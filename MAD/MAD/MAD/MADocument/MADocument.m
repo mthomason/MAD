@@ -312,9 +312,9 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)resetCache {
 
-    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
+    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
     NSNumber *type = [[NSNumber alloc] initWithShort: MTDataTableTypePhysical];
-    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
+    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
     NSNumber *objectIdV = [[NSNumber alloc] initWithUnsignedInteger: self.filename.hash];
     NSDictionary *parameters;
     parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];

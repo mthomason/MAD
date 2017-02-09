@@ -16,8 +16,8 @@
 
 + (instancetype)newDataTableWithDefinition:(NSDictionary *)parameters {
 
-    NSNumber *keyDataTableType = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
-    NSNumber *keyDataTableObjectId = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
+    NSNumber *keyDataTableType = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
+    NSNumber *keyDataTableObjectId = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
     
     NSNumber *dataTableType = parameters[keyDataTableType];
     NSNumber *dataTableObjectId = parameters[keyDataTableObjectId];
@@ -67,9 +67,9 @@
 + (instancetype)newDataTableForIdentifier:(NSString *)identifier {
     
     NSDictionary *definition;
-    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MTDataTableTypeOfTable];
+    NSNumber *typeKey = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
     NSNumber *type = [[NSNumber alloc] initWithShort: MTDataTableTypeVirtual];
-    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MTDataTableObjectId];
+    NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
     NSNumber *objectIdV =  [[NSNumber alloc] initWithUnsignedInteger: identifier.hash];
     
     definition = [[NSDictionary alloc] initWithObjectsAndKeys:

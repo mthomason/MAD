@@ -17,9 +17,9 @@
        NSMutableDictionary<KeyType, ObjectType>;
 
 typedef NS_ENUM(short, MADDataTableParameters) {
-    MTDataTableTypeOfTable,
-	MTDataTableObjectId,
-    MTDataTableNumberOfColumns,
+    MADDataTableParametersType,
+	MADDataTableParametersIdentifier,
+    MADDataTableParametersNumberOfColumns,
 };
 
 @interface MADDataTablePlist : NSObject
