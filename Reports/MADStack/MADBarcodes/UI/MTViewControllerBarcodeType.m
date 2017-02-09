@@ -74,7 +74,8 @@
 #pragma mark - UIPickerView Delegate
 
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView
-             attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+             attributedTitleForRow:(NSInteger)row
+                      forComponent:(NSInteger)component {
     
     NSArray *names = self.barcodeNamesOrdered;
     NSString *tableName = names[(NSUInteger)row];
@@ -92,12 +93,15 @@
     return  attributedString;
 }
 
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+- (void)pickerView:(UIPickerView *)pickerView
+      didSelectRow:(NSInteger)row
+       inComponent:(NSInteger)component {
+    
     NSString *barcodeName = self.barcodeNamesOrdered[(NSUInteger)row];
     NSArray *keys = [self.barcodeNamesByType allKeysForObject:barcodeName];
     if (keys.count > 0) {
         NSNumber *key = keys[0];
-        MTBarcodeType resultType = key.unsignedIntegerValue;
+        MTBarcodeType resultType = key.shortValue;
         [self.delegate didChangeBarcodeType:resultType];
     }
 }

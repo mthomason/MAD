@@ -42,19 +42,18 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 @interface MTStoreKitController ()
     <SKPaymentTransactionObserver, SKProductsRequestDelegate>
 
+    @property(nonatomic, assign) BOOL purchasingProduct;
+    @property(nonatomic, assign) BOOL restoringPurchases;
+
     @property(nonatomic, retain) NSArray *productIdentifiers;
     @property(nonatomic, readwrite, retain) NSArray *products;
 
-    @property(atomic, assign) BOOL purchasingProduct;
-
-    @property(copy) MTBlockCompletion    purchaseProductWithIdentifierCompletion;
-    @property(copy) MTBlockCompletion    initializeProductsCompletion;
-    @property(copy) MTBlockCompletion    restoringPurchasesCompletion;
+    @property(nonatomic, copy) MTBlockCompletion    purchaseProductWithIdentifierCompletion;
+    @property(nonatomic, copy) MTBlockCompletion    initializeProductsCompletion;
+    @property(nonatomic, copy) MTBlockCompletion    restoringPurchasesCompletion;
 
     @property(nonatomic, strong) SKProduct *purchasingProductObject;
     @property(nonatomic, strong) NSArray *restoredTransactionArray;
-
-    @property(atomic, assign) BOOL restoringPurchases;
 
 @end
 

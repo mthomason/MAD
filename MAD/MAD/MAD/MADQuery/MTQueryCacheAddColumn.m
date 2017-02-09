@@ -129,4 +129,8 @@
     return MADQueryTypeCacheAddColumn;
 }
 
+- (NSArray <NSString *> *)queryColumnKeys {
+    @throw NSInternalInconsistencyException;
+}
+
 @end

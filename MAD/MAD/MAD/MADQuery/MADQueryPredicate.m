@@ -8,18 +8,23 @@
 
 #import "MADQueryPredicate.h"
 
+#import <Foundation/NSSet.h>
+#import <Foundation/NSString.h>
+
+#import <MADFoundation/MADDataType.h>
+
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 
 #import "RptqQueryTable.h"
-#import "RptqQueryField.h"
 #import "RptqQueryTable+Extras.h"
+
+#import "RptqQueryField.h"
+
+#import "RptqQueryPredicate.h"
 #import "RptqQueryPredicate+Extras.h"
+
 #import "RptqDatabaseSchemaField.h"
-
-#import <MADFoundation/MADDataType.h>
-
-#import <Foundation/NSString.h>
 
 @interface MADQueryPredicate ()
 
@@ -35,8 +40,8 @@
         
         NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
         NSUInteger loopCounter = 0;
-        
-        for (RptqQueryPredicate *queryPredicate in queryPredicates) {
+        NSSet <RptqQueryPredicate *> *predicates = queryPredicates;
+        for (RptqQueryPredicate *queryPredicate in predicates) {
             
             if (loopCounter == 0) {
                 [result appendString:@"\nWHERE\n"];

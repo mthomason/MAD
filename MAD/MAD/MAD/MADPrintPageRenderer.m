@@ -484,7 +484,7 @@ typedef NSMutableDictionary <NSManagedObjectID *, UIFontDescriptor *> MADMutable
 
     NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
     
-    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:0];
+    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:1];
     sectionRepresentation.type = pageSection.sectionType;
     sectionRepresentation.elementOffset = offsetElement;
     

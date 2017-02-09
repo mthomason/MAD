@@ -8,7 +8,6 @@
 
 #import "MADFileUtilities.h"
 #import <MADFoundation/MADURL.h>
-#import <MADFoundation/NSURL+Document.h>
 
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSFileCoordinator.h>

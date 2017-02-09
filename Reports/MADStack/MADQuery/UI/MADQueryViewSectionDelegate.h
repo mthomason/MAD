@@ -17,11 +17,11 @@
 
     - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables position:(short)position;
     @property (nonatomic, assign, readonly) MADIdentifierQueryViewSections querySection;
-    @property (readonly) NSString   *name;
-    @property (readonly) NSUInteger count;
-    @property (readonly) NSInteger  numberOfRows;
-    @property (readonly) CGFloat    height;
-    @property (readonly) SEL        selector;
+    @property (nonatomic, readonly) NSString   *name;
+    @property (nonatomic, readonly) NSUInteger count;
+    @property (nonatomic, readonly) NSInteger  numberOfRows;
+    @property (nonatomic, readonly) CGFloat    height;
+    @property (nonatomic, readonly) SEL        selector;
 
 @end
 

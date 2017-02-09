@@ -34,7 +34,6 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
 #import <MADFoundation/MADURL.h>
-#import <MADFoundation/NSURL+Document.h>
 
 #import <MADExplorer/MADDocumentState.h>
 #import <MADExplorer/MADOpenDocumentManager.h>

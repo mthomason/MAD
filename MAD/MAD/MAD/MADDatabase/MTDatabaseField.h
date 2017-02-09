@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDatabaseField_h
-#define Reports_MTDatabaseField_h
+#ifndef Reports_MADDatabaseField_h
+#define Reports_MADDatabaseField_h
 
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
