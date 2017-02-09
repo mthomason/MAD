@@ -28,7 +28,7 @@
 #import "MADDatabaseConnection.h"
 
 #import "MTDataTable.h"
-#import "MTDataTablePlist.h"
+#import "MADDataTablePlist.h"
 
 @interface MTQuerySampleDataTable ()
     <MTDatabaseProtocol>

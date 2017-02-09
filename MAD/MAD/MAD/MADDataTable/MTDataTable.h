@@ -9,14 +9,14 @@
 #ifndef MAD_MTDataTable_Factory_h
 #define MAD_MTDataTable_Factory_h
 
-#import <MAD/MTDataTablePlist.h>
+#import <MAD/MADDataTablePlist.h>
 
 typedef NS_ENUM(short, MTDataTableType) {
     MTDataTableTypeVirtual,
     MTDataTableTypePhysical,
 };
 
-@interface MTDataTable : MTDataTablePlist
+@interface MTDataTable : MADDataTablePlist
 
     + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
     + (instancetype)newDataTableForIdentifier:(NSString *)identifier;

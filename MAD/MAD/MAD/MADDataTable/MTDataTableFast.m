@@ -77,7 +77,7 @@
 #import "madlib.h"
 
 #import "MADQueryParameters.h"
-#import "MTDataTablePlist.h"
+#import "MADDataTablePlist.h"
 #import "MTDatabaseDataBinding.h"
 
 typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataColumns;
@@ -161,7 +161,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return self;
 }
 
-- (MADDataTablePlist *)copyPlist {
+- (NSDictionary *)copyPlist {
     
     NSDictionary *superPlist = [super copyPlist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
@@ -193,7 +193,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return plist;
 }
 
-- (void)loadWithPlist:(MADDataTablePlist *)plist {
+- (void)loadWithPlist:(NSDictionary *)plist {
     [super loadWithPlist:plist];
     
     dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);

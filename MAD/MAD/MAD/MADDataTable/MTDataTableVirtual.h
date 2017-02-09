@@ -9,9 +9,9 @@
 #ifndef Reports_MTDataTableVirtual_h
 #define Reports_MTDataTableVirtual_h
 
-#import "MTDataTablePlist.h"
+#import "MADDataTablePlist.h"
 
-@interface MTDataTableVirtual : MTDataTablePlist
+@interface MTDataTableVirtual : MADDataTablePlist
 
 @end
 
