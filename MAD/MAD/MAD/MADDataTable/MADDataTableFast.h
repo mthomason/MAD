@@ -15,7 +15,7 @@
 
 @class MTQuery, MTDatabaseSqlite3;
 
-@interface MTDataTableFast : MTDataTable
+@interface MADDataTableFast : MTDataTable
     <NSCoding, NSFastEnumeration>
 
     @property (nonatomic, strong, readonly) MTDatabaseSqlite3 *databaseForSelects;

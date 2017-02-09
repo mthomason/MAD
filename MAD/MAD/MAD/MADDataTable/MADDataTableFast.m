@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataTableFast.h"
+#import "MADDataTableFast.h"
 
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSString.h>
@@ -84,7 +84,7 @@ typedef NSDictionary <__kindof NSString *, __kindof MADDataColumn *> MADMapDataC
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
-@interface MTDataTableFast () <MADQueryParametersStandardProtocol,
+@interface MADDataTableFast () <MADQueryParametersStandardProtocol,
         MADQueryParametersColumnKeysProtocol,
         MADQueryParametersColumnMetaProtocol,
         MADQueryParametersColumnDataProtocol>
@@ -143,17 +143,17 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
         self.queueBulkAdd = queue;
         
-        NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
+        NSString *absoluteString = [decoder decodeObjectForKey: [MADDataTableFast keyUrlFastCache]];
         NSURL *url = [NSURL URLWithString:absoluteString];
         self.urlFastCache = url;
         
-        NSNumber *tag = [decoder decodeObjectForKey: [MTDataTableFast keyTag]];
+        NSNumber *tag = [decoder decodeObjectForKey: [MADDataTableFast keyTag]];
         self.tag = tag.unsignedIntegerValue;
         
-        _bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]];
-        _sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]];
+        _bulkInsertLoop = [decoder decodeBoolForKey: [MADDataTableFast keyBulkInsertLoop]];
+        _sortDescriptorsSet = [decoder decodeBoolForKey: [MADDataTableFast keySortDescriptorsSet]];
         
-        NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
+        NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MADDataTableFast keyGroupKeys]];
         NSMutableIndexSet *groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
         self.groupKeyIndexes = groupKeys;
     
@@ -170,24 +170,24 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSString *absoluteString = urlFastCache.absoluteString;
     NSAssert(absoluteString != nil, @"We need a path.");
     NSString *urlFastCacheAbsolute = [[NSString alloc] initWithString: absoluteString];
-    NSString *keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
+    NSString *keyUrlFastCache = [MADDataTableFast keyUrlFastCache];
     plist[keyUrlFastCache] = urlFastCacheAbsolute;
     
     NSNumber *tag = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
-    NSString *keyTag = [MTDataTableFast keyTag];
+    NSString *keyTag = [MADDataTableFast keyTag];
     plist[keyTag] = tag;
     
     NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:_bulkInsertLoop];
-    NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
+    NSString *keyBulkInsertLoop = [MADDataTableFast keyBulkInsertLoop];
     plist[keyBulkInsertLoop] = bulkInsert;
     
     if (self.groupKeyIndexes != nil) {
-        NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
+        NSString *keyGroupKeys = [MADDataTableFast keyGroupKeys];
         plist[keyGroupKeys] = [NSKeyedArchiver archivedDataWithRootObject: _groupKeyIndexes];
     }
     
     NSNumber *sortSet = [[NSNumber alloc] initWithBool:_sortDescriptorsSet];
-    NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
+    NSString *keySortDescriptorsSet = [MADDataTableFast keySortDescriptorsSet];
     plist[keySortDescriptorsSet] = sortSet;
     
     return plist;
@@ -199,20 +199,20 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
     self.queueBulkAdd = queue;
 
-    id keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
+    id keyUrlFastCache = [MADDataTableFast keyUrlFastCache];
     NSString *absoluteString = plist[keyUrlFastCache];
     NSURL *url = [[NSURL alloc] initWithString:absoluteString];
     self.urlFastCache = url;
     
-    id keyTag = [MTDataTableFast keyTag];
+    id keyTag = [MADDataTableFast keyTag];
     NSNumber *tagWrapper = plist[keyTag];
     self.tag = tagWrapper.unsignedIntegerValue;
     
-    id keyBuildInsertLoop = [MTDataTableFast keyBulkInsertLoop];
+    id keyBuildInsertLoop = [MADDataTableFast keyBulkInsertLoop];
     NSNumber * __weak bulkInsertLoopWrapper = plist[keyBuildInsertLoop];
     _bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
     
-    id keyGroupKeys = [MTDataTableFast keyGroupKeys];
+    id keyGroupKeys = [MADDataTableFast keyGroupKeys];
     NSData *groupKeysData = plist[keyGroupKeys];
     NSIndexSet *groupKeysArray = [NSKeyedUnarchiver unarchiveObjectWithData:groupKeysData];
     NSMutableIndexSet *groupKeys;
@@ -259,12 +259,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     [super encodeWithCoder:encoder];
 
     NSString *absStr = _urlFastCache.absoluteString;
-    [encoder encodeObject: absStr forKey: [MTDataTableFast keyUrlFastCache]];
+    [encoder encodeObject: absStr forKey: [MADDataTableFast keyUrlFastCache]];
     
     NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
-    [encoder encodeObject: objid forKey: [MTDataTableFast keyTag]];
-    [encoder encodeBool: _bulkInsertLoop forKey: [MTDataTableFast keyBulkInsertLoop]];
-    [encoder encodeBool: _sortDescriptorsSet forKey: [MTDataTableFast keySortDescriptorsSet]];
+    [encoder encodeObject: objid forKey: [MADDataTableFast keyTag]];
+    [encoder encodeBool: _bulkInsertLoop forKey: [MADDataTableFast keyBulkInsertLoop]];
+    [encoder encodeBool: _sortDescriptorsSet forKey: [MADDataTableFast keySortDescriptorsSet]];
 
 }
 
