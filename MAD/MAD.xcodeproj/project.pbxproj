@@ -2838,7 +2838,7 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/mysqlclient/include\"",
 					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS/include\"",
@@ -2891,7 +2891,7 @@
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/mysqlclient/include\"",
 					"\"$(SRCROOT)/../opt/lib/mysqlclient-6.1/mysqlclient-6.1.6/iPhoneOS/include\"",
