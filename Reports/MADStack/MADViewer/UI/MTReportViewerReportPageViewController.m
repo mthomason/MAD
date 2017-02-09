@@ -25,7 +25,7 @@
 
 #import "MADTabBarController.h"
 
-#import "MTReportViewerReportPageView.h"
+#import "MADReportPageView.h"
 #import "NSDate+Extras.h"
 #import "MADDocumentScroller.h"
 #import "MADPageViewAttributes.h"

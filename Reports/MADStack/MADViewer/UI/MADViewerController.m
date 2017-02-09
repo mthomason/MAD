@@ -65,8 +65,8 @@
 
 #import "MTActivityReportPrintPreview.h"
 
-#import "MTReportViewerReportPageView.h"
 #import "MTReportViewerReportPageViewController.h"
+#import "MADReportPageView.h"
 
 #import "MADSliderPageVertical.h"
 #import "MADLabelStatus.h"
