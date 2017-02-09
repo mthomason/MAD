@@ -6,7 +6,7 @@
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDataTypeMySQL.h"
+#import "MADDataTypeMySQL.h"
 #import <MADFoundation/MADFoundation.h>
 #import <mysql.h>
 
