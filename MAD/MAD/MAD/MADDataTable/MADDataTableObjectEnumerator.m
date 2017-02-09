@@ -1,5 +1,5 @@
 //
-//  MTDataTableFastObjectEnumerator.m
+//  MADDataTableObjectEnumerator.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/21/14.
@@ -28,7 +28,7 @@
 
 #import <MADFoundation/MADLog.h>
 
-@interface MTDataTableFastObjectEnumerator ()
+@interface MADDataTableObjectEnumerator ()
 
     @property (nonatomic, strong) NSDictionary *columns;
     @property (nonatomic, strong) NSArray *columnKeys;
@@ -38,7 +38,7 @@
 
 @end
 
-@implementation MTDataTableFastObjectEnumerator {
+@implementation MADDataTableObjectEnumerator {
     sqlite3_stmt *_statement;
     BOOL _empty;
 }

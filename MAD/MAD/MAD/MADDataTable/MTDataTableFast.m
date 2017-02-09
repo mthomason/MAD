@@ -44,7 +44,7 @@
 
 #import "MADConstants.h"
 
-#import "MTDataTableFastObjectEnumerator.h"
+#import "MADDataTableObjectEnumerator.h"
 #import "MTDatabaseSqlite3.h"
 #import "MADDatabaseConnection.h"
 
@@ -964,10 +964,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject: queryDefination];
     NSURL *urlFastCache = self.urlFastCache;
     MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
-    objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                                   columns: self.columns
-                                                                                columnKeys: self.columnKeys
-                                                                                     query: query];
+    objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                                columns: self.columns
+                                                                             columnKeys: self.columnKeys
+                                                                                  query: query];
     return objectEnumerator;
 }
 
@@ -1013,11 +1013,11 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSArray <__kindof NSString *> *columnKeys;
     columnKeys = [[NSArray alloc] initWithObjects: MADIdentifierROWID, nil];
     
-    MTDataTableFastObjectEnumerator *enumerator;
-    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: connection
-                                                                             columns: columns
-                                                                          columnKeys: columnKeys
-                                                                               query: query];
+    MADDataTableObjectEnumerator *enumerator;
+    enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: connection
+                                                                          columns: columns
+                                                                       columnKeys: columnKeys
+                                                                            query: query];
     enumerator.addRowId = NO;
     enumerator.singleColumnNoWrapper = YES;
     
@@ -1055,12 +1055,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
          [self queryForAllRowsWithKeys:columnKeys];
         
         MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
-        enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                                 columns: self.columns
-                                                                              columnKeys: columnKeys
-                                                                                   query: query];
-        [(MTDataTableFastObjectEnumerator *)enumerator setAddRowId:YES];
-        [(MTDataTableFastObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
+        enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                              columns: self.columns
+                                                                           columnKeys: columnKeys
+                                                                                query: query];
+        [(MADDataTableObjectEnumerator *)enumerator setAddRowId:YES];
+        [(MADDataTableObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
     }
     return enumerator;
 }
@@ -1068,7 +1068,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
     MADDatabaseConnection *databaseConnection;
-    MTDataTableFastObjectEnumerator *enumerator;
+    MADDataTableObjectEnumerator *enumerator;
     
     MTQuery *query;
     query = [MTQueryCacheSelectLimitOffset newQueryCacheSelectLimitOffsetWithTableName: [self tableName]
@@ -1076,10 +1076,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                        sortDescriptors: self.sortDescriptors];
     
     databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
-    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                             columns: self.columns
-                                                                          columnKeys: self.columnKeys
-                                                                               query: query];
+    enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                          columns: self.columns
+                                                                       columnKeys: self.columnKeys
+                                                                            query: query];
     enumerator.addRowId = YES;
     enumerator.singleColumnNoWrapper = NO;
     return enumerator;
@@ -1253,10 +1253,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MADDatabaseConnection *databaseConnection;
     NSEnumerator *data;
     databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
-    data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                       columns: columns
-                                                                    columnKeys: columnKeys
-                                                                         query: query];
+    data = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                    columns: columns
+                                                                 columnKeys: columnKeys
+                                                                      query: query];
     return data;
 }
 

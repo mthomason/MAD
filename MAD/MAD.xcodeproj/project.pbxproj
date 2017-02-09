@@ -230,8 +230,8 @@
 		4C401E4B1BAE4D8C00BAE5FC /* MADocumentState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */; };
 		4C401E551BAE4E9400BAE5FC /* MTDataTableFast.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E4D1BAE4E9400BAE5FC /* MTDataTableFast.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E561BAE4E9400BAE5FC /* MTDataTableFast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E4E1BAE4E9400BAE5FC /* MTDataTableFast.m */; };
-		4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E4F1BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h */; };
-		4C401E581BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E501BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m */; };
+		4C401E571BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E4F1BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.h */; };
+		4C401E581BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E501BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.m */; };
 		4C401E591BAE4E9400BAE5FC /* MADDataTableLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E511BAE4E9400BAE5FC /* MADDataTableLocation.h */; };
 		4C401E5A1BAE4E9400BAE5FC /* MADDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E521BAE4E9400BAE5FC /* MADDataTableLocation.m */; };
 		4C401E5B1BAE4E9400BAE5FC /* MADDataTableVirtual.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E531BAE4E9400BAE5FC /* MADDataTableVirtual.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -794,8 +794,8 @@
 		4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocumentState.m; path = MAD/MADocument/MADocumentState.m; sourceTree = "<group>"; };
 		4C401E4D1BAE4E9400BAE5FC /* MTDataTableFast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataTableFast.h; path = MAD/MADDataTable/MTDataTableFast.h; sourceTree = "<group>"; };
 		4C401E4E1BAE4E9400BAE5FC /* MTDataTableFast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDataTableFast.m; path = MAD/MADDataTable/MTDataTableFast.m; sourceTree = "<group>"; };
-		4C401E4F1BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataTableFastObjectEnumerator.h; path = MAD/MADDataTable/MTDataTableFastObjectEnumerator.h; sourceTree = "<group>"; };
-		4C401E501BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDataTableFastObjectEnumerator.m; path = MAD/MADDataTable/MTDataTableFastObjectEnumerator.m; sourceTree = "<group>"; };
+		4C401E4F1BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataTableObjectEnumerator.h; path = MAD/MADDataTable/MADDataTableObjectEnumerator.h; sourceTree = "<group>"; };
+		4C401E501BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataTableObjectEnumerator.m; path = MAD/MADDataTable/MADDataTableObjectEnumerator.m; sourceTree = "<group>"; };
 		4C401E511BAE4E9400BAE5FC /* MADDataTableLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataTableLocation.h; path = MAD/MADDataTable/MADDataTableLocation.h; sourceTree = "<group>"; };
 		4C401E521BAE4E9400BAE5FC /* MADDataTableLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataTableLocation.m; path = MAD/MADDataTable/MADDataTableLocation.m; sourceTree = "<group>"; };
 		4C401E531BAE4E9400BAE5FC /* MADDataTableVirtual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataTableVirtual.h; path = MAD/MADDataTable/MADDataTableVirtual.h; sourceTree = "<group>"; };
@@ -1469,8 +1469,8 @@
 				4C5767491E1CD31F00611F37 /* MADDataTablePlist.m */,
 				4C401E4D1BAE4E9400BAE5FC /* MTDataTableFast.h */,
 				4C401E4E1BAE4E9400BAE5FC /* MTDataTableFast.m */,
-				4C401E4F1BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h */,
-				4C401E501BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m */,
+				4C401E4F1BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.h */,
+				4C401E501BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.m */,
 				4C401E511BAE4E9400BAE5FC /* MADDataTableLocation.h */,
 				4C401E521BAE4E9400BAE5FC /* MADDataTableLocation.m */,
 				4C401E531BAE4E9400BAE5FC /* MADDataTableVirtual.h */,
@@ -2239,7 +2239,7 @@
 				4CD87BA91E3E4ADD00F562B4 /* RptqDataHelper.h in Headers */,
 				4CC2824A1BADE81B00775B72 /* MADAlignment.h in Headers */,
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
-				4C401E571BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.h in Headers */,
+				4C401E571BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.h in Headers */,
 				4CCE18641DA149EB0093B166 /* archive_entry.h in Headers */,
 				4C401E291BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h in Headers */,
 				4C401DC11BAE3BD600BAE5FC /* MTQueryCacheDeleteAllFromTable.h in Headers */,
@@ -2576,7 +2576,7 @@
 				4CA3549A1D228D8F0072BD38 /* MADReportSectionPageHeader.m in Sources */,
 				4C5939D41E3EF7E400582271 /* RptqQuerySort.m in Sources */,
 				4CD85D081E444D85005DA2AF /* MADModelDocument.m in Sources */,
-				4C401E581BAE4E9400BAE5FC /* MTDataTableFastObjectEnumerator.m in Sources */,
+				4C401E581BAE4E9400BAE5FC /* MADDataTableObjectEnumerator.m in Sources */,
 				4CC282431BADE81A00775B72 /* MADSectionLayoutManager.m in Sources */,
 				4CC284A21BADE9FB00775B72 /* RptqDatabaseCredentals+Extras.m in Sources */,
 				4C5939901E3EF7E400582271 /* RptqDocumentElement.m in Sources */,

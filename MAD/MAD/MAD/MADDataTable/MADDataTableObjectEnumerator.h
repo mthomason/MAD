@@ -1,13 +1,13 @@
 //
-//  MTDataTableFastObjectEnumerator.h
+//  MADDataTableObjectEnumerator.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/21/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDataTableFastObjectEnumerator_h
-#define Reports_MTDataTableFastObjectEnumerator_h
+#ifndef Reports_MADDataTableObjectEnumerator_h
+#define Reports_MADDataTableObjectEnumerator_h
 
 #import <Foundation/NSEnumerator.h>
 
