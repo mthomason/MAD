@@ -13,7 +13,7 @@
 
 @class MADDatabaseConnection, MTQuery;
 
-@interface MTDataTableFastObjectEnumerator : NSEnumerator
+@interface MADDataTableObjectEnumerator : NSEnumerator
 
     @property (nonatomic, assign) BOOL addRowId;
     @property (nonatomic, assign) BOOL singleColumnNoWrapper;    //No wrapper on this.

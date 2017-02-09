@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDataTableFastObjectEnumerator.h"
+#import "MADDataTableObjectEnumerator.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNull.h>
