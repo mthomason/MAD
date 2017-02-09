@@ -20,7 +20,7 @@
 
     + (instancetype)newToolboxViewController;
 
-    @property (nonatomic, copy) NSSet *selectedObjectIds;
+    @property (readwrite, nonatomic, weak) NSSet <NSNumber *> *selectedElementIDs;
 
     @property (nonatomic, assign) BOOL clearsBackground;
 

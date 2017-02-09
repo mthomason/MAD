@@ -174,6 +174,16 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                             presentedRect.size.width - MTReportDesignerBorderPaddingSides);
 }
 
+static const inline CGSize sizePopoverDefault();
+static const inline CGSize sizePopoverDefault() {
+    return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
+}
+
+static const inline CGSize sizePopoverFonts();
+static const inline CGSize sizePopoverFonts() {
+    return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
+}
+
 @interface MADDesignerViewController()
 <MADViewControllerBarcodeDelegate,
     MTViewControllerAggregateDelegate,
@@ -505,7 +515,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
         viewControllerToolbox.clearsBackground = [self padLike];
         viewControllerToolbox.document = _document;
-        viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+        viewControllerToolbox.selectedElementIDs = self.selectedObjectIds;
         
         _toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
         _toolboxTransitioningDelegate.passthroughContainer = self.scroller;
@@ -518,7 +528,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (MADDesignerSectionLayoutController *)viewControllerSectionLayoutSettings {
     if (_viewControllerSectionLayoutSettings == nil) {
         MADDesignerSectionLayoutController *controller;
-        controller = [MADDesignerSectionLayoutController newReportDesignerSectionLayoutSettingsViewController];
+        controller = [MADDesignerSectionLayoutController newDesignerSectionLayoutController];
         controller.delegate = self;
         self.viewControllerSectionLayoutSettings = controller;
     }
@@ -1480,7 +1490,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
             [self.selectedObjectIds removeObject: @(lastElementViewToShowMenu.identifier)];
-            (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
+            (self.viewControllerToolbox).selectedElementIDs = self.selectedObjectIds;
         }
         self.lastElementViewToShowMenu = nil;
     }
@@ -1962,8 +1972,10 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 - (UICollectionViewCell *)collectionView: (MADDesignerSectionView *)collectionView
                   cellForItemAtIndexPath: (NSIndexPath *)indexPath {
     
-    MADocument *document = self.document;
+    MADocument *document;
     MADSectionLayoutManager *layoutManager;
+    
+    document = self.document;
     layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
     
     __block MADSectionLayoutAttributes *attributes;
@@ -2003,12 +2015,14 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
             for (id subview in subviews) {
                 [subview removeFromSuperview];
             }
-            
+            NSNumber *identifier = @(documentObject.identifier);
+
             cell.backgroundColor = [UIColor clearColor];
             cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
-            [self.elementViewsDictionary setObject:elementView forKey:documentObject.objectID];
+            [self.elementViewsDictionary setObject: elementView
+                                            forKey: identifier];
             
             UIGestureRecognizer *panGesture, *pinchGesture;
             panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement: self
@@ -2029,7 +2043,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
             
             cell.userInteractionEnabled = YES;
             
-            if ([self.selectedObjectIds containsObject: @(documentObject.identifier)]) {
+            if ([self.selectedObjectIds containsObject: identifier]) {
                 [self applyBorderToElementView: elementView];
             }
             
@@ -2037,7 +2051,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
             
             if (self.objectIdJustDisplayed != nil) {
                 
-                if ([self.objectIdJustDisplayed isEqualToNumber: @(documentObject.identifier)]) {
+                if ([self.objectIdJustDisplayed isEqualToNumber: identifier]) {
                     [elementView flash:^(BOOL finished) { if (finished) self.objectIdJustDisplayed = nil; }];
                     
                 }
@@ -2582,7 +2596,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
             
             [self deselectElementView: elementView animated: YES];
             [self.selectedObjectIds removeObject: @(elementView.identifier)];
-            (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
+            (self.viewControllerToolbox).selectedElementIDs = self.selectedObjectIds;
             
             [self.promptManager removeString: elementView.displayStringAttributed.string];
             [self displayPrompt];
@@ -2790,7 +2804,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         [self applyBorderToElementView: elementView];
         
         self.viewControllerToolbox.document = self.document;
-        self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds.copy;
+        self.viewControllerToolbox.selectedElementIDs = self.selectedObjectIds.copy;
         
     }
 }
@@ -3484,7 +3498,7 @@ END_deselectElementView:;
     }
     
     [self.selectedObjectIds removeAllObjects];
-    (self.viewControllerToolbox).selectedObjectIds = self.selectedObjectIds;
+    (self.viewControllerToolbox).selectedElementIDs = self.selectedObjectIds;
     
     [self displaySectionViewsRemoveBorder];
     
@@ -3590,19 +3604,13 @@ END_deselectElementView:;
 
     id elementView;
 
-    RptqDocumentElement *documentObject;
-
     elementView = [self viewForObjectID:@(managedObject.identifier)];
     if (elementView) goto ElementViewForManagedObjectShortCircut;
 
-    elementView = [self viewForObjectID:@(documentObject.identifier)];
-    if (elementView) goto ElementViewForManagedObjectShortCircut;
-
     SEL handleTap = @selector(handleToggleElementView:);
-    elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: documentObject
+    elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: managedObject
                                                                tapGestureDelegate: self
                                                                       tapSelector: handleTap];
-
     ElementViewForManagedObjectShortCircut:;
     
     return elementView;
@@ -3675,7 +3683,7 @@ END_deselectElementView:;
 
 - (void)adjustToolboxLocation {
     self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
-    self.viewControllerToolbox.selectedObjectIds = self.selectedObjectIds;
+    self.viewControllerToolbox.selectedElementIDs = self.selectedObjectIds;
 }
 
 #pragma mark NSNotificationCenter Helpers
@@ -3753,16 +3761,6 @@ END_deselectElementView:;
     [defaultCenter removeObserver: self
                              name: UIDocumentStateChangedNotification
                            object: document];
-}
-
-#pragma mark - Creators
-
-static const inline CGSize sizePopoverDefault() {
-    return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
-}
-
-static const inline CGSize sizePopoverFonts() {
-    return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
 }
 
 #pragma mark - Actions

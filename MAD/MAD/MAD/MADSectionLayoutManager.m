@@ -24,7 +24,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 @interface MADSectionLayoutManager ()
 
-    @property (nonatomic, strong, readwrite)    MADSectionLayoutAttributesMutableMap *items;
+    @property (nonatomic, strong, readwrite)    NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items;
     @property (nonatomic, weak)                 MADSectionLayoutAttributes *lastItem;
     @property (nonatomic, assign)               BOOL lastOpperationWasAdditon;
     @property (nonatomic, assign)               BOOL visibility;
@@ -56,7 +56,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
                 ips[MADIndexPathOffsetItem] = itemCounter;
                 path = [[NSIndexPath alloc] initWithIndexes:ips length:2];
                 layout = [MADSectionLayoutAttributes newSectionLayoutAttributesWithIndex: path
-                                                                                objectID: object.objectID
+                                                                                objectID: @(object.identifier)
                                                                                  andRect: object.frame];
                 [self addItem:layout];
             }
@@ -269,9 +269,9 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 #pragma mark - Helpers
 
 - (NSArray <__kindof NSValue *> *)allValidLocations {
-    MADSectionLayoutAttributesMutableMap *items = self.items;
+    NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items = self.items;
     NSValue *placement0Value;
-    NSArray *allItems = items.allValues;
+    NSArray <MADSectionLayoutAttributes *> *allItems = items.allValues;
     NSMutableArray <__kindof NSValue *> *allValidLocations;
     allValidLocations = [[NSMutableArray alloc] initWithCapacity:allItems.count * 4];
     

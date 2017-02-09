@@ -29,7 +29,7 @@ extern NSString * const MADSectionLayoutSettingsID;
 @interface MADDesignerSectionLayoutController : UITableViewController
     <UITableViewDelegate>
 
-    + (instancetype)newReportDesignerSectionLayoutSettingsViewController;
+    + (instancetype)newDesignerSectionLayoutController;
 
     @property (weak) IBOutlet id <MADDesignerSectionLayoutDelegate> delegate;
 

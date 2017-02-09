@@ -21,7 +21,7 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-#import "MTToolboxViewControllerProtocol.h"
+#import "MADToolboxControllerProtocol.h"
 #import "MADNavigationController.h"
 #import "MADViewControllerDocumentProtocol.h"
 
@@ -32,8 +32,8 @@ NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardS
 const CGFloat MADNavigationBarSizeHeightNormal = 44.0000f;
 const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
 
-typedef UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanel;
-typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanelTable;
+typedef UIViewController <MADToolboxControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanel;
+typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanelTable;
 
 
 @interface MADToolboxViewController ()
@@ -69,8 +69,8 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 }
 
 + (NSString *)keyPathSelectedObjectIds {
-    NSString *selectedObjectIds = NSStringFromSelector(@selector(selectedObjectIds));
-    return selectedObjectIds;
+    NSString *selectedElementIDs = NSStringFromSelector(@selector(selectedElementIDs));
+    return selectedElementIDs;
 }
 
 + (NSString *)keyPathDocument {
@@ -164,7 +164,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     MADToolboxPanelTable *style;
     style = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
-    [style setSelectedDocumentObjects:self.selectedObjectIds];
+    [style setSelectedDocumentObjects:self.selectedElementIDs];
 
 }
 
@@ -183,7 +183,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     MADToolboxPanelTable *viewControllerToUpdate = nil;
     viewControllerToUpdate = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
     
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
     viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
@@ -223,8 +223,8 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
     } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
         
-        id <MTToolboxViewControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
-        [delegate setSelectedDocumentObjects:self.selectedObjectIds];
+        id <MADToolboxControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
+        [delegate setSelectedDocumentObjects:self.selectedElementIDs];
     
     }
 }
@@ -248,7 +248,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 
     UIViewAnimationOptions options = UIViewAnimationOptionTransitionFlipFromRight;
     options = UIViewAnimationOptionTransitionCrossDissolve;
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
     viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
@@ -312,7 +312,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
     self.currentViewController = viewControllerToShow;
     
     options = UIViewAnimationOptionTransitionCrossDissolve;
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
     viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
@@ -368,7 +368,7 @@ typedef UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDispla
 }
 
 - (void)setOptionsForViewController:(MADToolboxPanel *)viewController {
-    [viewController setSelectedDocumentObjects: self.selectedObjectIds];
+    [viewController setSelectedDocumentObjects: self.selectedElementIDs];
     viewController.document = self.document;
 }
 

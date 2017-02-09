@@ -579,16 +579,18 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                   numberNotStrike               = 0,
                   numberNotUnderline            = 0;
         
-        NSManagedObjectID *objectId;
-        NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
+        NSNumber *objectId;
+        NSSet <NSNumber *> *userSelectedObjectIDs = _userSelectedObjectIDs;
         RptqDocumentElement *documentObject;
         
         //MADMargin_t margin; MADLayoutPadding_t padding; CGSize size; MADAlignment_t alignment;
         //MADTextStyle_t textStyle;
         CGSize size;
+        NSManagedObjectContext *context = self.document.managedObjectContext;
         for (objectId in userSelectedObjectIDs) {
             
-            documentObject = [self.document.managedObjectContext objectWithID:objectId];
+            documentObject = [RptqDocumentElement newDocumentElementWithIdentifier:objectId.longLongValue
+                                                                 fromObjectContext:context];
             
             if (documentObject != nil) {
                 
@@ -833,20 +835,22 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     CGFloat systemFontSize = [UIFont systemFontSize];
     UIFont *font = [UIFont fontWithName:familyName size:systemFontSize];
 
-    MADocument *doc = _document;
     UILabel *labelFontName = _labelFontName;
 
     labelFontName.font = font;
     labelFontName.text = familyName;
 
-    NSManagedObjectID *objectId;
-    NSSet *userSelectedObjectIDs = _userSelectedObjectIDs;
-    RptqDocumentElement *documentObject;
-    for (objectId in userSelectedObjectIDs) {
-        documentObject = [doc.managedObjectContext objectWithID:objectId];
-        documentObject.fontname = familyName;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.fontname = familyName;
     }
-    [doc.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (IBAction)toggleBold:(id)sender {
@@ -867,13 +871,17 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     }
     [self setStateInControl:self.buttonBold forState:self.controlStateBold];
     
-    MADocument *doc = self.document;
+    NSManagedObjectContext *context = _document.managedObjectContext;
     RptqDocumentElement *element;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        element = [doc.managedObjectContext objectWithID:objectId];
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
         element.style.bold = self.controlStateBold;
     }
-    [doc.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -893,13 +901,17 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     }
     [self setStateInControl:self.buttonItalic forState:self.controlStateItalic];
 
-    MADocument *doc = self.document;
+    NSManagedObjectContext *context = _document.managedObjectContext;
     RptqDocumentElement *element;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        element = [doc.managedObjectContext objectWithID:objectId];
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
         element.style.italic = self.controlStateItalic;
     }
-    [doc.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -919,14 +931,17 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     }
     [self setStateInControl:self.buttonStrike forState:self.controlStateStrike];
     
-    MADocument *doc = self.document;
-    NSManagedObjectID *objectID;
+    NSManagedObjectContext *context = _document.managedObjectContext;
     RptqDocumentElement *element;
-    for (objectID in self.userSelectedObjectIDs) {
-        element = [doc.managedObjectContext objectWithID:objectID];
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
         element.style.strikethrough = ControlStateIsOn(_controlStateStrike);
     }
-    [doc.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 
@@ -947,13 +962,17 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     }
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
     
-    MADocument *doc = self.document;
+    NSManagedObjectContext *context = _document.managedObjectContext;
     RptqDocumentElement *element;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        element = [doc.managedObjectContext objectWithID:objectId];
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
         element.style.underline = ControlStateIsOn(_controlStateUnderline);
     }
-    [doc.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)emptySelector:(id)whofuckingCares { }
@@ -964,147 +983,209 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     attributedString = [MADToolboxStyleViewController newAttributedStringFontSizeInPoints: pointSize
                                                                              withFontSize: labelFontSize.font.pointSize];
     labelFontSize.attributedText = attributedString;
-    MADocument *document = _document;
-    RptqDocumentElement *documentObject;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.fontsize = pointSize;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.fontsize = pointSize;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updateLabelSizeHeight:(double)height {
     NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:height];
     self.labelSizeHeight.attributedText = displayHeight;
-    MADocument *document = _document;
-    RptqDocumentElement *documentObject;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        documentObject = [document.managedObjectContext objectWithID:objectId];
-        [documentObject setSizeHeight: height];
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        [element setSizeHeight: height];
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updateLabelSizeWidth:(double)width {
     NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:width];
     self.labelSizeWidth.attributedText = displayWidth;
-    RptqDocumentElement *documentObject;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        documentObject = [document.managedObjectContext objectWithID:objectId];
-        [documentObject setSizeWidth: width];
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        [element setSizeWidth: width];
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
     [self.segmentedControlHorizontalAlignment setBackgroundImage: nil forState: UIControlStateNormal
                                                       barMetrics: UIBarMetricsDefault];
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.alignment.horizontal = (MADHorizontalAlignment)index;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.alignment.horizontal = (MADHorizontalAlignment)index;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updateVerticalAlignment:(NSInteger)index {
     [self.segmentedControlVerticalAlignment setBackgroundImage: nil forState: UIControlStateNormal
                                                     barMetrics: UIBarMetricsDefault];
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.alignment.vertical = (MADVerticalAlignment)index;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.alignment.vertical = (MADVerticalAlignment)index;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updatePaddingTop:(double)top {
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:top];
     self.labelPaddingTop.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.padding.top = top;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.padding.top = top;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updatePaddingBottom:(double)bottom {
     NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:bottom];
     self.labelPaddingBottom.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.padding.bottom = bottom;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.padding.bottom = bottom;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updatePaddingLeft:(double)left {
     NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue:left];
     self.labelPaddingLeft.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.padding.left = left;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.padding.left = left;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updatePaddingRight:(double)right {
     NSAttributedString *display = [MADToolboxStrings newMarginRightForValue:right];
     self.labelPaddingRight.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.padding.right = right;
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.padding.right = right;
     }
-    [document.managedObjectContext save:nil];
+    [context save:nil];
 }
 
 - (void)updateMarginTop:(double)top {
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: top];
     self.labelMarginTop.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.margin.top = top;
-        [document.managedObjectContext save:nil];
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.margin.top = top;
     }
+    [context save:nil];
 }
 
 - (void)updateMarginBottom:(double)bottom {
     NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:bottom];
     self.labelMarginBottom.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.margin.bottom = bottom;
-        [document.managedObjectContext save:nil];
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.margin.bottom = bottom;
     }
+    [context save:nil];
 }
 
 - (void)updateMarginLeft:(double)left {
     NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: left];
     self.labelMarginLeft.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.margin.left = left;
-        [document.managedObjectContext save:nil];
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.margin.left = left;
     }
+    [context save:nil];
 }
 
 - (void)updateMarginRight:(double)right {
     NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: right];
     self.labelMarginRight.attributedText = display;
-    MADocument *document = _document;
-    for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-        RptqDocumentElement *documentObject = [document.managedObjectContext objectWithID:objectId];
-        documentObject.margin.right = right;
-        [document.managedObjectContext save:nil];
+    NSManagedObjectContext *context = _document.managedObjectContext;
+    RptqDocumentElement *element;
+    NSSet <NSNumber *> *userSelectedObjectIDs;
+    userSelectedObjectIDs = userSelectedObjectIDs;
+    NSNumber *identifier;
+    for (identifier in userSelectedObjectIDs) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:context];
+        element.margin.right = right;
     }
+    [context save:nil];
 }
 
 
@@ -1182,10 +1263,14 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         MADFontSelectorViewController *destination = segue.destinationViewController;
         destination.delegate = self;
         destination.clearsBackground = self.clearsBackground;
+        NSManagedObjectContext *context = _document.managedObjectContext;
         NSString *fontname = nil;
-        for (NSManagedObjectID *objectId in self.userSelectedObjectIDs) {
-            RptqDocumentElement *documentObject = [self.document.managedObjectContext objectWithID:objectId];
-            fontname = documentObject.fontname.copy;
+        NSNumber *identifier;
+        RptqDocumentElement *element;
+        for (identifier in self.userSelectedObjectIDs) {
+            element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                          fromObjectContext:context];
+            fontname = element.fontname.copy;
             break;
         }
 

@@ -11,7 +11,7 @@
 
 #import <UIKit/UICollectionViewLayout.h>
 
-@class NSArray <__covariant ObjectType>, MADSectionLayoutManager, NSManagedObjectID;
+@class MADSectionLayoutManager, NSArray <__covariant ObjectType>;
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
     <NSCopying>
@@ -19,7 +19,7 @@
     @property (nonatomic, copy) NSNumber *objectID;
 
     + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
-                                               objectID:(NSManagedObjectID *)objectID
+                                               objectID:(NSNumber *)objectID
                                                 andRect:(CGRect)rect;
 
     - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)attributes;

@@ -9,14 +9,9 @@
 #ifndef Reports_MADToolboxControllerProtocol_h
 #define Reports_MADToolboxControllerProtocol_h
 
-@class MADocument;
-
 @protocol MADToolboxControllerProtocol <NSObject>
-
-@required
-
+  @required
     - (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIds;
-
 @end
 
 #endif
