@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADReportDesignerSectionLayoutSettingsViewController_h
-#define Reports_MADReportDesignerSectionLayoutSettingsViewController_h
+#ifndef Reports_MADDesignerSectionLayoutController_h
+#define Reports_MADDesignerSectionLayoutController_h
 
 #import <UIKit/UITableViewController.h>
 
