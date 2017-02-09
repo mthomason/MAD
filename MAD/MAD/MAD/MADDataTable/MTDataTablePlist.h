@@ -18,7 +18,7 @@
 @class NSMutableDictionary<KeyType, ObjectType>;
 @class NSEnumerator;
 
-typedef NS_ENUM(short, MTDataTableParameters) {
+typedef NS_ENUM(short, MADDataTableParameters) {
     MTDataTableTypeOfTable,
 	MTDataTableObjectId,
     MTDataTableNumberOfColumns,
