@@ -30,7 +30,7 @@
 #import <dispatch/queue.h>
 #import <dispatch/semaphore.h>
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADCocoaExtensions/BDHost.h>
@@ -272,7 +272,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-    MTDataTable *dataTable;
+    MADDataTable *dataTable;
     if (query.dataTable) {
         dataTable = query.dataTable;
     } else {
@@ -281,7 +281,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
+            andError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
     MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];
     if (dbconn) {
@@ -291,7 +292,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (BOOL)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process
-   withDataTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+   withDataTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
     NSError *sqlError = nil;
     NSString *sql = [query getSqlWithError:&sqlError];
@@ -301,17 +302,20 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return success;
 }
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+   intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn];
 }
 
-- (BOOL)runSQL:(NSString *)sql onDataTable:(MTDataTable *)datatable fieldKeys:(NSArray *)fieldKeys process:(MTDatabaseProcessSqlServer *)process {
+- (BOOL)runSQL:(NSString *)sql onDataTable:(MADDataTable *)datatable fieldKeys:(NSArray *)fieldKeys
+       process:(MTDatabaseProcessSqlServer *)process {
 
     BOOL rsuccess = NO;
     NSError *error = nil;
     if (sql.length > 0) {
         
-        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSCalendar *gregorian;
+        gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         
         NSDateComponents *janFirst1990Components = [[NSDateComponents alloc] init];
         janFirst1990Components.year =    1900;
@@ -778,7 +782,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     
                     /* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
                     NSMutableArray *columnPercision = [[NSMutableArray alloc] initWithCapacity:colmunHolder.count];
-                    for (NSInteger i = 0; i<colmunHolder.count; i++) {
+                    for (NSUInteger i = 0; i<colmunHolder.count; i++) {
                         NSNumber *negOne = @-1;
                         [columnPercision addObject: negOne];
                     }

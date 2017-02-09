@@ -36,7 +36,7 @@
 @implementation MysqlFetch
 
 /*
- dataTable = [MTDataTable newDataTableWithDefinition:@{
+ dataTable = [MADDataTable newDataTableWithDefinition:@{
  typeKey : type,
  numberOfColumnsKey : numberOfColumns}];
  */

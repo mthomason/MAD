@@ -8,7 +8,7 @@
 
 #import "MADOperationRefreshInitialize.h"
 
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 
 #import <MAD/MADDataTableFast.h>
 

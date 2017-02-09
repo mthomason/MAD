@@ -21,7 +21,7 @@
 #import "MADArrayCaching.h"
 #import "MTQuery.h"
 #import "MADAggregateFunctionGroupByType.h"
-
+#import "MADDataTable.h"
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
@@ -206,7 +206,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 
 + (NSArray *)dataForAggregateGroupByTypeSection:(int64_t)groupNumber
                                  groupLevelKeys:(NSArray *)groupLevelKeys
-                                      dataTable:(MTDataTable *)dataTable {
+                                      dataTable:(MADDataTable *)dataTable {
     NSArray <__kindof NSDictionary *> *dataForGroup;
     if (groupNumber < (int64_t)groupLevelKeys.count) {
         NSArray *groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];

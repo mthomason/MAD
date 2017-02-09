@@ -11,7 +11,7 @@
 
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTQuery.h>
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 
 #import <MADBarcodes/MADBarcodeBorderStyle.h>
 

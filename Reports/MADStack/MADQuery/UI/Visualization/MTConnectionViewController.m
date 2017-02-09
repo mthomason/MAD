@@ -33,7 +33,7 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MTKeyChain.h>
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MADProgress.h>

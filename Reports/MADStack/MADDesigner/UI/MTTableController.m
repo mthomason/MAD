@@ -11,8 +11,8 @@
 #endif
 
 #import "MTTableController.h"
+
 #import <CoreData/NSManagedObjectID.h>
-#import <MAD/MADDatabaseProtocol.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -25,10 +25,11 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDataTable.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQuery.h>
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseField.h>
 #import <MAD/MTQuery.h>
@@ -43,7 +44,7 @@
     <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseProtocol>
 
     @property (nonatomic, strong) MTQuery *query;
-    @property (nonatomic, strong) MTDataTable *datatable;
+    @property (nonatomic, strong) MADDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
     @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
     @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
@@ -56,7 +57,7 @@
 
 - (void)dealloc { }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.datatable;
 }
 
@@ -71,7 +72,7 @@
         _firstTimeViewDidAppear = YES;
         query.database.delegate = self;
         
-        MTDataTable *datatable;
+        MADDataTable *datatable;
         datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         
@@ -98,13 +99,13 @@
     self.navigationController.toolbarHidden = YES;
 }
 
-+ (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
++ (MADDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
     NSNumber *typeKey = @(MADDataTableParametersType);
     NSNumber *type = @(MADDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MADDataTableParametersIdentifier);
     NSNumber *objectIdV =  @(objectID.URIRepresentation.absoluteString.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
-    return [MTDataTable newDataTableWithDefinition:parameters];
+    return [MADDataTable newDataTableWithDefinition:parameters];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -21,7 +21,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import <MAD/MTKeyChain.h>
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -35,7 +35,7 @@
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
-    @property (nonatomic, strong) MTDataTable *dataTableSampleData;
+    @property (nonatomic, strong) MADDataTable *dataTableSampleData;
 
 @end
 
@@ -65,14 +65,14 @@
     [self.navigationController popViewControllerAnimated:YES];
     
     RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
-    MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
+    MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
     self.dataTableSampleData = dataTable;
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: schemaField];
     NSError * __autoreleasing error = NULL;
     BOOL success = [querySampleDataField performQueryWithError:&error];
     if (success) {
-        MTDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
+        MADDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
         self.dataTableSampleData = dt;
         NSArray *allObjects = [self.dataTableSampleData allObjects];
         [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
@@ -89,7 +89,7 @@
     }
 }
 
-+ (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
++ (MADDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
     NSUInteger hash = objectID.URIRepresentation.absoluteString.hash;
     NSNumber *typeKey = @(MADDataTableParametersType);
     NSNumber *type = @(MADDataTableTypeVirtual);
@@ -97,7 +97,7 @@
     NSNumber *objectIdV =  @(hash);
     NSDictionary *options = @{typeKey : type,
                               objectIdKey : objectIdV};
-    MTDataTable *dataTable = [MTDataTable newDataTableWithDefinition:options];
+    MADDataTable *dataTable = [MADDataTable newDataTableWithDefinition:options];
     return dataTable;
 }
 

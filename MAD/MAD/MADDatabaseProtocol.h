@@ -9,16 +9,13 @@
 #ifndef MADDatabaseProtocol_h
 #define MADDatabaseProtocol_h
 
-@class MADCredential;
-@class MTDataTable;
-@class NSString;
-@class MTQuery;
+@class MADCredential, MADDataTable, NSString, MTQuery;
 
 @protocol MADDatabaseProtocol <NSObject>
   @required
   @optional
     - (MADCredential *)getCredentialsForKey:(NSString *)key;
-    - (MTDataTable *)dataTableForQuery:(MTQuery *)query;
+    - (MADDataTable *)dataTableForQuery:(MTQuery *)query;
 @end
 
 #endif /* MADDatabaseProtocol_h */

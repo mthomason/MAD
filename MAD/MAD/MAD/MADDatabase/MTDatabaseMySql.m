@@ -14,8 +14,6 @@
 #import <Foundation/NSError.h>
 
 #import "MADErrorUserInfo.h"
-#import "MTDataTable.h"
-
 #import "MADCredential.h"
 
 #import "MADDatabaseConnection.h"
@@ -47,7 +45,7 @@
 
 #import "MTKeyChain.h"
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 #import "MADDatabaseTable.h"
 
 #import <mysql.h>
@@ -63,7 +61,7 @@
 
 @dynamic databaseConnection;
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return [self.delegate dataTableForQuery:query];
 }
 
@@ -103,7 +101,7 @@
     return success ? conn : nil;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
     id connectionSettings = self.databaseConnection;
     MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
@@ -135,7 +133,7 @@
 }
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
-    MTDataTable *dataTable;
+    MADDataTable *dataTable;
     if (query.dataTable) {
         dataTable = query.dataTable;
     } else {
@@ -145,7 +143,7 @@
 }
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-   intoResultTable:(MTDataTable *)dataTable
+   intoResultTable:(MADDataTable *)dataTable
          withError:(NSError * __autoreleasing *)error {
     
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
@@ -175,8 +173,8 @@
         
         NSError *fetchError = nil;
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-        MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-        MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
+        MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+        MADDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
                                               onConnection: conn error: &fetchError];
         NSMutableArray *results = nil;
         if (fetchError == nil) {
@@ -232,8 +230,8 @@
     NSError *error = nil;
     MysqlConnection *connection = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+    MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
                                              dataTable: &dataTableVirtual
                                           onConnection: connection
                                                  error: &error];
@@ -270,8 +268,8 @@
     NSError *error = nil;
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+    MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
                                              dataTable: &dataTableVirtual
                                           onConnection: conn
                                          extendedNames: YES
@@ -297,8 +295,8 @@
     NSError *errorFetch = nil;
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-    MTDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
+    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+    MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
                                              dataTable: &dataTableVirtual
                                           onConnection: conn
                                          extendedNames: YES
@@ -334,11 +332,11 @@
     NSString *command = [[NSString alloc] initWithFormat:@"SHOW COLUMNS FROM %@;", safeTableName];
     
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
+    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v9998"];
     NSError *errorShowColumns = nil;
     NSError *errorColumnMetaData = nil;
     
-    MTDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn error:&errorShowColumns];
+    MADDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn error:&errorShowColumns];
     if (errorShowColumns == nil) {
         NSUInteger resultsCount = [dataTable count];
         resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
@@ -350,11 +348,11 @@
             resultsDictionary[safeId] = field;
         }
         
-        MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
+        MADDataTable *dataTableVirtual2 = [MADDataTable newDataTableForIdentifier:@"v9997"];
         safeTableName = [self newSafeIdentifier:tableName];
         NSString *command2 = [[NSString alloc] initWithFormat:@"SELECT * FROM %@ LIMIT 0;", safeTableName];
         MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
-        MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
+        MADDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
         if (errorColumnMetaData == nil) {
             NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
             for (MADDataColumn *dataColumn in columnsEnumerator) {

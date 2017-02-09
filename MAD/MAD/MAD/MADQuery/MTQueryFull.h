@@ -11,7 +11,7 @@
 
 #import "MTQuery.h"
 
-@class NSManagedObjectID;
+@class NSManagedObjectID, NSManagedObjectContext;
 
 @interface MTQueryFull : MTQuery
 

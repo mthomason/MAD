@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @protocol MADDatabaseProtocol, MADDatabaseConnectionsProperties;
 
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MTDatabase, MADDatabaseTable,
-       MTDataTable, MTQuery, MADDatabaseField;
+       MADDataTable, MTQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
   @required
@@ -47,7 +47,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
     - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
     - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-       intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
+       intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
 
     - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL,
                                                                     NSError *,
@@ -81,7 +81,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
     - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName;
 
     - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error;
-    - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable andError:(NSError * __autoreleasing *)error;
+    - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
+                andError:(NSError * __autoreleasing *)error;
 
     - (MADCredential *)copyCredentalsWithConnection:(MADDatabaseConnection *)connection;
     - (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals;

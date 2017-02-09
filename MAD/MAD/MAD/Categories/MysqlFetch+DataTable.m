@@ -68,16 +68,16 @@
     return NSStringFromClass([self class]);
 }
 
-- (MTDataTable *)fetchWithCommand: (NSString *)command
-                        dataTable: (MTDataTable * __autoreleasing *)dataTable
+- (MADDataTable *)fetchWithCommand: (NSString *)command
+                        dataTable: (MADDataTable * __autoreleasing *)dataTable
                      onConnection: (MysqlConnection *)connection
                             error: (NSError * __autoreleasing *)error {
     return [self fetchWithCommand:command dataTable:dataTable onConnection:connection extendedNames:YES error:error];
 }
 
 
-- (MTDataTable *)fetchWithCommand: (NSString *)command
-                        dataTable: (MTDataTable * __autoreleasing *)dataTable
+- (MADDataTable *)fetchWithCommand: (NSString *)command
+                        dataTable: (MADDataTable * __autoreleasing *)dataTable
                      onConnection: (MysqlConnection *)connection
                     extendedNames: (BOOL)useExtendedNames
                             error: (NSError * __autoreleasing *)error {
@@ -194,7 +194,7 @@
 }
 
 - (void)fetchResultsFromConnection: (MysqlConnection *)connection
-                     intoDataTable: (MTDataTable * __autoreleasing *)dataTable
+                     intoDataTable: (MADDataTable * __autoreleasing *)dataTable
                      withStatement: (MYSQL_STMT *)statement
                              fetch: (MysqlFetch *)mf
                        andBindings: (MYSQL_BIND *)bindings  {

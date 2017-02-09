@@ -24,7 +24,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -84,8 +84,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, strong) MTQuery *query2;
 
-    @property (nonatomic, strong) MTDataTable *dataTableSampleData;
-    @property (nonatomic, strong) MTDataTable *dataTableSampleData2;
+    @property (nonatomic, strong) MADDataTable *dataTableSampleData;
+    @property (nonatomic, strong) MADDataTable *dataTableSampleData2;
 
 @end
 
@@ -255,7 +255,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 1024.0000f);
 }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
 
     if ([query isEqual:self.query]) {
         return self.dataTableSampleData;
@@ -269,8 +269,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     }
 }
 
-+ (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-    return [MTDataTable newDataTableForIdentifier:[objectID URIRepresentation].absoluteString];
++ (MADDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
+    return [MADDataTable newDataTableForIdentifier:[objectID URIRepresentation].absoluteString];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

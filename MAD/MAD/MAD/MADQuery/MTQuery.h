@@ -10,10 +10,9 @@
 #define Reports_MTQuery_h
 
 #import <Foundation/NSObject.h>
+#import <MADFoundation/MADDataType.h>
 
 #import "MADQueryType.h"
-
-#import <MADFoundation/MADDataType.h>
 
 #pragma mark Types of specific paramamters accepted for each query
 
@@ -25,20 +24,14 @@ extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
-@class NSManagedObjectContext;
-@class NSMutableArray;
-@class NSMutableDictionary;
-
-@class MTDatabase;
-@class MTDataTable;
-
-@class RptqQuery;
+@class NSMutableArray, NSMutableDictionary,
+       MTDatabase, MADDataTable, RptqQuery;
 
 @interface MTQuery : NSObject
 
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-    @property (nonatomic, weak) MTDataTable *dataTable;
+    @property (nonatomic, weak) MADDataTable *dataTable;
     @property (nonatomic, strong, readwrite) MTDatabase *database;
 
     @property (nonatomic, strong) id queryObject;

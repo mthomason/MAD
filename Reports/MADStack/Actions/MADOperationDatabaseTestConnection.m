@@ -18,7 +18,7 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADErrorUserInfo.h>
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 
 #import "MADKeyChainOperationGet.h"
 
@@ -31,7 +31,7 @@
 
     //Store
     @property (nonatomic, strong) MTDatabase *database;
-    @property (nonatomic, strong) MTDataTable *datatable;
+    @property (nonatomic, strong) MADDataTable *datatable;
 
     //Results
     @property (nonatomic, readwrite, strong) NSError *error;
@@ -120,7 +120,7 @@
     
     MADDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
-    MTDataTable *datatable = [MTDataTable newDataTableOfType: MADDataTableTypeVirtual
+    MADDataTable *datatable = [MADDataTable newDataTableOfType: MADDataTableTypeVirtual
                                                 withObjectID: databaseConnection.hash];
     
     self.datatable = datatable;
@@ -148,7 +148,7 @@
     return self.credentials;
 }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.datatable;
 }
 

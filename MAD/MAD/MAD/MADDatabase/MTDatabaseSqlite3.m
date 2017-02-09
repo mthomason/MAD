@@ -34,7 +34,7 @@
 
 #import <MADFoundation/MADDataColumn.h>
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 
 #import "MADDatabaseConnection.h"
 #import "MADErrorUserInfo.h"
@@ -444,7 +444,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-   intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+   intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     
     return [self executeSql:sql fieldKeys:fieldKeys onConnection:dbconn intoResultTable:dataTable
        transactionSet:NO returnsResults:YES binaryBindings:nil withError:error];
@@ -453,7 +453,7 @@ void sqliteLog(void *foo, const char* statement) {
 - (BOOL)executeSql: (NSString *)sql
          fieldKeys: (NSArray *)fieldKeys
       onConnection: (id)dbconn
-   intoResultTable: (MTDataTable *)dataTable
+   intoResultTable: (MADDataTable *)dataTable
     transactionSet: (BOOL)partOfTransactionSet
     returnsResults: (BOOL)returnsResults
     binaryBindings: (NSArray *)binaryBindings
@@ -625,7 +625,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (BOOL)executeQuery:(MTQuery *)query
-       withDataTable:(__kindof MTDataTable *)dataTable
+       withDataTable:(__kindof MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
 
     BOOL status = NO;
@@ -664,7 +664,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
 
-    MTDataTable *dataTable;
+    MADDataTable *dataTable;
     if (query.dataTable) {
         dataTable = query.dataTable;
     } else {

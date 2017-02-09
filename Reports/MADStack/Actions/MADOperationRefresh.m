@@ -92,7 +92,7 @@ static const short errCache = 2;
     BOOL success = [document.database executeSql: queryString
                                        fieldKeys: query.fieldKeys
                                     onConnection: dbconn
-                                 intoResultTable: (MTDataTable *)document.dataTable
+                                 intoResultTable: (MADDataTable *)document.dataTable
                                        withError: &executeError];
 
     if (!success) {

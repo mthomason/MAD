@@ -51,7 +51,7 @@
 
 #import "MADErrorUserInfo.h"
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 
 #import "MTQuery.h"
 #import "MTQueryFull.h"
@@ -1073,7 +1073,7 @@ READFROMURL_END:;
     return credentials;
 }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
 
     switch (query.type) {
         

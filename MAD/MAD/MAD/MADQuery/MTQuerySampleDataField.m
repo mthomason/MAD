@@ -18,14 +18,14 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 #import "MADDatabaseConnection.h"
 #import "MADDatabaseProtocol.h"
 
 @interface MTQuerySampleDataField ()
     <MADDatabaseProtocol>
 
-    @property (nonatomic, strong) MTDataTable *datatable;
+    @property (nonatomic, strong) MADDataTable *datatable;
 
 @end
 
@@ -50,7 +50,7 @@
         db.delegate = self;
         
         NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;
-        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:identifier];
+        MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier:identifier];
         self.datatable = dataTable;
         self.database = db;
         self.queryObject = object;
@@ -69,7 +69,7 @@
                                        andTable: ((RptqDatabaseSchemaField *)self.queryObject).inTable.name];
 }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.datatable;
 }
 

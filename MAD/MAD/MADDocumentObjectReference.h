@@ -13,7 +13,7 @@
 
 @protocol MADPrintPageRendererDataSourceProtocol;
 
-@class MTDatabase, MTDataTable, RptqDocumentElement, MADReportFormatter, NSManagedObjectID,
+@class RptqDocumentElement, NSManagedObjectID,
        MADElementStylizedText, NSMutableDictionary<KeyType, ObjectType>;
 
 @interface MADDocumentObjectDataReference : NSObject

@@ -12,34 +12,34 @@
 
 #import "MADViewerController.h"
 
-#import <MAD/MADActivityItemProviderDelegate.h>
-
-#import <UIKit/UIStoryboard.h>
-#import <UIKit/UIViewController.h>
-#import <UIKit/UIAccessibility.h>
-#import <UIKit/UIPopoverController.h>
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UIBarButtonItem.h>
-#import <UIKit/UIAccessibilityConstants.h>
-#import <UIKit/UIToolbar.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UIActivityIndicatorView.h>
-#import <UIKit/UIPrintInteractionController.h>
-#import <UIKit/UILocalNotification.h>
-#import <UIKit/UITabBarItem.h>
-#import <UIKit/UIPopoverPresentationController.h>
-#import <UIKit/UIDocumentInteractionController.h>
-#import <UIKit/UIViewControllerTransitioning.h>
-
 #import <CoreData/CoreData.h>
 
-#import <MADDataStructures/MTPair.h>
-
-#import <MAD/MTDataTable.h>
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIAccessibilityConstants.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UIDocumentInteractionController.h>
+#import <UIKit/UILocalNotification.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIPopoverController.h>
+#import <UIKit/UIPopoverPresentationController.h>
+#import <UIKit/UIPrintInteractionController.h>
+#import <UIKit/UIResponder.h>
+#import <UIKit/UIStoryboard.h>
+#import <UIKit/UITabBarItem.h>
+#import <UIKit/UIToolbar.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIViewControllerTransitioning.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import <MADDataStructures/MTPair.h>
+
+#import <MAD/MADActivityItemProviderDelegate.h>
+#import <MAD/MADDataTable.h>
 
 #import <MAD/MADPrintPageRenderer.h>
 
@@ -89,8 +89,6 @@
 #import "MADLabelTitle.h"
 #import "MADIdentifiersStoryboards.h"
 #import "MADDocumentScroller.h"
-
-#import <UIKit/UIResponder.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";

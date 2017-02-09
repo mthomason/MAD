@@ -15,7 +15,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
@@ -100,7 +100,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return results;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MTDataTable *)dataTable
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
@@ -238,7 +238,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (void)closeProcess:(id)process {}
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-   intoResultTable:(MTDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+   intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
     reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];

@@ -33,7 +33,7 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADDatabaseProtocol.h>
 
-#import <MAD/MTDataTable.h>
+#import <MAD/MADDataTable.h>
 
 #import "MTCellEnterText.h"
 
@@ -54,7 +54,7 @@
     @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
     @property (nonatomic, strong) MTQuery *querySampleDataField;
-    @property (nonatomic, strong) MTDataTable *dataTable;
+    @property (nonatomic, strong) MADDataTable *dataTable;
 
 @end
 
@@ -178,7 +178,7 @@
             MADViewControllerValueBasedOnField * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 MADViewControllerValueBasedOnField *strongself5 = weakself3;
-                MTDataTable *dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
+                MADDataTable *dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
                 strongself5.dataTable = dt;
                 
                 NSArray *allObjects = [strongself5.dataTable allObjects];

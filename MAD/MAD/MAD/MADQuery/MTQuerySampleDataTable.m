@@ -27,13 +27,13 @@
 #import "MADDatabaseField.h"
 #import "MADDatabaseConnection.h"
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 #import "MADDataTablePlist.h"
 
 @interface MTQuerySampleDataTable ()
     <MADDatabaseProtocol>
 
-    @property (nonatomic, strong) MTDataTable *dataTableMaxFieldLength;
+    @property (nonatomic, strong) MADDataTable *dataTableMaxFieldLength;
 
 @end
 
@@ -49,7 +49,7 @@
         MADDatabaseConnection *databaseConnection;
         databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
-        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
+        MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;
         self.dataTableMaxFieldLength = dataTable;
         self.queryObject = object;
@@ -140,7 +140,7 @@
     return sql;
 }
 
-- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.dataTableMaxFieldLength;
 }
 
