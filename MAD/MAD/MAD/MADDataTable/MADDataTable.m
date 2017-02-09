@@ -1,18 +1,18 @@
 //
-//  MTDataTable+Factory.m
+//  MADDataTable.m
 //  MAD
 //
 //  Created by Michael Thomason on 9/18/15.
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDataTable.h"
+#import "MADDataTable.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import "MADDataTableVirtual.h"
 #import "MADDataTableFast.h"
 
-@implementation MTDataTable
+@implementation MADDataTable
 
 + (instancetype)newDataTableWithDefinition:(NSDictionary *)parameters {
 

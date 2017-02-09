@@ -1,13 +1,13 @@
 //
-//  MTDataTable.h
+//  MADDataTable.h
 //  MAD
 //
 //  Created by Michael Thomason on 9/18/15.
 //  Copyright © 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTDataTable_Factory_h
-#define MAD_MTDataTable_Factory_h
+#ifndef MAD_MADDataTable_Factory_h
+#define MAD_MADDataTable_Factory_h
 
 #import <MAD/MADDataTablePlist.h>
 
@@ -16,7 +16,7 @@ typedef NS_ENUM(short, MADDataTableType) {
     MADDataTableTypePhysical,
 };
 
-@interface MTDataTable : MADDataTablePlist
+@interface MADDataTable : MADDataTablePlist
 
     + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
     + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
