@@ -16,7 +16,7 @@
 
 @class RptqDocument;
 
-@interface MTReportFormatterState : NSObject
+@interface MADReportFormatterState : NSObject
 
     - (instancetype)initWithDocument:(RptqDocument *)document
                      andDataDelegate:(id <MADDataProtocol>)dataDelegate;

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportFormatterState.h"
+#import "MADReportFormatterState.h"
 #import <Foundation/NSValue.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataProtocol.h>
