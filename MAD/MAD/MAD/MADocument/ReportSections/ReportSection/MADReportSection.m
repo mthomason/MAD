@@ -77,7 +77,7 @@
     }
 
     if (instance) {
-        instance.objectID = reportSection.objectID.copy;
+        instance.objectID = @(reportSection.identifier);
         instance.managedObjectContext = reportSection.managedObjectContext;
         instance.documentSection = reportSection;
     }

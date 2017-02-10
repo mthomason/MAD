@@ -393,7 +393,7 @@ static inline CGRect sectionBounds(CGRect pageRect,
                                                   andLevel: pageSection.groupLevel];
         
         rect = sectionBounds(pageRect,
-                             heightWithVisibility([reportFormatter heightForSectionWithObjectID:documentSection.objectID], documentSection.visibility),
+                             heightWithVisibility([reportFormatter heightForSectionWithObjectIdentifier:@(documentSection.identifier)], documentSection.visibility),
                              documentSection.visibility,
                              pageSection.sectionType,
                              reportFormatter.numberOfPages,

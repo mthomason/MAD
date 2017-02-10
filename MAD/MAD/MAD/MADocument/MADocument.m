@@ -535,7 +535,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark UIDocument
 
-- (NSDictionary *)layoutHeightsBySectionKey {
+- (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey {
     NSMutableDictionary *dictionary;
     dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
 
@@ -1253,8 +1253,8 @@ READFROMURL_END:;
             
             layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
             [RptqDocumentElement removeDocumentObject: documentObject
-                                   fromParentSection: parentSection
-                                   withLayoutManager: layoutManager];
+                                    fromParentSection: parentSection
+                                    withLayoutManager: layoutManager];
             [managedObjectContext deleteObject:documentObject];
         }
     }

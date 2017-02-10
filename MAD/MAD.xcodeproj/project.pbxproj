@@ -2853,6 +2853,7 @@
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
 					"\"$(SRCROOT)/../opt/lib/archive\"",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MAD;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2906,6 +2907,7 @@
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
 					"\"$(SRCROOT)/../opt/lib/archive\"",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MAD;
 				PRODUCT_NAME = "$(TARGET_NAME)";

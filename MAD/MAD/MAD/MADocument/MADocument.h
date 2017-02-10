@@ -87,7 +87,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
           fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSDictionary *)layoutHeightsBySectionKey;
+    - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey;
 
     + (void)close:(MADocument *)document
        completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion;

@@ -59,7 +59,13 @@
 #pragma mark -
 #pragma mark NSObject
 
-- (void)dealloc { }
+- (void)dealloc {
+    NSString *keyPathHasQueryGroups;
+    keyPathHasQueryGroups = NSStringFromSelector(@selector(hasQueryGroups));
+    [_document.hasDatabaseSchemas.anyObject.hasQueries.anyObject removeObserver:self
+                                                                     forKeyPath:keyPathHasQueryGroups];
+    
+}
 
 #pragma mark -
 #pragma mark Constructors
@@ -71,13 +77,14 @@
 - (instancetype)initWithDocument:(RptqDocument *)document {
     if (self = [super init]) {
 
-        NSString *path = NSStringFromSelector(@selector(hasQueryGroups));
+        NSString *keyPathHasQueryGroups;
+        keyPathHasQueryGroups = NSStringFromSelector(@selector(hasQueryGroups));
 
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *query =  database.hasQueries.anyObject;
 
         [query addObserver: self
-                forKeyPath: path
+                forKeyPath: keyPathHasQueryGroups
                    options: NSKeyValueObservingOptionNew
                    context: NULL];
         
