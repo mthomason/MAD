@@ -15,7 +15,7 @@
                                 andItem:(NSUInteger)item {
     
     const NSUInteger numberOfIndexes = 3;
-    const NSUInteger indexes[3] = {section, row, item};
+    NSUInteger indexes[] = {section, row, item};
     id result = [[NSIndexPath alloc] initWithIndexes: indexes
                                               length: numberOfIndexes];
     return result;

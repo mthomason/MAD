@@ -66,9 +66,10 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         
         if (calculateInMemory == NO) {
             
-            int64_t groupType = isAggregate.groupType;
+            int16_t groupType = isAggregate.groupType;
             NSArray <NSNumber *> *rowIdsForPage;
             rowIdsForPage = [datasource.reportFormatter rowidsForPage:definition.pageIndex];
+            
             aggregateResult = [[self class] newResultsForAggregateType: groupType
                                                               function: isAggregate.functionType
                                                               fieldKey: fieldKey

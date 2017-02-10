@@ -123,7 +123,6 @@
 #import "NSString+RelativePath.h"
 
 #import "UIImage+MADDocument.h"
-#import "MADErrorDocument.h"
 #import "UIManagedDocument+Extras.h"
 
 #import "miniz.h"
