@@ -20,8 +20,7 @@
 @implementation MTBarcodeDatabarStackedOmnidirectional
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeDatabarStackedOmnidirectional type];
         self.name = @"Databar Stacked Omnidirectional";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeRss14StackOmni;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"1111111999999";
     self.primaryData = @"";
 }

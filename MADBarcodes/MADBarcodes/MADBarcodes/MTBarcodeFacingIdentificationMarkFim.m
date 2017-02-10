@@ -20,8 +20,7 @@
 @implementation MTBarcodeFacingIdentificationMarkFim
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeFacingIdentificationMarkFim type];
         self.name = @"Facing Identification Mark (FIM)";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeFim;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"A";
     self.primaryData = @"";
 }

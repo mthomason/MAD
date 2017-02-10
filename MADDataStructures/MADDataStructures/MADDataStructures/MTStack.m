@@ -40,8 +40,7 @@
 }
 
 - (instancetype)initWithCapacity:(NSUInteger)capacity {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];
         self.stack = stack;
     }

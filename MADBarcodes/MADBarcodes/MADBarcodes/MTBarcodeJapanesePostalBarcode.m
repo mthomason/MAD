@@ -20,8 +20,7 @@
 @implementation MTBarcodeJapanesePostalBarcode
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypeJapanPost;
         self.name = @"Japanese Postal Barcode";
@@ -34,7 +33,7 @@
 
 + (MTBarcodeType)type { return MTBarcodeTypeJapanPost; }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"Japanese-Postal-Barcode";
     self.primaryData = @"";
 }

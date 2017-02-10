@@ -20,8 +20,7 @@
 @implementation MTBarcodeCodabar
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCodabar type];
         self.name = @"Codabar";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeCODABAR;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"9-$:/.+D";
     self.primaryData = @"";
 }

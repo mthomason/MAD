@@ -20,8 +20,7 @@
 @implementation MTBarcodeAztecRunes
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeAztecRunes type];
         self.name = @"Aztec Runes";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeAzrune;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"314159265359";
     self.primaryData = @"";
 }

@@ -160,11 +160,11 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSString *barcodeType = NSStringFromSelector(@selector(barcodeType));
-    NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
+    NSString *showErrorMessage = NSStringFromSelector(@selector(showErrorMessage));
     NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
     [self addObserver:barcode forKeyPath:barcodeType options:NSKeyValueObservingOptionNew context:NULL];
-    [self addObserver:barcode forKeyPath:showErrorMessages options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:barcode forKeyPath:showErrorMessage options:NSKeyValueObservingOptionNew context:NULL];
     [self addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
 }
 
@@ -394,16 +394,16 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                 break;
             }
             case 1: {
-                BOOL showErrorMessages = barcode.showErrorMessages;
+                BOOL showErrorMessage = barcode.showErrorMessage;
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowErrorMessages forIndexPath:indexPath];
-                UITableViewCellAccessoryType accessory = showErrorMessages ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+                UITableViewCellAccessoryType accessory = showErrorMessage ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 cell.accessoryType = accessory;
                 break;
             }
             case 2: {
                 
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceSymbolHeight forIndexPath:indexPath];
-                NSInteger symbolHeight = barcode.height;
+                NSInteger symbolHeight = barcode.barcodeHeight;
                 
                 static NSInteger tagWithStepper = 48584;
                 if (cell.tag != tagWithStepper) {
@@ -427,7 +427,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
         }
 
     } else if (section == tvsBorder(barcode.has2dComponent)) {
-        MTBarcodeBorderStyle borderStyle = barcode.borderStyle;
+        MTBarcodeBorderStyle borderStyle = barcode.barcodeBorderStyle;
         
         switch (indexPath.row) {
             case 0: {
@@ -616,8 +616,8 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                 }
                     
                 case 1: {
-                    BOOL showErrorMessages = [delegate didToggleShowErrorMessages];
-                    UITableViewCellAccessoryType accessory = showErrorMessages ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+                    BOOL showErrorMessage = [delegate didToggleShowErrorMessages];
+                    UITableViewCellAccessoryType accessory = showErrorMessage ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                     cell.accessoryType = accessory;
                     break;
                 }

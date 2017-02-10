@@ -20,7 +20,6 @@
 @implementation MTBarcodeCode2of5Iata
 
 - (instancetype)init {
-
     if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypeC25IATA;
@@ -36,7 +35,7 @@
     return MTBarcodeTypeC25IATA;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"11111111111";
     self.primaryData = @"";
 }

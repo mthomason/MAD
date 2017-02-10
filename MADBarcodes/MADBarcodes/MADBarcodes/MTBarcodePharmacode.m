@@ -20,8 +20,7 @@
 @implementation MTBarcodePharmacode
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodePharmacode type];
         self.name = @"Pharmacode";
@@ -36,7 +35,7 @@
     return MTBarcodeTypePharma;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"131070";
     self.primaryData = @"";
 }

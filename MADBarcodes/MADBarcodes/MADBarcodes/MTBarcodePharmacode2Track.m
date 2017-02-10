@@ -20,8 +20,7 @@
 @implementation MTBarcodePharmacode2Track
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodePharmacode2Track type];
         self.name = @"Pharmacode 2-track";
@@ -36,7 +35,7 @@
     return MTBarcodeTypePharmaTwo;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"64570080";
     self.primaryData = @"";
 }

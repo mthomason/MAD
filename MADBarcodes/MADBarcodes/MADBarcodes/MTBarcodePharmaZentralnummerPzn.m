@@ -20,8 +20,7 @@
 @implementation MTBarcodePharmaZentralnummerPzn
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodePharmaZentralnummerPzn type];
         self.name = @"Pharma Zentralnummer (PZN)";
@@ -36,7 +35,7 @@
     return MTBarcodeTypePzn;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"123456";
     self.primaryData = @"";
 }

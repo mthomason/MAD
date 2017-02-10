@@ -62,9 +62,9 @@
                              forDocumentObject: item
                                          value: rowData[tableFieldKey2]];
         
-        MTBarcode *barcode = [RptqDocumentElementBarcode newBarcode:item
-                                                             input1:input1
-                                                             input2:input2];
+        MTBarcode *barcode = [MTBarcode newBarcode:item
+                                            input1:input1
+                                            input2:input2];
         _drawingObject = barcode;
     }
     return self;

@@ -15,8 +15,7 @@
 @implementation MTPaperLegal
 
 - (instancetype)init {
-    self = [super init];
-    if (self) { }
+    if (self = [super init]) { }
     return self;
 }
 

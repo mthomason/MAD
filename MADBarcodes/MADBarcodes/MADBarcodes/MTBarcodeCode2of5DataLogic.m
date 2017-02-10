@@ -20,8 +20,7 @@
 @implementation MTBarcodeCode2of5DataLogic
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode2of5DataLogic type];
         self.name = @"Code 2 of 5 Data Logic";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeC25LOGIC;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"11111111111";
     self.primaryData = @"";
 }

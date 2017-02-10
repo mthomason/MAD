@@ -20,8 +20,7 @@
 @implementation MTBarcodeCode2of5Matrix
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode2of5Matrix type];
         self.name = @"Code 2 of 5 Matrix";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeC25MATRIX;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"11111111111";
     self.primaryData = @"";
 }

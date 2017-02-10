@@ -20,8 +20,7 @@
 @implementation MTBarcodeAusreDirect
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
 
         self.barcodeType = [MTBarcodeAusreDirect type];
         self.name = @"Australia Post Redirect Code";
@@ -34,7 +33,7 @@
 
 + (MTBarcodeType)type { return MTBarcodeTypeAusreDirect; }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"39549554";
     self.primaryData = @"";
 }

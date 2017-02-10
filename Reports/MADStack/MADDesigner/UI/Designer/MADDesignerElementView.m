@@ -329,7 +329,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                 
             case MTDocumentObjectTypeBarcode: {
                 MTBarcode *barcode;
-                barcode = [RptqDocumentElementBarcode newBarcode:(RptqDocumentElementBarcode *)element];
+                barcode = [MTBarcode newBarcode:(RptqDocumentElementBarcode *)element];
                 self.displayBarcode = barcode;
                 break;
             }

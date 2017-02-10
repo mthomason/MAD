@@ -74,6 +74,7 @@
 #import "MTBarcodeUspsIntelligentMail.h"
 
 #import <MADCocoaExtensions/MADColor.h>
+//#import <MAD/RptqDocumentElementBarcode.h>
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/NSStringDrawing.h>
@@ -99,6 +100,19 @@
 
 @implementation MTBarcode
 
+@synthesize barcodeType = _barcodeType;
+@synthesize whitespaceWidth = _whitespaceWidth;
+@synthesize has2dComponentEnabled = _has2dComponentEnabled;
+@synthesize barcodeBorderStyle = _barcodeBorderStyle;
+@synthesize barcodeBorderWidth = _barcodeBorderWidth;
+@synthesize barcodeHeight = _barcodeHeight;
+@synthesize humanReadable = _humanReadable;
+@synthesize option1 = _option1;
+@synthesize option2 = _option2;
+@synthesize option3 = _option3;
+@synthesize showErrorMessage = _showErrorMessage;
+@synthesize scale = _scale;
+
 - (void)dealloc { }
 
 - (instancetype)init {
@@ -107,10 +121,10 @@
         MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
         _forgroundColor = blackColor;
         _backgroundColor = whiteColor;
-        _showErrorMessages = YES;
+        _showErrorMessage = YES;
         _humanReadable = YES;
-        _height = 50;
-        _borderWidth = 5;
+        _barcodeHeight = 50;
+        _barcodeBorderWidth = 5;
         _rotate = (90.0000f * M_PI / 180.0000f);
         _option1 = NO;
         _option2 = NO;
@@ -119,6 +133,34 @@
         _scale = 1.0000f;
     }
     return self;
+}
+
++ (instancetype)newBarcode:(id <MTBarcodeProtocol>)documentObject {
+    
+    MTBarcode *barcode = [MTBarcode newBarcodeWithType:documentObject.barcodeType];
+    barcode.has2dComponentEnabled =     documentObject.has2dComponentEnabled;
+    barcode.barcodeBorderStyle =        documentObject.barcodeBorderStyle;
+    barcode.barcodeBorderWidth =        documentObject.barcodeBorderWidth;
+    barcode.barcodeHeight =             documentObject.barcodeHeight;
+    barcode.humanReadable =             documentObject.humanReadable;
+    barcode.option1 =                   documentObject.option1;
+    barcode.option2 =                   documentObject.option2;
+    barcode.option3 =                   documentObject.option3;
+    barcode.showErrorMessage =          documentObject.showErrorMessage;
+    barcode.whitespaceWidth =           documentObject.whitespaceWidth;
+    barcode.scale =                     documentObject.scale;
+    barcode.input =                     @"Sample data";
+    barcode.primaryData =               @"";
+    return barcode;
+}
+
++ (instancetype)newBarcode:(id <MTBarcodeProtocol>)documentObject
+                    input1:(NSString *)input1
+                    input2:(NSString *)input2 {
+    MTBarcode *barcode = [self newBarcode:documentObject];
+    barcode.input = input1.copy;
+    barcode.primaryData = input2.copy;
+    return barcode;
 }
 
 + (instancetype)newBarcodeWithType:(MTBarcodeType)type {
@@ -332,7 +374,6 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    self = [super init];
     if (self = [super init]) {
         
     }
@@ -354,13 +395,13 @@
     [coder encodeBool:      self.center                 forKey:@""];
     [coder encodeObject:    self.input                  forKey:@""];
 
-    [coder encodeInteger:   self.height                 forKey:@""];
+    [coder encodeInteger:   self.barcodeHeight          forKey:@""];
     [coder encodeInteger:   self.width                  forKey:@""];
-    [coder encodeInteger:   self.borderWidth            forKey:@""];
+    [coder encodeInteger:   self.barcodeBorderWidth     forKey:@""];
     [coder encodeInteger:   self.whitespaceWidth        forKey:@""];
     [coder encodeBool:      self.humanReadable          forKey:@""];
-    [coder encodeInteger:   self.borderStyle            forKey:@""];
-    [coder encodeBool:      self.showErrorMessages      forKey:@""];
+    [coder encodeInteger:   self.barcodeBorderStyle     forKey:@""];
+    [coder encodeBool:      self.showErrorMessage       forKey:@""];
     [coder encodeBool:      self.has2dComponentEnabled  forKey:@""];
     [coder encodeInteger:   self.has2dComponentType     forKey:@""];
     [coder encodeFloat:     self.scale                  forKey:@""];
@@ -425,11 +466,11 @@
         strcpy(barcode->fgcolour, fgcolor);
         strcpy(barcode->bgcolour, bgcolor);
         
-        barcode->height = (int)self.height;
-        barcode->border_width = (int)self.borderWidth;
+        barcode->height = (int)self.barcodeHeight;
+        barcode->border_width = (int)self.barcodeBorderWidth;
         barcode->whitespace_width = (int)self.whitespaceWidth;
         barcode->show_hrt = self.humanReadable;
-        barcode->output_options = self.borderStyle;
+        barcode->output_options = self.barcodeBorderStyle;
         barcode->scale = 1.0000f;
         barcode->input_mode = MTBarcodeDataTypeUnicode;
         
@@ -498,7 +539,7 @@
         }
         
         if (errorMessage) {
-            if (self.showErrorMessages) {
+            if (self.showErrorMessage) {
                 [errorMessage drawInRect:rect withAttributes:nil];
             }
         }
@@ -718,7 +759,7 @@
     return name.copy;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     
 }
 

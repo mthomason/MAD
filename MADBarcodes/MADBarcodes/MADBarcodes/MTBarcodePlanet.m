@@ -20,8 +20,7 @@
 @implementation MTBarcodePlanet
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypePlanet;
         self.name = @"PLANET";
@@ -34,7 +33,7 @@
 
 + (MTBarcodeType)type { return MTBarcodeTypePlanet; }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"1231231231231";
     self.primaryData = @"";
 }

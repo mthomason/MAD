@@ -50,7 +50,7 @@
     self.option2 = numberOfDataColumns;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = self.name;
     self.primaryData = @"";
 }

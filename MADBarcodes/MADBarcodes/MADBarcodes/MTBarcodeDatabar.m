@@ -20,8 +20,7 @@
 @implementation MTBarcodeDatabar
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeDatabar type];
         self.name = @"Databar";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeRss14;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"6660000000001";
     self.primaryData = @"";
 }

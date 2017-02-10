@@ -22,8 +22,7 @@
 @implementation MTBarcodeGridMatrix
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeGridMatrix type];
         self.name = @"Grid Matrix";
@@ -73,7 +72,7 @@
     return self.option1;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"http://www.everydayapps.com/";
     self.primaryData = @"";
 }

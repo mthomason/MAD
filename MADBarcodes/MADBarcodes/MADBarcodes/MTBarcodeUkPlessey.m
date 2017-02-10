@@ -20,8 +20,7 @@
 @implementation MTBarcodeUkPlessey
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeUkPlessey type];
         self.name = @"UK Plessey";
@@ -36,7 +35,7 @@
     return MTBarcodeTypePlessey;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"87654321";
     self.primaryData = @"";
 }

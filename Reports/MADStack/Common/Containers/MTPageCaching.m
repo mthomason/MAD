@@ -23,8 +23,7 @@
 @implementation MTPageCaching
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         NSMutableDictionary *pageCache = [[NSMutableDictionary alloc] init];
         [self setPageCache:pageCache];
     }

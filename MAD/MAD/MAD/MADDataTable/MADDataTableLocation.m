@@ -62,8 +62,7 @@ static NSString *_keyColumn;
 }
 
 - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         self.row = row;
         self.column = column;
     }

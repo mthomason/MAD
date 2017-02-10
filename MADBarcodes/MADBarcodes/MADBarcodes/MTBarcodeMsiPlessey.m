@@ -48,7 +48,7 @@
     self.option2 = checkDigit;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.option2 = 0;
     self.input = @"87654321";
     self.primaryData = @"";

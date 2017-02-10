@@ -20,8 +20,7 @@
 @implementation MTBarcodeEuropeanArticleNumberEan
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeEuropeanArticleNumberEan type];
         self.name = @"European Article Number (EAN)";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeEANX;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"54321";
     self.primaryData = @"";
 }

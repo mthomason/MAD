@@ -36,7 +36,7 @@
     return MTBarcodeTypeRssExp;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"[01]98898765432106[3202]012345[15]991231";
     self.primaryData = @"";
 }

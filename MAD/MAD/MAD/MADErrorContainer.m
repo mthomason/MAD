@@ -28,8 +28,7 @@ static NSString * const MADErrorContainerDate   = @"d";
 @implementation MADErrorContainer
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         NSMutableArray *errors = [NSMutableArray new];
         self.errors = errors;
     }

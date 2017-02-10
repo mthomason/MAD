@@ -20,8 +20,7 @@
 @implementation MTBarcodeCode16k
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode16k type];
         self.name = @"Code 16k";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeCODE16K;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"Code 16k";
     self.primaryData = @"";
 }

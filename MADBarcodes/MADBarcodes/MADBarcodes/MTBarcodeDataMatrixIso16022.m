@@ -59,7 +59,7 @@
     return self.option3 == DM_SQUARE;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"Thank you for using MAD Designer. Contact admin@everydayapps.com for your enterprise BI needs.";
     self.primaryData = @"";
 }

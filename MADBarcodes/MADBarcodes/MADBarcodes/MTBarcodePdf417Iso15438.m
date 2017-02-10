@@ -79,7 +79,7 @@ NSString * const MADStringDisplayPdfHibc    = @"HIBC PDF";
     self.option1 = errorCorrectionCapacity;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = self.name;
     self.primaryData = @"";
 }

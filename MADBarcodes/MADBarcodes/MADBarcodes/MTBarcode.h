@@ -13,15 +13,18 @@
 #import <CoreGraphics/CGGeometry.h>
 
 #import "MTBarcodeProtocol.h"
-#import "MADBarcodeType.h"
 
-#import "MADBarcodeBorderStyle.h"
 #import "MADBarcodeSizingMode.h"
 
-@class MADColor;
+@class MADColor, RptqDocumentElementBarcode;
 
 @interface MTBarcode : NSObject
     <MTBarcodeProtocol>
+
+    + (instancetype)newBarcode:(id <MTBarcodeProtocol>)documentObject;
+    + (instancetype)newBarcode:(id <MTBarcodeProtocol>)documentObject
+                        input1:(NSString *)input1
+                        input2:(NSString *)input2;
 
     + (instancetype)newBarcodeWithType:(MTBarcodeType)type;
 
@@ -31,33 +34,17 @@
 
     @property (nonatomic, copy, readwrite)  MADColor *forgroundColor;
     @property (nonatomic, copy, readonly)   MADColor *backgroundColor;
-
-    @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
-
     @property (nonatomic, assign, readonly) BOOL has2dComponent;
     @property (nonatomic, assign, readonly) BOOL hasOptionalInput;
-
-    @property (nonatomic, assign) int16_t option1;
-    @property (nonatomic, assign) int16_t option2;
-    @property (nonatomic, assign) int16_t option3;
 
     @property (nonatomic, assign) BOOL center;
 
     @property (nonatomic, retain) NSString *input;
-    @property (nonatomic, assign) int16_t height;
     @property (nonatomic, assign) NSInteger width;
-    @property (nonatomic, assign) int16_t borderWidth;
-    @property (nonatomic, assign) int16_t whitespaceWidth;
-    @property (nonatomic, assign) BOOL humanReadable;
-    @property (nonatomic, assign) MTBarcodeBorderStyle borderStyle;
-    @property (nonatomic, assign) BOOL showErrorMessages;
-
-    @property (nonatomic, assign) BOOL has2dComponentEnabled;
     @property (nonatomic, assign) NSInteger has2dComponentType;
 
-    @property (nonatomic, assign) float scale;
-
     - (void)drawInRect:(CGRect)rect;
+    - (void)loadSampleData;
 
     + (NSString *)newBarcodeNameForType:(MTBarcodeType)type;
     + (NSDictionary *)newDictionaryNames;

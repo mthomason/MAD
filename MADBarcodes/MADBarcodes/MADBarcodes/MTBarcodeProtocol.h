@@ -10,14 +10,28 @@
 #define Barcodes_MTBarcodeProtocol_h
 
 #import <Foundation/NSObject.h>
+#import "MADBarcodeType.h"
+#import "MADBarcodeBorderStyle.h"
 
 @protocol MTBarcodeProtocol <NSObject>
 
-@required
+  @required
 
-- (void)initSampleData;
+    @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
+    @property (nonatomic, assign) int16_t whitespaceWidth;
+    @property (nonatomic, assign) BOOL has2dComponentEnabled;
+    @property (nonatomic, assign) MTBarcodeBorderStyle barcodeBorderStyle;
+    @property (nonatomic, assign) int16_t barcodeBorderWidth;
+    @property (nonatomic, assign) int16_t barcodeHeight;
+    @property (nonatomic, assign) BOOL humanReadable;
+    @property (nonatomic, assign) int16_t option1;
+    @property (nonatomic, assign) int16_t option2;
+    @property (nonatomic, assign) int16_t option3;
+    @property (nonatomic, assign) BOOL showErrorMessage;
+    @property (nonatomic, assign) float scale;
 
-@optional
+
+  @optional
 
 @end
 

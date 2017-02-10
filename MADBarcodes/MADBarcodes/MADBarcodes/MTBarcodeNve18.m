@@ -20,8 +20,7 @@
 @implementation MTBarcodeNve18
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypeNve18;
         self.name = @"NVE-18";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeNve18;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"12345678901234567";
     self.primaryData = @"";
 }

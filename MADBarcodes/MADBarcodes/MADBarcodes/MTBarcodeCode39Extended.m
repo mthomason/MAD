@@ -48,7 +48,7 @@
     return self.option2 == 1;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"*CODE39*";
     self.primaryData = @"";
 }

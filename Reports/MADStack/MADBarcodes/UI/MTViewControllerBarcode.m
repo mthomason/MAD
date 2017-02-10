@@ -121,10 +121,10 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 - (void)dealloc {
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
-    NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
+    NSString *showErrorMessage = NSStringFromSelector(@selector(showErrorMessage));
     NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
     [self.optionsViewController removeObserver:self.barcode forKeyPath:barcodeTypeString];
-    [self.optionsViewController removeObserver:self.barcode forKeyPath:showErrorMessages];
+    [self.optionsViewController removeObserver:self.barcode forKeyPath:showErrorMessage];
     [self.optionsViewController removeObserver:self.barcode forKeyPath:humanReadable];
     [self setEditmode:NO];
 }
@@ -282,11 +282,10 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 }
 
 - (void)commonInit {
-    
     [self setEditModeBarcodeType:NO];
 
     MTBarcode *barcode = [MTBarcode newBarcodeWithType:MTBarcodeTypeAztec];
-    [barcode setShowErrorMessages:YES];
+    barcode.showErrorMessage = YES;
     self.barcode = barcode;
 }
 
@@ -323,7 +322,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 - (void)setBarcodeToEdit:(RptqDocumentElementBarcode *)barcodeDocumentObject {
 
     MTBarcode *barcode;
-    barcode = [RptqDocumentElementBarcode newBarcode:barcodeDocumentObject];
+    barcode = [MTBarcode newBarcode:barcodeDocumentObject];
     self.barcode = barcode;
     
     self.queryField1 = barcodeDocumentObject.referencesField1;
@@ -379,24 +378,24 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 }
 
 - (BOOL)didToggleShowErrorMessages {
-    BOOL showErrorMessages = !(self.barcode).showErrorMessages;
-    (self.barcode).showErrorMessages = showErrorMessages;
+    BOOL showErrorMessage = !(self.barcode).showErrorMessage;
+    (self.barcode).showErrorMessage = showErrorMessage;
     [self updateBarcode];
-    return showErrorMessages;
+    return showErrorMessage;
 }
 
 - (void)didChangeSymbolHeight:(int16_t)symbolHeight {
-    self.barcode.height = symbolHeight;
+    self.barcode.barcodeHeight = symbolHeight;
     [self updateBarcode];
 }
 
 - (void)setBorderWidth:(int16_t)borderWidth {
-    self.barcode.borderWidth = borderWidth;
+    self.barcode.barcodeBorderWidth = borderWidth;
     [self updateBarcode];
 }
 
 - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle {
-    (self.barcode).borderStyle = borderStyle;
+    (self.barcode).barcodeBorderStyle = borderStyle;
     [self updateBarcode];
 }
 
@@ -520,13 +519,13 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     MTBarcode *barcode = [MTBarcode newBarcodeWithType:barcodeType];
     
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
-    NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
+    NSString *showErrorMessage = NSStringFromSelector(@selector(showErrorMessage));
     NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
     [self.optionsViewController removeObserver:self.barcode forKeyPath:barcodeTypeString];
-    [self.optionsViewController removeObserver:self.barcode forKeyPath:showErrorMessages];
+    [self.optionsViewController removeObserver:self.barcode forKeyPath:showErrorMessage];
     [self.optionsViewController removeObserver:self.barcode forKeyPath:humanReadable];
     [self.optionsViewController addObserver:barcode forKeyPath:barcodeTypeString options:NSKeyValueObservingOptionNew context:NULL];
-    [self.optionsViewController addObserver:barcode forKeyPath:showErrorMessages options:NSKeyValueObservingOptionNew context:NULL];
+    [self.optionsViewController addObserver:barcode forKeyPath:showErrorMessage options:NSKeyValueObservingOptionNew context:NULL];
     [self.optionsViewController addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
     [self.previewViewController setBarcodeToPreview:barcode];
     self.barcode = barcode;

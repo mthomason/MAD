@@ -73,7 +73,7 @@
     return self.option1;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"Sample Data";
     self.primaryData = @"";
 }

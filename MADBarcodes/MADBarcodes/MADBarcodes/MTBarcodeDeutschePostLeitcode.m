@@ -20,8 +20,7 @@
 @implementation MTBarcodeDeutschePostLeitcode
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypeDPLEIT;
         self.name = @"Deutsche Post Leitcode";
@@ -34,7 +33,7 @@
 
 + (MTBarcodeType)type { return MTBarcodeTypeDPLEIT; }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"1111111111111";
     self.primaryData = @"";
 }

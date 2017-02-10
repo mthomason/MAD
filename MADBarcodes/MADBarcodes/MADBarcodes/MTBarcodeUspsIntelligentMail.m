@@ -20,8 +20,7 @@
 @implementation MTBarcodeUspsIntelligentMail
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypeOneCode;
         self.name = @"USPS OneCode (Intelligent Mail)";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeOneCode;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"01234567094987654321-01234567891";
     self.primaryData = @"";
 }

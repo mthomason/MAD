@@ -27,6 +27,8 @@
 
 @implementation RptqDocumentElementBarcode (Extras)
 
+@dynamic has2dComponentEnabled;
+
 - (NSString *)designerRepresentationText {
     NSString *barcodeName = [(RptqDocumentElementBarcode *)self copyBarcodeTypeName];
     id result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
@@ -38,51 +40,31 @@
     return result;
 }
 
+- (void)setHas2dComponentEnabled:(BOOL)has2dComponentEnabled {
+    self.add2dComponent = has2dComponentEnabled;
+}
+
+- (BOOL)has2dComponentEnabled {
+    return self.add2dComponent;
+}
+
 - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
 
     self.add2dComponent =       @(barcode.has2dComponent);
-    self.barcodeBorderStyle =   barcode.borderStyle;
-    self.barcodeBorderWidth =   barcode.borderWidth;
+    self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
+    self.barcodeBorderWidth =   barcode.barcodeBorderWidth;
     self.type =                 barcode.barcodeType;
-    self.barcodeHeight =        barcode.height;
+    self.barcodeHeight =        barcode.barcodeHeight;
     self.humanReadable =        barcode.humanReadable;
     self.option1 =              barcode.option1;
     self.option2 =              barcode.option2;
     self.option3 =              barcode.option3;
-    self.showErrorMessage =     barcode.showErrorMessages;
+    self.showErrorMessage =     barcode.showErrorMessage;
     self.whitespaceWidth =      barcode.whitespaceWidth;
     self.scale =                barcode.scale;
     self.referencesField1 =     fieldOne;
     self.referencesField2 =     fieldTwo;
     [self.managedObjectContext save:nil];
-}
-
-+ (MTBarcode *)newBarcode:(RptqDocumentElementBarcode *)documentObject {
-    
-    MTBarcode *barcode = [MTBarcode newBarcodeWithType:documentObject.barcodeType];
-    barcode.has2dComponentEnabled =     documentObject.add2dComponent;
-    barcode.borderStyle =               documentObject.barcodeBorderWidth;
-    barcode.borderWidth =               documentObject.barcodeBorderWidth;
-    barcode.height =                    documentObject.barcodeHeight;
-    barcode.humanReadable =             documentObject.humanReadable;
-    barcode.option1 =                   documentObject.option1;
-    barcode.option2 =                   documentObject.option2;
-    barcode.option3 =                   documentObject.option3;
-    barcode.showErrorMessages =         documentObject.showErrorMessage;
-    barcode.whitespaceWidth =           documentObject.whitespaceWidth;
-    barcode.scale =                     documentObject.scale;
-    barcode.input =                     @"Sample data";
-    barcode.primaryData =               @"";
-    return barcode;
-}
-
-+ (MTBarcode *)newBarcode:(RptqDocumentElementBarcode *)documentObject
-                   input1:(NSString *)input1
-                   input2:(NSString *)input2 {
-    MTBarcode *barcode = [self newBarcode:documentObject];
-    barcode.input = input1.copy;
-    barcode.primaryData = input2.copy;
-    return barcode;
 }
 
 + (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
@@ -102,16 +84,16 @@
         reportObject = [[RptqDocumentElementBarcode alloc] initWithEntity: entityDescription
                                           insertIntoManagedObjectContext: objectContext];
         reportObject.add2dComponent = barcode.has2dComponentEnabled;
-        reportObject.barcodeBorderStyle = barcode.borderStyle;
-        reportObject.barcodeBorderWidth = barcode.borderWidth;
+        reportObject.barcodeBorderStyle = barcode.barcodeBorderStyle;
+        reportObject.barcodeBorderWidth = barcode.barcodeBorderWidth;
         reportObject.backgroundColor = [UIColor whiteColor];
         reportObject.foregroundColor = [UIColor blackColor];
-        reportObject.barcodeHeight = barcode.height;
+        reportObject.barcodeHeight = barcode.barcodeHeight;
         reportObject.humanReadable = barcode.humanReadable;
         reportObject.option1 = barcode.option1;
         reportObject.option2 = barcode.option2;
         reportObject.option3 = barcode.option3;
-        reportObject.showErrorMessage = barcode.showErrorMessages;
+        reportObject.showErrorMessage = barcode.showErrorMessage;
         reportObject.type = barcode.barcodeType;
         reportObject.whitespaceWidth = barcode.whitespaceWidth;
         reportObject.useStaticInput1 = NO;

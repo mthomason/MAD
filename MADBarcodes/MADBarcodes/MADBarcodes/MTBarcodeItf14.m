@@ -20,8 +20,7 @@
 @implementation MTBarcodeItf14
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeItf14 type];
         self.name = @"ITF-14";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeItf14;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"9891234567890";
     self.primaryData = @"";
 }

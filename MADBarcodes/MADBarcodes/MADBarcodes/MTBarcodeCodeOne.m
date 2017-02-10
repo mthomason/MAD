@@ -21,8 +21,7 @@
 @implementation MTBarcodeCodeOne
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCodeOne type];
         self.name = @"Code One";
@@ -46,7 +45,7 @@
     return self.option2;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"http://www.everydayapps.com/";
     self.primaryData = @"";
 }

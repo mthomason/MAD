@@ -28,10 +28,6 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 /*
 - (instancetype)initWithFrame:(CGRect)frame
                  type:(MTBarcodeType)barcodeType

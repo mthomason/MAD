@@ -20,8 +20,7 @@
 @implementation MTBarcodeTelepenNumeric
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeTelepenNumeric type];
         self.name = @"Telepen Numeric";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeTelepenNum;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"466X33";
     self.primaryData = @"";
 }

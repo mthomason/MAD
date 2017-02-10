@@ -47,7 +47,7 @@
     self.option2 = numberOfDataColumns;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"1666666666661";
     self.primaryData = @"";
 }

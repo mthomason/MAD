@@ -20,8 +20,7 @@
 @implementation MTBarcodeEan14
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = MTBarcodeTypeEan14;
         self.name = @"EAN-14";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeEan14;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"1111111111111";
     self.primaryData = @"";
 }

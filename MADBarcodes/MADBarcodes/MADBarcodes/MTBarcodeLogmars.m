@@ -20,8 +20,7 @@
 @implementation MTBarcodeLogmars
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeLogmars type];
         self.name = @"LOGMARS";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeLogmars;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = self.name;
     self.primaryData = @"";
 }

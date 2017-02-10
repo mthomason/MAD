@@ -36,7 +36,7 @@
     return MTBarcodeTypeRm4scc;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"W1J0TR01";
     self.primaryData = @"";
 }

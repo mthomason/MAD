@@ -33,7 +33,7 @@
 
 + (MTBarcodeType)type { return MTBarcodeTypeAusroute; }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"39549554";
     self.primaryData = @"";
 }

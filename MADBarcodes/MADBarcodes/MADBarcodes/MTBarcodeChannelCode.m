@@ -22,8 +22,7 @@
 @implementation MTBarcodeChannelCode
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeChannelCode type];
         self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasChannelCode";
@@ -47,7 +46,7 @@
     return self.option2;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     [self setNumberOfChannels:   4];
     self.input = @"257";
     self.primaryData = @"";

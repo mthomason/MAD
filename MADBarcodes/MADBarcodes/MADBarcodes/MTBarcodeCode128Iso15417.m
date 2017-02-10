@@ -20,8 +20,7 @@
 @implementation MTBarcodeCode128Iso15417
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode128Iso15417 type];
         self.name = @"Code 128 (ISO 15417)";
@@ -36,7 +35,7 @@
     return MTBarcodeTypeCODE128;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"Code 128";
     self.primaryData = @"";
 }
@@ -46,8 +45,7 @@
 @implementation MTBarcodeCode128SubsetB
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode128SubsetB type];
         self.name = @"Code 128 (Subset C Suppression)";
@@ -62,7 +60,7 @@
     return MTBarcodeTypeCode128b;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"Code 128b";
     self.primaryData = @"";
 }
@@ -72,8 +70,7 @@
 @implementation MTBarcodeCode128Ean14
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode128Ean14 type];
         self.name = @"Code 128 (EAN-14)";
@@ -88,7 +85,7 @@
     return MTBarcodeTypeEan14;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"9889876543210";
     self.primaryData = @"";
 }
@@ -98,8 +95,7 @@
 @implementation MTBarcodeCode128Nve18
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode128Nve18 type];
         self.name = @"Code 128 (HBIC)";
@@ -114,7 +110,7 @@
     return MTBarcodeTypeNve18;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"13666666666666613";
     self.primaryData = @"";
 }
@@ -124,8 +120,7 @@
 @implementation MTBarcodeCode128Hibc
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode128Hibc type];
         self.name = @"Code 128 (GS1-128)";
@@ -140,7 +135,7 @@
     return MTBarcodeTypeHibc128;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"27182818";
     self.primaryData = @"";
 }
@@ -150,8 +145,7 @@
 @implementation MTBarcodeCode128Ean128
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         
         self.barcodeType = [MTBarcodeCode128Hibc type];
         self.name = @"Code 128 (GS1-128)";
@@ -166,7 +160,7 @@
     return MTBarcodeTypeEAN128;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"27182818";
     self.primaryData = @"";
 }

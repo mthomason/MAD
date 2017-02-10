@@ -36,7 +36,7 @@
     return MTBarcodeTypeUpce;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"1123456";
     self.primaryData = @"";
 }

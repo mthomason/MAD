@@ -36,7 +36,7 @@
     return [MTBarcodeInternationalStandardBookNumberIsbn type];
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"0812511816";
     self.primaryData = @"";
 }

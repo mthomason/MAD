@@ -64,7 +64,7 @@
     return self.primaryData;
 }
 
-- (void)initSampleData {
+- (void)loadSampleData {
     self.input = @"666001433";
     self.primaryData = @"MAD Designer";
 }
