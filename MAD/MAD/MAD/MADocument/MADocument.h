@@ -28,9 +28,6 @@
         MADSectionLayoutManager, MTQueryFull, MTPaper;
 
 
-typedef NSMutableDictionary <NSNumber *, MADSectionLayoutManager *>
-                                                        MADSectionLayoutManagerMutableMap;
-
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
@@ -47,7 +44,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
     @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
-    @property (readwrite, nonatomic, weak)                 NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
+    @property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
 
     @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
 
@@ -57,7 +54,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
 
-    @property (readonly, nonatomic, strong)     MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
+    @property (readonly, nonatomic, strong)     NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
     @property (readonly, nonatomic, copy)       NSString *filename;
     @property (readonly, nonatomic, strong)     MTQueryFull *mainQuery;

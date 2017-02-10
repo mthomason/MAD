@@ -243,28 +243,25 @@ void madwarn(char *err,  const char*err2) { }
         MADCacheProtocol,
         MADDatabaseProtocol>
 
-    //@property (nonatomic, readwrite, strong) RptqDocument *reportDocument;
     @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
     @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
     @property (nonatomic, readwrite, strong) NSDictionary *madPersistentStoreOptions;
 
     @property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
-
-    @property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
-    @property (nonatomic, readwrite, copy) NSURL *urlGuts;
-    @property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
-
     @property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
     @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
     @property (nonatomic, readwrite, strong) MTDatabase *database;
+    @property (nonatomic, readwrite, strong) MTQueryFull *mainQuery;
 
-    @property (nonatomic, readwrite, strong) MADSectionLayoutManagerMutableMap *sectionLayoutManagers;
+    @property (nonatomic, readwrite, strong) NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
     @property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
     @property (nonatomic, readwrite, strong) MTPaper *paper;
-    @property (nonatomic, readwrite, strong) MTQueryFull     *mainQuery;
 
+    @property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
+    @property (nonatomic, readwrite, copy) NSURL *urlGuts;
+    @property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
 
 @end
 
@@ -699,10 +696,10 @@ READFROMURL_END:;
 #pragma mark -
 #pragma mark UIManagedDocument Overrides
 
-- (NSManagedObjectContext *)managedObjectContext {
+/*- (NSManagedObjectContext *)managedObjectContext {
     id managedObjectContext = [super managedObjectContext];
     return managedObjectContext;
-}
+}*/
 
 /*- (NSManagedObjectModel *)managedObjectModel {
     return self.madManagedObjectModel;
@@ -1005,8 +1002,7 @@ READFROMURL_END:;
 #pragma mark NSManagedObjectContext Notifications
 
 - (void)handleManagedObjectContextDidChange:(NSNotification *)notification {
-    NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
-
+    //NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
     self.documentStatus.needsSave = YES;
     self.documentStatus.contextChagned = YES;
 }
@@ -1144,8 +1140,8 @@ READFROMURL_END:;
     return _activeDocumentModel;
 }
 
-- (MADSectionLayoutManagerMutableMap *)sectionLayoutManagers {
-    if (!_sectionLayoutManagers || _sectionLayoutManagers.count == 0) {
+- (NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *)sectionLayoutManagers {
+    if (!_sectionLayoutManagers) {
         NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
         RptqDocumentSectionEnumerator *sections;
         MADSectionLayoutManager *layoutManager;

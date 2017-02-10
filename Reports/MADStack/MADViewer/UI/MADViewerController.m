@@ -823,7 +823,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - UI Updates
 
 - (void)setDisplayActive {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
@@ -846,7 +845,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)setDisplayInactive {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
@@ -998,13 +996,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (IBAction)refresh:(id)sender {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    self->_didRefreshBeforeReaload = YES;
+    _didRefreshBeforeReaload = YES;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
     
     if (_refreshing == NO) {
-        self->_startedRefresh = YES;
+        _startedRefresh = YES;
         _refreshing = YES;
         
         [self setDisplayInactive];
@@ -1024,7 +1020,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)addObserverDidReadRowsToDatabase:(MTDatabase *)database {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportDocumentDidReadRows:)
                                                  name: MADNotificationDidReadRowsName
@@ -1032,30 +1027,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationDidReadRowsName
                                                   object: database];
 }
 
 
-- (IBAction)zoomToActualSize:(id)sender {
-    
-}
+- (IBAction)zoomToActualSize:(id)sender { }
 
-- (IBAction)zoomToFit:(id)sender {
-    
-}
+- (IBAction)zoomToFit:(id)sender { }
 
-- (IBAction)zoomToFullScreen:(id)sender {
-    
-}
+- (IBAction)zoomToFullScreen:(id)sender { }
 
 #pragma mark - Acivities
 
 - (MADActivityItemProviderPdf *)activityItemProviderPdf {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
@@ -1072,8 +1058,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller completion:(void (^)(BOOL))completion {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         completion(YES);
     } else {
@@ -1215,8 +1199,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (UIViewController *)pageViewController:(MADViewerController *)viewerViewController
       viewControllerBeforeViewController:(MADDocumentPageController *)pageViewControllerPrevious {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADDocumentPageController *result = nil;
     
     if (viewerViewController->_pageIsAnimating == NO) {
@@ -1410,12 +1392,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return YES;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [(MADTabBarController *)self.tabBarController enableTabBarItems];
 }
 
@@ -1424,8 +1404,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark - UIAccessibility
 
 - (BOOL)accessibilityScroll:(UIAccessibilityScrollDirection)direction {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     switch (direction) {
 
         case UIAccessibilityScrollDirectionNext:
@@ -1445,13 +1423,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (BOOL)accessibilityPerformEscape {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.viewControllerDelegate viewControllerDidFinish:nil];
     return YES;
 }
 
 - (BOOL)isAccessibilityElement {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return NO;
 }
 
@@ -1459,7 +1435,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark Traits
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self updateNavigationPrompt:previousTraitCollection != nil];
 }
 
@@ -1467,7 +1442,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark Helpers
 
 - (void)updateNavigationPrompt:(BOOL)animated {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         [UIView setAnimationsEnabled:animated];
         self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
@@ -1478,7 +1452,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (NSUInteger)currentPageNumber {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return _currentLocation.currentPage + 1;
 }
 
@@ -1490,9 +1463,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    
     if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
         
         if (((MADOperationRefreshReload *)operation).completedSuccessfully) {
