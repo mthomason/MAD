@@ -41,7 +41,7 @@
 }
 
 + (BOOL)item:(MADSectionLayoutAttributes *)item
-        intersectsAnItem:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
+        intersectsAnItem:(NSArray <MADSectionLayoutAttributes *> *)items {
     BOOL intersects = NO;
     for (MADSectionLayoutAttributes *existingItem in items) {
         if (item.objectID != existingItem.objectID) {
@@ -68,7 +68,7 @@
 }
 
 + (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem
-     intersectingItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)allItems {
+     intersectingItems:(NSArray <MADSectionLayoutAttributes *> *)allItems {
     
     CGPoint dropPoint = CGPointZero;
     double distance = MADDistance(placedItem.frame.origin, dropPoint),
@@ -113,7 +113,7 @@
     return instance;
 }
 
-- (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items {
+- (BOOL)intersectsAnItemInArray:(NSArray <MADSectionLayoutAttributes *> *)items {
     return [MADSectionLayoutAttributes item:self intersectsAnItem:items];
 }
 
@@ -121,12 +121,12 @@
     return [MADSectionLayoutAttributes moveItemOnScreen:self];
 }
 
-- (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)layoutAttributes {
+- (void)placeItemGivenAttributes:(NSArray <MADSectionLayoutAttributes *> *)layoutAttributes {
     [MADSectionLayoutAttributes movePlacedItem:self intersectingItems:layoutAttributes];
 }
 
 - (BOOL)validDropPoint:(CGPoint)dropPoint
-      givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems {
+      givenPlacedItems:(NSArray <MADSectionLayoutAttributes *> *)placedItems {
 
     BOOL valid = YES;
     for (MADSectionLayoutAttributes *placedItem in placedItems) {

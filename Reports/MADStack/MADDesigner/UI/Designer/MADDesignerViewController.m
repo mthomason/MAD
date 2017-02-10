@@ -2154,13 +2154,6 @@ static const inline CGSize sizePopoverFonts() {
     return cell;
 }
 
-- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView
-     numberOfItemsInSection: (NSInteger)section {
-    MADSectionLayoutManager *layoutManager;
-    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
-    return (NSInteger)layoutManager.items.count;
-}
-
 - (UICollectionReusableView *)collectionView: (UICollectionView *)collectionView
            viewForSupplementaryElementOfKind: (NSString *)kind
                                  atIndexPath: (NSIndexPath *)indexPath {
@@ -2187,6 +2180,13 @@ static const inline CGSize sizePopoverFonts() {
                                                            forIndexPath: indexPath];
     }
     return result;
+}
+
+- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView
+     numberOfItemsInSection: (NSInteger)section {
+    MADSectionLayoutManager *layoutManager;
+    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
+    return (NSInteger)layoutManager.items.count;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

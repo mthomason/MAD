@@ -22,10 +22,10 @@
                                                objectID:(NSNumber *)objectID
                                                 andRect:(CGRect)rect;
 
-    - (void)placeItemGivenAttributes:(NSArray <__kindof MADSectionLayoutAttributes *> *)attributes;
-    - (BOOL)intersectsAnItemInArray:(NSArray <__kindof MADSectionLayoutAttributes *> *)items;
+    - (void)placeItemGivenAttributes:(NSArray <MADSectionLayoutAttributes *> *)attributes;
+    - (BOOL)intersectsAnItemInArray:(NSArray <MADSectionLayoutAttributes *> *)items;
     - (BOOL)validDropPoint:(CGPoint)dropPoint
-          givenPlacedItems:(NSArray <__kindof MADSectionLayoutAttributes *> *)placedItems;
+          givenPlacedItems:(NSArray <MADSectionLayoutAttributes *> *)placedItems;
     - (BOOL)moveOnScreen;
     - (NSArray <NSValue *> *)copyDropPointsHorizontal;
     - (NSArray <NSValue *> *)copyDropPoints;

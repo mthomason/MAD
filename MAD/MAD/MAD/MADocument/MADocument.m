@@ -921,7 +921,6 @@ READFROMURL_END:;
         
         queryGroup.hasField = queryField;   //Retain cycle
         
-        
         //Create group header (contains a retain cycle)
         RptqDocumentSection *headerSection;
         headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
@@ -950,11 +949,13 @@ READFROMURL_END:;
         [queryGroup addHasSectionObject:footerSection];
         
         
-        MADSectionLayoutManager *layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:headerSection];
-        (self.sectionLayoutManagers)[headerSection.objectID] = layoutManagerHeader;
+        MADSectionLayoutManager *layoutManagerHeader;
+        layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:headerSection];
+        self.sectionLayoutManagers[@(headerSection.identifier)] = layoutManagerHeader;
         
-        MADSectionLayoutManager *layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:footerSection];
-        (self.sectionLayoutManagers)[footerSection.objectID] = layoutManagerFooter;
+        MADSectionLayoutManager *layoutManagerFooter;
+        layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:footerSection];
+        self.sectionLayoutManagers[@(footerSection.identifier)] = layoutManagerFooter;
 
 
         RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
@@ -1024,19 +1025,19 @@ READFROMURL_END:;
     if (document != nil) {
         switch (document.documentState) {
             case UIDocumentStateClosed:
-                //NSLog(@"\n\n\tDocument state closed.\n\n");
+                NSLog(@"\n\n\tDocument state closed.\n\n");
                 break;
             case UIDocumentStateEditingDisabled:
-                //NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
             case UIDocumentStateInConflict:
-                //NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
             case UIDocumentStateNormal:
-                //NSLog(@"\n\n\tDocument state normal.\n\n");
+                NSLog(@"\n\n\tDocument state normal.\n\n");
                 break;
             case UIDocumentStateSavingError:
-                //NSLog(@"\n\n\tDocument state saving error.\n\n");
+                NSLog(@"\n\n\tDocument state saving error.\n\n");
                 break;
             default:
                 break;
@@ -1141,14 +1142,18 @@ READFROMURL_END:;
 }
 
 - (NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *)sectionLayoutManagers {
-    if (!_sectionLayoutManagers) {
-        NSMutableDictionary *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
+    if (_sectionLayoutManagers.count == 0) {
+        NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
         RptqDocumentSectionEnumerator *sections;
         MADSectionLayoutManager *layoutManager;
+        NSNumber *identifier;
+        
+        sectionLayoutManagers = [[NSMutableDictionary alloc] init];
         sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.activeDocumentModel];
         for (RptqDocumentSection *reportSection in sections) {
             layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-            sectionLayoutManagers[reportSection.objectID] = layoutManager;
+            identifier = @(reportSection.identifier);
+            sectionLayoutManagers[identifier] = layoutManager;
         }
         
         _sectionLayoutManagers = sectionLayoutManagers;
