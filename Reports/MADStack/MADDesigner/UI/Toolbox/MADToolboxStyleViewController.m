@@ -29,9 +29,9 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
+#import <MAD/MADAlignment.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
-#import <MAD/MADAlignment.h>
 
 #import "MADControlState.h"
 

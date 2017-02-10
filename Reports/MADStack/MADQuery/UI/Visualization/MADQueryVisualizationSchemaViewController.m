@@ -42,15 +42,6 @@
 #import <MAD/MADModelQueryTable.h>
 #import <MAD/MADModelQueryField.h>
 
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
-
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryTable+Extras.h>
-
-#import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqDatabaseSchemaField+Extras.h>
-
 #import "MTTitleView.h"
 #import "MTSchemaFieldCell.h"
 #import "MADConnectorView.h"
