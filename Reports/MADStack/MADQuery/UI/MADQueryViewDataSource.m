@@ -474,11 +474,10 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             NSString *rightString = [MADStringQueryController newStringFieldDisplayWithTable: links.tableRightID
                                                                                     andField: links.fieldRightID];
             
-            NSString *linksDescription = [links copyLinkDescription];
             NSAttributedString *message;
             message = [MADAttributedStringQueryController newAttributedStringQuerySectionLinks: leftString
                                                                                    rightString: rightString
-                                                                              linksDescription: linksDescription];
+                                                                              linksDescription: [links linkDescription]];
             ((MADTableViewCellQueryLink *)cell).tableID = links.objectID.copy;
             cell.textLabel.attributedText = message;
 

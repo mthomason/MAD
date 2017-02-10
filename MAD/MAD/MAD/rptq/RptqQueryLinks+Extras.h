@@ -38,7 +38,7 @@ extern NSString * const MTLinkSqlFullOuterJoin;
                                       joinType:(MNSLinkType)joinType
                           managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSString *)copyLinkDescription;
+    - (NSString *)linkDescription;
 
     + (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
     + (NSString *)newLocalizedNameForLinkType:(MNSLinkType)type;

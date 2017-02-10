@@ -43,15 +43,8 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 @implementation RptqQueryLinks (Extras)
 
-#pragma mark - Overrides
-
-- (void)awakeFromInsert {
-    [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
-}
-
-#pragma mark - Static
+#pragma mark -
+#pragma mark Static
 
 + (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
                                 rightField:(RptqQueryField *)fieldRight
@@ -69,13 +62,8 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     queryLinks.tableRightID     = fieldRight.inQueryTable.alias.copy;
     queryLinks.fieldRightID     = fieldRight.databaseSchemaField.name.copy;
     queryLinks.type             = joinType;
-
+    
     return queryLinks;
-}
-
-- (NSString *)copyLinkDescription {
-    NSString *localizedName = [RptqQueryLinks newLocalizedNameForLinkType:self.type];
-    return localizedName;
 }
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type {
@@ -174,13 +162,28 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return NSLocalizedString(name, name);
 }
 
+
+#pragma mark -
+#pragma mark Overrides
+
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                        managedObjectContext:self.managedObjectContext];
+}
+
+- (NSString *)linkDescription {
+    NSString *localizedName = [RptqQueryLinks newLocalizedNameForLinkType:self.type];
+    return localizedName;
+}
+
 // MARK: MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
     NSString *name = self.hasLeftField.databaseSchemaField.name;
     NSString *nameRight = self.hasRightField.databaseSchemaField.name;
     NSMutableString *result = name.mutableCopy;
-    NSString *linkDescription = [self copyLinkDescription];
+    NSString *linkDescription = [self linkDescription];
     [result appendFormat:@" %@ ", linkDescription];
     [result appendString:nameRight];
     return result;

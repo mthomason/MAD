@@ -21,19 +21,25 @@
 + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
                               groupLevel:(NSUInteger)groupLevel
                                      row:(NSUInteger)row {
-    id result = [[self alloc] initSectionRepresentation:sectionType groupLevel:groupLevel row:row];
+    id result = [[self alloc] initSectionRepresentation: sectionType
+                                             groupLevel: groupLevel
+                                                    row: row];
     return result;
 }
 
 + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
                                      row:(NSUInteger)row {
-    id result = [[self alloc] initSectionRepresentation:sectionType groupLevel:NSUIntegerMax row:row];
+    id result = [[self alloc] initSectionRepresentation: sectionType
+                                             groupLevel: NSUIntegerMax
+                                                    row: row];
     return result;
 }
 
 - (instancetype)initSectionRepresentation:(MADDocumentSectionType)sectionType
                                       row:(NSUInteger)row {
-    return [self initSectionRepresentation:sectionType groupLevel:NSUIntegerMax row:row];
+    return [self initSectionRepresentation: sectionType
+                                groupLevel: NSUIntegerMax
+                                       row: row];
 }
 
 - (instancetype)initSectionRepresentation:(MADDocumentSectionType)sectionType

@@ -10,7 +10,7 @@
 #import <UIKit/UIGeometry.h>
 #import "MADReportLineRepresentation.h"
 
-typedef NSMutableSet <__kindof MADReportLineRepresentation *>  MADMutableSetReportLines;
+typedef NSMutableSet <MADReportLineRepresentation *>  MADMutableSetReportLines;
 
 @interface MADReportSectionRowsRepresentation ()
 
@@ -32,7 +32,8 @@ typedef NSMutableSet <__kindof MADReportLineRepresentation *>  MADMutableSetRepo
 
 - (instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount {
     if (self = [super init]) {
-        MADMutableSetReportLines *lines = [[MADMutableSetReportLines alloc] initWithCapacity:elementCount];
+        MADMutableSetReportLines *lines;
+        lines = [[MADMutableSetReportLines alloc] initWithCapacity:elementCount];
         self.lines = lines;
     }
     return self;

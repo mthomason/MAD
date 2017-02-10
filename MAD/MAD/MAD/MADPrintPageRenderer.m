@@ -91,14 +91,51 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
 static const char *MADQueueTextRepresentation = "com.everdayapps.mad.accessibility";
 
-static inline CGFloat heightWithVisibility(CGFloat height, BOOL visibility);
-static inline CGRect sectionBounds(CGRect pageRect,
-                                 CGFloat sectionHeight,
-                                 BOOL visility,
-                                 MADDocumentSectionType sectionType,
-                                 NSUInteger numberOfPages,
-                                 NSUInteger pageIndex,
-                                 CGFloat originY);
+static inline CGRect ElementBounds(CGRect, CGPoint);
+static inline CGFloat HeightWithVisibility(CGFloat, BOOL);
+static inline CGRect SectionBounds(CGRect, CGFloat, BOOL, MADDocumentSectionType, NSUInteger, NSUInteger, CGFloat);
+
+static inline CGRect ElementBounds(CGRect documentObjectFrame, CGPoint sectionBoundsOrigin) {
+    return CGRectMake(documentObjectFrame.origin.x + sectionBoundsOrigin.x,
+                      documentObjectFrame.origin.y + sectionBoundsOrigin.y,
+                      documentObjectFrame.size.width,
+                      documentObjectFrame.size.height);
+}
+
+static inline CGFloat HeightWithVisibility(CGFloat height, BOOL visibility) {
+    return visibility ? height : CGSizeZero.height;
+}
+
+static inline CGRect SectionBounds(CGRect pageRect,
+                                   CGFloat sectionHeight,
+                                   BOOL visility,
+                                   MADDocumentSectionType sectionType,
+                                   NSUInteger numberOfPages,
+                                   NSUInteger pageIndex,
+                                   CGFloat originY) {
+
+    switch (sectionType) {
+            
+        case MADDocumentSectionTypePageFooter:
+            originY = pageIndex == numberOfPages - 1 ?  // last page?
+                pageRect.origin.y + pageRect.size.height - HeightWithVisibility(sectionHeight, visility) - sectionHeight :
+                pageRect.origin.y + pageRect.size.height - HeightWithVisibility(sectionHeight, visility);
+            break;
+            
+        case MADDocumentSectionTypeReportFooter:
+            originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
+            break;
+            
+        default:
+            break;
+    }
+    return CGRectMake(pageRect.origin.x,
+                      originY,
+                      pageRect.size.width,
+                      HeightWithVisibility(sectionHeight, visility));
+    
+}
+
 
 @interface MADPrintPageRenderer ()
 
@@ -108,8 +145,6 @@ static inline CGRect sectionBounds(CGRect pageRect,
     @property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 
     @property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
-
-    @property (nonatomic, strong) dispatch_queue_t textRepresentationQueue;
 
     @property (nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
 
@@ -153,29 +188,6 @@ static inline CGRect sectionBounds(CGRect pageRect,
     return printPageRenderer;
 }
 
-- (void)dealloc { }
-
-#pragma -
-#pragma Constructors
-
-- (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
-    if (self = [super init]) {
-        self.datasource = datasource;
-
-        dispatch_queue_t queue = dispatch_queue_create(MADQueueTextRepresentation,
-                                                       DISPATCH_QUEUE_SERIAL);
-        
-        self.textRepresentationQueue =  queue;
-        
-        _showWaterMark = NO;
-        _accessibilityCacheNeedsUpdate = NO;
-        self.dataReference = [[MADDocumentObjectDataReference alloc] initWithDataSource:datasource];
-
-
-    }
-    return self;
-}
-
 #pragma -
 #pragma Helpers Drawing
 
@@ -189,7 +201,7 @@ static inline CGRect sectionBounds(CGRect pageRect,
 
 + (void)drawWatermarkWithContext:(CGContextRef)ctx
                       inPageRect:(CGRect)pageRect {
-
+    
     UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
@@ -197,11 +209,11 @@ static inline CGRect sectionBounds(CGRect pageRect,
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
     UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0000f/256.0000f
-                                           green:170.0000f/256.0000f
-                                            blue:170.0000f/256.0000f alpha:0.8000f];
+                                                  green:170.0000f/256.0000f
+                                                   blue:170.0000f/256.0000f alpha:0.8000f];
     UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0000f/256.0000f
-                                               green:85.0000f/256.0000f
-                                                blue:85.0000f/256.0000f alpha:0.8000f];
+                                                      green:85.0000f/256.0000f
+                                                       blue:85.0000f/256.0000f alpha:0.8000f];
     NSNumber *strokeWidth = @3.0000f;
     NSDictionary *results = @{NSFontAttributeName : customFont,
                               NSStrokeWidthAttributeName : strokeWidth,
@@ -241,6 +253,24 @@ static inline CGRect sectionBounds(CGRect pageRect,
         } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
         rowCounter++;
     } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
+}
+
+#pragma -
+#pragma NSObject
+
+- (void)dealloc { }
+
+#pragma -
+#pragma Constructors
+
+- (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
+    if (self = [super init]) {
+        self.datasource = datasource;
+        self.dataReference = [[MADDocumentObjectDataReference alloc] initWithDataSource:datasource];
+        _showWaterMark = NO;
+        _accessibilityCacheNeedsUpdate = NO;
+    }
+    return self;
 }
 
 #pragma -
@@ -392,8 +422,9 @@ static inline CGRect sectionBounds(CGRect pageRect,
         documentSection = [document documentSectionForType: pageSection.sectionType
                                                   andLevel: pageSection.groupLevel];
         
-        rect = sectionBounds(pageRect,
-                             heightWithVisibility([reportFormatter heightForSectionWithObjectIdentifier:@(documentSection.identifier)], documentSection.visibility),
+        rect = SectionBounds(pageRect,
+                             HeightWithVisibility([reportFormatter heightForSectionWithObjectIdentifier:@(documentSection.identifier)],
+                                                  documentSection.visibility),
                              documentSection.visibility,
                              pageSection.sectionType,
                              reportFormatter.numberOfPages,
@@ -479,7 +510,7 @@ static inline CGRect sectionBounds(CGRect pageRect,
 
     NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
     
-    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:0];
+    sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:1];
     sectionRepresentation.type = pageSection.sectionType;
     sectionRepresentation.elementOffset = offsetElement;
     
@@ -494,15 +525,14 @@ static inline CGRect sectionBounds(CGRect pageRect,
     for (row in rowsEnumerator) {
         
         documentObjectEnumerator = row.hasObjects.objectEnumerator;
-        rowRepresentation = [[MADReportSectionRowsRepresentation alloc]
-                             initWithNumberOfSectionRowElements:0];
+        rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
         
         for (item in documentObjectEnumerator) {
 
             self.dataReference.item = item;
 
             drawingObject = [MADDocumentObject newDocumentObject:self.dataReference];
-            [drawingObject drawInRect:documentObjectBounds(item.frame, sectionRect.origin)];
+            [drawingObject drawInRect:ElementBounds(item.frame, sectionRect.origin)];
             line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
                                                                   type: item.documentObjectType
                                                                  frame: item.frame];
@@ -518,84 +548,6 @@ static inline CGRect sectionBounds(CGRect pageRect,
 END_DrawSection:;
 
     return sectionRepresentation;
-}
-
-static inline CGRect documentObjectBounds(CGRect documentObjectFrame, CGPoint sectionBoundsOrigin) {
-    return CGRectMake(documentObjectFrame.origin.x + sectionBoundsOrigin.x,
-                                          documentObjectFrame.origin.y + sectionBoundsOrigin.y,
-                                          documentObjectFrame.size.width, documentObjectFrame.size.height);
-}
-
-static inline CGFloat heightWithVisibility(CGFloat height, BOOL visibility) {
-    return visibility ? height : CGSizeZero.height;
-}
-
-static inline BOOL isLastPage(NSUInteger pageIndex, NSUInteger numberOfPages) {
-    return pageIndex == numberOfPages - 1;
-}
-static inline CGFloat sectionOriginY(CGRect pageRect,
-                                     CGFloat sectionHeight,
-                                     BOOL visility,
-                                     MADDocumentSectionType sectionType,
-                                     NSUInteger numberOfPages,
-                                     NSUInteger pageIndex,
-                                     CGFloat originY) {
-    switch (sectionType) {
-            
-        case MADDocumentSectionTypePageFooter:
-            return isLastPage(pageIndex, numberOfPages) ?  // last page?
-                    pageRect.origin.y + pageRect.size.height - heightWithVisibility(sectionHeight, visility) - sectionHeight :
-                    pageRect.origin.y + pageRect.size.height - heightWithVisibility(sectionHeight, visility);
-            break;
-            
-        case MADDocumentSectionTypeReportFooter:
-            return pageRect.origin.y + pageRect.size.height - sectionHeight;
-            break;
-            
-        default:
-            return originY;
-            break;
-    }
-}
-
-static inline CGPoint sectionOrigin(CGRect pageRect,
-                                    CGFloat sectionHeight,
-                                    BOOL visility,
-                                    MADDocumentSectionType sectionType,
-                                    NSUInteger numberOfPages,
-                                    NSUInteger pageIndex,
-                                    CGFloat originY) {
-    return CGPointMake(pageRect.origin.x, sectionOriginY(pageRect, sectionHeight, visility, sectionType, numberOfPages, pageIndex, originY));
-}
-static inline CGRect sectionBounds(CGRect pageRect,
-                                   CGFloat sectionHeight,
-                                   BOOL visility,
-                                   MADDocumentSectionType sectionType,
-                                   NSUInteger numberOfPages,
-                                   NSUInteger pageIndex,
-                                   CGFloat originY) {
-
-    switch (sectionType) {
-            
-        case MADDocumentSectionTypePageFooter:
-            originY = pageIndex == numberOfPages - 1 ?  // last page?
-                pageRect.origin.y + pageRect.size.height - heightWithVisibility(sectionHeight, visility) - sectionHeight :
-                pageRect.origin.y + pageRect.size.height - heightWithVisibility(sectionHeight, visility);
-            break;
-            
-        case MADDocumentSectionTypeReportFooter:
-            originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
-            break;
-            
-        default:
-            break;
-    }
-    
-    return CGRectMake(pageRect.origin.x,
-                      originY,
-                      pageRect.size.width,
-                      heightWithVisibility(sectionHeight, visility));
-    
 }
 
 #pragma mark -
