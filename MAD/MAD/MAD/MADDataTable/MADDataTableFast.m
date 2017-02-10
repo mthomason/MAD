@@ -78,7 +78,7 @@
 
 #import "MADQueryParameters.h"
 #import "MADDataTablePlist.h"
-#import "MTDatabaseDataBinding.h"
+#import "MADDatabaseDataBinding.h"
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
@@ -101,7 +101,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     @property (nonatomic, readwrite, strong) id rowDataLastInserted;
 
-    @property (nonatomic, readwrite, strong) NSMutableArray <MTDatabaseDataBinding *> *binaryBindings;
+    @property (nonatomic, readwrite, strong) NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
 
 @end
 
@@ -432,7 +432,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         BOOL success = YES;
         
         if (self.binaryBindings == nil) {
-            NSMutableArray <MTDatabaseDataBinding *> *binaryBindings;
+            NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
             binaryBindings = [[NSMutableArray alloc] init];
             self.binaryBindings = binaryBindings;
         }
@@ -455,7 +455,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                 NSString *fieldName = self.columnKeys[columnCounter];
                 MADDataColumn *column = self.queryColumns[fieldName];
                 
-                id databinding = [[MTDatabaseDataBinding alloc] initWithDataType: column.type
+                id databinding = [[MADDatabaseDataBinding alloc] initWithDataType: column.type
                                                                       fieldIndex: columnCounter
                                                                            value: docObject];
                 [_databaseForInserts bindStatement:(void **)&_statementInsert withBindings:databinding];
@@ -889,7 +889,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                       queryString, -1, &statement, NULL) == SQLITE_OK;
     
     NSArray *queryBinaryBindings = query.binaryBindings;
-    for (MTDatabaseDataBinding *dataBinding in queryBinaryBindings) {
+    for (MADDatabaseDataBinding *dataBinding in queryBinaryBindings) {
         [databaseForSelects bindStatement: (void **)&statement withBindings: dataBinding];
     }
 
@@ -1123,7 +1123,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     NSAssert(success, @"%s", sqlite3_errmsg(databaseForSelects->_database));
     
-    for (MTDatabaseDataBinding *dataBinding in query.binaryBindings) {
+    for (MADDatabaseDataBinding *dataBinding in query.binaryBindings) {
         [databaseForSelects bindStatement:(void **)&statement withBindings:dataBinding];
     }
     

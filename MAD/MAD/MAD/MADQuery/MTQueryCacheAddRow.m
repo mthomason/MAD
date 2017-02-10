@@ -13,7 +13,7 @@
 #import "MTQueryCacheAddRow.h"
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataColumn.h>
-#import "MTDatabaseDataBinding.h"
+#import "MADDatabaseDataBinding.h"
 #import "MADDatabaseConnection.h"
 
 // FIXME: Remove dependency on MTDatabaseSqlite3

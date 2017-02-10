@@ -16,6 +16,7 @@
 
 #import <MADFoundation/MADDataType.h>
 
+static inline MADDataType DataTypeLimited(MADDataType);
 static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
     switch (expandedDataType) {
         case MADDataTypeBit:

@@ -18,7 +18,7 @@
 
 BOOL Sqlite3StepResultOK(int result);
 
-@class MTDatabaseDataBinding;
+@class MADDatabaseDataBinding;
 
 typedef NSString MADSqlite3SortDescription;
 
@@ -37,7 +37,7 @@ typedef NSString MADSqlite3SortDescription;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
     - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
-             withBindings:(MTDatabaseDataBinding *)databinding;
+             withBindings:(MADDatabaseDataBinding *)databinding;
 
     - (void)openDatabase;
     - (void)openDatabaseWithFlags:(int)flags;

@@ -11,7 +11,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
-#import "MTDatabaseDataBinding.h"
+#import "MADDatabaseDataBinding.h"
 #import "MADQuerySelectParameters.h"
 
 @interface MADQuerySelectItemsForGroup ()

@@ -51,7 +51,7 @@
 #import "MADQueryCacheDeleteAllFromTableParameters.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
-#import "MTDatabaseDataBinding.h"
+#import "MADDatabaseDataBinding.h"
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
@@ -261,13 +261,13 @@ NSString * const MADIdentifierROWID         = @"ROWID";
             NSString *columnValue = condition[@"v"];
             
             
-            MTDatabaseDataBinding *databinding;
+            MADDatabaseDataBinding *databinding;
             if ([[NSNull null] isEqual: columnValue]) {
-                databinding = [[MTDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
+                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
                                                                    fieldIndex: counterBinings
                                                                         value: columnValue];
             } else {
-                databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
+                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
                                                                    fieldIndex: counterBinings
                                                                         value: columnValue];
             }

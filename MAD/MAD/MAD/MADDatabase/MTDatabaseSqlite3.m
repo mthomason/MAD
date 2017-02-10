@@ -41,7 +41,7 @@
 #import "MTQuery.h"
 #import "MADDatabaseTable.h"
 
-#import "MTDatabaseDataBinding.h"
+#import "MADDatabaseDataBinding.h"
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeOverride.h"
 #import "MTQueryCacheBeginTransaction.h"
@@ -328,7 +328,8 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
-- (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MTDatabaseDataBinding *)databinding {
+- (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
+         withBindings:(MADDatabaseDataBinding *)databinding {
 
     int success = 0;
     if ([databinding.value isEqual:[NSNull null]]) {
@@ -419,13 +420,13 @@ void sqliteLog(void *foo, const char* statement) {
             success = prepare_result == SQLITE_OK;
             
             if (queryBinaryBindings.count > 0) {
-                for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
+                for (MADDatabaseDataBinding *databinding in queryBinaryBindings) {
                     [self bindStatement:(void **)&statement withBindings:databinding];
                 }
             }
         } else if (queryPartOfTransactionSet) {
             if (queryBinaryBindings.count > 0) {
-                for (MTDatabaseDataBinding *databinding in queryBinaryBindings) {
+                for (MADDatabaseDataBinding *databinding in queryBinaryBindings) {
                     [self bindStatement:(void **)&statement withBindings:databinding];
                 }
             }
@@ -473,13 +474,13 @@ void sqliteLog(void *foo, const char* statement) {
         NSAssert(prepare_result == SQLITE_OK, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
         success = prepare_result == SQLITE_OK;
         if (binaryBindings.count > 0) {
-            for (MTDatabaseDataBinding *databinding in binaryBindings) {
+            for (MADDatabaseDataBinding *databinding in binaryBindings) {
                 [self bindStatement:(void **)&statement withBindings:databinding];
             }
         }
     } else if (partOfTransactionSet) {
         if (binaryBindings.count > 0) {
-            for (MTDatabaseDataBinding *databinding in binaryBindings) {
+            for (MADDatabaseDataBinding *databinding in binaryBindings) {
                 [self bindStatement:(void **)&statement withBindings:databinding];
             }
         }
