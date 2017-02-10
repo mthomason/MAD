@@ -1343,7 +1343,7 @@ static const inline CGSize sizePopoverFonts() {
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
-    NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
+    NSDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
     sectionViewsDictionary = self.sectionViewsDictionary;
     [private performBlock:^{
     

@@ -20,10 +20,10 @@
     + (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
                            queryFieldOne:(RptqQueryField *)queryFieldOne
                            queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;
-    + (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject;
-    + (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject
-                                         input1:(NSString *)input1
-                                         input2:(NSString *)input2;
+    + (MTBarcode *)newBarcode:(RptqDocumentElementBarcode *)documentObject;
+    + (MTBarcode *)newBarcode:(RptqDocumentElementBarcode *)documentObject
+                       input1:(NSString *)input1
+                       input2:(NSString *)input2;
 
 @end
 

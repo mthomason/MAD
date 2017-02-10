@@ -295,7 +295,10 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     self.barcode.input = self.barcodeInput;
     [self.previewViewController update];
     
-    [self.delegate didUpdateBarcodeWithObjectID:self.bartcodeToEditObjectID barcodeObject:self.barcode withFieldOne:self.queryField1 andFieldTwo:self.queryField2];
+    [self.delegate didUpdateBarcodeWithObjectID: self.bartcodeToEditObjectID
+                                  barcodeObject: self.barcode
+                                   withFieldOne: self.queryField1
+                                    andFieldTwo: self.queryField2];
 }
 
 - (void)didSetField1:(RptqQueryField *)field {
@@ -319,7 +322,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 - (void)setBarcodeToEdit:(RptqDocumentElementBarcode *)barcodeDocumentObject {
 
-    MTBarcode *barcode = [RptqDocumentElementBarcode newBarcodeWithDocumentObject:barcodeDocumentObject];
+    MTBarcode *barcode;
+    barcode = [RptqDocumentElementBarcode newBarcode:barcodeDocumentObject];
     self.barcode = barcode;
     
     self.queryField1 = barcodeDocumentObject.referencesField1;

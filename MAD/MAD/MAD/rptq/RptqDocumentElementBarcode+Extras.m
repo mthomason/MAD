@@ -57,7 +57,7 @@
     [self.managedObjectContext save:nil];
 }
 
-+ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject {
++ (MTBarcode *)newBarcode:(RptqDocumentElementBarcode *)documentObject {
     
     MTBarcode *barcode = [MTBarcode newBarcodeWithType:documentObject.barcodeType];
     barcode.has2dComponentEnabled =     documentObject.add2dComponent;
@@ -76,10 +76,10 @@
     return barcode;
 }
 
-+ (MTBarcode *)newBarcodeWithDocumentObject:(RptqDocumentElementBarcode *)documentObject
-                                     input1:(NSString *)input1
-                                     input2:(NSString *)input2 {
-    MTBarcode *barcode = [self newBarcodeWithDocumentObject:documentObject];
++ (MTBarcode *)newBarcode:(RptqDocumentElementBarcode *)documentObject
+                   input1:(NSString *)input1
+                   input2:(NSString *)input2 {
+    MTBarcode *barcode = [self newBarcode:documentObject];
     barcode.input = input1.copy;
     barcode.primaryData = input2.copy;
     return barcode;
