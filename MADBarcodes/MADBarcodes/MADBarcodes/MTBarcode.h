@@ -16,7 +16,7 @@
 
 #import "MADBarcodeSizingMode.h"
 
-@class MADColor, RptqDocumentElementBarcode;
+@class MADColor;
 
 @interface MTBarcode : NSObject
     <MTBarcodeProtocol>

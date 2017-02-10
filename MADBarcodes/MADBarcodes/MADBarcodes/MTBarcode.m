@@ -74,7 +74,6 @@
 #import "MTBarcodeUspsIntelligentMail.h"
 
 #import <MADCocoaExtensions/MADColor.h>
-//#import <MAD/RptqDocumentElementBarcode.h>
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/NSStringDrawing.h>
