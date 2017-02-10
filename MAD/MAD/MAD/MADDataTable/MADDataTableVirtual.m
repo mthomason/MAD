@@ -53,22 +53,16 @@
     return nil;
 }
 
-- (void)encodeWithCoder:(NSCoder *)encoder {
-    [super encodeWithCoder:encoder];
-    NSString *key = [MADDataTableVirtual keySortIndex];
-    [encoder encodeObject: _sortIndex forKey: key];
-}
-
 - (instancetype)init {
     if (self = [super init]) {
-        [self initialize];
+        NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
+        self.sortIndex = sortIndex;
     }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-    self = [super initWithCoder:decoder];
-    if(self) {
+    if (self = [super initWithCoder:decoder]) {
         NSString *key = [MADDataTableVirtual keySortIndex];
         NSMutableArray *sortIndex = [decoder decodeObjectForKey:key];
         self.sortIndex = sortIndex;
@@ -76,30 +70,26 @@
     return self;
 }
 
+- (instancetype)initWithId:(NSUInteger)objectId {
+    if (self = [super initWithId:objectId]) {
+        NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
+        self.sortIndex = sortIndex;
+    }
+    return self;
+}
+
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-    self = [super initWithNumberOfColumns:numberOfColumns];
-    if (self) {
-        
+    if (self = [super initWithNumberOfColumns:numberOfColumns]) {
         NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
         self.sortIndex = sortIndex;
-        
     }
     return self;
 }
 
-- (instancetype)initWithId:(NSUInteger)objectId {
-    self = [super initWithId:objectId];
-    if (self) {
-        
-        [self initialize];
-        
-    }
-    return self;
-}
-
-- (void)initialize {
-    NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
-    self.sortIndex = sortIndex;
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [super encodeWithCoder:encoder];
+    NSString *key = [MADDataTableVirtual keySortIndex];
+    [encoder encodeObject: _sortIndex forKey: key];
 }
 
 - (void)loadWithPlist:(NSDictionary *)plist {
@@ -129,7 +119,6 @@
 - (NSArray *)allObjects {
     return self.sortIndex;
 }
-
 
 - (void)addColumnWithIdentifier:(NSString *)identifier  {
     [self addColumnWithIdentifier:identifier andDefaultValue:[NSNull null]];

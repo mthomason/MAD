@@ -50,13 +50,11 @@
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADSectionLayoutAttributes.h>
 
-#import <MAD/NSManagedObject+Extras.h>
-#import <MAD/NSManagedObjectID+Extras.h>
-
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>

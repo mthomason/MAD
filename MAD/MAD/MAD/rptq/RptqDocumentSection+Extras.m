@@ -42,9 +42,6 @@
 
 #import "RptqDocumentElement.h"
 #import "RptqDocumentElement+Extras.h"
-#import "NSManagedObject+Extras.h"
-
-#import "NSManagedObjectID+Extras.h"
 
 #import "RptqDataHelper.h"
 

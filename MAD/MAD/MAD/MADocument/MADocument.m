@@ -111,9 +111,6 @@
 
 #import "MADSectionLayoutManager.h"
 
-#import "NSManagedObject+Extras.h"
-#import "NSManagedObjectID+Extras.h"
-
 #import "MADDataTableFast.h"
 #import "MTDatabase.h"
 
