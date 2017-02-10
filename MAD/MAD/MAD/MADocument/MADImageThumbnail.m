@@ -6,16 +6,18 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UIImage+MADDocument.h"
+#import "MADImageThumbnail.h"
+#import <UIKit/UIGraphics.h>
+#import <UIKit/UITraitCollection.h>
+
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MADCocoaExtensions/MTMath.h>
+
 #import "MADocument.h"
 #import "MADPrintPageRenderer.h"
 #import "MADReportFormatter.h"
 #import "MADDataTableFast.h"
 #import "MTPaper.h"
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MADCocoaExtensions/MTMath.h>
-#import <UIKit/UIGraphics.h>
-#import <UIKit/UITraitCollection.h>
 
 static inline CGRect imageSizeForPaperSize(CGSize paperSize);
 static inline CGRect imageSizeForPaperSize(CGSize paperSize) {

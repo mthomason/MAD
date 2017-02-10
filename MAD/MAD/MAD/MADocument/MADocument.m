@@ -122,8 +122,8 @@
 
 #import "NSString+RelativePath.h"
 
-#import "UIImage+MADDocument.h"
-#import "UIManagedDocument+Extras.h"
+#import "MADImageThumbnail.h"
+//#import "UIManagedDocument+Extras.h"
 
 #import "miniz.h"
 
