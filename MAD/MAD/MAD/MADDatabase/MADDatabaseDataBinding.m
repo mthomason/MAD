@@ -1,5 +1,5 @@
 //
-//  MTDatabaseDataBinding.m
+//  MADDatabaseDataBinding.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/19/14.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseDataBinding.h"
+#import "MADDatabaseDataBinding.h"
 #import <Foundation/NSNull.h>
 #import <Foundation/NSString.h>
 
@@ -63,7 +63,7 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
     }
 }
 
-@interface MTDatabaseDataBinding ()
+@interface MADDatabaseDataBinding ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
@@ -73,11 +73,7 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
 
 @end
 
-@implementation MTDatabaseDataBinding
-
-- (int)columnNumber {
-    return self.fieldIndex + 1;
-}
+@implementation MADDatabaseDataBinding
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -88,7 +84,8 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
     return self;
 }
 
-- (instancetype)initWithDataType:(MADDataType)datatype fieldIndex:(NSUInteger)fieldIndex
+- (instancetype)initWithDataType:(MADDataType)datatype
+                      fieldIndex:(NSUInteger)fieldIndex
                            value:(id)value {
 
     if (self = [super init]) {
@@ -108,6 +105,10 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
         self.value = value;
     }
     return self;
+}
+
+- (int)columnNumber {
+    return self.fieldIndex + 1;
 }
 
 @end
