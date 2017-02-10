@@ -28,12 +28,9 @@
 
 @implementation MADOperationRefreshReload
 
-- (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADGetCredentialsOperation *getCredentials = self.getCredentials;
     if (getCredentials.gotCredentials) {
         MADCredential *c = getCredentials.credentials.copy;
@@ -46,9 +43,6 @@
 - (instancetype)initWithDocument: (MADocument *)document
                   viewController: (UIViewController *)viewController
               databaseConnection: (MADDatabaseConnection *)databaseConnection {
-
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-
     if (self = [super init]) {
 
         MADGetCredentialsOperation *getCredentials;
@@ -72,7 +66,8 @@
 - (void)addAllOperations {
 
     MADocument *document = _document;
-    MADOperationRefreshInitializeMainDataTable *initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
+    MADOperationRefreshInitializeMainDataTable *initializeMainDataTable;
+    initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
     [initializeMainDataTable addDependency:self.getCredentials];
     
     MADOperationRefreshInitialize *initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];

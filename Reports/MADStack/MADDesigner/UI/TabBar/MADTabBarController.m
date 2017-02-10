@@ -364,8 +364,6 @@ const int8_t MADIndexViewer = 2;
         fromView.frame = CGRectOffset(fromFrame, fromFrame.size.width * offset.dx,
                                       fromFrame.size.height * offset.dy);
         toView.frame = toFrame;
-        NSLog(@"%@", toViewController);
-        
     } completion:^(BOOL finished) {
         BOOL wasCancelled = [transitionContext transitionWasCancelled];
         // When we complete, tell the transition context

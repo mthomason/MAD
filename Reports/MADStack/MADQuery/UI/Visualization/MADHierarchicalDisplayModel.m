@@ -20,9 +20,7 @@
 #import <UIKit/UIGeometry.h>
 
 @interface MADHierarchicalDisplayModel ()
-
     @property (nonatomic, strong, readwrite) NSMutableDictionary <NSNumber *, MADHierarchicalChildViewDefination *> *tableDefinations;
-
 @end
 
 @implementation MADHierarchicalDisplayModel
@@ -60,18 +58,15 @@ static NSString *CacheExt                    = @"qvvc";
 
 - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination
                forObjectID:(int64_t)objectID {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADHierarchicalChildViewDefination *copyTableDefination = [tableDefination copyWithZone:nil];
     self.tableDefinations[@(objectID)] = copyTableDefination;
 }
 
 - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID {
-    NSLog(@"%s [%lld]", __PRETTY_FUNCTION__, objectID);
     return self.tableDefinations[@(objectID)];
 }
 
 - (void)removeTableDefinationForObjectID:(NSNumber *)objectID {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.tableDefinations removeObjectForKey: objectID];
 }
 

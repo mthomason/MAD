@@ -24,14 +24,11 @@
 @implementation MADBackgroundObserver
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (instancetype)init {
     if (self = [super init]){
-        NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
-
         // We need to know when the application moves to/from the background.
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(didEnterBackground:)

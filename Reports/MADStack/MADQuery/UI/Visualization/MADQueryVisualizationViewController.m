@@ -265,8 +265,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark MADQueryVisualizationSchemaPresentationDelegate
 
 - (CGRect)frameOfItemWithObjectID:(int64_t)objectID {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADHierarchicalChildViewDefination *tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
     CGRect result = CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2,
                                tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
@@ -276,7 +274,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (void)setDocument:(MADocument *)document {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (document != nil && _document != document) {
         _document = document;
     }
@@ -472,8 +469,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (void)layoutQueryLinks {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
     queryLinkEnumerator = self.document.documentModel.firstQuery.links.objectEnumerator;
     for (MADModelQueryLink *link in queryLinkEnumerator) {
@@ -488,8 +483,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (void)managedObjectContextWillSave:(NSNotification *)notification { }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
@@ -567,7 +560,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark MADViewControllerStandardProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
@@ -575,8 +567,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Cache Operations
 
 - (void)updateCache {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADocument *doc = self.document;
     if (doc != nil) {
         
@@ -683,8 +673,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 + (NSString *)cacheFileNameForDocument:(MADocument *)document {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     return [MADHierarchicalDisplayModel cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
 }
 
@@ -692,7 +680,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Gesture recognizer actions
 
 - (void)handlePanPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     int64_t tableID;
     tableID = ((MADQueryVisualizationSchemaView *)gestureRecognizer.view).identifier;
     NSAssert(tableID > 0, @"We expect an ID");
@@ -726,7 +713,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Change UI on IR Diagram
 
 - (void)clearScreen {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     for (UIViewController *viewController in self.childViewControllers) {
         [self removeViewController:viewController];
     }
@@ -739,8 +725,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Reload document view controllers
 
 - (void)redraw:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [self clearScreen];
     [self.rootTables removeAllObjects];
     [self.controllersByObjectID removeAllObjects];
@@ -832,9 +816,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark MADModel Notification Handlers
 
 - (void)insertQueryTable:(NSNotification *)note {
-    
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if (![note.name isEqualToString:MADNotificationQueryTableInsert]) return;
 
     MADModelQueryTable *insertedTable;
@@ -846,16 +827,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                          center: MADPointInsertTable(self.scrollView.contentView.bounds.size.height,
                                                                      self.rootTables.count)
                                            root: YES
-                                       animated: YES completion:^{
-                                           
-                                       }];
+                                       animated: YES completion:^{ }];
     }
-    
 }
 
 - (void)insertQueryLink:(NSNotification *)note {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if (![note.name isEqualToString:MADNotificationQueryLinkInsert]) return;
 
     MADHierarchicalChildController *leftTVC, *rightTVC;
@@ -879,9 +855,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (void)deleteQueryTable:(NSNotification *)note {
-
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if (![note.name isEqualToString:MADNotificationQueryLinkDelete]) return;
     
     MADModelQueryTable *deletedTable;
@@ -902,9 +875,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (void)deleteQueryLink:(NSNotification *)note {
-
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if (![note.name isEqualToString:MADNotificationQueryLinkDelete]) return;
     
     MADModelQuery *query = note.object;
@@ -923,7 +893,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         evaluatedJoinedTables = [NSExpression expressionForConstantValue:orphaned];
         expressionMinusSet = [NSExpression expressionForMinusSet: evaluatedObject
                                                             with: evaluatedJoinedTables];
-        //NSLog(@"%@", orphaned);
         NSNumber *objectID;
         for (NSNumber *orphanedTableIDs in orphaned) {
             
@@ -931,9 +900,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                 objectID = orphanedTableIDs.copy;
                 MADHierarchicalChildViewDefination *tableDefination;
                 tableDefination = [self.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
-                if (tableDefination == nil) {
-                    NSLog(@"Break\n\n");
-                }
                 tableDefination.root = YES;
                 [self.rootTables addObject: objectID];
                 objectID = nil;
@@ -944,7 +910,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
         [self.connectionViewsByObjectID removeObjectForKey:deletedLink.objectID];
         [connectorView removeFromSuperview];
-        NSLog(@"Deleted %@", deletedLink.objectID);
         //[self.view setNeedsLayout];
         //[self.view layoutIfNeeded];
 //UILayoutConstraintAxisVertical
@@ -958,7 +923,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark View Controller Container Data
 
 - (void)removeViewController:(UIViewController *)viewController {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [viewController willMoveToParentViewController:nil];
     [viewController.view removeFromSuperview];
     [viewController removeFromParentViewController];
@@ -1041,7 +1005,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                      root:(BOOL)root
                                  animated:(BOOL)animated
                                completion:(void(^)(void))completion {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     MADQueryVisualizationSchemaViewController *viewController;
     viewController = [MADQueryVisualizationSchemaViewController newQueryVisualizationSchemaViewController];
     viewController.document = self.document;
@@ -1059,8 +1022,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)addLinkViewControllerForQueryLinkModel:(MADModelQueryLink *)link
                                       animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     MADConnectorView *connectorView = [[MADConnectorView alloc] initWithFrame:CGRectZero];
     connectorView.userInteractionEnabled = NO;
     connectorView.identifier = link.identifier;
@@ -1112,8 +1073,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark - Layout
 
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     if ([sender isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
         
         MADQueryVisualizationSchemaViewController *controller;

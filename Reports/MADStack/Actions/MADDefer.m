@@ -15,14 +15,12 @@
 @implementation MADDefer
 
 + (instancetype)defer:(void (^)())block {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
     MADDefer *defer =  [[MADDefer alloc] init];
     defer.block = block;
     return [defer autorelease];
 }
 
 - (void)dealloc {
-    NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
     if (_block)
         _block();
     [super dealloc];

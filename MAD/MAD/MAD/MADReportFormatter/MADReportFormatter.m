@@ -112,9 +112,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     NSString *_filename;
 }
 
-- (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithDocument: (MADocument *)layout
                          options: (MADReportFormatterOptions)options  {
@@ -266,7 +264,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     [self.machineState resetWithDocument:(layout).activeDocumentModel
                          andDataDelegate:self.dataDelegate];
 
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [layout resetSectionLayoutManagers];
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;

@@ -74,7 +74,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 @dynamic url;
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     _lastObjectSelected = nil;
     if (_statementInsert != NULL) {
         sqlite3_finalize(_statementInsert);
@@ -294,19 +293,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)addObject:(id _Nonnull)object {
-    _lastObjectSelected = nil;
-    NSError * __autoreleasing * error = NULL;
-    
-    if (!object) {
-        NSLog(@"Can't be null");
-    }
+    _lastObjectSelected = nil;    
+    NSAssert(object != nil, @"Need an object.");
     int numberOfRows = _numberOfRows;
     sqlite3_stmt *statementInsert = _statementInsert;
     id objectToAdd = object;
     dispatch_sync(self.archivingQueue, ^{
         NSData *data;
         data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd];
-        NSAssert(error == NULL, @"%@", *error);
         int bind_result;
         bind_result = sqlite3_bind_int(statementInsert, 1, numberOfRows);
         NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);

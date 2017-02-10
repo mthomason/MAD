@@ -153,9 +153,7 @@ static inline CGRect sectionBounds(CGRect pageRect,
     return printPageRenderer;
 }
 
-- (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 #pragma -
 #pragma Constructors

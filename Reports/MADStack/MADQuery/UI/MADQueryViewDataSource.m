@@ -164,7 +164,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         if (((NSArray *)result).count > 0) {
             numberOfTables = (NSUInteger)[result[0][keyHasQueryTables] integerValue];
         } else {
-            if (error) NSLog(@"Fetch error: %@", *error);
             numberOfTables = 0;
         }
         

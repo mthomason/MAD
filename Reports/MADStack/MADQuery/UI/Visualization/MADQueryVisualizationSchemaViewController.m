@@ -269,8 +269,6 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, scrollView);
-
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 

@@ -22,16 +22,13 @@
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 @synthesize frame = _frame;
 
-- (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)init {
     return [self initWithObject:@"" type:MTDocumentObjectTypeLabelStatic frame:CGRectZero];
 }
 
 - (instancetype)initWithObject:(id)object type:(MTDocumentObjectType)type frame:(CGRect)frame {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         self.object = object;
         _frame = frame;

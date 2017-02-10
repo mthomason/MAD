@@ -22,14 +22,14 @@
 - (instancetype)initWithObjectID:(int64_t)objectID
          presentedViewController:(UIViewController *)presentedViewController
         presentingViewController:(UIViewController *)presentingViewController {
-    if (self = [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
+    if (self = [super initWithPresentedViewController: presentedViewController
+                             presentingViewController: presentingViewController]) {
         _objectID = objectID;
     }
     return self;
 }
 
 - (CGRect)frameOfPresentedViewInContainerView {
-    NSLog(@"%s [%lld]", __PRETTY_FUNCTION__, _objectID);
     return [self.delegatePresentation frameOfItemWithObjectID: _objectID];
 }
 

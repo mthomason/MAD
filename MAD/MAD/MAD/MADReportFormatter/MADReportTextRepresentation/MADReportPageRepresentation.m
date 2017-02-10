@@ -24,7 +24,6 @@ typedef NSMutableArray <__kindof MADReportSectionRepresentation *> MADReportSect
 @synthesize characterOffset = _characterOffset;
 
 - (void)dealloc {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [_sections removeAllObjects];
 }
 
@@ -34,7 +33,6 @@ typedef NSMutableArray <__kindof MADReportSectionRepresentation *> MADReportSect
 }
 
 - (instancetype)initWithNumberOfSections:(NSUInteger)count {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if (self = [super init]) {
         id sections;
         sections = count > 0 ? [[MADReportSectionArray alloc] initWithCapacity:count] :

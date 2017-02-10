@@ -412,7 +412,6 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)loadView {
     [super loadView];
-    NSLog(@"%@", self.view);
 
     void (^initalizeScroller)(MADBackgroundScrollView *) = ^(MADBackgroundScrollView *scroller) {
         scroller.scrollsToTop              = YES;
@@ -988,7 +987,6 @@ static const inline CGSize sizePopoverFonts() {
 - (void)updateViewConstraints {
     [super updateViewConstraints];
    
-    NSLog(@"Loaded %@", self.isViewLoaded ? @"YES" : @"NO");
     CGFloat zoomscale = self.scroller.zoomScale;
     CGFloat ratio = self.view.frame.size.width / zoomscale;
     //if (!isinf(ratio) && !isnan(ratio)) {

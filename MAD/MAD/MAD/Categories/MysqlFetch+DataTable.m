@@ -163,12 +163,10 @@
             
             if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
                 errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
-                NSLog(@"%@", errorFetch);
             } else {
                 
                 if (mysql_stmt_execute(myStatement)) {
                     errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
-                    NSLog(@"%@", errorFetch);
                 } else {
                     
                     [self fetchResultsFromConnection:connection

@@ -35,11 +35,6 @@ static const CGFloat contentViewHeight = 1024.0000f;
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    NSLog(@"%s [%@]", __PRETTY_FUNCTION__, NSStringFromCGPoint(self.center));
-}
-
 - (void)commonInit {
     self.showsHorizontalScrollIndicator = YES;
     self.showsVerticalScrollIndicator = YES;

@@ -106,9 +106,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
     BOOL _drawn;
 }
 
-- (void)dealloc {
-    NSLog(@"Dealloc");
-}
+- (void)dealloc { }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
