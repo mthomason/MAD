@@ -1,5 +1,5 @@
 //
-//  MADAttributedStringFileExplorer.h
+//  MADExplorerCaption.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/20/16.
@@ -11,7 +11,7 @@
 
 #import <Foundation/NSAttributedString.h>
 
-@interface MADAttributedStringFileExplorer : NSAttributedString
+@interface MADExplorerCaption : NSAttributedString
 
     + (instancetype)newAttributedStringFileExplorerCaption:(NSString *)text;
 
