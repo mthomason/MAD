@@ -15,8 +15,8 @@
 
     - (instancetype)initWithMessage:(NSString *)message andProgress:(float)progress;
 
-    @property (nonatomic, copy, readonly) NSString *message;
-    @property (nonatomic, assign, readonly) float progress;
+    @property (readonly, nonatomic, copy) NSString *message;
+    @property (readonly, nonatomic, assign) float progress;
 
 @end
 

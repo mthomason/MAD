@@ -11,29 +11,29 @@
 
 #import <Foundation/NSObject.h>
 
-extern const NSInteger MTKeyErrorUserCanceled;
 extern NSString * const MTKeyChainUsernameAccountDesc;
 extern NSString * const MTKeyChainPasswordAccountDesc;
 
-@class UIViewController;
-
 @interface MTKeyChain : NSObject
 
-    + (MTKeyChain *)sharedObject;
+    + (OSStatus)saveUsername:(NSString *)username
+                 andPassword:(NSString *)password
+                      forKey:(NSString *)key;
 
-    + (OSStatus)saveToken:(NSString *)token forKey:(NSString *)key
+    + (OSStatus)savePassword:(NSString *)password forKey:(NSString *)key;
+    + (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key;
+
+    + (OSStatus)saveToken:(NSString *)token
+                   forKey:(NSString *)key
           withDescription:(NSString *)description;
-    + (NSDictionary *)queryDefination:(NSString *)key withDescription:(NSString *)description;
+
+    + (NSDictionary *)queryDefination:(NSString *)key
+                      withDescription:(NSString *)description;
 
     + (NSString *)newKeyForUsernameWithMainKey:(NSString *)key;
     + (NSString *)newKeyForPasswordWithMainKey:(NSString *)key;
     + (NSDictionary *)queryUsernameDefination:(NSString *)key;
     + (NSDictionary *)queryPasswordDefination:(NSString *)key;
-    + (OSStatus)saveUsername:(NSString *)username andPassword:(NSString *)password
-                      forKey:(NSString *)key;
-
-    + (OSStatus)savePassword:(NSString *)password forKey:(NSString *)key;
-    + (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key;
 
     + (void)deleteSavedPasswordForKey:(NSString *)key;
     + (void)deleteKey:(NSString *)key;

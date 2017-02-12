@@ -55,7 +55,6 @@
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 #import <MAD/MADNotificationDidReadRows.h>
-#import <MAD/MTKeyChain.h>
 #import <MAD/MTPaper.h>
 
 #import "MADPrintingProtocol.h"

@@ -16,7 +16,6 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MAD/MTKeyChain.h>
 #import <MAD/MADErrorUserInfo.h>
 #import <MAD/MADDataTable.h>
 
