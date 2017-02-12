@@ -16,7 +16,7 @@
 #import <UIKit/UILongPressGestureRecognizer.h>
 #import <UIKit/UITapGestureRecognizer.h>
 
-#import <MADExplorer/MADAttributedStringFileExplorer.h>
+#import <MADExplorer/MADExplorerCaption.h>
 
 #import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MTMath.h>
@@ -89,7 +89,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)numberOfSections);
     if (self = [super init]) {
         
         id label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
@@ -372,14 +371,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     filename = [self copyTitleForItemAtIndexPath:indexPath];
     size = [self copySubtitleForItemAtIndexPath:indexPath];
     
-    attributedString = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption:filename];
+    attributedString = [MADExplorerCaption newExplorerCaption:filename];
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     sizeLabel[0] = [self heightForAttributedString: attributedString
                                 contentScaleFactor: collectionView.contentScaleFactor
                                               font: font];
     
-    attributedStringSub = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption: size];
+    attributedStringSub = [MADExplorerCaption newExplorerCaption: size];
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     sizeLabel[1] = [self heightForAttributedString: attributedStringSub

@@ -13,7 +13,7 @@
 
 @interface MADExplorerCaption : NSAttributedString
 
-    + (instancetype)newAttributedStringFileExplorerCaption:(NSString *)text;
+    + (instancetype)newExplorerCaption:(NSString *)text;
 
 @end
 

@@ -11,10 +11,7 @@
 
 #import <UIKit/UICollectionViewFlowLayout.h>
 
-@protocol MADFileExplorerViewDelegateProtocol;
-@protocol UIGestureRecognizerDelegate;
-
-typedef id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> MADFileExplorerDelegate;
+@protocol MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate;
 
 @interface MADFileExplorerViewDelegate : NSObject
     <UICollectionViewDelegate,
@@ -22,7 +19,8 @@ typedef id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> MA
 
     - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;
     
-    @property (nonatomic, weak) MADFileExplorerDelegate delegate;
+    @property (nonatomic, weak) id <MADFileExplorerViewDelegateProtocol,
+                                        UIGestureRecognizerDelegate> delegate;
 
     @property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;
 

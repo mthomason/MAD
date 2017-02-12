@@ -13,7 +13,7 @@
 
 @implementation MADExplorerCaption
 
-+ (instancetype)newAttributedStringFileExplorerCaption:(NSString *)text {
++ (instancetype)newExplorerCaption:(NSString *)text {
     
     id attributes;
     NSString *caption = text.copy;

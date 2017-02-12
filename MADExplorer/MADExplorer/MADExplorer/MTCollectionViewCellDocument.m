@@ -11,7 +11,7 @@
 #endif
 
 #import "MTCollectionViewCellDocument.h"
-#import "MADAttributedStringFileExplorer.h"
+#import "MADExplorerCaption.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
@@ -198,7 +198,7 @@ static inline float wobbleFactor() {
 - (void)setText:(NSString *)text {
 
     id attributedString;
-    attributedString = [MADAttributedStringFileExplorer newAttributedStringFileExplorerCaption:text];
+    attributedString = [MADExplorerCaption newExplorerCaption:text];
     UILabel *labelTitle = _labelTitle;
     labelTitle.attributedText = attributedString;
     labelTitle.text = text.copy;
