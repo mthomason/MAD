@@ -23,19 +23,16 @@
 static const short errCache = 2;
 
 @interface MADOperationRefresh ()
-
     @property (nonatomic, weak) MADocument *document;
-
 @end
 
 @implementation MADOperationRefresh
 
 - (void)dealloc {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
+
 }
 
 - (instancetype)initWithDocument:(MADocument *)document {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     if (self = [super init]) {
         _document = document;
     }
@@ -45,8 +42,6 @@ static const short errCache = 2;
 - (BOOL)isAsynchronous { return NO; }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-
     MADocument *document = self.document;
     MADCredential *credientals = nil;
     if (document.database.delegate == nil) {
@@ -73,19 +68,21 @@ static const short errCache = 2;
     
     NSError * __autoreleasing eerror = NULL;
     MADDatabaseConnection *connectionSettings = (document.database).databaseConnection;
-    id dbconn = [document.database connectWithConnection:connectionSettings credentals:credientals];
+    id dbconn = [document.database connectWithConnection: connectionSettings
+                                              credentals: credientals];
     
-    NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *private;
+    private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
 
     __block NSString *queryString = nil;
     MTQueryFull *query = document.mainQuery;
     [private performBlockAndWait:^{
         NSError *sqlError = NULL;
-        queryString = [query copySQLWithManagedObjectContext:private error:&sqlError];
+        queryString = [query copySQLWithManagedObjectContext: private
+                                                       error: &sqlError];
     }];
     
-    //NSLog(@"QueryString: %@", queryString);
     document.dataTable.dataDelegate = document;
     NSError *executeError = NULL;
     BOOL success = [document.database executeSql: queryString
@@ -95,7 +92,6 @@ static const short errCache = 2;
                                        withError: &executeError];
 
     if (!success) {
-        //NSLog(@"Failed to execute sql!");
         NSError *error = eerror;
         [self finishWithError:error];
         return;

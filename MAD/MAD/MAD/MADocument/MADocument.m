@@ -1317,15 +1317,16 @@ READFROMURL_END:;
         if (database) {
             
             RptqQuery *rquery = database.defaultQuery;
-            MTQueryFull *defaultQuery = [[MTQueryFull alloc] initWithQuery: rquery
-                                                         andQueryLimit: self.limitResultsDesignMode ?
-                                                                                    50 : NSUIntegerMax];
-            defaultQuery.dataDelegate = self;
+            MTQueryFull *mainQuery;
+            mainQuery = [[MTQueryFull alloc] initWithQuery: rquery
+                                             andQueryLimit: self.limitResultsDesignMode ?
+                                                                    50 : NSUIntegerMax];
+            mainQuery.dataDelegate = self;
             
             NSArray *sortDescriptors = [self readCurrentSortDescriptors];
             [self.dataTable sortUsingDescriptors:sortDescriptors];
             
-            _mainQuery = defaultQuery;
+            _mainQuery = mainQuery;
         }
     }
     return _mainQuery;
@@ -1337,10 +1338,10 @@ READFROMURL_END:;
 
 - (MADReportFormatter *)reportFormatter {
     if (!_reportFormatter) {
-        MADReportFormatter *reportFormatter;
-        reportFormatter = [[MADReportFormatter alloc] initWithDocument: self
-                                                              options: MADReportFormatterOptionsNone];
-        _reportFormatter = reportFormatter;
+        MADReportFormatter *formatter;
+        formatter = [[MADReportFormatter alloc] initWithDocument: self
+                                                         options: MADReportFormatterOptionsNone];
+        _reportFormatter = formatter;
     }
     return _reportFormatter;
 }

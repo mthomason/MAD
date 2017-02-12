@@ -40,10 +40,6 @@
     - (void)setNumberOfRows:(int32_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setHeight:(double)height forSectionAtRow:(NSUInteger)sectionRow;
     - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)addDatabase:(MTDatabase *)database
-                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                 status:(void (^)(NSString *status, float progress))status
-             completion:(void (^)(BOOL success, MADErrorContainer *error))completion;
 
     - (void)addQueryLink:(RptqQueryLinks *)queryLink;
     - (void)addPredicate:(RptqQueryPredicate *)predicate;

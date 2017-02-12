@@ -17,14 +17,6 @@ typedef NSString MADSafeQueryField;
 
 extern NSString * const MADSqlTextFromPart;
 
-typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
-	MTDatabaseQueryTypeNone = 0,
-	MTDatabaseQueryTypeGetTables,
-	MTDatabaseQueryTypeGetFields,
-	MTDatabaseQueryTypeGetResults,
-	MTDatabaseQueryTypeVerify
-};
-
 @protocol MADDatabaseProtocol, MADDatabaseConnectionsProperties;
 
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MTDatabase, MADDatabaseTable,

@@ -34,20 +34,18 @@
     if (self = [super init]) {
         
         NSMutableString *result = [[NSMutableString alloc] init];
-        MADQueryActiveQueryFields *queryFields;
-        queryFields = [[MADQueryActiveQueryFields alloc] initWithContext:context];
+        MADQueryActiveQueryFields *activeQueryFields;
+        activeQueryFields = [[MADQueryActiveQueryFields alloc] initWithContext:context];
 
-        NSSet <RptqQueryField *> *rptqQueryFields = queryFields.queryFields;
-        NSMutableDictionary *fields;
-        NSMutableArray *fieldKeys;
+        NSSet <RptqQueryField *> *rptqQueryFields = activeQueryFields.queryFields;
+        NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;
+        NSMutableArray <NSString *> *fieldKeys;
 
         fields = [[NSMutableDictionary alloc] initWithCapacity:rptqQueryFields.count];
         fieldKeys = [[NSMutableArray alloc] initWithCapacity:rptqQueryFields.count];
         
-        
         NSUInteger fieldCounter = 0;
-        for (RptqQueryField *queryField in queryFields.queryFields) {
-            
+        for (RptqQueryField *queryField in rptqQueryFields) {
             
             RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
             if (fieldCounter != 0)  [result appendString:@",\n"];
