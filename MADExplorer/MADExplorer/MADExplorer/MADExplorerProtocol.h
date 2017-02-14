@@ -11,7 +11,7 @@
 
 @class  MADMetaData;
 
-@protocol MADFileExplorerViewDelegateProtocol <NSObject>
+@protocol MADExplorerProtocol <NSObject>
   @required
 
     - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
