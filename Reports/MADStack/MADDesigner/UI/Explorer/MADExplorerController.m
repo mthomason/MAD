@@ -39,6 +39,7 @@
 #import <MADExplorer/MADCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
 #import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
+#import <MADExplorer/MADExplorerDataSource.h>
 
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
@@ -53,7 +54,6 @@
 
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
-#import "MADExplorerDataSource.h"
 #import "MADExplorerView.h"
 
 #import "MADExplorerSectionHeaderView.h"

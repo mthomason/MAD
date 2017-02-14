@@ -18,8 +18,8 @@
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 
-#import <MADExplorer/MADDocumentManagerProtocol.h>
-#import <MADExplorer/MADFileLocationManager.h>
+#import "MADDocumentManagerProtocol.h"
+#import "MADFileLocationManager.h"
 
 typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
