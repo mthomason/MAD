@@ -24,54 +24,11 @@
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADAppStorageOption.h>
 
+#import "MADAlertControllerPromptStorage.h"
+
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
 static NSString * const MADFirstLaunch                                     = @"MADFirstLaunch";
-static NSString * const MADTitleButtonLocalOnly        = @"Local Only";
-static NSString * const MADTitleButtonCloud            = @"iCloud";
-static NSString * const MADTitleChooseStorageOptions   = @"Choose Storage Option";
-static NSString * const MADMessageChooseStorageOptions = @"Do you want to store documents in iCloud or "
-                                                            @"only on this device?";
-
-@interface MADAlertControllerPromptStorage : UIAlertController
-
-+ (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
-                                          cloud:(void (^)())handlerCloud;
-
-@end
-
-@implementation MADAlertControllerPromptStorage
-
-+ (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
-                                          cloud:(void (^)())handlerCloud {
-
-    NSString *title, *message, *localOnlyActionTitle, *cloudActionTitle;
-    UIAlertController *storageController;
-    UIAlertAction *option;
-    title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions),
-    message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions),
-    localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly),
-    cloudActionTitle = NSLocalizedString(MADTitleButtonCloud, MADTitleButtonCloud);
-    
-    storageController = [UIAlertController alertControllerWithTitle: title
-                                                            message: message
-                                                     preferredStyle: UIAlertControllerStyleAlert];
-    
-    option = [UIAlertAction actionWithTitle: localOnlyActionTitle
-                                      style: UIAlertActionStyleDefault
-                                    handler: handlerLocal];
-    [storageController addAction:option];
-    
-    option = [UIAlertAction actionWithTitle: cloudActionTitle
-                                      style: UIAlertActionStyleDefault
-                                    handler: handlerCloud];
-    [storageController addAction:option];
-
-    return storageController;
-}
-
-
-@end
 
 @interface MADFileLocationManager ()
 

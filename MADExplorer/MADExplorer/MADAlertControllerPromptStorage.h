@@ -6,8 +6,14 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADAlertControllerPromptStorage_h
+#define Reports_MADAlertControllerPromptStorage_h
+
+#import <UIKit/UIAlertController.h>
 
 @interface MADAlertControllerPromptStorage : UIAlertController
-
+    + (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
+                                              cloud:(void (^)())handlerCloud;
 @end
+
+#endif

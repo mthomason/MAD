@@ -8,30 +8,40 @@
 
 #import "MADAlertControllerPromptStorage.h"
 
-@interface MADAlertControllerPromptStorage ()
-
-@end
-
+static NSString * const MADTitleButtonLocalOnly        = @"Local Only";
+static NSString * const MADTitleButtonCloud            = @"iCloud";
+static NSString * const MADTitleChooseStorageOptions   = @"Choose Storage Option";
+static NSString * const MADMessageChooseStorageOptions = @"Do you want to store documents "
+                                                         @"in iCloud or "
+                                                            @"only on this device?";
 @implementation MADAlertControllerPromptStorage
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
++ (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
+                                          cloud:(void (^)())handlerCloud {
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+    NSString *title, *message, *localOnlyActionTitle, *cloudActionTitle;
+    id storageController;
+    UIAlertAction *option;
+    title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions),
+    message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions),
+    localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly),
+    cloudActionTitle = NSLocalizedString(MADTitleButtonCloud, MADTitleButtonCloud);
+    
+    storageController = [UIAlertController alertControllerWithTitle: title
+                                                            message: message
+                                                     preferredStyle: UIAlertControllerStyleAlert];
+    
+    option = [UIAlertAction actionWithTitle: localOnlyActionTitle
+                                      style: UIAlertActionStyleDefault
+                                    handler: handlerLocal];
+    [storageController addAction:option];
+    
+    option = [UIAlertAction actionWithTitle: cloudActionTitle
+                                      style: UIAlertActionStyleDefault
+                                    handler: handlerCloud];
+    [storageController addAction:option];
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    return storageController;
 }
-*/
 
 @end
