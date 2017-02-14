@@ -19,13 +19,15 @@ struct MADMargin_t {
 typedef struct MADMargin_t MADMargin_t;
 
 static inline MADMargin_t MADLayoutMarginMake(Float64, Float64, Float64, Float64);
+static inline MADMargin_t MADLayoutMarginMakeQuick(Float64);
 
 static inline MADMargin_t MADLayoutMarginMake(Float64 l, Float64 r, Float64 t, Float64 b) {
-    MADMargin_t m;
-    m.left = l;
-    m.right = r;
-    m.top = t;
-    m.bottom = b;
+    MADMargin_t m; m.left = l; m.right = r; m.top = t; m.bottom = b;
+    return m;
+}
+
+static inline MADMargin_t MADLayoutMarginMakeQuick(Float64 w) {
+    MADMargin_t m; m.left = w; m.right = w; m.top = w; m.bottom = w;
     return m;
 }
 
