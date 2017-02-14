@@ -10,12 +10,18 @@
 
 @implementation MADExplorerActivityIndicator
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
++ (instancetype)newExplorerActivityIndicator {
+    
+    id activityIndicatorView;
+    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                             UIActivityIndicatorViewStyleGray];
+    [activityIndicatorView stopAnimating];
+    [activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |
+                                                UIViewAutoresizingFlexibleRightMargin |
+                                                UIViewAutoresizingFlexibleTopMargin |
+                                                UIViewAutoresizingFlexibleBottomMargin];
+    [activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints: YES];
+    return activityIndicatorView;
 }
-*/
 
 @end

@@ -26,9 +26,9 @@
 
 #import "MADAlertControllerPromptStorage.h"
 
-static NSString * const MADAppConfigurationUserDefaultsUbiquityToken       = @"MADAppConfigurationUserDefaultsUbiquityToken";
-static NSString * const MADAppConfigurationUserDefaultsStorageOption       = @"MADAppConfigurationUserDefaultsStorageOption";
-static NSString * const MADFirstLaunch                                     = @"MADFirstLaunch";
+static NSString * const MADAppConfigurationUserDefaultsUbiquityToken    = @"MADAppConfigurationUserDefaultsUbiquityToken";
+static NSString * const MADAppConfigurationUserDefaultsStorageOption    = @"MADAppConfigurationUserDefaultsStorageOption";
+static NSString * const MADFirstLaunch                                  = @"MADFirstLaunch";
 
 @interface MADFileLocationManager ()
 

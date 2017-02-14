@@ -28,6 +28,7 @@
 #import <MADFoundation/MADURL.h>
 
 #import "MADExplorerCaption.h"
+#import "MADExplorerActivityIndicator.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
@@ -67,28 +68,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 
 @interface MADCollectionViewCellDocument ()
     @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
-@end
-
-@interface MADActivityIndicatorViewExplorer : UIActivityIndicatorView
-    + (instancetype)newActivityIndicatorViewExplorer;
-@end
-
-@implementation MADActivityIndicatorViewExplorer
-
-+ (instancetype)newActivityIndicatorViewExplorer {
-    
-    id activityIndicatorView;
-    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-                             UIActivityIndicatorViewStyleGray];
-    [activityIndicatorView stopAnimating];
-    [activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |
-                                                UIViewAutoresizingFlexibleRightMargin |
-                                                UIViewAutoresizingFlexibleTopMargin |
-                                                UIViewAutoresizingFlexibleBottomMargin];
-    [activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints: YES];
-    return activityIndicatorView;
-}
-
 @end
 
 @implementation MADStringFormatted
@@ -248,7 +227,7 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 - (UIActivityIndicatorView *)activityIndicator {
     UIActivityIndicatorView *result = _activityIndicator;
     if (result == nil) {
-        result = [MADActivityIndicatorViewExplorer newActivityIndicatorViewExplorer];
+        result = [MADExplorerActivityIndicator newExplorerActivityIndicator];
         result.center = self.contentView.center;
         [self.contentView addSubview:result];
         _activityIndicator = result;
