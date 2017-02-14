@@ -136,12 +136,17 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
     }
 }
 
-- (void)setThumbnailURL:(NSURL *)URL {
+/*
+ - (void)setThumbnailURL:(NSURL *)URL {
     NSString *path = URL.path.copy;
     [self setThumbnailPath: path];
-    //if (!path) [self setThumbnailToDefault];
-    //else [self setThumbnailPath:path];
-    
+}
+ */
+
+- (void)setThumbnailURL:(NSURL *)URL {
+    NSString *path = URL.path;
+    if (!path) [self setThumbnailToDefault];
+    else [self setThumbnailPath:path];
 }
 
 - (void)prepareForReuse {

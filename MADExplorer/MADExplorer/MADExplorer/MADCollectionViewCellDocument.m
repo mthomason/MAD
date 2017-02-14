@@ -464,7 +464,9 @@ static inline float wobbleFactor() {
     dispatch_block_t read_iamge = ^{
         @autoreleasepool {
             NSURL *metadataURL, *thumbnailUrl;
-            [self.activityIndicator performSelectorOnMainThread:animateSwitch withObject:nil waitUntilDone:NO];
+            [self.activityIndicator performSelectorOnMainThread: animateSwitch
+                                                     withObject: nil
+                                                  waitUntilDone: NO];
 
             metadataURL = metadata.URL.copy;
             thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];

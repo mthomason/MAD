@@ -34,7 +34,7 @@
 
 #import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
-#import <MADExplorer/MTCollectionViewCellDocument.h>
+#import <MADExplorer/MADCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
 #import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
 
@@ -205,6 +205,47 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 #pragma mark -
+#pragma mark Helpers
+
++ (BOOL)isUniqueFilename:(NSString *)name inDirectory:(NSURL *)directory {
+    NSURL *renamedURL = [directory.URLByDeletingLastPathComponent
+                     URLByAppendingPathComponent:name isDirectory:NO];
+    NSString *path = renamedURL.path;
+    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:path] ||
+                  [[NSFileManager defaultManager] isUbiquitousItemAtURL:renamedURL];
+    return result;
+}
+
++ (NSString *)safeFilenameWithDesiredFilename:(NSString *)desiredName {
+    
+    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
+    
+    NSCharacterSet *unionSet = [NSCharacterSet alphanumericCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = [NSCharacterSet whitespaceCharacterSet];
+    [characterSet formUnionWithCharacterSet:unionSet];
+    
+    unionSet = characterSet.invertedSet;
+    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:unionSet];
+    NSString *result = [components componentsJoinedByString:@""];
+    return result.copy;
+    
+}
+
++ (instancetype)newFileExplorerViewController {
+    id controller;
+    NSString *explorerStoryboardIdentifier, *explorerViewControllerIdentifier;
+    explorerStoryboardIdentifier = @"MADDesignerExplorer";
+    explorerViewControllerIdentifier = @"MADIdentifierFileExplorerViewController";
+    id bundle = [NSBundle mainBundle];
+    UIStoryboard *storyboard;
+    storyboard = [UIStoryboard storyboardWithName:explorerStoryboardIdentifier bundle:bundle];
+    controller = [storyboard instantiateViewControllerWithIdentifier:explorerViewControllerIdentifier];
+    return controller;
+}
+
+#pragma mark -
 #pragma mark NSObject
 
 + (void)initialize {
@@ -276,18 +317,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }
 }
 
-+ (instancetype)newFileExplorerViewController {
-    id controller;
-    NSString *explorerStoryboardIdentifier, *explorerViewControllerIdentifier;
-    explorerStoryboardIdentifier = @"MADDesignerExplorer";
-    explorerViewControllerIdentifier = @"MADIdentifierFileExplorerViewController";
-    id bundle = [NSBundle mainBundle];
-    UIStoryboard *storyboard;
-    storyboard = [UIStoryboard storyboardWithName:explorerStoryboardIdentifier bundle:bundle];
-    controller = [storyboard instantiateViewControllerWithIdentifier:explorerViewControllerIdentifier];
-    return controller;
-}
-
 - (void)dealloc {
     
     _barButtonItemAction = nil;
@@ -315,7 +344,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -357,34 +385,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }
     return self;
     
-}
-
-- (MADExplorerDataSource *)fileExplorerDataSource {
-    if (!_fileExplorerDataSource) {
-        MADExplorerDataSource *datasource;
-        datasource = [[MADExplorerDataSource alloc] initWithCellConfiguration:^(MADCollectionViewCellDocument *cell) {
-            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
-        }];
-        _fileExplorerDataSource = datasource;
-    }
-    return _fileExplorerDataSource;
-}
-
-- (MADSearchBar *)searchBar {
-    if (!_searchBar) {
-        MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
-        _searchBar = searchBar;
-    }
-    return _searchBar;
-}
-
-- (MADProgressView *)progressViewFileManager {
-    if (!_progressViewFileManager) {
-        MADProgressView *progressView;
-        progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
-        _progressViewFileManager = progressView;
-    }
-    return _progressViewFileManager;
 }
 
 #pragma mark -
@@ -612,6 +612,38 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     [super setEditing:editing animated:animated];
     _fileExplorerViewDelegate.editing = editing;
+}
+
+
+#pragma mark -
+#pragma mark Lazy Load
+
+- (MADExplorerDataSource *)fileExplorerDataSource {
+    if (!_fileExplorerDataSource) {
+        MADExplorerDataSource *datasource;
+        datasource = [[MADExplorerDataSource alloc] initWithCellConfiguration:^(MADCollectionViewCellDocument *cell) {
+            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
+        }];
+        _fileExplorerDataSource = datasource;
+    }
+    return _fileExplorerDataSource;
+}
+
+- (MADSearchBar *)searchBar {
+    if (!_searchBar) {
+        MADSearchBar *searchBar = [[MADSearchBar alloc] initWithFrame:CGRectZero];
+        _searchBar = searchBar;
+    }
+    return _searchBar;
+}
+
+- (MADProgressView *)progressViewFileManager {
+    if (!_progressViewFileManager) {
+        MADProgressView *progressView;
+        progressView = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
+        _progressViewFileManager = progressView;
+    }
+    return _progressViewFileManager;
 }
 
 #pragma mark -
@@ -883,15 +915,15 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     }
 }
 
-- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
+- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)visible
                                              animated:(BOOL)animated {
     
-    if (_activityIndicatorRightVisible == rightBarButtonItemActivityIndicatorVisible) {
+    if (_activityIndicatorRightVisible == visible) {
         return;
     }
     UIBarButtonItem *barButtonItem;
     
-    if ((_activityIndicatorRightVisible = rightBarButtonItemActivityIndicatorVisible)) {
+    if ((_activityIndicatorRightVisible = visible)) {
         self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
         
         UIActivityIndicatorView *activityIndicator;
@@ -1032,13 +1064,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                      action: actionEdit];
     }
     return _barButtonItemEditDone;
-}
-
-#pragma mark -
-#pragma mark UIPopoverControllerDelegate
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return [self.openDocumentPopoverController isEqual:popoverController] == NO;
 }
 
 #pragma mark - 
@@ -1220,6 +1245,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark -
 #pragma mark UIPopoverControllerDelegate
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return [self.openDocumentPopoverController isEqual:popoverController] == NO;
+}
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     _shouldShowAddDocumentPopover = YES;
@@ -2044,35 +2073,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         default:
             break;
     }
-}
-
-#pragma mark -
-#pragma mark Helpers
-
-+ (BOOL)isUniqueFilename:(NSString *)name inDirectory:(NSURL *)directory {
-    NSURL *renamedURL = [directory.URLByDeletingLastPathComponent
-                     URLByAppendingPathComponent:name isDirectory:NO];
-    NSString *path = renamedURL.path;
-    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:path] ||
-                  [[NSFileManager defaultManager] isUbiquitousItemAtURL:renamedURL];
-    return result;
-}
-
-+ (NSString *)safeFilenameWithDesiredFilename:(NSString *)desiredName {
-    
-    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
-    
-    NSCharacterSet *unionSet = [NSCharacterSet alphanumericCharacterSet];
-    [characterSet formUnionWithCharacterSet:unionSet];
-    
-    unionSet = [NSCharacterSet whitespaceCharacterSet];
-    [characterSet formUnionWithCharacterSet:unionSet];
-    
-    unionSet = characterSet.invertedSet;
-    NSArray *components = [desiredName componentsSeparatedByCharactersInSet:unionSet];
-    NSString *result = [components componentsJoinedByString:@""];
-    return result.copy;
-    
 }
 
 #pragma mark -

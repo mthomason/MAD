@@ -27,8 +27,8 @@
 		4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA4D62F1D18451200A1240C /* libc++.tbd */; };
 		4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */; };
-		4CC6415A1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641581BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC6415B1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641591BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m */; };
+		4CC6415A1BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641581BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CC6415B1BA77ABC00F3ECCE /* MADCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641591BA77ABC00F3ECCE /* MADCollectionViewCellDocument.m */; };
 		4CC6415D1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC6415C1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641721BA77D6100F3ECCE /* MADBackgroundViewSelected.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641701BA77D6100F3ECCE /* MADBackgroundViewSelected.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641731BA77D6100F3ECCE /* MADBackgroundViewSelected.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641711BA77D6100F3ECCE /* MADBackgroundViewSelected.m */; };
@@ -74,8 +74,8 @@
 		4CA4D62F1D18451200A1240C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileLocationManager.h; path = MADExplorer/MADFileLocationManager.h; sourceTree = "<group>"; };
 		4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileLocationManager.m; path = MADExplorer/MADFileLocationManager.m; sourceTree = "<group>"; };
-		4CC641581BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTCollectionViewCellDocument.h; path = MADExplorer/MTCollectionViewCellDocument.h; sourceTree = "<group>"; };
-		4CC641591BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTCollectionViewCellDocument.m; path = MADExplorer/MTCollectionViewCellDocument.m; sourceTree = "<group>"; };
+		4CC641581BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCollectionViewCellDocument.h; path = MADExplorer/MADCollectionViewCellDocument.h; sourceTree = "<group>"; };
+		4CC641591BA77ABC00F3ECCE /* MADCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCollectionViewCellDocument.m; path = MADExplorer/MADCollectionViewCellDocument.m; sourceTree = "<group>"; };
 		4CC6415C1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentCellProtocol.h; path = MADExplorer/MADDocumentCellProtocol.h; sourceTree = "<group>"; };
 		4CC641701BA77D6100F3ECCE /* MADBackgroundViewSelected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBackgroundViewSelected.h; path = MADExplorer/MADBackgroundViewSelected.h; sourceTree = "<group>"; };
 		4CC641711BA77D6100F3ECCE /* MADBackgroundViewSelected.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBackgroundViewSelected.m; path = MADExplorer/MADBackgroundViewSelected.m; sourceTree = "<group>"; };
@@ -166,8 +166,8 @@
 				4CC641851BA78A1300F3ECCE /* MTTableViewCellDocument.m */,
 				4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */,
 				4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */,
-				4CC641581BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h */,
-				4CC641591BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m */,
+				4CC641581BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h */,
+				4CC641591BA77ABC00F3ECCE /* MADCollectionViewCellDocument.m */,
 				4CC641701BA77D6100F3ECCE /* MADBackgroundViewSelected.h */,
 				4CC641711BA77D6100F3ECCE /* MADBackgroundViewSelected.m */,
 				4CCB73541D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.h */,
@@ -212,7 +212,7 @@
 				4C4754571CF41A6500BC9E02 /* MADExplorerProtocol.h in Headers */,
 				4CC6415D1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h in Headers */,
 				4C5989A21DAA320B007A568B /* MADFileExplorerViewDelegate.h in Headers */,
-				4CC6415A1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h in Headers */,
+				4CC6415A1BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h in Headers */,
 				4C8785581D1BCB5600B4D2A1 /* MADThumbnailView.h in Headers */,
 				4CCB735A1D1A283000D7AE84 /* MADLabelFileExplorerDocumentCellSubtitle.h in Headers */,
 				4CC641721BA77D6100F3ECCE /* MADBackgroundViewSelected.h in Headers */,
@@ -320,7 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C8785591D1BCB5600B4D2A1 /* MADThumbnailView.m in Sources */,
-				4CC6415B1BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m in Sources */,
+				4CC6415B1BA77ABC00F3ECCE /* MADCollectionViewCellDocument.m in Sources */,
 				4CCB73571D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.m in Sources */,
 				4CC641731BA77D6100F3ECCE /* MADBackgroundViewSelected.m in Sources */,
 				4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */,
