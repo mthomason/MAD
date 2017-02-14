@@ -48,11 +48,9 @@
 }*/
 
 typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMutableMapGesturesLongPress;
-typedef NSMutableDictionary <NSNumber *, UITapGestureRecognizer *>       MADMutableMapGesturesTap;
 
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
-
 
 static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect();
 static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
@@ -252,11 +250,21 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
     forElementOfKind: (NSString *)elementKind atIndexPath: (NSIndexPath *)indexPath { }
 
+#pragma mark Highlight Item
+
+- (BOOL)collectionView:(UICollectionView *)collectionView
+                            shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    return YES;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView
                                         didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.highlighted[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 }
+
+#pragma mark Unhighlight Item
 
 - (void)collectionView:(UICollectionView *)collectionView
                                         didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -301,7 +309,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     return _editing ?
-    [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] : YES;
+        [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] :
+        YES;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -309,21 +318,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
-
     [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action
-    forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (void)collectionView:(UICollectionView *)collectionView
+         performAction:(SEL)action
+    forItemAtIndexPath:(NSIndexPath *)indexPath
+            withSender:(id)sender {
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-
-    
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView
-                            shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    return YES;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
@@ -444,6 +446,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     
 }
 
+#pragma mark -
+#pragma mark Helpers
 
 - (NSString *)subtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
     id result;

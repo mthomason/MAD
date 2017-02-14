@@ -11,7 +11,6 @@
 @implementation MADExplorerActivityIndicator
 
 + (instancetype)newExplorerActivityIndicator {
-    
     id activityIndicatorView;
     activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                              UIActivityIndicatorViewStyleGray];
