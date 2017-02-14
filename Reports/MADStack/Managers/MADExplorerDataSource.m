@@ -18,11 +18,8 @@
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
 
+#import <MADExplorer/MADDocumentManagerProtocol.h>
 #import <MADExplorer/MADFileLocationManager.h>
-
-#import <MAD/MADConstants.h>
-
-#import "MADDocumentManagerProtocol.h"
 
 typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
@@ -38,15 +35,20 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 @end
 
-@implementation MADExplorerDataSource
-
-- (instancetype)init {
-    return [self initWithCellConfiguration:nil];
+@implementation MADExplorerDataSource {
+    NSString *_extension;
 }
 
-- (instancetype)initWithCellConfiguration:(MADBlockConfigureDocumentCell)cellCondiguration {
+- (instancetype)init {
+    return [self initWithFileExtension:nil cellConfiguration:nil];
+}
+
+- (instancetype)initWithFileExtension:(NSString *)fileExtension
+                    cellConfiguration:(MADBlockConfigureDocumentCell)cellCondiguration {
     if (self = [super init]) {
 
+        _extension = fileExtension.copy;
+        
         MADFileLocationManager *fileLocationManager;
         fileLocationManager = [[MADFileLocationManager alloc] init];
         fileLocationManager.delegate = self;
@@ -114,7 +116,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
     return  ubiquityIdentifier;
 }
 
-- (NSString *)fileExtention { return MADFileExtentionMobleApplicationDocument; }
+- (NSString *)fileExtention { return _extension; }
 
 - (void)didConfigureFilesController:(MADFilesController *)filesController {
     filesController.delegate = self;

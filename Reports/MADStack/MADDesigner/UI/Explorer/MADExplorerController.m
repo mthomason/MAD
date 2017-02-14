@@ -33,6 +33,8 @@
 #import <MADFoundation/MADURL.h>
 
 #import <MADExplorer/MADExplorerProtocol.h>
+#import <MADExplorer/MADDocumentManagerProtocol.h>
+
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
@@ -83,8 +85,6 @@
 #import "NSUserDefaults+MADDesigner.h"
 
 #import "MTStoreKitController+Features.h"
-
-#import "MADDocumentManagerProtocol.h"
 
 #import "MADLabelTitle.h"
 
@@ -302,7 +302,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
             
             UILabel *labelInTableCell;
-            classes = [[NSArray alloc] initWithObjects:[UITableViewCell class], [UICollectionViewCell class], nil];
+            classes = [[NSArray alloc] initWithObjects:[UITableViewCell class],
+                                                       [UICollectionViewCell class], nil];
             labelInTableCell = [UILabel appearanceWhenContainedInInstancesOfClasses: classes];
             labelInTableCell.highlightedTextColor = orangeColor.copy;
             
@@ -537,8 +538,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-#pragma mark Start observing
-
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
 
@@ -618,7 +617,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (MADExplorerDataSource *)fileExplorerDataSource {
     if (!_fileExplorerDataSource) {
         MADExplorerDataSource *datasource;
-        datasource = [[MADExplorerDataSource alloc] initWithCellConfiguration:^(MADCollectionViewCellDocument *cell) {
+        datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
+                                                        cellConfiguration:^(MADCollectionViewCellDocument *cell) {
             if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
         }];
         _fileExplorerDataSource = datasource;
@@ -1656,6 +1656,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
+        self.collectionView.allowsSelection = YES;
         self.collectionView.allowsMultipleSelection = YES;
         
         //NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
@@ -1684,7 +1685,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     self.barButtonItemInformationDocument.enabled = NO;
     self.barButtonItemDuplicate.enabled = NO;
     self.barButtonItemAction.enabled = NO;
-    
+
+    self.collectionView.allowsSelection = NO;
     self.collectionView.allowsMultipleSelection = NO;
     
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];

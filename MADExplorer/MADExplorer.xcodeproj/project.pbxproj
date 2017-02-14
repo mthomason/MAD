@@ -17,6 +17,8 @@
 		4C6700FB1BA20633001C9D5A /* MADExplorerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6700FA1BA20633001C9D5A /* MADExplorerTests.m */; };
 		4C744EF11CE9B62100243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */; };
 		4C744EF21CE9B62100243830 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EF01CE9B62100243830 /* MADFileManager.framework */; };
+		4C7CB49F1E53041000B461B6 /* MADDocumentManagerProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7CB49E1E53041000B461B6 /* MADDocumentManagerProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C7CB4A11E5304CD00B461B6 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7CB4A01E5304CD00B461B6 /* MADFoundation.framework */; };
 		4C8785581D1BCB5600B4D2A1 /* MADThumbnailView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8785561D1BCB5600B4D2A1 /* MADThumbnailView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C8785591D1BCB5600B4D2A1 /* MADThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8785571D1BCB5600B4D2A1 /* MADThumbnailView.m */; };
 		4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -62,6 +64,8 @@
 		4C6700FC1BA20633001C9D5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C744EF01CE9B62100243830 /* MADFileManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFileManager.framework; path = "../Debug-iphonesimulator/MADFileManager.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7CB49E1E53041000B461B6 /* MADDocumentManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentManagerProtocol.h; path = MADExplorer/MADDocumentManagerProtocol.h; sourceTree = "<group>"; };
+		4C7CB4A01E5304CD00B461B6 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C8785561D1BCB5600B4D2A1 /* MADThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADThumbnailView.h; path = MADExplorer/MADThumbnailView.h; sourceTree = "<group>"; };
 		4C8785571D1BCB5600B4D2A1 /* MADThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADThumbnailView.m; path = MADExplorer/MADThumbnailView.m; sourceTree = "<group>"; };
 		4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSaveFileProtocol.h; path = MADExplorer/MADSaveFileProtocol.h; sourceTree = "<group>"; };
@@ -91,6 +95,7 @@
 				4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */,
 				4C744EF21CE9B62100243830 /* MADFileManager.framework in Frameworks */,
 				4C744EF11CE9B62100243830 /* MADCocoaExtensions.framework in Frameworks */,
+				4C7CB4A11E5304CD00B461B6 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +113,7 @@
 		4C341A541E52EE4F00315364 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				4C7CB49E1E53041000B461B6 /* MADDocumentManagerProtocol.h */,
 				4C4754561CF41A6500BC9E02 /* MADExplorerProtocol.h */,
 				4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */,
 			);
@@ -117,6 +123,7 @@
 		4C5205D51BA7E4FE000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C7CB4A01E5304CD00B461B6 /* MADFoundation.framework */,
 				4CA4D62F1D18451200A1240C /* libc++.tbd */,
 				4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */,
 				4C744EF01CE9B62100243830 /* MADFileManager.framework */,
@@ -202,6 +209,7 @@
 				4C401E3F1BAE42DD00BAE5FC /* MADOpenDocumentManager.h in Headers */,
 				4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */,
 				4CCB73561D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.h in Headers */,
+				4C7CB49F1E53041000B461B6 /* MADDocumentManagerProtocol.h in Headers */,
 				4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */,
 				4C4754571CF41A6500BC9E02 /* MADExplorerProtocol.h in Headers */,
 				4CC6415D1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h in Headers */,

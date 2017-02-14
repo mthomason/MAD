@@ -20,8 +20,9 @@
 @interface MADExplorerDataSource : NSObject
     <UICollectionViewDataSource,
         MADFileLocationManagerDelegate>
-
-    - (instancetype)initWithCellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))cellCondiguration NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithFileExtension:(NSString *)fileExtension
+                        cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))config
+                        NS_DESIGNATED_INITIALIZER;
 
     @property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
 
