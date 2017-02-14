@@ -1,5 +1,5 @@
 //
-//  MTCollectionViewCellDocument.m
+//  MADCollectionViewCellDocument.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/19/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTCollectionViewCellDocument.h"
+#import "MADCollectionViewCellDocument.h"
 #import "MADExplorerCaption.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"

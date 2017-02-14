@@ -1,5 +1,5 @@
 //
-//  MTCollectionViewCellDocument.h
+//  MADCollectionViewCellDocument.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/19/13.
