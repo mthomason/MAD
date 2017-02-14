@@ -9,7 +9,7 @@
 #ifndef MADFileExplorerViewControllerProtocol_h
 #define MADFileExplorerViewControllerProtocol_h
 
-@protocol MADFileExplorerViewControllerDelegate <NSObject>
+@protocol MADExplorerControllerProtocol <NSObject>
 
     - (void)openDocumentAtURL:(NSURL *)url;
     - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
