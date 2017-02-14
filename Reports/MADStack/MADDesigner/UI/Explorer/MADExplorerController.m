@@ -85,7 +85,6 @@
 #import "NSUserDefaults+MADDesigner.h"
 
 #import "MTStoreKitController+Features.h"
-
 #import "MADLabelTitle.h"
 
 #import "MADSearchBar.h"
@@ -112,7 +111,6 @@ static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled     = @"
 static NSString * const MADNotificationCloudActivityStarted               = @"MADNotificationCloudActivityStarted";
 static NSString * const MADNotificationCloudActivityCompleted             = @"MADNotificationCloudActivityCompleted";
 
-static NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
 static NSString * const MADHintBarButtonItemEdit = @"Enables document list edit mode.";
 static NSString * const MADHintBarButtonItemAddNewDocument = @"Adds a new document.";
 static NSString * const MADHintBarButtonItemStore = @"Displays the store.";
@@ -538,12 +536,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
+
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
 
     _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
-    // setup ui - navigaion item
     MADLabelTitle *titleView;
     titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
     
@@ -552,7 +551,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
     self.navigationItem.titleView = titleView;
-    
     self.navigationItem.hidesBackButton = YES;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
