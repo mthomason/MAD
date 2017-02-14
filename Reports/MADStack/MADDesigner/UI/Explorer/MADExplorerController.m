@@ -1073,7 +1073,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 - (void)explorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
-
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
     switch (numberOfItemsSelected) {
             
         case 0:
@@ -1284,16 +1285,18 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             //[tabController setViewControllers:viewControllers animated:YES];
             [self.navigationController popViewControllerAnimated:YES];
             
-                id handlerClose;
-                handlerClose = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                    selector:@selector(handleReloadAfterClose)
-                                                                      object:nil];
-                [[NSOperationQueue mainQueue] addOperation:handlerClose];
-                
-            //}];
+            id handlerClose;
+            SEL handleReloadAfterClose = @selector(handleReloadAfterClose);
+            handlerClose = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                selector: handleReloadAfterClose
+                                                                  object: nil];
+            [[NSOperationQueue mainQueue] addOperation:handlerClose];
+            
         };
         
         [MADocument close:openDocument completion:handleCloseCompletion];
+        
+        [self actionDone:sender];
     }
 }
 
@@ -1322,11 +1325,11 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 break;
 
             case UIDocumentStateEditingDisabled:
-                //NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
                 break;
 
             case UIDocumentStateInConflict:
-                //NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                NSLog(@"\n\n\tDocument state in conflict.\n\n");
                 break;
                 
             case UIDocumentStateNormal:
@@ -1334,7 +1337,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                 break;
 
             case UIDocumentStateSavingError:
-                //NSLog(@"\n\n\tDocument state saving error.\n\n");
+                NSLog(@"\n\n\tDocument state saving error.\n\n");
                 break;
 
             default:
@@ -1408,7 +1411,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)handleReloadAfterClose {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         @autoreleasepool {
-            NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems.copy;
+            NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems;
             [self.collectionView.backgroundView setNeedsDisplay];
             [self.collectionView reloadItemsAtIndexPaths:paths];
         }
@@ -1515,7 +1518,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSIndexPath *indexPath;
     NSMutableArray *metadataItems;
     UIPopoverPresentationController *ppc;
-    MADExplorerDataSource *fileExplorerDataSource;
     MADDocumentInformationTableViewController *documentInformation;
     
     selectedItems = [self.fileExplorerViewDelegate indexPathsForSelectedItems];

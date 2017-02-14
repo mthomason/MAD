@@ -299,7 +299,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         [self.delegate openDocumentAtURL:url];
     }
 
-    [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
+    [self invokeOperationDidChangeNumberOfItemsSelected:collectionView];
     
 }
 #pragma mark Deselect Item
@@ -318,7 +318,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
-    [self invokeOperationCollectionViewDidChangeNumberOfItemsSelected:collectionView];
+    [self invokeOperationDidChangeNumberOfItemsSelected:collectionView];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -341,22 +341,22 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
     return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-            UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
-            UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+                                    UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
+                                    UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
                    layout:(UICollectionViewLayout*)collectionViewLayout
                                     minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-        30.0000f : 5.0000f;
+                                    30.0000f : 5.0000f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
                    layout:(UICollectionViewLayout*)collectionViewLayout
                                     minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-        30.0000f : 5.0000f;
+                                    30.0000f : 5.0000f;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
@@ -416,11 +416,10 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     return height;
 }
 
-- (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
+- (void)invokeOperationDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
     NSObject <MADExplorerProtocol> *delegate = self.delegate;
     NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
     [delegate explorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
-
 }
 
 - (void)downloadIfNotYetDownloaded:(MADMetaData *)metadata {
