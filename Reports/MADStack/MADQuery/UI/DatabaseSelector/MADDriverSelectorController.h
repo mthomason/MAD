@@ -19,7 +19,7 @@ extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
 
 @protocol MADViewControllerStandardProtocol;
 
-@interface MTDatabaseDriverSelectorViewController : UITableViewController
+@interface MADDriverSelectorController : UITableViewController
     <MADSaveFileProtocol>
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;

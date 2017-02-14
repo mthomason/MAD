@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseDriverSelectorViewController.h"
+#import "MADDriverSelectorController.h"
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -37,7 +37,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier            = @"MTSe
 NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
-@interface MTDatabaseDriverSelectorViewController ()
+@interface MADDriverSelectorController ()
     <MADViewControllerStandardProtocol,
         UITableViewDelegate>
 
