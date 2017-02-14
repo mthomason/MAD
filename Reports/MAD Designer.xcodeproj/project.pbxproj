@@ -1332,10 +1332,10 @@
 		4C26B98C1BAF11FA00456DC8 /* MADVibrantTableViewCellImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableViewCellImage.m; sourceTree = "<group>"; };
 		4C26B9951BAF123A00456DC8 /* MADDocumentInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentInformationTableViewController.h; sourceTree = "<group>"; };
 		4C26B9961BAF123A00456DC8 /* MADDocumentInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentInformationTableViewController.m; sourceTree = "<group>"; };
-		4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOpenFileSectionHeaderView.h; sourceTree = "<group>"; };
-		4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOpenFileSectionHeaderView.m; sourceTree = "<group>"; };
-		4C26B99C1BAF123A00456DC8 /* MADFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerViewController.h; sourceTree = "<group>"; };
-		4C26B99D1BAF123A00456DC8 /* MADFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerViewController.m; sourceTree = "<group>"; };
+		4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOpenFileSectionHeaderView.h; path = MADStack/MADDesigner/UI/Explorer/MADOpenFileSectionHeaderView.h; sourceTree = "<group>"; };
+		4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOpenFileSectionHeaderView.m; path = MADStack/MADDesigner/UI/Explorer/MADOpenFileSectionHeaderView.m; sourceTree = "<group>"; };
+		4C26B99C1BAF123A00456DC8 /* MADFileExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerViewController.h; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerViewController.h; sourceTree = "<group>"; };
+		4C26B99D1BAF123A00456DC8 /* MADFileExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerViewController.m; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerViewController.m; sourceTree = "<group>"; };
 		4C26B99F1BAF123A00456DC8 /* MADNavigationControllerFontPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerFontPicker.h; path = ../MADDesigner/UI/FontPicker/MADNavigationControllerFontPicker.h; sourceTree = "<group>"; };
 		4C26B9A01BAF123A00456DC8 /* MADNavigationControllerFontPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerFontPicker.m; path = ../MADDesigner/UI/FontPicker/MADNavigationControllerFontPicker.m; sourceTree = "<group>"; };
 		4C26B9A11BAF123A00456DC8 /* MADFontSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFontSelectorViewController.h; sourceTree = "<group>"; };
@@ -1776,7 +1776,7 @@
 		4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSplitViewController.m; sourceTree = "<group>"; };
 		4C4754471CF362E900BC9E02 /* MADPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewController.h; sourceTree = "<group>"; };
 		4C4754481CF362E900BC9E02 /* MADPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewController.m; sourceTree = "<group>"; };
-		4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerViewControllerProtocol.h; sourceTree = "<group>"; };
+		4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerViewControllerProtocol.h; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerViewControllerProtocol.h; sourceTree = "<group>"; };
 		4C4935A01E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDesignerAnimatedTransitioning.h; path = MADStack/MADDesigner/MADDesignerAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDesignerAnimatedTransitioning.m; path = MADStack/MADDesigner/MADDesignerAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -1848,7 +1848,7 @@
 		4C5C0DC31C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionPolarQuestionAffirmativeResult.h; sourceTree = "<group>"; };
 		4C5C0DC41C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionPolarQuestionAffirmativeResult.m; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
-		4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADDesignerExplorer.storyboard; sourceTree = "<group>"; };
+		4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesignerExplorer.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADDesignerExplorer.storyboard; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
 		4C6700BB1BA133AB001C9D5A /* MAD Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Barcodes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1883,7 +1883,7 @@
 		4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaPresentationController.h; sourceTree = "<group>"; };
 		4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaPresentationController.m; sourceTree = "<group>"; };
 		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentManagerProtocol.h; sourceTree = "<group>"; };
+		4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentManagerProtocol.h; path = MADStack/MADDesigner/UI/Explorer/MADDocumentManagerProtocol.h; sourceTree = "<group>"; };
 		4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1942,8 +1942,8 @@
 		4C8F99C11ACA97C8006D3996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		4C8F99C31ACA97C9006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageJustified@2x.png"; path = "Reports/UIImageJustified@2x.png"; sourceTree = "<group>"; };
-		4C97CB8A1E3A263400587B16 /* MADFileExplorerAnimated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerAnimated.h; sourceTree = "<group>"; };
-		4C97CB8B1E3A263400587B16 /* MADFileExplorerAnimated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerAnimated.m; sourceTree = "<group>"; };
+		4C97CB8A1E3A263400587B16 /* MADFileExplorerAnimated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerAnimated.h; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerAnimated.h; sourceTree = "<group>"; };
+		4C97CB8B1E3A263400587B16 /* MADFileExplorerAnimated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerAnimated.m; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerAnimated.m; sourceTree = "<group>"; };
 		4C994F081BDC3B440058627A /* MADDocumentObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentObjectCollectionViewCell.h; path = MADStack/MADDesigner/UI/MADDocumentObjectCollectionViewCell.h; sourceTree = "<group>"; };
 		4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDocumentObjectCollectionViewCell.m; path = MADStack/MADDesigner/UI/MADDocumentObjectCollectionViewCell.m; sourceTree = "<group>"; };
 		4C994F371BE082730058627A /* MADLabelStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabelStatus.h; path = MADStack/MADViewer/UI/MADLabelStatus.h; sourceTree = "<group>"; };
@@ -1977,8 +1977,8 @@
 		4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
 		4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerFileExplorer.h; path = ../MADDesigner/UI/Explorer/MADNavigationControllerFileExplorer.h; sourceTree = "<group>"; };
 		4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerFileExplorer.m; path = ../MADDesigner/UI/Explorer/MADNavigationControllerFileExplorer.m; sourceTree = "<group>"; };
-		4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerView.h; sourceTree = "<group>"; };
-		4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerView.m; sourceTree = "<group>"; };
+		4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerView.h; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerView.h; sourceTree = "<group>"; };
+		4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerView.m; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerView.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
@@ -1993,10 +1993,10 @@
 		4CA9D7991E13820200ED9D78 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D79B1E13820800ED9D78 /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D79D1E13820E00ED9D78 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CB074D21E22006700643F32 /* MADFileExplorerToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerToolbar.h; sourceTree = "<group>"; };
-		4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerToolbar.m; sourceTree = "<group>"; };
-		4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileExplorerNavigationBar.h; sourceTree = "<group>"; };
-		4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileExplorerNavigationBar.m; sourceTree = "<group>"; };
+		4CB074D21E22006700643F32 /* MADFileExplorerToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerToolbar.h; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerToolbar.h; sourceTree = "<group>"; };
+		4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerToolbar.m; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerToolbar.m; sourceTree = "<group>"; };
+		4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerNavigationBar.h; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerNavigationBar.h; sourceTree = "<group>"; };
+		4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerNavigationBar.m; path = MADStack/MADDesigner/UI/Explorer/MADFileExplorerNavigationBar.m; sourceTree = "<group>"; };
 		4CB56E531AC683CC00756775 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4CB56E541AC683CC00756775 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4CB56E571AC683CC00756775 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -2392,8 +2392,8 @@
 		4CE3194E1E4D2C4B00EB5B85 /* MADCellElementDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCellElementDelegate.h; sourceTree = "<group>"; };
 		4CE4EFAE1CD08C58006CA2B0 /* MADCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCacheManager.h; path = MADStack/Managers/MADCacheManager.h; sourceTree = "<group>"; };
 		4CE4EFAF1CD08C58006CA2B0 /* MADCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCacheManager.m; path = MADStack/Managers/MADCacheManager.m; sourceTree = "<group>"; };
-		4CE7EC361D128B300072DF34 /* MADFileExplorerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerDataSource.h; path = ../../../Managers/MADFileExplorerDataSource.h; sourceTree = "<group>"; };
-		4CE7EC371D128B300072DF34 /* MADFileExplorerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerDataSource.m; path = ../../../Managers/MADFileExplorerDataSource.m; sourceTree = "<group>"; };
+		4CE7EC361D128B300072DF34 /* MADFileExplorerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerDataSource.h; path = MADStack/Managers/MADFileExplorerDataSource.h; sourceTree = "<group>"; };
+		4CE7EC371D128B300072DF34 /* MADFileExplorerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerDataSource.m; path = MADStack/Managers/MADFileExplorerDataSource.m; sourceTree = "<group>"; };
 		4CE84D8A1B396F3200BB3A0A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		4CE84D8C1B396F3800BB3A0A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MAD.xcdatamodel; sourceTree = "<group>"; };
@@ -2458,7 +2458,7 @@
 		4CFEE81C1BB7A3A300AFAA0A /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellEnterText.h; sourceTree = "<group>"; };
 		4CFEE81D1BB7A3A300AFAA0A /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellEnterText.m; sourceTree = "<group>"; };
 		4CFEE81E1BB7A3A300AFAA0A /* MTQueryBuilderAddPredicateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddPredicateViewController.h; sourceTree = "<group>"; };
-		4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQuery.storyboard; sourceTree = "<group>"; };
+		4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADQuery.storyboard; path = MADStack/MADDesigner/UI/QueryBuilder/MADQuery.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2784,31 +2784,6 @@
 			);
 			name = DocumentInformation;
 			path = MADStack/MADDesigner/UI/DocumentInformation;
-			sourceTree = "<group>";
-		};
-		4C26B9991BAF123A00456DC8 /* Explorer */ = {
-			isa = PBXGroup;
-			children = (
-				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
-				4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */,
-				4C26B99C1BAF123A00456DC8 /* MADFileExplorerViewController.h */,
-				4C26B99D1BAF123A00456DC8 /* MADFileExplorerViewController.m */,
-				4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */,
-				4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */,
-				4CE7EC361D128B300072DF34 /* MADFileExplorerDataSource.h */,
-				4CE7EC371D128B300072DF34 /* MADFileExplorerDataSource.m */,
-				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
-				4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */,
-				4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */,
-				4CB074D21E22006700643F32 /* MADFileExplorerToolbar.h */,
-				4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */,
-				4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */,
-				4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */,
-				4C97CB8A1E3A263400587B16 /* MADFileExplorerAnimated.h */,
-				4C97CB8B1E3A263400587B16 /* MADFileExplorerAnimated.m */,
-			);
-			name = Explorer;
-			path = MADStack/MADDesigner/UI/Explorer;
 			sourceTree = "<group>";
 		};
 		4C26B99E1BAF123A00456DC8 /* FontPicker */ = {
@@ -3217,9 +3192,15 @@
 				4CE1CA521CFC50E0001BD2D5 /* cpp */,
 				4C26BA261BAF999800456DC8 /* Protocols */,
 				4CB8EDFF1E19F4AB00193295 /* Navigation */,
+				4C26BA041BAF14F200456DC8 /* About */,
 				4C00818414B738E9003DF437 /* Model */,
 				4CC8EEF31E44F6EE00139089 /* Explorer */,
+				4C26BA321BAF99BE00456DC8 /* Constants.h */,
+				4C26BA331BAF99BE00456DC8 /* Constants.m */,
 				4CC8EEF41E44F6F200139089 /* Query */,
+				4C26B9A91BAF123A00456DC8 /* TabBar */,
+				4C26B9AE1BAF123A00456DC8 /* Toolbox */,
+				4C26B9941BAF123A00456DC8 /* DocumentInformation */,
 				4CC8EEF21E44F6EB00139089 /* Designer */,
 				4CC8EEF11E44F6DF00139089 /* Viewer */,
 				4CC8EEF51E44F6F500139089 /* Barcodes */,
@@ -4292,6 +4273,8 @@
 		4CB8EDFF1E19F4AB00193295 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */,
+				4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */,
 				4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */,
 				4C26B9B21BAF123A00456DC8 /* MADNavigationControllerToolbox.h */,
 				4C26B9B31BAF123A00456DC8 /* MADNavigationControllerToolbox.m */,
@@ -4661,28 +4644,17 @@
 		4CC8EEF21E44F6EB00139089 /* Designer */ = {
 			isa = PBXGroup;
 			children = (
-				4C26BA321BAF99BE00456DC8 /* Constants.h */,
-				4C26BA331BAF99BE00456DC8 /* Constants.m */,
 				4C4935A01E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.h */,
 				4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */,
 				4CF46DCA1CF2ED3E00D93406 /* MADManagedObjectCollectionView.h */,
 				4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */,
 				4CF46DCC1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.h */,
 				4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */,
-				4CFEE7F31BB773D800AFAA0A /* QueryBuilder */,
-				4C26BA041BAF14F200456DC8 /* About */,
 				4C26B9931BAF123A00456DC8 /* Designer */,
-				4C26B9941BAF123A00456DC8 /* DocumentInformation */,
 				4C26BA391BAF99F000456DC8 /* ElementView */,
-				4C26B9991BAF123A00456DC8 /* Explorer */,
 				4C26B99E1BAF123A00456DC8 /* FontPicker */,
 				4C26BA521BAF99F000456DC8 /* SectionView */,
 				4C26BA551BAF99F000456DC8 /* Settings */,
-				4C26B9A61BAF123A00456DC8 /* ShowSQL */,
-				4C26B9A91BAF123A00456DC8 /* TabBar */,
-				4C26B9AE1BAF123A00456DC8 /* Toolbox */,
-				4C26BA3E1BAF99F000456DC8 /* MADFileExplorerViewLayout.h */,
-				4C26BA3F1BAF99F000456DC8 /* MADFileExplorerViewLayout.m */,
 				4C26BA401BAF99F000456DC8 /* MADPopoverBackgroundView.h */,
 				4C26BA411BAF99F000456DC8 /* MADPopoverBackgroundView.m */,
 				4C26BA421BAF99F000456DC8 /* MTAggregateFunctionsViewController.h */,
@@ -4714,6 +4686,25 @@
 		4CC8EEF31E44F6EE00139089 /* Explorer */ = {
 			isa = PBXGroup;
 			children = (
+				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
+				4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */,
+				4C26B99C1BAF123A00456DC8 /* MADFileExplorerViewController.h */,
+				4C26B99D1BAF123A00456DC8 /* MADFileExplorerViewController.m */,
+				4CA4D6211D17C5F000A1240C /* MADFileExplorerView.h */,
+				4CA4D6221D17C5F000A1240C /* MADFileExplorerView.m */,
+				4CE7EC361D128B300072DF34 /* MADFileExplorerDataSource.h */,
+				4CE7EC371D128B300072DF34 /* MADFileExplorerDataSource.m */,
+				4C26B99A1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.h */,
+				4C26B99B1BAF123A00456DC8 /* MADOpenFileSectionHeaderView.m */,
+				4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */,
+				4CB074D21E22006700643F32 /* MADFileExplorerToolbar.h */,
+				4CB074D31E22006700643F32 /* MADFileExplorerToolbar.m */,
+				4CB074D51E22010900643F32 /* MADFileExplorerNavigationBar.h */,
+				4CB074D61E22010900643F32 /* MADFileExplorerNavigationBar.m */,
+				4C97CB8A1E3A263400587B16 /* MADFileExplorerAnimated.h */,
+				4C97CB8B1E3A263400587B16 /* MADFileExplorerAnimated.m */,
+				4C26BA3E1BAF99F000456DC8 /* MADFileExplorerViewLayout.h */,
+				4C26BA3F1BAF99F000456DC8 /* MADFileExplorerViewLayout.m */,
 			);
 			name = Explorer;
 			sourceTree = "<group>";
@@ -4721,13 +4712,19 @@
 		4CC8EEF41E44F6F200139089 /* Query */ = {
 			isa = PBXGroup;
 			children = (
+				4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */,
+				4CFEE8041BB7993300AFAA0A /* PredicateBuilder */,
+				4CFEE8061BB7993300AFAA0A /* AddTable */,
+				4CFEE8081BB7993300AFAA0A /* LinkBuilder */,
+				4CFEE7FE1BB78CAB00AFAA0A /* SelectOperator */,
+				4CFEE7F71BB77BD600AFAA0A /* SelectField */,
+				4CFEE7F41BB773D800AFAA0A /* AddGroup */,
+				4C26B9A61BAF123A00456DC8 /* ShowSQL */,
 				4CF304121D1EF54400466560 /* QueryView */,
 				4CA0C6D21CA79F0C00222B8D /* Misc */,
 				4C401F131BAE703200BAE5FC /* Cells */,
 				4C26BA771BAF9AA700456DC8 /* DatabaseSelector */,
 				4C26BA111BAF150F00456DC8 /* Visualization */,
-				4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */,
-				4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */,
 			);
 			name = Query;
 			sourceTree = "<group>";
@@ -4868,21 +4865,6 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		4CFEE7F31BB773D800AFAA0A /* QueryBuilder */ = {
-			isa = PBXGroup;
-			children = (
-				4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */,
-				4CFEE8041BB7993300AFAA0A /* PredicateBuilder */,
-				4CFEE8061BB7993300AFAA0A /* AddTable */,
-				4CFEE8081BB7993300AFAA0A /* LinkBuilder */,
-				4CFEE7FE1BB78CAB00AFAA0A /* SelectOperator */,
-				4CFEE7F71BB77BD600AFAA0A /* SelectField */,
-				4CFEE7F41BB773D800AFAA0A /* AddGroup */,
-			);
-			name = QueryBuilder;
-			path = MADStack/MADDesigner/UI/QueryBuilder;
-			sourceTree = "<group>";
-		};
 		4CFEE7F41BB773D800AFAA0A /* AddGroup */ = {
 			isa = PBXGroup;
 			children = (
@@ -4894,7 +4876,8 @@
 				4C4020E61BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.h */,
 				4C4020E71BAE988900BAE5FC /* MTQueryBuilderSortTypeViewController.m */,
 			);
-			path = AddGroup;
+			name = AddGroup;
+			path = MADStack/MADDesigner/UI/QueryBuilder/AddGroup;
 			sourceTree = "<group>";
 		};
 		4CFEE7F71BB77BD600AFAA0A /* SelectField */ = {
@@ -4905,7 +4888,8 @@
 				4CFEE7F91BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.h */,
 				4CFEE7FA1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m */,
 			);
-			path = SelectField;
+			name = SelectField;
+			path = MADStack/MADDesigner/UI/QueryBuilder/SelectField;
 			sourceTree = "<group>";
 		};
 		4CFEE7FE1BB78CAB00AFAA0A /* SelectOperator */ = {
@@ -4916,7 +4900,8 @@
 				4CFEE8001BB78CAB00AFAA0A /* MADTableViewControllerOpperators.h */,
 				4CFEE8011BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m */,
 			);
-			path = SelectOperator;
+			name = SelectOperator;
+			path = MADStack/MADDesigner/UI/QueryBuilder/SelectOperator;
 			sourceTree = "<group>";
 		};
 		4CFEE8041BB7993300AFAA0A /* PredicateBuilder */ = {
@@ -4932,7 +4917,8 @@
 				4CFEE81C1BB7A3A300AFAA0A /* MTCellEnterText.h */,
 				4CFEE81D1BB7A3A300AFAA0A /* MTCellEnterText.m */,
 			);
-			path = PredicateBuilder;
+			name = PredicateBuilder;
+			path = MADStack/MADDesigner/UI/QueryBuilder/PredicateBuilder;
 			sourceTree = "<group>";
 		};
 		4CFEE8061BB7993300AFAA0A /* AddTable */ = {
@@ -4942,7 +4928,8 @@
 				4CFEE8131BB7A29800AFAA0A /* MTQueryBuilderAddTableViewController.h */,
 				4CFEE8141BB7A29800AFAA0A /* MTQueryBuilderAddTableViewController.m */,
 			);
-			path = AddTable;
+			name = AddTable;
+			path = MADStack/MADDesigner/UI/QueryBuilder/AddTable;
 			sourceTree = "<group>";
 		};
 		4CFEE8081BB7993300AFAA0A /* LinkBuilder */ = {
@@ -4956,7 +4943,8 @@
 				4CFEE80E1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.h */,
 				4CFEE80D1BB7A1C000AFAA0A /* MTQueryBuilderLinkBuilderViewController.m */,
 			);
-			path = LinkBuilder;
+			name = LinkBuilder;
+			path = MADStack/MADDesigner/UI/QueryBuilder/LinkBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -33,21 +33,22 @@
 
 static const CGFloat PageEdgeInsetMargin = 3.0000f;
 
-static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id <UILayoutSupport> topLayoutGuide,
-                                                        id <UILayoutSupport> bottomLayoutGuide);
+static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id <UILayoutSupport>, id <UILayoutSupport>);
+static inline UIEdgeInsets boundsInsets(id<UILayoutSupport>, id<UILayoutSupport>);
+static inline CGFloat zoomScale(CGFloat, CGFloat, CGFloat);
+static inline CGFloat EdgeInsetForScrollIndicator(CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat MaximumZoomScaleForPaper(CGSize, CGSize, CGFloat);
+static inline CGFloat MinimumZoomScaleForPaper(CGSize, CGSize, CGFloat);
+static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
+
 static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id <UILayoutSupport> topLayoutGuide,
                                                         id <UILayoutSupport> bottomLayoutGuide) {
     return UIEdgeInsetsMake(topLayoutGuide.length, CGSizeZero.width, bottomLayoutGuide.length, CGSizeZero.width);
 }
 
-static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m);
 static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
     return 1 +  ( l2 - l1 - (m * 2) )  / l1;
 }
-
-static inline CGFloat EdgeInsetForScrollIndicator(CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGFloat MaximumZoomScaleForPaper(CGSize, CGSize, CGFloat);
-static inline CGFloat MinimumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 
 static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
                                                   CGFloat layoutGuideLength, CGFloat margin) {
@@ -65,13 +66,11 @@ static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, C
                zoomScale(paper.height, container.height, margin));
 }
 
-static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin);
 static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
     return CGPointMake(contentSize.width * 0.5000f + MAX(((scrollerBoundsSize.width - (margin * 2)) - contentSize.width) * 0.5000f, 0.0000f),
                        contentSize.height * 0.5000f + MAX(((scrollerBoundsSize.height - (margin * 2)) - contentSize.height) * 0.5000f, 0.0000f));
 }
 
-static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<UILayoutSupport> bottomLayoutGuide);
 static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<UILayoutSupport> bottomLayoutGuide) {
     return UIEdgeInsetsMake(topLayoutGuide.length, CGSizeZero.width, bottomLayoutGuide.length, CGSizeZero.width);
 }
