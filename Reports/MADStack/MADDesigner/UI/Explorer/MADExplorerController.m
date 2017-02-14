@@ -35,6 +35,7 @@
 #import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADDocumentManagerProtocol.h>
 
+#import <MADExplorer/MADExplorerView.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
@@ -54,7 +55,6 @@
 
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
-#import "MADExplorerView.h"
 
 #import "MADExplorerSectionHeaderView.h"
 #import "MADSearchBar.h"

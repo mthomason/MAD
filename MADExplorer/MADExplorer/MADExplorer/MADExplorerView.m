@@ -9,7 +9,6 @@
 #import "MADExplorerView.h"
 #import <UIKit/UIView.h>
 #import <UIKit/UITapGestureRecognizer.h>
-#import "MADWatermarkView.h"
 
 @implementation MADExplorerView
 
@@ -27,8 +26,6 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        id watermarkView = [[MADWatermarkView alloc] initWithFrame: self.bounds];
-        self.backgroundView = watermarkView;
         self.scrollIndicatorInsets = self.contentInset;
 
     }
