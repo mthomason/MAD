@@ -18,7 +18,7 @@
         @autoreleasepool {
             MADExplorerView *view;
             view = [MADExplorerView appearance];
-            view.backgroundColor = [UIColor lightGrayColor];
+            view.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
         }
     }
