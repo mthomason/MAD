@@ -17,7 +17,7 @@
 
 #import <MessageUI/MFMailComposeViewController.h>
 
-#import <MADExplorer/MADCollectionViewLayoutGroupedDelegateProtocol.h>
+#import <MADExplorer/MADFileExplorerViewDelegateProtocol.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 

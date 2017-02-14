@@ -7,7 +7,6 @@
 //
 
 #import "MADFileExplorerViewDelegate.h"
-#import "MADCollectionViewLayoutGroupedDelegateProtocol.h"
 
 #import <UIKit/UITableView.h>
 #import <UIKit/UIActivityIndicatorView.h>
@@ -16,14 +15,15 @@
 #import <UIKit/UILongPressGestureRecognizer.h>
 #import <UIKit/UITapGestureRecognizer.h>
 
-#import <MADExplorer/MADExplorerCaption.h>
-
 #import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
 #import <MADFileManager/MADMetaData.h>
+
+#import "MADFileExplorerViewDelegateProtocol.h"
+#import "MADExplorerCaption.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
