@@ -174,7 +174,7 @@
 		4C26BA6A1BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */; };
 		4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */; };
 		4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */; };
-		4C26BA801BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m */; };
+		4C26BA801BAF9AA700456DC8 /* MADDriverSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */; };
 		4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA871BAF9B3000456DC8 /* objcmad.c */; };
 		4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
 		4C26BA981BAF9B9B00456DC8 /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8E1BAF9B9B00456DC8 /* MADViewController.m */; };
@@ -1460,8 +1460,8 @@
 		4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
 		4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectionViewController.h; sourceTree = "<group>"; };
 		4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectionViewController.m; sourceTree = "<group>"; };
-		4C26BA781BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorViewController.h; sourceTree = "<group>"; };
-		4C26BA791BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorViewController.m; sourceTree = "<group>"; };
+		4C26BA781BAF9AA700456DC8 /* MADDriverSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDriverSelectorController.h; sourceTree = "<group>"; };
+		4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDriverSelectorController.m; sourceTree = "<group>"; };
 		4C26BA841BAF9B3000456DC8 /* MADObjectIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADObjectIdentifier.h; sourceTree = "<group>"; };
 		4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADObjectIdentifier.m; sourceTree = "<group>"; };
 		4C26BA871BAF9B3000456DC8 /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = objcmad.c; sourceTree = "<group>"; };
@@ -1776,7 +1776,7 @@
 		4C4754451CF362DB00BC9E02 /* MADSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSplitViewController.m; sourceTree = "<group>"; };
 		4C4754471CF362E900BC9E02 /* MADPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageViewController.h; sourceTree = "<group>"; };
 		4C4754481CF362E900BC9E02 /* MADPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPageViewController.m; sourceTree = "<group>"; };
-		4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerViewControllerProtocol.h; path = ../../MADDesigner/UI/Explorer/MADFileExplorerViewControllerProtocol.h; sourceTree = "<group>"; };
+		4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerControllerProtocol.h; path = ../../MADDesigner/UI/Explorer/MADExplorerControllerProtocol.h; sourceTree = "<group>"; };
 		4C4935A01E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDesignerAnimatedTransitioning.h; path = MADStack/MADDesigner/MADDesignerAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDesignerAnimatedTransitioning.m; path = MADStack/MADDesigner/MADDesignerAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -2910,7 +2910,7 @@
 			isa = PBXGroup;
 			children = (
 				4C8785551D1B9D9500B4D2A1 /* MADDocumentManagerProtocol.h */,
-				4C4754581CF41FF000BC9E02 /* MADFileExplorerViewControllerProtocol.h */,
+				4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */,
 				4CE3194D1E4D2AB900EB5B85 /* MADReportPageViewProtocol.h */,
 				4CBBA94A1CFE98810033F63B /* MADViewControllerValueBasedOnFieldDelegate.h */,
 				4CBBA94B1CFE99B40033F63B /* MADQueryBuilderAddPredicateDelegate.h */,
@@ -2994,8 +2994,8 @@
 		4C26BA771BAF9AA700456DC8 /* DatabaseSelector */ = {
 			isa = PBXGroup;
 			children = (
-				4C26BA781BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.h */,
-				4C26BA791BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m */,
+				4C26BA781BAF9AA700456DC8 /* MADDriverSelectorController.h */,
+				4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */,
 			);
 			name = DatabaseSelector;
 			path = MADStack/MADQuery/UI/DatabaseSelector;
@@ -6260,7 +6260,7 @@
 				4C401FC21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */,
 				4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */,
-				4C26BA801BAF9AA700456DC8 /* MTDatabaseDriverSelectorViewController.m in Sources */,
+				4C26BA801BAF9AA700456DC8 /* MADDriverSelectorController.m in Sources */,
 				4C4020501BAE92F200BAE5FC /* UIColor+PaperPatterns.m in Sources */,
 				4CF3040D1D1E175700466560 /* MADQueryViewSectionDelegate.m in Sources */,
 				4C401F7A1BAE7EB500BAE5FC /* MADWatermarkView.m in Sources */,

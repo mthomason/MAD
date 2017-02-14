@@ -169,7 +169,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)setEditing:(BOOL)editing {
-    //NSLog(@"%s: %@", __PRETTY_FUNCTION__, editing ? @"YES" : @"NO");
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, editing ? @"YES" : @"NO");
     if (_editing != editing) {
         _editing = editing;
     }
@@ -201,7 +201,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
@@ -445,7 +445,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 
-- (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
+- (NSString *)subtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
     id result;
     result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
                         NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded) :

@@ -15,7 +15,7 @@
 @interface MADExplorerController : UICollectionViewController
     <MADDocumentCellProtocol>
 
-    + (instancetype)newFileExplorerViewController;
+    + (instancetype)newExplorerController;
     - (void)done:(id)sender;
 
 @end

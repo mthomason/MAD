@@ -47,7 +47,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
 
-#import "MADFileExplorerViewControllerProtocol.h"
+#import "MADExplorerControllerProtocol.h"
 
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
@@ -62,7 +62,7 @@
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
-#import "MTDatabaseDriverSelectorViewController.h"
+#import "MADDriverSelectorController.h"
 #import "MADStoreViewController.h"
 
 #import "MADNavigationBarTitleView.h"
@@ -233,20 +233,17 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     
 }
 
-+ (instancetype)newFileExplorerViewController {
++ (instancetype)newExplorerController {
     id controller;
-    NSString *explorerStoryboardIdentifier, *explorerViewControllerIdentifier;
+    NSString *explorerStoryboardIdentifier, *identifier;
     explorerStoryboardIdentifier = @"MADDesignerExplorer";
-    explorerViewControllerIdentifier = @"MADIdentifierFileExplorerViewController";
+    identifier = @"MADIdentifierFileExplorerViewController";
     id bundle = [NSBundle mainBundle];
     UIStoryboard *storyboard;
     storyboard = [UIStoryboard storyboardWithName:explorerStoryboardIdentifier bundle:bundle];
-    controller = [storyboard instantiateViewControllerWithIdentifier:explorerViewControllerIdentifier];
+    controller = [storyboard instantiateViewControllerWithIdentifier:identifier];
     return controller;
 }
-
-#pragma mark -
-#pragma mark NSObject
 
 + (void)initialize {
     [super initialize];
@@ -289,7 +286,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             navigationBar.barTintColor  = madColor4.copy;
             navigationBar.tintColor     = redColor.copy;
             
-            classes = [[NSArray alloc] initWithObjects: [UINavigationController class], [UIViewController class], nil];
+            classes = [[NSArray alloc] initWithObjects: [UINavigationController class],
+                                                        [UIViewController class], nil];
             navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
             navigationBar.tintColor     = whiteColor.copy;
             
@@ -316,6 +314,9 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         }
     }
 }
+
+#pragma mark -
+#pragma mark NSObject
 
 - (void)dealloc {
     
@@ -541,11 +542,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
 
-    @autoreleasepool {
-
-        _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
-
-    }
+    _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
     // setup ui - navigaion item
     MADLabelTitle *titleView;
@@ -1308,7 +1305,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 #pragma mark -
-#pragma mark MADFileExplorerViewControllerDelegate
+#pragma mark MADExplorerControllerProtocol
 
 - (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
 
@@ -1448,8 +1445,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     navigationControl = [MADNavigationController newNavigationController: MADNavigationControllerTypeNewDocument];
     navigationControl.modalPresentationStyle = UIModalPresentationFormSheet;
     
-    MTDatabaseDriverSelectorViewController *databaseDriverSelector;
-    databaseDriverSelector = (MTDatabaseDriverSelectorViewController *)navigationControl.topViewController;
+    MADDriverSelectorController *databaseDriverSelector;
+    databaseDriverSelector = (MADDriverSelectorController *)navigationControl.topViewController;
     databaseDriverSelector.delegate = self;
     databaseDriverSelector.saveFileDelegate = self;
     

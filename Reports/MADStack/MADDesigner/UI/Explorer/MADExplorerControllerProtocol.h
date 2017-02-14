@@ -1,13 +1,13 @@
 //
-//  MADFileExplorerViewControllerProtocol.h
+//  MADExplorerControllerProtocol.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/24/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADFileExplorerViewControllerProtocol_h
-#define MADFileExplorerViewControllerProtocol_h
+#ifndef MAD_MADExplorerControllerProtocol_h
+#define MAD_MADExplorerControllerProtocol_h
 
 @protocol MADExplorerControllerProtocol <NSObject>
 

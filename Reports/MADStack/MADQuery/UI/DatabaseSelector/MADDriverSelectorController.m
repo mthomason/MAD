@@ -29,8 +29,8 @@
 #import "MTConnectionViewController.h"
 #import "MADLabelTitle.h"
 
-NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
-NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";
+NSString * const MADDriverSelectorControllerDefaultPrompt    = @"Select database type.";
+NSString * const MADDriverSelectorControllerDefaultTitle     = @"New Report";
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier            = @"MTSegueShowSetUpDatasourceSqlite3Identifier";
@@ -45,7 +45,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 @end
 
-@implementation MTDatabaseDriverSelectorViewController
+@implementation MADDriverSelectorController
 
 - (NSURL *)documentDirectory {
     NSURL *url = [self.saveFileDelegate documentDirectory];
@@ -61,10 +61,10 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt,
-                                                   MTDatabaseDriverSelectorViewControllerDefaultPrompt);
-    self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle,
-                                                  MTDatabaseDriverSelectorViewControllerDefaultTitle);
+    self.navigationItem.prompt = NSLocalizedString(MADDriverSelectorControllerDefaultPrompt,
+                                                   MADDriverSelectorControllerDefaultPrompt);
+    self.navigationItem.title = NSLocalizedString(MADDriverSelectorControllerDefaultTitle,
+                                                  MADDriverSelectorControllerDefaultTitle);
     [self.navigationItem setLeftItemsSupplementBackButton: YES];
     
     self.testCell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];

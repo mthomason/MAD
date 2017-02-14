@@ -94,7 +94,7 @@
     [super viewDidAppear: animated];
     if (self.viewControllers.count == 1) {
         MADExplorerController *fileExplorer;
-        fileExplorer = [MADExplorerController newFileExplorerViewController];
+        fileExplorer = [MADExplorerController newExplorerController];
         [self pushViewController:fileExplorer animated:YES];
     }
 }

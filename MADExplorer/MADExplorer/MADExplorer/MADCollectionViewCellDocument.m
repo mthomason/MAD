@@ -11,10 +11,6 @@
 #endif
 
 #import "MADCollectionViewCellDocument.h"
-#import "MADExplorerCaption.h"
-
-#import "MADLabelFileExplorerDocumentCellTitle.h"
-#import "MADLabelFileExplorerDocumentCellSubtitle.h"
 
 #import <QuartzCore/CALayer.h>
 
@@ -28,9 +24,13 @@
 #import <UIKit/UIAccessibility.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-//#import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADFileManager/MADMetaData.h>
 #import <MADFoundation/MADURL.h>
+
+#import "MADExplorerCaption.h"
+
+#import "MADLabelFileExplorerDocumentCellTitle.h"
+#import "MADLabelFileExplorerDocumentCellSubtitle.h"
 
 #import "MADBackgroundViewSelected.h"
 #import "MADStandard.h"
@@ -54,15 +54,15 @@ static const CGFloat Float_0                    =   0.00000000f;
 static const CGFloat Float_100                  = 100.00000000f;
 
 static inline float wobbleFactor(void);
-static inline BOOL isStatusNotDownloading(NSString *status);
+static inline BOOL isStatusNotDownloading(NSString *);
+
+static inline float wobbleFactor() {
+    return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
+}
 
 static inline BOOL isStatusNotDownloading(NSString *status) {
     BOOL result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
     return result;
-}
-
-static inline float wobbleFactor() {
-    return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
 }
 
 @interface MADCollectionViewCellDocument ()
@@ -113,38 +113,26 @@ static inline float wobbleFactor() {
     UIView * _selectedBackgroundView;
 }
 
-
-//- (void)
-
-//- (UIView *)selectedBackgroundView {
-//    if (_selectedBackgroundView == nil) {
-//        _selectedBackgroundView = [[MADBackgroundViewSelected alloc]
-//                                                initWithFrame:self.contentView.frame];
-//        self.selectedBackgroundView = _selectedBackgroundView;
-//    }
-//    return _selectedBackgroundView;
-//}
+#pragma mark -
+#pragma mark Overrides
 
 - (void)setSelected:(BOOL)selected {
+    NSLog(@"%s %s", __PRETTY_FUNCTION__, selected ? "YES" : "NO");
     [super setSelected:selected];
     [_labelTitle setSelected:selected];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
+    NSLog(@"%s %s", __PRETTY_FUNCTION__, highlighted ? "YES" : "NO");
     [super setHighlighted: highlighted];
     [_labelTitle setHighlighted: highlighted];
 }
 
+#pragma mark -
+#pragma mark NSObject
+
 - (void)dealloc {
     [self setSelectedBackgroundView:nil];
-}
-
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    [self stopWobble];
-    [self.imagePreview prepareForReuse];
-    NSArray *gestureRecognizers = [[NSArray alloc] init];
-    self.gestureRecognizers = gestureRecognizers;
 }
 
 - (void)awakeFromNib {
@@ -153,117 +141,6 @@ static inline float wobbleFactor() {
     UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc]
                                       initWithFrame:self.contentView.frame];
     [self setSelectedBackgroundView: selectedBackgroundView];
-}
-
-
-- (UIActivityIndicatorView *)activityIndicator {
-    UIActivityIndicatorView *result = _activityIndicator;
-    if (result == nil) {
-        result = [MADActivityIndicatorViewExplorer newActivityIndicatorViewExplorer];
-        result.center = self.contentView.center;
-        [self.contentView addSubview:result];
-        _activityIndicator = result;
-    }
-    return result;
-}
-
-- (void)addMotionEffect:(UIMotionEffect *)effect {
-    [self.imagePreview addMotionEffect:effect];
-    [self.progressViewDownload addMotionEffect:effect];
-    [self.progressViewUpload addMotionEffect:effect];
-}
-
-- (void)removeMotionEffect:(UIMotionEffect *)effect {
-    [self.imagePreview removeMotionEffect:effect];
-    [self.progressViewDownload removeMotionEffect:effect];
-    [self.progressViewUpload removeMotionEffect:effect];
-}
-
-- (void)setNeedsLayout {
-    [super setNeedsLayout];
-    [_labelTitle setNeedsLayout];
-    [_labelTitleSub setNeedsLayout];
-}
-
-- (void)setBounds:(CGRect)bounds {
-    super.bounds = bounds;
-    self.contentView.frame = bounds;
-}
-
-- (void)setText:(NSString *)text {
-
-    id attributedString;
-    attributedString = [MADExplorerCaption newExplorerCaption:text];
-    UILabel *labelTitle = _labelTitle;
-    labelTitle.attributedText = attributedString;
-    labelTitle.text = text.copy;
-    attributedString = nil;
-}
-
-- (void)updateFont {
-    NSString *text = self.labelTitle.text.copy;
-    [self setText: text];
-}
-
-- (void)startWobble {
-    if (_wobbling) return;
-    
-    _wobbling = true;
-    float r = wobbleFactor();
-    
-    self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    
-    void (^animationFinish)(void);
-    void (^animationStart)(void);
-    void (^animationStartCompletion)(BOOL finished);
-    
-    
-    MADCollectionViewCellDocument __weak *weakself = self;
-    
-    animationFinish = ^(void){
-        [UIView setAnimationRepeatCount: MAXFLOAT];
-        MADCollectionViewCellDocument *strongself = weakself;
-        if (strongself) {
-            CGAffineTransform rightWobble;
-            rightWobble = CGAffineTransformMakeRotation(
-                                    (CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
-            strongself.transform = rightWobble;
-        }
-    };
-    
-    animationStart = ^{
-        MADCollectionViewCellDocument *strongself = weakself;
-        if (strongself) {
-            CGAffineTransform leftWobble;
-            leftWobble = CGAffineTransformMakeRotation(
-                                    (CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-            strongself.transform = leftWobble;
-        }
-    };
-    
-    animationStartCompletion = ^(BOOL finished) {
-        
-        [UIView animateWithDuration: 0.2
-                              delay: 0
-                            options: UIViewAnimationOptionAllowUserInteraction |
-                                     UIViewAnimationOptionRepeat |
-                                     UIViewAnimationOptionAutoreverse |
-                                     UIViewAnimationOptionBeginFromCurrentState
-                         animations: animationFinish
-                         completion: nil];
-    };
-    
-    [UIView animateWithDuration: 0.2
-                     animations: animationStart
-                     completion: animationStartCompletion];
-}
-
-- (void)stopWobble {
-    if (_wobbling) {
-        _wobbling = false;
-        [self.layer removeAllAnimations];
-        self.transform = CGAffineTransformIdentity;
-    }
 }
 
 - (BOOL)shouldGroupAccessibilityChildren{
@@ -337,6 +214,135 @@ static inline float wobbleFactor() {
         default:
             return nil;
             break;
+    }
+}
+
+#pragma mark -
+#pragma mark UIView
+
+- (void)setNeedsLayout {
+    [super setNeedsLayout];
+    [_labelTitle setNeedsLayout];
+    [_labelTitleSub setNeedsLayout];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    super.bounds = bounds;
+    self.contentView.frame = bounds;
+}
+
+#pragma mark -
+#pragma mark UICollectionReusableView
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    [self stopWobble];
+    [self.imagePreview prepareForReuse];
+    NSArray *gestureRecognizers = [[NSArray alloc] init];
+    self.gestureRecognizers = gestureRecognizers;
+}
+
+#pragma mark -
+#pragma mark Lazy Load
+
+- (UIActivityIndicatorView *)activityIndicator {
+    UIActivityIndicatorView *result = _activityIndicator;
+    if (result == nil) {
+        result = [MADActivityIndicatorViewExplorer newActivityIndicatorViewExplorer];
+        result.center = self.contentView.center;
+        [self.contentView addSubview:result];
+        _activityIndicator = result;
+    }
+    return result;
+}
+
+#pragma mark -
+#pragma mark Helpers
+
+- (void)addMotionEffect:(UIMotionEffect *)effect {
+    [self.imagePreview addMotionEffect:effect];
+    [self.progressViewDownload addMotionEffect:effect];
+    [self.progressViewUpload addMotionEffect:effect];
+}
+
+- (void)removeMotionEffect:(UIMotionEffect *)effect {
+    [self.imagePreview removeMotionEffect:effect];
+    [self.progressViewDownload removeMotionEffect:effect];
+    [self.progressViewUpload removeMotionEffect:effect];
+}
+
+- (void)setText:(NSString *)text {
+    id attributedString;
+    attributedString = [MADExplorerCaption newExplorerCaption:text];
+    UILabel *labelTitle = _labelTitle;
+    labelTitle.attributedText = attributedString;
+    labelTitle.text = text.copy;
+    attributedString = nil;
+}
+
+- (void)updateFont {
+    NSString *text = self.labelTitle.text.copy;
+    [self setText: text];
+}
+
+- (void)startWobble {
+    if (_wobbling) return;
+    
+    _wobbling = true;
+    float r = wobbleFactor();
+    
+    self.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    
+    void (^animationFinish)(void);
+    void (^animationStart)(void);
+    void (^animationStartCompletion)(BOOL finished);
+    
+    
+    MADCollectionViewCellDocument __weak *weakself = self;
+    
+    animationFinish = ^(void){
+        [UIView setAnimationRepeatCount: MAXFLOAT];
+        MADCollectionViewCellDocument *strongself = weakself;
+        if (strongself) {
+            CGAffineTransform rightWobble;
+            rightWobble = CGAffineTransformMakeRotation(
+                                    (CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
+            strongself.transform = rightWobble;
+        }
+    };
+    
+    animationStart = ^{
+        MADCollectionViewCellDocument *strongself = weakself;
+        if (strongself) {
+            CGAffineTransform leftWobble;
+            leftWobble = CGAffineTransformMakeRotation(
+                                    (CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+            strongself.transform = leftWobble;
+        }
+    };
+    
+    animationStartCompletion = ^(BOOL finished) {
+        
+        [UIView animateWithDuration: 0.2
+                              delay: 0
+                            options: UIViewAnimationOptionAllowUserInteraction |
+                                     UIViewAnimationOptionRepeat |
+                                     UIViewAnimationOptionAutoreverse |
+                                     UIViewAnimationOptionBeginFromCurrentState
+                         animations: animationFinish
+                         completion: nil];
+    };
+    
+    [UIView animateWithDuration: 0.2
+                     animations: animationStart
+                     completion: animationStartCompletion];
+}
+
+- (void)stopWobble {
+    if (_wobbling) {
+        _wobbling = false;
+        [self.layer removeAllAnimations];
+        self.transform = CGAffineTransformIdentity;
     }
 }
 
@@ -498,7 +504,8 @@ static inline float wobbleFactor() {
     }
 }
 
-- (NSString *)copySubtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
+- (NSString *)subtitleForStatus:(NSString *)status
+                       fileSize:(unsigned long long)fileSize {
     id result;
     if (isStatusNotDownloading(status)) {
         NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
