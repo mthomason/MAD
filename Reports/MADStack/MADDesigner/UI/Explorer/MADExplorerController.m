@@ -32,8 +32,7 @@
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
 #import <MADFoundation/MADURL.h>
 
-#import <MADExplorer/MADFileExplorerViewDelegateProtocol.h>
-#import <MADExplorer/MADDocumentState.h>
+#import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
 #import <MADExplorer/MADFileExplorerViewDelegate.h>
@@ -130,7 +129,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 @interface MADExplorerController()
     <NSFileManagerDelegate,
-        UIViewControllerAnimatedTransitioning,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
         UIDocumentInteractionControllerDelegate,
@@ -138,14 +136,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         UITextFieldDelegate,
         UISearchBarDelegate,
         UIPopoverControllerDelegate,
-        UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
+        MADExplorerProtocol,
         MADDocumentManagerProtocol,
         MADocumentDelegate,
         MADViewControllerStandardProtocol,
         MADOperationObserver,
-        MADSaveFileProtocol,
-        MADFileExplorerViewDelegateProtocol>
+        MADSaveFileProtocol>
 
     @property (nonatomic, readwrite, strong) MADExplorerDataSource *fileExplorerDataSource;
     @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *fileExplorerViewDelegate;
@@ -735,8 +732,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark -
 #pragma mark UIViewController
 
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
@@ -855,9 +850,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [((UICollectionView *)scrollView).collectionViewLayout invalidateLayout];
 }
-
-#pragma mark -
-#pragma mark MADFileExplorerViewDelegateProtocol
 
 #pragma mark -
 #pragma mark Touch Event Handlers
@@ -1050,12 +1042,62 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 }
 
 #pragma mark - 
-#pragma mark MADFileExplorerViewDelegateProtocol
+#pragma mark MADExplorerProtocol
 
 - (BOOL)isFileViewEditing { return self.editing; }
 
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath {
     return [_fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
+}
+
+- (void)explorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
+
+    switch (numberOfItemsSelected) {
+            
+        case 0:
+            [self disableBarButtonItems];
+            break;
+            
+        case 1:
+            [self enableBarButtonItems];
+            break;
+            
+        default:
+            [self defaultBarButtonItemState];
+            break;
+            
+    }
+}
+
+- (void)openDocumentAtURL:(NSURL *)url {
+
+
+        MADocument *document = [[MADocument alloc] initWithFileURL:url];
+        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+        document.documentDelegate = self;
+        SEL documentStateChanged = @selector(handleDocumentStateChangedNotification:);
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: documentStateChanged
+                                                     name: UIDocumentStateChangedNotification
+                                                   object: document];
+        
+        self.activeDocumentManager.openDocument = document;
+        
+
+    [document openWithCompletionHandler:^(BOOL success) {
+        if (!success) {
+            //NSLog(@"Failed to open file");
+        } else {
+            SEL selector = @selector(openViewer);
+            
+            id operation = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                selector: selector
+                                                                  object: nil];
+            
+            [[NSOperationQueue mainQueue] addOperation:operation];
+        }
+    }];
+
 }
 
 #pragma mark -
@@ -1176,7 +1218,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
 
-#pragma mark - UIPopoverControllerDelegate
+#pragma mark -
+#pragma mark UIPopoverControllerDelegate
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     _shouldShowAddDocumentPopover = YES;
@@ -1303,7 +1346,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
  
 }
 
-
 - (void)openViewer {
     MADocument *document = self.activeDocumentManager.openDocument;
     NSURL *fileURL = document.fileURL.copy;
@@ -1317,37 +1359,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     self.tabController = tabBarController;
     
     [self.navigationController pushViewController:tabBarController animated:YES];
-
-}
-
-- (void)openDocumentAtURL:(NSURL *)url {
-
-
-        MADocument *document = [[MADocument alloc] initWithFileURL:url];
-        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-        document.documentDelegate = self;
-        SEL documentStateChanged = @selector(handleDocumentStateChangedNotification:);
-        [[NSNotificationCenter defaultCenter] addObserver: self
-                                                 selector: documentStateChanged
-                                                     name: UIDocumentStateChangedNotification
-                                                   object: document];
-        
-        self.activeDocumentManager.openDocument = document;
-        
-
-    [document openWithCompletionHandler:^(BOOL success) {
-        if (!success) {
-            //NSLog(@"Failed to open file");
-        } else {
-            SEL selector = @selector(openViewer);
-            
-            id operation = [[NSInvocationOperation alloc] initWithTarget: self
-                                                                selector: selector
-                                                                  object: nil];
-            
-            [[NSOperationQueue mainQueue] addOperation:operation];
-        }
-    }];
 
 }
 
@@ -1983,25 +1994,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 #pragma mark -
 #pragma mark Update UI
-
-- (void)fileExplorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
-
-    switch (numberOfItemsSelected) {
-            
-        case 0:
-            [self disableBarButtonItems];
-            break;
-            
-        case 1:
-            [self enableBarButtonItems];
-            break;
-            
-        default:
-            [self defaultBarButtonItemState];
-            break;
-            
-    }
-}
 
 - (void)defaultBarButtonItemState {
     _barButtonItemInformationDocument.enabled = YES;

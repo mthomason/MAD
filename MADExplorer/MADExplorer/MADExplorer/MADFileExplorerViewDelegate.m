@@ -22,7 +22,7 @@
 
 #import <MADFileManager/MADMetaData.h>
 
-#import "MADFileExplorerViewDelegateProtocol.h"
+#import "MADExplorerProtocol.h"
 #import "MADExplorerCaption.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"
@@ -186,7 +186,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    id <MADFileExplorerViewDelegateProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
+    id <MADExplorerProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
     
     UILongPressGestureRecognizer *longPressGesture;
@@ -410,9 +410,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)invokeOperationCollectionViewDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {
-    NSObject <MADFileExplorerViewDelegateProtocol> *delegate = self.delegate;
+    NSObject <MADExplorerProtocol> *delegate = self.delegate;
     NSUInteger numberOfItemsSelected = [self numberOfItemsSelected];
-    [delegate fileExplorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
+    [delegate explorerDidChangeNumberOfItemsSelected: numberOfItemsSelected];
 
 }
 
