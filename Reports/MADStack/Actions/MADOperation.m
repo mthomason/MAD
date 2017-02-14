@@ -19,16 +19,14 @@ static NSString * const MADOperatorSelectorIsExecuting  = @"isExecuting";
 static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 static NSString * const MADOperatorSelectorState        = @"state";
 
-@interface MADOperation() {
-    MADOperationState _state;
-}
-
+@interface MADOperation()
     @property (nonatomic, strong) NSMutableArray *internalErrors;
     @property (nonatomic, assign) BOOL hasFinishedAlready;
-
 @end
 
-@implementation MADOperation
+@implementation MADOperation {
+    MADOperationState _state;
+}
 
 - (void)dealloc { }
 

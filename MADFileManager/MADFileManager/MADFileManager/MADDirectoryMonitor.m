@@ -12,20 +12,18 @@
 #import <sys/unistd.h>
 #import <sys/fcntl.h>
 
-@interface MADDirectoryMonitor () {
-    int _fileDescriptor;
-}
-
-    @property (nonatomic, copy)     NSURL *URL;
-    @property (nonatomic, strong)   dispatch_queue_t directoryMonitorQueue;
-    @property (nonatomic, strong)   dispatch_source_t directoryMonitorSource;
-
-@end
-
 const char * MADQueueFileSystemWatcher = "com.everydayapps.mad.filesystem.watcher";
 static const int NotListening = -1;
 
-@implementation MADDirectoryMonitor
+@interface MADDirectoryMonitor ()
+    @property (nonatomic, copy)     NSURL *URL;
+    @property (nonatomic, strong)   dispatch_queue_t directoryMonitorQueue;
+    @property (nonatomic, strong)   dispatch_source_t directoryMonitorSource;
+@end
+
+@implementation MADDirectoryMonitor {
+    int _fileDescriptor;
+}
 
 #pragma mark - Initializers
 

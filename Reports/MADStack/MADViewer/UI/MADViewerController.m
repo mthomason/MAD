@@ -240,10 +240,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
 }
 
-#pragma mark - Dealloc
+#pragma mark -
+#pragma mark Dealloc
 
 - (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if (_timerLabelTimeSinceRefreh.valid) {
@@ -268,7 +268,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
 }
 
-#pragma mark - Initialize
+#pragma mark -
+#pragma mark Initialize
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -318,8 +319,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    
+
     NSMutableArray *toolbarItems;
     NSArray *emptyArray = [[NSArray alloc] init];
     toolbarItems = self.toolbarItems.mutableCopy;
@@ -333,7 +333,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     self.view.backgroundColor = [UIColor lightGrayColor];
 
-    UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
     self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
     self.navigationController.toolbar.tintColor    = [MADColorEverydayApps newColorWhite];
 
@@ -456,7 +455,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
 
     self.presentationController.delegate = self;
     
@@ -474,10 +472,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     id page;
     NSArray *pages;
     if (self.loadDocumentViewerQueue.operationCount > 0) {
-        //NSLog(@"Loading a blank");
         page = [[UIViewController alloc] init];
     } else {
-        //NSLog(@"Loading a document");
         MADocument *document = self.document;
         MADPageViewAttributes *pageAttributes;
         CGSize paperSize = document.paper.paperSize;
@@ -524,7 +520,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     NSArray *emptyArray = [[NSArray alloc] init];
     [self setToolbarItems: emptyArray animated: animated];
     //[self.navigationController setToolbarHidden:YES animated:animated];
@@ -532,7 +527,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.tabBarController.navigationItem setRightBarButtonItem:nil];
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self timerDealloc];
@@ -542,7 +536,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     CGFloat nonSliderButtonsWidth = CGSizeZero.width;
     NSUInteger counter = 0;
     
@@ -570,29 +563,19 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark UIViewControllerTransitioningDelegate
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return self;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
                                                                   presentingController:(UIViewController *)presenting
                                                                       sourceController:(UIViewController *)source {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return self;
 }
 
-- (void)presentationTransitionWillBegin {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);2
-}
-- (void)presentationTransitionDidEnd:(BOOL)completed {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-- (void)dismissalTransitionWillBegin {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-- (void)dismissalTransitionDidEnd:(BOOL)completed {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)presentationTransitionWillBegin { }
+- (void)presentationTransitionDidEnd:(BOOL)completed { }
+- (void)dismissalTransitionWillBegin { }
+- (void)dismissalTransitionDidEnd:(BOOL)completed { }
 
 #pragma mark -
 #pragma mark UIViewControllerContextTransitioning
@@ -600,19 +583,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 // This is used for percent driven interactive transitions, as well as for container controllers that have companion animations that might need to
 // synchronize with the main animation.
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return 3.0;
 }
 
 // This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     //UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     self.pageSlider.alpha = 0.0f;
     NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
     [UIView animateWithDuration:transitionDuration animations:^{
-        //NSLog(@"%s", __PRETTY_FUNCTION__);
         self.pageSlider.alpha = 1.0f;
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
@@ -624,11 +603,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
-    
-    //short circuit
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -638,32 +613,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-    //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromCGSize(size));
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
-
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
         [self.pageSlider setNeedsLayout];
-        
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        
-        //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, context);
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
         [self.pageSlider setNeedsLayout];
-        
     }];
 }
 
 #pragma mark - MADPrintingProtocol
 
 - (MADPrintPageRenderer *)printPageRenderer {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.printPageRendererReport;
 }
 
@@ -685,7 +649,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark MADPageSliderDelegate
 
 - (void)sliderDidChangeToPage:(NSUInteger)page {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     [self moveToPageAtIndex:page];
 }
 
@@ -727,14 +690,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     BOOL result = NO;
     if ((unsigned long)index != _currentLocation.currentPage && index != NSNotFound) {
         
         MADDocumentPageController *visiblePageViewController = [self visiblePageViewController];
         _currentLocation.currentPage = index;
         
-        [self.labelStatus updatePageStatus:_currentLocation.totalPages currentPageIndex:_currentLocation.currentPage];
+        [self.labelStatus updatePageStatus: _currentLocation.totalPages
+                          currentPageIndex: _currentLocation.currentPage];
 
         MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
         pageAttributes.pageNumber = index + 1;
@@ -774,52 +737,47 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (MADDocumentPageController *)currentPageviewController {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     MADDocumentPageController *currentPageviewController;
     currentPageviewController = [self pageViewControllerAtIndex: _currentLocation.currentPage];
     return currentPageviewController;
 }
 
 - (MADDocumentPageController *)pageViewControllerAtIndex:(NSUInteger)index {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return index < self.viewControllers.count ? self.viewControllers[index] :
                                                 self.viewControllers.lastObject;
 }
 
-#pragma mark - Document Interaction Controller Delegate
+#pragma mark -
+#pragma mark Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
                 self.navigationController : self;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     NSError *error = nil;
     BOOL success = [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
     NSAssert(success, @"Failed to delete file.");
-    
 }
 
-#pragma mark - Report Notifications
+#pragma mark -
+#pragma mark Report Notifications
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
     [self.labelStatus updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
 }
 
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
     [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
-#pragma mark - UI Updates
+#pragma mark -
+#pragma mark UI Updates
 
 - (void)setDisplayActive {
 
@@ -866,8 +824,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)setPageingEnabled:(BOOL)enabled {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     NSArray *gestureRecognizers = self.gestureRecognizers;
     [gestureRecognizers enumerateObjectsUsingBlock:^(UIGestureRecognizer * _Nonnull gestureRecognizer, NSUInteger idx, BOOL * _Nonnull stop) {
         gestureRecognizer.enabled = enabled;
@@ -875,8 +831,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)setTabBarItemsEnabled:(BOOL)enabled {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     NSArray <UITabBarItem *> *tabBarItems = self.tabBarController.tabBar.items;
     [tabBarItems enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(UITabBarItem * _Nonnull tabBarItem, NSUInteger idx, BOOL * _Nonnull stop) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -885,26 +839,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }];
 }
 
-#pragma mark - Actions
-
-/*- (IBAction)done:(id)sender {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    NSError *error = nil;
-    MADocument *document = self.document;
-    [document.managedObjectContext save:&error];
-    if (error != nil) { [document.managedObjectContext save:&error]; }
-    
-    
-    id <MADViewControllerStandardProtocol> viewControllerDelegate;
-    viewControllerDelegate = self.viewControllerDelegate;
-    [viewControllerDelegate viewControllerDidFinish: self];
-    viewControllerDelegate = nil;
-}*/
+#pragma mark -
+#pragma mark Actions
 
 - (IBAction)activity:(id)sender {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     _activityExporting = YES;
     self.pageSlider.enabled = NO;
     
@@ -1038,7 +976,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (IBAction)zoomToFullScreen:(id)sender { }
 
-#pragma mark - Acivities
+#pragma mark -
+#pragma mark Acivities
 
 - (MADActivityItemProviderPdf *)activityItemProviderPdf {
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
@@ -1050,7 +989,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return activityItemProviderPdf;
 }
 
-#pragma mark - UIDocumentInteractionController
+#pragma mark -
+#pragma mark UIDocumentInteractionController
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
     return self;
@@ -1065,7 +1005,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
 }
 
-#pragma mark - Load data
+#pragma mark -
+#pragma mark Load data
 
 - (void)reloadWithSize:(NSValue *)viewBoundsWrapper {
     CGSize viewBounds = [viewBoundsWrapper CGSizeValue];
@@ -1271,7 +1212,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     pageViewController->_pageIsAnimating = YES;
 }
 
-#pragma mark - Status Label
+#pragma mark -
+#pragma mark Status Label
 
 - (void)updateTimeSinceLastRefresh:(id)sender {
     MADLabelStatus *labelStatus = self.labelStatus;

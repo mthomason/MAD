@@ -163,6 +163,9 @@
 		4CC6414B1BA7791100F3ECCE /* MADExplorer */ = {
 			isa = PBXGroup;
 			children = (
+				4C401E411BAE446100BAE5FC /* MADDocumentState.h */,
+				4C4754561CF41A6500BC9E02 /* MADCollectionViewLayoutGroupedDelegateProtocol.h */,
+				4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */,
 				4C5989A01DAA320B007A568B /* MADFileExplorerViewDelegate.h */,
 				4C5989A11DAA320B007A568B /* MADFileExplorerViewDelegate.m */,
 				4CA4D62B1D183DD400A1240C /* MADStandard.h */,
@@ -171,18 +174,15 @@
 				4CA4D6281D17CCE400A1240C /* MADExplorerCaption.m */,
 				4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */,
 				4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */,
-				4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */,
 				4CC6415C1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h */,
 				4CC641841BA78A1300F3ECCE /* MTTableViewCellDocument.h */,
 				4CC641851BA78A1300F3ECCE /* MTTableViewCellDocument.m */,
 				4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */,
 				4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */,
-				4C4754561CF41A6500BC9E02 /* MADCollectionViewLayoutGroupedDelegateProtocol.h */,
 				4CC641581BA77ABC00F3ECCE /* MTCollectionViewCellDocument.h */,
 				4CC641591BA77ABC00F3ECCE /* MTCollectionViewCellDocument.m */,
 				4CC641701BA77D6100F3ECCE /* MADBackgroundViewSelected.h */,
 				4CC641711BA77D6100F3ECCE /* MADBackgroundViewSelected.m */,
-				4C401E411BAE446100BAE5FC /* MADDocumentState.h */,
 				4CCB73541D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.h */,
 				4CCB73551D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.m */,
 				4CCB73581D1A283000D7AE84 /* MADLabelFileExplorerDocumentCellSubtitle.h */,

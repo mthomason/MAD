@@ -35,18 +35,17 @@ static NSString * const MADAppConfigurationUserDefaultsStorageOption
 static const char * MADQueueCloudSerial
                             = "com.everydayapps.mad.cloud.serial";
 
-@interface MADCloudManager() {
+@interface MADCloudManager()
+    @property (nonatomic, copy) NSString *ubiquityIdentifier;
+    @property (nonatomic, copy) NSString *groupIdentifier;
+    @property (nonatomic, strong) dispatch_queue_t queue_background_serial;
+@end
+
+@implementation MADCloudManager {
     BOOL _completedStepOne;
     BOOL _cloudReadilyAvailable;
     MADAppStorage _userPreference;
 }
-    @property (nonatomic, copy) NSString *ubiquityIdentifier;
-    @property (nonatomic, copy) NSString *groupIdentifier;
-    @property (nonatomic, strong) dispatch_queue_t queue_background_serial;
-
-@end
-
-@implementation MADCloudManager
 
 + (instancetype)sharedManager {
     static id _sharedManager;

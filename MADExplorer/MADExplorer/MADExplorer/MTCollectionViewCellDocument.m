@@ -56,17 +56,6 @@ static const CGFloat Float_100                  = 100.00000000f;
 static inline float wobbleFactor(void);
 static inline BOOL isStatusNotDownloading(NSString *status);
 
-@interface MADCollectionViewCellDocument () {
-    
-        bool _wobbling;
-      @protected
-        UIView * _selectedBackgroundView;
-    }
-
-    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
-
-@end
-
 static inline BOOL isStatusNotDownloading(NSString *status) {
     BOOL result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
     return result;
@@ -76,6 +65,9 @@ static inline float wobbleFactor() {
     return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
 }
 
+@interface MADCollectionViewCellDocument ()
+    @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
+@end
 
 @interface MADActivityIndicatorViewExplorer : UIActivityIndicatorView
     + (instancetype)newActivityIndicatorViewExplorer;
@@ -116,8 +108,11 @@ static inline float wobbleFactor() {
 @end
 
 @implementation MADCollectionViewCellDocument {
-    
+    bool _wobbling;
+  @protected
+    UIView * _selectedBackgroundView;
 }
+
 
 //- (void)
 

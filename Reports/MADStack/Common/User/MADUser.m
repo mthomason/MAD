@@ -21,16 +21,14 @@ static const char *     MADIDQueueUserPreferences = "preferences.everydayapps.ma
 static NSString * const MADAppConfigurationApplicationGroupsPrimary = @"group.everydayapps.mad.primary";
 static NSString * const MADIDUser                                   = @"MADIDUser";
 
-@interface MADUser () {
+@interface MADUser ()
+    @property (nonatomic, strong) dispatch_queue_t queue_user_preferences;
+@end
+
+@implementation MADUser {
     BOOL _isFirstLaunchSet;
     CFUUIDRef _uuid;
 }
-
-@property (nonatomic, strong) dispatch_queue_t queue_user_preferences;
-
-@end
-
-@implementation MADUser
 
 - (instancetype)init {
     if (self = [super init]) {

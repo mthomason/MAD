@@ -14,15 +14,13 @@
 
 static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 
-@interface MADFileInfo () {
-    dispatch_queue_t _fetchQueue;
-}
-
+@interface MADFileInfo ()
     @property (nonatomic, strong, readonly) dispatch_queue_t fetchQueue;
-
 @end
 
-@implementation MADFileInfo
+@implementation MADFileInfo {
+    dispatch_queue_t _fetchQueue;
+}
 
 #pragma mark - Initialization
 

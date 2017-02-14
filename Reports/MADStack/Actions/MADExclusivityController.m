@@ -13,16 +13,12 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 
-@interface MADExclusivityController () {
+static id _sharedInstance;
+
+@implementation MADExclusivityController {
     dispatch_queue_t _serialQueue;
     NSMutableDictionary * _operations;
 }
-
-@end
-
-static id _sharedInstance;
-
-@implementation MADExclusivityController
 
 + (instancetype)sharedExclusivityController {
     

@@ -15,17 +15,13 @@
 
 struct MADVectorBoolImpl;
 
-@interface MADVectorBool () {
-    struct MADVectorBoolImpl *impl;
-  }
-
-@end
-
 struct MADVectorBoolImpl {
     std::vector<bool> _container;
 };
 
-@implementation MADVectorBool
+@implementation MADVectorBool {
+    struct MADVectorBoolImpl *impl;
+}
 
 - (void)dealloc {
     impl->_container.clear();
