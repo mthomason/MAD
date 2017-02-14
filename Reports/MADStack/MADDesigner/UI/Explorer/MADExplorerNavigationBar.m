@@ -1,5 +1,5 @@
 //
-//  MADFileExplorerNavigationBar.m
+//  MADExplorerNavigationBar.m
 //  MAD Designer
 //
 //  Created by Michael on 1/8/17.
@@ -11,10 +11,10 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/NSAttributedString.h>
 
-@implementation MADFileExplorerNavigationBar
+@implementation MADExplorerNavigationBar
 
 + (void)initialize {
-    if (self == [MADFileExplorerNavigationBar class]) {
+    if (self == [MADExplorerNavigationBar class]) {
         @autoreleasepool {
             
             NSArray <Class <UIAppearanceContainer>> *classes;

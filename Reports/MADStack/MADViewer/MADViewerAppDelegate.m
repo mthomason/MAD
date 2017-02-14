@@ -24,7 +24,7 @@
 #import "MTVerificationController.h"
 #import "MADQueryViewController.h"
 
-#import "MADFileExplorerViewController.h"
+#import "MADExplorerController.h"
 
 //@class MADTransparentPresentationController;
 
@@ -51,7 +51,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     <UIDocumentInteractionControllerDelegate>
 
 @property (readonly) MADNavigationController *navigationController;
-@property (readonly) MADFileExplorerViewController *openFileViewController;
+@property (readonly) MADExplorerController *openFileViewController;
 @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
 @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueBackground;
 @property (nonatomic, strong, readwrite) NSUserDefaults *applicationUserDefaults;
@@ -300,8 +300,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     return (MADNavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
 }
 
-- (MADFileExplorerViewController *)openFileViewController {
-    return (MADFileExplorerViewController *)self.navigationController.topViewController;
+- (MADExplorerController *)openFileViewController {
+    return (MADExplorerController *)self.navigationController.topViewController;
 }
 
 - (NSString *)bundleDisplayName {

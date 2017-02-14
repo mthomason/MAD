@@ -1,5 +1,5 @@
 //
-//  MADFileExplorerViewController
+//  MADExplorerController.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 1/2/12.
@@ -52,10 +52,10 @@
 
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
-#import "MADFileExplorerDataSource.h"
+#import "MADExplorerDataSource.h"
 #import "MADExplorerView.h"
 
-#import "MADOpenFileSectionHeaderView.h"
+#import "MADExplorerSectionHeaderView.h"
 #import "MADSearchBar.h"
 #import "MADProgressView.h"
 
@@ -128,7 +128,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
 //NSString * const MADUtiPublicData                               = @"public.data";
 
-@interface MADFileExplorerViewController()
+@interface MADExplorerController()
     <NSFileManagerDelegate,
         UIViewControllerAnimatedTransitioning,
         UIGestureRecognizerDelegate,
@@ -147,7 +147,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         MADSaveFileProtocol,
         MADFileExplorerViewDelegateProtocol>
 
-    @property (nonatomic, readwrite, strong) MADFileExplorerDataSource *fileExplorerDataSource;
+    @property (nonatomic, readwrite, strong) MADExplorerDataSource *fileExplorerDataSource;
     @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *fileExplorerViewDelegate;
 
     @property (nonatomic, readwrite, strong) MADOpenDocumentManager *activeDocumentManager;
@@ -185,7 +185,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
     @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
-    @property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
+    @property (nonatomic, strong) MADExplorerSectionHeaderView *headerCloud;
 
     @property (nonatomic, strong) MADProgressView *progressViewFileManager;
 
@@ -193,7 +193,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 @end
 
-@implementation MADFileExplorerViewController {
+@implementation MADExplorerController {
     
     BOOL _cloudActivityRunning;
     BOOL _cloudActivityRunningDisplay;
@@ -213,7 +213,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 + (void)initialize {
     [super initialize];
     
-    if (self == [MADFileExplorerViewController self]) {
+    if (self == [MADExplorerController self]) {
         
         @autoreleasepool {
             
@@ -362,10 +362,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     
 }
 
-- (MADFileExplorerDataSource *)fileExplorerDataSource {
+- (MADExplorerDataSource *)fileExplorerDataSource {
     if (!_fileExplorerDataSource) {
-        MADFileExplorerDataSource *datasource;
-        datasource = [[MADFileExplorerDataSource alloc] initWithCellConfiguration:^(MADCollectionViewCellDocument *cell) {
+        MADExplorerDataSource *datasource;
+        datasource = [[MADExplorerDataSource alloc] initWithCellConfiguration:^(MADCollectionViewCellDocument *cell) {
             if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
         }];
         _fileExplorerDataSource = datasource;
@@ -440,7 +440,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
         SEL cloudPrefs = @selector(updateCloudPreferences);
         
-        MADFileExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
+        MADExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
         getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: fileExplorerDataSource
                                                                        selector: cloudPrefs
                                                                          object: NULL];
@@ -477,7 +477,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     hint = NSLocalizedString(MADHintBarButtonItemAbout, MADHintBarButtonItemAbout);
     self.barButtonItemAbout.accessibilityHint = hint;
     
-    [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
+    [self.collectionView registerClass: [MADExplorerSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
     
@@ -625,13 +625,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     
     void (^actionConfirm)(UIAlertAction *action);
     actionConfirm = ^(UIAlertAction *action) {
-        MADFileExplorerViewController *sself = weakself;
+        MADExplorerController *sself = weakself;
         [sself.fileExplorerDataSource updateCloudPreferences];
     };
     
     void (^block)(void) = ^ {
         
-        MADFileExplorerViewController *sself = weakself;
+        MADExplorerController *sself = weakself;
         if (!sself) return;
         
         UIAlertController *alert;
@@ -1478,7 +1478,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSIndexPath *indexPath;
     NSMutableArray *metadataItems;
     UIPopoverPresentationController *ppc;
-    MADFileExplorerDataSource *fileExplorerDataSource;
+    MADExplorerDataSource *fileExplorerDataSource;
     MADDocumentInformationTableViewController *documentInformation;
     
     selectedItems = [self.fileExplorerViewDelegate indexPathsForSelectedItems];
@@ -1734,7 +1734,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                applicationActivities: applicationActivities];
     activityViewController.excludedActivityTypes = excludedActivityTypes;
     
-    MADFileExplorerViewController * __weak weakself = self;
+    MADExplorerController * __weak weakself = self;
     activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
                                                           NSArray *returnedItems, NSError *activityError) {
     
@@ -1839,7 +1839,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
         if (!shortcircut && metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
             
-            MADFileExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
+            MADExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
             
             void (^closeCompletion)(BOOL, NSURL *, NSURL *);
             void (^openCompletion)(BOOL);

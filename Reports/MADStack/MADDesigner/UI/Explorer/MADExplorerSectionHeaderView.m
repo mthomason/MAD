@@ -1,5 +1,5 @@
 //
-//  MADOpenFileSectionHeaderView.m
+//  MADExplorerSectionHeaderView.m
 //  MAD
 //
 //  Created by Michael Thomason on 10/8/14.

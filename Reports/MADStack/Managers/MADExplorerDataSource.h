@@ -1,13 +1,13 @@
 //
-//  MADFileExplorerDataSource.h
+//  MADExplorerDataSource.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/16/16.
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADFileExplorerDataSource_h
-#define Reports_MADFileExplorerDataSource_h
+#ifndef Reports_MADExplorerDataSource_h
+#define Reports_MADExplorerDataSource_h
 
 #import <Foundation/NSObject.h>
 #import <UIKit/UICollectionView.h>

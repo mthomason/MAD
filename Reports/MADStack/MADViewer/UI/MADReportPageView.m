@@ -108,7 +108,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     _firstTime = YES;
 }
 
-#pragma mark - Page Counter
+#pragma mark -
+#pragma mark Page Counter
 
 - (void)displayPageCounterIndicator {
 
@@ -159,7 +160,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     }
 }
 
-#pragma mark - Timer
+#pragma mark -
+#pragma mark Timer
 
 - (void)addTimerView {
     if (self.timeSinceRefreshView == nil) {

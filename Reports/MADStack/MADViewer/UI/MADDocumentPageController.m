@@ -93,7 +93,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     BOOL _initalLayout;
 }
 
-#pragma mark - Static Helpers
+#pragma mark -
+#pragma mark Static Helpers
 
 + (void)centerDocumentView:(UIView *)documentView insideScrollView:(UIScrollView *)scrollView
                                                     topLayoutGuide:(id <UILayoutSupport>)topLayoutGuide
@@ -126,7 +127,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
                                                         PageEdgeInsetMargin));
 }
 
-#pragma mark - Static Constructors
+#pragma mark -
+#pragma mark Static Constructors
 
 + (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document
                                          pageAttributes:(MADPageViewAttributes *)pageAttributes {
@@ -138,7 +140,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 }
 
-#pragma mark - NSObject
+#pragma mark -
+#pragma mark NSObject
 
 - (void)dealloc {
     [_documentView removeFromSuperview];
@@ -155,7 +158,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     return self;
 }
 
-#pragma mark - UIViewController Protocol
+#pragma mark -
+#pragma mark UIViewController Protocol
 
 
 - (void)viewDidLoad {
@@ -222,10 +226,6 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     
 }
 
-//- (UIScrollView *)documentScroller {
-//    return ((UIScrollView *)self.view);
-//}
-
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
@@ -263,7 +263,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     return self.pageViewAttributes.pageNumber;
 }
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark -
+#pragma mark UIScrollViewDelegate
 
 - (nullable UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.documentView;
@@ -288,7 +289,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     [view setNeedsDisplay];
 }
 
-#pragma mark - UIAccessibility
+#pragma mark -
+#pragma mark UIAccessibility
 
 - (NSInteger)accessibilityLineNumberForPoint:(CGPoint)point { return 1; }
 
@@ -304,7 +306,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     return @"Content for line number";
 }
 
-#pragma mark - MADReportPageViewProtocol
+#pragma mark -
+#pragma mark MADReportPageViewProtocol
 
 - (NSDate * _Nullable)lastCacheDate {
     if (self.pageViewAttributes.reportLastCacheDate == nil) {
@@ -320,7 +323,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     return self.pageViewAttributes.reportLastCacheDate;
 }
 
-#pragma mark - MADPrintingProtocol
+#pragma mark -
+#pragma mark MADPrintingProtocol
 
 - (MADPrintPageRenderer *)printPageRenderer {
     return [self.delegate printPageRenderer];

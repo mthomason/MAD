@@ -23,16 +23,16 @@
 
 #import "MADTransparentPresentationController.h"
 
-#import "MADFileExplorerNavigationBar.h"
-#import "MADFileExplorerToolbar.h"
-#import "MADFileExplorerViewController.h"
+#import "MADExplorerNavigationBar.h"
+#import "MADExplorerToolbar.h"
+#import "MADExplorerController.h"
 
-#import "MADFileExplorerAnimated.h"
+#import "MADExplorerAnimated.h"
 
 @interface MADNavigationControllerFileExplorer ()
 
-@property (weak, nonatomic) IBOutlet MADFileExplorerNavigationBar *fileExplorerNavigationBar;
-@property (weak, nonatomic) IBOutlet MADFileExplorerToolbar *fileExplorerToolBar;
+@property (weak, nonatomic) IBOutlet MADExplorerNavigationBar *fileExplorerNavigationBar;
+@property (weak, nonatomic) IBOutlet MADExplorerToolbar *fileExplorerToolBar;
 
 @end
 
@@ -93,8 +93,8 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
     if (self.viewControllers.count == 1) {
-        MADFileExplorerViewController *fileExplorer;
-        fileExplorer = [MADFileExplorerViewController newFileExplorerViewController];
+        MADExplorerController *fileExplorer;
+        fileExplorer = [MADExplorerController newFileExplorerViewController];
         [self pushViewController:fileExplorer animated:YES];
     }
 }
@@ -168,18 +168,18 @@
     id <UIViewControllerAnimatedTransitioning> animationController;
     BOOL toTabViewController = NO;
     BOOL toFileExplorferViewController = NO;
-    if ((toFileExplorferViewController = [toVC isKindOfClass:[MADFileExplorerViewController class]]) ||
+    if ((toFileExplorferViewController = [toVC isKindOfClass:[MADExplorerController class]]) ||
         (toTabViewController = [toVC isKindOfClass:[UITabBarController class]])) {
         toVC.modalPresentationStyle = UIModalPresentationCustom;
         
         switch (operation) {
             case UINavigationControllerOperationPush:
-                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
+                animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
                                                                                           pushing:YES];
                 break;
 
             case UINavigationControllerOperationPop:
-                animationController = [MADFileExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
+                animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
                                                                                           pushing:NO];
                 break;
 

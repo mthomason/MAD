@@ -1,5 +1,5 @@
 //
-//  MADFileExplorerViewController.h
+//  MADExplorerController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/2/12.

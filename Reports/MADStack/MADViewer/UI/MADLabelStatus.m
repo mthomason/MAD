@@ -26,6 +26,33 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
 
 @implementation MADLabelStatus
 
++ (NSDictionary *)attributesStatusLabelCentered {
+    NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyleCentered.alignment = NSTextAlignmentLeft;
+    NSDictionary *result;
+    result = [[NSDictionary alloc] initWithObjectsAndKeys: paragraphStyleCentered,
+                                                           NSParagraphStyleAttributeName, nil];
+    return result;
+}
+
++ (NSDictionary *)attributesStatusLabelBold {
+    UIColor *textColor = [UIColor whiteColor];
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:ToolbarFontPointSize];
+    NSDictionary *result;
+    result = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
+                                                          fontBold, NSFontAttributeName, nil];
+    return result;
+}
+
++ (NSDictionary *)attributesStatusLabelLight {
+    UIColor *textColor = [UIColor whiteColor];
+    UIFont *font = [UIFont systemFontOfSize:ToolbarFontPointSize];
+    NSDictionary *result;
+    result = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
+                                                          font, NSFontAttributeName, nil];
+    return result;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.numberOfLines = 3;
@@ -122,32 +149,6 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
         NSAttributedString *display = self.display.copy;
         self.attributedText = display;
     }];
-}
-
-+ (NSDictionary *)attributesStatusLabelCentered {
-    NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyleCentered.alignment = NSTextAlignmentLeft;
-    NSDictionary *attributesStatusLabelCentered;
-    attributesStatusLabelCentered = [[NSDictionary alloc] initWithObjectsAndKeys:paragraphStyleCentered, NSParagraphStyleAttributeName, nil];
-    return attributesStatusLabelCentered;
-}
-
-+ (NSDictionary *)attributesStatusLabelBold {
-    UIColor *textColor = [UIColor whiteColor];
-    UIFont *fontBold = [UIFont boldSystemFontOfSize:ToolbarFontPointSize];
-    NSDictionary *attributesStatusLabelBold;
-    attributesStatusLabelBold = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
-                                                                             fontBold, NSFontAttributeName, nil];
-    return attributesStatusLabelBold;
-}
-
-+ (NSDictionary *)attributesStatusLabelLight {
-    UIColor *textColor = [UIColor whiteColor];
-    UIFont *font = [UIFont systemFontOfSize:ToolbarFontPointSize];
-    NSDictionary *attributesStatusLabelLight;
-    attributesStatusLabelLight = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
-                                                                              font, NSFontAttributeName, nil];
-    return attributesStatusLabelLight;
 }
 
 @end

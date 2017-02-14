@@ -1,5 +1,5 @@
 //
-//  MADFileExplorerDataSource.m
+//  MADExplorerDataSource.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/16/16.

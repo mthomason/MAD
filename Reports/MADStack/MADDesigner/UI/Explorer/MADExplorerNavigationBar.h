@@ -1,13 +1,13 @@
 //
-//  MADFileExplorerNavigationBar.h
+//  MADExplorerNavigationBar.h
 //  MAD Designer
 //
 //  Created by Michael on 1/8/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADFileExplorerNavigation_h
-#define Reports_MADFileExplorerNavigation_h
+#ifndef Reports_MADExplorerNavigationBar_h
+#define Reports_MADExplorerNavigationBar_h
 
 #import <UIKit/UINavigationBar.h>
 

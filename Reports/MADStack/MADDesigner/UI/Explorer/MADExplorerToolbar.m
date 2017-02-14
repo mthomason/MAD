@@ -1,5 +1,5 @@
 //
-//  MADFileExplorerToolbar.m
+//  MADExplorerToolbar.m
 //  MAD Designer
 //
 //  Created by Michael on 1/8/17.
