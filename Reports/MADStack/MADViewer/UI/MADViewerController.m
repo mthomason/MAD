@@ -631,6 +631,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return self.printPageRendererReport;
 }
 
+/*
 #pragma mark - UIStateRestore
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
@@ -643,7 +644,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)applicationFinishedRestoringState {
     [super applicationFinishedRestoringState];
-}
+}*/
 
 #pragma mark -
 #pragma mark MADPageSliderDelegate

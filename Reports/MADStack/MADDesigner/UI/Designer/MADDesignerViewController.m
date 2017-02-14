@@ -370,6 +370,7 @@ static const inline CGSize sizePopoverFonts() {
     return self;
 }
 
+/*
 #pragma mark -
 #pragma mark UIStateRestore
 
@@ -380,6 +381,7 @@ static const inline CGSize sizePopoverFonts() {
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
     [super decodeRestorableStateWithCoder:coder];
 }
+ */
 
 #pragma mark -
 #pragma mark UITraitCollection

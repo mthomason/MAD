@@ -551,8 +551,8 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     titleView.text = [delegate name].copy;
     titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
     titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-    //self.navigationController.providesPresentationContextTransitionStyle;
-    //self.navigationItem.titleView = titleView;
+    self.navigationItem.titleView = titleView;
+    
     self.navigationItem.hidesBackButton = YES;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
