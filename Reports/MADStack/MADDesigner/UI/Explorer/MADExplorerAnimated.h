@@ -1,30 +1,30 @@
 //
-//  MADFileExplorerAnimated.h
+//  MADExplorerAnimated.h
 //  MAD Designer
 //
 //  Created by Michael on 1/26/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADFileExplorerAnimated_h
-#define Reports_MADFileExplorerAnimated_h
+#ifndef Reports_MADExplorerAnimated_h
+#define Reports_MADExplorerAnimated_h
 
 #import <UIKit/UIViewControllerTransitioning.h>
 
-@interface MADFileExplorerAnimated : NSObject
+@interface MADExplorerAnimated : NSObject
     <UIViewControllerAnimatedTransitioning>
 
     + (instancetype)newFileExplorerAnimatedShowToolbar:(BOOL)showToolbar pushing:(BOOL)pushing;
 
 @end
 
-@interface MADFileExplorerAnimatedCrossFadePush : MADFileExplorerAnimated
+@interface MADExplorerAnimatedCrossFadePush : MADExplorerAnimated
 
     - (instancetype)initToolbar:(BOOL)showToolbar;
 
 @end
 
-@interface MADFileExplorerAnimatedCrossFadePop : MADFileExplorerAnimated
+@interface MADExplorerAnimatedCrossFadePop : MADExplorerAnimated
 
     - (instancetype)initToolbar:(BOOL)showToolbar;
 

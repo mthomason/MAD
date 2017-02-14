@@ -6,19 +6,19 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileExplorerView.h"
+#import "MADExplorerView.h"
 #import <UIKit/UIView.h>
 #import <UIKit/UITapGestureRecognizer.h>
 #import "MADWatermarkView.h"
 
-@implementation MADFileExplorerView
+@implementation MADExplorerView
 
 + (void)initialize {
     [super initialize];
-    if (self == [MADFileExplorerView self]) {
+    if (self == [MADExplorerView self]) {
         @autoreleasepool {
-            MADFileExplorerView *view;
-            view = [MADFileExplorerView appearance];
+            MADExplorerView *view;
+            view = [MADExplorerView appearance];
             view.backgroundColor = [UIColor lightGrayColor];
 
         }

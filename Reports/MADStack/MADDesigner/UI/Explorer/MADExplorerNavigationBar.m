@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileExplorerNavigationBar.h"
+#import "MADExplorerNavigationBar.h"
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/NSAttributedString.h>

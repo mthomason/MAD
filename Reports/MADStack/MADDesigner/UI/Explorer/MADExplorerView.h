@@ -11,7 +11,7 @@
 
 #import <UIKit/UICollectionView.h>
 
-@interface MADFileExplorerView : UICollectionView
+@interface MADExplorerView : UICollectionView
 
 @end
 

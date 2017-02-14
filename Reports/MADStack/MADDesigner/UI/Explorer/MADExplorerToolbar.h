@@ -11,9 +11,7 @@
 
 #import <UIKit/UIToolbar.h>
 
-@interface MADFileExplorerToolbar : UIToolbar
-
-
+@interface MADExplorerToolbar : UIToolbar
 
 @end
 

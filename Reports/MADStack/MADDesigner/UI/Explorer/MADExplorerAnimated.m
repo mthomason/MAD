@@ -1,19 +1,19 @@
 //
-//  MADFileExplorerAnimated.m
+//  MADExplorerAnimated.m
 //  MAD Designer
 //
 //  Created by Michael on 1/26/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileExplorerAnimated.h"
+#import "MADExplorerAnimated.h"
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIToolbar.h>
 
-#import "MADFileExplorerViewController.h"
+#import "MADExplorerController.h"
 
-@implementation MADFileExplorerAnimatedCrossFadePop {
+@implementation MADExplorerAnimatedCrossFadePop {
     BOOL _hideToolbar;
 }
 
@@ -31,7 +31,7 @@
 @end
 
 
-@implementation MADFileExplorerAnimatedCrossFadePush {
+@implementation MADExplorerAnimatedCrossFadePush {
     BOOL _hideToolbar;
 }
 
@@ -48,7 +48,7 @@
 
 @end
 
-@implementation MADFileExplorerAnimated
+@implementation MADExplorerAnimated
 
 static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing);
 static inline CGRect CGRectTabBarOffscreen(CGRect rect);
@@ -67,8 +67,8 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
 }
 
 + (instancetype)newFileExplorerAnimatedShowToolbar:(BOOL)showToolbar pushing:(BOOL)pushing {
-    id instance = pushing ? [[MADFileExplorerAnimatedCrossFadePush alloc] initToolbar:showToolbar] :
-                            [[MADFileExplorerAnimatedCrossFadePop alloc] initToolbar:showToolbar];
+    id instance = pushing ? [[MADExplorerAnimatedCrossFadePush alloc] initToolbar:showToolbar] :
+                            [[MADExplorerAnimatedCrossFadePop alloc] initToolbar:showToolbar];
     return instance;
 }
 
@@ -86,12 +86,12 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
     
     BOOL pushingFileExplorer = NO, poppingFileExplorer = NO,
     pushingTabBarController = NO, poppingTabBarController = NO;
-    if ([toViewController isKindOfClass:[MADFileExplorerViewController class]]) {
+    if ([toViewController isKindOfClass:[MADExplorerController class]]) {
         pushingFileExplorer = YES;
         poppingFileExplorer = NO;
     }
     
-    if ([fromViewController isKindOfClass:[MADFileExplorerViewController class]]) {
+    if ([fromViewController isKindOfClass:[MADExplorerController class]]) {
         pushingFileExplorer = NO;
         poppingFileExplorer = YES;
     }

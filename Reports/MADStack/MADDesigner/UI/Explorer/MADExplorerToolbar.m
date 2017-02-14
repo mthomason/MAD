@@ -6,10 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileExplorerToolbar.h"
+#import "MADExplorerToolbar.h"
 
-@implementation MADFileExplorerToolbar
-
-
+@implementation MADExplorerToolbar
 
 @end

@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
 
 extern NSString * const MADIdentifierOpenFileSectionHeader;
 
-@interface MADOpenFileSectionHeaderView : UICollectionReusableView
+@interface MADExplorerSectionHeaderView : UICollectionReusableView
 
     @property (nonatomic, assign) MACloudManagerSection sectionType;
 

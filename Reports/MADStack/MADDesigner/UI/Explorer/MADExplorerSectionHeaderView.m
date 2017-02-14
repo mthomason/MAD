@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOpenFileSectionHeaderView.h"
+#import "MADExplorerSectionHeaderView.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
@@ -29,7 +29,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 }
 
 
-@interface MADOpenFileSectionHeaderView ()
+@interface MADExplorerSectionHeaderView ()
 
     @property (nonatomic, strong) UILabel *label;
 
@@ -44,11 +44,11 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 @end
 
-@implementation MADOpenFileSectionHeaderView
+@implementation MADExplorerSectionHeaderView
 
 + (void)initialize {
     [super initialize];
-    if (self == [MADOpenFileSectionHeaderView self]) {
+    if (self == [MADExplorerSectionHeaderView self]) {
         @autoreleasepool {
             UIActivityIndicatorView <UIAppearance> *appearanceProxy;
             NSArray <Class <UIAppearanceContainer>> *classes;

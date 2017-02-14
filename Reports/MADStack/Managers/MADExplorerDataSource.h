@@ -17,7 +17,7 @@
 
 @class MADMetaData, MADCollectionViewCellDocument;
 
-@interface MADFileExplorerDataSource : NSObject
+@interface MADExplorerDataSource : NSObject
     <UICollectionViewDataSource,
         MADFileLocationManagerDelegate>
 

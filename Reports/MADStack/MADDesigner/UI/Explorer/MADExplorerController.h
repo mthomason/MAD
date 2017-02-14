@@ -12,7 +12,7 @@
 #import <UIKit/UICollectionViewController.h>
 #import <MADExplorer/MADDocumentCellProtocol.h>
 
-@interface MADFileExplorerViewController : UICollectionViewController
+@interface MADExplorerController : UICollectionViewController
     <MADDocumentCellProtocol>
 
     + (instancetype)newFileExplorerViewController;

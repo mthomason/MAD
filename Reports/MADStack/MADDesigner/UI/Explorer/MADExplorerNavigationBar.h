@@ -11,7 +11,7 @@
 
 #import <UIKit/UINavigationBar.h>
 
-@interface MADFileExplorerNavigationBar : UINavigationBar
+@interface MADExplorerNavigationBar : UINavigationBar
 
 @end
 

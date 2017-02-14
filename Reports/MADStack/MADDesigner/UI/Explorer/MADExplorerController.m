@@ -10,14 +10,11 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADFileExplorerViewController.h"
-#import "MADFileExplorerViewControllerProtocol.h"
+#import "MADExplorerController.h"
 
 #import <QuickLook/QLPreviewController.h>
 
 #import <MessageUI/MFMailComposeViewController.h>
-
-#import <MADExplorer/MADFileExplorerViewDelegateProtocol.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -35,6 +32,7 @@
 #import <MADFoundation/MADConstantsDocumentExtentions.h>
 #import <MADFoundation/MADURL.h>
 
+#import <MADExplorer/MADFileExplorerViewDelegateProtocol.h>
 #import <MADExplorer/MADDocumentState.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MTCollectionViewCellDocument.h>
@@ -50,10 +48,12 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
 
+#import "MADFileExplorerViewControllerProtocol.h"
+
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
 #import "MADFileExplorerDataSource.h"
-#import "MADFileExplorerView.h"
+#import "MADExplorerView.h"
 
 #import "MADOpenFileSectionHeaderView.h"
 #import "MADSearchBar.h"
@@ -88,8 +88,6 @@
 #import "MADDocumentManagerProtocol.h"
 
 #import "MADLabelTitle.h"
-
-#import "MADFileExplorerView.h"
 
 #import "MADSearchBar.h"
 
@@ -155,7 +153,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     @property (nonatomic, readwrite, strong) MADOpenDocumentManager *activeDocumentManager;
 
     // This is the collection view
-    @property (nonatomic, weak)     IBOutlet MADFileExplorerView *fileExplorerView;
+    @property (nonatomic, weak)     IBOutlet MADExplorerView *fileExplorerView;
 
     @property (nonatomic, strong)   NSNumberFormatter *subtitleNumberFormatter;
 

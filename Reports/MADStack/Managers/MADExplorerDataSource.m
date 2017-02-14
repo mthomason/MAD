@@ -6,7 +6,7 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileExplorerDataSource.h"
+#import "MADExplorerDataSource.h"
 
 #import <UIKit/UIViewController.h>
 
@@ -26,7 +26,7 @@
 
 typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
-@interface MADFileExplorerDataSource ()
+@interface MADExplorerDataSource ()
     <MADFilesControllerDelegate>
 
     @property (nonatomic, readwrite, strong) MADFileLocationManager *fileLocationManager;
@@ -38,7 +38,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 @end
 
-@implementation MADFileExplorerDataSource
+@implementation MADExplorerDataSource
 
 - (instancetype)init {
     return [self initWithCellConfiguration:nil];
