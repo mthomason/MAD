@@ -499,7 +499,7 @@
 		4CD85D181E445A80005DA2AF /* MADModelQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD85D171E445A80005DA2AF /* MADModelQuery.m */; };
 		4CD87BA91E3E4ADD00F562B4 /* RptqDataHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD87BA71E3E4ADD00F562B4 /* RptqDataHelper.h */; };
 		4CD87BAA1E3E4ADD00F562B4 /* RptqDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD87BA81E3E4ADD00F562B4 /* RptqDataHelper.m */; };
-		4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DC21CE6C47A00B56B90 /* miniz.c */; };
+		4CD90DC41CE6C47A00B56B90 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DC21CE6C47A00B56B90 /* miniz.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4CD90DC51CE6C47A00B56B90 /* miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD90DC31CE6C47A00B56B90 /* miniz.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CE233B01D8F7E1300949451 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE233AF1D8F7E1300949451 /* MADDataStructures.framework */; };
 		4CE233B21D8F7E3400949451 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE233B11D8F7E3400949451 /* MADCocoaExtensions.framework */; };

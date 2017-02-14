@@ -113,7 +113,8 @@ static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
         return;
     }
 
-    if (write_state->maximum_file_size && write_state->bytes_written + length > write_state->maximum_file_size) {
+    if (write_state->maximum_file_size && write_state->bytes_written + length >
+                                                    write_state->maximum_file_size) {
         write_state->retval = TOO_LARGE_FILE;
     }
 
@@ -134,8 +135,7 @@ static png_bytepp rwpng_create_row_pointers(png_infop info_ptr,
                                             png_structp png_ptr,
                                             unsigned char *base,
                                             unsigned int height,
-                                            unsigned int rowbytes)
-{
+                                            unsigned int rowbytes) {
     if (!rowbytes) {
         rowbytes = png_get_rowbytes(png_ptr, info_ptr);
     }
@@ -148,8 +148,7 @@ static png_bytepp rwpng_create_row_pointers(png_infop info_ptr,
     return row_pointers;
 }
 
-static int read_chunk_callback(png_structp png_ptr, png_unknown_chunkp in_chunk)
-{
+static int read_chunk_callback(png_structp png_ptr, png_unknown_chunkp in_chunk) {
     if (0 == memcmp("iCCP", in_chunk->name, 5) ||
         0 == memcmp("cHRM", in_chunk->name, 5) ||
         0 == memcmp("gAMA", in_chunk->name, 5)) {
@@ -275,7 +274,9 @@ pngquant_error rwpng_read_image24_libpng(FILE *infile, png24_image *mainprog_ptr
         return PNG_OUT_OF_MEMORY_ERROR;
     }
 
-    png_bytepp row_pointers = rwpng_create_row_pointers(info_ptr, png_ptr, mainprog_ptr->rgba_data, mainprog_ptr->height, 0);
+    png_bytepp row_pointers = rwpng_create_row_pointers(info_ptr, png_ptr,
+                                                        mainprog_ptr->rgba_data,
+                                                        mainprog_ptr->height, 0);
 
     /* now we can go ahead and just read the whole image */
 
@@ -352,7 +353,8 @@ pngquant_error rwpng_read_image24_libpng(FILE *infile, png24_image *mainprog_ptr
         cmsHTRANSFORM hTransform = cmsCreateTransform(hInProfile, TYPE_RGBA_8,
                                                       hOutProfile, TYPE_RGBA_8,
                                                       INTENT_PERCEPTUAL,
-                                                      omp_get_max_threads() > 1 ? cmsFLAGS_NOCACHE : 0);
+                                                      omp_get_max_threads() > 1 ?
+                                                                        cmsFLAGS_NOCACHE : 0);
 
         #pragma omp parallel for \
             if (mainprog_ptr->height*mainprog_ptr->width > 8000) \
@@ -388,8 +390,7 @@ static void rwpng_free_chunks(struct rwpng_chunk *chunk) {
     free(chunk);
 }
 
-void rwpng_free_image24(png24_image *image)
-{
+void rwpng_free_image24(png24_image *image) {
     free(image->row_pointers);
     image->row_pointers = NULL;
 
@@ -400,8 +401,7 @@ void rwpng_free_image24(png24_image *image)
     image->chunks = NULL;
 }
 
-void rwpng_free_image8(png8_image *image)
-{
+void rwpng_free_image8(png8_image *image) {
     free(image->indexed_data);
     image->indexed_data = NULL;
 
@@ -412,8 +412,7 @@ void rwpng_free_image8(png8_image *image)
     image->chunks = NULL;
 }
 
-pngquant_error rwpng_read_image24(FILE *infile, png24_image *input_image_p, int verbose)
-{
+pngquant_error rwpng_read_image24(FILE *infile, png24_image *input_image_p, int verbose) {
 #if USE_COCOA
     return rwpng_read_image24_cocoa(infile, input_image_p);
 #else
@@ -422,11 +421,12 @@ pngquant_error rwpng_read_image24(FILE *infile, png24_image *input_image_p, int 
 }
 
 
-static pngquant_error rwpng_write_image_init(rwpng_png_image *mainprog_ptr, png_structpp png_ptr_p, png_infopp info_ptr_p, int fast_compression)
-{
+static pngquant_error rwpng_write_image_init(rwpng_png_image *mainprog_ptr, png_structpp png_ptr_p,
+                                             png_infopp info_ptr_p, int fast_compression) {
     /* could also replace libpng warning-handler (final NULL), but no need: */
 
-    *png_ptr_p = png_create_write_struct(PNG_LIBPNG_VER_STRING, mainprog_ptr, rwpng_error_handler, NULL);
+    *png_ptr_p = png_create_write_struct(PNG_LIBPNG_VER_STRING, mainprog_ptr,
+                                         rwpng_error_handler, NULL);
 
     if (!(*png_ptr_p)) {
         return LIBPNG_INIT_ERROR;   /* out of memory */
@@ -449,7 +449,10 @@ static pngquant_error rwpng_write_image_init(rwpng_png_image *mainprog_ptr, png_
     }
 
     png_set_compression_level(*png_ptr_p, fast_compression ? Z_BEST_SPEED : Z_BEST_COMPRESSION);
-    png_set_compression_mem_level(*png_ptr_p, fast_compression ? 9 : 5); // judging by optipng results, smaller mem makes libpng compress slightly better
+    png_set_compression_mem_level(*png_ptr_p,
+                                  fast_compression ? 9 : 5); // Judging by optipng results,
+                                                             //     smaller mem makes libpng
+                                                             //     compress slightly better.
 
     return SUCCESS;
 }
@@ -480,7 +483,9 @@ pngquant_error rwpng_write_image8(FILE *outfile, const png8_image *mainprog_ptr)
     png_structp png_ptr;
     png_infop info_ptr;
 
-    pngquant_error retval = rwpng_write_image_init((rwpng_png_image*)mainprog_ptr, &png_ptr, &info_ptr, mainprog_ptr->fast_compression);
+    pngquant_error retval = rwpng_write_image_init((rwpng_png_image*)mainprog_ptr,
+                                                   &png_ptr, &info_ptr,
+                                                   mainprog_ptr->fast_compression);
     if (retval) return retval;
 
     struct rwpng_write_state write_state;
@@ -521,7 +526,8 @@ pngquant_error rwpng_write_image8(FILE *outfile, const png8_image *mainprog_ptr)
         png_set_unknown_chunks(png_ptr, info_ptr, &pngchunk, 1);
 
         #if defined(PNG_HAVE_IHDR) && PNG_LIBPNG_VER < 10600
-        png_set_unknown_chunk_location(png_ptr, info_ptr, chunk_num, pngchunk.location ? pngchunk.location : PNG_HAVE_IHDR);
+        png_set_unknown_chunk_location(png_ptr, info_ptr, chunk_num,
+                                       pngchunk.location ? pngchunk.location : PNG_HAVE_IHDR);
         #endif
 
         chunk = chunk->next;
@@ -544,12 +550,14 @@ pngquant_error rwpng_write_image8(FILE *outfile, const png8_image *mainprog_ptr)
     return write_state.retval;
 }
 
-pngquant_error rwpng_write_image24(FILE *outfile, const png24_image *mainprog_ptr, int filter)
-{
+pngquant_error rwpng_write_image24(FILE *outfile, const png24_image *mainprog_ptr, int filter) {
     png_structp png_ptr;
     png_infop info_ptr;
 
-    pngquant_error retval = rwpng_write_image_init((rwpng_png_image*)mainprog_ptr, &png_ptr, &info_ptr, 0);
+    pngquant_error retval = rwpng_write_image_init((rwpng_png_image*)mainprog_ptr,
+                                                   &png_ptr,
+                                                   &info_ptr,
+                                                   0);
     if (retval) return retval;
 
     png_init_io(png_ptr, outfile);
@@ -563,7 +571,8 @@ pngquant_error rwpng_write_image24(FILE *outfile, const png24_image *mainprog_pt
 
     png_set_filter(png_ptr, PNG_FILTER_TYPE_BASE, filter);
 
-    png_bytepp row_pointers = rwpng_create_row_pointers(info_ptr, png_ptr, mainprog_ptr->rgba_data, mainprog_ptr->height, 0);
+    png_bytepp row_pointers = rwpng_create_row_pointers(info_ptr, png_ptr, mainprog_ptr->rgba_data,
+                                                        mainprog_ptr->height, 0);
 
     rwpng_write_end(&info_ptr, &png_ptr, row_pointers);
 
