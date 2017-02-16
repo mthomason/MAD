@@ -25,6 +25,8 @@
 
 #import <UIKit/UIImage.h>
 
+#import "MADDatabaseConnectionsPropertiesCredentals.h"
+
 #import "MADDatabaseConnection.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"

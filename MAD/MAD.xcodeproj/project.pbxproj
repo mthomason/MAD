@@ -23,6 +23,7 @@
 		4C1E54EA1E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E91E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54EC1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54EE1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1E54F01E56666100E3FAF0 /* MADDatabaseConnectionsPropertiesCredentals.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54EF1E56666100E3FAF0 /* MADDatabaseConnectionsPropertiesCredentals.h */; };
 		4C235CD71D1F81E900D3D77C /* MADReportSectionsEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C235CD51D1F81E900D3D77C /* MADReportSectionsEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C235CD81D1F81E900D3D77C /* MADReportSectionsEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C235CD61D1F81E900D3D77C /* MADReportSectionsEnumerator.m */; };
 		4C235CDC1D1F825C00D3D77C /* MADReportSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C235CDA1D1F825C00D3D77C /* MADReportSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -576,6 +577,7 @@
 		4C1E54E91E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsUsernameProtocol.h; sourceTree = "<group>"; };
 		4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsPasswordProtocol.h; sourceTree = "<group>"; };
 		4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsCredentialsProtocol.h; sourceTree = "<group>"; };
+		4C1E54EF1E56666100E3FAF0 /* MADDatabaseConnectionsPropertiesCredentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionsPropertiesCredentals.h; path = MAD/MADDatabaseConnectionsPropertiesCredentals.h; sourceTree = "<group>"; };
 		4C235CD51D1F81E900D3D77C /* MADReportSectionsEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportSectionsEnumerator.h; path = MAD/MADocument/ReportSections/MADReportSectionsEnumerator.h; sourceTree = "<group>"; };
 		4C235CD61D1F81E900D3D77C /* MADReportSectionsEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportSectionsEnumerator.m; path = MAD/MADocument/ReportSections/MADReportSectionsEnumerator.m; sourceTree = "<group>"; };
 		4C235CDA1D1F825C00D3D77C /* MADReportSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportSection.h; path = MAD/MADocument/ReportSections/ReportSection/MADReportSection.h; sourceTree = "<group>"; };
@@ -1853,6 +1855,7 @@
 				4C1E54E91E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h */,
 				4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */,
 				4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */,
+				4C1E54EF1E56666100E3FAF0 /* MADDatabaseConnectionsPropertiesCredentals.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -2238,6 +2241,7 @@
 				4CC281FD1BADE80500775B72 /* MADDocumentObjectType.h in Headers */,
 				4CC282711BADE82000775B72 /* MADErrorContainer.h in Headers */,
 				4C5939A31E3EF7E400582271 /* RptqDocumentElementLabel.h in Headers */,
+				4C1E54F01E56666100E3FAF0 /* MADDatabaseConnectionsPropertiesCredentals.h in Headers */,
 				4C3622BF1CF35017002B8649 /* MADDocumentTextRepresentationProtocol.h in Headers */,
 				4C401E551BAE4E9400BAE5FC /* MADDataTableFast.h in Headers */,
 				4C401DDF1BAE3BD700BAE5FC /* MTQueryCustomNoResults.h in Headers */,

@@ -26,13 +26,6 @@
     @property (readonly, class) NSString *Identifier;
 @end
 
-@protocol MADDatabaseConnectionsPropertiesCredentals <NSObject>
-    @property (readonly, nonatomic, copy)      NSString  *host;
-    @property (readonly, nonatomic, copy)      NSString  *server;
-    @property (readonly, nonatomic, copy)      NSString  *database;
-    @property (readonly, nonatomic, assign)    NSInteger port;
-@end
-
 @protocol MADDatabaseConnectionsPropertiesURL <NSObject>
     @property (readonly, nonatomic, copy) NSURL *databaseUrl;
 @end

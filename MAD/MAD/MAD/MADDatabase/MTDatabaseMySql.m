@@ -23,6 +23,8 @@
 #import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MADMySQLFetchProtocol.h>
 
+#import "MADDatabaseConnectionsPropertiesCredentals.h"
+
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 

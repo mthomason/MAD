@@ -10,6 +10,7 @@
 #define Reports_MTDatabaseConnectionMySql_h
 
 #import "MADDatabaseConnection.h"
+#import "MADDatabaseConnectionsPropertiesCredentals.h"
 
 @interface MTDatabaseConnectionMySql : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,

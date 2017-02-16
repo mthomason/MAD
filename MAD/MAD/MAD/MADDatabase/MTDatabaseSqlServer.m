@@ -33,6 +33,7 @@
 #import <MADTdsClient/sybdb.h>
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADFoundation/MADDataColumn.h>
+#import "MADDatabaseConnectionsPropertiesCredentals.h"
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
