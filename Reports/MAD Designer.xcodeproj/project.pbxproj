@@ -3205,6 +3205,7 @@
 				4C26B95F1BAF11C800456DC8 /* Operations */,
 				4C401EFE1BAE64AF00BAE5FC /* Common */,
 				4C401EB61BAE5E9000BAE5FC /* Store */,
+				4C4020731BAE957D00BAE5FC /* Upgrade */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -3276,7 +3277,6 @@
 			children = (
 				4C8DE27A1BAFB04D00AD1111 /* SupportingFiles */,
 				4C401EF31BAE62FD00BAE5FC /* Assets */,
-				4C4020731BAE957D00BAE5FC /* Upgrade */,
 				4CC3D6331BCB62BC00BDA5D3 /* Info.plist */,
 				4CBC501C1E1B508800B067AD /* MADMeta.plist */,
 				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
@@ -3622,7 +3622,8 @@
 				4C4020741BAE957D00BAE5FC /* MADUpgradeManager.h */,
 				4C4020751BAE957D00BAE5FC /* MADUpgradeManager.m */,
 			);
-			path = Upgrade;
+			name = Upgrade;
+			path = MADStack/MADDesigner/Upgrade;
 			sourceTree = "<group>";
 		};
 		4C4020F71BAE98C300BAE5FC /* MADViewer */ = {
