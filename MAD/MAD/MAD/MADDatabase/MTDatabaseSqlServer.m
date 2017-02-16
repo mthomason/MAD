@@ -98,7 +98,12 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (void)handleError:(NSNotification *)notification {
-    [self.errors addObject:notification.object];
+    if (notification.object) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullable-to-nonnull-conversion"
+        [self.errors addObject:notification.object];
+#pragma clang diagnostic pop
+    }
 }
 
 - (void)closeProcess:(id)process {

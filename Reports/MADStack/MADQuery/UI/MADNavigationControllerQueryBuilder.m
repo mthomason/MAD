@@ -21,14 +21,14 @@
 #import "MADAnimatedTransitionControllerPop.h"
 #import "MADAnimatedTransitionControllerPush.h"
 
-
 @interface MADNavigationControllerQueryBuilder ()
-
-    @property (nonatomic, assign) BOOL firstTimeLayout;
+    <UINavigationControllerDelegate>
 
 @end
 
-@implementation MADNavigationControllerQueryBuilder
+@implementation MADNavigationControllerQueryBuilder {
+    BOOL _firstTimeLayout;
+}
 
 @synthesize document = _document;
 
