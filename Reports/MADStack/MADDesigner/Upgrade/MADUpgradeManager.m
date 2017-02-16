@@ -7,15 +7,15 @@
 //
 
 #import "MADUpgradeManager.h"
-#import "MADOperationInstallSampleDatabase.h"
-#import <MADFoundation/MADApplication.h>
-//#import <MADFoundation/UIApplication+MADAppDelegate.h>
-
 
 #import <Foundation/NSURL.h>
 #import <Foundation/NSValue.h>
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
+
+#import <MADFoundation/MADApplication.h>
+
+#import "MADOperationInstallSampleDatabase.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 
