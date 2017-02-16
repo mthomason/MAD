@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_MADFieldSelectorNavigationItem_h
+#define MAD_MADFieldSelectorNavigationItem_h
+
+#import <UIKit/UINavigationBar.h>
 
 @interface MADDriverSelectorNavigationItem : UINavigationItem
 
 @end
+
+#endif

@@ -69,7 +69,6 @@
 
 #import "MADSliderPageVertical.h"
 #import "MADLabelStatus.h"
-#import "MADNavigationBarTitleView.h"
 
 #import "UIApplication+Extras.h"
 #import "UIViewController+tabBarItem.h"

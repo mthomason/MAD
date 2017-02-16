@@ -19,7 +19,6 @@
 #import "MADDesignerViewController.h"
 #import "MADLabelTitle.h"
 #import "MADNavigationController.h"
-#import "MADNavigationBarTitleView.h"
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADQueryVisualizationViewController.h"
 #import "MADViewerController.h"

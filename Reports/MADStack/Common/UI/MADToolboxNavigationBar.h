@@ -1,5 +1,5 @@
 //
-//  MADNavigationBarFixedSize.h
+//  MADToolboxNavigationBar.h
 //  MAD
 //
 //  Created by Michael Thomason on 11/11/14.
@@ -9,9 +9,9 @@
 #ifndef Reports_MADNavigationBarFixedSize_h
 #define Reports_MADNavigationBarFixedSize_h
 
-#import <UIKit/UINavigationBar.h>
+#import "MADNavigationBar.h"
 
-@interface MADToolboxNavigationBar : UINavigationBar
+@interface MADToolboxNavigationBar : MADNavigationBar
 
 @end
 

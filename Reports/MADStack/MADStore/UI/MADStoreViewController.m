@@ -15,7 +15,6 @@
 #import "MTVerificationController.h"
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADWatermarkView.h"
-#import "MADNavigationBarTitleView.h"
 #import "MADViewControllerStandardProtocol.h"
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
@@ -38,8 +37,6 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 
 @implementation MADStoreViewController
 
-static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault";
-
 - (void)viewControllerDidCancel:(id)sender {
     [self viewControllerDidFinish:sender];
 }
@@ -56,15 +53,10 @@ static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault
     if (self = [super initWithCoder:aDecoder]) {
 
         NSNumberFormatter *priceFormatter;
-        MADLabelTitle *titleView;
-
         priceFormatter = [[NSNumberFormatter alloc] init];
         priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
         self.priceFormatter = priceFormatter;
         
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = @"MAD Features";
-        self.navigationItem.titleView = titleView;
         
         self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
 
@@ -132,7 +124,7 @@ static NSString * const MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    static NSString *MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault";
     MADCollectionViewCellProductFeature *cell;
     cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADStoreCellReuseIdentifier
                                                      forIndexPath: indexPath];

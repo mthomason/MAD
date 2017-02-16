@@ -72,7 +72,6 @@
 #import "MADTabBarController.h"
 
 #import "MADRulerView.h"
-#import "MADNavigationBarTitleView.h"
 
 #import "MADDesignerElementView.h"
 #import "MADDesignerSectionView.h"

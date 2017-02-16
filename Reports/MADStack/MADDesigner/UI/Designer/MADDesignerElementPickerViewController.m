@@ -24,8 +24,6 @@
 
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
-#import "MADNavigationBarTitleView.h"
-
 #import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTDocumentObjectNewAggregateViewController.h"

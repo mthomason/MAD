@@ -42,8 +42,9 @@ static NSString * const MADKeyDBSchemaFieldName = @"databaseSchemaField.name";
 		self.rowHeights = rh;
         self.table = sectionTable;
 
-        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: MADKeyDBSchemaFieldName
-                                                                       ascending: YES];
+        NSSortDescriptor *namesAccending;
+        namesAccending = [[NSSortDescriptor alloc] initWithKey: MADKeyDBSchemaFieldName
+                                                     ascending: YES];
         NSArray *sortDescriptors = [[NSArray alloc] initWithObjects: namesAccending, nil];
         NSArray *fieldsArray = [self.table.hasQueryFields sortedArrayUsingDescriptors:sortDescriptors];
         NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];

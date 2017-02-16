@@ -30,7 +30,6 @@
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
-#import "MADNavigationBarTitleView.h"
 #import "MADLabelTitle.h"
 
 #import "MTAggregateFunctionsViewController.h"

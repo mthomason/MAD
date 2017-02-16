@@ -15,8 +15,6 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
-#import "MADNavigationBarTitleView.h"
-
 #import "MADLabelTitle.h"
 
 NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDocumentObjectNewStaticLabelViewControllerIdentifier";

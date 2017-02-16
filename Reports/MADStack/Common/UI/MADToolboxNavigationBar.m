@@ -1,5 +1,5 @@
 //
-//  MADNavigationBarFixedSize.m
+//  MADToolboxNavigationBar.m
 //  MAD
 //
 //  Created by Michael Thomason on 11/11/14.
@@ -8,6 +8,6 @@
 
 #import "MADToolboxNavigationBar.h"
 
-@implementation MADNavigationBarFixedSize
+@implementation MADToolboxNavigationBar
 
 @end

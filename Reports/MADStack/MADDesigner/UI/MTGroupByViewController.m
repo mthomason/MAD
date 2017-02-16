@@ -26,8 +26,6 @@
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
-#import "MADNavigationBarTitleView.h"
-
 #import "MADLabelTitle.h"
 
 NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewControllerIdentifier";

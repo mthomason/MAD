@@ -67,7 +67,6 @@
 #import "MADDriverSelectorController.h"
 #import "MADStoreViewController.h"
 
-#import "MADNavigationBarTitleView.h"
 #import "MADNavigationController.h"
 
 #import "MADQueryVisualizationViewController.h"
@@ -542,19 +541,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                       animated: animated];
 
     _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
-    
-    NSLog(@"%@", self.navigationItem.titleView);
-    /*if (self.navigationItem.titleView == nil) {
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        
-        MADAppDelegate delegate = [MADApplication AppDelegate];
-        titleView.text = [delegate name].copy;
-        titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        self.navigationItem.titleView = titleView;
-    }*/
-    //self.navigationItem.hidesBackButton = YES;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;

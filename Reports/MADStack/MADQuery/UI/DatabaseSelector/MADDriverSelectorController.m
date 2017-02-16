@@ -25,7 +25,6 @@
 #import "MADViewControllerStandardProtocol.h"
 
 #import "MADVibrantTableView.h"
-#import "MADNavigationBarTitleView.h"
 #import "MTConnectionViewController.h"
 #import "MADLabelTitle.h"
 
@@ -61,12 +60,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.prompt = NSLocalizedString(MADDriverSelectorControllerDefaultPrompt,
-                                                   MADDriverSelectorControllerDefaultPrompt);
-    self.navigationItem.title = NSLocalizedString(MADDriverSelectorControllerDefaultTitle,
-                                                  MADDriverSelectorControllerDefaultTitle);
-    [self.navigationItem setLeftItemsSupplementBackButton: YES];
-    
     self.testCell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
     
     self.tableView.dataSource = self;
@@ -75,12 +68,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.allowsSelection = YES;
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    
-    
-    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-    titleView.text = @"New Report";
-    self.navigationItem.titleView = titleView;
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return 1; }

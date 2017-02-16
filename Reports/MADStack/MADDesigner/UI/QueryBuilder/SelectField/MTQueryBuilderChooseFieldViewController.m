@@ -38,8 +38,6 @@
 
 #import "MADLabelTitle.h"
 
-#import "MADNavigationBarTitleView.h"
-
 #import "MTQueryBuilderChooseFieldDelegate.h"
 
 #import "MADDatabaseTableSectionHeaderView.h"
@@ -181,9 +179,9 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 		
         NSArray *dataTables = self.dataTables;
 		NSMutableArray *infoArray = [[NSMutableArray alloc] initWithCapacity:dataTables.count];
-		for (RptqQueryTable *queryTable in dataTables) {
-			RptqDatabaseSchemaFieldSelectorManager *sectionInfo =
-                        [[RptqDatabaseSchemaFieldSelectorManager alloc] initWithTable: queryTable];
+        RptqDatabaseSchemaFieldSelectorManager *sectionInfo;
+        for (RptqQueryTable *queryTable in dataTables) {
+			sectionInfo = [[RptqDatabaseSchemaFieldSelectorManager alloc] initWithTable: queryTable];
 			sectionInfo.open = NO;
 			
             NSNumber *defaultRowHeight = [[NSNumber alloc] initWithDouble: MAD_44];
@@ -200,14 +198,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     
     [self updateSize];
 	
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    UINavigationItem *navigationItem = self.navigationItem;
-    if (navigationItem.titleView != nil) {
-        [navigationItem setTitleView: nil];
-    }
-    [super viewDidDisappear:animated];
 }
 
 #pragma mark Table view data source and delegate

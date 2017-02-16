@@ -55,7 +55,6 @@
 
 #import "MADQueryViewSectionDelegate.h"
 #import "MADLabelTitle.h"
-#import "MADNavigationBarTitleView.h"
 #import "MADTabBarController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"

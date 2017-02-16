@@ -54,7 +54,6 @@
 #import <MADBarcodes/MTBarcodeChannelCode.h>
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 
-#import "MADNavigationBarTitleView.h"
 #import "MTViewControllerBarcodePreviewDelegate.h"
 
 #import "MADLabelTitle.h"
@@ -161,13 +160,14 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         barcodeViewerHeight = @"250.0000";
     }
-    NSString *asciiArtVertConstraint = @"V:|-(==0.0000)-[topView(==%@)]-(==0.0000)-[bottomView]-(==0.0000)-|";
-    NSString *asciiArtVert = [NSString stringWithFormat: asciiArtVertConstraint, barcodeViewerHeight];
+    NSString *vertConstraint;
+    vertConstraint = @"V:|-(==0.0000)-[topView(==%@)]-(==0.0000)-[bottomView]-(==0.0000)-|";
+    NSString *asciiArtVert = [NSString stringWithFormat: vertConstraint, barcodeViewerHeight];
     NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(topView, bottomView);
     NSArray *constraintsVert = [NSLayoutConstraint constraintsWithVisualFormat:asciiArtVert
-                                                                             options:0
-                                                                             metrics:nil
-                                                                               views:viewsDictionary];
+                                                                       options:0
+                                                                       metrics:nil
+                                                                         views:viewsDictionary];
     [self.view addConstraints:constraintsVert];
 }
 

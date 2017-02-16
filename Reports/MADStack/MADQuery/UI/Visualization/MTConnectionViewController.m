@@ -44,7 +44,6 @@
 #import "MADOperationObserver.h"
 #import "MADOperationQueue.h"
 
-#import "MADNavigationBarTitleView.h"
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADPromptOperationPassword.h"

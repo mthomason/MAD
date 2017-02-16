@@ -29,8 +29,6 @@
 
 #import "MADLabelTitle.h"
 
-#import "MADNavigationBarTitleView.h"
-
 #import "MADQueryViewController.h"
 #import "MADViewControllerSQL.h"
 

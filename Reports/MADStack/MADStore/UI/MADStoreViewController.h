@@ -9,11 +9,11 @@
 #ifndef MAD_Designer_MADStoreViewController_h
 #define MAD_Designer_MADStoreViewController_h
 
-#import "MADCollectionViewController.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <UIKit/UICollectionViewController.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
+#import "MADViewControllerStandardProtocol.h"
 
-@interface MADStoreViewController : MADCollectionViewController
+@interface MADStoreViewController : UICollectionViewController
     <MADViewControllerStandardProtocol, UICollectionViewDelegateFlowLayout>
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;

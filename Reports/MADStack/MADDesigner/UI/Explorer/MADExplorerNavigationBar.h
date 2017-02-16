@@ -9,9 +9,9 @@
 #ifndef Reports_MADExplorerNavigationBar_h
 #define Reports_MADExplorerNavigationBar_h
 
-#import <UIKit/UINavigationBar.h>
+#import "MADNavigationBar.h"
 
-@interface MADExplorerNavigationBar : UINavigationBar
+@interface MADExplorerNavigationBar : MADNavigationBar
 
 @end
 

@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_MADStoreNavigationItem_h
+#define MAD_MADStoreNavigationItem_h
+
+#import <UIKit/UINavigationBar.h>
 
 @interface MADStoreNavigationItem : UINavigationItem
 
 @end
+
+#endif
