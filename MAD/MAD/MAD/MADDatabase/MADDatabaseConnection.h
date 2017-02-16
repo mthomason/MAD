@@ -26,10 +26,6 @@
     @property (readonly, class) NSString *Identifier;
 @end
 
-@protocol MADDatabaseConnectionsPropertiesURL <NSObject>
-    @property (readonly, nonatomic, copy) NSURL *databaseUrl;
-@end
-
 @interface MADDatabaseConnection : NSObject
     <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties>
 

@@ -10,6 +10,7 @@
 #define Reports_MTDatabaseConnectionSqlite3_h
 
 #import "MADDatabaseConnection.h"
+#import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 
 @interface MTDatabaseConnectionSqlite3 : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,

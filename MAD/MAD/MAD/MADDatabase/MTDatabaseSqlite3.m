@@ -12,6 +12,17 @@
 
 #import "MTDatabaseSqlite3.h"
 
+#import <string.h>
+#import <stdlib.h>
+#import <stdio.h>
+
+#import <dispatch/time.h>
+#import <dispatch/semaphore.h>
+#import <dispatch/object.h>
+
+#import <CoreFoundation/CFString.h>
+#import <CoreFoundation/CFData.h>
+
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSString.h>
@@ -22,17 +33,11 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 
-#import <dispatch/time.h>
-#import <dispatch/semaphore.h>
-#import <dispatch/object.h>
-
-#import <string.h>
-#import <stdlib.h>
-#import <stdio.h>
-
 #import <MADSqlite3/sqlite3.h>
 
 #import <MADFoundation/MADDataColumn.h>
+
+#import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 
 #import "MADDataTable.h"
 
@@ -49,9 +54,6 @@
 #import "MTQueryCacheSyncDefault.h"
 
 #import "MADDatabaseProtocol.h"
-
-#import <CoreFoundation/CFString.h>
-#import <CoreFoundation/CFData.h>
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
