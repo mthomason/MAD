@@ -1081,6 +1081,7 @@
 		4CF6AFCF1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */; };
 		4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */; };
+		4CFC60B51E559C0700EC577E /* MADImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC60B41E559C0700EC577E /* MADImageTransformer.m */; };
 		4CFEE7F61BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */; };
 		4CFEE7FB1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FA1BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.m */; };
 		4CFEE7FD1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FC1BB77C4000AFAA0A /* MADQueryBuilderSelectField.storyboard */; };
@@ -2423,6 +2424,8 @@
 		4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationGetSQL.m; sourceTree = "<group>"; };
 		4CF9D08C1AD0EF6500525A50 /* MADRowTypeKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeKeyValue.h; sourceTree = "<group>"; };
 		4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeKeyValue.m; sourceTree = "<group>"; };
+		4CFC60B31E559C0700EC577E /* MADImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADImageTransformer.h; sourceTree = "<group>"; };
+		4CFC60B41E559C0700EC577E /* MADImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADImageTransformer.m; sourceTree = "<group>"; };
 		4CFEE7F51BB773D800AFAA0A /* MADQueryBuilderAddGroup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADQueryBuilderAddGroup.storyboard; sourceTree = "<group>"; };
 		4CFEE7F81BB77BD600AFAA0A /* MTQueryBuilderChooseFieldDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderChooseFieldDelegate.h; sourceTree = "<group>"; };
 		4CFEE7F91BB77BD600AFAA0A /* MTQueryBuilderChooseFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderChooseFieldViewController.h; sourceTree = "<group>"; };
@@ -3935,6 +3938,8 @@
 			children = (
 				4C6F34F71E4086AF00F4744F /* MADPointTransformer.h */,
 				4C6F34F81E4086AF00F4744F /* MADPointTransformer.m */,
+				4CFC60B31E559C0700EC577E /* MADImageTransformer.h */,
+				4CFC60B41E559C0700EC577E /* MADImageTransformer.m */,
 			);
 			name = Transformers;
 			sourceTree = "<group>";
@@ -6263,6 +6268,7 @@
 				4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m in Sources */,
 				4C26BA591BAF99F000456DC8 /* MADElementCanvas.m in Sources */,
 				4C4AA5721C92C3D2008558E4 /* MADOperation.m in Sources */,
+				4CFC60B51E559C0700EC577E /* MADImageTransformer.m in Sources */,
 				4C401F7E1BAE7EB500BAE5FC /* MTGradientView.m in Sources */,
 				4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */,
 				4C401FC31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
