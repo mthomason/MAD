@@ -11,7 +11,7 @@
 
 #import <UIKit/UINavigationBar.h>
 
-@interface MADNavigationBarFixedSize : UINavigationBar
+@interface MADToolboxNavigationBar : UINavigationBar
 
 @end
 

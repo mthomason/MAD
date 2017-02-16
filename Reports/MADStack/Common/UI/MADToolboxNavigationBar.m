@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADNavigationBarFixedSize.h"
+#import "MADToolboxNavigationBar.h"
 
 @implementation MADNavigationBarFixedSize
 
