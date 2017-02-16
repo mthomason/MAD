@@ -13,15 +13,6 @@
 
 @interface MADElementMigrationPolicy : NSEntityMigrationPolicy
 
-//- (NSValue *)migrateValueFromDropPointX:(NSNumber *)dropPointX dropPointY:(NSNumber *)dropPointY;
-- (NSString *)migrateValueFromMySQLDatabaseName:(NSString *)mySQLDBName
-                                      tdsDBName:(NSString *)tdsDBName;
-- (NSString *)migrateStringNotNullOrEmpty:(NSString *)s1
-                                  string2:(NSString *)s2;
-
-- (NSNumber *)migrateValueInt64NotZero:(NSNumber *)v1
-                                value2:(NSNumber *)v2;
-
 @end
 
 #endif
