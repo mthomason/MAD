@@ -116,7 +116,7 @@
         <attribute name="groupNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementImage" representedClassName="RptqDocumentElementImage" parentEntity="RptqDocumentElement" syncable="YES">
-        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="NSUnarchiveFromDataTransformerName" customClassName="UIImage" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="" syncable="YES"/>
     </entity>
     <entity name="RptqDocumentElementLabel" representedClassName="RptqDocumentElementLabel" parentEntity="RptqDocumentElement" syncable="YES">
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
