@@ -13,8 +13,7 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 #import <MAD/MADDatabaseConnection.h>
 
-@protocol MADViewControllerStandardProtocol;
-@protocol MADSaveFileProtocol;
+@protocol MADViewControllerStandardProtocol, MADSaveFileProtocol;
 
 @interface MADConnectionViewController : UITableViewController
     <UITableViewDelegate,

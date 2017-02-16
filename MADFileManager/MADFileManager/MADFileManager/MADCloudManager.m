@@ -20,6 +20,8 @@
 // FIXME: Don't import NSException.h on release builds.
 #import <Foundation/NSException.h>
 
+#import "MADCloudManagerProtocol.h"
+
 #import "MADFileUtilities.h"
 
 // UserDefaults/Preferences Used by this Singleton

@@ -10,9 +10,7 @@
 #define MADExplorer_MADSaveFileProtocol_h
 
 @protocol MADSaveFileProtocol <NSObject>
-
     - (NSURL *)documentDirectory;
-
 @end
 
 #endif /* MADExplorer_MADSaveFileProtocol_h */

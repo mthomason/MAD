@@ -12,11 +12,7 @@
 #import <Foundation/NSObject.h>
 #import "MADAppStorageOption.h"
 
-@protocol MADCloudManagerDelegate <NSObject>
-
-    - (void)promptUserForCloudPreference:(void (^)(MADAppStorage preference))result;
-
-@end
+@protocol MADCloudManagerDelegate;
 
 @interface MADCloudManager : NSObject
 
