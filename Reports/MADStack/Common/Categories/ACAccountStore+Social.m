@@ -41,7 +41,7 @@
                         }
                         #if DEBUG
                             NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)returendError.code];
-                            //NSLog(@"%@error %@", output,returendError.description);
+                            NSLog(@"%@error %@", output, returendError.description);
                         #endif
                     }];
                 }

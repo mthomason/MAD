@@ -6,21 +6,23 @@
 //  Copyright (c) 2015 Everyday Apps LLC. All rights reserved.
 //
 
-#import "NSString+Encryption.h"
-#import <Foundation/NSData.h>
+#import "MADStringEncryption.h"
+
 #import <strings.h>
+
 #import <openssl/crypto.h>
 #import <openssl/aes.h>
 
+#import <Foundation/NSData.h>
+
 @implementation MADStringEncryption
 
-+ (NSData *)encryptString:(NSString *)string withKey:(unsigned char *)key keySize:(int)keySize {
-    const unsigned char *orig = (const unsigned char *)[string cStringUsingEncoding:NSUTF8StringEncoding];
++ (NSData *)encryptString:(NSString *)s withKey:(unsigned char *)key keySize:(int)keySize {
+    const unsigned char *org = (const unsigned char *)[s cStringUsingEncoding:NSUTF8StringEncoding];
     AES_KEY key_enc;
-    unsigned char *part_encrypted = malloc(sizeof(unsigned char) * strlen((const char *)orig));
+    unsigned char *part_encrypted = malloc(sizeof(unsigned char) * strlen((const char *)org));
     AES_set_encrypt_key(key, keySize, &key_enc);
-    AES_encrypt(orig, part_encrypted, &key_enc);
-    
+    AES_encrypt(org, part_encrypted, &key_enc);
     return [NSData dataWithBytes:part_encrypted length:strlen((const char *)part_encrypted)];
 }
 
@@ -32,7 +34,8 @@
     AES_set_decrypt_key(key, keySize, &key_dec);
     AES_decrypt(data.bytes, dec_out, &key_dec);
     
-    return strlen((char *)dec_out) ? [NSString stringWithCString:(char *)dec_out encoding:NSUTF8StringEncoding] : @"";
+    return strlen((char *)dec_out) ? [NSString stringWithCString:(char *)dec_out
+                                                        encoding:NSUTF8StringEncoding] : @"";
 }
 
 @end

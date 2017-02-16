@@ -70,9 +70,6 @@
            managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     if (self = [self init]) {
-        
-        //NSManagedObjectContext *managedObjectContext = query.managedObjectContext;
-        //NSManagedObjectID *queryID = query.objectID;
 
         NSError * __autoreleasing *error = NULL;
         NSArray <NSManagedObjectID *> *fetchQueryTableResults;

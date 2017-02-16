@@ -21,9 +21,10 @@
     } else {
         CGFloat minx = CGPointZero.x, miny = CGPointZero.y, maxx = CGPointZero.x, maxy = CGPointZero.y;
         NSUInteger counter = 0;
+        CGRect frame;
         for (UIView *elementView in views) {
-            CGRect frame = [elementView convertRect:elementView.frame
-                                             toView:self];
+            frame = [elementView convertRect: elementView.frame
+                                      toView: self];
             if (counter == 0) {
                 minx = frame.origin.x;
                 miny = frame.origin.y;
