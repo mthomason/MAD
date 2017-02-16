@@ -3070,16 +3070,8 @@
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* Source */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
-				4C401EE81BAE61F700BAE5FC /* MADDesigner */,
-				4C4020F71BAE98C300BAE5FC /* MADViewer */,
-				4C401F111BAE703200BAE5FC /* MADQuery */,
-				4C8DE2881BAFB23400AD1111 /* MADExplorer */,
-				4C401FA11BAE8AD500BAE5FC /* MADBarcodes */,
-				4C8F99A81ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
-				4C8F99BD1ACA97C8006D3996 /* MAD Designer WatchKit App */,
+				4CFC60B61E55B0AB00EC577E /* Projects */,
 				4C8BE8521BAD457700F6E3F7 /* Resources */,
-				4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */,
-				4C5B55F11C98CCD6005C19D9 /* MADDesignerUnitTests */,
 				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -4839,6 +4831,22 @@
 				4C3A969B189F7D10007AF476 /* libMySqlClient */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		4CFC60B61E55B0AB00EC577E /* Projects */ = {
+			isa = PBXGroup;
+			children = (
+				4C401EE81BAE61F700BAE5FC /* MADDesigner */,
+				4C4020F71BAE98C300BAE5FC /* MADViewer */,
+				4C401F111BAE703200BAE5FC /* MADQuery */,
+				4C8DE2881BAFB23400AD1111 /* MADExplorer */,
+				4C401FA11BAE8AD500BAE5FC /* MADBarcodes */,
+				4C8F99A81ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
+				4C8F99BD1ACA97C8006D3996 /* MAD Designer WatchKit App */,
+				4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */,
+				4C5B55F11C98CCD6005C19D9 /* MADDesignerUnitTests */,
+			);
+			name = Projects;
 			sourceTree = "<group>";
 		};
 		4CFEE7F41BB773D800AFAA0A /* AddGroup */ = {

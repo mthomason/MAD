@@ -1686,7 +1686,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     self.barButtonItemDuplicate.enabled = NO;
     self.barButtonItemAction.enabled = NO;
 
-    self.collectionView.allowsSelection = NO;
+    //self.collectionView.allowsSelection = NO;
     self.collectionView.allowsMultipleSelection = NO;
     
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
