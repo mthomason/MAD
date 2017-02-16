@@ -759,6 +759,8 @@
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* MADStringEncryption.m */; };
+		4CAEE7241E55CBB4009A6096 /* MADExplorerNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */; };
+		4CAEE7281E55D26E009A6096 /* MADFieldSelectorNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7271E55D26E009A6096 /* MADFieldSelectorNavigationItem.m */; };
 		4CB074D41E22006700643F32 /* MADExplorerToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D31E22006700643F32 /* MADExplorerToolbar.m */; };
 		4CB074D71E22010900643F32 /* MADExplorerNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D61E22010900643F32 /* MADExplorerNavigationBar.m */; };
 		4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
@@ -1983,6 +1985,10 @@
 		4CA9D7991E13820200ED9D78 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D79B1E13820800ED9D78 /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D79D1E13820E00ED9D78 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CAEE7221E55CBB4009A6096 /* MADExplorerNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerNavigationItem.h; sourceTree = "<group>"; };
+		4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExplorerNavigationItem.m; sourceTree = "<group>"; };
+		4CAEE7261E55D26E009A6096 /* MADFieldSelectorNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFieldSelectorNavigationItem.h; sourceTree = "<group>"; };
+		4CAEE7271E55D26E009A6096 /* MADFieldSelectorNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFieldSelectorNavigationItem.m; sourceTree = "<group>"; };
 		4CB074D21E22006700643F32 /* MADExplorerToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerToolbar.h; path = MADStack/MADDesigner/UI/Explorer/MADExplorerToolbar.h; sourceTree = "<group>"; };
 		4CB074D31E22006700643F32 /* MADExplorerToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADExplorerToolbar.m; path = MADStack/MADDesigner/UI/Explorer/MADExplorerToolbar.m; sourceTree = "<group>"; };
 		4CB074D51E22010900643F32 /* MADExplorerNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerNavigationBar.h; path = MADStack/MADDesigner/UI/Explorer/MADExplorerNavigationBar.h; sourceTree = "<group>"; };
@@ -4111,6 +4117,17 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		4CAEE7251E55D11F009A6096 /* Navigation Items */ = {
+			isa = PBXGroup;
+			children = (
+				4CAEE7221E55CBB4009A6096 /* MADExplorerNavigationItem.h */,
+				4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */,
+				4CAEE7261E55D26E009A6096 /* MADFieldSelectorNavigationItem.h */,
+				4CAEE7271E55D26E009A6096 /* MADFieldSelectorNavigationItem.m */,
+			);
+			name = "Navigation Items";
+			sourceTree = "<group>";
+		};
 		4CB56E581AC683CC00756775 /* atomic */ = {
 			isa = PBXGroup;
 			children = (
@@ -4254,6 +4271,7 @@
 		4CB8EDFF1E19F4AB00193295 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				4CAEE7251E55D11F009A6096 /* Navigation Items */,
 				4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */,
 				4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */,
 				4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */,
@@ -6183,6 +6201,7 @@
 				4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */,
 				4C26B9531BAF0D4300456DC8 /* MADTableViewControllerCoreDataResults.m in Sources */,
 				4C26B9C41BAF123A00456DC8 /* MADNavigationControllerFontPicker.m in Sources */,
+				4CAEE7241E55CBB4009A6096 /* MADExplorerNavigationItem.m in Sources */,
 				4C26BA5D1BAF99F000456DC8 /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C401EE21BAE5E9000BAE5FC /* MADTableViewCellReceiptCharterMember.m in Sources */,
 				4C26BA621BAF99F000456DC8 /* MTTableController.m in Sources */,
@@ -6287,6 +6306,7 @@
 				4CD90DBB1CE6B76600B56B90 /* rwpng.c in Sources */,
 				4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */,
 				4C8DE2771BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m in Sources */,
+				4CAEE7281E55D26E009A6096 /* MADFieldSelectorNavigationItem.m in Sources */,
 				4C5B56011C98DD76005C19D9 /* MADPromptOperationCredentials.m in Sources */,
 				4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */,
 				4C26B9C21BAF123A00456DC8 /* MADExplorerSectionHeaderView.m in Sources */,

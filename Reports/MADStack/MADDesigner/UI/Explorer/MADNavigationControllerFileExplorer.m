@@ -99,17 +99,13 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
+/*- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if (self.isBeingDismissed) {
         NSArray *viewControllers = [[NSArray alloc] init];
         [self setViewControllers:viewControllers animated:animated];
     }
-}
+}*/
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if (action == @selector(done:)) {
@@ -175,12 +171,12 @@
         switch (operation) {
             case UINavigationControllerOperationPush:
                 animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
-                                                                                          pushing:YES];
+                                                                                      pushing:YES];
                 break;
 
             case UINavigationControllerOperationPop:
                 animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
-                                                                                          pushing:NO];
+                                                                                      pushing:NO];
                 break;
 
             case UINavigationControllerOperationNone:

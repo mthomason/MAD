@@ -36,7 +36,6 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
     if (self = [super initWithFrame:frame]) {
         
         id labelTitle;

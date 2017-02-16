@@ -173,19 +173,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     self.tableView.isAccessibilityElement = NO;
 }
 
-- (UINavigationItem *)navigationItem {
-    UINavigationItem *navigationItem = [super navigationItem];
-    if (navigationItem == nil) {
-        NSString *title;
-        title = NSLocalizedString(@"Select Field",
-                                  @"Title of form that allows you to choose "
-                                  @"the name of a database field.");
-    
-        navigationItem = [[MADNavigationItemTitleView alloc] initWithTitle: title];
-    }
-    return navigationItem;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated]; 
 	

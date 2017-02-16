@@ -536,22 +536,25 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
+    //NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
 
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
 
     _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     
-    MADLabelTitle *titleView;
-    titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-    
-    MADAppDelegate delegate = [MADApplication AppDelegate];
-    titleView.text = [delegate name].copy;
-    titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
-    titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-    self.navigationItem.titleView = titleView;
-    self.navigationItem.hidesBackButton = YES;
+    NSLog(@"%@", self.navigationItem.titleView);
+    /*if (self.navigationItem.titleView == nil) {
+        MADLabelTitle *titleView;
+        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+        
+        MADAppDelegate delegate = [MADApplication AppDelegate];
+        titleView.text = [delegate name].copy;
+        titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
+        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+        self.navigationItem.titleView = titleView;
+    }*/
+    //self.navigationItem.hidesBackButton = YES;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
@@ -1686,7 +1689,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     self.barButtonItemDuplicate.enabled = NO;
     self.barButtonItemAction.enabled = NO;
 
-    //self.collectionView.allowsSelection = NO;
     self.collectionView.allowsMultipleSelection = NO;
     
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];

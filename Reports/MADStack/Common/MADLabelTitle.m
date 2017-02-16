@@ -20,7 +20,8 @@
         self.numberOfLines = 1;
         self.minimumScaleFactor = 0.8f;
         self.adjustsFontSizeToFitWidth = YES;
-        [self setContentCompressionResistancePriority:900 forAxis:UILayoutConstraintAxisHorizontal];
+        [self setContentCompressionResistancePriority: 900
+                                              forAxis: UILayoutConstraintAxisHorizontal];
     }
     return self;
 }

@@ -132,10 +132,12 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.credentialQueue = credentialQueue;
     
     
-    NSString *prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
+    NSString *prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
+                                         MADConnectionViewControllerDefaultPrompt);
     self.navigationItem.prompt = prompt;
     
-    NSString *title = NSLocalizedString(MADConnectionViewControllerDefaultTitle, MADConnectionViewControllerDefaultTitle);
+    NSString *title = NSLocalizedString(MADConnectionViewControllerDefaultTitle,
+                                        MADConnectionViewControllerDefaultTitle);
     self.title = title;
     
     self.clearsSelectionOnViewWillAppear = YES;

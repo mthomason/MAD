@@ -13,7 +13,7 @@
 
 @implementation MADExplorerNavigationBar
 
-+ (void)initialize {
+/*+ (void)initialize {
     if (self == [MADExplorerNavigationBar class]) {
         @autoreleasepool {
             
@@ -36,6 +36,6 @@
             [navigationBar setTitleTextAttributes:titleTextAttributes];
         }
     }
-}
+}*/
 
 @end

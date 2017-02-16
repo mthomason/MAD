@@ -45,13 +45,6 @@
     }
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-
-    
-}
-
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
 }
