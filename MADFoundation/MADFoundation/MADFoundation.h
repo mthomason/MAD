@@ -28,3 +28,4 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADFilename.h>
+#import <MADFoundation/MADDataTableType.h>

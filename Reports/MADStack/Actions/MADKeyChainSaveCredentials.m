@@ -7,10 +7,11 @@
 //
 
 #import "MADKeyChainSaveCredentials.h"
-#import <MAD/MADCredential.h>
-#import <MAD/MTKeyChain.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MADCredential.h>
+#import <MAD/MADCredentialSourceType.h>
 #import "MADKeyChainGetCredentials.h"
 
 static NSString * const MADTitleSaveCredentials        = @"Save Credentials";

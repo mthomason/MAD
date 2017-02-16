@@ -12,6 +12,7 @@
 #import <UIKit/UIActivityItemProvider.h>
 
 @protocol MADActivityItemProviderDelegate;
+
 @class MADocument;
 
 @interface MADActivityItemProviderPdf : UIActivityItemProvider

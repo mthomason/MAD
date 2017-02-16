@@ -19,6 +19,10 @@
 		4C1CFF0C1D053174009DBA4F /* MADElementStylizedText.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1CFF0A1D053174009DBA4F /* MADElementStylizedText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1CFF0D1D053174009DBA4F /* MADElementStylizedText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CFF0B1D053174009DBA4F /* MADElementStylizedText.m */; };
 		4C1CFF101D0531A4009DBA4F /* MADocumentObjectAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1CFF0E1D0531A4009DBA4F /* MADocumentObjectAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1E54E81E56631300E3FAF0 /* MADCredentialSourceType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E71E56631300E3FAF0 /* MADCredentialSourceType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1E54EA1E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E91E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1E54EC1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1E54EE1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C235CD71D1F81E900D3D77C /* MADReportSectionsEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C235CD51D1F81E900D3D77C /* MADReportSectionsEnumerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C235CD81D1F81E900D3D77C /* MADReportSectionsEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C235CD61D1F81E900D3D77C /* MADReportSectionsEnumerator.m */; };
 		4C235CDC1D1F825C00D3D77C /* MADReportSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C235CDA1D1F825C00D3D77C /* MADReportSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -568,6 +572,10 @@
 		4C1CFF0B1D053174009DBA4F /* MADElementStylizedText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADElementStylizedText.m; path = MAD/MADocument/MADElementStylizedText.m; sourceTree = "<group>"; };
 		4C1CFF0E1D0531A4009DBA4F /* MADocumentObjectAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocumentObjectAttributes.h; path = MAD/MADocument/MADocumentObjectAttributes.h; sourceTree = "<group>"; };
 		4C1CFF0F1D0531A4009DBA4F /* MADocumentObjectAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocumentObjectAttributes.m; path = MAD/MADocument/MADocumentObjectAttributes.m; sourceTree = "<group>"; };
+		4C1E54E71E56631300E3FAF0 /* MADCredentialSourceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCredentialSourceType.h; path = MAD/MADCredentialSourceType.h; sourceTree = "<group>"; };
+		4C1E54E91E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsUsernameProtocol.h; sourceTree = "<group>"; };
+		4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsPasswordProtocol.h; sourceTree = "<group>"; };
+		4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsCredentialsProtocol.h; sourceTree = "<group>"; };
 		4C235CD51D1F81E900D3D77C /* MADReportSectionsEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportSectionsEnumerator.h; path = MAD/MADocument/ReportSections/MADReportSectionsEnumerator.h; sourceTree = "<group>"; };
 		4C235CD61D1F81E900D3D77C /* MADReportSectionsEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportSectionsEnumerator.m; path = MAD/MADocument/ReportSections/MADReportSectionsEnumerator.m; sourceTree = "<group>"; };
 		4C235CDA1D1F825C00D3D77C /* MADReportSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportSection.h; path = MAD/MADocument/ReportSections/ReportSection/MADReportSection.h; sourceTree = "<group>"; };
@@ -1092,7 +1100,7 @@
 		4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSQLJoinType.h; sourceTree = "<group>"; };
 		4CF781441BADE5EA0050A67D /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781471BADE5EA0050A67D /* MAD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
-		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MAD/Info.plist; sourceTree = "<group>"; };
 		4CF7814E1BADE5EA0050A67D /* MADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781531BADE5EA0050A67D /* MADTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTests.m; sourceTree = "<group>"; };
 		4CF781551BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1207,6 +1215,14 @@
 				4C3080E01D053EB800A7D597 /* MADFontDescriptor.m */,
 			);
 			name = MADDocumentObject;
+			sourceTree = "<group>";
+		};
+		4C1E54E61E56610D00E3FAF0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4CF781491BADE5EA0050A67D /* Info.plist */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		4C235CD41D1F81A600D3D77C /* ReportSections */ = {
@@ -1561,66 +1577,6 @@
 			name = "Document Section";
 			sourceTree = "<group>";
 		};
-		4C95C84F1BADE77100459CB0 /* MAD */ = {
-			isa = PBXGroup;
-			children = (
-				4CE319501E4D971500EB5B85 /* Protocols */,
-				4CE3194F1E4D971000EB5B85 /* Types */,
-				4CC283121BADE85000775B72 /* MADPrintPageRenderer.h */,
-				4CC283131BADE85000775B72 /* MADPrintPageRenderer.m */,
-				4CC281F21BADE80500775B72 /* MADConstants.h */,
-				4CC281F31BADE80500775B72 /* MADConstants.m */,
-				4CC2820D1BADE81A00775B72 /* MADAlignment.h */,
-				4C17AE291E4343F80056A0EA /* MADAlignment.m */,
-				4CC1C6FC1CFDED57006F1546 /* MADAppLaunchContext.h */,
-				4CC1C6FD1CFDED57006F1546 /* MADAppLaunchContext.m */,
-				4CC282381BADE81A00775B72 /* MTKeyChain.h */,
-				4CC282391BADE81A00775B72 /* MTKeyChain.m */,
-				4CA0C6C91CA56CAD00222B8D /* MADProgress.h */,
-				4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */,
-				4C4F125D1D0A0F130002294E /* MADQueryActiveQueryGroups */,
-				4C4754381CF35C3800BC9E02 /* c */,
-				4CA0C6D11CA79E7000222B8D /* Font Helper */,
-				4CA0C6C41CA564C000222B8D /* Notifications */,
-				4C401E5D1BAE4F2F00BAE5FC /* Categories */,
-				4C401E4C1BAE4E8200BAE5FC /* MADDataTable */,
-				4CD85D041E444D28005DA2AF /* Model */,
-				4C401E431BAE4D7800BAE5FC /* MADocument */,
-				4C401E081BAE3D7800BAE5FC /* MADDatabase */,
-				4C401DF91BAE3C5900BAE5FC /* MADReportFormatter */,
-				4C401D701BAE3BC100BAE5FC /* MADQuery */,
-				4C401CD71BAE3AD600BAE5FC /* MADPaper */,
-				4CC283C91BADE90600775B72 /* rptq */,
-				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
-				4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */,
-				4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */,
-				4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */,
-				4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */,
-				4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */,
-				4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */,
-				4CC282061BADE81A00775B72 /* MADSectionLayoutManager.m */,
-				4CC282081BADE81A00775B72 /* MADActivityIndicator.h */,
-				4CC282091BADE81A00775B72 /* MADActivityIndicator.m */,
-				4CC2820A1BADE81A00775B72 /* MADActivityItemProviderPdf.h */,
-				4CC2820B1BADE81A00775B72 /* MADActivityItemProviderPdf.m */,
-				4CC282341BADE81A00775B72 /* MADErrorContainer.h */,
-				4CC282351BADE81A00775B72 /* MADErrorContainer.m */,
-				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
-				4CC281F11BADE80500775B72 /* MADArrayCaching.m */,
-				4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */,
-				4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */,
-				4C39D0221C9284F800C70B10 /* MADCredential.h */,
-				4C39D0231C9284F800C70B10 /* MADCredential.m */,
-				4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */,
-				4C47543A1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.m */,
-				4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */,
-				4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */,
-				4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */,
-				4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */,
-			);
-			name = MAD;
-			sourceTree = "<group>";
-		};
 		4C994F1F1BDD96E40058627A /* MADReportTextRepresentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1803,24 +1759,8 @@
 		4CC284D31BADEC7400775B72 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4CC284D51BADEC8600775B72 /* Libraries */,
-				4CC284D41BADEC7F00775B72 /* Frameworks */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		4CC284D41BADEC7F00775B72 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4CC284D51BADEC8600775B72 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Libraries;
 			sourceTree = "<group>";
 		};
 		4CCB845C1D882556001F9F29 /* Frameworks */ = {
@@ -1891,10 +1831,11 @@
 		4CE3194F1E4D971000EB5B85 /* Types */ = {
 			isa = PBXGroup;
 			children = (
-				4CE319511E4DAD5F00EB5B85 /* MADPaperType.h */,
+				4C1E54E71E56631300E3FAF0 /* MADCredentialSourceType.h */,
 				4C08C3EA1E2980A900489D88 /* MADDatabaseType.h */,
-				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
+				4CE319511E4DAD5F00EB5B85 /* MADPaperType.h */,
 				4CBBA9511CFEB9DE0033F63B /* MADPredicateOperator.h */,
+				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -1909,6 +1850,9 @@
 				4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */,
 				4C3622BE1CF35017002B8649 /* MADDocumentTextRepresentationProtocol.h */,
 				4CF46DD11CF2F90B00D93406 /* MADDatabaseProtocol.h */,
+				4C1E54E91E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h */,
+				4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */,
+				4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -2007,6 +1951,7 @@
 		4CF7813A1BADE5EA0050A67D = {
 			isa = PBXGroup;
 			children = (
+				4C1E54E61E56610D00E3FAF0 /* Resources */,
 				4CF781461BADE5EA0050A67D /* MAD */,
 				4CF781521BADE5EA0050A67D /* MADTests */,
 				4CF781451BADE5EA0050A67D /* Products */,
@@ -2027,8 +1972,59 @@
 			isa = PBXGroup;
 			children = (
 				4CF781471BADE5EA0050A67D /* MAD.h */,
-				4CF781491BADE5EA0050A67D /* Info.plist */,
-				4C95C84F1BADE77100459CB0 /* MAD */,
+				4CE319501E4D971500EB5B85 /* Protocols */,
+				4CE3194F1E4D971000EB5B85 /* Types */,
+				4CC283121BADE85000775B72 /* MADPrintPageRenderer.h */,
+				4CC283131BADE85000775B72 /* MADPrintPageRenderer.m */,
+				4CC281F21BADE80500775B72 /* MADConstants.h */,
+				4CC281F31BADE80500775B72 /* MADConstants.m */,
+				4CC2820D1BADE81A00775B72 /* MADAlignment.h */,
+				4C17AE291E4343F80056A0EA /* MADAlignment.m */,
+				4CC1C6FC1CFDED57006F1546 /* MADAppLaunchContext.h */,
+				4CC1C6FD1CFDED57006F1546 /* MADAppLaunchContext.m */,
+				4CC282381BADE81A00775B72 /* MTKeyChain.h */,
+				4CC282391BADE81A00775B72 /* MTKeyChain.m */,
+				4CA0C6C91CA56CAD00222B8D /* MADProgress.h */,
+				4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */,
+				4C4F125D1D0A0F130002294E /* MADQueryActiveQueryGroups */,
+				4C4754381CF35C3800BC9E02 /* c */,
+				4CA0C6D11CA79E7000222B8D /* Font Helper */,
+				4CA0C6C41CA564C000222B8D /* Notifications */,
+				4C401E5D1BAE4F2F00BAE5FC /* Categories */,
+				4C401E4C1BAE4E8200BAE5FC /* MADDataTable */,
+				4CD85D041E444D28005DA2AF /* Model */,
+				4C401E431BAE4D7800BAE5FC /* MADocument */,
+				4C401E081BAE3D7800BAE5FC /* MADDatabase */,
+				4C401DF91BAE3C5900BAE5FC /* MADReportFormatter */,
+				4C401D701BAE3BC100BAE5FC /* MADQuery */,
+				4C401CD71BAE3AD600BAE5FC /* MADPaper */,
+				4CC283C91BADE90600775B72 /* rptq */,
+				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
+				4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */,
+				4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */,
+				4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */,
+				4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */,
+				4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */,
+				4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */,
+				4CC282061BADE81A00775B72 /* MADSectionLayoutManager.m */,
+				4CC282081BADE81A00775B72 /* MADActivityIndicator.h */,
+				4CC282091BADE81A00775B72 /* MADActivityIndicator.m */,
+				4CC2820A1BADE81A00775B72 /* MADActivityItemProviderPdf.h */,
+				4CC2820B1BADE81A00775B72 /* MADActivityItemProviderPdf.m */,
+				4CC282341BADE81A00775B72 /* MADErrorContainer.h */,
+				4CC282351BADE81A00775B72 /* MADErrorContainer.m */,
+				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
+				4CC281F11BADE80500775B72 /* MADArrayCaching.m */,
+				4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */,
+				4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */,
+				4C39D0221C9284F800C70B10 /* MADCredential.h */,
+				4C39D0231C9284F800C70B10 /* MADCredential.m */,
+				4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */,
+				4C47543A1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.m */,
+				4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */,
+				4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */,
+				4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */,
+				4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */,
 				4CC284D31BADEC7400775B72 /* Resources */,
 			);
 			path = MAD;
@@ -2071,6 +2067,7 @@
 				4C401E011BAE3CAD00BAE5FC /* MADReportFormatter.h in Headers */,
 				4C401DB51BAE3BD500BAE5FC /* MTQuery.h in Headers */,
 				4C401E391BAE3DCB00BAE5FC /* MTDatabaseSqlServer.h in Headers */,
+				4C1E54EC1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h in Headers */,
 				4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */,
 				4CC283B71BADE8C400775B72 /* MADPrintPageRenderer.h in Headers */,
 				4C1CFF031D050E21009DBA4F /* MADDocumentObject.h in Headers */,
@@ -2117,6 +2114,7 @@
 				4CC284891BADE9C900775B72 /* RptqDocumentSection+Extras.h in Headers */,
 				4C4F12561D091D4D0002294E /* UIManagedDocument+Extras.h in Headers */,
 				4CC2849B1BADE9EC00775B72 /* RptqQuerySort+Extras.h in Headers */,
+				4C1E54E81E56631300E3FAF0 /* MADCredentialSourceType.h in Headers */,
 				4CC284741BADE99F00775B72 /* RptqDocumentElement+Extras.h in Headers */,
 				4CC284721BADE99C00775B72 /* RptqDocument+Extras.h in Headers */,
 				4C47544B1CF3665300BC9E02 /* MADAggregateFunctionType.h in Headers */,
@@ -2126,6 +2124,7 @@
 				4CD85D0E1E444DB5005DA2AF /* MADModelTable.h in Headers */,
 				4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */,
 				4CC284A11BADE9F800775B72 /* RptqDatabaseCredentals+Extras.h in Headers */,
+				4C1E54EE1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h in Headers */,
 				4CF46DD21CF2F98100D93406 /* MADDatabaseProtocol.h in Headers */,
 				4CA0C6C71CA56AC000222B8D /* MADNotificationProgress.h in Headers */,
 				4CEFDD061CF5AC7C0092C148 /* MADQueryCacheIndexDropParameters.h in Headers */,
@@ -2175,6 +2174,7 @@
 				4C47543B1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h in Headers */,
 				4C401E2B1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.h in Headers */,
 				4CC284971BADE9E400775B72 /* RptqQueryLinks+Extras.h in Headers */,
+				4C1E54EA1E5664E700E3FAF0 /* MADOperationHoldsUsernameProtocol.h in Headers */,
 				4C994F281BDD96E40058627A /* MADReportPageRepresentation.h in Headers */,
 				4CC2848B1BADE9CC00775B72 /* RptqDocumentSectionRows+Extras.h in Headers */,
 				4C401D2A1BAE3AF800BAE5FC /* MTPaperA2.h in Headers */,

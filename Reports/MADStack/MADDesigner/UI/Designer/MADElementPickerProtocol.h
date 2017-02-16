@@ -9,5 +9,22 @@
 #ifndef MADElementPickerProtocol_h
 #define MADElementPickerProtocol_h
 
+#import <MAD/MADAggregateFunctionType.h>
+#import <MAD/MADAggregateFunctionInputType.h>
+#import <MAD/MADAggregateFunctionGroupByType.h>
+#import "MADViewControllerStandardProtocol.h"
+
+@protocol MADElementPickerProtocol
+    <MADViewControllerStandardProtocol>
+
+    - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
+    - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
+    - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
+                                                   inputType:(MTAggregateFunctionInputType)inputType
+                                                 inputObject:(NSManagedObjectID *)inputObject
+                                                   groupType:(MTAggregateGroupByType)groupType
+                                                 groupNumber:(NSNumber *)groupNumber;
+
+@end
 
 #endif /* MADElementPickerProtocol_h */

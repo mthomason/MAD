@@ -9,5 +9,11 @@
 #ifndef MADOperationHoldsCredentialsProtocol_h
 #define MADOperationHoldsCredentialsProtocol_h
 
+@protocol MADOperationHoldsCredentialsProtocol <NSObject>
+
+    - (MADCredential *)credentials;
+    - (BOOL)gotCredentials;
+
+@end
 
 #endif /* MADOperationHoldsCredentialsProtocol_h */

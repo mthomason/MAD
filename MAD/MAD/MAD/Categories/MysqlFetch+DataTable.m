@@ -22,11 +22,14 @@
 #import <string.h>
 
 #import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADDataTableType.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlFetchField.h>
 #import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MysqlException.h>
+
+#import <MADMySQL/MADMySQLFetchProtocol.h>
 
 #ifndef __OBJC_GC__
 #define BLOB_DEFAULT_SIZE 10000
@@ -200,7 +203,7 @@
     int fetchResults;
     NSUInteger rowCounter = 0;
     
-    id <MysqlFetchDelegate> delegate = self.delegate;
+    id <MADMySQLFetchProtocol> delegate = self.delegate;
     
     while ((fetchResults = [MysqlFetch fetchStatement:statement]) != MYSQL_NO_DATA) {
         

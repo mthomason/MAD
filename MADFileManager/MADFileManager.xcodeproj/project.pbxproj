@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1E54E51E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E41E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h */; };
 		4C21E3FB1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C21E3FA1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h */; };
 		4C4144181CCDF68A0050BAF6 /* MADFileCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4144171CCDF68A0050BAF6 /* MADFileCoordinator.m */; };
 		4C41DA801BA22C5700FF63EC /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C41DA6B1BA22C5700FF63EC /* MADMetaData.m */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C1E54E41E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDirectoryMonitorProtocol.h; path = MADFileManager/MADDirectoryMonitorProtocol.h; sourceTree = "<group>"; };
 		4C21E3FA1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileCoordinatorDelegate.h; path = MADFileManager/MADFileCoordinatorDelegate.h; sourceTree = "<group>"; };
 		4C4144171CCDF68A0050BAF6 /* MADFileCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileCoordinator.m; path = MADFileManager/MADFileCoordinator.m; sourceTree = "<group>"; };
 		4C41DA6B1BA22C5700FF63EC /* MADMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMetaData.m; path = MADFileManager/MADMetaData.m; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				4CC909051D0FD291007A1C75 /* FileCoordinator */,
 				4CC1C6FB1CFDE920006F1546 /* Categories */,
 				4CE1CA451CF87323001BD2D5 /* Notes */,
+				4C1E54E41E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h */,
 				4C41DA731BA22C5700FF63EC /* MADDirectoryMonitor.h */,
 				4C41DA741BA22C5700FF63EC /* MADDirectoryMonitor.m */,
 				4C41DA6C1BA22C5700FF63EC /* MADMetaData.h */,
@@ -271,6 +274,7 @@
 				4C41DA8D1BA22C5700FF63EC /* MADCloudFileCoordinator.h in Headers */,
 				4C4754531CF4160F00BC9E02 /* MADFileCoordinatorProtocol.h in Headers */,
 				4C41DA8B1BA22C5700FF63EC /* MADLocalFileCoordinator.h in Headers */,
+				4C1E54E51E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h in Headers */,
 				4C41DA811BA22C5700FF63EC /* MADMetaData.h in Headers */,
 				4C41DA841BA22C5700FF63EC /* MADFilesController.h in Headers */,
 				4CE1CA4B1CFAF74A001BD2D5 /* MADCloudManager.h in Headers */,

@@ -18,6 +18,8 @@
 
 #import <CoreData/NSManagedObjectID.h>
 
+#import <MADFoundation/MADDataTableType.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import <MAD/MTKeyChain.h>

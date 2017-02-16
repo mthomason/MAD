@@ -11,6 +11,7 @@
 
 #import "MADOperation.h"
 #import <MAD/MADCredential.h>
+#import <MAD/MADCredentialSourceType.h>
 
 @class MADCredential, UIViewController;
 

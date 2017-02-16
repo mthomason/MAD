@@ -9,6 +9,9 @@
 #import "MADDataTable.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+
+#import <MADFoundation/MADDataTableType.h>
+
 #import "MADDataTableVirtual.h"
 #import "MADDataTableFast.h"
 

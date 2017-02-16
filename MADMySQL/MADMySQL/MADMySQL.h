@@ -19,4 +19,4 @@ FOUNDATION_EXPORT const unsigned char MADMySQLVersionString[];
 #import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MysqlCommitException.h>
 #import <MADMySQL/MysqlException.h>
-//#import <MADMySQL/client_plugin.h>
+#import <MADMySQL/MADMySQLFetchProtocol.h>

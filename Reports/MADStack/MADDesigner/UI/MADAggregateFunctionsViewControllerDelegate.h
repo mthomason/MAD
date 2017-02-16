@@ -9,6 +9,8 @@
 #ifndef MAD_MADAggregateFunctionsViewControllerDelegate_h
 #define MAD_MADAggregateFunctionsViewControllerDelegate_h
 
+#import <MAD/MADAggregateFunctionType.h>
+
 @protocol MADAggregateFunctionsViewControllerDelegate
     - (void)didSelectFunction:(MTAggregateFunctionType)functionType;
 @end

@@ -10,30 +10,14 @@
 #define Reports_MADDesignerElementPIckerViewController_h
 
 #import "MADCollectionViewController.h"
-#import "MADViewControllerStandardProtocol.h"
 
-#import <MAD/MADAggregateFunctionType.h>
-#import <MAD/MADAggregateFunctionInputType.h>
-#import <MAD/MADAggregateFunctionGroupByType.h>
+@protocol MADElementPickerProtocol;
 
 @class MADocument, NSManagedObjectID, RptqQueryField;
 
-@protocol MADDesignerElementPickerDelegate
-    <MADViewControllerStandardProtocol>
-
-    - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
-    - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
-    - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
-                                                   inputType:(MTAggregateFunctionInputType)inputType
-                                                 inputObject:(NSManagedObjectID *)inputObject
-                                                   groupType:(MTAggregateGroupByType)groupType
-                                                 groupNumber:(NSNumber *)groupNumber;
-
-@end
-
 @interface MADDesignerElementPickerViewController : MADCollectionViewController
 
-    @property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
+    @property (nonatomic, weak) id <MADElementPickerProtocol> objectSelectorDelegate;
     @property (nonatomic, weak) MADocument *document;
 
 @end

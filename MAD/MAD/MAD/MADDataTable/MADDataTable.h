@@ -10,11 +10,7 @@
 #define MAD_MADDataTable_Factory_h
 
 #import <MAD/MADDataTablePlist.h>
-
-typedef NS_ENUM(short, MADDataTableType) {
-    MADDataTableTypeVirtual,
-    MADDataTableTypePhysical,
-};
+#import <MADFoundation/MADDataTableType.h>
 
 @interface MADDataTable : MADDataTablePlist
 

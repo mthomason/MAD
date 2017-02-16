@@ -16,6 +16,7 @@
 		4C0CCAD21DA6275300B5A190 /* client_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9B61DA6255900B5A190 /* client_plugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9FB1DA6255A00B5A190 /* typelib.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C0CCAD41DA6276700B5A190 /* my_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9951DA6255900B5A190 /* my_alloc.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4C1E54DF1E5636BF00E3FAF0 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54DE1E5636B500E3FAF0 /* MADMySQLFetchProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C33DF141DA58207005A73CD /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187C1DA14B8C0093B166 /* libcrypto.a */; };
 		4C54AFA91D8C4BD200FE8B73 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -254,10 +255,11 @@
 		4C0CC9FC1DA6255A00B5A190 /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
 		4C0CC9FD1DA6255A00B5A190 /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
 		4C0CC9FF1DA6255A00B5A190 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
+		4C1E54DE1E5636B500E3FAF0 /* MADMySQLFetchProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQLFetchProtocol.h; sourceTree = "<group>"; };
 		4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C7014941BACDC6800301713 /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMySQL.h; path = MADMySQL/MADMySQL.h; sourceTree = "<group>"; };
-		4C7014991BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
+		4C7014991BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADMySQL/Info.plist; sourceTree = "<group>"; };
 		4C70149E1BACDC6800301713 /* MADMySQLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADMySQLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014A31BACDC6800301713 /* MADMySQLTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLTests.m; sourceTree = "<group>"; };
 		4C7014A51BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -663,8 +665,8 @@
 		4C70148A1BACDC6800301713 = {
 			isa = PBXGroup;
 			children = (
-				4C7014971BACDC6800301713 /* MADMySQL.h */,
-				4C7014961BACDC6800301713 /* MADMySQL */,
+				4CAEE7341E563659009A6096 /* Resources */,
+				4C7014961BACDC6800301713 /* Source */,
 				4C7014A21BACDC6800301713 /* MADMySQLTests */,
 				4C7014951BACDC6800301713 /* Products */,
 				4C54AFA51D8C4B3900FE8B73 /* Frameworks */,
@@ -680,27 +682,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4C7014961BACDC6800301713 /* MADMySQL */ = {
+		4C7014961BACDC6800301713 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4C7015A71BACDCB700301713 /* MADMySQL */,
-				4C7014991BACDC6800301713 /* Info.plist */,
-			);
-			path = MADMySQL;
-			sourceTree = "<group>";
-		};
-		4C7014A21BACDC6800301713 /* MADMySQLTests */ = {
-			isa = PBXGroup;
-			children = (
-				4C7014A31BACDC6800301713 /* MADMySQLTests.m */,
-				4C7014A51BACDC6800301713 /* Info.plist */,
-			);
-			path = MADMySQLTests;
-			sourceTree = "<group>";
-		};
-		4C7015A71BACDCB700301713 /* MADMySQL */ = {
-			isa = PBXGroup;
-			children = (
+				4C7014971BACDC6800301713 /* MADMySQL.h */,
+				4C1E54DE1E5636B500E3FAF0 /* MADMySQLFetchProtocol.h */,
 				4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */,
 				4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */,
 				4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */,
@@ -732,7 +718,17 @@
 				4C9373DB1BAD2A8300D6BD62 /* MysqlRollbackException.h */,
 				4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */,
 			);
-			name = MADMySQL;
+			name = Source;
+			path = MADMySQL;
+			sourceTree = "<group>";
+		};
+		4C7014A21BACDC6800301713 /* MADMySQLTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C7014A31BACDC6800301713 /* MADMySQLTests.m */,
+				4C7014A51BACDC6800301713 /* Info.plist */,
+			);
+			path = MADMySQLTests;
 			sourceTree = "<group>";
 		};
 		4C865F431DA5276B0057678C /* mysqlclient */ = {
@@ -743,6 +739,14 @@
 				4CCE18781DA14B830093B166 /* libclientlib.a */,
 			);
 			name = mysqlclient;
+			sourceTree = "<group>";
+		};
+		4CAEE7341E563659009A6096 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C7014991BACDC6800301713 /* Info.plist */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -760,6 +764,7 @@
 				4C9372F91BAD244800D6BD62 /* MADDataTypeMySQL.h in Headers */,
 				4C9373EC1BAD2A8300D6BD62 /* MysqlFetchField.h in Headers */,
 				4C9373EA1BAD2A8300D6BD62 /* MysqlFetch.h in Headers */,
+				4C1E54DF1E5636BF00E3FAF0 /* MADMySQLFetchProtocol.h in Headers */,
 				4C0CCACF1DA6272100B5A190 /* mysql_com.h in Headers */,
 				4C0CCAD01DA6273100B5A190 /* mysql_time.h in Headers */,
 				4C0CCAD11DA6274000B5A190 /* my_list.h in Headers */,

@@ -119,6 +119,8 @@
 
 #import "MTViewControllerBarcode.h"
 
+#import "MADElementPickerProtocol.h"
+
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
     MTToolboxTypeSection = 3,
@@ -190,7 +192,7 @@ static const inline CGSize sizePopoverFonts() {
         MTViewControllerAggregateDelegate,
         MADCellElementDelegate,
         MADDesignerSectionLayoutLiquidDelegate,
-        MADDesignerElementPickerDelegate,
+        MADElementPickerProtocol,
         MADViewControllerStandardProtocol,
         MADDesignerSectionLayoutDelegate,
         MTQueryBuilderChooseFieldDelegate,
@@ -2315,7 +2317,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 #pragma mark -
-#pragma mark MADDesignerElementPickerDelegate
+#pragma mark MADElementPickerProtocol
 
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field {
     [self setDisplayActive];

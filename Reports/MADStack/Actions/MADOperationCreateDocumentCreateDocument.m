@@ -12,6 +12,8 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
+#import <MAD/MADOperationHoldsCredentialsProtocol.h>
+
 #import "MADOperationUniqueUrlForFilename.h"
 
 @interface MADOperationCreateDocumentCreateDocument ()

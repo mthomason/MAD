@@ -24,6 +24,8 @@
 
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
+#import "MADElementPickerProtocol.h"
+
 #import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
@@ -460,7 +462,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark - Accessibility
 
 - (BOOL)accessibilityPerformEscape {
-    id <MADDesignerElementPickerDelegate> objectSelectorDelegate = self.objectSelectorDelegate;
+    id <MADElementPickerProtocol> objectSelectorDelegate = self.objectSelectorDelegate;
     [objectSelectorDelegate viewControllerDidFinish: self];
     return objectSelectorDelegate != nil;
 }

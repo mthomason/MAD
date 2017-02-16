@@ -21,9 +21,10 @@
 
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
+#import "MADDirectoryMonitorProtocol.h"
 
 @interface MADLocalFileCoordinator ()
-            <MADDirectoryMonitorDelegate>
+            <MADDirectoryMonitorProtocol>
 
     @property (nonatomic, copy)     NSArray *currentLocalContents;
     @property (nonatomic, copy)     NSPredicate *predicate;
@@ -214,7 +215,7 @@
 
 }
 
-#pragma mark - MADDirectoryMonitorDelegate
+#pragma mark - MADDirectoryMonitorProtocol
 
 - (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor {
     [self processChangeToLocalDocumentsDirectory];

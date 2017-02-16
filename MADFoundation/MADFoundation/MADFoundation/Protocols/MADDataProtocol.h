@@ -12,10 +12,8 @@
 @class MTDatabase;
 
 @protocol MADDataProtocol <NSObject>
-
     - (NSArray *)sortDescriptors;
     - (MTDatabase *)database;
-
 @end
 
 #endif

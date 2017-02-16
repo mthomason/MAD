@@ -13,6 +13,7 @@
 #import <MAD/MTQuery.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
+#import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSURL.h>
 #import <CoreData/NSManagedObjectContext.h>

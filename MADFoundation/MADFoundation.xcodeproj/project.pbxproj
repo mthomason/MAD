@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1E54E31E5639B900E3FAF0 /* MADDataTableType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E21E5639B900E3FAF0 /* MADDataTableType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C8278B71DB73D4B005313F5 /* MADLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8278B61DB73D4B005313F5 /* MADLog.m */; };
 		4C8278B91DB74E1D005313F5 /* MADLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278B81DB73D61005313F5 /* MADLog.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C1E54E21E5639B900E3FAF0 /* MADDataTableType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataTableType.h; sourceTree = "<group>"; };
 		4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAssert.h; sourceTree = "<group>"; };
 		4C8278B61DB73D4B005313F5 /* MADLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLog.m; sourceTree = "<group>"; };
 		4C8278B81DB73D61005313F5 /* MADLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADLog.h; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		4C9372B81BACFDB200D6BD62 /* MADFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				4C1E54E21E5639B900E3FAF0 /* MADDataTableType.h */,
 				4CDA62D01D08021A00E95859 /* MADConstantsDocumentExtentions.h */,
 				4CDA62D11D08021A00E95859 /* MADConstantsDocumentExtentions.m */,
 				4CDA62D51D08032B00E95859 /* MADFilename.h */,
@@ -231,6 +234,7 @@
 				4CF09A451BB25EDF007BCF7A /* MADAppDelegate.h in Headers */,
 				4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */,
 				4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */,
+				4C1E54E31E5639B900E3FAF0 /* MADDataTableType.h in Headers */,
 				4C9372CF1BACFF0F00D6BD62 /* MADDataColumn.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

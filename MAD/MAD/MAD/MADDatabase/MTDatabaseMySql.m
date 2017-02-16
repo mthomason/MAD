@@ -21,6 +21,7 @@
 #import <MADMySQL/MysqlFetch.h>
 #import <MADMySQL/MysqlFetchField.h>
 #import <MADMySQL/MADDataTypeMySQL.h>
+#import <MADMySQL/MADMySQLFetchProtocol.h>
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
@@ -50,7 +51,7 @@
 #import "MADDatabaseField.h"
 
 @interface MTDatabaseMySql ()
-    <MysqlFetchDelegate>
+    <MADMySQLFetchProtocol>
 
     @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
 

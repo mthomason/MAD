@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDataTableType_h
-#define MADDataTableType_h
+#ifndef MADFoundation_MADDataTableType_h
+#define MADFoundation_MADDataTableType_h
 
 typedef NS_ENUM(short, MADDataTableType) {
     MADDataTableTypeVirtual,

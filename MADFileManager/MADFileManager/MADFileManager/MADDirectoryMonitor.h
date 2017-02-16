@@ -11,18 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADDirectoryMonitor;
-
-/// A protocol that allows delegates of \c AAPLDirectoryMonitor to respond to changes in a directory.
-@protocol MADDirectoryMonitorDelegate <NSObject>
-
-    - (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor;
-
-@end
+@protocol MADDirectoryMonitorProtocol;
 
 @interface MADDirectoryMonitor : NSObject
 
-    @property (nonatomic, weak) id<MADDirectoryMonitorDelegate> delegate;
+    @property (nonatomic, weak) id <MADDirectoryMonitorProtocol> delegate;
 
     - (instancetype)initWithURL:(NSURL *)URL;
 

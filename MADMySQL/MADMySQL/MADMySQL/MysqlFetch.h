@@ -12,17 +12,13 @@
 #import <Foundation/NSObject.h>
 #import "mysql.h"
 
-@class MysqlConnection, MTQuery, MADDataTable;
+@protocol MADMySQLFetchProtocol;
 
-@protocol MysqlFetchDelegate
-@optional
-    - (MADDataTable *)dataTableForQuery:(MTQuery *)query;
-    - (void)didFetchRow:(NSUInteger)row;
-@end
+@class MysqlConnection, MTQuery, MADDataTable;
 
 @interface MysqlFetch : NSObject
 
-    @property(nonatomic, weak) id <MysqlFetchDelegate> delegate;
+    @property(nonatomic, weak) id <MADMySQLFetchProtocol> delegate;
 
     @property(nonatomic, strong, readwrite) NSArray *fieldNames;
     @property(nonatomic, strong, readwrite) NSArray *fields;

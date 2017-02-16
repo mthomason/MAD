@@ -9,5 +9,11 @@
 #ifndef MADOperationHoldsUsernameProtocol_h
 #define MADOperationHoldsUsernameProtocol_h
 
+@protocol MADOperationHoldsUsernameProtocol <NSObject>
+
+    @property (nonatomic, readonly, copy) NSString *username;
+    @property (nonatomic, readonly, assign) BOOL gotUsername;
+
+@end
 
 #endif /* MADOperationHoldsUsernameProtocol_h */

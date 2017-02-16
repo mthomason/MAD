@@ -11,6 +11,8 @@
 
 #import "MADOperation.h"
 #import <MAD/MADCredential.h>
+#import <MAD/MADCredentialSourceType.h>
+#import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import "MADOperationConditionDisplayedAlert.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import "MADKeyChainOperationPut.h"

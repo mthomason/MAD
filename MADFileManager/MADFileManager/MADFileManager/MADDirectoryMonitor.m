@@ -7,10 +7,13 @@
 //
 
 #import "MADDirectoryMonitor.h"
-#import <Foundation/NSURL.h>
-#import <dispatch/dispatch.h>
 #import <sys/unistd.h>
 #import <sys/fcntl.h>
+#import <dispatch/dispatch.h>
+
+#import <Foundation/NSURL.h>
+
+#import "MADDirectoryMonitorProtocol.h"
 
 const char * MADQueueFileSystemWatcher = "com.everydayapps.mad.filesystem.watcher";
 static const int NotListening = -1;
@@ -114,7 +117,7 @@ static const int NotListening = -1;
     id uppercaseClassname = [classname uppercaseString];
     [debug appendFormat:@"--%@--\n", uppercaseClassname];
     [debug appendFormat:@"\tDirectory to monitor: %@\n", url];
-    [debug appendFormat:@"\File descriptor: %d\n", _fileDescriptor];
+    [debug appendFormat:@"\tFile descriptor: %d\n", _fileDescriptor];
     return debug;
 }
 

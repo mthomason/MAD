@@ -11,6 +11,7 @@
 
 #import "MADGroupOperation.h"
 #import <MAD/MADCredential.h>
+#import <MAD/MADOperationHoldsCredentialsProtocol.h>
 
 @class UIViewController, MADDatabaseConnection, MADCredential;
 

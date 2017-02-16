@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADCredentialSourceType_h
-#define MADCredentialSourceType_h
+#ifndef MAD_MADCredentialSourceType_h
+#define MAD_MADCredentialSourceType_h
 
+typedef NS_ENUM(short, MADCredentialSource) {
+    MADCredentialSourceUnknown,
+    MADCredentialSourceNone,
+    MADCredentialSourceKeychain,
+    MADCredentialSourceCredentialPrompt,
+    MADCredentialSourcePasswordPrompt,
+};
 
 #endif /* MADCredentialSourceType_h */

@@ -21,6 +21,8 @@
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/NSStringDrawing.h>
 
+#import <MADFoundation/MADDataTableType.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>

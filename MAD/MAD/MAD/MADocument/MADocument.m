@@ -32,6 +32,7 @@
 
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADDataTableType.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 

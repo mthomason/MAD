@@ -11,6 +11,7 @@
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
 #import <MAD/MADCredential.h>
+#import <MAD/MADCredentialSourceType.h>
 #import <MADCocoaExtensions/MADTextField.h>
 #import "MADKeyChainOperationGet.h"
 #import "MADPromptOperationCredentials.h"

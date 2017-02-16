@@ -6,8 +6,8 @@
 //  Copyright © 2016 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADActivityItemProviderDelegate_h
-#define MADActivityItemProviderDelegate_h
+#ifndef MAD_MADActivityItemProviderDelegate_h
+#define MAD_MADActivityItemProviderDelegate_h
 
 @protocol MADActivityItemProviderDelegate <NSObject>
     - (void)showPrintDialog;
