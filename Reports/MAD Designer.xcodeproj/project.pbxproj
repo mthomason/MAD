@@ -692,7 +692,6 @@
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
-		4C6F34F91E4086AF00F4744F /* MADPointTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34F81E4086AF00F4744F /* MADPointTransformer.m */; };
 		4C6F34FD1E408D9D00F4744F /* MADElementMigrationPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
@@ -1864,8 +1863,6 @@
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		4C6F34F71E4086AF00F4744F /* MADPointTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPointTransformer.h; sourceTree = "<group>"; };
-		4C6F34F81E4086AF00F4744F /* MADPointTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPointTransformer.m; sourceTree = "<group>"; };
 		4C6F34FB1E408D9D00F4744F /* MADElementMigrationPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementMigrationPolicy.h; sourceTree = "<group>"; };
 		4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementMigrationPolicy.m; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageToolbarDatabase.png; path = Reports/UIImageToolbarDatabase.png; sourceTree = "<group>"; };
@@ -3936,8 +3933,6 @@
 		4C6F34F61E40867F00F4744F /* Transformers */ = {
 			isa = PBXGroup;
 			children = (
-				4C6F34F71E4086AF00F4744F /* MADPointTransformer.h */,
-				4C6F34F81E4086AF00F4744F /* MADPointTransformer.m */,
 				4CFC60B31E559C0700EC577E /* MADImageTransformer.h */,
 				4CFC60B41E559C0700EC577E /* MADImageTransformer.m */,
 			);
@@ -6141,7 +6136,6 @@
 				4C26B9CB1BAF123A00456DC8 /* MADNavigationControllerToolbox.m in Sources */,
 				4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */,
 				4C3DCBCD1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m in Sources */,
-				4C6F34F91E4086AF00F4744F /* MADPointTransformer.m in Sources */,
 				4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */,
 				4C5B560A1C998B1D005C19D9 /* MADOperationDatabaseTestConnection.m in Sources */,
 				4CA1AAAE1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m in Sources */,
