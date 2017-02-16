@@ -10,30 +10,7 @@
 #define MAD_MTAlignment_h
 
 #import <Foundation/NSObject.h>
-
-typedef NS_ENUM(int16_t, MADVerticalAlignment) {
-    MADVerticalAlignmentUnknown = -1,
-    MADVerticalAlignmentTop = 0,
-    MADVerticalAlignmentCenter = 1,
-    MADVerticalAlignmentBottom = 2
-
-};
-
-typedef NS_ENUM(int16_t, MADHorizontalAlignment) {
-    MADHorizontalAlignmentUnknown = -1,
-    MADHorizontalAlignmentLeft = 0,
-    MADHorizontalAlignmentCenter = 1,
-    MADHorizontalAlignmentRight = 2,
-    MADHorizontalAlignmentJustified = 3,
-    MADHorizontalAlignmentNatrual = 4,
-    
-};
-
-struct MADAlignment_t {
-    MADHorizontalAlignment horizontal;
-    MADVerticalAlignment vertical;
-};
-typedef struct MADAlignment_t MADAlignment_t;
+#import <MAD/MADAlignment_t.h>
 
 @interface MADAlignment : NSObject
     <NSCoding>
