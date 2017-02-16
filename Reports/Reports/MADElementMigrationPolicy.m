@@ -24,7 +24,7 @@
 }
 
 - (MADAlignment *)migrateValueFromAlignmentHorizontal:(NSNumber *)horizontal
-                                        vertical:(NSNumber *)vertical {
+                                             vertical:(NSNumber *)vertical {
     int16_t h, v;
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)horizontal, kCFNumberSInt16Type, &h);
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)vertical, kCFNumberSInt16Type, &v);
@@ -34,7 +34,7 @@
 }
 
 - (UIColor *)migrateColorFromData:(NSData *)colorData {
-    return [NSKeyedUnarchiver unarchiveObjectWithData:colorData];
+    return colorData != nil ? [NSKeyedUnarchiver unarchiveObjectWithData:colorData] : nil;
 }
 
 - (MADMargin *)migrateValueFromMarginLeft:(NSNumber *)left
