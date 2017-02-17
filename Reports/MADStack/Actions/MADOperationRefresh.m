@@ -29,10 +29,6 @@ static const short errCache = 2;
 
 @implementation MADOperationRefresh
 
-- (void)dealloc {
-
-}
-
 - (instancetype)initWithDocument:(MADocument *)document {
     if (self = [super init]) {
         _document = document;

@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTViewControllerBarcode_h
 #define Barcodes_MTViewControllerBarcode_h
 
-#import "MADViewController.h"
+#import <UIKit/UIViewController.h>
 #import "MADViewControllerBarcodeOptionsDelegate.h"
 
 #import "MTViewControllerBarcodePreview.h"
@@ -21,7 +21,7 @@
 @class RptqDocumentElementBarcode;
 @class NSManagedObjectID;
 
-@interface MTViewControllerBarcode : MADViewController
+@interface MTViewControllerBarcode : UIViewController
     <MTViewControllerBarcodeOptionsDelegate,
         MADUnwindProtocol>
 

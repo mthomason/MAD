@@ -9,13 +9,13 @@
 #ifndef Reports_MADDesignerElementPIckerViewController_h
 #define Reports_MADDesignerElementPIckerViewController_h
 
-#import "MADCollectionViewController.h"
+#import <UIKit/UICollectionViewController.h>
 
 @protocol MADElementPickerProtocol;
 
-@class MADocument, NSManagedObjectID, RptqQueryField;
+@class MADocument;
 
-@interface MADDesignerElementPickerViewController : MADCollectionViewController
+@interface MADDesignerElementPickerViewController : UICollectionViewController
 
     @property (nonatomic, weak) id <MADElementPickerProtocol> objectSelectorDelegate;
     @property (nonatomic, weak) MADocument *document;
