@@ -19,6 +19,8 @@ typedef NS_ENUM(short, MADNavigationControllerType) {
     MADNavigationControllerTypeElementPicker,
     MADNavigationControllerTypeViewer,
     MADNavigationControllerTypeFileExplorer,
+    MADNavigationControllerTypeDesigner,
+    MADNavigationControllerTypeQuery
 };
 
 @protocol MADNavigationControllerIdentify <NSObject>

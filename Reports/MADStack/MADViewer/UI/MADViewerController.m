@@ -818,7 +818,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         activityIndicator.hidesWhenStopped = NO;
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
         [activityIndicator startAnimating];
-        [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem animated: YES];
+        [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
+                                                           animated: YES];
         
     }];
 }

@@ -167,8 +167,8 @@ static NSString * const TextRedraw = @"Redraw";
 
         buttonSQL.tintColor = whiteColor.copy;
         
-        navigationController.navigationBar.tintColor = whiteColor.copy;
-        navigationController.navigationItem.titleView.tintColor = whiteColor.copy;
+        //navigationController.navigationBar.tintColor = whiteColor.copy;
+        //navigationController.navigationItem.titleView.tintColor = whiteColor.copy;
 
         _setupInitalLayout = YES;
     }
@@ -184,20 +184,24 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    UIView *titleView = self.navigationItem.titleView;
-    [titleView sizeToFit];
+    //UIView *titleView = self.navigationItem.titleView;
+    //[titleView sizeToFit];
+}
+
++ (NSString *)Title {
+    NSString *localizedSuffix = NSLocalizedString(TextTitleQuery, TextTitleQuery);
+    id title = [[NSString alloc] initWithFormat: TextTitleFormat, localizedSuffix];
+    return title;
 }
 
 - (NSString *)title {
     if (_title == nil) {
-        NSString *localizedSuffix = NSLocalizedString(TextTitleQuery, TextTitleQuery);
-        id title = [[NSString alloc] initWithFormat: TextTitleFormat, localizedSuffix];
-        _title = title;
+        _title = [self.class Title];
     }
     return _title;
 }
 
-- (UINavigationItem *)navigationItem {
+/*- (UINavigationItem *)navigationItem {
     UINavigationItem *navigationItem = [super navigationItem];
     if (navigationItem.titleView == nil) {
         
@@ -225,7 +229,7 @@ static NSString * const TextRedraw = @"Redraw";
 
     }
     return navigationItem;
-}
+}*/
 
 - (UINavigationController *)detailNavigationController {
     if (_detailNavigationController == nil) {
@@ -363,7 +367,7 @@ static NSString * const TextRedraw = @"Redraw";
     [self.viewControllerDelegate viewControllerDidFinish:self];
 }
 
-- (IBAction)done:(id)sender {
+/*- (IBAction)done:(id)sender {
     NSError *error = nil;
     MADocument *document = self.document;
     [document.managedObjectContext save:&error];
@@ -371,7 +375,8 @@ static NSString * const TextRedraw = @"Redraw";
         [document.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish:self];
-}
+}*/
+
 - (IBAction)redrawQueryVisualization:(id)sender {
     [self.queryBuilderControllerAdvanced redraw: YES];
 }
@@ -413,7 +418,7 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+/*- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super willTransitionToTraitCollection: newCollection
@@ -428,7 +433,7 @@ static NSString * const TextRedraw = @"Redraw";
         [titleView sizeToFit];
     }];
     
-}
+}*/
 
 #pragma mark - MTTabBarImageProtocol
 

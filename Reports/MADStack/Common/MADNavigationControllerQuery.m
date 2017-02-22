@@ -7,31 +7,60 @@
 //
 
 #import "MADNavigationControllerQuery.h"
+#import "MADQueryBuilderSplitViewController.h"
 
 @interface MADNavigationControllerQuery ()
-
+    @property (nonatomic, strong) MADQueryBuilderSplitViewController *queryController;
 @end
 
 @implementation MADNavigationControllerQuery
 
+@synthesize title = _title;
+@synthesize document = _document;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    id rootViewController = [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController: _document];
+    self.queryController = rootViewController;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (UIViewController *)topViewController {
+    return self.queryController;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    //self.root
+    //if (self.viewControllers.count == 0) {
+    //    self setRoot self.queryController animated:animated];
+    //}
 }
-*/
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.isBeingDismissed) {
+        NSArray *viewControllers = [[NSArray alloc] init];
+        [self setViewControllers:viewControllers animated:animated];
+    }
+}
+
++ (UIImage *)newTabBarImage {
+    return [MADQueryBuilderSplitViewController newTabBarImage];
+}
+
+- (NSString *)title {
+    if (_title == nil) {
+        _title = self.queryController == nil ?
+                    [MADQueryBuilderSplitViewController Title] : self.queryController.title;
+    }
+    return _title;
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (_document != document) {
+        _document = document;
+    }
+}
 
 @end

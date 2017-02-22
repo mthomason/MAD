@@ -8,7 +8,6 @@
 
 #import "MADNavigationControllerViewer.h"
 #import "MADViewerController.h"
-#import <UIKit/UINavigationController.h>
 
 @interface MADNavigationControllerViewer ()
     @property (nonatomic, strong) MADViewerController *viewerController;
@@ -23,7 +22,6 @@
     [super viewDidLoad];
     id rootViewController = [MADViewerController newViewerController: _document];
     self.viewerController = rootViewController;
-    //self.viewerController.viewControllerDelegate = self.viewControllerDelegate;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -31,8 +29,6 @@
     if (self.viewControllers.count == 0) {
         [self pushViewController:self.viewerController animated:animated];
     }
-    [self setNavigationBarHidden:YES animated:NO];
-    [self setToolbarHidden:NO animated:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -50,7 +46,7 @@
 - (NSString *)title {
     if (_title == nil) {
         _title = self.viewerController == nil ?
-                    [MADViewerController Title] : self.viewerController.title.copy;
+                    [MADViewerController Title] : self.viewerController.title;
     }
     return _title;
 }
@@ -60,15 +56,5 @@
         _document = document;
     }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

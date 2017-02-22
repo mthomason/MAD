@@ -13,7 +13,15 @@
 
 @synthesize document = _document;
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        //[self setNavigationBarHidden:NO];
+        
+    }
+    return self;
+}
+
+/*- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
@@ -32,7 +40,7 @@
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         
     }];
-}
+}*/
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;

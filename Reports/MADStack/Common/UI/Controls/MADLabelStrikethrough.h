@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_UILabelStrikethrough_h
-#define Reports_UILabelStrikethrough_h
+#ifndef Reports_MADLabelStrikethrough_h
+#define Reports_MADLabelStrikethrough_h
 
 #import <UIKit/UILabel.h>
 

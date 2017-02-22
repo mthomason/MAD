@@ -13,14 +13,11 @@
 
 @class MTSchemaFieldCell;
 
-@protocol MTSchemaFieldCellDelegate
-@optional
-    - (void)tableViewCell:(MTSchemaFieldCell *)tableViewCell didUpdateAnchorPointLeftTo:(CGPoint)anchorPointLeft andAnchorPointRightTo:(CGPoint)anchorPointRight;
-@end
+@protocol MADSchemaFieldCellProtocol;
 
 @interface MTSchemaFieldCell : UITableViewCell
 
-    @property (nonatomic, weak) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
+    @property (nonatomic, weak) IBOutlet id <MADSchemaFieldCellProtocol> delegate;
     @property (nonatomic, strong) IBOutlet UILabel *detailLabel;
     @property (nonatomic, strong) UIView *parentContainerView;
 

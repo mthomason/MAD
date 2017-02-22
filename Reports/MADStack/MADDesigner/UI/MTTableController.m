@@ -48,8 +48,8 @@
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, strong) MADDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
-    @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
-    @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
+    @property (nonatomic, strong, readwrite) NSArray *fieldKeys;
+    @property (nonatomic, strong, readwrite) NSArray *fieldSizes;
 
 @end
 
@@ -95,10 +95,18 @@
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.alwaysBounceVertical = YES;
     
-    self.navigationItem.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+    //self.navigationItem.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+    [self setAutomaticallyAdjustsScrollViewInsets:YES];
     
     self.toolbarItems = nil;
-    self.navigationController.toolbarHidden = YES;
+    //self.navigationController.toolbarHidden = YES;
+    //self.navigationController embe
+    //self.providesPresentationContextTransitionStyle = NO;
+    //self.definesPresentationContext = NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 + (MADDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
@@ -112,9 +120,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [self.view setNeedsLayout];
-    [self.view layoutIfNeeded];
+    //[self.navigationController setNavigationBarHidden:NO animated:animated];
+    //[self.view setNeedsLayout];
+    //[self.view layoutIfNeeded];
     
     UIActivityIndicatorView *activityIndicator;
     activityIndicator = [[UIActivityIndicatorView alloc]
@@ -200,7 +208,7 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewWillLayoutSubviews {
+/*- (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
     UIViewController *parentViewController = self.navigationController.parentViewController;
@@ -216,16 +224,16 @@
     self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                                                         self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     [self.navigationItem.titleView setNeedsLayout];
-}
+}*/
 
-- (void)viewDidLayoutSubviews {
+/*- (void)viewDidLayoutSubviews {
     self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                                                                  self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     
     self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
                                                         self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
     [super viewDidLayoutSubviews];
-}
+}*/
 
 
 #pragma mark - Helpers
@@ -304,10 +312,12 @@
     return (NSInteger)([self rowCount] * [self columnCount]);
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSUInteger column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
-    NSUInteger row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
+    NSUInteger column, row;
+    column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
+    row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
     
     NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
     

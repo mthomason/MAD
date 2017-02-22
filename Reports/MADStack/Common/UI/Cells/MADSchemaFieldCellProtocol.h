@@ -9,5 +9,11 @@
 #ifndef MADSchemaFieldCellProtocol_h
 #define MADSchemaFieldCellProtocol_h
 
+@protocol MADSchemaFieldCellProtocol
+@optional
+    - (void)tableViewCell:(MTSchemaFieldCell *)tableViewCell
+            didUpdateAnchorPointLeftTo:(CGPoint)anchorPointLeft
+                 andAnchorPointRightTo:(CGPoint)anchorPointRight;
+@end
 
 #endif /* MADSchemaFieldCellProtocol_h */

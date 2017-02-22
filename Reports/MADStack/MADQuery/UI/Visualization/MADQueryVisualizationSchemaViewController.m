@@ -51,11 +51,12 @@
 
 #import "MADQueryVisualizationSchemaView.h"
 #import "MADQueryVisualizationSchemaDelegate.h"
+#import "MADSchemaFieldCellProtocol.h"
 
 @interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource,
         UITableViewDelegate,
-        MTSchemaFieldCellDelegate>
+        MADSchemaFieldCellProtocol>
 
     @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
     @property (nonatomic, weak) IBOutlet UIView *containerView;

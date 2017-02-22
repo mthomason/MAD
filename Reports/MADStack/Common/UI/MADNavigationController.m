@@ -18,8 +18,9 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
-//#import "MADViewerController.h"
 #import "MADNavigationControllerViewer.h"
+#import "MADNavigationControllerDesigner.h"
+#import "MADNavigationControllerQuery.h"
 
 #import "MADTransparentPresentationController.h"
 
@@ -124,6 +125,14 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
             controller = [[MADNavigationControllerViewer alloc] init];
             break;
             
+        case MADNavigationControllerTypeDesigner:
+            controller = [[MADNavigationControllerDesigner alloc] init];
+            break;
+
+        case MADNavigationControllerTypeQuery:
+            controller = [[MADNavigationControllerQuery alloc] init];
+            break;
+
         default:
             break;
             
@@ -150,75 +159,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     return controller;
 }
 
-//- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-//    if (self = [super initWithCoder:aDecoder]) {
-//        __completedFirstLayout = NO;
-//    }
-//    return self;
-//}
-
-//- (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-//}
-
-#pragma mark -
-#pragma mark UIViewController handle storyboard segue
-/*
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    UIViewController *foundViewController;
-    
-    for (UIViewController *childViewController in self.viewControllers) {
-        foundViewController = [childViewController viewControllerForUnwindSegueAction: action
-                                                                   fromViewController: fromViewController
-                                                                           withSender: sender];
-        
-        if (foundViewController) {
-            break;
-        }
-    }
-    
-    if (!foundViewController) {
-        foundViewController = [super viewControllerForUnwindSegueAction: action
-                                                     fromViewController: self
-                                                             withSender: sender];
-    }
-    
-    return [super viewControllerForUnwindSegueAction: action
-                                  fromViewController: self
-                                          withSender: sender];
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}*/
-
-#pragma mark -
-#pragma mark UIViewControllerTransitioningDelegate
-/*
-- (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
-                                                      presentingViewController:(UIViewController *)presenting
-                                                          sourceViewController:(UIViewController *)source {
-    UIPresentationController *result = nil;
-    if (presented == self || presenting == self) {
-        result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented
-                                                                      presentingViewController:presenting];
-    }
-    return result;
-}
-*/
-#pragma mark -
-#pragma mark MADViewControllerDocumentProtocol
-/*
-- (void)setDocument:(MADocument *)document {
-    if (_document != document) {
-        _document = document;
-    }
-}
-*/
-#pragma mark -
+/*#pragma mark -
 #pragma mark IBActions
 
 - (IBAction)done:(id)sender {
@@ -229,6 +170,6 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
                                           waitUntilDone: NO];
         }
     }
-}
+}*/
 
 @end

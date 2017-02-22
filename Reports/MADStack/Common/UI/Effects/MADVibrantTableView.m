@@ -16,7 +16,7 @@
 @implementation MADVibrantTableView
 
 - (void)awakeFromNib {
-  
+    [super awakeFromNib];
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:[MADVibrantTableViewCell blurEffectStyle]];
     UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
     self.backgroundView = visualEffectsView;
@@ -25,7 +25,6 @@
     self.estimatedRowHeight = 44.0000f;
     self.rowHeight = UITableViewAutomaticDimension;
     self.visualEffectsView = visualEffectsView;
-    [super awakeFromNib];
 }
 
 @end

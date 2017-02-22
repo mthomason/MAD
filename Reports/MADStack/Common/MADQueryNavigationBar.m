@@ -7,15 +7,23 @@
 //
 
 #import "MADQueryNavigationBar.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADQueryNavigationBar
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
++ (void)initialize {
+    [super initialize];
+    if (self == [MADQueryNavigationBar self]) {
+        UIColor *c = [MADColorEverydayApps newColorBlue];
+        [[MADQueryNavigationBar appearance] setBarTintColor:c];
+    }
 }
-*/
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        
+    }
+    return self;
+}
 
 @end

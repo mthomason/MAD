@@ -428,8 +428,8 @@ BOOL storeEnabled() {
     [super viewDidDisappear:animated];
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
-    [self.navigationItem setLeftBarButtonItem:nil animated:animated];
-    [self.navigationItem setRightBarButtonItem:nil animated:animated];
+    //[self.navigationItem setLeftBarButtonItem:nil animated:animated];
+    //[self.navigationItem setRightBarButtonItem:nil animated:animated];
 }
 
 - (void)viewWillLayoutSubviews {

@@ -7,31 +7,54 @@
 //
 
 #import "MADNavigationControllerDesigner.h"
+#import "MADDesignerViewController.h"
 
 @interface MADNavigationControllerDesigner ()
-
+    @property (nonatomic, strong) MADDesignerViewController *designerController;
 @end
 
 @implementation MADNavigationControllerDesigner
 
+@synthesize title = _title;
+@synthesize document = _document;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    id rootViewController = [MADDesignerViewController newDesignerViewController: _document];
+    self.designerController = rootViewController;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.viewControllers.count == 0) {
+        [self pushViewController:self.designerController animated:animated];
+    }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (self.isBeingDismissed) {
+        NSArray *viewControllers = [[NSArray alloc] init];
+        [self setViewControllers:viewControllers animated:animated];
+    }
 }
-*/
+
++ (UIImage *)newTabBarImage {
+    return [MADDesignerViewController newTabBarImage];
+}
+
+- (NSString *)title {
+    if (_title == nil) {
+        _title = self.designerController == nil ?
+                    [MADDesignerViewController Title] : self.designerController.title;
+    }
+    return _title;
+}
+
+- (void)setDocument:(MADocument *)document {
+    if (_document != document) {
+        _document = document;
+    }
+}
 
 @end

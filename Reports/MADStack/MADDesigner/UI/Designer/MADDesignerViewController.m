@@ -288,7 +288,7 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (NSString *)MADDesigner {
++ (NSString *)Title {
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
 }
@@ -406,7 +406,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (NSString *)title {
     if (_title == nil) {
-        _title = [MADDesignerViewController MADDesigner];
+        _title = [MADDesignerViewController Title];
     }
     return _title;
 }
@@ -1057,7 +1057,7 @@ static const inline CGSize sizePopoverFonts() {
 
 }
 
-- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+/*- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
               withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
     
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
@@ -1071,7 +1071,7 @@ static const inline CGSize sizePopoverFonts() {
         }];
     }
     
-}
+}*/
 
 #pragma mark -
 #pragma mark Lazy Load
@@ -3572,14 +3572,14 @@ END_deselectElementView:;
 }
 
 - (void)displayPrompt {
-    UITabBarController *tabBarController = self.tabBarController;
+    /*UITabBarController *tabBarController = self.tabBarController;
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         tabBarController.navigationItem.prompt = self.promptManager.prompt.copy;
     } else {
         if (tabBarController.navigationItem.prompt != nil) {
             tabBarController.navigationItem.prompt = nil;
         }
-    }
+    }*/
 }
 
 - (void)displaySectionViewsRemoveBorder {
