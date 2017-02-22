@@ -11,7 +11,7 @@
 
 #import <UIKit/UILabel.h>
 
-@interface UILabelStrikethrough : UILabel
+@interface MADLabelStrikethrough : UILabel
 
 @end
 

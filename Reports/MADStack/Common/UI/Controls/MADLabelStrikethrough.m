@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UILabelStrikethrough.h"
+#import "MADLabelStrikethrough.h"
 #import <UIKit/UIGraphics.h>
 
-@implementation UILabelStrikethrough
+@implementation MADLabelStrikethrough
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect: rect];
