@@ -99,14 +99,6 @@
     }
 }
 
-/*- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (self.isBeingDismissed) {
-        NSArray *viewControllers = [[NSArray alloc] init];
-        [self setViewControllers:viewControllers animated:animated];
-    }
-}*/
-
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if (action == @selector(done:)) {
         return YES;
@@ -124,20 +116,6 @@
 
 - (MADNavigationControllerType)controllerType {
     return MADNavigationControllerTypeFileExplorer;
-}
-
-- (void)transitionFromViewController:(UIViewController *)fromViewController
-                    toViewController:(UIViewController *)toViewController
-                            duration:(NSTimeInterval)duration
-                             options:(UIViewAnimationOptions)options
-                          animations:(void (^)(void))animations
-                          completion:(void (^)(BOOL))completion {
-    [super transitionFromViewController: fromViewController
-                       toViewController: toViewController
-                               duration: duration
-                                options: options
-                             animations: animations
-                             completion: completion];
 }
 
 #pragma mark -

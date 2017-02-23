@@ -36,8 +36,8 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     @property (nonatomic, strong) NSMutableArray <MTVertex *> *vertices;
 
     // MARK: Counters to give edges and verties unique ids.
-    @property (atomic, assign) NSUInteger idUniqueVertices;
-    @property (atomic, assign) NSUInteger idUniqueEdges;
+    @property (nonatomic, assign) NSUInteger idUniqueVertices;
+    @property (nonatomic, assign) NSUInteger idUniqueEdges;
 
 @end
 

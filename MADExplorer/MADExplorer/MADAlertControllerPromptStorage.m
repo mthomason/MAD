@@ -8,17 +8,17 @@
 
 #import "MADAlertControllerPromptStorage.h"
 
-static NSString * const MADTitleButtonLocalOnly        = @"Local Only";
-static NSString * const MADTitleButtonCloud            = @"iCloud";
-static NSString * const MADTitleChooseStorageOptions   = @"Choose Storage Option";
-static NSString * const MADMessageChooseStorageOptions = @"Do you want to store documents "
-                                                         @"in iCloud or "
-                                                            @"only on this device?";
 @implementation MADAlertControllerPromptStorage
 
 + (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
                                           cloud:(void (^)())handlerCloud {
 
+    NSString *MADTitleButtonLocalOnly        = @"Local Only";
+    NSString *MADTitleButtonCloud            = @"iCloud";
+    NSString *MADTitleChooseStorageOptions   = @"Choose Storage Option";
+    NSString *MADMessageChooseStorageOptions = @"Do you want to store documents "
+                                                    @"in iCloud or "
+                                                    @"only on this device?";
     NSString *title, *message, *localOnlyActionTitle, *cloudActionTitle;
     id storageController;
     UIAlertAction *option;

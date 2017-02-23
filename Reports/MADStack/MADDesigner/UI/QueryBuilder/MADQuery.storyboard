@@ -110,7 +110,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PDy-XC-RW7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.086274509803921567" green="0.41568627450980389" blue="0.54117647058823526" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MADIdentifierCellQueryLink" textLabel="5vp-V7-8rO" style="IBUITableViewCellStyleDefault" id="gAK-AZ-G0Z" customClass="MADTableViewCellQueryLink">
@@ -276,13 +276,22 @@
                             </tableViewCell>
                         </prototypes>
                     </tableView>
-                    <toolbarItems/>
+                    <toolbarItems>
+                        <barButtonItem title="SQL" style="plain" id="jdL-dh-Ii3">
+                            <connections>
+                                <segue destination="KDn-h6-IuZ" kind="popover" identifier="MADSegueShowSql" popoverAnchorBarButtonItem="jdL-dh-Ii3" id="0vV-Us-cjg">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="p3l-dB-Y3B" customClass="MADQueryNavigationItem">
                         <connections>
                             <outlet property="delegate" destination="joU-Nk-1nv" id="hpF-Sz-0JW"/>
                         </connections>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <segue destination="3Ei-e1-2no" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="Uhe-9u-Pew"/>
                         <segue destination="LGY-eA-01A" kind="modal" identifier="showAddPredicateViewController" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="W0j-ir-xSF"/>
@@ -331,18 +340,25 @@
         <!--Navigation Controller Query Builder-->
         <scene sceneID="CAc-4x-SdN">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" id="SDg-oh-2Va" customClass="MADNavigationControllerQueryBuilder" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" toolbarHidden="NO" id="SDg-oh-2Va" customClass="MADNavigationControllerQueryBuilder" sceneMemberID="viewController">
+                    <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Afb-XM-has" customClass="MADQueryNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="DnJ-HZ-4D7">
+                        <rect key="frame" x="0.0" y="980" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="joU-Nk-1nv" kind="relationship" relationship="rootViewController" id="Rw4-fY-uBt"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rXs-qs-jtm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem title="Item" id="OzB-aH-SVz"/>
             </objects>
             <point key="canvasLocation" x="-1400" y="19"/>
         </scene>
@@ -355,9 +371,6 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="EIU-KQ-pJF"/>
                         <barButtonItem title="SQL" id="bhA-2Z-ta5">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <segue destination="KDn-h6-IuZ" kind="modal" identifier="MADSegueShowSql" modalPresentationStyle="formSheet" id="maJ-0z-eyj"/>
-                            </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Query" id="6F6-TI-jLR" customClass="MADQueryNavigationItem">

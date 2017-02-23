@@ -169,9 +169,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     
     //Add a vertex to the graph for each table.
     for (RptqDatabaseSchemaTable *table in hasTables) {
-        @autoreleasepool {
+        //@autoreleasepool {
             [graph addVertexWithObject: table.objectID];
-        }
+        //}
     }
     
     //Create an edge in the graph for each query link.

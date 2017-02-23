@@ -32,8 +32,6 @@ const int8_t MADIndexViewer = 2;
 @interface MADTabBarController ()
     <UITabBarControllerDelegate>
 
-    @property (nonatomic, strong) NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
-
     @property (nonatomic, copy) NSString *promptNavigationItem;
 
     @property (nonatomic, strong) MADQueryBuilderSplitViewController *querySplitViewController;
@@ -88,10 +86,6 @@ const int8_t MADIndexViewer = 2;
         _navigationItemInitialized = NO;
         _lastSelectedIndex = NSNotFound;
         
-        NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
-        tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
-        self.tabBarViewControllers = tabBarViewControllers;
-        
     }
     return self;
 }
@@ -124,17 +118,20 @@ const int8_t MADIndexViewer = 2;
     MADNavigationController *navControllerViewer;
     MADNavigationController *navControllerDesigner;
     
+    NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
+    tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
+    
     splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
     self.querySplitViewController = splitViewController;
-    [self.tabBarViewControllers addObject: splitViewController];
+    [tabBarViewControllers addObject: splitViewController];
     
     navControllerDesigner = [MADNavigationController newNavigationController:MADNavigationControllerTypeDesigner];
     navControllerDesigner.document = document;
-    [self.tabBarViewControllers addObject: navControllerDesigner];
+    [tabBarViewControllers addObject: navControllerDesigner];
     
     navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
     navControllerViewer.document = document;
-    [self.tabBarViewControllers addObject: navControllerViewer];
+    [tabBarViewControllers addObject: navControllerViewer];
 
     id <MADViewControllerStandardProtocol> delegate;
     delegate = self.viewControllerDelegate;
@@ -144,11 +141,7 @@ const int8_t MADIndexViewer = 2;
     self.querySplitViewController.viewControllerDelegate = delegate;
     self.designerViewController.delegate = delegate;
 
-    [self setViewControllers: self.tabBarViewControllers animated: animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+    [self setViewControllers: tabBarViewControllers animated: animated];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -189,15 +182,6 @@ const int8_t MADIndexViewer = 2;
     [self.navigationItem setLeftBarButtonItem:nil animated:animated];
     [self.navigationItem setRightBarButtonItem:nil animated:animated];;
     
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.tabBarViewControllers removeAllObjects];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
 }
 
 - (id <UILayoutSupport>)topLayoutGuide {
