@@ -33,7 +33,7 @@
 + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate {
     NSFetchRequest *fetchRequest;
     
-    NSUInteger expressionDescCount = 10;
+    NSUInteger expressionDescCount = 5;
     NSString *pathIdentifier, *pathHasRightField, *pathHasLeftField, *pathInQueryTable;
     
     NSExpressionDescription *expressionDescription[expressionDescCount];
@@ -46,37 +46,12 @@
     pathHasLeftField = NSStringFromSelector(@selector(hasLeftField));
     pathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
 
-    expressionDescription[0] = [[NSExpressionDescription alloc] init];
-    expressionDescription[0].name = MADKeyQueryLink;
-    expressionDescription[0].expression = [NSExpression expressionForEvaluatedObject];
-    expressionDescription[0].expressionResultType = NSManagedObjectIDResultType;
-
     NSString *pathRTID = [pathHasRightField stringByAppendingString:@"."];
     pathRTID = [pathRTID stringByAppendingString:pathInQueryTable];
 
     NSString *pathLTID = [pathHasLeftField stringByAppendingString:@"."];
     pathLTID = [pathLTID stringByAppendingString:pathInQueryTable];
 
-    expressionDescription[1] = [[NSExpressionDescription alloc] init];
-    expressionDescription[1].name = MADKeyQueryLinkLeftTable;
-    expressionDescription[1].expression = [NSExpression expressionForKeyPath:pathRTID];
-    expressionDescription[1].expressionResultType = NSObjectIDAttributeType;
-    
-    expressionDescription[2] = [[NSExpressionDescription alloc] init];
-    expressionDescription[2].name = MADKeyQueryLinkLeftField;
-    expressionDescription[2].expression = [NSExpression expressionForKeyPath:pathHasLeftField];
-    expressionDescription[2].expressionResultType = NSObjectIDAttributeType;
-    
-    expressionDescription[3] = [[NSExpressionDescription alloc] init];
-    expressionDescription[3].name = MADKeyQueryLinkRightTable;
-    expressionDescription[3].expression = [NSExpression expressionForKeyPath:pathLTID];
-    expressionDescription[3].expressionResultType = NSObjectIDAttributeType;
-    
-    expressionDescription[4] = [[NSExpressionDescription alloc] init];
-    expressionDescription[4].name = MADKeyQueryLinkRightField;
-    expressionDescription[4].expression = [NSExpression expressionForKeyPath:pathHasRightField];
-    expressionDescription[4].expressionResultType = NSObjectIDAttributeType;
-    
     pathIdentifier = NSStringFromSelector(@selector(identifier));
 
     NSString *pathRFID = [pathHasRightField stringByAppendingString:@"."];
@@ -91,30 +66,30 @@
     pathLTID = [pathLTID stringByAppendingString:@"."];
     pathLTID = [pathLTID stringByAppendingString:pathIdentifier];
     
-    expressionDescription[5] = [[NSExpressionDescription alloc] init];
-    expressionDescription[5].name = MADKeyQueryLinkRightFieldID;
-    expressionDescription[5].expression = [NSExpression expressionForKeyPath:pathRFID];
-    expressionDescription[5].expressionResultType = NSInteger64AttributeType;
+    expressionDescription[0] = [[NSExpressionDescription alloc] init];
+    expressionDescription[0].name = MADKeyQueryLinkRightFieldID;
+    expressionDescription[0].expression = [NSExpression expressionForKeyPath:pathRFID];
+    expressionDescription[0].expressionResultType = NSInteger64AttributeType;
     
-    expressionDescription[6] = [[NSExpressionDescription alloc] init];
-    expressionDescription[6].name = MADKeyQueryLinkLeftFieldID;
-    expressionDescription[6].expression = [NSExpression expressionForKeyPath:pathLFID];
-    expressionDescription[6].expressionResultType = NSInteger64AttributeType;
+    expressionDescription[1] = [[NSExpressionDescription alloc] init];
+    expressionDescription[1].name = MADKeyQueryLinkLeftFieldID;
+    expressionDescription[1].expression = [NSExpression expressionForKeyPath:pathLFID];
+    expressionDescription[1].expressionResultType = NSInteger64AttributeType;
 
-    expressionDescription[7] = [[NSExpressionDescription alloc] init];
-    expressionDescription[7].name = MADKeyQueryLinkRightTableID;
-    expressionDescription[7].expression = [NSExpression expressionForKeyPath:pathRTID];
-    expressionDescription[7].expressionResultType = NSInteger64AttributeType;
+    expressionDescription[2] = [[NSExpressionDescription alloc] init];
+    expressionDescription[2].name = MADKeyQueryLinkRightTableID;
+    expressionDescription[2].expression = [NSExpression expressionForKeyPath:pathRTID];
+    expressionDescription[2].expressionResultType = NSInteger64AttributeType;
     
-    expressionDescription[8] = [[NSExpressionDescription alloc] init];
-    expressionDescription[8].name = MADKeyQueryLinkLeftTableID;
-    expressionDescription[8].expression = [NSExpression expressionForKeyPath:pathLTID];
-    expressionDescription[8].expressionResultType = NSInteger64AttributeType;
+    expressionDescription[3] = [[NSExpressionDescription alloc] init];
+    expressionDescription[3].name = MADKeyQueryLinkLeftTableID;
+    expressionDescription[3].expression = [NSExpression expressionForKeyPath:pathLTID];
+    expressionDescription[3].expressionResultType = NSInteger64AttributeType;
 
-    expressionDescription[9] = [[NSExpressionDescription alloc] init];
-    expressionDescription[9].name = MADKeyQueryLinkID;
-    expressionDescription[9].expression = [NSExpression expressionForKeyPath:pathIdentifier];
-    expressionDescription[9].expressionResultType = NSInteger64AttributeType;
+    expressionDescription[4] = [[NSExpressionDescription alloc] init];
+    expressionDescription[4].name = MADKeyQueryLinkID;
+    expressionDescription[4].expression = [NSExpression expressionForKeyPath:pathIdentifier];
+    expressionDescription[4].expressionResultType = NSInteger64AttributeType;
 
     
     NSArray <NSExpressionDescription *> *properties;

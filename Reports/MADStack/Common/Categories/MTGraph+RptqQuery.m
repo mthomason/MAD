@@ -55,7 +55,7 @@
         NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;
         for (MADModelQueryLink *link in queryLinkEnumerator) {
             MTVertex *vertexOrigin =        [self vertexForObject:@(link.leftFieldIdentifier.tableID)];
-            MTVertex *vertexDestination =   [self vertexForObject:@(link.leftFieldIdentifier.tableID)];
+            MTVertex *vertexDestination =   [self vertexForObject:@(link.rightFieldIdentifier.tableID)];
             
             [self addEdgeWithOrigin: vertexOrigin
                         destination: vertexDestination

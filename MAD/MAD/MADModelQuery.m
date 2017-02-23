@@ -297,11 +297,11 @@
     queryLinkIDsFiltered = [results valueForKey:MADKeyQueryLinkID];
     [_queryLinkIDs addObjectsFromArray:queryLinkIDsFiltered];
     
-    NSManagedObjectID *queryLinkID;
+    NSNumber *queryLinkID;
     MADModelQueryLink *queryLink;
     NSPredicate *predicate;
     NSExpression *queryLinkIDValue;
-    NSExpression *queryLinkPathKey = [NSExpression expressionForKeyPath:MADKeyQueryLink];
+    NSExpression *queryLinkPathKey = [NSExpression expressionForKeyPath:MADKeyQueryLinkID];
     
     for (queryLinkID in _queryLinkIDs) {
         
