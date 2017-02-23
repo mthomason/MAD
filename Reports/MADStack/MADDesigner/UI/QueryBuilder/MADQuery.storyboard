@@ -78,7 +78,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="KDn-h6-IuZ" customClass="MADNavigationController" sceneMemberID="viewController">
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="4RG-0Y-I8h">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="4RG-0Y-I8h">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -277,6 +277,7 @@
                         </prototypes>
                     </tableView>
                     <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="wIa-F7-faY"/>
                         <barButtonItem title="SQL" style="plain" id="jdL-dh-Ii3">
                             <connections>
                                 <segue destination="KDn-h6-IuZ" kind="popover" identifier="MADSegueShowSql" popoverAnchorBarButtonItem="jdL-dh-Ii3" id="0vV-Us-cjg">
@@ -399,7 +400,7 @@
                 <navigationController navigationBarHidden="YES" id="ISJ-nv-7OH" customClass="MADNavigationControllerQueryVisualization" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="hqf-37-NTs">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="hqf-37-NTs">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

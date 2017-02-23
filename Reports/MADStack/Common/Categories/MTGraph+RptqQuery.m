@@ -143,7 +143,7 @@
         MTVertex *vertexDestination;
         NSDictionary <NSString *, NSManagedObjectID *> *queryLinkObjectIDS;
         for (queryLinkObjectIDS in fetchQueryLinksResults) {
-            @autoreleasepool {
+            //@autoreleasepool {
                 // T1 is the queryLink objectID
                 //queryLink.inQuery
                 // LT is the left query table objectID
@@ -159,7 +159,7 @@
                             destination: vertexDestination
                                  object: [queryLinkObjectIDS[@"T1"] copy]
                               andWeight: weight.copy];
-            }
+            //}
         }
         vertexOrigin = nil;
         vertexDestination = nil;

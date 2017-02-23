@@ -23,9 +23,8 @@
 @implementation RptqDataHelper
 
 + (int64_t)nextIdentifierForClass:(Class)class
-                managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSString *keyEDIdentifer = @"ID";
     NSString *path = NSStringFromSelector(@selector(identifier));
     NSExpressionDescription *edIdentifier;
     NSFetchRequest *request;
@@ -34,7 +33,7 @@
     NSArray *fetchResults;
     
     edIdentifier = [[NSExpressionDescription alloc] init];
-    edIdentifier.name = keyEDIdentifer;
+    edIdentifier.name = @"ID";
     edIdentifier.expression = [NSExpression expressionForKeyPath:path];
     edIdentifier.expressionResultType = NSInteger64AttributeType;
     
@@ -55,9 +54,11 @@
     NSError * __autoreleasing *error = NULL;
     fetchResults = [managedObjectContext executeFetchRequest:request error:error];
     
-    NSNumber *identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"];
-    int64_t identifier64;
-    CFNumberGetValue((__bridge CFNumberRef)(identifierNumber), kCFNumberSInt64Type, &identifier64);
+    int64_t identifier64 = 0;
+    if (!fetchResults.count) {
+        NSNumber *identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"];
+        CFNumberGetValue((__bridge CFNumberRef)(identifierNumber), kCFNumberSInt64Type, &identifier64);
+    }
     identifier64++;
     return identifier64;
 }

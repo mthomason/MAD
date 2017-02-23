@@ -20,9 +20,9 @@
     - (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                             error:(NSError * __autoreleasing *)error;
 
-    - (NSString *)copySQLOnlyActiveFields:(BOOL)onlyActiveFields
-                     managedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                    error:(NSError **)error;
+    - (NSString *)SQLOnlyActiveFields:(BOOL)onlyActiveFields
+                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                error:(NSError **)error;
 
     @property (nonatomic, assign) NSUInteger limitResults;
 

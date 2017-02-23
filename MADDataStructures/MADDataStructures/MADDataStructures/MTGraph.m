@@ -335,8 +335,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
         }
         
         NSNumber *et = [[NSNumber alloc] initWithShort:edgeType];
-        MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
-        [*listOfEdges add:pairEdge];
+        if (incidentEdge != nil) {
+            MTPair *pairEdge = [MTPair newPairWithFormer:incidentEdge andLatter:et];
+            [*listOfEdges add:pairEdge];
+        }
         
         if (neighborVertex.properties.algorithmColor == MTColorWhite) {
             neighborVertex.dfsProperties.dfsPredecessor = vertex;
@@ -353,8 +355,10 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     vertex.dfsProperties.dfsTimestampFinished = *counter;
     vertex.dfsProperties.dfsFoundCounter = *counter;
     
-    MTPair *pairVertices = [MTPair newPairWithFormer:vertex andLatter:*counter];
-    [*listOfVertices add:pairVertices];
+    if (vertex != nil) {
+        MTPair *pairVertices = [MTPair newPairWithFormer:vertex andLatter:*counter];
+        [*listOfVertices add:pairVertices];
+    }
 }
 
 #pragma mark - MTProtocolLog

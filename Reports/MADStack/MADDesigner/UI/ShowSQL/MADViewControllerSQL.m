@@ -33,7 +33,7 @@
     
     MADocument *doc = self.document;
     NSError *error = nil;
-    NSString *sqlStatement = [doc.mainQuery copySQLOnlyActiveFields: NO
+    NSString *sqlStatement = [doc.mainQuery SQLOnlyActiveFields: NO
                                                managedObjectContext: doc.managedObjectContext
                                                               error: &error];
     
@@ -43,7 +43,7 @@
 
     if (sqlStatement.length > 0) {
 
-        self.textView.text = sqlStatement;
+        self.textView.text = sqlStatement.copy;
 
     } else {
 

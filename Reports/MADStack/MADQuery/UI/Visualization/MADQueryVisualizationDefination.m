@@ -72,7 +72,7 @@
 
                 queryLinkEnumerator = queryID.links.objectEnumerator;
                 for (link in queryLinkEnumerator) {
-                    if ([link.rightFieldReference.tableID isEqual:tableID]) {
+                    if (link.rightFieldIdentifier.tableID == tableID.longLongValue) {
                         topLevel = NO;
                         break;
                     }
@@ -81,13 +81,11 @@
                 if (topLevel) {
                     [startingPoints addObject:tableID];
                 }
-                
             }
         }
         
         self.startingPoints = startingPoints;
         self.directedAcyclicGraph = isDirectedAcyclicGraph;
-        
     }
     return self;
 }

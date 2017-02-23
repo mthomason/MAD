@@ -130,7 +130,8 @@
 }
 
 - (NSArray *)toArray {
-    return _list;
+    NSArray *result = [[NSArray alloc] initWithArray:_list];
+    return result;
 }
 
 @end
