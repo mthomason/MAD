@@ -393,8 +393,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     [super viewDidLoad];
 
 #pragma mark Initialize install operations
-    
-    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
         MADOperationQueue *operationQueueBackground;
         NSOperation *getUserCloudPreferences;
@@ -442,7 +440,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                                                          object: NULL];
         [operationQueueBackground addOperation:getUserCloudPreferences];
         
-    //}];
     
     NSString *hint;
     hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
@@ -535,8 +532,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    //NSString * const MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
-
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
 
@@ -548,20 +543,17 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         [self setToolbarItems:toolbarButtons animated:NO];
     }
 
-    // set delegates
     MADFileExplorerViewDelegate *layoutGroupedDelegate;
     layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
     layoutGroupedDelegate.delegate = self;
 
     self.collectionView.delegate = layoutGroupedDelegate;
     self.fileExplorerViewDelegate = layoutGroupedDelegate;
-    
-    //[self.collectionView.backgroundView setNeedsDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
     _aboutViewControllerOnScreen = NO;
     
     if (self.pendingLaunchContext) {

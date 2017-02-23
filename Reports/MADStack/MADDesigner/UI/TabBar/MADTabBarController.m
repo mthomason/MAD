@@ -36,11 +36,9 @@ const int8_t MADIndexViewer = 2;
 
     @property (nonatomic, copy) NSString *promptNavigationItem;
 
-    //@property (nonatomic, strong) MADDesignerViewController *designerViewController;
     @property (nonatomic, strong) MADQueryBuilderSplitViewController *querySplitViewController;
     @property (nonatomic, strong) MADNavigationController *navControllerViewer;
     @property (nonatomic, strong) MADNavigationController *navControllerDesigner;
-    //@property (nonatomic, strong) MADNavigationController *navControllerQuery;
 
 @end
 
@@ -54,17 +52,10 @@ const int8_t MADIndexViewer = 2;
 + (instancetype)newTabBarController:(MADocument *)document prompt:(NSString *)prompt {
     
     UIStoryboard *storyboard;
-    id bundle, tabBarController;
-
-    bundle = [NSBundle mainBundle];
-    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: bundle];
+    id tabBarController;
+    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner"
+                                           bundle: [NSBundle mainBundle]];
     tabBarController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
-    
-    //if (tabBarController) {
-    //    ((MADTabBarController *) tabBarController).document = document;
-    //    ((MADTabBarController *) tabBarController).promptNavigationItem = prompt ? prompt.copy : @"";
-    //}
-    
     return tabBarController;
 }
 
@@ -105,24 +96,10 @@ const int8_t MADIndexViewer = 2;
     return self;
 }
 
-/*- (UINavigationItem *)navigationItem {
-    UINavigationItem *navigationItem = [super navigationItem];
-    if (!_navigationItemInitialized) {
-        id newPrompt = _promptNavigationItem.copy;
-        navigationItem.prompt = newPrompt;
-        _navigationItemInitialized = YES;
-    }
-    return navigationItem;
-}*/
-
 - (void)setViewControllerDelegate:(id <MADViewControllerStandardProtocol>)delegate {
-
     if (_viewControllerDelegate != delegate) {
-        //_designerViewController.delegate = delegate;
-        //_querySplitViewController.viewControllerDelegate = delegate;
         _viewControllerDelegate = delegate;
     }
-    
 }
 
 - (void)viewDidLoad {
@@ -144,21 +121,12 @@ const int8_t MADIndexViewer = 2;
     MADocument *document = self.document;
     
     MADQueryBuilderSplitViewController *splitViewController;
-    //MADDesignerViewController *designerViewController;
     MADNavigationController *navControllerViewer;
     MADNavigationController *navControllerDesigner;
-    //MADNavigationController *navControllerQuery;
     
     splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
     self.querySplitViewController = splitViewController;
     [self.tabBarViewControllers addObject: splitViewController];
-    //UINavigationController *navigationControllerSplit = [[UINavigationController alloc] initWithRootViewController:_querySplitViewController];
-    //[navigationControllerSplit setToolbarHidden:NO animated:NO];
-
-    //navControllerQuery = [MADNavigationController newNavigationController:MADNavigationControllerTypeQuery];
-    //navControllerQuery.document = document;
-    //[self.tabBarViewControllers addObject: navControllerQuery];
-
     
     navControllerDesigner = [MADNavigationController newNavigationController:MADNavigationControllerTypeDesigner];
     navControllerDesigner.document = document;
@@ -173,35 +141,14 @@ const int8_t MADIndexViewer = 2;
 
     self.navControllerViewer = navControllerViewer;
     navControllerViewer.viewControllerDelegate = delegate;
-    // navControllerViewer
     self.querySplitViewController.viewControllerDelegate = delegate;
     self.designerViewController.delegate = delegate;
 
-    //[self showTitleWithText:splitViewController.title];
     [self setViewControllers: self.tabBarViewControllers animated: animated];
-    //UIBarButtonItem *buttonDismiss;
-    //buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-    //                                                             target: self
-    //                                                             action: @selector(done:)];
-    //[self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
-    
-    /*if (self.viewControllers.count > 0) {
-        UIViewController *vc = self.viewControllers.firstObject;
-        NSString *title = vc.title.copy;
-        [self showTitleWithText: title];
-    }*/
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    //id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: @"Redraw"
-    //                                                               style: UIBarButtonItemStylePlain
-    //                                                              target: self.querySplitViewController
-    //                                                              action: @selector(redrawQueryVisualization:)];
-    //self.barButtonItemRevealQuery = barButtonItemRevealQuery;
-    //[self setToolbarItems:@[barButtonItemRevealQuery] animated:YES];
-    //[self.navigationController setNavigationBarHidden:NO animated:YES];
-    //[self.view setNeedsLayout];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -384,18 +331,8 @@ const int8_t MADIndexViewer = 2;
     }];
 }
 
-//- (void)done:(id)sender {
-//    [self viewControllerDidFinish:sender];
-//}
-
 #pragma mark -
 #pragma mark Helpers
-
-- (void)showTitleWithText:(NSString *)text {
-    //MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-    //titleView.text = text.copy;
-    //self.navigationItem.titleView = titleView;
-}
 
 - (void)disableTabBarItems {
     NSArray *tabBarItems = self.tabBar.items;
