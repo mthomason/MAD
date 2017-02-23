@@ -51,8 +51,8 @@ static NSString * const TextRedraw = @"Redraw";
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
 
-    @property (nonatomic, strong) UIBarButtonItem *barButtonItemRevealQuery;
-    @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
+    //@property (nonatomic, strong) UIBarButtonItem *barButtonItemRevealQuery;
+    //@property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
 
     @property (nonatomic, strong) UIPopoverController *popover;
 
@@ -99,8 +99,8 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 - (void)dealloc {
-    _barButtonItemDone.target = nil;
-    _barButtonItemEdit.target = nil;
+    //_barButtonItemDone.target = nil;
+    //_barButtonItemEdit.target = nil;
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
@@ -130,18 +130,18 @@ static NSString * const TextRedraw = @"Redraw";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    id redraw = NSLocalizedString(TextRedraw, TextRedraw);
+    //id redraw = NSLocalizedString(TextRedraw, TextRedraw);
     
-    id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                         target: self.parentViewController
-                                                                         action: @selector(done:)];
-    self.barButtonItemDone = barButtonItemDone;
+    //id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+    //                                                                     target: self.parentViewController
+    //                                                                     action: @selector(done:)];
+    //self.barButtonItemDone = barButtonItemDone;
     
-    id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
-                                                                   style: UIBarButtonItemStylePlain
-                                                                  target: self
-                                                                  action: @selector(redrawQueryVisualization:)];
-    self.barButtonItemRevealQuery = barButtonItemRevealQuery;
+    //id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
+    //                                                               style: UIBarButtonItemStylePlain
+    //                                                              target: self
+    //                                                              action: @selector(redrawQueryVisualization:)];
+    //self.barButtonItemRevealQuery = barButtonItemRevealQuery;
 
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     
@@ -298,7 +298,7 @@ static NSString * const TextRedraw = @"Redraw";
     
     animate = animated.boolValue;
     
-    barButtonItemRevealQuery = self.barButtonItemRevealQuery;
+    //barButtonItemRevealQuery = self.barButtonItemRevealQuery;
     
     toolbarItemsFull = self.toolbarItems;
     toolbarItemsLimited = toolbarItemsFull.mutableCopy;

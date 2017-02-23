@@ -27,8 +27,18 @@
         self.titleView = titleView;
         self.title = title;
         self.leftItemsSupplementBackButton = YES;
+        
+        UIBarButtonItem *doneButton;
+        doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                   target: nil
+                                                                   action: @selector(done:)];
+        self.leftBarButtonItem = doneButton;
     }
     return self;
+}
+
+- (void)done:(nullable id)sender {
+    @throw NSInternalInconsistencyException;
 }
 
 @end

@@ -2715,11 +2715,11 @@
 				4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */,
 				4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */,
 				4C26BA021BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard */,
-				4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */,
 				4C8DE2821BAFB11800AD1111 /* MADStoryboardDesigner.storyboard */,
 				4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */,
 				4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */,
 				4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */,
+				4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";

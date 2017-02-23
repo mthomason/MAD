@@ -839,16 +839,8 @@ static const inline CGSize sizePopoverFonts() {
     
     [scrollerLayoutConstraints addObject:constraintToScollerBottom];
     
-    //[tabBarController enableTabBarItems];
-    
     [self.scroller addConstraints: scrollerLayoutConstraints];
     [self.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
-    
-    UIBarButtonItem *barButtonItemAdd;
-    barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                     target:self
-                                                                     action:@selector(actionAdd:)];
-    //[tabBarController.navigationItem setRightBarButtonItem:barButtonItemAdd animated:NO];
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;

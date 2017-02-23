@@ -288,10 +288,6 @@ const int8_t MADIndexViewer = 2;
 - (void)tabBarController:(UITabBarController *)tabBarController
  didSelectViewController:(UIViewController *)viewController {
     
-    if (tabBarController.selectedIndex != _lastSelectedIndex) {
-        [self showTitleWithText: viewController.title];
-    }
-    
     _lastSelectedIndex = tabBarController.selectedIndex;
     switch (tabBarController.selectedIndex) {
         case MADIndexQuery:

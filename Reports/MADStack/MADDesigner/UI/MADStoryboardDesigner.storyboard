@@ -34,7 +34,13 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="MAD Designer" id="Uzs-lN-K6Y" customClass="MADDesignerNavigationItem"/>
+                    <navigationItem key="navigationItem" title="MAD Designer" id="Uzs-lN-K6Y" customClass="MADDesignerNavigationItem">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="dBU-hf-B0W">
+                            <connections>
+                                <action selector="actionAdd:" destination="SZT-w9-gB7" id="UFb-dr-txF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -63,7 +69,13 @@
                         </barButtonItem>
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="5Mc-Dk-rgz"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="MAD Viewer" id="vZX-eE-ItD" customClass="MADViewerNavigationItem"/>
+                    <navigationItem key="navigationItem" title="MAD Viewer" id="vZX-eE-ItD" customClass="MADViewerNavigationItem">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="lkL-k0-1e3">
+                            <connections>
+                                <action selector="refresh:" destination="ERc-MK-TMQ" id="Wkd-hh-Lmn"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
