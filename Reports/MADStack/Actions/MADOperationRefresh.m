@@ -7,6 +7,12 @@
 //
 
 #import "MADOperationRefresh.h"
+
+#import <CoreData/NSManagedObjectContext.h>
+
+#import <Foundation/NSError.h>
+#import <Foundation/NSURL.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDataTableFast.h>
@@ -14,12 +20,10 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSURL.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import "MADOperationRefreshInitialize.h"
 #import <MAD/MADCredential.h>
 #import <MAD/MTQueryFull.h>
+
+#import "MADOperationRefreshInitialize.h"
 
 static const short errCache = 2;
 
