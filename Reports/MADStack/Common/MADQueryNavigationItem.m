@@ -8,7 +8,9 @@
 
 #import "MADQueryNavigationItem.h"
 #import <UIKit/UIAccessibility.h>
+#import <UIKit/UIApplication.h>
 #import "MADLabelTitle.h"
+#import "MADQueryNavigationProtocol.h"
 
 @implementation MADQueryNavigationItem
 
@@ -33,8 +35,8 @@
                                                                    target: nil
                                                                    action: @selector(done:)];
         editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                   target: nil
-                                                                   action: @selector(edit:)];
+                                                                   target: self
+                                                                   action: @selector(actionEdit:)];
         self.leftBarButtonItem = doneButton;
         self.rightBarButtonItem = editButton;
     }
@@ -45,8 +47,27 @@
     @throw NSInternalInconsistencyException;
 }
 
-- (void)edit:(nullable id)sender {
-    @throw NSInternalInconsistencyException;
+- (void)actionEdit:(nullable id)sender {
+    UIBarButtonItem *editButton;
+    editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                               target: self
+                                                               action: @selector(actionFinishEdit:)];
+    [self setLeftBarButtonItem: nil animated: YES];
+    [self setRightBarButtonItem: editButton animated: YES];
+    [self.delegate edit:self];
+}
+
+- (void)actionFinishEdit:(nullable id)sender {
+    UIBarButtonItem *editButton, *doneButton;
+    doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                               target: nil
+                                                               action: @selector(done:)];
+    editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                               target: self
+                                                               action: @selector(actionEdit:)];
+    [self setLeftBarButtonItem: doneButton animated: YES];
+    [self setRightBarButtonItem: editButton animated: YES];
+    [self.delegate edit:self];
 }
 
 @end

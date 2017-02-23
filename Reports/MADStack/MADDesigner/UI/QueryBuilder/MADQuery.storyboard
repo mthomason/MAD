@@ -103,7 +103,7 @@
             </objects>
             <point key="canvasLocation" x="-1788" y="2714"/>
         </scene>
-        <!--Query View Controller-->
+        <!--Delegate-->
         <scene sceneID="jeR-GO-JXK">
             <objects>
                 <tableViewController storyboardIdentifier="MADIdentifierStoryboardQueryViewController" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="joU-Nk-1nv" customClass="MADQueryViewController" sceneMemberID="viewController">
@@ -277,7 +277,11 @@
                         </prototypes>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="p3l-dB-Y3B" customClass="MADQueryNavigationItem"/>
+                    <navigationItem key="navigationItem" id="p3l-dB-Y3B" customClass="MADQueryNavigationItem">
+                        <connections>
+                            <outlet property="delegate" destination="joU-Nk-1nv" id="hpF-Sz-0JW"/>
+                        </connections>
+                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <segue destination="3Ei-e1-2no" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="Uhe-9u-Pew"/>

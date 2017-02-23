@@ -11,7 +11,11 @@
 
 #import <UIKit/UINavigationBar.h>
 
+@protocol MADQueryNavigationProtocol;
+
 @interface MADQueryNavigationItem : UINavigationItem
+
+    @property (nonatomic, weak) IBOutlet id <MADQueryNavigationProtocol> delegate;
 
 @end
 

@@ -156,14 +156,12 @@ static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushi
 
     @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
     @property (nonatomic, assign) BOOL beganUpdates;
-    @property (nonatomic, assign) BOOL toolbarIconShown;
-
 
     @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
     @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
 
-    @property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
-    @property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
+    @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
+    @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
 
     @property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
 
@@ -180,7 +178,6 @@ BOOL storeEnabled() {
 
 @synthesize title = _title;
 @synthesize document = _document;
-//@synthesize managedObjectContext = _managedObjectContext;
 
 #pragma mark -
 #pragma mark Static
@@ -252,14 +249,7 @@ BOOL storeEnabled() {
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
-
-    //if (_handleConfigureCell) _handleConfigureCell = NULL;
-    //if (_queryViewDelegate) _queryViewDelegate.delegate = nil;
-    //if (_queryViewDataSource) _queryViewDataSource.datasoruce = nil;
-    if (_barButtonItemEdit) _barButtonItemEdit = nil;
-    if (_barButtonItemDone) _barButtonItemDone = nil;
     [MADQueryViewController deleteCoreDataCache];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -274,20 +264,8 @@ BOOL storeEnabled() {
     self = [super initWithCoder:aDecoder];
     if (!self) return nil;
 
-    _toolbarIconShown = NO;
     _firstTimeViewWillLayoutSubviews = NO;
 
-    UIBarButtonItem *barButtonItemEdit, *barButtonItemDone;
-    barButtonItemEdit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                      target: self
-                                                                      action: @selector(edit:)];
-    self.barButtonItemEdit = barButtonItemEdit;
-    
-    barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                      target: self
-                                                                      action: @selector(edit:)];
-    self.barButtonItemDone = barButtonItemDone;
-    
     MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
     queryViewDelegate.delegate = self;
     self.queryViewDelegate = queryViewDelegate;
@@ -428,8 +406,6 @@ BOOL storeEnabled() {
     [super viewDidDisappear:animated];
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
-    //[self.navigationItem setLeftBarButtonItem:nil animated:animated];
-    //[self.navigationItem setRightBarButtonItem:nil animated:animated];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -649,7 +625,7 @@ BOOL storeEnabled() {
 - (NSString *)title {
     if (_title == nil) {
         NSString *title = NSLocalizedString(ViewControllerTitle, ViewControllerTitle);
-        _title = title.copy;
+        _title = title;
     }
     return _title;
 }

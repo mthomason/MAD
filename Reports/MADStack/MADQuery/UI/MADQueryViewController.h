@@ -13,6 +13,7 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADTabBarItemProtocol.h"
+#import "MADQueryNavigationProtocol.h"
 
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
@@ -21,6 +22,7 @@ extern NSString * const MADSegueShowSql;
 @interface MADQueryViewController : UITableViewController
     <MADViewControllerDocumentProtocol,
         MADTabBarImageProtocol,
+        MADQueryNavigationProtocol,
         UIViewControllerAnimatedTransitioning>
 
     + (instancetype)newQueryViewController:(MADocument *)document;

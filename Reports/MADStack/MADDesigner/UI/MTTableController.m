@@ -98,7 +98,7 @@
     //self.navigationItem.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
     [self setAutomaticallyAdjustsScrollViewInsets:YES];
     
-    self.toolbarItems = nil;
+    //self.toolbarItems = nil;
     //self.navigationController.toolbarHidden = YES;
     //self.navigationController embe
     //self.providesPresentationContextTransitionStyle = NO;
