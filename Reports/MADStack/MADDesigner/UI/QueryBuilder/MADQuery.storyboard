@@ -328,8 +328,9 @@
         <scene sceneID="CAc-4x-SdN">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" id="SDg-oh-2Va" customClass="MADNavigationControllerQueryBuilder" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Afb-XM-has" customClass="MADQueryNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Afb-XM-has" customClass="MADQueryNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -362,6 +363,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemEdit" destination="fJC-AW-SSJ" id="XjC-pN-w14"/>
@@ -377,9 +379,10 @@
         <!--Navigation Controller Query Visualization-->
         <scene sceneID="Pdn-0d-1mA">
             <objects>
-                <navigationController id="ISJ-nv-7OH" customClass="MADNavigationControllerQueryVisualization" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="hqf-37-NTs">
+                <navigationController navigationBarHidden="YES" id="ISJ-nv-7OH" customClass="MADNavigationControllerQueryVisualization" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="hqf-37-NTs">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -422,6 +425,8 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="brD-No-CEu"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="backgroundContainer" destination="RhT-w8-ti6" id="dbo-Zy-6tu"/>
                     </connections>

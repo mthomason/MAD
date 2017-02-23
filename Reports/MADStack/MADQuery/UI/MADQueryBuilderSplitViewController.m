@@ -94,6 +94,10 @@ static NSString * const TextRedraw = @"Redraw";
     return controller;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)dealloc {
     _barButtonItemDone.target = nil;
     _barButtonItemEdit.target = nil;

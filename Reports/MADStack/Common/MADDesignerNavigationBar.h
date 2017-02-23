@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADDesignerNavigationBar_h
+#define Reports_MADDesignerNavigationBar_h
+
+#import <UIKit/UINavigationBar.h>
 
 @interface MADDesignerNavigationBar : UINavigationBar
 
 @end
+
+#endif

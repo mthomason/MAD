@@ -15,4 +15,8 @@
     [self.topItem.titleView sizeToFit];
 }
 
+- (UIBarStyle)barStyle {
+    return UIBarStyleBlack;
+}
+
 @end

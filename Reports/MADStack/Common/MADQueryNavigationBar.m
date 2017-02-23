@@ -19,11 +19,8 @@
     }
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        
-    }
-    return self;
+- (UIBarStyle)barStyle {
+    return UIBarStyleBlack;
 }
 
 @end

@@ -12,7 +12,7 @@
         <!--MAD Designer-->
         <scene sceneID="EBH-Aw-yHb">
             <objects>
-                <viewController restorationIdentifier="MADIdentifierRestorationDesignerViewController" storyboardIdentifier="MADIdentifierStoryboardDesignerViewController" id="SZT-w9-gB7" customClass="MADDesignerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MADIdentifierStoryboardDesignerViewController" id="SZT-w9-gB7" customClass="MADDesignerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Dhv-H6-x7a"/>
                         <viewControllerLayoutGuide type="bottom" id="YL0-yC-lLI"/>

@@ -7,15 +7,20 @@
 //
 
 #import "MADViewerNavigationBar.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADViewerNavigationBar
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
++ (void)initialize {
+    [super initialize];
+    if (self == [MADViewerNavigationBar self]) {
+        UIColor *c = [MADColorEverydayApps newColorBlue];
+        [[MADViewerNavigationBar appearance] setBarTintColor:c];
+    }
 }
-*/
+
+- (UIBarStyle)barStyle {
+    return UIBarStyleBlack;
+}
 
 @end

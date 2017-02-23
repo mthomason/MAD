@@ -22,6 +22,9 @@
 #import "MADNavigationControllerDesigner.h"
 #import "MADNavigationControllerQuery.h"
 
+#import "MADDesignerNavigationBar.h"
+#import "MADViewerNavigationBar.h"
+
 #import "MADTransparentPresentationController.h"
 
 static NSString * const MADStoryboardInformationTable   = @"MADStoryboardInformationTable";
@@ -40,7 +43,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 @interface MADNavigationController ()
     @property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
     @property (readwrite, nonatomic, assign) BOOL _completedFirstLayout;
-    @property (readwrite, nonatomic, assign) UIStatusBarStyle statusBarStyleDefault;
+    //@property (readwrite, nonatomic, assign) UIStatusBarStyle statusBarStyleDefault;
 @end
 
 @implementation MADNavigationController
@@ -122,11 +125,13 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
             break;
             
         case MADNavigationControllerTypeViewer:
-            controller = [[MADNavigationControllerViewer alloc] init];
+            controller = [[MADNavigationControllerViewer alloc] initWithNavigationBarClass: [MADViewerNavigationBar class]
+                                                                              toolbarClass: nil];
             break;
             
         case MADNavigationControllerTypeDesigner:
-            controller = [[MADNavigationControllerDesigner alloc] init];
+            controller = [[MADNavigationControllerDesigner alloc] initWithNavigationBarClass: [MADDesignerNavigationBar class]
+                                                                                toolbarClass: nil];
             break;
 
         case MADNavigationControllerTypeQuery:
@@ -159,7 +164,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     return controller;
 }
 
-/*#pragma mark -
+#pragma mark -
 #pragma mark IBActions
 
 - (IBAction)done:(id)sender {
@@ -170,6 +175,6 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
                                           waitUntilDone: NO];
         }
     }
-}*/
+}
 
 @end

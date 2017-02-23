@@ -68,6 +68,10 @@ const int8_t MADIndexViewer = 2;
     return tabBarController;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (BOOL)canBecomeFirstResponder {
     return YES;
 }
@@ -175,10 +179,10 @@ const int8_t MADIndexViewer = 2;
 
     //[self showTitleWithText:splitViewController.title];
     [self setViewControllers: self.tabBarViewControllers animated: animated];
-    UIBarButtonItem *buttonDismiss;
-    buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                 target: self
-                                                                 action: @selector(done:)];
+    //UIBarButtonItem *buttonDismiss;
+    //buttonDismiss= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+    //                                                             target: self
+    //                                                             action: @selector(done:)];
     //[self.navigationItem setLeftBarButtonItem:buttonDismiss animated:animated];
     
     /*if (self.viewControllers.count > 0) {
