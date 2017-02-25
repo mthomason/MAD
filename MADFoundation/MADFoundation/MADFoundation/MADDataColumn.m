@@ -132,8 +132,7 @@
 
     if (self = [super init]) {
 
-        NSString *identifierW = [[NSString alloc] initWithString:identifier];
-        self.identifier = identifierW;
+        self.identifier = identifier.copy;
         
         NSString *caption = [[NSString alloc] initWithString:identifier];
         self.caption = caption;

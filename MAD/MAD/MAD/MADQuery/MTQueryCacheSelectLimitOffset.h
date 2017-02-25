@@ -11,13 +11,13 @@
 
 #import "MTQuery.h"
 
-@class MADDataColumn;
+@class MADDataColumn, NSSortDescriptor;
 
 @interface MTQueryCacheSelectLimitOffset : MTQuery
 
-    - (instancetype)initWithColumnKeys: (NSArray *)columnKeys
+    - (instancetype)initWithColumnKeys: (NSArray <NSString *> *)columnKeys
                              tableName: (NSString *)tableName
-                       sortDescriptors: (NSArray *)sortDescriptors
+                       sortDescriptors: (NSArray <NSSortDescriptor *> *)sortDescriptors
                                  limit: (NSUInteger)limit
                                 offset: (NSUInteger)offset
                              dropRowID: (BOOL)dropRowID

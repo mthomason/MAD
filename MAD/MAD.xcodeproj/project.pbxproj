@@ -280,6 +280,7 @@
 		4C5314971E2DB4FD001627A7 /* MADPrintPageRendererDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5314951E2DB4FD001627A7 /* MADPrintPageRendererDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5314A31E2E31B6001627A7 /* MADDocumentObjectText.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5314A11E2E31B6001627A7 /* MADDocumentObjectText.h */; };
 		4C5314A41E2E31B6001627A7 /* MADDocumentObjectText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5314A21E2E31B6001627A7 /* MADDocumentObjectText.m */; };
+		4C5478F31E6140B90043682E /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5478F21E6140B90043682E /* MADBarcodes.framework */; };
 		4C57674B1E1CD31F00611F37 /* MADDataTablePlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5767491E1CD31F00611F37 /* MADDataTablePlist.m */; };
 		4C57674C1E1CD31F00611F37 /* MADDataTablePlist.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C57674A1E1CD31F00611F37 /* MADDataTablePlist.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5767531E1CD57D00611F37 /* MysqlFetch+DataTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5767511E1CD57D00611F37 /* MysqlFetch+DataTable.h */; };
@@ -846,6 +847,7 @@
 		4C5314951E2DB4FD001627A7 /* MADPrintPageRendererDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPrintPageRendererDataSource.h; sourceTree = "<group>"; };
 		4C5314A11E2E31B6001627A7 /* MADDocumentObjectText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentObjectText.h; sourceTree = "<group>"; };
 		4C5314A21E2E31B6001627A7 /* MADDocumentObjectText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectText.m; sourceTree = "<group>"; };
+		4C5478F21E6140B90043682E /* MADBarcodes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADBarcodes.framework; path = "../DerivedData/Build/Products/Debug-iphoneos/MADBarcodes.framework"; sourceTree = "<group>"; };
 		4C5767491E1CD31F00611F37 /* MADDataTablePlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataTablePlist.m; path = MAD/MADDataTable/MADDataTablePlist.m; sourceTree = "<group>"; };
 		4C57674A1E1CD31F00611F37 /* MADDataTablePlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataTablePlist.h; path = MAD/MADDataTable/MADDataTablePlist.h; sourceTree = "<group>"; };
 		4C5767511E1CD57D00611F37 /* MysqlFetch+DataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MysqlFetch+DataTable.h"; path = "MAD/Categories/MysqlFetch+DataTable.h"; sourceTree = "<group>"; };
@@ -1129,6 +1131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C5478F31E6140B90043682E /* MADBarcodes.framework in Frameworks */,
 				4CCE18601DA149950093B166 /* libarchive.a in Frameworks */,
 				4CCE18751DA14B400093B166 /* libsybdb.a in Frameworks */,
 				4CCE18761DA14B400093B166 /* libct.a in Frameworks */,
@@ -1776,6 +1779,7 @@
 		4CCB845C1D882556001F9F29 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C5478F21E6140B90043682E /* MADBarcodes.framework */,
 				4CCE18731DA14B400093B166 /* libsybdb.a */,
 				4CCE18741DA14B400093B166 /* libct.a */,
 				4CCE18711DA14B0B0093B166 /* libbz2.a */,

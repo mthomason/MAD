@@ -323,7 +323,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSString *)tableName {
-    char buf[17];
+    char buf[22];
     buf[0] = 't';
     ultoa(self.tag, (buf+1));
     char *ptr = buf;
@@ -332,12 +332,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSString *)columnNameForIdentifier:(NSString *)identifier {
-    char buf[17];
+    char buf[22];
     buf[0] = 'c';
     ultoa(identifier.hash, (buf+1));
     char *ptr = buf;
-    NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-    return tableName;
+    NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    return columnName;
 }
 - (NSString *)queryTableName {
     return [self tableName];
@@ -354,14 +354,20 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (void)addColumn:(MADDataColumn *)column {
 
     BOOL createTable = self.columnKeys.count == 0;
-    NSString *columnName = [self columnNameForIdentifier:column.identifier];
+    char buf[22];
+    buf[0] = 'c';
+    ultoa(column.identifier.hash, (buf+1));
+    char *ptr = buf;
+    NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    //NSString *columnIdentifier = column.identifier.copy;
+    //NSString *columnName = [self columnNameForIdentifier:columnIdentifier];
     
-    self.columns[columnName] = column;
     [self.columnKeys addObject:columnName];
 
     NSString *tableName = [self tableName];
     [self addColumn:column toTable:tableName columnName:columnName createTable:createTable
              unique:NO];
+    self.columns[columnName] = column;
 }
 
 - (void)setupGroupKeyIndexes {
@@ -584,7 +590,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSString *)cacheTableNameForGroupLevel:(NSUInteger)groupLevel {
-    char buf[17];
+    char buf[22];
     buf[0] = 's';
     ultoa(groupLevel, (buf+1));
     char *ptr = buf;
@@ -593,7 +599,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSString *)indexNameForGroupLevel:(NSUInteger)groupLevel andIndex:(NSUInteger)index {
-    char buf[17];
+    char buf[22];
     buf[0] = 'i';
     ultoa(groupLevel, (buf+1));
     ultoa(index, (buf+1));
@@ -727,7 +733,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                    andOffset:offset];
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId andColumnIdentifier:(NSString *)columnIdentifier {
+- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
+                 andColumnIdentifier:(NSString *)columnIdentifier {
     NSString *columnName = [self columnNameForIdentifier:columnIdentifier];
     NSArray *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
     NSAssert([self.columnKeys containsObject:columnName], @"Searching for a field that doesn't exist");
@@ -986,7 +993,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                      dropRowID:NO
                                                                        columns:nil];
     NSURL *urlFastCache = self.urlFastCache;
-    MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
     objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                 columns: self.columns
                                                                              columnKeys: self.columnKeys
@@ -994,7 +1002,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return objectEnumerator;
 }
 
-- (MTQuery *)queryForAllRowsWithKeys:(NSArray *)columnKeys {
+- (MTQuery *)queryForAllRowsWithKeys:(NSArray <NSString *> *)columnKeys {
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
                                                                      tableName:[self tableName]
                                                                sortDescriptors:self.sortDescriptors
@@ -1073,8 +1081,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                   columns:nil];
         [self queryForAllRowsWithKeys:columnKeys];
         
-        MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
-        enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+        MADDatabaseConnection *dbConnection;
+        dbConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
+        enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
                                                                               columns: self.columns
                                                                            columnKeys: columnKeys
                                                                                 query: query];
@@ -1086,7 +1095,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
-    MADDatabaseConnection *databaseConnection;
+    MADDatabaseConnection *dbConnection;
     MADDataTableObjectEnumerator *enumerator;
     
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
@@ -1097,8 +1106,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                      dropRowID:NO
                                                                        columns:nil];
     
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
-    enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+    dbConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
+    enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
                                                                           columns: self.columns
                                                                        columnKeys: self.columnKeys
                                                                             query: query];

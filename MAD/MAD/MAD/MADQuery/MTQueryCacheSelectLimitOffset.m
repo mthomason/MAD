@@ -7,12 +7,12 @@
 //
 
 #import "MTQueryCacheSelectLimitOffset.h"
-#import <MADFoundation/MADDataColumn.h>
+#import <dispatch/dispatch.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
-#import <dispatch/dispatch.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseSqlite3.h"
 
 #import "MADQueryCacheSelectLimitOffsetParamaters.h"
@@ -23,9 +23,9 @@
 
 @implementation MTQueryCacheSelectLimitOffset
 
-- (instancetype)initWithColumnKeys: (NSArray *)columnKeys
+- (instancetype)initWithColumnKeys: (NSArray <NSString *> *)columnKeys
                          tableName: (NSString *)tableName
-                   sortDescriptors: (NSArray *)sortDescriptors
+                   sortDescriptors: (NSArray <NSSortDescriptor *> *)sortDescriptors
                              limit: (NSUInteger)limit
                             offset: (NSUInteger)offset
                          dropRowID: (BOOL)dropRowID
@@ -62,12 +62,15 @@
         dispatch_queue_t queueHigh = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_t group = dispatch_group_create();
         dispatch_group_enter(group);
+        
         __block NSString *sqlSelectText;
+        
         dispatch_group_async(group, queueHigh, ^{
             sqlSelectText = sqlSelect();
         });
         
         __block NSString *sqlOrderByText;
+        
         dispatch_group_async(group, queueHigh, ^{
             if (sortDescriptors.count > 0) {
                 NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];

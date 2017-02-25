@@ -191,19 +191,16 @@
 		4C130AEF1BA8075B0022665F /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A381BA8075B0022665F /* upcean.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130AF41BA807FE0022665F /* MobileCoreServices.framework */; };
-		4C130B001BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF81BA8085D0022665F /* png.h */; };
-		4C130B011BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AF91BA8085D0022665F /* pngconf.h */; };
-		4C130B021BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFA1BA8085D0022665F /* pnglibconf.h */; };
-		4C130B031BA8085D0022665F /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFC1BA8085D0022665F /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C130B041BA8085D0022665F /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFD1BA8085D0022665F /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C130B051BA8085D0022665F /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130AFE1BA8085D0022665F /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
+		4C5478EF1E6140A50043682E /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EC1E6140A50043682E /* png.h */; };
+		4C5478F01E6140A50043682E /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478ED1E6140A50043682E /* pngconf.h */; };
+		4C5478F11E6140A50043682E /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EE1E6140A50043682E /* pnglibconf.h */; };
 		4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */; };
 		4C865D891DA525610057678C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C865D881DA525610057678C /* libpng.a */; };
-		4C865D961DA525890057678C /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D901DA525890057678C /* png.h */; };
-		4C865D971DA525890057678C /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D911DA525890057678C /* pngconf.h */; };
-		4C865D981DA525890057678C /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D921DA525890057678C /* pnglibconf.h */; };
+		4C865D961DA525890057678C /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D901DA525890057678C /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C865D971DA525890057678C /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D911DA525890057678C /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C865D981DA525890057678C /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D921DA525890057678C /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC909011D0FC4FC007A1C75 /* MADBarcodeSizingMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD51CF3184600D93406 /* MADBarcodeBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -407,14 +404,11 @@
 		4C130A381BA8075B0022665F /* upcean.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upcean.c; path = MADBarcodes/upcean.c; sourceTree = "<group>"; };
 		4C130A391BA8075B0022665F /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = MADBarcodes/zint.h; sourceTree = "<group>"; };
 		4C130AF41BA807FE0022665F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		4C130AF81BA8085D0022665F /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
-		4C130AF91BA8085D0022665F /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
-		4C130AFA1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
-		4C130AFC1BA8085D0022665F /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
-		4C130AFD1BA8085D0022665F /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
-		4C130AFE1BA8085D0022665F /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4C5478EC1E6140A50043682E /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		4C5478ED1E6140A50043682E /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		4C5478EE1E6140A50043682E /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C865D881DA525610057678C /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../opt/lib/png/libpng.a; sourceTree = "<group>"; };
 		4C865D901DA525890057678C /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
@@ -687,51 +681,12 @@
 			name = zint;
 			sourceTree = "<group>";
 		};
-		4C130AFB1BA8085D0022665F /* libpng16 */ = {
-			isa = PBXGroup;
-			children = (
-				4C130AF81BA8085D0022665F /* png.h */,
-				4C130AF91BA8085D0022665F /* pngconf.h */,
-				4C130AFA1BA8085D0022665F /* pnglibconf.h */,
-			);
-			path = libpng16;
-			sourceTree = "<group>";
-		};
-		4C130AFF1BA8085D0022665F /* include */ = {
-			isa = PBXGroup;
-			children = (
-				4C130AFB1BA8085D0022665F /* libpng16 */,
-				4C130AFC1BA8085D0022665F /* png.h */,
-				4C130AFD1BA8085D0022665F /* pngconf.h */,
-				4C130AFE1BA8085D0022665F /* pnglibconf.h */,
-			);
-			name = include;
-			path = ../Compressor/library/libpng/include;
-			sourceTree = "<group>";
-		};
 		4C130B061BA808660022665F /* Resouces */ = {
 			isa = PBXGroup;
 			children = (
 				4C130B091BA808970022665F /* Frameworks */,
-				4C130B071BA808710022665F /* Libraries */,
 			);
 			name = Resouces;
-			sourceTree = "<group>";
-		};
-		4C130B071BA808710022665F /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				4C130B081BA8087B0022665F /* libpng */,
-			);
-			name = Libraries;
-			sourceTree = "<group>";
-		};
-		4C130B081BA8087B0022665F /* libpng */ = {
-			isa = PBXGroup;
-			children = (
-				4C130AFF1BA8085D0022665F /* include */,
-			);
-			name = libpng;
 			sourceTree = "<group>";
 		};
 		4C130B091BA808970022665F /* Frameworks */ = {
@@ -743,6 +698,16 @@
 				4C130AF41BA807FE0022665F /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C5478EB1E6140A50043682E /* libpng16 */ = {
+			isa = PBXGroup;
+			children = (
+				4C5478EC1E6140A50043682E /* png.h */,
+				4C5478ED1E6140A50043682E /* pngconf.h */,
+				4C5478EE1E6140A50043682E /* pnglibconf.h */,
+			);
+			path = libpng16;
 			sourceTree = "<group>";
 		};
 		4C865D871DA525610057678C /* Frameworks */ = {
@@ -765,6 +730,7 @@
 		4C865D8B1DA525890057678C /* include */ = {
 			isa = PBXGroup;
 			children = (
+				4C5478EB1E6140A50043682E /* libpng16 */,
 				4C865D901DA525890057678C /* png.h */,
 				4C865D911DA525890057678C /* pngconf.h */,
 				4C865D921DA525890057678C /* pnglibconf.h */,
@@ -786,6 +752,7 @@
 				4C130A841BA8075B0022665F /* MTBarcodeCode39Iso16388.h in Headers */,
 				4C130A9A1BA8075B0022665F /* MTBarcodeDataMatrixIso16022.h in Headers */,
 				4C130ACD1BA8075B0022665F /* MTBarcodeQrCodeIso18004.h in Headers */,
+				4C5478EF1E6140A50043682E /* png.h in Headers */,
 				4C130A6A1BA8075B0022665F /* MTBarcodeAztec.h in Headers */,
 				4C130ABA1BA8075B0022665F /* MTBarcodeMicroQrCode.h in Headers */,
 				4C130AC01BA8075B0022665F /* MTBarcodePdf417Iso15438.h in Headers */,
@@ -801,6 +768,7 @@
 				4C130A8C1BA8075B0022665F /* MTBarcodeCodeOne.h in Headers */,
 				4C130AAA1BA8075B0022665F /* MTBarcodeGridMatrix.h in Headers */,
 				4C130A921BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h in Headers */,
+				4C5478F11E6140A50043682E /* pnglibconf.h in Headers */,
 				4C130AF01BA8075B0022665F /* zint.h in Headers */,
 				4C130A4F1BA8075B0022665F /* dmatrix.h in Headers */,
 				4C130ADB1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h in Headers */,
@@ -821,7 +789,6 @@
 				4C130AEB1BA8075B0022665F /* rss.h in Headers */,
 				4C130A3F1BA8075B0022665F /* aztec.h in Headers */,
 				4C865D971DA525890057678C /* pngconf.h in Headers */,
-				4C130B051BA8085D0022665F /* pnglibconf.h in Headers */,
 				4C130AD91BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h in Headers */,
 				4C130A501BA8075B0022665F /* font.h in Headers */,
 				4C130A701BA8075B0022665F /* MTBarcodeCodabar.h in Headers */,
@@ -830,7 +797,6 @@
 				4C130A681BA8075B0022665F /* MTBarcodeAusRoute.h in Headers */,
 				4C130A861BA8075B0022665F /* MTBarcodeCode49.h in Headers */,
 				4C130A5C1BA8075B0022665F /* maxicode.h in Headers */,
-				4C130B011BA8085D0022665F /* pngconf.h in Headers */,
 				4C130AA01BA8075B0022665F /* MTBarcodeDutchPostKix.h in Headers */,
 				4C130A761BA8075B0022665F /* MTBarcodeCode2of5Industrial.h in Headers */,
 				4C130AA61BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h in Headers */,
@@ -840,7 +806,6 @@
 				4C130A431BA8075B0022665F /* code1.h in Headers */,
 				4C130A551BA8075B0022665F /* gs1.h in Headers */,
 				4C130A8A1BA8075B0022665F /* MTBarcodeCode128Iso15417.h in Headers */,
-				4C130B001BA8085D0022665F /* png.h in Headers */,
 				4C130A7A1BA8075B0022665F /* MTBarcodeCode2of5Matrix.h in Headers */,
 				4C130AA81BA8075B0022665F /* MTBarcodeFlattermarken.h in Headers */,
 				4C130A941BA8075B0022665F /* MTBarcodeDatabarLimited.h in Headers */,
@@ -849,7 +814,6 @@
 				4C130A461BA8075B0022665F /* code49.h in Headers */,
 				4C130AE81BA8075B0022665F /* reedsol.h in Headers */,
 				4C130A4B1BA8075B0022665F /* composite.h in Headers */,
-				4C130B031BA8085D0022665F /* png.h in Headers */,
 				4C130A401BA8075B0022665F /* Barcodes-Prefix.pch in Headers */,
 				4C130AA41BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h in Headers */,
 				4C130AD31BA8075B0022665F /* MTBarcodeTelepenNumeric.h in Headers */,
@@ -864,15 +828,14 @@
 				4C130AC61BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h in Headers */,
 				4C130A8E1BA8075B0022665F /* MTBarcodeDatabar.h in Headers */,
 				4C130A6C1BA8075B0022665F /* MTBarcodeAztecRunes.h in Headers */,
-				4C130B041BA8085D0022665F /* pngconf.h in Headers */,
 				4C130ACA1BA8075B0022665F /* MTBarcodePostnet.h in Headers */,
 				4C130AA21BA8075B0022665F /* MTBarcodeEan14.h in Headers */,
 				4C130AAE1BA8075B0022665F /* MTBarcodeItf14.h in Headers */,
+				4C5478F01E6140A50043682E /* pngconf.h in Headers */,
 				4C130A661BA8075B0022665F /* MTBarcodeAusreply.h in Headers */,
 				4C130A5F1BA8075B0022665F /* ms_stdint.h in Headers */,
 				4C130A721BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h in Headers */,
 				4C130AB01BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h in Headers */,
-				4C130B021BA8085D0022665F /* pnglibconf.h in Headers */,
 				4C130A641BA8075B0022665F /* MTBarcodeAusreDirect.h in Headers */,
 				4C130A511BA8075B0022665F /* gb2312.h in Headers */,
 				4C130A621BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h in Headers */,

@@ -446,11 +446,20 @@ void sqliteLog(void *foo, const char* statement) {
     }
 }
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-   intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
-    
-    return [self executeSql:sql fieldKeys:fieldKeys onConnection:dbconn intoResultTable:dataTable
-       transactionSet:NO returnsResults:YES binaryBindings:nil withError:error];
+- (BOOL)executeSql:(NSString *)sql
+         fieldKeys:(NSArray *)fieldKeys
+      onConnection:(id)dbconn
+   intoResultTable:(MADDataTable *)dataTable
+         withError:(NSError * __autoreleasing *)error {
+    BOOL result = [self executeSql: sql
+                         fieldKeys: fieldKeys
+                      onConnection: dbconn
+                   intoResultTable: dataTable
+                    transactionSet: NO
+                    returnsResults: YES
+                    binaryBindings: nil
+                         withError: error];
+    return result;
 }
 
 - (BOOL)executeSql: (NSString *)sql

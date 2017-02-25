@@ -14,7 +14,7 @@
 
 @class MADDataColumn, NSMutableArray<ObjectType>,
        NSDictionary<__covariant KeyType, __covariant ObjectType>,
-       NSMutableDictionary<KeyType, ObjectType>;
+       NSMutableDictionary<KeyType, ObjectType>, NSSortDescriptor;
 
 typedef NS_ENUM(short, MADDataTableParameters) {
     MADDataTableParametersType,
@@ -28,7 +28,7 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 
     @property (nonatomic, readwrite, copy)   NSString *name;
     @property (nonatomic, readwrite, strong) NSMutableArray *columnKeys;
-    @property (nonatomic, readwrite, strong) NSMutableArray *sortDescriptors;
+    @property (nonatomic, readwrite, strong) NSMutableArray <NSSortDescriptor *> *sortDescriptors;
     @property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *, MADDataColumn *> *columns;
     @property (nonatomic, readwrite, assign) NSUInteger rowCounter;
     @property (nonatomic, readwrite, assign) NSUInteger tag;

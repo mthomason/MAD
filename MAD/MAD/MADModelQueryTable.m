@@ -330,7 +330,7 @@
 }
 
 - (NSString *)queryAlias {
-    char buf[12]; char *ptr;
+    char buf[22]; char *ptr;
     ltoa(_dropIndex, buf);
     ptr = buf;
     NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
