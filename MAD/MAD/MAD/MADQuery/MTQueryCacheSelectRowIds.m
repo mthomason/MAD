@@ -13,48 +13,50 @@
 #import "MADQuerySelectParameters.h"
 
 @interface MTQueryCacheSelectRowIds ()
-
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *rowids;
-@property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, copy) NSString *sql;
 
 @end
 
 @implementation MTQueryCacheSelectRowIds
 
+- (instancetype)initWithRowIDs:(NSArray *)rowIDs tableName:(NSString *)tableName
+               sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns {
+    if (self = [super init]) {
+        NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ ", tableName];
+        [sql appendString:[self whereClauseWithRowIds:rowIDs]];
+        [sql appendString:[self orderByClauseWithSortDescriptors:sortDescriptors]];
+        self.sql = sql;
+    }
+    return self;
+}
+
 - (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
         id key;
 
         key = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
-        self.rowids = object[key];
+        NSArray *rowIDs = object[key];
         
         key = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
         NSString *tableName = object[key];
-        self.tableName = tableName;
         
         key = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
         NSArray *array = object[key];
         NSArray *sortDescriptors = [NSArray arrayWithArray:array];
-        self.sortDescriptors = sortDescriptors;
         
-        key = [[NSNumber alloc] initWithShort: MADQuerySelectColumns];
-        NSDictionary *columns = object[key];
-        self.columns = columns;
+        NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ ", tableName];
+        [sql appendString:[self whereClauseWithRowIds:rowIDs]];
+        [sql appendString:[self orderByClauseWithSortDescriptors:sortDescriptors]];
+        self.sql = sql;
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT *, ROWID FROM %@ ", self.tableName];
-
-    [sql appendString:[self whereClauseWithRowIds:self.rowids]];
-    [sql appendString:[self orderByClauseWithSortDescriptors:self.sortDescriptors]];
-    
-    return sql;
+    return self.sql;
 }
 
 - (MADQueryType)type {

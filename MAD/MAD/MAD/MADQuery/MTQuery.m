@@ -264,12 +264,12 @@ NSString * const MADIdentifierROWID         = @"ROWID";
             MADDatabaseDataBinding *databinding;
             if ([[NSNull null] isEqual: columnValue]) {
                 databinding = [[MADDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
-                                                                   fieldIndex: counterBinings
-                                                                        value: columnValue];
+                                                                    fieldIndex: counterBinings
+                                                                         value: columnValue];
             } else {
                 databinding = [[MADDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
-                                                                   fieldIndex: counterBinings
-                                                                        value: columnValue];
+                                                                    fieldIndex: counterBinings
+                                                                         value: columnValue];
             }
             [self.binaryBindings addObject:databinding];
             [sql appendFormat:@"%@ = ?", columnHandle];
@@ -361,22 +361,13 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return  queryDefination;
 
 }
+
 + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                 withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
+                                 withLimit:(NSUInteger)limit
+                                 andOffset:(NSUInteger)offset {
     return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
-                                andOffset:offset dropRowid:NO];
-}
-
-+ (NSDictionary *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table {
-    NSNumber *tableNameKey = [[NSNumber alloc] initWithShort: MTQueryCacheDeleteAllFromTableTableName];
-    id result = [[NSDictionary alloc] initWithObjectsAndKeys:table, tableNameKey, nil];
-    return result;
-}
-
-+ (NSDictionary *)newQueryDefinitionFull:(RptqQuery *)query {
-    NSNumber *key = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
-    id result = [[NSDictionary alloc] initWithObjectsAndKeys:query, key, nil];
-    return result;
+                                andOffset:offset
+                                dropRowid:NO];
 }
 
 @end

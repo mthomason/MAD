@@ -14,6 +14,10 @@
 
 @interface MADQuery : NSObject
 
+    - (instancetype)initWithQueryType:(MADQueryType)type object:(id)object;
+
+    @property (nonatomic, copy) NSString *sql;
+
 @end
 
 #endif

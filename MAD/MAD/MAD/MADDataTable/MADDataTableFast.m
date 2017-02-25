@@ -66,6 +66,7 @@
 #import "MTDatabaseSqlite3.h"
 
 #import "MADQueryCacheIndexCreateParameters.h"
+#import "MTQueryCacheSelectRowIds.h"
 
 #import "MTDatabase.h"
 #import "MADDatabaseProtocol.h"
@@ -714,12 +715,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return [MTQuery newQueryDefinitionSelect:self.columnKeys tableName:[self tableName]
+    return [MTQuery newQueryDefinitionSelect:self.columnKeys
+                                   tableName:[self tableName]
                              sortDescriptors:self.sortDescriptors];
 }
 
-- (NSDictionary *)queryDefinationSelectWithLimit:(NSUInteger)limit andOffset:(NSUInteger)offset {
-    return [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
+- (NSDictionary *)queryDefinationSelectWithLimit:(NSUInteger)limit
+                                       andOffset:(NSUInteger)offset {
+    return [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect]
+                                   withLimit:limit
+                                   andOffset:offset];
 }
 
 - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId andColumnIdentifier:(NSString *)columnIdentifier {
@@ -913,9 +918,24 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 // FIXME: Return error handler... remove credentals
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     
+    /*
+     [MTQuery newQueryDefinitionSelect:self.columnKeys
+                             tableName:[self tableName]
+                       sortDescriptors:self.sortDescriptors];
+     [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect]
+                             withLimit:limit
+                             andOffset:offset];
+     */
+    
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
     
-    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject: queryDefination];
+    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
+                                                                     tableName:[self tableName]
+                                                               sortDescriptors:self.sortDescriptors
+                                                                         limit:limit
+                                                                        offset:row
+                                                                     dropRowID:NO
+                                                                       columns:nil];
 
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:limit];
     if (row != NSNotFound && limit > 0) {
@@ -958,8 +978,13 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     if (self.columns.count <= 0) return nil;
     
     NSEnumerator *objectEnumerator = nil;
-    NSDictionary *queryDefination = [self queryDefinationSelect];
-    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject: queryDefination];
+    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
+                                                                     tableName:[self tableName]
+                                                               sortDescriptors:self.sortDescriptors
+                                                                         limit:NSNotFound
+                                                                        offset:NSNotFound
+                                                                     dropRowID:NO
+                                                                       columns:nil];
     NSURL *urlFastCache = self.urlFastCache;
     MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
     objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
@@ -970,39 +995,32 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (MTQuery *)queryForAllRowsWithKeys:(NSArray *)columnKeys {
-    id keyColumnKeys;
-    keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
-    id keyTableNames = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
-    id keySortDesc   = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
-    id keyColumns    = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumns];
-    
-    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                             self.columns, keyColumns,
-                             self.columnKeys, keyColumnKeys,
-                             [self tableName], keyTableNames,
-                             self.sortDescriptors, keySortDesc, nil];
-    
-    
-    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject: options];
+    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
+                                                                     tableName:[self tableName]
+                                                               sortDescriptors:self.sortDescriptors
+                                                                         limit:NSNotFound
+                                                                        offset:NSNotFound
+                                                                     dropRowID:NO
+                                                                       columns:nil];
     return query;
 }
 
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     
-    NSNumber *keyTableNames, *keySortDesc;
-    keyTableNames = [[NSNumber alloc] initWithShort:MTQueryCacheSelectLimitOffsetParamatersTableNames];
-    keySortDesc = [[NSNumber alloc] initWithShort:MTQueryCacheSelectLimitOffsetParamatersSortDesc];
-    id tableName = [self tableName];
-    id sortDescriptors = self.sortDescriptors;
-    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                                            tableName, keyTableNames,
-                                                            sortDescriptors, keySortDesc, nil];
-    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithObject:options];
+    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[]
+                                                                     tableName:[self tableName]
+                                                               sortDescriptors:self.sortDescriptors
+                                                                         limit:NSNotFound
+                                                                        offset:NSNotFound
+                                                                     dropRowID:NO
+                                                                       columns:nil];
 
-    NSURL *url = self.urlFastCache;
-    MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnectionForUrl: url];
 
-    MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
+    MADDatabaseConnection *connection;
+    MADDataColumn *rowid;
+    connection= [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
+
+    rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
     rowid.type = MADDataTypeInteger;
     
     NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns;
@@ -1046,11 +1064,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     } else {
     
         MTQuery *query;
-        query = [MTQueryCacheSelectLimitOffset newQueryCacheSelectLimitOffsetWithTableName: [self tableName]
-                                                                                columnKeys: columnKeys
-                                                                                   columns: self.columns
-                                                                           sortDescriptors: self.sortDescriptors];
-         [self queryForAllRowsWithKeys:columnKeys];
+        query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
+                                                                tableName:[self tableName]
+                                                          sortDescriptors:self.sortDescriptors
+                                                                    limit:NSNotFound
+                                                                   offset:NSNotFound
+                                                                dropRowID:NO
+                                                                  columns:nil];
+        [self queryForAllRowsWithKeys:columnKeys];
         
         MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
         enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
@@ -1068,10 +1089,13 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MADDatabaseConnection *databaseConnection;
     MADDataTableObjectEnumerator *enumerator;
     
-    MTQuery *query;
-    query = [MTQueryCacheSelectLimitOffset newQueryCacheSelectLimitOffsetWithTableName: [self tableName]
-                                                                            columnKeys: self.columnKeys
-                                                                       sortDescriptors: self.sortDescriptors];
+    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
+                                                                     tableName:[self tableName]
+                                                               sortDescriptors:self.sortDescriptors
+                                                                         limit:NSNotFound
+                                                                        offset:NSNotFound
+                                                                     dropRowID:NO
+                                                                       columns:nil];
     
     databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
     enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
@@ -1229,22 +1253,13 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (NSEnumerator *)enumeratorForRowIds:(NSArray *)cacheIds { //Note, software currently usues
                                                             //  NSArray for row ids
     
-    NSNumber *keyRowIds = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
-    NSNumber *keyTableN = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
-    NSNumber *keySortDe = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
-    NSNumber *keyColumn = [[NSNumber alloc] initWithShort: MADQuerySelectColumns];
+    NSDictionary <NSString *, MADDataColumn *> *columns;
+    columns = [NSDictionary dictionaryWithDictionary:self.columns];
     
-    NSString *tableName = [NSString stringWithString:[self tableName]];
-    NSArray *sortDescs = [NSArray arrayWithArray:self.sortDescriptors];
-    NSDictionary <NSString *, MADDataColumn *> *columns = [NSDictionary dictionaryWithDictionary:self.columns];
-    
-    
-    NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                cacheIds, keyRowIds, tableName, keyTableN,
-                                sortDescs, keySortDe, columns, keyColumn, nil];
-    
-    MTQuery *query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowIds
-                                                 object: options];
+    MTQuery *query = [[MTQueryCacheSelectRowIds alloc] initWithRowIDs:cacheIds
+                                                            tableName:[self tableName]
+                                                      sortDescriptors:self.sortDescriptors
+                                                              columns:self.columns];
     
     NSArray *columnKeys = self.columnKeys;
     NSURL *urlFastCache = self.urlFastCache;

@@ -13,6 +13,8 @@
 
 @interface MTQueryCacheDeleteAllFromTable : MTQuery
 
+    - (instancetype)initWithTableName:(NSString *)tableName;
+
 @end
 
 #endif

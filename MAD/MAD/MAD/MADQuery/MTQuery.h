@@ -65,18 +65,12 @@ extern NSString * const MADIdentifierROWID;
     @property (nonatomic, readonly) BOOL returnsResults;
     @property (nonatomic, readonly) BOOL partOfTransactionSet;
 
-    + (NSDictionary *)newQueryDefinitionFull:(RptqQuery *)query;
-    + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                     withLimit:(NSUInteger)limit
-                                     andOffset:(NSUInteger)offset
-                                     dropRowid:(BOOL)droprowid;
     + (NSDictionary *)newQueryDefinitionSelect:(NSArray *)columnKeys
                                      tableName:(NSString *)tableName
                                sortDescriptors:(NSArray *)sortDescriptors;
     + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                     withLimit:(NSUInteger)limit andOffset:(NSUInteger)offset;
-    + (NSDictionary *)newQueryDefinitionCacheDeleteAllFromTable:(NSString *)table;
-
+                                     withLimit:(NSUInteger)limit
+                                     andOffset:(NSUInteger)offset;
 @end
 
 #endif

@@ -277,6 +277,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
     
     id result = nil;
     NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
+    MTQuery *query;
     
     if (columnKey) {
         id queryParameters;
@@ -306,8 +307,8 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                 break;
         }
         
-        MTQuery *query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
-                                                     object: queryParameters];
+        query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
+                                            object: queryParameters];
         result = [dataTable runSelectQuery:query];
         
     }

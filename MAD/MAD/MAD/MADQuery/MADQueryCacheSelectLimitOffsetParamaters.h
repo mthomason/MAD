@@ -16,7 +16,6 @@ typedef NS_ENUM(short, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
     MTQueryCacheSelectLimitOffsetParamatersColumns,
     MTQueryCacheSelectLimitOffsetParamatersSortDesc,
-    MTQueryCacheSelectLimitOffsetParamatersWhere,
     MTQueryCacheSelectLimitOffsetParamatersDropRowid
 };
 

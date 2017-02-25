@@ -1371,6 +1371,8 @@
 				4C9FB2781D03774C00A1B291 /* MADQueryCache */,
 				4CEFDD0F1CF5AEA80092C148 /* Subclasses */,
 				4CEFDCF61CF5A8710092C148 /* MADQueryType.h */,
+				4C7281C61E27484D00C58DBE /* MADQuery.h */,
+				4C7281C71E27484D00C58DBE /* MADQuery.m */,
 				4C401D711BAE3BD500BAE5FC /* MTQuery.h */,
 				4C401D721BAE3BD500BAE5FC /* MTQuery.m */,
 				4C4F126E1D0A634D0002294E /* MADQueryPredicate.h */,
@@ -1383,8 +1385,6 @@
 				4C4F127B1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m */,
 				4C4F127E1D0A95810002294E /* MADQuerySelectExpressionActiveFields.h */,
 				4C4F127F1D0A95810002294E /* MADQuerySelectExpressionActiveFields.m */,
-				4C7281C61E27484D00C58DBE /* MADQuery.h */,
-				4C7281C71E27484D00C58DBE /* MADQuery.m */,
 			);
 			name = MADQuery;
 			sourceTree = "<group>";

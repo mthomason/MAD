@@ -38,7 +38,7 @@
 #import <MADFoundation/MADDataColumn.h>
 
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
-
+#import "MTQueryCacheDeleteAllFromTable.h"
 #import "MADDataTable.h"
 
 #import "MADDatabaseConnection.h"
@@ -795,18 +795,17 @@ void sqliteLog(void *foo, const char* statement) {
                                    &size_of_wal_log, &number_of_checkpointed_frames);
     NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
     //dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
+    
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         
+        MTQuery *dropTable;
+        BOOL successQuery = NO;
         for (MADDatabaseTable *table in tables) {
-            NSDictionary *queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable:table.name];
-            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheDeleteAllFromTable object:queryDefination];
-            NSError * __autoreleasing *errorQuery = NULL;
-            BOOL successQuery = NO;
-            successQuery = [self executeQuery:dropTable withError:errorQuery];
+            dropTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:table.name];
+            successQuery = [self executeQuery:dropTable withError:nil];
             NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
                      __PRETTY_FUNCTION__);
 
-            NSAssert(errorQuery == NULL, (*errorQuery).localizedDescription);
         }
         
     //    dispatch_semaphore_signal(s0);

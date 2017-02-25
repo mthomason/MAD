@@ -25,6 +25,8 @@
 
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
 
+#import "MTQueryCacheDeleteAllFromTable.h"
+
 #import "MADDatabaseConnection.h"
 #import "MTQueryCacheAddColumn.h"
 #import "MTDatabaseSqlite3.h"
@@ -405,48 +407,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (BOOL)removeAllObjects {
     _lastObjectSelected = nil;
     _numberOfRows = 0;
-    NSDictionary *queryDefination;
-    MTQuery *queryDeleteAllFromTable;
-    queryDefination = [MTQuery newQueryDefinitionCacheDeleteAllFromTable: MTArrayCachedTableName];
-    queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheDeleteAllFromTable
-                                                                   object: queryDefination];
-    
+    MTQuery *query;
+    query = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
     NSError * __autoreleasing *error = NULL;
-    return [self.database executeQuery:queryDeleteAllFromTable withError:error];
+    return [self.database executeQuery:query withError:error];
 
-}
-
-- (NSDictionary *)queryDefinatinSelect {
-    NSArray *columnNameIndex = [[NSArray alloc] initWithObjects: MTArrayCachedColumnKey, nil];
-    NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey: MTArrayCachedColumnKey
-                                                            ascending: NO
-                                                             selector: @selector(compare:)];
-    NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
-    NSDictionary *definition = [MTQuery newQueryDefinitionSelect: columnNameIndex
-                                                       tableName: MTArrayCachedTableName
-                                                 sortDescriptors: sortdesc];
-    return definition;
-}
-
-- (NSDictionary *)queryDefinationLastObject {
-    NSArray *columnNameIndex = [[NSArray alloc] initWithObjects: MTArrayCachedColumnKey, nil];
-    NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey: MTArrayCachedColumnKey
-                                                            ascending: NO
-                                                             selector: @selector(compare:)];
-    NSArray *sortdesc = [[NSArray alloc] initWithObjects: sortn, nil];
-    NSDictionary *queryDefinition = [MTQuery newQueryDefinitionSelect: columnNameIndex
-                                                                  tableName: MTArrayCachedTableName
-                                                            sortDescriptors: sortdesc];
-    NSMutableDictionary *queryDefinationSelect = queryDefinition.mutableCopy;
-    NSNumber *yes = @YES, *key;
-    key = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
-
-    queryDefinationSelect[key] = yes;
-    
-    NSDictionary *result = [MTQuery newQueryDefinitionSelect:queryDefinationSelect
-                                                   withLimit:1
-                                                   andOffset:0];
-    return result;
 }
 
 - (long long int)count {
