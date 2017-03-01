@@ -120,7 +120,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 - (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                         error:(NSError * __autoreleasing *)error {
-    [super getSqlWithError:error];
+    //[super getSqlWithError:error];
     NSString *activeFields;
     activeFields = [self SQLOnlyActiveFields: YES
                         managedObjectContext: managedObjectContext

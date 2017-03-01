@@ -24,8 +24,6 @@
 		4CB9AAEC1C8C2D3B00420CFF /* MADDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */; };
 		4CDA62CE1D08009300E95859 /* UIScreen+Properties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDA62CC1D08009300E95859 /* UIScreen+Properties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CDA62CF1D08009300E95859 /* UIScreen+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA62CD1D08009300E95859 /* UIScreen+Properties.m */; };
-		4CDA62D21D08021A00E95859 /* MADConstantsDocumentExtentions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDA62D01D08021A00E95859 /* MADConstantsDocumentExtentions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CDA62D31D08021A00E95859 /* MADConstantsDocumentExtentions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA62D11D08021A00E95859 /* MADConstantsDocumentExtentions.m */; };
 		4CDA62D61D08032B00E95859 /* MADFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA62D41D08032B00E95859 /* MADFilename.m */; };
 		4CDA62D71D08032B00E95859 /* MADFilename.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDA62D51D08032B00E95859 /* MADFilename.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CDA62DA1D0803ED00E95859 /* MADURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA62D81D0803ED00E95859 /* MADURL.m */; };
@@ -225,7 +223,6 @@
 				4CDA62DB1D0803ED00E95859 /* MADURL.h in Headers */,
 				4CF09A491BB2791D007BCF7A /* MADApplication.h in Headers */,
 				4C8278B91DB74E1D005313F5 /* MADLog.h in Headers */,
-				4CDA62D21D08021A00E95859 /* MADConstantsDocumentExtentions.h in Headers */,
 				4CDA62D71D08032B00E95859 /* MADFilename.h in Headers */,
 				4CDA62CE1D08009300E95859 /* UIScreen+Properties.h in Headers */,
 				4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */,
@@ -337,7 +334,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CDA62D61D08032B00E95859 /* MADFilename.m in Sources */,
-				4CDA62D31D08021A00E95859 /* MADConstantsDocumentExtentions.m in Sources */,
 				4C9372F21BAD215B00D6BD62 /* NSData+Comparson.m in Sources */,
 				4CB9AAEC1C8C2D3B00420CFF /* MADDataType.m in Sources */,
 				4C9372D01BACFF0F00D6BD62 /* MADDataColumn.m in Sources */,

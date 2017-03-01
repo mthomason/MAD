@@ -13,13 +13,12 @@
 #import "MTDatabaseConnectionSqlite3.h"
 #import <Foundation/NSURL.h>
 
-#import "RptqDatabaseCredentals.h"
-
 #import <MADFoundation/MADURL.h>
-
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+
+#import "RptqDatabaseCredentals.h"
 
 @implementation MTDatabaseConnectionSqlite3
 

@@ -29,7 +29,6 @@
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADConstantsDocumentExtentions.h>
 #import <MADFoundation/MADURL.h>
 
 #import <MADExplorer/MADExplorerProtocol.h>
@@ -89,7 +88,6 @@
 #import "MADSearchBar.h"
 
 #import "AppDelegate.h"
-
 
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
 const NSUInteger MADIDInstallOperationSampleDocumentMusic       = 2;
@@ -828,7 +826,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 - (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error
     movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
-    return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
+    return [dstURL.pathExtension.lowercaseString isEqualToString:@"png"];
 }
 
 #pragma mark -
@@ -1645,7 +1643,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         //    [self.collectionView reloadItemsAtIndexPaths:visibleItems];
         
         for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
-            [cell setEditing:YES];
+            cell.wobbling = YES;
         }
         [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
         
@@ -1679,7 +1677,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     visibleCells = self.collectionView.visibleCells;
     MADCollectionViewCellDocument *cell;
     for (cell in visibleCells) {
-        cell.editing = NO;
+        cell.wobbling = NO;
     }
 
 }
@@ -1957,7 +1955,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
                                    scrollPosition: UICollectionViewScrollPositionNone];
             
             [self.fileExplorerViewDelegate collectionView: collectionView
-                               didSelectItemAtIndexPath: indexPath];
+                                 didSelectItemAtIndexPath: indexPath];
         }
     }
     NSArray <NSIndexPath *> *selectedPath =

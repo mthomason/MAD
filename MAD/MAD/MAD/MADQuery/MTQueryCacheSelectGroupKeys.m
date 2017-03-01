@@ -7,10 +7,10 @@
 //
 
 #import "MTQueryCacheSelectGroupKeys.h"
-#import <MADFoundation/MADDataColumn.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
+#import <MADFoundation/MADDataColumn.h>
 #import "MTDatabaseSqlite3.h"
 #import "MADQuerySelectParameters.h"
 

@@ -1,5 +1,11 @@
 
-Cloud opperations
+Icon generation, copy, and removal
+Query visualization caching
+Query visualization layout
+
+
+--
+
 Need the ability to edit database informaiton.
 Use hover effect on paging slider
 

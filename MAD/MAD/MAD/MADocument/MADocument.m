@@ -148,10 +148,13 @@ static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
 }
 
 static void png_error_func(png_structp png_ptr, png_const_charp message) {
+    NSLog(@"%s", message);
     longjmp(png_jmpbuf(png_ptr), 1);
 }
 
-static void png_warn_func(png_structp png_ptr, png_const_charp message) { }
+static void png_warn_func(png_structp png_ptr, png_const_charp message) {
+    NSLog(@"%s", message);
+}
 
 int process_data(png_structp *png_ptr, png_infop *info_ptr,
                  png_bytep buffer, png_uint_32 length);
@@ -428,9 +431,9 @@ void madwarn(char *err,  const char*err2) { }
     NSURL *gutsUrl = strongDocument.urlGuts.copy;
     
 
-    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
-    strongDocument.thumbnail = thumbnail;
-    thumbnail = nil;
+    //UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
+    //strongDocument.thumbnail = thumbnail;
+    //thumbnail = nil;
     
     if (strongDocument != nil) {
         //strongDocument.thumbnail = nil;

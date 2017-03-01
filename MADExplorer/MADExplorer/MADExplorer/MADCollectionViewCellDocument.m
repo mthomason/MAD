@@ -49,7 +49,6 @@ static NSString * const MADTextRenamesDocument          = @"Renames document.";
        NSString * const MADTextNotDownloaded            = @"Not Downloaded";
 static NSString * const Syncing                         = @"Syncing";
 static NSString * const Downloading                     = @"Downloading";
-static NSString * const MADImageToolbarCloudDownload    = @"MADImageToolbarCloudDownload";
 
 static const CGFloat Float_0                    =   0.00000000f;
 static const CGFloat Float_100                  = 100.00000000f;
@@ -380,7 +379,7 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     MADThumbnailView *imagePreview;
     UIImage *cloudIndicatorImage;
 
-    _editing = editing;
+    self.wobbling = editing;
     NSString *name, *subtitle, *ubiquitousItemDownloadingStatus;
     
     cloudIndicatorImageView = self.imageCloudIndicator;
@@ -423,12 +422,10 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     [self setDownloadingActive:isDownloading percent: percentage];
     
     cloudIndicatorImage = notDownloaded && isUbiquitous ?
-                                [UIImage imageNamed:MADImageToolbarCloudDownload] : nil;
+                                [UIImage imageNamed:@"MADImageToolbarCloudDownload"] : nil;
     
     [cloudIndicatorImageView setImage: cloudIndicatorImage];
     
-    //[labelTitle layoutIfNeeded];
-    //[labelTitleSub layoutIfNeeded];
     [labelTitle setNeedsLayout];
     [labelTitleSub setNeedsLayout];
     [labelTitle setNeedsDisplay];
@@ -437,15 +434,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     activityIndicator = self.activityIndicator;
     SEL animateSwitch = isDownloading || isUploading ? @selector(startAnimating) :
                                                        @selector(stopAnimating);
-    //[activityIndicator performSelectorOnMainThread:animateSwitch withObject:nil waitUntilDone:NO];
-    
-    
-    //imagePreview = self.imagePreview;
-    
-    //metadataURL = metadata.URL.copy;
-    //thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
-    //imagePreview.thumbnailURL = thumbnailUrl;
-    
     dispatch_block_t read_iamge = ^{
         @autoreleasepool {
             NSURL *metadataURL, *thumbnailUrl;
@@ -457,28 +445,16 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
             thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
             imagePreview.thumbnailURL = thumbnailUrl;
             
-            //MADMetaData *thumbnailMetadata = [[MADMetaData alloc] initWithURL:fileURL];
-            //NSURL *thumbnailUrl = [NSURL newURLThumbnailForURL:fileURL];
-            NSString *path = thumbnailUrl.path;
-            NSData *imageData = [[NSData alloc] initWithContentsOfFile:path];
-            UIImage *image = [[UIImage alloc] initWithData:imageData scale:6.0];
-            //if (image == nil) image = [MADCollectionViewCellDocument newDefaultThumbnail];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                self.imagePreview.image = image;
-            });
         }
     };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
- 
-    if (_editing) [self startWobble];
-    else [self stopWobble];
 
 }
 
-- (void)setEditing:(BOOL)editing {
-    if (_editing != editing) {
-        if ((_editing = editing)) [self startWobble];
+- (void)setWobbling:(BOOL)wobbling {
+    if (_wobbling != wobbling) {
+        if ((_wobbling = wobbling)) [self startWobble];
         else [self stopWobble];
     }
 }

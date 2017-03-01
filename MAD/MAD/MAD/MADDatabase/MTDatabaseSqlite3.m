@@ -578,7 +578,7 @@ void sqliteLog(void *foo, const char* statement) {
                 for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
                     
                     resultsForRow[fieldKeys[(NSUInteger)colCtr]] = [MADDatabaseResultValue newDatabaseResultValue:statement
-                                                                                              columnNumber:colCtr];
+                                                                                                     columnNumber:colCtr];
                     
                 }
                 
@@ -1280,7 +1280,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
     id value = nil;
     switch (sqlite3_column_type(statement, columnNumber)) { //http://www.sqlite.org/c3ref/c_blob.html
         case SQLITE_INTEGER: {
-            value = [[NSNumber alloc] initWithInteger: sqlite3_column_int64(statement, columnNumber)];
+            value = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnNumber)];
             break;
         }
         case SQLITE_FLOAT: {

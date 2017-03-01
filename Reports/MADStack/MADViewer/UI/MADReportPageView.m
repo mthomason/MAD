@@ -115,6 +115,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
     id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
     if ([delegatePage respondsToSelector:@selector(numberOfPages)]) {
+        
         UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
                                                                       CGPointZero.y + PageCounterBuffer,
                                                                       PageCounterWidth,

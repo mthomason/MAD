@@ -25,7 +25,7 @@ extern NSString * const MADTextNotDownloaded;
 
 @interface MADCollectionViewCellDocument : UICollectionViewCell
 
-    @property (nonatomic, assign, getter=isEditing) BOOL editing;
+    @property (nonatomic, assign, getter=isWobbling) BOOL wobbling;
 
     @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellTitle *labelTitle;
     @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;

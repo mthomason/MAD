@@ -24,6 +24,7 @@
 #import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSIndexSet.h>
+#import <Foundation/NSOperation.h>
 
 #import <dispatch/dispatch.h>
 
@@ -359,9 +360,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     ultoa(column.identifier.hash, (buf+1));
     char *ptr = buf;
     NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-    //NSString *columnIdentifier = column.identifier.copy;
-    //NSString *columnName = [self columnNameForIdentifier:columnIdentifier];
-    
+
     [self.columnKeys addObject:columnName];
 
     NSString *tableName = [self tableName];
@@ -486,9 +485,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         MTQuery *query;
         query = [[MTQueryCacheAddRow alloc] initWithObject: self];
         NSError * __autoreleasing *errorQuery = NULL;
-        BOOL success = [_databaseForInserts executeQuery:query withError:errorQuery];
+        
+        __unused BOOL success;
+        success = [_databaseForInserts executeQuery:query withError:errorQuery];
         NSAssert(success, @"%s at %s", sqlite3_errmsg(sqlite_database),
                  __PRETTY_FUNCTION__);
+    
     }
 }
 
@@ -522,7 +524,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         NSMutableArray <__kindof NSSortDescriptor *> *newSortDescriptors;
         newSortDescriptors = [[NSMutableArray <__kindof NSSortDescriptor *> alloc] initWithCapacity:sortDescriptors.count];
 
-            NSUInteger groupKeyCounter;
+        NSUInteger groupKeyCounter;
         NSArray *columnKeys;
         
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
@@ -1002,17 +1004,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return objectEnumerator;
 }
 
-- (MTQuery *)queryForAllRowsWithKeys:(NSArray <NSString *> *)columnKeys {
-    MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
-                                                                     tableName:[self tableName]
-                                                               sortDescriptors:self.sortDescriptors
-                                                                         limit:NSNotFound
-                                                                        offset:NSNotFound
-                                                                     dropRowID:NO
-                                                                       columns:nil];
-    return query;
-}
-
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[]
@@ -1079,7 +1070,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                    offset:NSNotFound
                                                                 dropRowID:NO
                                                                   columns:nil];
-        [self queryForAllRowsWithKeys:columnKeys];
         
         MADDatabaseConnection *dbConnection;
         dbConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
@@ -1290,3 +1280,50 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 @end
+/*
+@interface MADOperationAddColumn : NSOperation
+
+@end
+
+@interface MADOperationAddRows : NSOperation
+    - (instancetype)initWithRows:(NSArray *)rows;
+@end
+
+@interface MADOperationAddRows ()
+    @property (nonatomic, strong) NSArray *rows;
+@end
+
+@implementation MADOperationAddColumn
+
+@end
+
+@implementation MADOperationAddRows {
+    BOOL _running;
+}
+
+- (instancetype)initWithRows:(NSArray *)rows {
+    if (self = [super init]) {
+        NSArray *r = [[NSArray alloc] initWithArray:rows];
+        self.rows = r;
+    }
+    return self;
+}
+
+- (void)start {
+    _running = YES;
+}
+
+- (BOOL)isAsynchronous {
+    return YES;
+}
+
+- (BOOL)isExecuting {
+    return _running;
+}
+
+- (BOOL)isFinished {
+    return !_running;
+}
+
+@end
+*/

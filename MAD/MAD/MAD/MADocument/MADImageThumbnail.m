@@ -47,7 +47,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                                    squareEffect: YES
                                      cornerSize: 0.0000f
                                           scale: 1.0000f
-                          andPrintPageRenderer: printPageRenderer];
+                           andPrintPageRenderer: printPageRenderer];
     return thumbnail;
 }
 
@@ -70,7 +70,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
                              squareEffect: (BOOL)squareEffect
                                cornerSize: (CGFloat)cornerSize
                                     scale: (CGFloat)scale
-                    andPrintPageRenderer: (MADPrintPageRenderer *)printPageRenderer {
+                     andPrintPageRenderer: (MADPrintPageRenderer *)printPageRenderer {
     
     size = size * scale;
     cornerSize = cornerSize * scale;
@@ -156,7 +156,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
     
     CGContextSaveGState(context);
     
-    [printPageRenderer drawPageAtIndex:0 inRect:rect withTransparentBackground:YES];
+    [printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES];
     
     CGContextRestoreGState(context);
     

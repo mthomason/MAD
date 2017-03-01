@@ -18,7 +18,6 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 
 #import "UIScreen+Properties.h"
-#import "MADConstantsDocumentExtentions.h"
 #import "MADFilename.h"
 
 static NSString * const MADPathComponentData       = @"Data";
@@ -61,7 +60,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 
 + (instancetype)newURLThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
     NSString *name = [UIScreen mainScreen].isRetnaDisplay ? [handle stringByAppendingString:@"@2x"] : handle;
-    NSString *filename = [name stringByAppendingPathExtension:MTDocumentExtentionPoratableNetworkGraphic];
+    NSString *filename = [name stringByAppendingPathExtension:@"png"];
     NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
     NSURL *cacheDirectory = [MADURL newURLForLocalCacheDirectoryNamed:fileNameId];
     id cachedPathFull = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
