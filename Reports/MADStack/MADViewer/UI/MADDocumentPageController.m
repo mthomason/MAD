@@ -309,6 +309,10 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark -
 #pragma mark MADReportPageViewProtocol
 
+- (NSURL *)thumbnailURL {
+    return _document.thumbnailURL;
+}
+
 - (NSDate * _Nullable)lastCacheDate {
     if (self.pageViewAttributes.reportLastCacheDate == nil) {
         NSError *error = nil;

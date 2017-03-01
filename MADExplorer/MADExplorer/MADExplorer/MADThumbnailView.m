@@ -92,56 +92,8 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
         _thumbnailAbsolutePath = path.copy;
 
         [self setImageFromPath: _thumbnailAbsolutePath];
-        
-        /*
-        int fdes = open(path.UTF8String, O_RDONLY);
-        if (_source) dispatch_source_cancel(_source);
-        _source = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
-                                         (uintptr_t)fdes,
-                                         DISPATCH_VNODE_WRITE,
-                                         [MADThumbnailView queue_file_monitor]);
-        
-        MADThumbnailView * __weak wself = self;
-        dispatch_source_set_event_handler(_source, ^{
-        
-            MADThumbnailView *sself = wself;
-            NSError * __autoreleasing *error;
-            NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-                                                                                        error: error];
-            
-            //NSLog(@"Reading image at path: %@,\n%@", sself.thumbnailAbsolutePath, attributes);
-            if (sself) {
-                id thumbnail = [[UIImage alloc] initWithContentsOfFile: sself.thumbnailAbsolutePath];
-                if (!thumbnail) thumbnail = [UIImage imageNamed:MADImageBlank];
-                MADThumbnailView * __weak wself2 = sself;
-                dispatch_block_t setThumbnail = ^{
-                    MADThumbnailView *sself2 = wself2;
-                    if (sself2) {
-                        sself2.image = thumbnail;
-                    }
-                };
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    dispatch_sync(dispatch_get_main_queue(), setThumbnail);
-                });
-            }
-        });
-        
-        
-        dispatch_source_set_cancel_handler(_source, ^{
-            close(fdes);
-        });
-        dispatch_resume(_source);
-        //dispatch_main();
-        */
     }
 }
-
-/*
- - (void)setThumbnailURL:(NSURL *)URL {
-    NSString *path = URL.path.copy;
-    [self setThumbnailPath: path];
-}
- */
 
 - (void)setThumbnailURL:(NSURL *)URL {
     NSString *path = URL.path;

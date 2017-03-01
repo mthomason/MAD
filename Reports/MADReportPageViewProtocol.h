@@ -14,6 +14,7 @@
     - (NSUInteger)pageNumber;
     - (NSDate * _Nullable)lastCacheDate;
     - (MADPrintPageRenderer * _Nullable)printPageRenderer;
+    - (NSURL * _Nonnull)thumbnailURL;
   @optional
     - (NSUInteger)numberOfPages;
 @end

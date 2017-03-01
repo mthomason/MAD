@@ -12,6 +12,11 @@
 
 #import "MADocument.h"
 
+#import <setjmp.h>
+
+#import <Foundation/NSEnumerator.h>
+#import <Foundation/NSComparisonPredicate.h>
+
 #import <CoreData/NSManagedObjectModel.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -25,11 +30,6 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIPrintInteractionController.h>
 
-#import <Foundation/NSEnumerator.h>
-#import <Foundation/NSComparisonPredicate.h>
-
-#import <setjmp.h>
-
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADDataTableType.h>
@@ -39,8 +39,6 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
-
-#import <MADBarcodes/png.h>
 
 #import "MADDocumentProtocol.h"
 #import "MADDatabaseProtocol.h"
@@ -135,59 +133,6 @@
 #import "MADNotificationFileUpdate.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
-
-typedef struct _iodata_stream {
-    unsigned int  i;
-    char         *m;
-} iodata_stream;
-
-static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
-    png_voidp io_ptr = png_get_io_ptr(ps);
-    memcpy(obuffer, (((iodata_stream *)io_ptr)->m) + (((iodata_stream*)io_ptr)->i), z);
-    ((iodata_stream *)io_ptr)->i += (unsigned int)z;
-}
-
-static void png_error_func(png_structp png_ptr, png_const_charp message) {
-    NSLog(@"%s", message);
-    longjmp(png_jmpbuf(png_ptr), 1);
-}
-
-static void png_warn_func(png_structp png_ptr, png_const_charp message) {
-    NSLog(@"%s", message);
-}
-
-int process_data(png_structp *png_ptr, png_infop *info_ptr,
-                 png_bytep buffer, png_uint_32 length);
-int process_data(png_structp *png_ptr, png_infop *info_ptr,
-                 png_bytep buffer, png_uint_32 length) {
-    if (setjmp(png_jmpbuf((*png_ptr)))) {
-        /* Free the png_ptr and info_ptr memory on error */
-        png_destroy_read_struct(png_ptr, info_ptr, NULL);
-        return (-1);
-    }
-    return (0);
-}
-
-void info_callback(png_structp png_ptr, png_infop info);
-void info_callback(png_structp png_ptr, png_infop info) { }
-
-void row_callback(png_structp png_ptr, png_bytep new_row, png_uint_32 row_num, int pass);
-void row_callback(png_structp png_ptr, png_bytep new_row, png_uint_32 row_num, int pass) { }
-
-void end_callback(png_structp png_ptr, png_infop info);
-void end_callback(png_structp png_ptr, png_infop info) { }
-
-typedef struct png_control {
-    png_structp png_ptr;
-    png_infop   info_ptr;
-    png_voidp   error_buf;           /* Always a jmp_buf at present. */
-    
-    png_const_bytep memory;          /* Memory buffer. */
-    png_size_t      size;            /* Size of the memory buffer. */
-    
-    unsigned int for_write       :1; /* Otherwise it is a read structure */
-    unsigned int owned_file      :1; /* We own the file in io_ptr */
-} png_control;
 
 /*
  {
@@ -505,7 +450,7 @@ void madwarn(char *err,  const char*err2) { }
     return _documentModel;
 }
 
-- (NSURL *)copyThumbnailURL {
+- (NSURL *)thumbnailURL {
     NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
     NSURL *url = [MADURL newURLThumbnailForHandle: name
                                  andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
@@ -711,7 +656,7 @@ READFROMURL_END:;
     NSError *readError = nil;
 
     NSData *imageData = nil;
-    NSURL *thumbnailURL = [self copyThumbnailURL];
+    NSURL *thumbnailURL = [self thumbnailURL];
     NSString *path = thumbnailURL.path;
     if (path) {
         if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
@@ -1380,70 +1325,6 @@ READFROMURL_END:;
 - (void)notifyThumbnailUpdated {
     MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] init];
     [fileUpdate notify];
-}
-
-- (void)regenThumbnail {
-    NSURL *thumbnailURL = [self copyThumbnailURL];
-    NSString *path = thumbnailURL.path;
-    BOOL contentChanged = NO;
-    if (!path) contentChanged = YES;
-    if (!contentChanged) {
-        contentChanged = self.activeDocumentModel != nil &&
-                         (self.documentStatus.contextChagned);
-    }
-    contentChanged = YES;
-    if (contentChanged || ![[NSFileManager defaultManager] fileExistsAtPath: path]) {
-        UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:self];
-        NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-        size_t newImageSize = 0;
-        
-        const int kPngSignatureLength = 8;
-        //int BYTE_SIZE = sizeof(float);
-        
-        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
-        [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
-        
-        if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
-
-        iodata_stream dstream;
-        
-        png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
-        png_infop info =  png_create_info_struct(p);
-        
-        if (info == NULL) {
-            png_destroy_read_struct(&p, NULL, NULL);
-        } else {
-    
-            dstream.i = 0;
-            dstream.m = (char *)pngImage.bytes;
-            png_set_read_fn(p, &dstream, mad_png_read_fn);
-            png_set_sig_bytes((png_structp)pngSignature, kPngSignatureLength);
-        }
-        png_byte numberOfChannels = png_get_channels(p, info);
-        png_uint_32 imageWidth = png_get_image_width(p, info);
-        png_sig_cmp(pngImage.bytes+kPngSignatureLength, (png_size_t)0, numberOfChannels*imageWidth);
-        
-        png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
-        png_uint_32 imageHeight = png_get_image_height(p, info);
-        void *compressedPNG = tdefl_write_image_to_png_file_in_memory_ex(p,
-                                                                         (int)imageWidth,
-                                                                         (int)imageHeight,
-                                                                         (int)numberOfChannels,
-                                                                         &newImageSize,
-                                                                         MZ_UBER_COMPRESSION, 0);
-        png_destroy_read_struct(&p, (png_infopp)NULL, NULL);
-        p = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
-        const char *thumbnailPath = thumbnailURL.path.UTF8String;
-        FILE *fp = fopen(thumbnailPath, "wb");
-        png_init_io(p, fp);
-        png_write_png(p, info, PNG_TRANSFORM_IDENTITY, compressedPNG);
-        png_destroy_write_struct(&p, &info);
-        RegenThumbnailShortCircuit:;
-        free(compressedPNG);
-        free((void *)pngSignature);
-        fclose(fp);
-        thumbnail = nil;
-    }
 }
 
 - (NSArray *)sortDescriptors{

@@ -976,11 +976,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                             databaseConnection:document.database.databaseConnection];
         [refreshOperation addObserver:self];
         [self.refreshQueue addOperation:refreshOperation];
-        //[self.refreshQueue addOperationWithBlock:^{
-        //    [document regenThumbnail];
-        //}];
-        
-        
+
     }
 }
 
@@ -1434,8 +1430,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
         
         if (((MADOperationRefreshReload *)operation).completedSuccessfully) {
-            
-            [self.document regenThumbnail];
             [self relaodByBlocks];
         }
         

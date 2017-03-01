@@ -86,7 +86,7 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 @end
 
 @implementation MADCollectionViewCellDocument {
-    bool _wobbling;
+    BOOL _wobbling;
   @protected
     UIView * _selectedBackgroundView;
 }
@@ -376,7 +376,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     
     UIActivityIndicatorView *activityIndicator;
     UIImageView *cloudIndicatorImageView;
-    MADThumbnailView *imagePreview;
     UIImage *cloudIndicatorImage;
 
     self.wobbling = editing;
@@ -443,7 +442,7 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 
             metadataURL = metadata.URL.copy;
             thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
-            imagePreview.thumbnailURL = thumbnailUrl;
+            self.imagePreview.thumbnailURL = thumbnailUrl;
             
         }
     };

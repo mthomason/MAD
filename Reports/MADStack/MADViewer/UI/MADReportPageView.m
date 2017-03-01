@@ -12,14 +12,21 @@
 
 #import "MADReportPageView.h"
 
+#import <setjmp.h>
+#import <mach/machine/vm_param.h>
+
 #import <UIKit/UILabel.h>
 
 #import <QuartzCore/CALayer.h>
 
+#import <MADBarcodes/png.h>
 #import <MADDataStructures/MTPair.h>
+#import <MAD/MADImageThumbnail.h>
 
 #import <MAD/MADPrintPageRenderer.h>
+#import <MAD/miniz.h>
 
+#import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
 #import "NSDate+Extras.h"
 #import "MADTextPosition.h"
@@ -30,6 +37,31 @@ static NSString * const MADTextNoCache = @"No Cache";
 static const CGFloat PageCounterWidth = 99.0000f;
 static const CGFloat PageCounterHeight = 33.0000f;
 static const CGFloat PageCounterBuffer = 10.0000f;
+
+struct iodata_stream_t {
+    unsigned int  i;
+    char         *m;
+};
+typedef struct iodata_stream_t iodata_stream_t;
+
+static void png_error_func(png_structp, png_const_charp);
+static void png_warn_func(png_structp, png_const_charp);
+static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z);
+
+static void mad_png_read_fn(png_structp ps, png_bytep obuffer, png_size_t z) {
+    png_voidp io_ptr = png_get_io_ptr(ps);
+    memcpy(obuffer, (((iodata_stream_t *)io_ptr)->m) + (((iodata_stream_t*)io_ptr)->i), z);
+    ((iodata_stream_t *)io_ptr)->i += (unsigned int)z;
+}
+
+static void png_error_func(png_structp png_ptr, png_const_charp message) {
+    NSLog(@"%s", message);
+    longjmp(png_jmpbuf(png_ptr), 1);
+}
+
+static void png_warn_func(png_structp png_ptr, png_const_charp message) {
+    NSLog(@"%s", message);
+}
 
 @interface MADReportPageView ()
 
@@ -92,11 +124,73 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect: rect];
-    if (!self.drawBlankPage) {
-        id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
-        MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
-        [printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
+
+    if (self.drawBlankPage) return;
+    
+    // Draw Page
+    id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
+    MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
+    [printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
+    
+    if (delegatePage.pageNumber != 1) return;
+
+    // Draw Thumbnail
+    NSURL *thumbnailURL;
+    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:[delegatePage printPageRenderer]];
+    NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+    size_t newImageSize = 0;
+    
+    const int kPngSignatureLength = 8;
+    //int BYTE_SIZE = sizeof(float);
+    
+    png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
+    [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
+    
+    FILE *fp = NULL;
+    void *compressedPNG = NULL;
+    
+    if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
+    
+    iodata_stream_t dstream;
+    
+    png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
+    png_infop info =  png_create_info_struct(p);
+    
+    if (info == NULL) {
+        png_destroy_read_struct(&p, NULL, NULL);
+    } else {
+        
+        dstream.i = 0;
+        dstream.m = (char *)pngImage.bytes;
+        png_set_read_fn(p, &dstream, mad_png_read_fn);
+        png_set_sig_bytes((png_structp)pngSignature, kPngSignatureLength);
     }
+    png_byte numberOfChannels = png_get_channels(p, info);
+    png_uint_32 imageWidth = png_get_image_width(p, info);
+    png_sig_cmp(pngImage.bytes+kPngSignatureLength, (png_size_t)0, numberOfChannels*imageWidth);
+    
+    png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
+    png_uint_32 imageHeight = png_get_image_height(p, info);
+    compressedPNG = tdefl_write_image_to_png_file_in_memory_ex(p,
+                                                               (int)imageWidth,
+                                                               (int)imageHeight,
+                                                               (int)numberOfChannels,
+                                                               &newImageSize,
+                                                               MZ_UBER_COMPRESSION, 0);
+    png_destroy_read_struct(&p, (png_infopp)NULL, NULL);
+    p = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
+    thumbnailURL = [delegatePage thumbnailURL];
+    const char *thumbnailPath = thumbnailURL.path.UTF8String;
+    fp = fopen(thumbnailPath, "wb");
+    png_init_io(p, fp);
+    png_write_png(p, info, PNG_TRANSFORM_IDENTITY, compressedPNG);
+    png_destroy_write_struct(&p, &info);
+RegenThumbnailShortCircuit:;
+    free(compressedPNG);
+    free((void *)pngSignature);
+    fclose(fp);
+    thumbnail = nil;
+    
 }
 
 #pragma mark
@@ -116,28 +210,12 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
     if ([delegatePage respondsToSelector:@selector(numberOfPages)]) {
         
-        UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
-                                                                      CGPointZero.y + PageCounterBuffer,
-                                                                      PageCounterWidth,
-                                                                      PageCounterHeight)];
-        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
-        numberView.backgroundColor = bgColor;
-        numberView.userInteractionEnabled = NO;
-        numberView.alpha = 0.0000f;
-        numberView.layer.cornerRadius =  6.0000f;
-        
-        UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                       PageCounterWidth, PageCounterHeight)];
-        labelView.text = [NSString stringWithFormat: @"%lu of %lu",
-                          (unsigned long)[delegatePage pageNumber],
-                          (unsigned long)[delegatePage numberOfPages]];
-        labelView.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f];
-        labelView.textColor = [UIColor whiteColor];
-        labelView.textAlignment = NSTextAlignmentCenter;
-        labelView.userInteractionEnabled = NO;
-        labelView.backgroundColor = [UIColor clearColor];
-        [numberView addSubview:labelView];
-        
+        CGRect frame = CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
+                                  CGPointZero.y + PageCounterBuffer,
+                                  PageCounterWidth,
+                                  PageCounterHeight);
+        MADPageStatusView *numberView = [[MADPageStatusView alloc] initWithFrame: frame];
+        [numberView setPage:[delegatePage pageNumber] ofTotal:[delegatePage numberOfPages]];
         [self addSubview:numberView];
         
         [UIView animateWithDuration:0.3000f delay:0.0000f
@@ -149,7 +227,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
                                 
                                 if (finished) {
                                     [UIView animateWithDuration:0.30000f delay:1.0000f
-                                                        options:UIViewAnimationOptionCurveEaseOut animations:^{
+                                                        options:UIViewAnimationOptionCurveEaseOut
+                                                     animations:^{
                                                             numberView.alpha = 0.0000f;
                                                         } completion:^(BOOL animateFinished) {
                                                             if (animateFinished) {
@@ -166,7 +245,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 
 - (void)addTimerView {
     if (self.timeSinceRefreshView == nil) {
-        CGRect viewFrame = CGRectMake(self.frame.size.width - 220.0000f, self.frame.size.height - 23.0000f,
+        CGRect viewFrame = CGRectMake(self.frame.size.width - 220.0000f,
+                                      self.frame.size.height - 23.0000f,
                                       220.0000f, 23.0000f);
         UIView *view = [[UIView alloc] initWithFrame:viewFrame];
         UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
@@ -175,7 +255,10 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         view.alpha = 0.0000f;
         view.layer.cornerRadius =  6.0000f;
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, viewFrame.size.width, viewFrame.size.height)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x,
+                                                                   CGPointZero.y,
+                                                                   viewFrame.size.width,
+                                                                   viewFrame.size.height)];
         label.font = [UIFont systemFontOfSize:[UIFont systemFontSize] - 2.0000f];
         label.textAlignment = NSTextAlignmentCenter;
         label.userInteractionEnabled = NO;
@@ -188,7 +271,8 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         [self addSubview:view];
         
         UIView * __weak blockView = view;
-        [UIView animateWithDuration:0.3000f delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:0.3000f
+                              delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
             blockView.alpha = 1.0000f;
         } completion:^(BOOL finished) {
             if (finished) {

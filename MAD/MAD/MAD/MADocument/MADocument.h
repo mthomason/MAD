@@ -94,7 +94,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
     - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
 
-    - (void)regenThumbnail;
+    - (NSURL *)thumbnailURL;
 
     - (void)saveContext;
     - (void)prepareForQuery;
