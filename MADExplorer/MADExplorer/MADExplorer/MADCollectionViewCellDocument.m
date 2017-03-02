@@ -86,7 +86,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 @end
 
 @implementation MADCollectionViewCellDocument {
-    BOOL _wobbling;
   @protected
     UIView * _selectedBackgroundView;
 }
@@ -264,64 +263,35 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 }
 
 - (void)startWobble {
-    if (_wobbling) return;
-    
-    _wobbling = true;
+
+    _wobbling = YES;
     float r = wobbleFactor();
     
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    
-    void (^animationFinish)(void);
-    void (^animationStart)(void);
-    void (^animationStartCompletion)(BOOL finished);
-    
-    
-    MADCollectionViewCellDocument __weak *weakself = self;
-    
-    animationFinish = ^(void){
-        [UIView setAnimationRepeatCount: MAXFLOAT];
-        MADCollectionViewCellDocument *strongself = weakself;
-        if (strongself) {
-            CGAffineTransform rightWobble;
-            rightWobble = CGAffineTransformMakeRotation(
-                                    (CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
-            strongself.transform = rightWobble;
-        }
-    };
-    
-    animationStart = ^{
-        MADCollectionViewCellDocument *strongself = weakself;
-        if (strongself) {
-            CGAffineTransform leftWobble;
-            leftWobble = CGAffineTransformMakeRotation(
-                                    (CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-            strongself.transform = leftWobble;
-        }
-    };
-    
-    animationStartCompletion = ^(BOOL finished) {
-        
-        [UIView animateWithDuration: 0.2
-                              delay: 0
-                            options: UIViewAnimationOptionAllowUserInteraction |
-                                     UIViewAnimationOptionRepeat |
-                                     UIViewAnimationOptionAutoreverse |
-                                     UIViewAnimationOptionBeginFromCurrentState
-                         animations: animationFinish
-                         completion: nil];
-    };
-    
     [UIView animateWithDuration: 0.2
-                     animations: animationStart
-                     completion: animationStartCompletion];
+                     animations: ^{
+                         self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+                     }
+                     completion: ^(BOOL finished) {
+                         
+                         [UIView animateWithDuration: 0.2
+                                               delay: 0
+                                             options: UIViewAnimationOptionAllowUserInteraction |
+                          UIViewAnimationOptionRepeat |
+                          UIViewAnimationOptionAutoreverse |
+                          UIViewAnimationOptionBeginFromCurrentState
+                                          animations: ^(void){
+                                              [UIView setAnimationRepeatCount: MAXFLOAT];
+                                              self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
+                                          }
+                                          completion: nil];
+                     }];
 }
 
 - (void)stopWobble {
-    if (_wobbling) {
-        _wobbling = false;
-        [self.layer removeAllAnimations];
-        self.transform = CGAffineTransformIdentity;
-    }
+    _wobbling = NO;
+    [self.layer removeAllAnimations];
+    self.transform = CGAffineTransformIdentity;
 }
 
 - (NSString *)titleLabelText {
