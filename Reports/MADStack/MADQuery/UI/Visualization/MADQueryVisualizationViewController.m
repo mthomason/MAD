@@ -133,13 +133,6 @@ typedef NSMutableDictionary <NSNumber *,
 
 @end
 
-@implementation MADQueryVisualizationViewController
-
-@synthesize document = _document;
-
-#pragma mark -
-#pragma mark Static functions and keys
-
 static const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
 static const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 
@@ -152,6 +145,13 @@ static inline CGPoint MADPointInsertTable(CGFloat, NSUInteger);
 static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCount) {
     return CGPointMake(CGPointZero.x + 500, viewHeight / (tableCount + 2) * (tableCount + 1));
 }
+
+@implementation MADQueryVisualizationViewController
+
+@synthesize document = _document;
+
+#pragma mark -
+#pragma mark Static functions and keys
 
 + (instancetype)newQueryVisualizationViewController:(MADocument *)document {
     UIStoryboard *storyboard;
