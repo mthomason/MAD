@@ -164,6 +164,14 @@
     }
 }
 
+- (NSString *)rightFieldID {
+    return self.rigthFieldID;
+}
+
+- (void)setRightFieldID:(NSString *)rightFieldID {
+    self.rigthFieldID = rightFieldID;
+}
+
 - (id)debugQuickLookObject {
     NSMutableString *description = [[NSMutableString alloc] init];
     [description appendFormat:@"*********\n"];

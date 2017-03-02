@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t comparson;
 @property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, copy) NSString *leftFieldID;
-@property (nullable, nonatomic, copy) NSString *rightFieldID;
+@property (nullable, nonatomic, copy) NSString *rigthFieldID;
 @property (nullable, nonatomic, retain) RptqQuery *inQuery;
 @property (nullable, nonatomic, retain) RptqQueryField *hasLeftField;
 @property (nullable, nonatomic, retain) RptqQueryField *hasRightField;

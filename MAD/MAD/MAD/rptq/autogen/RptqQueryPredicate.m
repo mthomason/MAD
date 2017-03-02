@@ -21,7 +21,7 @@
 
 @dynamic comparson;
 @dynamic leftFieldID;
-@dynamic rightFieldID;
+@dynamic rigthFieldID;
 @dynamic identifier;
 @dynamic hasLeftField;
 @dynamic hasRightField;

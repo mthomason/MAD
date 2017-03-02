@@ -39,6 +39,7 @@
 + (void)deletePredicate:(RptqQueryPredicate *)predicate;
 - (NSString *)symbolForComparson;
 - (NSString *)symbolForDisplay;
+- (NSString *)rightFieldID;
 
 @end
 
