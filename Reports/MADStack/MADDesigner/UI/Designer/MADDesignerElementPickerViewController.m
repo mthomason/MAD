@@ -26,8 +26,8 @@
 
 #import "MADElementPickerProtocol.h"
 
-#import "MTQueryBuilderChooseFieldDelegate.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldProtocol.h"
+#import "MADQueryChooseFieldController.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTGroupByViewController.h"
@@ -52,7 +52,7 @@ static const NSInteger MADViewTagDocumentObjectNewLabelStatic   = 2027;
 static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 @interface MADDesignerElementPickerViewController ()
-    <MTQueryBuilderChooseFieldDelegate,
+    <MADQueryChooseFieldProtocol,
         MADAggregateFunctionsViewControllerDelegate,
         MADGroupByViewControllerDelegate,
         UINavigationControllerDelegate,
@@ -273,7 +273,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark
 #pragma mark - UITableViewControllerChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
                                       withField:(RptqQueryField *)field {
     
     switch (controller.view.tag) {

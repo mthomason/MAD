@@ -70,7 +70,7 @@
 #import "MADTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 
-#import "MTQueryBuilderLinkBuilderViewController.h"
+#import "MADQueryLinkBuilderController.h"
 
 #import "MADTableViewHeader.h"
 
@@ -477,11 +477,11 @@ BOOL storeEnabled() {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
+                if ([navControl.topViewController isKindOfClass:[MADQueryLinkBuilderController class]]) {
 
                     MADocument *document = self.document;
-                    MTQueryBuilderLinkBuilderViewController *tvc;
-                    tvc = (MTQueryBuilderLinkBuilderViewController *)navControl.topViewController;
+                    MADQueryLinkBuilderController *tvc;
+                    tvc = (MADQueryLinkBuilderController *)navControl.topViewController;
                     if (tvc) {
                         tvc.document = document;
                         tvc.queryLinkDelegate = self;

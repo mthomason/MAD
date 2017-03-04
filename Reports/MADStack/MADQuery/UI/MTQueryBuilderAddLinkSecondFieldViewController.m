@@ -16,7 +16,7 @@
 
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
-#import "MTQueryBuilderAddLinkJoinTypeViewController.h"
+#import "MADQueryAddLinkJoinTypeController.h"
 #import <CoreData/NSFetchedResultsController.h>
 
 @implementation MTQueryBuilderAddLinkSecondFieldViewController

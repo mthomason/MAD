@@ -10,7 +10,7 @@
 #define Barcodes_MTTableViewControllerBarcodeExtraMaxicode_h
 
 #import <UIKit/UITableViewController.h>
-#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
 
 @protocol MTTableViewControllerBarcodeExtraMaxicodeDelegate
     - (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode;
@@ -24,7 +24,7 @@
 @class MADocument;
 
 @interface MTTableViewControllerBarcodeExtraMaxicode : UITableViewController
-    <MTQueryBuilderChooseFieldDelegate>
+    <MADQueryChooseFieldProtocol>
 
 @property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraMaxicodeDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;

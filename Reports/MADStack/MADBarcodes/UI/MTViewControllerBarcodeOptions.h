@@ -29,7 +29,7 @@
 @class MTBarcode;
 
 @interface MTViewControllerBarcodeOptions : UITableViewController
-    <MTQueryBuilderChooseFieldDelegate,
+    <MADQueryChooseFieldProtocol,
         MTViewControllerBarcodeTypeDelegate,
         MTTableViewControllerBarcodeExtraAztecDelegate,
         MTTableViewControllerBarcodeExtraGridMatrixDelegate,

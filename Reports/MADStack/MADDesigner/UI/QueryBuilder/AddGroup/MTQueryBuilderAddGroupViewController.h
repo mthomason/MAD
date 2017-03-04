@@ -11,7 +11,7 @@
 
 #import <UIKit/UITableViewController.h>
 #import "MADQueryBuilderSortTypeDelegate.h"
-#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
 
 @protocol MADQueryBuilderAddGroupDelegate;
 
@@ -20,7 +20,7 @@
 @interface MTQueryBuilderAddGroupViewController : UITableViewController
     <UITableViewDelegate,
         MADQueryBuilderSortTypeDelegate,
-        MTQueryBuilderChooseFieldDelegate>
+        MADQueryChooseFieldProtocol>
 
     @property (nonatomic, weak) id <MADQueryBuilderAddGroupDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;

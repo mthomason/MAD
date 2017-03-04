@@ -21,8 +21,8 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIStoryboardSegue.h>
 
-#import "MTQueryBuilderChooseFieldViewController.h"
-#import "MADViewControllerValueBasedOnField.h"
+#import "MADQueryChooseFieldController.h"
+#import "MADQueryValueFromFieldController.h"
 
 #import <MAD/MADocument.h>
 
@@ -80,9 +80,9 @@
         
         self.currentlyEditingPart = MNSPredicateLeft;
   
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {
 
-            MTQueryBuilderChooseFieldViewController *destinationViewController;
+            MADQueryChooseFieldController *destinationViewController;
             NSArray *excludedTables = [[NSArray alloc] init];
             destinationViewController = segue.destinationViewController;
             destinationViewController.excludeTables = excludedTables;
@@ -96,18 +96,18 @@
         
         self.currentlyEditingPart = MNSPredicateRight;
         
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {
             
             NSArray *excludedTables = [[NSArray alloc] init];
-            MTQueryBuilderChooseFieldViewController *destinationViewController;
+            MADQueryChooseFieldController *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.excludeTables = excludedTables;
             destinationViewController.delegate = self;
             destinationViewController.document = document;
         
-        } else if ([segue.destinationViewController isKindOfClass: [MADViewControllerValueBasedOnField class]]) {
+        } else if ([segue.destinationViewController isKindOfClass: [MADQueryValueFromFieldController class]]) {
 
-            MADViewControllerValueBasedOnField *destinationViewController;
+            MADQueryValueFromFieldController *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.enterStringDelegate = self;
             destinationViewController.document = document;
@@ -175,7 +175,7 @@
     [self.navigationController popToViewController:self animated:YES];
 }
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
                                       withField:(RptqQueryField *)queryField {
     UITableViewCell *tableViewCellRightSide = _tableViewCellRightSide;
     [self.navigationController popToViewController:self animated:YES];

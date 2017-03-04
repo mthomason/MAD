@@ -354,15 +354,15 @@
             </objects>
             <point key="canvasLocation" x="37" y="8"/>
         </scene>
-        <!--View Controller Value Based On Field-->
+        <!--Query Value From Field Controller-->
         <scene sceneID="4vJ-Rd-b6y">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="tRR-a1-qDG" customClass="MADViewControllerValueBasedOnField" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="tRR-a1-qDG" customClass="MADQueryValueFromFieldController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lW8-wE-4zi"/>
                         <viewControllerLayoutGuide type="bottom" id="H0H-c4-cXm"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="V3f-7n-Kb8">
+                    <view key="view" contentMode="scaleToFill" misplaced="YES" id="V3f-7n-Kb8">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>

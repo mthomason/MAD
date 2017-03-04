@@ -11,7 +11,7 @@
 
 #import <UIKit/UITableViewController.h>
 #import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
-#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
 #import "MADViewControllerStandardProtocol.h"
 
 #import "MADLinkPart.h"
@@ -26,7 +26,7 @@
     <UITableViewDataSource,
         UITableViewDelegate,
         MADQueryBuilderAddLinkJoinTypeDelegate,
-        MTQueryBuilderChooseFieldDelegate>
+        MADQueryChooseFieldProtocol>
 
     @property (nonatomic, weak) id <MTQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
     @property (nonatomic, weak) MADocument *document;

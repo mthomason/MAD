@@ -23,7 +23,7 @@
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldController.h"
 #import "MADQueryAddLinkJoinTypeController.h"
 
 @interface MADQueryLinkBuilderController ()
@@ -88,15 +88,15 @@
     controller.document = self.document;
 }
 
-- (void)setupFieldController1:(MTQueryBuilderChooseFieldViewController *)controller {
+- (void)setupFieldController1:(MADQueryChooseFieldController *)controller {
     [self setupFieldController:controller excludeTable:self.firstTable];
 }
 
-- (void)setupFieldController2:(MTQueryBuilderChooseFieldViewController *)controller {
+- (void)setupFieldController2:(MADQueryChooseFieldController *)controller {
     [self setupFieldController:controller excludeTable:self.secondTable];
 }
 
-- (void)setupFieldController:(MTQueryBuilderChooseFieldViewController *)controller
+- (void)setupFieldController:(MADQueryChooseFieldController *)controller
                  excludeTable:(RptqQueryTable *)excludeTable {
     if (controller == nil) return;
     id alias = excludeTable.alias.copy;
@@ -133,7 +133,7 @@
     return self.linkType;
 }
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
                                       withField: (RptqQueryField *)queryField {
     [self.navigationController popToViewController: self animated: YES];
     

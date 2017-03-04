@@ -33,7 +33,7 @@
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldController.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
@@ -52,16 +52,16 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderChooseFieldViewController class]]) {
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+    if ([segue.destinationViewController isKindOfClass:[MADQueryChooseFieldController class]]) {
+        ((MADQueryChooseFieldController *)segue.destinationViewController).delegate = self;
         MADocument *document = self.document;
         [(segue.destinationViewController) setDocument: document];
     }
 }
 
-#pragma mark - MTQueryBuilderChooseFieldDelegate
+#pragma mark - MADQueryChooseFieldProtocol
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
                                       withField: (RptqQueryField *)field {
     
     [self.navigationController popViewControllerAnimated:YES];

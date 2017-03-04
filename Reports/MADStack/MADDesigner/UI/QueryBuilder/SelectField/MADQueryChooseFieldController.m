@@ -38,7 +38,7 @@
 
 #import "MADLabelTitle.h"
 
-#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
 
 #import "MADDatabaseTableSectionHeaderView.h"
 
@@ -275,7 +275,7 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
     if (queryField != nil) {
-        id <MTQueryBuilderChooseFieldDelegate> d = self.delegate;
+        id <MADQueryChooseFieldProtocol> d = self.delegate;
         if (d != nil) {
             [d tableViewControllerChooseFieldDidFinish: self withField: queryField];
         }

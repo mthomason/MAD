@@ -25,10 +25,10 @@
 #import "MADAggregateFunctionsViewControllerDelegate.h"
 #import "MADGroupByViewControllerDelegate.h"
 
-#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
 
 #import "MTGroupByViewController.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldController.h"
 
 #import "MADLabelTitle.h"
 
@@ -50,7 +50,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 @interface MTDocumentObjectNewAggregateViewController ()
     <MADAggregateFunctionsViewControllerDelegate,
         MADGroupByViewControllerDelegate,
-        MTQueryBuilderChooseFieldDelegate>
+        MADQueryChooseFieldProtocol>
 
     @property(nonatomic, strong) RptqDocumentElementAggregate *aggregateDocumentObject;
 
@@ -60,9 +60,9 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 @synthesize unwindViewController;
 
-#pragma mark - MTQueryBuilderChooseFieldDelegate
+#pragma mark - MADQueryChooseFieldProtocol
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
                                       withField: (RptqQueryField *)field {
     self.fieldObject = field;
     self.fieldObjectId = field.objectID;
@@ -195,7 +195,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         
     } else if ([action.identifier isEqualToString:MTSegueAggregateFieldSave]) {
         
-        MTQueryBuilderChooseFieldViewController *dynamicFieldController = action.sourceViewController;
+        MADQueryChooseFieldController *dynamicFieldController = action.sourceViewController;
         RptqQueryField *queryField = dynamicFieldController.queryField;
         self.fieldObject = queryField;
         self.fieldObjectId = queryField.objectID.copy;
@@ -320,7 +320,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         
     } else if ([segue.identifier isEqualToString:@"MADSegueAggregateFunctionField"]) {
     
-        MTQueryBuilderChooseFieldViewController *destinationViewController;
+        MADQueryChooseFieldController *destinationViewController;
         destinationViewController = segue.destinationViewController;
         destinationViewController.document = document;
         destinationViewController.delegate = self;

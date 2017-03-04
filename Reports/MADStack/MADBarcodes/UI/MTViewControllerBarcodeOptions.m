@@ -43,7 +43,7 @@
 
 #import <MADCocoaExtensions/MADAlertController.h>
 
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldController.h"
 
 #import "MTTableViewControllerBarcodeExtraAztec.h"
 #import "MTTableViewControllerStaticSelectRow.h"
@@ -187,21 +187,21 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 
         MADocument *document = self.document;
         [self setSelectingField1:YES];
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = document;
+        ((MADQueryChooseFieldController *)segue.destinationViewController).delegate = self;
+        ((MADQueryChooseFieldController *)segue.destinationViewController).document = document;
 
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
         
         MADocument *document = self.document;
         [self setSelectingField2:YES];
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = document;
+        ((MADQueryChooseFieldController *)segue.destinationViewController).delegate = self;
+        ((MADQueryChooseFieldController *)segue.destinationViewController).document = document;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
         
         // FIXME: Set inital component
         [self setSelecting2dComponentType:YES];
-        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+        ((MADQueryChooseFieldController *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
 
@@ -827,9 +827,9 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     return [barcode suppressRectangularSymbols];
 }
 
-#pragma mark - MTQueryBuilderChooseFieldDelegate
+#pragma mark - MADQueryChooseFieldProtocol
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
                                       withField:(RptqQueryField *)field {
 
     [self.navigationController popViewControllerAnimated:YES];

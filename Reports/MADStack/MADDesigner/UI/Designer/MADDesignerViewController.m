@@ -98,8 +98,8 @@
 #import "MADBackgroundScrollView.h"
 #import "MADPromptManager.h"
 
-#import "MTQueryBuilderChooseFieldDelegate.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldProtocol.h"
+#import "MADQueryChooseFieldController.h"
 
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
@@ -195,7 +195,7 @@ static const inline CGSize sizePopoverFonts() {
         MADElementPickerProtocol,
         MADViewControllerStandardProtocol,
         MADDesignerSectionLayoutDelegate,
-        MTQueryBuilderChooseFieldDelegate,
+        MADQueryChooseFieldProtocol,
         UIPopoverPresentationControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
@@ -1917,8 +1917,8 @@ static const inline CGSize sizePopoverFonts() {
     
     UIView *viewToEdit = [self viewForObjectID:@(object.identifier)];
     
-    MTQueryBuilderChooseFieldViewController *chooseFieldViewController;
-    chooseFieldViewController = [MTQueryBuilderChooseFieldViewController newQueryBuilderChooseFieldViewController];
+    MADQueryChooseFieldController *chooseFieldViewController;
+    chooseFieldViewController = [MADQueryChooseFieldController newQueryBuilderChooseFieldViewController];
     chooseFieldViewController.document = self.document;
     chooseFieldViewController.delegate = self;
     
@@ -2006,9 +2006,9 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 #pragma mark -
-#pragma mark - MTQueryBuilderChooseFieldDelegate
+#pragma mark - MADQueryChooseFieldProtocol
 
-- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
                                       withField: (RptqQueryField *)field {
 
     RptqDocumentElementLabelDataField *documentObject;
@@ -2705,10 +2705,10 @@ static const inline CGSize sizePopoverFonts() {
     [self scrollToDetailSectionView];
 }
 
-- (void)saveDynamicLabel:(MTQueryBuilderChooseFieldViewController *)viewController {
+- (void)saveDynamicLabel:(MADQueryChooseFieldController *)viewController {
     
-    MTQueryBuilderChooseFieldViewController *dynamicFieldController;
-    dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)viewController;
+    MADQueryChooseFieldController *dynamicFieldController;
+    dynamicFieldController = (MADQueryChooseFieldController *)viewController;
  
     RptqQueryField *queryField = dynamicFieldController.queryField;
 

@@ -13,7 +13,7 @@
 #import "MADUnwindProtocol.h"
 #import "MADSectionHeaderViewDelegate.h"
 
-@protocol MTQueryBuilderChooseFieldDelegate;
+@protocol MADQueryChooseFieldProtocol;
 
 @class MADQueryChooseFieldController;
 @class RptqQueryField;
@@ -27,7 +27,7 @@
 
     + (instancetype)newQueryBuilderChooseFieldViewController;
 
-    @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
+    @property (nonatomic, weak) id <MADQueryChooseFieldProtocol> delegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, strong) RptqQueryField *queryField;

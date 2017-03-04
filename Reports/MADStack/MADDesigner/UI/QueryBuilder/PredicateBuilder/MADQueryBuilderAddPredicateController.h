@@ -13,11 +13,11 @@
 #import <MAD/MADPredicateOperator.h>
 
 #import "MADViewControllerStandardProtocol.h"
-#import "MADViewControllerValueBasedOnFieldDelegate.h"
+#import "MADQueryValueFromFieldControllerDelegate.h"
 
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
-#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
@@ -33,8 +33,8 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 @interface MADQueryBuilderAddPredicateController : UITableViewController
     <UITableViewDelegate,
         MADTableViewControllerOpperatorsDelegate,
-        MTQueryBuilderChooseFieldDelegate,
-        MADViewControllerValueBasedOnFieldDelegate>
+        MADQueryChooseFieldProtocol,
+        MADQueryValueFromFieldControllerDelegate>
 
 
     @property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateProtocol,

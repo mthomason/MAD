@@ -22,7 +22,7 @@
 #import <MAD/RptqQueryField+Extras.h>
 
 #import "MTQueryBuilderSortTypeViewController.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldController.h"
 
 #import "MADQueryBuilderAddGroupDelegate.h"
 
@@ -67,9 +67,9 @@ static NSString * const TextDefault = @"Default";
             ((MTQueryBuilderSortTypeViewController *)segue.destinationViewController).delegate = self;
         }
     } else if ([segue.identifier isEqualToString:@"showAddGroupByField"]) {
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {
             
-            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
+            MADQueryChooseFieldController *dvc = segue.destinationViewController;
             if (dvc != nil) {
                 NSArray *empty = [[NSArray alloc] init];
                 dvc.excludeTables = empty;
@@ -84,7 +84,7 @@ static NSString * const TextDefault = @"Default";
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+- (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
                                       withField:(RptqQueryField *)queryField {
     [self.navigationController popToViewController:self animated:YES];
 

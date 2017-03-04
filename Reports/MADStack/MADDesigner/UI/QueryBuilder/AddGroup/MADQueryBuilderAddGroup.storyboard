@@ -178,7 +178,7 @@
         <!--Select Field-->
         <scene sceneID="y6l-Pm-t8b">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAddGroup" id="bce-zh-8oY" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAddGroup" id="bce-zh-8oY" customClass="MADQueryChooseFieldController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="23a-tz-EMC">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
