@@ -11,7 +11,7 @@
 
 @class RptqQueryPredicate;
 
-@protocol MADQueryAddPredicateDelegate
+@protocol MADQueryAddPredicateProtocol
     - (void)tableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;
 @end
 

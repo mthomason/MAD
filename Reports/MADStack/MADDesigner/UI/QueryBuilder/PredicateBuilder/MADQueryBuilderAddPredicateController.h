@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTQueryBuilderAddPredicateViewController_h
-#define Reports_MTQueryBuilderAddPredicateViewController_h
+#ifndef Reports_MADQueryBuilderAddPredicateController_h
+#define Reports_MADQueryBuilderAddPredicateController_h
 
 #import <UIKit/UITableViewController.h>
 #import <MAD/MADPredicateOperator.h>
@@ -26,7 +26,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateNone
 };
 
-@protocol MADQueryAddPredicateDelegate;
+@protocol MADQueryAddPredicateProtocol;
 
 @class MADocument;
 
@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
         MADViewControllerValueBasedOnFieldDelegate>
 
 
-    @property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateDelegate,
+    @property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateProtocol,
                                                     MADViewControllerStandardProtocol> queryPredicateDelegate;
     @property (nonatomic, weak)     MADocument *document;
 

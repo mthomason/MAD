@@ -11,7 +11,7 @@
 
 @class NSString;
 
-@protocol MTViewControllerValueBasedOnFieldDelegate
+@protocol MADViewControllerValueBasedOnFieldDelegate
     - (void)enterStringDidFinishWithString:(NSString *)userInput;
 @end
 

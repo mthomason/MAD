@@ -7,15 +7,119 @@
 //
 
 #import "MADLabelTimer.h"
+#import <UIKit/UILabel.h>
+#import <MADDataStructures/MTPair.h>
+#import "NSDate+Extras.h"
+
+@interface MADLabelTimer ()
+
+    @property (nonatomic, weak) UILabel *label;
+    @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
+    @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
+    @property (nonatomic, strong) NSDate *lastCacheDate;
+
+
+@end
 
 @implementation MADLabelTimer
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+void invalidateTimer(NSTimer *);
+void invalidateTimer(NSTimer *t) {
+    if (t != nil) {
+        if ([t respondsToSelector:@selector(isValid)]) {
+            if (t.valid) {
+                [t invalidate];
+            }
+        }
+    }
 }
-*/
+
+- (void)dealloc {
+    invalidateTimer(_timerLabelTimeSinceRefreh);
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        UIView *view = [[UIView alloc] initWithFrame:frame];
+        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
+        view.backgroundColor = bgColor;
+        view.userInteractionEnabled = NO;
+        view.layer.cornerRadius =  6.0000f;
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x,
+                                                                   CGPointZero.y,
+                                                                   frame.size.width,
+                                                                   frame.size.height)];
+        label.font = [UIFont systemFontOfSize:[UIFont systemFontSize] - 2.0000f];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.userInteractionEnabled = NO;
+        UIColor *textColor = [UIColor whiteColor];
+        label.textColor = textColor;
+        UIColor *backgroundColor = [UIColor clearColor];
+        label.backgroundColor = backgroundColor;
+        
+        [view addSubview:label];
+        self.label = label;
+    }
+    return self;
+}
+
+- (MADDateFromTimeFormatter *)dateTimeFormatter {
+    if (_dateTimeFormatter == nil) {
+        MADDateFromTimeFormatter *dateTimeFormatter = [[MADDateFromTimeFormatter alloc] init];
+        _dateTimeFormatter = dateTimeFormatter;
+    }
+    return _dateTimeFormatter;
+}
+
+- (void)updateWithDate:(NSDate *)lastCacheDate {
+
+    if (lastCacheDate == nil) {
+        [self displayNoCache];
+    } else {
+        
+        self.lastCacheDate = lastCacheDate.copy;
+        NSTimeInterval updateLabelInSeconds = [self displayWithLastCacheDate:lastCacheDate];
+        
+        invalidateTimer(_timerLabelTimeSinceRefreh);
+
+        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds
+                                                      target: self
+                                                    selector: @selector(updateWithTimer:)
+                                                    userInfo: lastCacheDate
+                                                     repeats: NO];
+        self.timerLabelTimeSinceRefreh = t;
+    }
+
+}
+
+- (void)updateWithTimer:(NSTimer *)timer {
+    
+    if (_lastCacheDate == nil) {
+        [self displayNoCache];
+    } else {
+        
+        NSTimeInterval updateLabelInSeconds = [self displayWithLastCacheDate:_lastCacheDate];
+        invalidateTimer(_timerLabelTimeSinceRefreh);
+
+        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds
+                                                      target: self
+                                                    selector: @selector(updateWithTimer:)
+                                                    userInfo: _lastCacheDate
+                                                     repeats: NO];
+        self.timerLabelTimeSinceRefreh = t;
+    }
+}
+
+- (void)displayNoCache {
+    NSString *noCache = NSLocalizedString(@"No Cache", @"No Cache");
+    self.label.text = noCache;
+}
+
+- (MTDateResolution)displayWithLastCacheDate:(NSDate *)lastCacheDate {
+    MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:_lastCacheDate];
+    self.label.text = [dateStringAndInterval.former copyWithZone:nil];
+    return ((NSNumber *)dateStringAndInterval.latter).shortValue;
+}
 
 @end

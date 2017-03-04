@@ -33,7 +33,7 @@
         <!--Predicate Format-->
         <scene sceneID="Kjj-zr-QtN">
             <objects>
-                <tableViewController id="9UR-0v-mkt" customClass="MTQueryBuilderPredicateFormatViewController" sceneMemberID="viewController">
+                <tableViewController id="9UR-0v-mkt" customClass="MADQueryPredicateFormatController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="UtX-Qf-sGp">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -107,7 +107,7 @@
         <!--Add Predicate-->
         <scene sceneID="uFS-C0-l7l">
             <objects>
-                <tableViewController id="Ako-sk-WFW" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
+                <tableViewController id="Ako-sk-WFW" customClass="MADQueryBuilderAddPredicateController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wtr-i2-4Bh">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -237,7 +237,7 @@
         <!--Add Predicate-->
         <scene sceneID="O4k-yE-nsm">
             <objects>
-                <tableViewController id="R4o-wI-s9a" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
+                <tableViewController id="R4o-wI-s9a" customClass="MADQueryBuilderAddPredicateController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5Bh-Kd-6p5">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

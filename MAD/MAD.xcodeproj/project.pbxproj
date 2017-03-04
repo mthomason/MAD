@@ -40,8 +40,6 @@
 		4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C24809B1C8B20E00058E6B4 /* MADFonts.m */; };
 		4C2480B61C8B7C860058E6B4 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2480B71C8B7C860058E6B4 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */; };
-		4C2BB7701E329246005C8045 /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C2BB76E1E329246005C8045 /* London.mad */; };
-		4C2BB7711E329246005C8045 /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C2BB76F1E329246005C8045 /* Music.mad */; };
 		4C2DC0B21CEAD65800167DA3 /* madlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC0B01CEAD65800167DA3 /* madlib.c */; };
 		4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2DC0B11CEAD65800167DA3 /* madlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */; };
@@ -599,8 +597,6 @@
 		4C24809B1C8B20E00058E6B4 /* MADFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFonts.m; path = MAD/MADFonts.m; sourceTree = "<group>"; };
 		4C2480B41C8B7C860058E6B4 /* MADErrorUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADErrorUserInfo.h; path = MAD/MADErrorUserInfo.h; sourceTree = "<group>"; };
 		4C2480B51C8B7C860058E6B4 /* MADErrorUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADErrorUserInfo.m; path = MAD/MADErrorUserInfo.m; sourceTree = "<group>"; };
-		4C2BB76E1E329246005C8045 /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = ../../Reports/MADStack/MADDesigner/Assets/Samples/Reports/London.mad; sourceTree = "<group>"; };
-		4C2BB76F1E329246005C8045 /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = Music.mad; path = ../../Reports/MADStack/MADDesigner/Assets/Samples/Reports/Music.mad; sourceTree = "<group>"; };
 		4C2DC0B01CEAD65800167DA3 /* madlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = madlib.c; path = MAD/madlib.c; sourceTree = "<group>"; };
 		4C2DC0B11CEAD65800167DA3 /* madlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = madlib.h; path = MAD/madlib.h; sourceTree = "<group>"; };
 		4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityIndicatorLabel.h; sourceTree = "<group>"; };
@@ -2052,8 +2048,6 @@
 		4CF781521BADE5EA0050A67D /* MADTests */ = {
 			isa = PBXGroup;
 			children = (
-				4C2BB76E1E329246005C8045 /* London.mad */,
-				4C2BB76F1E329246005C8045 /* Music.mad */,
 				4CF781531BADE5EA0050A67D /* MADTests.m */,
 				4CF781551BADE5EA0050A67D /* Info.plist */,
 			);
@@ -2443,8 +2437,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C2BB7711E329246005C8045 /* Music.mad in Resources */,
-				4C2BB7701E329246005C8045 /* London.mad in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

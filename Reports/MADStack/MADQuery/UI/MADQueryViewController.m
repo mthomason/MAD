@@ -59,10 +59,10 @@
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
 
-#import "MTQueryBuilderAddTableViewController.h"
+#import "MADQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
-#import "MTQueryBuilderPredicateFormatViewController.h"
+#import "MADQueryPredicateFormatController.h"
 
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
@@ -138,7 +138,7 @@ static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushi
         MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
-        MTQueryBuilderAddTableDelegate,
+        MADQueryBuilderAddTableDelegate,
         MADQueryBuilderAddGroupDelegate,
         MADViewControllerStandardProtocol,
         MTQueryBuilderLinkBuilderDelegate,
@@ -447,9 +447,9 @@ BOOL storeEnabled() {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
+                if ([navControl.topViewController isKindOfClass:[MADQueryBuilderAddTableViewController class]]) {
                     
-                    MTQueryBuilderAddTableViewController *tvc = (MTQueryBuilderAddTableViewController *)navControl.topViewController;
+                    MADQueryBuilderAddTableViewController *tvc = (MADQueryBuilderAddTableViewController *)navControl.topViewController;
                     if (tvc) {
                         tvc.delegate = self;
                     }
@@ -494,9 +494,9 @@ BOOL storeEnabled() {
             UINavigationController *navControl = segue.destinationViewController;
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
-                    MTQueryBuilderPredicateFormatViewController *tvc;
-                    tvc = (MTQueryBuilderPredicateFormatViewController *)navControl.topViewController;
+                if ([navControl.topViewController isKindOfClass:[MADQueryPredicateFormatController class]]) {
+                    MADQueryPredicateFormatController *tvc;
+                    tvc = (MADQueryPredicateFormatController *)navControl.topViewController;
                     if (tvc) {
                         MADocument *document = self.document;
                         tvc.document = document;
@@ -763,7 +763,7 @@ BOOL storeEnabled() {
     [self.queryViewDataSource performFetchGroups];
 }
 
-#pragma mark - MTQueryBuilderAddTableDelegate
+#pragma mark - MADQueryBuilderAddTableDelegate
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectID {
 
@@ -1360,7 +1360,7 @@ BOOL storeEnabled() {
 
 - (void)reloadQueryViewData {
     //NSLog(@"Reload query view data.");
-    //[self.tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection

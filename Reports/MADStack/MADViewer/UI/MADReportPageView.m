@@ -13,23 +13,22 @@
 #import "MADReportPageView.h"
 
 #import <setjmp.h>
-#import <mach/machine/vm_param.h>
+#import <MAD/miniz.h>
 
 #import <UIKit/UILabel.h>
 
 #import <QuartzCore/CALayer.h>
 
 #import <MADBarcodes/png.h>
-#import <MADDataStructures/MTPair.h>
 #import <MAD/MADImageThumbnail.h>
 
 #import <MAD/MADPrintPageRenderer.h>
-#import <MAD/miniz.h>
 
 #import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
-#import "NSDate+Extras.h"
 #import "MADTextPosition.h"
+
+#import "MADLabelTimer.h"
 
 static NSString * const PageNumber = @"Page %@";
 static NSString * const MADTextNoCache = @"No Cache";
@@ -65,29 +64,17 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message) {
 
 @interface MADReportPageView ()
 
-    @property (nonatomic, assign) BOOL firstTime;
-    @property (nonatomic, assign) BOOL displaysPageCounter;
-    @property (nonatomic, assign) BOOL displaysCacheTimer;
-
-    @property (nonatomic, weak) UILabel *timeSinceRefrehLabel;
-
-    @property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
-
-    @property (nonatomic, strong) UIView *timeSinceRefreshView;
-    @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
+    @property (nonatomic, weak) MADLabelTimer *timerLabel;
 
 @end
 
-@implementation MADReportPageView
+@implementation MADReportPageView {
+    BOOL _firstTime;
+    BOOL _displaysPageCounter;
+    BOOL _displaysCacheTimer;
+}
 
 - (void)dealloc {
-    if (_timerLabelTimeSinceRefreh != nil) {
-        if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-            if (_timerLabelTimeSinceRefreh.valid) {
-                [_timerLabelTimeSinceRefreh invalidate];
-            }
-        }
-    }
     _delegatePage = nil;
 }
 
@@ -108,15 +95,13 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message) {
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (self.firstTime) {
-        MADDateFromTimeFormatter *dateTimeFormatter = [MADDateFromTimeFormatter new];
-        self.dateTimeFormatter = dateTimeFormatter;
-        self.firstTime = NO;
-        if (self.displaysCacheTimer) {
+    if (_firstTime) {
+        _firstTime = NO;
+        if (_displaysCacheTimer) {
             [self addTimerView];
             [self updateTimeSinceLastRefresh:self];
         }
-        if (self.displaysPageCounter) {
+        if (_displaysPageCounter) {
             [self displayPageCounterIndicator];
         }
     }
@@ -196,7 +181,7 @@ RegenThumbnailShortCircuit:;
 #pragma mark
 
 - (void)setup {
-    _displaysCacheTimer = NO;
+    _displaysCacheTimer = YES;
     _displaysPageCounter = NO;
     _drawBlankPage = NO;
     _firstTime = YES;
@@ -244,30 +229,11 @@ RegenThumbnailShortCircuit:;
 #pragma mark Timer
 
 - (void)addTimerView {
-    if (self.timeSinceRefreshView == nil) {
+    if (self.timerLabel == nil) {
         CGRect viewFrame = CGRectMake(self.frame.size.width - 220.0000f,
                                       self.frame.size.height - 23.0000f,
                                       220.0000f, 23.0000f);
-        UIView *view = [[UIView alloc] initWithFrame:viewFrame];
-        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
-        view.backgroundColor = bgColor;
-        view.userInteractionEnabled = NO;
-        view.alpha = 0.0000f;
-        view.layer.cornerRadius =  6.0000f;
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x,
-                                                                   CGPointZero.y,
-                                                                   viewFrame.size.width,
-                                                                   viewFrame.size.height)];
-        label.font = [UIFont systemFontOfSize:[UIFont systemFontSize] - 2.0000f];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.userInteractionEnabled = NO;
-        UIColor *textColor = [UIColor whiteColor];
-        label.textColor = textColor;
-        UIColor *backgroundColor = [UIColor clearColor];
-        label.backgroundColor = backgroundColor;
-        
-        [view addSubview:label];
+        MADLabelTimer *view = [[MADLabelTimer alloc] initWithFrame:viewFrame];
         [self addSubview:view];
         
         UIView * __weak blockView = view;
@@ -282,45 +248,14 @@ RegenThumbnailShortCircuit:;
                                     } completion:nil];
             }
         }];
-        
-        self.timeSinceRefrehLabel = label;
-        self.timeSinceRefreshView = view;
+        self.timerLabel = view;
     }
 }
 
 - (void)updateTimeSinceLastRefresh:(id)sender {
-
-    UILabel *timeSinceRefrehLabel = self.timeSinceRefrehLabel;
-    
-    NSDate * _Nullable lastCacheDate = [self.delegatePage lastCacheDate];
-    if (lastCacheDate == nil) {
-        
-        NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
-        timeSinceRefrehLabel.text = noCache;
-        
-    } else {
-
-        MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:lastCacheDate];
-        timeSinceRefrehLabel.text = dateStringAndInterval.former;
-        MTDateResolution resolution = ((NSNumber *)dateStringAndInterval.latter).shortValue;
-        
-        NSTimeInterval updateLabelInSeconds = [MADDateFromTimeFormatter timeIntervalForResolution:resolution];
-        
-        if (self.timerLabelTimeSinceRefreh != nil) {
-            if ([self.timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
-                if ((self.timerLabelTimeSinceRefreh).valid) {
-                    [self.timerLabelTimeSinceRefreh invalidate];
-                }
-            }
-            self.timerLabelTimeSinceRefreh = nil;
-        }
-        
-        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
-                                                    selector: @selector(updateTimeSinceLastRefresh:) userInfo:nil
-                                                     repeats: NO];
-        self.timerLabelTimeSinceRefreh = t;
-    }
-}
+    NSDate *date = [self.delegatePage lastCacheDate];
+    [self.timerLabel updateWithDate: date];
+ }
 
 #pragma mark - UITextInput
 #pragma mark Required

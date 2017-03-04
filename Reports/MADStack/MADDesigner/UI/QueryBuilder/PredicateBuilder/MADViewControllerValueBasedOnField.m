@@ -13,11 +13,11 @@
 #import "MADViewControllerValueBasedOnField.h"
 #import "MADViewControllerValueBasedOnFieldDelegate.h"
 
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <UIKit/UIWindow.h>
 #import <UIKit/UITableView.h>
 #import <UIKit/UIPickerView.h>
-
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>

@@ -2202,8 +2202,10 @@ static const inline CGSize sizePopoverFonts() {
         }
     }
     
-    NSAssert(elementView != nil, @"We need an element view people.");
-    [self.visibleElementViews addObject:elementView];
+    //NSAssert(elementView != nil, @"We need an element view people.");
+    if (elementView) {
+        [self.visibleElementViews addObject:elementView];
+    }
     [self adjustPassthroughViews];
     
 }

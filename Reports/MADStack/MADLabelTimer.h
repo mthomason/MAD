@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADLabelTimer_h
+#define Reports_MADLabelTimer_h
+
+#import <UIKit/UIView.h>
 
 @interface MADLabelTimer : UIView
 
+    - (void)updateWithDate:(NSDate *)lastCacheDate;
+
 @end
+
+#endif

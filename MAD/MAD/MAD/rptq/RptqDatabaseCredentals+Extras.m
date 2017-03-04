@@ -61,15 +61,15 @@
 
         case MADDatabaseTypeUnknown: {
             
-            if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
+            if ([self.driverID isEqualToString: [RptqDatabaseCredentals driverIDMySQL]]) {
                 result = self.dbname.copy;
                 self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
                 
-            } else if ([self.driverID isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
+            } else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDTDS]]) {
                 result = self.dbname.copy;
                 self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
                 
-            } else if ([self.driverID isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
+            } else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDSqlite3]]) {
                 result = self.dbname.copy;
                 self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
                 
@@ -88,23 +88,39 @@
 
 + (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext {
     NSString *entityName = NSStringFromClass([self class]);
-    NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext: objectContext];
-    id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
+    NSEntityDescription *ed = [NSEntityDescription entityForName: entityName
+                                          inManagedObjectContext: objectContext];
+    id userCredentals = [[self alloc] initWithEntity:ed
+                      insertIntoManagedObjectContext:objectContext];
     return userCredentals;
 }
 
-+ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext {
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
++ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)context {
+    NSFetchRequest *request;
+    NSString *dbCredentialsClassName = NSStringFromClass([RptqDatabaseCredentals class]);
+    request = [[NSFetchRequest alloc] initWithEntityName:dbCredentialsClassName];
     NSSortDescriptor *sort;
     sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driverID))
                                          ascending: YES];
     NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
     request.sortDescriptors = sortDescriptors;
     NSError *error = nil;
-    NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
+    NSArray *fetchResults = [context executeFetchRequest:request error:&error];
     NSArray <RptqDatabaseCredentals *> *results;
     results = [[NSArray <RptqDatabaseCredentals *> alloc] initWithArray:fetchResults];
     return results;
+}
+
++ (NSString *)driverIDMySQL {
+    return [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL];
+}
+
++ (NSString *)driverIDTDS {
+    return [MADDatabaseConnection Identifier:MADDatabaseTypeTDS];
+}
+
++ (NSString *)driverIDSqlite3 {
+    return [MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3];
 }
 
 - (id)debugQuickLookObject {

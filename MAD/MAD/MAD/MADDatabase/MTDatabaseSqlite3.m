@@ -69,6 +69,14 @@ int compare_string_utf8_localized_asc_collation(void *data, int len1, const void
     return str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] : NSOrderedDescending;
 }
 
+//#ifdef MAD_MTDatabaseSqlite3_DEBUG
+void sqliteLog(void *foo, const char* statement);
+void sqliteLog(void *foo, const char* statement) {
+    printf("=> %s\n", statement);
+    //MTLogStatic(@"=> %s", statement);
+}
+//#endif
+
 @interface MTDatabaseSqlite3 ()
 
     @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesURL> *databaseConnection;
@@ -81,131 +89,6 @@ int compare_string_utf8_localized_asc_collation(void *data, int len1, const void
 }
 
 @dynamic databaseConnection;
-
-//#ifdef MAD_MTDatabaseSqlite3_DEBUG
-void sqliteLog(void *foo, const char* statement);
-void sqliteLog(void *foo, const char* statement) {
-    printf("=> %s\n", statement);
-    //MTLogStatic(@"=> %s", statement);
-}
-//#endif
-
-- (void *)databaseHandle {
-    return _database;
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        _database = NULL;
-        _bulkStatement = NULL;
-        _isOpen = NO;
-    }
-    return self;
-}
-
-
-- (void)openDatabase {
-    [self openDatabaseWithFlags: SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE |
-                                    SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
-}
-
-- (void)openDatabaseWithFlags:(int)flags {
-    //NSError *error = nil;
-    //Open conneciton... closed in dealloc.
-    if (!_isOpen) {
-        
-        //NSLog(@"Path: %@", self.databaseConnection.databaseUrl.path);
-        
-        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
-        BOOL databaseOpen = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK;
-        NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s).", (char *)sqlite3_errmsg(_database));
-
-        if (databaseOpen) {
-            databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;
-            NSAssert(databaseOpen, @"Error: failed to extend result codes: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
-            databaseOpen = sqlite3_create_collation_v2((struct sqlite3 *)_database, "LSASC",
-                                        SQLITE_UTF8, (struct sqlite3 *)_database,
-                                        compare_string_utf8_localized_asc_collation, NULL) == SQLITE_OK;
-            NSAssert(databaseOpen, @"Error: failed to create collation: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
-//#ifdef MAD_MTDatabaseSqlite3_DEBUG
-            //sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
-//#endif
-
-        } else {
-            //const char *errorMessage = sqlite3_errmsg(_database);
-            //NSString *message = @(errorMessage);
-            //NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
-            //NSString *domain = @"MTSqlite3";
-            //MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: title
-            //                                                               andMessage: message];
-            //error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
-        }
-        _isOpen = YES;
-    }
-}
-
-- (void)dealloc {
-    
-    if (_bulkStatement != NULL && sqlite3_clear_bindings(_bulkStatement) && sqlite3_finalize(_bulkStatement)) {
-        NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.",
-                    __PRETTY_FUNCTION__,
-                    sqlite3_errmsg((struct sqlite3 *)_database));
-    }
-    
-    if (_database != NULL && sqlite3_close_v2(_database) != SQLITE_OK) {
-        NSAssert(0, @"Error: failed to close database with message '%s, %s'.",
-                    __PRETTY_FUNCTION__,
-                    sqlite3_errmsg((struct sqlite3 *)_database));
-    }
-
-}
-
-- (id)connectWithConnection:(MADDatabaseConnection *)connection
-                 credentals:(MADCredential *)credentals {
-    [self openDatabase];
-    return nil;
-}
-
-- (BOOL)tableExist:(NSString *)tablename {
-    BOOL exist = NO;
-    sqlite3_stmt *statement = NULL;
-    const char *queryc = "SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
-	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
-        const char *t = tablename.UTF8String;
-        int bind_result = sqlite3_bind_text(statement, 1, t, (int)strlen(t), SQLITE_STATIC);
-        NSAssert(bind_result == SQLITE_OK, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
-		if (sqlite3_step(statement) == SQLITE_ROW) {
-            exist = sqlite3_column_int(statement, 0) == 1;
-        }
-    }
-    sqlite3_clear_bindings(statement);
-    sqlite3_finalize(statement);
-    return exist;
-}
-
-- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    BOOL success = NO;
-	sqlite3_stmt *statement;
-	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
-
-	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-        success = YES;
-		while (sqlite3_step(statement) == SQLITE_ROW) {
-            
-            const unsigned char *resultString = sqlite3_column_text(statement, 0);
-            NSString *tableName = @((char *)resultString);
-            
-            MADDatabaseTable *databaseTable;
-            databaseTable = [[MADDatabaseTable alloc] initWithTableName: tableName];
-            [result addObject:databaseTable];
-		}
-	}
-	sqlite3_finalize(statement);
-	sqlite3_free(sql);
-    completion(success, nil, result);
-}
 
 //Converting native type to affinity type
 // using http://www.sqlite.org/datatype3.html
@@ -328,6 +211,123 @@ void sqliteLog(void *foo, const char* statement) {
             break;
     }
     return result;
+}
+
+- (void *)databaseHandle {
+    return _database;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _database = NULL;
+        _bulkStatement = NULL;
+        _isOpen = NO;
+    }
+    return self;
+}
+
+
+- (void)openDatabase {
+    [self openDatabaseWithFlags: SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE |
+                                    SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
+}
+
+- (void)openDatabaseWithFlags:(int)flags {
+    //NSError *error = nil;
+    //Open conneciton... closed in dealloc.
+    if (!_isOpen) {
+        
+        //NSLog(@"Path: %@", self.databaseConnection.databaseUrl.path);
+        
+        const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
+        BOOL databaseOpen = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK;
+        NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s).", (char *)sqlite3_errmsg(_database));
+
+        if (databaseOpen) {
+            databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;
+            NSAssert(databaseOpen, @"Error: failed to extend result codes: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
+            databaseOpen = sqlite3_create_collation_v2((struct sqlite3 *)_database, "LSASC",
+                                        SQLITE_UTF8, (struct sqlite3 *)_database,
+                                        compare_string_utf8_localized_asc_collation, NULL) == SQLITE_OK;
+            NSAssert(databaseOpen, @"Error: failed to create collation: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
+//#ifdef MAD_MTDatabaseSqlite3_DEBUG
+            //sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
+//#endif
+
+        } else {
+            //const char *errorMessage = sqlite3_errmsg(_database);
+            //NSString *message = @(errorMessage);
+            //NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
+            //NSString *domain = @"MTSqlite3";
+            //MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: title
+            //                                                               andMessage: message];
+            //error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
+        }
+        _isOpen = YES;
+    }
+}
+
+- (void)dealloc {
+    
+    if (_bulkStatement != NULL && sqlite3_clear_bindings(_bulkStatement) && sqlite3_finalize(_bulkStatement)) {
+        NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.",
+                    __PRETTY_FUNCTION__,
+                    sqlite3_errmsg((struct sqlite3 *)_database));
+    }
+    
+    if (_database != NULL && sqlite3_close_v2(_database) != SQLITE_OK) {
+        NSAssert(0, @"Error: failed to close database with message '%s, %s'.",
+                    __PRETTY_FUNCTION__,
+                    sqlite3_errmsg((struct sqlite3 *)_database));
+    }
+
+}
+
+- (id)connectWithConnection:(MADDatabaseConnection *)connection
+                 credentals:(MADCredential *)credentals {
+    [self openDatabase];
+    return nil;
+}
+
+- (BOOL)tableExist:(NSString *)tablename {
+    BOOL exist = NO;
+    sqlite3_stmt *statement = NULL;
+    const char *queryc = "SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
+	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
+        const char *t = tablename.UTF8String;
+        int bind_result = sqlite3_bind_text(statement, 1, t, (int)strlen(t), SQLITE_STATIC);
+        NSAssert(bind_result == SQLITE_OK, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+		if (sqlite3_step(statement) == SQLITE_ROW) {
+            exist = sqlite3_column_int(statement, 0) == 1;
+        }
+    }
+    sqlite3_clear_bindings(statement);
+    sqlite3_finalize(statement);
+    return exist;
+}
+
+- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    BOOL success = NO;
+	sqlite3_stmt *statement;
+	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
+	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
+
+	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+        success = YES;
+		while (sqlite3_step(statement) == SQLITE_ROW) {
+            
+            const unsigned char *resultString = sqlite3_column_text(statement, 0);
+            NSString *tableName = @((char *)resultString);
+            
+            MADDatabaseTable *databaseTable;
+            databaseTable = [[MADDatabaseTable alloc] initWithTableName: tableName];
+            [result addObject:databaseTable];
+		}
+	}
+	sqlite3_finalize(statement);
+	sqlite3_free(sql);
+    completion(success, nil, result);
 }
 
 - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
@@ -596,7 +596,7 @@ void sqliteLog(void *foo, const char* statement) {
         //NSLog(@"Failed to run query.");
         // FIXME: Handle failures.
         int step_result = sqlite3_step(statement);
-        NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (Result: %d -[%s]).", step_result, (char *)sqlite3_errmsg(_database));
+        //NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (Result: %d -[%s]).", step_result, (char *)sqlite3_errmsg(_database));
     }
     if (partOfTransactionSet == NO) {
         sqlite3_clear_bindings(statement);
@@ -610,7 +610,7 @@ void sqliteLog(void *foo, const char* statement) {
     
     if (!success) {
         errorMessage = (char *)sqlite3_errmsg(_database);
-        //NSLog(@"%s.", errorMessage);
+        NSLog(@"%s.", errorMessage);
     }
     
     NSString *message = nil;
@@ -643,10 +643,6 @@ void sqliteLog(void *foo, const char* statement) {
     NSError * __autoreleasing *sqlError = NULL;
     NSString *sqlResult = [query getSqlWithError: sqlError];
     NSString *queryString = [[NSString alloc] initWithString: sqlResult];
-    
-    if (queryString.length <= 0) {
-        //NSLog(@"No string");
-    }
     
     NSAssert(sqlError == NULL, @"Error %@", @"Could not create query string.");
 
@@ -873,7 +869,8 @@ void sqliteLog(void *foo, const char* statement) {
     
 }
 
-#pragma mark - Reading Tables
+#pragma mark -
+#pragma mark Reading Tables
 
 - (void)enumerateTablesFromConnection:(id)process
                            usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
@@ -945,7 +942,8 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
-#pragma mark - Reading Fields
+#pragma mark -
+#pragma mark Reading Fields
 
 - (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
                                      connection: (id)process

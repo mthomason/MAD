@@ -15,6 +15,7 @@
                 <navigationController storyboardIdentifier="MADIdentifierQueryBuilderAddTable" definesPresentationContext="YES" id="vFe-wK-P1j" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="taD-86-klb">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -33,7 +34,7 @@
         <!--Add Table-->
         <scene sceneID="FiN-8R-Kst">
             <objects>
-                <tableViewController id="eYd-TC-lTy" customClass="MTQueryBuilderAddTableViewController" sceneMemberID="viewController">
+                <tableViewController id="eYd-TC-lTy" customClass="MADQueryBuilderAddTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="yDQ-Xc-UG9">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
