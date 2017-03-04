@@ -33,6 +33,9 @@
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqQueryTable+Extras.h>
 
+#import <MAD/MADModelDocument.h>
+#import <MAD/MADModelQuery.h>
+
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
 #import "MADTableViewCellQueryPredicate.h"
@@ -191,6 +194,123 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
     return self;
 }
 
+#pragma mark -
+#pragma mark Overrides
+
+- (NSFetchedResultsController *)queryLinksController {
+    if (_queryLinksController == nil) {
+        NSString *key = NSStringFromSelector(@selector(tableLeftID));
+        NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
+        NSSortDescriptor *sortDescriptor;
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                     ascending: YES];
+        
+        NSFetchedResultsController *frc;
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        MADocument *doc = self.datasoruce.document;
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+        request.sortDescriptors = sortDescriptors;
+        frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                  managedObjectContext: doc.managedObjectContext
+                                                    sectionNameKeyPath: nil
+                                                             cacheName: nil];
+        frc.delegate = self;
+        _queryLinksController = frc;
+    }
+    return _queryLinksController;
+}
+
+- (NSFetchedResultsController *)queryGroupsController {
+    if (_queryGroupsController == nil) {
+
+        MADocument *doc;
+        NSFetchedResultsController *frc;
+        NSSortDescriptor *sortDescriptor;
+        NSArray *sortDescriptors;
+        
+        NSString *keyWeight = NSStringFromSelector(@selector(weight));
+        NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey: keyWeight
+                                                     ascending: YES];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        
+        sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+        
+        request.sortDescriptors = sortDescriptors;
+        doc = self.datasoruce.document;
+        frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                  managedObjectContext: doc.managedObjectContext
+                                                    sectionNameKeyPath: nil
+                                                             cacheName: nil];
+        frc.delegate = self;
+        _queryGroupsController = frc;
+    }
+    return _queryGroupsController;
+}
+
+- (NSFetchedResultsController *)queryTablesController {
+    if (_queryTablesController == nil) {
+        NSString *entityName = NSStringFromClass([RptqQueryTable class]);
+        NSString *keyAlias = NSStringFromSelector(@selector(alias));
+        NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+        NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
+        keyInQuery = [keyInQuery stringByAppendingString:@"."];
+        keyInQuery = [keyInQuery stringByAppendingString:keyIdentifier];
+
+        id predicate;
+        NSExpression *predicateExpression[2];
+        
+        predicateExpression[0] = [NSExpression expressionForKeyPath:keyInQuery];
+        MADocument *doc = self.datasoruce.document;
+        MADModelQuery *query = doc.documentModel.firstQuery;
+        predicateExpression[1] = [NSExpression expressionForConstantValue: @(query.identifier)];
+
+        predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
+                                                       rightExpression: predicateExpression[1]
+                                                              modifier: NSDirectPredicateModifier
+                                                                  type: NSEqualToPredicateOperatorType
+                                                               options: 0];
+        NSSortDescriptor *sortDescriptor;
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey: keyAlias
+                                                     ascending: YES];
+        //NSFetchedResultsController *frc;
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+        request.sortDescriptors = sortDescriptors;
+        request.predicate = predicate;
+        NSFetchedResultsController *frc;
+        frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                  managedObjectContext: doc.managedObjectContext
+                                                    sectionNameKeyPath: nil
+                                                             cacheName: nil];
+        frc.delegate = self;
+        _queryTablesController = frc;
+    }
+    return _queryTablesController;
+}
+
+- (NSFetchedResultsController *)queryPredicatesController {
+    if (_queryPredicatesController == nil) {
+        NSString *keyLeftFieldID = NSStringFromSelector(@selector(leftFieldID));
+        NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
+        MADocument *doc = self.datasoruce.document;
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: keyLeftFieldID
+                                                                       ascending: YES];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+        request.sortDescriptors = sortDescriptors;
+        NSFetchedResultsController *frc;
+        frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                  managedObjectContext: doc.managedObjectContext
+                                                    sectionNameKeyPath: nil
+                                                             cacheName: nil];
+        frc.delegate = self;
+        _queryPredicatesController = frc;
+    }
+    return _queryPredicatesController;
+}
+
 - (void)numberOfTablesChanged:(NSUInteger)numberOfTables {
     _count = numberOfSectionsForQueryTableCount(numberOfTables, _reportingEnabled);
     _numberOfTables = numberOfTables;
@@ -292,7 +412,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         [controller performFetch:&error];
         NSAssert(error == NULL, @"Error: %@", error);
     }
-    [self.datasoruce reloadQueryViewData];
+    //[self.datasoruce reloadQueryViewData];
 }
 
 - (void)performFetchAll {

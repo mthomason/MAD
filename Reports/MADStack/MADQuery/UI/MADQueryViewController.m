@@ -327,6 +327,7 @@ BOOL storeEnabled() {
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.navigationItem.prompt = nil;
+    self.tableView.dataSource = self.queryViewDataSource;
 
 
 }
@@ -370,7 +371,6 @@ BOOL storeEnabled() {
                                                   animated: NO];
   
     self.tableView.delegate = _queryViewDelegate;
-    self.tableView.dataSource = self.queryViewDataSource;
     [self reloadMainDocumentAnimated:YES];
 }
 
@@ -771,11 +771,11 @@ BOOL storeEnabled() {
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   YES];
+    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   YES];
     [self.document addQuerySelectTableForSchemeTableWithObjectID:       objectID];
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
+    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
 
-    [self.queryViewDataSource performFetchTables];
+    //[self.queryViewDataSource performFetchTables];
 }
 
 #pragma mark -
@@ -1118,101 +1118,13 @@ BOOL storeEnabled() {
     
     MADocument *reportDocument = self.document;
     NSAssert(reportDocument != nil, @"%s: Need a document", __PRETTY_FUNCTION__);
-    if (reportDocument) {
-        
-        
-        NSFetchedResultsController * (^newFetchedResultsController)(NSString *,
-                                                                    NSPredicate *,
-                                                                    NSSortDescriptor *,
-                                                                    id <NSFetchedResultsControllerDelegate>,
-                                                                    NSManagedObjectContext *);
-        newFetchedResultsController = ^NSFetchedResultsController *(NSString *entityName,
-                                                                    NSPredicate *predicate,
-                                                                    NSSortDescriptor *sortDescriptor,
-                                                                    id <NSFetchedResultsControllerDelegate> delegate,
-                                                                    NSManagedObjectContext *managedObjectContext) {
+    self.queryViewDataSource.queryTablesController.delegate = self;
+    self.queryViewDataSource.queryLinksController.delegate = self;
+    self.queryViewDataSource.queryGroupsController.delegate = self;
+    self.queryViewDataSource.queryPredicatesController.delegate = self;
 
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            request.predicate = predicate;
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-            request.sortDescriptors = sortDescriptors;
-            
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: nil];
-            frc.delegate = delegate;
-            return frc;
-        };
-        NSManagedObjectContext *context;
-        context = reportDocument.documentModel.managedObjectContext;
-        MADQueryViewDataSource *queryViewDataSource = self.queryViewDataSource;
-        
-        {
-            //managedObjectContext = reportDocument.documentModel.managedObjectContext;
-            NSManagedObjectID *objectID;
-            objectID = reportDocument.documentModel.databases.firstObject.queries.firstObject.objectID.copy;
-            
-            
-            NSString *entityName = NSStringFromClass([RptqQueryTable class]);
-            
-            NSString *key = NSStringFromSelector(@selector(alias));
-            NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
-            NSString *format = [keyInQuery stringByAppendingString:@" == %@"];
-            id predicate = [NSPredicate predicateWithFormat:format, objectID];
-            NSSortDescriptor *sortDescriptor;
-            sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                         ascending: YES];
-            NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, predicate, sortDescriptor, self, context);
-            
-            queryViewDataSource.queryTablesController = frc;
-            [queryViewDataSource performFetchTables];
-            frc = nil;
-        }
-        
-        {
-            NSString *key = NSStringFromSelector(@selector(tableLeftID));
-            NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-            NSSortDescriptor *sortDescriptor;
-            sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                         ascending: YES];
-
-            NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self, context);
-            queryViewDataSource.queryLinksController = frc;
-            [queryViewDataSource performFetchLinks];
-            frc = nil;
-        }
-        
-        {
-            NSString *key = NSStringFromSelector(@selector(weight));
-            NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-            NSSortDescriptor *sortDescriptor;
-            sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                         ascending: YES];
-
-            NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self, context);
-            queryViewDataSource.queryGroupsController = frc;
-            [queryViewDataSource performFetchGroups];
-            frc = nil;
-            
-        }
-        
-        {
-            NSString *key = NSStringFromSelector(@selector(leftFieldID));
-            NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                           ascending: YES];
-            NSFetchedResultsController *frc;
-            frc = newFetchedResultsController(entityName, nil, sortDescriptor, self, context);
-            queryViewDataSource.queryPredicatesController = frc;
-            [queryViewDataSource performFetchPredicate];
-            frc = nil;
-        }
-        [self.tableView reloadData];
-    }
+    [self.queryViewDataSource performFetchAll];
+    [self.tableView reloadData];
 }
 
 - (NSArray <NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section
@@ -1347,6 +1259,9 @@ BOOL storeEnabled() {
     return cellsToDelete;
 }
 
+#pragma mark -
+#pragma mark MADQueryViewControllerDatasourceProtocol
+
 - (void)deleteQueryPredicateFromTableView: (UITableView *)tableView
                               atIndexPath: (NSIndexPath *)indexPath {
     MADocument *document = self.document;
@@ -1363,12 +1278,12 @@ BOOL storeEnabled() {
     [self.tableView reloadData];
 }
 
-- (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)querySection
+- (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)section
                      fromTableView:(UITableView *)tableView
                        atIndexPath:(NSIndexPath *)indexPath {
     //NSLog(@"Delete item %ld from section %ld-%hd.", indexPath.item, indexPath.section, querySection);
     
-    switch (querySection) {
+    switch (section) {
         case MADIdentifierQueryViewSectionsTables:
             [self deleteQueryTableFromTableView: tableView atIndexPath: indexPath];
             break;
@@ -1668,14 +1583,14 @@ BOOL storeEnabled() {
             for (id change in changes) {
                 if ([change isEqualToString: selectorHasQueryTables]) {
                     
-                    MADQueryViewDataSource *dataSource;
-                    dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
-                                                                       reportingEnabled: reportingEnabled
-                                                                    handleConfigureCell: _handleConfigureCell];
-                    dataSource.datasoruce = self;
-                    self.tableView.dataSource = dataSource;
-                    self.queryViewDataSource.datasoruce = nil;
-                    self.queryViewDataSource = dataSource;
+                    //MADQueryViewDataSource *dataSource;
+                    //dataSource = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
+                    //                                                   reportingEnabled: reportingEnabled
+                    //                                                handleConfigureCell: _handleConfigureCell];
+                    //dataSource.datasoruce = self;
+                    //self.tableView.dataSource = dataSource;
+                    //self.queryViewDataSource.datasoruce = nil;
+                    //self.queryViewDataSource = dataSource;
                     
                 }
             }

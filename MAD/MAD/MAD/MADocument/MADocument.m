@@ -821,7 +821,6 @@ READFROMURL_END:;
         
         NSError * __autoreleasing *error = NULL;
         [private save:error];
-        
         [private refreshObject:newQueryTable mergeChanges:NO];
         
         for (RptqQueryField *field in newQueryFields) {
