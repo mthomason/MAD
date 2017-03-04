@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderLinkBuilderViewController.h"
+#import "MADQueryLinkBuilderController.h"
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
@@ -24,9 +24,9 @@
 #import <MAD/RptqQueryLinks+Extras.h>
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MTQueryBuilderAddLinkJoinTypeViewController.h"
+#import "MADQueryAddLinkJoinTypeController.h"
 
-@interface MTQueryBuilderLinkBuilderViewController ()
+@interface MADQueryLinkBuilderController ()
 
     @property (nonatomic, strong) RptqQueryTable *firstTable;
     @property (nonatomic, strong) RptqQueryTable *secondTable;
@@ -38,7 +38,7 @@
 
 @end
 
-@implementation MTQueryBuilderLinkBuilderViewController
+@implementation MADQueryLinkBuilderController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     return self = [super initWithCoder:aDecoder];
@@ -63,7 +63,7 @@
     if ([segue.identifier isEqualToString:@"showSelectJoinType"]) {
 
         if ([segue.destinationViewController isKindOfClass:
-                                        [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
+                                        [MADQueryAddLinkJoinTypeController class]]) {
             [self setupJoinController:segue.destinationViewController];
         }
         
@@ -83,7 +83,7 @@
     }
 }
 
-- (void)setupJoinController:(MTQueryBuilderAddLinkJoinTypeViewController *)controller {
+- (void)setupJoinController:(MADQueryAddLinkJoinTypeController *)controller {
     controller.delegate = self;
     controller.document = self.document;
 }

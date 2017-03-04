@@ -1,13 +1,13 @@
 //
-//  MTQueryBuilderAddLinkJoinTypeViewController.h
+//  MADQueryAddLinkJoinTypeController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/24/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTQueryBuilderAddLinkJoinTypeViewController_h
-#define Reports_MTQueryBuilderAddLinkJoinTypeViewController_h
+#ifndef Reports_MADQueryAddLinkJoinTypeController_h
+#define Reports_MADQueryAddLinkJoinTypeController_h
 
 #import <UIKit/UITableViewController.h>
 #import <MAD/MADQueryLinkType.h>
@@ -16,7 +16,7 @@
 
 @class MADocument;
 
-@interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController
+@interface MADQueryAddLinkJoinTypeController : UITableViewController
     <UITableViewDelegate>
 
     @property (nonatomic, weak) id <MADQueryBuilderAddLinkJoinTypeDelegate> delegate;

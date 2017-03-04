@@ -1,5 +1,5 @@
 //
-//  MADViewControllerValueBasedOnField.m
+//  MADQueryValueFromFieldController.m
 //  Reports
 //
 //  Created by Michael Thomason on 5/16/13.
@@ -10,8 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADViewControllerValueBasedOnField.h"
-#import "MADViewControllerValueBasedOnFieldDelegate.h"
+#import "MADQueryValueFromFieldController.h"
+#import "MADQueryValueFromFieldControllerDelegate.h"
 
 #import <CoreData/NSManagedObjectContext.h>
 
@@ -37,7 +37,7 @@
 
 #import "MADCellTextInput.h"
 
-@interface MADViewControllerValueBasedOnField ()
+@interface MADQueryValueFromFieldController ()
     <UITextFieldDelegate,
         UITableViewDataSource,
         UITableViewDelegate,
@@ -58,7 +58,7 @@
 
 @end
 
-@implementation MADViewControllerValueBasedOnField
+@implementation MADQueryValueFromFieldController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -127,7 +127,7 @@
         CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
         CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
         CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
-        MADViewControllerValueBasedOnField * __weak weakself = self;
+        MADQueryValueFromFieldController * __weak weakself = self;
         UIViewAnimationOptions options;
         switch (keyboardAnimationCurveUserInfoKey.integerValue) {
             case UIViewAnimationCurveEaseInOut:
@@ -167,17 +167,17 @@
 
     self.querySampleDataField = querySampleDataField;
     
-    MADViewControllerValueBasedOnField * __weak weakself2 = self;
+    MADQueryValueFromFieldController * __weak weakself2 = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        __strong MADViewControllerValueBasedOnField *strongself2 = weakself2;
+        __strong MADQueryValueFromFieldController *strongself2 = weakself2;
         
         NSError * __autoreleasing error = NULL;
         BOOL success = [querySampleDataField performQueryWithError:&error];
         
         if (success) {
-            MADViewControllerValueBasedOnField * __weak weakself3 = strongself2;
+            MADQueryValueFromFieldController * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{
-                MADViewControllerValueBasedOnField *strongself5 = weakself3;
+                MADQueryValueFromFieldController *strongself5 = weakself3;
                 MADDataTable *dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
                 strongself5.dataTable = dt;
                 

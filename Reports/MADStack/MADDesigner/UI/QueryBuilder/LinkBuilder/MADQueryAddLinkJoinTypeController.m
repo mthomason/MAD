@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderAddLinkJoinTypeViewController.h"
+#import "MADQueryAddLinkJoinTypeController.h"
 #import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
 
 #import <UIKit/UILabel.h>
@@ -23,7 +23,7 @@
 
 #import <MAD/MADDatabaseConnection.h>
 
-@interface MTQueryBuilderAddLinkJoinTypeViewController ()
+@interface MADQueryAddLinkJoinTypeController ()
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellEquiJoin;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
@@ -36,7 +36,7 @@
 
 @end
 
-@implementation MTQueryBuilderAddLinkJoinTypeViewController
+@implementation MADQueryAddLinkJoinTypeController
 
 #pragma mark - View lifecycle
 

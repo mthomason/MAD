@@ -1,5 +1,5 @@
 //
-//  MTQueryBuilderLinkBuilderViewController.h
+//  MADQueryLinkBuilderController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/26/12.
@@ -16,13 +16,13 @@
 
 #import "MADLinkPart.h"
 
-@class MTQueryBuilderLinkBuilderViewController, RptqQueryLinks;
+@class MADQueryLinkBuilderController, RptqQueryLinks;
 
 @protocol MTQueryBuilderLinkBuilderDelegate
     - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)queryLink;
 @end
 
-@interface MTQueryBuilderLinkBuilderViewController : UITableViewController
+@interface MADQueryLinkBuilderController : UITableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         MADQueryBuilderAddLinkJoinTypeDelegate,

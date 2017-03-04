@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTQueryBuilderChooseFieldViewController_h
-#define Reports_MTQueryBuilderChooseFieldViewController_h
+#ifndef Reports_MADQueryChooseFieldController_h
+#define Reports_MADQueryChooseFieldController_h
 
 #import <UIKit/UITableViewController.h>
 #import "MADUnwindProtocol.h"
@@ -15,11 +15,11 @@
 
 @protocol MTQueryBuilderChooseFieldDelegate;
 
-@class MTQueryBuilderChooseFieldViewController;
+@class MADQueryChooseFieldController;
 @class RptqQueryField;
 @class MADocument;
 
-@interface MTQueryBuilderChooseFieldViewController : UITableViewController
+@interface MADQueryChooseFieldController : UITableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
         MADSectionHeaderViewDelegate,

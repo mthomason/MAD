@@ -1,5 +1,5 @@
 //
-//  MTQueryBuilderChooseFieldViewController.h
+//  MADQueryChooseFieldController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADQueryChooseFieldController.h"
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIStoryboardSegue.h>
@@ -72,7 +72,7 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
                       (CGFloat)PreferredContentHeightForUpdate(sectionInfoArray, sectionInfo));
 }
 
-@interface MTQueryBuilderChooseFieldViewController ()
+@interface MADQueryChooseFieldController ()
 
     @property (nonatomic, strong) MADSectionInfoMutableArray *sectionInfoArray;
     @property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
@@ -85,7 +85,7 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 
 @end
 
-@implementation MTQueryBuilderChooseFieldViewController
+@implementation MADQueryChooseFieldController
 
 @synthesize unwindViewController;
 
