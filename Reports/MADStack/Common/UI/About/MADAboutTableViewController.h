@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 8/20/13.
-//  Copyright (c) 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MADAboutTableViewController_h

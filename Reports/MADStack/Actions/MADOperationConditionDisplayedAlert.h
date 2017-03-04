@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/20/16.
-//  Copyright © 2016 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADOperationConditionDisplayedAlert_h

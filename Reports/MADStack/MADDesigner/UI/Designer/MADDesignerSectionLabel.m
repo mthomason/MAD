@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 7/24/13.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDesignerSectionLabel.h"

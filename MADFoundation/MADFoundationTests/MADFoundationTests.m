@@ -3,7 +3,7 @@
 //  MADFoundationTests
 //
 //  Created by Michael Thomason on 9/18/15.
-//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>

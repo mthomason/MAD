@@ -3,7 +3,7 @@
 //  MADExplorer
 //
 //  Created by Michael Thomason on 6/23/16.
-//  Copyright © 2016 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MADThumbnailView_h

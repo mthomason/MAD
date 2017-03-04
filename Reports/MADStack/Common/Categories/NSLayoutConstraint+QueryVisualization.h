@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 8/31/15.
-//  Copyright © 2015 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef MAD_Designer_NSLayoutConstraint_QueryVisualization_h

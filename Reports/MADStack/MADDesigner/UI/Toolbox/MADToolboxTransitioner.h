@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/05/14.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADToolboxTransitioner_h

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/12/13.
-//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Barcodes_MTTableViewControllerBarcodeExtraMaxicode_h
