@@ -30,11 +30,11 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @class MADocument;
 
-@interface MTQueryBuilderAddPredicateViewController : UITableViewController
+@interface MADQueryBuilderAddPredicateController : UITableViewController
     <UITableViewDelegate,
         MADTableViewControllerOpperatorsDelegate,
         MTQueryBuilderChooseFieldDelegate,
-        MTViewControllerValueBasedOnFieldDelegate>
+        MADViewControllerValueBasedOnFieldDelegate>
 
 
     @property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateDelegate,

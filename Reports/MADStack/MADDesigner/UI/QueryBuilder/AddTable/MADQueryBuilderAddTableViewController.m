@@ -10,12 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderAddTableViewController.h"
+#import "MADQueryBuilderAddTableViewController.h"
 #import <CoreData/NSFetchedResultsController.h>
 #import <UIKit/UILabel.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 
-@implementation MTQueryBuilderAddTableViewController
+@implementation MADQueryBuilderAddTableViewController
 
 #pragma mark - View lifecycle
 

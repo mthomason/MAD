@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderAddPredicateViewController.h"
+#import "MADQueryBuilderAddPredicateController.h"
 #import "MADQueryBuilderAddPredicateDelegate.h"
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
@@ -22,7 +22,7 @@
 #import <UIKit/UIStoryboardSegue.h>
 
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MTViewControllerValueBasedOnField.h"
+#import "MADViewControllerValueBasedOnField.h"
 
 #import <MAD/MADocument.h>
 
@@ -32,14 +32,7 @@
 
 #import "MADTableViewControllerOpperators.h"
 
-static NSString * const MADIDPredicateOperatorEqual = @"Equal",
-                * const MADIDPredicateOperatorNotEqual = @"Not Equal",
-                * const MADIDPredicateOperatorGreaterThan = @"Greater Than",
-                * const MADIDPredicateOperatorGreaterTahnOrEqualTo = @"Greater Than or Equal To",
-                * const MADIDPredicateOperatorLessThan = @"Less Than",
-                * const MADIDPredicateOperatorLessThanOrEqualTo = @"Less Than or Equal To";
-
-@implementation MTQueryBuilderAddPredicateViewController
+@implementation MADQueryBuilderAddPredicateController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -53,10 +46,6 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
         _currentlyEditingPart = MNSPredicateNone;
     }
     return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
@@ -206,25 +195,24 @@ static NSString * const MADIDPredicateOperatorEqual = @"Equal",
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType {
     [self.navigationController popToViewController:self animated:YES];
     NSString *label = nil;
-
     switch ((_predicateOperator = operatorType)) {
         case MADPredicateOperatorEqual:
-            label = NSLocalizedString(MADIDPredicateOperatorEqual, MADIDPredicateOperatorEqual);
+            label = NSLocalizedString(@"Equal", @"Equal");
             break;
         case MADPredicateOperatorNotEqual:
-            label = NSLocalizedString(MADIDPredicateOperatorNotEqual, MADIDPredicateOperatorNotEqual);
+            label = NSLocalizedString(@"Not Equal", @"Not Equal");
             break;
         case MADPredicateOperatorGreaterThan:
-            label = NSLocalizedString(MADIDPredicateOperatorGreaterThan, MADIDPredicateOperatorGreaterThan);
+            label = NSLocalizedString(@"Greater Than", @"Greater Than");
             break;
         case MADPredicateOperatorGreaterThanOrEqualTo:
-            label = NSLocalizedString(MADIDPredicateOperatorGreaterTahnOrEqualTo, MADIDPredicateOperatorGreaterTahnOrEqualTo);
+            label = NSLocalizedString(@"Greater Than or Equal To", @"Greater Than or Equal To");
             break;
         case MADPredicateOperatorLessThanOrEqualTo:
-            label = NSLocalizedString(MADIDPredicateOperatorLessThanOrEqualTo, MADIDPredicateOperatorLessThanOrEqualTo);
+            label = NSLocalizedString(@"Less Than or Equal To", @"Less Than or Equal To");
             break;
         case MADPredicateOperatorLessThan:
-            label = NSLocalizedString(MADIDPredicateOperatorLessThan, MADIDPredicateOperatorLessThan);
+            label = NSLocalizedString(@"Less Than", @"Less Than");
             break;
         default:
             label = NSLocalizedString(@"Default", @"Default");

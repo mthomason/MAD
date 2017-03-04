@@ -1,5 +1,5 @@
 //
-//  MTViewControllerValueBasedOnField.m
+//  MADViewControllerValueBasedOnField.m
 //  Reports
 //
 //  Created by Michael Thomason on 5/16/13.
@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTViewControllerValueBasedOnField.h"
+#import "MADViewControllerValueBasedOnField.h"
 #import "MADViewControllerValueBasedOnFieldDelegate.h"
 
 #import <UIKit/UIWindow.h>
@@ -35,7 +35,7 @@
 
 #import <MAD/MADDataTable.h>
 
-#import "MTCellEnterText.h"
+#import "MADCellTextInput.h"
 
 @interface MADViewControllerValueBasedOnField ()
     <UITextFieldDelegate,
@@ -49,7 +49,7 @@
     @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
     @property (nonatomic, strong) UITextField *textField;
-    @property (nonatomic, strong) MADCellEnterText *tableViewCellEnterText;
+    @property (nonatomic, strong) MADCellTextInput *tableViewCellEnterText;
     @property (nonatomic, strong) NSArray *pickerData;
     @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
@@ -295,7 +295,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellPredicateEnterValueString";
     
-    MADCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
+    MADCellTextInput *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
     
     (result.textField).returnKeyType = UIReturnKeyDone;
     result.textField.delegate = self;

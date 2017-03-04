@@ -1,25 +1,25 @@
 //
-//  MTQueryBuilderPredicateFormatViewController.h
+//  MADQueryPredicateFormatController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTQueryBuilderPredicateFormatViewController_h
-#define Reports_MTQueryBuilderPredicateFormatViewController_h
+#ifndef Reports_MADQueryPredicateFormatController_h
+#define Reports_MADQueryPredicateFormatController_h
 
-#import "MTQueryBuilderAddPredicateViewController.h"
+#import "MADQueryBuilderAddPredicateController.h"
 #import "MADViewControllerStandardProtocol.h"
 #import "MADQueryBuilderAddPredicateDelegate.h"
 
-@class MTQueryBuilderPredicateFormatViewController;
+@class MADQueryPredicateFormatController;
 
 @protocol MTQueryBuilderPredicateFormatDelegate <MADViewControllerStandardProtocol>
     - (void)addQueryPredicate:(RptqQueryPredicate *)predicate;
 @end
 
-@interface MTQueryBuilderPredicateFormatViewController : UITableViewController
+@interface MADQueryPredicateFormatController : UITableViewController
     <MADViewControllerStandardProtocol,
         MADQueryAddPredicateDelegate>
 

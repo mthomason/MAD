@@ -12,7 +12,7 @@
 #import "MADTableViewControllerCoreDataResults.h"
 #import "MADViewControllerStandardProtocol.h"
 
-@class MTQueryBuilderAddTableViewController;
+@class MADQueryBuilderAddTableViewController;
 @class RptqDatabaseSchemaTable;
 @class NSManagedObjectID;
 
@@ -20,7 +20,7 @@
     - (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectID;
 @end
 
-@interface MTQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
+@interface MADQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
     @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddTableDelegate, MADViewControllerStandardProtocol> delegate;

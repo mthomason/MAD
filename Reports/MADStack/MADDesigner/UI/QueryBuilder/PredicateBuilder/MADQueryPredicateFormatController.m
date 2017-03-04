@@ -10,10 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderPredicateFormatViewController.h"
+#import "MADQueryPredicateFormatController.h"
 #import <UIKit/UIStoryboardSegue.h>
 
-@implementation MTQueryBuilderPredicateFormatViewController
+@implementation MADQueryPredicateFormatController
 
 #pragma mark - View lifecycle
 
@@ -26,16 +26,16 @@
     MADocument *document = _document;
     if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
         
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
-            MTQueryBuilderAddPredicateViewController *tvcSC = segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderAddPredicateController class]]) {
+            MADQueryBuilderAddPredicateController *tvcSC = segue.destinationViewController;
             tvcSC.document = document;
             tvcSC.queryPredicateDelegate = self;
         }
         
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
     
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
-            MTQueryBuilderAddPredicateViewController *tvcSC = segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderAddPredicateController class]]) {
+            MADQueryBuilderAddPredicateController *tvcSC = segue.destinationViewController;
             tvcSC.document = document;
             tvcSC.queryPredicateDelegate = self;
         }
