@@ -36,10 +36,10 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 
-    @property (nonatomic, strong) NSFetchedResultsController *queryTablesController;
-    @property (nonatomic, strong) NSFetchedResultsController *queryLinksController;
-    @property (nonatomic, strong) NSFetchedResultsController *queryGroupsController;
-    @property (nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
+    @property (readonly, nonatomic, strong) NSFetchedResultsController *queryTablesController;
+    @property (readonly, nonatomic, strong) NSFetchedResultsController *queryLinksController;
+    @property (readonly, nonatomic, strong) NSFetchedResultsController *queryGroupsController;
+    @property (readonly, nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
 
     @property (nonatomic, readonly, assign) short count;
     @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
@@ -51,7 +51,6 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
     - (MADIdentifierQueryViewSections)sectionAtIndex:(short)index;
     - (MADQueryViewSectionDelegate *)layoutAtIndex:(short)index;
 
-    - (NSInteger)numberOfRowsInSectionAtIndex:(short)index;
     - (BOOL)canEditSectionAtIndex:(short)index;
 
     - (void)performFetchAll;

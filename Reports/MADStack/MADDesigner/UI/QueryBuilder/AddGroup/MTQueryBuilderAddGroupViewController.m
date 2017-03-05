@@ -50,7 +50,8 @@ static NSString * const TextDefault = @"Default";
     return self;
 }
 
-#pragma mark - View lifecycle
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -80,7 +81,8 @@ static NSString * const TextDefault = @"Default";
     }
 }
 
-#pragma mark - Delegates
+#pragma mark -
+#pragma mark Delegates
 
 #pragma mark Choose Field
 
@@ -89,16 +91,18 @@ static NSString * const TextDefault = @"Default";
     [self.navigationController popToViewController:self animated:YES];
 
     NSString *fieldName = [queryField tableFieldKey];
-    self.fieldId = queryField.objectID;
+    self.fieldId = queryField.objectID.copy;
     self.field = queryField;
-    self.fieldName = fieldName;
+    self.fieldName = fieldName.copy;
     self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
     self.barButtonItemSave.enabled = YES;
 }
 
 #pragma mark Sort Type
 
-- (void)uITableViewControllerSortTypeDidSelectSortType:(MADSortOrder)sortOrderType {
+- (void)viewController:(UIViewController *)viewController
+     didSelectSortType:(MADSortOrder)sortOrderType {
+
     self.sortOrder = sortOrderType;
     NSString *label = nil;
     switch (sortOrderType) {
@@ -124,24 +128,20 @@ static NSString * const TextDefault = @"Default";
     [self.navigationController popToViewController:self animated:YES];
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Actions
 
 - (IBAction)cancel:(id)sender {
     [self.delegate viewControllerDidCancel: self];
 }
 
 - (IBAction)save:(id)sender {
-    // FIXME: No validation???
-    [self.delegate addQueryGroupWithQueryField: self.fieldId andSortOrder: self.sortOrder];
+    [self.delegate viewController:self addedGroupOnQueryField: self.fieldId
+                     andSortOrder: self.sortOrder];
 }
 
-#pragma mark - Table View Sort Type Delegate
-
-- (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller {
-    [self.navigationController popToViewController:self animated:YES];
-}
-
-#pragma mark - Table view delegate
+#pragma mark -
+#pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 

@@ -44,9 +44,11 @@
 #pragma mark Table View Delegate Protocol
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqDatabaseSchemaTable *tablea = [self.fetchedResultsController objectAtIndexPath: indexPath];
-    [self.delegate viewControllerSchemaAddTableDidSelectTable: tablea.objectID];
+    [self.delegate viewController:self addedTableWithID: tablea.objectID];
 }
 
 @end

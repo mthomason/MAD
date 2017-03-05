@@ -19,7 +19,8 @@
 @class MADQueryLinkBuilderController, RptqQueryLinks;
 
 @protocol MTQueryBuilderLinkBuilderDelegate
-    - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)queryLink;
+    - (void)viewController:(MADQueryLinkBuilderController *)controller
+            addedQueryLink:(RptqQueryLinks *)queryLink;
 @end
 
 @interface MADQueryLinkBuilderController : UITableViewController

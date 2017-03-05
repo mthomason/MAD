@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADQueryBuilderAddPredicateController.h"
+#import "MADQueryAddPredicateController.h"
 #import "MADQueryBuilderAddPredicateDelegate.h"
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
@@ -36,7 +36,7 @@
 
 #import "MADTableViewControllerOpperators.h"
 
-@implementation MADQueryBuilderAddPredicateController
+@implementation MADQueryAddPredicateController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {

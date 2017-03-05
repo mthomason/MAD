@@ -14,8 +14,8 @@
 @class MTQueryBuilderSortTypeViewController;
 
 @protocol MADQueryBuilderSortTypeDelegate
-    - (void)uITableViewControllerSortTypeDidFinish:(MTQueryBuilderSortTypeViewController *)controller;
-    - (void)uITableViewControllerSortTypeDidSelectSortType:(MADSortOrder)sortOrderType;
+    - (void)viewController:(UIViewController *)viewController
+         didSelectSortType:(MADSortOrder)sortOrderType;
 @end
 
 #endif /* MADQueryBuilderSortTypeDelegate_h */

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADQueryBuilderAddPredicateController_h
-#define Reports_MADQueryBuilderAddPredicateController_h
+#ifndef Reports_MADQueryAddPredicateController_h
+#define Reports_MADQueryAddPredicateController_h
 
 #import <UIKit/UITableViewController.h>
 #import <MAD/MADPredicateOperator.h>
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @class MADocument;
 
-@interface MADQueryBuilderAddPredicateController : UITableViewController
+@interface MADQueryAddPredicateController : UITableViewController
     <UITableViewDelegate,
         MADTableViewControllerOpperatorsDelegate,
         MADQueryChooseFieldProtocol,

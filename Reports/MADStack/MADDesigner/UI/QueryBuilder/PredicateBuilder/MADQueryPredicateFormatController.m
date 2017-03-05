@@ -26,16 +26,16 @@
     MADocument *document = _document;
     if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
         
-        if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderAddPredicateController class]]) {
-            MADQueryBuilderAddPredicateController *tvcSC = segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass: [MADQueryAddPredicateController class]]) {
+            MADQueryAddPredicateController *tvcSC = segue.destinationViewController;
             tvcSC.document = document;
             tvcSC.queryPredicateDelegate = self;
         }
         
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
     
-        if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderAddPredicateController class]]) {
-            MADQueryBuilderAddPredicateController *tvcSC = segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass: [MADQueryAddPredicateController class]]) {
+            MADQueryAddPredicateController *tvcSC = segue.destinationViewController;
             tvcSC.document = document;
             tvcSC.queryPredicateDelegate = self;
         }
@@ -52,7 +52,7 @@
 }
 
 - (void)tableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
-    [self.delegate addQueryPredicate: predicate];
+    [self.delegate viewController:self addedQueryPredicate: predicate];
 }
 
 - (IBAction)done:(id)sender {

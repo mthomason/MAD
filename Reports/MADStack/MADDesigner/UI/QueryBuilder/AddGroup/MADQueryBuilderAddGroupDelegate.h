@@ -10,8 +10,9 @@
 #define MAD_Designer_MADQueryBuilderAddGroupDelegate_h
 
 @protocol MADQueryBuilderAddGroupDelegate
-    - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField
-                           andSortOrder:(MADSortOrder)sortOrder;
+    - (void)viewController:(UIViewController *)viewController
+    addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
+              andSortOrder:(MADSortOrder)sortOrder;
     - (void)viewControllerDidCancel:(id)sender;
 @end
 

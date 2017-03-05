@@ -1100,7 +1100,7 @@
 		4CFEE8121BB7A22800AFAA0A /* MADQueryAddLinkJoinTypeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8101BB7A22800AFAA0A /* MADQueryAddLinkJoinTypeController.m */; };
 		4CFEE8151BB7A29800AFAA0A /* MADQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8141BB7A29800AFAA0A /* MADQueryBuilderAddTableViewController.m */; };
 		4CFEE8181BB7A2E600AFAA0A /* MADQueryPredicateFormatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8171BB7A2E600AFAA0A /* MADQueryPredicateFormatController.m */; };
-		4CFEE81F1BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8191BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.m */; };
+		4CFEE81F1BB7A3A300AFAA0A /* MADQueryAddPredicateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE8191BB7A3A300AFAA0A /* MADQueryAddPredicateController.m */; };
 		4CFEE8201BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81A1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m */; };
 		4CFEE8211BB7A3A300AFAA0A /* MADCellTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81D1BB7A3A300AFAA0A /* MADCellTextInput.m */; };
 		4CFEE8281BB99DB200AFAA0A /* MADQuery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */; };
@@ -2462,12 +2462,12 @@
 		4CFEE8141BB7A29800AFAA0A /* MADQueryBuilderAddTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryBuilderAddTableViewController.m; sourceTree = "<group>"; };
 		4CFEE8161BB7A2E600AFAA0A /* MADQueryPredicateFormatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryPredicateFormatController.h; sourceTree = "<group>"; };
 		4CFEE8171BB7A2E600AFAA0A /* MADQueryPredicateFormatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryPredicateFormatController.m; sourceTree = "<group>"; };
-		4CFEE8191BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryBuilderAddPredicateController.m; sourceTree = "<group>"; };
+		4CFEE8191BB7A3A300AFAA0A /* MADQueryAddPredicateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryAddPredicateController.m; sourceTree = "<group>"; };
 		4CFEE81A1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryValueFromFieldController.m; sourceTree = "<group>"; };
 		4CFEE81B1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryValueFromFieldController.h; sourceTree = "<group>"; };
 		4CFEE81C1BB7A3A300AFAA0A /* MADCellTextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCellTextInput.h; sourceTree = "<group>"; };
 		4CFEE81D1BB7A3A300AFAA0A /* MADCellTextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCellTextInput.m; sourceTree = "<group>"; };
-		4CFEE81E1BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderAddPredicateController.h; sourceTree = "<group>"; };
+		4CFEE81E1BB7A3A300AFAA0A /* MADQueryAddPredicateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryAddPredicateController.h; sourceTree = "<group>"; };
 		4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADQuery.storyboard; path = MADStack/MADDesigner/UI/QueryBuilder/MADQuery.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -4950,8 +4950,8 @@
 			isa = PBXGroup;
 			children = (
 				4CBBA94B1CFE99B40033F63B /* MADQueryBuilderAddPredicateDelegate.h */,
-				4CFEE81E1BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.h */,
-				4CFEE8191BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.m */,
+				4CFEE81E1BB7A3A300AFAA0A /* MADQueryAddPredicateController.h */,
+				4CFEE8191BB7A3A300AFAA0A /* MADQueryAddPredicateController.m */,
 				4CBBA94A1CFE98810033F63B /* MADQueryValueFromFieldControllerDelegate.h */,
 				4CFEE81B1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.h */,
 				4CFEE81A1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m */,
@@ -6337,7 +6337,7 @@
 				4C4020EB1BAE988900BAE5FC /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C4020861BAE966000BAE5FC /* MADQueryViewController.m in Sources */,
 				4C401FC51BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
-				4CFEE81F1BB7A3A300AFAA0A /* MADQueryBuilderAddPredicateController.m in Sources */,
+				4CFEE81F1BB7A3A300AFAA0A /* MADQueryAddPredicateController.m in Sources */,
 				4CEBD0331E319546009FE2DC /* MADAnimatedTransitionControllerPop.m in Sources */,
 				4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */,
 				4C401EED1BAE61F700BAE5FC /* AppDelegate.m in Sources */,

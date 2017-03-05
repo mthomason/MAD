@@ -148,15 +148,6 @@ static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushi
         MADQueryViewControllerDatasourceProtocol,
         UIViewControllerTransitioningDelegate>
 
-    @property (nonatomic, assign) BOOL firstTimeViewWillLayoutSubviews;
-
-    @property (nonatomic, assign) NSInteger lastSelectedRowNumber;
-
-    @property (nonatomic, assign) CGFloat headerSectionHeight;
-
-    @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
-    @property (nonatomic, assign) BOOL beganUpdates;
-
     @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
     @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
 
@@ -174,7 +165,13 @@ BOOL storeEnabled() {
     return [MTStoreKitController sharedObject].reportingEnabled;
 }
 
-@implementation MADQueryViewController
+@implementation MADQueryViewController {
+    NSUInteger _lastSelectedRowNumber;
+    CGFloat _headerSectionHeight;
+    BOOL _suspendAutomaticTrackingOfChangesInManagedObjectContext;
+    BOOL _firstTimeViewWillLayoutSubviews;
+    BOOL _beganUpdates;
+}
 
 @synthesize title = _title;
 @synthesize document = _document;
@@ -233,8 +230,6 @@ BOOL storeEnabled() {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
 }
 
-#pragma mark - Exit
-
 #pragma mark -
 #pragma mark NSObject
 
@@ -245,7 +240,6 @@ BOOL storeEnabled() {
     [((typeof(self))controller) setDocument: document];
     return controller;
 }
-
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
@@ -345,11 +339,11 @@ BOOL storeEnabled() {
     //self.navigationController.hidesBarsWhenVerticallyCompact = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(documentStateChanged)
+                                             selector: @selector(handleDocumentStateChanged)
                                                  name: UIDocumentStateChangedNotification
                                                object: document];
     
-    SEL handleContentSizeCategoryDidChange = @selector(handleContentSizeCategoryDidChangeNotification:);
+    SEL handleContentSizeCategoryDidChange = @selector(handleContentSizeCategoryDidChange:);
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: handleContentSizeCategoryDidChange
                                                  name: UIContentSizeCategoryDidChangeNotification
@@ -404,8 +398,8 @@ BOOL storeEnabled() {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    self.tableView.delegate = nil;
-    self.tableView.dataSource = nil;
+    //self.tableView.delegate = nil;
+    //self.tableView.dataSource = nil;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -421,11 +415,11 @@ BOOL storeEnabled() {
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    if (self.firstTimeViewWillLayoutSubviews) {
+    if (_firstTimeViewWillLayoutSubviews) {
         CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y,
                               self.tableView.frame.size.width, 1.0000f);
         [self.tableView scrollRectToVisible: r animated: NO];
-        self.firstTimeViewWillLayoutSubviews = NO;
+        _firstTimeViewWillLayoutSubviews = NO;
     }
 }
 
@@ -449,15 +443,19 @@ BOOL storeEnabled() {
             if (navControl.topViewController) {
                 if ([navControl.topViewController isKindOfClass:[MADQueryBuilderAddTableViewController class]]) {
                     
-                    MADQueryBuilderAddTableViewController *tvc = (MADQueryBuilderAddTableViewController *)navControl.topViewController;
+                    MADQueryBuilderAddTableViewController *tvc;
+                    tvc = (MADQueryBuilderAddTableViewController *)navControl.topViewController;
                     if (tvc) {
                         tvc.delegate = self;
                     }
 
                     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+                    NSFetchRequest *request;
                     NSSortDescriptor *sort;
-                    sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(name))
+                    NSString *keyPathName;
+                    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+                    keyPathName = NSStringFromSelector(@selector(name));
+                    sort = [NSSortDescriptor sortDescriptorWithKey: keyPathName
                                                          ascending: YES];
                     
                     request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
@@ -530,8 +528,9 @@ BOOL storeEnabled() {
                         RptqDocument *activeDocument = document.activeDocumentModel;
                         RptqQuery *query = activeDocument.defaultDatabase.defaultQuery;
                         
-                        RptqDocumentSection *section = [activeDocument documentSectionForSelectedIndex: (NSUInteger)self.lastSelectedRowNumber
-                                                                                    withNumberOfGroups: query.hasQueryGroups.count];
+                        RptqDocumentSection *section;
+                        section = [activeDocument documentSectionForSelectedIndex: _lastSelectedRowNumber
+                                                               withNumberOfGroups: query.hasQueryGroups.count];
 
                         
                         tvc.initalHeightValue = section.height;
@@ -612,10 +611,6 @@ BOOL storeEnabled() {
 #pragma mark -
 #pragma mark Property Overrides
 
-- (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
-}
-
 - (void)setDocument:(MADocument *)document {
     if (_document != document) {
         _document = document;
@@ -655,23 +650,14 @@ BOOL storeEnabled() {
     return _queryViewDataSource;
 }
 
-#pragma mark - MTQueryBuilderPredicateFormatDelegate
-
-- (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissViewController];
-
-    MADocument *document = self.document;
-    [document.activeDocumentModel addPredicate:predicate];
-    [document saveContext];
-}
-
-#pragma mark - MADDesignerSectionLayoutDelegate
+#pragma mark -
+#pragma mark MADDesignerSectionLayoutDelegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
     MADocument *document = self.document;
     [document.activeDocumentModel setHeight: height
-                            forSectionAtRow: (NSUInteger)self.lastSelectedRowNumber];
+                            forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
     
 }
@@ -680,7 +666,7 @@ BOOL storeEnabled() {
 
     MADocument *document = self.document;
     [document.activeDocumentModel setVisibility: isVisible
-                                forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
+                                forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
 
 }
@@ -690,20 +676,21 @@ BOOL storeEnabled() {
 
     MADocument *document = self.document;
     [document.activeDocumentModel setNewPageAfter: newPageAfter
-                                  forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
+                                  forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
 
 }
 
-- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
+- (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows {
 
     MADocument *document = self.document;
     [document.activeDocumentModel setNumberOfRows: numberOfRows
-                                  forSectionAtRow: (NSUInteger) self.lastSelectedRowNumber];
+                                  forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
 
 }
 
+#pragma mark -
 #pragma mark MUIViewControllerDelegate
 
 - (void)dismissViewController {
@@ -721,15 +708,27 @@ BOOL storeEnabled() {
     [self dismissViewController];
 }
 
-#pragma mark - MTQueryBuilderLinkBuilderDelegate
+#pragma mark -
+#pragma mark MTQueryBuilderPredicateFormatDelegate
 
-- (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
+- (void)viewController:(MADQueryPredicateFormatController *)controller
+   addedQueryPredicate:(RptqQueryPredicate *)predicate {
 
-    [self dismissViewController];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.tabBarController enableTabBarItems];
+    }];
+    
+}
 
-    MADocument *document = self.document;
-    [document.activeDocumentModel addQueryLink:link];
-    [document saveContext];
+#pragma mark -
+#pragma mark MTQueryBuilderLinkBuilderDelegate
+
+- (void)viewController:(MADQueryLinkBuilderController *)controller
+        addedQueryLink:(RptqQueryLinks *)link {
+
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.tabBarController enableTabBarItems];
+    }];
     
     NSInteger suspectedSection = 2;
     
@@ -737,45 +736,42 @@ BOOL storeEnabled() {
     tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
     
     if (tableSection == MADIdentifierQueryViewSectionsLinks) {
-        NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
+        NSIndexSet *linksSection;
+        linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
         [self.tableView reloadSections: linksSection
                       withRowAnimation: UITableViewRowAnimationAutomatic];
     }
     
-    [document saveToURL: document.fileURL
-       forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
+    //[document saveToURL: document.fileURL
+    //   forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
-#pragma mark - MTQueryBuilderAddGroupDelegate
+#pragma mark -
+#pragma mark MTQueryBuilderAddGroupDelegate
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldID
-                       andSortOrder:(MADSortOrder)sortOrder {
+- (void)viewController:(MTQueryBuilderAddGroupViewController *)viewController
+addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
+          andSortOrder:(MADSortOrder)sortOrder {
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   YES];
     [self.document addQueryGroupWithQueryField: queryFieldID
                                   andSortOrder: sortOrder];
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
-
-    [self.queryViewDataSource performFetchGroups];
 }
 
-#pragma mark - MADQueryBuilderAddTableDelegate
+#pragma mark -
+#pragma mark MADQueryBuilderAddTableDelegate
 
-- (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectID {
+- (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
+      addedTableWithID:(NSManagedObjectID *)objectID {
 
     [self dismissViewControllerAnimated:YES completion:^{
         [self.tabBarController enableTabBarItems];
     }];
 
-    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   YES];
-    [self.document addQuerySelectTableForSchemeTableWithObjectID:       objectID];
-    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:   NO];
-
-    //[self.queryViewDataSource performFetchTables];
+    [self.document addQuerySelectTableForSchemeTableWithObjectID: objectID];
 }
 
 #pragma mark -
@@ -810,20 +806,16 @@ BOOL storeEnabled() {
             
             // MARK: Display the table links or joins that are used in the query.
         case MADIdentifierQueryViewSectionsLinks:
-            
             cell.textLabel.numberOfLines = 0;
             break;
             
             // MARK: Display the groupings used in the query.
         case MADIdentifierQueryViewSectionsGroups:
-
             cell.textLabel.numberOfLines = 0;
             break;
         
-            
             // MARK: Display the predicates or conditions on the query.
         case MADIdentifierQueryViewSectionsPredicate:
-            
             cell.textLabel.numberOfLines = 0;
             break;
             
@@ -862,64 +854,47 @@ BOOL storeEnabled() {
             [switchControl setOn:NO animated:YES];
         }
     } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADIdentifierDefaultsViewerDesired];
+        [[NSUserDefaults standardUserDefaults] setBool: NO
+                                                forKey: MADIdentifierDefaultsViewerDesired];
     }
     
     // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
     //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
-    NSIndexPath *i = [NSIndexPath indexPathForItem:0 inSection:self.tableView.numberOfSections - 1];
+    NSIndexPath *i = [NSIndexPath indexPathForItem: 0
+                                         inSection: self.tableView.numberOfSections - 1];
     NSArray *paths = [[NSArray alloc] initWithObjects: i, nil];
-    [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths: paths
+                          withRowAnimation: UITableViewRowAnimationNone];
     //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark -
 #pragma mark NSFetchedResultsControllerDelegate
 
-- (MADIdentifierQueryViewSections)sectionPositionForTableSectionType:(MADIdentifierQueryViewSections)sec {
-    MADIdentifierQueryViewSections result = 0;
-    NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
-    MADQueryViewControllerTableLayout *tableLayout;
-    tableLayout = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
-                                                                   reportingEnabled:storeEnabled()];
-    NSArray *sectionTypes = [tableLayout sectionTypes].copy;
-    NSInteger secPos = 0;
-    
-    for (NSNumber *num in sectionTypes) {
-        if (num.unsignedIntegerValue == sec) {
-            result = (MADIdentifierQueryViewSections)secPos;
-            break;
-        }
-        secPos++;
-    }
-    return result;
-}
-
 - (NSMutableArray *)sectionsUsedByFetchedResultsController:(NSFetchedResultsController *)controller {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
     NSNumber *sectionNumber;
     if ([controller isEqual:self.queryViewDataSource.queryTablesController]) {
         
-        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MADIdentifierQueryViewSectionsTables]];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionIndexForTables]];
         [result addObject: sectionNumber];
 
     } else if ([controller isEqual:self.queryViewDataSource.queryLinksController]) {
 
-        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionPositionForTableSectionType: MADIdentifierQueryViewSectionsLinks]];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionIndexForLinks]];
         [result addObject: sectionNumber];
 
     } else if ([controller isEqual:self.queryViewDataSource.queryGroupsController]) {
 
-        short sectionGroup = [self sectionPositionForTableSectionType: MADIdentifierQueryViewSectionsGroups];
-        sectionNumber = [[NSNumber alloc] initWithShort: sectionGroup];
+        sectionNumber = [[NSNumber alloc] initWithShort: [self sectionIndexForGroups]];
         [result addObject: sectionNumber];
     
     } else if ([controller isEqual:self.queryViewDataSource.queryPredicatesController]) {
-    
-        short section = [self sectionPositionForTableSectionType: MADIdentifierQueryViewSectionsPredicate];
-        sectionNumber = [[NSNumber alloc] initWithShort:section];
+
+        sectionNumber = [[NSNumber alloc] initWithShort:[self sectionIndexForPredicate]];
         [result addObject: sectionNumber];
     }
     
@@ -929,13 +904,14 @@ BOOL storeEnabled() {
 
 - (void)controller: (NSFetchedResultsController *)controller
   didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
-		   atIndex: (NSUInteger)sectionIndex forChangeType: (NSFetchedResultsChangeType)type {
-
+		   atIndex: (NSUInteger)sectionIndex
+     forChangeType: (NSFetchedResultsChangeType)type {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
     for (NSNumber *section in sections) {
-        if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+        if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             MADIdentifierQueryViewSections updateSection = section.shortValue;
             switch(type) {
                 case NSFetchedResultsChangeInsert: {
@@ -969,40 +945,54 @@ BOOL storeEnabled() {
        atIndexPath: (NSIndexPath *)indexPath
      forChangeType: (NSFetchedResultsChangeType)type
       newIndexPath: (NSIndexPath *)newIndexPath {
-    
+    NSLog(@"%s (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
+
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
     for (NSNumber *section in sections) {
-        MADIdentifierQueryViewSections updateSection = section.shortValue;
+        NSInteger updateSection = section.shortValue;
         
-        NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
-                                               inSection: updateSection];
-        if (path) {
-            if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-                NSArray *indexPaths = [[NSArray alloc] initWithObjects: path, nil];
-                switch(type) {
-                    case NSFetchedResultsChangeInsert: {
-                        [self.tableView insertRowsAtIndexPaths: indexPaths
-                                              withRowAnimation: UITableViewRowAnimationFade];
-                        break;
-                    }
-                    case NSFetchedResultsChangeDelete: {
-                        [self.tableView deleteRowsAtIndexPaths: indexPaths
-                                              withRowAnimation: UITableViewRowAnimationFade];
-                        break;
-                    }
-                    case NSFetchedResultsChangeUpdate: {
-                        [self.tableView reloadRowsAtIndexPaths: indexPaths
-                                              withRowAnimation: UITableViewRowAnimationFade];
-                        break;
-                    }
-                    case NSFetchedResultsChangeMove: {
-                        [self.tableView deleteRowsAtIndexPaths: indexPaths
-                                              withRowAnimation: UITableViewRowAnimationFade];
-                        [self.tableView insertRowsAtIndexPaths: indexPaths
-                                              withRowAnimation: UITableViewRowAnimationFade];
-                        break;
-                    }
+        if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+            switch(type) {
+                case NSFetchedResultsChangeInsert: {
+                    NSUInteger index = [controller.fetchedObjects indexOfObject: anObject];
+                    NSIndexPath *path = [NSIndexPath indexPathForRow: (long)index
+                                                           inSection: updateSection];
+                    
+                    NSArray *indexPaths;
+                    indexPaths = @[path];
+                    [self.tableView insertRowsAtIndexPaths: indexPaths
+                                          withRowAnimation: UITableViewRowAnimationFade];
+                    break;
+                }
+                case NSFetchedResultsChangeDelete: {
+                    NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
+                                                           inSection: updateSection];
+                    NSArray *indexPaths;
+                    indexPaths = @[path];
+                    [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                          withRowAnimation: UITableViewRowAnimationFade];
+                    break;
+                }
+                case NSFetchedResultsChangeUpdate: {
+                    NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
+                                                           inSection: updateSection];
+                    NSArray *indexPaths;
+                    indexPaths = @[path];
+                    [self.tableView reloadRowsAtIndexPaths: indexPaths
+                                          withRowAnimation: UITableViewRowAnimationFade];
+                    break;
+                }
+                case NSFetchedResultsChangeMove: {
+                    NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
+                                                           inSection: updateSection];
+                    NSArray *indexPaths;
+                    indexPaths = @[path];
+                    [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                          withRowAnimation: UITableViewRowAnimationFade];
+                    [self.tableView insertRowsAtIndexPaths: indexPaths
+                                          withRowAnimation: UITableViewRowAnimationFade];
+                    break;
                 }
             }
         }
@@ -1010,26 +1000,30 @@ BOOL storeEnabled() {
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
         [self.tableView beginUpdates];
-        [self setBeganUpdates: YES];
+        _beganUpdates = YES;
     }
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    if (self.beganUpdates) {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (_beganUpdates) {
         [self.tableView endUpdates];
     }
-    [self setBeganUpdates:NO];
+    _beganUpdates = NO;
 }
 
-#pragma mark - MTTabBarImageProtocol
+#pragma mark -
+#pragma mark MTTabBarImageProtocol
 
 + (UIImage *)newTabBarImage {
     return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Actions
 
 - (IBAction)edit:(id)sender {
     
@@ -1082,9 +1076,10 @@ BOOL storeEnabled() {
     [self.tabBarController disableTabBarItems];
 }
 
-#pragma mark - Helper functions
+#pragma mark -
+#pragma mark Helper UIDocumentStateChangedNotification
 
-- (void)documentStateChanged {
+- (void)handleDocumentStateChanged {
     
     switch (self.document.documentState) {
         case UIDocumentStateClosed:
@@ -1105,6 +1100,52 @@ BOOL storeEnabled() {
             break;
     }
 }
+
+#pragma mark -
+#pragma mark Helper functions
+
+- (void)updateInupdateInterfaceForPerferedContentSizeCategory:(NSString *)category {
+    _headerSectionHeight = [self.class SizeCategoryHeight:category];
+}
+
+#pragma mark Section Indexes
+
+- (MADIdentifierQueryViewSections)sectionIndexForTables {
+    return [self sectionIndexForSectionType: MADIdentifierQueryViewSectionsTables];
+}
+
+- (MADIdentifierQueryViewSections)sectionIndexForLinks {
+    return [self sectionIndexForSectionType: MADIdentifierQueryViewSectionsLinks];
+}
+
+- (MADIdentifierQueryViewSections)sectionIndexForGroups {
+    return [self sectionIndexForSectionType: MADIdentifierQueryViewSectionsGroups];
+}
+
+- (MADIdentifierQueryViewSections)sectionIndexForPredicate {
+    return [self sectionIndexForSectionType: MADIdentifierQueryViewSectionsPredicate];
+}
+
+- (MADIdentifierQueryViewSections)sectionIndexForSectionType:(MADIdentifierQueryViewSections)sec {
+    MADIdentifierQueryViewSections result = 0;
+    NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
+    MADQueryViewControllerTableLayout *tableLayout;
+    tableLayout = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
+                                                                   reportingEnabled:storeEnabled()];
+    NSArray *sectionTypes = [tableLayout sectionTypes].copy;
+    NSInteger secPos = 0;
+    
+    for (NSNumber *num in sectionTypes) {
+        if (num.unsignedIntegerValue == sec) {
+            result = (MADIdentifierQueryViewSections)secPos;
+            break;
+        }
+        secPos++;
+    }
+    return result;
+}
+
+#pragma mark User Interface
 
 - (void)enableUserInteraction {
     [self.tableView setUserInteractionEnabled:YES];
@@ -1128,7 +1169,7 @@ BOOL storeEnabled() {
 }
 
 - (NSArray <NSIndexPath *> *)deleteLinksRelatedToSectionIndex:(NSInteger)section
-                                                        table:(NSManagedObjectID *)deleatedTableObjectId
+                                                        table:(NSManagedObjectID *)deleatedObjectID
                                                   inTableView:(UITableView *)tableView
                                                     inContext:(NSManagedObjectContext *)context {
     
@@ -1142,10 +1183,10 @@ BOOL storeEnabled() {
         NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         NSError *error = NULL;
         NSManagedObject *object = nil;
-        MADTableViewCellQueryLink *tableViewCellLink;
-        tableViewCellLink = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
-        if (tableViewCellLink) {
-            object = [context existingObjectWithID:tableViewCellLink.tableID error:&error];
+        MADTableViewCellQueryLink *cell;
+        cell = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
+        if (cell) {
+            object = [context existingObjectWithID:cell.tableID error:&error];
         } else {
             
             id <NSFetchedResultsSectionInfo> sectionInfo = fetchedLinkes.sections[0];
@@ -1157,8 +1198,8 @@ BOOL storeEnabled() {
         }
         if (!error && object && [object isKindOfClass:[RptqQueryLinks class]]) {
             RptqQueryLinks *queryLink = (RptqQueryLinks *)object;
-            if ([queryLink.hasLeftField.inQueryTable.objectID isEqual:deleatedTableObjectId] ||
-                [queryLink.hasRightField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
+            if ([queryLink.hasLeftField.inQueryTable.objectID isEqual:deleatedObjectID] ||
+                [queryLink.hasRightField.inQueryTable.objectID isEqual:deleatedObjectID]) {
                 [context deleteObject:queryLink];
                 
                 [cellsToDelete addObject:linkIndexPath];
@@ -1170,7 +1211,7 @@ BOOL storeEnabled() {
 }
 
 - (NSArray <NSIndexPath *> *)deleteGroupsRelatedToSectionIndex:(NSInteger)section
-                                                         table:(NSManagedObjectID *)deleatedTableObjectId
+                                                         table:(NSManagedObjectID *)deleatedObjectID
                                                    inTableView:(UITableView *)tableView
                                                      inContext:(NSManagedObjectContext *)context {
     
@@ -1192,7 +1233,7 @@ BOOL storeEnabled() {
             if (!error && object && [object isKindOfClass:[RptqQueryGroup class]]) {
             
                 RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
-                if ([groupToRemove.hasField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
+                if ([groupToRemove.hasField.inQueryTable.objectID isEqual:deleatedObjectID]) {
                     [self.document removeGroupWitObjectID: groupToRemove.objectID
                                  fromManagedObjectContext: context];
                     [cellsToDelete addObject:groupIndexPath];
@@ -1206,7 +1247,7 @@ BOOL storeEnabled() {
 }
 
 - (NSArray <NSIndexPath *> *)deletePredicateRelatedToSectionIndex: (NSInteger)section
-                                                            table: (NSManagedObjectID *)deleatedTableObjectId
+                                                            table: (NSManagedObjectID *)deleatedObjectID
                                                       inTableView: (UITableView *)tableView
                                                         inContext: (NSManagedObjectContext *)context {
 
@@ -1217,13 +1258,13 @@ BOOL storeEnabled() {
 
         NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         
-        MADTableViewCellQueryPredicate *tableViewCellPredicate;
-        tableViewCellPredicate = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
+        MADTableViewCellQueryPredicate *cell;
+        cell = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
         NSError *error = nil;
         NSManagedObject *object = nil;
         
-        if (tableViewCellPredicate) {
-            object = [context existingObjectWithID: tableViewCellPredicate.tableID
+        if (cell) {
+            object = [context existingObjectWithID: cell.tableID
                                              error: &error];
         } else {
             NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row
@@ -1236,7 +1277,7 @@ BOOL storeEnabled() {
             RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
 
             BOOL deleted = NO;
-            if ([predicateToRemove.hasLeftField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
+            if ([predicateToRemove.hasLeftField.inQueryTable.objectID isEqual:deleatedObjectID]) {
 
                 [context deleteObject:predicateToRemove];
                 
@@ -1246,7 +1287,7 @@ BOOL storeEnabled() {
             }
             
             if (!deleted) {
-                if ([predicateToRemove.hasRightField.inQueryTable.objectID isEqual:deleatedTableObjectId]) {
+                if ([predicateToRemove.hasRightField.inQueryTable.objectID isEqual:deleatedObjectID]) {
                 
                     [context deleteObject:predicateToRemove];
 
@@ -1262,6 +1303,11 @@ BOOL storeEnabled() {
 #pragma mark -
 #pragma mark MADQueryViewControllerDatasourceProtocol
 
+- (void)reloadQueryViewData {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self.tableView reloadData];
+}
+
 - (void)deleteQueryPredicateFromTableView: (UITableView *)tableView
                               atIndexPath: (NSIndexPath *)indexPath {
     MADocument *document = self.document;
@@ -1273,14 +1319,9 @@ BOOL storeEnabled() {
     [document.managedObjectContext save:nil];
 }
 
-- (void)reloadQueryViewData {
-    //NSLog(@"Reload query view data.");
-    [self.tableView reloadData];
-}
-
-- (void)deleteItemFromQuerySection:(MADIdentifierQueryViewSections)section
-                     fromTableView:(UITableView *)tableView
-                       atIndexPath:(NSIndexPath *)indexPath {
+- (void)deleteItemFromQuerySection: (MADIdentifierQueryViewSections)section
+                     fromTableView: (UITableView *)tableView
+                       atIndexPath: (NSIndexPath *)indexPath {
     //NSLog(@"Delete item %ld from section %ld-%hd.", indexPath.item, indexPath.section, querySection);
     
     switch (section) {
@@ -1307,7 +1348,9 @@ BOOL storeEnabled() {
 
 - (void)deleteQueryTableFromTableView: (UITableView *)tableView
                           atIndexPath: (NSIndexPath *)indexPath {
-    self.suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
+    NSLog(@"%s: (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
+    
+    _suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
     
     //NSManagedObjectContext *private;
     //private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -1450,7 +1493,7 @@ BOOL storeEnabled() {
         //[self observeManagedObjectContextChanges:self.document.managedObjectContext];
         [self observeManagedObjectContextChanges:context];
         
-        self.suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
+        _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
         
         //}];
     }
@@ -1518,7 +1561,8 @@ BOOL storeEnabled() {
 }
 
 - (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
-    
+    NSLog(@"%s: (%ld)", __PRETTY_FUNCTION__, index);
+
     NSIndexPath *indexPathUpdate;
     MADTableController *tableController;
     //MADLabelTitle *titleView;
@@ -1562,6 +1606,7 @@ BOOL storeEnabled() {
 #pragma mark NSManagedObjectContext Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 
     NSDictionary *userInfo = notification.userInfo;
     NSSet *updatedObjects = userInfo[NSUpdatedObjectsKey];
@@ -1599,28 +1644,29 @@ BOOL storeEnabled() {
 }
 
 - (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)context {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSManagedObjectContextObjectsDidChangeNotification
                                                   object: context];
 }
 
 - (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)context {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(managedObjectContextDidChange:)
                                                  name: NSManagedObjectContextObjectsDidChangeNotification
                                                object: context];
 }
 
-#pragma mark NSNotificationCenter
+#pragma mark -
+#pragma mark UIContentSizeCategoryDidChangeNotification
 
-- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
+- (void)handleContentSizeCategoryDidChange:(NSNotification *)notification {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
     [self updateInupdateInterfaceForPerferedContentSizeCategory:contentSize];
     [self.view setNeedsLayout];
-}
-
-- (void)updateInupdateInterfaceForPerferedContentSizeCategory:(NSString *)category {
-    _headerSectionHeight = [self.class SizeCategoryHeight:category];
 }
 
 - (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
@@ -1633,7 +1679,9 @@ BOOL storeEnabled() {
     return self;
 }
 
-- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                            presentingController:(UIViewController *)presenting
+                                                                                sourceController:(UIViewController *)source {
     return self;
 }
 

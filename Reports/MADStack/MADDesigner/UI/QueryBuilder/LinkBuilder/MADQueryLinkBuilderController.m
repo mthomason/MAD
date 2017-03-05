@@ -19,8 +19,15 @@
 
 #import <MAD/MADocument.h>
 
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+
 #import <MAD/RptqQueryTable.h>
+
+#import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
+
+#import <MAD/RptqQueryLinks.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 
 #import "MADQueryChooseFieldController.h"
@@ -112,12 +119,16 @@
 
 - (IBAction)save:(id)sender {
     if (self.firstField && self.secondField) {
+        MADocument *document = self.document;
         RptqQueryLinks *links;
         links = [RptqQueryLinks newQueryLinksWithLeftField: self.firstField
                                                 rightField: self.secondField
                                                   joinType: self.linkType
-                                      managedObjectContext: self.document.managedObjectContext];
-        [self.queryLinkDelegate viewControllerSchemaAddLinkDidAdd: links];
+                                      managedObjectContext: document.managedObjectContext];
+        [document.activeDocumentModel addQueryLink:links];
+        [document saveContext];
+        
+        [self.queryLinkDelegate viewController:self addedQueryLink: links];
     } else {
         [self cancel:sender];
     }

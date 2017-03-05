@@ -14,7 +14,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MADIdentifierQueryBuilderPredicateBuilder" definesPresentationContext="YES" id="1S4-ip-3dw" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="c4W-iz-snk">
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="c4W-iz-snk">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -107,7 +107,7 @@
         <!--Add Predicate-->
         <scene sceneID="uFS-C0-l7l">
             <objects>
-                <tableViewController id="Ako-sk-WFW" customClass="MADQueryBuilderAddPredicateController" sceneMemberID="viewController">
+                <tableViewController id="Ako-sk-WFW" customClass="MADQueryAddPredicateController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wtr-i2-4Bh">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -237,7 +237,7 @@
         <!--Add Predicate-->
         <scene sceneID="O4k-yE-nsm">
             <objects>
-                <tableViewController id="R4o-wI-s9a" customClass="MADQueryBuilderAddPredicateController" sceneMemberID="viewController">
+                <tableViewController id="R4o-wI-s9a" customClass="MADQueryAddPredicateController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5Bh-Kd-6p5">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -362,7 +362,7 @@
                         <viewControllerLayoutGuide type="top" id="lW8-wE-4zi"/>
                         <viewControllerLayoutGuide type="bottom" id="H0H-c4-cXm"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" misplaced="YES" id="V3f-7n-Kb8">
+                    <view key="view" contentMode="scaleToFill" id="V3f-7n-Kb8">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -377,8 +377,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Text to Display" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LCf-g6-1kA">
-                                                    <rect key="frame" x="10" y="7" width="520" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Text to Display" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LCf-g6-1kA">
+                                                    <rect key="frame" x="10" y="7" width="355" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="Afh-Tg-eNn"/>
                                                     </constraints>

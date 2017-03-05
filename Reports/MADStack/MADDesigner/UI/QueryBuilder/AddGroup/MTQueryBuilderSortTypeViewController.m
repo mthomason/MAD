@@ -51,12 +51,12 @@
     UITableViewCell *cellActive = [tableView cellForRowAtIndexPath:indexPath];
     NSString *reuseID = cellActive.reuseIdentifier;
     if ([reuseID isEqualToString: @"MTTableViewCellSortOrderAccending"]) {
-        [self.delegate uITableViewControllerSortTypeDidSelectSortType: MADSortOrderAccending];
+        [self.delegate viewController:self didSelectSortType: MADSortOrderAccending];
         cellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
         cellDecending.accessoryType = UITableViewCellAccessoryNone;
         
     } else if ([reuseID isEqualToString: @"MTTableViewCellSortOrderDecending"]) {
-        [self.delegate uITableViewControllerSortTypeDidSelectSortType: MADSortOrderDecending];
+        [self.delegate viewController:self didSelectSortType: MADSortOrderDecending];
         cellAccending.accessoryType = UITableViewCellAccessoryNone;
         cellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
 
