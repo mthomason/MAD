@@ -16,10 +16,8 @@
 @protocol MADQueryBuilderAddLinkJoinTypeDelegate
 
     - (MNSLinkType)initalLinktype;
-    - (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith: (MNSLinkType)result
-                                                        from: (MADocument *)document;
+    - (void)viewController:(UIViewController *)viewController addLinkJoinType:(MNSLinkType)result;
 
 @end
-
 
 #endif /* MADQueryBuilderAddLinkJoinTypeDelegate_h */

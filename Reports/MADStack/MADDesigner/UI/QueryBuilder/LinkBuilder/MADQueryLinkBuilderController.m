@@ -179,7 +179,7 @@
     [self updateSaveButtonState];
 }
 
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MADocument *)document {
+- (void)viewController:(UIViewController *)viewController addLinkJoinType:(MNSLinkType)result {
     [self setJoinType:result];
     [self.navigationController popToViewController: self animated: YES];
 }

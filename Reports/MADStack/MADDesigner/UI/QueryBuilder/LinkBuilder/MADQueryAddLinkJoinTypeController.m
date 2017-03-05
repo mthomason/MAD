@@ -11,9 +11,10 @@
 #endif
 
 #import "MADQueryAddLinkJoinTypeController.h"
-#import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
 
 #import <UIKit/UILabel.h>
+
+#import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
 
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -38,7 +39,8 @@
 
 @implementation MADQueryAddLinkJoinTypeController
 
-#pragma mark - View lifecycle
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -91,101 +93,93 @@
 
 - (void)checkLinkType:(MNSLinkType)type {
 
-    UITableViewCell *tableViewCellCrossJoin         = _tableViewCellCrossJoin;
-    UITableViewCell *tableViewCellEquiJoin          = _tableViewCellEquiJoin;
-    UITableViewCell *tableViewCellFullOuterJoin     = _tableViewCellFullOuterJoin;
-    UITableViewCell *tableViewCellInnerJoin         = _tableViewCellInnerJoin;
-    UITableViewCell *tableViewCellLeftOuterJoin     = _tableViewCellLeftOuterJoin;
-    UITableViewCell *tableViewCellNaturalJoin       = _tableViewCellNaturalJoin;
-    UITableViewCell *tableViewCellRightOuterJoin    = _tableViewCellRightOuterJoin;
-    
     switch (type) {
         case MNSLinkTypeCrossJoin:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
         case MNSLinkTypeEquiJoin:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryCheckmark;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryCheckmark;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
         case MNSLinkTypeFullOuterJoin:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryCheckmark;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryCheckmark;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeInnerJoin:
 
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeLeftOuterJoin:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryCheckmark;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryCheckmark;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeNaturalJoin:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryCheckmark;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryCheckmark;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
         case MNSLinkTypeRightOuterJoin:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryCheckmark;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryCheckmark;
 
             break;
         default:
             
-            tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
-            tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
-            tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
-            tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
-            tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
+            self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
+            self.tableViewCellFullOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellInnerJoin.accessoryType =        UITableViewCellAccessoryNone;
+            self.tableViewCellLeftOuterJoin.accessoryType =    UITableViewCellAccessoryNone;
+            self.tableViewCellNaturalJoin.accessoryType =      UITableViewCellAccessoryNone;
+            self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
     }
@@ -224,8 +218,7 @@
     
     if ((NSInteger)linktype != MNSLinkTypeUnknown) {
         [self checkLinkType:linktype];
-        [self.delegate viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype
-                                                                   from: _document];
+        [self.delegate viewController:self addLinkJoinType: linktype];
     }
 
 }

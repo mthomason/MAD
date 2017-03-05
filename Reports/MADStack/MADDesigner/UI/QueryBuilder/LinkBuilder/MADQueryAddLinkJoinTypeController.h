@@ -10,7 +10,6 @@
 #define Reports_MADQueryAddLinkJoinTypeController_h
 
 #import <UIKit/UITableViewController.h>
-#import <MAD/MADQueryLinkType.h>
 
 @protocol MADQueryBuilderAddLinkJoinTypeDelegate;
 
