@@ -35,14 +35,14 @@ extern NSString * const MTLinkSqlFullOuterJoin;
 
     + (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
                                     rightField:(RptqQueryField *)fieldRight
-                                      joinType:(MNSLinkType)joinType
+                                      joinType:(MADLinkType)joinType
                           managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     - (NSString *)linkDescription;
 
-    + (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
-    + (NSString *)newLocalizedNameForLinkType:(MNSLinkType)type;
-    + (NSString *)SqlForLinkType:(MNSLinkType)type;
+    + (NSString *)ReuseIdForLinkType:(MADLinkType)type;
+    + (NSString *)newLocalizedNameForLinkType:(MADLinkType)type;
+    + (NSString *)SqlForLinkType:(MADLinkType)type;
 
 @end
 

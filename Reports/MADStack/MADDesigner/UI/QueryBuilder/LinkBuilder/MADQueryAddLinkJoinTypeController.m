@@ -91,10 +91,10 @@
     [self checkLinkType:[self.delegate initalLinktype]];
 }
 
-- (void)checkLinkType:(MNSLinkType)type {
+- (void)checkLinkType:(MADLinkType)type {
 
     switch (type) {
-        case MNSLinkTypeCrossJoin:
+        case MADLinkTypeCrossJoin:
             
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryCheckmark;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
@@ -105,7 +105,7 @@
             self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
-        case MNSLinkTypeEquiJoin:
+        case MADLinkTypeEquiJoin:
             
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryCheckmark;
@@ -116,7 +116,7 @@
             self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
             
             break;
-        case MNSLinkTypeFullOuterJoin:
+        case MADLinkTypeFullOuterJoin:
             
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
@@ -127,7 +127,7 @@
             self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
-        case MNSLinkTypeInnerJoin:
+        case MADLinkTypeInnerJoin:
 
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
@@ -138,7 +138,7 @@
             self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
-        case MNSLinkTypeLeftOuterJoin:
+        case MADLinkTypeLeftOuterJoin:
             
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
@@ -149,7 +149,7 @@
             self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
-        case MNSLinkTypeNaturalJoin:
+        case MADLinkTypeNaturalJoin:
             
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
@@ -160,7 +160,7 @@
             self.tableViewCellRightOuterJoin.accessoryType =   UITableViewCellAccessoryNone;
 
             break;
-        case MNSLinkTypeRightOuterJoin:
+        case MADLinkTypeRightOuterJoin:
             
             self.tableViewCellCrossJoin.accessoryType =        UITableViewCellAccessoryNone;
             self.tableViewCellEquiJoin.accessoryType =         UITableViewCellAccessoryNone;
@@ -191,32 +191,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    MNSLinkType linktype = MNSLinkTypeUnknown;
+    MADLinkType linktype = MADLinkTypeUnknown;
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeInnerJoin]) {
-        linktype = MNSLinkTypeInnerJoin;
+        linktype = MADLinkTypeInnerJoin;
         
     } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeEquiJoin]) {
-        linktype = MNSLinkTypeEquiJoin;
+        linktype = MADLinkTypeEquiJoin;
 
     } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeNaturalJoin]) {
-        linktype = MNSLinkTypeNaturalJoin;
+        linktype = MADLinkTypeNaturalJoin;
     
     } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeCrossJoin]) {
-        linktype = MNSLinkTypeCrossJoin;
+        linktype = MADLinkTypeCrossJoin;
     
     } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeLeftOuterJoin]) {
-        linktype = MNSLinkTypeLeftOuterJoin;
+        linktype = MADLinkTypeLeftOuterJoin;
 
     } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeRightOuterJoin]) {
-        linktype = MNSLinkTypeRightOuterJoin;
+        linktype = MADLinkTypeRightOuterJoin;
     
     } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeFullOuterJoin]) {
-        linktype = MNSLinkTypeFullOuterJoin;
+        linktype = MADLinkTypeFullOuterJoin;
     }
     
-    if ((NSInteger)linktype != MNSLinkTypeUnknown) {
+    if ((NSInteger)linktype != MADLinkTypeUnknown) {
         [self checkLinkType:linktype];
         [self.delegate viewController:self addLinkJoinType: linktype];
     }

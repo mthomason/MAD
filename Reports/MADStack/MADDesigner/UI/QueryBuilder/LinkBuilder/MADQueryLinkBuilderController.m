@@ -59,7 +59,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setJoinType:MNSLinkTypeLeftOuterJoin];
+    [self setJoinType:MADLinkTypeLeftOuterJoin];
     self.currentlyEditingPart = MADLinkNone;
     [self updateRightLabelState];
     [self updateSaveButtonState];
@@ -140,7 +140,7 @@
 
 #pragma mark - Delegate callbacks
 
-- (MNSLinkType)initalLinktype {
+- (MADLinkType)initalLinktype {
     return self.linkType;
 }
 
@@ -179,14 +179,14 @@
     [self updateSaveButtonState];
 }
 
-- (void)viewController:(UIViewController *)viewController addLinkJoinType:(MNSLinkType)result {
+- (void)viewController:(UIViewController *)viewController addLinkJoinType:(MADLinkType)result {
     [self setJoinType:result];
     [self.navigationController popToViewController: self animated: YES];
 }
 
 #pragma mark - Helper functions
 
-- (void)setJoinType:(MNSLinkType)type {
+- (void)setJoinType:(MADLinkType)type {
     NSString *linkName = [RptqQueryLinks newLocalizedNameForLinkType:type];
     NSString *text = linkName.lowercaseString;
     self.tableViewCellJoinType.detailTextLabel.text = text;
