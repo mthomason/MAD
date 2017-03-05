@@ -26,7 +26,11 @@
 
 #import <MAD/MADocument.h>
 
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqQueryPredicate.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
+#import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 
@@ -121,7 +125,9 @@
 - (IBAction)save:(id)sender {
     
     RptqQueryPredicate *queryPredicate = nil;
-    NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
+    MADocument *document = self.document;
+
+    NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
     if (self.leftValue == nil) {
         if (self.rightValue == nil) {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftField: self.fieldLeft
@@ -147,6 +153,10 @@
                                                        forManagedObjectContext: managedObjectContext];
         }
     }
+    
+    [document.activeDocumentModel addPredicate:queryPredicate];
+    [document saveContext];
+    
     
     [self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
