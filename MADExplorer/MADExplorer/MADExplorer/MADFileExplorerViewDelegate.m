@@ -296,6 +296,10 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     if (self.isEditing) {
         [self downloadIfNotYetDownloaded: metadata];
     } else {
+        collectionView.allowsSelection = NO;
+        MADCollectionViewCellDocument *cell;
+        cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+        cell.working = YES;
         [self.delegate openDocumentAtURL:url];
     }
 
@@ -317,6 +321,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                             didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    MADCollectionViewCellDocument *cell;
+    cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.working = NO;
     [self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
     [self invokeOperationDidChangeNumberOfItemsSelected:collectionView];
 }

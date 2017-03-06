@@ -42,10 +42,7 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 
-static NSString * const MADTextHintDocumentWobblingYes  = @"Selects document named %@.";
-static NSString * const MADTextHintDocumentWobblingNo   = @"Opens document named %@.";
-static NSString * const MADTextDocumentName             = @"Document %@.";
-static NSString * const MADTextRenamesDocument          = @"Renames document.";
+
        NSString * const MADTextNotDownloaded            = @"Not Downloaded";
 static NSString * const Syncing                         = @"Syncing";
 static NSString * const Downloading                     = @"Downloading";
@@ -75,7 +72,8 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
                                 fileSize:(unsigned long long)fileSize {
     id result;
     if (isStatusNotDownloading(status)) {
-        NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
+        NSString *textNotDownloaded;
+        textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
         result = [[NSString alloc] initWithString:textNotDownloaded];
     } else {
         result = [MADStandard newStandardStringForFileSize:fileSize];
@@ -90,19 +88,21 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     UIView * _selectedBackgroundView;
 }
 
-#pragma mark -
-#pragma mark Overrides
-
-- (void)setSelected:(BOOL)selected {
-    NSLog(@"%s %s", __PRETTY_FUNCTION__, selected ? "YES" : "NO");
-    [super setSelected:selected];
-    [_labelTitle setSelected:selected];
-}
-
-- (void)setHighlighted:(BOOL)highlighted {
-    NSLog(@"%s %s", __PRETTY_FUNCTION__, highlighted ? "YES" : "NO");
-    [super setHighlighted: highlighted];
-    [_labelTitle setHighlighted: highlighted];
++ (void)updateProgressView:(UIProgressView *)progressView
+                    active:(BOOL)active
+                   percent:(double)percent {
+    
+    if (!active) {
+        progressView.hidden = YES;
+        [progressView setProgress:Float_0 animated:YES];
+        return;
+    }
+    
+    progressView.hidden = NO;
+    if (progressView.progress < percent / Float_100) {
+        [progressView setProgress: (float) (percent / Float_100)
+                         animated: YES];
+    }
 }
 
 #pragma mark -
@@ -120,7 +120,54 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     [self setSelectedBackgroundView: selectedBackgroundView];
 }
 
-- (BOOL)shouldGroupAccessibilityChildren{
+#pragma mark -
+#pragma mark Overrides
+
+- (void)setSelected:(BOOL)selected {
+    NSLog(@"%s %s", __PRETTY_FUNCTION__, selected ? "YES" : "NO");
+    [super setSelected:selected];
+    [_labelTitle setSelected:selected];
+}
+
+- (void)setHighlighted:(BOOL)highlighted {
+    NSLog(@"%s %s", __PRETTY_FUNCTION__, highlighted ? "YES" : "NO");
+    [super setHighlighted: highlighted];
+    [_labelTitle setHighlighted: highlighted];
+}
+
+- (void)setWorking:(BOOL)working {
+    UIActivityIndicatorView *activityIndicator = self.activityIndicator;
+    if (working) {
+        [activityIndicator startAnimating];
+    } else {
+        [activityIndicator stopAnimating];
+    }
+    _working = working;
+}
+
+#pragma mark -
+#pragma mark Accessibility
+
+- (NSString *)accessibilityHintDocumentName {
+    NSString *documentName = NSLocalizedString(@"Document %@.",
+                                               @"Document %@.");
+    NSString *label = [[NSString alloc] initWithFormat: documentName, _labelTitle.text];
+    return label;
+}
+
+- (NSString *)accessibilityHintActionSelect {
+    NSString *format = _wobbling ? NSLocalizedString(@"Selects document named %@.",
+                                                     @"Selects document named %@.") :
+                                   NSLocalizedString(@"Opens document named %@.",
+                                                     @"Opens document named %@.");
+    NSString *result = [[NSString alloc] initWithFormat: format, self.labelTitle.text];
+    return result;
+}
+
+#pragma mark -
+#pragma mark Overrides
+
+- (BOOL)shouldGroupAccessibilityChildren {
     return YES;
 }
 
@@ -129,18 +176,11 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 }
 
 - (NSString *)accessibilityHint {
-    NSString *documentHint = _wobbling ? NSLocalizedString(MADTextHintDocumentWobblingYes,
-                                                           MADTextHintDocumentWobblingYes) :
-                                         NSLocalizedString(MADTextHintDocumentWobblingNo,
-                                                           MADTextHintDocumentWobblingNo);
-    NSString *hint = [[NSString alloc] initWithFormat: documentHint, _labelTitle.text];
-    return hint;
+    return [self accessibilityHintActionSelect];
 }
 
 - (NSString *)accessibilityLabel {
-    NSString *documentName = NSLocalizedString(MADTextDocumentName, MADTextDocumentName);
-    NSString *label = [[NSString alloc] initWithFormat: documentName, _labelTitle.text];
-    return label;
+    return [self accessibilityHintDocumentName];
 }
 
 - (NSInteger)accessibilityElementCount {
@@ -154,36 +194,28 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 - (id)accessibilityElementAtIndex:(NSInteger)index {
     switch (index) {
         case 0: {
-            NSString *documentHint = _wobbling ? NSLocalizedString(MADTextHintDocumentWobblingYes,
-                                                                   MADTextHintDocumentWobblingYes) :
-                                                 NSLocalizedString(MADTextHintDocumentWobblingNo,
-                                                                   MADTextHintDocumentWobblingNo);
             UIImageView *imagePreview = _imagePreview;
-            UILabel *labelTitle = _labelTitle;
-            NSString *documentName = NSLocalizedString(MADTextDocumentName, MADTextDocumentName);
             imagePreview.isAccessibilityElement = YES;
             NSString *text;
             
-            text = [[NSString alloc] initWithFormat: documentHint, labelTitle.text];
-            imagePreview.accessibilityHint = text;
+            text = [self accessibilityHintActionSelect];
+            imagePreview.accessibilityHint = text.copy;
             
-            text = [[NSString alloc] initWithFormat: documentName, labelTitle.text];
-            imagePreview.accessibilityLabel = text;
+            text = [self accessibilityHintDocumentName];
+            imagePreview.accessibilityLabel = text.copy;
             
             imagePreview.accessibilityTraits = UIAccessibilityTraitButton;
             return imagePreview;
             break;
         }
         case 1: {
-            NSString *documentName = NSLocalizedString(MADTextDocumentName,
-                                                       MADTextDocumentName);
             UILabel *labelTitle = _labelTitle;
             NSString *text;
             labelTitle.isAccessibilityElement = YES;
-            text = [[NSString alloc] initWithFormat: documentName, labelTitle.text];
-            labelTitle.accessibilityLabel = text;
-            labelTitle.accessibilityHint = NSLocalizedString(MADTextRenamesDocument,
-                                                             MADTextRenamesDocument);
+            text = [self accessibilityHintDocumentName];
+            labelTitle.accessibilityLabel = text.copy;
+            labelTitle.accessibilityHint = NSLocalizedString(@"Renames document.",
+                                                             @"Renames document.");
             labelTitle.accessibilityTraits = UIAccessibilityTraitButton;
             return self.labelTitle;
             break;
@@ -192,6 +224,10 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
             return nil;
             break;
     }
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    return UIAccessibilityTraitButton;
 }
 
 #pragma mark -
@@ -236,6 +272,20 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 #pragma mark -
 #pragma mark Helpers
 
+
+- (void)handleContentSizeCategoryDidChangeNotification {
+    
+    NSAttributedString *attributedString;
+    attributedString = [MADExplorerCaption newExplorerCaption:self.labelTitle.text];
+
+    UILabel *labelTitle = _labelTitle;
+    labelTitle.attributedText = attributedString;
+    labelTitle.text = self.labelTitle.text.copy;
+
+}
+
+#pragma mark Motion Effects
+
 - (void)addMotionEffect:(UIMotionEffect *)effect {
     [self.imagePreview addMotionEffect:effect];
     [self.progressViewDownload addMotionEffect:effect];
@@ -248,19 +298,7 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     [self.progressViewUpload removeMotionEffect:effect];
 }
 
-- (void)setText:(NSString *)text {
-    id attributedString;
-    attributedString = [MADExplorerCaption newExplorerCaption:text];
-    UILabel *labelTitle = _labelTitle;
-    labelTitle.attributedText = attributedString;
-    labelTitle.text = text.copy;
-    attributedString = nil;
-}
-
-- (void)updateFont {
-    NSString *text = self.labelTitle.text.copy;
-    [self setText: text];
-}
+#pragma mark Wobble
 
 - (void)startWobble {
 
@@ -268,24 +306,21 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     float r = wobbleFactor();
     
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    [UIView animateWithDuration: 0.2
-                     animations: ^{
-                         self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-                     }
-                     completion: ^(BOOL finished) {
+    [UIView animateWithDuration: 0.2 animations: ^{
+        self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+    } completion: ^(BOOL finished) {
                          
-                         [UIView animateWithDuration: 0.2
-                                               delay: 0
-                                             options: UIViewAnimationOptionAllowUserInteraction |
-                          UIViewAnimationOptionRepeat |
-                          UIViewAnimationOptionAutoreverse |
-                          UIViewAnimationOptionBeginFromCurrentState
-                                          animations: ^(void){
-                                              [UIView setAnimationRepeatCount: MAXFLOAT];
-                                              self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
-                                          }
-                                          completion: nil];
-                     }];
+        [UIView animateWithDuration: 0.2
+                              delay: 0
+                            options: UIViewAnimationOptionAllowUserInteraction |
+                                        UIViewAnimationOptionRepeat |
+                                        UIViewAnimationOptionAutoreverse |
+                                        UIViewAnimationOptionBeginFromCurrentState
+                         animations: ^(void){
+                             [UIView setAnimationRepeatCount: MAXFLOAT];
+                             self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
+    } completion: nil];
+    }];
 }
 
 - (void)stopWobble {
@@ -294,30 +329,14 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     self.transform = CGAffineTransformIdentity;
 }
 
-- (NSString *)titleLabelText {
-    return _labelTitle.text;
-}
-
-- (UIAccessibilityTraits)accessibilityTraits {
-    return UIAccessibilityTraitButton;
-}
-
-+ (void)updateProgressView:(UIProgressView *)progressView
-                    active:(BOOL)active
-                   percent:(double)percent {
-    
-    if (!active) {
-        progressView.hidden = YES;
-        [progressView setProgress:Float_0 animated:YES];
-        return;
-    }
-    
-    progressView.hidden = NO;
-    if (progressView.progress < percent / Float_100) {
-        [progressView setProgress: (float) (percent / Float_100)
-                         animated: YES];
+- (void)setWobbling:(BOOL)wobbling {
+    if (_wobbling != wobbling) {
+        if ((_wobbling = wobbling)) [self startWobble];
+        else [self stopWobble];
     }
 }
+
+#pragma mark Progress
 
 - (void)setUploadingActive:(BOOL)active
                    percent:(double)percent {
@@ -335,6 +354,8 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
                              percent: percent];
     
 }
+
+#pragma mark Update Display
 
 - (void)updateDisplayForMetaData:(MADMetaData *)metadata editing:(BOOL)editing {
     
@@ -419,13 +440,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
 
-}
-
-- (void)setWobbling:(BOOL)wobbling {
-    if (_wobbling != wobbling) {
-        if ((_wobbling = wobbling)) [self startWobble];
-        else [self stopWobble];
-    }
 }
 
 - (NSString *)subtitleForStatus:(NSString *)status

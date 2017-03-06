@@ -26,12 +26,12 @@ extern NSString * const MADTextNotDownloaded;
 @interface MADCollectionViewCellDocument : UICollectionViewCell
 
     @property (nonatomic, assign, getter=isWobbling) BOOL wobbling;
+    @property (nonatomic, assign, getter=isWorking) BOOL working;
 
     @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellTitle *labelTitle;
     @property (nonatomic, weak) IBOutlet MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
     @property (nonatomic, weak) IBOutlet MADThumbnailView *imagePreview;
     @property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
-
     @property (nonatomic, weak) IBOutlet UIProgressView *progressViewDownload;
     @property (nonatomic, weak) IBOutlet UIProgressView *progressViewUpload;
 
@@ -39,9 +39,7 @@ extern NSString * const MADTextNotDownloaded;
 
     @property (nonatomic, weak) id <UIGestureRecognizerDelegate> delegate;
 
-    @property (nonatomic, readonly) NSString *titleLabelText;
-
-    - (void)updateFont;
+    - (void)handleContentSizeCategoryDidChangeNotification;
 
     - (void)setUploadingActive:(BOOL)active
                        percent:(double)percent;

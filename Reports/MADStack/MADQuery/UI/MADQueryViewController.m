@@ -120,6 +120,7 @@ static NSString * const ViewControllerTitle = @"MAD Query";
 
 static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing);
 static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
+BOOL storeEnabled(void);
 
 static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
     return pushing ? UITransitionContextFromViewControllerKey :
@@ -128,6 +129,10 @@ static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing
 static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
     return pushing ? UITransitionContextToViewControllerKey :
                      UITransitionContextFromViewControllerKey;
+}
+
+BOOL storeEnabled() {
+    return [MTStoreKitController sharedObject].reportingEnabled;
 }
 
 #pragma mark - Private Category
@@ -159,11 +164,6 @@ static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushi
     @property (nonatomic, readonly) MADTabBarController *tabBarController;
 
 @end
-
-BOOL storeEnabled(void);
-BOOL storeEnabled() {
-    return [MTStoreKitController sharedObject].reportingEnabled;
-}
 
 @implementation MADQueryViewController {
     NSUInteger _lastSelectedRowNumber;
@@ -304,10 +304,6 @@ BOOL storeEnabled() {
 #pragma mark -
 #pragma mark UIViewController
 
-- (void)handleApplicationDidBecomeActive:(id)sender {
-    [MADQueryViewController deleteCoreDataCache];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -315,7 +311,8 @@ BOOL storeEnabled() {
     [self updateInupdateInterfaceForPerferedContentSizeCategory: sizeCategory];
     
     static NSString *MADIdentifierTableViewCellTableName = @"MADIdentifierCellSchemaName";
-    [self.tableView registerClass: [MADTableViewCellQueryTableName class] forCellReuseIdentifier: MADIdentifierTableViewCellTableName];
+    [self.tableView registerClass: [MADTableViewCellQueryTableName class]
+           forCellReuseIdentifier: MADIdentifierTableViewCellTableName];
     
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -840,6 +837,10 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark Event handlers
 
+- (void)handleApplicationDidBecomeActive:(id)sender {
+    [MADQueryViewController deleteCoreDataCache];
+}
+
 - (void)handleToggleReportingMode:(UISwitch *)switchControl {
     if (switchControl.on) {
         if ([MTStoreKitController sharedObject].isReportingEnabled) {
@@ -863,6 +864,30 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
     [self.tableView reloadRowsAtIndexPaths: paths
                           withRowAnimation: UITableViewRowAnimationNone];
     //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark UIDocumentStateChangedNotification
+
+- (void)handleDocumentStateChanged {
+    
+    switch (self.document.documentState) {
+        case UIDocumentStateClosed:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateInConflict:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateSavingError:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateEditingDisabled:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateNormal:
+        default:
+            [self enableUserInteraction];
+            break;
+    }
 }
 
 #pragma mark -
@@ -1071,31 +1096,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController
                               sender: sender];
     [self.tabBarController disableTabBarItems];
-}
-
-#pragma mark -
-#pragma mark Helper UIDocumentStateChangedNotification
-
-- (void)handleDocumentStateChanged {
-    
-    switch (self.document.documentState) {
-        case UIDocumentStateClosed:
-            [self disableUserInteraction];
-            break;
-        case UIDocumentStateInConflict:
-            [self enableUserInteraction];
-            break;
-        case UIDocumentStateSavingError:
-            [self enableUserInteraction];
-            break;
-        case UIDocumentStateEditingDisabled:
-            [self disableUserInteraction];
-            break;
-        case UIDocumentStateNormal:
-        default:
-            [self enableUserInteraction];
-            break;
-    }
 }
 
 #pragma mark -

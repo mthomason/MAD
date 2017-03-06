@@ -932,7 +932,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     visibleCells = self.collectionView.visibleCells;
     MADCollectionViewCellDocument *cell;
     for (cell in visibleCells) {
-        [cell updateFont];
+        [cell handleContentSizeCategoryDidChangeNotification];
     }
     [self.view setNeedsLayout];
 }
@@ -1389,6 +1389,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         @autoreleasepool {
             NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems;
+            self.collectionView.allowsSelection = YES;
             [self.collectionView.backgroundView setNeedsDisplay];
             [self.collectionView reloadItemsAtIndexPaths:paths];
         }
@@ -1821,7 +1822,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     MADMetaData *metaData = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
     
-    NSString *textFieldText = cellDocument.titleLabelText.copy;
+    NSString *textFieldText = cellDocument.labelTitle.text;
     
     void (^handleRename)(UITextField *);
     handleRename = ^(UITextField *textField) {
