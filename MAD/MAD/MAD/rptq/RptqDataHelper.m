@@ -56,8 +56,10 @@
     
     int64_t identifier64 = 0;
     if (!fetchResults.count) {
-        NSNumber *identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"];
-        CFNumberGetValue((__bridge CFNumberRef)(identifierNumber), kCFNumberSInt64Type, &identifier64);
+        NSNumber *identifierNumber;
+        if ((identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"]) != nil) {
+            CFNumberGetValue((__bridge CFNumberRef)(identifierNumber), kCFNumberSInt64Type, &identifier64);
+        }
     }
     identifier64++;
     return identifier64;

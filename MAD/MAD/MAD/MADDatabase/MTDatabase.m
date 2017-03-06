@@ -28,9 +28,6 @@
 
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
-NSString * const MADSqlSqlite3SelectPart = @"SELECT\n";
-NSString * const MADSqlSqlite3Identifier = @"NONE";
-NSString * const MADSqlSqlite3TableAliasConnector = @" AS ";
 
 static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                                                 @"%@ %@ %@ "
@@ -142,10 +139,16 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (MADSafeQueryField *)fieldAliasForField:(NSString *)fieldName
-                    andTableName:(NSString *)tableName {
-    NSString *fieldAlias = [fieldName stringByAppendingString:tableName];
-    NSString *result = [self newSafeIdentifier:fieldAlias];
-    return result;
+                             andTableName:(NSString *)tableName {
+    NSString *fieldAlias;
+    //if (fieldName.length && tableName.length) {
+    //    fieldAlias = [fieldName stringByAppendingString:@"."];
+    //    fieldAlias = [fieldAlias stringByAppendingString:tableName];
+    //} else {
+        fieldAlias = [fieldName stringByAppendingString:tableName];
+    //}
+    //NSString *result = [self newSafeIdentifier:fieldAlias];
+    return fieldAlias;
 }
 
 - (NSString *)fieldAliasForField:(NSString *)field
@@ -179,23 +182,23 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (NSString *)tableAliasConnector {
-    return MADSqlSqlite3TableAliasConnector;
+    return @" AS ";
 }
 
 - (NSString *)identifier {
-    return MADSqlSqlite3Identifier;
+    return @"NONE";
 }
 
 + (NSString *)identifier {
-    return MADSqlSqlite3Identifier;
+    return @"NONE";
 }
 
 - (NSString *)selectPart {
-    return MADSqlSqlite3SelectPart;
+    return @"SELECT\n";
 }
 
 - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit {   //Generally limited resuls are in a LIMIT part, but
-    return MADSqlSqlite3SelectPart;                                   //  SQL Server uses the TOP part (not default here).
+    return @"SELECT\n";                                   //  SQL Server uses the TOP part (not default here).
 }
 
 - (NSString *)sqlLimitClause {
@@ -227,7 +230,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     NSString *tableAliasConnector = [self tableAliasConnector];
     return [NSString stringWithFormat:MADTextSqlSelectSampleDataForField,
                                                     selectPart, safeField, tableAliasConnector,
-                                                    safeFieldAlias, MADSqlTextFromPart, safeTable];
+                                                    safeFieldAlias, @"\nFROM\n", safeTable];
 }
 
 - (void)readRow:(NSUInteger)row {

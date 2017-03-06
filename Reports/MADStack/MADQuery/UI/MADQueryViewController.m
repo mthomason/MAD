@@ -332,12 +332,9 @@ BOOL storeEnabled() {
     UIManagedDocument *document;
     NSManagedObjectContext *managedObjectContext;
     
-    
     document = _document;
     managedObjectContext = document.managedObjectContext;
-    
-    //self.navigationController.hidesBarsWhenVerticallyCompact = NO;
-    
+
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleDocumentStateChanged)
                                                  name: UIDocumentStateChangedNotification

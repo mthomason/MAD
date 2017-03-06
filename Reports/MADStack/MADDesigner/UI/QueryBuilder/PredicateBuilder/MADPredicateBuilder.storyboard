@@ -14,7 +14,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MADIdentifierQueryBuilderPredicateBuilder" definesPresentationContext="YES" id="1S4-ip-3dw" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="c4W-iz-snk">
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="c4W-iz-snk">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -370,7 +370,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellPredicateEnterValueString" id="xeH-Fp-Ama" customClass="MADCellEnterText">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellPredicateEnterValueString" id="xeH-Fp-Ama" customClass="MADCellTextInput">
                                         <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xeH-Fp-Ama" id="Evb-ua-NWf">
@@ -394,9 +394,6 @@
                                         <constraints>
                                             <constraint firstItem="LCf-g6-1kA" firstAttribute="centerY" secondItem="xeH-Fp-Ama" secondAttribute="centerY" id="7ji-jw-egf"/>
                                         </constraints>
-                                        <connections>
-                                            <outlet property="textField" destination="LCf-g6-1kA" id="yu1-G6-GWV"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
@@ -439,7 +436,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="te9-UK-3nu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1136" y="469"/>
+            <point key="canvasLocation" x="1015" y="428"/>
         </scene>
         <!--MADIdentifierSelectField-->
         <scene sceneID="cKJ-JC-4iT">
@@ -469,7 +466,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r0d-EH-YaS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1001" y="-112"/>
+            <point key="canvasLocation" x="1021" y="-32"/>
         </scene>
         <!--MADIdentifierQueryBuilderSelectOperator-->
         <scene sceneID="zts-cD-Ncv">

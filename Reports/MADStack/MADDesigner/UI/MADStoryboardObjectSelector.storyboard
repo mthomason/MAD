@@ -27,13 +27,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3wL-qR-mzt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4551" y="-1075"/>
+            <point key="canvasLocation" x="3490" y="-1077"/>
         </scene>
         <!--Document Objects-->
         <scene sceneID="OeB-WP-Brm">
             <objects>
                 <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="K93-6D-DcO" customClass="MADDesignerElementPickerViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="s2X-lR-oPm">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="s2X-lR-oPm">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -101,7 +101,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7JI-mY-nUY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4958" y="-1075"/>
+            <point key="canvasLocation" x="4384" y="-1078"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Icx-ur-LId">
@@ -119,7 +119,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RDu-VC-BrM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7602" y="685"/>
+            <point key="canvasLocation" x="5634" y="-422"/>
         </scene>
         <!--New Static Label-->
         <scene sceneID="RVh-AY-gui">
@@ -178,7 +178,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jzo-5E-oV2" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="yTm-ZE-jpp" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5443" y="-995"/>
+            <point key="canvasLocation" x="5634" y="-958"/>
         </scene>
         <!--MADIdentifierBarcodeViewController-->
         <scene sceneID="0Ls-dP-htl">
@@ -188,7 +188,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BXb-aZ-T02" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5485" y="-697"/>
+            <point key="canvasLocation" x="5634" y="122"/>
         </scene>
         <!--Aggregate Functions-->
         <scene sceneID="zj2-Nb-zGo">
@@ -769,7 +769,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xYv-MO-jrf" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="WtF-2e-D8t" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5453" y="-364"/>
+            <point key="canvasLocation" x="6502" y="-421"/>
         </scene>
         <!--Group By-->
         <scene sceneID="UDG-5d-S4q">
@@ -823,7 +823,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aah-JW-cQ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="CBO-9v-7Px" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="7602" y="140"/>
+            <point key="canvasLocation" x="6502" y="94"/>
         </scene>
         <!--Select Field-->
         <scene sceneID="tm2-rc-yW4">
@@ -875,7 +875,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ov-BF-TkF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="SJ2-BD-3yi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5443" y="-1371"/>
+            <point key="canvasLocation" x="5634" y="-1378"/>
         </scene>
         <!--Select Field-->
         <scene sceneID="d4p-Wf-73y">

@@ -551,10 +551,17 @@ void sqliteLog(void *foo, const char* statement) {
                                  */
                                 
                                 int metadata_result;
-                                metadata_result = sqlite3_table_column_metadata(_database, databaseName, tableName,
-                                                                                columnName, &pzDataType, &pzCollSeq,
-                                                                                &pNotNull, &pPrimaryKey, &pAutoinc);
-                                NSAssert(metadata_result == SQLITE_OK, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+                                metadata_result = sqlite3_table_column_metadata(_database,
+                                                                                databaseName,
+                                                                                tableName,
+                                                                                columnName,
+                                                                                &pzDataType,
+                                                                                &pzCollSeq,
+                                                                                &pNotNull,
+                                                                                &pPrimaryKey,
+                                                                                &pAutoinc);
+                                //NSAssert(metadata_result == SQLITE_OK, @"%s at %s",
+                                //         sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
                             }
                             
                             dataColumn.fieldName = fieldName;

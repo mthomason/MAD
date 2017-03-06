@@ -48,7 +48,7 @@
     @property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
     @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
-    @property (nonatomic, strong) UITextField *textField;
+    @property (nonatomic, weak) IBOutlet UITextField *textField;
     @property (nonatomic, strong) MADCellTextInput *tableViewCellEnterText;
     @property (nonatomic, strong) NSArray *pickerData;
     @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
