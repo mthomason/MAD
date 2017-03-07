@@ -65,13 +65,21 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Sort Orders" id="Xtx-Xa-bKb">
+                    <navigationItem key="navigationItem" title="Sort Orders" id="Xtx-Xa-bKb" customClass="MADSortOrderNavigationItem">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Acy-i4-nuq">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="QdA-p2-qra" kind="unwind" unwindAction="unwindToQueryBuilder:" id="HlM-Kv-IX6"/>
                             </connections>
                         </barButtonItem>
+                        <connections>
+                            <outlet property="leftBarButtonItem" destination="Acy-i4-nuq" id="2ZA-jc-XbJ"/>
+                        </connections>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableViewCellAccending" destination="kyj-jM-1fZ" id="Anf-JV-Xha"/>
+                        <outlet property="tableViewCellDecending" destination="gaA-z1-OuA" id="gB5-KO-7tK"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wss-p5-6BA" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="QdA-p2-qra" userLabel="Exit" sceneMemberID="exit"/>
@@ -154,17 +162,23 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Add Group" id="04q-CH-mPO">
+                    <navigationItem key="navigationItem" title="Add Group" id="04q-CH-mPO" customClass="MADQueryAddGroupNavigationItem">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Yk7-yS-pdX">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="cancel:" destination="SD8-hm-piH" id="Veh-Jx-0qU"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Lzw-Ay-9q9">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="save:" destination="SD8-hm-piH" id="K4p-qG-q5L"/>
                             </connections>
                         </barButtonItem>
+                        <connections>
+                            <outlet property="leftBarButtonItem" destination="Yk7-yS-pdX" id="6QM-P0-pzb"/>
+                            <outlet property="rightBarButtonItem" destination="Lzw-Ay-9q9" id="wz0-vZ-4kx"/>
+                        </connections>
                     </navigationItem>
                     <connections>
                         <outlet property="tableViewCellField" destination="CEV-qK-ZRF" id="6NO-jC-PnE"/>
@@ -215,7 +229,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Select Field" id="cQG-4E-ihk"/>
+                    <navigationItem key="navigationItem" title="Select Field" id="cQG-4E-ihk" customClass="MADSelectFieldNavigationItem"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Fr-ey-ffQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -224,14 +238,15 @@
         <!--Navigation Controller-->
         <scene sceneID="ChD-cW-1UW">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierQueryBuilderAddGroup" id="1pu-Do-TYA" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierQueryBuilderAddGroup" id="1pu-Do-TYA" sceneMemberID="viewController">
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JwD-CG-GUK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="JwD-CG-GUK">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.075007282197475433" green="0.60598874092102051" blue="0.91053247451782227" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>

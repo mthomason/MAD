@@ -45,8 +45,7 @@ static NSString * const TextDefault = @"Default";
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) { }
+    if (self = [super initWithStyle:style]) { }
     return self;
 }
 

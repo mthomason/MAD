@@ -11,10 +11,10 @@
 #endif
 
 #import "MTQueryBuilderSortTypeViewController.h"
-#import "MADQueryBuilderSortTypeDelegate.h"
-
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
+
+#import "MADQueryBuilderSortTypeDelegate.h"
 
 @interface MTQueryBuilderSortTypeViewController ()
 
@@ -27,20 +27,20 @@
 
 @synthesize delegate = _delegate;
 
-#pragma mark - View lifecycle
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.leftItemsSupplementBackButton = YES;
-    self.navigationItem.hidesBackButton = NO;
     if (_initalSortOrder == MADSortOrderAccending) {
-        _tableViewCellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.tableViewCellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
-        _tableViewCellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.tableViewCellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
     }
 }
 
-#pragma mark - Table view delegate
+#pragma mark -
+#pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

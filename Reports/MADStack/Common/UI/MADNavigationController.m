@@ -56,13 +56,9 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     if (self == [MADNavigationController self]) {
         @autoreleasepool {
             NSArray<Class <UIAppearanceContainer>> * classes;
-            UINavigationBar *navigationBar;
             UIToolbar *toolbar;
             
             classes = [[NSArray alloc] initWithObjects: self, nil];
-            navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-            navigationBar.barTintColor = [UIColor clearColor];
-            navigationBar.translucent = YES;
 
             toolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses:classes];
             UIColor *white, *blue;

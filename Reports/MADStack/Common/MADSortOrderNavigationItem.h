@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_MADSortOrderNavigationItem_h
+#define MAD_MADSortOrderNavigationItem_h
+
+#import <UIKit/UINavigationBar.h>
 
 @interface MADSortOrderNavigationItem : UINavigationItem
 
 @end
+
+#endif
