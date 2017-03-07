@@ -15,28 +15,12 @@
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UITabBarItem.h>
 
-#import "MADDesignerAnimatedTransitioning.h"
-#import "MADDesignerViewController.h"
-#import "MADLabelTitle.h"
 #import "MADNavigationController.h"
 
 #import "MADQueryBuilderSplitViewController.h"
-#import "MADQueryVisualizationViewController.h"
-#import "MADViewerController.h"
-
-
-const int8_t MADIndexQuery = 0;
-const int8_t MADIndexDesigner = 1;
-const int8_t MADIndexViewer = 2;
 
 @interface MADTabBarController ()
     <UITabBarControllerDelegate>
-
-    @property (nonatomic, copy) NSString *promptNavigationItem;
-
-    @property (nonatomic, strong) MADQueryBuilderSplitViewController *querySplitViewController;
-    @property (nonatomic, strong) MADNavigationController *navControllerViewer;
-    @property (nonatomic, strong) MADNavigationController *navControllerDesigner;
 
 @end
 
@@ -76,16 +60,10 @@ const int8_t MADIndexViewer = 2;
     return NO;
 }
 
-- (void)dealloc {
-    _promptNavigationItem = nil;
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        
         _navigationItemInitialized = NO;
         _lastSelectedIndex = NSNotFound;
-        
     }
     return self;
 }
@@ -122,7 +100,6 @@ const int8_t MADIndexViewer = 2;
     tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
     
     splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
-    self.querySplitViewController = splitViewController;
     [tabBarViewControllers addObject: splitViewController];
     
     navControllerDesigner = [MADNavigationController newNavigationController:MADNavigationControllerTypeDesigner];
@@ -136,11 +113,8 @@ const int8_t MADIndexViewer = 2;
     id <MADViewControllerStandardProtocol> delegate;
     delegate = self.viewControllerDelegate;
 
-    self.navControllerViewer = navControllerViewer;
     navControllerViewer.viewControllerDelegate = delegate;
-    self.querySplitViewController.viewControllerDelegate = delegate;
-    self.designerViewController.delegate = delegate;
-
+    splitViewController.viewControllerDelegate = delegate;
     [self setViewControllers: tabBarViewControllers animated: animated];
 }
 
@@ -176,8 +150,6 @@ const int8_t MADIndexViewer = 2;
 
     if (navigationItem.rightBarButtonItem)
         [navigationItem setRightBarButtonItem: nil animated: animated];
-    
-    self.designerViewController.delegate = nil;
 
     [self setViewControllers: nil animated: animated];
     [self.navigationItem setLeftBarButtonItem:nil animated:animated];
@@ -219,7 +191,10 @@ const int8_t MADIndexViewer = 2;
 
 - (void)tabBarController:(UITabBarController *)tabBarController
  didSelectViewController:(UIViewController *)viewController {
-    
+    const int8_t MADIndexQuery = 0;
+    const int8_t MADIndexDesigner = 1;
+    const int8_t MADIndexViewer = 2;
+
     _lastSelectedIndex = tabBarController.selectedIndex;
     switch (tabBarController.selectedIndex) {
         case MADIndexQuery:

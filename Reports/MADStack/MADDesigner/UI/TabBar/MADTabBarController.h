@@ -13,10 +13,6 @@
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADViewControllerStandardProtocol.h"
 
-extern const int8_t MADIndexQuery;
-extern const int8_t MADIndexDesigner;
-extern const int8_t MADIndexViewer;
-
 @class MADocument, MADQueryBuilderSplitViewController, MADDesignerViewController,
        MADViewerController;
 
@@ -27,10 +23,6 @@ extern const int8_t MADIndexViewer;
                                  prompt:(NSString *)prompt;
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
-
-    @property (nonatomic, strong, readonly) MADQueryBuilderSplitViewController *querySplitViewController;
-    @property (nonatomic, strong, readonly) MADDesignerViewController *designerViewController;
-    @property (nonatomic, strong, readonly) MADViewerController *viewerViewController;
 
     - (void)enableTabBarItems;
     - (void)disableTabBarItems;
