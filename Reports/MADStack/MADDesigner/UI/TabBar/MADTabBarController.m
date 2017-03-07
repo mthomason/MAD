@@ -144,7 +144,8 @@ const int8_t MADIndexViewer = 2;
     [self setViewControllers: tabBarViewControllers animated: animated];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);

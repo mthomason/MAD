@@ -207,10 +207,9 @@ static const inline CGSize sizePopoverFonts() {
 
     @property (nonatomic, strong) IBOutlet MADBackgroundScrollView *scroller;
 
-
     @property (nonatomic, strong) NSMutableSet <MADDesignerElementView *> *visibleElementViews;
     @property (nonatomic, strong) NSSet <MADDesignerSectionView *> *passthroughContainers;
-    @property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedObjectIDs;
+    @property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElementIDs;
 
     @property (nonatomic, strong) NSArray <MADDesignerSectionView *> *sectionViewsArray;
 
@@ -258,14 +257,10 @@ static const inline CGSize sizePopoverFonts() {
     @property (nonatomic, copy) NSNumber *objectIdEditDynamicLabel;
     @property (nonatomic, copy) NSNumber *objectIdEditBarcode;     //Never set a value... never used????
     @property (nonatomic, copy) NSNumber *objectIdEditImage;
-    @property (nonatomic, copy) NSNumber *objectIdJustDisplayed;
     @property (nonatomic, copy) NSNumber *barcodeToEditObjectID;
     @property (nonatomic, copy) NSNumber *aggregateToEditObjectID;
 
     @property (nonatomic, strong) RptqDocumentElementAggregate *aggregateToEdit;
-
-    @property (nonatomic, assign) CGFloat zoomScaleRestore;
-    @property (nonatomic, assign) CGRect boundsOnDisappear;
 
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
     @property (nonatomic, strong) NSSet <UIGestureRecognizer *> *tapSectionLabels;
@@ -274,12 +269,15 @@ static const inline CGSize sizePopoverFonts() {
 @end
 
 @implementation MADDesignerViewController {
+    int64_t _identifierJustDisplayed;
+    CGFloat _zoomScaleRestore;
     BOOL _editAggregate;
     BOOL _toolboxVisible;
     BOOL _sectionSettingsVisible;
     BOOL _insetsSetup;
     BOOL _shownAndHidden;
     BOOL _lastMenuItemSelectRequiresElementView;
+    CGRect _boundsOnDisappear;
 }
 
 @synthesize document = _document;
@@ -313,7 +311,9 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark -
 #pragma mark NSObject
 
-- (void)dealloc { }
+- (void)dealloc {
+    
+}
 
 #pragma mark -
 #pragma mark Unwind Segue
@@ -366,6 +366,7 @@ static const inline CGSize sizePopoverFonts() {
         NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
         borderAppliedToView = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = borderAppliedToView;
+        _identifierJustDisplayed = -1;
 
     }
     return self;
@@ -428,10 +429,8 @@ static const inline CGSize sizePopoverFonts() {
         scroller.container.backgroundColor = [UIColor clearColor];
     };
 
-    void (^initalizeSelf)(MADDesignerViewController *) = ^(MADDesignerViewController *designer) {
-        designer.boundsOnDisappear = CGRectZero;
-        designer.zoomScaleRestore = -1.0000f;
-    };
+    _boundsOnDisappear = CGRectZero;
+    _zoomScaleRestore = -1.0000f;
     _shownAndHidden = NO;
     _editAggregate = NO;
     
@@ -439,7 +438,6 @@ static const inline CGSize sizePopoverFonts() {
     _toolboxVisible = NO;
     _sectionSettingsVisible = NO;
     initalizeScroller(self.scroller);
-    initalizeSelf(self);
 
 }
 
@@ -519,7 +517,7 @@ static const inline CGSize sizePopoverFonts() {
         viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
         viewControllerToolbox.clearsBackground = [self padLike];
         viewControllerToolbox.document = _document;
-        viewControllerToolbox.selectedElementIDs = self.selectedObjectIDs;
+        viewControllerToolbox.selectedElementIDs = self.selectedElementIDs;
         
         _toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
         _toolboxTransitioningDelegate.passthroughContainer = self.scroller;
@@ -857,9 +855,9 @@ static const inline CGSize sizePopoverFonts() {
     [self setScrollersEnabled:YES];
     
     if (_shownAndHidden && _zoomScaleRestore > 1.0001) {
-        [self.scroller setZoomScale:self.zoomScaleRestore animated:NO];
+        [self.scroller setZoomScale:_zoomScaleRestore animated:NO];
         [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
-        [self.scroller scrollRectToVisible:self.boundsOnDisappear animated:NO];
+        [self.scroller scrollRectToVisible:_boundsOnDisappear animated:NO];
     }
     [self.scroller flashScrollIndicators];
     [self.view setNeedsUpdateConstraints];
@@ -868,7 +866,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.boundsOnDisappear = self.scroller.bounds;
+    _boundsOnDisappear = self.scroller.bounds;
+    [self.statusLabelZoomScale removeFromSuperview];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1084,13 +1083,13 @@ static const inline CGSize sizePopoverFonts() {
     return _selectedSections;
 }
 
-- (NSMutableSet <NSNumber *> *)selectedObjectIDs {
-    if (!_selectedObjectIDs) {
-        NSMutableSet <NSNumber *> *selectedObjectIDs;
-        selectedObjectIDs = [[NSMutableSet alloc] init];
-        _selectedObjectIDs = selectedObjectIDs;
+- (NSMutableSet <NSNumber *> *)selectedElementIDs {
+    if (!_selectedElementIDs) {
+        NSMutableSet <NSNumber *> *selectedElementIDs;
+        selectedElementIDs = [[NSMutableSet alloc] init];
+        _selectedElementIDs = selectedElementIDs;
     }
-    return _selectedObjectIDs;
+    return _selectedElementIDs;
 }
 
 - (NSMutableSet <MADDesignerElementView *> *)visibleElementViews {
@@ -1495,7 +1494,7 @@ static const inline CGSize sizePopoverFonts() {
                     attributes = layoutManager.items[@(documentObject.identifier)];
                     if (attributes != nil) {
                         attributes.frame = [documentObject elementViewFrameDesigner];
-                        self.objectIdJustDisplayed = @(documentObject.identifier);
+                        _identifierJustDisplayed = documentObject.identifier;
                         [layoutManager positionItem:attributes];
                         [section.collectionViewLayout invalidateLayout];
                     }
@@ -1548,8 +1547,8 @@ static const inline CGSize sizePopoverFonts() {
         MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
-            [self.selectedObjectIDs removeObject: @(lastElementViewToShowMenu.identifier)];
-            (self.viewControllerToolbox).selectedElementIDs = self.selectedObjectIDs;
+            [self.selectedElementIDs removeObject: @(lastElementViewToShowMenu.identifier)];
+            (self.viewControllerToolbox).selectedElementIDs = self.selectedElementIDs;
         }
         self.lastElementViewToShowMenu = nil;
     }
@@ -2049,7 +2048,7 @@ static const inline CGSize sizePopoverFonts() {
     
 
     RptqDocumentElement *documentObject;
-    documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID.longLongValue
+    documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
                                                          fromObjectContext: document.managedObjectContext];
     CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
     NSString *resuseId = [MADCellElement reuseIdentifier];
@@ -2073,14 +2072,14 @@ static const inline CGSize sizePopoverFonts() {
             for (id subview in subviews) {
                 [subview removeFromSuperview];
             }
-            NSNumber *identifier = @(documentObject.identifier);
+            int64_t identifier = documentObject.identifier;
             
             cell.backgroundColor = [UIColor clearColor];
             cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
             [self.elementViewsDictionary setObject: elementView
-                                            forKey: identifier];
+                                            forKey: @(identifier)];
             
             UIGestureRecognizer *panGesture, *pinchGesture;
             panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement: self
@@ -2101,16 +2100,24 @@ static const inline CGSize sizePopoverFonts() {
             
             cell.userInteractionEnabled = YES;
             
-            if ([self.selectedObjectIDs containsObject: identifier]) {
+            if ([self.selectedElementIDs containsObject: @(identifier)]) {
                 [self applyBorderToElementView: elementView];
             }
             
             [cell addElementView:elementView];
             
-            if (self.objectIdJustDisplayed != nil) {
+            if (_identifierJustDisplayed != -1) {
                 
-                if ([self.objectIdJustDisplayed isEqualToNumber: identifier]) {
-                    [elementView flash:^(BOOL finished) { if (finished) self.objectIdJustDisplayed = nil; }];
+                if (_identifierJustDisplayed == identifier) {
+                    __typeof(self) __weak wself = self;
+                    [elementView flash:^(BOOL finished) {
+                        if (finished) {
+                            typeof(self) sself = wself;
+                            if (sself) {
+                                sself->_identifierJustDisplayed = -1;
+                            }
+                        }
+                    }];
                     
                 }
                 
@@ -2441,7 +2448,7 @@ static const inline CGSize sizePopoverFonts() {
     RptqDocumentElement *documentObject;
     
     for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
-        documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID.longLongValue
+        documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
                                                              fromObjectContext: objectContext];
         [documentObject setOriginPoint:attributes.frame.origin];
 
@@ -2651,7 +2658,7 @@ static const inline CGSize sizePopoverFonts() {
             [self.promptManager addString: elementView.displayStringAttributed.string];
             [self displayPrompt];
             
-            if (self.selectedObjectIDs.count == 1) {    // Show toolbox if we are selecting the first item.
+            if (self.selectedElementIDs.count == 1) {    // Show toolbox if we are selecting the first item.
                 
                 [self actionShowToolbox];
                 
@@ -2666,13 +2673,13 @@ static const inline CGSize sizePopoverFonts() {
         } else {
             
             [self deselectElementView: elementView animated: YES];
-            [self.selectedObjectIDs removeObject: @(elementView.identifier)];
-            (self.viewControllerToolbox).selectedElementIDs = self.selectedObjectIDs;
+            [self.selectedElementIDs removeObject: @(elementView.identifier)];
+            (self.viewControllerToolbox).selectedElementIDs = self.selectedElementIDs;
             
             [self.promptManager removeString: elementView.displayStringAttributed.string];
             [self displayPrompt];
             
-            if (self.selectedObjectIDs.count == 0) {
+            if (self.selectedElementIDs.count == 0) {
                 
                 [self actionHideToolbox];         // Hide toolbox location
                 
@@ -2793,7 +2800,7 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark Helpers
 
 - (BOOL)elementViewIsSelected:(MADDesignerElementView *)elementView {
-    return [self.selectedObjectIDs containsObject:@(elementView.identifier)];
+    return [self.selectedElementIDs containsObject:@(elementView.identifier)];
 }
 
 - (void)removeBorderFromAllSectionViews {
@@ -2868,11 +2875,11 @@ static const inline CGSize sizePopoverFonts() {
     if (self.selectedSections.count > 0) {
         [self removeBorderFromAllSectionViews];
     } else {
-        [self.selectedObjectIDs addObject: @(elementView.identifier)];
+        [self.selectedElementIDs addObject: @(elementView.identifier)];
         [self applyBorderToElementView: elementView];
         
         self.viewControllerToolbox.document = self.document;
-        self.viewControllerToolbox.selectedElementIDs = self.selectedObjectIDs;
+        self.viewControllerToolbox.selectedElementIDs = self.selectedElementIDs;
     }
 }
 
@@ -2969,7 +2976,7 @@ END_deselectElementView:;
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
                                    inSection: 0];
         
-        sself.objectIdJustDisplayed = @(element.identifier);
+        sself->_identifierJustDisplayed = element.identifier;
         
         layoutAttribute.frame = [element elementViewFrameDesigner];
         
@@ -2982,7 +2989,7 @@ END_deselectElementView:;
         [section.managedObjectContext save:nil];
 
         layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-        layoutAttribute.objectID = @(element.identifier);
+        layoutAttribute.objectID = element.identifier;
         
         [layoutManager addItem:layoutAttribute];
         [layoutManager layout];
@@ -3142,8 +3149,7 @@ END_deselectElementView:;
     [self.scroller.container bringSubviewToFront: piece];
 
     int64_t pieceID = piece.identifier;
-    NSNumber *pieceObjectIDTag = @(pieceID);
-    
+
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = _document.managedObjectContext;
@@ -3177,7 +3183,7 @@ END_deselectElementView:;
             
             MADocument *document = strongself1.document;
             MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[@(sectionView.identifier)];
-            MADSectionLayoutAttributes *itemToRemove = (layoutManager.items)[pieceObjectIDTag];
+            MADSectionLayoutAttributes *itemToRemove = (layoutManager.items)[@(pieceID)];
             
             MADocument * __weak wdocument = document;
             MADDesignerViewController __weak *weakself2 = strongself1;
@@ -3206,7 +3212,7 @@ END_deselectElementView:;
 
     MADDesignerElementView *piece = (MADDesignerElementView *)gesture.view;
     NSNumber *pieceObjectIdTag = @(piece.identifier);
-    
+    int64_t pieceIdentifier = piece.identifier;
     MADDesignerSectionView *sectionView = nil;
 
     for (UIView *subview in self.scroller.container.subviews) {
@@ -3278,7 +3284,7 @@ END_deselectElementView:;
                 [sectionView insertItemAtIndex:path update:^(){
                     
                     MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-                    la.objectID = pieceObjectIdTag;
+                    la.objectID = pieceIdentifier;
                     
                     NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
 
@@ -3287,7 +3293,7 @@ END_deselectElementView:;
 
                     documentSectionBlock = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
                                                                                fromObjectContext:managedObjectContext];
-                    documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceObjectIdTag.longLongValue
+                    documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceIdentifier
                                                                          fromObjectContext: managedObjectContext];
 
                     
@@ -3495,11 +3501,11 @@ END_deselectElementView:;
     
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
-    if (self.selectedObjectIDs.count > 0) {
+    if (self.selectedElementIDs.count > 0) {
         
         //Try quick hash method...
         BOOL quickHashWorks = YES;
-        for (NSNumber *selectedObjectId in self.selectedObjectIDs) {
+        for (NSNumber *selectedObjectId in self.selectedElementIDs) {
             UIView *selectedView = [self viewForObjectID:selectedObjectId];
             if (selectedView != nil) {
                 [results addObject:selectedView];
@@ -3529,7 +3535,7 @@ END_deselectElementView:;
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath
                                                                           inCollectionView:documentSectionView];
-                        if (elementView != nil && [self.selectedObjectIDs containsObject: @(elementView.identifier)]) {
+                        if (elementView != nil && [self.selectedElementIDs containsObject: @(elementView.identifier)]) {
                             [results addObject:elementView];
                         }
                     }
@@ -3560,8 +3566,8 @@ END_deselectElementView:;
                          animated: animated];
     }
     
-    [self.selectedObjectIDs removeAllObjects];
-    (self.viewControllerToolbox).selectedElementIDs = self.selectedObjectIDs;
+    [self.selectedElementIDs removeAllObjects];
+    (self.viewControllerToolbox).selectedElementIDs = self.selectedElementIDs;
     
     [self displaySectionViewsRemoveBorder];
     
@@ -3720,7 +3726,7 @@ END_deselectElementView:;
 
 - (void)adjustToolboxLocation {
     self.toolboxTransitioningDelegate.sourceRect = self.rectForSelectedElements;
-    self.viewControllerToolbox.selectedElementIDs = self.selectedObjectIDs;
+    self.viewControllerToolbox.selectedElementIDs = self.selectedElementIDs;
 }
 
 #pragma mark -

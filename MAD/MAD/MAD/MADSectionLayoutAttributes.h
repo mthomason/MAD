@@ -16,10 +16,10 @@
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
     <NSCopying>
 
-    @property (nonatomic, copy) NSNumber *objectID;
+    @property (nonatomic, assign) int64_t objectID;
 
     + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
-                                               objectID:(NSNumber *)objectID
+                                               objectID:(int64_t)objectID
                                                 andRect:(CGRect)rect;
 
     - (void)placeItemGivenAttributes:(NSArray <MADSectionLayoutAttributes *> *)attributes;

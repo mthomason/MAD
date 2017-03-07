@@ -927,17 +927,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 // FIXME: Return error handler... remove credentals
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
     
-    /*
-     [MTQuery newQueryDefinitionSelect:self.columnKeys
-                             tableName:[self tableName]
-                       sortDescriptors:self.sortDescriptors];
-     [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect]
-                             withLimit:limit
-                             andOffset:offset];
-     */
-    
-    NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
-    
     MTQuery *query = [[MTQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
                                                                      tableName:[self tableName]
                                                                sortDescriptors:self.sortDescriptors

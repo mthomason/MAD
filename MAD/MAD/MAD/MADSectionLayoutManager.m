@@ -8,6 +8,7 @@
 
 #import "MADSectionLayoutManager.h"
 #import <Foundation/NSIndexPath.h>
+#import <Foundation/NSValue.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADSectionLayoutAttributes.h"
@@ -193,7 +194,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
                 ips[MADIndexPathOffsetItem] = itemCounter;
                 path = [[NSIndexPath alloc] initWithIndexes:ips length:2];
                 layout = [MADSectionLayoutAttributes newSectionLayoutAttributesWithIndex: path
-                                                                                objectID: @(object.identifier)
+                                                                                objectID: object.identifier
                                                                                  andRect: object.frame];
                 [self addItem:layout];
             }
@@ -209,7 +210,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 #pragma mark Methods
 
 - (void)addItem:(MADSectionLayoutAttributes *)item {
-    (self.items)[item.objectID] = item;
+    NSNumber *objectID = @(item.objectID);
+    (self.items)[objectID] = item;
     self.lastItem = item;
     _lastOperationWasAddition = YES;
 }
@@ -233,7 +235,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         }
     }];
     
-    [self.items removeObjectForKey:itemToRemove.objectID];
+    [self.items removeObjectForKey:@(itemToRemove.objectID)];
     _lastOperationWasAddition = NO;
 }
 
@@ -249,7 +251,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
     layout = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
 // FIXME: Unused function causes retain cycle.
-    layout.objectID = objectID;
+    layout.objectID = objectID.longLongValue;
     layout.frame = frame;
     (self.items)[objectID] = layout;
 }

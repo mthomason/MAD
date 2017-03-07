@@ -96,7 +96,7 @@
 
 - (id)copyWithZone:(nullable NSZone *)zone {
     MADSectionLayoutAttributes *copy = [super copyWithZone:zone];
-    copy.objectID = [self.objectID copyWithZone:zone];
+    copy.objectID = self.objectID;
     copy.frame = self.frame;
     return copy;
 }
@@ -105,10 +105,10 @@
 #pragma mark Convience Constructor
 
 + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
-                                           objectID:(NSNumber *)objectID
+                                           objectID:(int64_t)objectID
                                             andRect:(CGRect)rect {
     MADSectionLayoutAttributes *instance = [self layoutAttributesForCellWithIndexPath:indexPath];
-    instance.objectID = objectID.copy;
+    instance.objectID = objectID;
     instance.frame = rect;
     return instance;
 }
@@ -151,7 +151,7 @@
 }
 
 - (id)debugQuickLookObject {
-    return [NSString stringWithFormat:@"%@\t\t%@", self.objectID, NSStringFromCGRect(self.frame)];
+    return [NSString stringWithFormat:@"%lld\t\t%@", self.objectID, NSStringFromCGRect(self.frame)];
 }
 
 @end
