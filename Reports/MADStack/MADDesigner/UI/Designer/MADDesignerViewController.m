@@ -1495,7 +1495,7 @@ static const inline CGSize sizePopoverFonts() {
                     attributes = layoutManager.items[@(documentObject.identifier)];
                     if (attributes != nil) {
                         attributes.frame = [documentObject elementViewFrameDesigner];
-                        self.objectIdJustDisplayed = documentObject.objectID.copy;
+                        self.objectIdJustDisplayed = @(documentObject.identifier);
                         [layoutManager positionItem:attributes];
                         [section.collectionViewLayout invalidateLayout];
                     }
@@ -2969,13 +2969,9 @@ END_deselectElementView:;
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
                                    inSection: 0];
         
-        layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
-        layoutAttribute.objectID = element.objectID.copy;
-        sself.objectIdJustDisplayed = element.objectID.copy;
+        sself.objectIdJustDisplayed = @(element.identifier);
         
         layoutAttribute.frame = [element elementViewFrameDesigner];
-        [layoutManager addItem:layoutAttribute];
-        [layoutManager layout];
         
         indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
         [section addDocumentObject: element
@@ -2984,7 +2980,13 @@ END_deselectElementView:;
         
         [collectionView insertItemsAtIndexPaths: indexPathsInserted];
         [section.managedObjectContext save:nil];
+
+        layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
+        layoutAttribute.objectID = @(element.identifier);
         
+        [layoutManager addItem:layoutAttribute];
+        [layoutManager layout];
+
     } completion:^(BOOL finished) {
         
         [weakself.scroller.container setNeedsUpdateConstraints];
@@ -3377,17 +3379,19 @@ END_deselectElementView:;
     _sectionSettingsVisible = NO;
     _toolboxVisible = NO;
     
-/*    MADTabBarController *tabBarController = self.tabBarController;
+    MADTabBarController *tabBarController;
+    tabBarController = (MADTabBarController *)self.navigationController.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = YES;
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    [tabBarController enableTabBarItems];*/
+    [tabBarController enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
-/*    MADTabBarController *tabBarController = self.tabBarController;
+    MADTabBarController *tabBarController;
+    tabBarController = (MADTabBarController *)self.navigationController.tabBarController;
     tabBarController.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
-    [tabBarController disableTabBarItems];*/
+    [tabBarController disableTabBarItems];
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {

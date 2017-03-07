@@ -163,9 +163,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark Controllers
 
-    @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
+    //@property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
-#pragma mark Identifiers
+#pragma mark 
+
+    @property (nonatomic, strong, readonly) MADTabBarController *tabBarController;
 
     @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 
@@ -360,10 +362,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [opLoadPtr addDependency:opLoadDoc];
 
     
-    invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateNumberOfPages) object:nil];
+    invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                     selector:@selector(updateNumberOfPages)
+                                                                       object:nil];
     [invokeUpdateNumberOfPages addDependency:opLoadPtr];
     
-    invokeUpdateRecordsRead = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateRecordsRead) object:nil];
+    invokeUpdateRecordsRead = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                   selector:@selector(updateRecordsRead)
+                                                                     object:nil];
     [invokeUpdateRecordsRead addDependency:opLoadPtr];
     
     invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:_pageSlider selector:@selector(setNeedsLayout) object:nil];
@@ -677,6 +683,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark -
 #pragma mark Overrides
+
+- (MADTabBarController *)tabBarController {
+    return (MADTabBarController *)self.navigationController.tabBarController;
+}
 
 - (MADDateFromTimeFormatter *)dateTimeFormatter {
     if (_dateTimeFormatter == nil) {
@@ -1023,7 +1033,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         completion(YES);
     } else {
-        [self.popoverControllerActivity dismissPopoverAnimated:YES];
+        //[self.popoverControllerActivity dismissPopoverAnimated:YES];
         completion(YES);
     }
 }
@@ -1314,8 +1324,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [weakself.popoverControllerActivity dismissPopoverAnimated:YES];
-            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     
@@ -1492,7 +1500,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [debug appendFormat:@"Toolbar Items Active:             %@\n", self.toolbarItemsActive];
     [debug appendFormat:@"Print Page Renderer Report:       %@\n", self.printPageRendererReport];
     [debug appendFormat:@"Activity Item ProviderPdf:        %@\n", self.activityItemProviderPdf];
-    [debug appendFormat:@"Popover Controller Activity:      %@\n", self.popoverControllerActivity];
     [debug appendFormat:@"Background Task Id Refresh:       %lu\n", (unsigned long)self.backgroundTaskIdRefresh];
     [debug appendFormat:@"Refreshing:                       %@\n", _refreshing ? @"Yes" : @"No"];
     [debug appendFormat:@"Did Refresh Before Reaload:       %@\n", _didRefreshBeforeReaload ? @"Yes" : @"No"];

@@ -351,7 +351,6 @@ BOOL storeEnabled() {
     
     [self observeManagedObjectContextChanges: managedObjectContext];
     
-    //self.navigationController.tabBarController
     [self.tabBarController enableTabBarItems];
     
     id barButtonItem = self.barButtonItemEdit;

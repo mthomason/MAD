@@ -360,7 +360,7 @@
 		4C401FC81BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FB91BAE8AD500BAE5FC /* MTViewControllerBarcodeOptions.m */; };
 		4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBB1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m */; };
 		4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */; };
-		4C401FD01BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */; };
+		4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401FCE1BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard */; };
 		4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */; };
 		4C4020371BAE92F200BAE5FC /* MADAffineTransformSwing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD71BAE92F200BAE5FC /* MADAffineTransformSwing.m */; };
 		4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */; };
@@ -1689,7 +1689,7 @@
 		4C401FBC1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTViewControllerBarcodeType.h; path = MADStack/MADBarcodes/UI/MTViewControllerBarcodeType.h; sourceTree = "<group>"; };
 		4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTViewControllerBarcodeType.m; path = MADStack/MADBarcodes/UI/MTViewControllerBarcodeType.m; sourceTree = "<group>"; };
 		4C401FCB1BAE8BB700BAE5FC /* MTViewControllerBarcodePreviewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTViewControllerBarcodePreviewDelegate.h; path = MADStack/MADBarcodes/UI/MTViewControllerBarcodePreviewDelegate.h; sourceTree = "<group>"; };
-		4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardLaunchImagesOS7.storyboard; path = MADStack/Common/UI/Storyboards/MTStoryboardLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
+		4C401FCE1BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADLaunchImagesOS7.storyboard; path = MADStack/Common/UI/Storyboards/MADLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
 		4C401FD41BAE92F200BAE5FC /* ACAccountStore+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+Social.h"; sourceTree = "<group>"; };
 		4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+Social.m"; sourceTree = "<group>"; };
 		4C401FD61BAE92F200BAE5FC /* MADAffineTransformSwing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAffineTransformSwing.h; path = Categories/MADAffineTransformSwing.h; sourceTree = "<group>"; };
@@ -2746,7 +2746,7 @@
 				4CFEE7FC1BB77C4000AFAA0A /* MADQuerySelectField.storyboard */,
 				4CFEE8051BB7993300AFAA0A /* MADQueryAddPredicate.storyboard */,
 				4CFEE7F51BB773D800AFAA0A /* MADQueryAddGroup.storyboard */,
-				4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */,
+				4C401FCE1BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard */,
 				4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */,
 				4C401ED11BAE5E9000BAE5FC /* MADStore.storyboard */,
 				4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */,
@@ -5618,7 +5618,7 @@
 				4CC3D7E51BCB6D9500BDA5D3 /* UIImagePatternWhiteColumns.png in Resources */,
 				4CC3D78B1BCB6D9500BDA5D3 /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
 				4CC3D7591BCB6D9500BDA5D3 /* Icon-76-Viewer-Modern.png in Resources */,
-				4C401FD01BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard in Resources */,
+				4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */,
 				4CC3D7B91BCB6D9500BDA5D3 /* UIImagePatternKraftPaper2@2x.png in Resources */,
 				4CC3D8021BCB6D9500BDA5D3 /* UIBarButtonItemDatabase8@2x.png in Resources */,
 				4CC3D7691BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortrait.png in Resources */,
