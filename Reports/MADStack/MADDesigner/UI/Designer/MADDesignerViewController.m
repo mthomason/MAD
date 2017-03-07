@@ -2123,31 +2123,12 @@ static const inline CGSize sizePopoverFonts() {
                 
             }
             
-            MADCellElement * __weak weakcell = cell;
-            MADDesignerElementView * __weak weakElementView = elementView;
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if (cell) {
+                cell.contentScaleFactor = contextScale;
+                (cell.contentView).contentScaleFactor = contextScale;
+            }
             
-                MADCellElement * strongcell = weakcell;
-                MADDesignerElementView *strongElementView = weakElementView;
-                
-                if (strongcell) {
-                    MADCellElement * __weak weakcell1 = strongcell;
-                    MADDesignerElementView * __weak weakElementView1 = strongElementView;
-                    
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                        MADCellElement *strongcell1 = weakcell1;
-                        if (strongcell1) {
-                            strongcell1.contentScaleFactor = contextScale;
-                            (strongcell1.contentView).contentScaleFactor = contextScale;
-                        }
-                        
-                        weakElementView1.contentScaleFactor = contextScale;
-                        
-                    });
-
-                }
-            });
+            elementView.contentScaleFactor = contextScale;
             break;
         }
     }

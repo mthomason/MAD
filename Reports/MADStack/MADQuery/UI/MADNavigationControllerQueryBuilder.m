@@ -62,15 +62,12 @@
 #pragma mark - Navigation
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
-
-    //[self setNavigationBarHidden:YES animated:animated];
     id result = [super popViewControllerAnimated:animated];;
-    
     return result;
-    
 }
 
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+- (void)pushViewController:(UIViewController *)viewController
+                  animated:(BOOL)animated {
     [super pushViewController: viewController
                      animated: animated];
     //[self setNavigationBarHidden: NO animated: animated];

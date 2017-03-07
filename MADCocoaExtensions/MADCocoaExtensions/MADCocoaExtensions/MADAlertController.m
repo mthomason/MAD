@@ -323,25 +323,25 @@ static NSString * const MADButtonRemove                = @"Remove";
     UITextField *textField;
     NSString *text;
     
-    alert = [[self alloc] alertControllerWithTitle: title
-                                           message: message
-                                    preferredStyle: UIAlertControllerStyleAlert];
+    alert = [UIAlertController alertControllerWithTitle: title
+                                                message: message
+                                         preferredStyle: UIAlertControllerStyleAlert];
     
-    textField= ((MADAlertController *)alert).textFields.firstObject;
+    [alert addTextFieldWithConfigurationHandler:textFieldConfig];
+    textField = ((MADAlertController *)alert).textFields.firstObject;
     text = textField.text.copy;
     
     actionDefault = [UIAlertAction actionWithTitle: rename
                                              style: UIAlertActionStyleDefault
                                            handler: ^(UIAlertAction *action) {
-                                               handlerConfirm(action, text);
+                                               handlerConfirm(action, textField.text);
                                            }];
     
     actionCancel = [UIAlertAction actionWithTitle: cancel
                                             style: UIAlertActionStyleCancel
                                           handler: handlerCancel];
     
-    [alert addTextFieldWithConfigurationHandler:textFieldConfig];
-    
+
     [alert addAction:actionDefault];
     [alert addAction:actionCancel];
     return alert;

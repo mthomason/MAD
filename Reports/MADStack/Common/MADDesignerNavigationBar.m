@@ -19,6 +19,11 @@
     }
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self.topItem.titleView sizeToFit];
+}
+
 - (UIBarStyle)barStyle {
     return UIBarStyleBlack;
 }

@@ -160,8 +160,8 @@
 
     id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
     [MADFileUtilities renameFileAtURL:URL toName:name completion:^(NSURL *sourceURL,
-                                                                              NSURL *newURL,
-                                                                              NSError *error) {
+                                                                   NSURL *newURL,
+                                                                   NSError *error) {
         id <MADFileCoordinatorDelegate> delegate = wdelegate;
         if (error) {
             [delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];

@@ -1822,9 +1822,11 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     MADMetaData *metaData = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
     
-    NSString *textFieldText = cellDocument.labelTitle.text;
+    NSString *textFieldText = cellDocument.labelTitle.text.copy;
     
     void (^handleRename)(UITextField *);
+    void (^handleConfermation)(UIAlertAction *action, NSString *text);
+    
     handleRename = ^(UITextField *textField) {
         
         textField.text = textFieldText.copy;
@@ -1833,25 +1835,25 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         
     };
     
-    void (^handleConfermation)(UIAlertAction *action, NSString *text);
     handleConfermation = ^(UIAlertAction *action, NSString *text) {
-        
+        //NSString *t = alert.textFields.firstObject.text.copy;
         NSString *name = [self.class safeFilenameWithDesiredFilename:text];
         BOOL shortcircut = NO;
         
         //Test for input
-        UIAlertController *alert;
         if (name.length <= 0) {
-            alert = [MADAlertController newAlertControllerErrorValidationFilename];
-            [self showViewController:alert sender:self];
+            UIAlertController *alertError;
+            alertError = [MADAlertController newAlertControllerErrorValidationFilename];
+            [self showViewController:alertError sender:self];
             shortcircut = YES;
         }
         
         //Check if file exist
         NSURL *url = metaData.URL.copy;
         if (!shortcircut && [self.class isUniqueFilename:name inDirectory:url]) {
-            alert = [MADAlertController newAlertControllerErrorFileExist];
-            [self showViewController:alert sender:self];
+            UIAlertController *alertError;
+            alertError = [MADAlertController newAlertControllerErrorFileExist];
+            [self showViewController:alertError sender:self];
             shortcircut = YES;
         }
         
@@ -1880,10 +1882,10 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             [self.fileExplorerDataSource rename:text itemAtIndex:(NSUInteger)indexPath.item];
         }
     };
-
+    
     UIAlertController *alert = [MADAlertController newAlertControllerRenameDocument: handleRename
-                                                         confirm: handleConfermation
-                                                          cancel: nil];
+                                                                            confirm: handleConfermation
+                                                                             cancel: nil];
     
     [self showViewController:alert sender:self];
     

@@ -184,7 +184,6 @@
 		4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA871BAF9B3000456DC8 /* objcmad.c */; };
 		4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
 		4C26BA9B1BAF9B9B00456DC8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA961BAF9B9B00456DC8 /* MTTitleView.m */; };
-		4C26BA9E1BAF9C6E00456DC8 /* MADBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA9D1BAF9C6E00456DC8 /* MADBarButtonItem.m */; };
 		4C26BAA51BAF9E8000456DC8 /* MADActivityReportPrintPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BAA41BAF9E8000456DC8 /* MADActivityReportPrintPreview.m */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -1493,8 +1492,6 @@
 		4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationController.m; path = UI/MADNavigationController.m; sourceTree = "<group>"; };
 		4C26BA951BAF9B9B00456DC8 /* MTTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTitleView.h; sourceTree = "<group>"; };
 		4C26BA961BAF9B9B00456DC8 /* MTTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTitleView.m; sourceTree = "<group>"; };
-		4C26BA9C1BAF9C6E00456DC8 /* MADBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBarButtonItem.h; sourceTree = "<group>"; };
-		4C26BA9D1BAF9C6E00456DC8 /* MADBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBarButtonItem.m; sourceTree = "<group>"; };
 		4C26BAA31BAF9E8000456DC8 /* MADActivityReportPrintPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityReportPrintPreview.h; sourceTree = "<group>"; };
 		4C26BAA41BAF9E8000456DC8 /* MADActivityReportPrintPreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADActivityReportPrintPreview.m; sourceTree = "<group>"; };
 		4C2831841B1AFC5500511D2D /* libsystem_stats.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_stats.dylib; path = usr/lib/system/libsystem_stats.dylib; sourceTree = SDKROOT; };
@@ -3539,8 +3536,6 @@
 			children = (
 				4C8DE25C1BAFA96300AD1111 /* MADSearchBar.h */,
 				4C8DE25D1BAFA96300AD1111 /* MADSearchBar.m */,
-				4C26BA9C1BAF9C6E00456DC8 /* MADBarButtonItem.h */,
-				4C26BA9D1BAF9C6E00456DC8 /* MADBarButtonItem.m */,
 				4C401F551BAE7EB500BAE5FC /* MADDesignerStatusLabel.h */,
 				4C401F561BAE7EB500BAE5FC /* MADDesignerStatusLabel.m */,
 				4C401F571BAE7EB500BAE5FC /* MADSliderPageVertical.h */,
@@ -6481,7 +6476,6 @@
 				4C26BA611BAF99F000456DC8 /* MTTableCellHeader.m in Sources */,
 				4CFEE8151BB7A29800AFAA0A /* MADQueryBuilderAddTableViewController.m in Sources */,
 				4C1E55001E581D1900E3FAF0 /* MADViewerNavigationItem.m in Sources */,
-				4C26BA9E1BAF9C6E00456DC8 /* MADBarButtonItem.m in Sources */,
 				4C401F7B1BAE7EB500BAE5FC /* MTBlurView.m in Sources */,
 				4C26BA201BAF150F00456DC8 /* MADHierarchicalDisplayModel.m in Sources */,
 				4C401ED91BAE5E9000BAE5FC /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
