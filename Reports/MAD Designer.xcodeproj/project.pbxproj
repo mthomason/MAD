@@ -313,7 +313,7 @@
 		4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECC1BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m */; };
 		4C401EE21BAE5E9000BAE5FC /* MADTableViewCellReceiptCharterMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECE1BAE5E9000BAE5FC /* MADTableViewCellReceiptCharterMember.m */; };
 		4C401EE31BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED01BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m */; };
-		4C401EE41BAE5E9000BAE5FC /* MADStoryboardLicensing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401ED11BAE5E9000BAE5FC /* MADStoryboardLicensing.storyboard */; };
+		4C401EE41BAE5E9000BAE5FC /* MADStore.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401ED11BAE5E9000BAE5FC /* MADStore.storyboard */; };
 		4C401EE51BAE5E9000BAE5FC /* MADReceiptViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED31BAE5E9000BAE5FC /* MADReceiptViewController.m */; };
 		4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED51BAE5E9000BAE5FC /* MADStoreViewController.m */; };
 		4C401EE71BAE5E9000BAE5FC /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED71BAE5E9000BAE5FC /* MTLicensingViewController.m */; };
@@ -1579,7 +1579,7 @@
 		4C401ECE1BAE5E9000BAE5FC /* MADTableViewCellReceiptCharterMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptCharterMember.m; sourceTree = "<group>"; };
 		4C401ECF1BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellReceiptInAppPurchase.h; sourceTree = "<group>"; };
 		4C401ED01BAE5E9000BAE5FC /* MADTableViewCellReceiptInAppPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellReceiptInAppPurchase.m; sourceTree = "<group>"; };
-		4C401ED11BAE5E9000BAE5FC /* MADStoryboardLicensing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardLicensing.storyboard; path = MADStack/MADStore/UI/MADStoryboardLicensing.storyboard; sourceTree = "<group>"; };
+		4C401ED11BAE5E9000BAE5FC /* MADStore.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStore.storyboard; path = MADStack/MADStore/UI/MADStore.storyboard; sourceTree = "<group>"; };
 		4C401ED21BAE5E9000BAE5FC /* MADReceiptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReceiptViewController.h; sourceTree = "<group>"; };
 		4C401ED31BAE5E9000BAE5FC /* MADReceiptViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReceiptViewController.m; sourceTree = "<group>"; };
 		4C401ED41BAE5E9000BAE5FC /* MADStoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreViewController.h; sourceTree = "<group>"; };
@@ -2748,11 +2748,8 @@
 				4CFEE7F51BB773D800AFAA0A /* MADQueryAddGroup.storyboard */,
 				4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */,
 				4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */,
-				4C401ED11BAE5E9000BAE5FC /* MADStoryboardLicensing.storyboard */,
+				4C401ED11BAE5E9000BAE5FC /* MADStore.storyboard */,
 				4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */,
-				4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */,
-				4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */,
-				4C26B9D41BAF146700456DC8 /* MADVibrantTableViewCell.xib */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -3236,6 +3233,7 @@
 		4C401EB51BAE5E7100BAE5FC /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4C6D2F051E6E86F5008EFE5D /* Nibs */,
 				4C1E55071E58295F00E3FAF0 /* Storyboard */,
 				4C26BA321BAF99BE00456DC8 /* Constants.h */,
 				4C26BA331BAF99BE00456DC8 /* Constants.m */,
@@ -3951,6 +3949,16 @@
 				4C2AC2FF15358DA600738091 /* UIImageExportTypeCSV@2x.png */,
 			);
 			name = "Misc Tool Images";
+			sourceTree = "<group>";
+		};
+		4C6D2F051E6E86F5008EFE5D /* Nibs */ = {
+			isa = PBXGroup;
+			children = (
+				4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */,
+				4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */,
+				4C26B9D41BAF146700456DC8 /* MADVibrantTableViewCell.xib */,
+			);
+			name = Nibs;
 			sourceTree = "<group>";
 		};
 		4C6F34F61E40867F00F4744F /* Transformers */ = {
@@ -5692,7 +5700,7 @@
 				4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */,
 				4CC3D7481BCB6D9500BDA5D3 /* Icon-57-Viewer-Lagacy@2x.png in Resources */,
 				4CC3D73A1BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern@2x.png in Resources */,
-				4C401EE41BAE5E9000BAE5FC /* MADStoryboardLicensing.storyboard in Resources */,
+				4C401EE41BAE5E9000BAE5FC /* MADStore.storyboard in Resources */,
 				4CC3D7EA1BCB6D9500BDA5D3 /* UIImagePatternWhiteStationary@2x.png in Resources */,
 				4CC3D76F1BCB6D9500BDA5D3 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4CC3D7BC1BCB6D9500BDA5D3 /* UIImagePatternKraftPaperWaffle@2x.png in Resources */,

@@ -77,7 +77,7 @@
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
-	<string>MTStoryboardLaunchImagesOS7</string>
+	<string>MADLaunchImagesOS7</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MADExplorer</string>
 	<key>UIPrerenderedIcon</key>
