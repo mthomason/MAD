@@ -75,7 +75,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="352" y="3629"/>
+            <point key="canvasLocation" x="314" y="3704"/>
         </scene>
         <!--What is MAD?-->
         <scene sceneID="Nuq-lM-1Km">
@@ -118,7 +118,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1055" y="3606"/>
+            <point key="canvasLocation" x="1046" y="3704"/>
         </scene>
     </scenes>
 </document>
