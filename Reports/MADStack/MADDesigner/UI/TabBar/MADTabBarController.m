@@ -50,11 +50,11 @@ const int8_t MADIndexViewer = 2;
 + (instancetype)newTabBarController:(MADocument *)document prompt:(NSString *)prompt {
     
     UIStoryboard *storyboard;
-    id tabBarController;
+    id controller;
     storyboard = [UIStoryboard storyboardWithName: @"MADDesigner"
                                            bundle: [NSBundle mainBundle]];
-    tabBarController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
-    return tabBarController;
+    controller = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
+    return controller;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

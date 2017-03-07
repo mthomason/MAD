@@ -58,7 +58,9 @@
 }
 
 - (void)updateCells {
-    BOOL autoresize = [self.delegate barcodeQrCodeAutomaticResizing];
+    id <MTTableViewControllerBarcodeExtraQrCodeDelegate> delegate;
+    delegate = self.delegate;
+    BOOL autoresize = [delegate barcodeQrCodeAutomaticResizing];
     UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -69,12 +71,12 @@
         cellError.detailTextLabel.text = automatic;
     } else {
         cellAuto.accessoryType = UITableViewCellAccessoryNone;
-        NSInteger initalErrorCorrecion = [self.delegate barcodeQrCodeInitalErrorCorrection];
+        NSInteger initalErrorCorrecion = [delegate barcodeQrCodeInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
             cellError.detailTextLabel.text = automatic;
             cellSize.detailTextLabel.text = @"Custom";
         }
-        NSInteger initalSize = [self.delegate barcodeQrCodeInitalSize];
+        NSInteger initalSize = [delegate barcodeQrCodeInitalSize];
         if (initalSize == 0) {
             cellSize.detailTextLabel.text = automatic;
             cellError.detailTextLabel.text = @"Custom";

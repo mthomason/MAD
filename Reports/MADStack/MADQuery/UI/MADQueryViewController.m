@@ -351,7 +351,7 @@ BOOL storeEnabled() {
     
     [self observeManagedObjectContextChanges: managedObjectContext];
     
-    
+    //self.navigationController.tabBarController
     [self.tabBarController enableTabBarItems];
     
     id barButtonItem = self.barButtonItemEdit;
@@ -604,6 +604,10 @@ BOOL storeEnabled() {
 
 #pragma mark -
 #pragma mark Property Overrides
+
+- (MADTabBarController *)tabBarController {
+    return (MADTabBarController *)self.navigationController.tabBarController;
+}
 
 - (void)setDocument:(MADocument *)document {
     if (_document != document) {
