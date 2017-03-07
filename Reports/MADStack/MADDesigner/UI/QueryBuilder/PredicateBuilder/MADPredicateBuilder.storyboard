@@ -92,7 +92,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Predicate Format" id="pJs-GH-7lq">
+                    <navigationItem key="navigationItem" title="Predicate Format" id="pJs-GH-7lq" customClass="MADPredicateFormatNavigationItem">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="9Ud-dF-7dB">
                             <connections>
                                 <action selector="done:" destination="9UR-0v-mkt" id="sFi-vs-yzQ"/>
@@ -207,7 +207,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Add Predicate" id="eIf-17-svD">
+                    <navigationItem key="navigationItem" title="Add Predicate" id="eIf-17-svD" customClass="MADPredicateAddNavigationItem">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="f5d-Ls-LRQ">
                             <connections>
                                 <action selector="save:" destination="Ako-sk-WFW" id="NpN-wN-WbZ"/>
@@ -337,7 +337,7 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Add Predicate" id="8Ma-0r-tth">
+                    <navigationItem key="navigationItem" title="Add Predicate" id="8Ma-0r-tth" customClass="MADPredicateAddNavigationItem">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="8tf-fr-0jk">
                             <connections>
                                 <action selector="save:" destination="R4o-wI-s9a" id="E59-aQ-xEU"/>
