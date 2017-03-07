@@ -238,7 +238,8 @@
         <!--Navigation Controller-->
         <scene sceneID="ChD-cW-1UW">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierQueryBuilderAddGroup" id="1pu-Do-TYA" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierQueryAddGroup" id="1pu-Do-TYA" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="JwD-CG-GUK">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
