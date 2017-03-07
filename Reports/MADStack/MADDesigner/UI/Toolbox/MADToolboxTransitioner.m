@@ -8,9 +8,8 @@
 
 #import "MADToolboxTransitioner.h"
 
-#import <UIKit/UIViewController.h>
-#import <UIKit/UITabBarController.h>
 #import <UIKit/UINavigationController.h>
+#import <UIKit/UITabBarController.h>
 
 #import "MADToolboxPresentationController.h"
 #import "MADViewControllerProtocol.h"
@@ -149,7 +148,7 @@
 @implementation MADToolboxAnimatedTransitioning
 
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.5;
+    return 0.5000f;
 }
 
 - (BOOL)showOnSide {
@@ -161,23 +160,21 @@
     UITabBarController *tabBarController;
     UINavigationController *toolboxNavigationController, *navController;
     
-    BOOL isToolboxVisible = _toolboxVisible;
+    BOOL isToolboxVisible = _toolboxVisible, showOnSide;
     if (isToolboxVisible == NO) {
         navController = [context viewControllerForKey:UITransitionContextToViewControllerKey];
-        tabBarController = navController.viewControllers.firstObject;
+        tabBarController = navController.viewControllers.lastObject;
         toolboxNavigationController = (UINavigationController *)[context viewControllerForKey:UITransitionContextFromViewControllerKey];
     } else {
         navController = [context viewControllerForKey:UITransitionContextFromViewControllerKey];
-        tabBarController = navController.viewControllers.firstObject;
+        tabBarController = navController.viewControllers.lastObject;
         toolboxNavigationController = (UINavigationController *)[context viewControllerForKey:UITransitionContextToViewControllerKey];
     }
     
-    UIView *containerView = context.containerView;
-    
-    BOOL showOnSide = [((MADToolboxPresentationController *)toolboxNavigationController.presentationController) showOnSide];
+    showOnSide = [((MADToolboxPresentationController *)toolboxNavigationController.presentationController) showOnSide];
 
     if (isToolboxVisible) {
-        [containerView addSubview:toolboxNavigationController.view];
+        [context.containerView addSubview:toolboxNavigationController.view];
     }
     
     CGRect appearedFrame = [context finalFrameForViewController:toolboxNavigationController];
@@ -195,7 +192,9 @@
     toolboxNavigationController.view.frame = initialFrame;
 
     UIViewController <MADViewControllerProtocol> *designer;
-    designer = tabBarController.selectedViewController;
+    UINavigationController *selectedConroller;
+    selectedConroller = (UINavigationController *)tabBarController.selectedViewController;
+    designer = (UIViewController <MADViewControllerProtocol> *)selectedConroller.topViewController;
     [designer setHidesStatusBar: isToolboxVisible];
     
     NSTimeInterval transitionDuration = [self transitionDuration:context];
