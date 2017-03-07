@@ -90,7 +90,7 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 @synthesize unwindViewController;
 
 + (instancetype)newQueryBuilderChooseFieldViewController {
-    static NSString * const ObjectSelector = @"MADStoryboardObjectSelector";
+    static NSString * const ObjectSelector = @"MADDesignerObjectSelector";
     static NSString * const MainIdentifier = @"UITableViewControllerChooseFieldDataObject";
     id bundle, viewController, storyboard;
     bundle = [NSBundle mainBundle];

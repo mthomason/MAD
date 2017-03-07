@@ -231,7 +231,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 + (instancetype)newExplorerController {
     id controller;
     NSString *explorerStoryboardIdentifier, *identifier;
-    explorerStoryboardIdentifier = @"MADDesignerExplorer";
+    explorerStoryboardIdentifier = @"MADExplorer";
     identifier = @"MADIdentifierFileExplorerViewController";
     id bundle = [NSBundle mainBundle];
     UIStoryboard *storyboard;

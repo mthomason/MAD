@@ -78,7 +78,7 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 + (instancetype)newQueryVisualizationSchemaViewController {
     UIStoryboard *storyboard;
     id controller;
-    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: NULL];
+    storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierViewControllerQueryVisualizationSchema];
     return controller;
 }

@@ -304,7 +304,7 @@ static const inline CGSize sizePopoverFonts() {
     NSString *MADDesignerStoryboardID = @"MADIdentifierStoryboardDesignerViewController";
     id bundle = [NSBundle mainBundle];
     UIStoryboard *storyboard;
-    storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardDesigner" bundle:bundle];
+    storyboard = [UIStoryboard storyboardWithName:@"MADDesigner" bundle:bundle];
     id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
     [((typeof(self))controller) setDocument: document];
     return controller;

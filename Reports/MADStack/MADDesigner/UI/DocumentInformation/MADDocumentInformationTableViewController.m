@@ -19,7 +19,6 @@
 #import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
 
-static NSString * const MADStoryboardDocumentInformation = @"MADStoryboardDocumentInformation";
 static NSString * const MADIdentifierDocumentInformationTableViewController = @"MADIdentifierDocumentInformationTableViewController";
 
 @interface MADDocumentInformationTableViewController ()
@@ -34,7 +33,7 @@ static NSString * const MADIdentifierDocumentInformationTableViewController = @"
 + (instancetype)newDocumentInformationTableViewController {
     UIStoryboard *storyboard;
     id controller;
-    storyboard = [UIStoryboard storyboardWithName: MADStoryboardDocumentInformation
+    storyboard = [UIStoryboard storyboardWithName: @"MADAboutDocument"
                                            bundle: [NSBundle mainBundle]];;
     controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierDocumentInformationTableViewController];
     return controller;

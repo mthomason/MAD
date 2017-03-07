@@ -27,11 +27,7 @@
 
 #import "MADTransparentPresentationController.h"
 
-static NSString * const MADStoryboardInformationTable   = @"MADStoryboardInformationTable";
 static NSString * const MADStoryboardLicensing          = @"MADStoryboardLicensing";
-static NSString * const MADStoryboardNewDocument        = @"MADStoryboardNewDocument";
-static NSString * const MADStoryboardToolbox            = @"MADStoryboardToolbox";
-static NSString * const MADStoryboardObjectSelector     = @"MADStoryboardObjectSelector";
 
 static NSString * const MADIdentifierNavigationControllerInformation                = @"MADIdentifierNavigationControllerInformation";
 static NSString * const MADIdentifierNavigationControllerLicensing                  = @"MADIdentifierNavigationControllerLicensing";
@@ -80,7 +76,7 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
     switch (type) {
 
         case MADNavigationControllerTypeInformation:
-            storyboardID = MADStoryboardInformationTable;
+            storyboardID = @"MADAboutApp";
             controllerID = MADIdentifierNavigationControllerInformation;
             bundle = [NSBundle mainBundle];
             break;
@@ -92,30 +88,30 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
             break;
             
         case MADNavigationControllerTypeNewDocument:
-            storyboardID = MADStoryboardNewDocument;
+            storyboardID = @"MADCreateDocument";
             controllerID = MADIdentifierNavigationControllerDocumentNew;
             bundle = [NSBundle mainBundle];
             break;
             
         case MADNavigationControllerTypeToolbox:
-            storyboardID = MADStoryboardToolbox;
+            storyboardID = @"MADDesignerToolbox";
             bundle = [NSBundle mainBundle];
             break;
             
         case MADNavigationControllerTypeFontPicker:
-            storyboardID = MADStoryboardToolbox;
+            storyboardID = @"MADDesignerToolbox";
             controllerID = MADIdentifierNavigationControllerFontPicker;
             bundle = [NSBundle mainBundle];
             break;
 
         case MADNavigationControllerTypeAggregateAdd:
-            storyboardID = MADStoryboardObjectSelector;
+            storyboardID = @"MADDesignerObjectSelector";
             controllerID = MADIdentifierNavigationControllerDocumentObjectNewAggregate;
             bundle = [NSBundle mainBundle];
             break;
             
         case MADNavigationControllerTypeElementPicker:
-            storyboardID = MADStoryboardObjectSelector;
+            storyboardID = @"MADDesignerObjectSelector";
             controllerID = MADIdentifierNavigationControllerDocumentObjectSelector;
             bundle = [NSBundle mainBundle];
             break;

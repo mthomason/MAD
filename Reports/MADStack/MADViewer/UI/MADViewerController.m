@@ -224,7 +224,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     id bundle, controller;
     
     bundle = [NSBundle mainBundle];
-    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner" bundle: bundle];
+    storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: bundle];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
     [((typeof(self))controller) setDocument: document];
     return controller;

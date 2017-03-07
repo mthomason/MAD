@@ -82,7 +82,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     UIStoryboard *storyboard;
     id toolbox;
     
-    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardToolbox"
+    storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox"
                                            bundle: [NSBundle mainBundle]];
     toolbox = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
     return toolbox;
@@ -106,7 +106,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
         UIStoryboard *storyboard;
         NSString *keyPaths;
 
-        storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardToolbox"
+        storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox"
                                                bundle: [NSBundle mainBundle]];
         
         MADToolboxPanel *layout, *format;

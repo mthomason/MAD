@@ -148,10 +148,10 @@
 		4C26B9FE1BAF14A500456DC8 /* MADDesignerSectionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F11BAF14A500456DC8 /* MADDesignerSectionControl.m */; };
 		4C26BA001BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */; };
 		4C26BA011BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */; };
-		4C26BA031BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA021BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard */; };
+		4C26BA031BAF14B300456DC8 /* MADAboutDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA021BAF14B300456DC8 /* MADAboutDocument.storyboard */; };
 		4C26BA0A1BAF14F200456DC8 /* MADGettingStartedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA061BAF14F200456DC8 /* MADGettingStartedTableViewController.m */; };
 		4C26BA0B1BAF14F200456DC8 /* MADInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA081BAF14F200456DC8 /* MADInformationTableViewController.m */; };
-		4C26BA0C1BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA091BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard */; };
+		4C26BA0C1BAF14F200456DC8 /* MADAboutApp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA091BAF14F200456DC8 /* MADAboutApp.storyboard */; };
 		4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m */; };
 		4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */; };
 		4C26BA201BAF150F00456DC8 /* MADHierarchicalDisplayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA131BAF150F00456DC8 /* MADHierarchicalDisplayModel.m */; };
@@ -177,7 +177,7 @@
 		4C26BA631BAF99F000456DC8 /* MADTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA511BAF99F000456DC8 /* MADTableLayout.m */; };
 		4C26BA641BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA541BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m */; };
 		4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA571BAF99F000456DC8 /* MTSettingsViewController.m */; };
-		4C26BA6A1BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */; };
+		4C26BA6A1BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard */; };
 		4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */; };
 		4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */; };
 		4C26BA801BAF9AA700456DC8 /* MADDriverSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */; };
@@ -322,7 +322,7 @@
 		4C401F021BAE64AF00BAE5FC /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F011BAE64AF00BAE5FC /* UIFont+Helpers.m */; };
 		4C401F0C1BAE6DF100BAE5FC /* MADAboutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F061BAE6DF100BAE5FC /* MADAboutTableView.m */; };
 		4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F081BAE6DF100BAE5FC /* MADAboutTableViewController.m */; };
-		4C401F0E1BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */; };
+		4C401F0E1BAE6DF100BAE5FC /* MADAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F091BAE6DF100BAE5FC /* MADAbout.storyboard */; };
 		4C401F0F1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */; };
 		4C401F241BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F151BAE703200BAE5FC /* MADTableViewCellQueryPredicate.m */; };
 		4C401F251BAE703200BAE5FC /* MADTableViewCellQueryInstructions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F171BAE703200BAE5FC /* MADTableViewCellQueryInstructions.m */; };
@@ -441,7 +441,7 @@
 		4C5C0DBF1C9CF1D300826BC2 /* MADKeyChainOperationPut.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C0DBE1C9CF1D300826BC2 /* MADKeyChainOperationPut.m */; };
 		4C5C0DC21C9CFFC600826BC2 /* MADOperationConditionPolarQuestionAffirmative.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C0DC11C9CFFC600826BC2 /* MADOperationConditionPolarQuestionAffirmative.m */; };
 		4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C0DC41C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m */; };
-		4C60C5B61BB0A1CC004D9758 /* MADDesignerExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */; };
+		4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C60C5B51BB0A1CC004D9758 /* MADExplorer.storyboard */; };
 		4C611981199130700090ECC4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
@@ -736,9 +736,9 @@
 		4C8DE2721BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4C8DE2771BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2741BAFAA0A00AD1111 /* MTAutoLayoutTableViewCell.m */; };
 		4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2761BAFAA0A00AD1111 /* MTSchemaFieldCell.m */; };
-		4C8DE2851BAFB11800AD1111 /* MADStoryboardDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2821BAFB11800AD1111 /* MADStoryboardDesigner.storyboard */; };
-		4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */; };
-		4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */; };
+		4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */; };
+		4C8DE2861BAFB11800AD1111 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */; };
+		4C8DE2871BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */; };
 		4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */; };
 		4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */; };
 		4C8F99AE1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99AD1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m */; };
@@ -1414,12 +1414,12 @@
 		4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionLayoutLine.m; sourceTree = "<group>"; };
 		4C26B9F61BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionLayoutLiquid.h; sourceTree = "<group>"; };
 		4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionLayoutLiquid.m; sourceTree = "<group>"; };
-		4C26BA021BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardDocumentInformation.storyboard; path = MADStack/MADDesigner/UI/DocumentInformation/MADStoryboardDocumentInformation.storyboard; sourceTree = "<group>"; };
+		4C26BA021BAF14B300456DC8 /* MADAboutDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADAboutDocument.storyboard; path = MADStack/MADDesigner/UI/DocumentInformation/MADAboutDocument.storyboard; sourceTree = "<group>"; };
 		4C26BA051BAF14F200456DC8 /* MADGettingStartedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGettingStartedTableViewController.h; sourceTree = "<group>"; };
 		4C26BA061BAF14F200456DC8 /* MADGettingStartedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGettingStartedTableViewController.m; sourceTree = "<group>"; };
 		4C26BA071BAF14F200456DC8 /* MADInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInformationTableViewController.h; sourceTree = "<group>"; };
 		4C26BA081BAF14F200456DC8 /* MADInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInformationTableViewController.m; sourceTree = "<group>"; };
-		4C26BA091BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardInformationTable.storyboard; path = MADStack/MADDesigner/UI/About/MADStoryboardInformationTable.storyboard; sourceTree = "<group>"; };
+		4C26BA091BAF14F200456DC8 /* MADAboutApp.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADAboutApp.storyboard; path = MADStack/MADDesigner/UI/About/MADAboutApp.storyboard; sourceTree = "<group>"; };
 		4C26BA0D1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerQueryBuilder.h; path = ../MADQuery/UI/MADNavigationControllerQueryBuilder.h; sourceTree = "<group>"; };
 		4C26BA0E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerQueryBuilder.m; path = ../MADQuery/UI/MADNavigationControllerQueryBuilder.m; sourceTree = "<group>"; };
 		4C26BA0F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderSplitViewController.h; sourceTree = "<group>"; };
@@ -1476,7 +1476,7 @@
 		4C26BA541BAF99F000456DC8 /* MTCollectionViewLayoutLiquidAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewLayoutLiquidAttributes.m; sourceTree = "<group>"; };
 		4C26BA561BAF99F000456DC8 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
 		4C26BA571BAF99F000456DC8 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
-		4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardToolbox.storyboard; path = MADStack/MADDesigner/UI/Toolbox/MADStoryboardToolbox.storyboard; sourceTree = "<group>"; };
+		4C26BA661BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesignerToolbox.storyboard; path = MADStack/MADDesigner/UI/Toolbox/MADDesignerToolbox.storyboard; sourceTree = "<group>"; };
 		4C26BA681BAF9A2B00456DC8 /* MADToolboxDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxDisplayProtocol.h; sourceTree = "<group>"; };
 		4C26BA691BAF9A2B00456DC8 /* MADToolboxControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxControllerProtocol.h; sourceTree = "<group>"; };
 		4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerDynamicItem.h; sourceTree = "<group>"; };
@@ -1594,7 +1594,7 @@
 		4C401F061BAE6DF100BAE5FC /* MADAboutTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAboutTableView.m; sourceTree = "<group>"; };
 		4C401F071BAE6DF100BAE5FC /* MADAboutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAboutTableViewController.h; sourceTree = "<group>"; };
 		4C401F081BAE6DF100BAE5FC /* MADAboutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAboutTableViewController.m; sourceTree = "<group>"; };
-		4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardAbout.storyboard; path = MADStack/Common/UI/About/MADStoryboardAbout.storyboard; sourceTree = "<group>"; };
+		4C401F091BAE6DF100BAE5FC /* MADAbout.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADAbout.storyboard; path = MADStack/Common/UI/About/MADAbout.storyboard; sourceTree = "<group>"; };
 		4C401F0A1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellAboutTitle.h; sourceTree = "<group>"; };
 		4C401F0B1BAE6DF100BAE5FC /* MADTableViewCellAboutTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellAboutTitle.m; sourceTree = "<group>"; };
 		4C401F141BAE703200BAE5FC /* MADTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
@@ -1862,7 +1862,7 @@
 		4C5C0DC31C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionPolarQuestionAffirmativeResult.h; sourceTree = "<group>"; };
 		4C5C0DC41C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionPolarQuestionAffirmativeResult.m; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
-		4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesignerExplorer.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADDesignerExplorer.storyboard; sourceTree = "<group>"; };
+		4C60C5B51BB0A1CC004D9758 /* MADExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADExplorer.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADExplorer.storyboard; sourceTree = "<group>"; };
 		4C63631414E65C16005DBBFF /* UIImageDocument20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocument20.png; path = Reports/UIImageDocument20.png; sourceTree = "<group>"; };
 		4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocument20@2x.png"; path = "Reports/UIImageDocument20@2x.png"; sourceTree = "<group>"; };
 		4C6700BB1BA133AB001C9D5A /* MAD Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Barcodes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1948,9 +1948,9 @@
 		4C8DE27B1BAFB04D00AD1111 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		4C8DE27C1BAFB04D00AD1111 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C8DE27D1BAFB04D00AD1111 /* Reports-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
-		4C8DE2821BAFB11800AD1111 /* MADStoryboardDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardDesigner.storyboard; path = MADStack/MADDesigner/UI/MADStoryboardDesigner.storyboard; sourceTree = "<group>"; };
-		4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardNewDocument.storyboard; path = MADStack/MADDesigner/UI/MADStoryboardNewDocument.storyboard; sourceTree = "<group>"; };
-		4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADStoryboardObjectSelector.storyboard; path = MADStack/MADDesigner/UI/MADStoryboardObjectSelector.storyboard; sourceTree = "<group>"; };
+		4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesigner.storyboard; path = MADStack/MADDesigner/UI/MADDesigner.storyboard; sourceTree = "<group>"; };
+		4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADCreateDocument.storyboard; path = MADStack/MADDesigner/UI/MADCreateDocument.storyboard; sourceTree = "<group>"; };
+		4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesignerObjectSelector.storyboard; path = MADStack/MADDesigner/UI/MADDesignerObjectSelector.storyboard; sourceTree = "<group>"; };
 		4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MAD Designer.entitlements"; sourceTree = "<group>"; };
 		4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADBarcodeDesigner.storyboard; path = MADStack/MADBarcodes/UI/MADBarcodeDesigner.storyboard; sourceTree = "<group>"; };
 		4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MAD Designer.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2732,25 +2732,25 @@
 		4C1E55071E58295F00E3FAF0 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				4C401F091BAE6DF100BAE5FC /* MADAbout.storyboard */,
+				4C26BA091BAF14F200456DC8 /* MADAboutApp.storyboard */,
+				4C26BA021BAF14B300456DC8 /* MADAboutDocument.storyboard */,
+				4C60C5B51BB0A1CC004D9758 /* MADExplorer.storyboard */,
+				4C8DE2821BAFB11800AD1111 /* MADDesigner.storyboard */,
+				4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */,
+				4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */,
 				4CFEE7FF1BB78CAB00AFAA0A /* MADQuerySelectOperator.storyboard */,
 				4CFEE8091BB7993300AFAA0A /* MADQueryAddJoin.storyboard */,
 				4CFEE8071BB7993300AFAA0A /* MADQueryAddTable.storyboard */,
 				4CFEE7FC1BB77C4000AFAA0A /* MADQuerySelectField.storyboard */,
 				4CFEE8051BB7993300AFAA0A /* MADQueryAddPredicate.storyboard */,
 				4CFEE7F51BB773D800AFAA0A /* MADQueryAddGroup.storyboard */,
-				4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */,
-				4C60C5B51BB0A1CC004D9758 /* MADDesignerExplorer.storyboard */,
-				4C26BA091BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard */,
 				4C401FCE1BAE8DC400BAE5FC /* MTStoryboardLaunchImagesOS7.storyboard */,
-				4C26B9D41BAF146700456DC8 /* MADVibrantTableViewCell.xib */,
-				4C401F091BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard */,
-				4C26BA661BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard */,
-				4C26BA021BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard */,
-				4C8DE2821BAFB11800AD1111 /* MADStoryboardDesigner.storyboard */,
-				4C8DE2831BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard */,
-				4C8DE2841BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard */,
+				4C26BA661BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard */,
+				4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */,
 				4C8DE26E1BAFA9A900AD1111 /* MADTableViewHeader.xib */,
 				4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */,
+				4C26B9D41BAF146700456DC8 /* MADVibrantTableViewCell.xib */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -5526,7 +5526,7 @@
 				4CC3D7661BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4CC3D7B21BCB6D9500BDA5D3 /* UIImagePatternGreenWithFibers@2x.png in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
-				4C8DE2861BAFB11800AD1111 /* MADStoryboardNewDocument.storyboard in Resources */,
+				4C8DE2861BAFB11800AD1111 /* MADCreateDocument.storyboard in Resources */,
 				4CC3D7571BCB6D9500BDA5D3 /* Icon-76-Designer-Modern.png in Resources */,
 				4CC3D7AF1BCB6D9500BDA5D3 /* UIImagePatternGreenAndBlack.png in Resources */,
 				4CC3D7D81BCB6D9500BDA5D3 /* UIImagePatternPinkTextured@2x.png in Resources */,
@@ -5537,7 +5537,7 @@
 				4CC3D7F31BCB6D9500BDA5D3 /* MADImageCaratOpen.png in Resources */,
 				4CC3D75C1BCB6D9500BDA5D3 /* MADBarcode64.psd in Resources */,
 				4CC3D7D71BCB6D9500BDA5D3 /* UIImagePatternPinkTextured.png in Resources */,
-				4C26BA0C1BAF14F200456DC8 /* MADStoryboardInformationTable.storyboard in Resources */,
+				4C26BA0C1BAF14F200456DC8 /* MADAboutApp.storyboard in Resources */,
 				4C26B9E11BAF148B00456DC8 /* MADImageClear.png in Resources */,
 				4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */,
 				4CC3D7D91BCB6D9500BDA5D3 /* UIImagePatternPinkWithFlecks.png in Resources */,
@@ -5561,7 +5561,7 @@
 				4CC3D7451BCB6D9500BDA5D3 /* Icon-57-Designer-Modern.png in Resources */,
 				4C00817B14B6CAAF003DF437 /* UIImageStrikethrough20.png in Resources */,
 				4C00817C14B6CAAF003DF437 /* UIImageStrikethrough20@2x.png in Resources */,
-				4C8DE2871BAFB11800AD1111 /* MADStoryboardObjectSelector.storyboard in Resources */,
+				4C8DE2871BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard in Resources */,
 				4CC3D8031BCB6D9500BDA5D3 /* UIBarButtonItemDatabase@2x.png in Resources */,
 				4CC3D7491BCB6D9500BDA5D3 /* Icon-57-Viewer-Modern.png in Resources */,
 				4CFEE8281BB99DB200AFAA0A /* MADQuery.storyboard in Resources */,
@@ -5576,7 +5576,7 @@
 				4CBC501D1E1B508800B067AD /* MADMeta.plist in Resources */,
 				4CC3D7561BCB6D9500BDA5D3 /* Icon-72-Viewer-Modern@2x.png in Resources */,
 				4CC3D7FB1BCB6D9500BDA5D3 /* MTSliderThumb@2x.png in Resources */,
-				4C401F0E1BAE6DF100BAE5FC /* MADStoryboardAbout.storyboard in Resources */,
+				4C401F0E1BAE6DF100BAE5FC /* MADAbout.storyboard in Resources */,
 				4CC3D7841BCB6D9500BDA5D3 /* MADImageClear.psd in Resources */,
 				4C3DCC1A1BCAEFA900ABE231 /* Images.xcassets in Resources */,
 				4CC3D7A11BCB6D9500BDA5D3 /* UIImagePatternFibers1.png in Resources */,
@@ -5603,7 +5603,7 @@
 				4CC3D7C61BCB6D9500BDA5D3 /* UIImagePatternLinenWeave@2x.png in Resources */,
 				4CC3D7C41BCB6D9500BDA5D3 /* UIImagePatternLinen@2x.png in Resources */,
 				4CC3D7F11BCB6D9500BDA5D3 /* MADImageCarat.png in Resources */,
-				4C60C5B61BB0A1CC004D9758 /* MADDesignerExplorer.storyboard in Resources */,
+				4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */,
 				4CC3D7751BCB6D9500BDA5D3 /* MADImageIconInfoSelected@2x.png in Resources */,
 				4CC3D75F1BCB6D9500BDA5D3 /* MADInfinity64.psd in Resources */,
 				4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */,
@@ -5648,11 +5648,11 @@
 				4CC3D79E1BCB6D9500BDA5D3 /* UIImagePatternCrepe@2x.png in Resources */,
 				4CC3D7F01BCB6D9500BDA5D3 /* UIImagePatternYellowLined@2x.png in Resources */,
 				4CC3D7D61BCB6D9500BDA5D3 /* UIImagePatternPebbled@2x.png in Resources */,
-				4C26BA031BAF14B300456DC8 /* MADStoryboardDocumentInformation.storyboard in Resources */,
+				4C26BA031BAF14B300456DC8 /* MADAboutDocument.storyboard in Resources */,
 				4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */,
 				4CC3D7D41BCB6D9500BDA5D3 /* UIImagePatternPeachPebbled@2x.png in Resources */,
 				4CC3D7BA1BCB6D9500BDA5D3 /* UIImagePatternKraftPaper@2x.png in Resources */,
-				4C8DE2851BAFB11800AD1111 /* MADStoryboardDesigner.storyboard in Resources */,
+				4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */,
 				4CC3D73E1BCB6D9500BDA5D3 /* Icon-50-Designer-Modern@2x.png in Resources */,
 				4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */,
 				4CC3D7731BCB6D9500BDA5D3 /* MADImageIconInfo@2x.png in Resources */,
@@ -5710,7 +5710,7 @@
 				4C26B9DF1BAF148B00456DC8 /* MADImageChevronRightTall@2x.png in Resources */,
 				4CFEE80C1BB7993300AFAA0A /* MADQueryAddJoin.storyboard in Resources */,
 				4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
-				4C26BA6A1BAF9A2B00456DC8 /* MADStoryboardToolbox.storyboard in Resources */,
+				4C26BA6A1BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard in Resources */,
 				4C3DCC161BCAEFA900ABE231 /* chinook.sqlite3 in Resources */,
 				4C26B9DE1BAF148B00456DC8 /* MADImageChevronRightTall.png in Resources */,
 				4CC3D7831BCB6D9500BDA5D3 /* MADImageChevronRightTall.psd in Resources */,

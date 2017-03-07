@@ -75,7 +75,7 @@
 	<key>UILaunchStoryboardName</key>
 	<string>MTStoryboardLaunchImagesOS7</string>
 	<key>UIMainStoryboardFile</key>
-	<string>MADDesignerExplorer</string>
+	<string>MADExplorer</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

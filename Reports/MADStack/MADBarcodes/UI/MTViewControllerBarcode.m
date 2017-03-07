@@ -93,7 +93,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 @synthesize unwindViewController;
 
 + (instancetype)newViewControllerBarcode {
-    static NSString * const ObjectSelector = @"MADStoryboardObjectSelector";
+    static NSString * const ObjectSelector = @"MADDesignerObjectSelector";
     static NSString * const MainIdentifier = @"MADIdentifierBarcodeViewController";
     id bundle = [NSBundle mainBundle];
     id storyboard = [UIStoryboard storyboardWithName: ObjectSelector bundle: bundle];

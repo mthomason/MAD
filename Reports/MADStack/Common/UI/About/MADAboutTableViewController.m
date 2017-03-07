@@ -36,7 +36,6 @@
 
 #import "MADAttributedStringCommon.h"
 
-static NSString * const MADStoryboardAbout = @"MADStoryboardAbout";
 static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutViewController";
 
 @interface MADAboutTableViewController ()
@@ -71,7 +70,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
     UIStoryboard *storyboard;
     id bundle, controller;
     bundle = [NSBundle mainBundle];
-    storyboard = [UIStoryboard storyboardWithName:MADStoryboardAbout bundle:bundle];
+    storyboard = [UIStoryboard storyboardWithName:@"MADAbout" bundle:bundle];
     controller = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierAboutViewController];
     return controller;
 }

@@ -51,7 +51,7 @@ const int8_t MADIndexViewer = 2;
     
     UIStoryboard *storyboard;
     id tabBarController;
-    storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardDesigner"
+    storyboard = [UIStoryboard storyboardWithName: @"MADDesigner"
                                            bundle: [NSBundle mainBundle]];
     tabBarController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
     return tabBarController;
