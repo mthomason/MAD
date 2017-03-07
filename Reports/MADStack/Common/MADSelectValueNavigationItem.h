@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_MADSelectValueNavigationItem_h
+#define MAD_MADSelectValueNavigationItem_h
+
+#import <UIKit/UINavigationBar.h>
 
 @interface MADSelectValueNavigationItem : UINavigationItem
 
 @end
+
+#endif

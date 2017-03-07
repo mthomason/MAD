@@ -702,6 +702,8 @@
 		4C6D2EF81E6DE510008EFE5D /* MADSelectFieldNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EF71E6DE510008EFE5D /* MADSelectFieldNavigationItem.m */; };
 		4C6D2EFB1E6E7789008EFE5D /* MADPredicateFormatNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EFA1E6E7789008EFE5D /* MADPredicateFormatNavigationItem.m */; };
 		4C6D2EFE1E6E77C0008EFE5D /* MADPredicateAddNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EFD1E6E77C0008EFE5D /* MADPredicateAddNavigationItem.m */; };
+		4C6D2F011E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2F001E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m */; };
+		4C6D2F041E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2F031E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m */; };
 		4C6F34FD1E408D9D00F4744F /* MADElementMigrationPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */; };
 		4C76F0BD14B527E9005DCE49 /* UIImageToolbarDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */; };
 		4C76F0BE14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */; };
@@ -1890,6 +1892,10 @@
 		4C6D2EFA1E6E7789008EFE5D /* MADPredicateFormatNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPredicateFormatNavigationItem.m; sourceTree = "<group>"; };
 		4C6D2EFC1E6E77C0008EFE5D /* MADPredicateAddNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPredicateAddNavigationItem.h; sourceTree = "<group>"; };
 		4C6D2EFD1E6E77C0008EFE5D /* MADPredicateAddNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPredicateAddNavigationItem.m; sourceTree = "<group>"; };
+		4C6D2EFF1E6E796D008EFE5D /* MADSelectOperatorNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSelectOperatorNavigationItem.h; sourceTree = "<group>"; };
+		4C6D2F001E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSelectOperatorNavigationItem.m; sourceTree = "<group>"; };
+		4C6D2F021E6E7AAC008EFE5D /* MADSelectValueNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSelectValueNavigationItem.h; sourceTree = "<group>"; };
+		4C6D2F031E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSelectValueNavigationItem.m; sourceTree = "<group>"; };
 		4C6F34FB1E408D9D00F4744F /* MADElementMigrationPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementMigrationPolicy.h; sourceTree = "<group>"; };
 		4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementMigrationPolicy.m; sourceTree = "<group>"; };
 		4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageToolbarDatabase.png; path = Reports/UIImageToolbarDatabase.png; sourceTree = "<group>"; };
@@ -4190,6 +4196,10 @@
 				4C6D2EFA1E6E7789008EFE5D /* MADPredicateFormatNavigationItem.m */,
 				4C6D2EFC1E6E77C0008EFE5D /* MADPredicateAddNavigationItem.h */,
 				4C6D2EFD1E6E77C0008EFE5D /* MADPredicateAddNavigationItem.m */,
+				4C6D2EFF1E6E796D008EFE5D /* MADSelectOperatorNavigationItem.h */,
+				4C6D2F001E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m */,
+				4C6D2F021E6E7AAC008EFE5D /* MADSelectValueNavigationItem.h */,
+				4C6D2F031E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m */,
 			);
 			name = "Navigation Items";
 			sourceTree = "<group>";
@@ -6275,6 +6285,7 @@
 				4C26BA5D1BAF99F000456DC8 /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C1E54FC1E56CA1F00E3FAF0 /* MADOperationRefresh.m in Sources */,
 				4C401EE21BAE5E9000BAE5FC /* MADTableViewCellReceiptCharterMember.m in Sources */,
+				4C6D2F041E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m in Sources */,
 				4C26BA621BAF99F000456DC8 /* MTTableController.m in Sources */,
 				4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */,
 				4C26BA311BAF999800456DC8 /* MADUser.m in Sources */,
@@ -6388,6 +6399,7 @@
 				4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */,
 				4C26B9C21BAF123A00456DC8 /* MADExplorerSectionHeaderView.m in Sources */,
 				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
+				4C6D2F011E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m in Sources */,
 				4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
 				4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */,

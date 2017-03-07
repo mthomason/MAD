@@ -422,7 +422,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" id="h4d-B0-1D8">
+                    <navigationItem key="navigationItem" id="h4d-B0-1D8" customClass="MADSelectValueNavigationItem">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="F4I-mQ-Z2B">
                             <connections>
                                 <action selector="done:" destination="tRR-a1-qDG" id="PUi-jc-vwS"/>
