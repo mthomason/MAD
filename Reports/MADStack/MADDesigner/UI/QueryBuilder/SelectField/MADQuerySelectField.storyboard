@@ -50,6 +50,7 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Field" id="UP6-f2-0bs" customClass="MADFieldSelectorNavigationItem"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yd7-Gq-zCS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

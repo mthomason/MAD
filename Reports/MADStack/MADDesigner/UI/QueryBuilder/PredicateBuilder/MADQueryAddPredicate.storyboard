@@ -12,9 +12,9 @@
         <!--Navigation Controller-->
         <scene sceneID="jwp-2p-7YR">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierQueryBuilderPredicateBuilder" definesPresentationContext="YES" id="1S4-ip-3dw" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierQueryAddPredicate" definesPresentationContext="YES" id="1S4-ip-3dw" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="c4W-iz-snk">
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="c4W-iz-snk">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -227,7 +227,7 @@
         <!--MADIdentifierQueryBuilderSelectOperator-->
         <scene sceneID="o01-ta-bLL">
             <objects>
-                <viewControllerPlaceholder storyboardName="MADQueryBuilderSelectOperator" referencedIdentifier="MADIdentifierQueryBuilderSelectOperator" id="RQ0-xa-Stf" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="MADQuerySelectOperator" referencedIdentifier="MADIdentifierQueryBuilderSelectOperator" id="RQ0-xa-Stf" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="WKl-26-kqB"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yBX-Wm-VoH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -471,7 +471,7 @@
         <!--MADIdentifierQueryBuilderSelectOperator-->
         <scene sceneID="zts-cD-Ncv">
             <objects>
-                <viewControllerPlaceholder storyboardName="MADQueryBuilderSelectOperator" referencedIdentifier="MADIdentifierQueryBuilderSelectOperator" id="UT4-SK-kmv" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="MADQuerySelectOperator" referencedIdentifier="MADIdentifierQueryBuilderSelectOperator" id="UT4-SK-kmv" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="7is-Ea-lvy"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uxn-nq-fqF" userLabel="First Responder" sceneMemberID="firstResponder"/>
