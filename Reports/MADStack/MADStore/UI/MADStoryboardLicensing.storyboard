@@ -326,12 +326,12 @@
         <!--Navigation Controller-->
         <scene sceneID="VGQ-gm-w63">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierNavigationControllerLicensing" definesPresentationContext="YES" toolbarHidden="NO" id="Rhi-Ik-w3d" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierNavControllerStore" definesPresentationContext="YES" toolbarHidden="NO" id="Rhi-Ik-w3d" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="mvQ-9h-xq7" customClass="MADNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mvQ-9h-xq7" customClass="MADNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

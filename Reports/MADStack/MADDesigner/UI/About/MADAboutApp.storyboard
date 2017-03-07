@@ -12,9 +12,9 @@
         <!--Navigation Controller-->
         <scene sceneID="tR2-pv-OBV">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierNavigationControllerInformation" definesPresentationContext="YES" id="uwX-fS-tMQ" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierNavControllerInfo" definesPresentationContext="YES" id="uwX-fS-tMQ" customClass="MADNavigationController" sceneMemberID="viewController">
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="Dwx-vL-jek">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="Dwx-vL-jek">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -216,11 +216,11 @@
         <!--Navigation Controller-->
         <scene sceneID="TKu-xT-8xO">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierNavigationControllerDocumentNew" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="overFullScreen" id="L6i-MR-x0P" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierNavControllerCreateDoc" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="overFullScreen" id="L6i-MR-x0P" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="Ytd-vG-tiO">
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Ytd-vG-tiO">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

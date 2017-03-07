@@ -27,19 +27,8 @@
 
 #import "MADTransparentPresentationController.h"
 
-static NSString * const MADStoryboardLicensing          = @"MADStoryboardLicensing";
-
-static NSString * const MADIdentifierNavigationControllerInformation                = @"MADIdentifierNavigationControllerInformation";
-static NSString * const MADIdentifierNavigationControllerLicensing                  = @"MADIdentifierNavigationControllerLicensing";
-static NSString * const MADIdentifierNavigationControllerDocumentNew                = @"MADIdentifierNavigationControllerDocumentNew";
-static NSString * const MADIdentifierNavigationControllerFontPicker                 = @"MADIdentifierNavigationControllerFontPicker";
-static NSString * const MADIdentifierNavigationControllerDocumentObjectNewAggregate = @"MADIdentifierNavigationControllerDocumentObjectNewAggregate";
-static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector     = @"MADIdentifierNavigationControllerDocumentObjectSelector";
-
 @interface MADNavigationController ()
     @property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
-    @property (readwrite, nonatomic, assign) BOOL _completedFirstLayout;
-    //@property (readwrite, nonatomic, assign) UIStatusBarStyle statusBarStyleDefault;
 @end
 
 @implementation MADNavigationController
@@ -77,19 +66,19 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
 
         case MADNavigationControllerTypeInformation:
             storyboardID = @"MADAboutApp";
-            controllerID = MADIdentifierNavigationControllerInformation;
+            controllerID = @"MADIdentifierNavControllerInfo";
             bundle = [NSBundle mainBundle];
             break;
             
         case MADNavigationControllerTypeLicensing:
-            storyboardID = MADStoryboardLicensing;
-            controllerID = MADIdentifierNavigationControllerLicensing;
+            storyboardID = @"MADStore";
+            controllerID = @"MADIdentifierNavControllerStore";
             bundle = [NSBundle mainBundle];
             break;
             
         case MADNavigationControllerTypeNewDocument:
             storyboardID = @"MADCreateDocument";
-            controllerID = MADIdentifierNavigationControllerDocumentNew;
+            controllerID = @"MADIdentifierNavControllerCreateDoc";
             bundle = [NSBundle mainBundle];
             break;
             
@@ -100,19 +89,19 @@ static NSString * const MADIdentifierNavigationControllerDocumentObjectSelector 
             
         case MADNavigationControllerTypeFontPicker:
             storyboardID = @"MADDesignerToolbox";
-            controllerID = MADIdentifierNavigationControllerFontPicker;
+            controllerID = @"MADIdentifierNavControllerFontPicker";
             bundle = [NSBundle mainBundle];
             break;
 
         case MADNavigationControllerTypeAggregateAdd:
             storyboardID = @"MADDesignerObjectSelector";
-            controllerID = MADIdentifierNavigationControllerDocumentObjectNewAggregate;
+            controllerID = @"MADIdentifierNavControllerAggregate";
             bundle = [NSBundle mainBundle];
             break;
             
         case MADNavigationControllerTypeElementPicker:
             storyboardID = @"MADDesignerObjectSelector";
-            controllerID = MADIdentifierNavigationControllerDocumentObjectSelector;
+            controllerID = @"MADIdentifierNavControllerObjectSelector";
             bundle = [NSBundle mainBundle];
             break;
             

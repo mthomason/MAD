@@ -12,7 +12,7 @@
         <!--Navigation Controller-->
         <scene sceneID="5MU-TO-PEb">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierNavigationControllerDocumentObjectSelector" definesPresentationContext="YES" id="nL8-hu-kiC" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierNavControllerObjectSelector" definesPresentationContext="YES" id="nL8-hu-kiC" customClass="MADNavigationController" sceneMemberID="viewController">
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="s5I-cw-zka">
@@ -106,7 +106,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Icx-ur-LId">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierNavigationControllerDocumentObjectNewAggregate" definesPresentationContext="YES" id="J2X-Yi-2wv" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierNavControllerAggregate" definesPresentationContext="YES" id="J2X-Yi-2wv" customClass="MADNavigationController" sceneMemberID="viewController">
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wsN-UA-xjw">
