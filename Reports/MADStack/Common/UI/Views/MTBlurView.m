@@ -13,9 +13,7 @@
 #import <UIKit/UIToolbar.H>
 
 @interface MTBlurView ()
-
     @property (nonatomic, strong) UIToolbar *toolbar;
-
 @end
 
 @implementation MTBlurView

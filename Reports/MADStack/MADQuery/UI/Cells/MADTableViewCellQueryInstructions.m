@@ -39,8 +39,4 @@ const CGFloat MNSTableViewCellHeightDefault = 44.0000f;
 
 + (CGFloat)defaultHeight { return MNSTableViewCellHeightDefault; }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 @end

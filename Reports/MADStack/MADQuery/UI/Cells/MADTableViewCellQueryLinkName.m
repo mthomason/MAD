@@ -14,8 +14,4 @@
     return 0.0000f;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 @end

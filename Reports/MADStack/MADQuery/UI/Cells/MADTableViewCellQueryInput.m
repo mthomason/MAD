@@ -15,8 +15,4 @@
     return MNSTableViewCellQueryInputHeightDefault;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 @end

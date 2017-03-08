@@ -113,25 +113,18 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
         UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
         self.backgroundColor =  bgColor;
         _drawn = NO;
-        //@autoreleasepool {
-        //    [self drawBackground];
-        //}
     }
     return self;
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview {
+/*- (void)willMoveToSuperview:(UIView *)newSuperview {
     [super willMoveToSuperview:newSuperview];
     //if (!newSuperview) {
     //    for (UIView *subview in self.subviews) {
     //        [subview removeFromSuperview];
     //    }
     //}
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
+}*/
 
 /*- (void)layoutSubviews {
     [super layoutSubviews];
