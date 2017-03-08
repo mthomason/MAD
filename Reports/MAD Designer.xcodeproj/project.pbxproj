@@ -279,6 +279,7 @@
 		4C32A4BE1BB07D5A00DD59A3 /* MADBarcodes.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4BD1BB07D5A00DD59A3 /* MADBarcodes.entitlements */; };
 		4C32A4C01BB07D6300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C32A4BF1BB07D6300DD59A3 /* main.m */; };
 		4C32A4C31BB07FF300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; };
+		4C3500121E7051E8009423B0 /* MADTableViewCellQueryCountID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3500111E7051E8009423B0 /* MADTableViewCellQueryCountID.m */; };
 		4C37E0F81ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
@@ -1527,6 +1528,8 @@
 		4C32A4BA1BB07BF300DD59A3 /* MADBarcodesAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBarcodesAppDelegate.m; sourceTree = "<group>"; };
 		4C32A4BD1BB07D5A00DD59A3 /* MADBarcodes.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MADBarcodes.entitlements; sourceTree = "<group>"; };
 		4C32A4BF1BB07D6300DD59A3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C3500101E7051E8009423B0 /* MADTableViewCellQueryCountID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellQueryCountID.h; sourceTree = "<group>"; };
+		4C3500111E7051E8009423B0 /* MADTableViewCellQueryCountID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellQueryCountID.m; sourceTree = "<group>"; };
 		4C37E0F41ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRowTypeDocumentsLocal.h; sourceTree = "<group>"; };
 		4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRowTypeDocumentsLocal.m; sourceTree = "<group>"; };
 		4C37E0F91ACC791600B4BC0D /* MAD Designer WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MAD Designer WatchKit Extension.entitlements"; sourceTree = "<group>"; };
@@ -3499,6 +3502,8 @@
 				4C401F211BAE703200BAE5FC /* MADTableViewCellQueryLink.m */,
 				4C401F221BAE703200BAE5FC /* MADTableViewCellQueryTableName.h */,
 				4C401F231BAE703200BAE5FC /* MADTableViewCellQueryTableName.m */,
+				4C3500101E7051E8009423B0 /* MADTableViewCellQueryCountID.h */,
+				4C3500111E7051E8009423B0 /* MADTableViewCellQueryCountID.m */,
 			);
 			name = Cells;
 			path = MADStack/MADQuery/UI/Cells;
@@ -6323,6 +6328,7 @@
 				4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C4020371BAE92F200BAE5FC /* MADAffineTransformSwing.m in Sources */,
 				4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */,
+				4C3500121E7051E8009423B0 /* MADTableViewCellQueryCountID.m in Sources */,
 				4CFEE8211BB7A3A300AFAA0A /* MADCellTextInput.m in Sources */,
 				4C26B96A1BAF11C800456DC8 /* MADOperationInstallSampleDocument.m in Sources */,
 				4C401FC71BAE8AD500BAE5FC /* MTViewControllerBarcode.m in Sources */,

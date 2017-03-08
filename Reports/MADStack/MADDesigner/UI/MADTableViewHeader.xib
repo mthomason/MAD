@@ -21,8 +21,8 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agC-S6-dV4">
-                    <rect key="frame" x="570" y="289" width="22" height="22"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agC-S6-dV4">
+                    <rect key="frame" x="345" y="323" width="22" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="22" id="ToX-7t-rFa"/>
                         <constraint firstAttribute="height" constant="22" id="vpj-X0-hqm"/>
@@ -31,17 +31,15 @@
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yfc-Ou-6d5">
-                    <rect key="frame" x="8" y="0.0" width="554" height="600"/>
-                    <constraints>
-                        <constraint firstAttribute="height" priority="25" constant="600" id="keP-5q-VTd"/>
-                    </constraints>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Label" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yfc-Ou-6d5">
+                    <rect key="frame" x="8" y="0.0" width="329" height="667"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <constraints>
+                <constraint firstItem="Yfc-Ou-6d5" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="0oQ-Eb-Jk0"/>
                 <constraint firstItem="agC-S6-dV4" firstAttribute="leading" secondItem="Yfc-Ou-6d5" secondAttribute="trailing" constant="8" symbolic="YES" id="75P-dG-1TO"/>
                 <constraint firstAttribute="trailing" secondItem="agC-S6-dV4" secondAttribute="trailing" constant="8" id="7b4-2v-DmX"/>
                 <constraint firstAttribute="centerY" secondItem="Yfc-Ou-6d5" secondAttribute="centerY" id="9qk-uG-STT"/>

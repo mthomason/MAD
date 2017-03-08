@@ -217,7 +217,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MADIdentifierQueryCountID" textLabel="I6I-Nd-tYl" style="IBUITableViewCellStyleDefault" id="tAT-ia-uwf">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MADIdentifierQueryCountID" textLabel="I6I-Nd-tYl" style="IBUITableViewCellStyleDefault" id="tAT-ia-uwf" customClass="MADTableViewCellQueryCountID">
                                 <rect key="frame" x="0.0" y="276" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tAT-ia-uwf" id="lic-r9-77i">
@@ -291,21 +291,10 @@
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
-                    <connections>
-                        <segue destination="LGY-eA-01A" kind="modal" identifier="showAddPredicateViewController" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="W0j-ir-xSF"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nfM-mZ-Ry6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-517" y="19"/>
-        </scene>
-        <!--MADIdentifierQueryAddPredicate-->
-        <scene sceneID="X3Z-YJ-JTa">
-            <objects>
-                <viewControllerPlaceholder storyboardName="MADQueryAddPredicate" referencedIdentifier="MADIdentifierQueryAddPredicate" id="LGY-eA-01A" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Xu3-iF-osj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="196" y="54"/>
         </scene>
         <!--Navigation Controller Query Builder-->
         <scene sceneID="CAc-4x-SdN">

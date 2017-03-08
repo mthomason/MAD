@@ -102,8 +102,6 @@
 
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
-NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
-NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
 
 static NSString * const NSFetchedResultsCacheName                   = @"NSFetchedResultsCacheName";
 static NSString * const NSFetchedResultsCacheTables                 = @"NSFetchedResultsCacheTables";
@@ -112,8 +110,6 @@ static NSString * const NSFetchedResultsCacheGroups                 = @"NSFetche
 static NSString * const NSFetchedResultsCachePredicates             = @"NSFetchedResultsCachePredicates";
 
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
-
-static NSString * const ViewControllerTitle = @"MAD Query";
 
 static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing);
 static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
@@ -384,8 +380,6 @@ BOOL storeEnabled() {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    //self.tableView.delegate = nil;
-    //self.tableView.dataSource = nil;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -406,47 +400,6 @@ BOOL storeEnabled() {
                               self.tableView.frame.size.width, 1.0000f);
         [self.tableView scrollRectToVisible: r animated: NO];
         _firstTimeViewWillLayoutSubviews = NO;
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-    if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
-        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = segue.destinationViewController;
-            //NSLog(@"Top View Controller: %@", [navControl topViewController]);
-            if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MADQueryPredicateFormatController class]]) {
-                    MADQueryPredicateFormatController *tvc;
-                    tvc = (MADQueryPredicateFormatController *)navControl.topViewController;
-                    if (tvc) {
-                        MADocument *document = self.document;
-                        tvc.document = document;
-                        tvc.delegate = self;
-                    }
-                }
-            }
-        }
-    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
-                if ([segue.destinationViewController isKindOfClass:[MADDesignerSectionLayoutController class]]) {
-                    MADDesignerSectionLayoutController *tvc;
-                    tvc = (MADDesignerSectionLayoutController *)segue.destinationViewController;
-                    if (tvc) {
-                        tvc.delegate = self;
-                        MADocument *document = self.document;
-                        RptqDocument *activeDocument = document.activeDocumentModel;
-                        RptqQuery *query = activeDocument.defaultDatabase.defaultQuery;
-                        
-                        RptqDocumentSection *section;
-                        section = [activeDocument documentSectionForSelectedIndex: _lastSelectedRowNumber
-                                                               withNumberOfGroups: query.hasQueryGroups.count];
-
-                        
-                        tvc.initalHeightValue = section.height;
-                        tvc.initalVisibility = section.visibility;
-                        tvc.initalNumberOfRows = section.numberOfRows;
-                    }
-                }
     }
 }
 
@@ -474,7 +427,7 @@ BOOL storeEnabled() {
 
 - (NSString *)title {
     if (_title == nil) {
-        NSString *title = NSLocalizedString(ViewControllerTitle, ViewControllerTitle);
+        NSString *title = NSLocalizedString(@"MAD Query", @"View controller title.");
         _title = title;
     }
     return _title;
@@ -637,47 +590,11 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
     
     switch (section) {
             
-            // MARK: Display and identify the data source and data sources
-        case MADIdentifierQueryViewSectionsDatasource: {
-            cell.detailTextLabel.text = @"";
-            cell.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
-            cell.textLabel.numberOfLines = 0;
-            break;
-        }
-            
-            // MARK: Display the table names that are used in the query
-        case MADIdentifierQueryViewSectionsTables: {
-            
-            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textLabel.font = font;
-            cell.textLabel.backgroundColor = [UIColor whiteColor];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.indentationLevel = 1;
-            cell.tintColor = [MADColorEverydayApps newColorBlue];
-            cell.backgroundColor = [UIColor whiteColor];
-            break;
-        }
-            
-            // MARK: Display the table links or joins that are used in the query.
-        case MADIdentifierQueryViewSectionsLinks:
-            cell.textLabel.numberOfLines = 0;
-            break;
-            
-            // MARK: Display the groupings used in the query.
-        case MADIdentifierQueryViewSectionsGroups:
-            cell.textLabel.numberOfLines = 0;
-            break;
-        
-            // MARK: Display the predicates or conditions on the query.
-        case MADIdentifierQueryViewSectionsPredicate:
-            cell.textLabel.numberOfLines = 0;
-            break;
-            
         case MADIdentifierQueryViewSectionsNumberOfQueryResults: {
             
             UISwitch *switchQueryMode = [[UISwitch alloc] initWithFrame:CGRectZero];
-            switchQueryMode.on = [[NSUserDefaults standardUserDefaults] boolForKey:MADIdentifierDefaultsViewerDesired];
-            [switchQueryMode addTarget: self action: @selector(handleToggleReportingMode:)
+            switchQueryMode.on = [[NSUserDefaults standardUserDefaults] boolForKey: MADIdentifierDefaultsViewerDesired];
+            [switchQueryMode addTarget: nil action: @selector(handleToggleReportingMode:)
                       forControlEvents: UIControlEventValueChanged];
             cell.accessoryView = switchQueryMode;
             cell.textLabel.text = switchQueryMode.on ?
@@ -715,15 +632,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
         [[NSUserDefaults standardUserDefaults] setBool: NO
                                                 forKey: MADIdentifierDefaultsViewerDesired];
     }
-    
-    // FIXME: This is a hack that I can do because I know this updates the last section in the query.  Kind of a hack.
-    //  NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:self.tableView.numberOfSections - 1];
-    NSIndexPath *i = [NSIndexPath indexPathForItem: 0
-                                         inSection: self.tableView.numberOfSections - 1];
-    NSArray *paths = [[NSArray alloc] initWithObjects: i, nil];
-    [self.tableView reloadRowsAtIndexPaths: paths
-                          withRowAnimation: UITableViewRowAnimationNone];
-    //  [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark UIDocumentStateChangedNotification
@@ -829,52 +737,48 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
       newIndexPath: (NSIndexPath *)newIndexPath {
     NSLog(@"%s (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
 
+    if (_suspendAutomaticTrackingOfChangesInManagedObjectContext) return;
+    
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
-    NSInteger updateSection;
     NSArray *indexPaths;
+    NSIndexPath *path;
     NSNumber *section;
     for (section in sections) {
-        updateSection = section.shortValue;
-        
-        if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-            switch(type) {
-                case NSFetchedResultsChangeInsert: {
-                    NSUInteger index = [controller.fetchedObjects indexOfObject: anObject];
-                    NSIndexPath *path = [NSIndexPath indexPathForRow: (long)index
-                                                           inSection: updateSection];
-                    
-                    indexPaths = @[path];
-                    [self.tableView insertRowsAtIndexPaths: indexPaths
-                                          withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                }
-                case NSFetchedResultsChangeDelete: {
-                    NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
-                                                           inSection: updateSection];
-                    indexPaths = @[path];
-                    [self.tableView deleteRowsAtIndexPaths: indexPaths
-                                          withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                }
-                case NSFetchedResultsChangeUpdate: {
-                    NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
-                                                           inSection: updateSection];
-                    indexPaths = @[path];
-                    [self.tableView reloadRowsAtIndexPaths: indexPaths
-                                          withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                }
-                case NSFetchedResultsChangeMove: {
-                    NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
-                                                           inSection: updateSection];
-                    indexPaths = @[path];
-                    [self.tableView deleteRowsAtIndexPaths: indexPaths
-                                          withRowAnimation: UITableViewRowAnimationFade];
-                    [self.tableView insertRowsAtIndexPaths: indexPaths
-                                          withRowAnimation: UITableViewRowAnimationFade];
-                    break;
-                }
+        switch(type) {
+            case NSFetchedResultsChangeInsert: {
+                path = [NSIndexPath indexPathForRow: (long)[controller.fetchedObjects indexOfObject: anObject]
+                                          inSection: section.shortValue];
+                indexPaths = @[path];
+                [self.tableView insertRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
+                break;
+            }
+            case NSFetchedResultsChangeDelete: {
+                path = [NSIndexPath indexPathForRow: indexPath.row
+                                          inSection: section.shortValue];
+                indexPaths = @[path];
+                [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
+                break;
+            }
+            case NSFetchedResultsChangeUpdate: {
+                path = [NSIndexPath indexPathForRow: indexPath.row
+                                          inSection: section.shortValue];
+                indexPaths = @[path];
+                [self.tableView reloadRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
+                break;
+            }
+            case NSFetchedResultsChangeMove: {
+                path = [NSIndexPath indexPathForRow: indexPath.row
+                                          inSection: section.shortValue];
+                indexPaths = @[path];
+                [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
+                [self.tableView insertRowsAtIndexPaths: indexPaths
+                                      withRowAnimation: UITableViewRowAnimationFade];
+                break;
             }
         }
     }

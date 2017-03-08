@@ -7,6 +7,7 @@
 //
 
 #import "MADTableViewCellQueryLink.h"
+#import <UIKit/UILabel.h>
 #import "Constants.h"
 
 @implementation MADTableViewCellQueryLink
@@ -15,8 +16,19 @@
     return MNSTableViewCellQueryLinkHeightDefault;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.textLabel.numberOfLines = 0;
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        self.textLabel.numberOfLines = 0;
+    }
+    return self;
 }
 
 @end

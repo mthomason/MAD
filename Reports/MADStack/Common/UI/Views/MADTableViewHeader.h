@@ -11,9 +11,16 @@
 
 #import <UIKit/UIView.h>
 
-@class UIButton, UILabel;
+@class UIButton, UILabel, MADQueryViewSectionDelegate;
+
+@protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
+
 
 @interface MADTableViewHeader : UIView
+
+    + (instancetype)newTableViewHeaderWithType:(MADQueryViewSectionDelegate *)layout
+                                      andFrame:(CGRect)frame
+                                        target:(id <MADQueryViewControllerLayoutSectionSelectorProtocol>)target;
 
     @property (nonatomic, weak) IBOutlet UIButton *buttonAdd;
     @property (nonatomic, weak) IBOutlet UILabel *labelTitle;

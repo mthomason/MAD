@@ -7,36 +7,39 @@
 //
 
 #import "MADTableViewCellQueryTableName.h"
-#import "Constants.h"
 #import <UIKit/UILabel.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import "Constants.h"
 
 @implementation MADTableViewCellQueryTableName
 
-- (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
-        self.textLabel.numberOfLines = 0;
+        [self initalize];
     }
     return self;
 }
-
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        self.textLabel.numberOfLines = 0;
+        [self initalize];
     }
     return self;
+}
+
+- (void)initalize {
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+    self.textLabel.font = font;
+    self.textLabel.backgroundColor = [UIColor whiteColor];
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.indentationLevel = 1;
+    self.tintColor = [MADColorEverydayApps newColorBlue];
+    self.backgroundColor = [UIColor whiteColor];
+    self.textLabel.numberOfLines = 0;
 }
 
 + (CGFloat)defaultHeight {
     return 44.0000f;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
 }
 
 @end
