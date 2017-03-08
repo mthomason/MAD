@@ -1150,7 +1150,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             UIScrollView *documentScroller = pageViewControllerLast.documentScroller;
 
             MADPageViewAttributes *pageAttributes;
-            pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber - 1
+            pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber + 1
                                                                    totalNumberOfPages: _currentLocation.totalPages
                                                                     contentSizeInital: documentScroller.contentSize];
             pageAttributes.zoomScaleInital = documentScroller.zoomScale;
@@ -1186,7 +1186,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (visiblePageNumber - 1 > 0) {
             
             UIScrollView *documentScroller = pageViewControllerPrevious.documentScroller;
-            //MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
             MADPageViewAttributes *pageAttributes;
             pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber - 1
                                                                    totalNumberOfPages: _currentLocation.totalPages
@@ -1299,7 +1298,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)updateNumberOfPages {
     _currentLocation.totalPages = self.document.reportFormatter.numberOfPages;
     [self updateNumberOfPages: (_currentLocation.totalPages > 0 ? (_currentLocation.totalPages - 1) : 0)];
-    [self setDisplayActive];
+    //[self setDisplayActive];
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {

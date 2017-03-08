@@ -49,7 +49,8 @@
 
         self.textView.text = @"";
         
-        UIAlertController *alertController = [MADAlertController newAlertControllerErrorEmptyQuery];
+        UIAlertController *alertController;
+        alertController = [MADAlertController newAlertControllerErrorEmptyQuery];
         [self presentViewController: alertController
                            animated: YES
                          completion: nil];

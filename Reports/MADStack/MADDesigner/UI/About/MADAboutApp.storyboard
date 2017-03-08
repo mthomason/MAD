@@ -12,7 +12,7 @@
         <!--Navigation Controller-->
         <scene sceneID="tR2-pv-OBV">
             <objects>
-                <navigationController storyboardIdentifier="MADIdentifierNavControllerInfo" definesPresentationContext="YES" id="uwX-fS-tMQ" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADIdentifierNavControllerInfo" definesPresentationContext="YES" id="uwX-fS-tMQ" sceneMemberID="viewController">
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="Dwx-vL-jek">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -35,7 +35,7 @@
         <scene sceneID="g5k-wV-0G9">
             <objects>
                 <tableViewController id="Fp4-MZ-YVc" customClass="MADInformationTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q3y-O0-P1y" customClass="MADAboutTableView">
+                    <tableView key="view" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q3y-O0-P1y">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

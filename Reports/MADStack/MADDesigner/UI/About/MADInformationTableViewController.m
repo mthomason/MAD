@@ -60,6 +60,22 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.preferredContentSize = CGSizeMake(480, 200);
+    
+    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.estimatedRowHeight = 44.0000f;
+        self.tableView.rowHeight = UITableViewAutomaticDimension;
+        self.tableView.backgroundColor = [UIColor clearColor];
+        id blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        id blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        self.tableView.backgroundView = blurEffectView;
+        
+        UIPopoverPresentationController *popover;
+        if ((popover = [self.navigationController popoverPresentationController])) {
+            popover.backgroundColor = [UIColor clearColor];
+        }
+        self.tableView.separatorEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+    }
 }
 
 #pragma mark - Table view data source
@@ -128,7 +144,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MADTableViewCellAuto *cell = [tableView dequeueReusableCellWithIdentifier:@"MADIdentiferTableViewCellInformation" forIndexPath:indexPath];
+    MADTableViewCellAuto *cell = [tableView dequeueReusableCellWithIdentifier: @"MADIdentiferTableViewCellInformation"
+                                                                 forIndexPath: indexPath];
     switch (indexPath.row) {
             
         case 0:

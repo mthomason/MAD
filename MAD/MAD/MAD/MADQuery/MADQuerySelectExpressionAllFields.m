@@ -10,6 +10,7 @@
 
 #import <CoreData/NSManagedObjectContext.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSEnumerator.h>
 
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
@@ -45,12 +46,15 @@
                 
                 NSUInteger fieldCounter = 0;
                 
-                for (RptqQueryField *queryField in table.hasQueryFields) {
-                    RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
+                RptqQueryField *queryField;
+                NSEnumerator <RptqQueryField *> *hasQueryFields;
+                hasQueryFields = table.hasQueryFields.objectEnumerator;
+                MADSafeQueryField *safeFieldName;
+                NSString *fieldAlias;
+                for (queryField in hasQueryFields) {
                     if (fieldCounter != 0)  [result appendString:@",\n"];
-                    NSString *fieldName = field.name;
-                    MADSafeQueryField *safeFieldName = [database newSafeIdentifier:fieldName];
-                    NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
+                    safeFieldName = [database newSafeIdentifier:queryField.databaseSchemaField.name];
+                    fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
                     [result appendString: @"\t"];
                     [result appendString: fieldAlias];
                     fieldCounter++;

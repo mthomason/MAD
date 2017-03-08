@@ -12,15 +12,6 @@
 
 #import "MADQueryViewController.h"
 
-#import <UIKit/UIStoryboardSegue.h>
-#import <UIKit/NSAttributedString.h>
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UISwitch.h>
-#import <UIKit/UILabel.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/UIStoryboard.h>
-
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSOrderedSet.h>
 
@@ -30,6 +21,17 @@
 #import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSPersistentStoreResult.h>
+
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UIPresentationController.h>
+#import <UIKit/UIPopoverPresentationController.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UISwitch.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIStoryboard.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -141,6 +143,8 @@ BOOL storeEnabled() {
 @interface MADQueryViewController ()
 
     <NSFetchedResultsControllerDelegate,
+        UIPopoverPresentationControllerDelegate,
+        UIViewControllerTransitioningDelegate,
         MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MTQueryBuilderAddLinkFirstTableDelegate,
@@ -151,8 +155,7 @@ BOOL storeEnabled() {
         MADViewControllerStandardProtocol,
         MADDesignerSectionLayoutDelegate,
         MTQueryBuilderPredicateFormatDelegate,
-        MADQueryViewControllerDatasourceProtocol,
-        UIViewControllerTransitioningDelegate>
+        MADQueryViewControllerDatasourceProtocol>
 
     @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
     @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
@@ -160,6 +163,8 @@ BOOL storeEnabled() {
     @property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
 
     @property (nonatomic, readonly) MADTabBarController *tabBarController;
+
+    @property (nonatomic, weak) UIPresentationController *showSQLPresentationController;
 
 @end
 
@@ -528,11 +533,6 @@ BOOL storeEnabled() {
     }
 }
 
-- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    [self.tabBarController enableTabBarItems];
-    [super dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -632,10 +632,10 @@ BOOL storeEnabled() {
 #pragma mark MUIViewControllerDelegate
 
 - (void)dismissViewController {
-    void (^handleCompletion)(void);
     MADTabBarController *tabBarController = self.tabBarController;
-    handleCompletion = ^{ [tabBarController enableTabBarItems]; };
-    [self dismissViewControllerAnimated:YES completion:handleCompletion];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [tabBarController enableTabBarItems];
+    }];
 }
 
 - (void)viewControllerDidFinish:(id)sender {
@@ -989,7 +989,47 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 }
 
 #pragma mark -
+#pragma mark UIAdaptivePresentationControllerDelegate
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:
+(UIPresentationController *)controller {
+    
+    UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
+    
+    if ([controller isEqual:self.showSQLPresentationController]) {
+        
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            style = UIModalPresentationNone;
+        } else {
+            style = UIModalPresentationOverFullScreen;
+        }
+    }
+    
+    return style;
+}
+
+#pragma mark -
 #pragma mark Actions
+
+- (IBAction)displaySQL:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQuery" bundle:nil];
+    UINavigationController *navigationController;
+    navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADQuerySQLNavigationController"];
+    navigationController.modalPresentationStyle = UIModalPresentationPopover;
+    MADViewControllerSQL *viewController;
+    viewController = (MADViewControllerSQL *)navigationController.topViewController;
+    viewController.document = self.document;
+    viewController.delegate = self;
+    UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
+    ppc.backgroundColor = [UIColor clearColor];
+    ppc.delegate = self;
+    ppc.barButtonItem = sender;
+    
+    self.showSQLPresentationController = ppc;
+    [self presentViewController:navigationController animated:YES completion:^{
+        //[self.tabBarController disableTabBarItems];
+    }];
+}
 
 - (IBAction)edit:(id)sender {
     self.tableView.editing = !self.tableView.isEditing;

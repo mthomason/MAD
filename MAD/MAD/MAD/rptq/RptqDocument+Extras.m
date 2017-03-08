@@ -311,7 +311,7 @@
                                                       query: self.defaultDatabase.defaultQuery];
             break;
         default:
-            NSAssert(NO, @"Unknown type");
+            NSAssert(NO, @"Unknown type: %lld at level %ld", type, level);
             return nil;
             break;
     }

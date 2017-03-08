@@ -8,9 +8,6 @@
 
 #import "MADNumberFormatter.h"
 
-static NSString * const TextDecimalSeparator = @".";
-static NSString * const TextGroupingSeparator = @",";
-
 @implementation MADNumberFormatter
 
 + (instancetype)newNumberFormatterTwoDecimalPlaces {
@@ -18,8 +15,8 @@ static NSString * const TextGroupingSeparator = @",";
 
     [numberFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
     [numberFormatter setMaximumFractionDigits: 2];
-    [numberFormatter setDecimalSeparator: TextDecimalSeparator];
-    [numberFormatter setGroupingSeparator: TextGroupingSeparator];
+    [numberFormatter setDecimalSeparator: @"."];
+    [numberFormatter setGroupingSeparator: @","];
     
     return numberFormatter;
 }

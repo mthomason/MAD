@@ -1257,7 +1257,9 @@ static const inline CGSize sizePopoverFonts() {
             
         }];
         
-        for (UICollectionView *section in self.sectionViewsDictionary.objectEnumerator) {
+        UICollectionView *section;
+        NSEnumerator *objectEnumerator = self.sectionViewsDictionary.objectEnumerator;
+        for (section in objectEnumerator) {
             section.contentScaleFactor = scale;
         }
         
@@ -1526,13 +1528,13 @@ static const inline CGSize sizePopoverFonts() {
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
     
     NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-
+    NSManagedObjectContext *context = notification.object;
     NSManagedObject *object;
     for (object in updatedObjects) {
         if ([object isKindOfClass:[RptqDocumentElement class]]) {
             MADDesignerElementView *elementView;
             elementView = [self elementViewForManagedObject:(RptqDocumentElement *)object];
-            [elementView updateForManagedObjectContent:object.managedObjectContext];
+            [elementView updateForManagedObjectContent:context];
         }
     }
     

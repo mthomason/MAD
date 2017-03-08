@@ -79,6 +79,18 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
     [super viewDidLoad];
     self.tableView.allowsSelection = YES;
     self.preferredContentSize = CGSizeMake(320.0000f, 260.0000f);
+    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
+        self.tableView.backgroundColor = [UIColor clearColor];
+        id blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        id blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        self.tableView.backgroundView = blurEffectView;
+        
+        UIPopoverPresentationController *popover;
+        if ((popover = [self.navigationController popoverPresentationController])) {
+            popover.backgroundColor = [UIColor clearColor];
+        }
+        self.tableView.separatorEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

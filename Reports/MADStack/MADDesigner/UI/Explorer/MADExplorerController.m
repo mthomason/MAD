@@ -137,10 +137,9 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         MADOperationObserver,
         MADSaveFileProtocol>
 
-    @property (nonatomic, readwrite, strong) MADExplorerDataSource *fileExplorerDataSource;
-    @property (nonatomic, readwrite, strong) MADFileExplorerViewDelegate *fileExplorerViewDelegate;
-
-    @property (nonatomic, readwrite, strong) MADOpenDocumentManager *activeDocumentManager;
+    @property (readwrite, nonatomic, strong) MADExplorerDataSource *fileExplorerDataSource;
+    @property (readwrite, nonatomic, strong) MADFileExplorerViewDelegate *fileExplorerViewDelegate;
+    @property (readwrite, nonatomic, strong) MADOpenDocumentManager *activeDocumentManager;
 
     // This is the collection view
     @property (nonatomic, weak)     IBOutlet MADExplorerView *fileExplorerView;
@@ -1018,20 +1017,6 @@ typedef NS_ENUM(short, MADExplorerState) {
     
 }
 
-#pragma mark -
-#pragma mark Add controls
-
-- (void)addProgressViewToView {
-    UIProgressView *progressView = self.progressViewFileManager;
-    progressView.progress = 0.0000f;
-    [self.view addSubview: progressView];
-    [self.view bringSubviewToFront: progressView];
-}
-
-- (void)removeProgressViewFromView {
-    [self.progressViewFileManager removeFromSuperview];
-}
-
 #pragma mark - 
 #pragma mark Property Overrides (Lazy loading)
 
@@ -1080,8 +1065,24 @@ typedef NS_ENUM(short, MADExplorerState) {
     }
 }
 
-- (void)openDocumentAtURL:(NSURL *)url {
+#pragma mark -
+#pragma mark MADExplorerControllerProtocol
 
+- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType {
+    if ([documentType isEqualToString:MADUtiType]) {
+        return MADMimeType;
+    } else {
+        NSAssert(NO, @"Unknown type at %s", __PRETTY_FUNCTION__);
+        return MADMimeType;
+    }
+}
+
+- (NSArray *)supportedUTIs {
+    NSArray *UTIs = [[NSArray alloc] initWithObjects: MADUtiType, nil];
+    return UTIs;
+}
+
+- (void)openDocumentAtURL:(NSURL *)url {
 
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
@@ -1152,47 +1153,6 @@ typedef NS_ENUM(short, MADExplorerState) {
     [self dismissAllPopovers];
 }
 
-- (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = segue.destinationViewController;
-        id tvc = navControl.topViewController;
-        [tvc setDelegate: self];
-    }
-    [(segue.destinationViewController) setDelegate: self];
-    
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = segue.destinationViewController;
-        if (navControl.topViewController) {
-            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                self.licensingPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
-            }
-        }
-    }
-}
-
-
-- (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
-    MADViewerController *viewControllerReportViewer;
-    viewControllerReportViewer = (MADViewerController *)((UINavigationController *)segue.destinationViewController).topViewController;
-    viewControllerReportViewer.viewControllerDelegate = self;
-}
-
-- (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] ||
-        [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
-        
-        MADTabBarController *tabBarController = (MADTabBarController *)segue.destinationViewController;
-        tabBarController.view.tintColor = [MADColorEverydayApps newColorRed];
-        self.tabController = tabBarController;
-        
-    } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
-        MADQueryViewController *queryBuilderViewController;
-        queryBuilderViewController = (MADQueryViewController *)[(segue.destinationViewController) topViewController];
-        [queryBuilderViewController reloadMainDocumentAnimated:YES];
-    }
-}
-
 - (BOOL)dismissAllPopovers {
     
     BOOL result = NO;
@@ -1248,9 +1208,6 @@ typedef NS_ENUM(short, MADExplorerState) {
                 
             }
             
-            self.tabController = nil;
-            //NSArray *viewControllers = [[NSArray alloc] init];
-            //[tabController setViewControllers:viewControllers animated:YES];
             [self.navigationController popViewControllerAnimated:YES];
             
             id handlerClose;
@@ -1350,27 +1307,10 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     MADTabBarController *tabBarController;
     tabBarController = [MADTabBarController newTabBarController:document prompt:title];
-    
     tabBarController.document = document;
     tabBarController.viewControllerDelegate = self;
-    self.tabController = tabBarController;
     
     [self.navigationController pushViewController:tabBarController animated:YES];
-
-}
-
-- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType {
-    if ([documentType isEqualToString:MADUtiType]) {
-        return MADMimeType;
-    } else {
-        NSAssert(NO, @"Unknown type at %s", __PRETTY_FUNCTION__);
-        return MADMimeType;
-    }
-}
-
-- (NSArray *)supportedUTIs {
-    NSArray *UTIs = [[NSArray alloc] initWithObjects: MADUtiType, nil];
-    return UTIs;
 }
 
 #pragma mark -
@@ -1438,6 +1378,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     infoViewController.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
     
     NSArray *passthoughViews = [self defaultPassthroughViews];
+    
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
     ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
     ppc.backgroundColor = [UIColor clearColor];
@@ -1446,7 +1387,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     self.infoPopoverPresentationController = ppc;
     
-    [self showViewController:infoViewController sender:self];
+    [self presentViewController:infoViewController animated:YES completion:nil];
 }
 
 - (IBAction)actionAbout:(id)sender {
@@ -1718,16 +1659,20 @@ typedef NS_ENUM(short, MADExplorerState) {
         [[NSMutableArray alloc] initWithCapacity: self.fileExplorerDataSource.count];
 
     NSArray<NSIndexPath *> *indexPaths = self.collectionView.indexPathsForSelectedItems;
-    for (NSIndexPath *indexPath in indexPaths) {
-        NSURL *fileUrl = [self copyMetaDataUrlForIndexPath:indexPath];
-        [wrappedUrls addObject:fileUrl];
+    MADMetaData *metadata;
+    NSURL *fileURL;
+    NSIndexPath *indexPath;
+    for (indexPath in indexPaths) {
+        metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
+        fileURL = metadata.URL.copy;
+        [wrappedUrls addObject:fileURL];
     }
     
     NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+    UICollectionViewCell *documentCell;
     for (NSInteger i=0; i<numberOfItemsInSection; i++) {
-        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
-        MADCollectionViewCellDocument *documentCell;
-        documentCell = (MADCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
+        indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+        documentCell = [self.collectionView cellForItemAtIndexPath:indexPath];
         documentCell.selected = NO;
     }
     
@@ -1748,14 +1693,14 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                           NSArray *returnedItems, NSError *activityError) {
     
         for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
-            MADCollectionViewCellDocument * __weak documentCell = (MADCollectionViewCellDocument *)cell;
-            documentCell.selected = NO;
+            cell.selected = NO;
         }
         
     };
     
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        if (self.popoverControllerActivity == nil || self.popoverControllerActivity.isPopoverVisible == NO) {
+        if (self.popoverControllerActivity == nil ||
+            self.popoverControllerActivity.isPopoverVisible == NO) {
 
             UIPopoverController *popoverController;
             popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
@@ -1964,12 +1909,24 @@ typedef NS_ENUM(short, MADExplorerState) {
                         (UIPresentationController *)controller {
 
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
-    if ([controller isEqual:self.aboutPopoverPresentationController] ||
-        [controller isEqual:self.infoPopoverPresentationController] ||
-        [controller isEqual:self.documentInformationPopoverPresentationController]) {
-        style = UIModalPresentationNone;
-        
-    }
+    
+        if ([controller isEqual:self.documentInformationPopoverPresentationController]) {
+            
+            if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                style = UIModalPresentationNone;
+            } else {
+                style = UIModalPresentationFullScreen;
+            }
+        } else if ([controller isEqual:self.infoPopoverPresentationController]) {
+            if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                style = UIModalPresentationNone;
+            } else {
+                style = UIModalPresentationOverFullScreen;
+            }
+        } else if ([controller isEqual:self.aboutPopoverPresentationController]) {
+
+            style = UIModalPresentationNone;
+        }
     
     return style;
 }

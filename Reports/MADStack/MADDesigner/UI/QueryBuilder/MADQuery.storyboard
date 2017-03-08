@@ -76,7 +76,7 @@
         <!--Navigation Controller-->
         <scene sceneID="0jz-2x-7ar">
             <objects>
-                <navigationController definesPresentationContext="YES" id="KDn-h6-IuZ" customClass="MADNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MADQuerySQLNavigationController" definesPresentationContext="YES" id="KDn-h6-IuZ" customClass="MADNavigationController" sceneMemberID="viewController">
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="4RG-0Y-I8h">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -166,7 +166,7 @@
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableViewCell>
                             <tableViewCell contentMode="center" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MADTableViewCellInstruction" textLabel="SKb-hJ-vsU" detailTextLabel="fcc-0q-9Z5" style="IBUITableViewCellStyleValue1" id="99H-Yo-uAO" customClass="MADTableViewCellQueryInstructions">
-                                <rect key="frame" x="0.0" y="187.5" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="188" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="99H-Yo-uAO" id="eOi-Kv-DuB">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
@@ -197,7 +197,7 @@
                                 <rect key="frame" x="0.0" y="231.5" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SLk-pV-TRZ" id="pBZ-J2-OIK">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="TUR-Ga-Jb6">
@@ -255,7 +255,7 @@
                                 <rect key="frame" x="0.0" y="363.5" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="08Y-DM-JEd" id="y98-ZV-6u3">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8CQ-lG-1ze">
@@ -280,9 +280,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="wIa-F7-faY"/>
                         <barButtonItem title="SQL" style="plain" id="jdL-dh-Ii3">
                             <connections>
-                                <segue destination="KDn-h6-IuZ" kind="popover" identifier="MADSegueShowSql" popoverAnchorBarButtonItem="jdL-dh-Ii3" id="0vV-Us-cjg">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
+                                <action selector="displaySQL:" destination="joU-Nk-1nv" id="gp0-bh-pAG"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
