@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTConnectionViewController.h"
+#import "MADConnectionViewController.h"
 #import "MADViewControllerStandardProtocol.h"
 
 #import <UIKit/UIAccessibility.h>
