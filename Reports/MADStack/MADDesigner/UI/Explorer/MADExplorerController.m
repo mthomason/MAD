@@ -96,9 +96,7 @@ const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
 static NSString * const MADIdentifierFileLondon                 = @"London";
 static NSString * const MADIdentifierFileMusic                  = @"Music";
 
-NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
-NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUpgradeInstalledSamplesLondon               = @"MADUpgradeInstalledSamplesLondon";
 NSString * const MADUpgradeInstalledSamplesMusic                = @"MADUpgradeInstalledSamplesMusic";
@@ -185,7 +183,17 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 
 @end
 
+typedef NS_ENUM(short, MADExplorerState) {
+    MADExplorerStateReady,
+    MADExplorerStateBusy,
+    MADExplorerStateEditingNoSelections,
+    MADExplorerStateEditingOneSelection,
+    MADExplorerStateEditingMoreThanOneSelection,
+};
+
 @implementation MADExplorerController {
+    
+    MADExplorerState _state;
     
     BOOL _cloudActivityRunning;
     BOOL _cloudActivityRunningDisplay;
@@ -197,6 +205,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     BOOL _activityIndicatorRightVisible;
     BOOL _updatingEnabled;
     BOOL _getUserCloudPrefsFirstCall;
+
 }
 
 #pragma mark -
@@ -391,7 +400,9 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     [super viewDidLoad];
 
 #pragma mark Initialize install operations
-
+    
+    _state = MADExplorerStateReady;
+    
         MADOperationQueue *operationQueueBackground;
         NSOperation *getUserCloudPreferences;
         MADOperation *operation;
@@ -1072,18 +1083,17 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 - (void)openDocumentAtURL:(NSURL *)url {
 
 
-        MADocument *document = [[MADocument alloc] initWithFileURL:url];
-        document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
-        document.documentDelegate = self;
-        SEL documentStateChanged = @selector(handleDocumentStateChangedNotification:);
-        [[NSNotificationCenter defaultCenter] addObserver: self
-                                                 selector: documentStateChanged
-                                                     name: UIDocumentStateChangedNotification
-                                                   object: document];
-        
-        self.activeDocumentManager.openDocument = document;
-        
-
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+    document.documentDelegate = self;
+    SEL documentStateChanged = @selector(handleDocumentStateChangedNotification:);
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: documentStateChanged
+                                                 name: UIDocumentStateChangedNotification
+                                               object: document];
+    
+    self.activeDocumentManager.openDocument = document;
+    
     [document openWithCompletionHandler:^(BOOL success) {
         if (!success) {
             //NSLog(@"Failed to open file");
@@ -1133,20 +1143,13 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
             _shouldShowAddDocumentPopover = NO;
             self.barButtonItemAddNewDocument.enabled = NO;
         }
-    } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
-        shouldPerformSegueWithIdentifier = !self.isEditing;
     }
     return shouldPerformSegueWithIdentifier;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
-
     [self dismissAllPopovers];
-    
-    if ([segue.identifier isEqualToString:MTSegueLicensing]) {
-        [self prepareForSegueLicensing:segue];
-    }
 }
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
@@ -1217,18 +1220,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
-
-#pragma mark -
-#pragma mark UIPopoverControllerDelegate
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return [self.openDocumentPopoverController isEqual:popoverController] == NO;
-}
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    _shouldShowAddDocumentPopover = YES;
-    [self.barButtonItemAddNewDocument setEnabled:YES];
-}
 
 #pragma mark - 
 #pragma mark MADViewControllerStandardProtocol

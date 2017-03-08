@@ -32,15 +32,6 @@
 #define FALSE 0
 #define TRUE  1
 
-extern NSString * const MTCollectionElementKindSectionLabel;
-
-extern NSString * const MNSStringInterfaceButtonTitleContinue;
-extern NSString * const MNSStringInterfaceButtonTitleContinueDesc;
-extern NSString * const MNSStringInterfaceButtonTitleTryAgain;
-extern NSString * const MNSStringInterfaceButtonTitleTryAgainDesc;
-extern NSString * const MNSStringInterfaceButtonTitleAbort;
-extern NSString * const MNSStringInterfaceButtonTitleAbortDesc;
-
 extern const CGFloat MNSAnimationDurationShowFromBottom;
 extern const CGFloat MNSAnimationDurationShowFromSide;
 extern const CGFloat MNSAnimationDurationSlow;
@@ -49,8 +40,6 @@ extern const CGFloat MNSAnimationDurationNormal;
 extern const CGFloat MNSAnimationDurationNone;
 
 extern const CGFloat MNSTableViewCellQueryInputHeightDefault;
-extern const CGFloat MNSTableViewCellInstructionHeightDefault;
-extern const CGFloat MNSTableViewCellOverrideHeightDefault;
 extern const CGFloat MNSTableViewCellQueryLinkHeightDefault;
 
 extern const CGFloat MNSDocumentHeight;

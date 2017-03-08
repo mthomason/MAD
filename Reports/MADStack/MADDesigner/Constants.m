@@ -34,18 +34,7 @@ NSString * const MTDocumentExtentionMobleApplicationDocumentData    = @"madd";
 
 NSString * const TEMPLATE_PATH_EXTENSION                            = @"madt";
 
-NSString * const MTCollectionElementKindSectionLabel                = @"MTCollectionElementKindSectionLabel";
-
 #pragma mark Common UI Strings
-
-NSString * const MNSStringInterfaceButtonTitleContinue              = @"Continue";
-NSString * const MNSStringInterfaceButtonTitleContinueDesc          = @"Continue Button Title";
-
-NSString * const MNSStringInterfaceButtonTitleTryAgain              = @"Try Again";
-NSString * const MNSStringInterfaceButtonTitleTryAgainDesc          = @"Try Again Button Title";
-
-NSString * const MNSStringInterfaceButtonTitleAbort                 = @"Abort Application";
-NSString * const MNSStringInterfaceButtonTitleAbortDesc             = @"Abort Button Title";
 
 // MARK: Storyboard Identifiers
 
@@ -72,8 +61,6 @@ NSString * const NSDATABASE_SF_OAUTH_KEY                            = @"3MVG9QDx
 NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL                  = @"eda://reports.everydayapps.com/";
 
 const CGFloat MNSTableViewCellQueryInputHeightDefault = 100.0000f;
-const CGFloat MNSTableViewCellInstructionHeightDefault = 100.0000f;
-const CGFloat MNSTableViewCellOverrideHeightDefault = 44.0000f;
 const CGFloat MNSTableViewCellQueryLinkHeightDefault = 50.0000f;
 
 // MARK: Segue Identifiers
