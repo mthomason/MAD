@@ -88,8 +88,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
     @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
 
-    @property (nonatomic, assign) BOOL viewDidLayoutSubviews;
-
 @end
 
 @implementation MADConnectionViewController
@@ -206,7 +204,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self removeObserverFromObjectForProgress:operation];
         [self.delegate viewControllerDidFinish: self];
-        self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt, MADConnectionViewControllerDefaultPrompt);
+        self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
+                                                       MADConnectionViewControllerDefaultPrompt);
         [self enableTextFields];
     }];
 }
@@ -219,8 +218,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
-    UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIViewController *viewControllerFrom, *viewControllerTo;
+    viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     transitionContext.containerView.backgroundColor = [UIColor clearColor];
     [transitionContext.containerView setOpaque:NO];
     viewControllerTo.view.bounds = viewControllerFrom.view.bounds;
@@ -289,8 +289,10 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 + (UIProgressView *)progressViewWithWidth:(CGFloat)width {
-    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, width, progressView.frame.size.height);
+    UIProgressView *progressView;
+    progressView = [[UIProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleDefault];
+    progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y,
+                                    width, progressView.frame.size.height);
     progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
     progressView.trackTintColor = [UIColor grayColor];
@@ -301,8 +303,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     // Operation: Get credentials.
     // ---------------------------------------------------
-    MADGetCredentialsOperation *getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
-                                                                                                          viewController: self];
+    MADGetCredentialsOperation *getCredentialsOperation;
+    getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+                                                                              viewController: self];
     [getCredentialsOperation addObserver:self];
     
     [self.credentialQueue addOperation: getCredentialsOperation];
@@ -343,10 +346,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     databaseConnection= [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType host: self.textFieldHost.text
                                                                     database: self.textFieldDatabase.text port: self.textFieldPort.text.integerValue];
     
-    MADOperationCreateDocument *createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
-                                                                                   documentsDirectory: saveFileDelegate.documentDirectory
-                                                                                   databaseConnection: databaseConnection
-                                                                                       viewController: self];
+    MADOperationCreateDocument *createDocument;
+    createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
+                                                       documentsDirectory: saveFileDelegate.documentDirectory
+                                                       databaseConnection: databaseConnection
+                                                           viewController: self];
     [createDocument addObserver:self];
     [self addObserverToObjectForProgress:createDocument];
     [self.credentialQueue addOperation:createDocument];
@@ -376,7 +380,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 + (void)viewController:(id)viewController
-         displayErrors:(NSArray <__kindof NSError *> *)errors completion:(void (^)(BOOL))completion {
+         displayErrors:(NSArray <__kindof NSError *> *)errors
+            completion:(void (^)(BOOL))completion {
 
     MADBlockAlertDidFinish handleAlertDidFinish;
     UIAlertController *alert;

@@ -12,6 +12,10 @@
 
 #import "MADQueryVisualizationViewController.h"
 
+#import <Foundation/NSSet.h>
+
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <UIKit/UIWindow.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UITableView.h>
@@ -24,14 +28,10 @@
 
 #import <QuartzCore/CALayer.h>
 
-#import <Foundation/NSSet.h>
-
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
-
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADURL.h>
 
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
@@ -42,29 +42,14 @@
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADFoundation/MADURL.h>
-
-#import <MAD/MADConstants.h>
-
 #import <MAD/MADocument.h>
 
 #import <MAD/RptqDocument.h>
-#import <MAD/RptqDocument+Extras.h>
-
 #import <MAD/RptqDatabase.h>
-#import <MAD/RptqDatabase+Extras.h>
-
 #import <MAD/RptqQuery.h>
-#import <MAD/RptqQuery+Extras.h>
-
 #import <MAD/RptqQueryLinks.h>
-#import <MAD/RptqQueryLinks+Extras.h>
-
 #import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
-
 #import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryTable+Extras.h>
 
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDocument.h>
@@ -76,7 +61,6 @@
 
 #import "MADViewControllerStandardProtocol.h"
 
-#import "MADViewControllerSQL.h"
 #import "MADConnectorView.h"
 
 #import "MADQueryVisualizationSchemaViewController.h"
@@ -175,6 +159,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark NSObject
 
 - (void)dealloc {
+    [self.controllersByObjectID removeAllObjects];
+    [self.connectionViewsByObjectID removeAllObjects];
+    [self.rootTables removeAllObjects];
+    [self.constraints removeAllObjects];
+    
     MADModelQuery *firstQuery = _document.documentModel.firstQuery;
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationQueryLinkDelete
@@ -195,18 +184,18 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         
         MADMutableMapHierarchicalChildControllers *controllersByObjectID;
         controllersByObjectID = [[NSMutableDictionary alloc] init];
-        _controllersByObjectID = controllersByObjectID;
+        self.controllersByObjectID = controllersByObjectID;
         
         NSMutableDictionary <NSNumber *, MADConnectorView *> *connectionViewsByObjectID;
         connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
-        _connectionViewsByObjectID = connectionViewsByObjectID;
+        self.connectionViewsByObjectID = connectionViewsByObjectID;
         
         NSMutableSet <NSNumber *> *rootTables = [[NSMutableSet alloc] init];
-        _rootTables = rootTables;
+        self.rootTables = rootTables;
         
         NSMutableDictionary <NSNumber *, NSDictionary <NSString *, NSLayoutConstraint *> *> *constraints;
         constraints = [[NSMutableDictionary alloc] init];
-        _constraints = constraints;
+        self.constraints = constraints;
         
     }
     return self;
@@ -673,7 +662,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 + (NSString *)cacheFileNameForDocument:(MADocument *)document {
-    return [MADHierarchicalDisplayModel cacheFileNameForFileName:document.fileURL.lastPathComponent.stringByDeletingPathExtension];
+    NSString *filename = document.fileURL.lastPathComponent.stringByDeletingPathExtension;
+    return [MADHierarchicalDisplayModel cacheFileNameForFileName:filename];
 }
 
 #pragma mark -
@@ -689,7 +679,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     UIWindow *window = [UIApplication sharedApplication].windows[0];
     NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-    constraints = [_constraints objectForKey: @(tableID)];
+    constraints = [self.constraints objectForKey: @(tableID)];
     CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
                                         toView: self.scrollView.contentView];
     constraints[keyCenterX].constant = pointInView.x;
@@ -966,7 +956,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                    width, keyWidth, height, keyHeight, nil];
     
     NSNumber *identifier = @(viewController.identifier);
-    [_constraints setObject:constraints forKey:identifier];
+    [self.constraints setObject:constraints forKey:identifier];
     viewController.root = root;
 
     self.controllersByObjectID[identifier] = viewController;;
