@@ -109,7 +109,6 @@ NSString * const MNSIdentifierSegueShowAddLinkViewController        = @"showAddL
 NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
 NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
-NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 
 static NSString * const NSFetchedResultsCacheName                   = @"NSFetchedResultsCacheName";
 static NSString * const NSFetchedResultsCacheTables                 = @"NSFetchedResultsCacheTables";
@@ -1037,12 +1036,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 
 - (IBAction)done:(id)sender {
     [((MADNavigationController *)self.navigationController) done:sender];
-}
-
-- (void)addConnection:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers
-                              sender: sender];
-    [self.tabBarController disableTabBarItems];
 }
 
 - (void)addTable:(id)sender {
