@@ -1100,9 +1100,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     void(^repositionRect)(CGRect *, CGRect *, CGFloat) = ^void(CGRect *rectParent, CGRect *rectChild, CGFloat rectParentBottomY) {
         if ((*rectParent).origin.y + (*rectParent).size.height > rectParentBottomY) {
-            (*rectParent) = CGRectMake((*rectParent).origin.x, rectParentBottomY - (*rectParent).size.height, (*rectParent).size.width, (*rectParent).size.height);
+            (*rectParent) = CGRectMake((*rectParent).origin.x, rectParentBottomY - (*rectParent).size.height,
+                                       (*rectParent).size.width, (*rectParent).size.height);
         } else if ((*rectParent).origin.y < (*rectChild).origin.y) {
-            (*rectParent) = CGRectMake((*rectParent).origin.x, (*rectChild).origin.y, (*rectParent).size.width, (*rectParent).size.height);
+            (*rectParent) = CGRectMake((*rectParent).origin.x, (*rectChild).origin.y,
+                                       (*rectParent).size.width, (*rectParent).size.height);
         }
     };
     

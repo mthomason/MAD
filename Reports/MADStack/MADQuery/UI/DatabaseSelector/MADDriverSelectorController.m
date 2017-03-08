@@ -25,7 +25,7 @@
 #import "MADViewControllerStandardProtocol.h"
 
 #import "MADVibrantTableView.h"
-#import "MTConnectionViewController.h"
+#import "MADConnectionViewController.h"
 #import "MADLabelTitle.h"
 
 NSString * const MADDriverSelectorControllerDefaultPrompt    = @"Select database type.";

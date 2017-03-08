@@ -179,7 +179,7 @@
 		4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA571BAF99F000456DC8 /* MTSettingsViewController.m */; };
 		4C26BA6A1BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard */; };
 		4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */; };
-		4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */; };
+		4C26BA731BAF9A8B00456DC8 /* MADConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */; };
 		4C26BA801BAF9AA700456DC8 /* MADDriverSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */; };
 		4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA871BAF9B3000456DC8 /* objcmad.c */; };
 		4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
@@ -1481,8 +1481,8 @@
 		4C26BA691BAF9A2B00456DC8 /* MADToolboxControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxControllerProtocol.h; sourceTree = "<group>"; };
 		4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerDynamicItem.h; sourceTree = "<group>"; };
 		4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
-		4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectionViewController.h; sourceTree = "<group>"; };
-		4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectionViewController.m; sourceTree = "<group>"; };
+		4C26BA711BAF9A8B00456DC8 /* MADConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectionViewController.h; sourceTree = "<group>"; };
+		4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConnectionViewController.m; sourceTree = "<group>"; };
 		4C26BA781BAF9AA700456DC8 /* MADDriverSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDriverSelectorController.h; sourceTree = "<group>"; };
 		4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDriverSelectorController.m; sourceTree = "<group>"; };
 		4C26BA841BAF9B3000456DC8 /* MADObjectIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADObjectIdentifier.h; sourceTree = "<group>"; };
@@ -2937,8 +2937,8 @@
 		4C26BA111BAF150F00456DC8 /* Visualization */ = {
 			isa = PBXGroup;
 			children = (
-				4C26BA711BAF9A8B00456DC8 /* MTConnectionViewController.h */,
-				4C26BA721BAF9A8B00456DC8 /* MTConnectionViewController.m */,
+				4C26BA711BAF9A8B00456DC8 /* MADConnectionViewController.h */,
+				4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */,
 				4C26BA1A1BAF150F00456DC8 /* MADQueryVisualizationViewController.h */,
 				4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */,
 				4C26BA121BAF150F00456DC8 /* MADHierarchicalDisplayModel.h */,
@@ -6197,7 +6197,7 @@
 				4C59BDA71C9A87A20031BC6C /* MADOperationQueue.m in Sources */,
 				4C59BDB31C9A8D1A0031BC6C /* NSOperation+Advanced.m in Sources */,
 				4CA0C6B01CA3A48900222B8D /* MADDefer.m in Sources */,
-				4C26BA731BAF9A8B00456DC8 /* MTConnectionViewController.m in Sources */,
+				4C26BA731BAF9A8B00456DC8 /* MADConnectionViewController.m in Sources */,
 				4C59BDBA1C9AA1A60031BC6C /* MADOperationConditionHasResultStringResult.m in Sources */,
 				4CA0C6D01CA68F1400222B8D /* MADOperationCreateDocumentImportSchema.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
