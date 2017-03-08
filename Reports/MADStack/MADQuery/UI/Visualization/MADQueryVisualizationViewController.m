@@ -33,10 +33,6 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURL.h>
 
-#import <MADDataStructures/MTPair.h>
-#import <MADDataStructures/MTVertex.h>
-#import <MADDataStructures/MTLinkedList.h>
-
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/UIScreen+Properties.h>
 
@@ -70,11 +66,6 @@
 #import "NSLayoutConstraint+QueryVisualization.h"
 #import "MADHierarchicalChildViewDefination.h"
 
-#import "MADQueryVisualizationDefination.h"
-#import "MADHierarchicalDisplayModel.h"
-
-#import "MADOperationArchiveData.h"
-
 #import "MADGestureRecognizerAnchorPoint.h"
 
 #import "MADQueryVisualizationSchemaPresentationController.h"
@@ -85,9 +76,18 @@
 
 #import "MADOperationQueue.h"
 
-#import "MADCacheManager.h"
 #import "MADQueryVisualizationSchemaView.h"
 #import "MADQueryVisualizationSchemaDelegate.h"
+
+#import "MADQueryVisualizationCacheManager.h"
+
+#import "MADQueryVisualizationDefination.h"
+#import "MADHierarchicalDisplayModel.h"
+#import "MADOperationArchiveData.h"
+
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTLinkedList.h>
 
 typedef void(^MTBlockResultVoid)(void);
 
@@ -97,7 +97,6 @@ typedef NSMutableDictionary <NSNumber *,
 
 @interface MADQueryVisualizationViewController ()
     <UIGestureRecognizerDelegate,
-        UIScrollViewDelegate,
         UIPopoverControllerDelegate,
         MADQueryVisualizationSchemaPresentationDelegate,
         MADQueryVisualizationSchemaDelegate,
@@ -109,8 +108,7 @@ typedef NSMutableDictionary <NSNumber *,
     @property (nonatomic, strong) NSMutableSet <NSNumber *> *rootTables;
 
     @property (nonatomic, weak) IBOutlet UIView *backgroundContainer;
-
-    @property (nonatomic, strong) MADHierarchicalDisplayModel *cacheData;
+    @property (nonatomic, strong) MADQueryVisualizationCacheManager *cacheManager;
     @property (nonatomic, strong) MADQueryVisualizationScrollView *scrollView;
 
     @property (nonatomic, copy) NSURL *localCacheFileURL;
@@ -254,7 +252,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark MADQueryVisualizationSchemaPresentationDelegate
 
 - (CGRect)frameOfItemWithObjectID:(int64_t)objectID {
-    MADHierarchicalChildViewDefination *tableDefination = [self.cacheData tableDefinationForObjectID:objectID];
+    MADHierarchicalChildViewDefination *tableDefination;
+    tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:objectID];
     CGRect result = CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2,
                                tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
                                MADSchemaViewDefaultWidth,
@@ -284,10 +283,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     MADQueryVisualizationScrollView *scrollView;
     scrollView = [[MADQueryVisualizationScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
-    scrollView.delegate = self;
-    scrollView.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
-    scrollView.opaque = NO;
-    scrollView.autoresizesSubviews = NO;
     [self.backgroundContainer addSubview:scrollView];
     
     NSDictionary <NSString *, __kindof UIView *> *viewDictionary;
@@ -432,13 +427,13 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         if ([childContoller isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
 
             MADHierarchicalChildViewDefination *tableDefination;
-            tableDefination = [self.cacheData tableDefinationForObjectID:((MADHierarchicalChildController *)childContoller).identifier];
+            tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:((MADHierarchicalChildController *)childContoller).identifier];
             if (tableDefination == nil) {
                 tableDefination = [MADHierarchicalChildViewDefination newTableDefination];
                 
                 tableDefination.center = CGCenterRect(self.scrollView.bounds);
 
-                [self.cacheData addTableDefination: tableDefination
+                [self.cacheManager.cacheData addTableDefination: tableDefination
                                        forObjectID: ((MADHierarchicalChildController *)childContoller).identifier];
             }
             
@@ -556,91 +551,25 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Cache Operations
 
 - (void)updateCache {
-    MADocument *doc = self.document;
-    if (doc != nil) {
-        
-        MADQueryVisualizationDefination *queryDef;
-        MTLinkedList *topologicallySortedTables;
-        MADHierarchicalDisplayModel *cacheData;
-        
-        NSNumber *tableID;
-        MADHierarchicalChildController *schemaController;
-        MADHierarchicalChildViewDefination *tableModel;
-        NSArray <NSNumber *> *startingPoints;
-
-        MTVertex *tableIDVertext;
-        
-        queryDef= [[MADQueryVisualizationDefination alloc] initWithQuery:doc.documentModel.firstQuery];
-        topologicallySortedTables = queryDef.topologicallySortedTables;
-
-        cacheData = [[MADHierarchicalDisplayModel alloc] initWithNumberOfTables:[topologicallySortedTables count]];
-        cacheData.scrollViewContentOffset = self.scrollView.contentOffset;
-        cacheData.scrollViewZoomScale = self.scrollView.zoomScale;
-        
-        for (MTPair *pair in queryDef.topologicallySortedTables) {
-
-            tableIDVertext = (MTVertex *)pair.former;
-            if (tableIDVertext.object != nil) {
-                
-                tableID = (NSNumber *)tableIDVertext.object;
-                schemaController = self.controllersByObjectID[tableID];
-                
-                tableModel = [[MADHierarchicalChildViewDefination alloc] init];
-                tableModel.center = schemaController.view.center;
-                
-                startingPoints = queryDef.startingPoints;
-                tableModel.root = [startingPoints containsObject: tableID];
-                [cacheData addTableDefination:tableModel forObjectID: tableID.longLongValue];
-            }
-        }
-        self.cacheData = cacheData;
+    if (self.cacheManager == nil) {
+        MADQueryVisualizationCacheManager *cacheManager;
+        cacheManager = [[MADQueryVisualizationCacheManager alloc] initWithURL:self.localCacheFileURL];
+        self.cacheManager = cacheManager;
     }
+    MADocument *doc = self.document;
+    [self.cacheManager updateCacheWithQuery:doc.documentModel.firstQuery
+                              contentOffset:self.scrollView.contentOffset
+                                  zoomScale:self.scrollView.zoomScale
+                                     center:^CGPoint(NSNumber *tableID) {
+                                         MADHierarchicalChildController *schemaController;
+                                         schemaController = self.controllersByObjectID[tableID];
+                                  return schemaController.view.center;
+                              }];
 }
 
 - (void)archiveCache {
     [self updateCache];
-    MADOperationArchiveData *operation;
-    operation = [[MADOperationArchiveData alloc] initWithURL: self.localCacheFileURL
-                                                   andObject: self.cacheData];
-    [[MADCacheManager sharedManager] addOperation:operation];
-}
-
-- (MADHierarchicalDisplayModel *)loadCache {
-    
-    MADHierarchicalDisplayModel *result;
-    NSError * _Nullable __autoreleasing * _Nullable error = nil;
-    NSData *data;
-    data = [[NSData alloc] initWithContentsOfURL: self.localCacheFileURL
-                                         options: NSDataReadingUncached error:error];
-    if (error != nil) {
-    
-        [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileURL error:error];
-        result = nil;
-
-    } else {
-        
-        id resultFromTryBlock = nil;
-        @try {
-        
-            resultFromTryBlock = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        
-        } @catch (NSException *exception) {
-
-            NSError *cleanup = nil;
-            [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileURL error:&cleanup];
-        
-        } @finally {
-            
-            if ([resultFromTryBlock isKindOfClass:[MADHierarchicalDisplayModel class]]) {
-                result = resultFromTryBlock;
-            } else {
-                [[NSFileManager defaultManager] removeItemAtURL:self.localCacheFileURL error:error];
-                result = nil;
-            }
-            
-        }
-    }
-    return result;
+    [self.cacheManager archiveCache];
 }
 
 - (NSString *)cacheFileName {
@@ -689,11 +618,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                   animated: NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         
-        if (!_cacheData) {
+        if (!self.cacheManager.cacheData) {
             [self updateCache];
         } else {
             MADHierarchicalChildViewDefination *tableDefination;
-            tableDefination = [_cacheData tableDefinationForObjectID:tableID];
+            tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:tableID];
             tableDefination.center = pointInView;
         }
     }
@@ -735,7 +664,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     path = self.localCacheFileURL.filePathURL.path;
     if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        cacheData = [self loadCache];
+        cacheData = [self.cacheManager loadCache];
     }
     
     if (cacheData) {
@@ -889,7 +818,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
             @autoreleasepool {
                 objectID = orphanedTableIDs.copy;
                 MADHierarchicalChildViewDefination *tableDefination;
-                tableDefination = [self.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
+                tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
                 tableDefination.root = YES;
                 [self.rootTables addObject: objectID];
                 objectID = nil;
@@ -1188,42 +1117,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                     rightCellAnchorPoint,
                                     extraInset, 10.0000f);
     [connectorView setNeedsDisplay];
-}
-
-#pragma mark -
-#pragma mark UIScrollViewDelegate
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    //[self updateCache];
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
-
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view
-                        atScale:(CGFloat)scale { }
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
-
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView { }
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
-
-- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView { return NO; }
-
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView { }
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView { }
-
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view { }
-
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
-                     withVelocity:(CGPoint)velocity
-              targetContentOffset:(inout CGPoint *)targetContentOffset { }
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.scrollView.contentView;
 }
 
 @end

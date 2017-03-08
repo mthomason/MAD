@@ -49,12 +49,12 @@
         
         NSError * __autoreleasing *error = NULL;
         BOOL isDirectedAcyclicGraph, topLevel;
-        MTLinkedList *tableIds;
+        MTLinkedList *tableIDs;
 
-        tableIds = [graph topologicalSortWithError: error
+        tableIDs = [graph topologicalSortWithError: error
                             isDirectedAcyclicGraph: &isDirectedAcyclicGraph];
         
-        self.topologicallySortedTables = tableIds;
+        self.topologicallySortedTables = tableIDs;
         
         NSMutableArray <NSNumber *> *startingPoints = [[NSMutableArray alloc] init];
         MTVertex *tableIdVertext;
@@ -62,7 +62,7 @@
 
         NSNumber *tableID;
         MADModelQueryLink *link;
-        for (MTPair *tableObjectIdContainer in tableIds) {
+        for (MTPair *tableObjectIdContainer in tableIDs) {
             tableIdVertext = tableObjectIdContainer.former;
             
             if (tableIdVertext.object != nil) {

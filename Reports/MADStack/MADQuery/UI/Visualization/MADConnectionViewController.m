@@ -422,7 +422,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 + (void)showLocalNotificationCreatedReportWithName:(NSString *)name {
     UILocalNotification *notification = [[UILocalNotification alloc] init];
-    NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'", @"Created report '%@.'");
+    NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'",
+                                                @"Created report '%@.'");
     NSString *body = [NSString stringWithFormat:reportIsReady, name];
     notification.alertBody = body;
     [[UIApplication sharedApplication] presentLocalNotificationNow: notification];

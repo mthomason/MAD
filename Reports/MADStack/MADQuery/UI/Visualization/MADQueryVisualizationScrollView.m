@@ -14,6 +14,7 @@ static const CGFloat contentViewWidth = 1024.0000f;
 static const CGFloat contentViewHeight = 1024.0000f;
 
 @interface MADQueryVisualizationScrollView ()
+    <UIScrollViewDelegate>
 
     @property (nonatomic, strong, readwrite) MADQueryVisualizationContentView *contentView;
 
@@ -49,9 +50,10 @@ static const CGFloat contentViewHeight = 1024.0000f;
     self.bouncesZoom = NO;
     self.delaysContentTouches = YES;
     self.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.backgroundColor = [UIColor blueColor];
-    self.alpha = 0.3000f;
+    self.autoresizesSubviews = NO;
+    self.delegate = self;
+    self.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
+    self.opaque = NO;
     
     self.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);
 
@@ -87,6 +89,42 @@ static const CGFloat contentViewHeight = 1024.0000f;
     contentView.autoresizesSubviews = NO;
     self.contentView = contentView;
     
+}
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    //[self updateCache];
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view
+                        atScale:(CGFloat)scale { }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView { }
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView { return NO; }
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView { }
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView { }
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view { }
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
+                     withVelocity:(CGPoint)velocity
+              targetContentOffset:(inout CGPoint *)targetContentOffset { }
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.contentView;
 }
 
 @end

@@ -61,7 +61,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     [super viewDidLoad];
     
     self.testCell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 44.0000f;
@@ -116,11 +115,13 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     switch (indexPath.row) {
 
         case 0:
-            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceMySqlIdentifier sender: self];
+            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceMySqlIdentifier
+                                      sender: self];
             break;
             
         case 1:
-            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceSqlServerIdentifier sender: self];
+            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceSqlServerIdentifier
+                                      sender: self];
             break;
             
         default:

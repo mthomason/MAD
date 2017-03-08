@@ -185,6 +185,7 @@
 		4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
 		4C26BA9B1BAF9B9B00456DC8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA961BAF9B9B00456DC8 /* MTTitleView.m */; };
 		4C26BAA51BAF9E8000456DC8 /* MADActivityReportPrintPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BAA41BAF9E8000456DC8 /* MADActivityReportPrintPreview.m */; };
+		4C28DDE31E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28DDE21E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
@@ -1496,6 +1497,8 @@
 		4C26BAA31BAF9E8000456DC8 /* MADActivityReportPrintPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityReportPrintPreview.h; sourceTree = "<group>"; };
 		4C26BAA41BAF9E8000456DC8 /* MADActivityReportPrintPreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADActivityReportPrintPreview.m; sourceTree = "<group>"; };
 		4C2831841B1AFC5500511D2D /* libsystem_stats.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_stats.dylib; path = usr/lib/system/libsystem_stats.dylib; sourceTree = SDKROOT; };
+		4C28DDE11E7085BF000BDA30 /* MADQueryVisualizationCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheManager.h; sourceTree = "<group>"; };
+		4C28DDE21E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationCacheManager.m; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeMySQL.png; path = Reports/UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
 		4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeMySQL@2x.png"; path = "Reports/UIImageExportTypeMySQL@2x.png"; sourceTree = "<group>"; };
 		4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeCSV.png; path = Reports/UIImageExportTypeCSV.png; sourceTree = "<group>"; };
@@ -2965,6 +2968,8 @@
 				4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */,
 				4C15F3301E4CA22A0072BE5F /* MADHierarchicalGroupingNodeProtocol.h */,
 				4C15F3311E4CA2AB0072BE5F /* MADQueryVisualizationSchemaDelegate.h */,
+				4C28DDE11E7085BF000BDA30 /* MADQueryVisualizationCacheManager.h */,
+				4C28DDE21E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m */,
 			);
 			name = Visualization;
 			path = MADStack/MADQuery/UI/Visualization;
@@ -6207,6 +6212,7 @@
 				4C401FC11BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
 				4C1E55031E581D3000E3FAF0 /* MADDesignerNavigationItem.m in Sources */,
 				4C59BDB71C9A9CD70031BC6C /* MADOperationConditionHasCredientialsResult.m in Sources */,
+				4C28DDE31E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m in Sources */,
 				4C17AE201E41B21F0056A0EA /* MADModel2-3.xcmappingmodel in Sources */,
 				4CF6AFC61CAFC14200D3AD11 /* MADOperationRefreshInitialize.m in Sources */,
 				4C5C0DBF1C9CF1D300826BC2 /* MADKeyChainOperationPut.m in Sources */,

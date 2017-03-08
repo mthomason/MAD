@@ -9,6 +9,8 @@
 #ifndef MAD_MADHierarchicalGroupingNodeProtocol_h
 #define MAD_MADHierarchicalGroupingNodeProtocol_h
 
+@class UIView;
+
 @protocol MADHierarchicalGroupingNodeProtocol <NSObject>
     @property (nonatomic, assign) BOOL root;
     - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
