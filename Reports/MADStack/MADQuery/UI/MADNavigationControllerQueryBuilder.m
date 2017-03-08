@@ -9,6 +9,7 @@
 #import "MADNavigationControllerQueryBuilder.h"
 #import <Foundation/NSObject.h>
 #import <UIKit/UINavigationBar.h>
+#import <UIKit/UIToolbar.h>
 #import <UIKit/UIAppearance.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UINavigationController.h>
@@ -23,6 +24,7 @@
 
 @interface MADNavigationControllerQueryBuilder ()
     <UINavigationControllerDelegate>
+    @property (nonatomic, weak) IBOutlet UIToolbar *bottomToolbar;
 
 @end
 
@@ -31,10 +33,6 @@
 }
 
 @synthesize document = _document;
-
-- (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
 
 + (void)initialize {
     [super initialize];
@@ -56,6 +54,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    ///self.hide
     self.hidesBarsWhenVerticallyCompact = NO;
 }
 
@@ -76,7 +75,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     //[self setNavigationBarHidden:YES animated:animated];
-    [self setToolbarHidden:NO animated:YES];
+    [self setToolbarHidden:NO animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -112,19 +111,19 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    //self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x,
-    //                                      CGPointZero.y + self.topLayoutGuide.length,
-    //                                      self.navigationBar.frame.size.width,
-    //                                      self.navigationBar.frame.size.height);
+    //self.bottomToolbar.frame = CGRectMake(self.bottomToolbar.frame.origin.x,
+    //                                      self.viewControllers.firstObject.bottomLayoutGuide.length - self.bottomToolbar.frame.size.height,
+    //                                      self.bottomToolbar.frame.size.width,
+    //                                      self.bottomToolbar.frame.size.height);
 }
 
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated {
-    //[self.presentedViewController presentationTransitionWillBegin];
-    //[super navigationController:navigationController
-    //     willShowViewController:viewController
-    //                   animated:animated];
+    BOOL toolbarsHidden = ![viewController isKindOfClass:[MADQueryViewController class]];
+    if (self.toolbarHidden != toolbarsHidden) {
+        [self setToolbarHidden:toolbarsHidden animated:animated];
+    }
 }
 
 - (void)navigationController:(UINavigationController *)navigationController
@@ -133,6 +132,10 @@
     //[super navigationController:navigationController
     //      didShowViewController:viewController
     //                   animated:animated];
+    //BOOL toolbarsHidden = ![viewController isKindOfClass:[MADQueryViewController class]];
+    //if (self.toolbarHidden != toolbarsHidden) {
+    //    [self setToolbarHidden:toolbarsHidden animated:animated];
+    //}
 }
 
 - (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController

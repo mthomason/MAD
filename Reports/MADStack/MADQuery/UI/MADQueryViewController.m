@@ -262,7 +262,7 @@ BOOL storeEnabled() {
                             MADIdentifierQueryViewSections forSection,
                             NSInteger row) {
         
-        [MADQueryViewController ConfigureCell: cell
+        [MADQueryViewController configureCell: cell
                                    forSection: forSection
                                        andRow: row];
         
@@ -300,10 +300,10 @@ BOOL storeEnabled() {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory.copy;
+    NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
     [self updateInupdateInterfaceForPerferedContentSizeCategory: sizeCategory];
     
-    static NSString *MADIdentifierTableViewCellTableName = @"MADIdentifierCellSchemaName";
+    NSString *MADIdentifierTableViewCellTableName = @"MADIdentifierCellSchemaName";
     [self.tableView registerClass: [MADTableViewCellQueryTableName class]
            forCellReuseIdentifier: MADIdentifierTableViewCellTableName];
     
@@ -520,11 +520,7 @@ BOOL storeEnabled() {
 
 - (void)viewController:(MADQueryPredicateFormatController *)controller
    addedQueryPredicate:(RptqQueryPredicate *)predicate {
-
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
-    
+    [self dismissViewController];
 }
 
 #pragma mark -
@@ -533,9 +529,7 @@ BOOL storeEnabled() {
 - (void)viewController:(MADQueryLinkBuilderController *)controller
         addedQueryLink:(RptqQueryLinks *)link {
 
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
     
     NSInteger suspectedSection = 2;
     
@@ -560,9 +554,7 @@ BOOL storeEnabled() {
 addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
           andSortOrder:(MADSortOrder)sortOrder {
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
 
     [self.document addQueryGroupWithQueryField: queryFieldID
                                   andSortOrder: sortOrder];
@@ -574,9 +566,7 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 - (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
       addedTableWithID:(NSManagedObjectID *)objectID {
 
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self.tabBarController enableTabBarItems];
-    }];
+    [self dismissViewController];
 
     [self.document addQuerySelectTableForSchemeTableWithObjectID: objectID];
 }
@@ -584,7 +574,7 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark Helper
 
-+ (void)ConfigureCell: (UITableViewCell *)cell
++ (void)configureCell: (UITableViewCell *)cell
            forSection: (MADIdentifierQueryViewSections)section
                andRow: (NSInteger)row {
     
