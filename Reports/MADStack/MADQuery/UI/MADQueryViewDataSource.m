@@ -115,65 +115,14 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         
         NSArray <NSDictionary <NSString *, NSNumber *> *> *result;
         NSError * __autoreleasing *error = NULL;
-        NSFetchRequest *request;
-        NSComparisonPredicate *predicate;
-        NSExpression *expression[2];
-        NSExpressionDescription *expressionDescriptionQueryTableCount;
-        NSExpressionDescription *expressionDescriptionQueryObjectID;
-        NSExpression *keyPathHasQueryTables;
+        NSFetchRequest *request = [RptqQuery fetchRequestTableCount:queryID
+                                                      objectContext:managedObjectContext];
         
-        expressionDescriptionQueryObjectID = [[NSExpressionDescription alloc] init];
-        expressionDescriptionQueryObjectID.name = NSStringFromSelector(@selector(objectID));
-        expressionDescriptionQueryObjectID.expression = [NSExpression expressionForEvaluatedObject];
-        expressionDescriptionQueryObjectID.expressionResultType = NSObjectIDAttributeType;
-        
-        NSArray *keyPathQueryTables;
-        
-        expressionDescriptionQueryTableCount = [[NSExpressionDescription alloc] init];
-        expressionDescriptionQueryTableCount.name = keyHasQueryTables.copy;
-        expressionDescriptionQueryTableCount.expressionResultType = NSInteger32AttributeType;
-        
-        NSString *hasQueryTables = NSStringFromSelector(@selector(hasQueryTables));
-        keyPathHasQueryTables = [NSExpression expressionForKeyPath:hasQueryTables];
-        keyPathQueryTables = [[NSArray alloc] initWithObjects:keyPathHasQueryTables, nil];
-        
-        
-        expressionDescriptionQueryTableCount.expression = [NSExpression expressionForFunction: @"count:"
-                                                                                    arguments: keyPathQueryTables];
-        
-        expression[0] = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-        expression[1] = [NSExpression expressionForConstantValue: queryID];
-        predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
-                                                      rightExpression: expression[1]
-                                                             modifier: NSDirectPredicateModifier
-                                                                 type: NSEqualToPredicateOperatorType
-                                                              options: 0];
-        
-        NSEntityDescription *entityDescription;
-        NSArray *propertiesToFetch;
-
-        entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqQuery class])
-                                        inManagedObjectContext: managedObjectContext];
-        request = [[NSFetchRequest alloc] init];
-
-        propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescriptionQueryTableCount,
-                                                             //expressionDescriptionQueryObjectID, nil];
-                                                             nil];
-        request.propertiesToFetch = propertiesToFetch;
-        request.entity = entityDescription;
-        request.fetchLimit = 1;
-        request.predicate = predicate;
-        request.resultType = NSDictionaryResultType;
-        request.includesSubentities = NO;
-
         NSUInteger numberOfTables = 0;
 
         result = [managedObjectContext executeFetchRequest:request error:error];
-        if (((NSArray *)result).count > 0) {
+        if (result.count > 0)
             numberOfTables = (NSUInteger)[result[0][keyHasQueryTables] integerValue];
-        } else {
-            numberOfTables = 0;
-        }
         
         _count = numberOfSectionsForQueryTableCount(numberOfTables, reportingEnabled);
         _reportingEnabled = reportingEnabled;
@@ -194,7 +143,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         _reportingEnabled = reportingEnabled;
         _numberOfTables = numberOfTables;
         _handleConfigureCell = handleConfigureCell;
-        
+
     }
     return self;
 }

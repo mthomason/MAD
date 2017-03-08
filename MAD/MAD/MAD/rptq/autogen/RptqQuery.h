@@ -12,7 +12,8 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
-@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
+@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate,
+       RptqQuerySort, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RptqQuery (CoreDataProperties)
 
 + (NSFetchRequest<RptqQuery *> *)fetchRequest;
++ (NSFetchRequest *)fetchRequestTableCount:(NSNumber *)queryIdentifier
+                             objectContext:(NSManagedObjectContext *)context;
 
 @property (nullable, nonatomic, copy) NSString *cachedText;
 @property (nonatomic) int64_t identifier;
