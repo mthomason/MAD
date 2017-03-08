@@ -17,7 +17,6 @@
 
 extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
-extern NSString * const MADSegueShowSql;
 
 @interface MADQueryViewController : UITableViewController
     <MADViewControllerDocumentProtocol,

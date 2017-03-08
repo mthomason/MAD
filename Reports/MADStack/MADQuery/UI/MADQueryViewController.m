@@ -100,14 +100,9 @@
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryViewDatasourceProtocol.h"
 
-NSString * const MADSegueShowSql                                    = @"MADSegueShowSql";
-
-NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
-NSString * const MNSIdentifierSegueShowAddLinkViewController        = @"showAddLinkViewController";
 NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
-NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
 
 static NSString * const NSFetchedResultsCacheName                   = @"NSFetchedResultsCacheName";
@@ -416,69 +411,7 @@ BOOL storeEnabled() {
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([segue.identifier isEqualToString: MADSegueShowSql]) {
-        MADViewControllerSQL *viewController;
-        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            viewController = (MADViewControllerSQL *)[(segue.destinationViewController) topViewController];
-        } else {
-            viewController = segue.destinationViewController;
-        }
-        MADocument *document = self.document;
-        viewController.document = document;
-        [self.tabBarController disableTabBarItems];
-        
-    } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
-        
-        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = segue.destinationViewController;
-            if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MADQueryBuilderAddTableViewController class]]) {
-                    
-                    MADQueryBuilderAddTableViewController *tvc;
-                    tvc = (MADQueryBuilderAddTableViewController *)navControl.topViewController;
-                    if (tvc) {
-                        tvc.delegate = self;
-                    }
-
-                    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-                    NSFetchRequest *request;
-                    NSSortDescriptor *sort;
-                    NSString *keyPathName;
-                    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-                    keyPathName = NSStringFromSelector(@selector(name));
-                    sort = [NSSortDescriptor sortDescriptorWithKey: keyPathName
-                                                         ascending: YES];
-                    
-                    request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
-
-                    MADocument *document = self.document;
-                    NSFetchedResultsController *frc;
-                    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                              managedObjectContext: document.managedObjectContext
-                                                                sectionNameKeyPath: nil
-                                                                         cacheName: nil];
-                    tvc.fetchedResultsController = frc;
-                }
-            }
-        }
-
-    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
-        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = segue.destinationViewController;
-            if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MADQueryLinkBuilderController class]]) {
-
-                    MADocument *document = self.document;
-                    MADQueryLinkBuilderController *tvc;
-                    tvc = (MADQueryLinkBuilderController *)navControl.topViewController;
-                    if (tvc) {
-                        tvc.document = document;
-                        tvc.queryLinkDelegate = self;
-                    }
-                }
-            }
-        }
-    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
+    if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
@@ -486,21 +419,6 @@ BOOL storeEnabled() {
                 if ([navControl.topViewController isKindOfClass:[MADQueryPredicateFormatController class]]) {
                     MADQueryPredicateFormatController *tvc;
                     tvc = (MADQueryPredicateFormatController *)navControl.topViewController;
-                    if (tvc) {
-                        MADocument *document = self.document;
-                        tvc.document = document;
-                        tvc.delegate = self;
-                    }
-                }
-            }
-        }
-    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
-        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = segue.destinationViewController;
-            if (navControl.topViewController) {
-                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
-                    MTQueryBuilderAddGroupViewController *tvc;
-                    tvc = (MTQueryBuilderAddGroupViewController *)navControl.topViewController;
                     if (tvc) {
                         MADocument *document = self.document;
                         tvc.document = document;
@@ -631,9 +549,8 @@ BOOL storeEnabled() {
 #pragma mark MUIViewControllerDelegate
 
 - (void)dismissViewController {
-    MADTabBarController *tabBarController = self.tabBarController;
     [self dismissViewControllerAnimated:YES completion:^{
-        [tabBarController enableTabBarItems];
+        [self.tabBarController enableTabBarItems];
     }];
 }
 
@@ -874,8 +791,8 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
-    
-    for (NSNumber *section in sections) {
+    NSNumber *section;
+    for (section in sections) {
         if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             MADIdentifierQueryViewSections updateSection = section.shortValue;
             switch(type) {
@@ -914,8 +831,11 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
-    for (NSNumber *section in sections) {
-        NSInteger updateSection = section.shortValue;
+    NSInteger updateSection;
+    NSArray *indexPaths;
+    NSNumber *section;
+    for (section in sections) {
+        updateSection = section.shortValue;
         
         if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             switch(type) {
@@ -924,7 +844,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
                     NSIndexPath *path = [NSIndexPath indexPathForRow: (long)index
                                                            inSection: updateSection];
                     
-                    NSArray *indexPaths;
                     indexPaths = @[path];
                     [self.tableView insertRowsAtIndexPaths: indexPaths
                                           withRowAnimation: UITableViewRowAnimationFade];
@@ -933,7 +852,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
                 case NSFetchedResultsChangeDelete: {
                     NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                            inSection: updateSection];
-                    NSArray *indexPaths;
                     indexPaths = @[path];
                     [self.tableView deleteRowsAtIndexPaths: indexPaths
                                           withRowAnimation: UITableViewRowAnimationFade];
@@ -942,7 +860,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
                 case NSFetchedResultsChangeUpdate: {
                     NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                            inSection: updateSection];
-                    NSArray *indexPaths;
                     indexPaths = @[path];
                     [self.tableView reloadRowsAtIndexPaths: indexPaths
                                           withRowAnimation: UITableViewRowAnimationFade];
@@ -951,7 +868,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
                 case NSFetchedResultsChangeMove: {
                     NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                            inSection: updateSection];
-                    NSArray *indexPaths;
                     indexPaths = @[path];
                     [self.tableView deleteRowsAtIndexPaths: indexPaths
                                           withRowAnimation: UITableViewRowAnimationFade];
@@ -991,7 +907,7 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 #pragma mark UIAdaptivePresentationControllerDelegate
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:
-(UIPresentationController *)controller {
+                                            (UIPresentationController *)controller {
     
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
     
@@ -1010,6 +926,14 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark Actions
 
+- (IBAction)edit:(id)sender {
+    self.tableView.editing = !self.tableView.isEditing;
+}
+
+- (IBAction)done:(id)sender {
+    [((MADNavigationController *)self.navigationController) done:sender];
+}
+
 - (IBAction)displaySQL:(id)sender {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQuery" bundle:nil];
     UINavigationController *navigationController;
@@ -1026,40 +950,105 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
     
     self.showSQLPresentationController = ppc;
     [self presentViewController:navigationController animated:YES completion:^{
-        //[self.tabBarController disableTabBarItems];
+        [self.tabBarController disableTabBarItems];
     }];
 }
 
-- (IBAction)edit:(id)sender {
-    self.tableView.editing = !self.tableView.isEditing;
-}
-
-- (IBAction)done:(id)sender {
-    [((MADNavigationController *)self.navigationController) done:sender];
-}
-
 - (void)addTable:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController
-                              sender: sender];
-    [self.tabBarController disableTabBarItems];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddTable" bundle:nil];
+    UINavigationController *navigationController;
+    navigationController = [storyboard instantiateInitialViewController];
+    navigationController.modalPresentationStyle =
+                self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
+                                                        UIModalPresentationFormSheet :
+                                                        UIModalPresentationOverFullScreen;
+    UIPresentationController *pc = navigationController.presentationController;
+    pc.delegate = self;
+    
+    
+    MADQueryBuilderAddTableViewController *tvc;
+    tvc = (MADQueryBuilderAddTableViewController *)navigationController.topViewController;
+    tvc.delegate = self;
+    
+    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
+    NSFetchRequest *request;
+    NSSortDescriptor *sort;
+    NSString *keyPathName;
+    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    keyPathName = NSStringFromSelector(@selector(name));
+    sort = [NSSortDescriptor sortDescriptorWithKey: keyPathName
+                                         ascending: YES];
+    
+    request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
+    
+    MADocument *document = self.document;
+    NSFetchedResultsController *frc;
+    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                              managedObjectContext: document.managedObjectContext
+                                                sectionNameKeyPath: nil
+                                                         cacheName: nil];
+    tvc.fetchedResultsController = frc;
+    
+    [self presentViewController:navigationController animated:YES completion:^{
+        [self.tabBarController disableTabBarItems];
+    }];
 }
 
 - (void)addLink:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController
-                              sender: sender];
-    [self.tabBarController disableTabBarItems];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddJoin" bundle:nil];
+    UINavigationController *navigationController;
+    navigationController = [storyboard instantiateInitialViewController];
+    navigationController.modalPresentationStyle =
+                self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
+                                                        UIModalPresentationFormSheet :
+                                                        UIModalPresentationOverFullScreen;
+    UIPresentationController *pc = navigationController.presentationController;
+    pc.delegate = self;
+    MADQueryLinkBuilderController *tvc;
+    tvc = (MADQueryLinkBuilderController *)navigationController.topViewController;
+    tvc.queryLinkDelegate = self;
+    tvc.document = self.document;
+    [self presentViewController:navigationController animated:YES completion:^{
+        [self.tabBarController disableTabBarItems];
+    }];
 }
 
 - (void)addPredicate:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController
-                              sender: sender];
-    [self.tabBarController disableTabBarItems];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddPredicate" bundle:nil];
+    UINavigationController *navigationController;
+    navigationController = [storyboard instantiateInitialViewController];
+    navigationController.modalPresentationStyle =
+                self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
+                                                        UIModalPresentationFormSheet :
+                                                        UIModalPresentationOverFullScreen;
+    UIPresentationController *pc = navigationController.presentationController;
+    pc.delegate = self;
+    MADQueryPredicateFormatController *tvc;
+    tvc = (MADQueryPredicateFormatController *)navigationController.topViewController;
+    tvc.delegate = self;
+    tvc.document = self.document;
+    [self presentViewController:navigationController animated:YES completion:^{
+        [self.tabBarController disableTabBarItems];
+    }];
 }
 
 - (void)addGroup:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController
-                              sender: sender];
-    [self.tabBarController disableTabBarItems];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddGroup" bundle:nil];
+    UINavigationController *navigationController;
+    navigationController = [storyboard instantiateInitialViewController];
+    navigationController.modalPresentationStyle =
+                self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
+                                                        UIModalPresentationFormSheet :
+                                                        UIModalPresentationOverFullScreen;
+    UIPresentationController *pc = navigationController.presentationController;
+    pc.delegate = self;
+    MTQueryBuilderAddGroupViewController *tvc;
+    tvc = (MTQueryBuilderAddGroupViewController *)navigationController.topViewController;
+    tvc.delegate = self;
+    tvc.document = self.document;
+    [self presentViewController:navigationController animated:YES completion:^{
+        [self.tabBarController disableTabBarItems];
+    }];
 }
 
 #pragma mark -

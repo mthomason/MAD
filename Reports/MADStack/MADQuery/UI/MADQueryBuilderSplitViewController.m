@@ -338,18 +338,7 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([segue.identifier isEqualToString:MADSegueShowSql]) {
-        MADocument *document = self.document;
-        MADViewControllerSQL *viewController;
-        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            viewController = (MADViewControllerSQL *)((UINavigationController *)segue.destinationViewController).topViewController;
-        } else {
-            viewController = segue.destinationViewController;
-        }
-        viewController.delegate = self;
-        viewController.document = document;
-        
-    } else if (sender == self) {
+    if (sender == self) {
         MADocument *document = self.document;
         [(segue.destinationViewController) setDocument: document];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
