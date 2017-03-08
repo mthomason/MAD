@@ -353,12 +353,15 @@ static NSString * const TextRedraw = @"Redraw";
         MADocument *document = self.document;
         [(segue.destinationViewController) setDocument: document];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
+        
     } else {
+        
         if (self.popover != nil) {
             if ((self.popover).popoverVisible) {
                 [self.popover dismissPopoverAnimated:YES];
             }
         }
+        
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
             ((UIStoryboardPopoverSegue *)segue).popoverController.delegate = self;
             self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;

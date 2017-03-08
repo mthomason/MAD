@@ -98,10 +98,11 @@
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryViewDatasourceProtocol.h"
 
+NSString * const MADSegueShowSql                                    = @"MADSegueShowSql";
+
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
-NSString * const MADSegueShowSql                                    = @"MADSegueShowSql";
 NSString * const MNSIdentifierSegueShowAddLinkViewController        = @"showAddLinkViewController";
 NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
 NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
@@ -155,9 +156,6 @@ BOOL storeEnabled() {
 
     @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
     @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
-
-    @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
-    @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
 
     @property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
 
@@ -353,10 +351,6 @@ BOOL storeEnabled() {
     
     [self.tabBarController enableTabBarItems];
     
-    id barButtonItem = self.barButtonItemEdit;
-    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
-                                                  animated: NO];
-  
     self.tableView.delegate = _queryViewDelegate;
     [self reloadMainDocumentAnimated:YES];
 }
@@ -539,11 +533,6 @@ BOOL storeEnabled() {
     [super dismissViewControllerAnimated:YES completion:nil];
 }
 
-//- (BOOL)animateAlongsideTransition:(void (^ __nullable)(id <UIViewControllerTransitionCoordinatorContext>context))animation
-//                        completion:(void (^ __nullable)(id <UIViewControllerTransitionCoordinatorContext>context))completion {
-    
-//}
-
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -552,54 +541,6 @@ BOOL storeEnabled() {
     }];
     
 }
-
-/*- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
-              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    
-    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
-
-    //short circuit
-    if (!self.isViewLoaded) return;
-    
-    UITableView *tableView;
-    UINavigationItem *navigationItem;
-    UIView __weak *backgroundView, __weak *titleView;
-    
-    tableView = self.tableView;
-    navigationItem = self.navigationItem;
-    backgroundView = tableView.backgroundView;
-    titleView = navigationItem.titleView;
-    
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        UIView *toView = [context viewForKey:UITransitionContextToViewKey];
-        UIView *fromView = [context viewForKey:UITransitionContextFromViewKey];
-        UIViewController *toViewController = [context viewForKey:UITransitionContextToViewControllerKey];
-        UIViewController *fromViewController = [context viewForKey:UITransitionContextFromViewControllerKey];
-        //[backgroundView setNeedsDisplay];
-        [titleView sizeToFit];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [titleView sizeToFit];
-    }];
-    
-}*/
-
-/*- (void)viewWillTransitionToSize:(CGSize)size
-       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    if (CGSizeEqualToSize(size, self.view.bounds.size)) return;
-    
-    UIView __weak *backgroundView;
-    backgroundView = self.tableView.backgroundView;
-    
-    void (^ handleAnimate)(id <UIViewControllerTransitionCoordinatorContext>context);
-    handleAnimate = ^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [backgroundView setNeedsDisplay];
-    };
-    [coordinator animateAlongsideTransition: handleAnimate completion: nil];
-    
-}*/
 
 #pragma mark -
 #pragma mark Property Overrides
@@ -1051,24 +992,11 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 #pragma mark Actions
 
 - (IBAction)edit:(id)sender {
-    
-    BOOL editing;
-    id barButtonItem;
-    
-    editing = !self.tableView.isEditing;
-    
-    barButtonItem = !editing ? self.barButtonItemEdit : self.barButtonItemDone;
-    [self.tabBarController.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-
-    self.tableView.editing = editing;
-
+    self.tableView.editing = !self.tableView.isEditing;
 }
 
 - (IBAction)done:(id)sender {
     [((MADNavigationController *)self.navigationController) done:sender];
-    //[self dismissViewControllerAnimated:YES completion:^{
-        
-    //}];
 }
 
 - (void)addConnection:(id)sender {
@@ -1792,11 +1720,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 
 #pragma mark - UIAccessibility
 
-/*- (BOOL)accessibilityPerformEscape {
-    [self.delegate viewControllerDidFinish:nil];
-    return YES;
-}*/
-
 @end
 
 @interface MADAnimatedTransitioningPop : NSObject <UIViewControllerAnimatedTransitioning>
@@ -1808,16 +1731,6 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
     return 0.35;
 }
-
-//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing);
-//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
-
-//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
-//    return pushing ? UITransitionContextFromViewControllerKey : UITransitionContextToViewControllerKey;
-//}
-//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
-//    return pushing ? UITransitionContextToViewControllerKey : UITransitionContextFromViewControllerKey;
-//}
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
