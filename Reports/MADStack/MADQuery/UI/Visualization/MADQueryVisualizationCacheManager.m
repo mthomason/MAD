@@ -85,7 +85,6 @@
 }
 
 - (void)archiveCache {
-    //[self updateCache];
     MADOperationArchiveData *operation;
     operation = [[MADOperationArchiveData alloc] initWithURL: self.url
                                                    andObject: self.cacheData];
@@ -132,28 +131,5 @@
     }
     return result;
 }
-/*
-- (NSString *)cacheFileName {
-    return [MADQueryVisualizationViewController cacheFileNameForDocument:self.document];
-}
 
-- (NSURL *)localCacheFileURL {
-    if (_localCacheFileURL == nil) {
-        MADAppDelegate delegate = [MADApplication AppDelegate];
-        NSString *groupIdentifier = [delegate groupIdentifier].copy;
-        NSURL *url;
-        NSString *cacheFileName = [self cacheFileName];
-        url = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
-        url = [url URLByAppendingPathComponent: cacheFileName
-                                   isDirectory: NO];
-        _localCacheFileURL = url.copy;
-    }
-    return _localCacheFileURL;
-}
-
-+ (NSString *)cacheFileNameForDocument:(MADocument *)document {
-    NSString *filename = document.fileURL.lastPathComponent.stringByDeletingPathExtension;
-    return [MADHierarchicalDisplayModel cacheFileNameForFileName:filename];
-}
-*/
 @end

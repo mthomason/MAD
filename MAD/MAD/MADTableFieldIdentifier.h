@@ -25,8 +25,8 @@
 
 @interface MADTableFieldIdentifier : NSObject
 
-- (instancetype)initWithTableID:(int64_t)tableID
-                     andFieldID:(int64_t)fieldID NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithTableID:(int64_t)tableID
+                         andFieldID:(int64_t)fieldID NS_DESIGNATED_INITIALIZER;
 
     @property (readonly, nonatomic, assign) int64_t tableID;
     @property (readonly, nonatomic, assign) int64_t fieldID;

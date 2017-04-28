@@ -18,6 +18,13 @@
 
 @interface RptqDatabase (Extras)
 
+    + (NSString *)keyOwnedByUserDriverID;
+    + (NSString *)keyOwnedByUserDatabaseName;
+    + (NSString *)keyDatabaseDriverType;
+    + (NSFetchRequest *)fetchRequestDatabaseDriverID:(int64_t)identifier;
+    + (NSFetchRequest *)fetchRequestDatabaseName:(int64_t)identifier;
+    + (NSFetchRequest *)fetchRequestDriverName:(int64_t)identifier;
+    + (NSFetchRequest *)fetchRequestDriverType:(int64_t)identifier;
     + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
                           andConnecitonId:(int64_t)connectionId;
 

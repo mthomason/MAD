@@ -14,8 +14,10 @@
 
 #import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSFetchRequestExpression.h>
 #import <CoreData/NSFetchedResultsController.h>
 #import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UILabel.h>
 
@@ -34,6 +36,7 @@
 #import <MAD/RptqQueryTable+Extras.h>
 
 #import <MAD/MADModelDocument.h>
+#import <MAD/MADModelDatabase.h>
 #import <MAD/MADModelQuery.h>
 
 #import "MADTableViewCellQueryTableName.h"
@@ -340,7 +343,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             NSError *error = nil;
             [(self.queryGroupsController).managedObjectContext save:&error];
 
-            //[self.document.managedObjectContext save:&error];
             [self performFetchGroups];
             break;
         }
@@ -366,41 +368,33 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
     
     switch (section) {
             
-            // MARK: Display and identify the data source and data sources
+        // MARK: Display and identify the data source and data sources
         case MADIdentifierQueryViewSectionsDatasource: {
             
             static NSString *MADIdentifierCellDataSource = @"MADIdentifierDataSource";
             cell = [tableView dequeueReusableCellWithIdentifier: MADIdentifierCellDataSource];
             
-            NSManagedObjectContext *managedObjectContext;
             MADocument *madDocument = self.datasoruce.document;
-            managedObjectContext = madDocument.managedObjectContext;
-            RptqDocument *document;
-            document = [madDocument activeDocumentModel];
-            RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-            if (database.ownedByUser) {
-                
-                NSString *databaseType = database.ownedByUser.driverID.copy;
-                RptqDatabaseCredentals *user = database.ownedByUser;
-                NSString * schemaName = [user databaseSchemaName].copy;
-                
-                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                     NSString *TextFormatConnection = @"You are connecting to %1$@"
-                     @" datasource named %2$@.";
-                     NSString *localizedMessageFormat;
-                     NSString *localizedMessage;
-                     NSAttributedString *message;
-                     localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
-                     localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
-                     message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-                                                                                                          databaseType: databaseType
-                                                                                                            schemaName: schemaName];
-                     dispatch_sync(dispatch_get_main_queue(), ^{
-                         cell.textLabel.attributedText = message;
-                         cell.textLabel.text = localizedMessage;
-                     });
-                 });
-            }
+            MADModelDatabase *db = madDocument.documentModel.firstDatabase;
+            NSString *databaseType = db.driverID.copy;
+            NSString *schemaName = db.schemaName.copy;
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSString *TextFormatConnection = @"You are connecting to %1$@"
+                                                 @" datasource named %2$@.";
+                NSString *localizedMessageFormat;
+                NSString *localizedMessage;
+                NSAttributedString *message;
+                localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+                localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
+                message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                                     databaseType: databaseType
+                                                                                                       schemaName: schemaName];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    cell.textLabel.attributedText = message;
+                    cell.textLabel.text = localizedMessage;
+                });
+            });
             
             break;
         }

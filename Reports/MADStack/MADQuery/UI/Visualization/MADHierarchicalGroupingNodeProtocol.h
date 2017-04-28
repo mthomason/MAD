@@ -13,8 +13,8 @@
 
 @protocol MADHierarchicalGroupingNodeProtocol <NSObject>
     @property (nonatomic, assign) BOOL root;
-    - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
-                                        inView:(UIView *)containerView;
+    - (CGRect)rectForFieldID:(int64_t)managedObjectID
+                      inView:(UIView *)containerView;
     - (CGRect)frame;
 @end
 

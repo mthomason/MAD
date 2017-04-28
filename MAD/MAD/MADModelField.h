@@ -21,13 +21,14 @@
                                  width:(int64_t)width
                                   name:(NSString *)name;
 
+    @property (nonatomic, weak) MADModelField *inTable;
     @property (nonatomic, readonly, copy) NSString *name;
     @property (nonatomic) BOOL primaryKey;
     @property (nonatomic) int16_t dataType;
     @property (nonatomic) int16_t dataTypeNative;
     @property (nonatomic) int16_t decimals;
     @property (nonatomic) int64_t width;
-    @property (nonatomic) int64_t identifier;
+    //@property (nonatomic) int64_t identifier;
 
 @end
 

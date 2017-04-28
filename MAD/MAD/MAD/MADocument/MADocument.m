@@ -830,7 +830,7 @@ READFROMURL_END:;
             }
             RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
             [private refreshObject: schemaField    mergeChanges:NO];
-            [private refreshObject: field                        mergeChanges:NO];
+            [private refreshObject: field          mergeChanges:NO];
         }
 
         for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {

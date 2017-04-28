@@ -11,6 +11,8 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSExpressionDescription.h>
 
+#import <Foundation/NSOrderedSet.h>
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSOrderedSet.h>
@@ -26,20 +28,17 @@
 #import "RptqQueryField.h"
 
 @interface MADModelQueryTable ()
-
+    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADModelQueryField *> *queryFields;
+    @property (readwrite, nonatomic, strong) NSMutableOrderedSet <NSNumber *> *queryFieldIDs;
 @end
 
 @implementation MADModelQueryTable {
     MADModelDatabase __weak *_database;
     int64_t _schemaTable;
     int64_t _dropIndex;
-    NSMutableOrderedSet <NSNumber *> *_fieldIDs;
-    NSMutableDictionary <NSNumber *, MADModelQueryField *> *_fields;
 }
 
 @dynamic schemaTable;
-@dynamic fields;
-@dynamic fieldIDs;
 
 + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate {
     
@@ -255,6 +254,10 @@
     return fetchQueryTable;
 }
 
+- (void)dealloc {
+    _inQuery = nil;
+}
+
 - (instancetype)initWithIdentifier:(int64_t)identifier {
     if (self = [super initWithIdentifier:identifier]) { }
     return self;
@@ -269,35 +272,30 @@
         _database = inDatabase;
         _schemaTable = schemaTable;
         _dropIndex = dropIndex;
-        id fields;
-        @autoreleasepool {
-            fields = [[NSMutableDictionary alloc] init];
-            _fields = fields;
-            fields = nil;
-        }
-        @autoreleasepool {
-            fields = [[NSMutableOrderedSet alloc] init];
-            _fieldIDs = fields;
-            fields = nil;
-            
-        }
+        NSMutableDictionary *fields;
+        fields = [[NSMutableDictionary alloc] init];
+        self.queryFields = fields;
+        
+        NSMutableOrderedSet *fieldIDs;
+        fieldIDs = [[NSMutableOrderedSet alloc] init];
+        self.queryFieldIDs = fieldIDs;
         
     }
     return self;
 }
 
-- (NSOrderedSet <NSNumber *> *)fieldIDs {
-    if (_fieldIDs.count == 0) {
+- (NSMutableOrderedSet <NSNumber *> *)queryFieldIDs {
+    if (_queryFieldIDs.count == 0) {
         [self updateFields];
     }
-    return _fieldIDs;
+    return _queryFieldIDs;
 }
 
-- (NSDictionary <NSNumber *, MADModelQueryField *> *)fields {
-    if (_fields.count == 0) {
+- (NSMutableDictionary <NSNumber *, MADModelQueryField *> *)queryFields {
+    if (_queryFields.count == 0) {
         [self updateFields];
     }
-    return _fields;
+    return _queryFields;
 }
 
 - (void)updateFields {
@@ -312,8 +310,9 @@
                                                     schemaTable: _schemaTable
                                                     schemaField: schemaField
                                                        database: _database];
-    [_fieldIDs addObject:@(fieldIdentifier)];
-    [_fields setObject:queryField forKey:@(fieldIdentifier)];
+    NSNumber *fieldID = @(fieldIdentifier);
+    [self.queryFieldIDs addObject:fieldID];
+    [self.queryFields setObject:queryField forKey:fieldID];
 
 }
 
@@ -322,7 +321,8 @@
 }
 
 - (NSString *)databaseSchemaTableName {
-    return [_database.tableDictionary objectForKey:@(_schemaTable)].name;
+    NSNumber *key = @(_schemaTable);
+    return [_database.tableDictionary objectForKey:key].name;
 }
 
 - (NSString *)alias {
@@ -337,15 +337,14 @@
     return [[self databaseSchemaTableName] stringByAppendingString:indexString];
 }
 
-/*- (NSString *)debugDescription {
+- (NSString *)debugDescription {
     NSString *debugDescription;
-    debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
-    [[NSString alloc] initWithFormat:@"%@ <%@::%@>",
-     NSStringFromClass([self class]),
-     self.objectID.URIRepresentation.pathComponents[1],
-     self.objectID.URIRepresentation.pathComponents[2]] :
-    self.debugDescription;
+    
+    debugDescription = [[NSString alloc] initWithFormat:@"%@ <%@::%@>",
+                                                NSStringFromClass([self class]),
+                                                self.objectID,
+                                                self.queryFieldIDs];
     return debugDescription;
-}*/
+}
 
 @end

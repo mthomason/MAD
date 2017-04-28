@@ -33,6 +33,10 @@
 @dynamic decimals;
 @dynamic width;
 
+- (void)dealloc {
+    _inTable = nil;
+}
+
 - (instancetype)initWithIdentifier:(int64_t)identifier {
     if (self = [super initWithIdentifier: identifier]) {
 

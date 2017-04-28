@@ -24,19 +24,21 @@
 #import "MADModelTable.h"
 #import "MADModelQuery.h"
 
-#import "RptqQuery.h"
+#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
+#import "RptqQuery.h"
 
 
 
 @interface MADModelDatabase ()
-    - (instancetype)initIdentifier:(int64_t)identifier
-              managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    - (instancetype)initIdentifier:(int64_t)identifier
-                           queryID:(NSManagedObjectID *)queryID
-                   queryIdentifier:(int64_t)queryIdentifier
-              managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (instancetype)initWithIdentifier:(int64_t)identifier
+                               queryID:(NSManagedObjectID *)queryID
+                       queryIdentifier:(int64_t)queryIdentifier
+                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 @end
 
 #pragma mark -
@@ -44,6 +46,10 @@
 
 @implementation MADModelDatabase {
 @protected
+    MADDatabaseType _driverType;
+    NSString *_driverName;
+    NSString *_driverID;
+    NSString *_driverDBName;
     NSManagedObjectContext * __weak _managedObjectContext;
     NSMutableOrderedSet <NSNumber *> *_tables;
     NSMutableDictionary <NSNumber *, MADModelTable *> *_tableDictionary;
@@ -63,6 +69,8 @@
 - (instancetype)initWithIdentifier:(int64_t)identifier
               managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     if (self = [super initWithIdentifier:identifier]) {
+        _driverName = nil;
+        _driverType = MADDatabaseTypeNotSet;
         _managedObjectContext = managedObjectContext;
     }
     return self;
@@ -73,6 +81,8 @@
               managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     if (self = [super initWithIdentifier:identifier]) {
+        _driverName = nil;
+        _driverType = MADDatabaseTypeNotSet;
         _managedObjectContext = managedObjectContext;
         MADModelQuery *queryObjectID;
         
@@ -125,6 +135,107 @@
     @autoreleasepool {
         [self updateQueries];
     }
+}
+
+- (MADDatabaseType)driverType {
+    
+    if (_driverType == MADDatabaseTypeNotSet) {
+    
+        NSArray <NSDictionary *> *results;
+        
+        NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverType: self.identifier];
+        
+        NSError * __autoreleasing *error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        if (results.count > 0) {
+            NSDictionary *firstResult = results[0];
+            NSString *key = [RptqDatabase keyDatabaseDriverType];
+            NSNumber *driverTypeWrapper = firstResult[key];
+            _driverType = driverTypeWrapper.shortValue;
+        }
+    }
+    return _driverType;
+}
+
+- (NSString *)schemaName {
+    
+    if (!_driverDBName) {
+        NSArray <NSDictionary *> *results;
+        
+        NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDatabaseName:self.identifier];
+        
+        NSError * __autoreleasing *error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        if (results.count > 0) {
+            NSDictionary *resultSet = results[0];
+            NSString *key = [RptqDatabase keyOwnedByUserDatabaseName];
+            NSString *driverName = resultSet[key];
+            _driverDBName = driverName.copy;
+        }
+    }
+    return _driverDBName;
+}
+
+- (NSString *)driverID {
+    
+    if (!_driverID) {
+        NSArray <NSDictionary *> *results;
+        
+        NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDatabaseDriverID:self.identifier];
+        
+        NSError * __autoreleasing *error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        if (results.count > 0) {
+            NSDictionary *resultSet = results[0];
+            NSString *key = [RptqDatabase keyOwnedByUserDriverID];
+            NSString *driverName = resultSet[key];
+            _driverID = driverName.copy;
+        }
+    }
+    return _driverID;
+}
+
+- (NSString *)driverName {
+
+    if (!_driverName) {
+        NSArray <NSDictionary *> *results;
+        
+        NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverName:self.identifier];
+        
+        NSError * __autoreleasing *error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        if (results.count > 0) {
+            NSDictionary *resultSet = results[0];
+            NSString *key = [RptqDatabase keyOwnedByUserDatabaseName];
+            NSString *driverName = resultSet[key];
+            _driverName = driverName.copy;
+        }
+    }
+    return _driverName;
+ /*
+    
+    NSString *databaseType = database.ownedByUser.driverID.copy;
+    RptqDatabaseCredentals *user = database.ownedByUser;
+    NSString * schemaName = [user databaseSchemaName].copy;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *TextFormatConnection = @"You are connecting to %1$@"
+        @" datasource named %2$@.";
+        NSString *localizedMessageFormat;
+        NSString *localizedMessage;
+        NSAttributedString *message;
+        localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+        localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
+        message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                             databaseType: databaseType
+                                                                                               schemaName: schemaName];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            cell.textLabel.attributedText = message;
+            cell.textLabel.text = localizedMessage;
+        });
+    });
+*/
+    return @"";
 }
 
 /**

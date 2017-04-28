@@ -17,6 +17,8 @@
 
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSExpressionDescription.h>
+#import <CoreData/NSFetchRequestExpression.h>
+
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPredicate.h>
@@ -51,11 +53,11 @@
     NSString *keyPathHasQueryTables = NSStringFromSelector(@selector(hasQueryTables));
     
     expressionDescriptionQueryTableCount = [[NSExpressionDescription alloc] init];
-    expressionDescriptionQueryTableCount.name = keyPathHasQueryTables.copy;
+    expressionDescriptionQueryTableCount.name = @"madQTC";//keyPathHasQueryTables.copy;
     expressionDescriptionQueryTableCount.expressionResultType = NSInteger32AttributeType;
     
     expressionHasQueryTables = [NSExpression expressionForKeyPath:keyPathHasQueryTables];
-    keyPathQueryTables = [[NSArray alloc] initWithObjects:keyPathHasQueryTables, nil];
+    keyPathQueryTables = [[NSArray alloc] initWithObjects:expressionHasQueryTables, nil];
     
     
     expressionDescriptionQueryTableCount.expression = [NSExpression expressionForFunction: @"count:"

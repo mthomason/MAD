@@ -619,6 +619,7 @@
 		4C3639F71D03B84E0077A506 /* MADImageThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADImageThumbnail.m; path = MAD/MADocument/MADImageThumbnail.m; sourceTree = "<group>"; };
 		4C39D0221C9284F800C70B10 /* MADCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCredential.h; path = MAD/MADCredential.h; sourceTree = "<group>"; };
 		4C39D0231C9284F800C70B10 /* MADCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCredential.m; path = MAD/MADCredential.m; sourceTree = "<group>"; };
+		4C3F85671E8E756B0003B67C /* MADModelType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADModelType.h; path = MAD/MADModelType.h; sourceTree = "<group>"; };
 		4C401CD81BAE3AF800BAE5FC /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaper.h; path = MAD/MADPaper/MTPaper.h; sourceTree = "<group>"; };
 		4C401CD91BAE3AF800BAE5FC /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPaper.m; path = MAD/MADPaper/MTPaper.m; sourceTree = "<group>"; };
 		4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPaperA0.h; path = MAD/MADPaper/MTPaperA0.h; sourceTree = "<group>"; };
@@ -1814,6 +1815,7 @@
 		4CD85D041E444D28005DA2AF /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C3F85671E8E756B0003B67C /* MADModelType.h */,
 				4C875F871E349FA40086C506 /* MADModel.h */,
 				4C875F881E349FA40086C506 /* MADModel.m */,
 				4CD85D051E444D73005DA2AF /* MADModelDocument.h */,

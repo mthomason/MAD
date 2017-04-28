@@ -167,15 +167,19 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
     return self.tableView.frame;
 }
 
-- (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID
-                                    inView:(UIView *)containerView {
-    MADModelTable *table = [_document.documentModel.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
-    NSUInteger row = [table.fieldIDs indexOfObject:@(managedObjectID)];
+- (CGRect)rectForFieldID:(int64_t)fieldID
+                  inView:(UIView *)containerView {
+    NSNumber *schemaTableID = @(_identifierSchemaTable);
+    NSNumber *schemaTableFieldID = @(fieldID);
+    MADModelDatabase *db = _document.documentModel.firstDatabase;
+    MADModelTable *table = [db.tableDictionary objectForKey: schemaTableID];
+    NSUInteger row = [table.fieldIDs indexOfObject:schemaTableFieldID];
     CGRect rectForRow;
     if (row == NSNotFound) {
         rectForRow = CGRectZero;
     } else {
-        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
+        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row
+                                                         inSection:0];
         rectForRow = [self.tableView rectForRowAtIndexPath:cellIndexPath];
     }
     return [self.tableView convertRect:rectForRow toView:containerView];
@@ -245,17 +249,6 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
     MADModelDocument *doc = _document.documentModel;
     MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
     return (NSInteger)table.fieldIDs.count;
-}
-
-#pragma mark - Methods
-
-- (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID {
-    MADModelDocument *doc = _document.documentModel;
-    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
-    NSUInteger row = [table.fieldIDs indexOfObject:@(managedObjectID)];
-    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row inSection:0];
-    CGRect rectForRow = [self.tableView rectForRowAtIndexPath:cellIndexPath];
-    return [self.tableView convertRect:rectForRow toView:self.view];
 }
 
 #pragma mark - UIScrollViewDelegate

@@ -54,13 +54,12 @@
     NSMutableDictionary <NSNumber *, MADModelQueryTable *> *_tables;
     //NSMutableDictionary <NSNumber *, MADModelTable *> *_tableSchemas;
     NSMutableDictionary <NSNumber *, MADModelQueryLink *> *_links;
-    MADModelDatabase __weak *_database;
     NSManagedObjectContext * __weak _managedObjectContext;
 }
     @synthesize managedObjectContext = _managedObjectContext;
 
 - (void)dealloc {
-    _database = nil;
+    _inDatabase = nil;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
@@ -75,7 +74,7 @@
                           database:(MADModelDatabase *)database {
     if (self = [self initWithIdentifier: identifier
                  managedObjectContext: database.managedObjectContext]) {
-        _database = database;
+        _inDatabase = database;
     }
     return self;
 }
@@ -277,7 +276,7 @@
                 queryTable = [[MADModelQueryTable alloc] initWithIdentifier: qtid
                                                                   dropIndex: di
                                                                 schemaTable: stid
-                                                                 inDatabase: _database];
+                                                                 inDatabase: _inDatabase];
                 
                 for (filteredResult in fresults) {
                     [queryTable addField: qfid

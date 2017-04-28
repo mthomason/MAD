@@ -106,6 +106,10 @@
     return fetchRequest;
 }
 
+- (void)dealloc {
+    _inQuery = nil;
+}
+
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
     if (self = [super initWithIdentifier:identifier]) {
 

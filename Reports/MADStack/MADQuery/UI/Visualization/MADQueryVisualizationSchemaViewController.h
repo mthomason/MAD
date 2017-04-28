@@ -29,8 +29,6 @@
     @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
     @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-    - (CGRect)rectForFieldWithObjectIdentifier:(int64_t)managedObjectID;
-
 @end
 
 #endif

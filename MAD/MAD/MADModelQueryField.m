@@ -27,6 +27,10 @@
     int64_t _schemaField;
 }
 
+- (void)dealloc {
+    _inQueryTable = nil;
+}
+
 - (instancetype)initWithIdentifier:(int64_t)identifier {
     if (self = [super initWithIdentifier:identifier]) { }
     return self;

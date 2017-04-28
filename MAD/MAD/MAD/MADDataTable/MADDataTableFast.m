@@ -12,6 +12,13 @@
 
 #import "MADDataTableFast.h"
 
+#import <dispatch/dispatch.h>
+#import <stdio.h>
+
+#import "madlib.h"
+
+#import <MADSqlite3/sqlite3.h>
+
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
@@ -26,9 +33,7 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSOperation.h>
 
-#import <dispatch/dispatch.h>
-
-#import <MADSqlite3/sqlite3.h>
+#import <MADDataStructures/MADIndex.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -38,7 +43,6 @@
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
-#import <MADDataStructures/MADIndex.h>
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
@@ -74,9 +78,6 @@
 
 #import "MADQueryCacheIndexCreateParameters.h"
 
-#import <stdio.h>
-
-#import "madlib.h"
 
 #import "MADQueryParameters.h"
 #import "MADDataTablePlist.h"

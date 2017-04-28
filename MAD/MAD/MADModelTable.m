@@ -41,6 +41,10 @@
 @dynamic fieldIDs;
 @dynamic name;
 
+- (void)dealloc {
+    _inDatabase = nil;
+}
+
 - (instancetype)initWithIdentifier:(int64_t)identifier {
     if (self = [self initWithIdentifier:identifier
                    managedObjectContext:nil]) {
