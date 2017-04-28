@@ -8,15 +8,7 @@
 
 #import "MADModel.h"
 #import <CoreFoundation/CFTree.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSFetchedPropertyDescription.h>
-#import <CoreData/NSPropertyDescription.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSAttributeDescription.h>
+
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSComparisonPredicate.h>
@@ -30,6 +22,17 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSMapTable.h>
 #import <Foundation/NSOperation.h>
+
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSExpressionDescription.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSFetchedPropertyDescription.h>
+#import <CoreData/NSPropertyDescription.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSAttributeDescription.h>
+
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqQuery.h>

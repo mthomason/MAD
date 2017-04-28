@@ -18,9 +18,11 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSExpressionDescription.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSExpression.h>
 
 #import <stdio.h>
 
@@ -47,6 +49,82 @@
 + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
                   managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     return (RptqQueryTable *)[managedObjectContext objectWithID:objectID];
+}
+
++ (NSFetchRequest *)fetchRequestQueryTables:(NSPredicate *)predicate {
+    
+    NSFetchRequest *fetchQueryTable;
+    NSString *entityName;
+    entityName = NSStringFromClass([RptqQueryTable class]);
+    fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
+    
+    NSString *keyPathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
+    NSString *keyPathDatabaseSchemaTable = NSStringFromSelector(@selector(databaseSchemaTable));
+    NSString *keyPathDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
+    NSString *keyPathName = NSStringFromSelector(@selector(name));
+    NSString *keyPathFieldName = [keyPathDatabaseSchemaField stringByAppendingString:@"."];
+    keyPathFieldName = [keyPathFieldName stringByAppendingString:keyPathName];
+    
+    NSString *keyPathTableName = [keyPathInQueryTable stringByAppendingString:@"."];
+    keyPathTableName = [keyPathTableName stringByAppendingString: keyPathDatabaseSchemaTable];
+    keyPathTableName = [keyPathTableName stringByAppendingString: @"."];
+    keyPathTableName = [keyPathTableName stringByAppendingString: keyPathName];
+    
+    NSString *keyPathSchemaTable = [keyPathInQueryTable stringByAppendingString: @"."];
+    keyPathSchemaTable = [keyPathSchemaTable stringByAppendingString: keyPathDatabaseSchemaTable];
+    
+    NSUInteger expressionCount = 10;
+    NSExpressionDescription *expressionDescription[expressionCount];
+    NSString *keys[] = {
+        @"QTI",
+        @"STI",
+    };
+    
+    NSString *keyQueryTableID, *keyQueryFieldID, *keySchemaTableID, *keySchemaFieldID;
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+    
+    keyQueryTableID = [keyPathInQueryTable stringByAppendingString:@"."];
+    keyQueryTableID = [keyQueryTableID stringByAppendingString:keyIdentifier];
+    
+    keyQueryFieldID = keyIdentifier.copy;
+    
+    keySchemaTableID = [keyPathSchemaTable stringByAppendingString:@"."];
+    keySchemaTableID = [keySchemaTableID stringByAppendingString:keyIdentifier];
+    
+    keySchemaFieldID = [keyPathDatabaseSchemaField stringByAppendingString:@"."];
+    keySchemaFieldID = [keySchemaFieldID stringByAppendingString:keyIdentifier];
+    
+    NSExpression *expressions[] = {
+        [NSExpression expressionForKeyPath: keyIdentifier],
+        [NSExpression expressionForKeyPath: keyPathDatabaseSchemaTable],
+    };
+    
+    NSAttributeType types[] = {
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+    };
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = [[NSExpressionDescription alloc] init];
+        expressionDescription[i].name = keys[i].copy;
+        expressionDescription[i].expression = expressions[i];
+        expressionDescription[i].expressionResultType = types[i];
+        
+    }
+    
+    NSArray *propertiesToFetch;
+    propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
+                                                   count: (NSUInteger)expressionCount];
+    
+    fetchQueryTable.propertiesToFetch = propertiesToFetch;
+    fetchQueryTable.resultType = NSDictionaryResultType;
+    fetchQueryTable.predicate = predicate;
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = nil;
+        keys[i] = nil;
+        expressions[i] = nil;
+    }
+    return fetchQueryTable;
 }
 
 + (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable

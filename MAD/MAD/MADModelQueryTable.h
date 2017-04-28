@@ -17,9 +17,6 @@
 @interface MADModelQueryTable : MADModel
     <MADModelIDProtocol>
 
-    + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
-    + (NSFetchRequest *)fetchRequestQueryTables:(NSPredicate *)predicate;
-
     - (instancetype)initWithIdentifier:(int64_t)identifier
                              dropIndex:(int64_t)dropIndex
                            schemaTable:(int64_t)schemaTableIdentifier

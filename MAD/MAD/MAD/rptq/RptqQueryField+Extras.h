@@ -18,6 +18,8 @@
     + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID
                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+    + (NSFetchRequest<NSDictionary *> *)fetchRequestFieldKeys:(int64_t)identifier;
+
     - (NSString *)display;
     - (NSString *)tableFieldKey;
     - (NSString *)toStringReverse;

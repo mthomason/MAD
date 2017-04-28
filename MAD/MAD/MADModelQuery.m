@@ -33,6 +33,7 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
 
 @interface MADModelQuery ()
 
@@ -201,26 +202,7 @@
     NSError * __autoreleasing error = NULL;
     NSArray <NSDictionary *> *fetchQueryTableResults;
     
-    NSUInteger expressionInQueryCount = 2;
-
-    NSExpression *expressions[expressionInQueryCount];
-    NSString *predicateKey;
-    predicateKey = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
-    predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
-    predicateKey = [predicateKey stringByAppendingString:@"."];
-    predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
-    
-    expressions[0] = [NSExpression expressionForKeyPath:predicateKey];
-    expressions[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
-    
-    NSPredicate *predicate;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
-                                                   rightExpression: expressions[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
-    
-    NSFetchRequest *fetchQueryTable = [MADModelQueryTable fetchRequest: predicate];
+    NSFetchRequest *fetchQueryTable = [RptqQueryField fetchRequestFieldKeys: self.identifier];
     
     fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable
                                                                  error:&error];
@@ -228,9 +210,6 @@
 
     [self insertTablesFromFetchRequestResults:fetchQueryTableResults];
 
-    for (NSUInteger i=0; i<expressionInQueryCount; i++) {
-        expressions[i] = nil;
-    }
 
 }
 
@@ -254,6 +233,7 @@
         
         NSDictionary *filteredResult;
         NSManagedObjectID *tableObjectID;
+        NSNumber *qtidn;
         for (tableObjectID in tableObjectIDs) {
             
             @autoreleasepool {
@@ -282,8 +262,9 @@
                     [queryTable addField: qfid
                              schemaField: sfid];
                 }
-                [_queryTableIDs addObject:@(qtid)];
-                [_tables setObject:queryTable forKey:@(qtid)];
+                qtidn = @(qtid);
+                [_queryTableIDs addObject:qtidn];
+                [_tables setObject:queryTable forKey:qtidn];
             }
         }
     }
@@ -375,27 +356,14 @@
     MADModelQueryTable *table;
     if ((table = [_tables objectForKey:queryTableID])) return;
 
-    NSExpression *expressionInQuery[2];
     NSArray <NSDictionary *> *results;
-    NSString *keyInQueryTable = NSStringFromSelector(@selector(inQueryTable));
-    expressionInQuery[0] = [NSExpression expressionForKeyPath:keyInQueryTable];
-    expressionInQuery[1] = [NSExpression expressionForConstantValue: queryTableID];
-    
-    NSPredicate *isQueryTable;
-    isQueryTable = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
-                                                      rightExpression: expressionInQuery[1]
-                                                             modifier: NSDirectPredicateModifier
-                                                                 type: NSEqualToPredicateOperatorType
-                                                              options: 0];
+
     NSError * __autoreleasing error = NULL;
-    NSFetchRequest *fetchRequest = [MADModelQueryTable fetchRequest:isQueryTable];
+    NSFetchRequest *fetchRequest = [RptqQueryField fetchRequestFieldKeys:queryTableID.longLongValue];
     results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
     
     NSAssert(results != nil && error == nil, @"What? %@", error);
     [self insertTablesFromFetchRequestResults:results];
-    
-    expressionInQuery[0] = nil;
-    expressionInQuery[1] = nil;
     
     NSDictionary *userInfo;
     userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:table, queryTableID, nil];
