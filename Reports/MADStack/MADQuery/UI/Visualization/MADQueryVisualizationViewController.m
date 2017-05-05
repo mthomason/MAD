@@ -55,6 +55,7 @@
 #import <MAD/MADModelQueryLink.h>
 #import <MAD/MADModelTable.h>
 #import <MAD/MADModelField.h>
+#import <MAD/MADModelQueryField.h>
 
 #import <MAD/MADTableFieldIdentifier.h>
 
@@ -930,10 +931,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (void)layoutQueryLinkViewControllerWithModelObject:(MADModelQueryLink *)link {
  
     MADConnectorView *connectorView;
-    //if (!(connectorView = self.connectionViewsByObjectID[queryLinkID])) return;
+
     connectorView = self.connectionViewsByObjectID[link.objectID];
     
-    const CGFloat paddingLeft = 44.0000f;
+    //const CGFloat paddingLeft = 44.0000f;
 
     CGFloat(^bottomLeftY)(CGRect) = ^CGFloat(CGRect rect) {
         return rect.origin.y + rect.size.height;
@@ -992,41 +993,103 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     CGFloat leftTableBottomY, rightTableBottomY;
     CGPoint leftCellAnchorPoint, rightCellAnchorPoint;
     
-    MADHierarchicalChildController *leftTVC, *rightTVC;
+    MADHierarchicalChildController *leftTableViewController, *rightTableViewController;
     
-    rightTVC = self.controllersByObjectID[@(link.rightFieldIdentifier.tableID)];
-    leftTVC = self.controllersByObjectID[@(link.leftFieldIdentifier.tableID)];
-    id tables = self.document.documentModel.firstDatabase.tables;
-    MADModelQueryTable *rightQueryTable = [self.document.documentModel.firstQuery.tables objectForKey:@(link.rightFieldIdentifier.tableID)];
-    MADModelQueryTable *leftQueryTable = [self.document.documentModel.firstQuery.tables objectForKey:@(link.leftFieldIdentifier.tableID)];
-    MADModelTable *rightTable = [self.document.documentModel.firstDatabase.tableDictionary objectForKey:@(rightQueryTable.schemaTable)];// link.leftFieldIdentifier.fieldID
-    MADModelTable *leftTable = [self.document.documentModel.firstDatabase.tableDictionary objectForKey:@(leftQueryTable.schemaTable)];
-    MADModelQueryField *rightQueryField = [rightQueryTable.queryFields objectForKey:@(link.rightFieldIdentifier.fieldID)];
-    MADModelQueryField *leftQueryField = [leftQueryTable.queryFields objectForKey:@(link.leftFieldIdentifier.fieldID)];
-    MADModelField *rightField, *leftField;
-    rightField = [rightTable.fields objectForKey:@(link.rightFieldIdentifier.fieldID)];
-    leftField = [leftTable.fields objectForKey:@(link.leftFieldIdentifier.fieldID)];
-    leftCellFrameInTable = [leftTVC rectForFieldID: link.leftFieldIdentifier.fieldID
-                                            inView: leftTVC.view];
-    rightCellFrameInTable = [rightTVC rectForFieldID: link.rightFieldIdentifier.fieldID
-                                              inView: rightTVC.view];
+    //id tables = self.document.documentModel.firstDatabase.tables;
+    MADocument *document = self.document;
+    MADModelQuery *firstQuery = document.documentModel.firstQuery;
+    
+    NSNumber *keyRightQueryTableID = @(link.rightFieldIdentifier.tableID);
+    NSNumber *keyLeftQueryTableID = @(link.leftFieldIdentifier.tableID);
+    NSNumber *keyRightSchemaTable, *keyLeftSchemaTable;
 
-    leftTableBottomY = bottomLeftY(leftTVC.frame);
+    NSNumber *keyRightFieldID = @(link.rightFieldIdentifier.fieldID);
+    NSNumber *keyLeftFieldID = @(link.leftFieldIdentifier.fieldID);
+
+    MADModelDatabase *firstDatabase = document.documentModel.firstDatabase;
+    MADModelQueryTable *rightQueryTable, *leftQueryTable;
+    MADModelTable *rightTable, *leftTable;
+    MADModelField *rightField, *leftField;
     
-    CGRect leftTVCFrame = leftTVC.frame;
-    repositionRect(&leftCellFrameInTable, &(leftTVCFrame), leftTableBottomY);
+    rightQueryTable = [firstQuery.tables objectForKey:keyRightQueryTableID];
+    leftQueryTable = [firstQuery.tables objectForKey:keyLeftQueryTableID];
+    
+    keyRightSchemaTable = @(rightQueryTable.schemaTable);
+    keyLeftSchemaTable = @(leftQueryTable.schemaTable);
+    
+    rightTable = [firstDatabase.tableDictionary objectForKey:keyRightSchemaTable];
+    leftTable = [firstDatabase.tableDictionary objectForKey:keyLeftSchemaTable];
+    
+    MADModelQueryField *leftQueryField = [leftQueryTable.queryFields objectForKey:keyLeftFieldID];
+    MADModelQueryField *rightQueryField = [rightQueryTable.queryFields objectForKey:keyRightFieldID];
+    NSNumber *leftSchemaFieldID = @(leftQueryField.schemaFieldIdentifier);
+    NSNumber *rightSchemaFieldID = @(rightQueryField.schemaFieldIdentifier);
+//    NSNumber *leftID
+    rightField = [rightTable.fields objectForKey:rightSchemaFieldID];
+    leftField = [leftTable.fields objectForKey:leftSchemaFieldID];
+    
+    
+    //int64_t leftQueryTableID = link.leftFieldIdentifier.tableID;   // 12
+    //int64_t rightQueryTableID = link.rightFieldIdentifier.tableID; // 11
+
+    //int64_t leftQueryFieldID = link.leftFieldIdentifier.fieldID;   // 98
+    //int64_t rightQueryFieldID = link.rightFieldIdentifier.fieldID; // 97
+    
+    //MADModelQueryTable *leftQueryTable2 = [firstQuery.tables objectForKey:keyLeftQueryTableID];
+    //MADModelQueryField *leftQueryField2 = [leftQueryTable.queryFields objectForKey:keyLeftFieldID];
+    
+    //MADModelQueryTable *rightQueryTable2 = [firstQuery.tables objectForKey:keyRightQueryTableID];
+    //MADModelQueryField *rightQueryField2 = [rightQueryTable.queryFields objectForKey:keyRightFieldID];
+    
+    //MADModelField *leftSchemaField = leftQueryField2.schemaField;
+    //MADModelField *rightSchemaField = rightQueryField2.schemaField;
+    
+    leftTableViewController = self.controllersByObjectID[keyLeftQueryTableID];
+
+    leftCellFrameInTable = [leftTableViewController rectForFieldID: leftField.identifier
+                                                            inView: leftTableViewController.view];
+    
+    rightTableViewController = self.controllersByObjectID[keyRightQueryTableID];
+    rightCellFrameInTable = [rightTableViewController rectForFieldID: rightField.identifier
+                                                              inView: rightTableViewController.view];
+
+    leftTableBottomY = bottomLeftY(leftTableViewController.frame);
+    
+    CGRect leftTableViewControllerFrame = leftTableViewController.frame;
+    repositionRect(&leftCellFrameInTable, &(leftTableViewControllerFrame), leftTableBottomY);
     
     leftCellAnchorPoint = CGCenterOfRect([self.scrollView.contentView convertRect: leftCellFrameInTable
-                                                                         fromView: leftTVC.view]);
+                                                                         fromView: leftTableViewController.view]);
     translatePoint(&leftCellAnchorPoint, 44.0000f, 0.0000f);
     
-    rightTableBottomY = bottomLeftY(rightTVC.frame);
+    rightTableBottomY = bottomLeftY(rightTableViewController.frame);
 
-    CGRect rightTVCFrame = rightTVC.frame;
-    repositionRect(&rightCellFrameInTable, &(rightTVCFrame), rightTableBottomY);
+    CGRect rightTableViewControllerFrame = rightTableViewController.frame;
+    NSLog(@"Query: (%lld, %lld) link (%lld, %lld)",
+          link.leftFieldIdentifier.tableID,
+          link.leftFieldIdentifier.fieldID,
+          link.rightFieldIdentifier.tableID,
+          link.rightFieldIdentifier.fieldID);
+    NSLog(@"Schema: %@.%@(%lld, %lld) link to %@.%@(%lld, %lld)",
+          leftTable.name,
+          leftField.name,
+          leftTable.identifier,
+          leftField.identifier,
+          rightTable.name,
+          rightField.name,
+          rightTable.identifier,
+          rightField.identifier);
+    NSLog(@"Table Frame: %@ %@",
+          NSStringFromCGRect(leftTableViewControllerFrame),
+          NSStringFromCGRect(rightTableViewControllerFrame));
+    NSLog(@"Cell Frame: %@ %@\n\n----",
+          NSStringFromCGRect(leftCellFrameInTable),
+          NSStringFromCGRect(rightCellFrameInTable));
+    
+    repositionRect(&rightCellFrameInTable, &(rightTableViewControllerFrame), rightTableBottomY);
     
     rightCellAnchorPoint = CGCenterOfRect([self.scrollView.contentView convertRect: rightCellFrameInTable
-                                                                          fromView: rightTVC.view]);
+                                                                          fromView: rightTableViewController.view]);
     translatePoint(&rightCellAnchorPoint, 44.0000f, 0.0000f);
 
     MADDirection direction;

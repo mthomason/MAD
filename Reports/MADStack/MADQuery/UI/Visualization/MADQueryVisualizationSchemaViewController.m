@@ -173,14 +173,14 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
     NSNumber *schemaTableFieldID = @(fieldID);
     MADModelDatabase *db = _document.documentModel.firstDatabase;
     MADModelTable *table = [db.tableDictionary objectForKey: schemaTableID];
-    NSUInteger row = [table.fieldIDs indexOfObject:schemaTableFieldID];
+    NSUInteger row = [table.fieldIDs indexOfObject: schemaTableFieldID];
     CGRect rectForRow;
     if (row == NSNotFound) {
         rectForRow = CGRectZero;
     } else {
-        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:(NSInteger)row
-                                                         inSection:0];
-        rectForRow = [self.tableView rectForRowAtIndexPath:cellIndexPath];
+        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem: (NSInteger)row
+                                                         inSection: 0];
+        rectForRow = [self.tableView rectForRowAtIndexPath: cellIndexPath];
     }
     return [self.tableView convertRect:rectForRow toView:containerView];
 }

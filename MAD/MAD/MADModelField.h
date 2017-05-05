@@ -28,7 +28,6 @@
     @property (nonatomic) int16_t dataTypeNative;
     @property (nonatomic) int16_t decimals;
     @property (nonatomic) int64_t width;
-    //@property (nonatomic) int64_t identifier;
 
 @end
 

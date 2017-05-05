@@ -245,22 +245,28 @@
                                                                                type: NSEqualToPredicateOperatorType
                                                                             options: 0];
                 fresults = [results filteredArrayUsingPredicate:predicateTable];
-                filteredResult = fresults.firstObject;
                 
-                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaTableID], kCFNumberSInt64Type, &stid);
-                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaFieldID], kCFNumberSInt64Type, &sfid);
-                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryTableID], kCFNumberSInt64Type, &qtid);
-                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryFieldID], kCFNumberSInt64Type, &qfid);
-                CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[dropIndex], kCFNumberSInt64Type, &di);
+                NSUInteger resultCounter = 0;
                 MADModelQueryTable *queryTable;
-                queryTable = [[MADModelQueryTable alloc] initWithIdentifier: qtid
-                                                                  dropIndex: di
-                                                                schemaTable: stid
-                                                                 inDatabase: _inDatabase];
-                
                 for (filteredResult in fresults) {
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaTableID], kCFNumberSInt64Type, &stid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaFieldID], kCFNumberSInt64Type, &sfid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryTableID], kCFNumberSInt64Type, &qtid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryFieldID], kCFNumberSInt64Type, &qfid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[dropIndex], kCFNumberSInt64Type, &di);
+
+                    if (resultCounter == 0) {
+
+                        queryTable = [[MADModelQueryTable alloc] initWithIdentifier: qtid
+                                                                          dropIndex: di
+                                                                        schemaTable: stid
+                                                                         inDatabase: _inDatabase];
+
+                    }
+                    
                     [queryTable addField: qfid
                              schemaField: sfid];
+                    resultCounter++;
                 }
                 qtidn = @(qtid);
                 [_queryTableIDs addObject:qtidn];

@@ -51,6 +51,10 @@
 - (MADModelField *)schemaField {
     return [[_database.tableDictionary objectForKey:@(_schemaTable)].fields objectForKey:@(_schemaField)];
 }
+
+- (int64_t) schemaFieldIdentifier {
+    return _schemaField;
+}
 /*
 - (NSString *)debugDescription {
     NSString *debugDescription;
