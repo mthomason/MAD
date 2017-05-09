@@ -1549,7 +1549,8 @@ static const inline CGSize sizePopoverFonts() {
         MADDesignerElementView *lastElementViewToShowMenu = self.lastElementViewToShowMenu;
         if (lastElementViewToShowMenu) {
             [self deselectElementView: lastElementViewToShowMenu animated: YES];
-            [self.selectedElementIDs removeObject: @(lastElementViewToShowMenu.identifier)];
+            NSNumber *identifer = @(lastElementViewToShowMenu.identifier);
+            [self.selectedElementIDs removeObject: identifer];
             (self.viewControllerToolbox).selectedElementIDs = self.selectedElementIDs;
         }
         self.lastElementViewToShowMenu = nil;
@@ -1576,19 +1577,20 @@ static const inline CGSize sizePopoverFonts() {
     }
     
     if (selectedImage != nil) {
-        self.hidesStatusBar = NO;
         
-        MADDesignerViewController * __weak wself = self;
+        //MADDesignerViewController * __weak wself = self;
+        
         [self dismissViewControllerAnimated:YES completion:^{
-        
-            NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeImage];
-            NSDictionary *defination;
-            defination = [[NSDictionary alloc] initWithObjectsAndKeys:
-                            type,           MTDocumentObjectDefinationType,
-                            selectedImage,  MTDocumentObjectDefinationObject, nil];
-            [wself insertDocumentObjectWithDefination: defination];
-            
+            self.hidesStatusBar = NO;
         }];
+
+        NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeImage];
+        NSDictionary *defination;
+        defination = [[NSDictionary alloc] initWithObjectsAndKeys:
+                      type,           MTDocumentObjectDefinationType,
+                      selectedImage,  MTDocumentObjectDefinationObject, nil];
+        [self insertDocumentObjectWithDefination: defination];
+
     }
     
     [self setDisplayActive];

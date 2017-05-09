@@ -171,8 +171,7 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
                   inView:(UIView *)containerView {
     NSNumber *schemaTableID = @(_identifierSchemaTable);
     NSNumber *schemaTableFieldID = @(fieldID);
-    MADModelDatabase *db = _document.documentModel.firstDatabase;
-    MADModelTable *table = [db.tableDictionary objectForKey: schemaTableID];
+    MADModelTable *table = [_document.documentModel.firstDatabase.tableDictionary objectForKey: schemaTableID];
     NSUInteger row = [table.fieldIDs indexOfObject: schemaTableFieldID];
     CGRect rectForRow;
     if (row == NSNotFound) {

@@ -59,20 +59,24 @@ static NSString *CacheExt                    = @"qvvc";
 - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination
                forObjectID:(int64_t)objectID {
     MADHierarchicalChildViewDefination *copyTableDefination = [tableDefination copyWithZone:nil];
-    self.tableDefinations[@(objectID)] = copyTableDefination;
+    NSNumber *oid = @(objectID);
+    self.tableDefinations[oid] = copyTableDefination;
 }
 
 - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID {
-    return self.tableDefinations[@(objectID)];
+    NSNumber *oid = @(objectID);
+    return self.tableDefinations[oid];
 }
 
-- (void)removeTableDefinationForObjectID:(NSNumber *)objectID {
-    [self.tableDefinations removeObjectForKey: objectID];
+- (void)removeTableDefinationForObjectID:(int64_t)objectID {
+    NSNumber *oid = @(objectID);
+    [self.tableDefinations removeObjectForKey: oid];
 }
 
 + (NSString *)cacheFileNameForFileName:(NSString *)filename {
-    NSString *fileName = [NSString stringWithFormat:@"%lu", (unsigned long)filename.hash];
-    return [fileName stringByAppendingPathExtension:CacheExt];
+    NSString *fileName = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)filename.hash];
+    fileName = [fileName stringByAppendingPathExtension:CacheExt];
+    return fileName;
 }
 
 - (NSString *)debugDescription {

@@ -20,7 +20,7 @@
 #import <MADDataStructures/MTPair.h>
 
 #import "MADHierarchicalDisplayModel.h"
-#import "MADQueryVisualizationDefination.h"
+#import "MADQueryVisualizationModel.h"
 #import "MADManagedObjectViewProtocol.h"
 #import "MADHierarchicalGroupingNodeProtocol.h"
 #import "MADHierarchicalChildViewDefination.h"
@@ -49,7 +49,7 @@
 
 - (void)updateCacheWithQuery:(MADModelQuery *)query contentOffset:(CGPoint)contentOffset
                    zoomScale:(CGFloat)zoomScale center:(CGPoint (^)(NSNumber *))center {
-    MADQueryVisualizationDefination *queryDef;
+    MADQueryVisualizationModel *queryDef;
     MTLinkedList *topologicallySortedTables;
     MADHierarchicalDisplayModel *cacheData;
     
@@ -59,7 +59,7 @@
 
     MTVertex *tableIDVertext;
     
-    queryDef= [[MADQueryVisualizationDefination alloc] initWithQuery:query];
+    queryDef= [[MADQueryVisualizationModel alloc] initWithQuery:query];
     topologicallySortedTables = queryDef.topologicallySortedTables;
     
     cacheData = [[MADHierarchicalDisplayModel alloc] initWithNumberOfTables:[topologicallySortedTables count]];

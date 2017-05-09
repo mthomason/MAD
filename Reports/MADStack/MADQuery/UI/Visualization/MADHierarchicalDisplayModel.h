@@ -25,7 +25,7 @@
     - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination
                    forObjectID:(int64_t)objectID;
 
-    - (void)removeTableDefinationForObjectID:(NSManagedObjectID *)objectID;
+    - (void)removeTableDefinationForObjectID:(int64_t)objectID;
 
     - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID;
 

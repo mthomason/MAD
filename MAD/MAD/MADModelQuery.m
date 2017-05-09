@@ -264,8 +264,7 @@
 
                     }
                     
-                    [queryTable addField: qfid
-                             schemaField: sfid];
+                    [queryTable addField: qfid schemaField: sfid];
                     resultCounter++;
                 }
                 qtidn = @(qtid);
