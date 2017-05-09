@@ -6,15 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MTQueryVisualizationLinkDefination_h
-#define MAD_Designer_MTQueryVisualizationLinkDefination_h
+#ifndef MAD_Designer_MADQueryVisualizationLinkModel_h
+#define MAD_Designer_MADQueryVisualizationLinkModel_h
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
 
 @class NSURL, MTPair;
 
-@interface MTQueryVisualizationLinkDefination : NSObject
+@interface MADQueryVisualizationLinkModel : NSObject
 
     @property (nonatomic, strong) NSURL *linkID;
     @property (nonatomic, strong) MTPair *fieldsIDs;

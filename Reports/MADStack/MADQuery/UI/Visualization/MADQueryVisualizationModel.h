@@ -13,7 +13,7 @@
 
 @class MADModelQuery, MTGraph, MTLinkedList, NSArray<__covariant ObjectType>;
 
-@interface MADQueryVisualizationDefination : NSObject
+@interface MADQueryVisualizationModel : NSObject
 
     - (instancetype)initWithQuery:(MADModelQuery *)query;
 

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADQueryVisualizationDefination.h"
+#import "MADQueryVisualizationModel.h"
 
 #import <Foundation/NSURL.h>
 #import <Foundation/NSExpression.h>
@@ -30,7 +30,7 @@
 
 #import "MTGraph+RptqQuery.h"
 
-@interface MADQueryVisualizationDefination()
+@interface MADQueryVisualizationModel()
 
     @property (nonatomic, strong, readwrite) MTGraph *graphRepresentation;
     @property (nonatomic, strong, readwrite) MTLinkedList *topologicallySortedTables;
@@ -39,7 +39,7 @@
 
 @end
 
-@implementation MADQueryVisualizationDefination
+@implementation MADQueryVisualizationModel
 
 - (instancetype)initWithQuery:(MADModelQuery *)queryID {
     if (self = [super init]) {
