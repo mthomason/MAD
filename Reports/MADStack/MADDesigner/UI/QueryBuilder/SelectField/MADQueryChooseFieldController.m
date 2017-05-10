@@ -52,54 +52,39 @@
 
 
 typedef NSArray <MADSchemaFieldSelectorModel *> MADSectionInfoArray;
-typedef NSMutableArray <MADSchemaFieldSelectorModel *> MADSectionInfoMutableArray;
 
 static inline double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
 static inline  double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
     return ((numTables * MADHeaderHeight) + (numFields * MAD_44));
 }
 
-static inline double
-PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                MADSchemaFieldSelectorModel *sectionInfo);
-static inline double
-PreferredContentHeightForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                MADSchemaFieldSelectorModel *sectionInfo) {
-    return heightForSectionInfo(sectionInfoArray.count,
-                                sectionInfo == nil ?
-                                0 : sectionInfo.table.hasQueryFields.count);
+static inline double PreferredContentHeightForUpdate(NSUInteger, NSUInteger);
+static inline double PreferredContentHeightForUpdate(NSUInteger count, NSUInteger index) {
+    return heightForSectionInfo(count, index);
 }
 
-static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                                   MADSchemaFieldSelectorModel *sectionInfo);
-static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionInfoArray,
-                                                   MADSchemaFieldSelectorModel *sectionInfo) {
+static inline CGSize PreferredContentSizeForUpdate(NSUInteger, NSUInteger);
+static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger index) {
     return CGSizeMake(MADFloat_320,
-                      (CGFloat)PreferredContentHeightForUpdate(sectionInfoArray, sectionInfo));
+                      (CGFloat)PreferredContentHeightForUpdate(count, index));
 }
 
 @interface MADQueryChooseFieldController ()
 
-    @property (nonatomic, strong) MADSectionInfoMutableArray *sectionInfoArray;
-    @property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
-    @property (nonatomic, strong) NSArray *dataTables;
-
-    @property (nonatomic, assign) NSInteger openSectionIndex;
-    @property (nonatomic, assign) CGFloat initialPinchHeight;
-
-    @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptors;
-
+    @property (nonatomic, strong) NSMutableArray <MADSchemaFieldSelectorModel *> *sectionInfoArray;
     @property (nonatomic, strong) NSFetchedResultsController *resultsController;
 
 @end
 
-@implementation MADQueryChooseFieldController
+@implementation MADQueryChooseFieldController {
+    NSInteger _openSectionIndex;
+}
 
 @synthesize unwindViewController;
 
 + (instancetype)newQueryBuilderChooseFieldViewController {
-    static NSString * const ObjectSelector = @"MADDesignerObjectSelector";
-    static NSString * const MainIdentifier = @"UITableViewControllerChooseFieldDataObject";
+    NSString * ObjectSelector = @"MADDesignerObjectSelector";
+    NSString * MainIdentifier = @"UITableViewControllerChooseFieldDataObject";
     id bundle, viewController, storyboard;
     bundle = [NSBundle mainBundle];
     storyboard = [UIStoryboard storyboardWithName: ObjectSelector bundle: bundle];
@@ -108,55 +93,36 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-
-        NSSortDescriptor *namesAccending;
-        NSArray *sortDescriptors;
-        
-        namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
-                                                     ascending: YES];
-        sortDescriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
-        self.sortDescriptors = sortDescriptors;
-        
-    }
+    if (self = [super initWithCoder:aDecoder]) { }
     return self;
 }
 
-- (NSFetchedResultsController *)resultsController {
-    if (_resultsController == nil) {
-       
-        NSString *keyInQueryTableAlias = [RptqQueryField keyInQueryTableAlias];
-        NSString *keySchemaFieldName = [RptqQueryField keySchemaFieldName];
-        
-        NSSortDescriptor *sortTable, *sortField;
-        sortTable = [NSSortDescriptor sortDescriptorWithKey: keyInQueryTableAlias
-                                                  ascending: YES];
+#pragma mark Initialization and configuration
 
-        sortField = [NSSortDescriptor sortDescriptorWithKey: keySchemaFieldName
-                                                  ascending: YES];
-        
-        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects: sortTable, sortField, nil];
-        
-        NSFetchRequest *request;
-        request = [RptqQueryField fetchRequestFields:1];
-        request.sortDescriptors = sortDescriptors;
-        
-        NSString *sectionNameKeyPath = [RptqQueryField keyTableName];
-        NSFetchedResultsController *resultsController;
-        resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                managedObjectContext: self.document.managedObjectContext
-                                                                  sectionNameKeyPath: keyInQueryTableAlias
-                                                                           cacheName: nil];
-        
-        NSError *error = nil;
-        if (![resultsController performFetch: &error]) {
-            NSLog(@"requestError: %@\n%@", error.localizedDescription, error.localizedFailureReason);
-        }
-
-        _resultsController = resultsController;
-    }
-    return _resultsController;
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    NSString *reuseID = NSStringFromClass([MADDatabaseTableSectionHeaderView class]);
+    [self.tableView registerClass:[MADDatabaseTableSectionHeaderView class] forHeaderFooterViewReuseIdentifier:reuseID];
+    
+    _openSectionIndex = NSNotFound;
+    
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated]; 
+    self.tableView.sectionHeaderHeight = MADFloatHeaderHeight;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.isAccessibilityElement = NO;
+    [self updateSize];
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+#pragma mark -
+#pragma mark Storyboard
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
                  fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
@@ -173,12 +139,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
                                                        withSender: sender];
 }
 
-#pragma mark Initialization and configuration
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"] ||
@@ -187,71 +147,72 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
         
         UITableViewCell *cell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell: cell];
-        RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
+        NSManagedObjectID *fieldID = [self queryFieldObjectIDForIndexPath:indexPath];
+        RptqQueryField *queryField = [self.document.managedObjectContext objectWithID:fieldID];
         self.queryField = queryField;
     
     }
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.tableView.sectionHeaderHeight = MADFloatHeaderHeight;
+#pragma mark -
+#pragma mark Lazy load
 
-    self.openSectionIndex = NSNotFound;
-    RptqDocument *document = (self.document).activeDocumentModel;
-    RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-    RptqQuery *query = database.hasQueries.anyObject;
-
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"alias"
-                                                                   ascending: YES];
-    NSArray *names = [[NSArray alloc] initWithObjects:namesAccending, nil];
-    NSArray *dataTables = [query.hasQueryTables sortedArrayUsingDescriptors:names];
-    
-    self.dataTables = dataTables;
-    
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    self.tableView.isAccessibilityElement = NO;
+- (NSMutableArray <MADSchemaFieldSelectorModel *> *)sectionInfoArray {
+    if (_sectionInfoArray == nil) {
+        NSMutableArray <MADSchemaFieldSelectorModel *> *infoArray;
+        NSUInteger sectionCount = self.resultsController.sections.count;
+        infoArray = [[NSMutableArray alloc] initWithCapacity:sectionCount];
+        MADSchemaFieldSelectorModel *sectionInfo;
+        for (NSUInteger i = 0; i<sectionCount; i++) {
+            sectionInfo = [[MADSchemaFieldSelectorModel alloc] init];
+            [infoArray addObject:sectionInfo];
+        }
+        _sectionInfoArray = infoArray;
+    }
+    return _sectionInfoArray;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated]; 
-	
-    MADSectionInfoArray *sectionInfoArray = self.sectionInfoArray.copy;
-	if (sectionInfoArray == nil || sectionInfoArray.count <= 0) {
-		
-        NSArray *dataTables = self.dataTables;
-		NSMutableArray *infoArray = [[NSMutableArray alloc] initWithCapacity:dataTables.count];
-        MADSchemaFieldSelectorModel *sectionInfo;
-        for (RptqQueryTable *queryTable in dataTables) {
-			sectionInfo = [[MADSchemaFieldSelectorModel alloc] initWithTable: queryTable];
-			sectionInfo.open = NO;
-			
-            NSNumber *defaultRowHeight = [[NSNumber alloc] initWithDouble: MAD_44];
-			NSUInteger countOfQuotations = sectionInfo.table.hasQueryFields.count;
-			for (NSUInteger i = 0; i < countOfQuotations; i++) {
-				[sectionInfo insertObject:defaultRowHeight inRowHeightsAtIndex:i];
-			}
-			
-			[infoArray addObject:sectionInfo];
-		}
-		
-		self.sectionInfoArray = infoArray;
-	}
-    
-    [self updateSize];
-	
+- (NSFetchedResultsController *)resultsController {
+    if (_resultsController == nil) {
+        
+        NSString *keyInQueryTableAlias = [RptqQueryField keyInQueryTableAlias];
+        NSString *keySchemaFieldName = [RptqQueryField keySchemaFieldName];
+        
+        NSSortDescriptor *sortTable, *sortField;
+        sortTable = [NSSortDescriptor sortDescriptorWithKey: keyInQueryTableAlias
+                                                  ascending: YES];
+        
+        sortField = [NSSortDescriptor sortDescriptorWithKey: keySchemaFieldName
+                                                  ascending: YES];
+        
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects: sortTable, sortField, nil];
+        
+        NSFetchRequest *request;
+        request = [RptqQueryField fetchRequestFields:1];
+        request.sortDescriptors = sortDescriptors;
+        
+        NSFetchedResultsController *resultsController;
+        resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                managedObjectContext: self.document.managedObjectContext
+                                                                  sectionNameKeyPath: keyInQueryTableAlias
+                                                                           cacheName: nil];
+        
+        NSError *error = nil;
+        if (![resultsController performFetch: &error]) {
+            NSLog(@"requestError: %@\n%@", error.localizedDescription, error.localizedFailureReason);
+        }
+        
+        _resultsController = resultsController;
+    }
+    return _resultsController;
 }
 
 #pragma mark -
 #pragma mark Table view datasource and delegate
 
 - (NSInteger)numberOfRowsInSection:(NSInteger)section {
-    
     MADSchemaFieldSelectorModel *state = _sectionInfoArray[(NSUInteger)section];
     id <NSFetchedResultsSectionInfo> data = self.resultsController.sections[(NSUInteger)section];
-    
     return state.open ? (NSInteger)data.numberOfObjects : 0;
 }
 
@@ -263,8 +224,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
     MADSchemaFieldSelectorModel *state = _sectionInfoArray[(NSUInteger)section];
     id <NSFetchedResultsSectionInfo> data = self.resultsController.sections[(NSUInteger)section];
-    
-    NSLog(@"numberOfRowsInSection %ld: %ld == %ld", section, state.open ? data.numberOfObjects : 0, [self numberOfRowsInSection:section]);
     return state.open ? (NSInteger)data.numberOfObjects : 0;
 }
 
@@ -272,92 +231,77 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 - (UITableViewCell *)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
     
     static NSString *identifier = @"UITableViewCellFieldWithType";
+    static NSString *keyFieldName, *keyDataType;
+    if (keyFieldName == nil) keyFieldName = [RptqQueryField keyFieldName];
+    if (keyDataType == nil) keyDataType = [RptqQueryField keySchemaFieldDataType];
+    
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
     
     cell.isAccessibilityElement = YES;
     cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton;
     
-    
-    if (self.sectionInfoArray.count >= (NSUInteger)indexPath.section) {
-        MADSchemaFieldSelectorModel *fieldSelectorManager = self.sectionInfoArray[(NSUInteger)indexPath.section];
-        NSArray *fieldsArray = [fieldSelectorManager.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
+    if (self.resultsController.sections.count >= (NSUInteger)indexPath.section) {
         
-        RptqQueryField *field = fieldsArray[(NSUInteger)indexPath.row];
-        RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
-        if (field) {
+        int16_t dataType;
+        id <NSFetchedResultsSectionInfo> secinfo = self.resultsController.sections[(NSUInteger)indexPath.section];
+        NSDictionary *object = secinfo.objects[(NSUInteger)indexPath.row];
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)object[keyDataType], kCFNumberSInt16Type, &dataType);
         
-            NSString *keyFieldName = [RptqQueryField keyFieldName];
-            NSString *keyDataType = [RptqQueryField keySchemaFieldDataType];
-            int16_t dataType;
-            id <NSFetchedResultsSectionInfo> secinfo = self.resultsController.sections[(NSUInteger)indexPath.section];
-            NSDictionary *object = secinfo.objects[(NSUInteger)indexPath.row];
-            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)object[keyDataType], kCFNumberSInt16Type, &dataType);
-            
-            NSString *name = object[keyFieldName];
-            NSString *dataTypeDisplay = [RptqDatabaseSchemaField dataTypeDisplay:dataType];
-            NSLog(@"Row %ld title: %@ == %@", indexPath.row, name, schemaField.name);
-            
-            cell.textLabel.text = name.copy;
-            cell.detailTextLabel.text = dataTypeDisplay.lowercaseString;
-            cell.accessibilityLabel = name.copy;
-            cell.accessibilityHint = NSLocalizedString(@"Selects field.", @"Selects field.");
-        }
+        NSString *name = object[keyFieldName];
+        NSString *dataTypeDisplay = [RptqDatabaseSchemaField dataTypeDisplay:dataType];
+        
+        cell.textLabel.text = name.copy;
+        cell.detailTextLabel.text = dataTypeDisplay.lowercaseString;
+        cell.accessibilityLabel = name.copy;
+        cell.accessibilityHint = NSLocalizedString(@"Selects field.", @"Selects field.");
     }
 
     return cell;
 }
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
-	MADSchemaFieldSelectorModel *sectionInfo = self.sectionInfoArray[(NSUInteger)section];
-    if (!sectionInfo.headerView) {
-        CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y,
-                                 self.tableView.bounds.size.width, MADFloatHeaderHeight);
-        
-        id <NSFetchedResultsSectionInfo> secinfo = self.resultsController.sections[(NSUInteger)section];
-        //secinfo.name;
-        
-        NSLog(@"Section title: %@ == %@", secinfo.name, sectionInfo.table.alias);
-        
-        id vsht = [[MADDatabaseTableSectionHeaderView alloc] initWithFrame: rect
-                                                                     title: sectionInfo.table.alias
-                                                                   section: section
-                                                                  delegate: self];
-        sectionInfo.headerView = vsht;
-    }
-    return sectionInfo.headerView;
+    
+    static NSString *identifier;
+    if (identifier == nil) identifier = NSStringFromClass([MADDatabaseTableSectionHeaderView class]);
+    MADDatabaseTableSectionHeaderView *vsht = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
+    CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y,
+                             self.tableView.bounds.size.width, MADFloatHeaderHeight);
+    
+    id <NSFetchedResultsSectionInfo> secinfo = self.resultsController.sections[(NSUInteger)section];
+    [vsht setSection:section];
+    [vsht setDelegate:self];
+    [vsht setTitle:secinfo.name];
+    [vsht setFrame:rect];
+    return vsht;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return MADFloatHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	MADSchemaFieldSelectorModel *sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
-    return [[sectionInfo objectInRowHeightsAtIndex:(NSUInteger)indexPath.row] floatValue];
+    return MAD_44;
 }
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
+    NSManagedObjectID *fieldID = [self queryFieldObjectIDForIndexPath:indexPath];
+    RptqQueryField *queryField = [self.document.managedObjectContext objectWithID:fieldID];
     if (queryField != nil) {
-        id <MADQueryChooseFieldProtocol> d = self.delegate;
-        if (d != nil) {
-            [d tableViewControllerChooseFieldDidFinish: self withField: queryField];
-        }
+        [self.delegate tableViewControllerChooseFieldDidFinish: self withField: queryField];
     }
 }
 
 #pragma mark -
 #pragma mark Helpers
 
-- (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
-    RptqQueryField *queryField = nil;
-    
-    MADSchemaFieldSelectorModel *sectionInfo;
-    sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
-
-    if (sectionInfo.table.hasQueryFields.count > (NSUInteger)indexPath.row) {
-        NSArray *fieldsArray = [sectionInfo.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
-        queryField = fieldsArray[(NSUInteger)indexPath.row];
-        self.queryField = queryField;
-    }
-    return queryField;
+- (NSManagedObjectID *)queryFieldObjectIDForIndexPath:(NSIndexPath *)indexPath {
+    NSManagedObjectID *result;
+    id <NSFetchedResultsSectionInfo> section = self.resultsController.sections[(NSUInteger)indexPath.section];
+    NSDictionary *rowData = section.objects[(NSUInteger)indexPath.row];
+    NSString *keyQueryFieldID = [RptqQueryField keyQueryFieldID];
+    result = rowData[keyQueryFieldID];
+    return result;
 }
 
 #pragma mark -
@@ -366,16 +310,18 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 - (void)sectionHeaderView:(MADDatabaseTableSectionHeaderView *)sectionHeaderView
             sectionOpened:(NSInteger)sectionOpened {
 	
-	MADSchemaFieldSelectorModel *sectionInfo =
-                                                self.sectionInfoArray[(NSUInteger)sectionOpened];
+	MADSchemaFieldSelectorModel *sectionInfo = self.sectionInfoArray[(NSUInteger)sectionOpened];
     sectionInfo.open = YES;
     
+    id <NSFetchedResultsSectionInfo> data = self.resultsController.sections[(NSUInteger)sectionOpened];
+
     /*
      Create an array containing the index paths of the rows to insert: These correspond to the
         rows for each quotation in the current section.
      */
-    NSUInteger countOfRowsToInsert = sectionInfo.fields.count;
-    NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
+    NSUInteger countOfRowsToInsert = data.numberOfObjects;
+    NSMutableArray <NSIndexPath *> *indexPathsToInsert;
+    indexPathsToInsert = [[NSMutableArray alloc] initWithCapacity:countOfRowsToInsert];
     for (NSUInteger i = 0; i < countOfRowsToInsert; i++) {
         @autoreleasepool {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow: (NSInteger)i
@@ -388,16 +334,23 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
      Create an array containing the index paths of the rows to delete: These correspond to the
         rows for each quotation in the previously-open section, if there was one.
      */
-    NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
+    NSMutableArray <NSIndexPath *> *indexPathsToDelete = [[NSMutableArray alloc] init];
 
-    NSInteger previousOpenSectionIndex = self.openSectionIndex;
+    NSInteger previousOpenSectionIndex = _openSectionIndex;
     if (previousOpenSectionIndex != NSNotFound) {
 		
 		MADSchemaFieldSelectorModel *previousOpenSection =
                                         self.sectionInfoArray[(NSUInteger)previousOpenSectionIndex];
+        id <NSFetchedResultsSectionInfo> previousData = self.resultsController.sections[(NSUInteger)previousOpenSectionIndex];
+
         previousOpenSection.open = NO;
-        [previousOpenSection.headerView toggleOpenWithUserAction:NO];
-        NSUInteger countOfRowsToDelete = previousOpenSection.fields.count;
+
+        MADDatabaseTableSectionHeaderView *headerView;
+        headerView = (MADDatabaseTableSectionHeaderView *)[self.tableView headerViewForSection:previousOpenSectionIndex];
+        if (headerView) {
+            [headerView toggleOpenWithUserAction:NO];
+        }
+        NSUInteger countOfRowsToDelete = previousData.objects.count;
         for (NSUInteger i = 0; i < countOfRowsToDelete; i++) {
             @autoreleasepool {
                 NSIndexPath *path = [NSIndexPath indexPathForRow: (NSInteger)i
@@ -425,16 +378,13 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
     [tableView endUpdates];
     
-    self.openSectionIndex = sectionOpened;
+    _openSectionIndex = sectionOpened;
     [self updateSize];
 }
 
 - (void)updateSize {
-    MADSchemaFieldSelectorModel *sectionInfo = self.openSectionIndex == NSNotFound ?
-                                    nil : self.sectionInfoArray[(NSUInteger)self.openSectionIndex];
-    self.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray, sectionInfo);
-    self.navigationController.preferredContentSize =
-                                PreferredContentSizeForUpdate(self.sectionInfoArray, sectionInfo);
+    self.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
+    self.navigationController.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
 }
 
 - (void)sectionHeaderView:(MADDatabaseTableSectionHeaderView *)sectionHeaderView
@@ -444,11 +394,11 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
      Create an array of the index paths of the rows in the section that was closed,
         then delete those rows from the table view.
      */
-	MADSchemaFieldSelectorModel *sectionInfo =
-                                                self.sectionInfoArray[(NSUInteger)sectionClosed];
+	MADSchemaFieldSelectorModel *sectionInfo = self.sectionInfoArray[(NSUInteger)sectionClosed];
     sectionInfo.open = NO;
 
-    NSInteger countOfRowsToDelete = [self.tableView numberOfRowsInSection:sectionClosed];
+    id <NSFetchedResultsSectionInfo> data = self.resultsController.sections[(NSUInteger)sectionClosed];
+    NSInteger countOfRowsToDelete = (NSInteger)data.numberOfObjects;
     if (countOfRowsToDelete > 0) {
         NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
         for (NSInteger i = 0; i < countOfRowsToDelete; i++) {
@@ -458,14 +408,14 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
         [self.tableView deleteRowsAtIndexPaths: indexPathsToDelete
                               withRowAnimation: UITableViewRowAnimationTop];
     }
-    self.openSectionIndex = NSNotFound;
+    _openSectionIndex = NSNotFound;
     [self updateSize];
 }
 
 #pragma mark -
 #pragma mark Accessibility
 
-- (BOOL)isAccessibilityElement {
+/*- (BOOL)isAccessibilityElement {
     return NO;
 }
 
@@ -482,6 +432,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     }
     
     return accessibilityElements;
-}
+}*/
 
 @end

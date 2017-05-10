@@ -9,15 +9,16 @@
 #ifndef Reports_MADDatabaseTableSectionHeaderView_h
 #define Reports_MADDatabaseTableSectionHeaderView_h
 
-#import <UIKit/UIView.h>
+#import <UIKit/UITableViewHeaderFooterView.h>
 
 @protocol MADSectionHeaderViewDelegate;
 
-@interface MADDatabaseTableSectionHeaderView : UIView
+@interface MADDatabaseTableSectionHeaderView : UITableViewHeaderFooterView
 
-    - (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title
-                          section:(NSInteger)sectionNumber
-                         delegate:(id <MADSectionHeaderViewDelegate>)delegate;
+    @property (nonatomic, assign) NSInteger section;
+    @property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
+
+    - (void)setTitle:(NSString *)title;
     - (void)toggleOpenWithUserAction:(BOOL)userAction;
 
 @end

@@ -226,8 +226,7 @@
     NSString *dropIndex = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
     dropIndex = [dropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
     
-    NSString *keyPathSchemaTable = [RptqQueryField keySchemaTable],
-             *keySchemaTableID = [RptqQueryField keySchemaTableID];
+    NSString *keySchemaTableID = [RptqQueryField keySchemaTableID];
     NSString *keyQueryTableID = [RptqQueryField keyQueryTableID],
              *keyQueryFieldID = [RptqQueryField keyQueryFieldID],
              *keySchemaFieldID = [RptqQueryField keySchemaFieldID];

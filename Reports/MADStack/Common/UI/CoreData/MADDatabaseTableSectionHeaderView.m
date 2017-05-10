@@ -24,75 +24,75 @@ static const CGFloat PaddingSize = 5.00000f;
 
 @interface MADDatabaseTableSectionHeaderView ()
 
-    @property (nonatomic, strong) UILabel *titleLabel;
-    @property (nonatomic, strong) UIButton *disclosureButton;
-    @property (nonatomic, assign) NSInteger section;
-    @property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
+    @property (readwrite, nonatomic, weak) UILabel *titleLabel;
+    @property (readwrite, nonatomic, weak) UIButton *disclosureButton;
 
 @end
 
 @implementation MADDatabaseTableSectionHeaderView
 
+- (void)setTitle:(NSString *)title {
+    self.titleLabel.text = title.copy;
+}
 
-- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <MADSectionHeaderViewDelegate>)delegate {
-    
-    if (self = [self initWithFrame:frame]) {
-        
-        _delegate =  delegate;
-        _section = sectionNumber;
-        CGRect titleLabelFrame = self.bounds;
-        titleLabelFrame.origin.x += ButtonSize;
-        titleLabelFrame.size.width -= ButtonSize;
-        CGRectInset(titleLabelFrame, 0.0000f, PaddingSize);
-
-        UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
-        label.isAccessibilityElement = NO;
-        label.text = title;
-        
-        UIFont *font = [UIFont boldSystemFontOfSize:17.0000f];
-        label.font = font;
-        
-        UIColor *blueColor = [MADColorEverydayApps newColorBlue];
-        label.textColor = blueColor;
-        label.backgroundColor =  [UIColor clearColor];
-        
-        [self addSubview:label];
-        self.titleLabel = label;
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.isAccessibilityElement = NO;
-        button.frame = CGRectMake(0.0000f, PaddingSize, ButtonSize, ButtonSize);
-        
-        UIImage *caratOpen = [UIImage imageNamed:@"MADImageCaratOpen"];
-        UIImage *caratClosed = [UIImage imageNamed:@"MADImageCarat"];
-        
-        [button setImage: caratClosed   forState:UIControlStateNormal];
-        [button setImage: caratOpen     forState:UIControlStateSelected];
-        [button addTarget: self
-                   action: @selector(toggleOpen:)
-         forControlEvents: UIControlEventTouchUpInside];
-        [self addSubview:button];
-
-        // Set up the tap gesture recognizer.
-        UITapGestureRecognizer *tapGesture;
-        tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                             action: @selector(toggleOpen:)];
-        [self addGestureRecognizer:tapGesture];
-        tapGesture = nil;
-        
-        self.disclosureButton = button;
-        
-        self.backgroundColor = [UIColor groupTableViewBackgroundColor];
-        self.userInteractionEnabled = YES;
+- (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier {
+    if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+        [self initalize];
     }
-    
     return self;
+}
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (void)initalize {
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.isAccessibilityElement = NO;
+    label.text = @"";
+    
+    UIFont *font = [UIFont boldSystemFontOfSize:17.0000f];
+    label.font = font;
+    
+    UIColor *blueColor = [MADColorEverydayApps newColorBlue];
+    label.textColor = blueColor;
+    label.backgroundColor =  [UIColor clearColor];
+    
+    [self.contentView addSubview:label];
+    self.titleLabel = label;
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.isAccessibilityElement = NO;
+    
+    UIImage *caratOpen = [UIImage imageNamed:@"MADImageCaratOpen"];
+    UIImage *caratClosed = [UIImage imageNamed:@"MADImageCarat"];
+    
+    [button setImage: caratClosed   forState: UIControlStateNormal];
+    [button setImage: caratOpen     forState: UIControlStateSelected];
+    [button addTarget: self
+               action: @selector(toggleOpen:)
+     forControlEvents: UIControlEventTouchUpInside];
+    [self.contentView addSubview:button];
+    
+    // Set up the tap gesture recognizer.
+    UITapGestureRecognizer *tapGesture;
+    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                         action: @selector(toggleOpen:)];
+    [self addGestureRecognizer:tapGesture];
+    tapGesture = nil;
+    
+    self.disclosureButton = button;
+    
+    self.contentView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.userInteractionEnabled = YES;
 }
 
 - (IBAction)toggleOpen:(id)sender {
     [self toggleOpenWithUserAction:YES];
 }
-
 
 - (void)toggleOpenWithUserAction:(BOOL)userAction {
     
@@ -110,6 +110,17 @@ static const CGFloat PaddingSize = 5.00000f;
             }
         }
     }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect titleLabelFrame = self.bounds;
+    titleLabelFrame.origin.x += ButtonSize;
+    titleLabelFrame.size.width -= ButtonSize;
+    CGRectInset(titleLabelFrame, 0.0000f, PaddingSize);
+    self.titleLabel.frame = titleLabelFrame;
+    self.disclosureButton.frame = CGRectMake(self.bounds.origin.x, PaddingSize, ButtonSize, ButtonSize);
+
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
