@@ -53,23 +53,13 @@ NSString * const MADNotificationQueryTableDelete = @"MADNotificationQueryTableDe
 NSString * const MADNotificationQueryLinkInsert = @"MADNotificationQueryLinkInsert";
 NSString * const MADNotificationQueryLinkDelete = @"MADNotificationQueryLinkDelete";
 
-NSString * const MADKeyQueryTable = @"QT";
 NSString * const MADKeyQueryField = @"QF";
-NSString * const MADKeySchemaFieldName = @"SFN";
-NSString * const MADKeySchemaTableName = @"STN";
-NSString * const MADKeySchemaTable = @"ST";
-NSString * const MADKeySchemaField = @"SF";
 
 NSString * const MADKeyQueryLinkID = @"QLI";
 NSString * const MADKeyQueryLinkLeftFieldID = @"LFI";
 NSString * const MADKeyQueryLinkRightFieldID = @"RFI";
 NSString * const MADKeyQueryLinkLeftTableID = @"LTI";
 NSString * const MADKeyQueryLinkRightTableID = @"RTI";
-
-NSString * const MADKeyQueryTableID = @"QTI";
-NSString * const MADKeyQueryFieldID = @"QFI";
-NSString * const MADKeySchemaTableID = @"STI";
-NSString * const MADKeySchemaFieldID = @"SFI";
 
 NSString * const MADKeyQuery = @"MADKeyQuery";
 

@@ -27,6 +27,11 @@
     + (NSString *)keyFieldName;
     + (NSString *)keyTableName;
     + (NSString *)keySchemaTable;
+    + (NSString *)keyQueryTableID;
+    + (NSString *)keyQueryFieldID;
+    + (NSString *)keySchemaTableID;
+    + (NSString *)keySchemaFieldID;
+    + (NSString *)keyInQueryTable;
 
 @end
 

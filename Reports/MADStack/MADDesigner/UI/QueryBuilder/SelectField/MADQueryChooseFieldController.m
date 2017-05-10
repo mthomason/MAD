@@ -190,10 +190,12 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
         request = [RptqQueryField fetchRequestFieldKeys:1];
         request.sortDescriptors = sortDescriptors;
         
+
+        NSString *sectionNameKeyPath = [RptqQueryField keyTableName];
         NSFetchedResultsController *resultsController;
         resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                 managedObjectContext: self.document.managedObjectContext
-                                                                  sectionNameKeyPath: @"STN"//keyInTableInQueryTableAlias
+                                                                  sectionNameKeyPath: sectionNameKeyPath
                                                                            cacheName: nil];
         _resultsController = resultsController;
     }

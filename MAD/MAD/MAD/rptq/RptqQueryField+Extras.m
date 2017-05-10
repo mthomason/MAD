@@ -161,29 +161,28 @@
     NSString *keyPathFieldName = [self keyFieldName];
     NSString *keyPathTableName = [self keyTableName];
     NSString *keyPathSchemaTable = [self keySchemaTable];
+    NSString *keyQueryTableID = [self keyQueryTableID],
+             *keyQueryFieldID = [self keyQueryFieldID],
+             *keySchemaTableID = [self keySchemaTableID],
+             *keySchemaFieldID = [self keySchemaFieldID];
     
     NSUInteger expressionCount = 11;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSString *keys[] = {
         @"QF",
-        @"QT",
-        @"SFN",
-        @"STN",
-        @"ST",
-        @"SF",
+        keyPathInQueryTable,
+        keyPathFieldName,
+        keyPathTableName,
+        keyPathSchemaTable,
+        keyPathDatabaseSchemaField,
         
-        @"QTI",
-        @"QFI",
-        @"STI",
-        @"SFI",
+        keyQueryTableID,
+        keyQueryFieldID,
+        keySchemaTableID,
+        keySchemaFieldID,
         keyPathInQueryTableDropIndex
     };
     
-    NSString *keyQueryTableID = [self keyQueryTableID],
-             *keyQueryFieldID = [self keyQueryFieldID],
-             *keySchemaTableID = [self keySchemaTableID],
-             *keySchemaFieldID = [self keySchemaFieldID];
-
     NSExpression *expressions[] = {
         [NSExpression expressionForEvaluatedObject],
         [NSExpression expressionForKeyPath: keyPathInQueryTable],

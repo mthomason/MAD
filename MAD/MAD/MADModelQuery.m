@@ -217,7 +217,8 @@
     if (!results.count) return;
     
     NSArray <NSManagedObjectID *> *tableValues;
-    tableValues = [results valueForKey:MADKeyQueryTable];
+    NSString *keyInQueryTable = [RptqQueryField keyInQueryTable];
+    tableValues = [results valueForKey:keyInQueryTable];
     
     NSOrderedSet <NSManagedObjectID *> *tableObjectIDs;
     tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
@@ -225,8 +226,14 @@
     NSString *dropIndex = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
     dropIndex = [dropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
     
+    NSString *keyPathSchemaTable = [RptqQueryField keySchemaTable],
+             *keySchemaTableID = [RptqQueryField keySchemaTableID];
+    NSString *keyQueryTableID = [RptqQueryField keyQueryTableID],
+             *keyQueryFieldID = [RptqQueryField keyQueryFieldID],
+             *keySchemaFieldID = [RptqQueryField keySchemaFieldID];
+    
     NSComparisonPredicate *predicateTable;
-    NSExpression *tablePath = [NSExpression expressionForKeyPath: MADKeyQueryTable], *tableValue;
+    NSExpression *tablePath = [NSExpression expressionForKeyPath: keyInQueryTable], *tableValue;
     NSArray *fresults;
     int64_t stid = -1, qtid = -1, sfid = -1, qfid = -1, di = -1;
     @autoreleasepool {
@@ -249,10 +256,10 @@
                 NSUInteger resultCounter = 0;
                 MADModelQueryTable *queryTable;
                 for (filteredResult in fresults) {
-                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaTableID], kCFNumberSInt64Type, &stid);
-                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeySchemaFieldID], kCFNumberSInt64Type, &sfid);
-                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryTableID], kCFNumberSInt64Type, &qtid);
-                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[MADKeyQueryFieldID], kCFNumberSInt64Type, &qfid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[keySchemaTableID], kCFNumberSInt64Type, &stid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[keySchemaFieldID], kCFNumberSInt64Type, &sfid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[keyQueryTableID], kCFNumberSInt64Type, &qtid);
+                    CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[keyQueryFieldID], kCFNumberSInt64Type, &qfid);
                     CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)filteredResult[dropIndex], kCFNumberSInt64Type, &di);
 
                     if (resultCounter == 0) {

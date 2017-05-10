@@ -21,23 +21,13 @@ extern NSString * const MADNotificationQueryLinkDelete;
 
 extern NSString * const MADKeyQuery;
 
-extern NSString * const MADKeyQueryTable;
 extern NSString * const MADKeyQueryField;
-extern NSString * const MADKeySchemaFieldName;
-extern NSString * const MADKeySchemaTableName;
-extern NSString * const MADKeySchemaTable;
-extern NSString * const MADKeySchemaField;
 
 extern NSString * const MADKeyQueryLinkID;
 extern NSString * const MADKeyQueryLinkLeftFieldID;
 extern NSString * const MADKeyQueryLinkRightFieldID;
 extern NSString * const MADKeyQueryLinkLeftTableID;
 extern NSString * const MADKeyQueryLinkRightTableID;
-
-extern NSString * const MADKeyQueryTableID;
-extern NSString * const MADKeyQueryFieldID;
-extern NSString * const MADKeySchemaTableID;
-extern NSString * const MADKeySchemaFieldID;
 
 @protocol MADModelIDProtocol <NSObject>
 
