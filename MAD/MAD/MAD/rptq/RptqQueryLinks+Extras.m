@@ -51,9 +51,12 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
                                   joinType:(MADLinkType)joinType
                       managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:managedObjectContext];
+    NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
+    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: entityName
+                                             inManagedObjectContext: managedObjectContext];
     
-    RptqQueryLinks *queryLinks = [[self alloc] initWithEntity: rqtEd insertIntoManagedObjectContext: managedObjectContext];
+    RptqQueryLinks *queryLinks = [[self alloc] initWithEntity: rqtEd
+                               insertIntoManagedObjectContext: managedObjectContext];
     
     queryLinks.hasLeftField     = fieldLeft;
     queryLinks.hasRightField    = fieldRight;

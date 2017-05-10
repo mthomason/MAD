@@ -12,6 +12,11 @@
 
 #import "MADQueryChooseFieldController.h"
 
+#import <Foundation/NSSortDescriptor.h>
+
+#import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSExpressionDescription.h>
+
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
@@ -29,10 +34,11 @@
 
 #import <MAD/RptqDatabase.h>
 
+#import <MAD/RptqDatabaseSchemaTable+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
 
 #import <MAD/MADocument.h>
 
@@ -81,7 +87,9 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     @property (nonatomic, assign) NSInteger openSectionIndex;
     @property (nonatomic, assign) CGFloat initialPinchHeight;
 
-    @property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptors;
+
+    @property (nonatomic, strong) NSFetchedResultsController *resultsController;
 
 @end
 
@@ -112,6 +120,84 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
         
     }
     return self;
+}
+
+- (NSFetchedResultsController *)resultsController {
+    if (_resultsController == nil) {
+        
+        NSString *entityName = NSStringFromClass([RptqQueryTable class]);
+        
+        NSUInteger expressionCount = 3;
+        NSExpressionDescription *expressionDescription[expressionCount];
+        
+        NSString *keyName = NSStringFromSelector(@selector(name));
+        NSString *keyAlias = NSStringFromSelector(@selector(alias));
+        NSString *keyInTable = NSStringFromSelector(@selector(inTable));
+        NSString *keyInQueryTable = NSStringFromSelector(@selector(inQueryTable));
+        NSString *keyInTableName = [keyInTable stringByAppendingString:@"."];
+        keyInTableName = [keyInTableName stringByAppendingString:keyName];
+        
+        NSString *keyInTableInQueryTableAlias = [keyInTable stringByAppendingString:@"."];
+        keyInTableInQueryTableAlias = [keyInTableInQueryTableAlias stringByAppendingString:keyInQueryTable];
+        keyInTableInQueryTableAlias = [keyInTableInQueryTableAlias stringByAppendingString:@"."];
+        keyInTableInQueryTableAlias = [keyInTableInQueryTableAlias stringByAppendingString:keyAlias];
+        
+        expressionDescription[0] = [[NSExpressionDescription alloc] init];
+        expressionDescription[0].name = @"alias";//keyName;
+        expressionDescription[0].expression = [NSExpression expressionForKeyPath: @"alias"];// keyName];
+        expressionDescription[0].expressionResultType = NSStringAttributeType;
+
+        expressionDescription[1] = [[NSExpressionDescription alloc] init];
+        expressionDescription[1].name = @"databaseSchemaTable.name";// keyInTableInQueryTableAlias;
+        expressionDescription[1].expression = [NSExpression expressionForKeyPath: @"databaseSchemaTable.name"];
+        expressionDescription[1].expressionResultType = NSStringAttributeType;
+
+        expressionDescription[2] = [[NSExpressionDescription alloc] init];
+        expressionDescription[2].name = @"databaseSchemaTable.hasFields.name";//@"inTable.name";// keyInTableName;
+        expressionDescription[2].expression = [NSExpression expressionForKeyPath: @"databaseSchemaTable.hasFields.name"];// keyInTableName];
+        expressionDescription[2].expressionResultType = NSStringAttributeType;
+
+        //expressionDescription[3] = [[NSExpressionDescription alloc] init];
+        //expressionDescription[3].name = keyInTable;
+        //expressionDescription[3].expression = [NSExpression expressionForKeyPath: keyInTable];
+        //expressionDescription[3].expressionResultType = NSObjectIDAttributeType;
+
+        //expressionDescription[2] = [[NSExpressionDescription alloc] init];
+        //expressionDescription[2].name = @"field";
+        //expressionDescription[2].expression = [NSExpression expressionForEvaluatedObject];
+        //expressionDescription[2].expressionResultType = NSObjectIDAttributeType;
+        
+        NSArray *propertiesToFetch;
+        propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
+                                                       count:expressionCount];
+        
+        NSSortDescriptor *sortDescriptorTableAlias, *sortDescriptorField;
+        sortDescriptorTableAlias = [NSSortDescriptor sortDescriptorWithKey: [RptqQueryField keySchemaTable]//keyInTableInQueryTableAlias
+                                                                 ascending: YES];
+        //sortDescriptorField = [NSSortDescriptor sortDescriptorWithKey: @"hasFields.name"//keyName
+                     //                                       ascending: YES];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptorTableAlias, nil];
+//                                                                     sortDescriptorField, nil];
+        
+        
+        
+        NSFetchRequest *request;
+        request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+        request.resultType = NSDictionaryResultType;
+        request.propertiesToFetch = propertiesToFetch;
+        request.sortDescriptors = sortDescriptors;
+        
+        request = [RptqQueryField fetchRequestFieldKeys:1];
+        request.sortDescriptors = sortDescriptors;
+        
+        NSFetchedResultsController *resultsController;
+        resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                managedObjectContext: self.document.managedObjectContext
+                                                                  sectionNameKeyPath: @"STN"//keyInTableInQueryTableAlias
+                                                                           cacheName: nil];
+        _resultsController = resultsController;
+    }
+    return _resultsController;
 }
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
@@ -200,9 +286,11 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
 	
 }
 
-#pragma mark Table view data source and delegate
+#pragma mark -
+#pragma mark Table view datasource and delegate
 
 - (NSInteger)numberOfRowsInSection:(NSInteger)section {
+    
     NSInteger numberOfRowsInSection = 0;
     RptqDatabaseSchemaFieldSelectorManager *sectionInfo;
     sectionInfo = _sectionInfoArray[(NSUInteger)section];
@@ -211,6 +299,14 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
         NSSet *hasQueryFields = table.hasQueryFields;
         numberOfRowsInSection = (NSInteger)hasQueryFields.count;
     }
+    
+    NSError *error = nil;
+    if (![self.resultsController performFetch: &error]) {
+        NSLog(@"requestError: %@\n%@", error.localizedDescription, error.localizedFailureReason);
+    }
+    id <NSFetchedResultsSectionInfo> secinfo = self.resultsController.sections[(NSUInteger)section];
+    NSLog(@"Section Count Comparson: %ld == %ld", secinfo.numberOfObjects, numberOfRowsInSection);
+    
     return numberOfRowsInSection;
 }
 
@@ -250,7 +346,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     return cell;
 }
 
-
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)section];
     if (!sectionInfo.headerView) {
@@ -264,7 +359,6 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     }
     return sectionInfo.headerView;
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
@@ -282,22 +376,24 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     }
 }
 
+#pragma mark -
+#pragma mark Helpers
+
 - (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryField *queryField = nil;
+    
     RptqDatabaseSchemaFieldSelectorManager *sectionInfo;
     sectionInfo = self.sectionInfoArray[(NSUInteger)indexPath.section];
-    NSInteger row = indexPath.row;
-    if (sectionInfo.table.hasQueryFields.count > (NSUInteger)row) {
-        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
-                                                                       ascending: YES];
-        id sortDescriptors = [[NSArray alloc] initWithObjects:namesAccending, nil];
-        NSArray *fieldsArray = [sectionInfo.table.hasQueryFields sortedArrayUsingDescriptors:sortDescriptors];
+
+    if (sectionInfo.table.hasQueryFields.count > (NSUInteger)indexPath.row) {
+        NSArray *fieldsArray = [sectionInfo.table.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptors];
         queryField = fieldsArray[(NSUInteger)indexPath.row];
         self.queryField = queryField;
     }
     return queryField;
 }
 
+#pragma mark -
 #pragma mark Section header delegate
 
 - (void)sectionHeaderView:(MADDatabaseTableSectionHeaderView *)sectionHeaderView
@@ -399,7 +495,8 @@ static inline CGSize PreferredContentSizeForUpdate(MADSectionInfoArray *sectionI
     [self updateSize];
 }
 
-#pragma mark - Accessibility
+#pragma mark -
+#pragma mark Accessibility
 
 - (BOOL)isAccessibilityElement {
     return NO;

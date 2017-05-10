@@ -24,6 +24,10 @@
     - (NSString *)tableFieldKey;
     - (NSString *)toStringReverse;
 
+    + (NSString *)keyFieldName;
+    + (NSString *)keyTableName;
+    + (NSString *)keySchemaTable;
+
 @end
 
 #endif

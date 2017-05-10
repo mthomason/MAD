@@ -157,7 +157,6 @@
     [document.activeDocumentModel addPredicate:queryPredicate];
     [document saveContext];
     
-    
     [self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }

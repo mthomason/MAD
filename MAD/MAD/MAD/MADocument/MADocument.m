@@ -1048,6 +1048,9 @@ READFROMURL_END:;
     NSError *error;
     if (self.managedObjectContext != nil) {
         if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
+            
+            
+            
             [self.managedObjectContext save:nil];
         }
     }

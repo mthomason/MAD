@@ -467,7 +467,6 @@ BOOL storeEnabled() {
     [document.activeDocumentModel setHeight: height
                             forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
-    
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
@@ -476,7 +475,6 @@ BOOL storeEnabled() {
     [document.activeDocumentModel setVisibility: isVisible
                                 forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
-
 }
 
 - (void)layoutSettings:(MADDesignerSectionLayoutController *)layoutSettings
@@ -486,16 +484,16 @@ BOOL storeEnabled() {
     [document.activeDocumentModel setNewPageAfter: newPageAfter
                                   forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
-
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows {
 
     MADocument *document = self.document;
+    
+    
     [document.activeDocumentModel setNumberOfRows: numberOfRows
                                   forSectionAtRow: _lastSelectedRowNumber];
     [document saveContext];
-
 }
 
 #pragma mark -

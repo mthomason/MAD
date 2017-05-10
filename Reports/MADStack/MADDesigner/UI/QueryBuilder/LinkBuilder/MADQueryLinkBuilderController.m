@@ -146,6 +146,7 @@
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
                                       withField: (RptqQueryField *)queryField {
+    
     [self.navigationController popToViewController: self animated: YES];
     
     RptqQueryTable *queryTable = queryField.inQueryTable;
@@ -153,7 +154,7 @@
     switch (self.currentlyEditingPart) {
         case MADLinkLeft: {
 
-            self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.lowercaseString;
+            self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.localizedLowercaseString;
             self.firstTable = queryTable;
             self.firstField = queryField;
             
@@ -168,7 +169,7 @@
             break;
         }
         case MADLinkRight: {
-            self.tableViewCellTableFieldTwo.detailTextLabel.text = tableFieldName.lowercaseString;
+            self.tableViewCellTableFieldTwo.detailTextLabel.text = tableFieldName.localizedLowercaseString;
             self.secondTable = queryTable;
             self.secondField = queryField;
             break;
