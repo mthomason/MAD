@@ -1,5 +1,5 @@
 //
-//  RptqDatabaseSchemaFieldSelectorManager.m
+//  MADSchemaFieldSelectorModel.m
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
@@ -20,7 +20,7 @@
 
 static NSString * const MADKeyDBSchemaFieldName = @"databaseSchemaField.name";
 
-@interface RptqDatabaseSchemaFieldSelectorManager ()
+@interface MADSchemaFieldSelectorModel ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
@@ -28,7 +28,7 @@ static NSString * const MADKeyDBSchemaFieldName = @"databaseSchemaField.name";
 
 @end
 
-@implementation RptqDatabaseSchemaFieldSelectorManager
+@implementation MADSchemaFieldSelectorModel
 
 - (instancetype)init {
     if (self = [super init]) { }

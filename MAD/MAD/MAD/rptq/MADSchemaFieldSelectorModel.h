@@ -1,5 +1,5 @@
 //
-//  RptqDatabaseSchemaFieldSelectorManager.h
+//  MADSchemaFieldSelectorModel.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
@@ -13,7 +13,7 @@
 
 @class RptqQueryTable, NSMutableArray, NSIndexSet, MADDatabaseTableSectionHeaderView;
 
-@interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
+@interface MADSchemaFieldSelectorModel : NSObject 
 
     @property (nonatomic, assign) BOOL open;
     @property (nonatomic, strong) RptqQueryTable *table;
