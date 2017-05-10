@@ -124,6 +124,154 @@
     return key;
 }
 
++ (NSString *)keySchemaFieldName {
+    NSString *keyName = NSStringFromSelector(@selector(name));
+    NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
+    NSString *key = [keyDatabaseSchemaField stringByAppendingString:@"."];
+    key = [key stringByAppendingString:keyName];
+    return key;
+}
+
++ (NSString *)keySchemaFieldDataType {
+    NSString *keyDataType = NSStringFromSelector(@selector(dataType));
+    NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
+    NSString *key = [keyDatabaseSchemaField stringByAppendingString:@"."];
+    key = [key stringByAppendingString:keyDataType];
+    return key;
+}
+
++ (NSString *)keyInQueryTableAlias {
+    NSString *keyAlias = NSStringFromSelector(@selector(alias));
+    NSString *key = [self keyInQueryTable];
+    key = [key stringByAppendingString:@"."];
+    key = [key stringByAppendingString:keyAlias];
+    return key;
+}
+
++ (NSFetchRequest *)fetchRequestFields:(int64_t)identifier {
+    
+    NSUInteger expressionInQueryCount = 2;
+
+    NSExpression *pexpressions[expressionInQueryCount];
+    NSString *predicateKey;
+    NSNumber *idn = @(identifier);
+    NSString *keyInQueryTable = [self keyInQueryTable];
+    predicateKey = [keyInQueryTable stringByAppendingString:@"."];
+    predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
+    predicateKey = [predicateKey stringByAppendingString:@"."];
+    predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
+    
+    pexpressions[0] = [NSExpression expressionForKeyPath:predicateKey];
+    pexpressions[1] = [NSExpression expressionForConstantValue: idn];
+    
+    NSPredicate *predicate;
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
+                                                   rightExpression: pexpressions[1]
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
+
+    
+    NSFetchRequest *fetchQueryTable;
+    NSString *entityName;
+    entityName = NSStringFromClass([RptqQueryField class]);
+    fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
+    
+    NSString *keyPathInQueryTable = [self keyInQueryTable];
+    
+    NSString *keyPathInQueryTableDropIndex = [self keyInQueryTableDropIndex];
+    
+    NSString *keyPathDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
+    NSString *keyPathFieldName = [self keyFieldName];
+    NSString *keyPathTableName = [self keyTableName];
+    NSString *keyPathSchemaTable = [self keySchemaTable];
+    NSString *keyQueryTableID = [self keyQueryTableID],
+             *keyQueryFieldID = [self keyQueryFieldID],
+             *keySchemaTableID = [self keySchemaTableID],
+             *keySchemaFieldID = [self keySchemaFieldID],
+             *keyQueryTableAlias = [self keyInQueryTableAlias],
+             *keySchemaFieldDataType = [self keySchemaFieldDataType];
+    
+    NSUInteger expressionCount = 13;
+    NSExpressionDescription *expressionDescription[expressionCount];
+    NSString *keys[] = {
+        @"QF",
+        keyPathInQueryTable,
+        keyPathFieldName,
+        keyPathTableName,
+        keyPathSchemaTable,
+        keyPathDatabaseSchemaField,
+        
+        keyQueryTableID,
+        keyQueryFieldID,
+        keySchemaTableID,
+        keySchemaFieldID,
+        keyPathInQueryTableDropIndex,
+        keyQueryTableAlias,
+        keySchemaFieldDataType
+    };
+    
+    NSExpression *expressions[] = {
+        [NSExpression expressionForEvaluatedObject],
+        [NSExpression expressionForKeyPath: keyPathInQueryTable],
+        [NSExpression expressionForKeyPath: keyPathFieldName],
+        [NSExpression expressionForKeyPath: keyPathTableName],
+        [NSExpression expressionForKeyPath: keyPathSchemaTable],
+        [NSExpression expressionForKeyPath: keyPathDatabaseSchemaField],
+        
+        [NSExpression expressionForKeyPath: keyQueryTableID],
+        [NSExpression expressionForKeyPath: keyQueryFieldID],
+        [NSExpression expressionForKeyPath: keySchemaTableID],
+        [NSExpression expressionForKeyPath: keySchemaFieldID],
+        [NSExpression expressionForKeyPath: keyPathInQueryTableDropIndex],
+        [NSExpression expressionForKeyPath: keyQueryTableAlias],
+        [NSExpression expressionForKeyPath: keySchemaFieldDataType]
+    };
+
+    NSAttributeType types[] = {
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSStringAttributeType,
+        NSStringAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+        NSInteger64AttributeType,
+        NSStringAttributeType,
+        NSInteger16AttributeType,
+    };
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = [[NSExpressionDescription alloc] init];
+        expressionDescription[i].name = keys[i].copy;
+        expressionDescription[i].expression = expressions[i];
+        expressionDescription[i].expressionResultType = types[i];
+    }
+
+    NSArray *propertiesToFetch;
+    propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
+                                                   count: (NSUInteger)expressionCount];
+    
+    fetchQueryTable.propertiesToFetch = propertiesToFetch;
+    fetchQueryTable.resultType = NSDictionaryResultType;
+    fetchQueryTable.predicate = predicate;
+    
+    for (NSUInteger i=0; i<expressionInQueryCount; i++) {
+        pexpressions[i] = nil;
+    }
+
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = nil;
+        keys[i] = nil;
+        expressions[i] = nil;
+    }
+    return fetchQueryTable;
+}
+
 + (NSFetchRequest *)fetchRequestFieldKeys:(int64_t)identifier {
     
     NSUInteger expressionInQueryCount = 2;
@@ -201,8 +349,8 @@
     NSAttributeType types[] = {
         NSObjectIDAttributeType,
         NSObjectIDAttributeType,
-        NSObjectIDAttributeType,
-        NSObjectIDAttributeType,
+        NSStringAttributeType,
+        NSStringAttributeType,
         NSObjectIDAttributeType,
         NSObjectIDAttributeType,
         

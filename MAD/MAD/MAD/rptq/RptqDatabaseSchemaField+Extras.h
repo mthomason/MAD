@@ -23,6 +23,8 @@
     + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
                      andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+    + (NSString *)dataTypeDisplay:(int16_t)dataType;
+
     - (NSString *)display;
     - (NSString *)fieldTypeDisplay;
 

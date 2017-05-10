@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqFieldSelectorManager.h"
+#import "MADSchemaFieldSelectorModel.h"
 
 #import <Foundation/NSSortDescriptor.h>
 

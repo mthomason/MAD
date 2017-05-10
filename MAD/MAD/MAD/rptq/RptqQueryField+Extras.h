@@ -19,6 +19,7 @@
                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     + (NSFetchRequest<NSDictionary *> *)fetchRequestFieldKeys:(int64_t)identifier;
+    + (NSFetchRequest *)fetchRequestFields:(int64_t)identifier;
 
     - (NSString *)display;
     - (NSString *)tableFieldKey;
@@ -32,6 +33,9 @@
     + (NSString *)keySchemaTableID;
     + (NSString *)keySchemaFieldID;
     + (NSString *)keyInQueryTable;
+    + (NSString *)keyInQueryTableAlias;
+    + (NSString *)keySchemaFieldName;
+    + (NSString *)keySchemaFieldDataType;
 
 @end
 

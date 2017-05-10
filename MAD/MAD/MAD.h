@@ -103,6 +103,6 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 
-#import <MAD/RptqFieldSelectorManager.h>
+#import <MAD/MADSchemaFieldSelectorModel.h>
 
 #import <MAD/MADActivityItemProviderDelegate.h>

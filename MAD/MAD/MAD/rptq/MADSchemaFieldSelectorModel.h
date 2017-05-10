@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqDatabaseSchemaFieldSelectorManager_h
-#define Reports_RptqDatabaseSchemaFieldSelectorManager_h
+#ifndef Reports_MADSchemaFieldSelectorModel_h
+#define Reports_MADSchemaFieldSelectorModel_h
 
 #import <Foundation/NSObject.h>
 

@@ -121,85 +121,85 @@
     return result;
 }
 
-- (NSString *)fieldTypeDisplay {
-
-    NSString *result = nil;
-    switch (self.dataType) {
++ (NSString *)dataTypeDisplay:(int16_t)dataType {
+    switch (dataType) {
         case MADDataTypeBit:
-            result = NSLocalizedString(@"Bit", @"Bit data type.");
+            return NSLocalizedString(@"Bit", @"Bit data type.");
             break;
         case MADDataTypeBlob:
-            result = NSLocalizedString(@"Blob", @"Blob data type.");
+            return NSLocalizedString(@"Blob", @"Blob data type.");
             break;
         case MADDataTypeDate:
-            result = NSLocalizedString(@"Date", @"Date data type.");
+            return NSLocalizedString(@"Date", @"Date data type.");
             break;
         case MADDataTypeDateTime:
-            result = NSLocalizedString(@"Date Time", @"Date data type.");
+            return NSLocalizedString(@"Date Time", @"Date data type.");
             break;
         case MADDataTypeDecimal:
-            result = NSLocalizedString(@"Decimal", @"Date data type.");
+            return NSLocalizedString(@"Decimal", @"Date data type.");
             break;
         case MADDataTypeDouble:
-            result = NSLocalizedString(@"Double", @"Date data type.");
+            return NSLocalizedString(@"Double", @"Date data type.");
             break;
         case MADDataTypeEnum:
-            result = NSLocalizedString(@"Enum", @"Date data type.");
+            return NSLocalizedString(@"Enum", @"Date data type.");
             break;
         case MADDataTypeFloat:
-            result = NSLocalizedString(@"Float", @"Date data type.");
+            return NSLocalizedString(@"Float", @"Date data type.");
             break;
         case MADDataTypeGeometry:
-            result = NSLocalizedString(@"Geometry", @"Date data type.");
+            return NSLocalizedString(@"Geometry", @"Date data type.");
             break;
         case MADDataTypeImage:
-            result = NSLocalizedString(@"Image", @"Image data type.");
+            return NSLocalizedString(@"Image", @"Image data type.");
             break;
         case MADDataTypeInt24:
-            result = NSLocalizedString(@"Int24", @"Image data type.");
+            return NSLocalizedString(@"Int24", @"Image data type.");
             break;
         case MADDataTypeInteger:
-            result = NSLocalizedString(@"Integer", @"Image data type.");
+            return NSLocalizedString(@"Integer", @"Image data type.");
             break;
         case MADDataTypeLong:
-            result = NSLocalizedString(@"Long", @"Image data type.");
+            return NSLocalizedString(@"Long", @"Image data type.");
             break;
         case MADDataTypeLongLong:
-            result = NSLocalizedString(@"Long Long", @"Image data type.");
+            return NSLocalizedString(@"Long Long", @"Image data type.");
             break;
         case MADDataTypeNumber:
-            result = NSLocalizedString(@"Number", @"Number data type.");
+            return NSLocalizedString(@"Number", @"Number data type.");
             break;
         case MADDataTypeSet:
-            result = NSLocalizedString(@"Set", @"Number data type.");
+            return NSLocalizedString(@"Set", @"Number data type.");
             break;
         case MADDataTypeShort:
-            result = NSLocalizedString(@"Short", @"Number data type.");
+            return NSLocalizedString(@"Short", @"Number data type.");
             break;
         case MADDataTypeString:
-            result = NSLocalizedString(@"String", @"String data type.");
+            return NSLocalizedString(@"String", @"String data type.");
             break;
         case MADDataTypeTime:
-            result = NSLocalizedString(@"Time", @"Number data type.");
+            return NSLocalizedString(@"Time", @"Number data type.");
             break;
         case MADDataTypeTimeStamp:
-            result = NSLocalizedString(@"Time Stamp", @"Number data type.");
+            return NSLocalizedString(@"Time Stamp", @"Number data type.");
             break;
         case MADDataTypeUnknown:
-            result = NSLocalizedString(@"Unknown", @"Number data type.");
+            return NSLocalizedString(@"Unknown", @"Number data type.");
             break;
         case MADDataTypeVarChar:
-            result = NSLocalizedString(@"Var Char", @"Number data type.");
+            return NSLocalizedString(@"Var Char", @"Number data type.");
             break;
         case MADDataTypeYear:
-            result = NSLocalizedString(@"Year", @"Number data type.");
+            return NSLocalizedString(@"Year", @"Number data type.");
             break;
         default:
-            result = [[NSString alloc] initWithFormat:@"Type %hd",
-                                                      self.dataType];
+            return [[NSString alloc] initWithFormat:@"Type %hd", dataType];
             break;
     }
-    return result;
+}
+
+- (NSString *)fieldTypeDisplay {
+    return [RptqDatabaseSchemaField dataTypeDisplay:self.dataType];
 }
 
 - (id)debugQuickLookObject {

@@ -470,8 +470,8 @@
 		4CC2848A1BADE9CB00775B72 /* RptqDocumentSection+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284521BADE98F00775B72 /* RptqDocumentSection+Extras.m */; };
 		4CC2848B1BADE9CC00775B72 /* RptqDocumentSectionRows+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284531BADE98F00775B72 /* RptqDocumentSectionRows+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC2848C1BADE9CF00775B72 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284541BADE98F00775B72 /* RptqDocumentSectionRows+Extras.m */; };
-		4CC2848D1BADE9D000775B72 /* RptqFieldSelectorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284551BADE98F00775B72 /* RptqFieldSelectorManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CC2848E1BADE9D300775B72 /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284561BADE98F00775B72 /* RptqFieldSelectorManager.m */; };
+		4CC2848D1BADE9D000775B72 /* MADSchemaFieldSelectorModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284551BADE98F00775B72 /* MADSchemaFieldSelectorModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CC2848E1BADE9D300775B72 /* MADSchemaFieldSelectorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284561BADE98F00775B72 /* MADSchemaFieldSelectorModel.m */; };
 		4CC2848F1BADE9D400775B72 /* RptqQuery+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284571BADE98F00775B72 /* RptqQuery+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284901BADE9D800775B72 /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC284581BADE98F00775B72 /* RptqQuery+Extras.m */; };
 		4CC284931BADE9DC00775B72 /* RptqQueryField+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2845B1BADE98F00775B72 /* RptqQueryField+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1037,8 +1037,8 @@
 		4CC284521BADE98F00775B72 /* RptqDocumentSection+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSection+Extras.m"; path = "MAD/rptq/RptqDocumentSection+Extras.m"; sourceTree = "<group>"; };
 		4CC284531BADE98F00775B72 /* RptqDocumentSectionRows+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentSectionRows+Extras.h"; path = "MAD/rptq/RptqDocumentSectionRows+Extras.h"; sourceTree = "<group>"; };
 		4CC284541BADE98F00775B72 /* RptqDocumentSectionRows+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqDocumentSectionRows+Extras.m"; path = "MAD/rptq/RptqDocumentSectionRows+Extras.m"; sourceTree = "<group>"; };
-		4CC284551BADE98F00775B72 /* RptqFieldSelectorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqFieldSelectorManager.h; path = MAD/rptq/RptqFieldSelectorManager.h; sourceTree = "<group>"; };
-		4CC284561BADE98F00775B72 /* RptqFieldSelectorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqFieldSelectorManager.m; path = MAD/rptq/RptqFieldSelectorManager.m; sourceTree = "<group>"; };
+		4CC284551BADE98F00775B72 /* MADSchemaFieldSelectorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSchemaFieldSelectorModel.h; path = MAD/rptq/MADSchemaFieldSelectorModel.h; sourceTree = "<group>"; };
+		4CC284561BADE98F00775B72 /* MADSchemaFieldSelectorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSchemaFieldSelectorModel.m; path = MAD/rptq/MADSchemaFieldSelectorModel.m; sourceTree = "<group>"; };
 		4CC284571BADE98F00775B72 /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQuery+Extras.h"; path = "MAD/rptq/RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4CC284581BADE98F00775B72 /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RptqQuery+Extras.m"; path = "MAD/rptq/RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4CC2845B1BADE98F00775B72 /* RptqQueryField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqQueryField+Extras.h"; path = "MAD/rptq/RptqQueryField+Extras.h"; sourceTree = "<group>"; };
@@ -1691,8 +1691,8 @@
 				4CC284441BADE98F00775B72 /* RptqDocumentElementFactory.h */,
 				4CC2843A1BADE98F00775B72 /* RptqDocument+Extras.h */,
 				4CC2843B1BADE98F00775B72 /* RptqDocument+Extras.m */,
-				4CC284551BADE98F00775B72 /* RptqFieldSelectorManager.h */,
-				4CC284561BADE98F00775B72 /* RptqFieldSelectorManager.m */,
+				4CC284551BADE98F00775B72 /* MADSchemaFieldSelectorModel.h */,
+				4CC284561BADE98F00775B72 /* MADSchemaFieldSelectorModel.m */,
 				4C85A12A1E3F369D00545E94 /* Database */,
 				4C85A12C1E3F371E00545E94 /* Query */,
 				4C85A12B1E3F36C300545E94 /* Document Elements */,
@@ -2209,7 +2209,7 @@
 				4CBBA9491CFE94FB0033F63B /* MADActivityItemProviderDelegate.h in Headers */,
 				4C5314931E2D85D0001627A7 /* MADDocumentObjectReference.h in Headers */,
 				4CEFDD071CF5AC7C0092C148 /* MADCacheIndexType.h in Headers */,
-				4CC2848D1BADE9D000775B72 /* RptqFieldSelectorManager.h in Headers */,
+				4CC2848D1BADE9D000775B72 /* MADSchemaFieldSelectorModel.h in Headers */,
 				4C401DDD1BAE3BD700BAE5FC /* MTQueryCacheVacuum.h in Headers */,
 				4C401DE91BAE3BD800BAE5FC /* MTQueryDefinitionSort.h in Headers */,
 				4C6F35021E409DE900F4744F /* MADCurrencyFormatter.h in Headers */,
@@ -2584,7 +2584,7 @@
 				4C5939901E3EF7E400582271 /* RptqDocumentElement.m in Sources */,
 				4C82C9861CF2077A00F244F6 /* madpath.c in Sources */,
 				4C401E2C1BAE3DCB00BAE5FC /* MTDatabaseConnectionSqlite3.m in Sources */,
-				4CC2848E1BADE9D300775B72 /* RptqFieldSelectorManager.m in Sources */,
+				4CC2848E1BADE9D300775B72 /* MADSchemaFieldSelectorModel.m in Sources */,
 				4C5939D01E3EF7E400582271 /* RptqDocumentElementAggregate.m in Sources */,
 				4CC283C81BADE8EC00775B72 /* RptqDocumentSectionEnumerator.m in Sources */,
 				4C401D6F1BAE3AF800BAE5FC /* MTPaperLetter.m in Sources */,
