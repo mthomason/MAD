@@ -63,7 +63,6 @@
 
 #import "MADQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
-#import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "MADQueryPredicateFormatController.h"
 
 #import "MADTableViewCellQueryTableName.h"
@@ -137,7 +136,6 @@ BOOL storeEnabled() {
         UIViewControllerTransitioningDelegate,
         MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
-        MTQueryBuilderAddLinkFirstTableDelegate,
         MADQueryBuilderAddTableDelegate,
         MADQueryBuilderAddGroupDelegate,
         MADViewControllerStandardProtocol,

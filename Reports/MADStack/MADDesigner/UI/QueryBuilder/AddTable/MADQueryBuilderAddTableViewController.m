@@ -84,6 +84,7 @@
             expressions[i] = nil;
         }
         
+        fetchedResultsController.delegate = self;
         _fetchedResultsController = fetchedResultsController;
     }
     return _fetchedResultsController;

@@ -12,12 +12,10 @@
 
 #import "MADTableViewControllerCoreDataResults.h"
 #import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSFetchedResultsController.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
 @interface MADTableViewControllerCoreDataResults()
-    <NSFetchedResultsControllerDelegate>
     @property (nonatomic, assign) BOOL beganUpdates;
 @end
 
