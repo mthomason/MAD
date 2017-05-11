@@ -12,6 +12,8 @@
 
 #import "MADQueryLinkBuilderController.h"
 
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -145,7 +147,10 @@
 }
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                      withField: (RptqQueryField *)queryField {
+                                    withFieldID: (NSManagedObjectID *)fieldID {
+    
+    NSManagedObjectContext *context = self.document.managedObjectContext;
+    RptqQueryField *queryField = [context objectWithID: fieldID];
     
     [self.navigationController popToViewController: self animated: YES];
     

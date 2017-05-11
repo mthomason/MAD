@@ -53,8 +53,6 @@ NSString * const MADNotificationQueryTableDelete = @"MADNotificationQueryTableDe
 NSString * const MADNotificationQueryLinkInsert = @"MADNotificationQueryLinkInsert";
 NSString * const MADNotificationQueryLinkDelete = @"MADNotificationQueryLinkDelete";
 
-NSString * const MADKeyQueryField = @"QF";
-
 NSString * const MADKeyQueryLinkID = @"QLI";
 NSString * const MADKeyQueryLinkLeftFieldID = @"LFI";
 NSString * const MADKeyQueryLinkRightFieldID = @"RFI";

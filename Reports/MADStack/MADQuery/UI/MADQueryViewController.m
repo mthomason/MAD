@@ -172,6 +172,34 @@ BOOL storeEnabled() {
 #pragma mark -
 #pragma mark Static
 
+#pragma mark -
+#pragma mark Helper
+
++ (void)configureCell: (UITableViewCell *)cell
+           forSection: (MADIdentifierQueryViewSections)section
+               andRow: (NSInteger)row {
+    
+    switch (section) {
+            
+        case MADIdentifierQueryViewSectionsNumberOfQueryResults: {
+            
+            UISwitch *switchQueryMode = [[UISwitch alloc] initWithFrame:CGRectZero];
+            switchQueryMode.on = [[NSUserDefaults standardUserDefaults] boolForKey: MADIdentifierDefaultsViewerDesired];
+            [switchQueryMode addTarget: nil action: @selector(handleToggleReportingMode:)
+                      forControlEvents: UIControlEventValueChanged];
+            cell.accessoryView = switchQueryMode;
+            cell.textLabel.text = switchQueryMode.on ?
+            @"Reporting Mode" :
+            @"Designer Mode (limited)";
+            break;
+        }
+            
+        default: {
+            break;
+        }
+    }
+}
+
 + (CGFloat)SizeCategoryHeight:(NSString *)category {
     
     if ([category isEqualToString: UIContentSizeCategoryExtraSmall]) {
@@ -548,9 +576,9 @@ BOOL storeEnabled() {
 #pragma mark -
 #pragma mark MTQueryBuilderAddGroupDelegate
 
-- (void)viewController:(MTQueryBuilderAddGroupViewController *)viewController
-addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
-          andSortOrder:(MADSortOrder)sortOrder {
+- (void)viewController: (MTQueryBuilderAddGroupViewController *)viewController
+addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
+          andSortOrder: (MADSortOrder)sortOrder {
     
     [self dismissViewController];
 
@@ -561,42 +589,11 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark MADQueryBuilderAddTableDelegate
 
-- (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
-      addedTableWithID:(NSManagedObjectID *)objectID {
+- (void)viewController: (MADQueryBuilderAddTableViewController *)viewController
+      addedTableWithID: (NSManagedObjectID *)objectID {
 
     [self dismissViewController];
-
     [self.document addQuerySelectTableForSchemeTableWithObjectID: objectID];
-}
-
-#pragma mark -
-#pragma mark Helper
-
-+ (void)configureCell: (UITableViewCell *)cell
-           forSection: (MADIdentifierQueryViewSections)section
-               andRow: (NSInteger)row {
-    
-    switch (section) {
-            
-        case MADIdentifierQueryViewSectionsNumberOfQueryResults: {
-            
-            UISwitch *switchQueryMode = [[UISwitch alloc] initWithFrame:CGRectZero];
-            switchQueryMode.on = [[NSUserDefaults standardUserDefaults] boolForKey: MADIdentifierDefaultsViewerDesired];
-            [switchQueryMode addTarget: nil action: @selector(handleToggleReportingMode:)
-                      forControlEvents: UIControlEventValueChanged];
-            cell.accessoryView = switchQueryMode;
-            cell.textLabel.text = switchQueryMode.on ?
-                                    @"Reporting Mode" :
-                                    @"Designer Mode (limited)";
-            break;
-        }
-            
-        default: {
-            break;
-        }
-            
-    }
-    
 }
 
 #pragma mark -
@@ -861,26 +858,7 @@ addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
     MADQueryBuilderAddTableViewController *tvc;
     tvc = (MADQueryBuilderAddTableViewController *)navigationController.topViewController;
     tvc.delegate = self;
-    
-    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-    NSFetchRequest *request;
-    NSSortDescriptor *sort;
-    NSString *keyPathName;
-    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    keyPathName = NSStringFromSelector(@selector(name));
-    sort = [NSSortDescriptor sortDescriptorWithKey: keyPathName
-                                         ascending: YES];
-    
-    request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
-    
-    MADocument *document = self.document;
-    NSFetchedResultsController *frc;
-    frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                              managedObjectContext: document.managedObjectContext
-                                                sectionNameKeyPath: nil
-                                                         cacheName: nil];
-    tvc.fetchedResultsController = frc;
-    
+    tvc.managedObjectContext = self.document.managedObjectContext;
     [self presentViewController:navigationController animated:YES completion:^{
         [self.tabBarController disableTabBarItems];
     }];

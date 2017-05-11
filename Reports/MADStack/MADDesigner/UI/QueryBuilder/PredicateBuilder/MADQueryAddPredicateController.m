@@ -15,6 +15,7 @@
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
 #import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -185,7 +186,11 @@
 }
 
 - (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
-                                      withField:(RptqQueryField *)queryField {
+                                    withFieldID:(NSManagedObjectID *)fieldID {
+    
+    NSManagedObjectContext *context = self.document.managedObjectContext;
+    RptqQueryField *queryField = [context objectWithID: fieldID];
+    
     UITableViewCell *tableViewCellRightSide = _tableViewCellRightSide;
     [self.navigationController popToViewController:self animated:YES];
     if (_currentlyEditingPart == MNSPredicateLeft) {

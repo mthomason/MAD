@@ -13,10 +13,14 @@
 
 #import "MTQueryBuilderAddGroupViewController.h"
 
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIStoryboardSegue.h>
+
+#import <MAD/MADocument.h>
 
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -85,8 +89,12 @@ static NSString * const TextDefault = @"Default";
 
 #pragma mark Choose Field
 
-- (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
-                                      withField:(RptqQueryField *)queryField {
+- (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
+                                    withFieldID: (NSManagedObjectID *)fieldID {
+    
+    NSManagedObjectContext *context = self.document.managedObjectContext;
+    RptqQueryField *queryField = [context objectWithID: fieldID];
+    
     [self.navigationController popToViewController:self animated:YES];
 
     NSString *fieldName = [queryField tableFieldKey];

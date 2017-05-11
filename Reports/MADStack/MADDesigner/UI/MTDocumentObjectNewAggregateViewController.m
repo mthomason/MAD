@@ -19,6 +19,7 @@
 
 #import <UIKit/UILabel.h>
 
+#import <MAD/MADocument.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
@@ -63,7 +64,11 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                      withField: (RptqQueryField *)field {
+                                    withFieldID: (NSManagedObjectID *)fieldID {
+    
+    NSManagedObjectContext *context = self.document.managedObjectContext;
+    RptqQueryField *field = [context objectWithID: fieldID];
+    
     self.fieldObject = field;
     self.fieldObjectId = field.objectID;
     

@@ -191,11 +191,11 @@
              *keySchemaFieldID = [self keySchemaFieldID],
              *keyQueryTableAlias = [self keyInQueryTableAlias],
              *keySchemaFieldDataType = [self keySchemaFieldDataType];
-    
+    NSString *keySelf = NSStringFromSelector(@selector(self));
     NSUInteger expressionCount = 13;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSString *keys[] = {
-        @"QF",
+        keySelf,
         keyPathInQueryTable,
         keyPathFieldName,
         keyPathTableName,
@@ -313,11 +313,11 @@
              *keyQueryFieldID = [self keyQueryFieldID],
              *keySchemaTableID = [self keySchemaTableID],
              *keySchemaFieldID = [self keySchemaFieldID];
-    
+    NSString *keySelf = NSStringFromSelector(@selector(self));
     NSUInteger expressionCount = 11;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSString *keys[] = {
-        @"QF",
+        keySelf,
         keyPathInQueryTable,
         keyPathFieldName,
         keyPathTableName,

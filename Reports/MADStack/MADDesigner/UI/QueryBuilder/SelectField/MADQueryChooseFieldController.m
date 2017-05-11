@@ -211,7 +211,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 #pragma mark Table view datasource and delegate
 
 - (NSInteger)numberOfRowsInSection:(NSInteger)section {
-    MADSchemaFieldSelectorModel *state = _sectionInfoArray[(NSUInteger)section];
+    MADSchemaFieldSelectorModel *state = self.sectionInfoArray[(NSUInteger)section];
     id <NSFetchedResultsSectionInfo> data = self.resultsController.sections[(NSUInteger)section];
     return state.open ? (NSInteger)data.numberOfObjects : 0;
 }
@@ -222,7 +222,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
-    MADSchemaFieldSelectorModel *state = _sectionInfoArray[(NSUInteger)section];
+    MADSchemaFieldSelectorModel *state = self.sectionInfoArray[(NSUInteger)section];
     id <NSFetchedResultsSectionInfo> data = self.resultsController.sections[(NSUInteger)section];
     return state.open ? (NSInteger)data.numberOfObjects : 0;
 }
@@ -286,10 +286,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSManagedObjectID *fieldID = [self queryFieldObjectIDForIndexPath:indexPath];
-    RptqQueryField *queryField = [self.document.managedObjectContext objectWithID:fieldID];
-    if (queryField != nil) {
-        [self.delegate tableViewControllerChooseFieldDidFinish: self withField: queryField];
-    }
+    [self.delegate tableViewControllerChooseFieldDidFinish: self withFieldID: fieldID];
 }
 
 #pragma mark -
@@ -299,8 +296,8 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
     NSManagedObjectID *result;
     id <NSFetchedResultsSectionInfo> section = self.resultsController.sections[(NSUInteger)indexPath.section];
     NSDictionary *rowData = section.objects[(NSUInteger)indexPath.row];
-    NSString *keyQueryFieldID = [RptqQueryField keyQueryFieldID];
-    result = rowData[keyQueryFieldID];
+    NSString *keySelf = NSStringFromSelector(@selector(self));
+    result = rowData[keySelf];
     return result;
 }
 
@@ -382,11 +379,6 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
     [self updateSize];
 }
 
-- (void)updateSize {
-    self.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
-    self.navigationController.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
-}
-
 - (void)sectionHeaderView:(MADDatabaseTableSectionHeaderView *)sectionHeaderView
             sectionClosed:(NSInteger)sectionClosed {
     
@@ -410,6 +402,11 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
     }
     _openSectionIndex = NSNotFound;
     [self updateSize];
+}
+
+- (void)updateSize {
+    self.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
+    self.navigationController.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
 }
 
 #pragma mark -

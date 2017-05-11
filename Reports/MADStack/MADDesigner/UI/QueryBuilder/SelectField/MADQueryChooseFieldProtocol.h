@@ -11,10 +11,13 @@
 
 @class MADQueryChooseFieldController;
 @class RptqQueryField;
+@class NSManagedObjectID;
 
 @protocol MADQueryChooseFieldProtocol
+
     - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                          withField: (RptqQueryField *)field;
+                                        withFieldID: (NSManagedObjectID *)fieldID;
+
 @end
 
 #endif

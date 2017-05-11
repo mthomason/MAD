@@ -17,10 +17,43 @@
 
 @implementation MADQueryBuilderAddTableViewController
 
+@synthesize fetchedResultsController = _fetchedResultsController;
+
 #pragma mark - View lifecycle
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    NSManagedObjectContext *managedObjectContext;
+    if (_fetchedResultsController == nil && ((managedObjectContext = _managedObjectContext)) != nil) {
+        NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
+        NSFetchRequest *request;
+        NSSortDescriptor *sort;
+        NSString *keyPathName;
+        request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+        keyPathName = NSStringFromSelector(@selector(name));
+        
+        sort = [NSSortDescriptor sortDescriptorWithKey: keyPathName
+                                             ascending: YES];
+        
+        request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
+        
+        NSFetchedResultsController *fetchedResultsController;
+        fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                  managedObjectContext: managedObjectContext
+                                                    sectionNameKeyPath: nil
+                                                             cacheName: nil];
+        
+        NSError *error = nil;
+        if (![fetchedResultsController performFetch:&error]) {
+            NSLog(@"Error: (%@, %@)", error.localizedDescription, error.localizedFailureReason);
+        }
+        
+        _fetchedResultsController = fetchedResultsController;
+    }
+    return _fetchedResultsController;
 }
 
 #pragma mark - Actions

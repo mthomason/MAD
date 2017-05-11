@@ -328,7 +328,7 @@ static const inline CGSize sizePopoverFonts() {
         
     } else if ([action.identifier isEqualToString:MTIdentifierSegueEditFieldExit]) {
         [self tableViewControllerChooseFieldDidFinish: action.sourceViewController
-                                            withField: [action.sourceViewController queryField]];
+                                          withFieldID: [action.sourceViewController queryField].objectID];
         
     } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         [self saveDynamicLabel: action.sourceViewController];
@@ -2012,11 +2012,13 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                      withField: (RptqQueryField *)field {
+                                    withFieldID: (NSManagedObjectID *)fieldID {
 
+    NSManagedObjectContext *context = self.document.managedObjectContext;
+    RptqQueryField *field = [context objectWithID: fieldID];
     RptqDocumentElementLabelDataField *documentObject;
     documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: field.identifier
-                                                                       fromObjectContext: field.managedObjectContext];
+                                                                       fromObjectContext: context];
     documentObject.referencesQueryField = field;
     [field.managedObjectContext save:nil];
     

@@ -21,8 +21,6 @@ extern NSString * const MADNotificationQueryLinkDelete;
 
 extern NSString * const MADKeyQuery;
 
-extern NSString * const MADKeyQueryField;
-
 extern NSString * const MADKeyQueryLinkID;
 extern NSString * const MADKeyQueryLinkLeftFieldID;
 extern NSString * const MADKeyQueryLinkRightFieldID;

@@ -15,6 +15,7 @@
 @class MADQueryBuilderAddTableViewController;
 @class RptqDatabaseSchemaTable;
 @class NSManagedObjectID;
+@class NSManagedObjectContext;
 
 @protocol MADQueryBuilderAddTableDelegate
     - (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
@@ -27,6 +28,7 @@
     @property (nonatomic, weak) IBOutlet id <MADQueryBuilderAddTableDelegate,
                                              MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, copy) NSArray *excludeResults;
+    @property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
     - (IBAction)done:(id)sender;
 

@@ -11,6 +11,9 @@
 #endif
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
+
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <MAD/MADDatabaseProtocol.h>
 
 #import <UIKit/UIStoryboardSegue.h>
@@ -24,6 +27,7 @@
 
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDataTable.h>
+#import <MAD/MADocument.h>
 
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -62,7 +66,10 @@
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                      withField: (RptqQueryField *)field {
+                                    withFieldID: (NSManagedObjectID *)fieldID {
+    
+    NSManagedObjectContext *context = self.document.managedObjectContext;
+    RptqQueryField *field = [context objectWithID: fieldID];
     
     [self.navigationController popViewControllerAnimated:YES];
     
