@@ -296,26 +296,26 @@
                                                            options: 0];
 
     
-    NSFetchRequest *fetchQueryTable;
     NSString *entityName;
+    NSFetchRequest *fetchQueryTable;
+    
     entityName = NSStringFromClass([RptqQueryField class]);
     fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
     
-    NSString *keyPathInQueryTable = [self keyInQueryTable];
-    
-    NSString *keyPathInQueryTableDropIndex = [self keyInQueryTableDropIndex];
-    
-    NSString *keyPathDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-    NSString *keyPathFieldName = [self keyFieldName];
-    NSString *keyPathTableName = [self keyTableName];
-    NSString *keyPathSchemaTable = [self keySchemaTable];
-    NSString *keyQueryTableID = [self keyQueryTableID],
+    NSString *keyPathInQueryTable = [self keyInQueryTable],
+             *keyPathInQueryTableDropIndex = [self keyInQueryTableDropIndex],
+             *keyPathDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField)),
+             *keyPathFieldName = [self keyFieldName],
+             *keyPathTableName = [self keyTableName],
+             *keyPathSchemaTable = [self keySchemaTable],
+             *keyQueryTableID = [self keyQueryTableID],
              *keyQueryFieldID = [self keyQueryFieldID],
              *keySchemaTableID = [self keySchemaTableID],
-             *keySchemaFieldID = [self keySchemaFieldID];
-    NSString *keySelf = NSStringFromSelector(@selector(self));
+             *keySchemaFieldID = [self keySchemaFieldID],
+             *keySelf = NSStringFromSelector(@selector(self));
     NSUInteger expressionCount = 11;
     NSExpressionDescription *expressionDescription[expressionCount];
+    
     NSString *keys[] = {
         keySelf,
         keyPathInQueryTable,
