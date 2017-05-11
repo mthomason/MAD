@@ -37,11 +37,11 @@
 
 @interface MADQueryLinkBuilderController ()
 
-    @property (nonatomic, strong) RptqQueryTable *firstTable;
-    @property (nonatomic, strong) RptqQueryTable *secondTable;
+    @property (nonatomic, strong) NSManagedObjectID /* RptqQueryTable */ *firstTableID;
+    @property (nonatomic, strong) NSManagedObjectID /* RptqQueryTable */ *secondTableID;
 
-    @property (nonatomic, strong) RptqQueryField *firstField;
-    @property (nonatomic, strong) RptqQueryField *secondField;
+    @property (nonatomic, strong) NSManagedObjectID /* RptqQueryField */ *firstFieldID;
+    @property (nonatomic, strong) NSManagedObjectID /* RptqQueryField */ *secondFieldID;
 
     @property (nonatomic, strong) IBOutlet UILabel *labelRightField;
 
@@ -98,41 +98,62 @@
 }
 
 - (void)setupFieldController1:(MADQueryChooseFieldController *)controller {
-    [self setupFieldController:controller excludeTable:self.firstTable];
+    [self setupFieldController:controller excludeTable:self.firstTableID];
 }
 
 - (void)setupFieldController2:(MADQueryChooseFieldController *)controller {
-    [self setupFieldController:controller excludeTable:self.secondTable];
+    [self setupFieldController:controller excludeTable:self.secondTableID];
 }
 
 - (void)setupFieldController:(MADQueryChooseFieldController *)controller
-                 excludeTable:(RptqQueryTable *)excludeTable {
+                excludeTable:(NSManagedObjectID *)excludeTableID {
     if (controller == nil) return;
-    id alias = excludeTable.alias.copy;
-    NSArray *excludeTables = alias != nil ?
+    
+    MADocument *document = self.document;
+    controller.delegate = self;
+    controller.document = document;
+
+    if (excludeTableID != nil) {
+        NSManagedObjectContext *moc = document.managedObjectContext;
+        RptqQueryTable *excludeTable = [moc objectWithID:excludeTableID];
+        id alias = excludeTable.alias.copy;
+        NSArray *excludeTables = alias != nil ?
                                 [[NSArray alloc] initWithObjects:alias, nil] :
                                 [[NSArray alloc] init];
-    controller.excludeTables = excludeTables;
-    controller.delegate = self;
-    controller.document = self.document;
+        controller.excludeTables = excludeTables;
+    } else {
+        NSArray *excludeTables = [[NSArray alloc] init];
+        controller.excludeTables = excludeTables;
+    }
+    
 }
 
 #pragma mark - Actions
 
 - (IBAction)save:(id)sender {
-    if (self.firstField && self.secondField) {
-        MADocument *document = self.document;
-        RptqQueryLinks *links;
-        links = [RptqQueryLinks newQueryLinksWithLeftField: self.firstField
-                                                rightField: self.secondField
-                                                  joinType: self.linkType
-                                      managedObjectContext: document.managedObjectContext];
-        [document.activeDocumentModel addQueryLink:links];
-        [document saveContext];
+    if (self.firstFieldID && self.secondFieldID) {
         
-        [self.queryLinkDelegate viewController:self addedQueryLink: links];
+        id <MTQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
+        queryLinkDelegate = self.queryLinkDelegate;
+        
+        MADocument *document = self.document;
+        NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+        
+        
+        
+        RptqQueryLinks *link;
+        RptqQueryField *firstField = [managedObjectContext objectWithID:self.firstFieldID];
+        RptqQueryField *secondField = [managedObjectContext objectWithID:self.secondFieldID];
+        link = [RptqQueryLinks newQueryLinksWithLeftField: firstField
+                                               rightField: secondField
+                                                 joinType: self.linkType
+                                     managedObjectContext: managedObjectContext];
+        [document.activeDocumentModel addQueryLink: link];
+        [document saveContext];
+
+        [queryLinkDelegate viewController: self addedQueryLink: link.objectID];
     } else {
-        [self cancel:sender];
+        [self cancel: sender];
     }
 }
 
@@ -160,8 +181,8 @@
         case MADLinkLeft: {
 
             self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.localizedLowercaseString;
-            self.firstTable = queryTable;
-            self.firstField = queryField;
+            self.firstTableID = queryTable.objectID;
+            self.firstFieldID = queryField.objectID;
             
             [self updateRightLabelState];
 
@@ -175,8 +196,8 @@
         }
         case MADLinkRight: {
             self.tableViewCellTableFieldTwo.detailTextLabel.text = tableFieldName.localizedLowercaseString;
-            self.secondTable = queryTable;
-            self.secondField = queryField;
+            self.secondTableID = queryTable.objectID;
+            self.secondFieldID = queryField.objectID;
             break;
         }
         default:
@@ -194,17 +215,16 @@
 
 - (void)setJoinType:(MADLinkType)type {
     NSString *linkName = [RptqQueryLinks newLocalizedNameForLinkType:type];
-    NSString *text = linkName.lowercaseString;
-    self.tableViewCellJoinType.detailTextLabel.text = text;
+    self.tableViewCellJoinType.detailTextLabel.text = linkName.lowercaseString;
     self.linkType = type;
 }
 
 - (BOOL)firstFieldSet {
-    return self.firstField != nil;
+    return self.firstFieldID != nil;
 }
 
 - (BOOL)secondFieldSet {
-    return self.secondField != nil && [self.firstField isEqual:self.secondField] == NO;
+    return self.secondFieldID != nil && [self.firstFieldID isEqual:self.secondFieldID] == NO;
 }
 
 - (void)updateRightLabelState {
@@ -214,13 +234,11 @@
     self.tableViewCellTableFieldTwo.textLabel.enabled = enabled;
     self.tableViewCellTableFieldTwo.detailTextLabel.enabled = enabled;
     self.labelRightField.enabled = enabled;
-    
-    UIColor *darkTextColor = enabled ? [UIColor blackColor] : [UIColor darkTextColor];
-    self.labelRightField.textColor = darkTextColor;
+    self.labelRightField.textColor = enabled ? [UIColor blackColor] : [UIColor darkTextColor];
 }
 
 - (void)updateSaveButtonState {
-    BOOL enabled = [self firstFieldSet] && self.secondField;
+    BOOL enabled = [self firstFieldSet] && self.secondFieldID;
     self.navigationItem.rightBarButtonItem.enabled = enabled;
 }
 

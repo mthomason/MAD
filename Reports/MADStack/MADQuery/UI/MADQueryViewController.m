@@ -551,7 +551,7 @@ BOOL storeEnabled() {
 #pragma mark MTQueryBuilderLinkBuilderDelegate
 
 - (void)viewController:(MADQueryLinkBuilderController *)controller
-        addedQueryLink:(RptqQueryLinks *)link {
+        addedQueryLink:(NSManagedObjectID *)linkID {
 
     [self dismissViewController];
     
@@ -732,7 +732,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             case NSFetchedResultsChangeInsert: {
                 path = [NSIndexPath indexPathForRow: (long)[controller.fetchedObjects indexOfObject: anObject]
                                           inSection: section.shortValue];
-                indexPaths = @[path];
+                indexPaths = [[NSArray alloc] initWithObjects: path, nil];
                 [self.tableView insertRowsAtIndexPaths: indexPaths
                                       withRowAnimation: UITableViewRowAnimationFade];
                 break;
@@ -740,7 +740,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             case NSFetchedResultsChangeDelete: {
                 path = [NSIndexPath indexPathForRow: indexPath.row
                                           inSection: section.shortValue];
-                indexPaths = @[path];
+                indexPaths = [[NSArray alloc] initWithObjects: path, nil];
                 [self.tableView deleteRowsAtIndexPaths: indexPaths
                                       withRowAnimation: UITableViewRowAnimationFade];
                 break;
@@ -748,7 +748,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             case NSFetchedResultsChangeUpdate: {
                 path = [NSIndexPath indexPathForRow: indexPath.row
                                           inSection: section.shortValue];
-                indexPaths = @[path];
+                indexPaths = [[NSArray alloc] initWithObjects: path, nil];
                 [self.tableView reloadRowsAtIndexPaths: indexPaths
                                       withRowAnimation: UITableViewRowAnimationFade];
                 break;
@@ -756,7 +756,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             case NSFetchedResultsChangeMove: {
                 path = [NSIndexPath indexPathForRow: indexPath.row
                                           inSection: section.shortValue];
-                indexPaths = @[path];
+                indexPaths = [[NSArray alloc] initWithObjects: path, nil];
                 [self.tableView deleteRowsAtIndexPaths: indexPaths
                                       withRowAnimation: UITableViewRowAnimationFade];
                 [self.tableView insertRowsAtIndexPaths: indexPaths

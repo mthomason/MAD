@@ -36,7 +36,6 @@ static NSString * const TextDefault = @"Default";
 
 @interface MTQueryBuilderAddGroupViewController ()
 
-    @property (nonatomic, strong) RptqQueryField *field;
     @property (nonatomic, copy) NSManagedObjectID *fieldId;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
@@ -99,7 +98,6 @@ static NSString * const TextDefault = @"Default";
 
     NSString *fieldName = [queryField tableFieldKey];
     self.fieldId = queryField.objectID.copy;
-    self.field = queryField;
     self.fieldName = fieldName.copy;
     self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
     self.barButtonItemSave.enabled = YES;
@@ -143,7 +141,8 @@ static NSString * const TextDefault = @"Default";
 }
 
 - (IBAction)save:(id)sender {
-    [self.delegate viewController:self addedGroupOnQueryField: self.fieldId
+    [self.delegate viewController: self
+           addedGroupOnQueryField: self.fieldId
                      andSortOrder: self.sortOrder];
 }
 

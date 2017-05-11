@@ -20,7 +20,7 @@
 
 @protocol MTQueryBuilderLinkBuilderDelegate
     - (void)viewController:(MADQueryLinkBuilderController *)controller
-            addedQueryLink:(RptqQueryLinks *)queryLink;
+            addedQueryLink:(NSManagedObjectID *)linkID;
 @end
 
 @interface MADQueryLinkBuilderController : UITableViewController
