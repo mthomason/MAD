@@ -24,7 +24,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
     @property (nonatomic, assign) BOOL indicatorVisible;
     @property (nonatomic, assign) CGFloat scale;
 
-    - (instancetype)initWithSection:(MADReportSection *)section;
+    - (instancetype)initWithText:(NSString *)text;
     - (void)dimView;
     - (void)normalView;
 

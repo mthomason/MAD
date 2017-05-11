@@ -20,19 +20,16 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 @interface MADDesignerSectionLabel ()
     <UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign, readwrite) BOOL selected;
-@property (nonatomic, strong) RptqDocumentSection *section;
+    @property (nonatomic, assign, readwrite) BOOL selected;
 
 @end
 
 @implementation MADDesignerSectionLabel
 
-- (instancetype)initWithSection:(MADReportSection *)section {
-
+- (instancetype)initWithText:(NSString *)text {
     if (self = [self initWithFrame:CGRectZero]) {
 
-        [self setSelected:NO];
-        
+        self.selected = NO;
         self.scale = 1.0000f;
 
         UIColor *tintColor = [MADColorEverydayApps newColorBlue];
@@ -42,7 +39,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
         self.textColor = tintColor;
         
-        self.text = [section localizedDisplayName];
+        self.text = text.copy;
         self.autoresizingMask = MADViewAutoresizingFlexable();
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.backgroundColor = [UIColor clearColor];
@@ -61,14 +58,6 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
     return self;
 }
 
-- (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
-    super.contentScaleFactor = contentScaleFactor;
-}
-
-- (void)setNeedsDisplay {
-    [super setNeedsDisplay];
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     UIColor *color = [MADColorEverydayApps newColorBlue];
@@ -81,12 +70,11 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 - (void)dimView {
     UIColor *tintColor = [MADColorEverydayApps newColorBlue];
-    self.textColor = [tintColor colorWithAlphaComponent:0.500f];
+    self.textColor = [tintColor colorWithAlphaComponent:0.5000f];
     self.selected = YES;
 }
 
 - (void)normalView {
-    
     UIColor *tintColor = [MADColorEverydayApps newColorBlue];
     self.textColor = tintColor;
     self.selected = NO;

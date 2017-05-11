@@ -712,6 +712,7 @@ static const inline CGSize sizePopoverFonts() {
     MADDesignerSectionView *sectionView;
     MADDesignerSectionLabel *sectionViewLabel;
     UIGestureRecognizer *tapGestureRecognizer;
+    NSString *localizedDisplayName;
     for (MADReportSection *reportSection in reportSectionsEnumerator) {
         
         reportSectionKey = @(reportSection.identifier);
@@ -726,8 +727,8 @@ static const inline CGSize sizePopoverFonts() {
         sectionView.showsVerticalScrollIndicator = YES;
         
         ((MADDesignerSectionLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
-        
-        sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithSection:reportSection];
+        localizedDisplayName = [reportSection localizedDisplayName];
+        sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithText:localizedDisplayName];
         
         tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self
                                                                                                 action:@selector(handleToggleSectionControlPanel:)
