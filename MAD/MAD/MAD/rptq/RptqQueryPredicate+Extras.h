@@ -16,24 +16,24 @@
 
 @interface RptqQueryPredicate (Extras)
 
-+ (instancetype)newQueryPredicateFactoryWithLeftField:(RptqQueryField *)leftField
-                                    comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                        andRightField:(RptqQueryField *)rightField
-                              forManagedObjectContext:(NSManagedObjectContext *)context;
++ (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftField
+                                      comparsonOperator:(MADPredicateOperator)comparsonOperator
+                                        andRightFieldID:(NSManagedObjectID *)rightField
+                                forManagedObjectContext:(NSManagedObjectContext *)context;
 
-+ (instancetype)newQueryPredicateFactoryWithLeftField:(RptqQueryField *)leftField
++ (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftField
+                                      comparsonOperator:(MADPredicateOperator)comparsonOperator
+                                          andRightValue:(NSString *)rightUserValue
+                                forManagedObjectContext:(NSManagedObjectContext *)context;
+
++ (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
                                     comparsonOperator:(MADPredicateOperator)comparsonOperator
                                         andRightValue:(NSString *)rightUserValue
                               forManagedObjectContext:(NSManagedObjectContext *)context;
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
                                     comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                        andRightValue:(NSString *)rightUserValue
-                              forManagedObjectContext:(NSManagedObjectContext *)context;
-
-+ (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
-                                    comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                        andRightField:(RptqQueryField *)rightField
+                                      andRightFieldID:(NSManagedObjectID *)rightField
                               forManagedObjectContext:(NSManagedObjectContext *)context;
 
 + (void)deletePredicate:(RptqQueryPredicate *)predicate;

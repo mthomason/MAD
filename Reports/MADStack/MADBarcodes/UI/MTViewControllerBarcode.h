@@ -18,8 +18,7 @@
 
 @protocol MADViewControllerBarcodeDelegate;
 
-@class RptqDocumentElementBarcode;
-@class NSManagedObjectID;
+@class RptqDocumentElementBarcode, NSManagedObjectID;
 
 @interface MTViewControllerBarcode : UIViewController
     <MTViewControllerBarcodeOptionsDelegate,
@@ -30,8 +29,8 @@
     @property (nonatomic, weak) id <MADViewControllerBarcodeDelegate> delegate;
     @property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, strong, readwrite) RptqQueryField *queryField1;
-    @property (nonatomic, strong, readwrite) RptqQueryField *queryField2;
+    @property (nonatomic, strong, readwrite) NSManagedObjectID *queryField1ID;
+    @property (nonatomic, strong, readwrite) NSManagedObjectID *queryField2ID;
     @property (nonatomic, strong, readwrite) MTBarcode *barcode;
     @property (nonatomic, strong, readonly) MTViewControllerBarcodeOptions *optionsViewController;
 

@@ -157,13 +157,14 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 - (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
                                       inputType:(MTAggregateFunctionInputType)inputType
                                       groupType:(MTAggregateGroupByType)groupType
-                                aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
+                              aggregateObjectID:(NSManagedObjectID *)aggregateObjectID  //RptqQueryField or MTAggregateFunctionInputTypeFormula
                                     groupNumber:(int32_t)groupNumber {
     
     self.functionType = functionType;
     self.groupNumber = groupNumber;
     self.groupType = groupType;
     
+    NSManagedObject *aggregateObject = [self.managedObjectContext objectWithID:aggregateObjectID];
     switch (inputType) {
         case MTAggregateFunctionInputTypeField: {
             self.aggregateField = (RptqQueryField *)aggregateObject;

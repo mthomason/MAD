@@ -535,15 +535,15 @@
     switch (objectType) {
         case MTDocumentObjectTypeLabelDynamic: {
             
-            NSManagedObjectID *fieldObjectId;
+            NSManagedObjectID *fieldObjectID;
             RptqQueryField *field;
             
             entityName = NSStringFromClass([RptqDocumentElementLabelDataField class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
                                                                  inManagedObjectContext: managedObjectContext];
             
-            fieldObjectId = defination[MTDocumentObjectDefinationObject];
-            field = (RptqQueryField *)[managedObjectContext objectWithID:fieldObjectId];
+            fieldObjectID = defination[MTDocumentObjectDefinationObject];
+            field = (RptqQueryField *)[managedObjectContext objectWithID:fieldObjectID];
             
             
             reportObject = [[RptqDocumentElementLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype

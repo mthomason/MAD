@@ -150,7 +150,6 @@ static inline CGRect SectionBounds(CGRect pageRect,
 
     @property (nonatomic, strong) MADDocumentObjectDataReference *dataReference;
 
-
 @end
 
 @implementation MADPrintPageRenderer {

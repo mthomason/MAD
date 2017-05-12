@@ -23,6 +23,7 @@
 @implementation MADReportSectionEnumerator
 
 - (void)dealloc {
+    _query = nil;
     [_buffer removeAllObjects];
 }
 

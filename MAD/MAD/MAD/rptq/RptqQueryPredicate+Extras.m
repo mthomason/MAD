@@ -26,6 +26,7 @@
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
+#import "RptqQueryField.h"
 
 #import "RptqDataHelper.h"
 
@@ -41,10 +42,13 @@
 
 #pragma mark - Static
 
-+ (instancetype)newQueryPredicateFactoryWithLeftField: (RptqQueryField *)leftField
-                                    comparsonOperator: (MADPredicateOperator)comparsonOperator
-                                        andRightField: (RptqQueryField *)rightField
-                              forManagedObjectContext: (NSManagedObjectContext *)managedObjectContext {
++ (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
+                                      comparsonOperator:(MADPredicateOperator)comparsonOperator
+                                        andRightFieldID:(NSManagedObjectID *)rightFieldID
+                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQueryField *leftField, *rightField;
+    leftField = [managedObjectContext objectWithID:leftFieldID];
+    rightField = [managedObjectContext objectWithID:rightFieldID];
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class])
                                           inManagedObjectContext: managedObjectContext];
     RptqQueryPredicate *queryPredicate;
@@ -52,50 +56,57 @@
                                  insertIntoManagedObjectContext: managedObjectContext];
     queryPredicate.hasRightField    = rightField;
     queryPredicate.hasLeftField     = leftField;
-    queryPredicate.rightFieldID   = nil;
-    queryPredicate.leftFieldID    = nil;
+    queryPredicate.rightFieldID     = nil;
+    queryPredicate.leftFieldID      = nil;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
-+ (instancetype)newQueryPredicateFactoryWithLeftField:(RptqQueryField *)leftField
-                            comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                andRightValue:(NSString *)rightUserValue
-                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
++ (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
+                                      comparsonOperator:(MADPredicateOperator)comparsonOperator
+                                          andRightValue:(NSString *)rightUserValue
+                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQueryField *leftField;
+    leftField = [managedObjectContext objectWithID:leftFieldID];
+    NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
+    NSEntityDescription *ed = [NSEntityDescription entityForName: entityName
+                                          inManagedObjectContext: managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = nil;
     queryPredicate.hasLeftField     = leftField;
-    queryPredicate.rightFieldID   = rightUserValue;
-    queryPredicate.leftFieldID    = nil;
+    queryPredicate.rightFieldID     = rightUserValue.copy;
+    queryPredicate.leftFieldID      = nil;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
-                            comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                andRightValue:(NSString *)rightUserValue
-                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+                                    comparsonOperator:(MADPredicateOperator)comparsonOperator
+                                        andRightValue:(NSString *)rightUserValue
+                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = nil;
     queryPredicate.hasLeftField     = nil;
-    queryPredicate.rightFieldID   = rightUserValue;
-    queryPredicate.leftFieldID    = leftUserValue;
+    queryPredicate.rightFieldID     = rightUserValue.copy;
+    queryPredicate.leftFieldID      = leftUserValue.copy;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
-                            comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                andRightField:(RptqQueryField *)rightField
-                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+                                    comparsonOperator:(MADPredicateOperator)comparsonOperator
+                                      andRightFieldID:(NSManagedObjectID /* RptqQueryField */ *)rightFieldID
+                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    RptqQueryField *rightField;
+    rightField = [managedObjectContext objectWithID:rightFieldID];
+    
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = rightField;
     queryPredicate.hasLeftField     = nil;
-    queryPredicate.rightFieldID   = nil;
-    queryPredicate.leftFieldID    = leftUserValue;
+    queryPredicate.rightFieldID     = nil;
+    queryPredicate.leftFieldID      = leftUserValue.copy;
     queryPredicate.comparson        = comparsonOperator;
     return queryPredicate;
 }

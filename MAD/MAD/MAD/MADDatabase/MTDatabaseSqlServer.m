@@ -1391,7 +1391,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
     
     MADSafeQueryField *safeField = [self newSafeQueryField: fieldName
-                                      andTable: tableName];
+                                                  andTable: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                       withSafeTableName: tableName];
     MADSafeQueryField *safeTable = [self newSafeIdentifier: tableName];

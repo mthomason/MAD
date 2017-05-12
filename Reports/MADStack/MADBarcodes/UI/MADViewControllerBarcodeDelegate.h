@@ -15,8 +15,8 @@
 
     - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
                            barcodeObject:(MTBarcode *)barcode
-                            withFieldOne:(RptqQueryField *)fieldOne
-                             andFieldTwo:(RptqQueryField *)fieldTwo;
+                            withFieldOne:(NSManagedObjectID /* RptqQueryField */ *)fieldOne
+                             andFieldTwo:(NSManagedObjectID /* RptqQueryField */ *)fieldTwo;
 
 @end
 

@@ -53,8 +53,6 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         MADGroupByViewControllerDelegate,
         MADQueryChooseFieldProtocol>
 
-    @property(nonatomic, strong) RptqDocumentElementAggregate *aggregateDocumentObject;
-
 @end
 
 @implementation MTDocumentObjectNewAggregateViewController
@@ -67,12 +65,10 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
                                     withFieldID: (NSManagedObjectID *)fieldID {
     
     NSManagedObjectContext *context = self.document.managedObjectContext;
-    RptqQueryField *field = [context objectWithID: fieldID];
-    
-    self.fieldObject = field;
-    self.fieldObjectId = field.objectID;
+    self.fieldObjectID = fieldID.copy;
     
     NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+    RptqQueryField *field = [context objectWithID: fieldID];
     NSString *detail = [NSString stringWithFormat:formatString, [field display]];
     self.tableViewCellAggregateInput.detailTextLabel.text = detail;
     [self updateDisplay];
@@ -201,11 +197,10 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     } else if ([action.identifier isEqualToString:MTSegueAggregateFieldSave]) {
         
         MADQueryChooseFieldController *dynamicFieldController = action.sourceViewController;
-        RptqQueryField *queryField = dynamicFieldController.queryField;
-        self.fieldObject = queryField;
-        self.fieldObjectId = queryField.objectID.copy;
+        self.fieldObjectID = dynamicFieldController.queryFieldID.copy;
         
         NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+        RptqQueryField *queryField = [self.document.managedObjectContext objectWithID:self.fieldObjectID];
         NSString *display = [queryField display];
         NSString *detailtext = [[NSString alloc] initWithFormat:formatString, display];
         _tableViewCellAggregateInput.detailTextLabel.text = detailtext;
@@ -251,18 +246,21 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
         [aggregateDelegate didUpdateggregateFunctionWithType: self.aggregateFunctionType
                                                    inputType: MTAggregateFunctionInputTypeField
-                                                 inputObject: self.fieldObject
+                                                 inputObject: self.fieldObjectID
                                                    groupType: self.aggregateGroupByType
                                                  groupNumber: self.groupTypeSectionNumber];
     }
-    self.navigationItem.rightBarButtonItem.enabled = self.fieldObject != nil;
+    self.navigationItem.rightBarButtonItem.enabled = self.fieldObjectID != nil;
 }
 
 - (void)updateField {
-    NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
-    NSString *display = [self.fieldObject display];
-    NSString *detailtext = [[NSString alloc] initWithFormat:formatString, display];
-    self.tableViewCellAggregateInput.detailTextLabel.text = detailtext;
+    if (self.fieldObjectID != nil) {
+        NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+        RptqQueryField *fieldObject = [self.document.managedObjectContext objectWithID:self.fieldObjectID];
+        NSString *display = [fieldObject display];
+        NSString *detailtext = [[NSString alloc] initWithFormat:formatString, display];
+        self.tableViewCellAggregateInput.detailTextLabel.text = detailtext;
+    }
 }
 
 - (void)updateFunctionType {
@@ -349,12 +347,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     self.aggregateFunctionType = aggregateDocumentObject.functionType;
     self.aggregateGroupByType = aggregateDocumentObject.groupType;
     self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber;
-    self.fieldObjectId = aggregateDocumentObject.aggregateField.objectID;
-    self.fieldObject = aggregateDocumentObject.aggregateField;
+    self.fieldObjectID = aggregateDocumentObject.aggregateField.objectID.copy;
     self.editmode = YES;
-
-    self.aggregateDocumentObject = aggregateDocumentObject;
-
 }
 - (IBAction)save:(id)sender {
     [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer" sender:sender];

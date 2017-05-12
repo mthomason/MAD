@@ -18,14 +18,11 @@
 
 @interface MADReportFormatterState : NSObject
 
-    - (instancetype)initWithDocument:(RptqDocument *)document
-                     andDataDelegate:(id <MADDataProtocol>)dataDelegate;
+    - (instancetype)initWithDataDelegate:(id <MADDataProtocol>)dataDelegate;
 
-    - (void)resetWithDocument:(RptqDocument *)document
-              andDataDelegate:(id <MADDataProtocol>)dataDelegate;
+    - (void)resetWithDataDelegate:(id <MADDataProtocol>)dataDelegate;
 
     @property (nonatomic, strong) NSArray *sortDescriptors;
-    @property (nonatomic, strong) RptqDocument *document;   //Valid for one run of the state machine.
 
     @property (nonatomic, assign) NSUInteger detailRowId;
     @property (nonatomic, assign) NSUInteger detailRowIdLast;

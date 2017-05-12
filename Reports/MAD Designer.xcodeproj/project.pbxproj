@@ -5021,10 +5021,10 @@
 		4CFEE8041BB7993300AFAA0A /* PredicateBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				4CBBA94A1CFE98810033F63B /* MADQueryValueFromFieldControllerDelegate.h */,
 				4CBBA94B1CFE99B40033F63B /* MADQueryBuilderAddPredicateDelegate.h */,
 				4CFEE81E1BB7A3A300AFAA0A /* MADQueryAddPredicateController.h */,
 				4CFEE8191BB7A3A300AFAA0A /* MADQueryAddPredicateController.m */,
-				4CBBA94A1CFE98810033F63B /* MADQueryValueFromFieldControllerDelegate.h */,
 				4CFEE81B1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.h */,
 				4CFEE81A1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m */,
 				4CFEE8161BB7A2E600AFAA0A /* MADQueryPredicateFormatController.h */,

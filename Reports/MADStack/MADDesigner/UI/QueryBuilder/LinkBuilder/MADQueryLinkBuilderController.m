@@ -57,7 +57,8 @@
     return self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
-#pragma mark - View lifecycle
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -116,10 +117,10 @@
     if (excludeTableID != nil) {
         NSManagedObjectContext *moc = document.managedObjectContext;
         RptqQueryTable *excludeTable = [moc objectWithID:excludeTableID];
-        id alias = excludeTable.alias.copy;
-        NSArray *excludeTables = alias != nil ?
-                                [[NSArray alloc] initWithObjects:alias, nil] :
-                                [[NSArray alloc] init];
+        NSString *alias = excludeTable.alias.copy;
+        NSArray <NSString *> *excludeTables = alias != nil ?
+                                        [[NSArray alloc] initWithObjects:alias, nil] :
+                                        [[NSArray alloc] init];
         controller.excludeTables = excludeTables;
     } else {
         NSArray *excludeTables = [[NSArray alloc] init];
@@ -128,7 +129,8 @@
     
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Actions
 
 - (IBAction)save:(id)sender {
     if (self.firstFieldID && self.secondFieldID) {
@@ -161,7 +163,8 @@
     [self.queryLinkDelegate viewControllerDidCancel:self];
 }
 
-#pragma mark - Delegate callbacks
+#pragma mark -
+#pragma mark Delegate callbacks
 
 - (MADLinkType)initalLinktype {
     return self.linkType;
@@ -211,7 +214,8 @@
     [self.navigationController popToViewController: self animated: YES];
 }
 
-#pragma mark - Helper functions
+#pragma mark -
+#pragma mark Helper functions
 
 - (void)setJoinType:(MADLinkType)type {
     NSString *linkName = [RptqQueryLinks newLocalizedNameForLinkType:type];

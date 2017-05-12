@@ -85,6 +85,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 @interface MADReportFormatter ()
 
     @property (nonatomic, readwrite, weak)      MADocument *layout;
+    @property (nonatomic, strong)               RptqDocument *document;
+
     @property (nonatomic, readwrite, assign)    MADReportFormatterOptions options;
 
     @property (nonatomic, readwrite, strong)    MADPageOptions *page;
@@ -112,7 +114,9 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     NSString *_filename;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+    _document = nil;
+}
 
 - (instancetype)initWithDocument: (MADocument *)layout
                          options: (MADReportFormatterOptions)options  {
@@ -204,7 +208,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     _machineState.detailRowIdLast = 0;
     _machineState.sortDescriptors = sortDescriptors;
     _machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
-    _machineState.document = (self.layout).activeDocumentModel;
+    self.document = [self.layout activeDocumentModel];
 }
 
 - (void)setMarginUsingPrintableRect:(CGRect)printableRect {
@@ -262,8 +266,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 
     MADocument *layout = _layout;
 
-    [self.machineState resetWithDocument:(layout).activeDocumentModel
-                         andDataDelegate:self.dataDelegate];
+    [self.machineState resetWithDataDelegate:self.dataDelegate];
 
     [layout resetSectionLayoutManagers];
     
@@ -492,8 +495,9 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
                           producesFormFeed:(BOOL)producesFormFeed {
     CGFloat layoutHeight = [self heightForSectionWithObjectIdentifier:identifier];
     if (producesFormFeed) {
+        NSNumber *pageFooterIdentifier = @(self.document.hasPageFooterSection.identifier);
         [self forcePageBreakWithFooterHeight:
-         [self heightForSectionWithObjectIdentifier: @(_machineState.document.hasPageFooterSection.identifier)]
+         [self heightForSectionWithObjectIdentifier: pageFooterIdentifier]
          ];
     } else {
         [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
@@ -517,7 +521,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     [self initReportLayoutContainers];
     _machineState.rowCounter = 0;
     
-    RptqDocumentSection *detailSection = self.machineState.document.hasDetailSection;
+    RptqDocumentSection *detailSection = self.document.hasDetailSection;
     
     BOOL firstRow = YES;
     
@@ -563,12 +567,13 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
             [self displayNewGroupHeadersIfNeeded: keyValuesForComparson
                                    andLastValues: self.lastComparsonValues];
             
-            [self addHeightFromSectionToReportLayout: @(detailSection.identifier)
+            NSNumber *detailSectionIdentifier = @(detailSection.identifier);
+            [self addHeightFromSectionToReportLayout: detailSectionIdentifier
                                     producesFormFeed: detailSection.producesFormFeed];
             
-            [MADReportFormatter addDetailForRowID:self.machineState.detailRowId
-                                      pageLayout:self.pageLayoutTemporary
-                                     pageIndexes:self.pageIndexesTemporary];
+            [MADReportFormatter addDetailForRowID: self.machineState.detailRowId
+                                       pageLayout: self.pageLayoutTemporary
+                                      pageIndexes: self.pageIndexesTemporary];
             
             self.lastComparsonValues = keyValuesForComparson;
             
@@ -622,7 +627,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     
     BOOL newPageCreated = NO;
     
-    CGFloat pageFooterSectionHeight = [self heightForSectionWithObjectIdentifier:@(self.machineState.document.hasPageFooterSection.identifier)];
+    CGFloat pageFooterSectionHeight = [self heightForSectionWithObjectIdentifier:@(self.document.hasPageFooterSection.identifier)];
     
     if (HeightWithNextItem(self.machineState.counterHeightUsedCurrentPage, nextItemHeight, pageFooterSectionHeight) >
         PrintableHeightForPage(self.page)) {
@@ -657,7 +662,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     [[MADNotificationDidFormatPage sharedObject] reportFormatter: self
                                                    formattedPage: self.machineState.pageCounter];
     
-    RptqDocumentSection *pageHeaderSection = (self.machineState.document).hasPageHeaderSection;
+    RptqDocumentSection *pageHeaderSection = (self.document).hasPageHeaderSection;
     
     //Reset height of the page to zero plus the hight of the page header section
     _machineState.counterHeightUsedCurrentPage = [self heightForSectionWithObjectIdentifier:@(pageHeaderSection.identifier)];
@@ -666,26 +671,30 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 }
 
 - (void)addReportHeaderToReportLayout {
+    NSNumber *identifier = @(self.document.hasReportHeaderSection.identifier);
     _machineState.counterHeightUsedCurrentPage = _machineState.counterHeightUsedCurrentPage +
-                                                [self heightForSectionWithObjectIdentifier: @(_machineState.document.hasReportHeaderSection.identifier)];
+                                                [self heightForSectionWithObjectIdentifier: identifier];
     [self addReportHeader];
 }
 
 - (void)addPageHeaderToReportLayout {
+    NSNumber *identifier = @(self.document.hasPageHeaderSection.identifier);
     _machineState.counterHeightUsedCurrentPage = _machineState.counterHeightUsedCurrentPage +
-                                                 [self heightForSectionWithObjectIdentifier: @(_machineState.document.hasPageHeaderSection.identifier)];
+                                                 [self heightForSectionWithObjectIdentifier: identifier];
     [self addPageHeader];
 }
 
 - (void)addPageFooterToReportLayout {
-    [self addHeightFromSectionToReportLayout: @(_machineState.document.hasPageFooterSection.identifier)
-                            producesFormFeed: _machineState.document.hasPageFooterSection.producesFormFeed];
+    NSNumber *identifier = @(self.document.hasPageFooterSection.identifier);
+    [self addHeightFromSectionToReportLayout: identifier
+                            producesFormFeed: self.document.hasPageFooterSection.producesFormFeed];
     [self addPageFooter];
 }
 
 - (void)addReportFooterToReportLayout {
-    [self addHeightFromSectionToReportLayout: @(_machineState.document.hasReportFooterSection.identifier)
-                            producesFormFeed: _machineState.document.hasReportFooterSection.producesFormFeed];
+    NSNumber *identifier = @(self.document.hasReportFooterSection.identifier);
+    [self addHeightFromSectionToReportLayout: identifier
+                            producesFormFeed: self.document.hasReportFooterSection.producesFormFeed];
     [self addPageFooterToReportLayout];
     [self addReportFooter];
 }

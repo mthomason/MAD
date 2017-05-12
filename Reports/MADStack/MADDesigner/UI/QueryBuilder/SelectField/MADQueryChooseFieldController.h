@@ -15,9 +15,7 @@
 
 @protocol MADQueryChooseFieldProtocol;
 
-@class MADQueryChooseFieldController;
-@class RptqQueryField;
-@class MADocument;
+@class NSManagedObjectID, MADQueryChooseFieldController, MADocument;
 
 @interface MADQueryChooseFieldController : UITableViewController
     <UITableViewDataSource,
@@ -30,8 +28,8 @@
     @property (nonatomic, weak) id <MADQueryChooseFieldProtocol> delegate;
     @property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, strong) RptqQueryField *queryField;
-    @property (nonatomic, strong) NSArray *excludeTables;
+    @property (nonatomic, strong) NSManagedObjectID *queryFieldID;
+    @property (nonatomic, strong) NSArray <NSString *> *excludeTables;
 
 @end
 

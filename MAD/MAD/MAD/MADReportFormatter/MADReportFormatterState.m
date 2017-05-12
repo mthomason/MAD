@@ -13,13 +13,11 @@
 
 @implementation MADReportFormatterState
 
-- (instancetype)initWithDocument:(RptqDocument *)document
-                 andDataDelegate:(id <MADDataProtocol>)dataDelegate {
+- (instancetype)initWithDataDelegate:(id <MADDataProtocol>)dataDelegate {
     return self = [super init];
 }
 
-- (void)resetWithDocument:(RptqDocument *)document
-          andDataDelegate:(id <MADDataProtocol>)dataDelegate {
+- (void)resetWithDataDelegate:(id <MADDataProtocol>)dataDelegate {
     NSArray *sortDescriptors = [dataDelegate sortDescriptors];
     _sortDescriptors = [[NSArray alloc] initWithArray: sortDescriptors];
     _rowCounter = 0;
@@ -28,7 +26,6 @@
     _detailRowId = 0;
     _detailRowIdLast = 0;
     _counterHeightUsedCurrentPage = 0.0;
-    _document = document;
 }
 
 @end

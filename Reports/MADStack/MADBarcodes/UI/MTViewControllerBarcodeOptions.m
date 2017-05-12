@@ -842,9 +842,9 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     
     id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
     if  (self.selectingField1) {
-        [delegate didSetField1:field];
+        [delegate didSetField1ID:fieldID];
     } else if (self.selectingField2) {
-        [delegate didSetField2:field];
+        [delegate didSetField2ID:fieldID];
     }
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField

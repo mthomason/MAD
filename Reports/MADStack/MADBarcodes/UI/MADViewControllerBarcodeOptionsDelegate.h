@@ -12,7 +12,7 @@
 #import <MADBarcodes/MADBarcodeType.h>
 #import <MADBarcodes/MADBarcodeBorderStyle.h>
 
-@class MTBarcode, RptqQueryField;
+@class MTBarcode, RptqQueryField, NSManagedObjectID;
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 
@@ -54,8 +54,8 @@
     - (void)barcodePDF417DidSetFormat:(NSInteger)format;
     - (void)barcodePDF417DidSetErrorCorrection:(NSInteger)errorCorrection;
 
-    - (void)didSetField1:(RptqQueryField *)field;
-    - (void)didSetField2:(RptqQueryField *)field;
+    - (void)didSetField1ID:(NSManagedObjectID *)fieldID;
+    - (void)didSetField2ID:(NSManagedObjectID *)fieldID;
 
     - (RptqQueryField *)barcodeQueryField1;
     - (RptqQueryField *)barcodeQueryField2;

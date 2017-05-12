@@ -64,6 +64,8 @@
     keyPathHasQueryGroups = NSStringFromSelector(@selector(hasQueryGroups));
     [_document.hasDatabaseSchemas.anyObject.hasQueries.anyObject removeObserver:self
                                                                      forKeyPath:keyPathHasQueryGroups];
+    _document = nil;
+    _mainQuery = nil;
 }
 
 #pragma mark -

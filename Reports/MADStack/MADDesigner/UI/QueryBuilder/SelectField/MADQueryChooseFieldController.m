@@ -148,8 +148,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
         UITableViewCell *cell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell: cell];
         NSManagedObjectID *fieldID = [self queryFieldObjectIDForIndexPath:indexPath];
-        RptqQueryField *queryField = [self.document.managedObjectContext objectWithID:fieldID];
-        self.queryField = queryField;
+        self.queryFieldID = fieldID.copy;
     
     }
 }

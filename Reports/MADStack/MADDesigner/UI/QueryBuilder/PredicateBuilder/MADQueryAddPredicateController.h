@@ -50,8 +50,8 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
     @property (nonatomic, copy)     NSString *leftValue;
     @property (nonatomic, copy)     NSString *rightValue;
-    @property (nonatomic, strong)   RptqQueryField *fieldLeft;
-    @property (nonatomic, strong)   RptqQueryField *fieldRight;
+    @property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldLeftID;
+    @property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldRightID;
 
     - (IBAction)save:(id)sender;
     - (IBAction)cancel:(id)sender;

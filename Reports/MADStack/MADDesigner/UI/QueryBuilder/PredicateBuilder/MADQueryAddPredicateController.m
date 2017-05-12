@@ -57,12 +57,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _tableViewCellRightSide.userInteractionEnabled = (_fieldLeft == nil) == NO;
+    _tableViewCellRightSide.userInteractionEnabled = (_fieldLeftID == nil) == NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    _tableViewCellRightSide.userInteractionEnabled = (_fieldLeft == nil) == NO;
+    _tableViewCellRightSide.userInteractionEnabled = (_fieldLeftID == nil) == NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -112,11 +112,12 @@
         
         } else if ([segue.destinationViewController isKindOfClass: [MADQueryValueFromFieldController class]]) {
 
+            RptqQueryField *leftField = [self.document.managedObjectContext objectWithID:self.fieldLeftID];
             MADQueryValueFromFieldController *destinationViewController;
             destinationViewController = segue.destinationViewController;
             destinationViewController.enterStringDelegate = self;
             destinationViewController.document = document;
-            destinationViewController.schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID.copy;
+            destinationViewController.schemaFieldObjectId = leftField.databaseSchemaField.objectID.copy;
         }
     }
 }
@@ -127,31 +128,31 @@
     
     RptqQueryPredicate *queryPredicate = nil;
     MADocument *document = self.document;
-
     NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+    
     if (self.leftValue == nil) {
         if (self.rightValue == nil) {
-            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftField: self.fieldLeft
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightField: self.fieldRight
+            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: self.fieldLeftID
+                                                                       comparsonOperator: self.predicateOperator
+                                                                         andRightFieldID: self.fieldRightID
                                                        forManagedObjectContext: managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftField: self.fieldLeft
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightValue: self.rightValue
-                                                       forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: self.fieldLeftID
+                                                                       comparsonOperator: self.predicateOperator
+                                                                           andRightValue: self.rightValue
+                                                                 forManagedObjectContext: managedObjectContext];
         }
     } else {
         if (self.rightValue == nil) {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftValue: self.leftValue
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightField: self.fieldRight
-                                                       forManagedObjectContext: managedObjectContext];
+                                                                     comparsonOperator: self.predicateOperator
+                                                                       andRightFieldID: self.fieldRightID
+                                                               forManagedObjectContext: managedObjectContext];
         } else {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftValue: self.leftValue
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightValue: self.rightValue
-                                                       forManagedObjectContext: managedObjectContext];
+                                                                     comparsonOperator: self.predicateOperator
+                                                                         andRightValue: self.rightValue
+                                                               forManagedObjectContext: managedObjectContext];
         }
     }
     
@@ -173,12 +174,12 @@
     NSString *userInput = userString.copy;
     if (_currentlyEditingPart == MNSPredicateLeft) {
         self.leftValue = userInput;
-        self.fieldLeft = nil;
+        self.fieldLeftID = nil;
         _tableViewCellLeftSide.detailTextLabel.text = userInput.lowercaseString;
         
     } else if (_currentlyEditingPart == MNSPredicateRight) {
         self.rightValue = userInput;
-        [self setFieldRight: nil];
+        self.fieldRightID = nil;
         _tableViewCellRightSide.detailTextLabel.text = userInput.lowercaseString;
         
     }
@@ -195,15 +196,15 @@
     [self.navigationController popToViewController:self animated:YES];
     if (_currentlyEditingPart == MNSPredicateLeft) {
         self.leftValue = nil;
-        self.fieldLeft = queryField;
+        self.fieldLeftID = fieldID.copy;
         _tableViewCellLeftSide.detailTextLabel.text = queryField.display;
         
     } else if (_currentlyEditingPart == MNSPredicateRight) {
         self.rightValue = nil;
-        self.fieldRight = queryField;
+        self.fieldRightID = fieldID.copy;
         tableViewCellRightSide.detailTextLabel.text = queryField.display;
     }
-    tableViewCellRightSide.userInteractionEnabled = (self.fieldLeft == nil);
+    tableViewCellRightSide.userInteractionEnabled = (self.fieldLeftID == nil);
 }
 
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType {

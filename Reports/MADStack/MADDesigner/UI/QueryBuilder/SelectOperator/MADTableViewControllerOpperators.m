@@ -15,20 +15,18 @@
 
 #import <MAD/RptqQueryPredicate+Extras.h>
 
-static NSString * const MADIDOperatorEqual                   = @"UITableViewCellPredicateOperatorEqual";
-static NSString * const MADIDOperatorNotEqual                = @"UITableViewCellPredicateOperatorNotEqual";
-static NSString * const MADIDOperatorGreaterThan             = @"UITableViewCellPredicateOperatorGreaterThan";
-static NSString * const MADIDOperatorGreaterThanOrEqualTo    = @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo";
-static NSString * const MADIDOperatorLessThanOrEqualTo       = @"UITableViewCellPredicateOperatorLessThanOrEqualTo";
-static NSString * const MADIDOperatorLessThan                = @"UITableViewCellPredicateOperatorLessThan";
-
-#define MADPredicateOperatorReuseIds [NSArray arrayWithObjects: @"UITableViewCellPredicateOperatorEqual", @"UITableViewCellPredicateOperatorNotEqual", @"UITableViewCellPredicateOperatorGreaterThan", @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo", @"UITableViewCellPredicateOperatorLessThan", @"UITableViewCellPredicateOperatorLessThanOrEqualTo", nil]
-
 @implementation MADTableViewControllerOpperators
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *MADIDOperatorEqual                   = @"UITableViewCellPredicateOperatorEqual";
+    static NSString *MADIDOperatorNotEqual                = @"UITableViewCellPredicateOperatorNotEqual";
+    static NSString *MADIDOperatorGreaterThan             = @"UITableViewCellPredicateOperatorGreaterThan";
+    static NSString *MADIDOperatorGreaterThanOrEqualTo    = @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo";
+    static NSString *MADIDOperatorLessThanOrEqualTo       = @"UITableViewCellPredicateOperatorLessThanOrEqualTo";
+    static NSString *MADIDOperatorLessThan                = @"UITableViewCellPredicateOperatorLessThan";
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     UITableViewCell __weak *cell = [tableView cellForRowAtIndexPath:indexPath];

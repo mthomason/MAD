@@ -17,8 +17,8 @@
 @interface RptqDocumentElementBarcode (Extras)
     <MTBarcodeProtocol>
 
-    - (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne
-                     fieldTwo:(RptqQueryField *)fieldTwo;
+    - (void)updateWithBarcode:(MTBarcode *)barcode field1ID:(NSManagedObjectID *)field1ID
+                     field2ID:(NSManagedObjectID *)field2ID;
     + (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
                            queryFieldOne:(RptqQueryField *)queryFieldOne
                            queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;

@@ -258,9 +258,7 @@ static const inline CGSize sizePopoverFonts() {
     @property (nonatomic, copy) NSNumber *objectIdEditBarcode;     //Never set a value... never used????
     @property (nonatomic, copy) NSNumber *objectIdEditImage;
     @property (nonatomic, copy) NSNumber *barcodeToEditObjectID;
-    @property (nonatomic, copy) NSNumber *aggregateToEditObjectID;
-
-    @property (nonatomic, strong) RptqDocumentElementAggregate *aggregateToEdit;
+    @property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
     @property (nonatomic, strong) NSSet <UIGestureRecognizer *> *tapSectionLabels;
@@ -328,7 +326,7 @@ static const inline CGSize sizePopoverFonts() {
         
     } else if ([action.identifier isEqualToString:MTIdentifierSegueEditFieldExit]) {
         [self tableViewControllerChooseFieldDidFinish: action.sourceViewController
-                                          withFieldID: [action.sourceViewController queryField].objectID];
+                                          withFieldID: [action.sourceViewController queryFieldID]];
         
     } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         [self saveDynamicLabel: action.sourceViewController];
@@ -1764,7 +1762,8 @@ static const inline CGSize sizePopoverFonts() {
                         
                     case MTDocumentObjectTypeAggregate: {
                         NSNumber *objectID  = @(objectToEdit.identifier);
-                        [self editDocumentObjectAggregateWithID: objectID];
+                        [self editDocumentObjectAggregateWithID: objectID
+                                                       objectID: objectToEdit.objectID];
                         break;
                     }
                     
@@ -1804,9 +1803,10 @@ static const inline CGSize sizePopoverFonts() {
 
 #pragma mark MADCellElement Helpers
 
-- (void)editDocumentObjectAggregateWithID:(NSNumber *)identifier {
+- (void)editDocumentObjectAggregateWithID:(NSNumber *)identifier
+                                 objectID:(NSManagedObjectID *)objectID {
     
-    self.aggregateToEditObjectID = identifier.copy;
+    self.aggregateToEditObjectID = objectID.copy;
     _editAggregate = YES;
 
     MADDesignerViewController * __weak weakself = self;
@@ -1820,12 +1820,14 @@ static const inline CGSize sizePopoverFonts() {
         UIView *viewToEdit = [strongself viewForObjectID: identifier];
         UINavigationController *navigation;
         navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
+        MADocument *document = strongself.document;
+        RptqDocumentElementAggregate *aggregateToEdit = [document.managedObjectContext objectWithID:objectID];
         
         MTDocumentObjectNewAggregateViewController *aggregateViewController;
         aggregateViewController = navigation.viewControllers.firstObject;
-        aggregateViewController.document = strongself.document;
+        aggregateViewController.document = document;
         aggregateViewController.aggregateDelegate = strongself;
-        [aggregateViewController setAggregateObjectToEdit:strongself.aggregateToEdit];
+        [aggregateViewController setAggregateObjectToEdit:aggregateToEdit];
         
         UIBarButtonItem *dismiss;
         dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
@@ -1973,8 +1975,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
                        barcodeObject:(MTBarcode *)barcode
-                        withFieldOne:(RptqQueryField *)fieldOne
-                         andFieldTwo:(RptqQueryField *)fieldTwo {
+                        withFieldOne:(NSManagedObjectID /* RptqQueryField */ *)fieldOne
+                         andFieldTwo:(NSManagedObjectID /* RptqQueryField */ *)fieldTwo {
     
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -1984,7 +1986,7 @@ static const inline CGSize sizePopoverFonts() {
     [private performBlock:^{
     
         RptqDocumentElementBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
-        [barcodeToEdit updateWithBarcode: barcode fieldOne: fieldOne fieldTwo: fieldTwo];
+        [barcodeToEdit updateWithBarcode: barcode field1ID: fieldOne field2ID: fieldTwo];
 
         NSError * __autoreleasing *error = NULL;
         [private save:error];
@@ -1998,15 +2000,17 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)didUpdateggregateFunctionWithType: (MTAggregateFunctionType)functionType
                                 inputType: (MTAggregateFunctionInputType)inputType
-                              inputObject: (NSManagedObject *)inputObject
+                              inputObject: (NSManagedObjectID *)objectID
                                 groupType: (MTAggregateGroupByType)groupType
                               groupNumber: (int32_t)groupNumber {
     
-    [self.aggregateToEdit updateAggregateFunctionWithFunctionType: functionType
-                                                        inputType: MTAggregateFunctionInputTypeField
-                                                        groupType: groupType
-                                                  aggregateObject: (RptqQueryField *)inputObject
-                                                      groupNumber: i32abs(groupNumber)];
+    RptqDocumentElementAggregate *aggregateToEdit;
+    aggregateToEdit = [self.document.managedObjectContext objectWithID: self.aggregateToEditObjectID];
+    [aggregateToEdit updateAggregateFunctionWithFunctionType: functionType
+                                                   inputType: MTAggregateFunctionInputTypeField
+                                                   groupType: groupType
+                                           aggregateObjectID: objectID
+                                                 groupNumber: i32abs(groupNumber)];
 }
 
 #pragma mark -
@@ -2705,12 +2709,12 @@ static const inline CGSize sizePopoverFonts() {
     MADQueryChooseFieldController *dynamicFieldController;
     dynamicFieldController = (MADQueryChooseFieldController *)viewController;
  
-    RptqQueryField *queryField = dynamicFieldController.queryField;
+    NSManagedObjectID *objectID = dynamicFieldController.queryFieldID.copy;
 
     NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelDynamic];
     NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     keyDynamic, MTDocumentObjectDefinationType,
-                                    queryField.objectID, MTDocumentObjectDefinationObject, nil];
+                                    objectID, MTDocumentObjectDefinationObject, nil];
     
     [self insertDocumentObjectWithDefination: definations];
     
@@ -2719,25 +2723,27 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)saveAggregateLabel:(MTDocumentObjectNewAggregateViewController *)viewController {
     
-    if (_aggregateToEdit && _editAggregate) {
+    if (_editAggregate && _aggregateToEditObjectID != nil) {
         
-        if (viewController.fieldObject != nil) {
-            [self.aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
+        if (viewController.fieldObjectID != nil) {
+            RptqDocumentElementAggregate *aggregateToEdit;
+            aggregateToEdit = [self.document.managedObjectContext objectWithID: _aggregateToEditObjectID];
+            [aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
                                                                 inputType: MTAggregateFunctionInputTypeField
                                                                 groupType: viewController.aggregateGroupByType
-                                                          aggregateObject: viewController.fieldObject
+                                                        aggregateObjectID: viewController.fieldObjectID
                                                               groupNumber: viewController.groupTypeSectionNumber];
         }
         
     } else {
-        if (viewController.fieldObjectId != nil) {
+        if (viewController.fieldObjectID != nil) {
         
             NSNumber *groupNumber;
             groupNumber = [[NSNumber alloc] initWithInteger:viewController.groupTypeSectionNumber];
             
             [self insertDocumentObjectNewAggregateFunctionWithType: viewController.aggregateFunctionType
                                                          inputType: MTAggregateFunctionInputTypeField
-                                                       inputObject: viewController.fieldObjectId
+                                                       inputObject: viewController.fieldObjectID
                                                          groupType: viewController.aggregateGroupByType
                                                        groupNumber: groupNumber];
             
@@ -2758,8 +2764,8 @@ static const inline CGSize sizePopoverFonts() {
                                                             fromObjectContext: managedObjectContext];
 
         [object updateWithBarcode: barcode
-                         fieldOne: viewController.queryField1
-                         fieldTwo: viewController.queryField2];
+                         field1ID: viewController.queryField1ID
+                         field2ID: viewController.queryField2ID];
         _objectIdEditBarcode = nil;
         
     } else {
@@ -2769,14 +2775,14 @@ static const inline CGSize sizePopoverFonts() {
         defination[MTDocumentObjectDefinationType] = type;
         defination[MTDocumentObjectDefinationObject] = viewController.barcode;
         
-        RptqQueryField *queryField1 = viewController.queryField1;
-        if (queryField1 != nil) {
-            defination[MTDocumentObjectDefinationField1] = queryField1.objectID;
+        NSManagedObjectID *queryField1ID = viewController.queryField1ID;
+        if (queryField1ID != nil) {
+            defination[MTDocumentObjectDefinationField1] = queryField1ID.copy;
         }
         
-        RptqQueryField *queryField2 = viewController.queryField2;
-        if (queryField2 != nil) {
-            defination[MTDocumentObjectDefinationField2] = queryField2.objectID;
+        NSManagedObjectID *queryField2ID = viewController.queryField2ID;
+        if (queryField2ID != nil) {
+            defination[MTDocumentObjectDefinationField2] = queryField2ID.copy;
         }
         [self insertDocumentObjectWithDefination:defination];
         

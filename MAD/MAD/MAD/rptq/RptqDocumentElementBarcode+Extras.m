@@ -48,8 +48,12 @@
     return self.add2dComponent;
 }
 
-- (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
+- (void)updateWithBarcode:(MTBarcode *)barcode field1ID:(NSManagedObjectID *)field1ID
+                 field2ID:(NSManagedObjectID *)field2ID {
 
+    RptqQueryField *field1 = [self.managedObjectContext objectWithID:field1ID];
+    RptqQueryField *field2 = [self.managedObjectContext objectWithID:field2ID];
+    
     self.add2dComponent =       @(barcode.has2dComponent);
     self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
     self.barcodeBorderWidth =   barcode.barcodeBorderWidth;
@@ -62,8 +66,8 @@
     self.showErrorMessage =     barcode.showErrorMessage;
     self.whitespaceWidth =      barcode.whitespaceWidth;
     self.scale =                barcode.scale;
-    self.referencesField1 =     fieldOne;
-    self.referencesField2 =     fieldTwo;
+    self.referencesField1 =     field1;
+    self.referencesField2 =     field2;
     [self.managedObjectContext save:nil];
 }
 
