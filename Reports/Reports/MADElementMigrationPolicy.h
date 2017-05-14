@@ -15,4 +15,8 @@
 
 @end
 
+@interface MADElementMigrationManager : NSMigrationManager
+
+@end
+
 #endif
