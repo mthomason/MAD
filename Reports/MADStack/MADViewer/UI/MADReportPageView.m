@@ -121,7 +121,7 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message) {
 
     // Draw Thumbnail
     NSURL *thumbnailURL;
-    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:[delegatePage printPageRenderer]];
+    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
     NSData *pngImage = UIImagePNGRepresentation(thumbnail);
     size_t newImageSize = 0;
     

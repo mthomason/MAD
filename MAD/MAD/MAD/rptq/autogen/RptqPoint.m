@@ -20,5 +20,7 @@
 
 @dynamic x;
 @dynamic y;
+@dynamic inElement;
+@dynamic inRect;
 
 @end

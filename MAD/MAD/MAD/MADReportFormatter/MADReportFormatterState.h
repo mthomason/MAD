@@ -14,7 +14,7 @@
 
 @protocol MADDataProtocol;
 
-@class RptqDocument;
+@class RptqDocument, NSSortDescriptor;
 
 @interface MADReportFormatterState : NSObject
 
@@ -22,7 +22,7 @@
 
     - (void)resetWithDataDelegate:(id <MADDataProtocol>)dataDelegate;
 
-    @property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptors;
 
     @property (nonatomic, assign) NSUInteger detailRowId;
     @property (nonatomic, assign) NSUInteger detailRowIdLast;

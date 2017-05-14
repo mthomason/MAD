@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RptqDocumentElement, RptqRect;
+
 @interface RptqPoint : NSManagedObject
 
 @end
@@ -24,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     @property (nonatomic) float x;
     @property (nonatomic) float y;
+    @property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
+    @property (nullable, nonatomic, retain) RptqRect *inRect;
 
 @end
 

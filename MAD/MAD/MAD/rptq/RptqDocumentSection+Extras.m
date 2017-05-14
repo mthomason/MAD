@@ -15,11 +15,14 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSExpressionDescription.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSIndexPath.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSIndexPath.h>
+#import <Foundation/NSCompoundPredicate.h>
+#import <Foundation/NSComparisonPredicate.h>
 
 #import <UIKit/UICollectionView.h>
 
@@ -31,10 +34,11 @@
 
 #import "RptqDatabaseSchemaTable.h"
 
-#import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
-#import "RptqQueryGroup.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryField+Extras.h"
+
 #import "RptqQueryGroup+Extras.h"
 
 #import "RptqDocumentSectionRows.h"
@@ -96,8 +100,10 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
     NSFetchRequest *request;
     NSPredicate *predicate;
     NSExpression *left, *right;
-    left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-    right = [NSExpression expressionForConstantValue:@(identifier)];
+    NSString *key = NSStringFromSelector(@selector(identifier));
+    left = [NSExpression expressionForKeyPath:key];
+    NSNumber *idn = @(identifier);
+    right = [NSExpression expressionForConstantValue:idn];
     predicate = [NSComparisonPredicate predicateWithLeftExpression: left
                                                    rightExpression: right
                                                           modifier: NSDirectPredicateModifier
@@ -110,6 +116,321 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
     request.resultType = NSManagedObjectResultType;
     request.includesSubentities = YES;
     request.includesPropertyValues = YES;
+    return request;
+}
+
++ (NSString *)keyPathidentifier {
+    NSString *result = NSStringFromSelector(@selector(identifier));
+    return result;
+}
+
++ (NSString *)keyPathNumberOfRows {
+    NSString *result = NSStringFromSelector(@selector(numberOfRows));
+    return result;
+}
+
++ (NSString *)keyPathType {
+    NSString *result = NSStringFromSelector(@selector(type));
+    return result;
+}
+
++ (NSString *)keyPathWrappingStyle {
+    NSString *result = NSStringFromSelector(@selector(wrappingStyle));
+    return result;
+}
+
++ (NSString *)keyPathVisibility {
+    NSString *result = NSStringFromSelector(@selector(visibility));
+    return result;
+}
+
++ (NSString *)keyPathHeight {
+    NSString *result = NSStringFromSelector(@selector(height));
+    return result;
+}
+
++ (NSString *)keyPathLayoutHeight {
+    NSString *result = NSStringFromSelector(@selector(layoutHeight));
+    return result;
+}
+
++ (NSString *)keyPathInGroup {
+    NSString *result = NSStringFromSelector(@selector(inGroup));
+    return result;
+}
+
++ (NSString *)keyPathInReport {
+    NSString *result = NSStringFromSelector(@selector(inReport));
+    return result;
+}
+
++ (NSString *)keyPathInPageHeader {
+    NSString *result = NSStringFromSelector(@selector(inReportPageHeader));
+    return result;
+}
+
++ (NSString *)keyPathInPageFooter {
+    NSString *result = NSStringFromSelector(@selector(inReportPageFooter));
+    return result;
+}
+
++ (NSString *)keyPathInReportHeader {
+    NSString *result = NSStringFromSelector(@selector(inReportReportHeader));
+    return result;
+}
+
++ (NSString *)keyPathInReportFooter {
+    NSString *result = NSStringFromSelector(@selector(inReportReportFooter));
+    return result;
+}
+
++ (NSString *)keyPathSort {
+    NSString *result = NSStringFromSelector(@selector(sort));
+    return result;
+}
+
++ (NSString *)keyPathWeight {
+    NSString *result = NSStringFromSelector(@selector(weight));
+    return result;
+}
+
++ (NSString *)keyPathInGroupSort {
+    NSString *result = [self keyPathInGroup];
+    NSString *keyPathSort = [self keyPathSort];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathSort];
+    return result;
+}
+
++ (NSString *)keyPathInGroupWeight {
+    NSString *result = [self keyPathInGroup];
+    NSString *keyPathWeight = [self keyPathWeight];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathWeight];
+    return result;
+}
+
++ (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldName {
+    NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
+    NSString *keyPathSchemaFieldName = [RptqQueryField keySchemaFieldName];
+    NSString *result = [self keyPathInGroup];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathHasField];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathSchemaFieldName];
+    return result;
+}
+
++ (NSString *)keyPathInGroupHasFieldInQueryTableAlias {
+    NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
+    NSString *keyPathInQueryTable = [RptqQueryField keyInQueryTable];
+    NSString *keyPathAlias = [RptqQueryTable keyPathAlias];
+    NSString *result = [self keyPathInGroup];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathHasField];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathInQueryTable];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathAlias];
+    return result;
+}
+
++ (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections {
+    
+    NSUInteger expressionCount = 18;
+    NSExpressionDescription *expressionDescription[expressionCount];
+    NSPredicate *predicate;
+    //NSExpression *left, *right;
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier)),
+             *keyPathNumberOfRows = [self keyPathNumberOfRows],
+             *keyPathType = [self keyPathType],
+             *keyPathWrappingStyle = [self keyPathWrappingStyle],
+             *keyPathVisibility = [self keyPathVisibility],
+             *keyPathHeight = [self keyPathHeight],
+             *keyPathLayoutHeight = [self keyPathLayoutHeight],
+             *keyPathInGroupHasFieldInQueryTableAlias = [self keyPathInGroupHasFieldInQueryTableAlias],
+             *keyPathInGroupHasFieldDatabaseSchemaFieldName = [self keyPathInGroupHasFieldDatabaseSchemaFieldName],
+             *keyPathInGroupWeight = [self keyPathInGroupWeight],
+             *keyPathInGroupSort = [self keyPathInGroupSort],
+             *keyPathInReportHeader = [self keyPathInReportHeader],
+             *keyPathInReportFooter = [self keyPathInReportFooter],
+             *keyPathInPageHeader = [self keyPathInPageHeader],
+             *keyPathInPageFooter = [self keyPathInPageFooter],
+             *keyPathInReport = [self keyPathInReport],
+             *keyPathInGroup = [self keyPathInGroup],
+             *keySelf = NSStringFromSelector(@selector(self));
+    
+    NSUInteger expressionInQueryCount = 12;
+    NSExpression *pexpressions[expressionInQueryCount];
+    pexpressions[0] = [NSExpression expressionForKeyPath:keyPathInReportHeader];
+    pexpressions[1] = [NSExpression expressionForConstantValue:nil];
+
+    NSPredicate *predicateReportHeaderNotNull;
+    predicateReportHeaderNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
+                                                                      rightExpression: pexpressions[1]
+                                                                             modifier: NSDirectPredicateModifier
+                                                                                 type: NSNotEqualToPredicateOperatorType
+                                                                              options: 0];
+
+    pexpressions[2] = [NSExpression expressionForKeyPath:keyPathInReportFooter];
+    pexpressions[3] = [NSExpression expressionForConstantValue:nil];
+
+    NSPredicate *predicateReportFooterNotNull;
+    predicateReportFooterNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[2]
+                                                                      rightExpression: pexpressions[3]
+                                                                             modifier: NSDirectPredicateModifier
+                                                                                 type: NSNotEqualToPredicateOperatorType
+                                                                              options: 0];
+
+    pexpressions[4] = [NSExpression expressionForKeyPath:keyPathInPageHeader];
+    pexpressions[5] = [NSExpression expressionForConstantValue:nil];
+
+    NSPredicate *predicatePageHeaderNotNull;
+    predicatePageHeaderNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[4]
+                                                                    rightExpression: pexpressions[5]
+                                                                           modifier: NSDirectPredicateModifier
+                                                                               type: NSNotEqualToPredicateOperatorType
+                                                                            options: 0];
+
+    pexpressions[6] = [NSExpression expressionForKeyPath:keyPathInPageFooter];
+    pexpressions[7] = [NSExpression expressionForConstantValue:nil];
+
+    NSPredicate *predicatePageFooterNotNull;
+    predicatePageFooterNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[6]
+                                                                    rightExpression: pexpressions[7]
+                                                                           modifier: NSDirectPredicateModifier
+                                                                               type: NSNotEqualToPredicateOperatorType
+                                                                            options: 0];
+
+    pexpressions[8] = [NSExpression expressionForKeyPath:keyPathInGroup];
+    pexpressions[9] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicateInGroup;
+    predicateInGroup = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[8]
+                                                          rightExpression: pexpressions[9]
+                                                                 modifier: NSDirectPredicateModifier
+                                                                     type: NSNotEqualToPredicateOperatorType
+                                                                  options: 0];
+
+    pexpressions[10] = [NSExpression expressionForKeyPath:keyPathInReport];
+    pexpressions[11] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicateInReport;
+    predicateInReport = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[10]
+                                                           rightExpression: pexpressions[11]
+                                                                  modifier: NSDirectPredicateModifier
+                                                                      type: NSNotEqualToPredicateOperatorType
+                                                                   options: 0];
+    
+    NSArray <NSPredicate *> *predicates;
+    predicates = [[NSArray alloc] initWithObjects: predicateReportHeaderNotNull, predicateReportFooterNotNull, predicatePageHeaderNotNull, predicatePageFooterNotNull, predicateInGroup, predicateInReport, nil];
+    predicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
+    
+    NSString *keys[] = {
+        keySelf,
+        keyIdentifier,
+        keyPathNumberOfRows,
+        keyPathType,
+        keyPathWrappingStyle,
+        keyPathVisibility,
+        keyPathHeight,
+        keyPathLayoutHeight,
+        keyPathInGroupHasFieldInQueryTableAlias,
+        keyPathInGroupHasFieldDatabaseSchemaFieldName,
+        keyPathInGroupWeight,
+        keyPathInGroupSort,
+        keyPathInReportHeader,
+        keyPathInReportFooter,
+        keyPathInPageHeader,
+        keyPathInPageFooter,
+        keyPathInGroup,
+        keyPathInReport,
+    };
+
+    NSExpression *expressions[] = {
+        [NSExpression expressionForEvaluatedObject],
+        [NSExpression expressionForKeyPath: keyIdentifier],
+        [NSExpression expressionForKeyPath: keyPathNumberOfRows],
+        [NSExpression expressionForKeyPath: keyPathType],
+        [NSExpression expressionForKeyPath: keyPathWrappingStyle],
+        [NSExpression expressionForKeyPath: keyPathVisibility],
+        [NSExpression expressionForKeyPath: keyPathHeight],
+        [NSExpression expressionForKeyPath: keyPathLayoutHeight],
+        [NSExpression expressionForKeyPath: keyPathInGroupHasFieldInQueryTableAlias],
+        [NSExpression expressionForKeyPath: keyPathInGroupHasFieldDatabaseSchemaFieldName],
+        [NSExpression expressionForKeyPath: keyPathInGroupWeight],
+        [NSExpression expressionForKeyPath: keyPathInGroupSort],
+        [NSExpression expressionForKeyPath: keyPathInReportHeader],
+        [NSExpression expressionForKeyPath: keyPathInReportFooter],
+        [NSExpression expressionForKeyPath: keyPathInPageHeader],
+        [NSExpression expressionForKeyPath: keyPathInPageFooter],
+        [NSExpression expressionForKeyPath: keyPathInGroup],
+        [NSExpression expressionForKeyPath: keyPathInReport],
+    };
+    
+    NSAttributeType types[] = {
+        NSObjectIDAttributeType,
+        NSInteger64AttributeType,
+        NSInteger32AttributeType,
+        NSInteger16AttributeType,
+        NSInteger16AttributeType,
+        NSBooleanAttributeType,
+        NSDoubleAttributeType,
+        NSDoubleAttributeType,
+        NSStringAttributeType,
+        NSStringAttributeType,
+        NSInteger16AttributeType,
+        NSInteger16AttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+        NSObjectIDAttributeType,
+    };
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = [[NSExpressionDescription alloc] init];
+        expressionDescription[i].name = keys[i].copy;
+        expressionDescription[i].expression = expressions[i];
+        expressionDescription[i].expressionResultType = types[i];
+    }
+        
+    NSString *entityName = NSStringFromClass([self class]);
+    
+    NSFetchRequest *request;
+
+    //left = [NSExpression expressionForKeyPath:key];
+    //NSNumber *idn = @(identifier);
+    //right = [NSExpression expressionForConstantValue:idn];
+    //predicate = [NSComparisonPredicate predicateWithLeftExpression: left
+    //                                               rightExpression: right
+    //                                                      modifier: NSDirectPredicateModifier
+    //                                                          type: NSEqualToPredicateOperatorType
+    //                                                       options: 0];
+    request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    request.predicate = predicate;
+    
+    //request.fetchLimit = 1;
+    NSArray *propertiesToFetch;
+    propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
+                                                   count: (NSUInteger)expressionCount];
+    
+    request.propertiesToFetch = propertiesToFetch;
+    request.resultType = NSDictionaryResultType;
+    //request.includesSubentities = YES;
+    //request.includesPropertyValues = YES;
+    
+    for (NSUInteger i=0; i<expressionInQueryCount; i++) {
+        pexpressions[i] = nil;
+    }
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = nil;
+        keys[i] = nil;
+        expressions[i] = nil;
+    }
+    
     return request;
 }
 

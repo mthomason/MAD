@@ -17,6 +17,7 @@
 #import <MADCocoaExtensions/MADTextStyle.h>
 #import "MADFontDescriptor.h"
 #import "RptqDocumentElement.h"
+#import "RptqTextStyle.h"
 #import "MADAlignment.h"
 
 @interface MADElementStylizedText ()
@@ -34,7 +35,7 @@
 
 - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
                                  fontSize:(double) fontsize
-                                textStyle:(MADTextStyle *)textStyle
+                                textStyle:(RptqTextStyle *)textStyle
                       horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment {
     
     if (self = [super init]) {

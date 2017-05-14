@@ -11,10 +11,10 @@
 #import <string.h>
 
 struct MADBorderStyle_t {
-    Float64 left;
-    Float64 right;
-    Float64 top;
-    Float64 bottom;
+    float left;
+    float right;
+    float top;
+    float bottom;
     MADBorderType leftStyle;
     MADBorderType rightStyle;
     MADBorderType topStyle;
@@ -22,13 +22,13 @@ struct MADBorderStyle_t {
 };
 typedef struct MADBorderStyle_t MADBorderStyle_t;
 
-static inline MADBorderStyle_t MADLayoutBorderStyleMake(Float64, Float64,
-                                                        Float64, Float64,
+static inline MADBorderStyle_t MADLayoutBorderStyleMake(float, float,
+                                                        float, float,
                                                         MADBorderType, MADBorderType,
                                                         MADBorderType, MADBorderType);
 
-static inline MADBorderStyle_t MADLayoutBorderStyleMake(Float64 l, Float64 r,
-                                                        Float64 t, Float64 b,
+static inline MADBorderStyle_t MADLayoutBorderStyleMake(float l, float r,
+                                                        float t, float b,
                                                         MADBorderType ls, MADBorderType rs,
                                                         MADBorderType ts, MADBorderType bs) {
     MADBorderStyle_t s;
@@ -58,11 +58,11 @@ static inline MADBorderStyle_t MADLayoutBorderStyleMake(Float64 l, Float64 r,
 @dynamic bottomStyle;
 
 + (BOOL)supportsSecureCoding {
-    return NO;
+    return YES;
 }
 
-- (instancetype)initWithLeft:(Float64)left right:(Float64)right
-                         top:(Float64)top bottom:(Float64)bottom
+- (instancetype)initWithLeft:(float)left right:(float)right
+                         top:(float)top bottom:(float)bottom
                    leftStyle:(MADBorderType)leftStyle rightStyle:(MADBorderType)rightStyle
                     topStyle:(MADBorderType)topStyle bottomStyle:(MADBorderType)bottomStyle {
     if (self = [super init]) {
@@ -75,48 +75,72 @@ static inline MADBorderStyle_t MADLayoutBorderStyleMake(Float64 l, Float64 r,
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        NSUInteger lenght;
-        memcpy(&_style,
-               [aDecoder decodeBytesForKey:@"s" returnedLength:&lenght],
-               sizeof(MADBorderStyle_t));
+        MADBorderStyle_t borderStyle;
+        borderStyle.bottom = [aDecoder decodeFloatForKey:@"b"];
+        borderStyle.bottomStyle = [aDecoder decodeInt32ForKey: @"bs"];
+        borderStyle.top = [aDecoder decodeFloatForKey:@"t"];
+        borderStyle.topStyle = [aDecoder decodeInt32ForKey: @"ts"];
+        borderStyle.left = [aDecoder decodeFloatForKey:@"l"];
+        borderStyle.leftStyle = [aDecoder decodeInt32ForKey: @"ls"];
+        borderStyle.right = [aDecoder decodeFloatForKey:@"r"];
+        borderStyle.rightStyle = [aDecoder decodeInt32ForKey: @"rs"];
+        _style = borderStyle;
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeBytes:(uint8_t *)&_style length:sizeof(MADBorderStyle_t) forKey:@"s"];
+    [aCoder encodeFloat:_style.bottom forKey:@"b"];
+    [aCoder encodeInt32:_style.bottomStyle forKey:@"bs"];
+    [aCoder encodeFloat:_style.top forKey:@"t"];
+    [aCoder encodeInt32:_style.topStyle forKey:@"ts"];
+    [aCoder encodeFloat:_style.left forKey:@"l"];
+    [aCoder encodeInt32:_style.leftStyle forKey:@"ls"];
+    [aCoder encodeFloat:_style.right forKey:@"r"];
+    [aCoder encodeInt32:_style.rightStyle forKey:@"rs"];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithLeft: _style.left
+                                                        right: _style.right
+                                                          top: _style.top
+                                                       bottom: _style.bottom
+                                                    leftStyle: _style.leftStyle
+                                                   rightStyle: _style.rightStyle
+                                                     topStyle: _style.topStyle
+                                                  bottomStyle: _style.bottomStyle];
+    return copy;
+}
 
-- (Float64)left {
+- (float)left {
     return _style.left;
 }
 
-- (Float64)right {
+- (float)right {
     return _style.right;
 }
 
-- (Float64)top {
+- (float)top {
     return _style.top;
 }
 
-- (Float64)bottom {
+- (float)bottom {
     return _style.bottom;
 }
 
-- (void)setLeft:(Float64)left {
+- (void)setLeft:(float)left {
     _style.left = left;
 }
 
-- (void)setRight:(Float64)right {
+- (void)setRight:(float)right {
     _style.right = right;
 }
 
-- (void)setTop:(Float64)top {
+- (void)setTop:(float)top {
     _style.top = top;
 }
 
-- (void)setBottom:(Float64)bottom {
+- (void)setBottom:(float)bottom {
     _style.bottom = bottom;
 }
 

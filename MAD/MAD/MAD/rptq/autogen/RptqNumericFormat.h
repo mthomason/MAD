@@ -12,7 +12,7 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
-@class NSLocale;
+@class NSLocale, RptqDocumentElement;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSLocale *locale;
 @property (nonatomic) BOOL enabled;
 @property (nonatomic) int64_t decimalCount;
+@property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
 
 @end
 

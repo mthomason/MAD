@@ -22,5 +22,6 @@
 @dynamic underline;
 @dynamic italic;
 @dynamic bold;
+@dynamic inElement;
 
 @end

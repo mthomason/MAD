@@ -20,5 +20,6 @@
 
 @dynamic width;
 @dynamic height;
+@dynamic inRect;
 
 @end

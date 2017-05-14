@@ -20,22 +20,21 @@ NSString * const MTNullIdentifier = @"(null)";
     return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElement"];
 }
 
+@dynamic backgroundColor;
 @dynamic dropIndex;
 @dynamic fontname;
 @dynamic fontsize;
+@dynamic foregroundColor;
 @dynamic identifier;
 @dynamic type;
-@dynamic origin;
-@dynamic dropPoint;
-@dynamic margin;
-@dynamic padding;
-@dynamic border;
-@dynamic alignment;
-@dynamic size;
-@dynamic style;
-@dynamic backgroundColor;
-@dynamic foregroundColor;
-@dynamic numericFormat;
 @dynamic inSectionRow;
+@dynamic dropPoint;
+@dynamic padding;
+@dynamic rect;
+@dynamic margin;
+@dynamic border;
+@dynamic textStyle;
+@dynamic alignment;
+@dynamic numericFormat;
 
 @end

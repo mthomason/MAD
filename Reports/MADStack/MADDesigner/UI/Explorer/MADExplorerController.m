@@ -1321,7 +1321,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         @autoreleasepool {
             NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems;
             self.collectionView.allowsSelection = YES;
-            [self.collectionView.backgroundView setNeedsDisplay];
+            //[self.collectionView.backgroundView setNeedsDisplay];
             [self.collectionView reloadItemsAtIndexPaths:paths];
         }
     }];

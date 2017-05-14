@@ -21,5 +21,6 @@
 @dynamic locale;
 @dynamic enabled;
 @dynamic decimalCount;
+@dynamic inElement;
 
 @end

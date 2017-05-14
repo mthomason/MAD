@@ -117,7 +117,8 @@ void invalidateTimer(NSTimer *t) {
 }
 
 - (MTDateResolution)displayWithLastCacheDate:(NSDate *)lastCacheDate {
-    MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:_lastCacheDate];
+    MTPair *dateStringAndInterval;
+    dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:_lastCacheDate];
     self.label.text = [dateStringAndInterval.former copyWithZone:nil];
     return ((NSNumber *)dateStringAndInterval.latter).shortValue;
 }

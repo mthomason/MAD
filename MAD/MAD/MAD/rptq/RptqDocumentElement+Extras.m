@@ -35,6 +35,15 @@
 
 #import "MADAlignment.h"
 #import "MADFont.h"
+
+#import "RptqDirectionalAsymmetry.h"
+#import "RptqNumericFormat.h"
+#import "RptqAlignment.h"
+#import "RptqRect.h"
+#import "RptqSize.h"
+#import "RptqPoint.h"
+#import "RptqTextStyle.h"
+#import "RptqBorder.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDocumentElementGroupKey.h"
@@ -162,6 +171,185 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return request;
 }
 
++ (NSString *)keyInSectionRow {
+    NSString *result = NSStringFromSelector(@selector(inSectionRow));
+    return result;
+}
+
++ (NSString *)keyRowNumber {
+    NSString *result = [self keyInSectionRow];
+    NSString *keyRowNumber = NSStringFromSelector(@selector(rowNumber));
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyRowNumber];
+    return result;
+}
+
++ (NSString *)keyInSection {
+    NSString *result = [self keyInSectionRow];
+    NSString *keyInSection = NSStringFromSelector(@selector(inSection));
+    result = [result stringByAppendingString: @"."];
+    result = [result stringByAppendingString: keyInSection];
+    return result;
+}
+
++ (NSString *)keyOrigin {
+    NSString *result = NSStringFromSelector(@selector(origin));
+    return result;
+}
+
++ (NSString *)keySize {
+    NSString *result = NSStringFromSelector(@selector(size));
+    return result;
+}
+
++ (NSString *)keyMargin {
+    NSString *result = NSStringFromSelector(@selector(margin));
+    return result;
+}
+
++ (NSString *)keyBorder {
+    NSString *result = NSStringFromSelector(@selector(border));
+    return result;
+}
+
++ (NSString *)keyPadding {
+    NSString *result = NSStringFromSelector(@selector(padding));
+    return result;
+}
+
++ (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID {
+    NSFetchRequest *request;
+    NSPredicate *predicate;
+    NSUInteger expressionCount = 6;
+    //NSExpressionDescription *expressionDescription[expressionCount];
+    NSExpression *left, *right;
+    
+    NSString *keySelf = NSStringFromSelector(@selector(self));
+    NSString *keyInSection = [self keyInSection];
+    NSString *keyBorder = [self keyBorder];
+    NSString *keyPadding = [self keyPadding];
+    NSString *keyMargin = [self keyMargin];
+    NSString *keySize = [self keySize];
+    NSString *keyRowNumber = [self keyRowNumber];
+    
+    NSString *keys[] = {
+        keySelf,
+        keyBorder,
+        keyPadding,
+        keyMargin,
+        keySize,
+        keyRowNumber,
+    };
+    //NSKeyedUnarchiveFromDataTransformerName
+    NSExpression *expressions[] = {
+        [NSExpression expressionForEvaluatedObject],
+        [NSExpression expressionForKeyPath: keyBorder],
+        [NSExpression expressionForKeyPath: keyPadding],
+        [NSExpression expressionForKeyPath: keyMargin],
+        [NSExpression expressionForKeyPath: keySize],
+        [NSExpression expressionForKeyPath: keyRowNumber],
+    };
+    
+    NSAttributeType types[] = {
+        NSObjectIDAttributeType,
+        NSTransformableAttributeType,
+        NSTransformableAttributeType,
+        NSTransformableAttributeType,
+        NSTransformableAttributeType,
+        NSInteger32AttributeType,
+    };
+    
+    
+    NSArray *propertiesToFetch = [[NSArray alloc] init];
+    
+    NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+    expressionDescription.name = keys[0].copy;
+    expressionDescription.expression = expressions[0];
+    expressionDescription.expressionResultType = types[0];
+    propertiesToFetch = [propertiesToFetch arrayByAddingObject:expressionDescription];
+
+    //expressionDescription = [[NSExpressionDescription alloc] init];
+    //expressionDescription.name = keys[1].copy;
+    //expressionDescription.expression = expressions[1];
+    //expressionDescription.expressionResultType = types[1];
+    //propertiesToFetch = [propertiesToFetch arrayByAddingObject:expressionDescription];
+    /*
+    NSAttributeDescription *attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = keys[1].copy;
+    attributeDescription.attributeType = types[1];
+    
+    attributeDescription.valueTransformerName = NSKeyedUnarchiveFromDataTransformerName;
+    attributeDescription.attributeValueClassName = NSStringFromClass([MADBorderStyle class]);
+    propertiesToFetch = [propertiesToFetch arrayByAddingObject:attributeDescription];*;
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = keys[2].copy;
+    attributeDescription.attributeType = types[2];
+    attributeDescription.valueTransformerName = NSUnarchiveFromDataTransformerName;
+    attributeDescription.attributeValueClassName = NSStringFromClass([MADPadding class]);
+    propertiesToFetch = [propertiesToFetch arrayByAddingObject:attributeDescription];
+    
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = keys[3].copy;
+    attributeDescription.attributeType = types[3];
+    attributeDescription.valueTransformerName = NSUnarchiveFromDataTransformerName;
+    attributeDescription.attributeValueClassName = NSStringFromClass([MADMargin class]);
+    propertiesToFetch = [propertiesToFetch arrayByAddingObject:attributeDescription];
+
+    attributeDescription = [[NSAttributeDescription alloc] init];
+    attributeDescription.name = keys[4].copy;
+    attributeDescription.attributeType = types[4];
+    attributeDescription.valueTransformerName = NSUnarchiveFromDataTransformerName;
+    attributeDescription.attributeValueClassName = NSStringFromClass([NSNumber class]);
+    propertiesToFetch = [propertiesToFetch arrayByAddingObject:attributeDescription];
+
+    expressionDescription = [[NSExpressionDescription alloc] init];
+    expressionDescription.name = keys[5].copy;
+    expressionDescription.expression = expressions[5];
+    expressionDescription.expressionResultType = types[5];
+    propertiesToFetch = [propertiesToFetch arrayByAddingObject:expressionDescription];
+  */
+    //for (NSUInteger i=0; i<expressionCount; i++) {
+    //        expressionDescription[i] = [[NSExpressionDescription alloc] init];
+    //        expressionDescription[i].name = keys[i].copy;
+    //        expressionDescription[i].expression = expressions[i];
+    //        expressionDescription[i].expressionResultType = types[i];
+//            propertiesToFetch = [propertiesToFetch arrayByAddingObject:expressionDescription];
+    //}
+    
+    //NSArray *propertiesToFetch;
+    //propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
+    //                                               count: (NSUInteger)expressionCount];
+    
+    left = [NSExpression expressionForKeyPath:keyInSection];
+    right = [NSExpression expressionForConstantValue:sectionID];
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: left
+                                                   rightExpression: right
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
+    
+    
+    
+    NSString *entityName = NSStringFromClass([self class]);
+    request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    request.predicate = predicate;
+    request.resultType = NSDictionaryResultType;// NSManagedObjectResultType;
+    NSArray *properties = [[NSArray alloc] init];
+    NSExpression *objectID = [NSExpression expressionForEvaluatedObject];
+    request.propertiesToFetch = @[expressionDescription, @"border", @"padding"];// propertiesToFetch;
+    //request.includesSubentities = NO;
+    //request.includesPropertyValues = YES;
+    //request.returnsObjectsAsFaults = YES;
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        //expressionDescription[i] = nil;
+        keys[i] = nil;
+        expressions[i] = nil;
+    }
+    
+    return request;
+}
+
 + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
                                fromObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet;
@@ -253,18 +441,12 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     
 }
 
-- (void)setSizeWidth:(double)width {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    s.width = width;
-    [NSValue value:&s withObjCType:@encode(CGSize)];
+- (void)setSizeWidth:(float)width {
+    self.rect.size.width = width;
 }
 
-- (void)setSizeHeight:(double)height {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    s.height = height;
-    [NSValue value:&s withObjCType:@encode(CGSize)];
+- (void)setSizeHeight:(float)height {
+    self.rect.size.height = height;
 }
 
 - (void)setHorizontalAlignment:(MADHorizontalAlignment)alignment {
@@ -280,63 +462,59 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return placementPoint;
 }
 
-- (void)setSizeWidth:(double)w height:(double)h {
-    CGSize s = CGSizeMake(w, h);
-    self.size = [NSValue valueWithCGSize:s];
+- (void)setSizeWidth:(float)w height:(float)h {
+    self.rect.size.width = w;
+    self.rect.size.height = h;
 }
 
 - (void)setSizeValue:(CGSize)size {
-    self.size = [NSValue valueWithCGSize:size];
+    self.rect.size.width = (float)size.width;
+    self.rect.size.height = (float)size.height;
 }
 
 - (void)setOriginPoint:(CGPoint)or {
-    self.origin = [NSValue valueWithCGPoint:or];
+    self.rect.origin.x = (float)or.x;
+    self.rect.origin.y = (float)or.y;
 }
 
 - (double)spacingLeft {
-    return self.margin.left + self.border.left + self.padding.left;
+    return self.margin.left + self.border.width.left + self.padding.left;
 }
 
 - (double)spacingRight {
-    return self.margin.right + self.border.right + self.padding.right;
+    return self.margin.right + self.border.width.right + self.padding.right;
 }
 
 - (double)spacingTop {
-    return self.margin.top + self.border.top + self.padding.top;
+    return self.margin.top + self.border.width.top + self.padding.top;
 }
 
 - (double)spacingBottom {
-    return self.margin.bottom + self.border.bottom + self.padding.bottom;
+    return self.margin.bottom + self.border.width.bottom + self.padding.bottom;
 }
 
 - (CGFloat)sizeWidthCalculated {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
     return MADDocObjSizeWidthCalculated(self.padding.left,
-                                        self.border.left,
+                                        self.border.width.left,
                                         self.margin.left,
-                                        s.width,
+                                        self.rect.size.width,
                                         self.margin.right,
-                                        self.border.right,
+                                        self.border.width.right,
                                         self.padding.right);
 }
 
 - (CGFloat)sizeHeightCalculated {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
     return MADDocObjSizeHeightCalculated(self.padding.top,
-                                         self.border.top,
+                                         self.border.width.top,
                                          self.margin.top,
-                                         s.height,
+                                         self.rect.size.height,
                                          self.margin.bottom,
-                                         self.border.bottom,
+                                         self.border.width.bottom,
                                          self.padding.bottom);
 }
 
 - (CGSize)innerSize {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    return s;
+    return CGSizeMake(self.rect.size.width, self.rect.size.height);
 }
 
 - (CGSize)sizeCalculated {
@@ -344,27 +522,21 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (CGSize)sizeContentView {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    return s;
+    return CGSizeMake(self.rect.size.width, self.rect.size.height);
 }
 
 - (CGRect)boundsContentView {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    return CGRectMake(CGPointZero.x, CGPointZero.y, s.width, s.height);
+    return CGRectMake(CGPointZero.x, CGPointZero.y, self.rect.size.width, self.rect.size.height);
 }
 
 - (CGRect)paddingViewBounds {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
     return CGRectMake(CGPointZero.x, CGPointZero.y,
                       paddingViewBoundsSizeWidth(self.padding.left,
                                                  self.padding.right,
-                                                 s.width),
+                                                 self.rect.size.width),
                       paddingViewBoundsSizeHeight(self.padding.top,
                                                   self.padding.bottom,
-                                                  s.height));
+                                                  self.rect.size.height));
 }
 
 - (CGRect)paddingViewFrame {
@@ -375,16 +547,11 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (CGRect)elementViewBounds {
-    CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    return CGRectMake(CGPointZero.x, CGPointZero.y, s.width, s.height);
+    return CGRectMake(CGPointZero.x, CGPointZero.y, self.rect.size.width, self.rect.size.height);
 }
 
 - (CGRect)elementViewFrameDesigner {
-    CGPoint o; CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    [(NSValue *)self.origin getValue:&o];
-    return CGRectMake(o.x, o.y, s.width, s.height);
+    return CGRectMake(self.rect.origin.x, self.rect.origin.y, self.rect.size.width, self.rect.size.height);
 }
 
 - (CGRect)elementViewFrame {
@@ -395,13 +562,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (CGRect)frame {
-    CGPoint o; CGSize s;
-    [(NSValue *)self.size getValue:&s];
-    [(NSValue *)self.origin getValue:&o];
-    return MADDocObjFrameCalculated(o.x, self.spacingLeft,
-                                    o.y, self.spacingTop,
-                                    s.width, self.spacingRight,
-                                    s.height, self.spacingBottom);
+    return MADDocObjFrameCalculated(self.rect.origin.x, self.spacingLeft,
+                                    self.rect.origin.y, self.spacingTop,
+                                    self.rect.size.width, self.spacingRight,
+                                    self.rect.size.height, self.spacingBottom);
 }
 
 #pragma mark - Member
@@ -412,12 +576,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (NSString *)designerRepresentationText {
     @throw NSInternalInconsistencyException;
-}
-
-- (void)dropAtRect:(CGRect)rect {
-    rect.size.width = nearbyint(rect.size.width);
-    rect.size.height = nearbyint(rect.size.height);
-    self.size = [NSValue value:&rect.size withObjCType:@encode(CGSize)];
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
@@ -535,7 +693,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
                 } else {
                     NSMutableString *format;
                     format = [[NSMutableString alloc] initWithString:@"%."];
-                    [format appendFormat:@"%ld", self.numericFormat.decimalCount];
+                    [format appendFormat:@"%lld", self.numericFormat.decimalCount];
                     [format appendString:@"f"];
                     result = [[NSString alloc] initWithFormat:format, [value floatValue]];
                 }
@@ -626,8 +784,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSString *fontname;
     
     UIFontDescriptorSymbolicTraits traits = 0;
-    if (self.style.italic) traits     |= UIFontDescriptorTraitItalic;
-    if (self.style.bold)   traits     |= UIFontDescriptorTraitBold;
+    if (self.textStyle.italic) traits     |= UIFontDescriptorTraitItalic;
+    if (self.textStyle.bold)   traits     |= UIFontDescriptorTraitBold;
     
     NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
     

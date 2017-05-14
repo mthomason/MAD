@@ -11,6 +11,8 @@
 #import <UIKit/NSStringDrawing.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
 #import "RptqDocumentElement.h"
+#import "RptqTextStyle.h"
+#import "RptqAlignment.h"
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADElementStylizedText.h"
@@ -42,7 +44,7 @@
     if (attt == nil) {
         attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
                                                        fontSize: item.fontsize
-                                                      textStyle: item.style
+                                                      textStyle: item.textStyle
                                             horizontalAlignment: item.alignment.horizontal];
         
         definition.fontDescriptors[item.objectID] = attt;

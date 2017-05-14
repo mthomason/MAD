@@ -31,6 +31,24 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid
                         inManagedObjectContext:(NSManagedObjectContext *)moc;
 
+    + (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections;
+    + (NSString *)keyPathInReportHeader;
+    + (NSString *)keyPathInReportFooter;
++ (NSString *)keyPathNumberOfRows;
++ (NSString *)keyPathType;
++ (NSString *)keyPathWrappingStyle;
++ (NSString *)keyPathVisibility;
++ (NSString *)keyPathHeight;
++ (NSString *)keyPathLayoutHeight;
++ (NSString *)keyPathInGroupHasFieldInQueryTableAlias;
++ (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldName;
++ (NSString *)keyPathInGroupWeight;
++ (NSString *)keyPathInGroupSort;
++ (NSString *)keyPathInPageHeader;
++ (NSString *)keyPathInPageFooter;
++ (NSString *)keyPathInReport;
++ (NSString *)keyPathInGroup;
+
     + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
                                 withNumberOfGroups:(NSUInteger)numberOfGroups;
 

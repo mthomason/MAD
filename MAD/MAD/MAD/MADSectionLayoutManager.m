@@ -24,7 +24,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 @interface MADSectionLayoutManager ()
 
-    @property (nonatomic, strong, readwrite) NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items;
+    @property (nonatomic, strong, readwrite) NSMutableDictionary <NSNumber *,
+                                                                    MADSectionLayoutAttributes *> *items;
     @property (nonatomic, weak)              MADSectionLayoutAttributes *lastItem;
 
 @end
@@ -36,21 +37,6 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 #pragma mark -
 #pragma mark Static Helpers
-
-+ (NSArray *)nonOverlappingDropPointsForItem:(MADSectionLayoutAttributes *)attr1
-                             givenDropPoints:(NSArray *)dropPoints
-                              andPlacedItems:(NSArray *)placedItems {
-    
-    NSMutableArray *nonOverlappingDropPoints;
-    nonOverlappingDropPoints = [[NSMutableArray alloc] initWithCapacity:dropPoints.count];
-    for (NSValue *pointObj in dropPoints) {
-        // Is drop point valid... doesn't it overlap a placed item?
-        if ([attr1 validDropPoint:pointObj.CGPointValue givenPlacedItems:placedItems]) {
-            [nonOverlappingDropPoints addObject: pointObj];
-        }
-    }
-    return nonOverlappingDropPoints;
-}
 
 + (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
    dropTolerance:(CGFloat)tolerance {
@@ -235,7 +221,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
         }
     }];
     
-    [self.items removeObjectForKey:@(itemToRemove.objectID)];
+    NSNumber *key = @(itemToRemove.objectID);
+    [self.items removeObjectForKey:key];
     _lastOperationWasAddition = NO;
 }
 

@@ -20,5 +20,6 @@
 
 @dynamic horizontal;
 @dynamic vertical;
+@dynamic inElement;
 
 @end

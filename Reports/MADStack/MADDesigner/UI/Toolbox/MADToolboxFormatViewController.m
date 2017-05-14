@@ -7,18 +7,21 @@
 //
 
 #import "MADToolboxFormatViewController.h"
+
+#import <CoreData/NSManagedObject.h>
+#import <CoreData/NSManagedObjectContext.h>
+
 #import <UIKit/UIStepper.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIFont.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/NSAttributedString.h>
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSManagedObjectContext.h>
-
 #import <MADFoundation/MADDataType.h>
 
-#import <MAD/MADCurrencyFormatter.h>
+#import <MAD/RptqAlignment.h>
+
+#import <MAD/RptqNumericFormat.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
@@ -28,6 +31,7 @@
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqQueryField.h>
+#import <MAD/RptqNumericFormat.h>
 
 #import "MADToolboxControllerProtocol.h"
 
@@ -200,20 +204,17 @@
     id valueThatChanged = nil;
     
     if ([sender isEqual:self.stepperNumberOfDecimals]) {
-        valueThatChanged = @((self.stepperNumberOfDecimals).value);
+        valueThatChanged = [[NSNumber alloc] initWithDouble:(self.stepperNumberOfDecimals).value];
         (self.labelNumberOfDecimals).attributedText =
             [self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
         
-        MADCurrencyFormatter *currencyFormatter;
         RptqDocumentElement *documentObject;
         NSNumber *identifier;
         NSManagedObjectContext *context = self.document.managedObjectContext;
         for (identifier in self.userSelectedObjectIDs) {
             documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
                                                                  fromObjectContext: context];
-            currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
-            currencyFormatter.decimalCount = [valueThatChanged integerValue];
-            documentObject.numericFormat = currencyFormatter;
+            documentObject.numericFormat.decimalCount = [valueThatChanged integerValue];
             [documentObject.managedObjectContext save:nil];
         }
     }
@@ -227,7 +228,9 @@
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
     
     NSString *decimals = NSLocalizedString(@"Decimals", "Decimals");
-    NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: decimals attributes: boldAttributes];
+    NSMutableAttributedString *localizedAttributedMessage;
+    localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: decimals
+                                                                        attributes: boldAttributes];
     NSString *pointsString;
     if (numberOfDecimals == -1) {
         pointsString = @"-";
@@ -243,7 +246,8 @@
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
+forRowAtIndexPath:(NSIndexPath *)indexPath {
     cell.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
 }
@@ -255,7 +259,6 @@
     
     if (indexPath.row == 1 && indexPath.section == 0) {
         
-        MADCurrencyFormatter *currencyFormatter;
         NSNumber *identifier;
         UITableViewCellAccessoryType newAccessory;
         RptqDocumentElement *documentObject;
@@ -263,10 +266,8 @@
         for (identifier in self.userSelectedObjectIDs) {
             documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
                                                                  fromObjectContext: context];
-            currencyFormatter = (MADCurrencyFormatter *)documentObject.numericFormat;
-            currencyFormatter.enabled = !currencyFormatter.enabled;
-            documentObject.numericFormat = currencyFormatter;
-            newAccessory = currencyFormatter.enabled ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            documentObject.numericFormat.enabled = !documentObject.numericFormat.enabled;
+            newAccessory = documentObject.numericFormat.enabled ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             (self.tableViewCellCurrency).accessoryType = newAccessory;
             [documentObject.managedObjectContext save:nil];
         }

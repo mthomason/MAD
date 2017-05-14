@@ -18,6 +18,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
 
+#import <MAD/RptqAlignment.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementImage.h>
@@ -341,7 +342,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         MADElementStylizedText *attributesText;
         attributesText = [[MADElementStylizedText alloc] initWithFontName:element.fontname
                                                                  fontSize:element.fontsize
-                                                                textStyle:element.style
+                                                                textStyle:element.textStyle
                                                       horizontalAlignment:element.alignment.horizontal];
         
         NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string

@@ -22,5 +22,6 @@
 @dynamic bottom;
 @dynamic left;
 @dynamic right;
+@dynamic inBorder;
 
 @end

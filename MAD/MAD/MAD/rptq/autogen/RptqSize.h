@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RptqRect;
+
 @interface RptqSize : NSManagedObject
 
 @end
@@ -24,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     @property (nonatomic) float width;
     @property (nonatomic) float height;
+    @property (nullable, nonatomic, retain) RptqRect *inRect;
 
 @end
 

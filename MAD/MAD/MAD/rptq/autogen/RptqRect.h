@@ -12,7 +12,7 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
-@class RptqPoint, RptqSize;
+@class RptqPoint, RptqSize, RptqDocumentElement;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     @property (nullable, nonatomic, retain) RptqPoint *origin;
     @property (nullable, nonatomic, retain) RptqSize *size;
+    @property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
 
 @end
 

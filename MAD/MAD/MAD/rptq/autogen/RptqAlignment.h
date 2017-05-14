@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RptqDocumentElement;
+
 @interface RptqAlignment : NSManagedObject
 
 @end
@@ -24,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int16_t horizontal;
 @property (nonatomic) int16_t vertical;
+@property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
 
 @end
 

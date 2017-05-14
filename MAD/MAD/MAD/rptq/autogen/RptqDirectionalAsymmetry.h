@@ -12,6 +12,8 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
+@class RptqDocumentElement, RptqBorder;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDirectionalAsymmetry : NSManagedObject
@@ -26,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) float bottom;
 @property (nonatomic) float left;
 @property (nonatomic) float right;
+@property (nullable, nonatomic, retain) RptqDocumentElement *inElementMargin;
+@property (nullable, nonatomic, retain) RptqDocumentElement *inElementPadding;
+@property (nullable, nonatomic, retain) RptqBorder *inBorder;
 
 @end
 

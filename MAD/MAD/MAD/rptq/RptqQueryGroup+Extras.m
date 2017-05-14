@@ -15,7 +15,10 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSComparisonPredicate.h>
 
+#import <CoreData/NSPropertyMapping.h>
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -56,6 +59,11 @@
     return queryGroup;
 }
 
++ (NSString *)keyPathHasField {
+    NSString *result = NSStringFromSelector(@selector(hasField));
+    return result;
+}
+
 #pragma mark -
 #pragma mark Overrides
 
@@ -67,6 +75,29 @@
 
 #pragma mark -
 #pragma mark Static
+
++ (NSUInteger)numberOfGroupsForQueryID:(NSManagedObjectID *)objectID
+                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    
+    NSExpression *predicateExpression[2];
+    NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
+    //predicateExpression[0] = [NSExpression expressionForKeyPath: keyInQuery];
+    //predicateExpression[1] = [NSExpression expressionForConstantValue: objectID];
+    
+    //NSPredicate *predicate;
+    //predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
+    //                                               rightExpression: predicateExpression[1]
+    //                                                      modifier: NSDirectPredicateModifier
+    //                                                          type: NSEqualToPredicateOperatorType
+    //                                                       options: 0];
+
+    //request.predicate = predicate;
+    NSError *error = nil;
+    NSUInteger result = [managedObjectContext countForFetchRequest:request error:&error];
+    return result == NSNotFound ? 0 : result;
+    
+}
 
 + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];

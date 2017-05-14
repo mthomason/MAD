@@ -66,6 +66,14 @@ static inline MADMargin_t MADLayoutMarginMakeQuick(Float64 w) {
     [aCoder encodeBytes:(uint8_t *)&_margin length:sizeof(MADMargin_t) forKey:@"m"];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    id copy = [[MADMargin allocWithZone:zone] initWithLeft: _margin.left
+                                                     right: _margin.right
+                                                       top: _margin.top
+                                                    bottom: _margin.bottom];
+    return copy;
+}
+
 - (Float64)left {
     return _margin.left;
 }

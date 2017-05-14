@@ -22,5 +22,8 @@
 @dynamic bottom;
 @dynamic left;
 @dynamic right;
+@dynamic inElementMargin;
+@dynamic inElementPadding;
+@dynamic inBorder;
 
 @end

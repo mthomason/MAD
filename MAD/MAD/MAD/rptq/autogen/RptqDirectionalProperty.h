@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RptqBorder;
+
 @interface RptqDirectionalProperty : NSManagedObject
 
 @end
@@ -26,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int16_t bottom;
 @property (nonatomic) int16_t left;
 @property (nonatomic) int16_t right;
+@property (nullable, nonatomic, retain) RptqBorder *inBorder;
 
 @end
 

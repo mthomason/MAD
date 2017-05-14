@@ -12,7 +12,7 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
-@class RptqDirectionalAsymmetry, RptqDirectionalProperty;
+@class RptqDirectionalAsymmetry, RptqDirectionalProperty, RptqDocumentElement;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,8 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<RptqBorder *> *)fetchRequest;
 
-@property (nullable, nonatomic, retain) RptqDirectionalAsymmetry *width;
-@property (nullable, nonatomic, retain) RptqDirectionalProperty *style;
+    @property (nullable, nonatomic, retain) RptqDirectionalAsymmetry *width;
+    @property (nullable, nonatomic, retain) RptqDirectionalProperty *style;
+    @property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
 
 @end
 

@@ -164,11 +164,11 @@
     [document.hasPageFooterSection      setInterfaceHeight: 44.0000f];
     [document.hasDetailSection          setInterfaceHeight: 88.0000f];
 
-    document.hasReportHeaderSection.visibility = @YES;
-    document.hasReportFooterSection.visibility = @YES;
-    document.hasPageHeaderSection.visibility = @YES;
-    document.hasPageFooterSection.visibility = @YES;
-    document.hasDetailSection.visibility = @YES;
+    document.hasReportHeaderSection.visibility = YES;
+    document.hasReportFooterSection.visibility = YES;
+    document.hasPageHeaderSection.visibility = YES;
+    document.hasPageFooterSection.visibility = YES;
+    document.hasDetailSection.visibility = YES;
     
 
     return document;

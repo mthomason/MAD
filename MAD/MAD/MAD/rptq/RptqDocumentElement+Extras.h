@@ -39,6 +39,8 @@ extern NSString * const MTDocumentObjectDefinationField2;
     + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
                                    fromObjectContext:(NSManagedObjectContext *)context;
     + (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
+    + (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID;
+
     + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
                fromParentSection:(RptqDocumentSection *)section
                withLayoutManager:(MADSectionLayoutManager *)layoutManager;
@@ -53,17 +55,15 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGRect)elementViewFrame;
     - (CGRect)elementViewFrameDesigner;
 
-    - (void)setSizeWidth:(double)width;
-    - (void)setSizeHeight:(double)height;
+    - (void)setSizeWidth:(float)width;
+    - (void)setSizeHeight:(float)height;
 
     - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
     - (CGSize)sizeContentView;
     - (void)setOriginPoint:(CGPoint)origin;
     - (void)setSizeValue:(CGSize)size;
-    - (void)setSizeWidth:(double)w height:(double)h;
-
-    - (void)dropAtRect:(CGRect)rect;
+    - (void)setSizeWidth:(float)w height:(float)h;
 
     - (double)spacingLeft;
     - (double)spacingTop;

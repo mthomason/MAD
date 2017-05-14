@@ -379,7 +379,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             NSString *databaseType = db.driverID.copy;
             NSString *schemaName = db.schemaName.copy;
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 NSString *TextFormatConnection = @"You are connecting to %1$@"
                                                  @" datasource named %2$@.";
                 NSString *localizedMessageFormat;
@@ -390,11 +390,11 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
                 message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
                                                                                                      databaseType: databaseType
                                                                                                        schemaName: schemaName];
-                dispatch_sync(dispatch_get_main_queue(), ^{
+            //    dispatch_sync(dispatch_get_main_queue(), ^{
                     cell.textLabel.attributedText = message;
                     cell.textLabel.text = localizedMessage;
-                });
-            });
+            //    });
+            //});
             
             break;
         }

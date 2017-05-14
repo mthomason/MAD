@@ -19,8 +19,10 @@
     + (instancetype)newQueryGroupQueryWithSortOrder:(MADSortOrder)sortOrder
                             andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+    + (NSString *)keyPathHasField;
     + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;
-
+    + (NSUInteger)numberOfGroupsForQueryID:(NSManagedObjectID *)objectID
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (NSString *)fieldNameNice;
     - (NSString *)fieldNameQuery;
     - (NSString *)sortDisplayNice;

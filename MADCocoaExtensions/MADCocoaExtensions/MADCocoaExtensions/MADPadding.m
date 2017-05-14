@@ -69,6 +69,14 @@ static inline MADLayoutPadding_t MADLayoutPaddingMakeQuick(Float64 p) {
     [aCoder encodeBytes:(uint8_t *)&_padding length:sizeof(MADLayoutPadding_t) forKey:@"p"];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    id copy = [[[self class] allocWithZone:zone] initWithLeft:_padding.left
+                                                        right:_padding.right
+                                                          top:_padding.top
+                                                       bottom:_padding.bottom];
+    return copy;
+}
+
 - (Float64)left {
     return _padding.left;
 }

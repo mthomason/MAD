@@ -30,8 +30,13 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADAlignment.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqSize.h>
+#import <MAD/RptqAlignment.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqTextStyle.h>
 
 #import "MADControlState.h"
 
@@ -602,7 +607,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                         
                 }
                 
-                [(NSValue *)documentObject.size getValue:&size];
+                size = CGSizeMake(documentObject.rect.size.width, documentObject.rect.size.height);
+                //[(NSValue *)documentObject.size getValue:&size];
                 
                 if (documentObject.margin.top != marginHolder.top ) {
                     marginHolder.top = documentObject.margin.top;
@@ -644,12 +650,12 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                     numberOfPaddingRight++;
                 }
 
-                if (size.width != sizeHolder.width ) {
+                if (documentObject.rect.size.width != sizeHolder.width ) {
                     sizeHolder.width = size.width;
                     numberOfSizeWidths++;
                 }
 
-                if (size.height != sizeHolder.height ) {
+                if (documentObject.rect.size.height != sizeHolder.height ) {
                     sizeHolder.height = size.height;
                     numberOfSizeHeights++;
                 }
@@ -663,10 +669,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                     numberOfHorazontalAlignments++;
                 }
                 
-                documentObject.style.bold ? numberBold++ : numberNotBold++;
-                documentObject.style.underline ? numberUnderline++ : numberNotUnderline++;
-                documentObject.style.strikethrough ? numberStrike++ : numberNotStrike++;
-                documentObject.style.italic ? numberItalic++ : numberNotItalic++;
+                documentObject.textStyle.bold ? numberBold++ : numberNotBold++;
+                documentObject.textStyle.underline ? numberUnderline++ : numberNotUnderline++;
+                documentObject.textStyle.strikethrough ? numberStrike++ : numberNotStrike++;
+                documentObject.textStyle.italic ? numberItalic++ : numberNotItalic++;
                 
             }
             
@@ -877,7 +883,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.style.bold = self.controlStateBold;
+        element.textStyle.bold = self.controlStateBold;
     }
     [context save:nil];
 }
@@ -907,7 +913,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.style.italic = self.controlStateItalic;
+        element.textStyle.italic = self.controlStateItalic;
     }
     [context save:nil];
 }
@@ -937,7 +943,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.style.strikethrough = ControlStateIsOn(_controlStateStrike);
+        element.textStyle.strikethrough = ControlStateIsOn(_controlStateStrike);
     }
     [context save:nil];
 }
@@ -968,7 +974,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.style.underline = ControlStateIsOn(_controlStateUnderline);
+        element.textStyle.underline = ControlStateIsOn(_controlStateUnderline);
     }
     [context save:nil];
 }

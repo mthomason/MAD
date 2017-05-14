@@ -12,14 +12,14 @@
 #import <Foundation/NSObject.h>
 #import <MAD/MADAlignment.h>
 
-@class MADTextStyle, NSString;
+@class RptqTextStyle, NSString;
 
 
 @interface MADElementStylizedText : NSObject
 
     - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
                                      fontSize:(double) fontsize
-                                    textStyle:(MADTextStyle  * _Nullable )textStyle
+                                    textStyle:(RptqTextStyle  * _Nullable )textStyle
                           horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment
                                                                     NS_DESIGNATED_INITIALIZER;
 

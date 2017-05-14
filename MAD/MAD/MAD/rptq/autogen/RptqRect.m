@@ -23,5 +23,6 @@
 
 @dynamic origin;
 @dynamic size;
+@dynamic inElement;
 
 @end

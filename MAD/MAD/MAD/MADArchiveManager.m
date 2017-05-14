@@ -230,25 +230,28 @@ READ_FAIL:;
 
     
     {
-        //Test to see if it's it's not a compressed  archive
-        NSError * __autoreleasing *errorReading = NULL;
-        NSData *data;
-        data = [[NSData alloc] initWithContentsOfURL:_archive options:NSDataReadingUncached
-                                               error:errorReading];
-        
-        NSAssert(!errorReading, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
-                 _archive, *errorReading, __PRETTY_FUNCTION__);
-        
-        NSFileWrapper *fileWrapper;
-        fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        
-        NSError * __autoreleasing *error = NULL;
-        success = [fileWrapper writeToURL: _filewrapper
-                                  options: NSFileWrapperWritingAtomic
-                      originalContentsURL: _archive
-                                    error: error];
-        
-        NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
+        @autoreleasepool {
+            //Test to see if it's it's not a compressed  archive
+            NSError * __autoreleasing *errorReading = NULL;
+            NSData *data;
+            data = [[NSData alloc] initWithContentsOfURL: _archive
+                                                 options: NSDataReadingUncached
+                                                   error: errorReading];
+            
+            NSAssert(!errorReading, @"Failed to read data from\n\t%@\n\t\twith error %@\n\t\t at %s",
+                     _archive, *errorReading, __PRETTY_FUNCTION__);
+            
+            NSFileWrapper *fileWrapper;
+            fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+            
+            NSError * __autoreleasing *error = NULL;
+            success = [fileWrapper writeToURL: _filewrapper
+                                      options: NSFileWrapperWritingAtomic
+                          originalContentsURL: _archive
+                                        error: error];
+            
+            NSAssert(success, @"Failed to write at %s.", __PRETTY_FUNCTION__);
+        }
     }
     
 READ_END:;

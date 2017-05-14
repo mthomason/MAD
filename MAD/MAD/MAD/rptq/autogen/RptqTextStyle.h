@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RptqDocumentElement;
+
 @interface RptqTextStyle : NSManagedObject
 
 @end
@@ -26,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL underline;
 @property (nonatomic) BOOL italic;
 @property (nonatomic) BOOL bold;
+@property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
 
 @end
 

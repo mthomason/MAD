@@ -511,17 +511,22 @@ void madwarn(char *err,  const char*err2) { }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
+    BOOL success;
     MADArchiveManager *archiveManager;
-    BOOL success = [url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
-    if (!success) goto READFROMURL_END;
-
-    archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
-                                                            archiveURL: url];
-    success = [archiveManager unarchive];
-
-READFROMURL_END:;
-
-    return success ? [super readFromURL:_urlGuts error:outError] : NO;
+    NSString *pathExtension;
+    //@autoreleasepool {
+        pathExtension = url.pathExtension;
+        success = [url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
+        if (success) {
+        
+            archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
+                                                                    archiveURL: url];
+            success = [archiveManager unarchive];
+        
+        }
+        success = success ? [super readFromURL:_urlGuts error:outError] : NO;
+    //}
+    return success;
     
 }
 

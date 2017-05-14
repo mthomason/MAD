@@ -24,6 +24,8 @@
     + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
                       managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+    + (NSString *)keyPathAlias;
+
     - (NSString *)queryAlias;
     - (NSString *)tableAlias;
 

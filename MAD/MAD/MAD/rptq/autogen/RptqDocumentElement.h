@@ -12,8 +12,8 @@
 #import <CoreData/NSManagedObject.h>
 #import <CoreData/NSFetchRequest.h>
 
-@class RptqDocumentSectionRows, MADAlignment, MADBorderStyle, MADCurrencyFormatter,
-       MADMargin, MADPadding, MADTextStyle, UIColor;
+@class RptqDocumentSectionRows, RptqPoint, RptqDirectionalAsymmetry, RptqRect,
+       RptqBorder, RptqTextStyle, RptqAlignment, RptqNumericFormat, UIColor;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,18 +32,17 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic) int64_t dropIndex;
 @property (nonatomic) double fontsize;
 @property (nullable, nonatomic, copy) NSString *fontname;
-@property (nullable, nonatomic, retain) NSValue *origin;
-@property (nullable, nonatomic, retain) NSValue *dropPoint;
-@property (nullable, nonatomic, retain) MADMargin *margin;
-@property (nullable, nonatomic, retain) MADPadding *padding;
-@property (nullable, nonatomic, retain) MADBorderStyle *border;
-@property (nullable, nonatomic, retain) MADAlignment *alignment;
-@property (nullable, nonatomic, retain) NSValue *size;
-@property (nullable, nonatomic, retain) MADTextStyle *style;
 @property (nullable, nonatomic, retain) UIColor *backgroundColor;
 @property (nullable, nonatomic, retain) UIColor *foregroundColor;
-@property (nullable, nonatomic, retain) MADCurrencyFormatter *numericFormat;
 @property (nullable, nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
+@property (nullable, nonatomic, retain) RptqPoint *dropPoint;
+@property (nullable, nonatomic, retain) RptqDirectionalAsymmetry *padding;
+@property (nullable, nonatomic, retain) RptqRect *rect;
+@property (nullable, nonatomic, retain) RptqDirectionalAsymmetry *margin;
+@property (nullable, nonatomic, retain) RptqBorder *border;
+@property (nullable, nonatomic, retain) RptqTextStyle *textStyle;
+@property (nullable, nonatomic, retain) RptqAlignment *alignment;
+@property (nullable, nonatomic, retain) RptqNumericFormat *numericFormat;
 
 @end
 

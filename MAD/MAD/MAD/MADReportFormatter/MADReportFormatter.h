@@ -32,9 +32,7 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
     + (instancetype)newReportFormatterWithLayout: (MADocument *)layout
                                          options: (MADReportFormatterOptions)options;
 
-
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
-
 
     //  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
     //      which represents a page.  The array contains dictionaries for each object on that page.

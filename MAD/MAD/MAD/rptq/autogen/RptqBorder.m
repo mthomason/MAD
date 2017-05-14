@@ -23,5 +23,6 @@
 
 @dynamic width;
 @dynamic style;
+@dynamic inElement;
 
 @end

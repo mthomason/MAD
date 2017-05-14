@@ -37,6 +37,10 @@
 
 @implementation RptqQueryTable (Extras)
 
++ (NSString *)keyPathAlias {
+    NSString *result = NSStringFromSelector(@selector(alias));
+    return result;
+}
 
 #pragma mark - Overrides
 
