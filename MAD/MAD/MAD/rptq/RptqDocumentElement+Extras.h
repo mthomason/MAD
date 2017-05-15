@@ -40,10 +40,21 @@ extern NSString * const MTDocumentObjectDefinationField2;
                                    fromObjectContext:(NSManagedObjectContext *)context;
     + (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
     + (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID;
+    + (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID;
 
     + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
                fromParentSection:(RptqDocumentSection *)section
                withLayoutManager:(MADSectionLayoutManager *)layoutManager;
+
+    + (NSString *)keyBorderWidthTop;
+    + (NSString *)keyBorderWidthBottom;
+    + (NSString *)keyPaddingTop;
+    + (NSString *)keyPaddingBottom;
+    + (NSString *)keyMarginTop;
+    + (NSString *)keyMarginBottom;
+    + (NSString *)keyRectOriginY;
+    + (NSString *)keyRectSizeHeight;
+    + (NSString *)keyCalculatedHeight;
 
     @property (readonly) MTDocumentObjectType documentObjectType;
     @property (readonly) CGRect frame;

@@ -10,4 +10,16 @@
 
 @implementation RptqRect (Extras)
 
++ (NSString *)keyOrigin {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(origin));
+    return key;
+}
+
++ (NSString *)keySize {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(size));
+    return key;
+}
+
 @end

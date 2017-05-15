@@ -13,19 +13,20 @@
 
 @implementation MADReportFormatterState
 
-- (instancetype)initWithDataDelegate:(id <MADDataProtocol>)dataDelegate {
-    return self = [super init];
+- (instancetype)init {
+    if (self = [super init]) {
+        [self reset];
+    }
+    return self;
 }
 
-- (void)resetWithDataDelegate:(id <MADDataProtocol>)dataDelegate {
-    NSArray *sortDescriptors = [dataDelegate sortDescriptors];
-    _sortDescriptors = sortDescriptors.copy;
+- (void)reset {
     _rowCounter = 0;
     _groupCounter = 0;
     _pageCounter = 0;
     _detailRowId = 0;
     _detailRowIdLast = 0;
-    _counterHeightUsedCurrentPage = 0.0;
+    _counterHeightUsedCurrentPage = 0.0000f;
 }
 
 @end

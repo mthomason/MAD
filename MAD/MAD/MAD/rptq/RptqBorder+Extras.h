@@ -6,8 +6,16 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MAD/MAD.h>
+#ifndef Reports_RptqBorder_Extras_h
+#define Reports_RptqBorder_Extras_h
+
+#import <MAD/RptqBorder.h>
 
 @interface RptqBorder (Extras)
 
++ (NSString *)keyWidth;
++ (NSString *)keyStyle;
+
 @end
+
+#endif

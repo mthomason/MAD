@@ -18,11 +18,9 @@
 
 @interface MADReportFormatterState : NSObject
 
-    - (instancetype)initWithDataDelegate:(id <MADDataProtocol>)dataDelegate;
+    - (instancetype)init;
 
-    - (void)resetWithDataDelegate:(id <MADDataProtocol>)dataDelegate;
-
-    @property (nonatomic, strong) NSArray <NSSortDescriptor *> *sortDescriptors;
+    - (void)reset;
 
     @property (nonatomic, assign) NSUInteger detailRowId;
     @property (nonatomic, assign) NSUInteger detailRowIdLast;

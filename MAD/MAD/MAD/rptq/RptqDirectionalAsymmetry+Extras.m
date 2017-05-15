@@ -7,7 +7,16 @@
 //
 
 #import "RptqDirectionalAsymmetry+Extras.h"
+#import "RptqDirectionalProperty+Extras.h"
 
 @implementation RptqDirectionalAsymmetry (Extras)
+
++ (NSString *)keyTop {
+    return [RptqDirectionalProperty keyTop];
+}
+
++ (NSString *)keyBottom {
+    return [RptqDirectionalProperty keyBottom];
+}
 
 @end

@@ -10,4 +10,16 @@
 
 @implementation RptqPoint (Extras)
 
++ (NSString *)keyX {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(x));
+    return key;
+}
+
++ (NSString *)keyY {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(y));
+    return key;
+}
+
 @end

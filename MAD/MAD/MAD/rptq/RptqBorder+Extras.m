@@ -10,4 +10,16 @@
 
 @implementation RptqBorder (Extras)
 
++ (NSString *)keyWidth {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(width));
+    return key;
+}
+
++ (NSString *)keyStyle {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(style));
+    return key;
+}
+
 @end

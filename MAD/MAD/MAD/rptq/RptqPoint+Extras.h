@@ -6,8 +6,16 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MAD/MAD.h>
+#ifndef Reports_RptqPoint_Extras_h
+#define Reports_RptqPoint_Extras_h
+
+#import <MAD/RptqPoint.h>
 
 @interface RptqPoint (Extras)
 
++ (NSString *)keyX;
++ (NSString *)keyY;
+
 @end
+
+#endif

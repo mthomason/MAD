@@ -10,4 +10,16 @@
 
 @implementation RptqSize (Extras)
 
++ (NSString *)keyWidth {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(width));
+    return key;
+}
+
++ (NSString *)keyHeight {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(height));
+    return key;
+}
+
 @end

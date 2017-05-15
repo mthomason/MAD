@@ -6,8 +6,16 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MAD/MAD.h>
+#ifndef Reports_RptqRect_Extras_h
+#define Reports_RptqRect_Extras_h
+
+#import <MAD/RptqRect.h>
 
 @interface RptqRect (Extras)
 
++ (NSString *)keyOrigin;
++ (NSString *)keySize;
+
 @end
+
+#endif
