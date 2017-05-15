@@ -42,6 +42,11 @@
     return result;
 }
 
++ (NSString *)keyPathDropIndex {
+    NSString *result = NSStringFromSelector(@selector(dropIndex));
+    return result;
+}
+
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {
@@ -168,11 +173,19 @@
 }
 
 - (NSString *)queryAlias {
+    return [RptqQueryTable queryAliasForSchemaTableName:self.databaseSchemaTable.name
+                                              dropIndex:self.dropIndex];
+}
+
++ (NSString *)queryAliasForSchemaTableName:(NSString *)schemaTableName
+                                 dropIndex:(int64_t)dropIndex {
     char buf[22]; char *ptr;
-    ltoa(self.dropIndex, buf);
+    ltoa(dropIndex, buf);
     ptr = buf;
-    NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-    return [self.databaseSchemaTable.name stringByAppendingString:indexString];
+    NSString *indexString;
+    indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+    NSString *result = [schemaTableName stringByAppendingString:indexString];
+    return result;
 }
 
 - (BOOL)isEqualTo:(RptqQueryTable *)sender {

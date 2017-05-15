@@ -152,8 +152,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     if (self = [super init]) {
         _document = document;
         _initalLayout = YES;
-        MADPageViewAttributes *attributes = pageAttributes.copy;
-        self.pageViewAttributes = attributes;
+        _pageViewAttributes = pageAttributes.copy;
     }
     return self;
 }

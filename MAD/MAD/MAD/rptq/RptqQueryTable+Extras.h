@@ -25,10 +25,11 @@
                       managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
     + (NSString *)keyPathAlias;
+    + (NSString *)keyPathDropIndex;
 
     - (NSString *)queryAlias;
-    - (NSString *)tableAlias;
-
+    + (NSString *)queryAliasForSchemaTableName:(NSString *)schemaTableName
+                                     dropIndex:(int64_t)dropIndex;
 @end
 
 #endif

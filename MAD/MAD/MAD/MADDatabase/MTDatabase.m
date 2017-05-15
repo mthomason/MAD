@@ -129,6 +129,11 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return safeField;
 }
 
++ (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
+    id result = [[MADSafeQueryField alloc] initWithString: s];
+    return result;
+}
+
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
     id result = s.copy;
     return result;

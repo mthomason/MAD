@@ -260,13 +260,14 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     };
     
     
-    NSArray *propertiesToFetch = [[NSArray alloc] init];
+    //NSArray *propertiesToFetch = [[NSArray alloc] init];
     
-    NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
-    expressionDescription.name = keys[0].copy;
-    expressionDescription.expression = expressions[0];
-    expressionDescription.expressionResultType = types[0];
-    propertiesToFetch = [propertiesToFetch arrayByAddingObject:expressionDescription];
+    NSExpressionDescription *expressionSelf = [[NSExpressionDescription alloc] init];
+    expressionSelf.name = keys[0].copy;
+    expressionSelf.expression = expressions[0];
+    expressionSelf.expressionResultType = types[0];
+    //propertiesToFetch = [propertiesToFetch arrayByAddingObject:expressionDescription];
+    
 
     //expressionDescription = [[NSExpressionDescription alloc] init];
     //expressionDescription.name = keys[1].copy;
@@ -334,12 +335,14 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     request = [[NSFetchRequest alloc] initWithEntityName: entityName];
     request.predicate = predicate;
     request.resultType = NSDictionaryResultType;// NSManagedObjectResultType;
-    NSArray *properties = [[NSArray alloc] init];
-    NSExpression *objectID = [NSExpression expressionForEvaluatedObject];
-    request.propertiesToFetch = @[expressionDescription, @"border", @"padding"];// propertiesToFetch;
-    //request.includesSubentities = NO;
-    //request.includesPropertyValues = YES;
-    //request.returnsObjectsAsFaults = YES;
+    //NSArray *properties = [[NSArray alloc] init];
+    //NSExpression *objectID = [NSExpression expressionForEvaluatedObject];
+    NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionSelf,
+                                  @"border.width.top", @"border.width.bottom",
+                                  @"padding.top", @"padding.bottom",
+                                  @"margin.top", @"margin.bottom",
+                                  @"rect.origin.y", @"rect.size.height", nil];
+    request.propertiesToFetch = propertiesToFetch;
     
     for (NSUInteger i=0; i<expressionCount; i++) {
         //expressionDescription[i] = nil;

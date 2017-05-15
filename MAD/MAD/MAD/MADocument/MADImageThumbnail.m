@@ -167,27 +167,31 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
         CGContextClip(context);
         CGPathRelease(zagPath);
     }
-    
-    
-    CGContextSaveGState(context);
-    
-    [printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES];
-    
-    CGContextRestoreGState(context);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+
     id croppedImage;
     
-    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
-    croppedImage = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-    UIGraphicsEndImageContext();
-    
-    if (squareEffect) {
-        croppedImage = [self newImageMadeSquare:croppedImage];
+    @autoreleasepool {
+
+        CGContextSaveGState(context);
+        
+        [printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES];
+        
+        CGContextRestoreGState(context);
+        
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        
+        CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
+        croppedImage = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        UIGraphicsEndImageContext();
+        
+        if (squareEffect) {
+            croppedImage = [self newImageMadeSquare:croppedImage];
+        }
+        
+        image = nil;
+
     }
-    
-    image = nil;
     
     return croppedImage;
     

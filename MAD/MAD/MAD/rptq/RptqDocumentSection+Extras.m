@@ -235,9 +235,34 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
     return result;
 }
 
++ (NSString *)keyPathInGroupHasFieldInQueryTableDropIndex {
+    NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
+    NSString *keyPathInQueryTable = [RptqQueryField keyInQueryTable];
+    NSString *keyPathDropIndex = [RptqQueryTable keyPathDropIndex];
+    NSString *result = [self keyPathInGroup];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathHasField];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathInQueryTable];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathDropIndex];
+    return result;
+}
+
++ (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldDataType {
+    NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
+    NSString *keyPathSchemaFieldDataType = [RptqQueryField keySchemaFieldDataType];
+    NSString *result = [self keyPathInGroup];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathHasField];
+    result = [result stringByAppendingString:@"."];
+    result = [result stringByAppendingString:keyPathSchemaFieldDataType];
+    return result;
+}
+
 + (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections {
     
-    NSUInteger expressionCount = 18;
+    NSUInteger expressionCount = 20;
     NSExpressionDescription *expressionDescription[expressionCount];
     NSPredicate *predicate;
     //NSExpression *left, *right;
@@ -258,6 +283,8 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
              *keyPathInPageFooter = [self keyPathInPageFooter],
              *keyPathInReport = [self keyPathInReport],
              *keyPathInGroup = [self keyPathInGroup],
+             *keyPathInGroupHasFieldDatabaseSchemaFieldDataType = [self keyPathInGroupHasFieldDatabaseSchemaFieldDataType],
+             *keyPathInGroupHasFieldInQueryTableDropIndex = [self keyPathInGroupHasFieldInQueryTableDropIndex],
              *keySelf = NSStringFromSelector(@selector(self));
     
     NSUInteger expressionInQueryCount = 12;
@@ -345,6 +372,8 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
         keyPathInPageFooter,
         keyPathInGroup,
         keyPathInReport,
+        keyPathInGroupHasFieldDatabaseSchemaFieldDataType,
+        keyPathInGroupHasFieldInQueryTableDropIndex,
     };
 
     NSExpression *expressions[] = {
@@ -366,6 +395,8 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
         [NSExpression expressionForKeyPath: keyPathInPageFooter],
         [NSExpression expressionForKeyPath: keyPathInGroup],
         [NSExpression expressionForKeyPath: keyPathInReport],
+        [NSExpression expressionForKeyPath: keyPathInGroupHasFieldDatabaseSchemaFieldDataType],
+        [NSExpression expressionForKeyPath: keyPathInGroupHasFieldInQueryTableDropIndex],
     };
     
     NSAttributeType types[] = {
@@ -387,6 +418,8 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
         NSObjectIDAttributeType,
         NSObjectIDAttributeType,
         NSObjectIDAttributeType,
+        NSInteger16AttributeType,
+        NSInteger64AttributeType,
     };
     
     for (NSUInteger i=0; i<expressionCount; i++) {
@@ -398,28 +431,15 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
         
     NSString *entityName = NSStringFromClass([self class]);
     
-    NSFetchRequest *request;
-
-    //left = [NSExpression expressionForKeyPath:key];
-    //NSNumber *idn = @(identifier);
-    //right = [NSExpression expressionForConstantValue:idn];
-    //predicate = [NSComparisonPredicate predicateWithLeftExpression: left
-    //                                               rightExpression: right
-    //                                                      modifier: NSDirectPredicateModifier
-    //                                                          type: NSEqualToPredicateOperatorType
-    //                                                       options: 0];
-    request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
     request.predicate = predicate;
     
-    //request.fetchLimit = 1;
     NSArray *propertiesToFetch;
     propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
                                                    count: (NSUInteger)expressionCount];
     
     request.propertiesToFetch = propertiesToFetch;
     request.resultType = NSDictionaryResultType;
-    //request.includesSubentities = YES;
-    //request.includesPropertyValues = YES;
     
     for (NSUInteger i=0; i<expressionInQueryCount; i++) {
         pexpressions[i] = nil;
@@ -719,7 +739,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 }
 
 // This is the layout height for page rendering... the designer section height is stored in the db
-- (CGFloat)layoutHeightCalculated {
+/*- (CGFloat)layoutHeightCalculated {
     CGFloat resultHeight = CGSizeZero.height;
     CGPoint dropPoint; CGSize marginSize; CGRect elementCanvasRect; CGFloat totalHeight;
     if (self.visibility) {
@@ -738,7 +758,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
         }
     }
     return resultHeight;
-}
+}*/
 
 - (RptqDocument *)inRptqDocument {
     return [RptqDocumentSection rptqDocumentForSection:self];

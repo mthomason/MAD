@@ -303,25 +303,35 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     NSURL *urlFastCache = self.urlFastCache;
 
-    MTDatabaseSqlite3 *database; MADDatabaseConnection *connection;
     
     id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
     
-    database = [[MTDatabaseSqlite3 alloc] init];
-    database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
+    MTDatabaseSqlite3 *database;
+    MADDatabaseConnection *connection;
 
-    connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
-    database.databaseConnection = connection;
+    @autoreleasepool {
+        database = [[MTDatabaseSqlite3 alloc] init];
+        database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
+        
+        connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
+        database.databaseConnection = connection;
+        
+        [(MTDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
+         SQLITE_OPEN_CREATE |
+         SQLITE_OPEN_FULLMUTEX];
+        self.databaseForInserts = database;
+        database = nil;
+        connection = nil;
+    }
     
-    [(MTDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
-                                                          SQLITE_OPEN_CREATE |
-                                                          SQLITE_OPEN_FULLMUTEX];
-    self.databaseForInserts = database;
-    
-    connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
-    database = [MTDatabaseSqlite3 newDatabaseWithConnection:connection];
-    database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
-    self.databaseForSelects = database;
+    @autoreleasepool {
+        connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
+        database = [MTDatabaseSqlite3 newDatabaseWithConnection:connection];
+        database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
+        self.databaseForSelects = database;
+        database = nil;
+        connection = nil;
+    }
 }
 
 - (NSString *)tableName {

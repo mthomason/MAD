@@ -1361,6 +1361,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return [MTDatabaseSqlServer newSafeQueryField:fieldName andTable:tableName];
 }
 
++ (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
+    id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
+    return result;
+}
+
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
     id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
     return result;

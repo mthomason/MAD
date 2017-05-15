@@ -125,25 +125,26 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
-    MADSafeQueryField *safeQueryTable, *safeFieldName;
-    NSString *keyFirstPart, *key, *queryTable;
+    MADSafeQueryField *nameTablePart, *nameFieldPart;
+    NSString *keyForSort, *valueInQueryTableAlias;
     NSSortDescriptor *sort;
+    BOOL sortDirectionIsAscending;
     for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
         @autoreleasepool {
-            BOOL sortAscending = (queryGroup.sort == MADSortOrderAccending);
+            sortDirectionIsAscending = (queryGroup.sort == MADSortOrderAccending);
             RptqQueryField *groupField = queryGroup.hasField;
             
-            queryTable = [groupField.inQueryTable queryAlias];
+            valueInQueryTableAlias = [groupField.inQueryTable queryAlias];
 
-            safeQueryTable = [database newSafeIdentifier: queryTable];
-            keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
-
-            safeFieldName = [database newSafeIdentifier: groupField.databaseSchemaField.name];
-            key = [keyFirstPart stringByAppendingString: safeFieldName];
+            nameTablePart = [database newSafeIdentifier: valueInQueryTableAlias];
+            nameFieldPart = [database newSafeIdentifier: groupField.databaseSchemaField.name];
+            
+            keyForSort = [nameTablePart stringByAppendingString:@"."];
+            keyForSort = [keyForSort stringByAppendingString: nameFieldPart];
             
             SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType);
-            sort = [[NSSortDescriptor alloc] initWithKey: key
-                                               ascending: sortAscending
+            sort = [[NSSortDescriptor alloc] initWithKey: keyForSort
+                                               ascending: sortDirectionIsAscending
                                                 selector: sel];
             [sortedSortDescriptorsGroup addObject:sort];
         }

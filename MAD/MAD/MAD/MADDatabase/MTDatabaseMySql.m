@@ -219,6 +219,11 @@
     return safeIdentifier;
 }
 
++ (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
+    id result = [[NSString alloc] initWithFormat:@"`%@`", fieldOrTableName];
+    return result;
+}
+
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
     id safeIdentifier = [[NSString alloc] initWithFormat:@"`%@`", fieldOrTableName];
     return safeIdentifier;

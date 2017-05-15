@@ -511,21 +511,19 @@ void madwarn(char *err,  const char*err2) { }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
-    BOOL success;
-    MADArchiveManager *archiveManager;
-    NSString *pathExtension;
-    //@autoreleasepool {
-        pathExtension = url.pathExtension;
-        success = [url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument];
-        if (success) {
-        
+    BOOL success = NO;
+    @autoreleasepool {
+        if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
+            MADArchiveManager *archiveManager;
             archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
                                                                     archiveURL: url];
             success = [archiveManager unarchive];
         
         }
-        success = success ? [super readFromURL:_urlGuts error:outError] : NO;
-    //}
+    }
+    NSError *error = NULL;
+    success = success ? [super readFromURL:_urlGuts error:&error] : NO;
+    if (error) *outError = error;
     return success;
     
 }
@@ -900,11 +898,13 @@ void madwarn(char *err,  const char*err2) { }
         
         MADSectionLayoutManager *layoutManagerHeader;
         layoutManagerHeader = [[MADSectionLayoutManager alloc] initWithDocumentSection:headerSection];
-        self.sectionLayoutManagers[@(headerSection.identifier)] = layoutManagerHeader;
+        NSNumber *key = @(headerSection.identifier);
+        self.sectionLayoutManagers[key] = layoutManagerHeader;
         
         MADSectionLayoutManager *layoutManagerFooter;
         layoutManagerFooter = [[MADSectionLayoutManager alloc] initWithDocumentSection:footerSection];
-        self.sectionLayoutManagers[@(footerSection.identifier)] = layoutManagerFooter;
+        key = @(footerSection.identifier);
+        self.sectionLayoutManagers[key] = layoutManagerFooter;
 
 
         RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
@@ -1129,7 +1129,8 @@ void madwarn(char *err,  const char*err2) { }
                                                       fromObjectContext:private];
         RptqDocumentSection *parentSection = element.inSectionRow.inSection;
         MADSectionLayoutManager *layoutManager;
-        layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
+        NSNumber *key = @(parentSection.identifier);
+        layoutManager = self.sectionLayoutManagers[key];
         [RptqDocumentElement removeDocumentObject: element
                                 fromParentSection: parentSection
                                 withLayoutManager: layoutManager];
@@ -1168,7 +1169,8 @@ void madwarn(char *err,  const char*err2) { }
         MADSectionLayoutManager *layoutManager;
         for (documentObject in objectsToDelete) {
             parentSection = documentObject.inSectionRow.inSection;
-            layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
+            NSNumber *key = @(parentSection.identifier);
+            layoutManager = self.sectionLayoutManagers[key];
             [RptqDocumentElement removeDocumentObject:documentObject
                                     fromParentSection:parentSection
                                     withLayoutManager:layoutManager];
@@ -1202,8 +1204,9 @@ void madwarn(char *err,  const char*err2) { }
         MADSectionLayoutManager *layoutManager;
         for (RptqDocumentElement *documentObject in objectsToDelete) {
             parentSection = documentObject.inSectionRow.inSection;
-            
-            layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
+
+            NSNumber *key = @(parentSection.identifier);
+            layoutManager = self.sectionLayoutManagers[key];
             [RptqDocumentElement removeDocumentObject: documentObject
                                     fromParentSection: parentSection
                                     withLayoutManager: layoutManager];
@@ -1231,8 +1234,11 @@ void madwarn(char *err,  const char*err2) { }
             RptqDocumentSection *section0 = sections[0];
             RptqDocumentSection *section1 = sections[1];
             
-            [self.sectionLayoutManagers removeObjectForKey:@(section0.identifier)];
-            [self.sectionLayoutManagers removeObjectForKey:@(section1.identifier)];
+            NSNumber *key = @(section0.identifier);
+            [self.sectionLayoutManagers removeObjectForKey:key];
+
+            key = @(section1.identifier);
+            [self.sectionLayoutManagers removeObjectForKey:key];
             
             [group removeHasSectionObject: section0];
             [group removeHasSectionObject: section1];
@@ -1365,7 +1371,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark Helper
 
 - (NSString *)filename {
-    NSString *filename = self.fileURL.lastPathComponent.stringByDeletingPathExtension.copy;
+    NSString *filename = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
     return filename;
 }
 

@@ -112,70 +112,72 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message) {
 
     if (self.drawBlankPage) return;
     
-    // Draw Page
-    id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
-    MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
-    [printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
-    
-    if (delegatePage.pageNumber != 1) return;
-
-    // Draw Thumbnail
-    NSURL *thumbnailURL;
-    UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
-    NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-    size_t newImageSize = 0;
-    
-    const int kPngSignatureLength = 8;
-    //int BYTE_SIZE = sizeof(float);
-    
-    png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
-    [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
-    
-    FILE *fp = NULL;
-    void *compressedPNG = NULL;
-    
-    if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
-    
-    iodata_stream_t dstream;
-    
-    png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
-    png_infop info =  png_create_info_struct(p);
-    
-    if (info == NULL) {
-        png_destroy_read_struct(&p, NULL, NULL);
-    } else {
+    @autoreleasepool {
+        // Draw Page
+        id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
+        MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
+        [printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
         
-        dstream.i = 0;
-        dstream.m = (char *)pngImage.bytes;
-        png_set_read_fn(p, &dstream, mad_png_read_fn);
-        png_set_sig_bytes((png_structp)pngSignature, kPngSignatureLength);
+        if (delegatePage.pageNumber != 1) return;
+        
+        // Draw Thumbnail
+        NSURL *thumbnailURL;
+        UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
+        NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+        size_t newImageSize = 0;
+        
+        const int kPngSignatureLength = 8;
+        //int BYTE_SIZE = sizeof(float);
+        
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
+        [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
+        
+        FILE *fp = NULL;
+        void *compressedPNG = NULL;
+        
+        if (!png_check_sig(pngSignature, 8)) goto RegenThumbnailShortCircuit;
+        
+        iodata_stream_t dstream;
+        
+        png_structp p = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
+        png_infop info =  png_create_info_struct(p);
+        
+        if (info == NULL) {
+            png_destroy_read_struct(&p, NULL, NULL);
+        } else {
+            
+            dstream.i = 0;
+            dstream.m = (char *)pngImage.bytes;
+            png_set_read_fn(p, &dstream, mad_png_read_fn);
+            png_set_sig_bytes((png_structp)pngSignature, kPngSignatureLength);
+        }
+        png_byte numberOfChannels = png_get_channels(p, info);
+        png_uint_32 imageWidth = png_get_image_width(p, info);
+        png_sig_cmp(pngImage.bytes+kPngSignatureLength, (png_size_t)0, numberOfChannels*imageWidth);
+        
+        png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
+        png_uint_32 imageHeight = png_get_image_height(p, info);
+        compressedPNG = tdefl_write_image_to_png_file_in_memory_ex(p,
+                                                                   (int)imageWidth,
+                                                                   (int)imageHeight,
+                                                                   (int)numberOfChannels,
+                                                                   &newImageSize,
+                                                                   MZ_UBER_COMPRESSION, 0);
+        png_destroy_read_struct(&p, (png_infopp)NULL, NULL);
+        p = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
+        thumbnailURL = [delegatePage thumbnailURL];
+        const char *thumbnailPath = thumbnailURL.path.UTF8String;
+        fp = fopen(thumbnailPath, "wb");
+        png_init_io(p, fp);
+        png_write_png(p, info, PNG_TRANSFORM_IDENTITY, compressedPNG);
+        png_destroy_write_struct(&p, &info);
+    RegenThumbnailShortCircuit:;
+        free(compressedPNG);
+        free((void *)pngSignature);
+        fclose(fp);
+        thumbnail = nil;
     }
-    png_byte numberOfChannels = png_get_channels(p, info);
-    png_uint_32 imageWidth = png_get_image_width(p, info);
-    png_sig_cmp(pngImage.bytes+kPngSignatureLength, (png_size_t)0, numberOfChannels*imageWidth);
-    
-    png_read_png(p, info, PNG_TRANSFORM_IDENTITY, NULL);
-    png_uint_32 imageHeight = png_get_image_height(p, info);
-    compressedPNG = tdefl_write_image_to_png_file_in_memory_ex(p,
-                                                               (int)imageWidth,
-                                                               (int)imageHeight,
-                                                               (int)numberOfChannels,
-                                                               &newImageSize,
-                                                               MZ_UBER_COMPRESSION, 0);
-    png_destroy_read_struct(&p, (png_infopp)NULL, NULL);
-    p = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_warn_func);
-    thumbnailURL = [delegatePage thumbnailURL];
-    const char *thumbnailPath = thumbnailURL.path.UTF8String;
-    fp = fopen(thumbnailPath, "wb");
-    png_init_io(p, fp);
-    png_write_png(p, info, PNG_TRANSFORM_IDENTITY, compressedPNG);
-    png_destroy_write_struct(&p, &info);
-RegenThumbnailShortCircuit:;
-    free(compressedPNG);
-    free((void *)pngSignature);
-    fclose(fp);
-    thumbnail = nil;
-    
+
 }
 
 #pragma mark

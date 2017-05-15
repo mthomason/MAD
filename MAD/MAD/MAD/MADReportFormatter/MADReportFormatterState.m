@@ -19,7 +19,7 @@
 
 - (void)resetWithDataDelegate:(id <MADDataProtocol>)dataDelegate {
     NSArray *sortDescriptors = [dataDelegate sortDescriptors];
-    _sortDescriptors = [[NSArray alloc] initWithArray: sortDescriptors];
+    _sortDescriptors = sortDescriptors.copy;
     _rowCounter = 0;
     _groupCounter = 0;
     _pageCounter = 0;

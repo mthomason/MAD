@@ -719,7 +719,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (nullable MADDocumentPageController *)visiblePageViewController {
-    return self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
+    id result = self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
+    return result;
 }
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
@@ -747,7 +748,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                andPageAttributtes: pageAttributes];
 
         pageOne.view.frame = self.view.bounds;
-        pageOne.view.backgroundColor = self.view.backgroundColor;
+        pageOne.view.backgroundColor = self.view.backgroundColor.copy;
         pageOne.delegate = self;
     
         [self.view bringSubviewToFront: self.pageSlider];

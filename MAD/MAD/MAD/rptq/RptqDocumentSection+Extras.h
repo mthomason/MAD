@@ -34,20 +34,22 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     + (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections;
     + (NSString *)keyPathInReportHeader;
     + (NSString *)keyPathInReportFooter;
-+ (NSString *)keyPathNumberOfRows;
-+ (NSString *)keyPathType;
-+ (NSString *)keyPathWrappingStyle;
-+ (NSString *)keyPathVisibility;
-+ (NSString *)keyPathHeight;
-+ (NSString *)keyPathLayoutHeight;
-+ (NSString *)keyPathInGroupHasFieldInQueryTableAlias;
-+ (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldName;
-+ (NSString *)keyPathInGroupWeight;
-+ (NSString *)keyPathInGroupSort;
-+ (NSString *)keyPathInPageHeader;
-+ (NSString *)keyPathInPageFooter;
-+ (NSString *)keyPathInReport;
-+ (NSString *)keyPathInGroup;
+    + (NSString *)keyPathNumberOfRows;
+    + (NSString *)keyPathType;
+    + (NSString *)keyPathWrappingStyle;
+    + (NSString *)keyPathVisibility;
+    + (NSString *)keyPathHeight;
+    + (NSString *)keyPathLayoutHeight;
+    + (NSString *)keyPathInGroupHasFieldInQueryTableAlias;
+    + (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldName;
+    + (NSString *)keyPathInGroupWeight;
+    + (NSString *)keyPathInGroupSort;
+    + (NSString *)keyPathInPageHeader;
+    + (NSString *)keyPathInPageFooter;
+    + (NSString *)keyPathInReport;
+    + (NSString *)keyPathInGroup;
+    + (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldDataType;
+    + (NSString *)keyPathInGroupHasFieldInQueryTableDropIndex;
 
     + (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
                                 withNumberOfGroups:(NSUInteger)numberOfGroups;
@@ -60,8 +62,6 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     + (RptqDocumentSection *)headerSectionInSections:(NSSet <RptqDocumentSection *> *)sections;
 
     - (MADDocumentSectionType)getDocumentSectionType;
-
-    - (CGFloat)layoutHeightCalculated;
 
     - (NSString *)localizedDisplayName;
 

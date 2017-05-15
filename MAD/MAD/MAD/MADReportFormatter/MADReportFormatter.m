@@ -20,6 +20,7 @@
 
 #import <UIKit/UIPrintInteractionController.h>
 
+#import <MADFoundation/MADDataType.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADReportFormatterDataSourceProtocol.h"
@@ -39,8 +40,10 @@
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentElement+Extras.h"
 #import "RptqQuery+Extras.h"
+#import "RptqQueryTable+Extras.h"
 #import "RptqQueryGroup+Extras.h"
 
+#import "MTDatabase.h"
 #import "MADDatabaseField.h"
 
 #import "MADReportFormatterCache.h"
@@ -96,6 +99,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     @property (nonatomic, assign) NSUInteger numberOfRows;
     @property (nonatomic, assign, getter=isVisible) BOOL visibility;
     @property (nonatomic, assign) RptqDocumentSectionWrappingStyle wrappingStyle;
+    //@property (nonatomic, strong) NSArray *elements;
 
 @end
 
@@ -121,15 +125,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
                  *keyPathWrappingStyle = [RptqDocumentSection keyPathWrappingStyle],
                  *keyPathVisibility = [RptqDocumentSection keyPathVisibility],
                  *keyPathHeight = [RptqDocumentSection keyPathHeight],
-                 *keyPathLayoutHeight = [RptqDocumentSection keyPathLayoutHeight],
-                 *keyPathInGroupHasFieldInQueryTableAlias = [RptqDocumentSection keyPathInGroupHasFieldInQueryTableAlias],
-                 *keyPathInGroupHasFieldDatabaseSchemaFieldName = [RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldName],
-                 *keyPathInGroupWeight = [RptqDocumentSection keyPathInGroupWeight],
-                 *keyPathInGroupSort = [RptqDocumentSection keyPathInGroupSort],
-                 *keyPathInPageHeader = [RptqDocumentSection keyPathInPageHeader],
-                 *keyPathInPageFooter = [RptqDocumentSection keyPathInPageFooter],
-                 *keyPathInReport = [RptqDocumentSection keyPathInReport],
-                 *keyPathInGroup = [RptqDocumentSection keyPathInGroup],
                  *keySelf = NSStringFromSelector(@selector(self));
         
         NSNumber *number = object[keyIdentifier];
@@ -169,30 +164,72 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 
 @interface MADSectionGroupLayout : MADSectionLayout
 
-    @property (nonatomic, assign) int16_t sort;
+    @property (nonatomic, assign) MADSortOrder sort;
     @property (nonatomic, assign) int16_t weight;
+    @property (nonatomic, assign) int16_t dataType;
+    @property (nonatomic, copy) NSString * (^safeIdentifier)(NSString *);
 
 @end
 
-@implementation MADSectionGroupLayout
+@implementation MADSectionGroupLayout {
+    int64_t _dropIndex;
+    NSString *_tableAlias;
+    NSString *_fieldName;
+}
 
 - (instancetype)initWithObject:(NSDictionary *)object
-          managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+          managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+              safeIdentifier:(NSString * (^)(NSString *))safeIdentifier {
     if (self = [super initWithObject: object managedObjectContext: managedObjectContext]) {
         
         if (_type == MADDocumentSectionTypeGroupHeader || _type == MADDocumentSectionTypeGroupFooter) {
             NSString *keyPathInGroupWeight = [RptqDocumentSection keyPathInGroupWeight],
-                     *keyPathInGroupSort = [RptqDocumentSection keyPathInGroupSort];
+                     *keyPathInGroupSort = [RptqDocumentSection keyPathInGroupSort],
+                     *keyPathInGroupHasFieldDatabaseSchemaFieldDataType = [RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldDataType],
+                     *keyPathInGroupHasFieldInQueryTableAlias = [RptqDocumentSection keyPathInGroupHasFieldInQueryTableAlias],
+                     *keyPathInGroupHasFieldDatabaseSchemaFieldName = [RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldName],
+                     *keyPathInGroupHasFieldInQueryTableDropIndex = [RptqDocumentSection keyPathInGroupHasFieldInQueryTableDropIndex];
         
             NSNumber *number = object[keyPathInGroupSort];
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_sort);
 
             number = object[keyPathInGroupWeight];
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_weight);
+            
+            number = object[keyPathInGroupHasFieldDatabaseSchemaFieldDataType];
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_dataType);
+            
+            NSString *tableAlias = object[keyPathInGroupHasFieldInQueryTableAlias];
+            _tableAlias = tableAlias.copy;
+
+            NSString *fieldName = object[keyPathInGroupHasFieldDatabaseSchemaFieldName];
+            _fieldName = fieldName.copy;
+
+            number = object[keyPathInGroupHasFieldInQueryTableDropIndex];
+            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_dropIndex);
+
+            self.safeIdentifier = safeIdentifier;
         }
     
     }
     return self;
+}
+
+- (BOOL)sortAscending {
+    return _sort == MADSortOrderAccending;
+}
+
+- (NSSortDescriptor *)sortDescriptor {
+    NSString *queryTableAlias = [RptqQueryTable queryAliasForSchemaTableName:_tableAlias dropIndex:_dropIndex];
+    NSString *safeTableAlias = self.safeIdentifier(queryTableAlias);
+    NSString *safeFieldName = self.safeIdentifier(_fieldName);
+    NSString *sortKey = [safeTableAlias stringByAppendingString:@"."];
+    sortKey = [sortKey stringByAppendingString:safeFieldName];
+    SEL sel = MADDataTypeSelectorForSorting(_dataType);
+    id result = [[NSSortDescriptor alloc] initWithKey: sortKey
+                                            ascending: [self sortAscending]
+                                             selector: sel];
+    return result;
 }
 
 @end
@@ -215,7 +252,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 
 @implementation MADSectionsLayout
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                               databaseClass:(Class)databaseClass {
     if (self = [super init]) {
         NSFetchRequest *fetchRequestDocumentSections;
         fetchRequestDocumentSections = [RptqDocumentSection fetchRequestDocumentSections];
@@ -347,13 +385,17 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
             MADSectionGroupLayout *groupLayout;
             for (NSDictionary *objects in groupArray) {
                 groupLayout = [[MADSectionGroupLayout alloc] initWithObject: objects
-                                                       managedObjectContext: managedObjectContext];
+                                                       managedObjectContext: managedObjectContext
+                               safeIdentifier:^NSString *(NSString *identifier) {
+                                   id dbClass = databaseClass;
+                                   return [dbClass newSafeIdentifier:identifier];
+                               }];
                 switch (groupLayout.type) {
                     
                     case MADDocumentSectionTypeGroupHeader:
                         groupHeaders = [groupHeaders arrayByAddingObject: groupLayout];
                         break;
-                        
+                    
                     case MADDocumentSectionTypeGroupFooter:
                         groupFooters = [groupFooters arrayByAddingObject: groupLayout];
                         break;
@@ -578,7 +620,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     MADocument *layout = _layout;
     NSManagedObjectContext *managedObjectContext = layout.managedObjectContext;
     
-    MADSectionsLayout *sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: managedObjectContext];
+    MADSectionsLayout *sections;
+    Class databaseClass = [layout.database class];
+    sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: managedObjectContext
+                                                         databaseClass: databaseClass];
     self.sections = sections;
     
     //MADSectionLayout *sl = [[MADSectionLayout alloc] init];
@@ -610,6 +655,12 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     NSLog(@"%@", reportHeaderSections);
     */
     [self.machineState resetWithDataDelegate:self.dataDelegate];
+    NSUInteger i = 0;
+    for (MADSectionGroupLayout *groupSection in self.sections.groupHeaders) {
+        NSLog(@"Sort %lu: %@", (unsigned long)i, [groupSection sortDescriptor]);
+        NSLog(@"Sort %lu: %@", (unsigned long)i, self.machineState.sortDescriptors[i]);
+        i++;
+    }
 
     [layout resetSectionLayoutManagers];
     
