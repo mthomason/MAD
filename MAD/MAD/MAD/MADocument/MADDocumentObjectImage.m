@@ -14,20 +14,24 @@
 #import "RptqDocumentElement.h"
 
 @interface MADDocumentObjectImage ()
-    @property (nonatomic, weak) RptqDocumentElementImage *item;
+    @property (nonatomic, strong) UIImage *image;
 @end
 
 @implementation MADDocumentObjectImage
 
+- (void)dealloc {
+    _image = nil;
+}
+
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super init]) {
-        self.item = definition.item;
+        self.image = ((RptqDocumentElementImage *)definition.item).image.copy;
     }
     return self;
 }
 
 - (void)drawInRect:(CGRect)rect {
-    [(UIImage *)self.item.image drawInRect:rect];
+    [self.image drawInRect:rect];
 }
 
 @end

@@ -65,7 +65,6 @@
 #import "MADActivityReportPrintPreview.h"
 
 #import "MADDocumentPageController.h"
-#import "MADReportPageView.h"
 
 #import "MADSliderPageVertical.h"
 #import "MADLabelStatus.h"

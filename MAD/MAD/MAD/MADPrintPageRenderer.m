@@ -414,6 +414,8 @@ static inline CGRect SectionBounds(CGRect pageRect,
     MADReportSectionRepresentation *sectionRepresentation;
     
     self.dataReference.pageIndex = pageIndex;
+
+    NSNumber *sectionIdentifier;
     for (MADSectionRepresentation *pageSection in layoutEnumerator) {
 
         self.dataReference.detailRowId = pageSection.detailRowId;
@@ -421,8 +423,9 @@ static inline CGRect SectionBounds(CGRect pageRect,
         documentSection = [document documentSectionForType: pageSection.sectionType
                                                   andLevel: pageSection.groupLevel];
         
+        sectionIdentifier = @(documentSection.identifier);
         rect = SectionBounds(pageRect,
-                             HeightWithVisibility([reportFormatter heightForSectionWithObjectIdentifier:@(documentSection.identifier)],
+                             HeightWithVisibility([reportFormatter heightForSectionWithObjectIdentifier:sectionIdentifier],
                                                   documentSection.visibility),
                              documentSection.visibility,
                              pageSection.sectionType,
@@ -502,9 +505,6 @@ static inline CGRect SectionBounds(CGRect pageRect,
 
     MADReportLineRepresentation * _Nonnull line;
 
-    RptqDocumentSectionRows *row;
-    RptqDocumentElement *item;
-
     id drawingObject;
 
     NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
@@ -521,12 +521,12 @@ static inline CGRect SectionBounds(CGRect pageRect,
     [self setBackgroundColorForSectionType: type
                                     inRect: sectionRect];
     
-    for (row in rowsEnumerator) {
+    for (RptqDocumentSectionRows *row in rowsEnumerator) {
         
         documentObjectEnumerator = row.hasObjects.objectEnumerator;
         rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
         
-        for (item in documentObjectEnumerator) {
+        for (RptqDocumentElement *item in documentObjectEnumerator) {
 
             self.dataReference.item = item;
 

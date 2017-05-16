@@ -22,4 +22,16 @@
     return key;
 }
 
++ (NSString *)keyLeft {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(left));
+    return key;
+}
+
++ (NSString *)keyRight {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(right));
+    return key;
+}
+
 @end

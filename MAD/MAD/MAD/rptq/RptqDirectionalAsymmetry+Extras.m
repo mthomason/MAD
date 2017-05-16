@@ -19,4 +19,12 @@
     return [RptqDirectionalProperty keyBottom];
 }
 
++ (NSString *)keyLeft {
+    return [RptqDirectionalProperty keyLeft];
+}
+
++ (NSString *)keyRight {
+    return [RptqDirectionalProperty keyLeft];
+}
+
 @end

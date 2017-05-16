@@ -39,15 +39,15 @@
     definition = self.definition;
     item = definition.item;
     
-    attt = definition.fontDescriptors[item.objectID];
+    attt = definition.fontDescriptors[definition.item.objectID];
     
     if (attt == nil) {
-        attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
-                                                       fontSize: item.fontsize
-                                                      textStyle: item.textStyle
-                                            horizontalAlignment: item.alignment.horizontal];
+        attt = [[MADElementStylizedText alloc] initWithFontName: definition.item.fontname
+                                                       fontSize: definition.item.fontsize
+                                                      textStyle: definition.item.textStyle
+                                            horizontalAlignment: definition.item.alignment.horizontal];
         
-        definition.fontDescriptors[item.objectID] = attt;
+        definition.fontDescriptors[definition.item.objectID] = attt;
     }
     
     [self.text drawWithRect: rect

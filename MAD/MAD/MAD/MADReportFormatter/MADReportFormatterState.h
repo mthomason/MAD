@@ -29,7 +29,7 @@
     @property (nonatomic, assign) NSUInteger pageCounter;
     @property (nonatomic, assign) NSUInteger rowCounter;
 
-    @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
+    @property (nonatomic, assign) CGFloat cumulativePageHeight;
 
 @end
 

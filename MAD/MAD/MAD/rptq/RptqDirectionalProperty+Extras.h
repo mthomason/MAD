@@ -15,6 +15,8 @@
 
 + (NSString *)keyTop;
 + (NSString *)keyBottom;
++ (NSString *)keyLeft;
++ (NSString *)keyRight;
 
 @end
 

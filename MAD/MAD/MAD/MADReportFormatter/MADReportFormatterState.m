@@ -26,7 +26,7 @@
     _pageCounter = 0;
     _detailRowId = 0;
     _detailRowIdLast = 0;
-    _counterHeightUsedCurrentPage = 0.0000f;
+    _cumulativePageHeight = 0.0000f;
 }
 
 @end
