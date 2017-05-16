@@ -204,6 +204,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self.documentScroller removeFromSuperview];
     [self.documentView removeFromSuperview];
 }
 

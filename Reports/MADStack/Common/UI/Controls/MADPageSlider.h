@@ -17,15 +17,15 @@
 
 @interface MADPageSlider : UIVisualEffectView
 
+    @property (nonatomic) float value;
+    @property (nonatomic) float minimumValue;
+    @property (nonatomic) float maximumValue;
+
     @property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
 
     @property (readonly, weak, getter=pageSlider) MADSliderPageVertical *slider;
 
     @property (nonatomic, getter=isEnabled) BOOL enabled;
-
-    @property (nonatomic) float value;
-    @property (nonatomic) float minimumValue;
-    @property (nonatomic) float maximumValue;
 
 @end
 

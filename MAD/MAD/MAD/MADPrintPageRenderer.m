@@ -287,7 +287,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
 #pragma -
 #pragma Drawing Helpers
 
-- (UIColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type {
++ (UIColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type {
     switch (type) {
         case MADDocumentSectionTypeBody:
             return [UIColor redColor];
@@ -485,7 +485,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
     return sectionRepresentation;
 }
 
-- (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {
++ (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     [[self backgroundColorForDocumentSectionType:type] setFill];
     CGPathRef path = CGPathCreateWithRect(rect, NULL);
@@ -518,8 +518,8 @@ static inline CGRect SectionBounds(CGRect pageRect,
            documentSection.visibility))) goto END_DrawSection;
     
     MADDocumentSectionType type = [documentSection getDocumentSectionType];
-    [self setBackgroundColorForSectionType: type
-                                    inRect: sectionRect];
+    [MADPrintPageRenderer setBackgroundColorForSectionType: type
+                                                    inRect: sectionRect];
     
     for (RptqDocumentSectionRows *row in rowsEnumerator) {
         

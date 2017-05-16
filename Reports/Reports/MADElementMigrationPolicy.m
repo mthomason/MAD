@@ -43,7 +43,7 @@
 
 @implementation MADElementMigrationPolicy
 
-- (BOOL)createDestinationInstancesForSourceInstance:(NSManagedObject *)sInstance
+/*- (BOOL)createDestinationInstancesForSourceInstance:(NSManagedObject *)sInstance
                                       entityMapping:(NSEntityMapping *)mapping
                                             manager:(NSMigrationManager *)manager
                                               error:(NSError * _Nullable *)error{
@@ -51,7 +51,9 @@
                                                        entityMapping: mapping
                                                              manager: manager
                                                                error: error];
-    /*if ([sInstance.entity.name isEqualToString: @"RptqDocumentObject"]) {
+ */
+    /*
+     if ([sInstance.entity.name isEqualToString: @"RptqDocumentObject"]) {
         NSArray *sInstances = [[NSArray alloc] initWithObjects:sInstance, nil];
         NSArray<__kindof NSManagedObject *> *dInstances = [manager destinationInstancesForEntityMappingNamed: mapping.name
                                                                                              sourceInstances: sInstances];
@@ -70,8 +72,9 @@
         //    NSLog(@"%@", saveError);
        // }
     }*/
+/*
     return result;
-}
+}*/
 
 - (void)addBorderToElement:(RptqDocumentElement *)destinationElement
                fromElement:(NSManagedObject *)sourceElement

@@ -47,7 +47,6 @@ static inline CGFloat MaxDimension(CGSize size) {
 @interface MADPageSlider ()
 
     @property (nonatomic, weak) MADSliderPageVertical *slider;
-
     @property (nonatomic, weak) UIVisualEffectView *vibrancyView;
 
     @property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
@@ -55,8 +54,6 @@ static inline CGFloat MaxDimension(CGSize size) {
 
     @property (nonatomic, assign) CGRect lastRect;
     @property (nonatomic, assign) unsigned long lastNumberOfTicks;
-
-    @property (nonatomic, strong) NSShadow *shadow;
 
     @property (nonatomic, assign) BOOL enabledColor;
 
@@ -73,7 +70,9 @@ static inline CGFloat MaxDimension(CGSize size) {
     return CGSizeMake(bounds.size.width, bounds.size.height);
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+    _sliderDelegate = nil;
+}
 
 - (instancetype)init {
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
@@ -126,28 +125,6 @@ static inline CGFloat MaxDimension(CGSize size) {
         
     }
     return self;
-}
-
-- (void)removeFromSuperview {
-    [super removeFromSuperview];
-    NSArray <UILabel *> *labels = self.labels;
-    for (UILabel *label in labels) {
-        [label removeFromSuperview];
-    }
-    [self.slider removeFromSuperview];
-    [self.vibrancyView removeFromSuperview];
-    [self.labels removeAllObjects];
-}
-
-- (NSShadow *)shadow {
-    if (_shadow == nil) {
-        NSShadow *shadow = [[NSShadow alloc] init];
-        UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
-        shadow.shadowColor = shadowColor;
-        shadow.shadowOffset = CGSizeMake(0.0000f, -1.0000f);
-        _shadow = shadow;
-    }
-    return _shadow;
 }
 
 - (void)layoutSubviews {
@@ -237,6 +214,20 @@ static inline CGFloat MaxDimension(CGSize size) {
         }
         drawingPoint = CGPointMake(drawingPoint.x,
                                    drawingPoint.y + _stringHeight + distanceBetweenTicks);
+    }
+}
+
+- (void)didMoveToWindow {
+    [super didMoveToWindow];
+    if (self.window == nil) {
+        for (UILabel *label in self.labels) {
+            [label removeFromSuperview];
+        }
+        [self.vibrancyView removeFromSuperview];
+        [self.slider removeFromSuperview];
+        [self.labels removeAllObjects];
+        self.vibrancyView = nil;
+        self.slider = nil;
     }
 }
 

@@ -43,7 +43,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (instancetype)newURLDocumentArchiveForFileURL:(NSURL *)madUrl extension:(NSString *)extension {
-    NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
+    NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension;
     NSString *destinationName;
     destinationName = [name stringByAppendingPathExtension: extension];
     NSURL *destinationDirectoryUrl = [MADURL newURLLocalTemporaryDirectory];

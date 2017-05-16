@@ -81,15 +81,13 @@ static NSString * const keyContentScaleFactor   = @"f";
 - (instancetype)copyWithZone:(NSZone *)zone {
 
     MADPageViewAttributes *result = [[[self class] allocWithZone:zone] init];
-    result.contentScaleFactor = self.contentScaleFactor;
-    result.pageNumber = self.pageNumber;
-    result.numberOfPages = self.numberOfPages;
-    result.contentOffsetInital = self.contentOffsetInital;
-    result.contentSizeInital = self.contentSizeInital;
-    result.zoomScaleInital = self.zoomScaleInital;
-    
-    NSDate *reportLastCacheDate = self.reportLastCacheDate.copy;
-    result.reportLastCacheDate = reportLastCacheDate;
+    result.reportLastCacheDate = _reportLastCacheDate.copy;
+    result.contentScaleFactor = _contentScaleFactor;
+    result.pageNumber = _pageNumber;
+    result.numberOfPages = _numberOfPages;
+    result.contentOffsetInital = _contentOffsetInital;
+    result.contentSizeInital = _contentSizeInital;
+    result.zoomScaleInital = _zoomScaleInital;
 
     return result;
 }

@@ -155,8 +155,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
     @property (nonatomic, strong) UIBarButtonItem *barButtonLabelStatus;
 
-    @property (nonatomic, strong) NSMutableArray *toolbarItemsActive;
-
     @property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
     @property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
 
@@ -252,7 +250,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
         _timerLabelTimeSinceRefreh = nil;
     }
-    [_toolbarItemsActive removeAllObjects];
 }
 
 - (void)timerDealloc {
@@ -320,13 +317,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    NSMutableArray *toolbarItems;
-    NSArray *emptyArray = [[NSArray alloc] init];
-    toolbarItems = self.toolbarItems.mutableCopy;
-    [toolbarItems insertObject: self.barButtonLabelStatus atIndex: 0];
-    [self setToolbarItems: emptyArray animated: NO];
-    self.toolbarItemsActive = toolbarItems;
-
     self.pageSlider.sliderDelegate = self;
     
     self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
@@ -371,7 +361,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                      object:nil];
     [invokeUpdateRecordsRead addDependency:opLoadPtr];
     
-    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:_pageSlider selector:@selector(setNeedsLayout) object:nil];
+    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:self.pageSlider selector:@selector(setNeedsLayout) object:nil];
     [invokePageSliderNeedsLayout addDependency:opLoadPtr];
 
     invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setLastCacheDate:) object:[NSDate date]];
@@ -409,7 +399,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     self.presentationController.delegate = self;
     
     MADPageSlider *pageSlider = self.pageSlider;
@@ -418,6 +408,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    NSArray *emptyArray = [[NSArray alloc] init];
+    [self setToolbarItems: emptyArray animated: animated];
+    //[self.navigationController setToolbarHidden:YES animated:animated];
+    self.pageSlider.sliderDelegate = nil;
+    [self.pageSlider removeFromSuperview];
+    //[self setViewControllers: nil
+    //               direction: UIPageViewControllerNavigationDirectionForward
+    //                animated: animated completion: nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -450,7 +452,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                     animated: animated
                   completion: ^(BOOL finished) { }];
 
-    [self setToolbarItems: self.toolbarItemsActive animated:animated];
+    NSMutableArray *toolbarItems;
+    toolbarItems = self.toolbarItems.mutableCopy;
+    [toolbarItems insertObject: self.barButtonLabelStatus atIndex: 0];
+    [self setToolbarItems: toolbarItems animated:animated];
+    
     [self.navigationController setToolbarHidden:NO animated:animated];
     [self updateTimeSinceLastRefresh:self];
     
@@ -472,20 +478,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    NSArray *emptyArray = [[NSArray alloc] init];
-    [self setToolbarItems: emptyArray animated: animated];
-    //[self.navigationController setToolbarHidden:YES animated:animated];
-}
-
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.tabBarController.navigationItem setRightBarButtonItem:nil];
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self timerDealloc];
-    _pageSlider.sliderDelegate = nil;
-    [_pageSlider removeFromSuperview];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -536,7 +533,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                      object:nil];
     [invokeUpdateRecordsRead addDependency:invokeUpdateNumberOfPages];
     
-    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:_pageSlider
+    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:self.pageSlider
                                                                        selector:@selector(setNeedsLayout)
                                                                          object:nil];
     [invokePageSliderNeedsLayout addDependency:invokeUpdateRecordsRead];
@@ -1073,7 +1070,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     if (self) {
         MADDocumentPageController *pageOne =
         [MADDocumentPageController newReportPageViewControllerWithDocument: document
-                                                              pageAttributes: pageAttributes];
+                                                            pageAttributes: pageAttributes];
         pageOne.view.frame = self.view.bounds;
         pageOne.delegate = self;
         
@@ -1496,7 +1493,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [debug appendFormat:@"Page Slider:                      %@\n", self.pageSlider];
     [debug appendFormat:@"Bar Button Item Activity:         %@\n", self.barButtonItemActivity];
     [debug appendFormat:@"Bar Button Label Status:          %@\n", self.barButtonLabelStatus];
-    [debug appendFormat:@"Toolbar Items Active:             %@\n", self.toolbarItemsActive];
     [debug appendFormat:@"Print Page Renderer Report:       %@\n", self.printPageRendererReport];
     [debug appendFormat:@"Activity Item ProviderPdf:        %@\n", self.activityItemProviderPdf];
     [debug appendFormat:@"Background Task Id Refresh:       %lu\n", (unsigned long)self.backgroundTaskIdRefresh];
