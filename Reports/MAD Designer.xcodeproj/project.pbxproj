@@ -2540,6 +2540,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4CB98A921E13839400B3A580 /* MADDataStructures.framework in Frameworks */,
 				4CB98A941E13839400B3A580 /* MADCocoaExtensions.framework in Frameworks */,
 				4CB98AA61E1383DC00B3A580 /* MADFileManager.framework in Frameworks */,
@@ -2569,7 +2570,6 @@
 				4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
-				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */,
 				4CA54D341893828B006B301A /* libc++.dylib in Frameworks */,
 				4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */,
