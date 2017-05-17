@@ -39,6 +39,13 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
     NSString *_extension;
 }
 
+- (void)dealloc {
+    _delegate = nil;
+    [_batchInserts removeAllIndexes];
+    [_batchRemoves removeAllIndexes];
+    [_batchUpdates removeAllIndexes];
+}
+
 - (instancetype)init {
     return [self initWithFileExtension:nil cellConfiguration:nil];
 }
@@ -161,9 +168,9 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 - (void)filesControllerDidChangeContent:(MADFilesController *)filesController
                              completion:(void (^)(BOOL, NSError *))completion {
 
-    NSMutableArray *inserts = [[NSMutableArray alloc] initWithCapacity: _batchInserts.count],
-                   *removes = [[NSMutableArray alloc] initWithCapacity: _batchRemoves.count],
-                   *updates = [[NSMutableArray alloc] initWithCapacity: _batchUpdates.count];
+    NSMutableArray <NSIndexPath *> *inserts = [[NSMutableArray alloc] initWithCapacity: _batchInserts.count],
+                                   *removes = [[NSMutableArray alloc] initWithCapacity: _batchRemoves.count],
+                                   *updates = [[NSMutableArray alloc] initWithCapacity: _batchUpdates.count];
 
     NSIndexPath *path;
     NSUInteger i;
@@ -199,6 +206,8 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
                                            removes: removes
                                            updates: updates
                                         completion: handleCompletion];
+
+    [inserts removeAllObjects], [removes removeAllObjects], [updates removeAllObjects];
 
 }
 

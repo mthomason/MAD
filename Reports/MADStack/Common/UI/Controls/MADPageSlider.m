@@ -72,6 +72,7 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 - (void)dealloc {
     _sliderDelegate = nil;
+    [_labels removeAllObjects];
 }
 
 - (instancetype)init {

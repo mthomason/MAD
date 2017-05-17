@@ -37,10 +37,10 @@
                                                           message: localizedMessage
                                                    preferredStyle: UIAlertControllerStyleAlert];
 
-    actionYes = [UIAlertAction actionWithTitle: yes
+    actionYes = [UIAlertAction actionWithTitle: localizedYes
                                          style: UIAlertActionStyleDefault
                                        handler: handler];
-    actionCancel = [UIAlertAction actionWithTitle: cancel
+    actionCancel = [UIAlertAction actionWithTitle: localizedCancel
                                             style: UIAlertActionStyleCancel
                                           handler: handlerCancel];
 

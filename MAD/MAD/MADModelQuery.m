@@ -60,7 +60,12 @@
     @synthesize managedObjectContext = _managedObjectContext;
 
 - (void)dealloc {
+    [_queryTableIDs removeAllObjects];
+    [_queryLinkIDs removeAllObjects];
+    [_tables removeAllObjects];
+    [_links removeAllObjects];
     _inDatabase = nil;
+    _managedObjectContext = nil;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
@@ -154,17 +159,16 @@
     return _links;
 }
 
-- (NSSet <MADTableFieldReference *> *)tableFieldReferencesInLinks {
+/*- (NSSet <MADTableFieldReference *> *)tableFieldReferencesInLinks {
     NSEnumerator <MADModelQueryLink *> *links = _links.objectEnumerator;
     MADModelQueryLink *link;
     NSSet *tablesInLinks;
     tablesInLinks = [[NSMutableSet alloc] initWithCapacity:_links.count * 2];
     for (link in links) {
         tablesInLinks = [tablesInLinks setByAddingObjectsFromSet: link.tableFieldReferences];
-        
     }
     return tablesInLinks;
-}
+}*/
 
 - (NSSet <NSNumber *> *)tablesInLinks {
     NSEnumerator <MADModelQueryLink *> *links = _links.objectEnumerator;

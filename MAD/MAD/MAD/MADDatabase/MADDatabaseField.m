@@ -14,6 +14,7 @@
 #import "NSData+Comparson.h"
 #import <Foundation/NSString.h>
 #import <MADFoundation/MADDataType.h>
+#import "RptqDatabaseSchemaField.h"
 
 static inline BOOL isDataTypeNumeric(MADDataType type);
 static inline BOOL isDataTypeNumeric(MADDataType type) {
@@ -63,10 +64,19 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
     return self;
 }
 
++ (instancetype)newDatabaseFieldWithSchemaField:(RptqDatabaseSchemaField *)schemaField {
+    MADDatabaseField *result = [[MADDatabaseField alloc] init];
+    result.name = schemaField.name.copy;
+    result.fieldType = schemaField.dataType;
+    result.fieldTypeNative = schemaField.dataTypeNative;
+    result.decimals = schemaField.decimals;
+    result.primaryKey = schemaField.primaryKey;
+    return result;
+}
+
 - (instancetype)copyWithZone:(NSZone *)zone {
     MADDatabaseField *copy = [[[self class] allocWithZone:zone] init];
-    NSString *name = _name.copy;
-    copy.name = name;
+    copy.name = _name.copy;
     copy.fieldType = _fieldType;
     copy.fieldTypeNative = _fieldTypeNative;
     copy.width = _width;

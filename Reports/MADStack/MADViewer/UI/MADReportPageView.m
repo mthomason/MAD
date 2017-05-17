@@ -127,9 +127,9 @@ static void png_warn_func(png_structp png_ptr, png_const_charp message) {
         size_t newImageSize = 0;
         
         const int kPngSignatureLength = 8;
-        //int BYTE_SIZE = sizeof(float);
+        unsigned long BYTE_SIZE_local = sizeof(float);
         
-        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE);
+        png_const_bytep pngSignature = malloc(kPngSignatureLength * BYTE_SIZE_local);
         [pngImage getBytes:(void *)pngSignature range:NSMakeRange(0, kPngSignatureLength)];
         
         FILE *fp = NULL;

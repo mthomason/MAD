@@ -42,7 +42,10 @@
 @dynamic name;
 
 - (void)dealloc {
+    [_fieldIDs removeAllObjects];
+    [_fields removeAllObjects];
     _inDatabase = nil;
+    _managedObjectContext = nil;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier {
@@ -201,8 +204,9 @@
     NSPredicate *predicate;
     NSExpression *predicateExpression[2];
     
+    NSNumber *identifierObject = @(self.identifier);
     predicateExpression[0] = [NSExpression expressionForKeyPath: keyInTableIdentifier];
-    predicateExpression[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
+    predicateExpression[1] = [NSExpression expressionForConstantValue: identifierObject];
     
     predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
                                                    rightExpression: predicateExpression[1]

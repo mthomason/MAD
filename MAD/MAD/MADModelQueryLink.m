@@ -23,12 +23,12 @@
 
 @interface MADModelQueryLink ()
 
+@property (nonatomic, readwrite, strong) MADTableFieldIdentifier *leftFieldIdentifier;
+@property (nonatomic, readwrite, strong) MADTableFieldIdentifier *rightFieldIdentifier;
+
 @end
 
-@implementation MADModelQueryLink {
-    MADTableFieldIdentifier *_leftFieldIdentifier;
-    MADTableFieldIdentifier *_rightFieldIdentifier;
-}
+@implementation MADModelQueryLink
 
 + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate {
     NSFetchRequest *fetchRequest;
@@ -128,10 +128,10 @@
         MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
         leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rightTableID
                                                                     andFieldID: rightFieldID];
-        _leftFieldIdentifier = leftFieldIdentifier;
+        self.leftFieldIdentifier = leftFieldIdentifier;
         rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
                                                                      andFieldID: leftFieldID];
-        _rightFieldIdentifier = rightFieldIdentifier;
+        self.rightFieldIdentifier = rightFieldIdentifier;
         
     }
     return self;
@@ -145,11 +145,11 @@
     return tables;
 }
 
-- (NSSet <MADTableFieldReference *> *)tableFieldReferences {
+/*- (NSSet <MADTableFieldReference *> *)tableFieldReferences {
     NSSet *tables = [[NSSet alloc] initWithObjects:_leftFieldReference,
                                                    _rightFieldReference, nil];
     return tables;
-}
+}*/
 
 /*- (NSString *)debugDescription {
     NSString *debugDescription;

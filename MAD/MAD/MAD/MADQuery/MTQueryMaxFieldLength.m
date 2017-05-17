@@ -17,6 +17,7 @@
 
 #import "MTDatabase.h"
 #import "MADDatabaseConnection.h"
+#import "MADDatabaseField.h"
 
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
@@ -66,9 +67,9 @@
         
         for (RptqDatabaseSchemaField *field in fields) {
             
-            MADDatabaseField *dbField = [field databaseFieldWrapper];
+            MADDatabaseField *dbField = [MADDatabaseField newDatabaseFieldWithSchemaField:field];
             RptqDatabaseSchemaTable *table = field.inTable;
-            
+
             [tables addObject:table];
 
             NSString *fieldAliasSafe = [self.database fieldAliasForField:field.name

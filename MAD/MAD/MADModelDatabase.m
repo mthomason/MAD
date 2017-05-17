@@ -62,6 +62,13 @@
 
 @synthesize queries = _queries;
 
+- (void)dealloc {
+    [_tables removeAllObjects];
+    [_tableDictionary removeAllObjects];
+    _queries = nil;
+    _managedObjectContext = nil;
+}
+
 - (NSManagedObjectContext *)managedObjectContext {
     return _managedObjectContext;
 }

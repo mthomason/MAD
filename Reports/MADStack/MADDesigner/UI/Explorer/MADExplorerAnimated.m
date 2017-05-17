@@ -107,35 +107,24 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
     toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     
     [[transitionContext containerView] addSubview:toView];
-    
-    void(^animationToolbarPushing)(UINavigationController *, BOOL);
-    animationToolbarPushing = ^(UINavigationController *navigationController, BOOL pushFileExplorder){
-        if (pushFileExplorder) {
-            navigationController.toolbar.alpha = 0.0;
-            [navigationController setToolbarHidden: NO animated:NO];
-        }
-    };
-    
-    void(^animationToolbarPopping)(UINavigationController *, BOOL);
-    animationToolbarPopping = ^(UINavigationController *navigationController, BOOL popFileExplorder){
-        if (popFileExplorder) {
-            navigationController.toolbar.alpha = 1.0;
-            [navigationController setToolbarHidden: NO animated:NO];
-        }
-    };
-    
-    
-    animationToolbarPushing(toViewController.navigationController, pushingFileExplorer);
-    animationToolbarPopping(fromViewController.navigationController, poppingFileExplorer);
-    
+
+    if (pushingFileExplorer) {
+        //toViewController.navigationController.toolbar.alpha = 0.0;
+        //[toViewController.navigationController setToolbarHidden: NO animated:NO];
+    }
+    if (poppingFileExplorer) {
+        //fromViewController.navigationController.toolbar.alpha = 1.0;
+        //[fromViewController.navigationController setToolbarHidden: NO animated:NO];
+    }
+
     toView.alpha = 0.0;
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
 
         toView.alpha = 1.0;
         if (pushingFileExplorer) {
-            toViewController.navigationController.toolbar.alpha = 1.0;
+            //toViewController.navigationController.toolbar.alpha = 1.0;
         } else if (poppingFileExplorer) {
-            fromViewController.navigationController.toolbar.alpha = 0.0;
+            //fromViewController.navigationController.toolbar.alpha = 0.0;
         }
         [toViewController.view setNeedsLayout];
         
@@ -146,9 +135,9 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
 
             if (!(canceled = [transitionContext transitionWasCancelled])) {
                 if (pushingFileExplorer) {
-                    [toViewController.navigationController setToolbarHidden: NO animated:NO];
+                    //[toViewController.navigationController setToolbarHidden: NO animated:NO];
                 } else if (poppingFileExplorer) {
-                    [fromViewController.navigationController setToolbarHidden: YES animated:NO];
+                    //[fromViewController.navigationController setToolbarHidden: YES animated:NO];
                 }
                 [fromView removeFromSuperview];
             }

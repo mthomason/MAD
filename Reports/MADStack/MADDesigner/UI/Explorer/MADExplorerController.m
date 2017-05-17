@@ -542,8 +542,8 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     [self.navigationItem setRightBarButtonItem: _barButtonItemEdit
                                       animated: animated];
-
-    _barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
+    BOOL canMakePayments = [SKPaymentQueue canMakePayments];
+    _barButtonItemLicensing.enabled = canMakePayments;
 
     if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
         NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;

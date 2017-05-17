@@ -78,16 +78,6 @@
     return rptqField;
 }
 
-- (MADDatabaseField *)databaseFieldWrapper {
-    MADDatabaseField *result = [[MADDatabaseField alloc] init];
-    result.name = self.name;
-    result.fieldType = self.dataType;
-    result.fieldTypeNative = self.dataTypeNative;
-    result.decimals = self.decimals;
-    result.primaryKey = self.primaryKey;
-    return result;
-}
-
 + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
        andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     return (RptqDatabaseSchemaField *)[managedObjectContext objectWithID:objectID];

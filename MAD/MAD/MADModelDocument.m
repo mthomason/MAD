@@ -55,6 +55,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     [notificationCenter removeObserver:_observeChangeNotification];
     [notificationCenter removeObserver:_observeWillSaveNotification];
     [notificationCenter removeObserver:_observeDidSaveNotification];
+    _managedObjectContext = nil;
 }
 
 - (instancetype)init {

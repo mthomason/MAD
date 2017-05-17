@@ -30,7 +30,7 @@
     @property (nonatomic, readonly, strong) MADTableFieldIdentifier *leftFieldIdentifier;
     @property (nonatomic, readonly, strong) MADTableFieldIdentifier *rightFieldIdentifier;
 
-    - (NSSet <MADTableFieldReference *> *)tableFieldReferences;
+    //- (NSSet <MADTableFieldReference *> *)tableFieldReferences;
     - (NSSet <NSNumber *> *)tables;
 
 @end

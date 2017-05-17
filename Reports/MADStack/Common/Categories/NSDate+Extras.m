@@ -79,6 +79,10 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 
 @implementation MADDateFromTimeFormatter
 
+- (void)dealloc {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (instancetype)init {
     if (self = [super init]) {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];

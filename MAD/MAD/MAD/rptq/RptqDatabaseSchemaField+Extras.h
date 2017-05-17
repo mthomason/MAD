@@ -19,7 +19,6 @@
     + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                                 andField:(MADDatabaseField *)field;
 
-    - (MADDatabaseField *)databaseFieldWrapper;
     + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
                      andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

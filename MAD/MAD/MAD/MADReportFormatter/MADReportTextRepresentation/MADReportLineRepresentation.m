@@ -22,7 +22,9 @@
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 @synthesize frame = _frame;
 
-- (void)dealloc { }
+- (void)dealloc {
+    _object = nil;
+}
 
 - (instancetype)init {
     return [self initWithObject:@"" type:MTDocumentObjectTypeLabelStatic frame:CGRectZero];

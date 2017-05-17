@@ -41,7 +41,10 @@
 @dynamic schemaTable;
 
 - (void)dealloc {
+    [_queryFields removeAllObjects];
+    [_queryFieldIDs removeAllObjects];
     _inQuery = nil;
+    _database = nil;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier {

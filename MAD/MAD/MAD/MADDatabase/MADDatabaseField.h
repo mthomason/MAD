@@ -12,10 +12,13 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
+@class RptqDatabaseSchemaField;
+
 @interface MADDatabaseField : NSObject
     <NSCopying>
     
     - (instancetype)initWithName:(NSString *)name;
+    + (instancetype)newDatabaseFieldWithSchemaField:(RptqDatabaseSchemaField *)schemaField;
 
     @property (nonatomic, copy) NSString *name;
     @property (nonatomic, assign) NSUInteger calculatedWidth;

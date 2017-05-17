@@ -34,10 +34,6 @@ void invalidateTimer(NSTimer *t) {
     }
 }
 
-- (void)dealloc {
-    invalidateTimer(_timerLabelTimeSinceRefreh);
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         UIView *view = [[UIView alloc] initWithFrame:frame];
@@ -62,6 +58,13 @@ void invalidateTimer(NSTimer *t) {
         self.label = label;
     }
     return self;
+}
+
+- (void)didMoveToWindow {
+    if (self.window == nil) {
+        invalidateTimer(_timerLabelTimeSinceRefreh);
+        _dateTimeFormatter = nil;
+    }
 }
 
 - (MADDateFromTimeFormatter *)dateTimeFormatter {

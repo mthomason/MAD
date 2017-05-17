@@ -123,7 +123,14 @@
 
 - (void)navigationController:(UINavigationController *)navigationController
       willShowViewController:(UIViewController *)viewController
-                    animated:(BOOL)animated { }
+                    animated:(BOOL)animated {
+    if ([viewController isKindOfClass:[MADExplorerController class]]) {
+        [self setToolbarHidden: NO animated: animated];
+    } else {
+        [self setToolbarHidden: YES animated: animated];
+    }
+    
+}
 
 - (void)navigationController:(UINavigationController *)navigationController
        didShowViewController:(UIViewController *)viewController

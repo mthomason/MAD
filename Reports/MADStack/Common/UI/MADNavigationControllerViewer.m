@@ -10,33 +10,31 @@
 #import "MADViewerController.h"
 
 @interface MADNavigationControllerViewer ()
-    @property (nonatomic, strong) MADViewerController *viewerController;
 @end
 
 @implementation MADNavigationControllerViewer
 
-@synthesize title = _title;
 @synthesize document = _document;
+
+- (void)dealloc {
+    _viewControllerDelegate = nil;
+    _document = nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    id rootViewController = [MADViewerController newViewerController: _document];
-    self.viewerController = rootViewController;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (self.viewControllers.count == 0) {
-        [self pushViewController:self.viewerController animated:animated];
+        id rootViewController = [MADViewerController newViewerController: _document];
+        [self pushViewController:rootViewController animated:animated];
     }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (self.isBeingDismissed) {
-        NSArray *viewControllers = [[NSArray alloc] init];
-        [self setViewControllers:viewControllers animated:animated];
-    }
 }
 
 + (UIImage *)newTabBarImage {
@@ -44,11 +42,7 @@
 }
 
 - (NSString *)title {
-    if (_title == nil) {
-        _title = self.viewerController == nil ?
-                    [MADViewerController Title] : self.viewerController.title;
-    }
-    return _title;
+    return self.viewControllers.count > 0 ? self.viewControllers.firstObject.title : [MADViewerController Title];
 }
 
 - (void)setDocument:(MADocument *)document {
@@ -59,6 +53,12 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)animated completion:(void (^)(void))completion {
+    [super dismissViewControllerAnimated:animated completion:completion];
+    NSArray *viewControllers = [[NSArray alloc] init];
+    [self setViewControllers:viewControllers animated:animated];
 }
 
 @end

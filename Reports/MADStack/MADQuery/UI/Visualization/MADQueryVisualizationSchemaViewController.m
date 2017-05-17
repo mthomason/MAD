@@ -232,9 +232,11 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     
     MADModelDocument *doc = _document.documentModel;
-    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+    NSNumber *key = @(_identifierSchemaTable);
+    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: key];
     NSNumber *schemaFieldID = [table.fieldIDs objectAtIndex:(NSUInteger)indexPath.row];
     MADModelField *field = [table.fields objectForKey:schemaFieldID];
+    
     MTSchemaFieldCell *cell = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
     cell.detailLabel.text = field.name.copy;
     return cell;

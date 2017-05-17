@@ -151,10 +151,20 @@
     if (navigationItem.rightBarButtonItem)
         [navigationItem setRightBarButtonItem: nil animated: animated];
 
+    for (id viewController in self.viewControllers) {
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            [((UINavigationController *)viewController) dismissViewControllerAnimated:animated completion:^{
+                
+            }];
+        }
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear: animated];
     [self setViewControllers: nil animated: animated];
     [self.navigationItem setLeftBarButtonItem:nil animated:animated];
     [self.navigationItem setRightBarButtonItem:nil animated:animated];;
-    
 }
 
 - (id <UILayoutSupport>)topLayoutGuide {

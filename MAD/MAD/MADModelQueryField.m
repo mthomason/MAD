@@ -16,18 +16,20 @@
 
 #import "MADModelDatabase.h"
 #import "MADModelTable.h"
+#import "MADModelField.h"
 
 @interface MADModelQueryField ()
 
 @end
 
 @implementation MADModelQueryField {
-    MADModelDatabase *_database;
+    MADModelDatabase * __weak _database;
     int64_t _schemaTable;
     int64_t _schemaField;
 }
 
 - (void)dealloc {
+    _database = nil;
     _inQueryTable = nil;
 }
 
@@ -49,7 +51,10 @@
 }
 
 - (MADModelField *)schemaField {
-    return [[_database.tableDictionary objectForKey:@(_schemaTable)].fields objectForKey:@(_schemaField)];
+    NSNumber *keyTable = @(_schemaTable), *keyField = @(_schemaField);
+    MADModelTable *table = [_database.tableDictionary objectForKey:keyTable];
+    MADModelField *field = [table.fields objectForKey:keyField];
+    return field;
 }
 
 - (int64_t) schemaFieldIdentifier {
