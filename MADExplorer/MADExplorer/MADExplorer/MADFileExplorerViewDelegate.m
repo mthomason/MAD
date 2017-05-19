@@ -167,7 +167,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 }
 
 - (void)setEditing:(BOOL)editing {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, editing ? @"YES" : @"NO");
+    //NSLog(@"%s: %@", __PRETTY_FUNCTION__, editing ? @"YES" : @"NO");
     if (_editing != editing) {
         _editing = editing;
     }
@@ -199,7 +199,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
@@ -228,7 +228,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
   didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     id gestureToRemove = _longPressGestures[hash];
@@ -254,13 +254,13 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                             shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return YES;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
                                         didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.highlighted[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 }
 
@@ -269,7 +269,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
                                         didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     [self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 }
 
@@ -277,13 +277,13 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                             shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return YES;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
                             didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     [self.selected[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 
@@ -306,11 +306,32 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     [self invokeOperationDidChangeNumberOfItemsSelected:collectionView];
     
 }
+
+- (void)collectionView:(UICollectionView *)collectionView allowSelection:(BOOL)allowSelection {
+
+    if (allowSelection) {
+        NSInteger section = 0;
+        for (NSMutableIndexSet *selectedSections in self.selected) {
+            [selectedSections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                MADCollectionViewCellDocument *cell;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger)idx
+                                                             inSection:section];
+                cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+                if (cell != nil) cell.working = NO;
+
+            }];
+            section++;
+        }
+        [self.selected removeAllObjects];
+    }
+    collectionView.allowsSelection = allowSelection;
+}
+
 #pragma mark Deselect Item
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                             shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     
     return _editing ?
         [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] :
@@ -320,7 +341,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
                             didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     MADCollectionViewCellDocument *cell;
     cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.working = NO;
@@ -332,12 +353,12 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
          performAction:(SEL)action
     forItemAtIndexPath:(NSIndexPath *)indexPath
             withSender:(id)sender {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                             shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
     return NO;
 }
 
@@ -375,7 +396,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
     CGFloat sizeLabel[2];
     UIFont *font;

@@ -1134,7 +1134,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     NSManagedObjectID *objid = cell.tableID;
     NSManagedObject *predicate = [document.managedObjectContext objectWithID:objid];
     [document.managedObjectContext deleteObject:predicate];
-    [document.managedObjectContext save:nil];
+    NSError *error = NULL;
+    if ([document.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)deleteItemFromQuerySection: (MADIdentifierQueryViewSections)section

@@ -512,7 +512,7 @@ void madwarn(char *err,  const char*err2) { }
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
     BOOL success = NO;
-    @autoreleasepool {
+    //@autoreleasepool {
         if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
             MADArchiveManager *archiveManager;
             archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
@@ -520,7 +520,7 @@ void madwarn(char *err,  const char*err2) { }
             success = [archiveManager unarchive];
         
         }
-    }
+    //}
     NSError *error = NULL;
     success = success ? [super readFromURL:_urlGuts error:&error] : NO;
     if (error) *outError = error;
@@ -556,10 +556,11 @@ void madwarn(char *err,  const char*err2) { }
      forSaveOperation:(UIDocumentSaveOperation)saveOperation
                 error:(NSError * __autoreleasing *)outError {
     
-    BOOL success = [super writeContents:contents andAttributes:additionalFileAttributes
-             safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
+    BOOL success;
+    if (!(success = [super writeContents:contents andAttributes:additionalFileAttributes
+                             safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError]))
+        return NO;
     
-    if (!success) return NO;
     MADArchiveManager *archiveManager;
     archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
                                                             archiveURL: self.fileURL];
@@ -588,18 +589,18 @@ void madwarn(char *err,  const char*err2) { }
     return MADFileExtentionMobleApplicationDocument;
 }
 
-/*- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completion {
+- (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completion {
+
     if ([self hasUnsavedChanges]) {
         
-        NSURL *url = self.fileURL.copy;
-        [self saveToURL: url
-       forSaveOperation: UIDocumentSaveForOverwriting
+        [self saveToURL: self.fileURL forSaveOperation: UIDocumentSaveForOverwriting
       completionHandler: completion];
         
     } else {
         completion(YES);
     }
-}*/
+    
+}
 
 #pragma mark -
 #pragma mark MADocument Overrides
@@ -742,8 +743,8 @@ void madwarn(char *err,  const char*err2) { }
         additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
                                            version, MADDocumentInfoKeyVersion,
                                            generator, MADDocumentInfoKeyGenerator, nil];
-        [additionalContent writeToURL:_urlMetaPlaylist atomically:NO];
-        
+        if (![additionalContent writeToURL:_urlMetaPlaylist atomically:NO])
+            NSLog(@"Write to %@ failed", _urlMetaPlaylist);
     } else {
         
         writeAdditionalContent = NO;
@@ -1053,9 +1054,7 @@ void madwarn(char *err,  const char*err2) { }
     NSError *error;
     if (self.managedObjectContext != nil) {
         if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
-            
-            
-            
+            NSLog(@"Error saving managed object context: %@", error);
             [self.managedObjectContext save:nil];
         }
     }
@@ -1136,7 +1135,7 @@ void madwarn(char *err,  const char*err2) { }
                                 withLayoutManager: layoutManager];
 
         NSError * __autoreleasing *error = NULL;
-        [private save:error];
+        if (![private save:error]) NSLog(@"Error saving context: %@.", *error);
     }];
 
 }

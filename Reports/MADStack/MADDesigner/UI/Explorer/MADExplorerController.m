@@ -1236,6 +1236,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark MADExplorerControllerProtocol
 
 - (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
+    NSLog(@"handleDocumentStateChangedNotification: %@", notification);
 
     if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
         
@@ -1261,9 +1262,13 @@ typedef NS_ENUM(short, MADExplorerState) {
                 [self handleDocumentStateChangedNotificationNormal:changeNotification];
                 break;
 
-            case UIDocumentStateSavingError:
-                NSLog(@"\n\n\tDocument state saving error.\n\n");
+            case UIDocumentStateSavingError: {
+                [self.fileExplorerViewDelegate collectionView:self.collectionView allowSelection:YES];
+                //UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Open Failure" message:[NSString stringWithFormat: @"Failed to open with message:\n\t%@", notification.userInfo] preferredStyle:UIAlertControllerStyleAlert];
+                //[self presentViewController:alertController animated:YES completion:nil];
+                NSLog(@"\n\n\tDocument state saving error.\n\t%@", notification.userInfo);
                 break;
+            }
 
             default:
                 break;
@@ -1273,6 +1278,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (void)handleDocumentStateChangedNotificationClosed:(NSNotification *)notification {
+    NSLog(@"handleDocumentStateChangedNotificationClosed: %@", notification);
 
     MADocument *document = notification.object;
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -1282,7 +1288,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
-
+    NSLog(@"handleDocumentStateChangedNotificationNormal: %@", notification);
 /*    NSNotification *changeNotification;
     MADocument *document;
     SEL selector;

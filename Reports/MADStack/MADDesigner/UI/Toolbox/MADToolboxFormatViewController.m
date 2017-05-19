@@ -215,7 +215,8 @@
             documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
                                                                  fromObjectContext: context];
             documentObject.numericFormat.decimalCount = [valueThatChanged integerValue];
-            [documentObject.managedObjectContext save:nil];
+            NSError *error = NULL;
+            if ([documentObject.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
         }
     }
 }
@@ -269,7 +270,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             documentObject.numericFormat.enabled = !documentObject.numericFormat.enabled;
             newAccessory = documentObject.numericFormat.enabled ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             (self.tableViewCellCurrency).accessoryType = newAccessory;
-            [documentObject.managedObjectContext save:nil];
+            NSError *error = NULL;
+            if ([documentObject.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
         }
     }
 }

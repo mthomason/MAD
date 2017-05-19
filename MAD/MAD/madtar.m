@@ -15,6 +15,9 @@
 #import <stdbool.h>
 #import <errno.h>
 #import <assert.h>
+#import <copyfile.h>
+
+#import <asl.h>
 
 #import "archive.h"
 #import "archive_entry.h"
@@ -144,12 +147,40 @@ void strip_trailing_slashes(char **path) {
 
 int mad_extract(const char *source, const char *dest, const char *filename) {
     
-    struct archive *a, *ext;
-    struct archive_entry *entry;
+    struct stat source_status;
+    stat(source, &source_status);
+    
+    switch (source_status.st_mode) {
+        case S_IFDIR: {
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Source file is a directory.  Going to try to copy it.");
+            if (copyfile(source, dest, NULL,
+                         COPYFILE_RECURSIVE | COPYFILE_ALL | COPYFILE_COPY_DATA | COPYFILE_COPY_XATTR) < 0) {
+                asl_log(NULL, NULL, ASL_LEVEL_ERR,
+                        "Error (%d): %s\n\tFailed to copy directory %s to %s.", errno, strerror(errno), source, dest);
+                return ARCHIVE_FAILED;
+            } else {
+                return ARCHIVE_OK;
+            }
+            break;
+        }
+            
+        case S_IFREG:
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Source file is a regular file.  Going to try to unarchive it.");
+            break;
+            
+        default:
+            //assert(source_status.st_mode);
+            break;
+    }
+
+    struct archive *source_archive, *dest_archive;
+    struct archive_entry *source_archive_entry;
+    
     char *dest_root = 0;
     int flags, r, ar;
     bool mkdirstatus = 0;
     
+    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Unpacking archiver.");
     // Does dest exist?
     
     if (!path_exist(dest)) {
@@ -161,30 +192,46 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         ARCHIVE_EXTRACT_PERM |
         ARCHIVE_EXTRACT_ACL |
         ARCHIVE_EXTRACT_FFLAGS;
+
+    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Enable unarchiver.");
     
-    a = archive_read_new();
-    ar = archive_read_support_format_all(a);
+    source_archive = archive_read_new();
+    ar = archive_read_support_format_all(source_archive);
     archive_function_result_handler(ar, "Archive enabled format all.");
 
+    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Enabled support for bzip2.");
     
-    ar = archive_read_support_filter_bzip2(a);
+    ar = archive_read_support_filter_bzip2(source_archive);
     archive_function_result_handler(ar, "Archive enbled format bzip2.");
     
-    ext = archive_write_disk_new();
-    ar = archive_write_disk_set_options(ext, flags);
+    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Set disk options.");
+
+    dest_archive = archive_write_disk_new();
+    ar = archive_write_disk_set_options(dest_archive, flags);
     archive_function_result_handler(ar, "Archive correctly set disk options.");
 
-    ar = archive_write_disk_set_standard_lookup(ext);
+    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Archive set standard lookup.");
+
+    ar = archive_write_disk_set_standard_lookup(dest_archive);
     archive_function_result_handler(ar, "Archive correctly set standard lookup.");
     
-    r = archive_read_open_filename(a, source, 10240);
+    r = archive_read_open_filename(source_archive, source, 10240);
     
     if (r < 0) {
+        if (r == ARCHIVE_FATAL) {
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG,
+                    "archive_read_open_filename returned %d.  Probably opening an old file.  Not an error.", r);
+            
+        } else {
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Error: archiver failed with %d", r);
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Probably not an archive, but an older format.");
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Aborting extraction.");
+        }
+
         goto EXTRACT_MAD_FAIL;  // Problably using non archvie format.
         assert(r);
     }
 
-//    char dest_root[(strlen(dest) + strlen(filename) + 1)];
     dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1 + 1) * sizeof(char));
     dest_root[0] = '\0';
     strlcpy(dest_root, dest, sizeof(dest_root));
@@ -195,11 +242,11 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         mad_mkdir(dest_root);
     }
     
-    while ((r = archive_read_next_header(a, &entry)) >= ARCHIVE_WARN &&
+    while ((r = archive_read_next_header(source_archive, &source_archive_entry)) >= ARCHIVE_WARN &&
            r != ARCHIVE_EOF) {
         
         const char *entry_pathname;
-        entry_pathname = archive_entry_pathname(entry);
+        entry_pathname = archive_entry_pathname(source_archive_entry);
         
         char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char));
         location[0] = '\0';
@@ -211,66 +258,35 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         path[0] = '\0';
         
         strlcpy(path, dest, sizeof(path));
-        
-        //if (!path_exist(path)) {
-        //    mkdirstatus = mad_mkdir(path);
-        //    assert(mkdirstatus);
-        //}
         strlcat(path, "/", sizeof(path));
         strlcat(path, location, sizeof(path));
 
-        mode_t file_mode = archive_entry_filetype(entry);
+        mode_t file_mode = archive_entry_filetype(source_archive_entry);
         bool file_is_directory = S_ISDIR(file_mode);
         if (file_is_directory) {
             if (!directory_exist(path)) {
                 mad_mkdir(path);
-                //assert(mkdirstatus);
             }
-            
-        } else {
-            //int fd;
-            //fd = open(path, O_RDONLY);
-            //close(fd);
         }
         
-        archive_entry_set_pathname(entry, location);
-        //const char *entry_pathname_confirm = archive_entry_pathname(entry);
+        archive_entry_set_pathname(source_archive_entry, location);
         
         if (!file_is_directory) {
-            r = archive_write_header(ext, entry);
+            r = archive_write_header(dest_archive, source_archive_entry);
             
         }
-        
-        //if (access(path, F_OK) == -1) {
-            //exit(2);
-        //}
-        
-        
-        if (r >= ARCHIVE_OK && archive_entry_size(entry) > 0) {
-            
-            r = mad_copy_data(a, ext);
-            
+        if (r >= ARCHIVE_OK && archive_entry_size(source_archive_entry) > 0) {
+            r = mad_copy_data(source_archive, dest_archive);
             if (r < ARCHIVE_WARN)
                 goto EXTRACT_MAD_FAIL;
-            
         } else {
-            const char *error = archive_error_string(ext);
+            const char *error = archive_error_string(dest_archive);
             printf("%s", error);
         }
         
-        archive_write_finish_entry(ext);
-        
-        free(path);
-
-        //free(path);
-        free(location);
-        
-        
+        archive_write_finish_entry(dest_archive);
+        free(path); free(location);
     }
-    
-
-    //free(dest_root);
-    
     goto EXTRACT_MAD_FINISH;
     
 EXTRACT_MAD_FAIL:;
@@ -279,10 +295,10 @@ EXTRACT_MAD_FINISH:;
     
     free(dest_root);
 
-    archive_read_close(a);
-    archive_read_free(a);
-    archive_write_close(ext);
-    archive_write_free(ext);
+    archive_read_close(source_archive);
+    archive_read_free(source_archive);
+    archive_write_close(dest_archive);
+    archive_write_free(dest_archive);
     
     if (r == ARCHIVE_EOF)
         r = ARCHIVE_OK;
@@ -326,9 +342,9 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st)
     }
 }
 
-void mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath) {
+int mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath) {
     
-    const ssize_t buff_size = 8192;
+    const size_t buff_size = 8192;
     int fd = 0, status = 0;
     ssize_t len;
     char buff[buff_size];
@@ -336,38 +352,34 @@ void mad_archive_write_file(struct archive *archive, const char *filename, const
     struct archive_entry *entry = NULL;
     struct stat st;
     
-    status = stat(filename, &st);
-    if (status == -1) {
-        fprintf(stderr, "Failed to get file status for %s.\n", filename);
-        goto ARCHIVE_WRITE_MAD_CLEANUP;
+    if ((status = stat(filename, &st)) < 0) {
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to get file status for %s.", filename);
+    } else {
+        entry = archive_entry_new2(archive);
+        archive_entry_copy_stat(entry, &st);
+        archive_entry_set_pathname(entry, relativePath);
+        mad_archive_entry_set_attributes(&entry, &st);
+        archive_write_header(archive, entry);
+        
+        if ((fd = open(filename, O_RDONLY)) == -1) {
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to open file %s.\n", filename);
+        } else {
+            status = 0;
+            la_ssize_t w_size;
+            while ((len = read(fd, buff, buff_size)) > 0) {
+                w_size = archive_write_data(archive, buff, (size_t)len);
+            }
+            
+            if ((status = close(fd)) == -1) {
+                asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error (%d): %s.", errno, strerror(errno));
+            }
+        }
     }
     
-    entry = archive_entry_new2(archive);
-    archive_entry_copy_stat(entry, &st);
-    archive_entry_set_pathname(entry, relativePath);
-    mad_archive_entry_set_attributes(&entry, &st);
-    
-    archive_write_header(archive, entry);
-    fd = open(filename, O_RDONLY);
-    if (fd == -1) {
-        fprintf(stderr, "Failed to open file %s.\n", filename);
-        goto ARCHIVE_WRITE_MAD_CLEANUP;
-    }
 
-    la_ssize_t w_size;
-    while ((len = read(fd, buff, buff_size)) > 0) {
-        w_size = archive_write_data(archive, buff, len);
-    }
-    
-    status = close(fd);
-    if (status == -1) {
-        fprintf(stderr, "Failed to close file.\n");
-        goto ARCHIVE_WRITE_MAD_CLEANUP;
-    }
-    
-ARCHIVE_WRITE_MAD_CLEANUP:;
     if (entry) {
         archive_entry_free(entry);
     }
+    return status;
 }
 

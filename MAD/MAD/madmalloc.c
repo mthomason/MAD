@@ -10,10 +10,13 @@
 
 #import <stdlib.h>
 
-void mad_malloc(char **str, size_t len) {
-    *str = (char *)malloc(len * sizeof(char));
+size_t mad_malloc(char **str, size_t len) {
+    size_t result = len * sizeof(char);
+    *str = (char *)malloc(result);
     if (*str == NULL && len > 0) {
         fprintf(stderr, "failed to allocate memory.\n");
-        abort();
+        //abort();
+        result = 0;
     }
+    return result;
 }

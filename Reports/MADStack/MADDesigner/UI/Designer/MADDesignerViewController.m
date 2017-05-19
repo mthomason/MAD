@@ -1322,7 +1322,7 @@ static const inline CGSize sizePopoverFonts() {
         [section setProducesFormFeed: newPageAfter];
         
         NSError * __autoreleasing *error = NULL;
-        [private save:error];
+        if (![private save:error]) NSLog(@"Error saving managed object context: %@", *error);
         
     }];
     
@@ -1358,7 +1358,7 @@ static const inline CGSize sizePopoverFonts() {
         [[NSOperationQueue mainQueue] addOperationWithBlock:updateVisibility];
 
         NSError * __autoreleasing *error = NULL;
-        [private save:error];
+        if (![private save:error]) NSLog(@"Error saving managed object context: %@", *error);
 
     }];
 }
@@ -1374,15 +1374,17 @@ static const inline CGSize sizePopoverFonts() {
     UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.identifier];
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [section setInterfaceHeight: collectionViewContentSize.height];
- 
-    [section.managedObjectContext save:nil];
+    
+    NSError * __autoreleasing *error = NULL;
+    if (![section.managedObjectContext save:error]) NSLog(@"Error saving managed object context: %@", *error);
+
     
     NSNumber *key = @(section.identifier);
     UICollectionView *collectionView = self.sectionViewsDictionary[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
     [section setInterfaceHeight: collectionViewContentSize.height];
-    [section.managedObjectContext save:nil];
+    if (![section.managedObjectContext save:error]) NSLog(@"Error saving managed object context: %@", *error);
     
     [self.view setNeedsUpdateConstraints];
     
@@ -1446,7 +1448,8 @@ static const inline CGSize sizePopoverFonts() {
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
     NSError *error = nil;
-    [doc.managedObjectContext save:&error];
+    if (![doc.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
+
     [doc saveToURL: doc.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                
         if (insertNewSection) {

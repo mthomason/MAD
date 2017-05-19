@@ -30,6 +30,8 @@
     - (NSArray <NSIndexPath *> *)indexPathsForSelectedItems;
     - (NSArray <NSIndexPath *> *)indexPathsForHighlightedItems;
 
+    - (void)collectionView:(UICollectionView *)collectionView allowSelection:(BOOL)allowSelection;
+
 @end
 
 #endif

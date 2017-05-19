@@ -854,7 +854,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.fontname = familyName;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (IBAction)toggleBold:(id)sender {
@@ -885,7 +886,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.textStyle.bold = self.controlStateBold;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -915,7 +917,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.textStyle.italic = self.controlStateItalic;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -945,7 +948,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.textStyle.strikethrough = ControlStateIsOn(_controlStateStrike);
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 
@@ -976,7 +980,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.textStyle.underline = ControlStateIsOn(_controlStateUnderline);
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)emptySelector:(id)whofuckingCares { }
@@ -997,7 +1002,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.fontsize = pointSize;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateLabelSizeHeight:(double)height {
@@ -1011,9 +1017,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        [element setSizeHeight: height];
+        [element setSizeHeight: (float)height];
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateLabelSizeWidth:(double)width {
@@ -1027,9 +1034,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        [element setSizeWidth: width];
+        [element setSizeWidth: (float)width];
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
@@ -1045,7 +1053,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.alignment.horizontal = (MADHorizontalAlignment)index;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateVerticalAlignment:(NSInteger)index {
@@ -1061,7 +1070,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                                                       fromObjectContext:context];
         element.alignment.vertical = (MADVerticalAlignment)index;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updatePaddingTop:(double)top {
@@ -1075,9 +1085,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.padding.top = top;
+        element.padding.top = (float)top;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updatePaddingBottom:(double)bottom {
@@ -1091,9 +1102,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.padding.bottom = bottom;
+        element.padding.bottom = (float)bottom;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updatePaddingLeft:(double)left {
@@ -1107,9 +1119,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.padding.left = left;
+        element.padding.left = (float)left;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updatePaddingRight:(double)right {
@@ -1123,9 +1136,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.padding.right = right;
+        element.padding.right = (float)right;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateMarginTop:(double)top {
@@ -1139,9 +1153,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.margin.top = top;
+        element.margin.top = (float)top;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateMarginBottom:(double)bottom {
@@ -1155,9 +1170,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.margin.bottom = bottom;
+        element.margin.bottom = (float)bottom;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateMarginLeft:(double)left {
@@ -1171,9 +1187,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.margin.left = left;
+        element.margin.left = (float)left;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 - (void)updateMarginRight:(double)right {
@@ -1187,9 +1204,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.margin.right = right;
+        element.margin.right = (float)right;
     }
-    [context save:nil];
+    NSError *error = NULL;
+    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
 }
 
 
@@ -1277,9 +1295,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
             fontname = element.fontname.copy;
             break;
         }
-
         [destination setFamilyName:fontname];
-        
     }
 }
 
