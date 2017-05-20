@@ -13,6 +13,8 @@
 
 #import <QuartzCore/CALayer.h>
 
+#import <UIKit/NSParagraphStyle.h>
+
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -60,12 +62,13 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @end
 
 @implementation MADDesignerElementView {
-    NSString *_fontname;
     double _fontsize;
     BOOL _bold;
     BOOL _italic;
     BOOL _underline;
     BOOL _strikethrough;
+    int16_t _horizontal;
+    NSString *_fontname;
 }
 
 @synthesize identifier = _identifier;
@@ -354,6 +357,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         _italic = element.textStyle.italic;
         _strikethrough = element.textStyle.strikethrough;
         _underline = element.textStyle.underline;
+        _horizontal = element.alignment.horizontal;
         MADElementStylizedText *attributesText;
         attributesText = [[MADElementStylizedText alloc] initWithFontName:element.fontname
                                                                  fontSize:element.fontsize
@@ -381,9 +385,86 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         
         UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
         NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-        [self.displayStringAttributed addAttributes:newAttributes range:NSMakeRange(0, self.displayStringAttributed.length)];
+        [self.displayStringAttributed addAttributes:newAttributes
+                                              range:NSMakeRange(0, self.displayStringAttributed.length)];
+        _fontname = fontname.copy;
+        _fontsize = fontsize;
+        _bold = bold;
+        _italic = italic;
     }
 }
+
+
+
+- (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal {
+    if (_horizontal != horizontal) {
+        NSMutableParagraphStyle *paragraphStyle = [self.displayStringAttributed attribute:NSParagraphStyleAttributeName atIndex:0 effectiveRange:nil];
+        switch (horizontal) {
+            case MADHorizontalAlignmentLeft:
+                paragraphStyle.alignment = NSTextAlignmentLeft;
+                break;
+            case MADHorizontalAlignmentRight:
+                paragraphStyle.alignment = NSTextAlignmentRight;
+                break;
+            case MADHorizontalAlignmentCenter:
+                paragraphStyle.alignment = NSTextAlignmentCenter;
+                break;
+            case MADHorizontalAlignmentJustified:
+                paragraphStyle.alignment = NSTextAlignmentJustified;
+                break;
+            case MADHorizontalAlignmentNatrual:
+                paragraphStyle.alignment = NSTextAlignmentNatural;
+                break;
+            default:
+                paragraphStyle.alignment = NSTextAlignmentLeft;
+                break;
+        }
+        [self.displayStringAttributed addAttribute:NSParagraphStyleAttributeName
+                                             value:paragraphStyle
+                                             range:NSMakeRange(0, self.displayStringAttributed.length)];
+        _horizontal = horizontal;
+    }
+
+}
+
+- (void)updateVerticalAlignment:(MADVerticalAlignment)vertical {
+    
+}
+
+- (void)updateFontSize:(double)fontsize {
+    if (_fontsize != fontsize) {
+        UIFontDescriptor *fontDescriptor;
+        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: _fontname
+                                                                fontSize: fontsize
+                                                                    bold: _bold
+                                                                  italic: _italic];
+        
+        UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+        NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
+        [self.displayStringAttributed addAttributes:newAttributes
+                                              range:NSMakeRange(0, self.displayStringAttributed.length)];
+        _fontsize = fontsize;
+    }
+}
+
+
+- (void)updateFontName:(NSString *)fontname {
+    if (![_fontname isEqualToString:fontname]) {
+        UIFontDescriptor *fontDescriptor;
+        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
+                                                                fontSize: _fontsize
+                                                                    bold: _bold
+                                                                  italic: _italic];
+        
+        UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+        NSDictionary *newAttributes;
+        newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
+        [self.displayStringAttributed addAttributes:newAttributes
+                                              range:NSMakeRange(0, self.displayStringAttributed.length)];
+        _fontname = fontname.copy;
+    }
+}
+
 
 - (void)updateSetStrikethrough:(BOOL)strikethrough {
     if (_strikethrough != strikethrough) {

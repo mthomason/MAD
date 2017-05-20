@@ -74,6 +74,8 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
+#import "RptqAlignment.h"
+
 #import "RptqDocumentSectionRows.h"
 #import "RptqDocumentSectionRows+Extras.h"
 
@@ -281,6 +283,7 @@ void madwarn(char *err,  const char*err2) { }
     [self.undoManager setActionName:actionName];
     [self.undoManager registerUndoWithTarget:self handler:undoHandler];
 }
+
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setStrikethrough:(BOOL)strikethrough {
     NSString *actionName = NSLocalizedString(strikethrough ? @"Strikethrough" : @"Disable Strikethrough",
                                              strikethrough ? @"Strikethrough" : @"Disable Strikethrough");
@@ -327,6 +330,91 @@ void madwarn(char *err,  const char*err2) { }
             [(MADocument *)target updateElements:elementIDs setUnderline:YES];
         };
     }
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontsize:(double)fontsize {
+    NSString *actionName = NSLocalizedString(underline ? @"Font Size" : @"Font Size",
+                                             underline ? @"Font Size" : @"Font Size");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    double previousFontsize = 0.0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previousFontsize = element.fontsize;
+        element.fontsize = fontsize;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setFontsize:previousFontsize];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontname:(NSString *)fontname {
+    NSString *actionName = NSLocalizedString(@"Font Name %@",
+                                             @"Font Name %@");
+    actionName = [NSString stringWithFormat:actionName, fontname];
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    NSString *previousFontname = nil;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        if (previousFontname == nil) previousFontname = element.fontname.copy;
+        element.fontname = fontname.copy;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setFontname:previousFontname];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setVerticalAlignment:(int16_t)verticalAlignment {
+    NSString *actionName = NSLocalizedString(@"Vertical Alignment",
+                                             @"Vertical Alignment");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    int16_t previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.alignment.vertical;
+        element.alignment.vertical = verticalAlignment;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setVerticalAlignment:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setHorizontalAlignment:(int16_t)horizontalAlignment {
+    NSString *actionName = NSLocalizedString(@"Horizontal Alignment",
+                                             @"Horizontal Alignment");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    int16_t previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.alignment.horizontal;
+        element.alignment.horizontal = horizontalAlignment;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setHorizontalAlignment:previous];
+    };
     [self.undoManager setActionName:actionName];
     [self.undoManager registerUndoWithTarget:self handler:undoHandler];
 }

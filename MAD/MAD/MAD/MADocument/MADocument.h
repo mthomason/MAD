@@ -107,6 +107,10 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic;
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setStrikethrough:(BOOL)strikethrough;
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setUnderline:(BOOL)underline;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontsize:(double)fontsize;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontname:(NSString *)fontname;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setVerticalAlignment:(int16_t)verticalAlignment;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setHorizontalAlignment:(int16_t)horizontalAlignment;
 
 @end
 

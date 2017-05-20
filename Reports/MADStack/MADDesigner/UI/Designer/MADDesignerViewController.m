@@ -67,6 +67,10 @@
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqNumericFormat.h>
+#import <MAD/RptqAlignment.h>
+#import <MAD/RptqBorder.h>
 #import <MAD/madmath.h>
 
 #import "MADTabBarController.h"
@@ -930,8 +934,6 @@ static const inline CGSize sizePopoverFonts() {
     [super viewWillDisappear:animated];
     _boundsOnDisappear = self.scroller.bounds;
     [self.statusLabelZoomScale removeFromSuperview];
-    NSString *keyPath = [MADDesignerViewController keyPathDocumentUndoTitle];
-    [self removeObserver:self forKeyPath:keyPath];
     [self setToolbarItems:@[] animated:animated];
     self.undoButton = nil;
 }
@@ -1542,9 +1544,9 @@ static const inline CGSize sizePopoverFonts() {
     
     NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     
-    for (id updatedObject in updatedObjects) {
+    for (NSManagedObject *updatedObject in updatedObjects) {
         if ([updatedObject isKindOfClass:[RptqTextStyle class]]) {
-            RptqTextStyle *updatedTextStyle = updatedObject;
+            RptqTextStyle *updatedTextStyle = (RptqTextStyle *)updatedObject;
             if (updatedTextStyle.inElement != nil) {
                 MADDesignerElementView *elementView;
                 elementView = [self elementViewForManagedObject:updatedTextStyle.inElement];
@@ -1557,6 +1559,21 @@ static const inline CGSize sizePopoverFonts() {
                 [elementView setNeedsDisplay];
                 //[elementView updateWithElement:updatedTextStyle.inElement];
             }
+        } else if ([updatedObject isKindOfClass:[RptqAlignment class]]) {
+
+            NSNumber *horizontal = [updatedObject.changedValues objectForKey:@"horizontal"];
+            if (horizontal != nil) {
+                MADDesignerElementView *elementView;
+                elementView = [self elementViewForManagedObject:((RptqAlignment *)updatedObject).inElement];
+                [elementView updateHorizontalAlignment:horizontal.shortValue];
+                [elementView setNeedsDisplay];
+            }
+
+        } else if ([updatedObject isKindOfClass:[RptqDirectionalAsymmetry class]]) {
+            
+        } else if ([updatedObject isKindOfClass:[RptqBorder class]]) {
+            
+        } else if ([updatedObject isKindOfClass:[RptqNumericFormat class]]) {
             
         } else if ([updatedObject isKindOfClass:[RptqDocumentElement class]]) {
             RptqDocumentElement *documentObject = updatedObject;
@@ -1566,6 +1583,23 @@ static const inline CGSize sizePopoverFonts() {
             MADDesignerSectionView *section;
             MADSectionLayoutManager *layoutManager;
             MADSectionLayoutAttributes *attributes;
+            
+            NSNumber *fontsize = [changes objectForKey:@"fontsize"];
+            if (fontsize != nil) {
+                MADDesignerElementView *elementView;
+                elementView = [self elementViewForManagedObject:documentObject];
+                [elementView updateFontSize:fontsize.doubleValue];
+                [elementView setNeedsDisplay];
+            }
+            
+            NSString *fontname = [changes objectForKey:@"fontname"];
+            if (fontname != nil) {
+                MADDesignerElementView *elementView;
+                elementView = [self elementViewForManagedObject:documentObject];
+                [elementView updateFontName:fontname];
+                [elementView setNeedsDisplay];
+            }
+
             for (id change in changes) {
                 
                 if ([change isEqualToString: NSStringFromSelector(@selector(sizewidth))] ||

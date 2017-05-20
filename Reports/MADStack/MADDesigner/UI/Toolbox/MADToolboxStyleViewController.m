@@ -198,8 +198,6 @@ const NSInteger MADIDTagStepperSizeHeight   = 2047;
 const NSInteger MADIDTagStepperFontSize     = 4095;
 
 const NSInteger MADIDTagSegmentedControlHorizontalAlignment     = 8191;
-const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
-
 
 @interface MADToolboxStyleViewController()
     <UITableViewDelegate>
@@ -245,7 +243,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     @property (nonatomic, weak) IBOutlet UIStepper *stepperSizeHeight;
 
     @property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
-    @property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
 
     @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
     @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
@@ -283,7 +280,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     self.stepperFontSize.tag = MADIDTagStepperFontSize;
     
     self.segmentedControlHorizontalAlignment.tag = MADIDTagSegmentedControlHorizontalAlignment;
-    self.segmentedControlVerticalAlignment.tag = MADIDTagSegmentedControlVerticalAlignment;
     
     UIColor *tintColor = self.view.tintColor.copy;
     self.buttonBold.layer.borderColor = tintColor.CGColor;
@@ -423,29 +419,14 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 }
 
-- (void)updateSegmentedControlVerticalAlignmentNotSelected {
-    UISegmentedControl *segmentedControlVerticalAlignment;
-    segmentedControlVerticalAlignment = _segmentedControlVerticalAlignment;
-    segmentedControlVerticalAlignment.selected = NO;
-    segmentedControlVerticalAlignment.highlighted = NO;
-    
-    segmentedControlVerticalAlignment.selectedSegmentIndex = UISegmentedControlNoSegment;
-    segmentedControlVerticalAlignment.userInteractionEnabled = NO;
-}
-
-- (void)updateSegmentedControlVerticalAlignmentWithChosenIndex:(NSInteger)index {
-    _segmentedControlVerticalAlignment.selectedSegmentIndex = index;
-}
-
 - (void)updateDisplay {
 
     if (!self.isViewLoaded) return;
     
     
-    UISegmentedControl *segmentedControlHorizontalAlignment, *segmentedControlVerticalAlignment;
+    UISegmentedControl *segmentedControlHorizontalAlignment;
     segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
-    segmentedControlVerticalAlignment = _segmentedControlVerticalAlignment;
-    
+
     void(^updateControlsEnabled)(BOOL) = ^void(BOOL enabled) {
         self.buttonItalic.      enabled = enabled;
         self.buttonBold.        enabled = enabled;
@@ -478,8 +459,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     
     if (self.userSelectedObjectIDs.count == 0) {
         updateControlsEnabled(NO);
-        
-        [self updateSegmentedControlVerticalAlignmentNotSelected];
         
         self.controlStateBold = MTControlStateOff;
         self.controlStateItalic = MTControlStateOff;
@@ -680,7 +659,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         }
         
         segmentedControlHorizontalAlignment.selectedSegmentIndex = documentObject.alignment.horizontal;
-        [self updateSegmentedControlVerticalAlignmentWithChosenIndex:documentObject.alignment.vertical];
         
         double displayNumber = numberOfMarginTop >= 1 ? marginHolder.top : 0;
         NSAttributedString *atext = [MADToolboxStrings newMarginTopForValue: displayNumber];
@@ -770,7 +748,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         _controlStateUnderline = numberUnderline > 0 ? ( numberNotUnderline > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
         
         MTControlState controlStateHorizontalAlignment = numberOfHorazontalAlignments > 0 ? (numberOfHorazontalAlignments == 1 ? MTControlStateOn : MTControlStateAmbiguous) : MTControlStateOff;
-        MTControlState controlStateVerticalAlignment = numberOfVerticalAlignments > 0 ? (numberOfVerticalAlignments == 1 ? MTControlStateOn : MTControlStateAmbiguous) : MTControlStateOff;
         
         // FIXME: Needs ambigious state for segmented control.
         
@@ -797,12 +774,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         
         
         [self setStateInControl:segmentedControlHorizontalAlignment forState:controlStateHorizontalAlignment];
-        [self setStateInControl:segmentedControlVerticalAlignment forState:controlStateVerticalAlignment];
         
         _fontLabelTableViewCell.userInteractionEnabled = YES;
         stepperFontSize.userInteractionEnabled = YES;
         segmentedControlHorizontalAlignment.userInteractionEnabled = YES;
-        segmentedControlVerticalAlignment.userInteractionEnabled = YES;
         
     }
     [self setStateInControl: _buttonBold        forState: _controlStateBold];
@@ -836,6 +811,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     return localizedAttributedMessage;
 }
 
+- (void)emptySelector:(id)whofuckingCares { }
+
 - (void)chooseFamilyName:(NSString *)familyName {
     CGFloat systemFontSize = [UIFont systemFontSize];
     UIFont *font = [UIFont fontWithName:familyName size:systemFontSize];
@@ -843,22 +820,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     UILabel *labelFontName = _labelFontName;
 
     labelFontName.font = font;
-    labelFontName.text = familyName;
+    labelFontName.text = familyName.copy;
 
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.fontname = familyName;
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setFontname:familyName];
 }
 
 - (IBAction)toggleBold:(id)sender {
@@ -920,7 +884,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                      setStrikethrough:ControlStateIsOn(self.controlStateStrike)];
 }
 
-
 - (IBAction)toggleUnderline:(id)sender {
     switch (self.controlStateUnderline) {
         case MTControlStateOn:
@@ -938,12 +901,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     }
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
 
-    MADocument *document = self.document;
-    [document updateElements:self.userSelectedObjectIDs
-            setUnderline:ControlStateIsOn(self.controlStateUnderline)];
+    [self.document updateElements:self.userSelectedObjectIDs
+                     setUnderline:ControlStateIsOn(self.controlStateUnderline)];
 }
-
-- (void)emptySelector:(id)whofuckingCares { }
 
 - (void)updateLabelFontSize:(double)pointSize {
     UILabel *labelFontSize = _labelFontSize;
@@ -951,20 +911,13 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     attributedString = [MADToolboxStyleViewController newAttributedStringFontSizeInPoints: pointSize
                                                                              withFontSize: labelFontSize.font.pointSize];
     labelFontSize.attributedText = attributedString;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.fontsize = pointSize;
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setFontsize:pointSize];
+}
+
+- (void)updateHorizontalAlignment:(NSInteger)index {
+    [self.segmentedControlHorizontalAlignment setBackgroundImage: nil forState: UIControlStateNormal
+                                                      barMetrics: UIBarMetricsDefault];
+    [self.document updateElements:self.userSelectedObjectIDs setHorizontalAlignment:(MADHorizontalAlignment)index];
 }
 
 - (void)updateLabelSizeHeight:(double)height {
@@ -998,42 +951,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
         [element setSizeWidth: (float)width];
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
-}
-
-- (void)updateHorizontalAlignment:(NSInteger)index {
-    [self.segmentedControlHorizontalAlignment setBackgroundImage: nil forState: UIControlStateNormal
-                                                      barMetrics: UIBarMetricsDefault];
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.alignment.horizontal = (MADHorizontalAlignment)index;
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
-}
-
-- (void)updateVerticalAlignment:(NSInteger)index {
-    [self.segmentedControlVerticalAlignment setBackgroundImage: nil forState: UIControlStateNormal
-                                                    barMetrics: UIBarMetricsDefault];
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.alignment.vertical = (MADVerticalAlignment)index;
     }
     NSError *error = NULL;
     if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
@@ -1184,7 +1101,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
                 error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
-
 - (IBAction)controlValueChanged:(UIControl *)sender {
     
     switch (sender.tag) {
@@ -1237,10 +1153,6 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
             [self updateHorizontalAlignment:((UISegmentedControl *)sender).selectedSegmentIndex];
             break;
 
-        case MADIDTagSegmentedControlVerticalAlignment:
-            [self updateVerticalAlignment:((UISegmentedControl *)sender).selectedSegmentIndex];
-            break;
-            
         default:
             break;
     }

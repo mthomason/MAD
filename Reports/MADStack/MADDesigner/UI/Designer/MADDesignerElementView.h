@@ -10,6 +10,8 @@
 #define Reports_MTElementView_h
 
 #import <UIKit/UIView.h>
+#import <MAD/MADVerticalAlignmentType.h>
+#import <MAD/MADHorizontalAlignmentType.h>
 #import "MADManagedObjectViewProtocol.h"
 
 @protocol UIGestureRecognizerDelegate;
@@ -43,11 +45,15 @@
     - (void)updateWithElement:(RptqDocumentElement *)element;
     - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 
+    - (void)updateFontName:(NSString *)fontname;
+    - (void)updateFontSize:(double)fontSize;
     - (void)updateFontName:(NSString *)fontname
                   fontSize:(double)fontSize
                       bold:(BOOL)bold
                     italic:(BOOL)italic;
 
+- (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal;
+- (void)updateVerticalAlignment:(MADVerticalAlignment)vertical;
 - (void)updateSetStrikethrough:(BOOL)strikethrough;
 - (void)updateSetUnderline:(BOOL)underline;
 
