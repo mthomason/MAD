@@ -17,6 +17,7 @@
 #import "MADViewControllerDocumentProtocol.h"
 
 @class MADocument, MADToolboxStyleViewController, MTFont;
+@protocol MADDesignerDisplayProtocol;
 
 @protocol MADReportDesignerFontSettingsDelegate
 

@@ -44,7 +44,7 @@
 		4C2DC0B31CEAD65800167DA3 /* madlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2DC0B11CEAD65800167DA3 /* madlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */; };
 		4C3002491E2B8F0000B3E224 /* MADActivityIndicatorLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */; };
-		4C3080E11D053EB800A7D597 /* MADFontDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080DF1D053EB800A7D597 /* MADFontDescriptor.h */; };
+		4C3080E11D053EB800A7D597 /* MADFontDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080DF1D053EB800A7D597 /* MADFontDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3080E21D053EB800A7D597 /* MADFontDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3080E01D053EB800A7D597 /* MADFontDescriptor.m */; };
 		4C3080E51D05502B00A7D597 /* MADDocumentObjectLabelDynamic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080E31D05502B00A7D597 /* MADDocumentObjectLabelDynamic.h */; };
 		4C3080E61D05502B00A7D597 /* MADDocumentObjectLabelDynamic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3080E41D05502B00A7D597 /* MADDocumentObjectLabelDynamic.m */; };

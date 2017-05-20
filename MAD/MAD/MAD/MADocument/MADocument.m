@@ -90,7 +90,7 @@
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
-
+#import "RptqTextStyle.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
 
@@ -225,6 +225,111 @@ void madwarn(char *err,  const char*err2) { }
 @synthesize database = _database;
 @synthesize dataTable = _dataTable;
 @synthesize reportFormatter = _reportFormatter;
+
+#pragma mark -
+#pragma mark Adjust
+
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBold:(BOOL)bold {
+    NSString *actionName = NSLocalizedString(bold ? @"Bold" : @"Disable Bold",
+                                             bold ? @"Bold" : @"Disable Bold");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        element.textStyle.bold = bold;
+    }
+    
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    if (bold) {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setBold:NO];
+        };
+    } else {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setBold:YES];
+        };
+    }
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {
+    NSString *actionName = NSLocalizedString(italic ? @"Italic" : @"Disable Italic",
+                                             italic ? @"Italic" : @"Disable Italic");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        element.textStyle.italic = italic;
+    }
+    
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    if (italic) {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setItalic:NO];
+        };
+    } else {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setItalic:YES];
+        };
+    }
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setStrikethrough:(BOOL)strikethrough {
+    NSString *actionName = NSLocalizedString(strikethrough ? @"Strikethrough" : @"Disable Strikethrough",
+                                             strikethrough ? @"Strikethrough" : @"Disable Strikethrough");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        element.textStyle.strikethrough = strikethrough;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    if (strikethrough) {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setStrikethrough:NO];
+        };
+    } else {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setStrikethrough:YES];
+        };
+    }
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setUnderline:(BOOL)underline {
+    NSString *actionName = NSLocalizedString(underline ? @"Underline" : @"Disable Underline",
+                                             underline ? @"Underline" : @"Disable Underline");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        element.textStyle.underline = underline;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    if (underline) {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setUnderline:NO];
+        };
+    } else {
+        undoHandler = ^(id  _Nonnull target) {
+            [(MADocument *)target updateElements:elementIDs setUnderline:YES];
+        };
+    }
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
 
 - (NSArray *)groupLevelKeys:(NSUInteger)rowID {
         NSArray *groupLevelKeys;

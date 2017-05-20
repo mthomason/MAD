@@ -19,11 +19,13 @@
 #import <MADCocoaExtensions/MADTextStyle.h>
 
 #import <MAD/RptqAlignment.h>
+#import <MAD/RptqTextStyle.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementImage.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
+#import <MAD/MADFontDescriptor.h>
 
 #import <MAD/MADElementStylizedText.h>
 #import <MAD/MADAlignment.h>
@@ -57,7 +59,14 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 @end
 
-@implementation MADDesignerElementView
+@implementation MADDesignerElementView {
+    NSString *_fontname;
+    double _fontsize;
+    BOOL _bold;
+    BOOL _italic;
+    BOOL _underline;
+    BOOL _strikethrough;
+}
 
 @synthesize identifier = _identifier;
 
@@ -256,6 +265,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     NSAssert(error == NULL, @"Error: %@", *error);
     
 }
+
 #pragma mark - Members
 
 - (void)flash:(void (^)(BOOL finished))completion {
@@ -338,19 +348,64 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
             default:
                 break;
         }
-        
+        _fontname = element.fontname.copy;
+        _fontsize = element.fontsize;
+        _bold = element.textStyle.bold;
+        _italic = element.textStyle.italic;
+        _strikethrough = element.textStyle.strikethrough;
+        _underline = element.textStyle.underline;
         MADElementStylizedText *attributesText;
         attributesText = [[MADElementStylizedText alloc] initWithFontName:element.fontname
                                                                  fontSize:element.fontsize
                                                                 textStyle:element.textStyle
                                                       horizontalAlignment:element.alignment.horizontal];
         
-        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString: string
-                                                                                attributes: attributesText.fontAttributes];
+        NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString: string
+                                                                                              attributes: attributesText.fontAttributes];
         self.displayStringAttributed = attributtedString;
         [self setNeedsLayout];
         [self setNeedsDisplay];
     }
 }
+
+- (void)updateFontName:(NSString *)fontname
+              fontSize:(double)fontsize
+                  bold:(BOOL)bold
+                italic:(BOOL)italic {
+    if (_bold != bold || _italic != italic || _fontsize != fontsize || ![_fontname isEqualToString:fontname]) {
+        UIFontDescriptor *fontDescriptor;
+        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
+                                                                fontSize: fontsize
+                                                                    bold: bold
+                                                                  italic: italic];
+        
+        UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+        NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
+        [self.displayStringAttributed addAttributes:newAttributes range:NSMakeRange(0, self.displayStringAttributed.length)];
+    }
+}
+
+- (void)updateSetStrikethrough:(BOOL)strikethrough {
+    if (_strikethrough != strikethrough) {
+        NSNumber *strikethroughStyle;
+        strikethroughStyle = [[NSNumber alloc] initWithInteger: strikethrough ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
+        [self.displayStringAttributed addAttribute:NSStrikethroughStyleAttributeName
+                                             value:strikethroughStyle
+                                             range:NSMakeRange(0, self.displayStringAttributed.length)];
+        _strikethrough = strikethrough;
+    }
+}
+
+- (void)updateSetUnderline:(BOOL)underline {
+    if (_underline != underline) {
+        NSNumber *underlineStyle;
+        underlineStyle = [[NSNumber alloc] initWithInteger: underline ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
+        [self.displayStringAttributed addAttribute:NSUnderlineStyleAttributeName
+                                             value:underlineStyle
+                                             range:NSMakeRange(0, self.displayStringAttributed.length)];
+        _underline = underline;
+    }
+}
+
 
 @end

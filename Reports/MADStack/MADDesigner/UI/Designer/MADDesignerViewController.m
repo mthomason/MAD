@@ -58,7 +58,7 @@
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
-
+#import <MAD/RptqTextStyle.h>
 #import <MAD/RptqDocumentElementLabel.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
@@ -263,6 +263,8 @@ static const inline CGSize sizePopoverFonts() {
     @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
     @property (nonatomic, strong) NSSet <UIGestureRecognizer *> *tapSectionLabels;
     @property (nonatomic, weak) UILabel *lastSelectedLabel;
+
+    @property (nonatomic, weak) UIBarButtonItem *undoButton;
 
 @end
 
@@ -614,8 +616,22 @@ static const inline CGSize sizePopoverFonts() {
 
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    NSLog(@"%@", self.document.undoManager.undoMenuItemTitle);
+    NSLog(@"Keypath: %@", keyPath);
+    NSLog(@"Object: %@", object);
+    NSLog(@"Change: %@", change);
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MADocument *maDocument = self.document;
+    NSLog(@"%@", maDocument.undoManager.undoMenuItemTitle);
+    //NSString *keyPath = [MADDesignerViewController keyPathDocumentUndoTitle];
+    //[self addObserver:self
+    //       forKeyPath:keyPath
+    //          options:NSKeyValueObservingOptionNew context:nil];
     
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         [UIView setAnimationsEnabled:NO];
@@ -631,7 +647,7 @@ static const inline CGSize sizePopoverFonts() {
     _zoomScaleRestore = scroller.zoomScale;
     [scroller setZoomScale: 1.0000f animated: NO];
 
-    RptqDocument *document = [self.document activeDocumentModel];
+    RptqDocument *document = [maDocument activeDocumentModel];
 
     MADReportSectionsEnumerator *reportSectionsEnumerator;
     reportSectionsEnumerator = [[MADReportSectionsEnumerator alloc] initWithDocument:document];
@@ -841,9 +857,22 @@ static const inline CGSize sizePopoverFonts() {
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
-    [[self view] addSubview:self.scroller];
+    [self.view addSubview:self.scroller];
     [self.scroller setNeedsLayout];
+    
+    UIBarButtonItem *toolbarItem = [[UIBarButtonItem alloc] initWithTitle: @"Undo"
+                                                                    style: UIBarButtonItemStylePlain
+                                                                   target: self
+                                                                   action: @selector(undo)];
+    [self.navigationController setToolbarHidden:NO animated:animated];
+    [self setToolbarItems:@[toolbarItem] animated:NO];
+    self.undoButton = toolbarItem;
 
+}
+
+- (void)undo {
+    [self.document.undoManager undo];
+    NSLog(@"Undo");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -863,10 +892,48 @@ static const inline CGSize sizePopoverFonts() {
     [self.view setNeedsLayout];
 }
 
++ (NSString *)keyPathDocument {
+    static NSString *key = nil;
+    if (key == nil) key = NSStringFromSelector(@selector(document));
+    return key;
+}
+
++ (NSString *)keyPathDocumentRedoTitle {
+    static NSString *key = nil;
+    if (key == nil) {
+        NSString *keyPathDocument = [self keyPathDocument];
+        NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
+        NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
+        key = [keyPathDocument stringByAppendingString:@"."];
+        key = [key stringByAppendingString:keyPathUndoManager];
+        key = [key stringByAppendingString:@"."];
+        key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
+    }
+    return key;
+}
+
++ (NSString *)keyPathDocumentUndoTitle {
+    static NSString *key = nil;
+    if (key == nil) {
+        NSString *keyPathDocument = [self keyPathDocument];
+        NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
+        NSString *keyPathUndoMenuItemTitle = NSStringFromSelector(@selector(undoMenuItemTitle));
+        key = [keyPathDocument stringByAppendingString:@"."];
+        key = [key stringByAppendingString:keyPathUndoManager];
+        key = [key stringByAppendingString:@"."];
+        key = [key stringByAppendingString:keyPathUndoMenuItemTitle];
+    }
+    return key;
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     _boundsOnDisappear = self.scroller.bounds;
     [self.statusLabelZoomScale removeFromSuperview];
+    NSString *keyPath = [MADDesignerViewController keyPathDocumentUndoTitle];
+    [self removeObserver:self forKeyPath:keyPath];
+    [self setToolbarItems:@[] animated:animated];
+    self.undoButton = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1468,11 +1535,30 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark NSManagedObjectContextObjectsDidChangeNotification
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
+    UIBarButtonItem *undoButton = self.undoButton;
+    MADocument *document = self.document;
+    undoButton.enabled = document.undoManager.canUndo;
+    undoButton.title = document.undoManager.undoMenuItemTitle.copy;
+    
     NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     
     for (id updatedObject in updatedObjects) {
-        
-        if ([updatedObject isKindOfClass:[RptqDocumentElement class]]) {
+        if ([updatedObject isKindOfClass:[RptqTextStyle class]]) {
+            RptqTextStyle *updatedTextStyle = updatedObject;
+            if (updatedTextStyle.inElement != nil) {
+                MADDesignerElementView *elementView;
+                elementView = [self elementViewForManagedObject:updatedTextStyle.inElement];
+                [elementView updateFontName:updatedTextStyle.inElement.fontname
+                                   fontSize:updatedTextStyle.inElement.fontsize
+                                       bold:updatedTextStyle.bold
+                                     italic:updatedTextStyle.italic];
+                [elementView updateSetUnderline:updatedTextStyle.underline];
+                [elementView updateSetStrikethrough:updatedTextStyle.strikethrough];
+                [elementView setNeedsDisplay];
+                //[elementView updateWithElement:updatedTextStyle.inElement];
+            }
+            
+        } else if ([updatedObject isKindOfClass:[RptqDocumentElement class]]) {
             RptqDocumentElement *documentObject = updatedObject;
             NSDictionary *changes = [documentObject changedValues];
             
@@ -1494,10 +1580,13 @@ static const inline CGSize sizePopoverFonts() {
                     [change isEqualToString: NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
+                    
                     NSNumber *identifier = @(section.identifier);
                     layoutManager = doc.sectionLayoutManagers[identifier];
+                    
                     identifier = @(documentObject.identifier);
                     attributes = layoutManager.items[identifier];
+                    
                     if (attributes != nil) {
                         attributes.frame = [documentObject elementViewFrameDesigner];
                         _identifierJustDisplayed = documentObject.identifier;
@@ -3668,8 +3757,8 @@ END_deselectElementView:;
 - (MADDesignerElementView *)elementViewForManagedObject:(__kindof RptqDocumentElement *)managedObject {
 
     id elementView;
-
-    elementView = [self viewForObjectID:@(managedObject.identifier)];
+    NSNumber *identifier = @(managedObject.identifier);
+    elementView = [self viewForObjectID:identifier];
     if (elementView) goto ElementViewForManagedObjectShortCircut;
 
     SEL handleTap = @selector(handleToggleElementView:);

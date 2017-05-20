@@ -24,7 +24,7 @@
     @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;
     @property (nonatomic, readwrite, assign, getter=isResizingEnabled) BOOL enableResizing;
 
-    @property (nonatomic, readwrite, strong) NSAttributedString *displayStringAttributed;
+    @property (nonatomic, readwrite, strong) NSMutableAttributedString *displayStringAttributed;
     @property (nonatomic, readwrite, strong) UIImage *displayImage;
     @property (nonatomic, readwrite, strong) MTBarcode *displayBarcode;
 
@@ -40,7 +40,16 @@
     - (void)flash:(void (^)(BOOL finished))completion;
 
     - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+    - (void)updateWithElement:(RptqDocumentElement *)element;
     - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
+
+    - (void)updateFontName:(NSString *)fontname
+                  fontSize:(double)fontSize
+                      bold:(BOOL)bold
+                    italic:(BOOL)italic;
+
+- (void)updateSetStrikethrough:(BOOL)strikethrough;
+- (void)updateSetUnderline:(BOOL)underline;
 
 @end
 

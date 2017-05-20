@@ -2423,6 +2423,7 @@
 		4CE8A03B14C019B4007C8345 /* UIImageDocuments20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocuments20@2x.png"; path = "Reports/UIImageDocuments20@2x.png"; sourceTree = "<group>"; };
 		4CE8A03C14C019B4007C8345 /* UIImageDocumentsAlt20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentsAlt20.png; path = Reports/UIImageDocumentsAlt20.png; sourceTree = "<group>"; };
 		4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentsAlt20@2x.png"; path = "Reports/UIImageDocumentsAlt20@2x.png"; sourceTree = "<group>"; };
+		4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerDisplayProtocol.h; sourceTree = "<group>"; };
 		4CEBD02E1E319535009FE2DC /* MADAnimatedTransitionControllerPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAnimatedTransitionControllerPush.h; path = MADStack/MADQuery/UI/MADAnimatedTransitionControllerPush.h; sourceTree = "<group>"; };
 		4CEBD02F1E319535009FE2DC /* MADAnimatedTransitionControllerPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitionControllerPush.m; path = MADStack/MADQuery/UI/MADAnimatedTransitionControllerPush.m; sourceTree = "<group>"; };
 		4CEBD0311E319546009FE2DC /* MADAnimatedTransitionControllerPop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAnimatedTransitionControllerPop.h; path = MADStack/MADQuery/UI/MADAnimatedTransitionControllerPop.h; sourceTree = "<group>"; };
@@ -2828,6 +2829,7 @@
 				4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */,
 				4C26B9F61BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.h */,
 				4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */,
+				4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;

@@ -41,6 +41,7 @@
 #import "MADControlState.h"
 
 #import "MADReportDesignerFontSelectorDelegateProtocol.h"
+#import "MADDesignerDisplayProtocol.h"
 
 static const CGFloat CornerRadius = 6.6666f;
 static const CGFloat BorderWidth = 1.0000f;
@@ -263,7 +264,7 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+        
     self.tableView.delegate = self;
     
     self.stepperPaddingTop.tag = MADTagStepperPaddingTop;
@@ -867,31 +868,16 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
             self.controlStateBold = MTControlStateOff;
             break;
         case MTControlStateOff:
-            self.controlStateBold = MTControlStateOn;
-            break;
         case MTControlStateAmbiguous:
-            self.controlStateBold = MTControlStateOn;
-            break;
         default:
             self.controlStateBold = MTControlStateOn;
             break;
     }
     [self setStateInControl:self.buttonBold forState:self.controlStateBold];
     
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.textStyle.bold = ControlStateIsOn(self.controlStateBold);
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    MADocument *document = self.document;
+    [document updateElements:self.userSelectedObjectIDs
+                     setBold:ControlStateIsOn(self.controlStateBold)];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -900,31 +886,16 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
             self.controlStateItalic = MTControlStateOff;
             break;
         case MTControlStateOff:
-            self.controlStateItalic = MTControlStateOn;
-            break;
         case MTControlStateAmbiguous:
-            self.controlStateItalic = MTControlStateOn;
-            break;
         default:
             self.controlStateItalic = MTControlStateOn;
             break;
     }
     [self setStateInControl:self.buttonItalic forState:self.controlStateItalic];
 
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.textStyle.italic = ControlStateIsOn(self.controlStateItalic);
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    MADocument *document = self.document;
+    [document updateElements:self.userSelectedObjectIDs
+                   setItalic:ControlStateIsOn(self.controlStateItalic)];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -943,21 +914,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
             break;
     }
     [self setStateInControl:self.buttonStrike forState:self.controlStateStrike];
-    
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.textStyle.strikethrough = ControlStateIsOn(_controlStateStrike);
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+
+    MADocument *document = self.document;
+    [document updateElements:self.userSelectedObjectIDs
+                     setStrikethrough:ControlStateIsOn(self.controlStateStrike)];
 }
 
 
@@ -977,21 +937,10 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
             break;
     }
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
-    
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.textStyle.underline = ControlStateIsOn(_controlStateUnderline);
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+
+    MADocument *document = self.document;
+    [document updateElements:self.userSelectedObjectIDs
+            setUnderline:ControlStateIsOn(self.controlStateUnderline)];
 }
 
 - (void)emptySelector:(id)whofuckingCares { }

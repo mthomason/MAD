@@ -103,6 +103,11 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)resetMainQuery;
     - (void)resetSectionLayoutManagers;
 
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBold:(BOOL)bold;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setStrikethrough:(BOOL)strikethrough;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setUnderline:(BOOL)underline;
+
 @end
 
 #endif

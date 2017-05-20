@@ -23,7 +23,7 @@
 @interface MADElementStylizedText ()
 
     - (instancetype)init NS_DESIGNATED_INITIALIZER;
-    @property (nonatomic, strong, readwrite) NSDictionary *fontAttributes;
+    @property (nonatomic, strong, readwrite) NSMutableDictionary *fontAttributes;
 
 @end
 
@@ -88,8 +88,8 @@
                                                                         NSUnderlineStyleSingle :
                                                                         NSUnderlineStyleNone];
         
-        NSDictionary *fontAttributes;
-        fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+        NSMutableDictionary *fontAttributes;
+        fontAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                     customFont,         NSFontAttributeName,
                                     baselineOffset,     NSBaselineOffsetAttributeName,
                                     underlineStyle,     NSUnderlineStyleAttributeName,
