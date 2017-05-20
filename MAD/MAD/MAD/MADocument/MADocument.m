@@ -941,9 +941,8 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)handleDocumentStateChanged:(NSNotification *)notification {
 
-    MADocument *document = notification.object;
-    if (document != nil) {
-        switch (document.documentState) {
+    if (notification.object != nil) {
+        switch (((MADocument *)notification.object).documentState) {
             case UIDocumentStateClosed:
                 NSLog(@"\n\n\tDocument state closed.\n\n");
                 break;

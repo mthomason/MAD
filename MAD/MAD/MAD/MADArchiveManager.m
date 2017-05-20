@@ -156,7 +156,7 @@ int restore_backup(char *, char *, char *);
 
 - (int)unarchiveV8 {
     int success = 0;
-    BOOL isDirectory;
+    BOOL isDirectory, fileExist;
     int r;
     //NSURL *urlGuts = _filewrapper.copy;
     NSString *destinationPath = _filewrapper.path;
@@ -167,10 +167,10 @@ int restore_backup(char *, char *, char *);
     [MADFileUtilities deleteCoreDataFilesAtDirectory: _filewrapper];
     
     char *dest = 0, *filename = 0, *source = 0;
-    success = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
-                                                   isDirectory: &isDirectory];
+    fileExist = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
+                                                     isDirectory: &isDirectory];
     
-    if (!success || !isDirectory) {
+    if (!fileExist || !isDirectory) {
         BOOL successCreate, sucessExist;
         successCreate = [[NSFileManager defaultManager] createDirectoryAtPath: destinationPath
                                                   withIntermediateDirectories: YES

@@ -54,17 +54,23 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
 }
 
 static inline bool path_exist(const char *path) {
-    return !(access(path, F_OK) == -1);
+    int access_i = access(path, F_OK);
+    if ((access_i < 0)) {
+        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Debug (path_exist)(%d): %s.", errno, strerror(errno));
+        return false;
+    } else {
+        return true;
+    }
 }
 
 
 bool directory_exist(const char *path) {
     bool opened_directory = false;
-    size_t path_len = strlen(path);
-    char *p = (char *) malloc((path_len) * sizeof(char));
+    size_t path_len = (strlen(path) + 1) * sizeof(char);
+    char *p = (char *) malloc(path_len);
     p[0] = '\0';
-    strlcpy(p, path, sizeof(p));
-    strip_trailing_slashes(&path);
+    strlcpy(p, path, path_len);
+    strip_trailing_slashes(&p);
     DIR *dir = opendir(p);
     if (dir) {
         opened_directory = true;
@@ -92,10 +98,10 @@ bool archive_function_result_handler(int ar, const char *description) {
 
 bool mad_mkdir(const char *path) {
     bool success;
-    size_t path_len = strlen(path);
-    char *p = (char *) malloc((path_len + 1) * sizeof(char));
+    size_t path_len = (strlen(path) + 1) * sizeof(char);
+    char *p = (char *) malloc(path_len);
     p[0] = '\0';
-    strlcpy(p, path, sizeof(p));
+    strlcpy(p, path, path_len);
     strip_trailing_slashes(&p);
 
     success = mkdir(p, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0;
@@ -279,9 +285,10 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         }
         if (r >= ARCHIVE_OK && archive_entry_size(source_archive_entry) > 0) {
             r = mad_copy_data(source_archive, dest_archive);
-            if (r < ARCHIVE_WARN)
+            if (r < ARCHIVE_WARN) {
                 asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error (%d): mad_copy_data", r);
                 goto EXTRACT_MAD_FAIL;
+            }
         } else {
             const char *error = archive_error_string(dest_archive);
             asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "%s", error);
