@@ -124,13 +124,11 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 #pragma mark Overrides
 
 - (void)setSelected:(BOOL)selected {
-    NSLog(@"%s %s", __PRETTY_FUNCTION__, selected ? "YES" : "NO");
     [super setSelected:selected];
     [_labelTitle setSelected:selected];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
-    NSLog(@"%s %s", __PRETTY_FUNCTION__, highlighted ? "YES" : "NO");
     [super setHighlighted: highlighted];
     [_labelTitle setHighlighted: highlighted];
 }

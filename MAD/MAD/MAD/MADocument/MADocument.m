@@ -13,6 +13,7 @@
 #import "MADocument.h"
 
 #import <setjmp.h>
+#import <asl.h>
 
 #import <Foundation/NSEnumerator.h>
 #import <Foundation/NSComparisonPredicate.h>
@@ -509,18 +510,26 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark Reading
 
+/// Reading MADocument has the following steps:
+/// 1. Unarchive the MAD file; it's a zip file (tar.bz2 maybe).
+/// 2. Read the unarchived file.  It's currently a Core Data file.
+
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
     BOOL success = NO;
-    //@autoreleasepool {
-        if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
-            MADArchiveManager *archiveManager;
-            archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
-                                                                    archiveURL: url];
-            success = [archiveManager unarchive];
-        
+
+    /// 1. Unarchive the MAD file; it's a zip file (tar.bz2 maybe).
+    if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
+        MADArchiveManager *archiveManager;
+        archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
+                                                                archiveURL: url];
+        if (!(success = [archiveManager unarchive])) {
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Document unarchive failed.");
         }
-    //}
+    }
+    
+    /// 2. Read the unarchived file.  It's currently a Core Data file.
+    
     NSError *error = NULL;
     success = success ? [super readFromURL:_urlGuts error:&error] : NO;
     if (error) *outError = error;
@@ -531,18 +540,17 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark Error handling
 
-- (id)contentsForType:(NSString *)typeName error:(NSError *__autoreleasing *)outError {
-    return [super contentsForType:typeName error:outError];
-}
-
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
     [super handleError:error userInteractionPermitted:userInteractionPermitted];
-    NSLog(@"  Error: %@", error.userInfo);
-    NSLog(@"  UI Permitted: %@", userInteractionPermitted ? @"YES" : @"NO");
-    NSArray *detailErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
-    if(detailErrors.count > 0) {
+    asl_log(NULL, NULL, ASL_LEVEL_ERR, "MADocument Error (Show UI %s): %s\n\t%s",
+            userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String,
+            error.localizedDescription.UTF8String);
+    NSArray *detailErrors;
+    if((detailErrors = [error.userInfo objectForKey:NSDetailedErrorsKey]).count > 0) {
         for (NSError *detailError in detailErrors) {
-            NSLog(@"  Error: %@", detailError.userInfo);
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "  Error: %s\n\t%s",
+                    detailError.localizedFailureReason.UTF8String,
+                    detailError.localizedDescription.UTF8String);
         }
     }
 }
@@ -593,7 +601,8 @@ void madwarn(char *err,  const char*err2) { }
 
     if ([self hasUnsavedChanges]) {
         
-        [self saveToURL: self.fileURL forSaveOperation: UIDocumentSaveForOverwriting
+        [self saveToURL: self.fileURL
+       forSaveOperation: UIDocumentSaveForOverwriting
       completionHandler: completion];
         
     } else {
@@ -612,47 +621,8 @@ void madwarn(char *err,  const char*err2) { }
     }
 }
 
-#pragma mark Lazy Loading
-
-/*- (NSManagedObjectModel *)madManagedObjectModel {
-    @synchronized (self) {
-        if (!_madManagedObjectModel) {
-            NSURL *modelURL;
-            NSManagedObjectModel *managedObjectModel;
-            modelURL = [[NSBundle mainBundle] URLForResource: MADManagedObjectModelName
-                                               withExtension: MADManagedObjectModelExtention];
-            if (modelURL == nil) {
-                for (NSBundle *bundle in [NSBundle allBundles]) {
-                    if (bundle.isLoaded) {
-                        
-                        modelURL = [bundle URLForResource: MADManagedObjectModelName
-                                            withExtension: MADManagedObjectModelExtention];
-                        NSURL *resourceURL = [[NSBundle bundleForClass:[self class]] resourceURL];
-                        NSURL *url = [resourceURL URLByAppendingPathComponent:@"Music.mad"].filePathURL;
-                        if (modelURL) break;
-                    }
-                }
-            }
-            managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-            _madManagedObjectModel = managedObjectModel;;
-            managedObjectModel = nil;
-        }
-        
-    }
-    return _madManagedObjectModel;
-}*/
-
 #pragma mark -
 #pragma mark UIManagedDocument Overrides
-
-/*- (NSManagedObjectContext *)managedObjectContext {
-    id managedObjectContext = [super managedObjectContext];
-    return managedObjectContext;
-}*/
-
-/*- (NSManagedObjectModel *)managedObjectModel {
-    return self.madManagedObjectModel;
-}*/
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL
                                error:(NSError * __autoreleasing *)error {
@@ -988,6 +958,9 @@ void madwarn(char *err,  const char*err2) { }
                 break;
             case UIDocumentStateSavingError:
                 NSLog(@"\n\n\tDocument state saving error.\n\n");
+                break;
+            case UIDocumentStateProgressAvailable:
+                NSLog(@"Document progress: %@", notification);
                 break;
             default:
                 break;

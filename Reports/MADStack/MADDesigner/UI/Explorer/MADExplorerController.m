@@ -672,8 +672,6 @@ typedef NS_ENUM(short, MADExplorerState) {
                                 updates:(NSArray *)updates
                              completion:(void (^)(BOOL, NSError *))completion {
 
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
     UICollectionView *__weak weakCollectionView = self.collectionView;
     
     void (^ batchUpdates)(void);
@@ -843,7 +841,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark UIMenuController required methods
 /*
 - (BOOL)canBecomeFirstResponder {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
     return YES;
 }
 
@@ -852,7 +849,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    //NSLog(@"%s\n\t%@", __PRETTY_FUNCTION__, NSStringFromSelector(action));
     BOOL result = NO;
     if (@selector(handleDidTapCollectionView:) == action) {
         result = YES;
@@ -1240,14 +1236,10 @@ typedef NS_ENUM(short, MADExplorerState) {
 
     if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
         
-        NSNotification *changeNotification = notification.copy;
-        MADocument *document = changeNotification.object;
-        UIDocumentState documentState = document.documentState;
-        
-        switch (documentState) {
+        switch (((MADocument *)notification.object).documentState) {
 
             case UIDocumentStateClosed:
-                [self handleDocumentStateChangedNotificationClosed:changeNotification];
+                [self handleDocumentStateChangedNotificationClosed:notification];
                 break;
 
             case UIDocumentStateEditingDisabled:
@@ -1259,7 +1251,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                 break;
                 
             case UIDocumentStateNormal:
-                [self handleDocumentStateChangedNotificationNormal:changeNotification];
+                [self handleDocumentStateChangedNotificationNormal:notification];
                 break;
 
             case UIDocumentStateSavingError: {

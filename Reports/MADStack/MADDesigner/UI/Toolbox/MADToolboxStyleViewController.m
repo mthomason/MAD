@@ -11,7 +11,7 @@
 #endif
 
 #import "MADToolboxStyleViewController.h"
-
+#import <asl.h>
 #import <QuartzCore/CALayer.h>
 
 #import <CoreData/NSManagedObjectContext.h>
@@ -855,7 +855,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.fontname = familyName;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (IBAction)toggleBold:(id)sender {
@@ -884,10 +886,12 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.textStyle.bold = self.controlStateBold;
+        element.textStyle.bold = ControlStateIsOn(self.controlStateBold);
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -915,10 +919,12 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
     for (identifier in userSelectedObjectIDs) {
         element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
                                                       fromObjectContext:context];
-        element.textStyle.italic = self.controlStateItalic;
+        element.textStyle.italic = ControlStateIsOn(self.controlStateItalic);
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -949,7 +955,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.textStyle.strikethrough = ControlStateIsOn(_controlStateStrike);
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 
@@ -981,7 +989,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.textStyle.underline = ControlStateIsOn(_controlStateUnderline);
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)emptySelector:(id)whofuckingCares { }
@@ -1003,7 +1013,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.fontsize = pointSize;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateLabelSizeHeight:(double)height {
@@ -1020,7 +1032,9 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         [element setSizeHeight: (float)height];
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error])
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateLabelSizeWidth:(double)width {
@@ -1037,7 +1051,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         [element setSizeWidth: (float)width];
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateHorizontalAlignment:(NSInteger)index {
@@ -1054,7 +1069,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.alignment.horizontal = (MADHorizontalAlignment)index;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateVerticalAlignment:(NSInteger)index {
@@ -1071,7 +1087,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.alignment.vertical = (MADVerticalAlignment)index;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updatePaddingTop:(double)top {
@@ -1088,7 +1105,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.padding.top = (float)top;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updatePaddingBottom:(double)bottom {
@@ -1105,7 +1123,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.padding.bottom = (float)bottom;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updatePaddingLeft:(double)left {
@@ -1122,7 +1141,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.padding.left = (float)left;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updatePaddingRight:(double)right {
@@ -1139,7 +1159,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.padding.right = (float)right;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateMarginTop:(double)top {
@@ -1156,7 +1177,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.margin.top = (float)top;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateMarginBottom:(double)bottom {
@@ -1173,7 +1195,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.margin.bottom = (float)bottom;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateMarginLeft:(double)left {
@@ -1190,7 +1213,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.margin.left = (float)left;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 - (void)updateMarginRight:(double)right {
@@ -1207,7 +1231,8 @@ const NSInteger MADIDTagSegmentedControlVerticalAlignment       = 16383;
         element.margin.right = (float)right;
     }
     NSError *error = NULL;
-    if ([context save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
+                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
 }
 
 

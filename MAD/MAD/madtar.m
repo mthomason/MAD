@@ -184,6 +184,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     // Does dest exist?
     
     if (!path_exist(dest)) {
+        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Destination doesn't exist.  Going to create path.");
         mkdirstatus = mad_mkdir(dest);
         assert(mkdirstatus);
     }
@@ -232,12 +233,14 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         assert(r);
     }
 
+    //size_t dest_root_len = (strlen(dest) + strlen(filename) + 1 + 1);
     dest_root = (char *)malloc((strlen(dest) + strlen(filename) + 1 + 1) * sizeof(char));
     dest_root[0] = '\0';
-    strlcpy(dest_root, dest, sizeof(dest_root));
-    strlcat(dest_root, "/", sizeof(dest_root));
-    strlcat(dest_root, filename, sizeof(dest_root));
-
+    strlcpy(dest_root, dest, strlen(dest_root) + strlen(dest) + 1);
+    strlcat(dest_root, "/", strlen(dest_root) + 2);
+    strlcat(dest_root, filename, strlen(dest_root) + strlen(filename) + 1);
+    assert(strlen(dest_root) > strlen(dest));
+        
     if (!path_exist(dest_root)) {
         mad_mkdir(dest_root);
     }
@@ -250,16 +253,15 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         
         char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char));
         location[0] = '\0';
-        strlcpy(location, filename, sizeof(location));
-        strlcat(location, "/", sizeof(location));
-        strlcat(location, entry_pathname, sizeof(location));
+        strlcpy(location, filename, strlen(location) + strlen(filename) + 1);
+        strlcat(location, "/", strlen(location) + 2);
+        strlcat(location, entry_pathname, strlen(location) + strlen(entry_pathname) + 1);
         
         char *path = (char *)malloc((strlen(dest) + strlen(location) + 1 + 1) * sizeof(char));
         path[0] = '\0';
-        
-        strlcpy(path, dest, sizeof(path));
-        strlcat(path, "/", sizeof(path));
-        strlcat(path, location, sizeof(path));
+        strlcpy(path, dest, strlen(path) + strlen(dest) + 1);
+        strlcat(path, "/", strlen(path) + 2);
+        strlcat(path, location, strlen(path) + strlen(location) + 1);
 
         mode_t file_mode = archive_entry_filetype(source_archive_entry);
         bool file_is_directory = S_ISDIR(file_mode);
@@ -278,10 +280,11 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         if (r >= ARCHIVE_OK && archive_entry_size(source_archive_entry) > 0) {
             r = mad_copy_data(source_archive, dest_archive);
             if (r < ARCHIVE_WARN)
+                asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error (%d): mad_copy_data", r);
                 goto EXTRACT_MAD_FAIL;
         } else {
             const char *error = archive_error_string(dest_archive);
-            printf("%s", error);
+            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "%s", error);
         }
         
         archive_write_finish_entry(dest_archive);
@@ -359,7 +362,9 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
         archive_entry_copy_stat(entry, &st);
         archive_entry_set_pathname(entry, relativePath);
         mad_archive_entry_set_attributes(&entry, &st);
-        archive_write_header(archive, entry);
+        if ((status = archive_write_header(archive, entry)) != ARCHIVE_OK) {
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: archive_write_header() returned %d.", status);
+        }
         
         if ((fd = open(filename, O_RDONLY)) == -1) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to open file %s.\n", filename);

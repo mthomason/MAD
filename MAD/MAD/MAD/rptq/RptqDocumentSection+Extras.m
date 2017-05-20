@@ -260,6 +260,142 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
     return result;
 }
 
++ (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSectionIDs {
+    NSUInteger expressionCount = 4;
+    NSExpressionDescription *expressionDescription[expressionCount];
+    NSPredicate *predicate;
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier)),
+    *keyPathType = [self keyPathType],
+    *keyPathInGroupWeight = [self keyPathInGroupWeight],
+    *keyPathInReportHeader = [self keyPathInReportHeader],
+    *keyPathInReportFooter = [self keyPathInReportFooter],
+    *keyPathInPageHeader = [self keyPathInPageHeader],
+    *keyPathInPageFooter = [self keyPathInPageFooter],
+    *keyPathInReport = [self keyPathInReport],
+    *keyPathInGroup = [self keyPathInGroup],
+    *keySelf = NSStringFromSelector(@selector(self));
+    
+    NSUInteger expressionInQueryCount = 12;
+    NSExpression *pexpressions[expressionInQueryCount];
+    pexpressions[0] = [NSExpression expressionForKeyPath:keyPathInReportHeader];
+    pexpressions[1] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicateReportHeaderNotNull;
+    predicateReportHeaderNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
+                                                                      rightExpression: pexpressions[1]
+                                                                             modifier: NSDirectPredicateModifier
+                                                                                 type: NSNotEqualToPredicateOperatorType
+                                                                              options: 0];
+    
+    pexpressions[2] = [NSExpression expressionForKeyPath:keyPathInReportFooter];
+    pexpressions[3] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicateReportFooterNotNull;
+    predicateReportFooterNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[2]
+                                                                      rightExpression: pexpressions[3]
+                                                                             modifier: NSDirectPredicateModifier
+                                                                                 type: NSNotEqualToPredicateOperatorType
+                                                                              options: 0];
+    
+    pexpressions[4] = [NSExpression expressionForKeyPath:keyPathInPageHeader];
+    pexpressions[5] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicatePageHeaderNotNull;
+    predicatePageHeaderNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[4]
+                                                                    rightExpression: pexpressions[5]
+                                                                           modifier: NSDirectPredicateModifier
+                                                                               type: NSNotEqualToPredicateOperatorType
+                                                                            options: 0];
+    
+    pexpressions[6] = [NSExpression expressionForKeyPath:keyPathInPageFooter];
+    pexpressions[7] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicatePageFooterNotNull;
+    predicatePageFooterNotNull = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[6]
+                                                                    rightExpression: pexpressions[7]
+                                                                           modifier: NSDirectPredicateModifier
+                                                                               type: NSNotEqualToPredicateOperatorType
+                                                                            options: 0];
+    
+    pexpressions[8] = [NSExpression expressionForKeyPath:keyPathInGroup];
+    pexpressions[9] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicateInGroup;
+    predicateInGroup = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[8]
+                                                          rightExpression: pexpressions[9]
+                                                                 modifier: NSDirectPredicateModifier
+                                                                     type: NSNotEqualToPredicateOperatorType
+                                                                  options: 0];
+    
+    pexpressions[10] = [NSExpression expressionForKeyPath:keyPathInReport];
+    pexpressions[11] = [NSExpression expressionForConstantValue:nil];
+    
+    NSPredicate *predicateInReport;
+    predicateInReport = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[10]
+                                                           rightExpression: pexpressions[11]
+                                                                  modifier: NSDirectPredicateModifier
+                                                                      type: NSNotEqualToPredicateOperatorType
+                                                                   options: 0];
+    
+    NSArray <NSPredicate *> *predicates;
+    predicates = [[NSArray alloc] initWithObjects: predicateReportHeaderNotNull,
+                  predicateReportFooterNotNull, predicatePageHeaderNotNull,
+                  predicatePageFooterNotNull, predicateInGroup, predicateInReport, nil];
+    predicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
+    
+    NSString *keys[] = {
+        keySelf,
+        keyIdentifier,
+        keyPathType,
+        keyPathInGroupWeight,
+    };
+    
+    NSExpression *expressions[] = {
+        [NSExpression expressionForEvaluatedObject],
+        [NSExpression expressionForKeyPath: keyIdentifier],
+        [NSExpression expressionForKeyPath: keyPathType],
+        [NSExpression expressionForKeyPath: keyPathInGroupWeight],
+    };
+    
+    NSAttributeType types[] = {
+        NSObjectIDAttributeType,
+        NSInteger64AttributeType,
+        NSInteger16AttributeType,
+        NSInteger16AttributeType,
+    };
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = [[NSExpressionDescription alloc] init];
+        expressionDescription[i].name = keys[i].copy;
+        expressionDescription[i].expression = expressions[i];
+        expressionDescription[i].expressionResultType = types[i];
+    }
+    
+    NSString *entityName = NSStringFromClass([self class]);
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    request.predicate = predicate;
+    
+    NSArray *propertiesToFetch;
+    propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
+                                                   count: (NSUInteger)expressionCount];
+    
+    request.propertiesToFetch = propertiesToFetch;
+    request.resultType = NSDictionaryResultType;
+    
+    for (NSUInteger i=0; i<expressionInQueryCount; i++) {
+        pexpressions[i] = nil;
+    }
+    
+    for (NSUInteger i=0; i<expressionCount; i++) {
+        expressionDescription[i] = nil;
+        keys[i] = nil;
+        expressions[i] = nil;
+    }
+    
+    return request;
+}
+
 + (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections {
     
     NSUInteger expressionCount = 20;

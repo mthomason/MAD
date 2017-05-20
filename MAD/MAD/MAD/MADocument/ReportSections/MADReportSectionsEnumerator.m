@@ -7,9 +7,14 @@
 //
 
 #import "MADReportSectionsEnumerator.h"
+
+#import <asl.h>
+
+#import <Foundation/NSString.h>
+#import <Foundation/NSError.h>
+
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
-#import <Foundation/NSString.h>
 
 #import "RptqDocument.h"
 #import "RptqDocumentSectionEnumerator.h"
@@ -73,6 +78,23 @@
 
 - (instancetype)init {
     return [self initWithDocument:nil];
+}
+
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (self = [super init]) {
+        NSFetchRequest  <NSDictionary *> *fetchRequest;
+        NSError *error = NULL;
+        NSArray <NSDictionary *> *sectionIDs;
+ 
+        fetchRequest = [RptqDocumentSection fetchRequestDocumentSectionIDs];
+        sectionIDs = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+        if (error != nil) {
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.", error.localizedDescription.UTF8String);
+        } else {
+            
+        }
+    }
+    return self;
 }
 
 - (instancetype)initWithDocument:(RptqDocument *)document {
@@ -225,7 +247,8 @@
     if(countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) {
         state->itemsPtr = stackbuf;
         while((countOfItemsAlreadyEnumerated < state->extra[MADIndexSectionCount]) && (count < stackbufLength)) {
-            stackbuf[count] = [self sectionAtIndex:countOfItemsAlreadyEnumerated numberOfGroups:state->extra[MADIndexGroupCount]];
+            stackbuf[count] = [self sectionAtIndex: countOfItemsAlreadyEnumerated
+                                    numberOfGroups: state->extra[MADIndexGroupCount]];
             countOfItemsAlreadyEnumerated++;
             count++;
         }

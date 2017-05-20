@@ -284,7 +284,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
     MADQueryViewSectionDelegate *layoutSection = [self layoutAtIndex:(short)section];
     NSInteger numberOfRows = layoutSection.numberOfRows == NSNotFound ?
                     [self numberOfRowsInSection:layoutSection.querySection] : 1;
-    NSLog(@"%s %ld: %ld", __PRETTY_FUNCTION__, (long)section, numberOfRows);
+    //NSLog(@"%s %ld: %ld", __PRETTY_FUNCTION__, (long)section, numberOfRows);
     return numberOfRows;
 }
 
@@ -334,11 +334,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             RptqQueryGroup *fromGroup = [_queryGroupsController objectAtIndexPath: fromIndex],
                            *toGroup =   [_queryGroupsController objectAtIndexPath: toIndex];
             
-            int16_t fromWeight   = toGroup.weight;
-            int16_t toWeight     = fromGroup.weight;
-            
-            fromGroup.weight = fromWeight;
-            toGroup.weight = toWeight;
+            fromGroup.weight = toGroup.weight;
+            toGroup.weight = fromGroup.weight;
             
             NSError *error = nil;
             [(self.queryGroupsController).managedObjectContext save:&error];
@@ -357,9 +354,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s: (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
-
-    //NSLog(@"Cell for row at index path: (%ld, %ld)", indexPath.section, indexPath.row);
 
     UITableViewCell *cell = nil;
     
@@ -379,23 +373,18 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             NSString *databaseType = db.driverID.copy;
             NSString *schemaName = db.schemaName.copy;
             
-            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSString *TextFormatConnection = @"You are connecting to %1$@"
-                                                 @" datasource named %2$@.";
-                NSString *localizedMessageFormat;
-                NSString *localizedMessage;
-                NSAttributedString *message;
-                localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
-                localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
-                message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-                                                                                                     databaseType: databaseType
-                                                                                                       schemaName: schemaName];
-            //    dispatch_sync(dispatch_get_main_queue(), ^{
-                    cell.textLabel.attributedText = message;
-                    cell.textLabel.text = localizedMessage;
-            //    });
-            //});
-            
+            NSString *TextFormatConnection = @"You are connecting to %1$@"
+            @" datasource named %2$@.";
+            NSString *localizedMessageFormat;
+            NSString *localizedMessage;
+            NSAttributedString *message;
+            localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
+            localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
+            message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+                                                                                                 databaseType: databaseType
+                                                                                                   schemaName: schemaName];
+            cell.textLabel.attributedText = message;
+            cell.textLabel.text = localizedMessage;
             break;
         }
             

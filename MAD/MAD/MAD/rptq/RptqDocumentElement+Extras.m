@@ -12,6 +12,8 @@
 
 #import "RptqDocumentElement+Extras.h"
 
+#import <asl.h>
+
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIGeometry.h>
 
@@ -583,7 +585,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
                                fromObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet;
     fetchRequet = [self fetchRequestElement: identifier];
-    return [context executeFetchRequest:fetchRequet error:nil].firstObject;
+    NSError *error = NULL;
+    NSArray <RptqDocumentElement *> *elements = [context executeFetchRequest:fetchRequet error:&error];
+    if (error != nil) {
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.  %s.",
+                error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
+    }
+    return elements.firstObject;
 }
 
 + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
@@ -598,7 +606,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSMutableOrderedSet *hasObjects = documentObject.inSectionRow.hasObjects.mutableCopy;
     [hasObjects removeObjectAtIndex:deleteIndex];
     
-    [layoutManager removeItemWithID:@(documentObject.identifier)];
+    NSNumber *identifier = @(documentObject.identifier);
+    [layoutManager removeItemWithID:identifier];
     [layoutManager layout];
     
     sectionRow.hasObjects = hasObjects;

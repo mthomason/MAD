@@ -11,7 +11,7 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@class MADReportSection, NSArray, RptqDocument, RptqQuery;
+@class MADReportSection, NSArray, RptqDocument, RptqQuery, NSManagedObjectContext;
 
 static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups);
 static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
@@ -33,6 +33,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     <NSFastEnumeration>
 
     - (instancetype)initWithDocument:(RptqDocument *)document NS_DESIGNATED_INITIALIZER;
+    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
 
     @property (nonatomic, readonly, strong) MADReportSection *reportHeader;
     @property (nonatomic, readonly, strong) MADReportSection *pageHeader;

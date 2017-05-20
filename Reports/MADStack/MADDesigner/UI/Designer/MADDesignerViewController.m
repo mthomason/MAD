@@ -1494,8 +1494,10 @@ static const inline CGSize sizePopoverFonts() {
                     [change isEqualToString: NSStringFromSelector(@selector(paddingBottom))]) {
                     
                     section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
-                    layoutManager = doc.sectionLayoutManagers[@(section.identifier)];
-                    attributes = layoutManager.items[@(documentObject.identifier)];
+                    NSNumber *identifier = @(section.identifier);
+                    layoutManager = doc.sectionLayoutManagers[identifier];
+                    identifier = @(documentObject.identifier);
+                    attributes = layoutManager.items[identifier];
                     if (attributes != nil) {
                         attributes.frame = [documentObject elementViewFrameDesigner];
                         _identifierJustDisplayed = documentObject.identifier;

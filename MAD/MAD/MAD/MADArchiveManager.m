@@ -15,6 +15,7 @@
 #import <unistd.h>
 #import <fcntl.h>
 #import <errno.h>
+#import <libgen.h>
 #import <asl.h>
 
 #import <Foundation/NSURL.h>
@@ -28,9 +29,9 @@
 #import "madmalloc.h"
 #import "madpath.h"
 #import "madtar.h"
-#import "archive.h"
-#import "archive_entry.h"
-#import "NSString+RelativePath.h"
+//#import "archive.h"
+//#import "archive_entry.h"
+//#import "NSString+RelativePath.h"
 
 @interface MADArchiveManager ()
 
@@ -41,7 +42,7 @@
 
 @implementation MADArchiveManager
 
-int backup_file(char *, char *, char *);
+int backup_file(char *, char *);
 int write_archive(char *, NSURL *);
 int restore_backup(char *, char *, char *);
 
@@ -109,7 +110,7 @@ int restore_backup(char *, char *, char *);
     strlcat(backup_path, "~", backup_size);
     
     // 1. Remove backup.
-    if ((r = backup_file(origin_path, backup_path, archive_path)) < 0) {
+    if ((r = backup_file(archive_path, backup_path)) < 0) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to backup file with %d.", r);
     } else {
         
@@ -243,30 +244,31 @@ int restore_backup(char *, char *, char *);
 // 1. Does a previous backup exist exist?
 // 2. If a previous backup exist, delete it.
 // 3. Copy file to backup location... that is, create the backup.
-int backup_file(char *origional_path, char *backup_path, char *backup_name) {
+int backup_file(char *path_origin, char *path_destination) {
     
     int r;
-    
-    if ((r = chdir(origional_path)) < 0) {
+    char *path_origin_dirname = dirname(path_origin);
+    char *path_origin_basename = basename(path_origin);
+    if ((r = chdir(path_origin_dirname)) < 0) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: Change directory returned %d. Error (%d): %s",
                 r, errno, strerror(errno));
     } else {
         // 1. Does a previous backup exist exist?
-        if ((r = access(backup_path, F_OK)) < 0)
+        if ((r = access(path_destination, F_OK)) < 0)
             asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "No backup file to delete (%d): %s\n\t%s)",
-                    errno, strerror(errno), backup_path);
+                    errno, strerror(errno), path_destination);
         else
             // 2. If a previous backup exist, delete it.
-            if ((r = remove(backup_path)) < 0)
+            if ((r = remove(path_destination)) < 0)
                 asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error removing file: %s\n\t%d: %s)",
-                        backup_path, errno, strerror(errno));
+                        path_destination, errno, strerror(errno));
         
         // 3. Copy file to backup location... that is, create the backup.
-        if ((r = copyfile(backup_name, backup_path, NULL,
+        if ((r = copyfile(path_origin_basename, path_destination, NULL,
                           COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
                           COPYFILE_COPY_XATTR)) < 0)
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: Copyfile %s.\n\tGot %d: %s.\n\t\n\tStore is migration directory?",
-                  backup_name, errno, strerror(errno));
+                  path_origin, errno, strerror(errno));
     }
     
     return r;
@@ -289,7 +291,7 @@ int write_archive(char *outname, NSURL *filewrapper) {
         asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Error (%d): %s.", errno, strerror(errno));
     }
     
-    NSDirectoryEnumerator <NSURL *> * directoryToArchive =
+    NSDirectoryEnumerator <NSURL *> * sourceDirectoryEnumerator =
     [[NSFileManager defaultManager] enumeratorAtURL: filewrapper
                          includingPropertiesForKeys: nil
                                             options: NSDirectoryEnumerationSkipsHiddenFiles
@@ -299,25 +301,27 @@ int write_archive(char *outname, NSURL *filewrapper) {
                                                    url.absoluteString.UTF8String);
                                            return YES;
                                        }];
-    NSURL *urlToArchive, *baseUrl;
-    NSString *relativePath;
-    for (urlToArchive in directoryToArchive) {
+    NSURL *source_filepath, *baseUrl;
+    NSString *source_path_relative;
+    int archive_status;
+    for (source_filepath in sourceDirectoryEnumerator) {
         
-        baseUrl = urlToArchive.copy;
+        baseUrl = source_filepath.copy;
         while (![baseUrl.lastPathComponent isEqualToString:directoryToArchiveFileName]) {
             baseUrl = baseUrl.URLByDeletingLastPathComponent;
         }
         
-        relativePath = [MADArchiveManager newStringWithPath: urlToArchive.path
-                                                 relativeTo: baseUrl.path];
+        source_path_relative = [MADArchiveManager newStringWithPath: source_filepath.path
+                                                         relativeTo: baseUrl.path];
         
-        char *filename = strdup(urlToArchive.fileSystemRepresentation);
-        char *relativePathFileSystem = strdup(relativePath.fileSystemRepresentation);
+        char *source_filepath_fsr = strdup(source_filepath.fileSystemRepresentation);
+        char *source_path_relative_fsr = strdup(source_path_relative.fileSystemRepresentation);
         
-        mad_archive_write_file(archive, filename, relativePathFileSystem);
-        
-        free(relativePathFileSystem); free(filename);
-        
+        if ((archive_status = mad_archive_write_file(archive, source_filepath_fsr,
+                                                     source_path_relative_fsr)) < 0) {
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error %d in archive.", archive_status);
+        }
+        free(source_path_relative_fsr); free(source_filepath_fsr);
     }
     
     archive_write_close(archive);

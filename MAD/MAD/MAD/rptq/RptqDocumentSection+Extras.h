@@ -31,7 +31,9 @@ typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
     + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid
                         inManagedObjectContext:(NSManagedObjectContext *)moc;
 
+    + (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSectionIDs;
     + (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections;
+
     + (NSString *)keyPathInReportHeader;
     + (NSString *)keyPathInReportFooter;
     + (NSString *)keyPathNumberOfRows;
