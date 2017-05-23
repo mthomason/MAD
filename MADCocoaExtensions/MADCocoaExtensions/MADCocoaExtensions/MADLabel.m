@@ -11,9 +11,9 @@
 @implementation MADLabel
 
 + (instancetype)newLabelDocumentCaption:(CGRect)frame width:(CGFloat)width {
-    MADLabel *label = [[self alloc] initWithFrame:frame];
-    label.clipsToBounds = NO;
-    label.numberOfLines = 0;
+    id label = [[self alloc] initWithFrame:frame];
+    [label setClipsToBounds: NO];
+    [label setNumberOfLines: 0];
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: label
                                                                   attribute: NSLayoutAttributeWidth

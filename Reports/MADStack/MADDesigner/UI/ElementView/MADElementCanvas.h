@@ -21,13 +21,6 @@
 @interface MADElementCanvas : UIView
 
     @property (nonatomic, weak) id <MADElementCanvasDelegate>canvasDelegate;
-    @property (nonatomic, strong) UIFont *displayFont;
-    @property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
-    @property (nonatomic, strong) NSNumber *underlineStyle;
-    @property (nonatomic, strong) NSNumber *strikeThroughStyle;
-    @property (nonatomic, assign) CGRect drawingRect;
-
-    @property (readonly) NSStringDrawingOptions drawingOptions;
 
 @end
 

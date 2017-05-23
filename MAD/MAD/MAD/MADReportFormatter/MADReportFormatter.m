@@ -673,7 +673,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     return (NSUInteger)self.reportLayout.count;
 }
 
-- (NSArray <NSNumber *> *)rowidsForPage:(NSUInteger)pageIndex {
+- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex {
     return _reportIndexes[pageIndex];
 }
 
@@ -967,15 +967,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
             BOOL newHeader = lastValues.count == 0;
             if (newHeader == NO) {
                 
-                id value = lastValues[groupLevel];
-                id value2 = currentValues[groupLevel];
-                
                 NSSortDescriptor *sortDesc = self.sections.groupSortDescriptors[groupLevel];
-                NSComparisonResult comparsonResult = [self compareValue:value
-                                                              withValue:value2
-                                                          usingSelector:sortDesc.selector];
-                
-                newHeader = comparsonResult != NSOrderedSame;
+                newHeader = [self compareValue:lastValues[groupLevel]
+                                     withValue:currentValues[groupLevel]
+                                 usingSelector:sortDesc.selector] != NSOrderedSame;
             }
             
             if (newHeader) {
@@ -1011,18 +1006,21 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 
 - (void)formatDocumentForcePageBreakWithFooterHeight:(CGFloat)footerHeight {
 
-    _machineState.cumulativePageHeight = _machineState.cumulativePageHeight +
-                                                 footerHeight;
+    _machineState.cumulativePageHeight = _machineState.cumulativePageHeight + footerHeight;
     [self layoutAddPageFooter];
     
     id pageInfo = self.pageLayoutTemporary != nil ?
-                            [NSMutableArray arrayWithArray: self.pageLayoutTemporary] :
+                            [[NSMutableArray alloc] initWithArray: self.pageLayoutTemporary] :
                             [[NSArray alloc] init];
     
     [self.reportLayout addObject:pageInfo];
     
-    if (self.pageIndexesTemporary != nil) [self.reportIndexes addObject:self.pageIndexesTemporary];
-    else [self.reportIndexes addObject:@[]];
+    if (self.pageIndexesTemporary != nil) {
+        [self.reportIndexes addObject:self.pageIndexesTemporary];
+    } else {
+        NSArray *emptyArray = [[NSArray alloc] init];
+        [self.reportIndexes addObject:emptyArray];
+    }
     
     [self cleanupTemporaryIndexes];
     

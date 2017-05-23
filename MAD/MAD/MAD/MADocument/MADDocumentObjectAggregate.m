@@ -67,14 +67,14 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         if (calculateInMemory == NO) {
             
             int16_t groupType = isAggregate.groupType;
-            NSArray <NSNumber *> *rowIdsForPage;
-            rowIdsForPage = [datasource.reportFormatter rowidsForPage:definition.pageIndex];
+            NSArray <NSNumber *> *rowIDsForPage;
+            rowIDsForPage = [datasource.reportFormatter rowIDsForPage:definition.pageIndex];
             
             aggregateResult = [[self class] newResultsForAggregateType: groupType
                                                               function: isAggregate.functionType
                                                               fieldKey: fieldKey
                                                              groupKeys: groupKeys
-                                                                rowids: rowIdsForPage
+                                                                rowids: rowIDsForPage
                                                          fromDataTable: datasource.dataTable];
             
         } else {    //Handle first and last

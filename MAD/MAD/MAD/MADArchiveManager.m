@@ -29,9 +29,6 @@
 #import "madmalloc.h"
 #import "madpath.h"
 #import "madtar.h"
-//#import "archive.h"
-//#import "archive_entry.h"
-//#import "NSString+RelativePath.h"
 
 @interface MADArchiveManager ()
 

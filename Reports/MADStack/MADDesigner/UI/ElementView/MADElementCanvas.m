@@ -11,31 +11,35 @@
 
 #import <MADCocoaExtensions/MADColor.h>
 
+
 @implementation MADElementCanvas
 
-static const CGFloat kDashedBorderWidth     = (0.5f);
-static const CGFloat kDashedPhase           = (0.0f);
-static const CGFloat kDashedLinesLength[]   = {4.0f, 2.0f};
-static size_t const kDashedCount            = (2.0f);
+- (void)dealloc {
+    _canvasDelegate = nil;
+}
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect: rect];
 
     id displayObject = [self.canvasDelegate displayObject];
-    if ([displayObject isKindOfClass: [MTBarcode class]]) {
-        [displayObject loadSampleData];
-        MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-        ((MTBarcode *)displayObject).forgroundColor = color;
-    }
     
     if ([displayObject isKindOfClass: [NSAttributedString class]]) {
         [displayObject drawWithRect: rect
-                            options: self.drawingOptions
+                            options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                             context: nil];
+    } else if ([displayObject isKindOfClass: [MTBarcode class]]) {
+        [displayObject loadSampleData];
+        MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
+        ((MTBarcode *)displayObject).forgroundColor = color;
     } else {
         [displayObject drawInRect:rect];
     }
-    
+
+    static const CGFloat kDashedBorderWidth     = (0.5f);
+    static const CGFloat kDashedPhase           = (0.0f);
+    static const CGFloat kDashedLinesLength[]   = {4.0f, 2.0f};
+    static size_t const kDashedCount            = (2.0f);
+
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, kDashedBorderWidth);
     UIColor *tintColor = [UIColor blackColor];
@@ -43,10 +47,6 @@ static size_t const kDashedCount            = (2.0f);
     CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount) ;
     CGContextAddRect(context, rect);
     CGContextStrokePath(context);
-}
-
-- (NSStringDrawingOptions)drawingOptions {
-    return NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
 }
 
 @end

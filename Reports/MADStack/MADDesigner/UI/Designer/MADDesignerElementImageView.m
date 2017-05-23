@@ -7,15 +7,21 @@
 //
 
 #import "MADDesignerElementImageView.h"
+#import <UIKit/UIImage.h>
+#import <MAD/RptqDocumentElementImage.h>
 
 @implementation MADDesignerElementImageView
 
-/*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    // Drawing code
+    [super drawRect:rect];
+    [(UIImage *)self.displayObject drawInRect:rect];
 }
-*/
+
+- (void)updateWithElement:(RptqDocumentElement *)element {
+    [super updateWithElement:element];
+    self.displayObject = ((RptqDocumentElementImage *)element).image;
+}
 
 @end

@@ -26,10 +26,8 @@
     @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;
     @property (nonatomic, readwrite, assign, getter=isResizingEnabled) BOOL enableResizing;
 
-    @property (nonatomic, readwrite, strong) NSMutableAttributedString *displayStringAttributed;
-    @property (nonatomic, readwrite, strong) UIImage *displayImage;
-    @property (nonatomic, readwrite, strong) MTBarcode *displayBarcode;
-
+    @property (nonatomic, strong) id displayObject;
+    @property (nonatomic, readonly, copy) NSString *textRepresentation;
 
     - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
                         tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
@@ -44,18 +42,6 @@
     - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
     - (void)updateWithElement:(RptqDocumentElement *)element;
     - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
-
-    - (void)updateFontName:(NSString *)fontname;
-    - (void)updateFontSize:(double)fontSize;
-    - (void)updateFontName:(NSString *)fontname
-                  fontSize:(double)fontSize
-                      bold:(BOOL)bold
-                    italic:(BOOL)italic;
-
-- (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal;
-- (void)updateVerticalAlignment:(MADVerticalAlignment)vertical;
-- (void)updateSetStrikethrough:(BOOL)strikethrough;
-- (void)updateSetUnderline:(BOOL)underline;
 
 @end
 

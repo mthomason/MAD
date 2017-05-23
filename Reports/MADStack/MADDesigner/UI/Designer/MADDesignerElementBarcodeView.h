@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADDesignerElementBarcodeView_h
+#define Reports_MADDesignerElementBarcodeView_h
+
 #import "MADDesignerElementView.h"
 
 @interface MADDesignerElementBarcodeView : MADDesignerElementView
 
 @end
+
+#endif

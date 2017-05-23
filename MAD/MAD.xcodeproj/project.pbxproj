@@ -60,7 +60,7 @@
 		4C35E2661EC9D6CA0090D1BF /* RptqDirectionalAsymmetry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35E2641EC9D6CA0090D1BF /* RptqDirectionalAsymmetry+Extras.m */; };
 		4C35E2691EC9D6E10090D1BF /* RptqDirectionalProperty+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C35E2671EC9D6E10090D1BF /* RptqDirectionalProperty+Extras.h */; };
 		4C35E26A1EC9D6E10090D1BF /* RptqDirectionalProperty+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35E2681EC9D6E10090D1BF /* RptqDirectionalProperty+Extras.m */; };
-		4C35E26D1EC9E7480090D1BF /* RptqRect+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C35E26B1EC9E7480090D1BF /* RptqRect+Extras.h */; };
+		4C35E26D1EC9E7480090D1BF /* RptqRect+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C35E26B1EC9E7480090D1BF /* RptqRect+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C35E26E1EC9E7480090D1BF /* RptqRect+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35E26C1EC9E7480090D1BF /* RptqRect+Extras.m */; };
 		4C35E2711EC9E9500090D1BF /* RptqSize+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C35E26F1EC9E9500090D1BF /* RptqSize+Extras.h */; };
 		4C35E2721EC9E9500090D1BF /* RptqSize+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35E2701EC9E9500090D1BF /* RptqSize+Extras.m */; };

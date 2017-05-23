@@ -129,7 +129,7 @@
 }
 
 - (NSString *)accessibilityLabel {
-    return self.elementView.displayStringAttributed.string;
+    return self.elementView.textRepresentation;
 }
 
 @end

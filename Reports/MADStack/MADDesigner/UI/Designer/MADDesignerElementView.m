@@ -14,12 +14,14 @@
 #import <QuartzCore/CALayer.h>
 
 #import <UIKit/NSParagraphStyle.h>
+#import <UIKit/UIGraphics.h>
 
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
 
+#import <MAD/RptqRect+Extras.h>
 #import <MAD/RptqAlignment.h>
 #import <MAD/RptqTextStyle.h>
 #import <MAD/RptqDocumentElement.h>
@@ -27,10 +29,13 @@
 #import <MAD/RptqDocumentElementImage.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
-#import <MAD/MADFontDescriptor.h>
 
 #import <MAD/MADElementStylizedText.h>
 #import <MAD/MADAlignment.h>
+
+#import "MADDesignerElementTextView.h"
+#import "MADDesignerElementBarcodeView.h"
+#import "MADDesignerElementImageView.h"
 
 #import "MADElementCanvas.h"
 #import "MADResizeHandles.h"
@@ -52,29 +57,18 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @interface MADDesignerElementView ()
     <MADElementCanvasDelegate, UIGestureRecognizerDelegate>
 
-    @property (nonatomic, weak)     MADElementCanvas *canvasView;
     @property (nonatomic, strong)   MADResizeHandles *resizeHandles;
-
     @property (nonatomic, weak)     NSManagedObjectContext *managedObjectContext;
-
     @property (nonatomic, copy)     NSManagedObjectID *objectID;
+    @property (nonatomic, readwrite, copy) NSString *textRepresentation;
 
 @end
 
-@implementation MADDesignerElementView {
-    double _fontsize;
-    BOOL _bold;
-    BOOL _italic;
-    BOOL _underline;
-    BOOL _strikethrough;
-    int16_t _horizontal;
-    NSString *_fontname;
-}
+@implementation MADDesignerElementView
 
 @synthesize identifier = _identifier;
 
 - (void)dealloc {
-    [_canvasView removeFromSuperview];
     if (_resizeHandles) {
         UIView *view;
         for (view in _resizeHandles.resizeHandles) {
@@ -97,20 +91,24 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
                            tapSelector:(SEL)selector {
     
     CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
-    if (self = [self initWithFrame: rect]) {
+    
+    switch (documentObject.documentObjectType) {
+        case MTDocumentObjectTypeImage:
+            self = [[MADDesignerElementImageView alloc] initWithFrame:rect];
+            break;
+        case MTDocumentObjectTypeBarcode:
+            self = [[MADDesignerElementBarcodeView alloc] initWithFrame:rect];
+            break;
+        default:
+            self = [[MADDesignerElementTextView alloc] initWithFrame:rect];
+            break;
+    }
+    
+    if (self) {
         
         self.identifier = documentObject.identifier;
         self.objectID = documentObject.objectID.copy;
         
-        MADElementCanvas *canvasView;
-        canvasView = [[MADElementCanvas alloc] initWithFrame:rect];
-        canvasView.autoresizingMask = MADViewAutoresizingFlexable();
-        canvasView.backgroundColor = [UIColor clearColor];
-        canvasView.canvasDelegate = self;
-        [self addSubview:canvasView];
-        self.canvasView = canvasView;
-        
-
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
@@ -140,7 +138,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     return self;
 }
 
-#pragma mark - NSObject
+#pragma mark -
+#pragma mark NSObject
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
     shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -154,36 +153,50 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     return YES;
 }
 
+#pragma mark -
+#pragma mark UIView
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    id displayObject = [self displayObject];
+    
+    if ([displayObject isKindOfClass: [NSAttributedString class]]) {
+        [displayObject drawWithRect: rect
+                            options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                            context: nil];
+    } else if ([displayObject isKindOfClass: [MTBarcode class]]) {
+        [displayObject loadSampleData];
+        MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
+        ((MTBarcode *)displayObject).forgroundColor = color;
+    } else {
+        [displayObject drawInRect:rect];
+    }
+    
+    static const CGFloat kDashedBorderWidth     = (0.5000f);
+    static const CGFloat kDashedPhase           = (0.0000f);
+    static const CGFloat kDashedLinesLength[]   = {4.0000f, 2.0000f};
+    static size_t const kDashedCount            = (2.0000f);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, kDashedBorderWidth);
+    UIColor *tintColor = [UIColor blackColor];
+    CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
+    CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount) ;
+    CGContextAddRect(context, rect);
+    CGContextStrokePath(context);
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
+
+    //
+    RptqDocumentElement *element;
+    element = [_managedObjectContext objectWithID: _objectID];
+    
+    //self.frame = element.rect.frame;
+    
+    // Position handles
     [self.resizeHandles positionAroundRect:self.frame];
-}
-
-#pragma mark - UIView
-
-- (id)displayObject {
-    if (self.displayImage != nil) {
-        return self.displayImage;
-    } else if (self.displayBarcode != nil) {
-        return self.displayBarcode;
-    } else {
-        return self.displayStringAttributed;
-    }
-}
-
-- (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
-    _canvasView.contentScaleFactor = contentScaleFactor;
-    super.contentScaleFactor = contentScaleFactor;
-}
-
-- (void)setNeedsDisplay {
-    [_canvasView  setNeedsDisplay];
-    [super setNeedsDisplay];
-}
-
-- (void)setTransform:(CGAffineTransform)transform {
-    _canvasView.transform = transform;
-    super.transform = transform;
 }
 
 - (void)setAlpha:(CGFloat)alpha {
@@ -196,13 +209,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     self.backgroundColor = labelBackgroundColor;
 }
 
-- (void)setEnableResizing:(BOOL)enableResizing {
-    if (_enableResizing != enableResizing) {
-        _enableResizing = enableResizing;
-        if (enableResizing) [self showResizeHandles];
-        else [self hideResizeHandles];
-    }
-}
+#pragma mark -
+#pragma mark Accessors
 
 - (void)showResizeHandles { }
 
@@ -212,64 +220,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         ((UIView *)resizeView).hidden = YES;
     }
 }
-
-- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        UIView *piece = gestureRecognizer.view;
-        CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
-        
-        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width,
-                                              locationInView.y / piece.bounds.size.height);
-        piece.center = locationInSuperview;
-    }
-}
-
-- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer {
-    UIView *piece = nil;
-    if ([piece isKindOfClass:[MADResizeHandleView class]]) {
-        [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-        if (gestureRecognizer.state == UIGestureRecognizerStateBegan
-                                || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-            CGPoint translation = [gestureRecognizer translationInView:piece.superview];
-            switch (((MADResizeHandleView *)piece).type) {
-                case north:
-                case south:
-                    [self resize:CGSizeMake(self.frame.size.width,
-                                            self.frame.size.width + translation.y)];
-                    break;
-                case east:
-                case west:
-                    [self resize:CGSizeMake(self.frame.size.width + translation.x,
-                                            self.frame.size.width)];
-                    break;
-                case northWest:
-                case northEast:
-                case southEast:
-                case southWest:
-                default:
-                    [self resize:CGSizeMake(self.frame.size.width + translation.x,
-                                            self.frame.size.width + translation.y)];
-                    break;
-            }
-            [gestureRecognizer setTranslation:CGPointZero inView:piece.superview];
-        }
-    }
-}
-
-- (void)resize:(CGSize)size {
-
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectID];
-    [documentObject setSizeValue:size];
-
-    NSError * __autoreleasing *error = NULL;
-    [managedObjectContext save:error];
-    NSAssert(error == NULL, @"Error: %@", *error);
-    
-}
-
-#pragma mark - Members
 
 - (void)flash:(void (^)(BOOL finished))completion {
 
@@ -313,9 +263,56 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     }
 }
 
-- (id)debugQuickLookObject {
-    return self;
+- (void)setEnableResizing:(BOOL)enableResizing {
+    if (_enableResizing != enableResizing) {
+        _enableResizing = enableResizing;
+        if (enableResizing) [self showResizeHandles];
+        else [self hideResizeHandles];
+    }
 }
+
+- (void)resize:(CGSize)size {
+
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectID];
+    [documentObject setSizeValue:size];
+
+    NSError * __autoreleasing *error = NULL;
+    [managedObjectContext save:error];
+    NSAssert(error == NULL, @"Error: %@", *error);
+    
+}
+
+#pragma mark -
+#pragma mark Update model
+
+- (void)updateWithElement:(RptqDocumentElement *)element {
+    if (element != nil) {
+        
+        CGRect marginViewFrame = [element boundsContentView];
+        self.frame = marginViewFrame;
+        
+        NSString *textRepresentation = [element designerRepresentationText];
+        self.textRepresentation = textRepresentation.copy;
+        
+    }
+}
+
+- (void)updateSetMarginTop:(float)value {
+    
+}
+- (void)updateSetMarginBottom:(float)value {
+    
+}
+- (void)updateSetMarginLeft:(float)value {
+    
+}
+- (void)updateSetMarginRight:(float)value {
+    
+}
+
+#pragma mark -
+#pragma mark Event Handlers
 
 - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
     RptqDocumentElement *element = (RptqDocumentElement *)[context objectWithID:self.objectID];
@@ -323,170 +320,54 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     self.managedObjectContext = context;
 }
 
-- (void)updateWithElement:(RptqDocumentElement *)element {
-    if (element != nil) {
-        
-        CGRect marginViewFrame = [element boundsContentView];
-        
-        self.frame = marginViewFrame;
-        self.displayBarcode = nil;
-        self.displayImage = nil;
-        
-        
-        NSString *string = [element designerRepresentationText];
-        
-        switch (element.documentObjectType) {
-                
-            case MTDocumentObjectTypeImage:
-                self.displayImage = ((RptqDocumentElementImage *)element).image;
-                break;
-                
-            case MTDocumentObjectTypeBarcode: {
-                MTBarcode *barcode;
-                barcode = [MTBarcode newBarcode:(RptqDocumentElementBarcode *)element];
-                self.displayBarcode = barcode;
-                break;
+- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer {
+    UIView *piece = nil;
+    if ([piece isKindOfClass:[MADResizeHandleView class]]) {
+        [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan
+                                || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [gestureRecognizer translationInView:piece.superview];
+            switch (((MADResizeHandleView *)piece).type) {
+                case north:
+                case south:
+                    [self resize:CGSizeMake(self.frame.size.width,
+                                            self.frame.size.width + translation.y)];
+                    break;
+                case east:
+                case west:
+                    [self resize:CGSizeMake(self.frame.size.width + translation.x,
+                                            self.frame.size.width)];
+                    break;
+                case northWest:
+                case northEast:
+                case southEast:
+                case southWest:
+                default:
+                    [self resize:CGSizeMake(self.frame.size.width + translation.x,
+                                            self.frame.size.width + translation.y)];
+                    break;
             }
-                
-            default:
-                break;
+            [gestureRecognizer setTranslation:CGPointZero inView:piece.superview];
         }
-        _fontname = element.fontname.copy;
-        _fontsize = element.fontsize;
-        _bold = element.textStyle.bold;
-        _italic = element.textStyle.italic;
-        _strikethrough = element.textStyle.strikethrough;
-        _underline = element.textStyle.underline;
-        _horizontal = element.alignment.horizontal;
-        MADElementStylizedText *attributesText;
-        attributesText = [[MADElementStylizedText alloc] initWithFontName:element.fontname
-                                                                 fontSize:element.fontsize
-                                                                textStyle:element.textStyle
-                                                      horizontalAlignment:element.alignment.horizontal];
-        
-        NSMutableAttributedString *attributtedString = [[NSMutableAttributedString alloc] initWithString: string
-                                                                                              attributes: attributesText.fontAttributes];
-        self.displayStringAttributed = attributtedString;
-        [self setNeedsLayout];
-        [self setNeedsDisplay];
     }
 }
 
-- (void)updateFontName:(NSString *)fontname
-              fontSize:(double)fontsize
-                  bold:(BOOL)bold
-                italic:(BOOL)italic {
-    if (_bold != bold || _italic != italic || _fontsize != fontsize || ![_fontname isEqualToString:fontname]) {
-        UIFontDescriptor *fontDescriptor;
-        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
-                                                                fontSize: fontsize
-                                                                    bold: bold
-                                                                  italic: italic];
-        
-        UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
-        NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-        [self.displayStringAttributed addAttributes:newAttributes
-                                              range:NSMakeRange(0, self.displayStringAttributed.length)];
-        _fontname = fontname.copy;
-        _fontsize = fontsize;
-        _bold = bold;
-        _italic = italic;
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint locationInView = [gestureRecognizer locationInView:gestureRecognizer.view];
+        gestureRecognizer.view.layer.anchorPoint =
+                CGPointMake(locationInView.x / gestureRecognizer.view.bounds.size.width,
+                            locationInView.y / gestureRecognizer.view.bounds.size.height);
+        gestureRecognizer.view.center =
+                [gestureRecognizer locationInView:gestureRecognizer.view.superview];
     }
 }
 
+#pragma mark -
+#pragma mark Standard
 
-
-- (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal {
-    if (_horizontal != horizontal) {
-        NSMutableParagraphStyle *paragraphStyle = [self.displayStringAttributed attribute:NSParagraphStyleAttributeName atIndex:0 effectiveRange:nil];
-        switch (horizontal) {
-            case MADHorizontalAlignmentLeft:
-                paragraphStyle.alignment = NSTextAlignmentLeft;
-                break;
-            case MADHorizontalAlignmentRight:
-                paragraphStyle.alignment = NSTextAlignmentRight;
-                break;
-            case MADHorizontalAlignmentCenter:
-                paragraphStyle.alignment = NSTextAlignmentCenter;
-                break;
-            case MADHorizontalAlignmentJustified:
-                paragraphStyle.alignment = NSTextAlignmentJustified;
-                break;
-            case MADHorizontalAlignmentNatrual:
-                paragraphStyle.alignment = NSTextAlignmentNatural;
-                break;
-            default:
-                paragraphStyle.alignment = NSTextAlignmentLeft;
-                break;
-        }
-        [self.displayStringAttributed addAttribute:NSParagraphStyleAttributeName
-                                             value:paragraphStyle
-                                             range:NSMakeRange(0, self.displayStringAttributed.length)];
-        _horizontal = horizontal;
-    }
-
+- (id)debugQuickLookObject {
+    return self;
 }
-
-- (void)updateVerticalAlignment:(MADVerticalAlignment)vertical {
-    
-}
-
-- (void)updateFontSize:(double)fontsize {
-    if (_fontsize != fontsize) {
-        UIFontDescriptor *fontDescriptor;
-        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: _fontname
-                                                                fontSize: fontsize
-                                                                    bold: _bold
-                                                                  italic: _italic];
-        
-        UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
-        NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-        [self.displayStringAttributed addAttributes:newAttributes
-                                              range:NSMakeRange(0, self.displayStringAttributed.length)];
-        _fontsize = fontsize;
-    }
-}
-
-
-- (void)updateFontName:(NSString *)fontname {
-    if (![_fontname isEqualToString:fontname]) {
-        UIFontDescriptor *fontDescriptor;
-        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
-                                                                fontSize: _fontsize
-                                                                    bold: _bold
-                                                                  italic: _italic];
-        
-        UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
-        NSDictionary *newAttributes;
-        newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-        [self.displayStringAttributed addAttributes:newAttributes
-                                              range:NSMakeRange(0, self.displayStringAttributed.length)];
-        _fontname = fontname.copy;
-    }
-}
-
-
-- (void)updateSetStrikethrough:(BOOL)strikethrough {
-    if (_strikethrough != strikethrough) {
-        NSNumber *strikethroughStyle;
-        strikethroughStyle = [[NSNumber alloc] initWithInteger: strikethrough ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
-        [self.displayStringAttributed addAttribute:NSStrikethroughStyleAttributeName
-                                             value:strikethroughStyle
-                                             range:NSMakeRange(0, self.displayStringAttributed.length)];
-        _strikethrough = strikethrough;
-    }
-}
-
-- (void)updateSetUnderline:(BOOL)underline {
-    if (_underline != underline) {
-        NSNumber *underlineStyle;
-        underlineStyle = [[NSNumber alloc] initWithInteger: underline ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
-        [self.displayStringAttributed addAttribute:NSUnderlineStyleAttributeName
-                                             value:underlineStyle
-                                             range:NSMakeRange(0, self.displayStringAttributed.length)];
-        _underline = underline;
-    }
-}
-
 
 @end

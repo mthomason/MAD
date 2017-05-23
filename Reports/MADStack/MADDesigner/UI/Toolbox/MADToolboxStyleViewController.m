@@ -923,39 +923,15 @@ const NSInteger MADIDTagSegmentedControlHorizontalAlignment     = 8191;
 - (void)updateLabelSizeHeight:(double)height {
     NSAttributedString *displayHeight = [MADToolboxStrings newSizeHeightForValue:height];
     self.labelSizeHeight.attributedText = displayHeight;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        [element setSizeHeight: (float)height];
-    }
-    NSError *error = NULL;
-    if (![context save:&error])
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setSizeHeight:(float)height];
 }
 
 - (void)updateLabelSizeWidth:(double)width {
     NSAttributedString *displayWidth = [MADToolboxStrings newSizeWidthForValue:width];
     self.labelSizeWidth.attributedText = displayWidth;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        [element setSizeWidth: (float)width];
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setSizeWidth:(float)width];
 }
+
 
 - (void)updatePaddingTop:(double)top {
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue:top];
@@ -1032,73 +1008,25 @@ const NSInteger MADIDTagSegmentedControlHorizontalAlignment     = 8191;
 - (void)updateMarginTop:(double)top {
     NSAttributedString *display = [MADToolboxStrings newMarginTopForValue: top];
     self.labelMarginTop.attributedText = display;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.margin.top = (float)top;
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setMarginTop:(float)top];
 }
 
 - (void)updateMarginBottom:(double)bottom {
     NSAttributedString *display = [MADToolboxStrings newMarginBottomForValue:bottom];
     self.labelMarginBottom.attributedText = display;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.margin.bottom = (float)bottom;
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setMarginBottom:(float)bottom];
 }
 
 - (void)updateMarginLeft:(double)left {
     NSAttributedString *display = [MADToolboxStrings newMarginLeftForValue: left];
     self.labelMarginLeft.attributedText = display;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.margin.left = (float)left;
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setMarginLeft:(float)left];
 }
 
 - (void)updateMarginRight:(double)right {
     NSAttributedString *display = [MADToolboxStrings newMarginRightForValue: right];
     self.labelMarginRight.attributedText = display;
-    NSManagedObjectContext *context = _document.managedObjectContext;
-    RptqDocumentElement *element;
-    NSSet <NSNumber *> *userSelectedObjectIDs;
-    userSelectedObjectIDs = userSelectedObjectIDs;
-    NSNumber *identifier;
-    for (identifier in userSelectedObjectIDs) {
-        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-                                                      fromObjectContext:context];
-        element.margin.right = (float)right;
-    }
-    NSError *error = NULL;
-    if (![context save:&error]) asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s. %s.",
-                error.localizedDescription.UTF8String, error.localizedFailureReason.UTF8String);
+    [self.document updateElements:self.userSelectedObjectIDs setMarginRight:(float)right];
 }
 
 - (IBAction)controlValueChanged:(UIControl *)sender {

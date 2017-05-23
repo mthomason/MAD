@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 @interface MADDesignerSectionView : MADManagedObjectCollectionView
 
     + (instancetype)newDesignerSectionView:(MADReportSection *)section
-                                  delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource>)layoutDelegate;
+                                  delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate;
 
     @property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
 

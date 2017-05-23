@@ -56,11 +56,10 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
     - (void)loadFromCacheWithSize:(CGSize)printableSize;
 
     - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
-    - (NSArray <MADSectionRepresentation *> *)layoutForPage:(NSUInteger)page;
 
     - (CGFloat)heightForSectionWithObjectIdentifier:(NSNumber *)identifier;
 
-    - (NSArray <NSNumber *> *)rowidsForPage:(NSUInteger)pageIndex;
+    - (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex;
 
     - (void)setLayoutSize:(CGSize)layoutSize;
     - (void)setMarginUsingPrintableRect:(CGRect)printableRect;

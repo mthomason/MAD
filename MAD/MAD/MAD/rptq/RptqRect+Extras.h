@@ -15,6 +15,7 @@
 
 + (NSString *)keyOrigin;
 + (NSString *)keySize;
+- (struct CGRect)frame;
 
 @end
 

@@ -37,6 +37,11 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
 
 @implementation MADDesignerSectionLayoutLiquid
 
+- (void)dealloc {
+    [_itemAttributesBySection removeAllObjects];
+    _delegate = nil;
+}
+
 - (instancetype)init {
     self = [super init];
     if (!self) return nil;
@@ -47,7 +52,6 @@ static inline CGRect rectAvailablePosition2(CGRect rect, CGRect centerRect) {
     NSString *decorationViewKind = NSStringFromClass([MADDesignerSectionControl class]);
     [self registerClass: [MADDesignerSectionControl class]
 forDecorationViewOfKind: decorationViewKind];
-
 
     return self;
 }

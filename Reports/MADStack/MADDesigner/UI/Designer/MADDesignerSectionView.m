@@ -17,6 +17,7 @@
 #import <UIKit/UIAccessibilityCustomAction.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
 #import <UIKit/UIAccessibilityConstants.h>
+#import <UIKit/UIGestureRecognizer.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -63,15 +64,24 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 
 @implementation MADDesignerSectionView
 
+- (void)dealloc {
+    self.delegate = nil;
+    self.dataSource = nil;
+}
+
+
 + (instancetype)newDesignerSectionView:(MADReportSection *)section
-                              delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource>)layoutDelegate {
-    id collectionView;
+                              delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate {
+    
     MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
     layout.delegate = layoutDelegate;
+    MADDesignerSectionView *collectionView;
     collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    ((MADDesignerSectionView *)collectionView).identifier   = section.identifier;
-    ((MADDesignerSectionView *)collectionView).tag          = section.identifier;
-    ((MADDesignerSectionView *)collectionView).visible      = section.isVisible;
+    collectionView.delegate     = layoutDelegate;
+    collectionView.dataSource   = layoutDelegate;
+    collectionView.identifier   = section.identifier;
+    collectionView.tag          = section.identifier;
+    collectionView.visible      = section.isVisible;
     return collectionView;
 }
 
@@ -92,11 +102,16 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
         NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
         NSString *documentElementReuseIdentifier = [MADCellElement reuseIdentifier];
         
-        [self registerClass: [MADCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
+        [self registerClass: [MADCellElement class]
+ forCellWithReuseIdentifier: documentElementReuseIdentifier];
         
-        [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionHeader withReuseIdentifier: supplmentaryViewReuseIdHeader];
+        [self registerClass: [MTCollectionReuseableViewDefault class]
+ forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+        withReuseIdentifier: supplmentaryViewReuseIdHeader];
         
-        [self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionFooter withReuseIdentifier: supplmentaryViewReuseIdHeader];
+        [self registerClass: [MTCollectionReuseableViewDefault class]
+ forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
+        withReuseIdentifier: supplmentaryViewReuseIdHeader];
         
         self.clipsToBounds = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -119,6 +134,28 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     
 }
 
+#pragma mark -
+#pragma mark UIView
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    UIColor *bgcolor = backgroundColor(self.selected, self.visible);
+    CGContextSetFillColorWithColor(context, bgcolor.CGColor);
+    CGContextFillRect(context, rect);
+}
+
+- (CGSize)intrinsicContentSize {
+    return CGSizeMake(self.collectionViewLayout.collectionViewContentSize.width,
+                      self.collectionViewLayout.collectionViewContentSize.height + MTDefaultFingerSizeHeight);
+}
+
+#pragma mark -
+#pragma mark Delegates
+
+#pragma mark UIGestureRecognizerDelegate
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
     shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
@@ -126,10 +163,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     //      [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
 }
 
-- (CGSize)intrinsicContentSize {
-    CGSize intrinsicContentSize = self.collectionViewLayout.collectionViewContentSize;
-    return CGSizeMake(intrinsicContentSize.width, intrinsicContentSize.height + MTDefaultFingerSizeHeight);
-}
+#pragma mark -
+#pragma mark Accessors
 
 - (void)removeItemAtIndex: (NSIndexPath *)deletePath
                    update: (void (^)())update
@@ -223,18 +258,7 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     }
 }
 
-#pragma mark - UIView
-
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    CGContextRef context = UIGraphicsGetCurrentContext();
-
-    UIColor *bgcolor = backgroundColor(self.selected, self.visible);
-    CGContextSetFillColorWithColor(context, bgcolor.CGColor);
-    CGContextFillRect(context, rect);
-}
-
-#pragma mark - Overrides
+#pragma mark Overrides
 
 - (void)setVisible:(BOOL)visible {
     if (_visible != visible) {
@@ -252,7 +276,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     }
 }
 
-#pragma mark - Accessibility
+#pragma mark -
+#pragma mark Accessibility
 
 - (NSArray <__kindof UIAccessibilityCustomAction *> *)accessibilityCustomActions {
     NSString *toggleAccessibilityName = NSLocalizedString(MADTextAccessSectionElements,

@@ -71,6 +71,9 @@
 #import <MAD/RptqNumericFormat.h>
 #import <MAD/RptqAlignment.h>
 #import <MAD/RptqBorder.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqSize.h>
+
 #import <MAD/madmath.h>
 
 #import "MADTabBarController.h"
@@ -78,6 +81,8 @@
 #import "MADRulerView.h"
 
 #import "MADDesignerElementView.h"
+#import "MADDesignerElementTextView.h"
+
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
 
@@ -934,7 +939,8 @@ static const inline CGSize sizePopoverFonts() {
     [super viewWillDisappear:animated];
     _boundsOnDisappear = self.scroller.bounds;
     [self.statusLabelZoomScale removeFromSuperview];
-    [self setToolbarItems:@[] animated:animated];
+    NSArray *emptyArray = [[NSArray alloc] init];
+    [self setToolbarItems:emptyArray animated:animated];
     self.undoButton = nil;
 }
 
@@ -1548,8 +1554,8 @@ static const inline CGSize sizePopoverFonts() {
         if ([updatedObject isKindOfClass:[RptqTextStyle class]]) {
             RptqTextStyle *updatedTextStyle = (RptqTextStyle *)updatedObject;
             if (updatedTextStyle.inElement != nil) {
-                MADDesignerElementView *elementView;
-                elementView = [self elementViewForManagedObject:updatedTextStyle.inElement];
+                MADDesignerElementTextView *elementView;
+                elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:updatedTextStyle.inElement];
                 [elementView updateFontName:updatedTextStyle.inElement.fontname
                                    fontSize:updatedTextStyle.inElement.fontsize
                                        bold:updatedTextStyle.bold
@@ -1563,20 +1569,39 @@ static const inline CGSize sizePopoverFonts() {
 
             NSNumber *horizontal = [updatedObject.changedValues objectForKey:@"horizontal"];
             if (horizontal != nil) {
-                MADDesignerElementView *elementView;
-                elementView = [self elementViewForManagedObject:((RptqAlignment *)updatedObject).inElement];
+                MADDesignerElementTextView *elementView;
+                elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:((RptqAlignment *)updatedObject).inElement];
                 [elementView updateHorizontalAlignment:horizontal.shortValue];
                 [elementView setNeedsDisplay];
             }
 
         } else if ([updatedObject isKindOfClass:[RptqDirectionalAsymmetry class]]) {
             
-        } else if ([updatedObject isKindOfClass:[RptqBorder class]]) {
+            if (((RptqDirectionalAsymmetry *)updatedObject).inElementMargin != nil) {
+                [self positionItem:((RptqDirectionalAsymmetry *)updatedObject).inElementMargin];
+                
+            } else if (((RptqDirectionalAsymmetry *)updatedObject).inElementPadding != nil) {
+                [self positionItem:((RptqDirectionalAsymmetry *)updatedObject).inElementPadding];
+                
+            } else if (((RptqDirectionalAsymmetry *)updatedObject).inBorder.inElement != nil) {
+                [self positionItem:((RptqDirectionalAsymmetry *)updatedObject).inBorder.inElement];
+            }
             
-        } else if ([updatedObject isKindOfClass:[RptqNumericFormat class]]) {
+        } else if ([updatedObject isKindOfClass:[RptqSize class]]) {
+            [self positionItem:((RptqSize *)updatedObject).inRect.inElement];
+/*
+            float width = [(RptqSize *)updatedObject width];
+            MADDesignerElementView *elementView;
+            elementView = [self elementViewForManagedObject:((RptqSize *)updatedObject).inRect.inElement];
+            [elementView updateFontSize:fontsize.doubleValue];
+            [elementView setNeedsDisplay];
             
+            float height = [(RptqSize *)updatedObject height];
+            [elementView updateFontSize:fontsize.doubleValue];
+            [elementView setNeedsDisplay];
+*/
         } else if ([updatedObject isKindOfClass:[RptqDocumentElement class]]) {
-            RptqDocumentElement *documentObject = updatedObject;
+            RptqDocumentElement *documentObject = (RptqDocumentElement *)updatedObject;
             NSDictionary *changes = [documentObject changedValues];
             
             MADocument *doc = self.document;
@@ -1586,16 +1611,16 @@ static const inline CGSize sizePopoverFonts() {
             
             NSNumber *fontsize = [changes objectForKey:@"fontsize"];
             if (fontsize != nil) {
-                MADDesignerElementView *elementView;
-                elementView = [self elementViewForManagedObject:documentObject];
+                MADDesignerElementTextView *elementView;
+                elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:documentObject];
                 [elementView updateFontSize:fontsize.doubleValue];
                 [elementView setNeedsDisplay];
             }
             
             NSString *fontname = [changes objectForKey:@"fontname"];
             if (fontname != nil) {
-                MADDesignerElementView *elementView;
-                elementView = [self elementViewForManagedObject:documentObject];
+                MADDesignerElementTextView *elementView;
+                elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:documentObject];
                 [elementView updateFontName:fontname];
                 [elementView setNeedsDisplay];
             }
@@ -1633,7 +1658,7 @@ static const inline CGSize sizePopoverFonts() {
             }
         } else if ([updatedObject isKindOfClass:[RptqDocumentSection class]]) {
         
-            RptqDocumentSection *documentSection = updatedObject;
+            RptqDocumentSection *documentSection = (RptqDocumentSection *)updatedObject;
             NSDictionary *changes = [documentSection changedValues];
             for (id change in changes) {
                 if ([change isEqualToString:NSStringFromSelector(@selector(height))]) {
@@ -1645,8 +1670,40 @@ static const inline CGSize sizePopoverFonts() {
                     
                 }
             }
+        } else if ([updatedObject isKindOfClass:[RptqBorder class]]) {
+            
+        } else if ([updatedObject isKindOfClass:[RptqRect class]]) {
+            
+        } else if ([updatedObject isKindOfClass:[RptqNumericFormat class]]) {
+            
         }
     }
+}
+
+- (void)positionItem:(RptqDocumentElement *)documentObject {
+    MADocument *doc = self.document;
+    MADDesignerSectionView *section;
+    MADSectionLayoutManager *layoutManager;
+    MADSectionLayoutAttributes *attributes;
+
+    section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
+    
+    NSNumber *identifier = @(section.identifier);
+    layoutManager = doc.sectionLayoutManagers[identifier];
+    
+    identifier = @(documentObject.identifier);
+    attributes = layoutManager.items[identifier];
+    
+    if (attributes != nil) {
+        attributes.frame = [documentObject elementViewFrameDesigner];
+        _identifierJustDisplayed = documentObject.identifier;
+        [layoutManager positionItem:attributes];
+        [section.collectionViewLayout invalidateLayout];
+    }
+    MADDesignerElementView *elementView;
+    elementView = [self elementViewForManagedObject:documentObject];
+    [elementView setNeedsDisplay];
+    
 }
 
 #pragma mark -
@@ -2563,7 +2620,8 @@ static const inline CGSize sizePopoverFonts() {
          prepareLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADocument *document = self.document;
     MADSectionLayoutManager *layoutManager;
-    layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
+    NSNumber *identifier = @(collectionView.identifier);
+    layoutManager = document.sectionLayoutManagers[identifier];
     NSManagedObjectContext *objectContext = document.managedObjectContext;
     RptqDocumentElement *documentObject;
     
@@ -2585,7 +2643,8 @@ static const inline CGSize sizePopoverFonts() {
             layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
     
     MADSectionLayoutManager *layoutManager;
-    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
+    NSNumber *identifier = @(collectionView.identifier);
+    layoutManager = self.document.sectionLayoutManagers[identifier];
     __block MADSectionLayoutAttributes *item;
     [layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key,
                                                              MADSectionLayoutAttributes *object,
@@ -2603,21 +2662,24 @@ static const inline CGSize sizePopoverFonts() {
 - (NSUInteger)numberOfItemsInSection: (NSUInteger)section
                     ofCollectionView: (MADDesignerSectionView *)collectionView {
     MADSectionLayoutManager *layoutManager;
-    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
+    NSNumber *identifier = @(collectionView.identifier);
+    layoutManager = self.document.sectionLayoutManagers[identifier];
     return layoutManager.items.count;
 }
 
 - (NSArray *)collectionView: (MADDesignerSectionView *)collectionView
         attributesForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager;
-    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
+    NSNumber *identifier = @(collectionView.identifier);
+    layoutManager = self.document.sectionLayoutManagers[identifier];
     return layoutManager.items.allValues;
 }
 
 - (CGSize)collectionView: (MADDesignerSectionView *)collectionView
            sizeForLayout: (UICollectionViewLayout *)collectionViewLayout {
     MADSectionLayoutManager *layoutManager;
-    layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
+    NSNumber *identifier = @(collectionView.identifier);
+    layoutManager = self.document.sectionLayoutManagers[identifier];
     return layoutManager.size;
 }
 
@@ -2640,13 +2702,11 @@ static const inline CGSize sizePopoverFonts() {
         switch (resizeAspect.direction) {
 
             case horizontal:
-                [element setSizeWidth:element.sizeContentView.width *
-                                      gestureRecognizer.scale];
+                [element setSizeWidth:element.sizeContentView.width * gestureRecognizer.scale];
                 break;
 
             case vertical:
-                [element setSizeHeight:element.sizeContentView.height *
-                                       gestureRecognizer.scale];
+                [element setSizeHeight:element.sizeContentView.height * gestureRecognizer.scale];
                 break;
                 
             default: {
@@ -2775,7 +2835,7 @@ static const inline CGSize sizePopoverFonts() {
             [self selectElementView: elementView];
             
             // Select a unselected element
-            [self.promptManager addString: elementView.displayStringAttributed.string];
+            [self.promptManager addString: elementView.textRepresentation];
             [self displayPrompt];
             
             if (self.selectedElementIDs.count == 1) {    // Show toolbox if we are selecting the first item.
@@ -2796,7 +2856,7 @@ static const inline CGSize sizePopoverFonts() {
             [self.selectedElementIDs removeObject: @(elementView.identifier)];
             (self.viewControllerToolbox).selectedElementIDs = self.selectedElementIDs;
             
-            [self.promptManager removeString: elementView.displayStringAttributed.string];
+            [self.promptManager removeString: elementView.textRepresentation];
             [self displayPrompt];
             
             if (self.selectedElementIDs.count == 0) {
@@ -3077,7 +3137,8 @@ END_deselectElementView:;
     MADSectionLayoutManager *layoutManager;
 
     collectionView = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
-    layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
+    NSNumber *identifier = [[NSNumber alloc] initWithLongLong:collectionView.identifier];
+    layoutManager = document.sectionLayoutManagers[identifier];
     
     MADDesignerViewController * __weak weakself = self;
     [collectionView performBatchUpdates:^{
@@ -3125,7 +3186,7 @@ END_deselectElementView:;
 
 - (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell {
     int64_t cellIdentifier = cell.identifier;
-    NSNumber *objectId = @(cellIdentifier);
+    NSNumber *objectId = @(cell.identifier);
     
     MADocument *document;
     NSArray *elements;
@@ -3142,7 +3203,8 @@ END_deselectElementView:;
                                                                  error: &error];
     element  = elements.firstObject;
     sectionView = [self getSectionViewForDocumentSection:element.inSectionRow.inSection];
-    layoutManager = document.sectionLayoutManagers[@(sectionView.identifier)];
+    NSNumber *sectionIdentifier = [[NSNumber alloc] initWithLongLong:sectionView.identifier];
+    layoutManager = document.sectionLayoutManagers[sectionIdentifier];
     itemToRemove = (layoutManager.items)[objectId];
     
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
@@ -3333,7 +3395,7 @@ END_deselectElementView:;
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {
 
     MADDesignerElementView *piece = (MADDesignerElementView *)gesture.view;
-    NSNumber *pieceObjectIdTag = @(piece.identifier);
+    //NSNumber *pieceObjectIdTag = @(piece.identifier);
     int64_t pieceIdentifier = piece.identifier;
     MADDesignerSectionView *sectionView = nil;
 
