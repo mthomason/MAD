@@ -364,35 +364,6 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
                             }];
 }
 
-/*- (UIImage *)cropImage:(UIImage *)image toRect:(CGRect)rect {
-    if (self.traitCollection.displayScale > 1.0f) {
-        rect = CGRectMake(rect.origin.x * self.traitCollection.displayScale,
-                          rect.origin.y * self.traitCollection.displayScale,
-                          rect.size.width * self.traitCollection.displayScale,
-                          rect.size.height * self.traitCollection.displayScale);
-    }
-    
-    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, rect);
-    UIImage *result = [UIImage imageWithCGImage: imageRef
-                                          scale: self.traitCollection.displayScale
-                                    orientation: image.imageOrientation];
-    CGImageRelease(imageRef);
-    return result;
-}
-
-- (UIImage *)snapshot2:(UIView *)view {
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, view.traitCollection.displayScale);
-    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];   // FIXME:  .. should be able to say YES, but it distorts the screen.. radar 17851775
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
-- (void)setOptionsForViewController:(MADToolboxPanel *)viewController {
-    [viewController setSelectedDocumentObjects: self.selectedElementIDs];
-    viewController.document = self.document;
-}*/
-
 #pragma mark -
 #pragma mark Accessibility
 
