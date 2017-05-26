@@ -71,6 +71,8 @@
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 
+#import "RptqBorder.h"
+
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
@@ -233,6 +235,30 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark Adjust
 
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers
+            actionName:(NSString *)actionName
+         updateHandler:(void (^)(long long identifier))updateHandler
+           undoHandler:(void (^)(id target))undoHandler {
+    //NSString *actionName = NSLocalizedString(underline ? @"Font Size" : @"Font Size",
+    //                                         underline ? @"Font Size" : @"Font Size");
+    NSNumber *identifier;
+    //RptqDocumentElement *element;
+    //double previousFontsize = 0.0;
+    for (identifier in identifiers) {
+        updateHandler(identifier.longLongValue);
+        //element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+        //                                              fromObjectContext:self.managedObjectContext];
+        //previousFontsize = element.fontsize;
+        //element.fontsize = fontsize;
+    }
+    //void (^undoHandler)(id target);
+    //NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    //undoHandler = ^(id  _Nonnull target) {
+    //    [(MADocument *)target updateElements:elementIDs setFontsize:previousFontsize];
+    //};
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBold:(BOOL)bold {
     NSString *actionName = NSLocalizedString(bold ? @"Bold" : @"Disable Bold",
@@ -360,7 +386,7 @@ void madwarn(char *err,  const char*err2) { }
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontname:(NSString *)fontname {
     NSString *actionName = NSLocalizedString(@"Font Name %@",
                                              @"Font Name %@");
-    actionName = [NSString stringWithFormat:actionName, fontname];
+    actionName = [[NSString alloc] initWithFormat:actionName, fontname];
     NSNumber *identifier;
     RptqDocumentElement *element;
     NSString *previousFontname = nil;
@@ -547,6 +573,173 @@ void madwarn(char *err,  const char*err2) { }
     [self.undoManager registerUndoWithTarget:self handler:undoHandler];
 }
 
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingBottom:(float)bottom {
+    NSString *actionName = NSLocalizedString(@"Padding Bottom",
+                                             @"Padding Bottom");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.padding.bottom;
+        element.padding.bottom = bottom;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setPaddingBottom:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingTop:(float)top {
+    NSString *actionName = NSLocalizedString(@"Padding Top",
+                                             @"Padding Top");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.padding.top;
+        element.padding.top = top;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setPaddingTop:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingLeft:(float)left {
+    NSString *actionName = NSLocalizedString(@"Padding Left",
+                                             @"Padding Left");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.padding.left;
+        element.padding.left = left;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setPaddingLeft:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingRight:(float)right {
+    NSString *actionName = NSLocalizedString(@"Padding Right",
+                                             @"Padding Right");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.padding.right;
+        element.padding.right = right;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setPaddingRight:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderBottom:(float)bottom {
+    NSString *actionName = NSLocalizedString(@"Border Bottom",
+                                             @"Border Bottom");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.border.width.bottom;
+        element.border.width.bottom = bottom;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setBorderBottom:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderTop:(float)top {
+    NSString *actionName = NSLocalizedString(@"Border Top",
+                                             @"Border Top");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.border.width.top;
+        element.border.width.top = top;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setBorderTop:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderLeft:(float)left {
+    NSString *actionName = NSLocalizedString(@"Border Left",
+                                             @"Border Left");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.border.width.left;
+        element.border.width.left = left;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setBorderLeft:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
+
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderRight:(float)right {
+    NSString *actionName = NSLocalizedString(@"Border Right",
+                                             @"Border Right");
+    NSNumber *identifier;
+    RptqDocumentElement *element;
+    float previous = 0;
+    for (identifier in identifiers) {
+        element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
+                                                      fromObjectContext:self.managedObjectContext];
+        previous = element.border.width.right;
+        element.border.width.right = right;
+    }
+    void (^undoHandler)(id target);
+    NSSet <NSNumber *> *elementIDs = identifiers.copy;
+    undoHandler = ^(id  _Nonnull target) {
+        [(MADocument *)target updateElements:elementIDs setBorderRight:previous];
+    };
+    [self.undoManager setActionName:actionName];
+    [self.undoManager registerUndoWithTarget:self handler:undoHandler];
+}
 
 - (NSArray *)groupLevelKeys:(NSUInteger)rowID {
         NSArray *groupLevelKeys;

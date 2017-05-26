@@ -26,6 +26,9 @@
     @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;
     @property (nonatomic, readwrite, assign, getter=isResizingEnabled) BOOL enableResizing;
 
+    @property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, readonly, copy) NSManagedObjectID *objectID;
+
     @property (nonatomic, strong) id displayObject;
     @property (nonatomic, readonly, copy) NSString *textRepresentation;
 

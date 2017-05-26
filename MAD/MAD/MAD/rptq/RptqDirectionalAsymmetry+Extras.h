@@ -18,6 +18,11 @@
 + (NSString *)keyLeft;
 + (NSString *)keyRight;
 
+//- (CGPoint *)topLine;
+//- (CGPoint *)bottomLine;
+//- (CGPoint *)leftLine;
+//- (CGPoint *)rightLine;
+
 @end
 
 #endif

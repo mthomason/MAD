@@ -58,13 +58,35 @@ extern NSString * const MTDocumentObjectDefinationField2;
 
     @property (readonly) MTDocumentObjectType documentObjectType;
     @property (readonly) CGRect frame;
-    
+
     - (CGSize)sizeCalculated;
+    - (CGRect)boundsCalculated;
     - (NSString *)designerRepresentationText;
     - (CGRect)paddingViewFrame;
     - (CGRect)boundsContentView;
     - (CGRect)elementViewFrame;
     - (CGRect)elementViewFrameDesigner;
+    - (CGRect)elementViewFrameDesignerFrameCalculated;
+    - (CGRect)borderRect;
+    - (CGRect)paddingRect;
+    - (CGRect)innerRect;
+
+- (CGFloat)borderLineTopAX;
+- (CGFloat)borderLineTopAY;
+- (CGFloat)borderLineTopBX;
+- (CGFloat)borderLineTopBY;
+- (CGFloat)borderLineBottomAX;
+- (CGFloat)borderLineBottomAY;
+- (CGFloat)borderLineBottomBX;
+- (CGFloat)borderLineBottomBY;
+- (CGFloat)borderLineLeftAX;
+- (CGFloat)borderLineLeftAY;
+- (CGFloat)borderLineLeftBX;
+- (CGFloat)borderLineLeftBY;
+- (CGFloat)borderLineRightAX;
+- (CGFloat)borderLineRightAY;
+- (CGFloat)borderLineRightBX;
+- (CGFloat)borderLineRightBY;
 
     - (void)setSizeWidth:(float)width;
     - (void)setSizeHeight:(float)height;

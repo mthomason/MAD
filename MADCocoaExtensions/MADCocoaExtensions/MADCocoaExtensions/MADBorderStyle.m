@@ -61,6 +61,18 @@ static inline MADBorderStyle_t MADLayoutBorderStyleMake(float l, float r,
     return YES;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        MADBorderStyle_t borderStyle;
+        borderStyle = MADLayoutBorderStyleMake(0, 0, 0, 0,
+                                               MADBorderStyleNone,
+                                               MADBorderStyleNone,
+                                               MADBorderStyleNone,
+                                               MADBorderStyleNone);
+    }
+    return self;
+}
+
 - (instancetype)initWithLeft:(float)left right:(float)right
                          top:(float)top bottom:(float)bottom
                    leftStyle:(MADBorderType)leftStyle rightStyle:(MADBorderType)rightStyle
@@ -77,13 +89,13 @@ static inline MADBorderStyle_t MADLayoutBorderStyleMake(float l, float r,
     if (self = [super init]) {
         MADBorderStyle_t borderStyle;
         borderStyle.bottom = [aDecoder decodeFloatForKey:@"b"];
-        borderStyle.bottomStyle = [aDecoder decodeInt32ForKey: @"bs"];
+        borderStyle.bottomStyle = (int16_t)[aDecoder decodeInt32ForKey: @"bs"];
         borderStyle.top = [aDecoder decodeFloatForKey:@"t"];
-        borderStyle.topStyle = [aDecoder decodeInt32ForKey: @"ts"];
+        borderStyle.topStyle = (int16_t)[aDecoder decodeInt32ForKey: @"ts"];
         borderStyle.left = [aDecoder decodeFloatForKey:@"l"];
-        borderStyle.leftStyle = [aDecoder decodeInt32ForKey: @"ls"];
+        borderStyle.leftStyle = (int16_t)[aDecoder decodeInt32ForKey: @"ls"];
         borderStyle.right = [aDecoder decodeFloatForKey:@"r"];
-        borderStyle.rightStyle = [aDecoder decodeInt32ForKey: @"rs"];
+        borderStyle.rightStyle = (int16_t)[aDecoder decodeInt32ForKey: @"rs"];
         _style = borderStyle;
     }
     return self;

@@ -47,6 +47,13 @@ static inline MADLayoutPadding_t MADLayoutPaddingMakeQuick(Float64 p) {
     return NO;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        _padding = MADLayoutPaddingMake(0, 0, 0, 0);
+    }
+    return self;
+}
+
 - (instancetype)initWithLeft:(Float64)left right:(Float64)right
                          top:(Float64)top bottom:(Float64)bottom {
     if (self = [super init]) {

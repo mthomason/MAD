@@ -12,6 +12,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <QuartzCore/CALayer.h>
+#import <CoreGraphics/CGContext.h>
 
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/UIGraphics.h>
@@ -24,6 +25,9 @@
 #import <MAD/RptqRect+Extras.h>
 #import <MAD/RptqAlignment.h>
 #import <MAD/RptqTextStyle.h>
+#import <MAD/RptqSize.h>
+#import <MAD/RptqBorder.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementImage.h>
@@ -57,9 +61,9 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @interface MADDesignerElementView ()
     <MADElementCanvasDelegate, UIGestureRecognizerDelegate>
 
-    @property (nonatomic, strong)   MADResizeHandles *resizeHandles;
-    @property (nonatomic, weak)     NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, copy)     NSManagedObjectID *objectID;
+    @property (nonatomic, readwrite, strong)   MADResizeHandles *resizeHandles;
+    @property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
+    @property (nonatomic, readwrite, copy) NSManagedObjectID *objectID;
     @property (nonatomic, readwrite, copy) NSString *textRepresentation;
 
 @end
@@ -110,10 +114,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         self.objectID = documentObject.objectID.copy;
         
         self.translatesAutoresizingMaskIntoConstraints = YES;
+        self.backgroundColor = [UIColor clearColor];
+        self.clipsToBounds = NO;
+        self.autoresizingMask = MADViewAutoresizingFlexable();
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
-        
-        self.backgroundColor = [UIColor clearColor];
         
         
         MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
@@ -121,10 +126,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
             [self addSubview:view];
         }
         self.resizeHandles = resizeHandles;
-        
-        self.clipsToBounds = NO;
-        
-        self.autoresizingMask = MADViewAutoresizingFlexable();
         
         [self updateWithElement:documentObject];
         
@@ -156,34 +157,124 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 #pragma mark -
 #pragma mark UIView
 
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    [super setBounds:bounds];
+}
+
+//Margin
+//Border
+//Padding
+//
+/*
+ - (CGRect)paddingViewBounds {
+    return CGRectMake(CGPointZero.x, CGPointZero.y,
+                      paddingViewBoundsSizeWidth(self.padding.left,
+                                                 self.padding.right,
+                                                 self.rect.size.width),
+                      paddingViewBoundsSizeHeight(self.padding.top,
+                                                  self.padding.bottom,
+                                                  self.rect.size.height));
+}
+ */
+
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    id displayObject = [self displayObject];
-    
-    if ([displayObject isKindOfClass: [NSAttributedString class]]) {
-        [displayObject drawWithRect: rect
-                            options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
-                            context: nil];
-    } else if ([displayObject isKindOfClass: [MTBarcode class]]) {
-        [displayObject loadSampleData];
-        MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-        ((MTBarcode *)displayObject).forgroundColor = color;
-    } else {
-        [displayObject drawInRect:rect];
-    }
     
     static const CGFloat kDashedBorderWidth     = (0.5000f);
     static const CGFloat kDashedPhase           = (0.0000f);
     static const CGFloat kDashedLinesLength[]   = {4.0000f, 2.0000f};
     static size_t const kDashedCount            = (2.0000f);
     
+    RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+    
+    UIColor *tintColor = [UIColor blackColor];
+    
+    //Draw element margin border.
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, kDashedBorderWidth);
-    UIColor *tintColor = [UIColor blackColor];
     CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
-    CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount) ;
+    CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount);
     CGContextAddRect(context, rect);
     CGContextStrokePath(context);
+    
+    //Draw border top
+    UIColor *borderColor = [UIColor blackColor];
+    if (element.border.width.top > CGSizeZero.height) {
+        CGContextSetLineDash(context, kDashedPhase, nil, 0);
+        CGContextSetLineWidth(context, element.border.width.top);
+        CGContextAddLines(context, ((CGPoint[]){
+            CGPointMake([element borderLineTopAX],
+                        [element borderLineTopAY] + (element.border.width.top / 2.0000f)),
+            CGPointMake([element borderLineTopBX],
+                        [element borderLineTopBY] + (element.border.width.top / 2.0000f)),
+        }), 2);
+        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
+        CGContextStrokePath(context);
+    }
+
+    //Draw border bottom
+    if (element.border.width.bottom > CGSizeZero.height) {
+        CGContextSetLineDash(context, kDashedPhase, nil, 0);
+        CGContextSetLineWidth(context, element.border.width.bottom);
+        CGContextAddLines(context, ((CGPoint[]){
+            CGPointMake([element borderLineBottomAX],
+                        [element borderLineBottomAY] - (element.border.width.bottom / 2.0000f)),
+            CGPointMake([element borderLineBottomBX],
+                        [element borderLineBottomBY] - (element.border.width.bottom / 2.0000f)),
+        }), 2);
+        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
+        CGContextStrokePath(context);
+    }
+
+    //Draw border left
+    if (element.border.width.left > CGSizeZero.width) {
+        CGContextSetLineDash(context, kDashedPhase, nil, 0);
+        CGContextSetLineWidth(context, element.border.width.left);
+        CGContextAddLines(context, ((CGPoint[]){
+            CGPointMake([element borderLineLeftAX] + (element.border.width.left / 2.0000f),
+                        [element borderLineLeftAY]),
+            CGPointMake([element borderLineLeftBX] + (element.border.width.left / 2.0000f),
+                        [element borderLineLeftBY]),
+        }), 2);
+        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
+        CGContextStrokePath(context);
+    }
+
+    //Draw border right
+    if (element.border.width.right > CGSizeZero.width) {
+        CGContextSetLineDash(context, kDashedPhase, nil, 0);
+        CGContextSetLineWidth(context, element.border.width.right);
+        CGContextAddLines(context, ((CGPoint[]){
+            CGPointMake([element borderLineRightAX] - (element.border.width.right / 2.0000f),
+                        [element borderLineRightAY]),
+            CGPointMake([element borderLineRightBX] - (element.border.width.right / 2.0000f),
+                        [element borderLineRightBY]),
+        }), 2);
+        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
+        CGContextStrokePath(context);
+    }
+
+
+    tintColor = [UIColor lightGrayColor];
+    //Draw element content view.
+    CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
+    CGContextSetLineWidth(context, 1);
+    CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount);
+    CGContextAddRect(context, [element innerRect]);
+    CGContextStrokePath(context);
+
+    //tintColor = [UIColor grayColor];
+    //Draw element content view.
+    //CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
+    //CGContextSetLineWidth(context, 1);
+    //CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount);
+    //CGContextAddRect(context, [element paddingRect]);
+    //CGContextStrokePath(context);
+
 }
 
 - (void)layoutSubviews {
@@ -289,8 +380,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 - (void)updateWithElement:(RptqDocumentElement *)element {
     if (element != nil) {
         
-        CGRect marginViewFrame = [element boundsContentView];
-        self.frame = marginViewFrame;
+        self.frame = [element boundsCalculated];
         
         NSString *textRepresentation = [element designerRepresentationText];
         self.textRepresentation = textRepresentation.copy;

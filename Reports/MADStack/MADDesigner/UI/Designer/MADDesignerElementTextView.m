@@ -7,6 +7,7 @@
 //
 
 #import "MADDesignerElementTextView.h"
+#import <CoreData/NSManagedObjectContext.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <MAD/MADFontDescriptor.h>
@@ -26,11 +27,14 @@
     NSString *_fontname;
 }
 
+@dynamic displayObject;
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    [self.displayObject drawWithRect: rect
+    RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+    [self.displayObject drawWithRect: [element innerRect]
                              options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                              context: nil];
 }

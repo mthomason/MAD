@@ -7,6 +7,8 @@
 //
 
 #import "MADDesignerElementImageView.h"
+#import <CoreData/NSManagedObjectContext.h>
+#import <MAD/RptqDocumentElement+Extras.h>
 #import <UIKit/UIImage.h>
 #import <MAD/RptqDocumentElementImage.h>
 
@@ -16,7 +18,8 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    [(UIImage *)self.displayObject drawInRect:rect];
+    RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+    [(UIImage *)self.displayObject drawInRect:[element innerRect]];
 }
 
 - (void)updateWithElement:(RptqDocumentElement *)element {

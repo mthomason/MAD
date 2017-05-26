@@ -1647,7 +1647,7 @@ static const inline CGSize sizePopoverFonts() {
                     attributes = layoutManager.items[identifier];
                     
                     if (attributes != nil) {
-                        attributes.frame = [documentObject elementViewFrameDesigner];
+                        attributes.frame = [documentObject elementViewFrameDesignerFrameCalculated];
                         _identifierJustDisplayed = documentObject.identifier;
                         [layoutManager positionItem:attributes];
                         [section.collectionViewLayout invalidateLayout];
@@ -1695,7 +1695,7 @@ static const inline CGSize sizePopoverFonts() {
     attributes = layoutManager.items[identifier];
     
     if (attributes != nil) {
-        attributes.frame = [documentObject elementViewFrameDesigner];
+        attributes.frame = [documentObject elementViewFrame];
         _identifierJustDisplayed = documentObject.identifier;
         [layoutManager positionItem:attributes];
         [section.collectionViewLayout invalidateLayout];
@@ -3161,7 +3161,7 @@ END_deselectElementView:;
         
         sself->_identifierJustDisplayed = element.identifier;
         
-        layoutAttribute.frame = [element elementViewFrameDesigner];
+        layoutAttribute.frame = [element elementViewFrameDesignerFrameCalculated];
         
         indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
         [section addDocumentObject: element
@@ -3731,15 +3731,18 @@ END_deselectElementView:;
 }
 
 - (MADDesignerSectionView *)getSectionViewForSectionID:(int64_t)sectionID {
-    return self.sectionViewsDictionary[@(sectionID)];
+    NSNumber *identifier = @(sectionID);
+    return self.sectionViewsDictionary[identifier];
 }
 
 - (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)section {
-    return self.sectionViewsDictionary[@(section.identifier)];
+    NSNumber *identifier = @(section.identifier);
+    return self.sectionViewsDictionary[identifier];
 }
 
 - (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)section {
-    return self.sectionControlViewsDictionary[@(section.identifier)];
+    NSNumber *identifier = @(section.identifier);
+    return self.sectionControlViewsDictionary[identifier];
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {

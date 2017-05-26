@@ -8,6 +8,7 @@
 
 #import "RptqDirectionalAsymmetry+Extras.h"
 #import "RptqDirectionalProperty+Extras.h"
+#import <CoreGraphics/CGGeometry.h>
 
 @implementation RptqDirectionalAsymmetry (Extras)
 

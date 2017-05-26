@@ -143,7 +143,8 @@ static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop,
                             borderHeightBottom + paddingBottom;
 }
 
-static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy, CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
+static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy,
+                                              CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
     return CGRectMake(x + sx, y + sy, w + sw, h + wh);
 }
 
@@ -759,6 +760,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return CGSizeMake([self sizeWidthCalculated], [self sizeHeightCalculated]);
 }
 
+- (CGRect)boundsCalculated {
+    return CGRectMake(CGPointZero.x, CGPointZero.y, [self sizeWidthCalculated], [self sizeHeightCalculated]);
+}
+
 - (CGSize)sizeContentView {
     return CGSizeMake(self.rect.size.width, self.rect.size.height);
 }
@@ -788,15 +793,12 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return CGRectMake(CGPointZero.x, CGPointZero.y, self.rect.size.width, self.rect.size.height);
 }
 
-- (CGRect)elementViewFrameDesigner {
+- (CGRect)elementViewFrameDesignerFrameCalculated {
     return CGRectMake(self.rect.origin.x, self.rect.origin.y, self.rect.size.width, self.rect.size.height);
 }
 
-- (CGRect)elementViewFrame {
-    CGRect elementViewBounds = [self elementViewBounds];
-    return CGRectMake(CGPointZero.x + self.padding.left,
-                      CGPointZero.y + self.padding.top,
-                      elementViewBounds.size.width, elementViewBounds.size.height);
+- (CGRect)elementViewFrameDesigner {
+    return CGRectMake(self.rect.origin.x, self.rect.origin.y, self.rect.size.width, self.rect.size.height);
 }
 
 - (CGRect)frame {
@@ -804,6 +806,105 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
                                     self.rect.origin.y, self.spacingTop,
                                     self.rect.size.width, self.spacingRight,
                                     self.rect.size.height, self.spacingBottom);
+}
+
+- (CGRect)elementViewFrame {
+    return CGRectMake(self.rect.origin.x,
+                      self.rect.origin.y,
+                      self.rect.size.width + self.margin.left + self.margin.right + self.border.width.left + self.border.width.right + self.padding.left + self.padding.right,
+                      self.rect.size.height + self.margin.top + self.margin.bottom + self.border.width.top + self.border.width.bottom + self.padding.top + self.padding.bottom);
+}
+
+//For lines in box model, each x and y coordnate for the point pairs needed to make up the line.
+
+- (CGFloat)borderLineTopAX {
+    return CGPointZero.x + self.margin.left;
+}
+
+- (CGFloat)borderLineTopAY {
+    return CGPointZero.y + self.margin.top;
+}
+- (CGFloat)borderLineTopBX {
+    return CGPointZero.x + self.margin.left + self.border.width.left + self.padding.left +
+        self.rect.size.width + self.padding.right + self.border.width.right;
+}
+
+- (CGFloat)borderLineTopBY {
+    return CGPointZero.y + self.margin.top;
+}
+
+- (CGFloat)borderLineBottomAX {
+    return CGPointZero.x + self.margin.left;
+}
+
+- (CGFloat)borderLineBottomAY {
+    return CGPointZero.y + self.margin.top + self.border.width.top + self.padding.top +
+        self.rect.size.height + self.padding.bottom + self.border.width.bottom;
+}
+- (CGFloat)borderLineBottomBX {
+    return CGPointZero.x + self.margin.left + self.border.width.left + self.padding.left +
+        self.rect.size.width + self.padding.right + self.border.width.right;
+}
+
+- (CGFloat)borderLineBottomBY {
+    return CGPointZero.y + self.margin.top + self.border.width.top + self.padding.top +
+        self.rect.size.height + self.padding.bottom + self.border.width.bottom;
+}
+
+- (CGFloat)borderLineLeftAX {
+    return [self borderLineTopAX];
+}
+
+- (CGFloat)borderLineLeftAY {
+    return [self borderLineTopAY];
+}
+- (CGFloat)borderLineLeftBX {
+    return [self borderLineBottomAX];
+}
+
+- (CGFloat)borderLineLeftBY {
+    return [self borderLineBottomAY];
+}
+- (CGFloat)borderLineRightAX {
+    return [self borderLineTopBX];
+}
+
+- (CGFloat)borderLineRightAY {
+    return [self borderLineTopBY];
+}
+
+- (CGFloat)borderLineRightBX {
+    return [self borderLineBottomBX];
+}
+
+- (CGFloat)borderLineRightBY {
+    return [self borderLineBottomBY];
+}
+
+
+
+
+- (CGRect)borderRect {
+    return CGRectMake(CGPointZero.x + self.margin.left,
+                      CGPointZero.y + self.margin.top,
+                      self.rect.size.width + self.border.width.left + self.border.width.right +
+                        self.padding.left + self.padding.right,
+                      self.rect.size.height + self.border.width.top + self.border.width.bottom +
+                        self.padding.top + self.padding.bottom);
+}
+
+- (CGRect)paddingRect {
+    return CGRectMake(CGPointZero.x + self.margin.left + self.border.width.left,
+                      CGPointZero.y + self.margin.top + self.border.width.top,
+                      self.rect.size.width + self.padding.left + self.padding.right,
+                      self.rect.size.height + self.padding.top + self.padding.bottom);
+}
+
+- (CGRect)innerRect {
+    return CGRectMake(CGPointZero.x + self.margin.left + self.border.width.left + self.padding.left,
+                      CGPointZero.y + self.margin.top + self.border.width.top + self.padding.top,
+                      self.rect.size.width,
+                      self.rect.size.height);
 }
 
 #pragma mark - Member

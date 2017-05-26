@@ -117,6 +117,18 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginTop:(float)top;
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginLeft:(float)left;
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginRight:(float)right;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingBottom:(float)bottom;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingTop:(float)top;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingLeft:(float)left;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingRight:(float)right;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderBottom:(float)bottom;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderTop:(float)top;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderLeft:(float)left;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderRight:(float)right;
+- (void)updateElements:(NSSet <NSNumber *> *)identifiers
+            actionName:(NSString *)actionName
+         updateHandler:(void (^)(long long identifier))updateHandler
+           undoHandler:(void (^)(id target))undoHandler;
 
 @end
 
