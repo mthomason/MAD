@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADBackgroundScrollView_h
-#define Reports_MADBackgroundScrollView_h
+#ifndef Reports_MADDesignerScrollView_h
+#define Reports_MADDesignerScrollView_h
 
 #import <UIKit/UIScrollView.h>
 

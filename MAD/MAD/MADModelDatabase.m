@@ -288,7 +288,8 @@
     NSString *inDatabaseIdentifier = [inDatabase stringByAppendingString:@"."];
     inDatabaseIdentifier = [inDatabaseIdentifier stringByAppendingString:keyIdentifier];
     predicateExpression[0] = [NSExpression expressionForKeyPath:inDatabaseIdentifier];
-    predicateExpression[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
+    NSNumber *identifier = @(self.identifier);
+    predicateExpression[1] = [NSExpression expressionForConstantValue: identifier];
     
     NSPredicate *predicate;
     predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
@@ -389,8 +390,8 @@
     expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
                      NSStringFromSelector(@selector(inDatabase)),
                      keyPathIdentifier];
-    
-    expression[1] = [NSExpression expressionForConstantValue:@(self.identifier)];
+    NSNumber *identifier = @(self.identifier);
+    expression[1] = [NSExpression expressionForConstantValue:identifier];
     request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
     
     NSAssert(expression != nil, @"Need an expression");

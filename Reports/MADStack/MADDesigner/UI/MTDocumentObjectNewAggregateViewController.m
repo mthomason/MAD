@@ -114,8 +114,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
         self.aggregateFunctionType = aggregateFunctionType;
         NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:aggregateFunctionType];
-        NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
-        self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
+        functionName = [functionName stringByAppendingString:@"()"];
+        self.tableViewCellAggrageFunction.detailTextLabel.text = functionName;
     }
     
     [self updateDisplay];
@@ -210,8 +210,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
         self.aggregateFunctionType = aggregateFunctionType;
         NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:aggregateFunctionType];
-        NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
-        self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
+        self.tableViewCellAggrageFunction.detailTextLabel.text = [functionName stringByAppendingString:@"()"];
     }
     
     [self updateDisplay];
@@ -265,8 +264,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)updateFunctionType {
     NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:self.aggregateFunctionType];
-    NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
-    self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
+    functionName = [functionName stringByAppendingString:@"(x)"];
+    self.tableViewCellAggrageFunction.detailTextLabel.text = functionName;
 }
 
 - (void)updateGroupType {

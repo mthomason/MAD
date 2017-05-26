@@ -604,13 +604,14 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     UIWindow *window = [UIApplication sharedApplication].windows[0];
     NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-    constraints = [self.constraints objectForKey: @(tableID)];
+    NSNumber *tableIdentifier = @(tableID);
+    constraints = [self.constraints objectForKey: tableIdentifier];
     CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
                                         toView: self.scrollView.contentView];
     constraints[keyCenterX].constant = pointInView.x;
     constraints[keyCenterY].constant = pointInView.y;
 
-    [self didMoveFieldRect: self.controllersByObjectID[@(tableID)]
+    [self didMoveFieldRect: self.controllersByObjectID[tableIdentifier]
                   animated: NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         

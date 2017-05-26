@@ -12,9 +12,7 @@
 #import "MADCellElementDelegate.h"
 
 @interface MADCellElement ()
-
     @property (nonatomic, weak) MADDesignerElementView *elementView;
-
 @end
 
 @implementation MADCellElement
@@ -35,10 +33,8 @@
 
 - (void)commonInit {
     UIMenuController *menu = [UIMenuController sharedMenuController];
-    NSMutableArray <UIMenuItem *> *menuItems = menu.menuItems.mutableCopy;
-    if (menuItems == nil) {
-        menuItems = [NSMutableArray new];
-    }
+    NSArray *menuMenuItems = menu.menuItems.count > 0 ? menu.menuItems : [[NSArray alloc] init];
+    NSMutableArray <UIMenuItem *> *menuItems = [[NSMutableArray alloc] initWithArray: menuMenuItems];
     UIMenuItem *menuItemEdit;
     UIMenuItem *menuItemFormat;
     NSString *edit = NSLocalizedString(@"Edit", @"Edit");

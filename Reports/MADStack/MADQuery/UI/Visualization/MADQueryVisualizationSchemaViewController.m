@@ -146,7 +146,8 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
         
         MADModelQueryTable *queryTable;
         MADocument *doc = self.document;
-        queryTable = [doc.documentModel.firstQuery.tables objectForKey: @(identifier)];
+        NSNumber *identifierObjectID = @(identifier);
+        queryTable = [doc.documentModel.firstQuery.tables objectForKey: identifierObjectID];
         _identifierSchemaTable = queryTable.schemaTable;
 
         self.titleView.label.text = [queryTable alias].copy;
@@ -248,7 +249,8 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     MADModelDocument *doc = _document.documentModel;
-    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+    NSNumber *key = @(_identifierSchemaTable);
+    MADModelTable *table = [doc.firstDatabase.tableDictionary objectForKey: key];
     return (NSInteger)table.fieldIDs.count;
 }
 

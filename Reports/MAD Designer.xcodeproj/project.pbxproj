@@ -335,7 +335,7 @@
 		4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F301BAE754200BAE5FC /* MADTableViewCellBase.m */; };
 		4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F561BAE7EB500BAE5FC /* MADDesignerStatusLabel.m */; };
 		4C401F751BAE7EB500BAE5FC /* MADSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F581BAE7EB500BAE5FC /* MADSliderPageVertical.m */; };
-		4C401F761BAE7EB500BAE5FC /* MADBackgroundScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5B1BAE7EB500BAE5FC /* MADBackgroundScrollView.m */; };
+		4C401F761BAE7EB500BAE5FC /* MADDesignerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */; };
 		4C401F771BAE7EB500BAE5FC /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */; };
 		4C401F781BAE7EB500BAE5FC /* MADDimmingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5F1BAE7EB500BAE5FC /* MADDimmingView.m */; };
 		4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F611BAE7EB500BAE5FC /* MADProgressView.m */; };
@@ -1050,6 +1050,7 @@
 		4CD90DBB1CE6B76600B56B90 /* rwpng.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90DB91CE6B76600B56B90 /* rwpng.c */; };
 		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
+		4CDFC9831ED89147008E1AD6 /* MADDesignerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */; };
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
 		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
@@ -1624,8 +1625,8 @@
 		4C401F561BAE7EB500BAE5FC /* MADDesignerStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerStatusLabel.m; sourceTree = "<group>"; };
 		4C401F571BAE7EB500BAE5FC /* MADSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSliderPageVertical.h; sourceTree = "<group>"; };
 		4C401F581BAE7EB500BAE5FC /* MADSliderPageVertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSliderPageVertical.m; sourceTree = "<group>"; };
-		4C401F5A1BAE7EB500BAE5FC /* MADBackgroundScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundScrollView.h; sourceTree = "<group>"; };
-		4C401F5B1BAE7EB500BAE5FC /* MADBackgroundScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundScrollView.m; sourceTree = "<group>"; };
+		4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerScrollView.h; sourceTree = "<group>"; };
+		4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerScrollView.m; sourceTree = "<group>"; };
 		4C401F5C1BAE7EB500BAE5FC /* MADBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundView.h; sourceTree = "<group>"; };
 		4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundView.m; sourceTree = "<group>"; };
 		4C401F5E1BAE7EB500BAE5FC /* MADDimmingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDimmingView.h; sourceTree = "<group>"; };
@@ -2405,6 +2406,8 @@
 		4CD90DB91CE6B76600B56B90 /* rwpng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rwpng.c; sourceTree = "<group>"; };
 		4CD90DBA1CE6B76600B56B90 /* rwpng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwpng.h; sourceTree = "<group>"; };
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4CDFC9811ED89147008E1AD6 /* MADDesignerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerView.h; sourceTree = "<group>"; };
+		4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerView.m; sourceTree = "<group>"; };
 		4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MADVector.cpp; path = MADStack/cpp/MADVector.cpp; sourceTree = "<group>"; };
 		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
 		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
@@ -2845,6 +2848,8 @@
 				4C26B9F61BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.h */,
 				4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */,
 				4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */,
+				4CDFC9811ED89147008E1AD6 /* MADDesignerView.h */,
+				4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;
@@ -3551,8 +3556,8 @@
 				4C8DE2681BAFA98B00AD1111 /* MADConnectorView.m */,
 				4C8DE2691BAFA98B00AD1111 /* MADResizeHandleView.h */,
 				4C8DE26A1BAFA98B00AD1111 /* MADResizeHandleView.m */,
-				4C401F5A1BAE7EB500BAE5FC /* MADBackgroundScrollView.h */,
-				4C401F5B1BAE7EB500BAE5FC /* MADBackgroundScrollView.m */,
+				4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */,
+				4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */,
 				4C401F5C1BAE7EB500BAE5FC /* MADBackgroundView.h */,
 				4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */,
 				4C401F5E1BAE7EB500BAE5FC /* MADDimmingView.h */,
@@ -6225,6 +6230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDFC9831ED89147008E1AD6 /* MADDesignerView.m in Sources */,
 				4C8DE2621BAFA96300AD1111 /* MADSearchBar.m in Sources */,
 				4C401F751BAE7EB500BAE5FC /* MADSliderPageVertical.m in Sources */,
 				4C401F781BAE7EB500BAE5FC /* MADDimmingView.m in Sources */,
@@ -6404,7 +6410,7 @@
 				4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */,
 				4C6D2EEF1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m in Sources */,
 				4C26B9C51BAF123A00456DC8 /* MADFontSelectorViewController.m in Sources */,
-				4C401F761BAE7EB500BAE5FC /* MADBackgroundScrollView.m in Sources */,
+				4C401F761BAE7EB500BAE5FC /* MADDesignerScrollView.m in Sources */,
 				4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */,
 				4C8DE2721BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C401F801BAE7EB500BAE5FC /* MTTextView.m in Sources */,
@@ -7101,7 +7107,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = MADDesignerUITests/Info.plist;
@@ -7125,7 +7131,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;

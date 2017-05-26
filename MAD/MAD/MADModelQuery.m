@@ -311,8 +311,10 @@
         
         int64_t qlid = -1, ltid = -1, lfid = -1, rtid = -1, rfid = -1;
         for (NSDictionary *result in fresults) {
+
+            NSNumber *qlidObj = (NSNumber *)result[MADKeyQueryLinkID];
             
-            CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkID], kCFNumberSInt64Type, &qlid);
+            CFNumberGetValue((__bridge CFNumberRef)qlidObj, kCFNumberSInt64Type, &qlid);
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkLeftTableID], kCFNumberSInt64Type, &ltid);
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkLeftFieldID], kCFNumberSInt64Type, &lfid);
             CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)result[MADKeyQueryLinkRightTableID], kCFNumberSInt64Type, &rtid);
@@ -323,8 +325,7 @@
                                                           leftTableID: ltid
                                                          rightFieldID: rfid
                                                          rightTableID: rtid];
-            
-            [_links setObject:queryLink forKey:@(qlid)];
+            [_links setObject:queryLink forKey:qlidObj];
             
         }
     }
@@ -343,7 +344,8 @@
     NSString *inQueryTableID = [NSStringFromSelector(@selector(inQuery)) stringByAppendingString:@"."];
     inQueryTableID = [inQueryTableID stringByAppendingString: NSStringFromSelector(@selector(identifier))];
     expressions[0] = [NSExpression expressionForKeyPath: inQueryTableID];
-    expressions[1] = [NSExpression expressionForConstantValue: @(self.identifier)];
+    NSNumber *identifier = @(self.identifier);
+    expressions[1] = [NSExpression expressionForConstantValue: identifier];
 
     predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
                                                    rightExpression: expressions[1]

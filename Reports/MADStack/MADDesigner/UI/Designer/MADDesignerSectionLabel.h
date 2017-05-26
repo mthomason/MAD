@@ -27,6 +27,8 @@ extern const CGFloat MADesignerSectionLabelFontSize;
     - (instancetype)initWithText:(NSString *)text;
     - (void)dimView;
     - (void)normalView;
+    - (void)applyBorder;
+    - (void)removeBorder;
 
     @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 

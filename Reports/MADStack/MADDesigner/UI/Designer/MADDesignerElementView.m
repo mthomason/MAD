@@ -46,6 +46,8 @@
 #import "MADResizeHandleView.h"
 #import "UITapGestureRecognizer+Designer.h"
 
+#import "UIView+Extras.h"
+
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 #define kAnimationTranslateX 2.0
@@ -372,6 +374,20 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     [managedObjectContext save:error];
     NSAssert(error == NULL, @"Error: %@", *error);
     
+}
+
+- (void)applyBorder {
+    self.enableResizing = YES;
+    UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
+    self.layer.borderColor = tintColor.CGColor;
+    self.layer.borderWidth = [UIView borderWidthThin];
+}
+
+- (void)removeBorder {
+    self.enableResizing = NO;
+    UIColor *color = [UIColor blackColor];
+    self.layer.borderColor = color.CGColor;
+    self.layer.borderWidth = 0;
 }
 
 #pragma mark -

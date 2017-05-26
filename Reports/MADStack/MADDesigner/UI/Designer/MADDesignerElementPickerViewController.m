@@ -254,8 +254,8 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
     if (self.aggregateViewController) {
-        NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:functionType];
-        NSString *detailText = [[NSString alloc] initWithFormat:@"%@(x)", functionName];
+        NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForType:functionType];
+        detailText = [detailText stringByAppendingString:@"(x)"];
         (self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel).text = detailText;
     }
 }

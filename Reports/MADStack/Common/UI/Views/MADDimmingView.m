@@ -7,7 +7,7 @@
 //
 
 #import "MADDimmingView.h"
-#import "MADBackgroundScrollView.h"
+#import "MADDesignerScrollView.h"
 
 @implementation MADDimmingView
 

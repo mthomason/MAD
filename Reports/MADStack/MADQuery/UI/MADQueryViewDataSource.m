@@ -587,7 +587,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         predicateExpression[0] = [NSExpression expressionForKeyPath:keyInQuery];
         MADocument *doc = self.datasoruce.document;
         MADModelQuery *query = doc.documentModel.firstQuery;
-        predicateExpression[1] = [NSExpression expressionForConstantValue: @(query.identifier)];
+        NSNumber *identifier = @(query.identifier);
+        predicateExpression[1] = [NSExpression expressionForConstantValue: identifier];
 
         predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
                                                        rightExpression: predicateExpression[1]

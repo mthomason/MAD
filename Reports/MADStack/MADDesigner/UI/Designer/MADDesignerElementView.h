@@ -46,6 +46,9 @@
     - (void)updateWithElement:(RptqDocumentElement *)element;
     - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 
+    - (void)applyBorder;
+    - (void)removeBorder;
+
 @end
 
 #endif
