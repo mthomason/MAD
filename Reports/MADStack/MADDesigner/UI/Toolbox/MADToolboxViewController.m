@@ -38,22 +38,24 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 @interface MADToolboxViewController ()
 
+    @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
     @property (nonatomic, strong) MADToolboxPanel *layout;
     @property (nonatomic, strong) MADToolboxPanel *format;
-    @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
     @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
     @property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
 
-    @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
-
     @property (nonatomic, weak) UIViewController *currentViewController;
+    @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
 @end
 
 @implementation MADToolboxViewController
 
 @synthesize document = _document;
+
+#pragma mark -
+#pragma mark Static
 
 + (void)initialize {
     [super initialize];
@@ -68,6 +70,16 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     }
 }
 
++ (instancetype)newToolboxViewController {
+    UIStoryboard *storyboard;
+    id toolbox;
+    
+    storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox"
+                                           bundle: [NSBundle mainBundle]];
+    toolbox = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
+    return toolbox;
+}
+
 + (NSString *)keyPathSelectedObjectIds {
     NSString *selectedElementIDs = NSStringFromSelector(@selector(selectedElementIDs));
     return selectedElementIDs;
@@ -78,15 +90,8 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     return document;
 }
 
-+ (instancetype)newToolboxViewController {
-    UIStoryboard *storyboard;
-    id toolbox;
-    
-    storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox"
-                                           bundle: [NSBundle mainBundle]];
-    toolbox = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
-    return toolbox;
-}
+#pragma mark -
+#pragma mark View Controller
 
 - (void)dealloc {
 
@@ -175,6 +180,13 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     }
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
+#pragma mark -
+#pragma mark Helpers
+
 - (void)showInitalChildViewController {
     
     UIViewController *viewControllerToShow = self.styleNavigationController;
@@ -198,49 +210,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-}
-
-- (void)setClearsBackground:(BOOL)clearsBackground {
-    _clearsBackground = clearsBackground;
-    self.layout.clearsBackground = clearsBackground;
-    self.format.clearsBackground = clearsBackground;
-    for (UIViewController <MADToolboxDisplayProtocol> *viewController in self.styleNavigationController.viewControllers) {
-        viewController.clearsBackground = clearsBackground;
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
-                       context:(void *)context {
-    
-    if ([keyPath isEqualToString:[MADToolboxViewController keyPathDocument]]) {
-    
-        id <MADViewControllerDocumentProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
-        [delegate setDocument:self.document];
-
-    } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
-        
-        id <MADToolboxControllerProtocol> delegate;
-        delegate = [self delegateForController:self.childViewControllers.firstObject];
-        [delegate setSelectedDocumentObjects:self.selectedElementIDs];
-    
-    }
-}
-
-- (MADToolboxPanel *)delegateForController:(UIViewController *)controller {
-    MADToolboxPanel *delegate;
-    if ([controller isKindOfClass:[UINavigationController class]]) {
-        delegate = (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
-    } else {
-        delegate = (MADToolboxPanel *)controller;
-    }
-    return delegate;
-}
-
-- (void)showStyle {
+- (void)showStyleViewController {
     
     MADToolboxPanel *viewControllerToUpdate = (MADToolboxPanel *)self.styleNavigationController.viewControllers.firstObject;
 
@@ -279,6 +249,57 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 }
 
+#pragma mark -
+#pragma mark Accessors
+
+- (void)setClearsBackground:(BOOL)clearsBackground {
+    _clearsBackground = clearsBackground;
+    self.layout.clearsBackground = clearsBackground;
+    self.format.clearsBackground = clearsBackground;
+    for (UIViewController <MADToolboxDisplayProtocol> *viewController in self.styleNavigationController.viewControllers) {
+        viewController.clearsBackground = clearsBackground;
+    }
+}
+
+- (IBAction)done:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (MADToolboxPanel *)delegateForController:(UIViewController *)controller {
+    MADToolboxPanel *delegate;
+    if ([controller isKindOfClass:[UINavigationController class]]) {
+        delegate = (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
+    } else {
+        delegate = (MADToolboxPanel *)controller;
+    }
+    return delegate;
+}
+
+#pragma mark -
+#pragma mark KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
+                       context:(void *)context {
+    
+    if ([keyPath isEqualToString:[MADToolboxViewController keyPathDocument]]) {
+    
+        id <MADViewControllerDocumentProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
+        [delegate setDocument:self.document];
+
+    } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
+        
+        id <MADToolboxControllerProtocol> delegate;
+        delegate = [self delegateForController:self.childViewControllers.firstObject];
+        [delegate setSelectedDocumentObjects:self.selectedElementIDs];
+    
+    }
+}
+
+#pragma mark -
+#pragma mark Accessors
+
 - (IBAction)valueChanged:(id)sender {
 
     UIViewController *viewControllerToShow = nil;
@@ -289,7 +310,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     
         case 0:
             
-            [self showStyle];   //Handles this case alone...
+            [self showStyleViewController];   //Handles this case alone...
             return;
             
             break;
@@ -343,7 +364,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
                             }];
 }
 
-- (UIImage *)cropImage:(UIImage *)image toRect:(CGRect)rect {
+/*- (UIImage *)cropImage:(UIImage *)image toRect:(CGRect)rect {
     if (self.traitCollection.displayScale > 1.0f) {
         rect = CGRectMake(rect.origin.x * self.traitCollection.displayScale,
                           rect.origin.y * self.traitCollection.displayScale,
@@ -370,11 +391,10 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 - (void)setOptionsForViewController:(MADToolboxPanel *)viewController {
     [viewController setSelectedDocumentObjects: self.selectedElementIDs];
     viewController.document = self.document;
-}
+}*/
 
-- (IBAction)done:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
+#pragma mark -
+#pragma mark Accessibility
 
 - (BOOL)accessibilityPerformEscape {
     return [self.navigationController.presentationController accessibilityPerformEscape];

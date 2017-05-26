@@ -881,9 +881,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return [self borderLineBottomBY];
 }
 
-
-
-
 - (CGRect)borderRect {
     return CGRectMake(CGPointZero.x + self.margin.left,
                       CGPointZero.y + self.margin.top,
