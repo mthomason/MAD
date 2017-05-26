@@ -6,20 +6,20 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADBackgroundScrollView.h"
+#import "MADDesignerScrollView.h"
 #import <UIKit/UITapGestureRecognizer.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-@interface MADBackgroundScrollView ()
+@interface MADDesignerScrollView ()
     <UIGestureRecognizerDelegate>
 
     @property (nonatomic, strong) NSArray *availableZoomScales;
 
 @end
 
-@implementation MADBackgroundScrollView
+@implementation MADDesignerScrollView
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {

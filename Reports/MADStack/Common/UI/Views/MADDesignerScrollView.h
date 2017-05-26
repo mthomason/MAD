@@ -13,7 +13,7 @@
 
 @class UITapGestureRecognizer;
 
-@interface MADBackgroundScrollView : UIScrollView
+@interface MADDesignerScrollView : UIScrollView
 
     @property (nonatomic, strong) UIView *container;
     @property (nonatomic, strong) UITapGestureRecognizer *doubleTapToZoom;
