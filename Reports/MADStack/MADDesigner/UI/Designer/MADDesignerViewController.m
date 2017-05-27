@@ -156,9 +156,9 @@ static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer        = @"
 static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
 static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
 static const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
-static const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
-static const CGFloat MTReportDesignerBorderPaddingDetail        =  3.0000f;
-static const CGFloat MTReportDesignerBorderPaddingVertical      =  3.0000f;
+//static const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
+//static const CGFloat MTReportDesignerBorderPaddingDetail        =  3.0000f;
+//static const CGFloat MTReportDesignerBorderPaddingVertical      =  3.0000f;
 static const CGFloat MTReportDesignerBufferPaddingVertical      =  2.0000f;
 static const CGFloat MTReportDesignerSectionLabelPaddingRight   =  8.0000f;
 
@@ -248,7 +248,7 @@ static const inline CGSize sizePopoverFonts() {
 
     @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-    @property (nonatomic, strong) MADRulerView *ruler;
+    //@property (nonatomic, strong) MADRulerView *ruler;
     @property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
     @property (nonatomic, strong) MADPromptManager *promptManager;
 
@@ -415,6 +415,14 @@ static const inline CGSize sizePopoverFonts() {
         borderAppliedToView = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = borderAppliedToView;
         _identifierJustDisplayed = -1;
+        _boundsOnDisappear = CGRectZero;
+        _zoomScaleRestore = -1.0000f;
+        _shownAndHidden = NO;
+        _editAggregate = NO;
+        
+        _insetsSetup = NO;
+        _toolboxVisible = NO;
+        _sectionSettingsVisible = NO;
 
     }
     return self;
@@ -460,20 +468,6 @@ static const inline CGSize sizePopoverFonts() {
     return _title;
 }
 
-- (void)loadView {
-    [super loadView];
-
-    _boundsOnDisappear = CGRectZero;
-    _zoomScaleRestore = -1.0000f;
-    _shownAndHidden = NO;
-    _editAggregate = NO;
-    
-    _insetsSetup = NO;
-    _toolboxVisible = NO;
-    _sectionSettingsVisible = NO;
-
-}
-
 - (MADDesignerStatusLabel *)statusLabelZoomScale {
     if (_statusLabelZoomScale == nil) {
         MADDesignerStatusLabel *detailDisplay;
@@ -493,14 +487,14 @@ static const inline CGSize sizePopoverFonts() {
     return _numberFormatterPercentage;
 }
 
-- (MADRulerView *)ruler {
+/*- (MADRulerView *)ruler {
     if (_ruler == nil) {
         MADRulerView *ruler;
         ruler = [[MADRulerView alloc] initWithFrame:CGRectZero];
         _ruler = ruler;
     }
     return _ruler;
-}
+}*/
 
 - (MADToolboxTransitioningDelegate *)toolboxTransitioningDelegate {
     if (_toolboxTransitioningDelegate == nil) {
@@ -686,20 +680,20 @@ static const inline CGSize sizePopoverFonts() {
     NSInteger sectionCounter = 0;
     NSUInteger numberOfSections = reportSectionsEnumerator.count;
     
-    [self.view.scroller.container addSubview:self.ruler];
+    //[self.view.scroller.container addSubview:self.ruler];
     
     [self.view addSubview:self.statusLabelZoomScale];
     [self updateDisplayDetailZoomValue];
     
-    NSArray <NSLayoutConstraint *> *rulerConstraints, *rulerSideConstraints;
-    rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
-                                                      designer: self.view.scroller.container
-                                                     marginTop: MTReportDesignerBorderPaddingVertical
-                                                         heigh: MTReportDesignerRulerHeight].copy;
+    //NSArray <NSLayoutConstraint *> *rulerConstraints, *rulerSideConstraints;
+    //rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
+    //                                                  designer: self.view.scroller.container
+    //                                                 marginTop: MTReportDesignerBorderPaddingVertical
+    //                                                     heigh: MTReportDesignerRulerHeight].copy;
     
-    rulerSideConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
-                                                          designer: self.view.scroller.container
-                                                        sideMargin: MTReportDesignerBorderPaddingSides].copy;
+    //rulerSideConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
+    //                                                      designer: self.view.scroller.container
+    //                                                    sideMargin: MTReportDesignerBorderPaddingSides].copy;
     
     NSMutableArray <NSNumber *> *reportSectionKeyTracker;
     
@@ -729,10 +723,7 @@ static const inline CGSize sizePopoverFonts() {
     NSMutableSet <MADDesignerSectionView *> *passthroughContainers;
     passthroughContainers = [[NSMutableSet alloc] initWithCapacity:numberOfSections];
 
-    [constraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
-    
-    [scrollerLayoutConstraints addObjectsFromArray:rulerConstraints];
-    [scrollerLayoutConstraints addObjectsFromArray:rulerSideConstraints];
+    //[constraintsSectionsSidesBorder addObjectsFromArray:self.view.scroller.container.rulerConstraints];
     
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight +
                                                  MTReportDesignerBorderPaddingVertical;
@@ -784,7 +775,7 @@ static const inline CGSize sizePopoverFonts() {
         UIView *constraintItem;
         
         key = reportSectionKeyTracker.lastObject;
-        constraintItem = sectionCounter == 0 ? self.ruler :
+        constraintItem = sectionCounter == 0 ? self.view.scroller.container.ruler :
                                                sectionViewsDictionary[key];
         
         constraintViewTop = [MADLayoutConstraint newLayoutConstraintViewTop: constraintItem
@@ -934,8 +925,8 @@ static const inline CGSize sizePopoverFonts() {
     for (id view in subviews) {
         if ([view isKindOfClass:[MADDesignerSectionView class]]) {
             [((MADDesignerSectionView *)view).sectionLabel removeFromSuperview];
+            [view removeFromSuperview];
         }
-        [view removeFromSuperview];
     }
     
     [self.view.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
@@ -995,7 +986,7 @@ static const inline CGSize sizePopoverFonts() {
     
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
     [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
-    [self.ruler setNeedsDisplay];
+    [self.view.scroller.container.ruler setNeedsDisplay];
     
 }
 
@@ -1205,7 +1196,7 @@ static const inline CGSize sizePopoverFonts() {
         [self updateDisplayDetailZoomValue];
         self.statusLabelZoomScale.frame = [self detailDisplayFrame];
         
-        [self.ruler setNeedsDisplay];
+        [self.view.scroller.container.ruler setNeedsDisplay];
         
         @autoreleasepool {
             UIFontDescriptor *captionFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
@@ -1291,7 +1282,7 @@ static const inline CGSize sizePopoverFonts() {
         
         CGFloat scaleWithScreen = scale * scrollView.traitCollection.displayScale;
         
-        self.ruler.contentScaleFactor = scaleWithScreen;
+        self.view.scroller.container.ruler.contentScaleFactor = scaleWithScreen;
         
         NSSet *elementViews = self.visibleElementViews;
         for (MADDesignerElementView *elementView in elementViews) {
@@ -3890,7 +3881,7 @@ END_deselectElementView:;
 - (CGSize)designerContentViewSize {
     CGFloat height = (self.sectionViewsDictionary.count * MTReportDesignerBufferPaddingVertical) +
                         (2 * MTReportDesignerBorderPaddingVertical) +
-                        self.ruler.intrinsicContentSize.height;
+                        self.view.scroller.container.ruler.intrinsicContentSize.height;
     MADDesignerSectionView *sectionView;
     NSEnumerator <MADDesignerSectionView *> *sectionViews = self.sectionViewsDictionary.objectEnumerator;
     for (sectionView in sectionViews) {
@@ -4059,7 +4050,6 @@ END_deselectElementView:;
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
                 (*error).localizedDescription.UTF8String);
     }
-
 }
 
 - (IBAction)actionHideToolbox {

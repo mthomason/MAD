@@ -7,6 +7,7 @@
 //
 
 #import "MADDesignerView.h"
+#import "MADDesignerScrollView.h"
 
 @implementation MADDesignerView
 
@@ -17,5 +18,10 @@
     // Drawing code
 }
 */
+
+- (void)setNeedsUpdateConstraints {
+    [super setNeedsUpdateConstraints];
+    [self.scroller setNeedsUpdateConstraints];
+}
 
 @end

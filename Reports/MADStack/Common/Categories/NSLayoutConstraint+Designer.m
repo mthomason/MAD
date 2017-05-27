@@ -26,7 +26,7 @@
                                                attribute: NSLayoutAttributeTop
                                                relatedBy: NSLayoutRelationEqual
                                                   toItem: designer
-                                               attribute: NSLayoutAttributeTop
+                                               attribute: NSLayoutAttributeTopMargin
                                               multiplier: 1.0000f
                                                 constant: marginTop];
     

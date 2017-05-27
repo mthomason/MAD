@@ -161,4 +161,9 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
     }];
 }
 
+- (void)setNeedsUpdateConstraints {
+    [super setNeedsUpdateConstraints];
+    [self.container setNeedsUpdateConstraints];
+}
+
 @end
