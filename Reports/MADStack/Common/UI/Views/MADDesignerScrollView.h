@@ -11,11 +11,11 @@
 
 #import <UIKit/UIScrollView.h>
 
-@class UITapGestureRecognizer;
+@class UITapGestureRecognizer, MADDesignerLayoutDesignView;
 
 @interface MADDesignerScrollView : UIScrollView
 
-    @property (nonatomic, strong) UIView *container;
+    @property (nonatomic, strong) MADDesignerLayoutDesignView *container;
     @property (nonatomic, strong) UITapGestureRecognizer *doubleTapToZoom;
 
     - (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest

@@ -12,6 +12,8 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
+#import "MADDesignerLayoutDesignView.h"
+
 @interface MADDesignerScrollView ()
     <UIGestureRecognizerDelegate>
 
@@ -21,24 +23,53 @@
 
 @implementation MADDesignerScrollView
 
+static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect);
+static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect) {
+    CGRect r = CGRectMake(offset.x, offset.y,
+                                    size.width, size.height - presentedRect.size.height);
+    return r;
+}
+
+static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest);
+static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest) {
+    CGRect r = zoomScale >= 1 ? rectOfInterest :
+                                                CGRectAdjustForScale(rectOfInterest, zoomScale);
+    return r;
+}
+
+static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect);
+static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
+    CGRect r = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f), rect.origin.y + adjustment,
+                                    CGFLOAT_MAX, rect.size.height - adjustment);
+    return r;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;
+        self.scrollsToTop = YES;
+        self.scrollEnabled = YES;
+        self.userInteractionEnabled = YES;
         self.contentOffset = CGPointZero;
-        self.maximumZoomScale = 1.0000f;
-        self.minimumZoomScale = 1.0000f;
+        self.indicatorStyle            = UIScrollViewIndicatorStyleDefault;
+        self.maximumZoomScale          = 4.0000f;
+        self.minimumZoomScale          = 0.3000f;
         self.zoomScale = 1.0000f;
         self.bounces = YES;
         self.alwaysBounceHorizontal = YES;
         self.alwaysBounceVertical = YES;
         self.bouncesZoom = NO;
+        self.opaque = NO;
+        self.backgroundColor = [UIColor clearColor];
+
         self.delaysContentTouches = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
         
-        UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
+        MADDesignerLayoutDesignView *container = [[MADDesignerLayoutDesignView alloc] initWithFrame:CGRectZero];
         container.userInteractionEnabled = YES;
+        container.opaque = NO;
         container.translatesAutoresizingMaskIntoConstraints = NO;
         container.backgroundColor = [UIColor clearColor];
         
@@ -92,27 +123,6 @@
                                       withView: self.container
                                        atScale: zoomScale];
     }
-}
-
-static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect);
-static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect) {
-    CGRect r = CGRectMake(offset.x, offset.y,
-                                    size.width, size.height - presentedRect.size.height);
-    return r;
-}
-
-static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest);
-static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest) {
-    CGRect r = zoomScale >= 1 ? rectOfInterest :
-                                                CGRectAdjustForScale(rectOfInterest, zoomScale);
-    return r;
-}
-
-static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect);
-static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
-    CGRect r = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f), rect.origin.y + adjustment,
-                                    CGFLOAT_MAX, rect.size.height - adjustment);
-    return r;
 }
 
 - (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect

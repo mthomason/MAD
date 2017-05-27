@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADDesignerLayoutDesignView_h
+#define Reports_MADDesignerLayoutDesignView_h
+
+#import <UIKit/UIView.h>
 
 @interface MADDesignerLayoutDesignView : UIView
 
 @end
+
+#endif

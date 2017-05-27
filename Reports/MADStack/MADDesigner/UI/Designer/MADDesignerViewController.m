@@ -132,6 +132,9 @@
 
 #import "MADElementPickerProtocol.h"
 
+#import "MADDesignerLayoutDesignView.h"
+#import "MADDesignerView.h"
+
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,
     MTToolboxTypeSection = 3,
@@ -216,7 +219,7 @@ static const inline CGSize sizePopoverFonts() {
         UIScrollViewDelegate,
         UIImagePickerControllerDelegate>
 
-    @property (nonatomic, strong) IBOutlet MADDesignerScrollView *scroller;
+    @property(null_resettable, nonatomic, strong) MADDesignerView *view;
 
     @property (nonatomic, strong) NSMutableSet <MADDesignerElementView *> *visibleElementViews;
     @property (nonatomic, strong) NSSet <MADDesignerSectionView *> *passthroughContainers;
@@ -288,6 +291,8 @@ static const inline CGSize sizePopoverFonts() {
     BOOL _lastMenuItemSelectRequiresElementView;
     CGRect _boundsOnDisappear;
 }
+
+@dynamic view;
 
 @synthesize document = _document;
 @synthesize title = _title;
@@ -458,20 +463,6 @@ static const inline CGSize sizePopoverFonts() {
 - (void)loadView {
     [super loadView];
 
-    void (^initalizeScroller)(MADDesignerScrollView *) = ^(MADDesignerScrollView *scroller) {
-        scroller.scrollsToTop              = YES;
-        scroller.scrollEnabled             = YES;
-        scroller.userInteractionEnabled    = YES;
-        scroller.indicatorStyle            = UIScrollViewIndicatorStyleDefault;
-        scroller.maximumZoomScale          = 4.0000f;
-        scroller.minimumZoomScale          = 0.3000f;
-        scroller.bouncesZoom               = NO;
-        scroller.opaque = NO;
-        scroller.backgroundColor = [UIColor clearColor];
-        scroller.container.opaque = NO;
-        scroller.container.backgroundColor = [UIColor clearColor];
-    };
-
     _boundsOnDisappear = CGRectZero;
     _zoomScaleRestore = -1.0000f;
     _shownAndHidden = NO;
@@ -480,7 +471,6 @@ static const inline CGSize sizePopoverFonts() {
     _insetsSetup = NO;
     _toolboxVisible = NO;
     _sectionSettingsVisible = NO;
-    initalizeScroller(self.scroller);
 
 }
 
@@ -563,7 +553,7 @@ static const inline CGSize sizePopoverFonts() {
         viewControllerToolbox.selectedElementIDs = self.selectedElementIDs;
         
         _toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
-        _toolboxTransitioningDelegate.passthroughContainer = self.scroller;
+        _toolboxTransitioningDelegate.passthroughContainer = self.view.scroller;
         
         _viewControllerToolbox = viewControllerToolbox;
     }
@@ -598,18 +588,18 @@ static const inline CGSize sizePopoverFonts() {
     self.hidesStatusBar = NO;
     
     NSArray <NSLayoutConstraint *> *constraints;
-    constraints = self.scroller.container.constraints;
+    constraints = self.view.scroller.container.constraints;
     if (constraints.count > 0) {
-        [self.scroller.container removeConstraints:constraints];
+        [self.view.scroller.container removeConstraints:constraints];
     }
     
-    constraints = self.scroller.constraints;
+    constraints = self.view.scroller.constraints;
     if (constraints.count > 0) {
-        [self.scroller removeConstraints:constraints];
+        [self.view.scroller removeConstraints:constraints];
     }
     constraints = nil;
     
-    UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
+    UITapGestureRecognizer *tapGestureDoubleTap = self.view.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
     UIGestureRecognizer *tap;
@@ -617,34 +607,34 @@ static const inline CGSize sizePopoverFonts() {
                                                                         action: @selector(handleStrayTouch:)
                                                                       delegate: self];
     [tap requireGestureRecognizerToFail:tapGestureDoubleTap];
-    [self.scroller addGestureRecognizer:tap];
+    [self.view.scroller addGestureRecognizer:tap];
     self.strayTouchGesture = tap;
     
-    self.scroller.delegate = self;
+    self.view.scroller.delegate = self;
     
-    self.scroller.container.backgroundColor =   [UIColor greenColor];
-    self.scroller.backgroundColor =             [UIColor blueColor];
+    self.view.scroller.container.backgroundColor =   [UIColor greenColor];
+    self.view.scroller.backgroundColor =             [UIColor blueColor];
 
     NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
                        *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
     
     constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
-                                                           containerLeft: self.scroller.container];
+                                                           containerLeft: self.view.scroller.container];
     
     constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view
-                                                           containerRight: self.scroller.container];
+                                                           containerRight: self.view.scroller.container];
     
-    constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.scroller
-                                                           containerTop: self.scroller.container];
-    constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.scroller
+    constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.view.scroller
+                                                           containerTop: self.view.scroller.container];
+    constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.view.scroller
                                                                          bottom: self.bottomLayoutGuide];
-    constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.scroller.container
-                                                                width: self.view.frame.size.width / self.scroller.zoomScale];
+    constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container
+                                                                width: self.view.frame.size.width / self.view.scroller.zoomScale];
     
     constraintContentLeft.priority = 999;
     constraintContentRight.priority = 999;
 
-    viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
+    viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller
                                                                          view: self.topLayoutGuide];
 
     constraints = [[NSArray alloc] initWithObjects: constraintContentLeft,
@@ -684,11 +674,9 @@ static const inline CGSize sizePopoverFonts() {
 
     [self addObservers];
     
-    MADDesignerScrollView *scroller = _scroller;
-
     _lastMenuItemSelectRequiresElementView = NO;
-    _zoomScaleRestore = scroller.zoomScale;
-    [scroller setZoomScale: 1.0000f animated: NO];
+    _zoomScaleRestore = self.view.scroller.zoomScale;
+    [self.view.scroller setZoomScale: 1.0000f animated: NO];
 
     RptqDocument *document = [maDocument activeDocumentModel];
 
@@ -698,20 +686,20 @@ static const inline CGSize sizePopoverFonts() {
     NSInteger sectionCounter = 0;
     NSUInteger numberOfSections = reportSectionsEnumerator.count;
     
-    [scroller.container addSubview:self.ruler];
+    [self.view.scroller.container addSubview:self.ruler];
     
     [self.view addSubview:self.statusLabelZoomScale];
     [self updateDisplayDetailZoomValue];
     
     NSArray <NSLayoutConstraint *> *rulerConstraints, *rulerSideConstraints;
     rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
-                                                     designer: scroller.container
-                                                    marginTop: MTReportDesignerBorderPaddingVertical
-                                                        heigh: MTReportDesignerRulerHeight].copy;
+                                                      designer: self.view.scroller.container
+                                                     marginTop: MTReportDesignerBorderPaddingVertical
+                                                         heigh: MTReportDesignerRulerHeight].copy;
     
     rulerSideConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
-                                                         designer: scroller.container
-                                                       sideMargin: MTReportDesignerBorderPaddingSides].copy;
+                                                          designer: self.view.scroller.container
+                                                        sideMargin: MTReportDesignerBorderPaddingSides].copy;
     
     NSMutableArray <NSNumber *> *reportSectionKeyTracker;
     
@@ -817,11 +805,11 @@ static const inline CGSize sizePopoverFonts() {
                                                               toHeight: MTReportDesignerSectionLabelHeight];
         
         constraintViewLeft = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
-                                                                     content:scroller.container
+                                                                     content:self.view.scroller.container
                                                                      padding:MTReportDesignerBorderPaddingSides];
         
         constraintViewRight = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
-                                                                       content:scroller.container
+                                                                       content:self.view.scroller.container
                                                                        padding:MTReportDesignerBorderPaddingSides];
         
         collectionViewConstraints = [[NSArray alloc] initWithObjects: constraintViewLeft,
@@ -853,8 +841,8 @@ static const inline CGSize sizePopoverFonts() {
         
         sectionCounter++;
         
-        [scroller.container addSubview:sectionView];
-        [scroller.container addSubview:sectionViewLabel];
+        [self.view.scroller.container addSubview:sectionView];
+        [self.view.scroller.container addSubview:sectionViewLabel];
         
         [passthroughContainers addObject:sectionView];
         
@@ -876,8 +864,8 @@ static const inline CGSize sizePopoverFonts() {
     sectionHeights += MTReportDesignerBorderPaddingVertical;
     
     NSLayoutConstraint *constraintContentViewHeight;
-    constraintContentViewHeight = [MADLayoutConstraint newLayoutConstraintView: scroller.container
-                                                                       height: sectionHeights];
+    constraintContentViewHeight = [MADLayoutConstraint newLayoutConstraintView: self.view.scroller.container
+                                                                        height: sectionHeights];
 
     [scrollerLayoutConstraints addObject:constraintContentViewHeight];
 
@@ -885,25 +873,25 @@ static const inline CGSize sizePopoverFonts() {
     
     
     NSLayoutConstraint *constraintToScollerBottom;
-    constraintToScollerBottom = [MADLayoutConstraint newLayoutConstraintView: scroller.container
-                                                                   containerBottom: scroller];
+    constraintToScollerBottom = [MADLayoutConstraint newLayoutConstraintView: self.view.scroller.container
+                                                             containerBottom: self.view.scroller];
     
     [scrollerLayoutConstraints addObject:constraintToScollerBottom];
     
-    [self.scroller addConstraints: scrollerLayoutConstraints];
-    [self.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
+    [self.view.scroller addConstraints: scrollerLayoutConstraints];
+    [self.view.scroller.container addConstraints: viewDidAppearDesignerContentViewConstraints];
     
     self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
     self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
-    [self.view addSubview:self.scroller];
-    [self.scroller setNeedsLayout];
+    [self.view.scroller setNeedsLayout];
     
     UIBarButtonItem *toolbarItem = [[UIBarButtonItem alloc] initWithTitle: @"Undo"
                                                                     style: UIBarButtonItemStylePlain
                                                                    target: self
                                                                    action: @selector(undo)];
     [self.navigationController setToolbarHidden:NO animated:animated];
-    [self setToolbarItems:@[toolbarItem] animated:NO];
+    NSArray *toolbarItems = [[NSArray alloc] initWithObjects:toolbarItem, nil];
+    [self setToolbarItems:toolbarItems animated:NO];
     self.undoButton = toolbarItem;
 
 }
@@ -921,18 +909,18 @@ static const inline CGSize sizePopoverFonts() {
     [self setScrollersEnabled:YES];
     
     if (_shownAndHidden && _zoomScaleRestore > 1.0001) {
-        [self.scroller setZoomScale:_zoomScaleRestore animated:NO];
-        [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.scroller.zoomScale];
-        [self.scroller scrollRectToVisible:_boundsOnDisappear animated:NO];
+        [self.view.scroller setZoomScale:_zoomScaleRestore animated:NO];
+        [self handledScrollViewDidEndZooming: nil withView: nil atScale: self.view.scroller.zoomScale];
+        [self.view.scroller scrollRectToVisible:_boundsOnDisappear animated:NO];
     }
-    [self.scroller flashScrollIndicators];
+    [self.view.scroller flashScrollIndicators];
     [self.view setNeedsUpdateConstraints];
     [self.view setNeedsLayout];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    _boundsOnDisappear = self.scroller.bounds;
+    _boundsOnDisappear = self.view.scroller.bounds;
     [self.statusLabelZoomScale removeFromSuperview];
     NSArray *emptyArray = [[NSArray alloc] init];
     [self setToolbarItems:emptyArray animated:animated];
@@ -942,7 +930,7 @@ static const inline CGSize sizePopoverFonts() {
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    NSArray *subviews = self.scroller.container.subviews;
+    NSArray *subviews = self.view.scroller.container.subviews;
     for (id view in subviews) {
         if ([view isKindOfClass:[MADDesignerSectionView class]]) {
             [((MADDesignerSectionView *)view).sectionLabel removeFromSuperview];
@@ -950,8 +938,8 @@ static const inline CGSize sizePopoverFonts() {
         [view removeFromSuperview];
     }
     
-    [self.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
-    [self.scroller.container removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
+    [self.view.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
+    [self.view.scroller.container removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
     
     [self.elementViewsDictionary removeAllObjects];
     [self.visibleElementViews removeAllObjects];
@@ -1002,8 +990,8 @@ static const inline CGSize sizePopoverFonts() {
         
     }
     
-    self.scroller.contentInset = insets;
-    self.scroller.scrollIndicatorInsets = insets;
+    self.view.scroller.contentInset = insets;
+    self.view.scroller.scrollIndicatorInsets = insets;
     
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
     [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
@@ -1048,7 +1036,7 @@ static const inline CGSize sizePopoverFonts() {
 - (void)updateViewConstraints {
     [super updateViewConstraints];
    
-    CGFloat zoomscale = self.scroller.zoomScale;
+    CGFloat zoomscale = self.view.scroller.zoomScale;
     CGFloat ratio = self.view.frame.size.width / zoomscale;
     //if (!isinf(ratio) && !isnan(ratio)) {
         self.layoutConstraintContainerWidth.constant = ratio;
@@ -1205,14 +1193,14 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)scrollViewWillBeginZooming: (UIScrollView *)scrollView
                           withView: (UIView *)view {
-    if ([scrollView isEqual:self.scroller]) {
+    if ([scrollView isEqual:self.view.scroller]) {
         [self.statusLabelZoomScale show];
     }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     
-    if ([scrollView isEqual:self.scroller]) {
+    if ([scrollView isEqual:self.view.scroller]) {
         
         [self updateDisplayDetailZoomValue];
         self.statusLabelZoomScale.frame = [self detailDisplayFrame];
@@ -1237,15 +1225,15 @@ static const inline CGSize sizePopoverFonts() {
                 
                 controlView.preferredMaxLayoutWidth = controlViewTextBounds.size.width / scrollView.zoomScale;
                 controlView.font = font;
-                controlView.scale = self.scroller.zoomScale;
-                controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
+                controlView.scale = self.view.scroller.zoomScale;
+                controlView.contentScaleFactor =  scrollView.zoomScale * self.view.scroller.traitCollection.displayScale;
                 [controlView setNeedsDisplay];
             }
         }
         
         [self adjustScroller];
-        [self.scroller.container invalidateIntrinsicContentSize];
-        self.scroller.container.center = CGPointMake(ScrollViewCenterX(scrollView), ScrollViewCenterY(scrollView));
+        [self.view.scroller.container invalidateIntrinsicContentSize];
+        self.view.scroller.container.center = CGPointMake(ScrollViewCenterX(scrollView), ScrollViewCenterY(scrollView));
         
         [self.view setNeedsUpdateConstraints];
         
@@ -1260,7 +1248,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([scrollView isEqual:self.scroller]) {
+    if ([scrollView isEqual:self.view.scroller]) {
         [self adjustScroller];
     }
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
@@ -1278,7 +1266,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.scroller.container;
+    return self.view.scroller.container;
 }
 
 #pragma mark -
@@ -1288,18 +1276,18 @@ static const inline CGSize sizePopoverFonts() {
     
     [self adjustContextOffsetForOpenPopover];
     
-    if (self.scroller.contentOffset.x != 0) {
-        CGPoint offset = self.scroller.contentOffset;
+    if (self.view.scroller.contentOffset.x != 0) {
+        CGPoint offset = self.view.scroller.contentOffset;
         offset.x = CGPointZero.x;
-        self.scroller.contentOffset = offset;
-        self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
+        self.view.scroller.contentOffset = offset;
+        self.view.scroller.contentSize = CGSizeMake(self.view.scroller.frame.size.width, self.view.scroller.contentSize.height);
     }
 }
 
 - (void)handledScrollViewDidEndZooming: (UIScrollView *)scrollView
                               withView: (UIView *)view
                                atScale: (CGFloat)scale {
-    if ([scrollView isEqual:self.scroller]) {
+    if ([scrollView isEqual:self.view.scroller]) {
         
         CGFloat scaleWithScreen = scale * scrollView.traitCollection.displayScale;
         
@@ -1341,7 +1329,7 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (void)updateDisplayDetailZoomValue {
-    NSNumber *number = [[NSNumber alloc] initWithDouble: self.scroller.zoomScale];
+    NSNumber *number = [[NSNumber alloc] initWithDouble: self.view.scroller.zoomScale];
     self.statusLabelZoomScale.text = [self.numberFormatterPercentage stringFromNumber:number];
 }
 
@@ -2031,9 +2019,9 @@ static const inline CGSize sizePopoverFonts() {
         popoverController = navigation.popoverPresentationController;
         popoverController.delegate = strongself;
         popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
-                                                        toView: strongself.scroller.container];
+                                                        toView: strongself.view.scroller.container];
         
-        popoverController.sourceView = strongself.scroller.container;
+        popoverController.sourceView = strongself.view.scroller.container;
         popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
         [strongself presentViewController:navigation animated:YES completion:nil];
         [strongself setDisplayInactive];
@@ -2069,8 +2057,8 @@ static const inline CGSize sizePopoverFonts() {
         popoverController = barcodeViewController.popoverPresentationController;
         popoverController.delegate = strongself;
         popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
-                                                        toView: strongself.scroller.container];
-        popoverController.sourceView = strongself.scroller.container;
+                                                        toView: strongself.view.scroller.container];
+        popoverController.sourceView = strongself.view.scroller.container;
         popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
         [strongself presentViewController:barcodeViewController animated:YES completion:nil];
         [strongself setDisplayInactive];
@@ -2094,8 +2082,8 @@ static const inline CGSize sizePopoverFonts() {
     popoverController = barcodeViewController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
-                                                    toView: self.scroller.container];
-    popoverController.sourceView = self.scroller.container;
+                                                    toView: self.view.scroller.container];
+    popoverController.sourceView = self.view.scroller.container;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:barcodeViewController animated:YES completion:nil];
     [self setDisplayInactive];
@@ -2123,8 +2111,8 @@ static const inline CGSize sizePopoverFonts() {
     popoverController = chooseFieldViewController.popoverPresentationController;
     popoverController.delegate = self;
     popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
-                                                    toView: self.scroller.container];
-    popoverController.sourceView = self.scroller.container;
+                                                    toView: self.view.scroller.container];
+    popoverController.sourceView = self.view.scroller.container;
     popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     [self presentViewController:chooseFieldViewController animated:YES completion:nil];
     [self setDisplayInactive];
@@ -2262,7 +2250,7 @@ static const inline CGSize sizePopoverFonts() {
     RptqDocumentElement *documentObject;
     documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
                                                          fromObjectContext: document.managedObjectContext];
-    CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
+    CGFloat contextScale = self.view.scroller.zoomScale * self.view.scroller.traitCollection.displayScale;
     NSString *resuseId = [MADCellElement reuseIdentifier];
     
     MADCellElement *cell;
@@ -2290,21 +2278,22 @@ static const inline CGSize sizePopoverFonts() {
             cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
             
             MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
+            NSNumber *elementViewIdentifier = @(identifier);
             [self.elementViewsDictionary setObject: elementView
-                                            forKey: @(identifier)];
+                                            forKey: elementViewIdentifier];
             
             UIGestureRecognizer *panGesture, *pinchGesture;
             panGesture = [MADPanGestureRecognizer newPanGestureRecognizerElement: self
                                                                           action: @selector(handlePanPiece:)
                                                                         delegate: self];
-            [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
+            [self.view.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
             [elementView addGestureRecognizer:panGesture];
 
             pinchGesture = [MADPinchGestureRecognizer newPinchGestureRecognizerElement: self
                                                                                 action: @selector(handlePinchPiece:)
                                                                               delegate: self];
 
-            [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
+            [self.view.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
             [elementView addGestureRecognizer:pinchGesture];
             
             elementView.frame = cellFrame;
@@ -3039,7 +3028,7 @@ static const inline CGSize sizePopoverFonts() {
         CGRect frame, bounds;
         frame = ((MADToolboxTransitioningDelegate *)_toolboxTransitioningDelegate).
                                         presentationController.presentedViewController.view.frame;
-        bounds = [self.scroller positionForRectOfInterest: [self rectForSelectedElements]
+        bounds = [self.view.scroller positionForRectOfInterest: [self rectForSelectedElements]
                                                withPresentedRect: frame
                                                    containerSize: self.view.frame.size
                                                       adjustment: self.topLayoutGuide.length];
@@ -3061,7 +3050,7 @@ static const inline CGSize sizePopoverFonts() {
         CGRect presentedRect, position;
         presentedRect = ((MADToolboxTransitioningDelegate *)self.settingsTransitioningDelegate).
                                         presentationController.presentedViewController.view.frame;
-        position = [self.scroller positionForRectOfInterest: selectedSectionView.frame
+        position = [self.view.scroller positionForRectOfInterest: selectedSectionView.frame
                                           withPresentedRect: presentedRect
                                               containerSize: self.view.frame.size
                                                  adjustment: self.topLayoutGuide.length];
@@ -3214,7 +3203,7 @@ END_deselectElementView:;
 
     } completion:^(BOOL finished) {
         
-        [weakself.scroller.container setNeedsUpdateConstraints];
+        [weakself.view.scroller.container setNeedsUpdateConstraints];
         
     }];
 }
@@ -3249,7 +3238,7 @@ END_deselectElementView:;
     
     } animationComplete:^() {
 
-        [self.scroller.container invalidateIntrinsicContentSize];
+        [self.view.scroller.container invalidateIntrinsicContentSize];
         [self.view setNeedsUpdateConstraints];
 
     } completion:^() {
@@ -3269,7 +3258,7 @@ END_deselectElementView:;
 
 - (CGRect)rectForSelectedElements {
     NSSet *views = [self selectedElementViews];
-    return [self.scroller.container popoverRectForSelectedViews:views];
+    return [self.view.scroller.container popoverRectForSelectedViews:views];
 }
 
 - (UIView *)viewForObjectID:(NSNumber *)objectID {
@@ -3283,7 +3272,7 @@ END_deselectElementView:;
     result = [self.sectionViewsDictionary objectForKey:objectID];
 
     return result;
-    //return [self.scroller.container viewWithTag: (NSInteger)objectID.hash];
+    //return [self.view.scroller.container viewWithTag: (NSInteger)objectID.hash];
 }
 
 - (void)adjustContextOffsetForOpenPopover {
@@ -3307,11 +3296,11 @@ END_deselectElementView:;
     if (_sectionSettingsVisible) {
         self.settingsTransitioningDelegate.passthroughContainers =  self.passthroughContainers;
         self.settingsTransitioningDelegate.passthroughViews =       [self passthroughViews];
-        self.settingsTransitioningDelegate.passthroughContainer =   self.scroller;
+        self.settingsTransitioningDelegate.passthroughContainer =   self.view.scroller;
     } else if (_toolboxVisible) {
         self.toolboxTransitioningDelegate.passthroughContainers =   self.passthroughContainers;
         self.toolboxTransitioningDelegate.passthroughViews =        [self passthroughViews];
-        self.toolboxTransitioningDelegate.passthroughContainer =    self.scroller;
+        self.toolboxTransitioningDelegate.passthroughContainer =    self.view.scroller;
     }
     
 }
@@ -3373,7 +3362,7 @@ END_deselectElementView:;
     [UIView animateWithDuration:0.2 animations:^{
         piece.alpha = 0.80000f;
     }];
-    [self.scroller.container bringSubviewToFront: piece];
+    [self.view.scroller.container bringSubviewToFront: piece];
 
     int64_t pieceID = piece.identifier;
 
@@ -3424,7 +3413,7 @@ END_deselectElementView:;
             } animationComplete:^() {
 
                 MADDesignerViewController *strongself2 = weakself2;
-                [strongself2.scroller.container invalidateIntrinsicContentSize];
+                [strongself2.view.scroller.container invalidateIntrinsicContentSize];
                 [strongself2.view setNeedsUpdateConstraints];
 
             } completion:^() {
@@ -3445,7 +3434,7 @@ END_deselectElementView:;
     int64_t pieceIdentifier = piece.identifier;
     MADDesignerSectionView *sectionView = nil;
 
-    for (UIView *subview in self.scroller.container.subviews) {
+    for (UIView *subview in self.view.scroller.container.subviews) {
         if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
             CGPoint location = [self.view convertPoint:gesture.view.frame.origin toView:subview];
             if ([subview pointInside:location withEvent:nil]) {
@@ -3460,10 +3449,10 @@ END_deselectElementView:;
     //Section not found, so add to the first one.
     if (sectionView == nil) {
         CGFloat minDistance = CGFLOAT_MAX, distance;
-        for (UICollectionView *view in self.scroller.container.subviews) {
+        for (UICollectionView *view in self.view.scroller.container.subviews) {
             if ([view isKindOfClass: [MADDesignerSectionView class]]) {
                 CGPoint p1 = [self.view convertPoint:gesture.view.frame.origin toView:self.view];
-                CGPoint p2 = [_scroller.container convertPoint:view.frame.origin toView:self.view];
+                CGPoint p2 = [self.view.scroller.container convertPoint:view.frame.origin toView:self.view];
                 if ((distance = (CGFloat)MADDistance(p1, p2)) < minDistance) {
                     sectionView = (MADDesignerSectionView *)view;
                     minDistance = distance;
@@ -3472,7 +3461,7 @@ END_deselectElementView:;
         }
         
         if (sectionView == nil) {
-            for (UICollectionView *view in self.scroller.container.subviews) {
+            for (UICollectionView *view in self.view.scroller.container.subviews) {
                 if ([view isKindOfClass: [MADDesignerSectionView class]]) {
                     sectionView = (MADDesignerSectionView *)view;
                     break;
@@ -3546,7 +3535,7 @@ END_deselectElementView:;
 
                 } animationComplete:^() {
                     
-                    [self.scroller.container invalidateIntrinsicContentSize];
+                    [self.view.scroller.container invalidateIntrinsicContentSize];
                     [self.view setNeedsUpdateConstraints];
                     
                 } completion:^() {
@@ -3583,8 +3572,8 @@ END_deselectElementView:;
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         UIView *piece = gestureRecognizer.view;
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.scroller.container];
-        locationInSuperview = [self.scroller.container convertPoint:locationInSuperview toView:self.view];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:self.view.scroller.container];
+        locationInSuperview = [self.view.scroller.container convertPoint:locationInSuperview toView:self.view];
         piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
         piece.center = locationInSuperview;
     }
@@ -3637,7 +3626,7 @@ END_deselectElementView:;
 
 - (void)setScrollersEnabled:(BOOL)enabled {
 
-    MADDesignerScrollView *scroller = _scroller;
+    MADDesignerScrollView *scroller = self.view.scroller;
     @synchronized(scroller) {
         if ([scroller respondsToSelector:@selector(setScrollEnabled:)]) {
             scroller.scrollEnabled = enabled;
@@ -3722,7 +3711,7 @@ END_deselectElementView:;
 
 - (MADDesignerSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifier {
     MADDesignerSectionView *documentSectionView = nil;
-    NSArray<__kindof UIView *> *subviews = _scroller.container.subviews;
+    NSArray<__kindof UIView *> *subviews = self.view.scroller.container.subviews;
     for (UIView *subview in subviews) {
         if (subview.tag == identifier && [subview isKindOfClass:[MADDesignerSectionView class]]) {
             documentSectionView = (MADDesignerSectionView *)subview;
@@ -3917,7 +3906,7 @@ END_deselectElementView:;
         UIView *sectionView = [self detailSectionView];
         CGRect rect = sectionView.frame;
         self.hidesStatusBar = NO;
-        [self.scroller scrollRectToVisible:rect animated:YES];
+        [self.view.scroller scrollRectToVisible:rect animated:YES];
     }
 }
 
@@ -4091,13 +4080,13 @@ END_deselectElementView:;
     _toolboxVisible = YES;
     _sectionSettingsVisible = NO;
     
-    self.toolboxTransitioningDelegate.sourceView = self.scroller.container;
+    self.toolboxTransitioningDelegate.sourceView = self.view.scroller.container;
     self.toolboxTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.toolboxTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.toolboxTransitioningDelegate.container = self.scroller.container;
+    self.toolboxTransitioningDelegate.container = self.view.scroller.container;
     self.toolboxTransitioningDelegate.passthroughContainers = self.passthroughContainers;
     self.toolboxTransitioningDelegate.passthroughViews = [self passthroughViews];
-    self.toolboxTransitioningDelegate.passthroughContainer = self.scroller;
+    self.toolboxTransitioningDelegate.passthroughContainer = self.view.scroller;
     
     self.viewControllerToolbox.clearsBackground = [self padLike];
     self.viewControllerToolbox.document = self.document;
@@ -4113,13 +4102,13 @@ END_deselectElementView:;
     
     _toolboxVisible = NO;
     self.settingsTransitioningDelegate.sourceRect = label.frame;
-    self.settingsTransitioningDelegate.sourceView = self.scroller.container;
+    self.settingsTransitioningDelegate.sourceView = self.view.scroller.container;
     self.settingsTransitioningDelegate.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.settingsTransitioningDelegate.popoverPresentationControllerDelegate = self;
-    self.settingsTransitioningDelegate.container = self.scroller.container;
+    self.settingsTransitioningDelegate.container = self.view.scroller.container;
     self.settingsTransitioningDelegate.passthroughContainers = self.passthroughContainers;
     self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
-    self.settingsTransitioningDelegate.passthroughContainer = self.scroller;
+    self.settingsTransitioningDelegate.passthroughContainer = self.view.scroller;
     
     if (_sectionSettingsVisible == NO) {
         _sectionSettingsVisible = YES;

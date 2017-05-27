@@ -6,8 +6,17 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADDesignerView_h
+#define Reports_MADDesignerView_h
+
+#import <UIKit/UIView.h>
+
+@class MADDesignerScrollView;
 
 @interface MADDesignerView : UIView
 
+    @property (nonatomic, weak) IBOutlet MADDesignerScrollView *scroller;
+
 @end
+
+#endif
