@@ -17,17 +17,17 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 
 @interface MADDesignerLayoutDesignView ()
 
-    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
+/*    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
     - (instancetype)initWithFrame:(CGRect)frame;
     - (void)setup;
     - (void)updateConstraints;
     - (void)removeFromSuperview;
-    - (void)willMoveToSuperview:(UIView *)newSuperview;
+    - (void)willMoveToSuperview:(UIView *)newSuperview;*/
 
 @end
 
 @implementation MADDesignerLayoutDesignView
-
+/*
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         [self setup];
@@ -54,11 +54,11 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
         rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
                                                           designer: self
                                                          marginTop: MTReportDesignerBorderPaddingVertical
-                                                             heigh: MTReportDesignerRulerHeight];
+                                                             heigh: MTReportDesignerRulerHeight scaleFactor:1.0];
         
         rulerSideConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
                                                               designer: self
-                                                            sideMargin: MTReportDesignerBorderPaddingSides];
+                                                            sideMargin: MTReportDesignerBorderPaddingSides scaleFactor:1.0];
         
         rulerConstraints = [rulerConstraints arrayByAddingObjectsFromArray:rulerSideConstraints];
         [self addConstraints:rulerConstraints];
@@ -69,15 +69,32 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 
 - (void)removeFromSuperview {
     [super removeFromSuperview];
+    [self removeConstraints:self.rulerConstraints];
     self.rulerConstraints = nil;
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     if (newSuperview == nil) {
+        [self removeConstraints:self.rulerConstraints];
         self.rulerConstraints = nil;
     }
 }
 
+- (void)setNeedsUpdateConstraints {
+    [super setNeedsUpdateConstraints];
+    [self.ruler setNeedsUpdateConstraints];
+}
+
+- (void)setNeedsLayout {
+    [super setNeedsLayout];
+    [self.ruler setNeedsLayout];
+}
+
+- (void)setNeedsDisplay {
+    [super setNeedsDisplay];
+    [self.ruler setNeedsDisplay];
+}
+*/
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

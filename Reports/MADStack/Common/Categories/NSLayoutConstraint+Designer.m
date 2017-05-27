@@ -11,7 +11,7 @@
 @implementation MADLayoutConstraint
 
 + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
-                      marginTop:(CGFloat)marginTop heigh:(CGFloat)height {
+                      marginTop:(CGFloat)marginTop heigh:(CGFloat)height scaleFactor:(CGFloat)scaleFactor {
     NSLayoutConstraint *constraint1,
                        *constraint2;
     constraint1 = [NSLayoutConstraint constraintWithItem: ruler
@@ -19,7 +19,7 @@
                                                relatedBy: NSLayoutRelationEqual
                                                   toItem: nil
                                                attribute: NSLayoutAttributeNotAnAttribute
-                                              multiplier: 1.0000f
+                                              multiplier: scaleFactor
                                                 constant: height];
     
     constraint2 = [NSLayoutConstraint constraintWithItem: ruler
@@ -27,14 +27,14 @@
                                                relatedBy: NSLayoutRelationEqual
                                                   toItem: designer
                                                attribute: NSLayoutAttributeTopMargin
-                                              multiplier: 1.0000f
+                                              multiplier: scaleFactor
                                                 constant: marginTop];
     
     return @[constraint1, constraint2];
 }
 
 + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
-                     sideMargin:(CGFloat)sideMargin {
+                     sideMargin:(CGFloat)sideMargin scaleFactor:(CGFloat)scaleFactor {
 
     NSArray *constraints;
     NSLayoutConstraint *constraint3,
@@ -44,7 +44,7 @@
                                                relatedBy: NSLayoutRelationEqual
                                                   toItem: designer
                                                attribute: NSLayoutAttributeLeft
-                                              multiplier: 1.0000f
+                                              multiplier: scaleFactor
                                                 constant: sideMargin];
     
     constraint4 = [NSLayoutConstraint constraintWithItem: ruler
@@ -52,7 +52,7 @@
                                                relatedBy: NSLayoutRelationEqual
                                                   toItem: designer
                                                attribute: NSLayoutAttributeRight
-                                              multiplier: 1.0000f
+                                              multiplier: scaleFactor
                                                 constant: -sideMargin];
     constraints = [[NSArray alloc] initWithObjects:constraint3, constraint4, nil];
     return constraints;

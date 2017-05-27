@@ -16,10 +16,10 @@
 @interface MADLayoutConstraint : NSLayoutConstraint
 
     + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
-                          marginTop:(CGFloat)marginTop heigh:(CGFloat)height;
+                          marginTop:(CGFloat)marginTop heigh:(CGFloat)height scaleFactor:(CGFloat)scaleFactor;
                           
     + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
-                         sideMargin:(CGFloat)sideMargin;
+                         sideMargin:(CGFloat)sideMargin scaleFactor:(CGFloat)scaleFactor;
 
     + (instancetype)newLayoutConstraintViewScrollerTop:(id)item view:(id)item;
     + (instancetype)newLayoutConstraintViewLeft:(UIView *)section content:(UIView *)content

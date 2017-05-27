@@ -8,20 +8,12 @@
 
 #import "MADDesignerScrollView.h"
 #import <UIKit/UITapGestureRecognizer.h>
+#import <UIKit/UIView.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADDesignerLayoutDesignView.h"
-
-@interface MADDesignerScrollView ()
-    <UIGestureRecognizerDelegate>
-
-    @property (nonatomic, strong) NSArray *availableZoomScales;
-
-@end
-
-@implementation MADDesignerScrollView
 
 static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect);
 static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect) {
@@ -43,6 +35,23 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
                                     CGFLOAT_MAX, rect.size.height - adjustment);
     return r;
 }
+
+@interface MADDesignerScrollView ()
+    <UIGestureRecognizerDelegate>
+
+    @property (nonatomic, strong) NSArray *availableZoomScales;
+
+    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
+    - (void)doubleTapZoom:(UITapGestureRecognizer *)sender;
+    - (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect
+                          containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment;
+    - (void)setNeedsDisplay;
+    - (void)setNeedsUpdateConstraints;
+    - (void)setNeedsLayout;
+
+@end
+
+@implementation MADDesignerScrollView
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -164,6 +173,11 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
 - (void)setNeedsUpdateConstraints {
     [super setNeedsUpdateConstraints];
     [self.container setNeedsUpdateConstraints];
+}
+
+- (void)setNeedsLayout {
+    [super setNeedsLayout];
+    [self.container setNeedsLayout];
 }
 
 @end

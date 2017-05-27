@@ -19,8 +19,8 @@ extern const CGFloat MTReportDesignerBorderPaddingSides;
 
 @interface MADDesignerLayoutDesignView : UIView
 
-    @property (nonatomic, strong) MADRulerView *ruler;
-    @property (nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerConstraints;
+    //@property (nonatomic, strong) MADRulerView *ruler;
+    //@property (nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerConstraints;
 
 @end
 

@@ -24,4 +24,14 @@
     [self.scroller setNeedsUpdateConstraints];
 }
 
+- (void)setNeedsLayout {
+    [super setNeedsLayout];
+    [self.scroller setNeedsLayout];
+}
+
+- (void)setNeedsDisplay {
+    [super setNeedsDisplay];
+    [self.scroller setNeedsDisplay];
+}
+
 @end
