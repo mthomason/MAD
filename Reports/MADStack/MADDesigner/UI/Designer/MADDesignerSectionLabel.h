@@ -20,6 +20,7 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 @interface MADDesignerSectionLabel : UILabel
 
     @property (nonatomic, assign, readonly) BOOL selected;
+    @property (nonatomic, assign, readwrite) NSInteger identifier;
     @property (nonatomic, assign) BOOL indicatorFormFeed;
     @property (nonatomic, assign) BOOL indicatorVisible;
     @property (nonatomic, assign) CGFloat scale;

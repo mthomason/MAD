@@ -1626,8 +1626,8 @@
 		4C401F561BAE7EB500BAE5FC /* MADDesignerStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerStatusLabel.m; sourceTree = "<group>"; };
 		4C401F571BAE7EB500BAE5FC /* MADSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSliderPageVertical.h; sourceTree = "<group>"; };
 		4C401F581BAE7EB500BAE5FC /* MADSliderPageVertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSliderPageVertical.m; sourceTree = "<group>"; };
-		4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerScrollView.h; sourceTree = "<group>"; };
-		4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerScrollView.m; sourceTree = "<group>"; };
+		4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDesignerScrollView.h; path = ../../../Common/UI/Views/MADDesignerScrollView.h; sourceTree = "<group>"; };
+		4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDesignerScrollView.m; path = ../../../Common/UI/Views/MADDesignerScrollView.m; sourceTree = "<group>"; };
 		4C401F5C1BAE7EB500BAE5FC /* MADBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBackgroundView.h; sourceTree = "<group>"; };
 		4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundView.m; sourceTree = "<group>"; };
 		4C401F5E1BAE7EB500BAE5FC /* MADDimmingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDimmingView.h; sourceTree = "<group>"; };
@@ -2853,6 +2853,8 @@
 				4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */,
 				4CDFC9811ED89147008E1AD6 /* MADDesignerView.h */,
 				4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */,
+				4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */,
+				4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */,
 				4CDFC9841ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.h */,
 				4CDFC9851ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m */,
 			);
@@ -3561,8 +3563,6 @@
 				4C8DE2681BAFA98B00AD1111 /* MADConnectorView.m */,
 				4C8DE2691BAFA98B00AD1111 /* MADResizeHandleView.h */,
 				4C8DE26A1BAFA98B00AD1111 /* MADResizeHandleView.m */,
-				4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */,
-				4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */,
 				4C401F5C1BAE7EB500BAE5FC /* MADBackgroundView.h */,
 				4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */,
 				4C401F5E1BAE7EB500BAE5FC /* MADDimmingView.h */,

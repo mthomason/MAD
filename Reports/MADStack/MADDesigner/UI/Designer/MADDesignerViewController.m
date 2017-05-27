@@ -728,7 +728,6 @@ static const inline CGSize sizePopoverFonts() {
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight +
                                                  MTReportDesignerBorderPaddingVertical;
     
-    CGFloat borderWidthThin = [UIView borderWidthThin];
     NSLayoutConstraint *constraintViewTop,
                        *constraintView,
                        *constraintLabelRight,
@@ -751,14 +750,11 @@ static const inline CGSize sizePopoverFonts() {
         
         sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height);
         
-        sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection
+        sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection.identifier
+                                                           isVisible: reportSection.isVisible
                                                             delegate: self];
-        sectionView.delegate = self;
-        sectionView.dataSource = self;
-        sectionView.layer.borderWidth = borderWidthThin;
-        sectionView.showsVerticalScrollIndicator = YES;
         
-        ((MADDesignerSectionLayoutLiquid *)sectionView.collectionViewLayout).tag = sectionCounter;
+        ((MADDesignerSectionLayoutLiquid *)sectionView.collectionViewLayout).designViewIdentifier = sectionCounter;
         localizedDisplayName = [reportSection localizedDisplayName];
         sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithText:localizedDisplayName];
         
@@ -2813,14 +2809,11 @@ static const inline CGSize sizePopoverFonts() {
                 RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
                 MADDesignerSectionView *superView = [self getSectionViewForDocumentSection: section];
                 superView.selected = YES;
-                [label dimView];
-                
-                
-                _viewControllerSectionLayoutSettings.initalHeightValue = section.height;
-                _viewControllerSectionLayoutSettings.initalVisibility = section.visibility;
-                _viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
-                _viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows;
-                [_viewControllerSectionLayoutSettings updateDisplay];
+                [label dimView];                
+                [_viewControllerSectionLayoutSettings updateDisplay:section.height
+                                                         visibility:section.visibility
+                                                   producesFormFeed:section.producesFormFeed
+                                                       numberOfRows:section.numberOfRows];
                 
                 UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
                 _viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
@@ -3707,9 +3700,11 @@ END_deselectElementView:;
     MADDesignerSectionView *documentSectionView = nil;
     NSArray<__kindof UIView *> *subviews = self.view.scroller.container.subviews;
     for (UIView *subview in subviews) {
-        if (subview.tag == identifier && [subview isKindOfClass:[MADDesignerSectionView class]]) {
-            documentSectionView = (MADDesignerSectionView *)subview;
-            break;
+        if ([subview isKindOfClass:[MADDesignerSectionView class]]) {
+            if (((MADDesignerSectionView *)subview).tag == identifier) {
+                documentSectionView = (MADDesignerSectionView *)subview;
+                break;
+            }
         }
     }
     return documentSectionView;

@@ -41,7 +41,7 @@
     @property (nonatomic, weak) id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 
     @property (nonatomic, assign) CGSize contentSize;
-    @property (nonatomic, assign) NSInteger tag;
+    @property (nonatomic, assign) NSInteger designViewIdentifier;
 
 @end
 

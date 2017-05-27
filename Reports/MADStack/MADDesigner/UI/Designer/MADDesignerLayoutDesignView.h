@@ -17,10 +17,19 @@ extern const CGFloat MTReportDesignerBorderPaddingDetail;
 extern const CGFloat MTReportDesignerBorderPaddingVertical;
 extern const CGFloat MTReportDesignerBorderPaddingSides;
 
+@protocol MADDesignerDesignViewDataSource;
+
 @interface MADDesignerLayoutDesignView : UIView
 
-    //@property (nonatomic, strong) MADRulerView *ruler;
-    //@property (nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerConstraints;
+    @property (nonatomic, weak) NSObject <MADDesignerDesignViewDataSource> *datasource;
+    @property (nonatomic, strong) MADRulerView *ruler;
+    @property (nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerConstraints;
+
+@end
+
+@protocol MADDesignerDesignViewDataSource <NSObject>
+
+- (NSInteger)numberOfSectionsInDesignView:(MADDesignerLayoutDesignView *)designView;
 
 @end
 

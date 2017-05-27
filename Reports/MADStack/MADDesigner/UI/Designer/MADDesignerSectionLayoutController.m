@@ -92,6 +92,17 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
     [self updateDisplay];
 }
 
+- (void)updateDisplay:(double)height
+           visibility:(BOOL)visibility
+     producesFormFeed:(BOOL)producesFormFeed
+         numberOfRows:(int32_t)numberOfRows {
+    _initalHeightValue = height;
+    _initalVisibility = visibility;
+    _initalFormFeedEnabled = producesFormFeed;
+    _initalNumberOfRows = numberOfRows;
+    [self updateDisplay];
+}
+
 - (void)updateDisplay {
     self.switchFormFeed.on = self.initalFormFeedEnabled;
     self.switchVisibility.on = self.initalVisibility;

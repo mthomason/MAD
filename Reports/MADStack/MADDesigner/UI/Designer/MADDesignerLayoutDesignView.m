@@ -27,7 +27,7 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 @end
 
 @implementation MADDesignerLayoutDesignView
-/*
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         [self setup];
@@ -94,7 +94,7 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
     [super setNeedsDisplay];
     [self.ruler setNeedsDisplay];
 }
-*/
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

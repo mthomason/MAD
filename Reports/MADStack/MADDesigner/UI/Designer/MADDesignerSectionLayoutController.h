@@ -39,6 +39,10 @@ extern NSString * const MADSectionLayoutSettingsID;
     @property (nonatomic, assign) int32_t initalNumberOfRows;
 
     - (void)updateDisplay;
+    - (void)updateDisplay:(double)height
+               visibility:(BOOL)visibility
+         producesFormFeed:(BOOL)producesFormFeed
+             numberOfRows:(int32_t)numberOfRows;
 
 @end
 

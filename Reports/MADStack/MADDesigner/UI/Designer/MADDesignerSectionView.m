@@ -22,13 +22,12 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MAD/MADReportSection.h>
-
 #import "MADDesignerSectionLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 #import "MADCellElement.h"
 #import "MADDesignerSectionBackground.h"
+#import "UIView+Extras.h"
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
     if (!selected && !visible) {
@@ -70,7 +69,8 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 }
 
 
-+ (instancetype)newDesignerSectionView:(MADReportSection *)section
++ (instancetype)newDesignerSectionView:(NSInteger)identifier
+                             isVisible:(BOOL)isVisible
                               delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate {
     
     MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
@@ -79,9 +79,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     collectionView.delegate     = layoutDelegate;
     collectionView.dataSource   = layoutDelegate;
-    collectionView.identifier   = section.identifier;
-    collectionView.tag          = section.identifier;
-    collectionView.visible      = section.isVisible;
+    collectionView.identifier   = identifier;
+    collectionView.tag          = identifier;
+    collectionView.visible      = isVisible;
     return collectionView;
 }
 
@@ -121,7 +121,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
         self.layer.borderColor = borderColor.CGColor;
         self.backgroundView = nil;
         self.backgroundColor = clearColor;
-        
+        self.layer.borderWidth = [UIView borderWidthThin];
+        self.showsVerticalScrollIndicator = YES;
+
         [self setContentHuggingPriority: UILayoutPriorityDefaultLow
                                 forAxis: UILayoutConstraintAxisVertical];
         [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
