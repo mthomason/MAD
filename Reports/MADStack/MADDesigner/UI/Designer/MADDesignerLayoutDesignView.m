@@ -33,6 +33,7 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 @implementation MADDesignerLayoutDesignView
 
 - (void)dealloc {
+    _datasource = nil;
     _rulerVerticalConstraints = nil;
     _rulerVerticalConstraints = nil;
 }
@@ -112,6 +113,12 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
     [self.ruler setNeedsDisplay];
+}
+
+// Called to update the view.
+
+- (void)reloadData {
+    
 }
 
 /*

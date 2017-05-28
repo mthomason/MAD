@@ -484,15 +484,6 @@ static const inline CGSize sizePopoverFonts() {
     return _numberFormatterPercentage;
 }
 
-/*- (MADRulerView *)ruler {
-    if (_ruler == nil) {
-        MADRulerView *ruler;
-        ruler = [[MADRulerView alloc] initWithFrame:CGRectZero];
-        _ruler = ruler;
-    }
-    return _ruler;
-}*/
-
 - (MADToolboxTransitioningDelegate *)toolboxTransitioningDelegate {
     if (_toolboxTransitioningDelegate == nil) {
         MADToolboxTransitioningDelegate *delegate;
