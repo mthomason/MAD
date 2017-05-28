@@ -17,6 +17,10 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 
 @interface MADDesignerLayoutDesignView ()
 
+@property (readwrite, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerHorizontalConstraints;
+@property (readwrite, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerVerticalConstraints;
+
+
 /*    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
     - (instancetype)initWithFrame:(CGRect)frame;
     - (void)setup;
@@ -27,6 +31,11 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 @end
 
 @implementation MADDesignerLayoutDesignView
+
+- (void)dealloc {
+    _rulerVerticalConstraints = nil;
+    _rulerVerticalConstraints = nil;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -44,30 +53,40 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
 
 - (void)setup {
     MADRulerView *ruler = [[MADRulerView alloc] initWithFrame:CGRectZero];
+    
+    NSArray <NSLayoutConstraint *> *rulerVerticalConstraints, *rulerHorizontalConstraints;
+    rulerVerticalConstraints = [MADLayoutConstraint constraintForRuler: ruler
+                                                              designer: self
+                                                             marginTop: MTReportDesignerBorderPaddingVertical
+                                                                 heigh: MTReportDesignerRulerHeight
+                                                           scaleFactor: 1.0];
+    
+    rulerHorizontalConstraints = [MADLayoutConstraint constraintForRuler: ruler
+                                                                designer: self
+                                                              sideMargin: MTReportDesignerBorderPaddingSides
+                                                             scaleFactor: 1.0];
+    
+    NSArray <NSLayoutConstraint *> *allConstraints = [rulerVerticalConstraints arrayByAddingObjectsFromArray:rulerHorizontalConstraints];
+    
     [self addSubview:ruler];
+    [self addConstraints:allConstraints];
+    
+    self.rulerVerticalConstraints = rulerVerticalConstraints;
+    self.rulerHorizontalConstraints = rulerHorizontalConstraints;
+    
     self.ruler = ruler;
+    
+    allConstraints = nil;
+    
 }
 
 - (void)updateConstraints {
-    if (self.rulerConstraints == nil) {
-        NSArray <NSLayoutConstraint *> *rulerConstraints, *rulerSideConstraints;
-        rulerConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
-                                                          designer: self
-                                                         marginTop: MTReportDesignerBorderPaddingVertical
-                                                             heigh: MTReportDesignerRulerHeight scaleFactor:1.0];
-        
-        rulerSideConstraints = [MADLayoutConstraint constraintForRuler: self.ruler
-                                                              designer: self
-                                                            sideMargin: MTReportDesignerBorderPaddingSides scaleFactor:1.0];
-        
-        rulerConstraints = [rulerConstraints arrayByAddingObjectsFromArray:rulerSideConstraints];
-        [self addConstraints:rulerConstraints];
-        self.rulerConstraints = rulerConstraints;
+    if (self.rulerVerticalConstraints == nil) {
     }
     [super updateConstraints];
 }
 
-- (void)removeFromSuperview {
+/*- (void)removeFromSuperview {
     [super removeFromSuperview];
     [self removeConstraints:self.rulerConstraints];
     self.rulerConstraints = nil;
@@ -78,7 +97,7 @@ const CGFloat MTReportDesignerBorderPaddingSides         =  8.0000f;
         [self removeConstraints:self.rulerConstraints];
         self.rulerConstraints = nil;
     }
-}
+}*/
 
 - (void)setNeedsUpdateConstraints {
     [super setNeedsUpdateConstraints];
