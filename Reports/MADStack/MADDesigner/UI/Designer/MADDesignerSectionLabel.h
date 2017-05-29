@@ -1,5 +1,5 @@
 //
-//  DesignerSectionLabel.h
+//  MADDesignerSectionLabel.h
 //  Reports
 //
 //  Created by Michael Thomason on 7/24/13.

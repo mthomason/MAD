@@ -49,6 +49,8 @@
 
 #import "RptqDataHelper.h"
 
+#import "RptqDocumentSectionWrappingStyle.h"
+
 static inline BOOL MADDocumentSectionIndexIsBody(NSUInteger, NSUInteger);
 static inline BOOL MADDocumentSectionIndexIsBody(NSUInteger row, NSUInteger total) {
     return row == (2 + total);

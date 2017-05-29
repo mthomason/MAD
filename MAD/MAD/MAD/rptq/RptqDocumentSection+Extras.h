@@ -13,11 +13,6 @@
 #import <CoreGraphics/CGGeometry.h>
 #import "MADocumentSectionType.h"
 
-typedef NS_ENUM(int16_t, RptqDocumentSectionWrappingStyle) {
-    RptqDocumentSectionWrappingStyleStandard = 1,
-    RptqDocumentSectionWrappingStyleNewPageAfter = 2,
-};
-
 @class RptqQuery, RptqDocumentElement, NSIndexPath;
 
 @interface RptqDocumentSection (Extras)

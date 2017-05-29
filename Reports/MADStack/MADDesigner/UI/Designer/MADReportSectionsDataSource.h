@@ -6,8 +6,27 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_MADReportSectionsDataSource_h
+#define MAD_MADReportSectionsDataSource_h
+
+#import <objc/NSObject.h>
+#import "MADReportSectionDataSourceProtocol.h"
+
+@class NSManagedObjectContext;
+
+@protocol UICollectionViewDelegate, UICollectionViewDataSource,
+            MADDesignerSectionLayoutLiquidDelegate;
 
 @interface MADReportSectionsDataSource : NSObject
+    <MADDesignerDesignViewDataSource>
+
+    @property (nonatomic, readwrite, weak) id <MADDesignerSectionLayoutLiquidDelegate,
+                                                UICollectionViewDelegate,
+                                                UICollectionViewDataSource> eventDelegate;
+
+    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    - (void)refreshData;
 
 @end
+
+#endif

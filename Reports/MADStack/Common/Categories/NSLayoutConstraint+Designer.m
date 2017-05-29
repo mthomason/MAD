@@ -174,8 +174,8 @@
     return constraint;
 }
 
-+ (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIScrollView *)scroller {
-    id constraint = [NSLayoutConstraint constraintWithItem: scroller
++ (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIView *)bottom {
+    id constraint = [NSLayoutConstraint constraintWithItem: bottom
                                                  attribute: NSLayoutAttributeBottom
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: view

@@ -33,7 +33,7 @@
                                           padding:(CGFloat)padding;
     + (instancetype)newLayoutConstraintViewTop:(UIView *)item viewBottom:(UIView *)section
                                        padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIScrollView *)scroller;
+    + (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIView *)scroller;
     + (instancetype)newLayoutConstraintView:(UIView *)view height:(CGFloat)height;
     + (instancetype)newLayoutConstraintViewBottom:(id)item container:(id)toItem;
     + (instancetype)newLayoutConstraintToolBoxBottom:(id)item container:(id)toItem;

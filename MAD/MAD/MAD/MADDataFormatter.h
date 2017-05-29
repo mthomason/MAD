@@ -9,7 +9,7 @@
 #ifndef MAD_MADDataFormatter_h
 #define MAD_MADDataFormatter_h
 
-#import <Foundation/NSObject.h>
+#import <objc/NSObject.h>
 
 @class MTQuery;
 

@@ -11,8 +11,6 @@
 
 #import <MAD/MADDataFormatter.h>
 
-@class MTQuery;
-
 @interface MADTableFormatter : MADDataFormatter
 
     @property (nonatomic, assign) BOOL didRefresh;

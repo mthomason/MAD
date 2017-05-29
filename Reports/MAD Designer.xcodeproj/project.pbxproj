@@ -1052,6 +1052,7 @@
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDFC9831ED89147008E1AD6 /* MADDesignerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */; };
 		4CDFC9861ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9851ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m */; };
+		4CDFC9891EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */; };
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
 		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
@@ -2411,6 +2412,10 @@
 		4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerView.m; sourceTree = "<group>"; };
 		4CDFC9841ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerLayoutDesignView.h; sourceTree = "<group>"; };
 		4CDFC9851ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerLayoutDesignView.m; sourceTree = "<group>"; };
+		4CDFC9871EDB8EB5008E1AD6 /* MADReportSectionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportSectionsDataSource.h; sourceTree = "<group>"; };
+		4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportSectionsDataSource.m; sourceTree = "<group>"; };
+		4CDFC98A1EDB8EE3008E1AD6 /* MADReportSectionDataSourceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADReportSectionDataSourceProtocol.h; sourceTree = "<group>"; };
+		4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportSectionDelegateProtocol.h; sourceTree = "<group>"; };
 		4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MADVector.cpp; path = MADStack/cpp/MADVector.cpp; sourceTree = "<group>"; };
 		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
 		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
@@ -2857,6 +2862,10 @@
 				4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */,
 				4CDFC9841ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.h */,
 				4CDFC9851ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m */,
+				4CDFC9871EDB8EB5008E1AD6 /* MADReportSectionsDataSource.h */,
+				4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */,
+				4CDFC98A1EDB8EE3008E1AD6 /* MADReportSectionDataSourceProtocol.h */,
+				4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;
@@ -6416,6 +6425,7 @@
 				4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */,
 				4C6D2EEF1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m in Sources */,
 				4C26B9C51BAF123A00456DC8 /* MADFontSelectorViewController.m in Sources */,
+				4CDFC9891EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m in Sources */,
 				4C401F761BAE7EB500BAE5FC /* MADDesignerScrollView.m in Sources */,
 				4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */,
 				4C8DE2721BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,

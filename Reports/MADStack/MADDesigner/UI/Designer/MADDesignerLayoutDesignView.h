@@ -11,26 +11,47 @@
 
 #import <UIKit/UIView.h>
 
-@class MADRulerView;
-
 extern const CGFloat MTReportDesignerBorderPaddingDetail;
 extern const CGFloat MTReportDesignerBorderPaddingVertical;
 extern const CGFloat MTReportDesignerBorderPaddingSides;
+extern const CGFloat MTReportDesignerBufferPaddingVertical;
+extern const CGFloat MTReportDesignerSectionLabelPaddingRight;
+extern const CGFloat MTReportDesignerSectionLabelHeight;
 
-@protocol MADDesignerDesignViewDataSource;
+@class UITapGestureRecognizer, MADRulerView, MADDesignerSectionView, MADDesignerSectionLabel;
+
+@protocol MADDesignerDesignViewDataSource, MADDesignerDesignViewDelegate;
 
 @interface MADDesignerLayoutDesignView : UIView
 
-    @property (nonatomic, weak) NSObject <MADDesignerDesignViewDataSource> *datasource;
+    @property (nonatomic, weak) id <MADDesignerDesignViewDataSource> datasource;
+    @property (nonatomic, weak) id <MADDesignerDesignViewDelegate> delegate;
+
     @property (nonatomic, strong) MADRulerView *ruler;
+
+    @property (readonly, nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
+
+    @property (readonly, nonatomic, strong) UITapGestureRecognizer *strayTouchGestureRecognizer;
+    @property (readonly, nonatomic, strong) NSSet <UITapGestureRecognizer *> *sectionLabelGestureRecognizers;
+    @property (readonly, nonatomic, strong) NSSet <MADDesignerSectionView *> *passthroughContainers;
+
+    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
     @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerHorizontalConstraints;
     @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerVerticalConstraints;
+    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
+    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
 
-@end
+    @property (readonly, nonatomic, strong) NSDictionary <NSNumber *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
+    @property (readonly, nonatomic, strong) NSDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
+    @property (readonly, nonatomic, strong) NSDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionControlViewsDictionary;
 
-@protocol MADDesignerDesignViewDataSource <NSObject>
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints;
 
-- (NSInteger)numberOfSectionsInDesignView:(MADDesignerLayoutDesignView *)designView;
+    - (void)reloadData;
+    - (void)reloadDataIfNeeded;
+
+    - (UITapGestureRecognizer *)strayTouchGestureRecognizer;
 
 @end
 
