@@ -24,6 +24,7 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
 @interface MADDesignerSectionView : MADManagedObjectCollectionView
 
     + (instancetype)newDesignerSectionView:(NSInteger)identifier
+                      designViewIdentifier:(NSUInteger)designViewIdentifier
                                  isVisible:(BOOL)isVisible
                                   delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate;
 

@@ -32,26 +32,30 @@ extern const CGFloat MTReportDesignerSectionLabelHeight;
     @property (readonly, nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 
     @property (readonly, nonatomic, strong) UITapGestureRecognizer *strayTouchGestureRecognizer;
-    @property (readonly, nonatomic, strong) NSSet <UITapGestureRecognizer *> *sectionLabelGestureRecognizers;
-    @property (readonly, nonatomic, strong) NSSet <MADDesignerSectionView *> *passthroughContainers;
+    @property (readonly, nonatomic, strong) NSMutableSet <UITapGestureRecognizer *> *sectionLabelGestureRecognizers;
+    @property (readonly, nonatomic, strong) NSMutableSet <MADDesignerSectionView *> *passthroughContainers;
 
-    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
-    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerHorizontalConstraints;
-    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerVerticalConstraints;
-    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
-    @property (readonly, nonatomic, strong) NSArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
+    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
+    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
+    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
 
-    @property (readonly, nonatomic, strong) NSDictionary <NSNumber *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
-    @property (readonly, nonatomic, strong) NSDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
-    @property (readonly, nonatomic, strong) NSDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionControlViewsDictionary;
+    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
+    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
+    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
 
-    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;
-    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints;
+    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;
+    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints;
 
+    - (void)setNeedsCleanup;
+    - (void)cleanup;
+
+    - (void)setNeedsReload;
     - (void)reloadData;
     - (void)reloadDataIfNeeded;
 
     - (UITapGestureRecognizer *)strayTouchGestureRecognizer;
+    - (void)repositionSectionViews:(CGRect)presentedRect;
+    - (CGRect)popoverRectForSelectedViews:(NSSet <UIView *> *)views;
 
 @end
 

@@ -42,7 +42,7 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
     @property (nonatomic, strong) NSArray *availableZoomScales;
 
     - (instancetype)initWithCoder:(NSCoder *)aDecoder;
-    - (void)doubleTapZoom:(UITapGestureRecognizer *)sender;
+    - (void)handleTapDoubleGesture:(UITapGestureRecognizer *)sender;
     - (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect
                           containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment;
     - (void)setNeedsDisplay;
@@ -103,7 +103,7 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
         
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                              action: @selector(doubleTapZoom:)];
+                                                                              action: @selector(handleTapDoubleGesture:)];
         tap.numberOfTapsRequired = 2;
         tap.numberOfTouchesRequired = 1;
         
@@ -116,7 +116,7 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
     return self;
 }
 
-- (void)doubleTapZoom:(UITapGestureRecognizer *)sender {
+- (void)handleTapDoubleGesture:(UITapGestureRecognizer *)sender {
     static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
     if (sender.state == UIGestureRecognizerStateEnded) {
         CGFloat initalZoomScale = self.zoomScale;

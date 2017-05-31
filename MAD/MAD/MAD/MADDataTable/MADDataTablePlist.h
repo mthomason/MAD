@@ -16,11 +16,11 @@
        NSDictionary<__covariant KeyType, __covariant ObjectType>,
        NSMutableDictionary<KeyType, ObjectType>, NSSortDescriptor;
 
-typedef NS_ENUM(short, MADDataTableParameters) {
+typedef enum MADDataTableParameters : short {
     MADDataTableParametersType,
 	MADDataTableParametersIdentifier,
     MADDataTableParametersNumberOfColumns,
-};
+} MADDataTableParameters;
 
 @interface MADDataTablePlist : NSObject
   <NSCoding,

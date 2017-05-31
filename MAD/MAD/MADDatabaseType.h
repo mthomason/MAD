@@ -9,7 +9,7 @@
 #ifndef MADDatabaseType_h
 #define MADDatabaseType_h
 
-typedef NS_ENUM(int16_t, MADDatabaseType) {
+typedef enum MADDatabaseType : int16_t {
     MADDatabaseTypeNotSet               = -1,
     MADDatabaseTypeUnknown              = 0,
     MADDatabaseTypeDatabaseCom          = 1,
@@ -23,6 +23,6 @@ typedef NS_ENUM(int16_t, MADDatabaseType) {
     MADDatabaseTypeNone                 = 9,
     MADDatabaseTypeSqlite3              = 10,
     MADDatabaseTypeSample1              = 11,
-};
+} MADDatabaseType;
 
 #endif /* MADDatabaseType_h */

@@ -9,13 +9,15 @@
 #ifndef MAD_MADQueryCacheIndexCreateTypes_h
 #define MAD_MADQueryCacheIndexCreateTypes_h
 
-typedef NS_ENUM(short, MADCacheIndexType) {
+#import <sys/types.h>
+
+typedef enum MADCacheIndexType : short {
     MADCacheIndexTypeGroupCount,
     MADCacheIndexTypeName,
     MADCacheIndexTypeTableName,
     MADCacheIndexTypeSortDescriptors,
     MADCacheIndexTypeColumns,
-};
+} MADCacheIndexType;
 
 #endif
 

@@ -7,7 +7,6 @@
 //
 
 #import "MADStorageState.h"
-#import <Foundation/NSString.h>
 
 @implementation MADStorageState
 
@@ -19,16 +18,7 @@
     storageState.storageOption = storageOption;
     storageState.accountDidChange = hasUbiquityIdentityChanged;
     storageState.cloudAvailable = isCloudReadilyAvailable;
-    
     return storageState;
-}
-
-- (id)debugQuickLookObject {
-    NSMutableString *debug = [[NSMutableString alloc] init];
-    NSString *classname = NSStringFromClass([self class]);
-    id uppercaseClassname = [classname uppercaseString];
-    [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    return debug;
 }
 
 @end

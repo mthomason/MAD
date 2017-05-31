@@ -7,6 +7,11 @@
 //
 
 #import "MADDesignerLayoutDesignView.h"
+
+#import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSSet.h>
+
 #import "MADRulerView.h"
 #import "NSLayoutConstraint+Designer.h"
 
@@ -15,8 +20,6 @@
 
 #import "MADReportSectionDataSourceProtocol.h"
 #import "MADReportSectionDelegateProtocol.h"
-
-#import "MADDesignerSectionLayoutLiquid.h"
 
 #import "UITapGestureRecognizer+Designer.h"
 
@@ -31,31 +34,38 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
     <UIGestureRecognizerDelegate>
 
     @property (readwrite, nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
-    @property (readwrite, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerHorizontalConstraints;
-    @property (readwrite, nonatomic, strong) NSArray <NSLayoutConstraint *> *rulerVerticalConstraints;
+
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
+
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *rulerHorizontalConstraints;
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *rulerVerticalConstraints;
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;
+    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints;
+
+    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
+    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
+    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
 
     @property (readwrite, nonatomic, strong) NSMutableSet <MADDesignerSectionView *> *passthroughContainers;
     @property (readwrite, nonatomic, strong) NSMutableSet <UITapGestureRecognizer *> *sectionLabelGestureRecognizers;
 
     @property (readwrite, nonatomic, strong) UITapGestureRecognizer *strayTouchGestureRecognizer;
-    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsVerticalBuffer;
-    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, __kindof NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
-    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
-    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionControlViewsDictionary;
-    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
-    @property (readwrite, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
-
-/*    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
-    - (instancetype)initWithFrame:(CGRect)frame;
-    - (void)setup;
-    - (void)updateConstraints;
-    - (void)removeFromSuperview;
-    - (void)willMoveToSuperview:(UIView *)newSuperview;*/
 
 @end
 
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect);
+static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
+    return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width,
+                            CGSizeZero.height,
+                            presentedRect.size.width - MTReportDesignerBorderPaddingSides);
+}
+
 @implementation MADDesignerLayoutDesignView {
     BOOL _needsReload;
+    BOOL _needsCleanup;
+    NSUInteger _numberOfSections;
     struct {
         BOOL handleTapLabel;
         BOOL handleTapStray;
@@ -65,7 +75,21 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
     } _dataSourceHas;
 }
 
+#pragma mark -
+#pragma mark Constructors and destructors
+
 - (void)dealloc {
+    [self cleanup];
+    if (_rulerVerticalConstraints.count > 0)
+        [NSLayoutConstraint deactivateConstraints: _rulerVerticalConstraints];
+    if (_rulerHorizontalConstraints.count > 0)
+        [NSLayoutConstraint deactivateConstraints: _rulerHorizontalConstraints];
+
+    [_ruler removeConstraints:_rulerVerticalConstraints];
+    [_ruler removeConstraints:_rulerHorizontalConstraints];
+    [_ruler removeFromSuperview];
+    [_rulerHorizontalConstraints removeAllObjects];
+    [_rulerVerticalConstraints removeAllObjects];
     _datasource = nil;
     _rulerVerticalConstraints = nil;
     _rulerVerticalConstraints = nil;
@@ -73,62 +97,61 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self setup];
+        [[self class] setup: &self];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self setup];
+        [[self class] setup: &self];
     }
     return self;
 }
 
-- (void)setDatasource:(NSObject<MADDesignerDesignViewDataSource> *)datasource {
-    _dataSourceHas.numberOfSectionsInDesignView = [datasource respondsToSelector:@selector(numberOfSectionsInDesignView:)];
-    _datasource = datasource;
-}
+#pragma mark Common initalizer
 
-- (void)setDelegate:(id <MADDesignerDesignViewDelegate>)delegate {
-    _delegateHas.handleTapLabel = [delegate respondsToSelector:@selector(designView:handleTapLabel:)];
-    _delegateHas.handleTapStray = [delegate respondsToSelector:@selector(designView:handleTapStray:)];
-    _delegate = delegate;
-}
++ (void)setup:(MADDesignerLayoutDesignView *__autoreleasing *)view {
 
-- (void)setup {
+    (*view)->_needsReload = YES;
+    (*view)->_needsCleanup = NO;
+    
     MADRulerView *ruler = [[MADRulerView alloc] initWithFrame:CGRectZero];
     
     NSArray <NSLayoutConstraint *> *rulerVerticalConstraints, *rulerHorizontalConstraints;
     rulerVerticalConstraints = [MADLayoutConstraint constraintForRuler: ruler
-                                                              designer: self
+                                                              designer: *view
                                                              marginTop: MTReportDesignerBorderPaddingVertical
                                                                  heigh: MTReportDesignerRulerHeight
                                                            scaleFactor: 1.0];
     
     rulerHorizontalConstraints = [MADLayoutConstraint constraintForRuler: ruler
-                                                                designer: self
+                                                                designer: *view
                                                               sideMargin: MTReportDesignerBorderPaddingSides
                                                              scaleFactor: 1.0];
     
     NSArray <NSLayoutConstraint *> *allConstraints = [rulerVerticalConstraints arrayByAddingObjectsFromArray:rulerHorizontalConstraints];
     
-    [self addSubview:ruler];
-    [self addConstraints:allConstraints];
+    [*view addSubview:ruler];
+    [*view addConstraints:allConstraints];
     
-    self.rulerVerticalConstraints = rulerVerticalConstraints;
-    self.rulerHorizontalConstraints = rulerHorizontalConstraints;
+    [(*view).rulerVerticalConstraints addObjectsFromArray: rulerVerticalConstraints];
+    [(*view).rulerHorizontalConstraints addObjectsFromArray: rulerHorizontalConstraints];
     
-    self.ruler = ruler;
+    (*view).ruler = ruler;
     
     allConstraints = nil;
 }
 
-- (void)updateConstraints {
+#pragma mark -
+#pragma mark Property overrides
+
+
+/*- (void)updateConstraints {
     if (self.rulerVerticalConstraints == nil) {
     }
     [super updateConstraints];
-}
+}*/
 
 /*- (void)removeFromSuperview {
     [super removeFromSuperview];
@@ -142,19 +165,6 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
         self.rulerConstraints = nil;
     }
 }*/
-
-- (UITapGestureRecognizer *)strayTouchGestureRecognizer {
-    if (_strayTouchGestureRecognizer == nil) {
-        UITapGestureRecognizer *tap;
-        tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget: self
-                                                                            action: @selector(handleTapStray:)
-                                                                          delegate: self];
-        //[tap requireGestureRecognizerToFail:tapGestureDoubleTap];
-        [self addGestureRecognizer:tap];
-        _strayTouchGestureRecognizer = tap;
-    }
-    return _strayTouchGestureRecognizer;
-}
 
 - (void)setNeedsUpdateConstraints {
     [super setNeedsUpdateConstraints];
@@ -175,97 +185,93 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
     _needsReload = YES;
 }
 
+- (void)setNeedsCleanup {
+    _needsCleanup = YES;
+}
+
+- (void)cleanup {
+    
+    if (!_needsCleanup) return;
+    
+    [NSLayoutConstraint deactivateConstraints: _viewDidAppearDesignerScrollViewConstraints];
+    [NSLayoutConstraint deactivateConstraints: _viewDidAppearDesignerContentViewConstraints];
+    
+    [self removeConstraints: _viewDidAppearDesignerContentViewConstraints];
+    [self.superview removeConstraints: _viewDidAppearDesignerScrollViewConstraints];
+    
+    NSEnumerator *sectionViews = _sectionViews.objectEnumerator;
+    for (MADDesignerSectionView *view in sectionViews) {
+        [view.sectionLabel removeFromSuperview];
+        [view removeFromSuperview];
+        view.sectionLabel = nil;
+    }
+    
+    [_layoutConstraintsSectionsVerticalBuffer removeAllObjects];
+    [_layoutConstraintsSectionsSidesBorder removeAllObjects];
+    [_layoutConstraintSectionLabelHeightContainer removeAllObjects];
+    
+    [_layoutConstraintsReportSectionHeight removeAllObjects];
+    [_sectionViews removeAllObjects];
+    [_sectionLabels removeAllObjects];
+    
+    [_passthroughContainers removeAllObjects];
+    [_sectionLabelGestureRecognizers removeAllObjects];
+    
+    [_viewDidAppearDesignerScrollViewConstraints removeAllObjects];
+    [_viewDidAppearDesignerContentViewConstraints removeAllObjects];
+
+    _needsCleanup = NO;
+}
+
 // Called to update the view.
+
+
 
 - (void)reloadData {
     
     if (_datasource == nil) return;
     
-    //RptqDocument *document = [maDocument activeDocumentModel];
-    
-    //MADReportSectionsEnumerator *reportSectionsEnumerator;
-    //reportSectionsEnumerator = [[MADReportSectionsEnumerator alloc] initWithDocument:document];
+    [self cleanup];
     
     id <MADDesignerDesignViewDataSource> datasource = _datasource;
+    CGFloat measurementSectionHeight = CGSizeZero.height;
 
-    NSUInteger numberOfSections = _dataSourceHas.numberOfSectionsInDesignView ?
+    _numberOfSections = _dataSourceHas.numberOfSectionsInDesignView ?
                             [datasource numberOfSectionsInDesignView:self] : 0;
     
-    
-    NSMutableArray <NSNumber *> *reportSectionKeyTracker;
-    NSMutableArray <NSLayoutConstraint *> *scrollerLayoutConstraints,
-    *viewDidAppearDesignerContentViewConstraints,
-    *constraintsSectionsSidesBorder,
-    *constraintSectionLabelHeightContainer,
-    *constraintsSectionsVerticalBuffer;
-    
-    NSMutableDictionary <NSNumber *, NSLayoutConstraint *> *constraintsReportSectionHeight;
-    
-    reportSectionKeyTracker = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    
-    scrollerLayoutConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 6];
-    viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 5];
-    constraintsSectionsSidesBorder = [[NSMutableArray alloc] initWithCapacity:numberOfSections * 2 + 2];
-    constraintSectionLabelHeightContainer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    constraintsSectionsVerticalBuffer = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-    constraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    
-    NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViewsDictionary;
-    NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionControlViewsDictionary;
-    
-    sectionViewsDictionary          = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    sectionControlViewsDictionary   = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    
     NSMutableSet <MADDesignerSectionView *> *passthroughContainers;
-    passthroughContainers = [[NSMutableSet alloc] initWithCapacity:numberOfSections];
+    passthroughContainers = [[NSMutableSet alloc] initWithCapacity:_numberOfSections];
     
-    [scrollerLayoutConstraints addObjectsFromArray:self.rulerHorizontalConstraints];
-    [scrollerLayoutConstraints addObjectsFromArray:self.rulerVerticalConstraints];
+    [self.viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:self.rulerHorizontalConstraints];
+    [self.viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:self.rulerVerticalConstraints];
+    [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:self.rulerHorizontalConstraints];
     
-    [constraintsSectionsSidesBorder addObjectsFromArray:self.rulerHorizontalConstraints];
+    CGFloat measurementControlHeight = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     
-    CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
+    NSLayoutConstraint *constraintViewTop, *constraintViewHeight, *constraintLabelRight,
+                       *lcLabelBottom, *lcLabelHeight;
     
-    NSLayoutConstraint *constraintViewTop,
-    *constraintViewHeight,
-    *constraintLabelRight,
-    *constraintLabelBottom,
-    *constraintLabelHeight,
-    *constraintViewLeft,
-    *constraintViewRight;
-    NSArray *collectionViewConstraints, *sectionViewLabelConstraints;
-    //UIGestureRecognizer *strayTouchGesture = self.strayTouchGesture;
+    NSArray *collectionViewConstraints;
+    NSArray *sectionViewLabelConstraints;
     
     NSMutableSet <UITapGestureRecognizer *> *sectionLabelGestureRecognizers = [[NSMutableSet alloc] init];
-    NSNumber *reportSectionKey;
     MADDesignerSectionView *sectionView;
     MADDesignerSectionLabel *sectionViewLabel;
     UITapGestureRecognizer *tapGestureRecognizer;
-    NSString *localizedDisplayName;
     
-    CGFloat sectionHeight;
-    for (NSUInteger sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++) {
-//    for (MADReportSection *reportSection in reportSectionsEnumerator) {
-        
-//        reportSectionKey = @(reportSection.identifier);
-        
-        //sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height);
-//        sectionView = [datasource designView:self
-//                sectionViewForSectionAtIndex:sectionIndex];
-//        sectionView = [MADDesignerSectionView newDesignerSectionView: reportSection.identifier
-//                                                           isVisible: reportSection.isVisible
-//                                                            delegate: self];
-        sectionView = [datasource designView:self sectionViewForSectionAtIndex:sectionIndex];
-        sectionHeight = [datasource designView:self heightForSectionAtIndex:sectionIndex];
-        sectionHeights += MTReportDesignerBufferPaddingVertical + sectionHeight;
-        
-        localizedDisplayName = [datasource designView:self titleForSectionAtIndex:sectionIndex];
+    NSNumber *reportSectionKey, *lastReportSectionKey = nil;
+    for (NSUInteger sectionIndex = 0; sectionIndex < _numberOfSections; sectionIndex++) {
+
+        measurementSectionHeight = [datasource designView:self heightForSectionAtIndex:sectionIndex];
+        measurementControlHeight += MTReportDesignerBufferPaddingVertical + measurementSectionHeight;
         reportSectionKey = @([datasource designView:self identifierAtIndex:sectionIndex]);
-        ((MADDesignerSectionLayoutLiquid *)sectionView.collectionViewLayout).designViewIdentifier = (NSInteger)sectionIndex;
-        //((MADDesignerSectionLayoutLiquid *)sectionView.collectionViewLayout).designViewIdentifier = sectionCounter;
-        //localizedDisplayName = [reportSection localizedDisplayName];
-        //sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithText:localizedDisplayName];
+        
+        // Get new section view.
+        sectionView = [datasource designView:self sectionViewForSectionAtIndex:sectionIndex];
+        
+        // Get new section label.
         sectionViewLabel = [self.datasource designView:self sectionLabelViewForSectionAtIndex:sectionIndex];
+        
         tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self
                                                                                                 action:@selector(handleTapLabel:)
                                                                                               delegate:self];
@@ -275,63 +281,37 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
         
         sectionViewLabel.tag = (NSInteger)sectionIndex;
         
-        NSNumber *key;
-        UIView *lastView;
-        
-        key = reportSectionKeyTracker.lastObject;
-        lastView = sectionIndex == 0 ? self.ruler : sectionViewsDictionary[key];
-        
-        constraintViewTop = [MADLayoutConstraint newLayoutConstraintViewTop: lastView
+        constraintViewTop = [MADLayoutConstraint newLayoutConstraintViewTop: sectionIndex == 0 ? self.ruler : self.sectionViews[lastReportSectionKey]
                                                                  viewBottom: sectionView
                                                                     padding: MTReportDesignerBufferPaddingVertical];
         
-        constraintViewHeight = [MADLayoutConstraint newLayoutConstraintView: sectionView
-                                                                     height: sectionHeight];
+        constraintViewHeight = [MADLayoutConstraint newLayoutConstraintView: sectionView height: measurementSectionHeight];
         
-        constraintLabelRight = [MADLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel
-                                                                        container: sectionView
+        constraintLabelRight = [MADLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel container: sectionView
                                                                           padding: MTReportDesignerSectionLabelPaddingRight];
         
-        constraintLabelBottom = [MADLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel
-                                                                          container: sectionView
+        lcLabelBottom = [MADLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel container: sectionView
                                                                             padding: MTReportDesignerBufferPaddingVertical];
-        constraintLabelHeight = [MADLayoutConstraint newLayoutConstraintLabel: sectionViewLabel
-                                                                     toHeight: MTReportDesignerSectionLabelHeight];
         
-        constraintViewLeft = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
-                                                                      content:self
-                                                                      padding:MTReportDesignerBorderPaddingSides];
+        lcLabelHeight = [MADLayoutConstraint newLayoutConstraintLabel: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
         
-        constraintViewRight = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
-                                                                        content:self
-                                                                        padding:MTReportDesignerBorderPaddingSides];
-        
-        collectionViewConstraints = [[NSArray alloc] initWithObjects: constraintViewLeft,
-                                     constraintViewRight, nil];
+        collectionViewConstraints = [MADDesignerLayoutDesignView constraintsForSectionView:sectionView contentView:self];
         
         sectionViewLabelConstraints = [[NSArray alloc] initWithObjects: constraintViewTop,
-                                       constraintViewHeight,
-                                       constraintLabelRight,
-                                       constraintLabelBottom,
-                                       constraintLabelHeight, nil];
+                                       constraintViewHeight, constraintLabelRight,
+                                       lcLabelBottom, lcLabelHeight, nil];
         
-        [viewDidAppearDesignerContentViewConstraints addObjectsFromArray:sectionViewLabelConstraints];
-        
-        
-        [constraintsSectionsVerticalBuffer addObject: constraintViewTop];
-        [constraintSectionLabelHeightContainer addObject: constraintLabelHeight];
-        
-        [constraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
-        
-        [scrollerLayoutConstraints addObjectsFromArray:collectionViewConstraints];
+        [self.viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:collectionViewConstraints];
+        [self.layoutConstraintsSectionsVerticalBuffer addObject: constraintViewTop];
+        [self.layoutConstraintSectionLabelHeightContainer addObject: lcLabelHeight];
+        [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
+        [self.viewDidAppearDesignerContentViewConstraints addObjectsFromArray:sectionViewLabelConstraints];
 
         NSNumber *sectionViewIdentifier = @(sectionView.identifier);
-        constraintsReportSectionHeight[sectionViewIdentifier] = constraintViewHeight;
+        self.layoutConstraintsReportSectionHeight[sectionViewIdentifier] = constraintViewHeight;
         
-        sectionViewsDictionary[reportSectionKey] = sectionView;
-        sectionControlViewsDictionary[reportSectionKey] = sectionViewLabel;
-        
-        [reportSectionKeyTracker addObject:reportSectionKey];
+        self.sectionViews[reportSectionKey] = sectionView;
+        self.sectionLabels[reportSectionKey] = sectionViewLabel;
         
         [self addSubview:sectionView];
         [self addSubview:sectionViewLabel];
@@ -339,26 +319,21 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
         [passthroughContainers addObject:sectionView];
         
         sectionView.sectionLabel = sectionViewLabel;
+
+        lastReportSectionKey = reportSectionKey.copy;
     }
     
-    [reportSectionKeyTracker removeAllObjects];
     
     self.sectionLabelGestureRecognizers = sectionLabelGestureRecognizers;
-    self.layoutConstraintsSectionsVerticalBuffer = constraintsSectionsVerticalBuffer;
-    self.layoutConstraintsReportSectionHeight = constraintsReportSectionHeight;
-    self.sectionViewsDictionary = sectionViewsDictionary;
-    self.sectionControlViewsDictionary = sectionControlViewsDictionary;
-    self.layoutConstraintsSectionsSidesBorder = constraintsSectionsSidesBorder;
-    self.layoutConstraintSectionLabelHeightContainer = constraintSectionLabelHeightContainer;
     self.passthroughContainers = passthroughContainers;
 
-    sectionHeights += MTReportDesignerBorderPaddingVertical;
+    measurementControlHeight += MTReportDesignerBorderPaddingVertical;
 
     NSLayoutConstraint *constraintContentViewHeight;
     constraintContentViewHeight = [MADLayoutConstraint newLayoutConstraintView: self
-                                                                        height: sectionHeights];
+                                                                        height: measurementControlHeight];
 
-    [scrollerLayoutConstraints addObject:constraintContentViewHeight];
+    [self.viewDidAppearDesignerScrollViewConstraints addObject:constraintContentViewHeight];
     self.layoutConstraintDesignerContentViewHeight = constraintContentViewHeight;
 
     
@@ -366,19 +341,13 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
     constraintToScollerBottom = [MADLayoutConstraint newLayoutConstraintView: self
                                                              containerBottom: self.superview];
     
-    [scrollerLayoutConstraints addObject:constraintToScollerBottom];
+    [self.viewDidAppearDesignerScrollViewConstraints addObject:constraintToScollerBottom];
     
-    [self.superview addConstraints: scrollerLayoutConstraints];
-    [self addConstraints: viewDidAppearDesignerContentViewConstraints];
-    
-    self.viewDidAppearDesignerContentViewConstraints = viewDidAppearDesignerContentViewConstraints;
-    self.viewDidAppearDesignerScrollViewConstraints = scrollerLayoutConstraints;
-    
-
-    
+    [self.superview addConstraints: self.viewDidAppearDesignerScrollViewConstraints];
+    [self addConstraints: self.viewDidAppearDesignerContentViewConstraints];
     
     _needsReload = NO;
-    
+    _needsCleanup = YES;
 }
 
 - (void)reloadDataIfNeeded {
@@ -423,12 +392,157 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
     return YES;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+#pragma mark -
+#pragma mark Property overrides
+
+- (void)setDatasource:(NSObject<MADDesignerDesignViewDataSource> *)datasource {
+    _dataSourceHas.numberOfSectionsInDesignView = [datasource respondsToSelector:@selector(numberOfSectionsInDesignView:)];
+    _datasource = datasource;
 }
-*/
+
+- (void)setDelegate:(id <MADDesignerDesignViewDelegate>)delegate {
+    _delegateHas.handleTapLabel = [delegate respondsToSelector:@selector(designView:handleTapLabel:)];
+    _delegateHas.handleTapStray = [delegate respondsToSelector:@selector(designView:handleTapStray:)];
+    _delegate = delegate;
+}
+
+#pragma mark Lazy load
+
+- (UITapGestureRecognizer *)strayTouchGestureRecognizer {
+    if (_strayTouchGestureRecognizer == nil) {
+        UITapGestureRecognizer *tap;
+        tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget: self
+                                                                            action: @selector(handleTapStray:)
+                                                                          delegate: self];
+        //[tap requireGestureRecognizerToFail:tapGestureDoubleTap];
+        [self addGestureRecognizer:tap];
+        _strayTouchGestureRecognizer = tap;
+    }
+    return _strayTouchGestureRecognizer;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)rulerVerticalConstraints {
+    if (_rulerVerticalConstraints == nil) {
+        _rulerVerticalConstraints = [[NSMutableArray alloc] initWithCapacity: 2];;
+    }
+    return _rulerVerticalConstraints;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)rulerHorizontalConstraints {
+    if (_rulerHorizontalConstraints == nil) {
+        _rulerHorizontalConstraints = [[NSMutableArray alloc] initWithCapacity: 2];;
+    }
+    return _rulerHorizontalConstraints;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)layoutConstraintsSectionsVerticalBuffer {
+    if (_layoutConstraintsSectionsVerticalBuffer == nil) {
+        _layoutConstraintsSectionsVerticalBuffer = [[NSMutableArray alloc] initWithCapacity: _numberOfSections];
+    }
+    return _layoutConstraintsSectionsVerticalBuffer;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)layoutConstraintsSectionsSidesBorder {
+    if (_layoutConstraintsSectionsSidesBorder == nil) {
+        _layoutConstraintsSectionsSidesBorder = [[NSMutableArray alloc] initWithCapacity: _numberOfSections * 2 + 2];
+    }
+    return _layoutConstraintsSectionsSidesBorder;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)layoutConstraintSectionLabelHeightContainer {
+    if (_layoutConstraintSectionLabelHeightContainer == nil) {
+        _layoutConstraintSectionLabelHeightContainer = [[NSMutableArray alloc] initWithCapacity: _numberOfSections];
+    }
+    return _layoutConstraintSectionLabelHeightContainer;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)viewDidAppearDesignerScrollViewConstraints {
+    if (_viewDidAppearDesignerScrollViewConstraints == nil) {
+        _viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] initWithCapacity:_numberOfSections * 2 + 6];
+    }
+    return _viewDidAppearDesignerScrollViewConstraints;
+}
+
+- (NSMutableArray <NSLayoutConstraint *> *)viewDidAppearDesignerContentViewConstraints {
+    if (_viewDidAppearDesignerContentViewConstraints == nil) {
+        _viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] initWithCapacity:_numberOfSections * 5];
+    }
+    return _viewDidAppearDesignerContentViewConstraints;
+}
+
+- (NSMutableDictionary <NSNumber *, NSLayoutConstraint *> *)layoutConstraintsReportSectionHeight {
+    if (_layoutConstraintsReportSectionHeight == nil) {
+        _layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity: _numberOfSections];
+    }
+    return _layoutConstraintsReportSectionHeight;
+}
+
+- (NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *)sectionViews {
+    if (_sectionViews == nil) {
+        _sectionViews = [[NSMutableDictionary alloc] initWithCapacity: _numberOfSections];
+    }
+    return _sectionViews;
+}
+
+- (NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *)sectionLabels {
+    if (_sectionLabels == nil) {
+        _sectionLabels = [[NSMutableDictionary alloc] initWithCapacity: _numberOfSections];
+    }
+    return _sectionLabels;
+}
+
+#pragma mark - Helpers
+
+- (void)repositionSectionViews:(CGRect)presentedRect {
+    if (presentedRect.origin.x > CGPointZero.x) {
+        NSEnumerator <MADDesignerSectionView *> *sectionViews = self.sectionViews.objectEnumerator;
+        for (UICollectionView *sectionView in sectionViews) {
+            sectionView.contentInset = ScrollIndicatorContentInsets(presentedRect);
+            sectionView.scrollIndicatorInsets = ScrollIndicatorContentInsets(presentedRect);
+        }
+    }
+}
+
+- (CGRect)popoverRectForSelectedViews:(NSSet <UIView *> *)views {
+    CGRect result;
+    if (views.count == 0) {
+        result = CGRectZero;
+    } else if (views.count == 1) {
+        result = [views.anyObject convertRect:views.anyObject.frame toView:self];
+    } else {
+        CGPoint min = CGPointZero, max = CGPointZero;
+        NSUInteger counter = 0;
+        CGRect frame;
+        for (UIView *elementView in views) {
+            frame = [elementView convertRect: elementView.frame toView: self];
+            if (counter == 0) {
+                min = frame.origin;
+                max = CGPointMake(frame.origin.x + frame.size.width,
+                                  frame.origin.y + frame.size.height);
+            } else {
+                min = CGPointMake(min.x < frame.origin.x ? min.x : frame.origin.x,
+                                  min.y < frame.origin.y ? min.y : frame.origin.y);
+                max = CGPointMake(max.x > frame.origin.x + frame.size.width ? max.x : frame.origin.x + frame.size.width,
+                                  max.y > frame.origin.y + frame.size.height ? max.y : frame.origin.y + frame.size.height);
+            }
+            counter++;
+        }
+        result = CGRectMake(min.x, min.y, max.x - min.x, max.y - min.y);
+    }
+    return result;
+}
+
++ (NSArray *)constraintsForSectionView:(UIView *)sectionView contentView:(UIView *)contentView {
+    id left = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
+                                                       content:contentView
+                                                       padding:MTReportDesignerBorderPaddingSides];
+    
+    id right = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
+                                                         content:contentView
+                                                         padding:MTReportDesignerBorderPaddingSides];
+    
+    id results = [[NSArray alloc] initWithObjects: left, right, nil];
+    return results;
+}
 
 @end

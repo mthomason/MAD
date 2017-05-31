@@ -70,11 +70,13 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 
 
 + (instancetype)newDesignerSectionView:(NSInteger)identifier
+                  designViewIdentifier:(NSUInteger)designViewIdentifier
                              isVisible:(BOOL)isVisible
                               delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate {
     
     MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
     layout.delegate = layoutDelegate;
+    layout.designViewIdentifier = identifier;
     MADDesignerSectionView *collectionView;
     collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     collectionView.delegate     = layoutDelegate;

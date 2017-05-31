@@ -9,7 +9,9 @@
 #ifndef MADHorizontalAlignmentType_h
 #define MADHorizontalAlignmentType_h
 
-typedef NS_ENUM(int16_t, MADHorizontalAlignment) {
+#import <sys/types.h>
+
+typedef enum MADHorizontalAlignment : int16_t {
     MADHorizontalAlignmentUnknown = -1,
     MADHorizontalAlignmentLeft = 0,
     MADHorizontalAlignmentCenter = 1,
@@ -17,6 +19,6 @@ typedef NS_ENUM(int16_t, MADHorizontalAlignment) {
     MADHorizontalAlignmentJustified = 3,
     MADHorizontalAlignmentNatrual = 4,
     
-};
+} MADHorizontalAlignment;
 
 #endif /* MADHorizontalAlignmentType_h */

@@ -13,8 +13,6 @@
 
 @interface UIView (Extras)
 
-    - (CGRect)popoverRectForSelectedViews:(NSSet *)views;
-
     + (CGFloat)borderWidthThin;
 
 @end

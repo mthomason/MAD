@@ -74,6 +74,7 @@
           sectionViewForSectionAtIndex:(NSUInteger)index {
     MADSectionLayout *section = [self.sectionsLayout sectionLayoutAtIndex:index];
     MADDesignerSectionView *sectionView = [MADDesignerSectionView newDesignerSectionView: section.identifier
+                                                                    designViewIdentifier: index
                                                                                isVisible: section.isVisible
                                                                                 delegate: self.eventDelegate];
     
