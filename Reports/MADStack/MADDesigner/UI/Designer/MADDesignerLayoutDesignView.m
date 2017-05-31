@@ -17,6 +17,7 @@
 
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
+#import "MADDesignerElementView.h"
 
 #import "MADReportSectionDataSourceProtocol.h"
 #import "MADReportSectionDelegateProtocol.h"
@@ -32,6 +33,9 @@ const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
 
 @interface MADDesignerLayoutDesignView ()
     <UIGestureRecognizerDelegate>
+
+    @property (readwrite, nonatomic, strong) NSMutableSet <NSNumber *> *selectedElements;
+    @property (readwrite, nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;
 
     @property (readwrite, nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 
@@ -143,6 +147,19 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     allConstraints = nil;
 }
 
++ (NSArray *)constraintsForSectionView:(UIView *)sectionView contentView:(UIView *)contentView {
+    id left = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
+                                                       content:contentView
+                                                       padding:MTReportDesignerBorderPaddingSides];
+    
+    id right = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
+                                                         content:contentView
+                                                         padding:MTReportDesignerBorderPaddingSides];
+    
+    id results = [[NSArray alloc] initWithObjects: left, right, nil];
+    return results;
+}
+
 #pragma mark -
 #pragma mark Property overrides
 
@@ -221,6 +238,53 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [_viewDidAppearDesignerContentViewConstraints removeAllObjects];
 
     _needsCleanup = NO;
+}
+
+- (void)removeBorderFromAllSectionViews {
+    NSEnumerator <MADDesignerSectionLabel *> *labels;
+    labels = self.sectionLabels.objectEnumerator;
+    for (MADDesignerSectionLabel *label in labels) {
+        [self removeBorderFromSectionLabel: label];
+    }
+}
+
+- (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label {
+    BOOL result;
+    NSNumber *key = [[NSNumber alloc] initWithInteger:label.tag];
+    if ([self.selectedSections containsObject:key]) {
+        [self.selectedSections removeObject:key];
+        [label removeBorder];
+        result = YES;
+    } else {
+        result = NO;
+    }
+    return result;
+}
+
+- (void)applyBorderToSectionLabel:(MADDesignerSectionLabel *)view {
+    
+    NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
+    [self.selectedSections addObject:key];
+    [view applyBorder];
+}
+
+- (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
+    BOOL result;
+    NSNumber *key = @(view.identifier);
+    if ([self.selectedElements containsObject:key]) {
+        [self.selectedElements removeObject:key];
+        result = YES;
+        [view removeBorder];
+    } else {
+        result = NO;
+    }
+    return result;
+}
+
+- (void)applyBorderToView:(MADDesignerElementView *)view {
+    NSNumber *key = @(view.identifier);
+    [self.selectedElements addObject:key];
+    [view applyBorder];
 }
 
 // Called to update the view.
@@ -408,6 +472,22 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 #pragma mark Lazy load
 
+- (NSMutableSet <NSNumber *> *)selectedElements {
+    if (!_selectedElements) {
+        NSMutableSet *selectedElements = [[NSMutableSet alloc] init];
+        _selectedElements = selectedElements;
+    }
+    return _selectedElements;
+}
+
+- (NSMutableSet <NSNumber *> *)selectedSections {
+    if (!_selectedSections) {
+        NSMutableSet *selectedSections = [[NSMutableSet alloc] init];
+        _selectedSections = selectedSections;
+    }
+    return _selectedSections;
+}
+
 - (UITapGestureRecognizer *)strayTouchGestureRecognizer {
     if (_strayTouchGestureRecognizer == nil) {
         UITapGestureRecognizer *tap;
@@ -493,6 +573,18 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 #pragma mark - Helpers
 
+- (void)removeBorderFromSections {
+    //Remove border from the section views
+    [_sectionLabels enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
+        [view normalView];
+    }];
+    
+    //Remove border from the section views
+    [_sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
+        view.selected = NO;
+    }];
+}
+
 - (void)repositionSectionViews:(CGRect)presentedRect {
     if (presentedRect.origin.x > CGPointZero.x) {
         NSEnumerator <MADDesignerSectionView *> *sectionViews = self.sectionViews.objectEnumerator;
@@ -510,9 +602,9 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     } else if (views.count == 1) {
         result = [views.anyObject convertRect:views.anyObject.frame toView:self];
     } else {
+        CGRect frame;
         CGPoint min = CGPointZero, max = CGPointZero;
         NSUInteger counter = 0;
-        CGRect frame;
         for (UIView *elementView in views) {
             frame = [elementView convertRect: elementView.frame toView: self];
             if (counter == 0) {
@@ -532,17 +624,27 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     return result;
 }
 
-+ (NSArray *)constraintsForSectionView:(UIView *)sectionView contentView:(UIView *)contentView {
-    id left = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
-                                                       content:contentView
-                                                       padding:MTReportDesignerBorderPaddingSides];
-    
-    id right = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
-                                                         content:contentView
-                                                         padding:MTReportDesignerBorderPaddingSides];
-    
-    id results = [[NSArray alloc] initWithObjects: left, right, nil];
-    return results;
+- (CGFloat)sizeHeight {
+    CGFloat height = CGPointZero.y + (self.sectionViews.count + 2) * MTReportDesignerBufferPaddingVertical +
+                            self.ruler.intrinsicContentSize.height;
+    MADDesignerSectionView *sectionView;
+    NSEnumerator <MADDesignerSectionView *> *sectionViews = self.sectionViews.objectEnumerator;
+    for (sectionView in sectionViews) {
+        height += sectionView.frame.size.height <= CGSizeZero.height ?
+                            ceil(sectionView.intrinsicContentSize.height) : sectionView.frame.size.height;
+    }
+    return height;
+}
+
+- (void)updateSection:(NSNumber *)sectionKey height:(CGFloat)height {
+    NSLayoutConstraint *layoutConstraint;
+    layoutConstraint = self.layoutConstraintsReportSectionHeight[sectionKey];
+    layoutConstraint.constant = height;
+}
+
+- (CGFloat)heightForSection:(NSNumber *)sectionID {
+    NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[sectionID];
+    return layoutConstraint.constant;
 }
 
 @end

@@ -18,7 +18,8 @@ extern const CGFloat MTReportDesignerBufferPaddingVertical;
 extern const CGFloat MTReportDesignerSectionLabelPaddingRight;
 extern const CGFloat MTReportDesignerSectionLabelHeight;
 
-@class UITapGestureRecognizer, MADRulerView, MADDesignerSectionView, MADDesignerSectionLabel;
+@class UITapGestureRecognizer, MADRulerView, MADDesignerSectionView, MADDesignerSectionLabel,
+        MADDesignerElementView;
 
 @protocol MADDesignerDesignViewDataSource, MADDesignerDesignViewDelegate;
 
@@ -26,6 +27,11 @@ extern const CGFloat MTReportDesignerSectionLabelHeight;
 
     @property (nonatomic, weak) id <MADDesignerDesignViewDataSource> datasource;
     @property (nonatomic, weak) id <MADDesignerDesignViewDelegate> delegate;
+
+    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
+    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
+
+    @property (readonly, nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;
 
     @property (nonatomic, strong) MADRulerView *ruler;
 
@@ -39,13 +45,6 @@ extern const CGFloat MTReportDesignerSectionLabelHeight;
     @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintsSectionsSidesBorder;
     @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *layoutConstraintSectionLabelHeightContainer;
 
-    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, NSLayoutConstraint *> *layoutConstraintsReportSectionHeight;
-    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
-    @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
-
-    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerScrollViewConstraints;
-    @property (readonly, nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *viewDidAppearDesignerContentViewConstraints;
-
     - (void)setNeedsCleanup;
     - (void)cleanup;
 
@@ -56,6 +55,17 @@ extern const CGFloat MTReportDesignerSectionLabelHeight;
     - (UITapGestureRecognizer *)strayTouchGestureRecognizer;
     - (void)repositionSectionViews:(CGRect)presentedRect;
     - (CGRect)popoverRectForSelectedViews:(NSSet <UIView *> *)views;
+
+    - (CGFloat)sizeHeight;
+
+    - (void)removeBorderFromSections;
+    - (void)removeBorderFromAllSectionViews;
+    - (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label;
+    - (void)applyBorderToSectionLabel:(MADDesignerSectionLabel *)view;
+    - (BOOL)removeBorderFromView:(MADDesignerElementView *)view;
+    - (void)applyBorderToView:(MADDesignerElementView *)view;
+
+    - (void)updateSection:(NSNumber *)sectionID height:(CGFloat)height;
 
 @end
 

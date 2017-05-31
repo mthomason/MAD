@@ -218,8 +218,8 @@ static const inline CGSize sizePopoverFonts() {
     @property (nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementViewsDictionary;
     @property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
 
-    @property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElements;
-    @property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;
+    //@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElements;
+    //@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;
 
     @property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
 
@@ -448,8 +448,7 @@ static const inline CGSize sizePopoverFonts() {
 - (MADDesignerStatusLabel *)statusLabelZoomScale {
     if (_statusLabelZoomScale == nil) {
         MADDesignerStatusLabel *detailDisplay;
-        detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: CGRectZero];
-        detailDisplay.frame = [self detailDisplayFrame];
+        detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: [self detailDisplayFrame]];
         _statusLabelZoomScale = detailDisplay;
     }
     return _statusLabelZoomScale;
@@ -718,17 +717,9 @@ static const inline CGSize sizePopoverFonts() {
         }
     }
     
-    //[self.view.scroller removeConstraints:self.view.scroller.container.viewDidAppearDesignerScrollViewConstraints];
-    //[self.view.scroller.container removeConstraints:self.view.scroller.container.viewDidAppearDesignerContentViewConstraints];
-    
     [self.elementViewsDictionary removeAllObjects];
     [self.visibleElementViews removeAllObjects];
     [self.view.scroller.container cleanup];
-    //[self.view.scroller.container.viewDidAppearDesignerContentViewConstraints removeAllObjects];
-    //[self.view.scroller.container.viewDidAppearDesignerScrollViewConstraints removeAllObjects];
-    //[self.view.scroller.container.layoutConstraintsSectionsSidesBorder removeAllObjects];
-    //[self.view.scroller.container.layoutConstraintsSectionsVerticalBuffer removeAllObjects];
-    //[self.view.scroller.container.layoutConstraintsReportSectionHeight removeAllObjects];
     
     _shownAndHidden = YES;
     [self.document saveContext];
@@ -847,7 +838,7 @@ static const inline CGSize sizePopoverFonts() {
     [self.view.scroller.container.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:calculateVerticalBuffer];
     [self.view.scroller.container.layoutConstraintSectionLabelHeightContainer enumerateObjectsUsingBlock:calculateLabelHeight];
     
-    self.view.scroller.container.layoutConstraintDesignerContentViewHeight.constant = [self designerContentViewSize].height;
+    self.view.scroller.container.layoutConstraintDesignerContentViewHeight.constant = self.view.contentViewSize.height;
 
     [super updateViewConstraints];
 
@@ -906,22 +897,6 @@ static const inline CGSize sizePopoverFonts() {
 
 #pragma mark -
 #pragma mark Lazy Load
-
-- (NSMutableSet <NSNumber *> *)selectedElements {
-    if (!_selectedElements) {
-        NSMutableSet *selectedElements = [[NSMutableSet alloc] init];
-        _selectedElements = selectedElements;
-    }
-    return _selectedElements;
-}
-
-- (NSMutableSet <NSNumber *> *)selectedSections {
-    if (!_selectedSections) {
-        NSMutableSet *selectedSections = [[NSMutableSet alloc] init];
-        _selectedSections = selectedSections;
-    }
-    return _selectedSections;
-}
 
 - (NSMutableSet <NSNumber *> *)selectedElementIDs {
     if (!_selectedElementIDs) {
@@ -2086,9 +2061,7 @@ static const inline CGSize sizePopoverFonts() {
             
             NSNumber *identifierNumber = @(identifier);
             if ([self.selectedElementIDs containsObject: identifierNumber]) {
-                NSNumber *key = @(elementView.identifier);
-                [self.selectedElements addObject:key];
-                [elementView applyBorder];
+                [self.view.scroller.container applyBorderToView:elementView];
             }
             
             [cell addElementView:elementView];
@@ -2261,9 +2234,7 @@ static const inline CGSize sizePopoverFonts() {
     
     MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath
                                                       inCollectionView: collectionView];
-    NSNumber *key = @(elementView.identifier);
-    [self.selectedElements addObject:key];
-    [elementView applyBorder];
+    [self.view.scroller.container applyBorderToView:elementView];
     self.lastElementViewToShowMenu = elementView;
     return YES;
 }
@@ -2636,7 +2607,7 @@ static const inline CGSize sizePopoverFonts() {
         MADDesignerElementView *elementView = (MADDesignerElementView *)sender.view;
         [self dismissSectionPresentationIfOpen];
         
-        [self displaySectionViewsRemoveBorder];
+        [self.view.scroller.container removeBorderFromSections];
         
         if ([self elementViewIsSelected: elementView] == NO) {
             [self selectElementView: elementView];
@@ -2790,14 +2761,6 @@ static const inline CGSize sizePopoverFonts() {
     return [self.selectedElementIDs containsObject:elementViewIdentifier];
 }
 
-- (void)removeBorderFromAllSectionViews {
-    NSEnumerator <MADDesignerSectionLabel *> *labels;
-    labels = self.view.scroller.container.sectionLabels.objectEnumerator;
-    for (MADDesignerSectionLabel *label in labels) {
-        [self removeBorderFromSectionLabel: label];
-    }
-}
-
 - (void)adjustContextOffsetForToolboxWithToolboxType:(MTToolboxType)toolboxType {
     switch (toolboxType) {
         case MTToolboxTypeSection:
@@ -2849,17 +2812,14 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (void)selectElementView:(MADDesignerElementView *)elementView {
-    if (self.selectedSections.count > 0) {
-        [self removeBorderFromAllSectionViews];
+    if (self.view.scroller.container.selectedSections.count > 0) {
+        [self.view.scroller.container removeBorderFromAllSectionViews];
     } else {
         
         NSNumber *key = @(elementView.identifier);
         [self.selectedElementIDs addObject: key];
         
-        key = @(elementView.identifier);
-        [self.selectedElements addObject:key];
-        
-        [elementView applyBorder];
+        [self.view.scroller.container applyBorderToView:elementView];
         
         self.viewControllerToolbox.document = self.document;
         self.viewControllerToolbox.selectedElementIDs = self.selectedElementIDs;
@@ -2869,7 +2829,7 @@ static const inline CGSize sizePopoverFonts() {
 - (void)deselectElementView:(MADDesignerElementView *)elementView
                    animated:(BOOL)animated {
     
-    [self removeBorderFromView: elementView];
+    [self.view.scroller.container removeBorderFromView: elementView];
     
     NSArray <UIView *> *passThroughViewsArray;
     NSMutableSet <UIView *>  * _Nullable passThroughViewsSet;
@@ -3094,7 +3054,7 @@ END_deselectElementView:;
         
         _sectionSettingsVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
-        [self removeBorderFromAllSectionViews];
+        [self.view.scroller.container removeBorderFromAllSectionViews];
         
         NSError * __autoreleasing *error = NULL;
         if (![self.document.managedObjectContext save:error]) {
@@ -3272,9 +3232,7 @@ END_deselectElementView:;
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
-                NSLayoutConstraint *layoutConstraint;
-                layoutConstraint = self.view.scroller.container.layoutConstraintsReportSectionHeight[documentSectionKey];
-                layoutConstraint.constant = documentSectionHeight;
+                [self.view.scroller.container updateSection:documentSectionKey height:documentSectionHeight];
                 [self.view setNeedsUpdateConstraints];
                 
                 MADSectionLayoutManager *layoutManager;
@@ -3381,8 +3339,7 @@ END_deselectElementView:;
     }];
     
     NSNumber *objectID = @(objectIdentifier);
-    NSLayoutConstraint *layoutConstraint = self.view.scroller.container.layoutConstraintsReportSectionHeight[objectID];
-    layoutConstraint.constant = height;
+    [self.view.scroller.container updateSection:objectID height:height];
     [self.view setNeedsUpdateConstraints];
 }
 
@@ -3581,7 +3538,7 @@ END_deselectElementView:;
     [self.selectedElementIDs removeAllObjects];
     (self.viewControllerToolbox).selectedElementIDs = self.selectedElementIDs;
     
-    [self displaySectionViewsRemoveBorder];
+    [self.view.scroller.container removeBorderFromSections];
     
     [self.promptManager removeAll];
     [self displayPrompt];
@@ -3596,53 +3553,6 @@ END_deselectElementView:;
             tabBarController.navigationItem.prompt = nil;
         }
     }*/
-}
-
-- (void)displaySectionViewsRemoveBorder {
-    
-    //Remove border from the section views
-    [self.view.scroller.container.sectionLabels enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
-        [view normalView];
-    }];
-    
-    //Remove border from the section views
-    [self.view.scroller.container.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
-        view.selected = NO;
-    }];
-    
-}
-
-- (void)applyBorderToSectionLabel:(MADDesignerSectionLabel *)view {
-    
-    NSNumber *key = [[NSNumber alloc] initWithInteger: view.tag];
-    [self.selectedSections addObject:key];
-    [view applyBorder];
-}
-
-- (BOOL)removeBorderFromSectionLabel:(MADDesignerSectionLabel *)label {
-    BOOL result;
-    NSNumber *key = [[NSNumber alloc] initWithInteger:label.tag];
-    if ([self.selectedSections containsObject:key]) {
-        [self.selectedSections removeObject:key];
-        [label removeBorder];
-        result = YES;
-    } else {
-        result = NO;
-    }
-    return result;
-}
-
-- (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
-    BOOL result;
-    NSNumber *key = @(view.identifier);
-    if ([self.selectedElements containsObject:key]) {
-        [self.selectedElements removeObject:key];
-        result = YES;
-        [view removeBorder];
-    } else {
-        result = NO;
-    }
-    return result;
 }
 
 - (MADDesignerElementView *)elementViewForManagedObject:(__kindof RptqDocumentElement *)managedObject {
@@ -3667,21 +3577,7 @@ END_deselectElementView:;
 - (CGRect)detailDisplayFrame {
     return CGRectMake(DetailDisplayFrameOriginX(self.view.frame.size.width),
                       DetailDisplayFrameOriginY(self.topLayoutGuide.length),
-                      MADSizeWidthViewDetailDisplay,
-                      MADSizeHeightViewDetailDisplay);
-}
-
-- (CGSize)designerContentViewSize {
-    CGFloat height = CGPointZero.y + (self.view.scroller.container.sectionViews.count + 2) * MTReportDesignerBufferPaddingVertical +
-                            self.view.scroller.container.ruler.intrinsicContentSize.height;
-    MADDesignerSectionView *sectionView;
-    NSEnumerator <MADDesignerSectionView *> *sectionViews = self.view.scroller.container.sectionViews.objectEnumerator;
-    for (sectionView in sectionViews) {
-        height += sectionView.frame.size.height <= CGSizeZero.height ?
-            ceil(sectionView.intrinsicContentSize.height) :
-            sectionView.frame.size.height;
-    }
-    return CGSizeMake(self.view.bounds.size.width, height+20);
+                      MADSizeWidthViewDetailDisplay, MADSizeHeightViewDetailDisplay);
 }
 
 - (void)scrollToDetailSectionView {

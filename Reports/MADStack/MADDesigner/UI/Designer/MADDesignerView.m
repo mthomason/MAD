@@ -8,6 +8,7 @@
 
 #import "MADDesignerView.h"
 #import "MADDesignerScrollView.h"
+#import "MADDesignerLayoutDesignView.h"
 
 @implementation MADDesignerView
 
@@ -32,6 +33,10 @@
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
     [self.scroller setNeedsDisplay];
+}
+
+- (CGSize)contentViewSize {
+    return CGSizeMake(self.bounds.size.width, self.scroller.container.sizeHeight + 20.0000f);
 }
 
 @end
