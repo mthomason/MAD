@@ -154,4 +154,8 @@
     }
 }
 
+- (id <NSCopying>)key {
+    return @(self.identifier);
+}
+
 @end

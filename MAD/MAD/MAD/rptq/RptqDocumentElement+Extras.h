@@ -36,8 +36,12 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @interface RptqDocumentElement (Extras)
     <MTProtocolLog, RptqDocumentElementFactory>
 
+    @property (readonly) MTDocumentObjectType documentObjectType;
+    @property (readonly) CGRect frame;
+
     + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
                                    fromObjectContext:(NSManagedObjectContext *)context;
+
     + (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
     + (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID;
     + (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID;
@@ -56,12 +60,9 @@ extern NSString * const MTDocumentObjectDefinationField2;
     + (NSString *)keyRectSizeHeight;
     + (NSString *)keyCalculatedHeight;
 
-    @property (readonly) MTDocumentObjectType documentObjectType;
-    @property (readonly) CGRect frame;
-
     - (CGSize)sizeCalculated;
+    - (CGSize)sizeContentView;
     - (CGRect)boundsCalculated;
-    - (NSString *)designerRepresentationText;
     - (CGRect)paddingViewFrame;
     - (CGRect)boundsContentView;
     - (CGRect)elementViewFrame;
@@ -71,29 +72,6 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (CGRect)paddingRect;
     - (CGRect)innerRect;
 
-- (CGFloat)borderLineTopAX;
-- (CGFloat)borderLineTopAY;
-- (CGFloat)borderLineTopBX;
-- (CGFloat)borderLineTopBY;
-- (CGFloat)borderLineBottomAX;
-- (CGFloat)borderLineBottomAY;
-- (CGFloat)borderLineBottomBX;
-- (CGFloat)borderLineBottomBY;
-- (CGFloat)borderLineLeftAX;
-- (CGFloat)borderLineLeftAY;
-- (CGFloat)borderLineLeftBX;
-- (CGFloat)borderLineLeftBY;
-- (CGFloat)borderLineRightAX;
-- (CGFloat)borderLineRightAY;
-- (CGFloat)borderLineRightBX;
-- (CGFloat)borderLineRightBY;
-
-    - (void)setSizeWidth:(float)width;
-    - (void)setSizeHeight:(float)height;
-
-    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
-
-    - (CGSize)sizeContentView;
     - (void)setOriginPoint:(CGPoint)origin;
     - (void)setSizeValue:(CGSize)size;
     - (void)setSizeWidth:(float)w height:(float)h;
@@ -102,6 +80,30 @@ extern NSString * const MTDocumentObjectDefinationField2;
     - (double)spacingTop;
     - (double)spacingBottom;
     - (double)spacingRight;
+
+    - (NSString *)designerRepresentationText;
+
+    - (CGFloat)borderLineTopAX;
+    - (CGFloat)borderLineTopAY;
+    - (CGFloat)borderLineTopBX;
+    - (CGFloat)borderLineTopBY;
+    - (CGFloat)borderLineBottomAX;
+    - (CGFloat)borderLineBottomAY;
+    - (CGFloat)borderLineBottomBX;
+    - (CGFloat)borderLineBottomBY;
+    - (CGFloat)borderLineLeftAX;
+    - (CGFloat)borderLineLeftAY;
+    - (CGFloat)borderLineLeftBX;
+    - (CGFloat)borderLineLeftBY;
+    - (CGFloat)borderLineRightAX;
+    - (CGFloat)borderLineRightAY;
+    - (CGFloat)borderLineRightBX;
+    - (CGFloat)borderLineRightBY;
+
+    - (void)setSizeWidth:(float)width;
+    - (void)setSizeHeight:(float)height;
+
+    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
 @end
 

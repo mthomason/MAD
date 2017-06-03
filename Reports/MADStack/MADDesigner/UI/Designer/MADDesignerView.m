@@ -36,7 +36,7 @@
 }
 
 - (CGSize)contentViewSize {
-    return CGSizeMake(self.bounds.size.width, self.scroller.container.sizeHeight + 20.0000f);
+    return CGSizeMake(self.bounds.size.width, self.scroller.container.sizeHeight);
 }
 
 @end

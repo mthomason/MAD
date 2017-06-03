@@ -63,7 +63,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @interface MADDesignerElementView ()
     <MADElementCanvasDelegate, UIGestureRecognizerDelegate>
 
-    @property (nonatomic, readwrite, strong)   MADResizeHandles *resizeHandles;
+    @property (nonatomic, readwrite, strong) MADResizeHandles *resizeHandles;
     @property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
     @property (nonatomic, readwrite, copy) NSManagedObjectID *objectID;
     @property (nonatomic, readwrite, copy) NSString *textRepresentation;
@@ -73,6 +73,7 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @implementation MADDesignerElementView
 
 @synthesize identifier = _identifier;
+//@dynamic identifier;
 
 - (void)dealloc {
     if (_resizeHandles) {
@@ -467,6 +468,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         gestureRecognizer.view.center =
                 [gestureRecognizer locationInView:gestureRecognizer.view.superview];
     }
+}
+
+- (id <NSCopying>)key {
+    return @(self.identifier);
 }
 
 #pragma mark -

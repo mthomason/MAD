@@ -12,12 +12,21 @@
 #import <UIKit/UIView.h>
 #import <MAD/MADVerticalAlignmentType.h>
 #import <MAD/MADHorizontalAlignmentType.h>
+#import <MAD/MADDocumentObjectType.h>
 #import "MADManagedObjectViewProtocol.h"
 
 @protocol UIGestureRecognizerDelegate;
 
 @class UIPanGestureRecognizer, NSManagedObjectID, NSManagedObjectContext, MADDesignerElementView,
        MTBarcode, RptqDocumentElement;
+
+@protocol MADDesignerElementViewDataSource <NSObject>
+  @required
+    - (MTDocumentObjectType)documentObjectTypeForElementView:(MADDesignerElementView *)elementView;
+    - (id)documentObjectForElementView:(MADDesignerElementView *)elementView;
+    - (CGSize)documentObjectSizeForElementView:(MADDesignerElementView *)elementView;
+  @optional
+@end
 
 @interface MADDesignerElementView : UIView
     <MADManagedObjectViewProtocol>

@@ -154,27 +154,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier {
-    NSFetchRequest *request;
-    NSPredicate *predicate;
-    NSExpression *left, *right;
-    left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-    right = [NSExpression expressionForConstantValue:@(identifier)];
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: left
-                                                   rightExpression: right
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
-    request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
-    request.predicate = predicate;
-    
-    request.fetchLimit = 1;
-    request.resultType = NSManagedObjectResultType;
-    request.includesSubentities = YES;
-    request.includesPropertyValues = YES;
-    return request;
-}
-
 + (NSString *)keyInSectionRow {
     NSString *result = NSStringFromSelector(@selector(inSectionRow));
     return result;
@@ -384,6 +363,20 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return key;
 }
 
++ (NSString *)keyRectOriginX {
+    static NSString *key = nil;
+    if (key == nil) {
+        NSString *result = [self keyRect];
+        NSString *keyOrigin = [RptqRect keyOrigin];
+        NSString *keyX = [RptqPoint keyX];
+        result = [result stringByAppendingString:@"."];
+        result = [result stringByAppendingString:keyOrigin];
+        result = [result stringByAppendingString:@"."];
+        key = [result stringByAppendingString:keyX];
+    }
+    return key;
+}
+
 + (NSString *)keyRectSizeHeight {
     static NSString *key = nil;
     if (key == nil) {
@@ -398,16 +391,50 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     return key;
 }
 
++ (NSString *)keyRectSizeWidth {
+    static NSString *key = nil;
+    if (key == nil) {
+        NSString *result = [self keyRect];
+        NSString *keySize = [RptqRect keySize];
+        NSString *keyWidth = [RptqSize keyWidth];
+        result = [result stringByAppendingString:@"."];
+        result = [result stringByAppendingString:keySize];
+        result = [result stringByAppendingString:@"."];
+        key = [result stringByAppendingString:keyWidth];
+    }
+    return key;
+}
+
 + (NSString *)keyCalculatedHeight {
     static NSString *key = @"calculatedHeight";
     return key;
 }
 
-+ (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID {
-    
++ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier {
     NSFetchRequest *request;
     NSPredicate *predicate;
     NSExpression *left, *right;
+    left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
+    right = [NSExpression expressionForConstantValue:@(identifier)];
+    predicate = [NSComparisonPredicate predicateWithLeftExpression: left
+                                                   rightExpression: right
+                                                          modifier: NSDirectPredicateModifier
+                                                              type: NSEqualToPredicateOperatorType
+                                                           options: 0];
+    request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
+    request.predicate = predicate;
+    
+    request.fetchLimit = 1;
+    request.resultType = NSManagedObjectResultType;
+    request.includesSubentities = YES;
+    request.includesPropertyValues = YES;
+    return request;
+}
+
++ (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID {
+    
+    NSFetchRequest *request;
+    NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
     
     NSString *keyBorderWidthTop = [self keyBorderWidthTop];
     NSString *keyBorderWidthBottom = [self keyBorderWidthBottom];
@@ -477,16 +504,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     expressionMax.expressionResultType = NSFloatAttributeType;
 */
     
-    NSString *keyInSection = [self keyInSection];
-
-    left = [NSExpression expressionForKeyPath:keyInSection];
-    right = [NSExpression expressionForConstantValue:sectionID];
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: left
-                                                   rightExpression: right
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
-    
     NSString *entityName = NSStringFromClass([self class]);
     NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionSum, nil];
     request = [[NSFetchRequest alloc] initWithEntityName: entityName];
@@ -537,27 +554,18 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
  */
 
 + (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID {
+
     NSFetchRequest *request;
-    NSPredicate *predicate;
-    NSExpression *left, *right;
+    NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
     
     NSString *keySelf = NSStringFromSelector(@selector(self));
-    NSString *keyInSection = [self keyInSection];
     
     NSExpressionDescription *expressionSelf = [[NSExpressionDescription alloc] init];
     expressionSelf.name = keySelf;
     expressionSelf.expression = [NSExpression expressionForEvaluatedObject];
     expressionSelf.expressionResultType = NSObjectIDAttributeType;
-    
-    left = [NSExpression expressionForKeyPath:keyInSection];
-    right = [NSExpression expressionForConstantValue:sectionID];
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: left
-                                                   rightExpression: right
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
-    
-    
+
+    predicate = [self comparisonPredicateInSection:sectionID];
     
     NSString *entityName = NSStringFromClass([self class]);
     request = [[NSFetchRequest alloc] initWithEntityName: entityName];
@@ -581,6 +589,67 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     request.propertiesToFetch = propertiesToFetch;
     
     return request;
+}
+
++ (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSectionDetailed:(NSManagedObjectID *)sectionID {
+    NSFetchRequest *request;
+    NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
+    
+    NSString *keySelf = NSStringFromSelector(@selector(self));
+    
+    NSExpressionDescription *expressionSelf = [[NSExpressionDescription alloc] init];
+    expressionSelf.name = keySelf;
+    expressionSelf.expression = [NSExpression expressionForEvaluatedObject];
+    expressionSelf.expressionResultType = NSObjectIDAttributeType;
+    
+    NSString *entityName = NSStringFromClass([self class]);
+    request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    request.predicate = predicate;
+    request.resultType = NSDictionaryResultType;
+    
+    NSString *keyBorderWidthTop = [self keyBorderWidthTop];
+    NSString *keyBorderWidthBottom = [self keyBorderWidthBottom];
+    NSString *keyBorderWidthLeft = [self keyBorderWidthLeft];
+    NSString *keyBorderWidthRight = [self keyBorderWidthRight];
+    NSString *keyPaddingTop = [self keyPaddingTop];
+    NSString *keyPaddingBottom = [self keyPaddingBottom];
+    NSString *keyPaddingLeft = [self keyPaddingLeft];
+    NSString *keyPaddingRight = [self keyPaddingRight];
+    NSString *keyMarginTop = [self keyMarginTop];
+    NSString *keyMarginBottom = [self keyMarginBottom];
+    NSString *keyMarginLeft = [self keyMarginLeft];
+    NSString *keyMarginRight = [self keyMarginRight];
+    NSString *keyRectOriginY = [self keyRectOriginY];
+    NSString *keyRectOriginX = [self keyRectOriginX];
+    NSString *keyRectSizeHeight = [self keyRectSizeHeight];
+    NSString *keyRectSizeWidth = [self keyRectSizeWidth];
+    NSString *keyRowNumber = [self keyRowNumber];
+    
+    NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionSelf,
+                                  keyBorderWidthTop, keyBorderWidthBottom,
+                                  keyBorderWidthLeft, keyBorderWidthRight,
+                                  keyPaddingTop, keyPaddingBottom,
+                                  keyPaddingLeft, keyPaddingRight,
+                                  keyMarginTop, keyMarginBottom,
+                                  keyMarginLeft, keyMarginRight,
+                                  keyRectOriginX, keyRectOriginY,
+                                  keyRectSizeHeight, keyRectSizeWidth,
+                                  keyRowNumber, nil];
+    request.propertiesToFetch = propertiesToFetch;
+    
+    return request;
+}
+
++ (NSPredicate *)comparisonPredicateInSection:(NSManagedObjectID *)sectionID {
+    NSString *keyInSection = [self keyInSection];
+    NSExpression *left, *right;
+    left = [NSExpression expressionForKeyPath:keyInSection];
+    right = [NSExpression expressionForConstantValue:sectionID];
+    return [NSComparisonPredicate predicateWithLeftExpression: left
+                                              rightExpression: right
+                                                     modifier: NSDirectPredicateModifier
+                                                         type: NSEqualToPredicateOperatorType
+                                                      options: 0];
 }
 
 + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier

@@ -28,23 +28,4 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
     return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
 }
 
-
-@interface MADReportSectionsEnumerator : NSObject
-    <NSFastEnumeration>
-
-    - (instancetype)initWithDocument:(RptqDocument *)document NS_DESIGNATED_INITIALIZER;
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext NS_DESIGNATED_INITIALIZER;
-
-    @property (nonatomic, readonly, strong) MADReportSection *reportHeader;
-    @property (nonatomic, readonly, strong) MADReportSection *pageHeader;
-    @property (nonatomic, readonly, strong) NSArray <MADReportSection *> *groupHeaders;
-    @property (nonatomic, readonly, strong) MADReportSection *detail;
-    @property (nonatomic, readonly, strong) NSArray <MADReportSection *> *groupFooters;
-    @property (nonatomic, readonly, strong) MADReportSection *pageFooter;
-    @property (nonatomic, readonly, strong) MADReportSection *reportFooter;
-
-    - (NSUInteger)count;
-    
-@end
-
 #endif

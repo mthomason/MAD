@@ -57,16 +57,30 @@
     return self.sectionsLayout.count;
 }
 
+- (NSUInteger)numberOfRowsInDesignView:(MADDesignerLayoutDesignView *)designView
+                           sectionView:(MADDesignerSectionView *)sectionView
+                               section:(NSUInteger)section {
+    
+}
+- (NSUInteger)numberOfElementsInDesignView:(MADDesignerLayoutDesignView *)designView
+                               sectionView:(MADDesignerSectionView *)sectionView
+                                   section:(NSUInteger)section
+                                       row:(NSUInteger)row {
+    
+}
+
 - (double)designView:(MADDesignerLayoutDesignView *)designView heightForSectionAtIndex:(NSUInteger)index {
     MADSectionLayout *layout = [self.sectionsLayout sectionLayoutAtIndex:index];
     return layout.height;
 }
 
-- (NSString *)designView:(MADDesignerLayoutDesignView *)designView titleForSectionAtIndex:(NSUInteger)index {
+- (NSString *)designView:(MADDesignerLayoutDesignView *)designView
+  titleForSectionAtIndex:(NSUInteger)index {
     return [[self.sectionsLayout sectionLayoutAtIndex:index] localizedDisplay];
 }
 
-- (int64_t)designView:(MADDesignerLayoutDesignView *)designView identifierAtIndex:(NSUInteger)index {
+- (int64_t)designView:(MADDesignerLayoutDesignView *)designView
+    identifierAtIndex:(NSUInteger)index {
     return [[self.sectionsLayout sectionLayoutAtIndex:index] identifier];
 }
 

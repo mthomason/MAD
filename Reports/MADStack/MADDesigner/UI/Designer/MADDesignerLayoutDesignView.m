@@ -164,11 +164,38 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 #pragma mark Property overrides
 
 
-/*- (void)updateConstraints {
-    if (self.rulerVerticalConstraints == nil) {
-    }
+- (void)updateConstraints {
+    CGFloat zoomscale = [self.superview isKindOfClass:[UIScrollView class]] ?
+                            ((UIScrollView *)self.superview).zoomScale : 1.0000f;
+    void (^calculateBorder)(NSLayoutConstraint *, NSUInteger, BOOL *);
+    void (^calculateVerticalBuffer)(NSLayoutConstraint *, NSUInteger, BOOL *);
+    void (^calculateLabelHeight)(NSLayoutConstraint *, NSUInteger, BOOL *);
+    
+    calculateBorder = ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
+        if (zoomscale != 0) {
+            constraint.constant = constraint.constant > 0 ? MTReportDesignerBorderPaddingSides / zoomscale :
+                                                           -MTReportDesignerBorderPaddingSides / zoomscale;
+        } else {
+            constraint.constant = 0;
+        }
+    };
+    
+    calculateVerticalBuffer = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+        constraint.constant = constraint.constant > 0 ? MTReportDesignerBufferPaddingVertical :
+                                                       -MTReportDesignerBufferPaddingVertical;
+    };
+    
+    calculateLabelHeight = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+        constraint.constant = MTReportDesignerSectionLabelHeight / zoomscale;
+    };
+    
+    [self.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:calculateBorder];
+    [self.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:calculateVerticalBuffer];
+    [self.layoutConstraintSectionLabelHeightContainer enumerateObjectsUsingBlock:calculateLabelHeight];
+    self.layoutConstraintDesignerContentViewHeight.constant = self.sizeHeight;
+
     [super updateConstraints];
-}*/
+}
 
 /*- (void)removeFromSuperview {
     [super removeFromSuperview];
@@ -270,9 +297,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 - (BOOL)removeBorderFromView:(MADDesignerElementView *)view {
     BOOL result;
-    NSNumber *key = @(view.identifier);
-    if ([self.selectedElements containsObject:key]) {
-        [self.selectedElements removeObject:key];
+    if ([self.selectedElements containsObject:view.key]) {
+        [self.selectedElements removeObject:view.key];
         result = YES;
         [view removeBorder];
     } else {
@@ -282,8 +308,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (void)applyBorderToView:(MADDesignerElementView *)view {
-    NSNumber *key = @(view.identifier);
-    [self.selectedElements addObject:key];
+    [self.selectedElements addObject:view.key];
     [view applyBorder];
 }
 
@@ -633,7 +658,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         height += sectionView.frame.size.height <= CGSizeZero.height ?
                             ceil(sectionView.intrinsicContentSize.height) : sectionView.frame.size.height;
     }
-    return height;
+    return height + 20.0000f;
 }
 
 - (void)updateSection:(NSNumber *)sectionKey height:(CGFloat)height {

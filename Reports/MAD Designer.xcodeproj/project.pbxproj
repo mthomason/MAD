@@ -1053,6 +1053,7 @@
 		4CDFC9831ED89147008E1AD6 /* MADDesignerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */; };
 		4CDFC9861ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9851ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m */; };
 		4CDFC9891EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */; };
+		4CDFC99C1EDEFAE7008E1AD6 /* MADElementViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */; };
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
 		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
@@ -2416,6 +2417,8 @@
 		4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportSectionsDataSource.m; sourceTree = "<group>"; };
 		4CDFC98A1EDB8EE3008E1AD6 /* MADReportSectionDataSourceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADReportSectionDataSourceProtocol.h; sourceTree = "<group>"; };
 		4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportSectionDelegateProtocol.h; sourceTree = "<group>"; };
+		4CDFC99A1EDEFAE7008E1AD6 /* MADElementViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementViewManager.h; sourceTree = "<group>"; };
+		4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementViewManager.m; sourceTree = "<group>"; };
 		4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MADVector.cpp; path = MADStack/cpp/MADVector.cpp; sourceTree = "<group>"; };
 		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
 		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
@@ -2841,10 +2844,6 @@
 				4CEA05A41ED3E5970062624F /* MADDesignerElementTextView.m */,
 				4CEA05A61ED3E5AA0062624F /* MADDesignerElementBarcodeView.h */,
 				4CEA05A71ED3E5AA0062624F /* MADDesignerElementBarcodeView.m */,
-				4C26B9E81BAF14A500456DC8 /* MADDesignerSectionLabel.h */,
-				4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */,
-				4C26B9EA1BAF14A500456DC8 /* MADDesignerSectionView.h */,
-				4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */,
 				4C26B9EE1BAF14A500456DC8 /* MADDesignerSectionBackground.h */,
 				4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */,
 				4C26B9F01BAF14A500456DC8 /* MADDesignerSectionControl.h */,
@@ -2862,10 +2861,16 @@
 				4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */,
 				4CDFC9841ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.h */,
 				4CDFC9851ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.m */,
+				4C26B9EA1BAF14A500456DC8 /* MADDesignerSectionView.h */,
+				4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */,
+				4C26B9E81BAF14A500456DC8 /* MADDesignerSectionLabel.h */,
+				4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */,
 				4CDFC9871EDB8EB5008E1AD6 /* MADReportSectionsDataSource.h */,
 				4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */,
 				4CDFC98A1EDB8EE3008E1AD6 /* MADReportSectionDataSourceProtocol.h */,
 				4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */,
+				4CDFC99A1EDEFAE7008E1AD6 /* MADElementViewManager.h */,
+				4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;
@@ -6504,6 +6509,7 @@
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,
 				4CFEE8121BB7A22800AFAA0A /* MADQueryAddLinkJoinTypeController.m in Sources */,
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
+				4CDFC99C1EDEFAE7008E1AD6 /* MADElementViewManager.m in Sources */,
 				4CEFDD1A1CF782C70092C148 /* NSUserDefaults+MADDesigner.m in Sources */,
 				4C40204C1BAE92F200BAE5FC /* MADButtonTwitter.m in Sources */,
 				4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */,

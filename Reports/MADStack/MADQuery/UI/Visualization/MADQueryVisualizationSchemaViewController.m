@@ -260,4 +260,8 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
+- (id <NSCopying>)key {
+    return @(self.identifier);
+}
+
 @end

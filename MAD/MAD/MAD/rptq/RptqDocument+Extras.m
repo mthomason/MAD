@@ -58,7 +58,6 @@
 
 #import "MADErrorContainer.h"
 #import "MADDatabaseTable.h"
-
 #import "MADReportSectionsEnumerator.h"
 
 #import "RptqDataHelper.h"

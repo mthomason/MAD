@@ -42,7 +42,6 @@
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
-#import <MAD/MADReportSectionsEnumerator.h>
 #import <MAD/MADReportSection.h>
 
 #import <MAD/MADocument.h>
@@ -217,9 +216,6 @@ static const inline CGSize sizePopoverFonts() {
 
     @property (nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementViewsDictionary;
     @property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
-
-    //@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElements;
-    //@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;
 
     @property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
 
@@ -812,34 +808,6 @@ static const inline CGSize sizePopoverFonts() {
     if (!isinf(ratio) && !isnan(ratio)) {
         self.layoutConstraintContainerWidth.constant = ratio;
     }
-    void (^calculateBorder)(NSLayoutConstraint *, NSUInteger, BOOL *);
-    void (^calculateVerticalBuffer)(NSLayoutConstraint *, NSUInteger, BOOL *);
-    void (^calculateLabelHeight)(NSLayoutConstraint *, NSUInteger, BOOL *);
-    
-    calculateBorder = ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
-        if (zoomscale != 0) {
-            constraint.constant = constraint.constant > 0 ? MTReportDesignerBorderPaddingSides / zoomscale :
-                                                           -MTReportDesignerBorderPaddingSides / zoomscale;
-        } else {
-            constraint.constant = 0;
-        }
-    };
-    
-    calculateVerticalBuffer = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
-        constraint.constant = constraint.constant > 0 ? MTReportDesignerBufferPaddingVertical :
-                                                       -MTReportDesignerBufferPaddingVertical;
-    };
-    
-    calculateLabelHeight = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
-        constraint.constant = MTReportDesignerSectionLabelHeight / zoomscale;
-    };
-    
-    [self.view.scroller.container.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:calculateBorder];
-    [self.view.scroller.container.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:calculateVerticalBuffer];
-    [self.view.scroller.container.layoutConstraintSectionLabelHeightContainer enumerateObjectsUsingBlock:calculateLabelHeight];
-    
-    self.view.scroller.container.layoutConstraintDesignerContentViewHeight.constant = self.view.contentViewSize.height;
-
     [super updateViewConstraints];
 
 }
@@ -2252,6 +2220,74 @@ static const inline CGSize sizePopoverFonts() {
                                         didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 #pragma mark -
+#pragma mark MADReportSectionDelegate Protocol
+
+- (void)designView:(MADDesignerLayoutDesignView *)designView
+    handleTapStray:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
+        if (self.presentedViewController != nil) {
+            [self actionHideToolbox];
+        }
+    }
+}
+
+- (void)designView:(MADDesignerLayoutDesignView *)designView
+    handleTapLabel:(UITapGestureRecognizer *)sender {
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        
+        MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
+        
+        [[UIMenuController sharedMenuController] setMenuVisible: NO
+                                                       animated: YES];
+        
+        [self dismissToolboxPresentationIfOpen];
+        
+        NSSet *selectedElementViews = [self selectedElementViews];
+        
+        if (selectedElementViews.count >= 1) {
+            
+            [self actionHideToolbox];
+            
+        } else {
+            
+            self.viewControllerToolbox.document = self.document;
+            
+            if (label.selected) {
+                
+                
+                [label normalView];
+                [self actionHideToolbox];
+                
+            } else {
+                
+                [self deselectAllElementsAnimated:YES];
+                
+                
+                self.lastSelectedSectionControlPanel = label.tag;
+                self.lastSelectedLabel = label;
+                RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
+                MADDesignerSectionView *superView = [self getSectionViewForDocumentSection: section];
+                superView.selected = YES;
+                [label dimView];
+                [_viewControllerSectionLayoutSettings updateDisplay:section.height
+                                                         visibility:section.visibility
+                                                   producesFormFeed:section.producesFormFeed
+                                                       numberOfRows:section.numberOfRows];
+                
+                UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
+                _viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+                _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+                
+                [self actionShowSectionSettingsFromLabel:label];
+                
+            }
+        }
+    }
+}
+
+#pragma mark -
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
@@ -2336,23 +2372,6 @@ static const inline CGSize sizePopoverFonts() {
  
  */
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-    shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    
-    //Require the failure of the resize handles.
-    if ([otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] &&
-        [otherGestureRecognizer respondsToSelector:@selector(handleGesturePanResizeHandle:)]) {
-        return YES;
-    } else {
-        if (otherGestureRecognizer == _strayTouchGesture &&
-                                    [self.view.scroller.container.sectionLabelGestureRecognizers containsObject:gestureRecognizer]) {
-            return YES;
-        } else {
-            return  NO;
-        }
-    }
-}
-
 - (BOOL)gestureRecognizer: (UIGestureRecognizer *)gestureRecognizer
        shouldReceiveTouch: (UITouch *)touch {
     return YES;
@@ -2396,10 +2415,6 @@ static const inline CGSize sizePopoverFonts() {
         documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
                                                              fromObjectContext: objectContext];
         [documentObject setOriginPoint:attributes.frame.origin];
-
-        //documentObject.sizewidth = @(attributes.frame.size.width);
-        //documentObject.sizeheight = @(attributes.frame.size.height);
-
     }
 
     //[objectContext save:nil];
@@ -2531,73 +2546,8 @@ static const inline CGSize sizePopoverFonts() {
     [self designView:nil handleTapStray:sender];
 }
 
-- (void)designView:(MADDesignerLayoutDesignView *)designView
-    handleTapStray:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
-        if (self.presentedViewController != nil) {
-            [self actionHideToolbox];
-        }
-    }
-}
-
 - (void)handleTapLabel:(UITapGestureRecognizer *)sender {
     [self designView:nil handleTapLabel:sender];
-}
-
-- (void)designView:(MADDesignerLayoutDesignView *)designView
-    handleTapLabel:(UITapGestureRecognizer *)sender {
-    
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        
-        MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
-        
-        [[UIMenuController sharedMenuController] setMenuVisible: NO
-                                                       animated: YES];
-        
-        [self dismissToolboxPresentationIfOpen];
-        
-        NSSet *selectedElementViews = [self selectedElementViews];
-        
-        if (selectedElementViews.count >= 1) {
-            
-            [self actionHideToolbox];
-            
-        } else {
-            
-            self.viewControllerToolbox.document = self.document;
-            
-            if (label.selected) {
-                
-                
-                [label normalView];
-                [self actionHideToolbox];
-                
-            } else {
-                
-                [self deselectAllElementsAnimated:YES];
-                
-                
-                self.lastSelectedSectionControlPanel = label.tag;
-                self.lastSelectedLabel = label;
-                RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
-                MADDesignerSectionView *superView = [self getSectionViewForDocumentSection: section];
-                superView.selected = YES;
-                [label dimView];
-                [_viewControllerSectionLayoutSettings updateDisplay:section.height
-                                                         visibility:section.visibility
-                                                   producesFormFeed:section.producesFormFeed
-                                                       numberOfRows:section.numberOfRows];
-                
-                UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
-                _viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
-                _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
-                
-                [self actionShowSectionSettingsFromLabel:label];
-                
-            }
-        }
-    }
 }
 
 - (void)handleToggleElementView:(UITapGestureRecognizer *)sender {
@@ -3556,18 +3506,15 @@ END_deselectElementView:;
 }
 
 - (MADDesignerElementView *)elementViewForManagedObject:(__kindof RptqDocumentElement *)managedObject {
-
     id elementView;
     NSNumber *identifier = @(managedObject.identifier);
     elementView = [self viewForObjectID:identifier];
-    if (elementView) goto ElementViewForManagedObjectShortCircut;
-
-    SEL handleTap = @selector(handleToggleElementView:);
-    elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: managedObject
-                                                               tapGestureDelegate: self
-                                                                      tapSelector: handleTap];
-    ElementViewForManagedObjectShortCircut:;
-    
+    if (elementView == nil) {
+        SEL handleTap = @selector(handleToggleElementView:);
+        elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: managedObject
+                                                                   tapGestureDelegate: self
+                                                                          tapSelector: handleTap];
+    }
     return elementView;
 }
 
