@@ -76,14 +76,13 @@ int restore_backup(char *, char *, char *);
     // 1. Remove backup.
     if ((r = backup_file(archive_path, backup_path)) < 0) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to backup file with %d.", r);
-    } else {
-        
-        //2. Write archive.
-        if ((r = write_archive(archive_path, self.filewrapper)) < 0) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to archive file with %d.", r);
-        }
-        mad_file_remove_if_exist(backup_path);
     }
+        
+    //2. Write archive.
+    if ((r = write_archive(archive_path, self.filewrapper)) < 0) {
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to archive file with %d.", r);
+    }
+    mad_file_remove_if_exist(backup_path);
 
     success = r == ARCHIVE_OK;
 

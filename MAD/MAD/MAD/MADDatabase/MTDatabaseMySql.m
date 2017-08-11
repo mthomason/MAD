@@ -72,7 +72,8 @@
 }
 
 // FIXME: Return error.
-- (id)connectWithConnection:(MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)connection
+                 credentals:(MADCredential *)credentals {
 
     if (credentals == nil) {
         credentals = [self copyCredentalsWithConnection:connection];

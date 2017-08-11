@@ -58,15 +58,15 @@
     
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
-    //MADocument * __weak wdoc = document;
     [private performBlockAndWait:^{
-        //MADocument *doc = wdoc;
-        //RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
-        //doc = rptqDocument.identifier;
-
+        BOOL success = [RptqDocument newDocumentForManagedObjectContext: private] != nil;
         os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Save:", __PRETTY_FUNCTION__);
         NSError *error = nil;
-        [private save:&error];
+        if (success) {
+            success = [private save:&error];
+        } else {
+            [private save:&error];
+        }
     }];
     os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
 

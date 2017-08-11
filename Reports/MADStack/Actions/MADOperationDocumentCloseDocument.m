@@ -29,34 +29,29 @@
         }
     }
     
-    void (^handleCloseCompletion)(BOOL, NSURL *, NSURL *);
-    handleCloseCompletion = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
-        if (success) {
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finished closing:", __PRETTY_FUNCTION__);
-            [self finish];
-        } else {
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error closing document:", __PRETTY_FUNCTION__);
-            NSString *title = NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document");
-            NSString *message = NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.");
-            MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-            NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
-            [self finishWithError:error];
-        }
-    };
     
-    void (^mainBlock)(void);
-    mainBlock = ^ {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADocument *doc = document;
         if (doc.documentState & UIDocumentStateClosed) {
             os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
             [self finish];
         } else {
             os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Close:", __PRETTY_FUNCTION__);
-            [MADocument close:doc completion:handleCloseCompletion];
+            [MADocument close:doc completion:^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+                if (success) {
+                    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finished closing:", __PRETTY_FUNCTION__);
+                    [self finish];
+                } else {
+                    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error closing document:", __PRETTY_FUNCTION__);
+                    NSString *title = NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document");
+                    NSString *message = NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.");
+                    MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
+                    NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
+                    [self finishWithError:error];
+                }
+            }];
         }
-    };
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:mainBlock];
+    }];
 }
 
 @end

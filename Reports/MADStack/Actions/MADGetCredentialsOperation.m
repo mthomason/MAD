@@ -199,7 +199,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
     NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
     
-    
     // ---------------------------------------------------
     // Operation 5a: Test the connection (credentials prompt)
     // ---------------------------------------------------

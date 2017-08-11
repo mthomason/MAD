@@ -169,7 +169,6 @@
     document.hasPageFooterSection.visibility = YES;
     document.hasDetailSection.visibility = YES;
     
-
     return document;
 }
 

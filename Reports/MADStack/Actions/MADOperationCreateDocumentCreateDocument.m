@@ -41,7 +41,7 @@
 }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    if (self.credentials) {
+    //if (self.credentials) {
 
         NSArray<NSOperation *> *dependencies = self.dependencies;
         for (NSOperation *dependency in dependencies) {
@@ -53,7 +53,7 @@
                 }
             }
         }
-    }
+    //}
     return self.credentials;
 }
 
