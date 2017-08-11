@@ -28,8 +28,8 @@
 #import "MADConnectionViewController.h"
 #import "MADLabelTitle.h"
 
-NSString * const MADDriverSelectorControllerDefaultPrompt    = @"Select database type.";
-NSString * const MADDriverSelectorControllerDefaultTitle     = @"New Report";
+NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Select database type.";
+NSString * const MADDriverSelectorControllerDefaultTitle                = @"New Report";
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier            = @"MTSegueShowSetUpDatasourceSqlite3Identifier";
