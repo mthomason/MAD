@@ -1221,11 +1221,15 @@ typedef NS_ENUM(short, MADExplorerState) {
     }
 }
 
-- (void)viewControllerDidCancel:(id)sender {
+- (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     _shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
+}
+
+- (void)viewControllerDidCancel:(id)sender {
+    [self viewControllerDidFinish:sender];
 }
 
 #pragma mark -
