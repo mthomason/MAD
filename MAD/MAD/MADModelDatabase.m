@@ -8,7 +8,6 @@
 
 #import "MADModelDatabase.h"
 
-#import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSKeyValueCoding.h>
@@ -20,6 +19,8 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSExpressionDescription.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "MADModel.h"
 #import "MADModelTable.h"
 #import "MADModelQuery.h"
@@ -30,13 +31,12 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQuery.h"
 
-
+#import "NSPredicate+Creators.h"
 
 @interface MADModelDatabase ()
     - (instancetype)initWithIdentifier:(int64_t)identifier
                   managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (instancetype)initWithIdentifier:(int64_t)identifier
-                               queryID:(NSManagedObjectID *)queryID
                        queryIdentifier:(int64_t)queryIdentifier
                   managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 @end
@@ -267,7 +267,6 @@
     
     NSUInteger expressionCount = 3;
     NSExpressionDescription *expressionDescription[expressionCount];
-    NSExpression *predicateExpression[2];
     
     NSString *inTable, *name, *inDatabase, *inTableInDB, *inTableName,
                 *keyField, *keyFieldName, *keyTable, *keyTableName;
@@ -280,23 +279,16 @@
     inTable = NSStringFromSelector(@selector(inTable));
     inDatabase = NSStringFromSelector(@selector(inDatabase));
     name = NSStringFromSelector(@selector(name));
-    inTableInDB = [[NSString alloc] initWithFormat:@"%@.%@", inTable, inDatabase];
-    inTableName = [[NSString alloc] initWithFormat:@"%@.%@", inTable, name];
+    inTableInDB = [inTable stringByAppendingKeyPath:inDatabase];
+    inTableName = [inTable stringByAppendingKeyPath:name];
     
-    NSString *inTableInDBIdentifier = [inTableInDB stringByAppendingString:@"."];
+    NSString *inTableInDBIdentifier = [inTableInDB stringByAppendingPeriod];
     inTableInDBIdentifier = [inTableInDBIdentifier stringByAppendingString:keyIdentifier];
-    NSString *inDatabaseIdentifier = [inDatabase stringByAppendingString:@"."];
+    NSString *inDatabaseIdentifier = [inDatabase stringByAppendingPeriod];
     inDatabaseIdentifier = [inDatabaseIdentifier stringByAppendingString:keyIdentifier];
-    predicateExpression[0] = [NSExpression expressionForKeyPath:inDatabaseIdentifier];
-    NSNumber *identifier = @(self.identifier);
-    predicateExpression[1] = [NSExpression expressionForConstantValue: identifier];
     
-    NSPredicate *predicate;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-                                                   rightExpression: predicateExpression[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
+                                                                 atKeyPath:inDatabaseIdentifier];
     
     for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = [[NSExpressionDescription alloc] init];
@@ -365,9 +357,6 @@
         [tableDictionary setObject:table forKey:schemaTableIdentifier];
     }
 
-    predicateExpression[0] = nil;
-    predicateExpression[1] = nil;
-    
     for (NSUInteger i=0; i<expressionCount; i++) {
         expressionDescription[i] = nil;
     }
@@ -378,28 +367,21 @@
 - (void)updateQueries {
     NSFetchRequest *request;
     NSArray <NSDictionary <NSString *, NSNumber *> *> *result;
-    NSExpression *expression[2];
-    NSComparisonPredicate *predicate;
+    NSPredicate *predicate;
     NSExpressionDescription *expressionDescription;
     NSString *keyPathIdentifier = NSStringFromSelector(@selector(identifier));
     expressionDescription = [[NSExpressionDescription alloc] init];
     expressionDescription.name = keyPathIdentifier.copy;
     expressionDescription.expression = [NSExpression expressionForKeyPath:keyPathIdentifier];
     expressionDescription.expressionResultType = NSInteger64AttributeType;
+    NSString *keyPath = NSStringFromSelector(@selector(inDatabase));
+    keyPath = [keyPath stringByAppendingPeriod];
+    keyPath = [keyPath stringByAppendingString:keyPathIdentifier];
+
+    NSString *entityName = NSStringFromClass([RptqQuery class]);
+    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
     
-    expression[0] = [NSExpression expressionWithFormat: @"%@.%@",
-                     NSStringFromSelector(@selector(inDatabase)),
-                     keyPathIdentifier];
-    NSNumber *identifier = @(self.identifier);
-    expression[1] = [NSExpression expressionForConstantValue:identifier];
-    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
-    
-    NSAssert(expression != nil, @"Need an expression");
-    predicate= [NSComparisonPredicate predicateWithLeftExpression: expression[0]
-                                                  rightExpression: expression[1]
-                                                         modifier: NSDirectPredicateModifier
-                                                             type: NSEqualToPredicateOperatorType
-                                                          options: 0];
+    predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier atKeyPath:keyPath];
     request.predicate = predicate;
     request.resultType = NSDictionaryResultType;
     request.includesSubentities = NO;
@@ -424,8 +406,6 @@
     result = nil;;
     request = nil;
     predicate = nil;
-    expression[0] = nil;
-    expression[1] = nil;
 }
 
 - (id)debugQuickLookObject {

@@ -13,6 +13,8 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSKeyedArchiver.h>
 
+#import <os/log.h>
+
 @interface MADOperationArchiveData ()
     @property (nonatomic, copy) NSURL *url;
     @property (nonatomic, strong) id <NSCoding> object;

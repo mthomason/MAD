@@ -11,6 +11,7 @@
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADFoundation/NSString+Common.h>
 
 @implementation MADAttributedStringQueryController
 
@@ -137,7 +138,7 @@
 @implementation MADStringQueryController
 
 + (instancetype)newStringFieldDisplayWithTable:(NSString *)table andField:(NSString *)field {
-    id result = [table.capitalizedString stringByAppendingString:@"."];
+    id result = [table.capitalizedString stringByAppendingPeriod];
     result = [result stringByAppendingString:field.capitalizedString];
     return result;
 }

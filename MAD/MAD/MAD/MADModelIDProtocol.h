@@ -9,5 +9,10 @@
 #ifndef MADModelIDProtocol_h
 #define MADModelIDProtocol_h
 
+@protocol MADModelIDProtocol <NSObject>
+
+    @property (nonatomic, readonly, assign) int64_t identifier;
+
+@end
 
 #endif /* MADModelIDProtocol_h */

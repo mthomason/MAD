@@ -26,6 +26,8 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSExpressionDescription.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 
@@ -57,7 +59,7 @@
 + (NSString *)keyInQueryTableDropIndex {
     NSString *keyPathInQueryTable = [self keyInQueryTable];
     NSString *keyPathDropIndex = NSStringFromSelector(@selector(dropIndex));
-    NSString *keyPathInQueryTableDropIndex = [keyPathInQueryTable stringByAppendingString:@"."];
+    NSString *keyPathInQueryTableDropIndex = [keyPathInQueryTable stringByAppendingPeriod];
     keyPathInQueryTableDropIndex = [keyPathInQueryTableDropIndex stringByAppendingString:keyPathDropIndex];
     return keyPathInQueryTableDropIndex;
 }
@@ -70,10 +72,10 @@
 + (NSString *)keyTableName {
     NSString *keyPathName = [self keyName];
     NSString *keyPathInQueryTable = [self keyInQueryTable];
-    NSString *keyPathTableName = [keyPathInQueryTable stringByAppendingString:@"."];
+    NSString *keyPathTableName = [keyPathInQueryTable stringByAppendingPeriod];
     NSString *keyPathDatabaseSchemaTable = [self keyDatabaseSchemaTable];
     keyPathTableName = [keyPathTableName stringByAppendingString: keyPathDatabaseSchemaTable];
-    keyPathTableName = [keyPathTableName stringByAppendingString: @"."];
+    keyPathTableName = [keyPathTableName stringByAppendingPeriod];
     keyPathTableName = [keyPathTableName stringByAppendingString: keyPathName];
     return keyPathTableName;
 }
@@ -81,7 +83,7 @@
 + (NSString *)keyFieldName {
     NSString *keyPathName = [self keyName];
     NSString *keyPathDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-    NSString *keyPathFieldName = [keyPathDatabaseSchemaField stringByAppendingString:@"."];
+    NSString *keyPathFieldName = [keyPathDatabaseSchemaField stringByAppendingPeriod];
     keyPathFieldName = [keyPathFieldName stringByAppendingString:keyPathName];
     return keyPathFieldName;
 }
@@ -89,7 +91,7 @@
 + (NSString *)keySchemaTable {
     NSString *keyPathInQueryTable = [self keyInQueryTable];
     NSString *keyPathDatabaseSchemaTable = [self keyDatabaseSchemaTable];
-    NSString *keyPathSchemaTable = [keyPathInQueryTable stringByAppendingString: @"."];
+    NSString *keyPathSchemaTable = [keyPathInQueryTable stringByAppendingPeriod];
     keyPathSchemaTable = [keyPathSchemaTable stringByAppendingString: keyPathDatabaseSchemaTable];
     return keyPathSchemaTable;
 }
@@ -98,7 +100,7 @@
     NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
     NSString *keyInQueryTable = [self keyInQueryTable];
     NSString *key;
-    key = [keyInQueryTable stringByAppendingString:@"."];
+    key = [keyInQueryTable stringByAppendingPeriod];
     key = [key stringByAppendingString:keyIdentifier];
     return key;
 }
@@ -111,7 +113,7 @@
 + (NSString *)keySchemaTableID {
     NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
     NSString *keySchemaTable = [self keySchemaTable];
-    NSString *key = [keySchemaTable stringByAppendingString:@"."];
+    NSString *key = [keySchemaTable stringByAppendingPeriod];
     key = [key stringByAppendingString:keyIdentifier];
     return key;
 }
@@ -119,7 +121,7 @@
 + (NSString *)keySchemaFieldID {
     NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
     NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-    NSString *key = [keyDatabaseSchemaField stringByAppendingString:@"."];
+    NSString *key = [keyDatabaseSchemaField stringByAppendingPeriod];
     key = [key stringByAppendingString:keyIdentifier];
     return key;
 }
@@ -127,7 +129,7 @@
 + (NSString *)keySchemaFieldName {
     NSString *keyName = NSStringFromSelector(@selector(name));
     NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-    NSString *key = [keyDatabaseSchemaField stringByAppendingString:@"."];
+    NSString *key = [keyDatabaseSchemaField stringByAppendingPeriod];
     key = [key stringByAppendingString:keyName];
     return key;
 }
@@ -135,7 +137,7 @@
 + (NSString *)keySchemaFieldDataType {
     NSString *keyDataType = NSStringFromSelector(@selector(dataType));
     NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-    NSString *key = [keyDatabaseSchemaField stringByAppendingString:@"."];
+    NSString *key = [keyDatabaseSchemaField stringByAppendingPeriod];
     key = [key stringByAppendingString:keyDataType];
     return key;
 }
@@ -143,7 +145,7 @@
 + (NSString *)keyInQueryTableAlias {
     NSString *keyAlias = NSStringFromSelector(@selector(alias));
     NSString *key = [self keyInQueryTable];
-    key = [key stringByAppendingString:@"."];
+    key = [key stringByAppendingPeriod];
     key = [key stringByAppendingString:keyAlias];
     return key;
 }
@@ -156,9 +158,9 @@
     NSString *predicateKey;
     NSNumber *idn = @(identifier);
     NSString *keyInQueryTable = [self keyInQueryTable];
-    predicateKey = [keyInQueryTable stringByAppendingString:@"."];
+    predicateKey = [keyInQueryTable stringByAppendingPeriod];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
-    predicateKey = [predicateKey stringByAppendingString:@"."];
+    predicateKey = [predicateKey stringByAppendingPeriod];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
     
     pexpressions[0] = [NSExpression expressionForKeyPath:predicateKey];
@@ -280,9 +282,9 @@
     NSString *predicateKey;
     NSNumber *idn = @(identifier);
     NSString *keyInQueryTable = [self keyInQueryTable];
-    predicateKey = [keyInQueryTable stringByAppendingString:@"."];
+    predicateKey = [keyInQueryTable stringByAppendingPeriod];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
-    predicateKey = [predicateKey stringByAppendingString:@"."];
+    predicateKey = [predicateKey stringByAppendingPeriod];
     predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
     
     pexpressions[0] = [NSExpression expressionForKeyPath:predicateKey];
@@ -414,16 +416,16 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat:@"%@.%@", self.inQueryTable.alias, self.databaseSchemaField.name];
+    return [self.inQueryTable.alias stringByAppendingKeyPath: self.databaseSchemaField.name];
 }
 
 - (NSString *)toStringReverse {
-    return [NSString stringWithFormat:@"%@.%@", self.databaseSchemaField.name, self.inQueryTable.alias];
+    return [self.databaseSchemaField.name stringByAppendingKeyPath: self.inQueryTable.alias];
 }
 
 - (NSString *)toString {
     NSString *queryAlias = [self.inQueryTable queryAlias];
-    return [NSString stringWithFormat:@"%@.%@", queryAlias, self.databaseSchemaField.name];
+    return [queryAlias stringByAppendingKeyPath: self.databaseSchemaField.name];
 }
 
 - (NSString *)toStringDebug {

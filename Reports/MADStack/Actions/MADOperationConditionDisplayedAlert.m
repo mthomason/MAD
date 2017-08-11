@@ -19,6 +19,8 @@
 
 #import <MAD/MADErrorUserInfo.h>
 
+#import <os/log.h>
+
 @interface MADOperationConditionDisplayedAlert ()
 
     @property (nonatomic, assign, readwrite) NSUInteger tag;

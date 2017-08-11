@@ -20,6 +20,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSExpressionDescription.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "MADModelField.h"
 
 #import "RptqDatabaseSchemaTable.h"
@@ -147,7 +149,7 @@
     keyWidth = NSStringFromSelector(@selector(width));
     keyIdentifier = NSStringFromSelector(@selector(identifier));
     keyInTableIdentifier = NSStringFromSelector(@selector(inTable));
-    keyInTableIdentifier = [keyInTableIdentifier stringByAppendingString:@"."];
+    keyInTableIdentifier = [keyInTableIdentifier stringByAppendingPeriod];
     keyInTableIdentifier = [keyInTableIdentifier stringByAppendingString:keyIdentifier];
 
     

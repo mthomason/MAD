@@ -1189,7 +1189,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
     MADocument *openDocument = self.activeDocumentManager.openDocument;
-    if (openDocument && openDocument.documentState != UIDocumentStateClosed) {
+    if (openDocument && !(openDocument.documentState & UIDocumentStateClosed)) {
         
         void (^handleCloseCompletion)(BOOL, NSURL *, NSURL *);
         handleCloseCompletion = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {

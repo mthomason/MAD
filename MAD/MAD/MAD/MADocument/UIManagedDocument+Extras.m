@@ -37,7 +37,7 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
         completion(YES);
     };
     
-    NSAssert(self.documentState == UIDocumentStateClosed, @"Document must be closed to call this!");
+    NSAssert(self.documentState & UIDocumentStateClosed, @"Document must be closed to call this!");
     
     [self resetPersistentStore];
     

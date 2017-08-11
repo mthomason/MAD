@@ -24,6 +24,8 @@
 
 #import "MADKeyChainOperationGet.h"
 
+#import <os/log.h>
+
 @interface MADOperationDatabaseTestConnection ()
     <MADDatabaseProtocol>
 
@@ -133,12 +135,18 @@
     self.database = db;
     
     NSError * __autoreleasing *error = NULL;
-    if ((self.success = [queryTest.database executeQuery:queryTest withError:error])) {
+    self.success = [queryTest.database executeQuery:queryTest withError:error];
+    if (self.success) {
         [self finish];
     } else {
-        NSError *err = *error;
-        self.error = *error;
-        [self finishWithError:err];
+        if (error == NULL) {
+            self.error = nil;
+            [self finishWithError:nil];
+        } else {
+            NSError *err = *error;
+            self.error = *error;
+            [self finishWithError:err];
+        }
     }
 }
 

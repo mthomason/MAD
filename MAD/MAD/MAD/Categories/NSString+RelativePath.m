@@ -11,15 +11,13 @@
 
 @implementation NSString (RelativePath)
 
-+ (NSString *)newStringWithPath:(NSString *)basePath relativeTo:(NSString *)anchorPath {
-    NSString *baseString = basePath.copy;
-    NSString *anchorString = anchorPath.copy;
++ (instancetype)newStringWithPath:(NSString *)basePath relativeTo:(NSString *)anchorPath {
     
-    NSArray <NSString *> *pathComponents = baseString.pathComponents;
-    NSArray <NSString *> *anchorComponents = anchorString.pathComponents;
+    NSString *pathComponent, *anchorComponent;
+    NSArray <NSString *> *pathComponents = basePath.pathComponents,
+    *anchorComponents = anchorPath.pathComponents;
     
     NSUInteger componentsInCommon = MIN(pathComponents.count, anchorComponents.count);
-    NSString *pathComponent, *anchorComponent;
     
     for (NSUInteger i = 0, n = componentsInCommon; i < n; i++) {
         pathComponent = pathComponents[i];
@@ -43,8 +41,7 @@
     subarrayWithRange = [pathComponents subarrayWithRange:
                          NSMakeRange(componentsInCommon, numberOfPathComponents)];
     [relativeComponents addObjectsFromArray: subarrayWithRange];
-    NSString *result = [NSString pathWithComponents:relativeComponents];
-    return result.copy;
+    return [NSString pathWithComponents:relativeComponents];
 }
 
 - (NSString *)stringWithPathRelativeTo:(NSString *)anchorPath {

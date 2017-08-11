@@ -13,6 +13,8 @@
 
 #import "MADOperationConditionResult.h"
 
+#import <os/log.h>
+
 @interface MADMutualExclusiveCondition()
 
     @property (nonatomic, strong) NSString *className;

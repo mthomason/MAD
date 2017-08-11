@@ -16,7 +16,6 @@
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
-#import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSExpression.h>
 
 #import <CoreData/NSFetchRequest.h>
@@ -24,12 +23,16 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSExpressionDescription.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseCredentals.h"
 
 #import "RptqDataHelper.h"
+
+#import "NSPredicate+Creators.h"
 
 @implementation RptqDatabase (Extras)
 
@@ -49,7 +52,7 @@
 + (NSString *)keyOwnedByUserDriverID {
     NSString *keyOwnedByUser = [self keyOwnedByUser];
     NSString *keyDriverID = [self keyDriverID];
-    NSString *keyOwndByUserDriverID = [keyOwnedByUser stringByAppendingString:@"."];
+    NSString *keyOwndByUserDriverID = [keyOwnedByUser stringByAppendingPeriod];
     keyOwndByUserDriverID = [keyOwndByUserDriverID stringByAppendingString:keyDriverID];
     return keyOwndByUserDriverID;
 }
@@ -57,7 +60,7 @@
 + (NSString *)keyOwnedByUserDatabaseName {
     NSString *keyOwnedByUser = [self keyOwnedByUser];
     NSString *keyDatabaseName = NSStringFromSelector(@selector(dbname));
-    NSString *keyOwndByUserDBName = [keyOwnedByUser stringByAppendingString:@"."];
+    NSString *keyOwndByUserDBName = [keyOwnedByUser stringByAppendingPeriod];
     keyOwndByUserDBName = [keyOwndByUserDBName stringByAppendingString:keyDatabaseName];
     return keyOwndByUserDBName;
 }
@@ -68,82 +71,45 @@
 }
 
 + (NSFetchRequest *)fetchRequestDatabaseDriverID:(int64_t)identifier {
-    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
     NSString *keyOwndByUserDriverID = [self keyOwnedByUserDriverID];
-    NSNumber *idn = @(identifier);
-    
-    NSExpression *predicateExpression[2];
-    predicateExpression[0] = [NSExpression expressionForKeyPath: keyIdentifier];
-    predicateExpression[1] = [NSExpression expressionForConstantValue: idn];
-    
-    NSPredicate *predicate;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-                                                   rightExpression: predicateExpression[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
-    
     NSFetchRequest *fetchRequest;
     NSString *entityName = NSStringFromClass([RptqDatabase class]);
     fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     
-    NSUInteger expressionCount = 1;
-    NSExpressionDescription *expressionDescription[expressionCount];
     NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:keyOwndByUserDriverID];
     
-    for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = [[NSExpressionDescription alloc] init];
-    }
+    NSExpressionDescription *expressionDescription;
+    expressionDescription = [[NSExpressionDescription alloc] init];
+    expressionDescription.name = keyOwndByUserDriverID;
+    expressionDescription.expression = expressionForDatabaseDriverType;
+    expressionDescription.expressionResultType = NSStringAttributeType;
     
-    expressionDescription[0].name = keyOwndByUserDriverID;
-    expressionDescription[0].expression = expressionForDatabaseDriverType;
-    expressionDescription[0].expressionResultType = NSStringAttributeType;
-    
-    NSArray *propertiesToFetch;
-    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
-                                                   count:expressionCount];
+    NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
     fetchRequest.propertiesToFetch = propertiesToFetch;
     fetchRequest.resultType = NSDictionaryResultType;
     fetchRequest.predicate = predicate;
-    
+
     return fetchRequest;
 }
 
 + (NSFetchRequest *)fetchRequestDatabaseName:(int64_t)identifier {
-    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
     NSString *keyOwndByUserDBName = [self keyOwnedByUserDatabaseName];
-    NSNumber *idn = @(identifier);
-    
-    NSExpression *predicateExpression[2];
-    predicateExpression[0] = [NSExpression expressionForKeyPath: keyIdentifier];
-    predicateExpression[1] = [NSExpression expressionForConstantValue: idn];
-    
-    NSPredicate *predicate;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-                                                   rightExpression: predicateExpression[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
     
     NSFetchRequest *fetchRequest;
     NSString *entityName = NSStringFromClass([RptqDatabase class]);
     fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     
-    NSUInteger expressionCount = 1;
-    NSExpressionDescription *expressionDescription[expressionCount];
     NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:keyOwndByUserDBName];
     
-    for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = [[NSExpressionDescription alloc] init];
-    }
-    
-    expressionDescription[0].name = keyOwndByUserDBName;
-    expressionDescription[0].expression = expressionForDatabaseDriverType;
-    expressionDescription[0].expressionResultType = NSStringAttributeType;
+    NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+    expressionDescription.name = keyOwndByUserDBName;
+    expressionDescription.expression = expressionForDatabaseDriverType;
+    expressionDescription.expressionResultType = NSStringAttributeType;
     
     NSArray *propertiesToFetch;
-    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
-                                                   count:expressionCount];
+    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
     fetchRequest.propertiesToFetch = propertiesToFetch;
     fetchRequest.resultType = NSDictionaryResultType;
     fetchRequest.predicate = predicate;
@@ -152,40 +118,23 @@
 }
 
 + (NSFetchRequest *)fetchRequestDriverName:(int64_t)identifier {
-    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
+
     NSString *key = [self keyOwnedByUserDatabaseName];
-    NSNumber *idn = @(identifier);
-    
-    NSExpression *predicateExpression[2];
-    predicateExpression[0] = [NSExpression expressionForKeyPath: keyIdentifier];
-    predicateExpression[1] = [NSExpression expressionForConstantValue: idn];
-    
-    NSPredicate *predicate;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-                                                   rightExpression: predicateExpression[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
     
     NSFetchRequest *fetchRequest;
     NSString *entityName = NSStringFromClass([RptqDatabase class]);
     fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     
-    NSUInteger expressionCount = 1;
-    NSExpressionDescription *expressionDescription[expressionCount];
     NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:key];
     
-    for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = [[NSExpressionDescription alloc] init];
-    }
-    
-    expressionDescription[0].name = key;
-    expressionDescription[0].expression = expressionForDatabaseDriverType;
-    expressionDescription[0].expressionResultType = NSStringAttributeType;
+    NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+    expressionDescription.name = key;
+    expressionDescription.expression = expressionForDatabaseDriverType;
+    expressionDescription.expressionResultType = NSStringAttributeType;
     
     NSArray *propertiesToFetch;
-    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
-                                                   count:expressionCount];
+    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
     fetchRequest.propertiesToFetch = propertiesToFetch;
     fetchRequest.resultType = NSDictionaryResultType;
     fetchRequest.predicate = predicate;
@@ -194,40 +143,24 @@
 }
 
 + (NSFetchRequest *)fetchRequestDriverType:(int64_t)identifier {
-    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
+
     NSString *keyDatabaseDriverTypeEnum = [self keyDatabaseDriverType];
-    
-    NSExpression *predicateExpression[2];
-    predicateExpression[0] = [NSExpression expressionForKeyPath: keyIdentifier];
-    NSNumber *idn = @(identifier);
-    predicateExpression[1] = [NSExpression expressionForConstantValue: idn];
-    
-    NSPredicate *predicate;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-                                                   rightExpression: predicateExpression[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
     
     NSFetchRequest *fetchRequest;
     NSString *entityName = NSStringFromClass([RptqDatabase class]);
     fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
     
-    NSUInteger expressionCount = 1;
-    NSExpressionDescription *expressionDescription[expressionCount];
     NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:keyDatabaseDriverTypeEnum];
-    
-    for (NSUInteger i=0; i<expressionCount; i++) {
-        expressionDescription[i] = [[NSExpressionDescription alloc] init];
-    }
-    
-    expressionDescription[0].name = keyDatabaseDriverTypeEnum;
-    expressionDescription[0].expression = expressionForDatabaseDriverType;
-    expressionDescription[0].expressionResultType = NSInteger16AttributeType;
+
+    NSExpressionDescription *expressionDescription;
+    expressionDescription = [[NSExpressionDescription alloc] init];
+    expressionDescription.name = keyDatabaseDriverTypeEnum;
+    expressionDescription.expression = expressionForDatabaseDriverType;
+    expressionDescription.expressionResultType = NSInteger16AttributeType;
     
     NSArray *propertiesToFetch;
-    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
-                                                   count:expressionCount];
+    propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
     fetchRequest.propertiesToFetch = propertiesToFetch;
     fetchRequest.resultType = NSDictionaryResultType;
     fetchRequest.predicate = predicate;

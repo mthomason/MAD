@@ -30,6 +30,8 @@
 #import "madpath.h"
 #import "madtar.h"
 
+#import "NSString+RelativePath.h"
+
 @interface MADArchiveManager ()
 
     @property (nonatomic, copy) NSURL *filewrapper;
@@ -42,41 +44,6 @@
 int backup_file(char *, char *);
 int write_archive(char *, NSURL *);
 int restore_backup(char *, char *, char *);
-
-+ (NSString *)newStringWithPath:(NSString *)basePath relativeTo:(NSString *)anchorPath {
-    NSString *baseString = basePath.copy;
-    NSString *anchorString = anchorPath.copy;
-    
-    NSString *pathComponent, *anchorComponent;
-    NSArray <NSString *> *pathComponents = baseString.pathComponents,
-                         *anchorComponents = anchorString.pathComponents;
-    
-    NSUInteger componentsInCommon = MIN(pathComponents.count, anchorComponents.count);
-    
-    for (NSUInteger i = 0, n = componentsInCommon; i < n; i++) {
-        pathComponent = pathComponents[i];
-        anchorComponent = anchorComponents[i];
-        if (![pathComponent isEqualToString:anchorComponent]) {
-            componentsInCommon = i;
-            break;
-        }
-    }
-    
-    const NSUInteger numberOfParentComponents = anchorComponents.count - componentsInCommon;
-    const NSUInteger numberOfPathComponents = pathComponents.count - componentsInCommon;
-    
-    NSMutableArray *relativeComponents;
-    relativeComponents = [[NSMutableArray alloc] initWithCapacity:
-                          numberOfParentComponents + numberOfPathComponents];
-    for (NSUInteger i = 0; i < numberOfParentComponents; i++) {
-        [relativeComponents addObject:@".."];
-    }
-    NSArray <NSString *> *subarrayWithRange;
-    subarrayWithRange = [pathComponents subarrayWithRange:
-                         NSMakeRange(componentsInCommon, numberOfPathComponents)];
-    [relativeComponents addObjectsFromArray: subarrayWithRange];
-    return [NSString pathWithComponents:relativeComponents];
-}
 
 - (instancetype)initWithFileWrapperURL:(NSURL *)fileWrapper archiveURL:(NSURL *)archive {
     if (self = [super init]) {
@@ -308,8 +275,8 @@ int write_archive(char *outname, NSURL *filewrapper) {
             baseUrl = baseUrl.URLByDeletingLastPathComponent;
         }
         
-        source_path_relative = [MADArchiveManager newStringWithPath: source_filepath.path
-                                                         relativeTo: baseUrl.path];
+        source_path_relative = [NSString newStringWithPath: source_filepath.path
+                                                relativeTo: baseUrl.path];
         
         char *source_filepath_fsr = strdup(source_filepath.fileSystemRepresentation);
         char *source_path_relative_fsr = strdup(source_path_relative.fileSystemRepresentation);

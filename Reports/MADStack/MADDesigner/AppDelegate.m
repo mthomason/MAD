@@ -19,6 +19,7 @@
 #import "Constants.h"
 
 #import <MADDataStructures/MADVectorBool.h>
+#import <os/log.h>
 
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIdentifierFileLondon                            = @"London";
@@ -172,6 +173,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (BOOL)application:(UIApplication *)application
                             didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
 
     /*
     MADVectorBool *vectorBool = [[MADVectorBool alloc] init];

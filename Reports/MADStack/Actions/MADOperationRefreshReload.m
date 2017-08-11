@@ -18,6 +18,8 @@
 #import "MADOperationRefresh.h"
 #import "MADOperationQueue.h"
 
+#import <os/log.h>
+
 @interface MADOperationRefreshReload ()
 
     @property (nonatomic, readwrite, weak) MADocument *document;

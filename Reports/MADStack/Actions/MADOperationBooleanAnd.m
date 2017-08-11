@@ -15,6 +15,8 @@
 #import "NSError+MADOperationErrors.h"
 #import <MAD/MADErrorUserInfo.h>
 
+#import <os/log.h>
+
 @interface MADOperationBooleanAnd ()
 
     @property (nonatomic, copy) NSArray <NSObject <MADOperationCondition> *> *conditions;

@@ -20,6 +20,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSExpressionDescription.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "MADModelDatabase.h"
 #import "MADModelQuery.h"
 
@@ -225,14 +227,14 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     NSString *identifier = NSStringFromSelector(@selector(identifier));
     NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
     NSString *inDocument;
-    NSString *keyOwnedByQuery =NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
-    inDocument = [inDatabase stringByAppendingString:@"."];
+    NSString *keyOwnedByQuery = NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
+    inDocument = [inDatabase stringByAppendingPeriod];
     inDocument = [inDocument stringByAppendingString: keyOwnedByQuery];
     
-    NSString *inDBID = [inDatabase stringByAppendingString:@"."];
+    NSString *inDBID = [inDatabase stringByAppendingPeriod];
     inDBID = [inDBID stringByAppendingString:identifier];
     
-    NSString *inDocID = [inDocument stringByAppendingString:@"."];
+    NSString *inDocID = [inDocument stringByAppendingPeriod];
     inDocID = [inDocID stringByAppendingString:identifier];
     
     NSExpression *dbExpression = [NSExpression expressionForKeyPath:inDatabase];

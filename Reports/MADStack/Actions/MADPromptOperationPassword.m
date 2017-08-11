@@ -18,6 +18,8 @@
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
 
+#import <os/log.h>
+
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
 
@@ -147,7 +149,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = password;
     self.gotPassword = YES;
     self.result = YES;
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
     defer(^{
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish defered:", __PRETTY_FUNCTION__);
         [self performSelectorInBackground:@selector(finish) withObject:nil];
     });
 }
@@ -157,7 +161,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.password = nil;
     self.result = NO;
     self.gotPassword = NO;
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancel:", __PRETTY_FUNCTION__);
     defer(^{
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancled defered:", __PRETTY_FUNCTION__);
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
         [self performSelectorInBackground:@selector(finishWithError:) withObject:error];
     });

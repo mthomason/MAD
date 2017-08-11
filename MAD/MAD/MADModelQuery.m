@@ -26,6 +26,8 @@
 #import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSFetchRequest.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "MADModelDatabase.h"
 #import "MADModelQueryTable.h"
 #import "MADModelQueryLink.h"
@@ -34,6 +36,8 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+
+#import "NSPredicate+Creators.h"
 
 @interface MADModelQuery ()
 
@@ -227,7 +231,7 @@
     NSOrderedSet <NSManagedObjectID *> *tableObjectIDs;
     tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
     
-    NSString *dropIndex = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingString:@"."];
+    NSString *dropIndex = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingPeriod];
     dropIndex = [dropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
     
     NSString *keySchemaTableID = [RptqQueryField keySchemaTableID];
@@ -295,17 +299,12 @@
     NSNumber *queryLinkID;
     MADModelQueryLink *queryLink;
     NSPredicate *predicate;
-    NSExpression *queryLinkIDValue;
-    NSExpression *queryLinkPathKey = [NSExpression expressionForKeyPath:MADKeyQueryLinkID];
+    NSExpression *expressionKeyPath = [NSExpression expressionForKeyPath:MADKeyQueryLinkID];
     
     for (queryLinkID in _queryLinkIDs) {
         
-        queryLinkIDValue = [NSExpression expressionForConstantValue: queryLinkID];
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: queryLinkPathKey
-                                                       rightExpression: queryLinkIDValue
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSEqualToPredicateOperatorType
-                                                               options: 0];
+        predicate = [NSPredicate newPredicateObjectWithNumber:queryLinkID
+                                                andExpression:expressionKeyPath];
         
         NSArray *fresults = [results filteredArrayUsingPredicate:predicate];
         
@@ -338,20 +337,14 @@
 
     NSArray <NSDictionary *> *fetchQueryLinksResults;
     NSFetchRequest *fetch;
-    NSExpression *expressions[2];
-    NSPredicate *predicate;
 
-    NSString *inQueryTableID = [NSStringFromSelector(@selector(inQuery)) stringByAppendingString:@"."];
-    inQueryTableID = [inQueryTableID stringByAppendingString: NSStringFromSelector(@selector(identifier))];
-    expressions[0] = [NSExpression expressionForKeyPath: inQueryTableID];
-    NSNumber *identifier = @(self.identifier);
-    expressions[1] = [NSExpression expressionForConstantValue: identifier];
+    NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
+    NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
+    NSString *inQueryTableID = [keyInQuery stringByAppendingPeriod];
+    inQueryTableID = [inQueryTableID stringByAppendingString: keyIdentifier];
 
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: expressions[0]
-                                                   rightExpression: expressions[1]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
+                                                                 atKeyPath:inQueryTableID];
  
     fetch = [MADModelQueryLink fetchRequest:predicate];
     
@@ -360,9 +353,6 @@
     NSAssert(fetchQueryLinksResults != nil && error == nil, @"Need this to work! %@", error);
 
     [self insertLinksFromFetchRequestResults:fetchQueryLinksResults];
-    
-    expressions[0] = nil;
-    expressions[1] = nil;
 }
 
 - (void)update { }
@@ -391,6 +381,8 @@
     }];
 }
 
+
+/// FIXME: Predicate is broken... maybe more... unused, but I think it's needed.
 - (void)insertQueryLinkID:(NSNumber *)queryLinkID {
     MADModelQueryLink *link;
     if ((link = [_links objectForKey:queryLinkID])) return;

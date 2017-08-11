@@ -18,6 +18,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "MADDatabaseField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
@@ -84,9 +86,7 @@
 }
 
 - (NSString *)display {
-    NSString *display = [[NSString alloc] initWithFormat:@"%@.%@",
-                                                         self.inTable.name, self.name];
-    return display.lowercaseString;
+    return [self.inTable.name stringByAppendingKeyPath:self.name].lowercaseString;
 }
 
 - (SEL)selectorForSorting {
@@ -96,9 +96,7 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    NSString *result;
-    result = [[NSString alloc] initWithFormat:@"%@.%@", self.inTable.name, self.name];
-    return result;
+    return [self.inTable.name stringByAppendingKeyPath:self.name];
 }
 
 - (NSString *)toString {
@@ -106,9 +104,7 @@
 }
 
 - (NSString *)toStringDebug {
-    NSString *result;
-    result = [[NSString alloc] initWithFormat:@"%@", self];
-    return result;
+    return [NSString stringWithFormat:@"%@", self];
 }
 
 + (NSString *)dataTypeDisplay:(int16_t)dataType {

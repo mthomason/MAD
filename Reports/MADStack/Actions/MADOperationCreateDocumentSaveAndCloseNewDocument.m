@@ -10,6 +10,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADErrorUserInfo.h>
 #import "MADOperationCreateDocumentCreateDocument.h"
+#import <os/log.h>
 
 @implementation MADOperationCreateDocumentSaveAndCloseNewDocument
 
@@ -18,6 +19,8 @@
 }
 
 - (void)execute {
+    
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -30,9 +33,12 @@
 
     void (^handleCloseCompletion)(BOOL, NSURL *, NSURL *);
     handleCloseCompletion = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "handleCloseCompletion:", __PRETTY_FUNCTION__);
         if (success) {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
             [self finish];
         } else {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error creating document:", __PRETTY_FUNCTION__);
             NSString *title = NSLocalizedString(@"Error Creating Document",
                                                 @"Error Creating Document");
             NSString *message = NSLocalizedString(@"Failed to close.",
@@ -45,21 +51,33 @@
         }
     };
 
-    void (^mainBlock)(void);
+    /*void (^mainBlock)(void);
     mainBlock = ^ {
         MADocument *doc = document;
         if (doc.documentState != UIDocumentStateClosed) {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Close document:", __PRETTY_FUNCTION__);
             
             [MADocument close: doc completion:handleCloseCompletion];
             
             
         } else {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
             [self finish];
         }
         
-    };
+    };*/
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:mainBlock];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        MADocument *doc = document;
+        if (doc.documentState & UIDocumentStateClosed) {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Document already closed:", __PRETTY_FUNCTION__);
+            [self finish];
+        } else {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Close document:", __PRETTY_FUNCTION__);
+            [MADocument close: doc completion:handleCloseCompletion];
+        }
+        
+    }];
     
 }
 

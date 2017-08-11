@@ -11,6 +11,8 @@
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
 
+#import <os/log.h>
+
 static NSString * const TextYes = @"Dismiss";
 
 @interface MADPromptOperationDisplayError ()
@@ -80,6 +82,7 @@ static NSString * const TextYes = @"Dismiss";
 
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
 
     NSError *error = self.error;
     if (error == nil) { // Find the error in dependencies if it wasn't passed in.
@@ -114,7 +117,9 @@ static NSString * const TextYes = @"Dismiss";
         MADPromptOperationDisplayError * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
         defer(^{
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish defered:", __PRETTY_FUNCTION__);
             [sself performSelectorInBackground:@selector(finish) withObject:nil];
         });
     }];
@@ -122,6 +127,7 @@ static NSString * const TextYes = @"Dismiss";
     [alertController addAction:actionOK];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Show error alert:", __PRETTY_FUNCTION__);
         UIViewController *viewController = self.viewController;
         viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [viewController presentViewController: alertController animated: YES completion: nil];

@@ -25,6 +25,8 @@
 #import "MADOperationBooleanAnd.h"
 #import "MADDefer.h"
 
+#import <os/log.h>
+
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
 static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to save your password?";
@@ -73,7 +75,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 - (void)execute {
     
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
     if (_shortCircut) {
         [self finish];
     } else {
@@ -82,7 +84,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Did finsih:", __PRETTY_FUNCTION__);
     // Operation 1 & 3: Credentials in keychain.
     //  If results are read from keychain, then MADOperationResultStringProtocol.
     //---
@@ -123,6 +125,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
             self.passwordSet = YES;
         }
     }
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish but not calling finish?:", __PRETTY_FUNCTION__);
     //NSLog(@"Count   %d", self.internalQueue.operationCount);
     //NSLog(@"Last    %@", self.internalQueue.operations.lastObject);
     //if (self.internalQueue.operationCount == 0) {
@@ -200,23 +203,27 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     // Operation 5a: Test the connection (credentials prompt)
     // ---------------------------------------------------
-    MADOperationDatabaseTestConnection *testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+    MADOperationDatabaseTestConnection *testConnectionOperationCredentials;
+    testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
     [testConnectionOperationCredentials addDependency:getUsername];
     [testConnectionOperationCredentials addDependency:getPassword];
     [testConnectionOperationCredentials addDependency:promptCredntials];
     
-    MADOperationConditionPolarQuestionAffirmative *promptForCredentialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptCredntials.hash];
+    MADOperationConditionPolarQuestionAffirmative *promptForCredentialsAffirmative;
+    promptForCredentialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptCredntials.hash];
     [testConnectionOperationCredentials addCondition: promptForCredentialsAffirmative];
     
     // ---------------------------------------------------
     // Operation 5b: Test the connection (password prompt)
     // ---------------------------------------------------
-    MADOperationDatabaseTestConnection *testConnectionOperationPassword = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+    MADOperationDatabaseTestConnection *testConnectionOperationPassword;
+    testConnectionOperationPassword = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
     [testConnectionOperationPassword addDependency:getUsername];
     [testConnectionOperationPassword addDependency:getPassword];
     [testConnectionOperationPassword addDependency:promptPassword];
     
-    MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
+    MADOperationConditionPolarQuestionAffirmative *promptForPasswordAffirmative;
+    promptForPasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptPassword.hash];
     [testConnectionOperationPassword addCondition: promptForPasswordAffirmative];
     
     // ---------------------------------------------------
@@ -245,7 +252,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Operation 6: Prompt save password
     // Conditions:  User entered a password.
     // ---------------------------------------------------
-    MADPromptOperationPolarQuestion *promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messagePasswordPrompt viewController:viewController];
+    MADPromptOperationPolarQuestion *promptSavePassword;
+    promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle:title message:messagePasswordPrompt viewController:viewController];
     [promptSavePassword addDependency:testConnectionOperationPassword];
     [promptSavePassword addDependency:promptPassword];
     
@@ -256,8 +264,10 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Dependency:  Prompt save credentials.
     // Conditions:  User said yes to save credentials.
     // ---------------------------------------------------
-    MADKeyChainOperationPut *putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
-    MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSaveCredntials.hash];
+    MADKeyChainOperationPut *putUsername;
+    putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
+    MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
+    promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSaveCredntials.hash];
     [putUsername addDependency:promptCredntials];
     [putUsername addDependency:promptSaveCredntials];
     [putUsername addCondition:promptToSaveCredntialsAffirmative];
@@ -267,14 +277,17 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Conditions:  User said yes to save credentials OR
     //              User said yes to save password.
     // ---------------------------------------------------
-    MADKeyChainOperationPut *putPasswordCredentials = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
-    MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmativePassword = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSaveCredntials.hash];
+    MADKeyChainOperationPut *putPasswordCredentials;
+    putPasswordCredentials = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+    MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmativePassword;
+    promptToSaveCredntialsAffirmativePassword = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSaveCredntials.hash];
     [putPasswordCredentials addDependency:promptCredntials];
     [putPasswordCredentials addDependency:promptSaveCredntials];
     [putPasswordCredentials addCondition:promptToSaveCredntialsAffirmativePassword];
     
     MADKeyChainOperationPut *putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
-    MADOperationConditionPolarQuestionAffirmative *promptToSavePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSavePassword.hash];
+    MADOperationConditionPolarQuestionAffirmative *promptToSavePasswordAffirmative;
+    promptToSavePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithTag:promptSavePassword.hash];
     [putPassword addDependency:promptPassword];
     [putPassword addDependency:promptSavePassword];
     [putPassword addCondition:promptToSavePasswordAffirmative];
@@ -290,6 +303,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADGroupOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
         MADGroupOperation *sself = wself;
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
         [sself finish];
     }];
 

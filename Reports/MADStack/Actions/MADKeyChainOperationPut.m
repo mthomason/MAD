@@ -14,6 +14,8 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADCredential.h>
 
+#import <os/log.h>
+
 static const short StatusNotFound = 35;
 static NSString * const ErrorDomain = @"MADKCP";
 
@@ -41,6 +43,7 @@ static NSString * const ErrorDomain = @"MADKCP";
 
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
 
     NSString *valueToWrite = nil;
     
@@ -64,10 +67,13 @@ static NSString * const ErrorDomain = @"MADKCP";
         OSStatus status = [MTKeyChain saveToken:valueToWrite forKey:self.key withDescription:self.keyDescription];
         if (status == errSecSuccess) {
         
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
             [self finish];
 
         } else {
 
+
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
             NSError *error = [NSError errorWithDomain:ErrorDomain code:status userInfo:nil];
             [self finishWithError:error];
             
@@ -75,6 +81,7 @@ static NSString * const ErrorDomain = @"MADKCP";
         
     } else {
 
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
         NSError *error = [NSError errorWithDomain:ErrorDomain code:StatusNotFound userInfo:nil];
         [self finishWithError:error];
         

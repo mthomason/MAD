@@ -14,6 +14,8 @@
 #import <Foundation/NSURL.h>
 #import <MADFoundation/MADURL.h>
 
+#import <os/log.h>
+
 @interface MADOperationInstallSampleDocument ()
 
     @property (nonatomic, copy) NSString *filename;

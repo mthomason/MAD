@@ -17,6 +17,8 @@
 
 #import "MADOperationCreateDocumentCreateDocument.h"
 
+#import <os/log.h>
+
 @interface MADOperationCreateDocumentAddConnection ()
 
     @property (nonatomic, assign) BOOL success;
@@ -45,7 +47,8 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -60,6 +63,9 @@
     [document activeDocumentModel];
 
     self.success = YES;
+    
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
+    
     [self finish];
 }
 

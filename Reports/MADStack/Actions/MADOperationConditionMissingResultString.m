@@ -18,6 +18,8 @@
 #import "MADOperationConditionResult.h"
 #import <MAD/MADErrorUserInfo.h>
 
+#import <os/log.h>
+
 @interface MADOperationConditionMissingResultString ()
 
     @property (nonatomic, readwrite, copy) NSString *key;

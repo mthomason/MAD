@@ -10,6 +10,7 @@
 #define Reports_MADModel_h
 
 #import <Foundation/NSObject.h>
+#import <MAD/MADModelIDProtocol.h>
 
 @class NSManagedObjectContext;
 
@@ -27,25 +28,8 @@ extern NSString * const MADKeyQueryLinkRightFieldID;
 extern NSString * const MADKeyQueryLinkLeftTableID;
 extern NSString * const MADKeyQueryLinkRightTableID;
 
-@protocol MADModelIDProtocol <NSObject>
-
-    @property (nonatomic, readonly, assign) int64_t identifier;
-
-@end
-
-@protocol MADModelDataProtocol <NSObject>
-
-    - (instancetype)initWithIdentifier:(int64_t)identifier
-                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
-    @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
-
-    - (void)update;
-
-@end
-
 @interface MADModel : NSObject
-<MADModelIDProtocol> {
+    <MADModelIDProtocol> {
   @protected
     int64_t _uid;
 }

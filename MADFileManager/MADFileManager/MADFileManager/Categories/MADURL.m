@@ -16,6 +16,7 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/NSString+Common.h>
 
 #import "UIScreen+Properties.h"
 #import "MADFilename.h"
@@ -311,12 +312,10 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (instancetype)newURLApplicationSupportFile:(NSString *)filename extension:(NSString *)extension {
     id result;
     NSURL *appSupportDirectory;
-    NSString *groupIdentifier, *fileHandle;
+    NSString *fileHandle;
     MADAppDelegate appDelegate = [MADApplication AppDelegate];
-    
-    groupIdentifier = [appDelegate groupIdentifier].copy;
-    appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
-    fileHandle = [[NSString alloc] initWithFormat: @"%@.%@", filename, extension];
+    appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: [appDelegate groupIdentifier]];
+    fileHandle = [filename stringByAppendingKeyPath:extension];
     result = [appSupportDirectory URLByAppendingPathComponent:fileHandle isDirectory:NO];
     return result;
 }

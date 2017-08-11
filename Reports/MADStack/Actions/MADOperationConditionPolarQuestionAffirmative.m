@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationConditionPolarQuestionAffirmative.h"
+#import <asl.h>
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
 #import "MADPromptOperationPolarQuestion.h"
@@ -14,6 +15,8 @@
 #import "MADOperationConditionResult.h"
 #import "NSError+MADOperationErrors.h"
 #import <MAD/MADErrorUserInfo.h>
+
+#import <os/log.h>
 
 @interface MADOperationConditionPolarQuestionAffirmative ()
 
@@ -57,6 +60,7 @@
                                                                        andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
         result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Result evaluated to NO.");
         return result;
     }
     
@@ -81,12 +85,14 @@
     }
 
     if (result != nil) {
+        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Result evaluated to %s.", result.isSucceed ? "YES" : "NO");
         return result;
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
                                                                        andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
         result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Result evaluated to NO.");
         return result;
     }
 

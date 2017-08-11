@@ -16,7 +16,6 @@
 #import <asl.h>
 
 #import <Foundation/NSEnumerator.h>
-#import <Foundation/NSComparisonPredicate.h>
 
 #import <CoreData/NSManagedObjectModel.h>
 #import <CoreData/NSFetchRequest.h>
@@ -34,6 +33,7 @@
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/NSString+Common.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -129,7 +129,6 @@
 #import "NSString+RelativePath.h"
 
 #import "MADImageThumbnail.h"
-//#import "UIManagedDocument+Extras.h"
 
 #import "miniz.h"
 
@@ -138,6 +137,8 @@
 #import <mach/machine/vm_param.h>
 
 #import "MADNotificationFileUpdate.h"
+
+#import "NSPredicate+Creators.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -898,11 +899,17 @@ void madwarn(char *err,  const char*err2) { }
     
     if (strongDocument != nil) {
         //strongDocument.thumbnail = nil;
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if (![NSThread isMainThread]) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
+                    completion(successClose, fileURL, gutsUrl);
+                }];
+            }];
+        } else {
             [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
                 completion(successClose, fileURL, gutsUrl);
             }];
-        }];
+        }
     }
 
     
@@ -1080,8 +1087,9 @@ void madwarn(char *err,  const char*err2) { }
                 error:(NSError * __autoreleasing *)outError {
     
     BOOL success;
+    NSError * __autoreleasing *error = nil;
     if (!(success = [super writeContents:contents andAttributes:additionalFileAttributes
-                             safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError]))
+                             safelyToURL:self.urlGuts forSaveOperation:saveOperation error:error]))
         return NO;
     
     MADArchiveManager *archiveManager;
@@ -1093,14 +1101,18 @@ void madwarn(char *err,  const char*err2) { }
 - (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
                             forSaveOperation: (UIDocumentSaveOperation)saveOperation
                                        error: (NSError * __autoreleasing *)outError {
-    
-    UIImage *thumbnail = self.thumbnail.copy;
-    NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                thumbnail, NSThumbnail1024x1024SizeKey, nil];
-    thumbnail = nil;
-    
-    id fileAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         thumbnails, NSURLThumbnailDictionaryKey, nil];
+    id fileAttributes;
+    if (self.thumbnail != nil) {
+        UIImage *thumbnail = self.thumbnail.copy;
+        NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    thumbnail, NSThumbnail1024x1024SizeKey, nil];
+        thumbnail = nil;
+        
+        fileAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                thumbnails, NSURLThumbnailDictionaryKey, nil];
+    } else {
+        fileAttributes = @{};
+    }
     
     
     return fileAttributes;
@@ -1635,17 +1647,11 @@ void madwarn(char *err,  const char*err2) { }
     
     keyInQueryTableRel = NSStringFromSelector(@selector(inQueryTable));
     
-    keyInQueryTable = [NSStringFromSelector(@selector(aggregateField)) stringByAppendingString:@"."];
+    keyInQueryTable = [NSStringFromSelector(@selector(aggregateField)) stringByAppendingPeriod];
     keyInQueryTable = [keyInQueryTable stringByAppendingString:keyInQueryTableRel];
     
-    NSExpression *e1 = [NSExpression expressionForKeyPath:keyInQueryTable];
-    NSExpression *e2 = [NSExpression expressionForConstantValue:deleatedTableObjectID];
-    NSPredicate *predicate;
-    predicate =[NSComparisonPredicate predicateWithLeftExpression: e1
-                                                  rightExpression: e2
-                                                         modifier: NSDirectPredicateModifier
-                                                             type: NSEqualToPredicateOperatorType
-                                                          options: 0];
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
+                                                               atKeyPath: keyInQueryTable];
 
     fetchReqest.predicate = predicate;
     NSError *fetchError = nil;
@@ -1670,16 +1676,11 @@ void madwarn(char *err,  const char*err2) { }
     NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
     NSFetchRequest *fetchReqest;
     fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    NSString *keyInQueryTable = [NSStringFromSelector(@selector(referencesQueryField)) stringByAppendingString:@"."];
+    NSString *keyInQueryTable = [NSStringFromSelector(@selector(referencesQueryField)) stringByAppendingPeriod];
     keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
-    NSExpression *e1 = [NSExpression expressionForKeyPath:keyInQueryTable];
-    NSExpression *e2 = [NSExpression expressionForConstantValue:deleatedTableObjectID];
-    NSPredicate *predicate;
-    predicate =[NSComparisonPredicate predicateWithLeftExpression: e1
-                                                  rightExpression: e2
-                                                         modifier: NSDirectPredicateModifier
-                                                             type: NSEqualToPredicateOperatorType
-                                                          options: 0];
+    
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
+                                                               atKeyPath: keyInQueryTable];
     fetchReqest.predicate = predicate;
     NSError *fetchError = nil;
     NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest

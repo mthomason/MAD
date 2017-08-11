@@ -18,6 +18,8 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURL.h>
 
+#import <os/log.h>
+
 NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
 NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
 

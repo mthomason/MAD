@@ -6,8 +6,16 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Foundation_NSString_Common_h
+#define MAD_Foundation_NSString_Common_h
+
+#import <Foundation/NSString.h>
 
 @interface NSString (Common)
 
+- (NSString *)stringByAppendingPeriod;
+- (NSString *)stringByAppendingKeyPath:(NSString *)keyPath;
+
 @end
+
+#endif

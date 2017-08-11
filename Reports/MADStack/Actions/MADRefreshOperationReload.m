@@ -9,6 +9,8 @@
 #import "MADRefreshOperationReload.h"
 #import <MAD/MADocument.h>
 
+#import <os/log.h>
+
 @interface MADRefreshOperationReload ()
 
     @property (nonatomic, weak) MADocument *document;

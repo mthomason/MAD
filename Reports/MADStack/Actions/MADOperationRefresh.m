@@ -25,6 +25,8 @@
 
 #import "MADOperationRefreshInitialize.h"
 
+#import <os/log.h>
+
 static const short errCache = 2;
 
 @interface MADOperationRefresh ()

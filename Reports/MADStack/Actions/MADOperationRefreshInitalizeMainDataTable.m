@@ -11,6 +11,8 @@
 #import <MAD/MADDataTableFast.h>
 #import <MAD/MADDataTable.h>
 
+#import <os/log.h>
+
 @interface MADOperationRefreshInitializeMainDataTable ()
 
     @property (nonatomic, weak) MADocument *document;

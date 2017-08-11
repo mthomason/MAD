@@ -141,7 +141,12 @@
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }
-    return [self executeQuery:query withDataTable:dataTable andError:error];
+    NSError * __autoreleasing *executeError = nil;
+    BOOL result = [self executeQuery:query withDataTable:dataTable andError:executeError];
+    if (executeError != nil) {
+        error = executeError;
+    }
+    return result;
 }
 
 - (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn

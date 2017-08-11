@@ -42,6 +42,8 @@
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import <MAD/MADReportSection.h>
 
 #import <MAD/MADocument.h>
@@ -285,9 +287,9 @@ static const inline CGSize sizePopoverFonts() {
         NSString *keyPathDocument = [self keyPathDocument];
         NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
         NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
-        key = [keyPathDocument stringByAppendingString:@"."];
+        key = [keyPathDocument stringByAppendingPeriod];
         key = [key stringByAppendingString:keyPathUndoManager];
-        key = [key stringByAppendingString:@"."];
+        key = [key stringByAppendingPeriod];
         key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
     }
     return key;
@@ -299,9 +301,9 @@ static const inline CGSize sizePopoverFonts() {
         NSString *keyPathDocument = [self keyPathDocument];
         NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
         NSString *keyPathUndoMenuItemTitle = NSStringFromSelector(@selector(undoMenuItemTitle));
-        key = [keyPathDocument stringByAppendingString:@"."];
+        key = [keyPathDocument stringByAppendingPeriod];
         key = [key stringByAppendingString:keyPathUndoManager];
-        key = [key stringByAppendingString:@"."];
+        key = [key stringByAppendingPeriod];
         key = [key stringByAppendingString:keyPathUndoMenuItemTitle];
     }
     return key;
@@ -1063,18 +1065,11 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark UIDocumentStateChangedNotification
 
 - (void)documentStateChanged {
-    
-    switch (self.document.documentState) {
-        case UIDocumentStateEditingDisabled:
-            self.view.userInteractionEnabled = NO;
-            break;
-        case UIDocumentStateSavingError:
-        case UIDocumentStateNormal:
-        case UIDocumentStateClosed:
-        case UIDocumentStateInConflict:
-        default:
-            self.view.userInteractionEnabled = YES;
-            break;
+    UIDocumentState documentState = self.document.documentState;
+    if (documentState & UIDocumentStateEditingDisabled) {
+        self.view.userInteractionEnabled = NO;
+    } else {
+        self.view.userInteractionEnabled = YES;
     }
 }
 

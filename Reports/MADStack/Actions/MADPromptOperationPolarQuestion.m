@@ -11,6 +11,8 @@
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
 
+#import <os/log.h>
+
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
 
@@ -47,8 +49,7 @@ static NSString * const TextNo = @"No";
 }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: self.title message: self.message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     

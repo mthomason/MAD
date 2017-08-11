@@ -10,6 +10,7 @@
 #define MADModelTable_h
 
 #import <MAD/MADModel.h>
+#import <MAD/MADModelDataProtocol.h>
 
 @class NSOrderedSet<__covariant ObjectType>, NSDictionary<KeyType, ObjectType>, MADModelDatabase,
        MADModelField;

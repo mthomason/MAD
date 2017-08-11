@@ -15,6 +15,8 @@
 #import "NSError+MADOperationErrors.h"
 #import <MAD/MADErrorUserInfo.h>
 
+#import <os/log.h>
+
 @interface MADOperationConditionPolarQuestionNegative ()
 
     @property (nonatomic, readwrite) NSUInteger tag;

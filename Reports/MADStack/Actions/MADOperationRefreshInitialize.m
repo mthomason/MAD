@@ -34,6 +34,8 @@
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 
+#import <os/log.h>
+
 @interface MADOperationRefreshInitialize ()
 
     @property (nonatomic, weak) MADocument *document;

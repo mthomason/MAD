@@ -10,7 +10,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSComparisonPredicate.h>
+#import <Foundation/NSPredicate.h>
 #import <Foundation/NSBundle.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import "MTDatabase.h"
@@ -18,6 +18,7 @@
 #import "RptqDocumentSection+Extras.h"
 #import "MADSectionLayout.h"
 #import "MADSectionGroupLayout.h"
+#import "NSPredicate+Creators.h"
 
 @interface MADSectionsLayout ()
 
@@ -49,21 +50,10 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
         documentSections = [managedObjectContext executeFetchRequest: fetchRequestDocumentSections
                                                                error: &error];
 
-        NSString *keyPath;
-        NSUInteger expressionInQueryCount = 2;
-        NSExpression *pexpressions[expressionInQueryCount];
-        
-        // Report Header
-        keyPath = [RptqDocumentSection keyPathInReportHeader];
-        pexpressions[0] = [NSExpression expressionForKeyPath:keyPath];
-        pexpressions[1] = [NSExpression expressionForConstantValue:nil];
+        NSString *keyPath = [RptqDocumentSection keyPathInReportHeader];
         
         NSPredicate *predicate;
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-                                                       rightExpression: pexpressions[1]
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSNotEqualToPredicateOperatorType
-                                                               options: 0];
+        predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
         
         NSArray <NSDictionary *> *reportHeaderArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (reportHeaderArray.count > 0) {
@@ -74,13 +64,7 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
         
         // Report Footer
         keyPath = [RptqDocumentSection keyPathInReportFooter];
-        pexpressions[0] = [NSExpression expressionForKeyPath:keyPath];
-        
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-                                                       rightExpression: pexpressions[1]
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSNotEqualToPredicateOperatorType
-                                                               options: 0];
+        predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
 
         NSArray <NSDictionary *> *reportFooterArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (reportFooterArray.count > 0) {
@@ -91,13 +75,8 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
         
         // Page Header
         keyPath = [RptqDocumentSection keyPathInPageHeader];
-        pexpressions[0] = [NSExpression expressionForKeyPath:keyPath];
+        predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
         
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-                                                       rightExpression: pexpressions[1]
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSNotEqualToPredicateOperatorType
-                                                               options: 0];
         NSArray <NSDictionary *> *pageHeaderArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (pageHeaderArray.count > 0) {
             NSDictionary *objects = pageHeaderArray[0];
@@ -107,13 +86,8 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 
         // Page Footer
         keyPath = [RptqDocumentSection keyPathInPageFooter];
-        pexpressions[0] = [NSExpression expressionForKeyPath:keyPath];
+        predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
         
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-                                                       rightExpression: pexpressions[1]
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSNotEqualToPredicateOperatorType
-                                                               options: 0];
         NSArray <NSDictionary *> *pageFooterArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (pageFooterArray.count > 0) {
             NSDictionary *objects = pageFooterArray[0];
@@ -123,13 +97,8 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 
         // Detail
         keyPath = [RptqDocumentSection keyPathInReport];
-        pexpressions[0] = [NSExpression expressionForKeyPath:keyPath];
-        
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-                                                       rightExpression: pexpressions[1]
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSNotEqualToPredicateOperatorType
-                                                               options: 0];
+        predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+
         NSArray <NSDictionary *> *detailArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (detailArray.count > 0) {
             NSDictionary *objects = detailArray[0];
@@ -156,13 +125,8 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
         NSArray *groupFooters = [[NSArray alloc] init];
         
         keyPath = [RptqDocumentSection keyPathInGroup];
-        pexpressions[0] = [NSExpression expressionForKeyPath:keyPath];
+        predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
         
-        predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-                                                       rightExpression: pexpressions[1]
-                                                              modifier: NSDirectPredicateModifier
-                                                                  type: NSNotEqualToPredicateOperatorType
-                                                               options: 0];
         NSArray <NSDictionary *> *groupArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (groupArray.count > 0) {
             MADSectionGroupLayout *groupLayout;

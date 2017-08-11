@@ -8,6 +8,7 @@
 
 #import "MADOperationBackgroundTaskBegin.h"
 #import <UIKit/UIApplication.h>
+#import <os/log.h>
 
 @interface MADOperationBackgroundTaskBegin ()
 
@@ -24,7 +25,8 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADOperationBackgroundTaskBegin * __weak weakself = self;
     
@@ -37,8 +39,10 @@
     self.backgroundTaskIdentifier = identifier;
     
     if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
         [self finish];
     } else {
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error:", __PRETTY_FUNCTION__);
         NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:22 userInfo:nil];
         [self finishWithError:error];
     }

@@ -11,7 +11,6 @@
 
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSPredicate.h>
-#import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSOrderedSet.h>
 #import <Foundation/NSSet.h>

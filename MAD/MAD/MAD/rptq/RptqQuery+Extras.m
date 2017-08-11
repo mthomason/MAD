@@ -12,7 +12,6 @@
 
 #import "RptqQuery+Extras.h"
 
-#import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSPredicate.h>
@@ -22,6 +21,8 @@
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
+
+#import <MADFoundation/NSString+Common.h>
 
 #import "MADDatabaseField.h"
 #import "MTDatabase.h"
@@ -59,6 +60,8 @@
 
 #import "RptqDataHelper.h"
 
+#import "NSPredicate+Creators.h"
+
 static inline unsigned long MADSectionCountWithGroupCount(unsigned long);
 static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCount) {
     return 5 + groupCount * 2;
@@ -73,14 +76,11 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 + (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
             managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    NSPredicate *predicate;
-    NSFetchRequest *request;
-    predicate = [NSComparisonPredicate predicateWithLeftExpression: [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inQuery))]
-                                                   rightExpression: [NSExpression expressionForConstantValue:queryObjectID]
-                                                          modifier: NSDirectPredicateModifier
-                                                              type: NSEqualToPredicateOperatorType
-                                                           options: 0];
-    request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+    NSString *keyPath = NSStringFromSelector(@selector(inQuery));
+    NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID:queryObjectID
+                                                               atKeyPath:keyPath];
+    NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
     request.predicate = predicate;
     request.includesSubentities = NO;
     request.includesPropertyValues = NO;
@@ -139,7 +139,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
             nameTablePart = [database newSafeIdentifier: valueInQueryTableAlias];
             nameFieldPart = [database newSafeIdentifier: groupField.databaseSchemaField.name];
             
-            keyForSort = [nameTablePart stringByAppendingString:@"."];
+            keyForSort = [nameTablePart stringByAppendingPeriod];
             keyForSort = [keyForSort stringByAppendingString: nameFieldPart];
             
             SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType);

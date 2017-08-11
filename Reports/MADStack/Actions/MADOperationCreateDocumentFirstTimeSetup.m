@@ -15,6 +15,7 @@
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import "MADOperationCreateDocumentCreateDocument.h"
+#import <os/log.h>
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()
 
@@ -44,6 +45,8 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Create document first time setup:", __PRETTY_FUNCTION__);
+
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -61,9 +64,11 @@
         //RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
         //doc = rptqDocument.identifier;
 
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Save:", __PRETTY_FUNCTION__);
         NSError *error = nil;
         [private save:&error];
     }];
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
 
     [self finish];
 }

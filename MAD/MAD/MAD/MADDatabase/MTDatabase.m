@@ -15,6 +15,8 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 
+#import <MADFoundation/NSString+Common.h>
+
 #import "MADDataTable.h"
 
 #import "MTDatabaseMySql.h"
@@ -25,7 +27,6 @@
 #import "MADCredential.h"
 #import "MADErrorUserInfo.h"
 #import "MADDatabaseProtocol.h"
-
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
@@ -120,7 +121,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString *result = [tableName stringByAppendingString:@"."];
+    NSString *result = [tableName stringByAppendingPeriod];
     return [result stringByAppendingString:fieldName];
 }
 
@@ -147,7 +148,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                              andTableName:(NSString *)tableName {
     NSString *fieldAlias;
     //if (fieldName.length && tableName.length) {
-    //    fieldAlias = [fieldName stringByAppendingString:@"."];
+    //    fieldAlias = [fieldName stringByAppendingPeriod];
     //    fieldAlias = [fieldAlias stringByAppendingString:tableName];
     //} else {
         fieldAlias = [fieldName stringByAppendingString:tableName];
@@ -158,7 +159,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (NSString *)fieldAliasForField:(NSString *)field
                withSafeTableName:(NSString *)safeTableName {
-    NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
+    NSString *tableAlias = [safeTableName stringByAppendingPeriod];
     MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
     NSString * __autoreleasing alias = [tableAlias stringByAppendingString:fieldName];
     return alias;
