@@ -35,17 +35,17 @@
         NSArray *sortDescriptors = object.sortDescriptors;
         if (sortDescriptors.count == 0) return self;
         
-        sql = [[NSMutableString alloc] initWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (", object.groupName, object.tableName];
+        sql = [[NSMutableString alloc] initWithFormat: @"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (",
+                                                       object.groupName, object.tableName];
         
-        NSDictionary *columns;
-        columns = object.columns;
+        NSDictionary *columns = object.columns;
         MADSqlite3SortDescription *sortDirection;
         NSUInteger sortCounter = 0;
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             
             NSString *keySortDescriptor = sortDescriptor.key;
             
-            MADDataColumn *column = columns[keySortDescriptor];
+            MADDataColumn *column = object.columns[keySortDescriptor];
             
             NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
             sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType

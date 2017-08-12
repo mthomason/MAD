@@ -30,6 +30,9 @@ NSString * MADOperationConditionKey = @"OperationCondition";
 }
 
 + (instancetype)newOperationConditionResultFailed:(NSError *)error {
+    if (error == nil) {
+        error = [NSError errorWithDomain:NSStringFromClass(self) code:32874 userInfo:nil];
+    }
     return [self newOperationConditionResultIsSucceed:NO error:error];
 }
 
@@ -109,7 +112,7 @@ NSString * MADOperationConditionKey = @"OperationCondition";
         dispatch_group_enter(conditionGroup);
         [condition evaluateForOperation:operation completion:^(MADOperationConditionResult * result) {
             
-            results[idx] = result;
+            [results addObject: result];
             dispatch_group_leave(conditionGroup);
         }];
     }];
@@ -125,11 +128,13 @@ NSString * MADOperationConditionKey = @"OperationCondition";
          check for that.
          */
         if (operation.isCancelled) {
-            failures = [failures arrayByAddingObject: [NSError errorWithCode:MADConditionFailed]];
+            NSError *error = [NSError errorWithCode:MADConditionFailed];
+            failures = [failures arrayByAddingObject: error];
         }
-        if (completion){
+        if (completion) {
             completion(failures);
         }
     });
 }
+
 @end

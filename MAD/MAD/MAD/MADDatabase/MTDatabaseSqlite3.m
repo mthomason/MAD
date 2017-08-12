@@ -918,7 +918,8 @@ void sqliteLog(void *foo, const char* statement) {
     
 }
 
-- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+- (void)getTablesFromConnection:(id)process
+                     completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         if (error) {
             //NSLog(@"Error: %@", error);
@@ -954,8 +955,8 @@ void sqliteLog(void *foo, const char* statement) {
 #pragma mark Reading Fields
 
 - (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
-                                     connection: (id)process
-                                          error: (NSError * __autoreleasing *)error {
+                                      connection: (id)process
+                                           error: (NSError * __autoreleasing *)error {
     NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
     sqlite3_stmt *statement;
     NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";

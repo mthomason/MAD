@@ -7,11 +7,11 @@
 //
 
 #import "MADPromptOperationDisplayError.h"
+#import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
-
-#import <os/log.h>
+#import "MADPromptOperationDisplayErrorProtocol.h"
 
 static NSString * const TextYes = @"Dismiss";
 
@@ -130,7 +130,9 @@ static NSString * const TextYes = @"Dismiss";
         os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Show error alert:", __PRETTY_FUNCTION__);
         UIViewController *viewController = self.viewController;
         viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [viewController presentViewController: alertController animated: YES completion: nil];
+        [viewController presentViewController: alertController animated: YES completion:^{
+        //    [self finish];
+        }];
     }];
 }
 

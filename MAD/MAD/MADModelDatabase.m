@@ -386,10 +386,10 @@
     request.resultType = NSDictionaryResultType;
     request.includesSubentities = NO;
     request.includesPropertyValues = NO;
-    NSError * __autoreleasing *error = NULL;
+    NSError * __autoreleasing error = NULL;
     NSManagedObjectContext *managedObjectContext;
     managedObjectContext = _managedObjectContext;
-    result = [managedObjectContext executeFetchRequest:request error:error];
+    result = [managedObjectContext executeFetchRequest:request error:&error];
     
     NSMutableOrderedSet <MADModelQuery *> *queries;
     queries = [[NSMutableOrderedSet <MADModelQuery *> alloc] init];

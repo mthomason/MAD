@@ -80,14 +80,16 @@
             if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
  
                 if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
-                    MADCredential *credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials.copy;
+                    MADCredential *credentials;
+                    credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials.copy;
                     self.credentials = credentials;
                     break;
                 }
                 
             } else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
                 if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
-                    NSString *value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
+                    NSString *value;
+                    value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
                     switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
                         case MADKeyChainReadOperationTypeUsername:
                             username = value;
@@ -105,7 +107,9 @@
         
         if (self.credentials == nil) {
             if (username != nil && password != nil) {
-                MADCredential *credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
+                MADCredential *credentials;
+                credentials = [[MADCredential alloc] initWithUsername: username
+                                                          andPassword: password];
                 self.credentials = credentials;
             }
         }
@@ -115,7 +119,8 @@
     if (self.credentials == nil) {
         NSString *testFailed = NSLocalizedString(@"Test Failed", @"Test Failed");
         NSString *credentialsNotFound = NSLocalizedString(@"Credentials not found.", @"Credentials not found.");
-        MADErrorUserInfo *errorInfo = [[MADErrorUserInfo alloc] initWithTitle:testFailed andMessage:credentialsNotFound];
+        MADErrorUserInfo *errorInfo = [[MADErrorUserInfo alloc] initWithTitle: testFailed
+                                                                   andMessage: credentialsNotFound];
         NSError *error = [errorInfo errorWithDomain:NSStringFromClass([self class]) code:-1];
         self.error = error;
         [self finishWithError:error];
@@ -125,7 +130,7 @@
     MADDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
     MADDataTable *datatable = [MADDataTable newDataTableOfType: MADDataTableTypeVirtual
-                                                withObjectID: databaseConnection.hash];
+                                                  withObjectID: databaseConnection.hash];
     
     self.datatable = datatable;
     

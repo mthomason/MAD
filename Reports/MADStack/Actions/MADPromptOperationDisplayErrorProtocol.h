@@ -9,5 +9,12 @@
 #ifndef MADPromptOperationDisplayErrorProtocol_h
 #define MADPromptOperationDisplayErrorProtocol_h
 
+@protocol MADPromptOperationDisplayErrorProtocol <NSObject>
+
+    - (NSError *)error;
+    - (BOOL)displayError;
+    - (NSUInteger)tag;
+
+@end
 
 #endif /* MADPromptOperationDisplayErrorProtocol_h */

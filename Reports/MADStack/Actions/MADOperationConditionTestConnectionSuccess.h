@@ -6,8 +6,23 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADOperationConditionTestConnectionSuccess_h
+#define MAD_Designer_MADOperationConditionTestConnectionSuccess_h
 
-@interface MADOperationConditionTestConnectionSuccess : NSObject
+#import <Foundation/NSObject.h>
+#import "MADOperationCondition.h"
+
+@interface MADOperationConditionTestConnection : NSObject
+    <MADOperationCondition>
 
 @end
+
+@interface MADOperationConditionTestConnectionSuccess : MADOperationConditionTestConnection
+
+@end
+
+@interface MADOperationConditionTestConnectionFailuare : MADOperationConditionTestConnection
+
+@end
+
+#endif

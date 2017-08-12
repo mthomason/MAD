@@ -11,15 +11,10 @@
 
 #import "MADOperation.h"
 #import "MADPromptOperationDisplayError.h"
+#import "MADPromptOperationDisplayErrorProtocol.h"
+#import "MADOperationDatabaseTestConnectionProtocol.h"
 
 @class MADDatabaseConnection, MADCredential;
-
-@protocol MADOperationDatabaseTestConnectionProtocol <NSObject>
-
-    @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign) BOOL success;
-
-@end
 
 @interface MADOperationDatabaseTestConnection : MADOperation
     <MADPromptOperationDisplayErrorProtocol, MADOperationDatabaseTestConnectionProtocol>

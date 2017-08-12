@@ -132,9 +132,11 @@
             NSDictionary *userInfo;
             userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                             errorDescription, NSLocalizedDescriptionKey, nil];
-            *error = [NSError errorWithDomain: @"MTDatabaseMySql"
-                                         code: (NSInteger)errorCode
-                                     userInfo: userInfo];
+            NSError * __autoreleasing errorFailedToConnect;
+            errorFailedToConnect = [NSError errorWithDomain: @"MTDatabaseMySql"
+                                                       code: (NSInteger)errorCode
+                                                   userInfo: userInfo];
+            *error = errorFailedToConnect;
         }
         return nil;
     }

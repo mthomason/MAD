@@ -1087,11 +1087,15 @@ void madwarn(char *err,  const char*err2) { }
                 error:(NSError * __autoreleasing *)outError {
     
     BOOL success;
-    NSError * __autoreleasing *error = nil;
-    if (!(success = [super writeContents:contents andAttributes:additionalFileAttributes
-                             safelyToURL:self.urlGuts forSaveOperation:saveOperation error:error]))
+    NSError * __autoreleasing error = nil;
+    if (!(success = [super writeContents: contents
+                           andAttributes: additionalFileAttributes
+                             safelyToURL: self.urlGuts
+                        forSaveOperation: saveOperation
+                                   error: &error])) {
+        *outError = error;
         return NO;
-    
+    }
     MADArchiveManager *archiveManager;
     archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
                                                             archiveURL: self.fileURL];
@@ -1206,7 +1210,7 @@ void madwarn(char *err,  const char*err2) { }
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError * __autoreleasing *)error {
 
     if (self.extraInformation == nil) {
-        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithCapacity:3];
         self.extraInformation = extraInfo;
     }
     NSNumber *dataVersion = [[NSNumber alloc] initWithDouble:1.0];

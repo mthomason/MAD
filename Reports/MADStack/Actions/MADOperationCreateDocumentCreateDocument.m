@@ -15,6 +15,7 @@
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 
 #import "MADOperationUniqueUrlForFilename.h"
+#import "MADPromptOperationDisplayErrorProtocol.h"
 
 @interface MADOperationCreateDocumentCreateDocument ()
     <MADocumentDelegate>
@@ -68,6 +69,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    
     if (!_url) {
         
         for (NSOperation *dependency in self.dependencies) {
@@ -85,7 +87,9 @@
     [document archiveAndRemoveFileWrapper];
     self.document = document;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self.document saveToURL:self.url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+        [self.document saveToURL: self.url
+                forSaveOperation: UIDocumentSaveForCreating
+               completionHandler: ^(BOOL success) {
             if (success) {
                 [self finish];
             } else {

@@ -101,16 +101,22 @@
         conn = [MysqlConnection connectToServer: serv error:&connError];
         
         success = (conn && connError == nil);
-        *error = [connError copy];
+        NSError __autoreleasing *errorC = [connError copy];
+        if (errorC) {
+            *error = errorC;
+        }
     }
     return success ? conn : nil;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
+            andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
     id connectionSettings = self.databaseConnection;
-    NSError * __autoreleasing *dberror = nil;
-    MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil connectionError:dberror];
+    NSError * __autoreleasing dberror = nil;
+    MysqlConnection *dbconn = [self connectWithConnection: connectionSettings
+                                               credentals: nil
+                                          connectionError: &dberror];
     if (dbconn && dberror == nil) {
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
         myFetch.delegate = self;
@@ -128,18 +134,19 @@
             errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription
                                                          andMessage:sqlError.localizedFailureReason];
             if (error != NULL) {
-                *error = [errorUserInfo errorWithDomain:sqlError.domain code:sqlError.code];
+                NSError *userError = [errorUserInfo errorWithDomain:sqlError.domain code:sqlError.code];
+                *error = userError;
             }
         } else {
             result = YES;
         }
     } else {
         if (dberror != nil) {
-            error = dberror;
+            NSError *userError = [dberror copy];
+            *error = userError;
         }
     }
     return result;
-    
 }
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
@@ -149,10 +156,11 @@
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }
-    NSError * __autoreleasing *executeError = nil;
-    BOOL result = [self executeQuery:query withDataTable:dataTable andError:executeError];
+    NSError * __autoreleasing executeError = nil;
+    BOOL result = [self executeQuery:query withDataTable:dataTable andError:&executeError];
     if (executeError != nil) {
-        error = executeError;
+        NSError * __autoreleasing errorResult = [executeError copy];
+        *error = errorResult;
     }
     return result;
 }
@@ -344,7 +352,9 @@
 
 #pragma mark - Reading Fields
 
-- (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)dbconn error:(NSError * __autoreleasing *)error {
+- (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
+                                      connection: (id)dbconn
+                                           error: (NSError * __autoreleasing *)error {
     
     MysqlConnection *conn = dbconn;
     NSMutableDictionary *resultsDictionary = nil;
@@ -354,18 +364,22 @@
     
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v9998"];
-    NSError *errorShowColumns = nil;
-    NSError *errorColumnMetaData = nil;
+    NSError * __autoreleasing errorShowColumns = nil;
+    NSError * __autoreleasing errorColumnMetaData = nil;
     
-    MADDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn error:&errorShowColumns];
+    MADDataTable *dataTable = [myFetch fetchWithCommand: command
+                                              dataTable: &dataTableVirtual
+                                           onConnection: conn
+                                                  error: &errorShowColumns];
     if (errorShowColumns == nil) {
         NSUInteger resultsCount = [dataTable count];
         resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
         
-        for (NSUInteger i=0; i<[dataTable numberOfRows]; i++) {
+        NSUInteger numberOfRows = [dataTable numberOfRows];
+        for (NSUInteger i = 0; i < numberOfRows; i++) {
             NSString *name = [dataTable objectAtRow:i column:0];
-            NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
             MADDatabaseField *field = [[MADDatabaseField alloc] initWithName:name];
+            NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
             resultsDictionary[safeId] = field;
         }
         
@@ -373,7 +387,10 @@
         safeTableName = [self newSafeIdentifier:tableName];
         NSString *command2 = [[NSString alloc] initWithFormat:@"SELECT * FROM %@ LIMIT 0;", safeTableName];
         MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
-        MADDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
+        MADDataTable *dataTable2 = [myFetch2 fetchWithCommand: command2
+                                                    dataTable: &dataTableVirtual2
+                                                 onConnection: conn
+                                                        error: &errorColumnMetaData];
         if (errorColumnMetaData == nil) {
             NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
             for (MADDataColumn *dataColumn in columnsEnumerator) {
@@ -384,7 +401,7 @@
                 MADDataType fieldType = [MADDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
                 databaseField.fieldType = fieldType;
                 databaseField.width = dataColumn.dataLength;
-                databaseField.decimals = dataColumn.dataPercision;
+                databaseField.decimals = (int16_t)dataColumn.dataPercision;
                 databaseField.primaryKey = dataColumn.isPrimaryKey;
             }
         }
