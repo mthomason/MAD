@@ -126,7 +126,7 @@ int restore_backup(char *, char *, char *);
     NSString *destinationLastPathComponent = _filewrapper.lastPathComponent;
     NSURL *destinationURL = _filewrapper.URLByDeletingLastPathComponent;
     
-    NSError * __autoreleasing *errorCreate = nil;
+    NSError * __autoreleasing errorCreate = nil;
     [MADFileUtilities deleteCoreDataFilesAtDirectory: _filewrapper];
     
     char *dest = 0, *filename = 0, *source = 0;
@@ -138,7 +138,7 @@ int restore_backup(char *, char *, char *);
         successCreate = [[NSFileManager defaultManager] createDirectoryAtPath: destinationPath
                                                   withIntermediateDirectories: YES
                                                                    attributes: nil
-                                                                        error: errorCreate];
+                                                                        error: &errorCreate];
         if (successCreate) {
             sucessExist = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
                                                                isDirectory: &isDirectory];
@@ -173,13 +173,13 @@ int restore_backup(char *, char *, char *);
 - (int)unvarchiveLegacy {
     int success = 0;
     //Test to see if it's it's not a compressed  archive
-    NSError * __autoreleasing *errorReading = NULL;
+    NSError * __autoreleasing errorReading = NULL;
     NSData *data;
     data = [[NSData alloc] initWithContentsOfURL: _archive
                                          options: NSDataReadingUncached
-                                           error: errorReading];
+                                           error: &errorReading];
     if (errorReading != nil) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.", (*errorReading).localizedDescription.UTF8String);
+        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.", errorReading.localizedDescription.UTF8String);
         success = -2;
     }
     
@@ -187,14 +187,14 @@ int restore_backup(char *, char *, char *);
         NSFileWrapper *fileWrapper;
         fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
         
-        NSError * __autoreleasing *errorWriting = NULL;
+        NSError * __autoreleasing errorWriting = NULL;
         success = [fileWrapper writeToURL: _filewrapper
                                   options: NSFileWrapperWritingAtomic
                       originalContentsURL: _archive
-                                    error: errorWriting] ? 0 : -1;
+                                    error: &errorWriting] ? 0 : -1;
         
         if (success < 0 && errorWriting != nil) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.", (*errorWriting).localizedDescription.UTF8String);
+            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.", errorWriting.localizedDescription.UTF8String);
         }
         
         NSAssert(success >= 0, @"Failed to write at %s.", __PRETTY_FUNCTION__);

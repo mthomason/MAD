@@ -59,12 +59,12 @@
 }
 
 - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    NSError * __autoreleasing *sqlError = NULL;
-    [super getSqlWithError: sqlError];
+    NSError * __autoreleasing sqlError = NULL;
+    [super getSqlWithError: &sqlError];
     if (sqlError && error != NULL) {
-        error = sqlError;
+      *error = sqlError;
     }
-    NSAssert(sqlError == NULL, @"Error: %@", (*sqlError).localizedDescription);
+    NSAssert(sqlError == NULL, @"Error: %@", sqlError.localizedDescription);
 
     NSString *selectPart = [self.database selectPartWithLimitedResults:255];
     NSMutableString *sql = [[NSMutableString alloc] initWithString:selectPart];
@@ -90,11 +90,11 @@
                                                                object: fields];
     queryMaxFieldLenght.database.delegate = self;
 
-    NSError * __autoreleasing *blockError = NULL;
+    NSError * __autoreleasing blockError = NULL;
     BOOL success = [queryMaxFieldLenght.database executeQuery: queryMaxFieldLenght
                                                 withDataTable: self.dataTableMaxFieldLength
-                                                     andError: blockError];
-    NSAssert(blockError == NULL, @"Error: %@", (*blockError).localizedDescription);
+                                                     andError: &blockError];
+    NSAssert(blockError == NULL, @"Error: %@", blockError.localizedDescription);
     if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
         
         for (RptqDatabaseSchemaField *field in fields) {

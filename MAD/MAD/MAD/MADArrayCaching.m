@@ -276,18 +276,18 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                         uniqueColumnHack: unique
                                           columnAffinity: columnAffinity];
     BOOL success = NO;
-    NSError * __autoreleasing *error = NULL;
-    success = [self.database executeQuery:queryCacheAddColumn withError:error];
+    NSError * __autoreleasing error = NULL;
+    success = [self.database executeQuery:queryCacheAddColumn withError:&error];
     NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database),
              __PRETTY_FUNCTION__);
 }
 
 + (id)newObjectForData:(NSData *)data {
-    NSError * __autoreleasing * error = NULL;
+    NSError * __autoreleasing error = NULL;
     id plist;
     if (data) {
         plist = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        NSAssert(error == NULL, @"Error %@ in %s.", *error, __PRETTY_FUNCTION__);
+        NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
         return plist;
     } else {
         return nil;
@@ -409,8 +409,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     _numberOfRows = 0;
     MTQuery *query;
     query = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
-    NSError * __autoreleasing *error = NULL;
-    return [self.database executeQuery:query withError:error];
+    NSError * __autoreleasing error = NULL;
+    return [self.database executeQuery:query withError:&error];
 
 }
 

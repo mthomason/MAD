@@ -77,7 +77,8 @@ extern NSString * const MADSqlTextFromPart;
                 andError:(NSError * __autoreleasing *)error;
 
     - (MADCredential *)copyCredentalsWithConnection:(MADDatabaseConnection *)connection;
-    - (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals;
+    - (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals
+                connectionError:(NSError * __autoreleasing *)error;
 
     - (void)readRow:(NSUInteger)row;
 

@@ -280,8 +280,8 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
     
     NSFetchRequest *request = [MADModelDocument fetchRequestDocDBQueryIDs];
     
-    NSError * __autoreleasing *error = NULL;
-    results = [managedObjectContext executeFetchRequest:request error:error];
+    NSError * __autoreleasing error = NULL;
+    results = [managedObjectContext executeFetchRequest:request error:&error];
     
     NSAssert(results.count > 0, @"We expect results.");
     if (results.count == 0) return;

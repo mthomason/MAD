@@ -122,9 +122,12 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             MADDatabaseConnection *databaseConnection = blockSelf.databaseConnection;
-            DBPROCESS *dbconn = (__bridge DBPROCESS *)([blockSelf connectWithConnection:databaseConnection credentals:nil]);
+            NSError * __autoreleasing dberror = nil;
+            DBPROCESS *dbconn = (__bridge DBPROCESS *)([blockSelf connectWithConnection:databaseConnection
+                                                                             credentals:nil
+                                                                        connectionError:&dberror]);
 
-            if (dbconn) {
+            if (dbconn && dberror == nil) {
                 
                 id results = nil;
                 NSError *error = nil;
@@ -285,7 +288,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
-    MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil];
+    NSError * __autoreleasing dberror = nil;
+    MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil connectionError:&dberror];
     if (dbconn) {
         success = [self runQuery:query onProcess:dbconn withDataTable:dataTable withError: NULL];
     }
@@ -1321,7 +1325,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return address == nil ? server : [NSString stringWithString:address];
 }
 
-- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals
+            connectionError:(NSError *__autoreleasing *)error {
     
     if (credentals == nil) {
         credentals = [self copyCredentalsWithConnection:connection];
@@ -1330,12 +1335,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     DBPROCESS *dbconn = NULL;
     if (credentals != nil) {
         
-        NSError *error = nil;
-        dbconn = [self connect:credentals.username andPassword:credentals.password error:&error];
+        NSError * __autoreleasing dberror = nil;
+        dbconn = [self connect:credentals.username andPassword:credentals.password error:&dberror];
         MTDatabaseProcessSqlServer *dbwrap = nil;
-        
+        error = &dberror;
         if (error) {
-            [self.errors insertObject:error atIndex:0];
+            [self.errors insertObject:dberror atIndex:0];
         } else {
             dbwrap = [[MTDatabaseProcessSqlServer alloc] initWithProcess:dbconn];
         }

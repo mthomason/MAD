@@ -47,11 +47,11 @@
         MTGraph *graph = [[MTGraph alloc] initWtthQueryID: queryID];
         self.graphRepresentation = graph;
         
-        NSError * __autoreleasing *error = NULL;
+        NSError * __autoreleasing error = NULL;
         BOOL isDirectedAcyclicGraph, topLevel;
         MTLinkedList *tableIDs;
 
-        tableIDs = [graph topologicalSortWithError: error
+        tableIDs = [graph topologicalSortWithError: &error
                             isDirectedAcyclicGraph: &isDirectedAcyclicGraph];
         
         self.topologicallySortedTables = tableIDs;

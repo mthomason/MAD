@@ -134,8 +134,8 @@
     queryTest.database = db;
     self.database = db;
     
-    NSError * __autoreleasing *error = NULL;
-    self.success = [queryTest.database executeQuery:queryTest withError:error];
+    NSError * __autoreleasing error = NULL;
+    self.success = [queryTest.database executeQuery:queryTest withError:&error];
     if (self.success) {
         [self finish];
     } else {
@@ -143,8 +143,8 @@
             self.error = nil;
             [self finishWithError:nil];
         } else {
-            NSError *err = *error;
-            self.error = *error;
+            NSError *err = error;
+            self.error = error;
             [self finishWithError:err];
         }
     }

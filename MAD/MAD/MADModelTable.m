@@ -120,7 +120,7 @@
 - (void)update {
     NSManagedObjectContext *managedObjectContext = _managedObjectContext;
     
-    NSError * __autoreleasing *error = NULL;
+    NSError * __autoreleasing error = NULL;
     NSArray <NSDictionary *> *results;
     NSFetchRequest *fetchQueryTable;
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
@@ -223,7 +223,7 @@
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortByFieldName, nil];
     fetchQueryTable.sortDescriptors = sortDescriptors;
 
-    results = [managedObjectContext executeFetchRequest:fetchQueryTable error:error];
+    results = [managedObjectContext executeFetchRequest:fetchQueryTable error:&error];
 
     
     NSMutableOrderedSet <NSNumber *> *fieldIDs = [[NSMutableOrderedSet alloc] init];

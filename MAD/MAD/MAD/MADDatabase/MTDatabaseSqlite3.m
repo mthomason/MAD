@@ -284,7 +284,8 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (id)connectWithConnection:(MADDatabaseConnection *)connection
-                 credentals:(MADCredential *)credentals {
+                 credentals:(MADCredential *)credentals
+            connectionError:(NSError * __autoreleasing *)error {
     [self openDatabase];
     return nil;
 }
@@ -826,22 +827,22 @@ void sqliteLog(void *foo, const char* statement) {
     //dispatch_release(s0);
     
     BOOL success = NO;
-    NSError * __autoreleasing *errorQuerySyncMode = NULL;
+    NSError * __autoreleasing errorQuerySyncMode = NULL;
     MTQuery *querySyncMode = [[MTQueryCacheSyncOff alloc] init];
-    success = [self executeQuery:querySyncMode withError:errorQuerySyncMode];
+    success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
-    NSError * __autoreleasing *errorQueryJournalMode = NULL;
+    NSError * __autoreleasing errorQueryJournalMode = NULL;
     MTQuery *queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
-    success = [self executeQuery:queryJournalMode withError:errorQueryJournalMode];
+    success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
 
-    NSError * __autoreleasing *errorQueryCacheBeginTransaction = NULL;
+    NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
     MTQuery *query = [[MTQueryCacheBeginTransaction alloc] init];
-    success = [self executeQuery:query withError:errorQueryCacheBeginTransaction];
+    success = [self executeQuery:query withError:&errorQueryCacheBeginTransaction];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
@@ -851,15 +852,15 @@ void sqliteLog(void *foo, const char* statement) {
 
     BOOL success = NO;
 
-    NSError * __autoreleasing *errorCacheEndTransaction = NULL;
+    NSError * __autoreleasing errorCacheEndTransaction = NULL;
     MTQuery *query = [[MTQueryCacheEndTransaction alloc] init];
-    success = [self executeQuery:query withError:errorCacheEndTransaction];
+    success = [self executeQuery:query withError:&errorCacheEndTransaction];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
-    NSError * __autoreleasing *errorQuerySyncMode = NULL;
+    NSError * __autoreleasing errorQuerySyncMode = NULL;
     MTQuery *querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
-    success = [self executeQuery:querySyncMode withError:errorQuerySyncMode];
+    success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 

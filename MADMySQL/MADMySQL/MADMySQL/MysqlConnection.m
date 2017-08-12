@@ -113,10 +113,12 @@
     const char *schema =    server.schema.UTF8String;
     unsigned int port =     server.port;
     
-    mysql_real_connect(connectionHandle, host, user, password, schema, port,
-                       NULL,  /* default socket */ server.flags);
+    //mysql_real_connect(connectionHandle, host, user, password, schema, port,
+    //                   NULL,  /* default socket */ server.flags);
+    
 
-    if (!connectionHandle) {
+    if (!mysql_real_connect(connectionHandle, host, user, password, schema, port,
+                            NULL,  /* default socket */ server.flags)) {
         NSString *errorDescription;
         errorDescription = [[NSString alloc] initWithFormat:@"%s", mysql_error(connectionHandle)];
         unsigned int errorCode = mysql_errno(connectionHandle);

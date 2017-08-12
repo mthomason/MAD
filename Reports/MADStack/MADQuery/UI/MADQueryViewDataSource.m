@@ -119,13 +119,13 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         NSString *keyHasQueryTables = @"madQTC";
         
         NSArray <NSDictionary <NSString *, NSNumber *> *> *result;
-        NSError * __autoreleasing *error = NULL;
+        NSError * __autoreleasing error = NULL;
         NSFetchRequest *request = [RptqQuery fetchRequestTableCount:queryID
                                                       objectContext:managedObjectContext];
         
         NSUInteger numberOfTables = 0;
 
-        result = [managedObjectContext executeFetchRequest:request error:error];
+        result = [managedObjectContext executeFetchRequest:request error:&error];
         if (result.count > 0)
             numberOfTables = (NSUInteger)[result[0][keyHasQueryTables] integerValue];
         

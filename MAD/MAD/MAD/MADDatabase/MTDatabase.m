@@ -116,7 +116,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals {
+- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals
+            connectionError:(NSError * __autoreleasing *)error {
     return nil;
 }
 

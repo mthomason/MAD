@@ -233,10 +233,10 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     if (path != nil &&
         ![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
         
-        NSError * __autoreleasing *error = NULL;
+        NSError * __autoreleasing error = NULL;
         isDirectory = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL
                                                withIntermediateDirectories: YES attributes: nil
-                                                                     error: error];
+                                                                     error: &error];
         
     }
     return cacheURL;

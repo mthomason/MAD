@@ -1099,10 +1099,10 @@ static const inline CGSize sizePopoverFonts() {
         
         [section setProducesFormFeed: newPageAfter];
         
-        NSError * __autoreleasing *error = NULL;
-        if (![private save:error]) {
+        NSError * __autoreleasing error = NULL;
+        if (![private save:&error]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*error).localizedDescription.UTF8String);
+                    error.localizedDescription.UTF8String);
         }
     }];
     
@@ -1137,10 +1137,10 @@ static const inline CGSize sizePopoverFonts() {
         };
         [[NSOperationQueue mainQueue] addOperationWithBlock:updateVisibility];
 
-        NSError * __autoreleasing *error = NULL;
-        if (![private save:error]) {
+        NSError * __autoreleasing error = NULL;
+        if (![private save:&error]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*error).localizedDescription.UTF8String);
+                    error.localizedDescription.UTF8String);
         }
     }];
 }
@@ -1157,8 +1157,8 @@ static const inline CGSize sizePopoverFonts() {
     CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
     [section setInterfaceHeight: collectionViewContentSize.height];
     
-    NSError * __autoreleasing *error = NULL;
-    if (![section.managedObjectContext save:error]) NSLog(@"Error saving managed object context: %@", *error);
+    NSError * __autoreleasing error = NULL;
+    if (![section.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
 
     
     NSNumber *key = @(section.identifier);
@@ -1166,7 +1166,7 @@ static const inline CGSize sizePopoverFonts() {
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
     [section setInterfaceHeight: collectionViewContentSize.height];
-    if (![section.managedObjectContext save:error]) NSLog(@"Error saving managed object context: %@", *error);
+    if (![section.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
     
     [self.view setNeedsUpdateConstraints];
     
@@ -1229,10 +1229,10 @@ static const inline CGSize sizePopoverFonts() {
     MADDesignerSectionBackground *backgroundView = (MADDesignerSectionBackground *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
-    NSError * __autoreleasing *error = NULL;
-    if (![doc.managedObjectContext save:error]) {
+    NSError * __autoreleasing error = NULL;
+    if (![doc.managedObjectContext save:&error]) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                (*error).localizedDescription.UTF8String);
+                error.localizedDescription.UTF8String);
     }
 
     [doc saveToURL: doc.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
@@ -1856,10 +1856,10 @@ static const inline CGSize sizePopoverFonts() {
     completion = ^(UIAlertAction *action, NSString *text) {
         
         ((RptqDocumentElementLabel *)object).text = text.copy;
-        NSError * __autoreleasing *error = NULL;
-        if (![object.managedObjectContext save:error]) {
+        NSError * __autoreleasing error = NULL;
+        if (![object.managedObjectContext save:&error]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*error).localizedDescription.UTF8String);
+                    error.localizedDescription.UTF8String);
         }
         
     };
@@ -1889,10 +1889,10 @@ static const inline CGSize sizePopoverFonts() {
         RptqDocumentElementBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
         [barcodeToEdit updateWithBarcode: barcode field1ID: fieldOne field2ID: fieldTwo];
 
-        NSError * __autoreleasing *error = NULL;
-        if (![private save:error]) {
+        NSError * __autoreleasing error = NULL;
+        if (![private save:&error]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*error).localizedDescription.UTF8String);
+                    error.localizedDescription.UTF8String);
         }
 
 
@@ -1930,10 +1930,10 @@ static const inline CGSize sizePopoverFonts() {
     documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: field.identifier
                                                                        fromObjectContext: context];
     documentObject.referencesQueryField = field;
-    NSError * __autoreleasing *error = NULL;
-    if (![field.managedObjectContext save:error]) {
+    NSError * __autoreleasing error = NULL;
+    if (![field.managedObjectContext save:&error]) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                (*error).localizedDescription.UTF8String);
+                error.localizedDescription.UTF8String);
     }
 
 }
@@ -2498,10 +2498,10 @@ static const inline CGSize sizePopoverFonts() {
     }
     gestureRecognizer.scale = 1.0000f;
     
-    NSError * __autoreleasing *error = NULL;
-    if (![element.managedObjectContext save:error]) {
+    NSError * __autoreleasing error = NULL;
+    if (![element.managedObjectContext save:&error]) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                (*error).localizedDescription.UTF8String);
+                error.localizedDescription.UTF8String);
     }
 }
 
@@ -2858,9 +2858,9 @@ END_deselectElementView:;
 
         NSArray *objects = [[NSArray alloc] initWithObjects:element, nil];
 
-        NSError * __autoreleasing *error = NULL;
+        NSError * __autoreleasing error = NULL;
         [rptqDocument.managedObjectContext obtainPermanentIDsForObjects: objects
-                                                                  error: error];
+                                                                  error: &error];
         
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
                                    inSection: 0];
@@ -2876,10 +2876,10 @@ END_deselectElementView:;
         
         [collectionView insertItemsAtIndexPaths: indexPathsInserted];
 
-        NSError * __autoreleasing *saveError = NULL;
-        if (![section.managedObjectContext save:saveError]) {
+        NSError * __autoreleasing saveError = NULL;
+        if (![section.managedObjectContext save:&saveError]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*saveError).localizedDescription.UTF8String);
+                    saveError.localizedDescription.UTF8String);
         }
 
         layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
@@ -2935,10 +2935,10 @@ END_deselectElementView:;
         elementB = [RptqDocumentElement newDocumentElementWithIdentifier:cellIdentifier
                                                        fromObjectContext:document.managedObjectContext];
         [document.managedObjectContext deleteObject:elementB];
-        NSError * __autoreleasing *err = NULL;
-        if (![document.managedObjectContext save:err]) {
+        NSError * __autoreleasing err = NULL;
+        if (![document.managedObjectContext save:&err]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*err).localizedDescription.UTF8String);
+                    err.localizedDescription.UTF8String);
         }
     }];
 }
@@ -3001,10 +3001,10 @@ END_deselectElementView:;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self.view.scroller.container removeBorderFromAllSectionViews];
         
-        NSError * __autoreleasing *error = NULL;
-        if (![self.document.managedObjectContext save:error]) {
+        NSError * __autoreleasing error = NULL;
+        if (![self.document.managedObjectContext save:&error]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*error).localizedDescription.UTF8String);
+                    error.localizedDescription.UTF8String);
         }
     }
 }
@@ -3017,10 +3017,10 @@ END_deselectElementView:;
         _toolboxVisible = NO;
         [self dismissViewControllerAnimated: YES completion: NULL];
         [self deselectAllElementsAnimated:YES];
-        NSError * __autoreleasing *error = NULL;
-        if (![self.document.managedObjectContext save:error]) {
+        NSError * __autoreleasing error = NULL;
+        if (![self.document.managedObjectContext save:&error]) {
             asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    (*error).localizedDescription.UTF8String);
+                    error.localizedDescription.UTF8String);
         }
     }
 }
@@ -3212,10 +3212,10 @@ END_deselectElementView:;
                     [documentSectionBlock addDocumentObject: documentObject
                                               withDropPoint: locationInSection
                                        managedObjectContext: managedObjectContext];
-                    NSError * __autoreleasing *error = NULL;
-                    if (![managedObjectContext save:error]) {
+                    NSError * __autoreleasing error = NULL;
+                    if (![managedObjectContext save:&error]) {
                         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                                (*error).localizedDescription.UTF8String);
+                                error.localizedDescription.UTF8String);
                     }
 
                 } animationComplete:^() {
@@ -3235,10 +3235,10 @@ END_deselectElementView:;
                     CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
                     sectionBlock.height = sectionViewIntrinsicContentSizeHeight;
                     
-                    NSError * __autoreleasing *error = NULL;
-                    if (![managedObjectContext save:error]) {
+                    NSError * __autoreleasing error = NULL;
+                    if (![managedObjectContext save:&error]) {
                         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                                (*error).localizedDescription.UTF8String);
+                                error.localizedDescription.UTF8String);
                     }
                     
                     [self redrawAllElementViewsInCollectionView:sectionView];
@@ -3627,10 +3627,10 @@ END_deselectElementView:;
 #pragma mark Actions
 
 - (IBAction)actionDone:(id)sender {
-    NSError * __autoreleasing *error = NULL;
-    if (![self.document.managedObjectContext save:error]) {
+    NSError * __autoreleasing error = NULL;
+    if (![self.document.managedObjectContext save:&error]) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                (*error).localizedDescription.UTF8String);
+                error.localizedDescription.UTF8String);
     }
     if (![self dismissAllPopovers]) {
         [self.delegate viewControllerDidFinish:nil];
@@ -3675,10 +3675,10 @@ END_deselectElementView:;
 
 - (IBAction)actionDismiss {
     [self deselectAllElementsAnimated:YES];
-    NSError * __autoreleasing *error = NULL;
-    if (![self.document.managedObjectContext save:error]) {
+    NSError * __autoreleasing error = NULL;
+    if (![self.document.managedObjectContext save:&error]) {
         asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                (*error).localizedDescription.UTF8String);
+                error.localizedDescription.UTF8String);
     }
 }
 

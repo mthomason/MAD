@@ -28,9 +28,9 @@
         NSString *path;
         if ((path = url.path)) {
             NSDictionary *attributes;
-            NSError *__autoreleasing * error = nil;
+            NSError *__autoreleasing error = nil;
             attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-                                                                          error: error];
+                                                                          error: &error];
             _attributes = attributes;
         }
         

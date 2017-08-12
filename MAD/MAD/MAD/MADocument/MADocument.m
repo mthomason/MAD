@@ -1320,8 +1320,8 @@ void madwarn(char *err,  const char*err2) { }
         [tablesInQuery addObject:newQueryTable];
         query.hasQueryTables = tablesInQuery;
         
-        NSError * __autoreleasing *error = NULL;
-        [private save:error];
+        NSError * __autoreleasing error = NULL;
+        [private save:&error];
         [private refreshObject:newQueryTable mergeChanges:NO];
         
         for (RptqQueryField *field in newQueryFields) {
@@ -1409,8 +1409,8 @@ void madwarn(char *err,  const char*err2) { }
         RptqQuery *query = database.hasQueries.anyObject;
         [query addHasQueryGroupsObject: queryGroup];
 
-        NSError * __autoreleasing *error = NULL;
-        [private save:error];
+        NSError * __autoreleasing error = NULL;
+        [private save:&error];
         
         RptqQueryField *groupByField = queryGroup.hasField;
         if (groupByField) {
@@ -1633,8 +1633,8 @@ void madwarn(char *err,  const char*err2) { }
                                 fromParentSection: parentSection
                                 withLayoutManager: layoutManager];
 
-        NSError * __autoreleasing *error = NULL;
-        if (![private save:error]) NSLog(@"Error saving context: %@.", *error);
+        NSError * __autoreleasing error = NULL;
+        if (![private save:&error]) NSLog(@"Error saving context: %@.", error);
     }];
 
 }
@@ -1752,8 +1752,8 @@ void madwarn(char *err,  const char*err2) { }
             
         }
         
-        NSError * __autoreleasing * error = NULL;
-        [managedObjectContext save:error];
+        NSError * __autoreleasing error = NULL;
+        if (![managedObjectContext save:&error]) NSLog(@"Error saving context: %@.", error);
     //}];
     
 

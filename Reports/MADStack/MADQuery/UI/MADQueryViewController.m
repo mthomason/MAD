@@ -1278,8 +1278,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             }
         }
         
-    NSError * __autoreleasing *error = nil;
-    BOOL success = [context save:error];
+    NSError * __autoreleasing error = nil;
+    BOOL success = [context save:&error];
     //success = [private.parentContext save:error];
     if (success) {
         [self.queryViewDataSource numberOfTablesChanged: numberOfTables];
@@ -1335,8 +1335,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         NSAssert(table != nil, @"Need a non-nil value for %@", tableID);
         [private deleteObject:table];
         
-        NSError * __autoreleasing *error = nil;
-        [private save:error];
+        NSError * __autoreleasing error = nil;
+        [private save:&error];
         
     }];
 }
@@ -1355,8 +1355,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         RptqQueryGroup *groupToRemove = [rptqQuery queryGroupForIndex:(NSUInteger)indexPath.row];
         [self.document removeGroupWitObjectID:groupToRemove.objectID fromManagedObjectContext:private];
         
-        NSError * __autoreleasing * error = NULL;
-        [private save:error];
+        NSError * __autoreleasing error = NULL;
+        [private save:&error];
     };
     [private performBlockAndWait:deleteGroup];
 }

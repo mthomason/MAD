@@ -73,7 +73,8 @@
 
 // FIXME: Return error.
 - (id)connectWithConnection:(MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)connection
-                 credentals:(MADCredential *)credentals {
+                 credentals:(MADCredential *)credentals
+            connectionError:(NSError * __autoreleasing *)error {
 
     if (credentals == nil) {
         credentals = [self copyCredentalsWithConnection:connection];
@@ -82,8 +83,8 @@
     BOOL success = NO;
     MysqlConnection *conn = nil;
     
+    NSError *connError = nil;
     if (connection && credentals) {
-        NSError *connError = nil;
         
         MysqlServer *serv = [[MysqlServer alloc] init];
         
@@ -100,6 +101,7 @@
         conn = [MysqlConnection connectToServer: serv error:&connError];
         
         success = (conn && connError == nil);
+        *error = [connError copy];
     }
     return success ? conn : nil;
 }
@@ -107,8 +109,9 @@
 - (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
     id connectionSettings = self.databaseConnection;
-    MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil];
-    if (dbconn) {
+    NSError * __autoreleasing *dberror = nil;
+    MysqlConnection *dbconn = [self connectWithConnection:connectionSettings credentals:nil connectionError:dberror];
+    if (dbconn && dberror == nil) {
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
         myFetch.delegate = self;
         
@@ -129,6 +132,10 @@
             }
         } else {
             result = YES;
+        }
+    } else {
+        if (dberror != nil) {
+            error = dberror;
         }
     }
     return result;
@@ -176,8 +183,9 @@
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     id connectionSettings = self.databaseConnection;
-    MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil];
-    if (conn) {
+    NSError * __autoreleasing connectionError = nil;
+    MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
+    if (conn && connectionError == nil) {
         
         NSError *fetchError = nil;
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
@@ -278,7 +286,7 @@
 
 - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     
-    NSError *error = nil;
+    NSError * __autoreleasing error = nil;
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
     MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];

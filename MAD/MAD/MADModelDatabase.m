@@ -152,8 +152,8 @@
         
         NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverType: self.identifier];
         
-        NSError * __autoreleasing *error = NULL;
-        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        NSError * __autoreleasing error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (results.count > 0) {
             NSDictionary *firstResult = results[0];
             NSString *key = [RptqDatabase keyDatabaseDriverType];
@@ -171,8 +171,8 @@
         
         NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDatabaseName:self.identifier];
         
-        NSError * __autoreleasing *error = NULL;
-        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        NSError * __autoreleasing error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (results.count > 0) {
             NSDictionary *resultSet = results[0];
             NSString *key = [RptqDatabase keyOwnedByUserDatabaseName];
@@ -190,8 +190,8 @@
         
         NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDatabaseDriverID:self.identifier];
         
-        NSError * __autoreleasing *error = NULL;
-        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        NSError * __autoreleasing error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (results.count > 0) {
             NSDictionary *resultSet = results[0];
             NSString *key = [RptqDatabase keyOwnedByUserDriverID];
@@ -209,8 +209,8 @@
         
         NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverName:self.identifier];
         
-        NSError * __autoreleasing *error = NULL;
-        results = [_managedObjectContext executeFetchRequest:fetchRequest error:error];
+        NSError * __autoreleasing error = NULL;
+        results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
         if (results.count > 0) {
             NSDictionary *resultSet = results[0];
             NSString *key = [RptqDatabase keyOwnedByUserDatabaseName];
@@ -255,7 +255,7 @@
 - (void)updateTables {
     NSManagedObjectContext *managedObjectContext = _managedObjectContext;
     
-    NSError * __autoreleasing *error = NULL;
+    NSError * __autoreleasing error = NULL;
     NSArray <NSDictionary *> *results;
     
     void (^setupExpressionWithType)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
@@ -333,7 +333,7 @@
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortByTableName, nil];
     
     fetchQueryTable.sortDescriptors = sortDescriptors;
-    results = [managedObjectContext executeFetchRequest:fetchQueryTable error:error];
+    results = [managedObjectContext executeFetchRequest:fetchQueryTable error:&error];
     
     NSMutableOrderedSet <NSNumber *> *tables;
     NSMutableDictionary <NSNumber *, MADModelTable *> *tableDictionary;
@@ -397,7 +397,7 @@
     NSUInteger i = 0;
     for (NSDictionary <NSString *, NSNumber *> *objid in result) {
         queryObjectID = [[MADModelQuery alloc] initWithIdentifier: objid[keyPathIdentifier].longLongValue
-                                           managedObjectContext:managedObjectContext];
+                                             managedObjectContext: managedObjectContext];
         [queries addObject: queryObjectID];
         queryObjectID = nil;
         i++;

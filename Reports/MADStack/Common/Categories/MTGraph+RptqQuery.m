@@ -71,7 +71,7 @@
     
     if (self = [self init]) {
 
-        NSError * __autoreleasing *error = NULL;
+        NSError * __autoreleasing error = NULL;
         NSArray <NSManagedObjectID *> *fetchQueryTableResults;
         NSArray <NSManagedObjectID *> *fetchQueryLinksResults;
 
@@ -105,7 +105,7 @@
         fetchQueryTable.resultType = NSManagedObjectIDResultType;
         fetchQueryTable.predicate = predicateInQuery;
         
-        fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable error:error];
+        fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable error:&error];
 
 
         NSExpressionDescription *expLeftFieldHasQueryTable = [[NSExpressionDescription alloc] init];
@@ -123,9 +123,9 @@
         fetchQueryLinks.resultType = NSDictionaryResultType;
         fetchQueryLinks.predicate = predicateInQuery;
         error = NULL;
-        fetchQueryLinksResults = [managedObjectContext executeFetchRequest:fetchQueryLinks error:error];
+        fetchQueryLinksResults = [managedObjectContext executeFetchRequest:fetchQueryLinks error:&error];
         
-        NSAssert(error == nil, @"Got error %@", *error);
+        NSAssert(error == nil, @"Got error %@", error);
         
         //Add a vertex to the graph for each table.
         NSManagedObjectID *objectID;

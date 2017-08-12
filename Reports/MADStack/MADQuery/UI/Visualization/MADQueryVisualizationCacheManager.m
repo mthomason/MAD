@@ -94,15 +94,15 @@
 - (MADHierarchicalDisplayModel *)loadCache {
     
     MADHierarchicalDisplayModel *result;
-    NSError * _Nullable __autoreleasing * _Nullable error = nil;
+    NSError * _Nullable __autoreleasing error = nil;
     NSData *data;
     data = [[NSData alloc] initWithContentsOfURL: self.url
                                          options: NSDataReadingUncached
-                                           error: error];
+                                           error: &error];
     if (error != nil) {
     
         [[NSFileManager defaultManager] removeItemAtURL: self.url
-                                                  error: error];
+                                                  error: &error];
         result = nil;
 
     } else {
@@ -123,7 +123,7 @@
             if ([resultFromTryBlock isKindOfClass:[MADHierarchicalDisplayModel class]]) {
                 result = resultFromTryBlock;
             } else {
-                [[NSFileManager defaultManager] removeItemAtURL:self.url error:error];
+                [[NSFileManager defaultManager] removeItemAtURL:self.url error:&error];
                 result = nil;
             }
             

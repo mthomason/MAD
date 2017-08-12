@@ -143,8 +143,8 @@
         
         MADTableController *strongself = weakSelf;
         MADTableController * __weak weakSelf2 = strongself;
-        NSError * __autoreleasing *error = NULL;
-        BOOL success = [strongself.tableFormatter.query performQueryWithError: error];
+        NSError * __autoreleasing errorPerformQuery = NULL;
+        BOOL success = [strongself.tableFormatter.query performQueryWithError: &errorPerformQuery];
         
         MADTableController *strongself2 = weakSelf2;
 
@@ -159,7 +159,7 @@
                                             withObject: nil
                                          waitUntilDone: NO];
         
-        if (!success && error) {
+        if (!success && errorPerformQuery) {
             
             NSString *key = strongself2.query.database.databaseConnection.connectionString.copy;
             void (^deleteKey)(BOOL);
@@ -167,7 +167,7 @@
                 [MTKeyChain deleteKey:key];
             };
             
-            NSError *serror = [*error copyWithZone:nil];
+            NSError *serror = [errorPerformQuery copyWithZone:nil];
             MADTableController * __weak weakself4 = strongself2;
             dispatch_block_t showError = ^{
                 MADTableController *sself = weakself4;
