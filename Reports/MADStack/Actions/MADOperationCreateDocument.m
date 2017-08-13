@@ -36,6 +36,9 @@
 @interface MADOperationCreateDocument ()
     <MADOperationCreateDocumentImportSchemaProtocol>
 
+    @property (nonatomic, assign, readwrite, getter=isSuccessConnection) BOOL successConnection;
+    @property (nonatomic, assign, readwrite, getter=isSuccessCreate) BOOL successCreate;
+
 @end
 
 @implementation MADOperationCreateDocument
@@ -50,7 +53,8 @@
     
     if (self = [super init]) {
         
-        
+        _connectionSuccess = NO;
+        _successCreate = NO;
         // ---------------------------------------------------
         // Operation 1: Create unique filename/url for document.
         // -------------------------
@@ -216,9 +220,13 @@
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    //if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
-    //    [self finish];
-    //}
+    if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
+        [self finish];
+    } else if ([operation isKindOfClass:[MADOperationDatabaseTestConnection class]]) {
+        _connectionSuccess = ((MADOperationDatabaseTestConnection *)operation).success;
+    } else if ([operation isKindOfClass:[MADOperationCreateDocumentSaveAndCloseNewDocument class]]) {
+        _successCreate = errors.count == 0;
+    }
 }
 
 - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {

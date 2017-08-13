@@ -88,6 +88,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
     @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
 
+    @property (nonatomic, assign) SEL actionSave;
+    @property (nonatomic, weak) id actionSaveTarget;
+
 @end
 
 @implementation MADConnectionViewController
@@ -109,6 +112,56 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     }
 }
 
++ (void)viewController:(id)viewController
+         displayErrors:(NSArray <__kindof NSError *> *)errors
+            completion:(void (^)(BOOL))completion {
+
+    MADBlockAlertDidFinish handleAlertDidFinish;
+    UIAlertController *alert;
+    NSRange range;
+    NSError *error;
+    NSString *localizedDescription, *localizedFailureReason;
+    NSArray <__kindof NSError *> *remaningErrors;
+    
+    error = errors.lastObject;
+    
+    range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
+    remaningErrors = [errors subarrayWithRange:range];
+
+    handleAlertDidFinish = ^(UIAlertAction *action) {
+
+        if (remaningErrors.count > 0) {
+            
+            MADBlockCompletionStatus alertCompleted = ^(BOOL success) { completion(YES); };
+            [MADConnectionViewController viewController:viewController
+                                          displayErrors:remaningErrors
+                                             completion:alertCompleted];
+        } else {
+            completion(YES);
+        }
+        
+    };
+    
+    localizedDescription = error.localizedDescription.copy;
+    localizedFailureReason = error.localizedFailureReason.copy;
+
+    alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: localizedDescription
+                                                                     message: localizedFailureReason
+                                                               andCompletion: handleAlertDidFinish];
+
+    [viewController presentViewController:alert animated:YES completion:nil];
+}
+
++ (void)showLocalNotificationCreatedReportWithName:(NSString *)name {
+    NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'",
+                                                @"Created report '%@.'");
+    NSString *body = [[NSString alloc] initWithFormat:reportIsReady, name];
+
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    notification.alertBody = body;
+    [[UIApplication sharedApplication] presentLocalNotificationNow: notification];
+}
+
 - (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -120,11 +173,15 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return self;
 }
 
-#pragma mark - View lifecycle
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    self.actionSave = self.navigationItem.rightBarButtonItem.action;
+    self.actionSaveTarget = self.navigationItem.rightBarButtonItem.target;
+    
     MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
     self.credentialQueue = credentialQueue;
     
@@ -168,7 +225,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [super viewWillLayoutSubviews];
 }
 
-#pragma mark - Post Report Notifications
+#pragma mark -
+#pragma mark Post Report Notifications
 
 - (void)addObserverToObjectForProgress:(id)obj {
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -183,7 +241,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
                                                   object: obj];
 }
 
-#pragma mark - Progress Notifications
+#pragma mark -
+#pragma mark Progress Notifications
 
 - (void)objectDidUpdateProgress:(NSNotification *)sender {
     MADProgress *progress;
@@ -194,23 +253,40 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     }];
 }
 
-#pragma mark - MADOperationObserver
+#pragma mark -
+#pragma mark MADOperationObserver
 
 - (void)operationDidStart:(MADOperation *)operation { }
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        [self removeObserverFromObjectForProgress:operation];
-        [self.delegate viewControllerDidFinish: self];
-        self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
-                                                       MADConnectionViewControllerDefaultPrompt);
-        [self enableTextFields];
-    }];
+    //If document was created, then dismiss the form.  Otherwise, reset the form.
+    BOOL success = NO;
+    if ([operation isKindOfClass:[MADOperationCreateDocument class]]) {
+        if (((MADOperationCreateDocument *)operation).isSuccessConnection &&
+            ((MADOperationCreateDocument *)operation).isSuccessCreate) {
+            success = YES;
+        }
+    }
+    if (success) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            [self removeObserverFromObjectForProgress:operation];
+            [self resetPrompt];
+            [self.delegate viewControllerDidFinish: self];
+            [self enableTextFields];
+        }];
+    } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            [self removeObserverFromObjectForProgress:operation];
+            [self resetPrompt];
+            [self enableUserInteraction];
+        }];
+    }
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Actions
 
 - (void)cancel:(id)sender {
     [self.delegate viewControllerDidCancel:self];
@@ -288,6 +364,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     self.textFieldReportName.enabled = YES;
 }
 
+- (void)resetPrompt {
+    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
+                                                   MADConnectionViewControllerDefaultPrompt);
+}
+
 + (UIProgressView *)progressViewWithWidth:(CGFloat)width {
     UIProgressView *progressView;
     progressView = [[UIProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleDefault];
@@ -328,9 +409,22 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;
     activityIndicator.hidesWhenStopped = NO;
+    
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     barButtonItem.isAccessibilityElement = NO;
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+}
+
+- (void)enableUserInteraction {
+    [self enableNavigation];
+    [self enableTextFields];
+    UIBarButtonItem *buttonSave = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
+                                                                                target: self.actionSaveTarget
+                                                                                action: self.actionSave];
+    [self.navigationItem setRightBarButtonItem:buttonSave animated:YES];
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.progressView.progress = 0.0000f;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 - (IBAction)save:(id)sender {
@@ -343,8 +437,10 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
     
     MADDatabaseConnection *databaseConnection;
-    databaseConnection= [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType host: self.textFieldHost.text
-                                                                    database: self.textFieldDatabase.text port: self.textFieldPort.text.integerValue];
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType
+                                                                         host: self.textFieldHost.text
+                                                                     database: self.textFieldDatabase.text
+                                                                         port: self.textFieldPort.text.integerValue];
     
     MADOperationCreateDocument *createDocument;
     createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
@@ -357,10 +453,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 }
 
-#pragma mark - MADDatabaseProtocol
+#pragma mark -
+#pragma mark MADDatabaseProtocol
 
 - (void)resetAfterConnectionString:(NSString *)connectionString failedTest:(NSArray *)errors {
-    [self resetForm];
+    [self enableUserInteraction];
     [self displayErrors:errors forConnectionString:connectionString];
 
 }
@@ -371,72 +468,14 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     }];
 }
 
-- (void)resetForm {
-    [self enableNavigation];
-    [self enableTextFields];
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-    self.progressView.progress = 0.0000f;
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-}
-
-+ (void)viewController:(id)viewController
-         displayErrors:(NSArray <__kindof NSError *> *)errors
-            completion:(void (^)(BOOL))completion {
-
-    MADBlockAlertDidFinish handleAlertDidFinish;
-    UIAlertController *alert;
-    NSRange range;
-    NSError *error;
-    NSString *localizedDescription, *localizedFailureReason;
-    NSArray <__kindof NSError *> *remaningErrors;
-    
-    error = errors.lastObject;
-    
-    range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
-    remaningErrors = [errors subarrayWithRange:range];
-
-    handleAlertDidFinish = ^(UIAlertAction *action) {
-
-        if (remaningErrors.count > 0) {
-            
-            MADBlockCompletionStatus alertCompleted = ^(BOOL success) { completion(YES); };
-            [MADConnectionViewController viewController:viewController
-                                          displayErrors:remaningErrors
-                                             completion:alertCompleted];
-        } else {
-            completion(YES);
-        }
-        
-    };
-    
-    localizedDescription = error.localizedDescription.copy;
-    localizedFailureReason = error.localizedFailureReason.copy;
-
-    alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: localizedDescription
-                                                                     message: localizedFailureReason
-                                                               andCompletion: handleAlertDidFinish];
-
-    [viewController presentViewController:alert animated:YES completion:nil];
-
-}
-
-+ (void)showLocalNotificationCreatedReportWithName:(NSString *)name {
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'",
-                                                @"Created report '%@.'");
-    NSString *body = [NSString stringWithFormat:reportIsReady, name];
-    notification.alertBody = body;
-    [[UIApplication sharedApplication] presentLocalNotificationNow: notification];
-
-}
-
 - (void)showErrorLog:(MADErrorContainer *)errorContainer {
     if (errorContainer && [errorContainer count] > 0) {
         NSString *errorText = [errorContainer errorLogCompact];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Issues Encounterd"
-                                                                       message: errorText
-                                                                preferredStyle: UIAlertControllerStyleAlert];
+        UIAlertController *alert;
+        alert = [UIAlertController alertControllerWithTitle: @"Issues Encounterd"
+                                                    message: errorText
+                                             preferredStyle: UIAlertControllerStyleAlert];
         
         UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue"
                                                      style: UIAlertActionStyleDefault
@@ -481,7 +520,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self.delegate viewControllerDidCancel:self];
 }
 
-#pragma mark - Table view delegate
+#pragma mark -
+#pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath: indexPath animated: NO];

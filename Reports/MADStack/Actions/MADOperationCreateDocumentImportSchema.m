@@ -25,7 +25,7 @@
 
 @interface MADOperationCreateDocumentImportSchema ()
 
-    @property (nonatomic, assign) BOOL success;
+    @property (nonatomic, assign, readwrite, getter=isSuccess) BOOL success;
     @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
 
 @end
@@ -118,8 +118,6 @@
             [errorContainer addErrorsFromContainer:additionalErrors];
             
         }
-
-        
         
         [document.database closeProcess:dbconnection];
         
@@ -134,8 +132,8 @@
         }
 
     }];
-    
-    if (success) {
+    _success = success;
+    if (_success) {
         [self finish];
     } else {
         [self finishWithError:displayError];

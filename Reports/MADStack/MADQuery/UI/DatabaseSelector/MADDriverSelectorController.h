@@ -12,11 +12,6 @@
 #import <UIKit/UITableViewController.h>
 #import <MADExplorer/MADSaveFileProtocol.h>
 
-extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
-extern NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier;
-extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
-extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
-
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADDriverSelectorController : UITableViewController

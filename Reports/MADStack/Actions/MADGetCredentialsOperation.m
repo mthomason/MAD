@@ -214,9 +214,10 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptPassword addDependency:promptCredntials];
     [promptPassword addCondition:conditionPromptPasswordBoolAnd];
     
-    NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
-    NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
-    
+
+ NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
+ NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
+
     // ---------------------------------------------------
     // Operation 5a: Test the connection (credentials prompt)
     // ---------------------------------------------------
@@ -315,14 +316,18 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [putPassword addDependency:promptPassword];
     [putPassword addDependency:promptSavePassword];
     [putPassword addCondition:promptToSavePasswordAffirmative];
-    
-    // Operation: Confirm Save Username and Password
+
+
     NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,
-                                                     getPassword, promptPassword,
-                                                     testConnectionOperationCredentials, testConnectionOperationPassword,
-                                                     displayErrorCredentials, displayErrorPassword,
-                                                     promptSaveCredntials, promptSavePassword,
-                                                     putUsername, putPassword];
+                                                     getPassword, promptPassword
+                                                     //testConnectionOperationCredentials, testConnectionOperationPassword,
+                                                     //displayErrorCredentials,
+                                                     //displayErrorPassword,
+                                                     //promptSaveCredntials,
+                                                     //promptSavePassword,
+                                                     //putUsername,
+                                                     //putPassword
+                                                     ];
     
     MADGroupOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{

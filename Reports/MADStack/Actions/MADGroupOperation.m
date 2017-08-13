@@ -52,7 +52,6 @@
         [_finishingOperation addDependency:op];
         [_internalQueue addOperation:op];
     }
-    //[_internalQueue addOperation:_finishingOperation];
 }
 
 - (MADOperationQueue *)internalQueue {
@@ -68,6 +67,7 @@
 
 - (void)cancel {
     [self.internalQueue cancelAllOperations];
+    self.internalQueue.suspended = NO;
     [super cancel];
 }
 

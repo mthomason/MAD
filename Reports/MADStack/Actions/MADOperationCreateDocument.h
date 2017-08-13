@@ -20,6 +20,9 @@
                   databaseConnection: (MADDatabaseConnection *)databaseConnection
                       viewController: (UIViewController *)viewController;
 
+    @property (nonatomic, assign, readonly, getter=isSuccessConnection) BOOL connectionSuccess;
+    @property (nonatomic, assign, readonly, getter=isSuccessCreate) BOOL successCreate;
+
 @end
 
 #endif

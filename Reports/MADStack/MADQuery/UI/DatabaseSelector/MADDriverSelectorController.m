@@ -32,9 +32,7 @@ NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Sele
 NSString * const MADDriverSelectorControllerDefaultTitle                = @"New Report";
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
-NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier            = @"MTSegueShowSetUpDatasourceSqlite3Identifier";
-NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
-NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceSqlServerIdentifier";
 
 @interface MADDriverSelectorController ()
     <MADViewControllerStandardProtocol,
@@ -143,12 +141,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
         ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
         ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
         dbId = MADDatabaseTypeTDS;
-
-    } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
-    
-        ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
-        ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADDatabaseTypeSqlite3;
 
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {
