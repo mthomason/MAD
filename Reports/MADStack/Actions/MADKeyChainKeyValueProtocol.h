@@ -9,5 +9,10 @@
 #ifndef MADKeyChainKeyValueProtocol_h
 #define MADKeyChainKeyValueProtocol_h
 
+@protocol MADKeyChainKeyValueProtocol <NSObject>
+
+    - (NSString *)valueForKey:(NSString *)key;
+
+@end
 
 #endif /* MADKeyChainKeyValueProtocol_h */

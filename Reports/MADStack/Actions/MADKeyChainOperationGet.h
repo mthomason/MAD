@@ -10,20 +10,7 @@
 #define MAD_Designer_MADKeyChainOperationGet_h
 
 #import "MADOperation.h"
-
-typedef NS_ENUM(short, MADKeyChainReadOperationTypes) {
-    MADKeyChainReadOperationTypeUsername,
-    MADKeyChainReadOperationTypePassword,
-};
-
-@protocol MADOperationResultStringProtocol <NSObject>
-
-    - (NSString *)key;
-    - (NSString *)value;
-    - (BOOL)success;
-    - (MADKeyChainReadOperationTypes)readOperationType;
-
-@end
+#import "MADOperationResultStringProtocol.h"
 
 @interface MADKeyChainOperationGet : MADOperation
     <MADOperationResultStringProtocol>

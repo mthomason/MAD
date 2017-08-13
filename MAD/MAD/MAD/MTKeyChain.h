@@ -35,8 +35,8 @@ extern NSString * const MTKeyChainPasswordAccountDesc;
     + (NSDictionary *)queryUsernameDefination:(NSString *)key;
     + (NSDictionary *)queryPasswordDefination:(NSString *)key;
 
-    + (void)deleteSavedPasswordForKey:(NSString *)key;
     + (void)deleteKey:(NSString *)key;
+    + (void)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error;
 
 @end
 

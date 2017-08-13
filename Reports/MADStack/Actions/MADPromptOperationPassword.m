@@ -76,6 +76,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _userContinue = NO;
 
         _viewController = viewController;
+        self.identifier = self.hash;
         condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
         [self addCondition:condition];
 

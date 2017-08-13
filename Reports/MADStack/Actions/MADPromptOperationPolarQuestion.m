@@ -32,7 +32,8 @@ static NSString * const TextNo = @"No";
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
+- (instancetype)initWithTitle:(NSString *)title
+                      message:(NSString *)message
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
         //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
@@ -41,6 +42,7 @@ static NSString * const TextNo = @"No";
         _title = title.copy;
         _message = message.copy;
         _result = NO;
+        self.identifier = self.hash;
         MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
         [self addCondition:condition];
         

@@ -10,12 +10,7 @@
 #define MAD_Designer_MADKeyChainOperationPut_h
 
 #import "MADOperation.h"
-
-@protocol MADKeyChainKeyValueProtocol <NSObject>
-
-    - (NSString *)valueForKey:(NSString *)key;
-
-@end
+#import "MADKeyChainKeyValueProtocol.h"
 
 @interface MADKeyChainOperationPut : MADOperation
 

@@ -29,7 +29,7 @@
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
-- (instancetype)initWithTag:(NSUInteger)tag {
+- (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
     if (self = [super init]) {
         _tag = tag;
     }
@@ -63,9 +63,9 @@
         return result;
     }
 
-    for (NSOperation *dependency in dependencies) {
+    for (MADOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
-            dependency.hash == self.tag) {
+            dependency.identifier == self.tag) {
             if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
                 
                 result = [MADOperationConditionPolarQuestionNegativeResult newOperationConditionResultSatisfied];

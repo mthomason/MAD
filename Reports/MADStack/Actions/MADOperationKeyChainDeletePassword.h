@@ -6,8 +6,18 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADKeyChainOperationPut_h
+#define MAD_Designer_MADKeyChainOperationPut_h
 
-@interface MADOperationKeyChainDeletePassword : NSObject
+#import "MADOperation.h"
+
+@interface MADOperationKeyChainDeletePassword : MADOperation
+
+    - (instancetype)initWithKey:(NSString *)key;
+
+    @property (nonatomic, readonly, copy) NSString *key;
+    @property (atomic, readonly, assign) BOOL success;
 
 @end
+
+#endif

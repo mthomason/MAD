@@ -19,7 +19,7 @@
 @interface MADOperationConditionDisplayedAlert : NSObject
     <MADOperationCondition>
 
-    - (instancetype)initWithTag:(NSUInteger)tag;
+    - (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
     @property (nonatomic, assign) BOOL reverseCondition;
 
 @end

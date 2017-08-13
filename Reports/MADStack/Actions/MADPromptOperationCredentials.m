@@ -70,7 +70,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _gotCredentials = NO;
         MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
         [self addCondition:condition];
-        
+        self.identifier = self.hash;
     }
     return self;
 }

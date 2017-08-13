@@ -10,7 +10,7 @@
 #import "MADOperationQueue.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
-#import "MADDefer.h"
+
 /**
  A subclass of `Operation` that executes zero or more operations as part of its
  own execution. This class of operation is very useful for abstracting several

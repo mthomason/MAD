@@ -420,7 +420,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                                   fileExtension: MADFileExtentionMobleApplicationDocument
                                                                 groupIdentifier: groupID
                                                                     installFlag: MADUpgradeInstalledSamplesLondon];
-        operation.tag = MADIDInstallOperationSampleDocumentLondon;
+        operation.identifier = MADIDInstallOperationSampleDocumentLondon;
         [operation addObserver:self];
         [operationQueueBackground addOperation:operation];
         
@@ -428,7 +428,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                                   fileExtension: MADFileExtentionMobleApplicationDocument
                                                                 groupIdentifier: groupID
                                                                     installFlag: MADUpgradeInstalledSamplesMusic];
-        operation.tag = MADIDInstallOperationSampleDocumentMusic;
+        operation.identifier = MADIDInstallOperationSampleDocumentMusic;
         [operation addObserver:self];
         [operationQueueBackground addOperation:operation];
         
@@ -1992,7 +1992,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (void)operationDidFinish:(MADOperation *)operation
                     errors:(NSArray *)errors {
 
-    switch (operation.tag) {
+    switch (operation.identifier) {
 
         case MADIDInstallOperationSampleDocumentMusic:
         case MADIDInstallOperationSampleDocumentLondon: {

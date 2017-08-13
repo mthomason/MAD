@@ -15,7 +15,7 @@
 @interface MADOperationConditionPolarQuestionAffirmative : NSObject
     <MADOperationCondition>
 
-    - (instancetype)initWithTag:(NSUInteger)tag;
+    - (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
 
 @end
 

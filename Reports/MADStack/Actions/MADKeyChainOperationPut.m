@@ -64,7 +64,9 @@ static NSString * const ErrorDomain = @"MADKCP";
     // Write the value to the keychain.
     if (valueToWrite != nil) {
     
-        OSStatus status = [MTKeyChain saveToken:valueToWrite forKey:self.key withDescription:self.keyDescription];
+        OSStatus status = [MTKeyChain saveToken: valueToWrite
+                                         forKey: self.key
+                                withDescription: self.keyDescription];
         if (status == errSecSuccess) {
         
             os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);

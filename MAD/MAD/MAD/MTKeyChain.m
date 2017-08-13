@@ -255,23 +255,33 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     }
 }
 
-+ (void)deleteSavedPasswordForKey:(NSString *)key {
++ (void)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error {
     
     NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
     NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
     
     CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
     
+    NSError * __autoreleasing deleteError = nil;
     OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername,
                                                 (CFTypeRef *)&queryUsernameData);
     if (deleteStatus == errSecSuccess) {
         deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
+        if (deleteStatus != errSecSuccess) {
+            deleteError = [NSError errorWithDomain:@"MADKeyChain" code:deleteStatus userInfo:nil];
+        }
     }
     
     deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword,
                                        (CFTypeRef *)&queryPasswordData);
     if (deleteStatus == errSecSuccess) {
         deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryPassword);
+        if (deleteStatus != errSecSuccess && deleteError == nil) {
+            deleteError = [NSError errorWithDomain:@"MADKeyChain" code:deleteStatus userInfo:nil];
+        }
+    }
+    if (deleteError != nil) {
+        *error = deleteError;
     }
 }
 

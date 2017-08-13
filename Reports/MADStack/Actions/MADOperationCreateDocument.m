@@ -11,6 +11,8 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
+#import <MAD/MTKeyChain.h>
+#import <MAD/MADCredential.h>
 
 #import "MADOperationQueue.h"
 #import "MADOperationUniqueUrlForFilename.h"
@@ -26,6 +28,10 @@
 #import "MADOperationDatabaseTestConnection.h"
 #import "MADOperationConditionTestConnectionSuccess.h"
 #import "MADPromptOperationPolarQuestion.h"
+#import "MADOperationKeyChainDeletePassword.h"
+#import "MADKeyChainOperationGet.h"
+#import "MADOperationConditionPolarQuestionAffirmative.h"
+#import "MADOperationConditionHasResultString.h"
 
 @interface MADOperationCreateDocument ()
     <MADOperationCreateDocumentImportSchemaProtocol>
@@ -44,27 +50,46 @@
     
     if (self = [super init]) {
         
+        
+        // ---------------------------------------------------
+        // Operation 1: Create unique filename/url for document.
+        // -------------------------
+        
         MADOperationUniqueUrlForFilename *uniqueUrlForFilename;
         uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
                                                                                    pathExtension: MADFileExtentionMobleApplicationDocument
                                                                            andDocumentsDirectory: documentsDirectory];
         
+        // ---------------------------------------------------
+        // Operation 1: Get database credentials from keychain or user.
+        // -------------------------
+
         MADGetCredentialsOperation *getCredentials;
         getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
                                                                          viewController: viewController];
       
+        // ---------------------------------------------------
+        // Operation 1: Test the database connection.
+        // -------------------------
+
         MADOperationDatabaseTestConnection *testConnectionOperationCredentials;
         testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
         [testConnectionOperationCredentials addDependency:getCredentials];
+        
+        
         
         MADPromptOperationDisplayError *displayErrorCredentials;
         displayErrorCredentials = [[MADPromptOperationDisplayError alloc] initWithViewController:viewController];
         [displayErrorCredentials addDependency:testConnectionOperationCredentials];
         
+        
+        
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
         [taskBegin addDependency: getCredentials];
         [taskBegin addDependency: testConnectionOperationCredentials];
         [taskBegin addDependency: displayErrorCredentials];
+        
+        
         
         MADOperationCreateDocumentCreateDocument *createDocument;
         createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
@@ -119,15 +144,42 @@
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addCondition: connectionConnectionSuccess];
         
+        NSString *key = databaseConnection.connectionString;
+        NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+
+        MADKeyChainOperationGet *operationGetUsername;
+        
+        operationGetUsername = [[MADKeyChainOperationGet alloc] initWithKey: keyUsername
+                                                            withDescription: MTKeyChainUsernameAccountDesc];
+        operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
+        [operationGetUsername addDependency: displayErrorCredentials];
+        [operationGetUsername addDependency: testConnectionOperationCredentials];
+
+        MADOperationConditionHasResultString *conditionReadUsername;
+        conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
+        
         MADPromptOperationPolarQuestion *promptDeleteCredntials;
         promptDeleteCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
                                                                                 message: @"Would you like to remove the saved credentials"
                                                                          viewController: viewController];
-        [promptDeleteCredntials addDependency: displayErrorCredentials];
-        [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
+        
         MADOperationConditionTestConnectionFailuare *connectionConnectionFail;
         connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
-        [promptDeleteCredntials addCondition:connectionConnectionFail];
+
+        [promptDeleteCredntials addDependency: displayErrorCredentials];
+        [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
+        [promptDeleteCredntials addDependency: operationGetUsername];
+        [promptDeleteCredntials addCondition: connectionConnectionFail];
+        [promptDeleteCredntials addCondition: conditionReadUsername];
+        
+
+        MADOperationConditionPolarQuestionAffirmative *promptDeletePasswordAffirmative;
+        promptDeletePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier: promptDeleteCredntials.identifier];
+        
+        MADOperationKeyChainDeletePassword *operationDeletePassword;
+        operationDeletePassword = [[MADOperationKeyChainDeletePassword alloc] initWithKey: databaseConnection.connectionString];
+        [operationDeletePassword addDependency:promptDeleteCredntials];
+        [operationDeletePassword addCondition:promptDeletePasswordAffirmative];
         
 
         MADOperationBackgroundTaskEnd *taskEnd;
@@ -142,7 +194,8 @@
                                                          firstTimeSetup, addConnection,
                                                          importSchema, saveOperation,
                                                          closeDocument, taskEnd,
-                                                         promptDeleteCredntials];
+                                                         promptDeleteCredntials,
+                                                         operationDeletePassword];
         
         MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{

@@ -33,7 +33,7 @@
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 }
 
-- (instancetype)initWithTag:(NSUInteger)tag {
+- (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
     if (self = [super init]) {
         _tag = tag;
         _reverseCondition = NO;
@@ -72,10 +72,10 @@
         return result;
     }
 
-    for (NSOperation *dependency in dependencies) {
+    for (MADOperation *dependency in dependencies) {
         
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] &&
-            dependency.hash == self.tag) {
+            dependency.identifier == self.tag) {
             
             BOOL condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
             
