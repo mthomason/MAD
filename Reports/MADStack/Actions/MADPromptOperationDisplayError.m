@@ -98,14 +98,17 @@ static NSString * const TextYes = @"Dismiss";
         return;
     }
 
-    NSString *localizedDescription = error.localizedDescription;
-    NSString *localizedFailureReason = error.localizedFailureReason;
+    NSString *localizedDescription;
+    NSString *localizedFailureReason;
     
     NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
     
     if (underlyingError.localizedDescription != nil) {
         localizedDescription = underlyingError.localizedDescription;
         localizedFailureReason = underlyingError.localizedFailureReason;
+    } else {
+        localizedDescription = error.localizedDescription;
+        localizedFailureReason = error.localizedFailureReason;
     }
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason
@@ -115,23 +118,27 @@ static NSString * const TextYes = @"Dismiss";
     MADPromptOperationDisplayError * __weak weakSelf = self;
     NSString *title = NSLocalizedString(TextYes, TextYes);
     
-    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title style: UIAlertActionStyleDefault
+    UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title
+                                                       style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction * _Nonnull action) {
         MADPromptOperationDisplayError * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
-        [sself finish];
-        //[sself performSelectorInBackground:@selector(finish) withObject:nil];
+        //[sself finish];
+                                                         defer(^{
+                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
+                                                         });
         sself.viewController = nil;
     }];
     
     [alertController addAction:actionOK];
     
+    UIViewController * __weak viewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Show error alert:", __PRETTY_FUNCTION__);
-        UIViewController *viewController = self.viewController;
-        viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [viewController presentViewController: alertController animated: YES completion: nil];
+        UIViewController *sViewController = viewController;
+        sViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [sViewController presentViewController: alertController animated: YES completion: nil];
     }];
 }
 

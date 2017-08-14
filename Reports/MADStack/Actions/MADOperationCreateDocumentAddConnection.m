@@ -22,14 +22,14 @@
 @interface MADOperationCreateDocumentAddConnection ()
 
     @property (nonatomic, assign) BOOL success;
-    @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
+    @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
 
 @end
 
 @implementation MADOperationCreateDocumentAddConnection
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)init {
@@ -38,7 +38,7 @@
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
-        self.databaseConnection = databaseConnection;
+        self.databaseConnection = databaseConnection.copy;
         self.success = NO;
     }
     return self;
@@ -47,7 +47,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
     if (self.cancelled) return [self finish];
 

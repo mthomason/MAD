@@ -103,14 +103,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
             return self.cancelled;
 
         case MADOperationStatePending:
-            if (self.cancelled) {                                   // If the operation has been cancelled, "isReady" should return YES
+            if (self.cancelled) {
+                self.state = MADOperationStateReady;
                 return YES;
-            } else {
-
-                if (super.ready) { [self evaluateConditions]; }     // If super isReady, conditions can be evaluated
-                return NO;                                          // Until conditions have been evaluated, "isReady" returns NO
             }
-
+            if (super.ready) {
+                [self evaluateConditions];
+                return self.state == MADOperationStateReady;
+            }
+            
         case MADOperationStateReady:
             return super.ready || self.cancelled;
         
@@ -134,6 +135,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (BOOL)canTransitionToState:(MADOperationState)target {
     return (target == MADOperationStatePending               && self.state == MADOperationStateInitialized)
         || (target == MADOperationStateEvaluatingConditions  && self.state == MADOperationStatePending)
+        || (target == MADOperationStateReady                 && self.state == MADOperationStatePending              && self.isCancelled)
+        || (target == MADOperationStateFinished              && self.state == MADOperationStatePending              && self.isCancelled)
         || (target == MADOperationStateReady                 && self.state == MADOperationStateEvaluatingConditions)
         || (target == MADOperationStateExecuting             && self.state == MADOperationStateReady)
         || (target == MADOperationStateFinishing             && self.state == MADOperationStateReady)
@@ -224,10 +227,6 @@ static NSString * const MADOperatorSelectorState        = @"state";
     [self finish];
 }
 
-- (void)cancel {
-    [self cancelWithError:nil];
-}
-
 - (void)cancelWithError:(NSError *)error {
     if (error) {
         [self.internalErrors addObject:error];
@@ -270,8 +269,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
         operation has finished.
      */
 - (void)finish:(NSArray *)errors {
-    
-    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Finish %s", NSStringFromClass(super.class).UTF8String);
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = YES;
         self.state = MADOperationStateFinishing;
@@ -323,6 +321,17 @@ static NSString * const MADOperatorSelectorState        = @"state";
      */
     //NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this
         // ONLY if you're absolutely sure there is No Other Way™.");
+}
+
+- (void)cleanup {
+    NSArray <NSOperation *> *dependencies = self.dependencies;
+    for (NSOperation *dependency in dependencies) {
+        [self removeDependency:dependency];
+    }
+    
+    [self.conditions removeAllObjects];
+    [self.observers removeAllObjects];
+    
 }
 
 @end

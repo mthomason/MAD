@@ -46,7 +46,8 @@
 @implementation MADOperationCreateDocument
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    
 //    [self.internalQueue cancelAllOperations];
 }
 
@@ -60,6 +61,15 @@
         _connectionSuccess = NO;
         _successCreate = NO;
         
+        NSString *key = databaseConnection.connectionString;
+        NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+        
+        MADOperationConditionHasResultString *conditionReadUsername;
+        conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
+        
+        MADOperationConditionTestConnectionFailuare *connectionConnectionFail;
+        connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
+
         // ---------------------------------------------------
         // Operation 1: Create unique filename/url for document.
         // -------------------------
@@ -91,14 +101,14 @@
         [displayErrorCredentials addDependency:testConnectionOperationCredentials];
         
         
-        
+        // Start a background task
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
         [taskBegin addDependency: getCredentials];
         [taskBegin addDependency: testConnectionOperationCredentials];
         [taskBegin addDependency: displayErrorCredentials];
         
         
-        
+        // Create the document file on disk.
         MADOperationCreateDocumentCreateDocument *createDocument;
         createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
         [createDocument addDependency: getCredentials];  // This is because the document uses this task as delegate to get credentials.
@@ -110,6 +120,7 @@
         connectionConnectionSuccess = [[MADOperationConditionTestConnectionSuccess alloc] init];
         [createDocument addCondition:connectionConnectionSuccess];
         
+        // Do first time document setup.
         MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup;
         firstTimeSetup = [[MADOperationCreateDocumentFirstTimeSetup alloc] init];
         [firstTimeSetup addDependency: createDocument];
@@ -117,6 +128,7 @@
         [firstTimeSetup addDependency: testConnectionOperationCredentials];
         [firstTimeSetup addCondition:connectionConnectionSuccess];
         
+        // Add databaes connection to document.
         MADOperationCreateDocumentAddConnection *addConnection;
         addConnection = [[MADOperationCreateDocumentAddConnection alloc] initWithDatabaseConnection:databaseConnection];
         [addConnection addDependency: createDocument];
@@ -125,6 +137,7 @@
         [addConnection addDependency: testConnectionOperationCredentials];
         [addConnection addCondition: connectionConnectionSuccess];
         
+        // Import schema into document.
         MADOperationCreateDocumentImportSchema *importSchema;
         importSchema = [[MADOperationCreateDocumentImportSchema alloc] initWithDatabaseConnection:databaseConnection];
         [importSchema addDependency: createDocument];
@@ -134,6 +147,7 @@
         [importSchema addCondition: connectionConnectionSuccess];
         importSchema.parentOperation = self;
         
+        // Save the new document.
         MADOperationCreateDocumentSaveAndCloseNewDocument *saveOperation;
         saveOperation = [[MADOperationCreateDocumentSaveAndCloseNewDocument alloc] init];
         [saveOperation addDependency: createDocument];
@@ -142,6 +156,7 @@
         [saveOperation addDependency: testConnectionOperationCredentials];
         [saveOperation addCondition: connectionConnectionSuccess];
         
+        // Close the new document.
         MADOperationDocumentCloseDocument *closeDocument;
         closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
         [closeDocument addDependency: createDocument];
@@ -152,28 +167,19 @@
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addCondition: connectionConnectionSuccess];
         
-        NSString *key = databaseConnection.connectionString;
-        NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-        
+        //Test if credentals are saved
         MADKeyChainOperationGet *operationGetUsername;
-        
         operationGetUsername = [[MADKeyChainOperationGet alloc] initWithKey: keyUsername
                                                             withDescription: MTKeyChainUsernameAccountDesc];
         operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         [operationGetUsername addDependency: displayErrorCredentials];
         [operationGetUsername addDependency: testConnectionOperationCredentials];
         
-        MADOperationConditionHasResultString *conditionReadUsername;
-        conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
-        
+        //If connection failed and credentals are saved, prompt to delete credentals.
         MADPromptOperationPolarQuestion *promptDeleteCredntials;
         promptDeleteCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
                                                                                 message: @"Would you like to remove the saved credentials"
                                                                          viewController: viewController];
-        
-        MADOperationConditionTestConnectionFailuare *connectionConnectionFail;
-        connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
-        
         [promptDeleteCredntials addDependency: displayErrorCredentials];
         [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
         [promptDeleteCredntials addDependency: operationGetUsername];
@@ -188,6 +194,7 @@
         operationDeletePassword = [[MADOperationKeyChainDeletePassword alloc] initWithKey: databaseConnection.connectionString];
         [operationDeletePassword addDependency:promptDeleteCredntials];
         [operationDeletePassword addCondition:promptDeletePasswordAffirmative];
+        
         
         
         MADOperationBackgroundTaskEnd *taskEnd;
@@ -205,12 +212,13 @@
                                                          promptDeleteCredntials,
                                                          operationDeletePassword];
         
-        MADGroupOperation * __weak wself = self;
+        //MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-            MADGroupOperation *sself = wself;
+            //MADGroupOperation *sself = wself;
             //[sself finish];
-        }];
-        [self addOperations:operations finishingOperation:nil];
+            //[sself cancel];
+    }];
+        [self addOperations:operations finishingOperation:finishingOperation];
         
     }
     
@@ -218,8 +226,8 @@
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-    
+    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+
     if (self.cancelled) return [self finish];
 
     [super execute];
@@ -227,15 +235,27 @@
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-
     if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
+        [((MADOperation *)operation) cleanup];
+        
         [self finish];
+        [self cleanup];
+        //[self.internalQueue cancelAllOperations];
     } else if ([operation isKindOfClass:[MADOperationDatabaseTestConnection class]]) {
+        [((MADOperation *)operation) cleanup];
         _connectionSuccess = ((MADOperationDatabaseTestConnection *)operation).success;
     } else if ([operation isKindOfClass:[MADOperationCreateDocumentSaveAndCloseNewDocument class]]) {
+        [((MADOperation *)operation) cleanup];
         _successCreate = errors.count == 0;
+    } else if ([operation isKindOfClass:[MADOperationCreateDocumentImportSchema class]]) {
+        [((MADOperation *)operation) cleanup];
+        ((MADOperationCreateDocumentImportSchema *)operation).parentOperation = nil;
+    } else {
+        [((MADOperation *)operation) cleanup];
     }
+    
+    
+
 }
 
 - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {

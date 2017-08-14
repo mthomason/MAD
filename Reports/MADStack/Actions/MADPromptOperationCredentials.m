@@ -129,14 +129,17 @@ static NSString * const MADButtonCancel                = @"Cancel";
         strongself.userContinue = success;
         strongself.credentials = credentials.copy;
         strongself.result = YES;
-
+        defer(^{
+            [strongself performSelectorInBackground:@selector(finish) withObject:nil];
+        });
+/*
         MADPromptOperationCredentials __weak *weakself2 = strongself;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             MADPromptOperationCredentials *strongself2 = weakself2;
-            [strongself2 finish];
-            //[strongself2 performSelectorInBackground:@selector(finish) withObject:nil];
+            //[strongself2 finish];
+            [strongself2 performSelectorInBackground:@selector(finish) withObject:nil];
          });
-        
+  */      
     }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
@@ -150,8 +153,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
         strongself.userContinue = NO;
         strongself.credentials = nil;
         strongself.result = NO;
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([strongself class]) code:173 userInfo:nil];
         MADPromptOperationCredentials * __weak weakself2 = strongself;
+                                                                  
+                                                                  
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             MADPromptOperationCredentials *strongself2 = weakself2;
             [strongself2 userCancel];
@@ -191,7 +196,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (void)finish:(BOOL)success credentials:(MADCredential *)credentials {
     self.alertDisplayed = YES;
     self.userContinue = success;
-    self.credentials = credentials;
+    self.credentials = credentials.copy;
     self.result = YES;
     os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
     //defer(^{

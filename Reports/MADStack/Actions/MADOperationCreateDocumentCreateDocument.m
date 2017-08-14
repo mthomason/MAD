@@ -14,6 +14,7 @@
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import <MAD/MADDatabaseConnection.h>
 
 #import "MADOperationUniqueUrlForFilename.h"
 #import "MADPromptOperationDisplayErrorProtocol.h"
@@ -25,19 +26,19 @@
 
     @property (nonatomic, readwrite, copy) NSURL *url;
     @property (nonatomic, readwrite, copy) MADCredential *credentials;
-    @property (nonatomic, readwrite, strong) MADDatabaseConnection *databaseConnection;
+    @property (nonatomic, readwrite, copy) MADDatabaseConnection *databaseConnection;
 
 @end
 
 @implementation MADOperationCreateDocumentCreateDocument
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
-        self.databaseConnection = databaseConnection;
+        self.databaseConnection = databaseConnection.copy;
     }
     return self;
 }
@@ -70,7 +71,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    
+    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
     if (self.cancelled) return [self finish];
 
     if (!_url) {

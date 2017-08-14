@@ -25,6 +25,11 @@
 @dynamic connectionString;
 @dynamic identifier;
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    typeof(self) c = [[self.class alloc] copyWithZone:zone];
+    return c;
+}
+
 + (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
                                          host:(NSString *)host
                                      database:(NSString *)database

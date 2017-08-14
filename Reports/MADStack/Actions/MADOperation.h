@@ -48,6 +48,7 @@ typedef NSMutableArray <__kindof NSObject <MADOperationObserver> *> MADMutableOp
     - (void)finished:(NSArray *)errors;
     - (void)execute;
     - (void)produceOperation:(NSOperation *)operation;
+    - (void)cleanup;
 
 @end
 

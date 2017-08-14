@@ -30,7 +30,7 @@
     <MADDatabaseProtocol>
 
     //Parameters
-    @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
+    @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
     @property (nonatomic, copy) MADCredential *credentials;
 
     //Store
@@ -47,7 +47,7 @@
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection {
     if (self = [super init]) {
-        _databaseConnection = connection;
+        _databaseConnection = connection.copy;
         _credentials = nil;
         _success = NO;
     }
@@ -57,7 +57,7 @@
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
                                credentials:(MADCredential *)credentials {
     if (self = [super init]) {
-        _databaseConnection = connection;
+        _databaseConnection = connection.copy;
         _credentials = credentials.copy;
         _success = NO;
     }
@@ -156,6 +156,14 @@
             [self finishWithError:err];
         }
     }
+}
+
+- (void)cleanup {
+    [super cleanup];
+    _credentials = nil;
+    _database = nil;
+    _datatable = nil;
+    _databaseConnection = nil;
 }
 
 - (BOOL)displayError { return !self.success && self.error != nil; }

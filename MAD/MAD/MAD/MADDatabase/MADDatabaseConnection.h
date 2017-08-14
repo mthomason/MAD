@@ -27,7 +27,7 @@
 @end
 
 @interface MADDatabaseConnection : NSObject
-    <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties>
+    <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying>
 
     + (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
                                              host:(NSString *)host

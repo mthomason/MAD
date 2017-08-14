@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationKeyChainDeletePassword.h"
+#import <os/log.h>
 #import <Foundation/NSString.h>
 #import <MAD/MTKeyChain.h>
 
@@ -20,12 +21,11 @@
 @implementation MADOperationKeyChainDeletePassword
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithKey:(NSString *)key {
     if (self = [super init]) {
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _key = key.copy;
         _success = NO;
     }
@@ -35,6 +35,7 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
     if (self.cancelled) {
         return [self finish];

@@ -158,7 +158,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.gotPassword = YES;
     self.result = YES;
     //defer(^{
-        //[self performSelectorInBackground:@selector(finish) withObject:nil];
+        [self performSelectorInBackground:@selector(finish) withObject:nil];
     //});
 }
 
