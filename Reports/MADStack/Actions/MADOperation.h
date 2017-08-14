@@ -32,8 +32,8 @@ typedef NSMutableArray <__kindof NSObject <MADOperationObserver> *> MADMutableOp
 
 @interface MADOperation : NSOperation
 
-    @property (nonatomic, assign, readwrite) NSUInteger identifier;
-    @property (nonatomic, assign, readonly) MADOperationState state;
+    @property (atomic, assign, readwrite) NSUInteger identifier;
+    @property (atomic, assign, readonly) MADOperationState state;
 
     @property (nonatomic, strong) MADMutableOperationConditions *conditions;
     @property (nonatomic, strong) MADMutableOperationObservers *observers;

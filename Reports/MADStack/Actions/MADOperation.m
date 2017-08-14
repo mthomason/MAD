@@ -7,6 +7,7 @@
 //
 
 #import "MADOperation.h"
+#import <os/log.h>
 #import <Foundation/NSKeyValueObserving.h>
 #import <Foundation/NSException.h>
 #import "MADOperationCondition.h"
@@ -21,23 +22,26 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 @interface MADOperation()
     @property (nonatomic, strong) NSMutableArray *internalErrors;
-    @property (nonatomic, assign) BOOL hasFinishedAlready;
+    @property (atomic, assign) BOOL hasFinishedAlready;
 @end
 
 @implementation MADOperation {
     MADOperationState _state;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+}
 
 - (instancetype)init {
     if (self = [super init]) {
-
+        _hasFinishedAlready = NO;
     }
     return self;
 }
 
-#pragma mark - Lazy Load
+#pragma mark -
+#pragma mark Lazy Load
 
 - (NSMutableArray *)internalErrors {
     return (_internalErrors == nil) ?
@@ -52,7 +56,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
     return (_observers == nil) ? _observers = [[NSMutableArray alloc] init] : _observers;
 }
 
-#pragma mark - KVO
+#pragma mark -
+#pragma mark KVO
 
 // use the KVO mechanism to indicate that changes to "state" affect other properties as well
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
@@ -153,7 +158,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
     }];
 }
 
-#pragma mark - Conditions
+#pragma mark -
+#pragma mark Conditions
 
 - (void)addCondition:(NSObject <MADOperationCondition> *)condition {
     NSAssert(self.state < MADOperationStateEvaluatingConditions, @"Cannot modify observers after execution has begun.");
@@ -165,21 +171,22 @@ static NSString * const MADOperatorSelectorState        = @"state";
     [super addDependency:op];
 }
 
-#pragma mark - Observers
+#pragma mark -
+#pragma mark Observers
 
 - (void)addObserver:(NSObject <MADOperationObserver> *)observer {
     NSAssert(self.state < MADOperationStateExecuting, @"Cannot modify observers after execution has begun.");
     [self.observers addObject:observer];
 }
 
-#pragma mark - Execution and Cancellation
+#pragma mark -
+#pragma mark Execution and Cancellation
 - (void)start {
     
-    // NSOperation.start() contains important logic that shouldn't be bypassed.
-    [super start];
-    
-    // If the operation has been cancelled, we still need to enter the "Finished" state.
-    if (self.cancelled) {
+    if (self.isReady) {
+        [self main];
+        
+    } else if (self.cancelled) {
         [self finish];
     }
 }
@@ -234,7 +241,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
     }
 }
 
-#pragma mark - Finishing
+#pragma mark -
+#pragma mark Finishing
 
     /**
     Most operations may finish with a single error, if they have one at all.
@@ -262,6 +270,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
         operation has finished.
      */
 - (void)finish:(NSArray *)errors {
+    
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = YES;
         self.state = MADOperationStateFinishing;
@@ -282,7 +292,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
         }
         
         self.state = MADOperationStateFinished;
+
     }
+    //[self.conditions removeAllObjects];
+    //[self.observers removeAllObjects];
 }
 
     /**
