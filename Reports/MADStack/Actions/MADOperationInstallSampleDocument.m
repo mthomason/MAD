@@ -49,6 +49,10 @@
 
 - (void)execute {
 
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:_installFlag];
     if (!installed) {
         
@@ -63,6 +67,10 @@
         NSString *path = destination.path;
         installed = [[NSFileManager defaultManager] fileExistsAtPath: path
                                                          isDirectory: &isDirectory];
+        
+        if (self.cancelled) {
+            return [self finish];
+        }
         
         if (!installed) {
             NSURL *origin = [self resourceUrl];

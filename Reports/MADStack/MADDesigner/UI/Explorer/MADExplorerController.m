@@ -12,6 +12,8 @@
 
 #import "MADExplorerController.h"
 
+#import <os/log.h>
+
 #import <QuickLook/QLPreviewController.h>
 
 #import <MessageUI/MFMailComposeViewController.h>
@@ -1991,6 +1993,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 
 - (void)operationDidFinish:(MADOperation *)operation
                     errors:(NSArray *)errors {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 
     switch (operation.identifier) {
 

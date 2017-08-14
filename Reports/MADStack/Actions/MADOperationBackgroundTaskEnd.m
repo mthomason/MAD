@@ -17,15 +17,14 @@
 @implementation MADOperationBackgroundTaskEnd
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;
     NSArray<NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -34,11 +33,9 @@
         }
     }
     if (backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
         [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
         [self finish];
     } else {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error:", __PRETTY_FUNCTION__);
         NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:23 userInfo:nil];
         [self finishWithError:error];
     }

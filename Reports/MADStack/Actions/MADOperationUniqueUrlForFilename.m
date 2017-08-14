@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationUniqueUrlForFilename.h"
+#import <os/log.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSError.h>
@@ -25,7 +26,7 @@
 @implementation MADOperationUniqueUrlForFilename
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
@@ -43,8 +44,12 @@
 }
 
 - (void)execute {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     NSURL *uniqueUrl = [MADURL newURLUniqueUrlInDirectory: self.documentsDirectory
                                         withDesiredHandle: self.desiredFilename
                                              andExtension: self.pathExtension];

@@ -35,6 +35,8 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 - (void)execute {
 
+    if (self.cancelled) return [self finish];
+
     NSURL *fileURL, *databaseURL;
     NSError *error = nil;
 
@@ -55,7 +57,13 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
     
     if (installed) {
         NSString *filepath = databaseURL.path;
+        
+        if (self.cancelled) return [self finish];
+
         if ([[NSFileManager defaultManager] fileExistsAtPath:filepath]) {
+            
+            if (self.cancelled) return [self finish];
+
             [[NSUserDefaults standardUserDefaults] setBool: YES
                                                     forKey: MADUpgradeInstalledChinook];
             [[NSUserDefaults standardUserDefaults] synchronize];

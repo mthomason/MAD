@@ -62,6 +62,11 @@
 
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     MADocument *doc = _document;
     /*
         for (NSOperation *dependency in self.dependencies) {

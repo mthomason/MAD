@@ -15,10 +15,17 @@
 @implementation MADOperationDocumentCloseDocument
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+}
+
+- (BOOL)isAsynchronous {
+    return YES;
 }
 
 - (void)execute {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) return [self finish];
 
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -33,16 +40,12 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADocument *doc = document;
         if (doc.documentState & UIDocumentStateClosed) {
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
             [self finish];
         } else {
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Close:", __PRETTY_FUNCTION__);
             [MADocument close:doc completion:^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
                 if (success) {
-                    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finished closing:", __PRETTY_FUNCTION__);
                     [self finish];
                 } else {
-                    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error closing document:", __PRETTY_FUNCTION__);
                     NSString *title = NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document");
                     NSString *message = NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.");
                     MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];

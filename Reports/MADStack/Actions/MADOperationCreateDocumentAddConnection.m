@@ -29,7 +29,7 @@
 @implementation MADOperationCreateDocumentAddConnection
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)init {
@@ -47,7 +47,9 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) return [self finish];
 
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -63,8 +65,6 @@
     [document activeDocumentModel];
 
     self.success = YES;
-    
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
     
     [self finish];
 }

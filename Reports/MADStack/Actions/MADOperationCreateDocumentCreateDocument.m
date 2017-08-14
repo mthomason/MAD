@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationCreateDocumentCreateDocument.h"
+#import <os/log.h>
 #import <MAD/MADDocumentProtocol.h>
 
 #import <MAD/MADocument.h>
@@ -31,7 +32,7 @@
 @implementation MADOperationCreateDocumentCreateDocument
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
@@ -70,6 +71,8 @@
 
 - (void)execute {
     
+    if (self.cancelled) return [self finish];
+
     if (!_url) {
         
         for (NSOperation *dependency in self.dependencies) {
@@ -80,12 +83,17 @@
         
     }
     
+    if (self.cancelled) return [self finish];
+
     //Create MADocument File and Remove Cache
     MADocument *document = [[MADocument alloc] initWithFileURL: self.url andDatabaseConnection:self.databaseConnection];
 
     document.documentDelegate = self;
     [document archiveAndRemoveFileWrapper];
     self.document = document;
+    
+    if (self.cancelled) return [self finish];
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self.document saveToURL: self.url
                 forSaveOperation: UIDocumentSaveForCreating

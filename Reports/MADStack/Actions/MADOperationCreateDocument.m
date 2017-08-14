@@ -8,6 +8,8 @@
 
 #import "MADOperationCreateDocument.h"
 
+#import <os/log.h>
+
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
@@ -38,16 +40,18 @@
 
     @property (nonatomic, assign, readwrite, getter=isSuccessConnection) BOOL successConnection;
     @property (nonatomic, assign, readwrite, getter=isSuccessCreate) BOOL successCreate;
-
+ 
 @end
 
 @implementation MADOperationCreateDocument
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+//    [self.internalQueue cancelAllOperations];
 }
 
-- (instancetype)initWithFilename: (NSString *)filename documentsDirectory:(NSURL *)documentsDirectory
+- (instancetype)initWithFilename: (NSString *)filename
+              documentsDirectory: (NSURL *)documentsDirectory
               databaseConnection: (MADDatabaseConnection *)databaseConnection
                   viewController: (UIViewController *)viewController {
     
@@ -55,6 +59,7 @@
         
         _connectionSuccess = NO;
         _successCreate = NO;
+        
         // ---------------------------------------------------
         // Operation 1: Create unique filename/url for document.
         // -------------------------
@@ -67,19 +72,18 @@
         // ---------------------------------------------------
         // Operation 1: Get database credentials from keychain or user.
         // -------------------------
-
+        
         MADGetCredentialsOperation *getCredentials;
         getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
                                                                          viewController: viewController];
-      
+        
         // ---------------------------------------------------
         // Operation 1: Test the database connection.
         // -------------------------
-
+        
         MADOperationDatabaseTestConnection *testConnectionOperationCredentials;
         testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
         [testConnectionOperationCredentials addDependency:getCredentials];
-        
         
         
         MADPromptOperationDisplayError *displayErrorCredentials;
@@ -137,7 +141,7 @@
         [saveOperation addDependency: displayErrorCredentials];
         [saveOperation addDependency: testConnectionOperationCredentials];
         [saveOperation addCondition: connectionConnectionSuccess];
-
+        
         MADOperationDocumentCloseDocument *closeDocument;
         closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
         [closeDocument addDependency: createDocument];
@@ -150,7 +154,7 @@
         
         NSString *key = databaseConnection.connectionString;
         NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-
+        
         MADKeyChainOperationGet *operationGetUsername;
         
         operationGetUsername = [[MADKeyChainOperationGet alloc] initWithKey: keyUsername
@@ -158,7 +162,7 @@
         operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         [operationGetUsername addDependency: displayErrorCredentials];
         [operationGetUsername addDependency: testConnectionOperationCredentials];
-
+        
         MADOperationConditionHasResultString *conditionReadUsername;
         conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
         
@@ -169,14 +173,14 @@
         
         MADOperationConditionTestConnectionFailuare *connectionConnectionFail;
         connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
-
+        
         [promptDeleteCredntials addDependency: displayErrorCredentials];
         [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
         [promptDeleteCredntials addDependency: operationGetUsername];
         [promptDeleteCredntials addCondition: connectionConnectionFail];
         [promptDeleteCredntials addCondition: conditionReadUsername];
         
-
+        
         MADOperationConditionPolarQuestionAffirmative *promptDeletePasswordAffirmative;
         promptDeletePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier: promptDeleteCredntials.identifier];
         
@@ -185,7 +189,7 @@
         [operationDeletePassword addDependency:promptDeleteCredntials];
         [operationDeletePassword addCondition:promptDeletePasswordAffirmative];
         
-
+        
         MADOperationBackgroundTaskEnd *taskEnd;
         taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
         [taskEnd addDependency:taskBegin];
@@ -204,22 +208,27 @@
         MADGroupOperation * __weak wself = self;
         NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
             MADGroupOperation *sself = wself;
-            [sself finish];
+            //[sself finish];
         }];
-        [self addOperations:operations finishingOperation:finishingOperation];
+        [self addOperations:operations finishingOperation:nil];
+        
     }
     
     return self;
 }
 
 - (void)execute {
-    if (!self.cancelled) {
-        self.internalQueue.suspended = NO;
-        [self.internalQueue addOperation:self.finishingOperation];
-    }
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    
+    if (self.cancelled) return [self finish];
+
+    [super execute];
+        
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+
     if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
         [self finish];
     } else if ([operation isKindOfClass:[MADOperationDatabaseTestConnection class]]) {

@@ -39,6 +39,10 @@
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     [self.document resetCache];
     
     [self finish];

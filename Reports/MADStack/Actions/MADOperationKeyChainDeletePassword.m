@@ -35,6 +35,11 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     NSAssert(_key != nil, @"Need a key.");
     NSError * __autoreleasing error = nil;
     [MTKeyChain deleteSavedPasswordForKey: _key error: &error];

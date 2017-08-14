@@ -48,7 +48,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 @implementation MADPromptOperationPassword
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (NSString *)key {
@@ -68,6 +68,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (instancetype)initWithPasswordKey:(NSString *)passwordKey
                   andViewController:(UIViewController *)viewController {
     if (self = [super init]) {
+        os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
         MADMutualExclusiveCondition *condition;
         _passwordKey = passwordKey.copy;
         _source = MADCredentialSourceNone;
@@ -77,8 +78,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
         _viewController = viewController;
         self.identifier = self.hash;
-        condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
-        [self addCondition:condition];
+        //condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        //[self addCondition:condition];
 
     }
     return self;
@@ -91,7 +92,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) {
+        return [self finish];
+    }
 
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
     NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
@@ -101,15 +106,16 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                    preferredStyle: UIAlertControllerStyleAlert];
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField);
+
+    MADPromptOperationPassword * __weak weakself = self;
+
     actionTextFieldWithConfiguration = ^(UITextField *textField) {
         
         MADTextField *textFormatter = [[MADTextField alloc] init];
         textFormatter.handleConfigurePassword(textField);
-        textField.delegate = self;
+        textField.delegate = weakself;
     };
     
-    MADPromptOperationPassword * __weak weakself = self;
-
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
@@ -144,30 +150,28 @@ static NSString * const MADButtonCancel                = @"Cancel";
 }
 
 - (void)finish:(BOOL)success password:(NSString *)password {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
     self.alertDisplayed = YES;
     self.source = MADCredentialSourcePasswordPrompt;
     self.userContinue = YES;
     self.password = password;
     self.gotPassword = YES;
     self.result = YES;
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
-    defer(^{
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish defered:", __PRETTY_FUNCTION__);
-        [self performSelectorInBackground:@selector(finish) withObject:nil];
-    });
+    //defer(^{
+        //[self performSelectorInBackground:@selector(finish) withObject:nil];
+    //});
 }
 
 - (void)userCancel {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
     self.userContinue = NO;
     self.password = nil;
     self.result = NO;
     self.gotPassword = NO;
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancel:", __PRETTY_FUNCTION__);
-    defer(^{
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancled defered:", __PRETTY_FUNCTION__);
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
-        [self performSelectorInBackground:@selector(finishWithError:) withObject:error];
-    });
+    //defer(^{
+        //NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+        //[self performSelectorInBackground:@selector(finishWithError:) withObject:error];
+    //});
 }
 
 #pragma mark - UITextFieldDelegate

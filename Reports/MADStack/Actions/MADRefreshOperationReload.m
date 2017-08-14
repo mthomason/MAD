@@ -22,6 +22,11 @@
 - (BOOL)isAsynchronous { return NO; }
 
 - (void)execute {
+
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     [self finish];
 }
 

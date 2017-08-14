@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationQueue.h"
+#import <os/log.h>
 #import <Foundation/NSArray.h>
 #import "MADOperation.h"
 #import "NSOperation+Advanced.h"
@@ -16,17 +17,22 @@
 
 @implementation MADOperationQueue
 
-- (void)dealloc { }
+- (void)dealloc {
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+}
 
 - (void)addOperation:(NSOperation *)operation {
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s] %s", NSStringFromClass(self.class).UTF8String,
+                                               __FUNCTION__, operation.description.UTF8String);
 
     if ([operation isKindOfClass:[MADOperation class]]) {
     
         MADOperation * op = (MADOperation *)operation;
         typeof(self) __weak weakSelf = self;
         
-        // Set up a `BlockObserver` to invoke the `OperationQueueDelegate` method.
-        MADBlockObserver * delegate = [[MADBlockObserver alloc] initWithStartHandler: nil produceHandler:^(MADOperation * oper, NSOperation * newOp) {
+        // Set up a block delegate. When operation finishes, invoke the delegate method to finish.
+        MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler: nil
+                                                                      produceHandler: ^(MADOperation * oper, NSOperation * newOp) {
 
             [weakSelf addOperation:newOp];
             
@@ -40,7 +46,7 @@
         [op addObserver:delegate];
         
         // Extract any dependencies needed by this operation.
-        NSMutableArray *dependencies = [NSMutableArray arrayWithCapacity:op.conditions.count];
+        NSMutableArray *dependencies = [[NSMutableArray alloc] initWithCapacity:op.conditions.count];
         for (NSObject <MADOperationCondition> *condition in op.conditions) {
 
             NSOperation *dependency = [condition dependencyForOperation:op];
@@ -70,10 +76,13 @@
             // Set up the mutual exclusivity dependencies.
             MADExclusivityController * exclusivityController = [MADExclusivityController sharedExclusivityController];
             
+            os_log(OS_LOG_DEFAULT, "Adding operation to exclusivity controller: %s", op.name.UTF8String);
             [exclusivityController addOperation: op categories: concurrencyCategories];
+            MADBlockObserver * obs = [[MADBlockObserver alloc] initWithStartHandler: nil
+                                                                     produceHandler: nil
+                                                                      finishHandler: ^(MADOperation * oper, NSArray * error) {
             
-            MADBlockObserver * obs = [[MADBlockObserver alloc] initWithStartHandler:nil produceHandler:nil finishHandler:^(MADOperation * oper, NSArray * error) {
-            
+                os_log(OS_LOG_DEFAULT, "Removing operation from exclusivity controller: %s", op.name.UTF8String);
                 [exclusivityController removeOperation:oper categories:concurrencyCategories];
                 
             }];
@@ -121,15 +130,16 @@
 }
 
 - (void)addOperations:(NSArray *)ops waitUntilFinished:(BOOL)wait {
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
 
     // The base implementation of this method does not call `addOperation()`, so we'll call it ourselves.
 
-    for (NSOperation * op in ops){
+    for (NSOperation * op in ops) {
         [self addOperation:op];
     }
     
-    if (wait){
-        for (NSOperation * op in ops){
+    if (wait) {
+        for (NSOperation * op in ops) {
             [op waitUntilFinished];
         }
     }

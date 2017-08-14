@@ -44,6 +44,9 @@ const short errUserCancel = 1;
 
 - (void)execute {
     //NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+    
+    if (self.cancelled) return [self finish];
+
     MADCredentialSource source = none;
     NSArray *dependencies = self.dependencies;
     for (MADKeyChainGetCredentials *dependency in dependencies) {
@@ -54,6 +57,7 @@ const short errUserCancel = 1;
         }
     }
     
+    if (self.cancelled) return [self finish];
     
     switch (source) {
         case MADCredentialSourceCredentialPrompt: {

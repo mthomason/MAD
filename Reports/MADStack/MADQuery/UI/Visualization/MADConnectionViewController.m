@@ -11,6 +11,9 @@
 #endif
 
 #import "MADConnectionViewController.h"
+
+#import <os/log.h>
+
 #import "MADViewControllerStandardProtocol.h"
 
 #import <UIKit/UIAccessibility.h>
@@ -54,7 +57,6 @@
 #import "MADLabelTitle.h"
 
 #import "MADProgressView.h"
-#import "MADGetCredentialsOperation.h"
 
 #import "MADOperationDatabaseTestConnection.h"
 
@@ -86,7 +88,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, strong) MADProgressView *progressView;
 
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
-    @property (nonatomic, strong) MADGetCredentialsOperation *getCredentialsOperation;
 
     @property (nonatomic, assign) SEL actionSave;
     @property (nonatomic, weak) id actionSaveTarget;
@@ -261,6 +262,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+
     //If document was created, then dismiss the form.  Otherwise, reset the form.
     BOOL success = NO;
     if ([operation isKindOfClass:[MADOperationCreateDocument class]]) {
@@ -380,21 +383,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return progressView;
 }
 
-- (MADCredential *)getCredentialsForDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
-    
-    // Operation: Get credentials.
-    // ---------------------------------------------------
-    MADGetCredentialsOperation *getCredentialsOperation;
-    getCredentialsOperation = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
-                                                                              viewController: self];
-    [getCredentialsOperation addObserver:self];
-    
-    [self.credentialQueue addOperation: getCredentialsOperation];
-
-    self.getCredentialsOperation = getCredentialsOperation;
-    return nil;
-}
-
 - (void)disableUserInteractionWithMessage:(NSString *)message {
     [self removeKeyboard];
     [self disableTextFields];
@@ -429,10 +417,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (IBAction)save:(id)sender {
     NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
+
+    [self.credentialQueue cancelAllOperations];
     
     NSString *message = NSLocalizedString(@"Importing schema.", @"Importing schema.");
     [self disableUserInteractionWithMessage:message];
-    
     
     id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
     

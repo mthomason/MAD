@@ -27,7 +27,7 @@ static NSString * const TextYes = @"Dismiss";
 @implementation MADPromptOperationDisplayError
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithViewController:(UIViewController * __weak)viewController {
@@ -47,13 +47,13 @@ static NSString * const TextYes = @"Dismiss";
 - (instancetype)initWithError:(NSError *)error tagDependency:(NSUInteger)tagDependency
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+        os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
         _tagDependency = tagDependency;
         _viewController = viewController;
         _error = error.copy;
         _result = NO;
-        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
-        [self addCondition:condition];
+        //MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        //[self addCondition:condition];
     }
     return self;
 }
@@ -81,9 +81,12 @@ static NSString * const TextYes = @"Dismiss";
 }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
+    if (self.cancelled) {
+        return [self finish];
+    }
+    
     NSError *error = self.error;
     if (error == nil) { // Find the error in dependencies if it wasn't passed in.
         error = [self errorFromDependencies];
@@ -117,11 +120,9 @@ static NSString * const TextYes = @"Dismiss";
         MADPromptOperationDisplayError * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
-        defer(^{
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish defered:", __PRETTY_FUNCTION__);
-            [sself performSelectorInBackground:@selector(finish) withObject:nil];
-        });
+        [sself finish];
+        //[sself performSelectorInBackground:@selector(finish) withObject:nil];
+        sself.viewController = nil;
     }];
     
     [alertController addAction:actionOK];
@@ -130,9 +131,7 @@ static NSString * const TextYes = @"Dismiss";
         os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Show error alert:", __PRETTY_FUNCTION__);
         UIViewController *viewController = self.viewController;
         viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [viewController presentViewController: alertController animated: YES completion:^{
-        //    [self finish];
-        }];
+        [viewController presentViewController: alertController animated: YES completion: nil];
     }];
 }
 

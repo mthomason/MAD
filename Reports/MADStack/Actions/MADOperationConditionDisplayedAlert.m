@@ -59,6 +59,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     MADOperationConditionResult *result = nil;
@@ -86,7 +87,7 @@
                 result = [MADOperationConditionResult newOperationConditionResultSatisfied];
                 
             } else {
-            
+                
                 MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: @"Not Satisified"
                                                                                andMessage: @"Not satisified."];
                 NSError *error = [errorUserInfo errorWithDomain: domain

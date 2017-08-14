@@ -51,7 +51,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 @implementation MADPromptOperationCredentials
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithUsernameKey:(NSString *)usernameKey passwordKey:(NSString *)passwordKey
@@ -59,7 +59,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     if (self = [super init]) {
 
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         _usernameKey = usernameKey.copy;
         _passwordKey = passwordKey.copy;
         _viewController = viewController;
@@ -68,8 +67,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
         _displayingPrompt = NO;
         _bypass = NO;
         _gotCredentials = NO;
-        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
-        [self addCondition:condition];
+        //MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        //[self addCondition:condition];
         self.identifier = self.hash;
     }
     return self;
@@ -88,8 +87,12 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
-    
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     self.displayingPrompt = YES;
 
     NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
@@ -110,7 +113,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     MADPromptOperationCredentials * __weak weakself = self;
     
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User OK:", __PRETTY_FUNCTION__);
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "OK");
         MADPromptOperationCredentials *strongself = weakself;
         username = ((UITextField *)alertController.textFields.firstObject).text;
         password = ((UITextField *)(alertController.textFields)[1]).text;
@@ -126,13 +129,20 @@ static NSString * const MADButtonCancel                = @"Cancel";
         strongself.userContinue = success;
         strongself.credentials = credentials.copy;
         strongself.result = YES;
-        [strongself performSelectorInBackground:@selector(finish) withObject:nil];
+
+        MADPromptOperationCredentials __weak *weakself2 = strongself;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            MADPromptOperationCredentials *strongself2 = weakself2;
+            [strongself2 finish];
+            //[strongself2 performSelectorInBackground:@selector(finish) withObject:nil];
+         });
+        
     }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
                                                                 style: UIAlertActionStyleCancel
                                                               handler: ^(UIAlertAction *action) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancled:", __PRETTY_FUNCTION__);
+        os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "Cancel");
         MADPromptOperationCredentials *strongself = weakself;
         password = nil; username = nil;
         success = NO;
@@ -141,20 +151,28 @@ static NSString * const MADButtonCancel                = @"Cancel";
         strongself.credentials = nil;
         strongself.result = NO;
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
-        [strongself performSelectorInBackground:@selector(finishWithError:) withObject:error];
+        MADPromptOperationCredentials * __weak weakself2 = strongself;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            MADPromptOperationCredentials *strongself2 = weakself2;
+            [strongself2 userCancel];
+            [strongself2 performSelectorInBackground:@selector(finishWithError:) withObject:error];
+        });
 
     }];
     
+    
     actionTextFieldWithConfigurationUsername = ^(UITextField *textField) {
+        MADPromptOperationCredentials *strongself = weakself;
         MADTextField *textFieldFormatter = [[MADTextField alloc] init];
         textFieldFormatter.handleConfigureUsername(textField);
-        textField.delegate = self;
+        textField.delegate = strongself;
     };
     
     actionTextFieldWithConfigurationPassword = ^(UITextField *textField) {
+        MADPromptOperationCredentials *strongself = weakself;
         MADTextField *textFieldFormatter = [[MADTextField alloc] init];
         textFieldFormatter.handleConfigurePassword(textField);
-        textField.delegate = self;
+        textField.delegate = strongself;
     };
 
     [alertController addAction:actionAlertOK];
@@ -164,7 +182,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     UIViewController *viewController = self.viewController;
     viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [viewController  presentViewController: alertController animated: YES completion:NULL];
+    [viewController  presentViewController: alertController animated: YES completion:^{
+//        [self performSelectorInBackground:@selector(finish) withObject:nil];
+    }];
 
 }
 
@@ -173,11 +193,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = success;
     self.credentials = credentials;
     self.result = YES;
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
-    defer(^{
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish defered:", __PRETTY_FUNCTION__);
-        [self performSelectorInBackground:@selector(finish) withObject:nil];
-    });
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    //defer(^{
+        //[self performSelectorInBackground:@selector(finish) withObject:nil];
+    //});
 }
 
 - (void)userCancel {
@@ -185,12 +204,11 @@ static NSString * const MADButtonCancel                = @"Cancel";
     self.userContinue = NO;
     self.credentials = nil;
     self.result = NO;
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancel:", __PRETTY_FUNCTION__);
-    defer(^{
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "User cancled defered:", __PRETTY_FUNCTION__);
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
-        [self performSelectorInBackground:@selector(finishWithError:) withObject:error];
-    });
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    //defer(^{
+        //NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
+        //[self performSelectorInBackground:@selector(finishWithError:) withObject:error];
+    //});
 }
 
 #pragma mark - UITextFieldDelegate

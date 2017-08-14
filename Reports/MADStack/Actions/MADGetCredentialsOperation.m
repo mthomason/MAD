@@ -45,7 +45,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 @implementation MADGetCredentialsOperation
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
@@ -62,10 +62,12 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     return self;
 }
 
+- (BOOL)isAsynchronous {
+    return YES;
+}
+
 - (void)execute {
-    
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
     if (_shortCircut) {
         [self finish];
     } else {
@@ -74,7 +76,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Did finsih:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
     // Operation 1 & 3: Credentials in keychain.
     //  If results are read from keychain, then MADOperationResultStringProtocol.
     //---
@@ -115,12 +117,12 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
             self.passwordSet = YES;
         }
     }
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish but not calling finish?:", __PRETTY_FUNCTION__);
+    //os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish but not calling finish?:", __PRETTY_FUNCTION__);
     //NSLog(@"Count   %d", self.internalQueue.operationCount);
     //NSLog(@"Last    %@", self.internalQueue.operations.lastObject);
-    //if (self.internalQueue.operationCount == 0) {
-    //    [self finish];
-    //}
+    if (self.internalQueue.operationCount == 0) {
+        [self finish];
+    }
 }
 
 - (MADCredential *)credentials {
@@ -214,9 +216,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [promptPassword addDependency:promptCredntials];
     [promptPassword addCondition:conditionPromptPasswordBoolAnd];
     
-
- NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
- NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
+/*
+    NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
+    NSString *messageCredntialsPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
 
     // ---------------------------------------------------
     // Operation 5a: Test the connection (credentials prompt)
@@ -317,7 +319,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     [putPassword addDependency:promptSavePassword];
     [putPassword addCondition:promptToSavePasswordAffirmative];
 
-
+*/
     NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,
                                                      getPassword, promptPassword
                                                      //testConnectionOperationCredentials, testConnectionOperationPassword,
@@ -332,7 +334,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADGroupOperation * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
         MADGroupOperation *sself = wself;
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
+        os_log_info(OS_LOG_DEFAULT, "%s - block", __PRETTY_FUNCTION__);
         [sself finish];
     }];
 

@@ -27,7 +27,7 @@
 @implementation MADOperationConditionPolarQuestionAffirmative
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
@@ -46,12 +46,14 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
     MADOperationConditionResult *result;
     result = [self evaluateForOperation:operation];
     completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 
     MADOperationConditionResult *result = nil;
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
@@ -60,7 +62,6 @@
                                                                        andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
         result = [MADOperationConditionResult newOperationConditionResultFailed:error];
-        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Result evaluated to NO.");
         return result;
     }
     
@@ -85,14 +86,12 @@
     }
 
     if (result != nil) {
-        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Result evaluated to %s.", result.isSucceed ? "YES" : "NO");
         return result;
     } else {
         MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
                                                                        andMessage:@"Not satisified."];
         NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
         result = [MADOperationConditionResult newOperationConditionResultFailed:error];
-        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Result evaluated to NO.");
         return result;
     }
 

@@ -30,7 +30,7 @@
     <MADDatabaseProtocol>
 
     //Parameters
-    @property (nonatomic, weak) MADDatabaseConnection *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection *databaseConnection;
     @property (nonatomic, copy) MADCredential *credentials;
 
     //Store
@@ -141,6 +141,9 @@
     
     NSError * __autoreleasing error = NULL;
     self.success = [queryTest.database executeQuery:queryTest withError:&error];
+    
+    _databaseConnection = nil;
+    
     if (self.success) {
         [self finish];
     } else {

@@ -60,9 +60,12 @@
 }
 
 - (void)execute {
+    
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     [self addAllOperations];
-    [self.internalQueue addOperation:self.finishingOperation];
-    self.internalQueue.suspended = NO;
 }
 
 - (void)addAllOperations {

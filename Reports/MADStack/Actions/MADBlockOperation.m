@@ -7,6 +7,7 @@
 //
 
 #import "MADBlockOperation.h"
+#import <os/log.h>
 
 @interface MADBlockOperation ()
 
@@ -16,7 +17,9 @@
 
 @implementation MADBlockOperation
 
-- (void)dealloc { }
+- (void)dealloc {
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+}
 
 /**
     The designated initializer.
@@ -29,7 +32,7 @@
  */
 
 - (instancetype)initWithBlock:(OperationBlock)block {
-    if (self = [super init]){
+    if (self = [super init]) {
         _block = block;
     }
     return self;
@@ -38,7 +41,7 @@
 - (instancetype)initWithMainQueueBlock:(dispatch_block_t)block {
     self = [self initWithBlock:^(void(^operationCompletionBlock)(void)) {
         block();
-        if (operationCompletionBlock){
+        if (operationCompletionBlock) {
             operationCompletionBlock();
         }
     }];

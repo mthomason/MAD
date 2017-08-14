@@ -14,13 +14,18 @@
 
 @implementation MADOperationCreateDocumentSaveAndCloseNewDocument
 
+- (void)dealloc {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+}
+
 - (BOOL)isAsynchronous {
     return YES;
 }
 
 - (void)execute {
-    
     os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) return [self finish];
 
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -31,30 +36,29 @@
         }
     }
 
-
+    MADOperation * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        MADOperation *strongself = weakself;
         MADocument *doc = document;
         if (doc.documentState & UIDocumentStateClosed) {
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Document already closed:", __PRETTY_FUNCTION__);
-            [self finish];
+            [strongself finish];
         } else {
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Close document:", __PRETTY_FUNCTION__);
+            MADOperation * __weak weakself2 = self;
             [MADocument close: doc completion:^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+                MADOperation *strongself2 = weakself2;
                 os_log_info(OS_LOG_DEFAULT, "%s\t%s", "handleCloseCompletion:", __PRETTY_FUNCTION__);
                 if (success) {
-                    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish:", __PRETTY_FUNCTION__);
-                    [self finish];
+                    [strongself2 finish];
                 } else {
-                    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error creating document:", __PRETTY_FUNCTION__);
                     NSString *title = NSLocalizedString(@"Error Creating Document",
                                                         @"Error Creating Document");
                     NSString *message = NSLocalizedString(@"Failed to close.",
                                                           @"Failed to close.");
                     MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle: title
                                                                               andMessage: message];
-                    NSError *error = [userInfo errorWithDomain: NSStringFromClass(self.class)
+                    NSError *error = [userInfo errorWithDomain: NSStringFromClass(strongself2.class)
                                                           code: 893];
-                    [self finishWithError:error];
+                    [strongself2 finishWithError:error];
                 }
             }];
         }

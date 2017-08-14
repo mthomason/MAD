@@ -7,6 +7,7 @@
 //
 
 #import "MADGroupOperation.h"
+#import <os/log.h>
 #import "MADOperationQueue.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
@@ -33,7 +34,9 @@
 
 @implementation MADGroupOperation
 
-- (void)dealloc { }
+- (void)dealloc {
+    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+}
 
 - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations {
     [self addOperations:operations finishingOperation:nil];
@@ -45,13 +48,14 @@
     _finishingOperation = finishingOperation;
     if (_internalQueue == nil) {
         _internalQueue = [MADOperationQueue new];
+        _internalQueue.suspended = YES;
+        _internalQueue.delegate = self;
     }
-    _internalQueue.suspended = YES;
-    _internalQueue.delegate = self;
     for (NSOperation *op in operations){
-        [_finishingOperation addDependency:op];
+        //[_finishingOperation addDependency:op];
         [_internalQueue addOperation:op];
     }
+//    [self.internalQueue addOperation:self.finishingOperation];
 }
 
 - (MADOperationQueue *)internalQueue {
@@ -67,7 +71,6 @@
 
 - (void)cancel {
     [self.internalQueue cancelAllOperations];
-    self.internalQueue.suspended = NO;
     [super cancel];
 }
 
@@ -94,7 +97,8 @@
     // For use by subclassers.
 }
 
-#pragma mark - MADOperationQueueDelegate
+#pragma mark -
+#pragma mark MADOperationQueueDelegate
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue willAddOperation:(NSOperation *)operation {
     NSAssert(!self.finishingOperation.finished, @"cannot add new operations to a group after the group has completed");

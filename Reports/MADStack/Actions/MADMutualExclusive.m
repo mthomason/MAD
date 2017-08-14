@@ -10,7 +10,7 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UIAlert.h>
-
+#import "MADOperation.h"
 #import "MADOperationConditionResult.h"
 
 #import <os/log.h>
@@ -43,18 +43,21 @@
 - (NSString *)name { return [NSString stringWithFormat:@"MutuallyExclusive<%@>", self.className]; }
 
 - (BOOL)isMutuallyExclusive {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
     return YES;
 }
 
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
     MADOperationConditionResult *result;
-    result = [self evaluateForOperation:operation];
+    result = [MADOperationConditionResult newOperationConditionResultSatisfied];
     completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
     MADOperationConditionResult *result = [MADOperationConditionResult newOperationConditionResultSatisfied];
     return result;
 }

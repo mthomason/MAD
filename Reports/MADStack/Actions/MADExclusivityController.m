@@ -7,6 +7,7 @@
 //
 
 #import "MADExclusivityController.h"
+#import <os/log.h>
 #import "MADOperation.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
@@ -38,8 +39,8 @@ static id _sharedInstance;
     if (_sharedInstance) return nil;
     
     if (self = [super init]){
-        _serialQueue = dispatch_queue_create("Operations.ExclusivityController",DISPATCH_QUEUE_SERIAL);
-        _operations = [NSMutableDictionary dictionary];
+        _serialQueue = dispatch_queue_create("Operations.ExclusivityController", DISPATCH_QUEUE_SERIAL);
+        _operations = [[NSMutableDictionary alloc] init];
     }
     return self;
 
@@ -61,6 +62,7 @@ static id _sharedInstance;
 
 /// Unregisters an operation from being mutually exclusive.
 - (void)removeOperation:(MADOperation *)operation categories:(NSArray */*[String]*/)categories {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
     dispatch_async(_serialQueue, ^{
         for (NSString * category in categories) {
             [self noqueue_removeOperation:operation category:category];
@@ -71,9 +73,9 @@ static id _sharedInstance;
 #pragma mark - Operation Management
 
 - (void)noqueue_addOperation:(MADOperation*)operation category:(NSString *)category {
-    NSMutableArray * operationsWithThisCategory = _operations[category] ?: @[].mutableCopy;
+    NSMutableArray *operationsWithThisCategory = _operations[category] ?: @[].mutableCopy;
     
-    MADOperation * last = operationsWithThisCategory.lastObject;
+    MADOperation *last = operationsWithThisCategory.lastObject;
     if (last) {
         [operation addDependency:last];
     }
@@ -84,11 +86,19 @@ static id _sharedInstance;
 }
 
 - (void)noqueue_removeOperation:(MADOperation*)operation category:(NSString *)category {
-    NSMutableArray * matchingOperations = _operations[category];
+    NSMutableArray *matchingOperations = _operations[category];
     if (matchingOperations) {
         [matchingOperations removeObject:operation];
         _operations[category] = matchingOperations;
     }
+}
+
+- (id)debugQuicklookObject {
+    NSString *title = [[NSString alloc] initWithFormat:@"%@ (%lu)\n", NSStringFromClass(self.class),
+                       (unsigned long)_operations.count];
+    NSString *debug = [title stringByAppendingString:@"\n\tSerial queue: "];
+    debug = [debug stringByAppendingString:_serialQueue.description];
+    return debug;
 }
 
 @end

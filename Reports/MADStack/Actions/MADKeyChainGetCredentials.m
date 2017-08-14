@@ -69,7 +69,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
+
+    if (self.cancelled) return [self finish];
 
     const char PromptForUsernameAndPassword = 1;
     const char PromptForPassword = 2;
@@ -95,6 +96,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
     } else if (status == PromptForPassword && queryPasswordData == NULL) {
         status = PromptForUsernameAndPassword;
     }
+    
+    if (self.cancelled) return [self finish];
     
     switch (status) {
             

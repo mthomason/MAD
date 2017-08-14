@@ -29,7 +29,7 @@ static NSString * const ErrorDomain = @"MADKCP";
 @implementation MADKeyChainOperationPut
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithKey:(NSString *)key description:(NSString *)description {
@@ -42,8 +42,9 @@ static NSString * const ErrorDomain = @"MADKCP";
 }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) return [self finish];
 
     NSString *valueToWrite = nil;
     
@@ -60,6 +61,8 @@ static NSString * const ErrorDomain = @"MADKCP";
         }
         
     }
+    
+    if (self.cancelled) return [self finish];
 
     // Write the value to the keychain.
     if (valueToWrite != nil) {

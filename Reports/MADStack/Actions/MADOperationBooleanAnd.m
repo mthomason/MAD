@@ -10,6 +10,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
+#import "MADOperation.h"
 #import "MADOperationCondition.h"
 #import "MADOperationConditionResult.h"
 #import "NSError+MADOperationErrors.h"
@@ -49,6 +50,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 
     BOOL succes = YES;
     for (NSObject <MADOperationCondition> *condition in self.conditions) {

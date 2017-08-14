@@ -21,6 +21,10 @@
 
 #pragma mark - Condition
 
+- (NSString *)name {
+    return NSStringFromClass(super.class);
+}
+
 - (BOOL)isMutuallyExclusive {
     return NO;
 }

@@ -33,7 +33,7 @@
 @implementation MADOperationCreateDocumentImportSchema
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)init {
@@ -51,7 +51,9 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+
+    if (self.cancelled) return [self finish];
 
     MADocument * document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
@@ -61,13 +63,19 @@
             break;
         }
     }
+    
+    if (self.cancelled) return [self finish];
 
     BOOL __block success = NO;
     NSError __block * displayError = nil;
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = document.managedObjectContext;
     //MADocument * __weak weakdoc = document;
+    
+    MADOperationCreateDocumentImportSchema * __weak weakself = self;
     [private performBlockAndWait:^{
+        MADOperationCreateDocumentImportSchema *strongself = weakself;
+
         //MADocument *doc = weakdoc;
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         
@@ -97,7 +105,8 @@
                 @autoreleasepool {
                     
                     NSString *name = databaseTable.name.copy;
-                    [self.parentOperation updateImportProgressWithMessage:name progress:(counter + 1) / numberOfTables];
+                    [strongself.parentOperation updateImportProgressWithMessage: name
+                                                                       progress: (counter + 1) / numberOfTables];
                     
                     NSError *getFieldsError = NULL;
                     NSArray *fieldsForTable = [document.database fieldsForTable: databaseTable.name

@@ -27,7 +27,7 @@
 @implementation MADKeyChainOperationGet
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description {
@@ -43,8 +43,9 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    if (self.cancelled) return [self finish];
 
     CFDataRef queryData = NULL;
     NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key withDescription:self.keyDescription];
@@ -52,8 +53,9 @@
     OSStatus queryStatus = SecItemCopyMatching(queryDefinationC, (CFTypeRef *)&queryData);
     CFRelease(queryDefinationC);
     
+    if (self.cancelled) return [self finish];
+
     if (queryData == NULL) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish with error:", __PRETTY_FUNCTION__);
         NSString *domain = NSStringFromClass([self class]);
         NSError *error = [NSError errorWithDomain:domain code:queryStatus userInfo:nil];
         [self finishWithError:error];
@@ -67,7 +69,6 @@
     switch (queryStatus) {
         case errSecSuccess:
             
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
             result = [[NSString alloc] initWithData: resultData encoding: NSUTF8StringEncoding];
             self.value = result;
             self.success = YES;
@@ -80,10 +81,8 @@
             break;
     }
     if (self.success) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
         [self finish];
     } else {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
         [self finishWithError:error];
     }

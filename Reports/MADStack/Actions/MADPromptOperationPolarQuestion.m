@@ -10,7 +10,7 @@
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
-
+#import "NSError+MADOperationErrors.h"
 #import <os/log.h>
 
 static NSString * const TextYes = @"Yes";
@@ -29,30 +29,41 @@ static NSString * const TextNo = @"No";
 @implementation MADPromptOperationPolarQuestion
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithTitle:(NSString *)title
                       message:(NSString *)message
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+        os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
         _viewController = viewController;
         _title = title.copy;
         _message = message.copy;
         _result = NO;
         self.identifier = self.hash;
-        MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
-        [self addCondition:condition];
+        //MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        //[self addCondition:condition];
         
     }
     return self;
 }
 
+- (BOOL)isAsynchronous {
+    return YES;
+}
+
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Execute:", __PRETTY_FUNCTION__);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: self.title message: self.message
+    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "isCanceled? %s", self.isCancelled ? "YES" : "NO");
+    
+    if (self.cancelled) {
+        return [self finish];
+    }
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: self.title
+                                                                             message: self.message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
     MADPromptOperationPolarQuestion * __weak weakSelf = self;
@@ -62,9 +73,12 @@ static NSString * const TextNo = @"No";
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
-        defer(^{
-            [sself performSelectorInBackground:@selector(finish) withObject:nil];
-        });
+        //defer(^{
+        //MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+        //[sself.conditions removeObject:condition];
+        [sself finish];
+        //    [sself performSelectorInBackground:@selector(finish) withObject:nil];
+        //});
     }];
     
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
@@ -73,17 +87,19 @@ static NSString * const TextNo = @"No";
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = NO;
         sself.alertDisplayed = YES;
-        defer(^{
-            NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: 173 userInfo: nil];
-            [sself performSelectorInBackground: @selector(finishWithError:) withObject: error];
-        });
+        //defer(^{
+        NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: MADConditionFailed userInfo: nil];
+        [sself finishWithError:error];
+            //NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: 173 userInfo: nil];
+            //[sself performSelectorInBackground: @selector(finishWithError:) withObject: error];
+        //});
     }];
     
     [alertController addAction:actionOK];
     [alertController addAction:actionCancel];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-        UIViewController *viewController = self.viewController;
+        UIViewController *viewController = weakSelf.viewController;
         viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         [viewController presentViewController: alertController animated: YES completion: nil];
     }];

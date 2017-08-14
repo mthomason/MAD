@@ -45,6 +45,11 @@ static const short errCache = 2;
 - (BOOL)isAsynchronous { return NO; }
 
 - (void)execute {
+    
+    if (self.cancelled) {
+        return [self finish];
+    }
+
     MADocument *document = self.document;
     MADCredential *credientals = nil;
     if (document.database.delegate == nil) {
