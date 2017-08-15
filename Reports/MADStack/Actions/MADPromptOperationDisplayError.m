@@ -58,6 +58,8 @@ static NSString * const TextYes = @"Dismiss";
     return self;
 }
 
+- (BOOL)alertDisplayedAffirmed { return self.alertDisplayed && self.result; }
+
 - (NSError *)errorFromDependencies {
     NSError *error = nil;
     NSArray<__kindof NSOperation *> *dependencies = self.dependencies;
