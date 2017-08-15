@@ -11,7 +11,7 @@
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
-#import "MADPromptOperationDisplayErrorProtocol.h"
+#import "MADOperationPromptErrorProtocol.h"
 
 static NSString * const TextYes = @"Dismiss";
 
@@ -65,9 +65,9 @@ static NSString * const TextYes = @"Dismiss";
     NSArray<__kindof NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
         
-        if ([dependency conformsToProtocol:@protocol(MADPromptOperationDisplayErrorProtocol)]) {
+        if ([dependency conformsToProtocol:@protocol(MADOperationPromptErrorProtocol)]) {
             
-            NSObject <MADPromptOperationDisplayErrorProtocol> *bumbDependency = (NSObject <MADPromptOperationDisplayErrorProtocol> *)dependency;
+            NSObject <MADOperationPromptErrorProtocol> *bumbDependency = (NSObject <MADOperationPromptErrorProtocol> *)dependency;
             if ([bumbDependency displayError]) {
                 
                 if (self.tagDependency == 0 || self.tagDependency == [bumbDependency tag]) {

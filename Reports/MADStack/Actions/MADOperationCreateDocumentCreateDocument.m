@@ -17,7 +17,7 @@
 #import <MAD/MADDatabaseConnection.h>
 
 #import "MADOperationUniqueUrlForFilename.h"
-#import "MADPromptOperationDisplayErrorProtocol.h"
+#import "MADOperationPromptErrorProtocol.h"
 
 @interface MADOperationCreateDocumentCreateDocument ()
     <MADocumentDelegate>

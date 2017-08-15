@@ -1783,7 +1783,7 @@
 		4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDocumentPageController.m; path = MADStack/MADViewer/UI/MADDocumentPageController.m; sourceTree = "<group>"; };
 		4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerControllerProtocol.h; path = ../../MADDesigner/UI/Explorer/MADExplorerControllerProtocol.h; sourceTree = "<group>"; };
 		4C479D451F3E9CAE00FCE020 /* MADPromptOperationDisplayError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADPromptOperationDisplayError.h; sourceTree = "<group>"; };
-		4C479D461F3E9CF100FCE020 /* MADPromptOperationDisplayErrorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPromptOperationDisplayErrorProtocol.h; sourceTree = "<group>"; };
+		4C479D461F3E9CF100FCE020 /* MADOperationPromptErrorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationPromptErrorProtocol.h; sourceTree = "<group>"; };
 		4C479D471F3EBB0800FCE020 /* MADOperationConditionTestConnectionSuccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionTestConnectionSuccess.h; sourceTree = "<group>"; };
 		4C479D481F3EBB0800FCE020 /* MADOperationConditionTestConnectionSuccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionTestConnectionSuccess.m; sourceTree = "<group>"; };
 		4C479D4A1F3EBBDC00FCE020 /* MADOperationDatabaseTestConnectionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationDatabaseTestConnectionProtocol.h; sourceTree = "<group>"; };
@@ -3848,6 +3848,8 @@
 		4C5B560C1C9A2D07005C19D9 /* Alerts */ = {
 			isa = PBXGroup;
 			children = (
+				4C479D461F3E9CF100FCE020 /* MADOperationPromptErrorProtocol.h */,
+				4C479D451F3E9CAE00FCE020 /* MADPromptOperationDisplayError.h */,
 				4CA0C6B21CA51F7800222B8D /* MADPromptOperationDisplayError.m */,
 				4C5B55FC1C98DD4D005C19D9 /* MADPromptOperationPassword.h */,
 				4C5B55FD1C98DD4D005C19D9 /* MADPromptOperationPassword.m */,
@@ -3855,8 +3857,6 @@
 				4C5B56001C98DD76005C19D9 /* MADPromptOperationCredentials.m */,
 				4C5C0DB71C9BFF7E00826BC2 /* MADPromptOperationPolarQuestion.h */,
 				4C5C0DB81C9BFF7E00826BC2 /* MADPromptOperationPolarQuestion.m */,
-				4C479D451F3E9CAE00FCE020 /* MADPromptOperationDisplayError.h */,
-				4C479D461F3E9CF100FCE020 /* MADPromptOperationDisplayErrorProtocol.h */,
 			);
 			name = Alerts;
 			sourceTree = "<group>";
