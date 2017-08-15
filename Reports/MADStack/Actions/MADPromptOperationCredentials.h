@@ -28,6 +28,7 @@
     - (NSString *)valueForKey:(NSString *)key;
 
     @property (nonatomic, readonly, assign) BOOL alertDisplayed;
+    @property (nonatomic, readonly, assign) BOOL alertDisplayedAffirmed;
 
     @property (nonatomic, readonly, copy) MADCredential *credentials;
     @property (nonatomic, readonly, assign) BOOL gotCredentials;

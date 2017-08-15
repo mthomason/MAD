@@ -130,7 +130,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
                 strongself.source = MADCredentialSourceCredentialPrompt;
             }
             strongself.alertDisplayed = YES;
-            strongself.userContinue = success;
+            strongself.userContinue = YES;
+            success = YES;
             strongself.credentials = credentials.copy;
             strongself.result = YES;
             for (UITextField *field in strongAlertController.textFields) {
@@ -208,6 +209,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
         }];
     }];
 
+}
+
+- (BOOL)alertDisplayedAffirmed {
+    return self.alertDisplayed && self.userContinue;
 }
 
 #pragma mark -

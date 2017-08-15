@@ -7,6 +7,7 @@
 //
 
 #import "MADGetCredentialsOperation.h"
+#import <os/log.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDatabaseConnection.h>
 #import "NSOperation+Advanced.h"
@@ -25,8 +26,6 @@
 #import "MADOperationBooleanAnd.h"
 #import "MADDefer.h"
 
-#import <os/log.h>
-
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
 static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to save your password?";
@@ -43,6 +42,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 @end
 
 @implementation MADGetCredentialsOperation {
+    NSString *_keyUsername, *_keyPassword;
     BOOL _finishedPromptPassword;
     BOOL _finishedPromptCredentals;
 }
@@ -132,9 +132,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     if ([operation isKindOfClass:[MADKeyChainOperationGet class]]) {
         
     } else if ([operation isKindOfClass:[MADPromptOperationPassword class]]) {
-        _finishedPromptPassword = YES;
+        _finishedPromptPassword = ((MADPromptOperationPassword *)operation).alertDisplayedAffirmed;
     } else if ([operation isKindOfClass:[MADPromptOperationCredentials class]]) {
-        _finishedPromptCredentals = YES;
+        _finishedPromptCredentals = ((MADPromptOperationCredentials *)operation).alertDisplayedAffirmed;
     }
     if (_finishedPromptPassword && _finishedPromptCredentals) {
         //[self.internalQueue cancelAllOperations];
@@ -154,29 +154,33 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 - (BOOL)gotCredentials { return self.usernameSet && self.passwordSet; }
 
+- (BOOL)completedPrompt { return _finishedPromptPassword || _finishedPromptCredentals; }
+
+- (BOOL)manuallyInputtedCredentials { return [self gotCredentials] && [self completedPrompt]; }
+
 - (void)addOperationsToGetCredentialsWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                              viewController: (UIViewController *)viewController {
     
     NSString *key = databaseConnection.connectionString;
-    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-    NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+    _keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+    _keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
     
     // ---------------------------------------------------
     // Operation 1: Read username.
     // -------------------------
     MADKeyChainOperationGet *getUsername;
 
-    getUsername = [[MADKeyChainOperationGet alloc] initWithKey: keyUsername
+    getUsername = [[MADKeyChainOperationGet alloc] initWithKey: _keyUsername
                                                withDescription: MTKeyChainUsernameAccountDesc];
     getUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
     
     // Condition: Username is missing.
     MADOperationConditionMissingResultString *conditionReadUsernameFailed;
-    conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyUsername];
+    conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey: _keyUsername];
     
     // Condition: Username is found.
     MADOperationConditionHasResultString *conditionReadUsername;
-    conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
+    conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey: _keyUsername];
 
     
     // ---------------------------------------------------
@@ -184,8 +188,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Conditions:  Username is missing.
     // ---------------------------------------------------
     MADPromptOperationCredentials *promptCredntials;
-    promptCredntials = [[MADPromptOperationCredentials alloc] initWithUsernameKey: keyUsername
-                                                                      passwordKey: keyPassword
+    promptCredntials = [[MADPromptOperationCredentials alloc] initWithUsernameKey: _keyUsername
+                                                                      passwordKey: _keyPassword
                                                                 andViewController: viewController];
     [promptCredntials addDependency:getUsername];
     [promptCredntials addCondition:conditionReadUsernameFailed];
@@ -200,7 +204,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Conditions:  Username is found.
     // ---------------------------------------------------
     MADKeyChainOperationGet *getPassword;
-    getPassword = [[MADKeyChainOperationGet alloc] initWithKey: keyPassword
+    getPassword = [[MADKeyChainOperationGet alloc] initWithKey: _keyPassword
                                                withDescription: MTKeyChainPasswordAccountDesc];
     getPassword.readOperationType = MADKeyChainReadOperationTypePassword;
     [getPassword addDependency:getUsername];
@@ -208,7 +212,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     
     // Condition: Get password failed
     MADOperationConditionMissingResultString *conditionReadPasswordFailed;
-    conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:keyPassword];
+    conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:_keyPassword];
 
     // Condition: Prompt for password only
     NSArray <NSObject <MADOperationCondition> *> *conditionsForPromptPassword;
@@ -226,7 +230,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     //              Credentials alert was suppressed (redundant).
     // ---------------------------------------------------
     MADPromptOperationPassword *promptPassword;
-    promptPassword = [[MADPromptOperationPassword alloc] initWithPasswordKey: keyPassword
+    promptPassword = [[MADPromptOperationPassword alloc] initWithPasswordKey: _keyPassword
                                                            andViewController: viewController];
     [promptPassword addDependency:getUsername];
     [promptPassword addDependency:getPassword];
@@ -359,6 +363,19 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     }];
 
     [self addOperations:operations finishingOperation:finishingOperation];
+}
+
+#pragma mark -
+#pragma mark MADKeyChainKeyValueProtocol
+
+- (NSString *)valueForKey:(NSString *)key {
+    if ([key isEqualToString:_keyUsername]) {
+        return self.credentials.username;
+    } else if ([key isEqualToString:_keyPassword]) {
+        return self.credentials.password;
+    } else {
+        return nil;
+    }
 }
 
 @end

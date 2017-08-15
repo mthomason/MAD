@@ -18,6 +18,7 @@
 
 #import "MADOperationQueue.h"
 #import "MADOperationUniqueUrlForFilename.h"
+#import "MADKeyChainOperationPut.h"
 #import "MADGetCredentialsOperation.h"
 #import "MADOperationCreateDocumentCreateDocument.h"
 #import "MADOperationBackgroundTaskBegin.h"
@@ -34,6 +35,7 @@
 #import "MADKeyChainOperationGet.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionHasResultString.h"
+#import "MADOperationConditionDisplayedAlertConfirm.h"
 
 @interface MADOperationCreateDocument ()
     <MADOperationCreateDocumentImportSchemaProtocol>
@@ -47,8 +49,6 @@
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-    
-//    [self.internalQueue cancelAllOperations];
 }
 
 - (instancetype)initWithFilename: (NSString *)filename
@@ -63,12 +63,21 @@
         
         NSString *key = databaseConnection.connectionString;
         NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-        
+        NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+
         MADOperationConditionHasResultString *conditionReadUsername;
         conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
         
         MADOperationConditionTestConnectionFailuare *connectionConnectionFail;
         connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
+
+        // Condition: Confirm user manually entered password
+        MADOperationConditionDisplayedAlertConfirm *conditionEnteredPassword;
+        conditionEnteredPassword = [[MADOperationConditionDisplayedAlertConfirm alloc] init];
+        
+        // Condition: Test connection success
+        MADOperationConditionTestConnectionSuccess *conditionConnectionConnectionSuccess;
+        conditionConnectionConnectionSuccess = [[MADOperationConditionTestConnectionSuccess alloc] init];
 
         // ---------------------------------------------------
         // Operation 1: Create unique filename/url for document.
@@ -107,6 +116,45 @@
         [taskBegin addDependency: testConnectionOperationCredentials];
         [taskBegin addDependency: displayErrorCredentials];
         
+        // ---------------------------------------------------
+        // Operation 6: Prompt save password
+        // Conditions:  User entered a password.
+        // ---------------------------------------------------
+        NSString *TextSaveToKeyChain = @"Save to KeyChain";
+        NSString *TextSaveToKeyChainMessage = @"Would you like to save your password?";
+        NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
+        NSString *messagePasswordPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
+        MADPromptOperationPolarQuestion *promptSavePassword;
+        promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle: title
+                                                                            message: messagePasswordPrompt
+                                                                     viewController: viewController];
+        [promptSavePassword addDependency: testConnectionOperationCredentials];
+        [promptSavePassword addDependency: getCredentials];
+        [promptSavePassword addCondition: conditionEnteredPassword];
+        [promptSavePassword addCondition: conditionConnectionConnectionSuccess];
+        
+        // ---------------------------------------------------
+        // Operation 7: Save username
+        // Dependency:  Prompt save credentials.
+        // Conditions:  User said yes to save credentials.
+        // ---------------------------------------------------
+        MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
+        promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
+
+        MADKeyChainOperationPut *putUsername;
+        putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
+        [putUsername addDependency:promptSavePassword];
+        [putUsername addCondition:promptToSaveCredntialsAffirmative];
+        
+        // ---------------------------------------------------
+        // Operation 8: Save password
+        // Dependency:  Prompt save credentials.
+        // Conditions:  User said yes to save credentials..
+        // ---------------------------------------------------
+        MADKeyChainOperationPut *putPassword;
+        putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+        [putPassword addDependency:promptSavePassword];
+        [putPassword addCondition:promptToSaveCredntialsAffirmative];
         
         // Create the document file on disk.
         MADOperationCreateDocumentCreateDocument *createDocument;
@@ -116,9 +164,7 @@
         [createDocument addDependency: taskBegin];
         [createDocument addDependency: displayErrorCredentials];
         [createDocument addDependency: testConnectionOperationCredentials];
-        MADOperationConditionTestConnectionSuccess *connectionConnectionSuccess;
-        connectionConnectionSuccess = [[MADOperationConditionTestConnectionSuccess alloc] init];
-        [createDocument addCondition:connectionConnectionSuccess];
+        [createDocument addCondition: conditionConnectionConnectionSuccess];
         
         // Do first time document setup.
         MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup;
@@ -126,7 +172,7 @@
         [firstTimeSetup addDependency: createDocument];
         [firstTimeSetup addDependency: displayErrorCredentials];
         [firstTimeSetup addDependency: testConnectionOperationCredentials];
-        [firstTimeSetup addCondition:connectionConnectionSuccess];
+        [firstTimeSetup addCondition: conditionConnectionConnectionSuccess];
         
         // Add databaes connection to document.
         MADOperationCreateDocumentAddConnection *addConnection;
@@ -135,7 +181,7 @@
         [addConnection addDependency: firstTimeSetup];
         [addConnection addDependency: displayErrorCredentials];
         [addConnection addDependency: testConnectionOperationCredentials];
-        [addConnection addCondition: connectionConnectionSuccess];
+        [addConnection addCondition: conditionConnectionConnectionSuccess];
         
         // Import schema into document.
         MADOperationCreateDocumentImportSchema *importSchema;
@@ -144,7 +190,7 @@
         [importSchema addDependency: addConnection];
         [importSchema addDependency: displayErrorCredentials];
         [importSchema addDependency: testConnectionOperationCredentials];
-        [importSchema addCondition: connectionConnectionSuccess];
+        [importSchema addCondition: conditionConnectionConnectionSuccess];
         importSchema.parentOperation = self;
         
         // Save the new document.
@@ -154,7 +200,7 @@
         [saveOperation addDependency: importSchema];
         [saveOperation addDependency: displayErrorCredentials];
         [saveOperation addDependency: testConnectionOperationCredentials];
-        [saveOperation addCondition: connectionConnectionSuccess];
+        [saveOperation addCondition: conditionConnectionConnectionSuccess];
         
         // Close the new document.
         MADOperationDocumentCloseDocument *closeDocument;
@@ -165,7 +211,7 @@
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addDependency: displayErrorCredentials];
         [closeDocument addDependency: testConnectionOperationCredentials];
-        [closeDocument addCondition: connectionConnectionSuccess];
+        [closeDocument addCondition: conditionConnectionConnectionSuccess];
         
         //Test if credentals are saved
         MADKeyChainOperationGet *operationGetUsername;
@@ -192,32 +238,36 @@
         
         MADOperationKeyChainDeletePassword *operationDeletePassword;
         operationDeletePassword = [[MADOperationKeyChainDeletePassword alloc] initWithKey: databaseConnection.connectionString];
-        [operationDeletePassword addDependency:promptDeleteCredntials];
-        [operationDeletePassword addCondition:promptDeletePasswordAffirmative];
-        
-        
+        [operationDeletePassword addDependency: promptDeleteCredntials];
+        [operationDeletePassword addCondition: promptDeletePasswordAffirmative];
         
         MADOperationBackgroundTaskEnd *taskEnd;
         taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
-        [taskEnd addDependency:taskBegin];
-        [taskEnd addDependency:closeDocument];
+        [taskEnd addDependency: putUsername];
+        [taskEnd addDependency: putPassword];
+        [taskEnd addDependency: promptSavePassword];
+        [taskEnd addDependency: taskBegin];
+        [taskEnd addDependency: closeDocument];
         
-        NSArray <__kindof NSOperation *> *operations = @[uniqueUrlForFilename, getCredentials,
-                                                         taskBegin, createDocument,
+        NSArray <__kindof NSOperation *> *operations = @[promptSavePassword,
+                                                         putUsername,
+                                                         putPassword,
+                                                         uniqueUrlForFilename,
+                                                         getCredentials,
+                                                         taskBegin,
+                                                         createDocument,
                                                          displayErrorCredentials,
                                                          testConnectionOperationCredentials,
-                                                         firstTimeSetup, addConnection,
-                                                         importSchema, saveOperation,
-                                                         closeDocument, taskEnd,
+                                                         firstTimeSetup,
+                                                         addConnection,
+                                                         importSchema,
+                                                         saveOperation,
+                                                         closeDocument,
+                                                         taskEnd,
                                                          promptDeleteCredntials,
                                                          operationDeletePassword];
         
-        //MADGroupOperation * __weak wself = self;
-        NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-            //MADGroupOperation *sself = wself;
-            //[sself finish];
-            //[sself cancel];
-    }];
+        NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{ }];
         [self addOperations:operations finishingOperation:finishingOperation];
         
     }
@@ -240,7 +290,7 @@
         
         [self finish];
         [self cleanup];
-        //[self.internalQueue cancelAllOperations];
+
     } else if ([operation isKindOfClass:[MADOperationDatabaseTestConnection class]]) {
         [((MADOperation *)operation) cleanup];
         _connectionSuccess = ((MADOperationDatabaseTestConnection *)operation).success;

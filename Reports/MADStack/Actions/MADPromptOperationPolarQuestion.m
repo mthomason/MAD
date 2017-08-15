@@ -28,14 +28,13 @@ static NSString * const TextNo = @"No";
 @implementation MADPromptOperationPolarQuestion
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithTitle:(NSString *)title
                       message:(NSString *)message
                viewController:(UIViewController * __weak)viewController {
     if (self = [super init]) {
-        os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 
         _viewController = viewController;
         _title = title.copy;
@@ -54,8 +53,7 @@ static NSString * const TextNo = @"No";
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-    os_log_info(OS_LOG_DEFAULT, "isCanceled? %s", self.isCancelled ? "YES" : "NO");
+    os_log_info(OS_LOG_DEFAULT, "Execute %s", NSStringFromClass(self.class).UTF8String);
     
     if (self.cancelled) {
         return [self finish];

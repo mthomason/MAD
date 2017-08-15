@@ -26,7 +26,7 @@
 @implementation MADOperationConditionPolarQuestionNegative
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
@@ -36,7 +36,8 @@
     return self;
 }
 
-#pragma mark - Condition
+#pragma mark -
+#pragma mark Condition
 
 - (NSString *)name { return NSStringFromClass(self.class); }
 
@@ -50,8 +51,9 @@
     completion(result);
 }
 
+
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+    os_log_info(OS_LOG_DEFAULT, "Evaluate\t%s", operation.description.UTF8String);
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     MADOperationConditionResult *result = nil;
@@ -67,6 +69,7 @@
     for (MADOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
             dependency.identifier == self.tag) {
+
             if ( ! ((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
                 
                 result = [MADOperationConditionPolarQuestionNegativeResult newOperationConditionResultSatisfied];

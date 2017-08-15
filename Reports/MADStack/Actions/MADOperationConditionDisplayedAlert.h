@@ -14,13 +14,13 @@
 
 @protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
     - (BOOL)alertDisplayed;
+    - (BOOL)alertDisplayedAffirmed;
 @end
 
 @interface MADOperationConditionDisplayedAlert : NSObject
     <MADOperationCondition>
 
     - (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
-    @property (nonatomic, assign) BOOL reverseCondition;
 
 @end
 

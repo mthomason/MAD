@@ -22,6 +22,7 @@
                                 viewController: (UIViewController *)viewController;
     @property (readonly) MADCredential *credentials;
     @property (readonly) BOOL gotCredentials;
+    @property (readonly) BOOL manuallyInputtedCredentials;
 
 @end
 

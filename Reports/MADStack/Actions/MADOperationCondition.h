@@ -50,6 +50,10 @@
 
     - (void)evaluateForOperation:(MADOperation *)operation completion:(void(^)(MADOperationConditionResult *))completion;
 
+@optional
+
+    @property (nonatomic, assign) BOOL reverseCondition;
+
 @end
 
 #endif /* MADOperationCondition_h */

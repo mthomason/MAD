@@ -69,7 +69,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                   andViewController:(UIViewController *)viewController {
     if (self = [super init]) {
         os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-        MADMutualExclusiveCondition *condition;
+        //MADMutualExclusiveCondition *condition;
         _passwordKey = passwordKey.copy;
         _source = MADCredentialSourceNone;
         _alertDisplayed = NO;
@@ -168,6 +168,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
         [topViewController  presentViewController: weakAlertController animated: YES completion:NULL];
     }];
 
+}
+
+- (BOOL)alertDisplayedAffirmed {
+    return self.alertDisplayed && self.userContinue;
 }
 
 #pragma mark - UITextFieldDelegate

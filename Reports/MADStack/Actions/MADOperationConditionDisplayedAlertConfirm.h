@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADOperationConditionDisplayedAlertConfirm_h
+#define MAD_Designer_MADOperationConditionDisplayedAlertConfirm_h
+
+#import <Foundation/NSObject.h>
+#import "MADOperationCondition.h"
 
 @interface MADOperationConditionDisplayedAlertConfirm : NSObject
+    <MADOperationCondition>
 
 @end
+
+#endif

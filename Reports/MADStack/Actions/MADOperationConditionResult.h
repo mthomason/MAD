@@ -21,6 +21,8 @@ extern NSString * MADOperationConditionKey;
     @property (nonatomic, readonly) NSError * error;
 
     + (instancetype)newOperationConditionResultSatisfied;
+    + (instancetype)newOperationConditionResult:(BOOL)satisfied;
+    + (instancetype)newOperationConditionResult:(BOOL)satisfied name:(NSString *)name;
     + (instancetype)newOperationConditionResultFailed:(NSError *)error;
     + (void)evaluateConditions:(NSArray *)conditions
                      operation:(MADOperation *)operation

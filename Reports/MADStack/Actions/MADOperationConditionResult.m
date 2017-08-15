@@ -7,12 +7,14 @@
 //
 
 #import "MADOperationConditionResult.h"
-#import "MADOperationCondition.h"
-#import "MADOperation.h"
-#import "NSError+MADOperationErrors.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSKeyValueCoding.h>
+#import <MAD/MADErrorUserInfo.h>
+#import "MADOperation.h"
+#import "MADOperationCondition.h"
+#import "MADOperationConditionResult.h"
+#import "NSError+MADOperationErrors.h"
 
 NSString * MADOperationConditionKey = @"OperationCondition";
 
@@ -27,6 +29,26 @@ NSString * MADOperationConditionKey = @"OperationCondition";
 
 + (instancetype)newOperationConditionResultSatisfied {
     return [self newOperationConditionResultIsSucceed:YES error:nil];
+}
+
++ (instancetype)newOperationConditionResult:(BOOL)satisfied {
+    return [self newOperationConditionResult:satisfied
+                                        name:NSStringFromClass(self.class)];
+}
+
++ (instancetype)newOperationConditionResult:(BOOL)satisfied name:(NSString *)name {
+    id operationCondition;
+    if (satisfied) {
+        operationCondition = [self newOperationConditionResultSatisfied];
+    } else {
+        NSString *message = @"Not Satisified";
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: message
+                                                                       andMessage: message];
+        NSError *error = [errorUserInfo errorWithDomain: name
+                                                   code: MADConditionFailed];
+        operationCondition = [MADOperationConditionResult newOperationConditionResultFailed:error];
+    }
+    return operationCondition;
 }
 
 + (instancetype)newOperationConditionResultFailed:(NSError *)error {

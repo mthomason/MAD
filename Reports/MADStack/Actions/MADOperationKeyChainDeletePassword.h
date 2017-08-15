@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADKeyChainOperationPut_h
-#define MAD_Designer_MADKeyChainOperationPut_h
+#ifndef MAD_Designer_MADOperationKeyChainDeletePassword_h
+#define MAD_Designer_MADOperationKeyChainDeletePassword_h
 
 #import "MADOperation.h"
 

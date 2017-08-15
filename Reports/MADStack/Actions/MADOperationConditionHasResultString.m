@@ -28,7 +28,7 @@
 @implementation MADOperationConditionHasResultString
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithKey:(NSString *)key {
@@ -58,7 +58,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", operation.description.UTF8String);
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     MADOperationConditionResult *result = nil;

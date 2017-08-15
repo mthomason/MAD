@@ -27,7 +27,7 @@
 @implementation MADOperationBooleanAnd
 
 - (void)dealloc {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithConditions:(NSArray <NSObject <MADOperationCondition> *> *)conditions {
@@ -50,7 +50,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Evaluate", operation.description.UTF8String);
 
     BOOL succes = YES;
     for (NSObject <MADOperationCondition> *condition in self.conditions) {
