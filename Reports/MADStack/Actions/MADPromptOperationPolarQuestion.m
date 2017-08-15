@@ -7,11 +7,10 @@
 //
 
 #import "MADPromptOperationPolarQuestion.h"
+#import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
-#import "MADDefer.h"
 #import "NSError+MADOperationErrors.h"
-#import <os/log.h>
 
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
@@ -73,12 +72,7 @@ static NSString * const TextNo = @"No";
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
-        //defer(^{
-        //MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
-        //[sself.conditions removeObject:condition];
-        [sself finish];
-        //    [sself performSelectorInBackground:@selector(finish) withObject:nil];
-        //});
+        [sself performSelector:@selector(finish)];
     }];
     
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
@@ -87,12 +81,8 @@ static NSString * const TextNo = @"No";
         MADPromptOperationPolarQuestion * __strong sself = weakSelf;
         sself.result = NO;
         sself.alertDisplayed = YES;
-        //defer(^{
         NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: MADConditionFailed userInfo: nil];
-        [sself finishWithError:error];
-            //NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: 173 userInfo: nil];
-            //[sself performSelectorInBackground: @selector(finishWithError:) withObject: error];
-        //});
+        [sself performSelector:@selector(finishWithError:) withObject:error];
     }];
     
     [alertController addAction:actionOK];

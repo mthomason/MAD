@@ -14,11 +14,8 @@
 - (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password {
     if (self = [super init]) {
 
-        NSString *u = [[NSString alloc] initWithString:username];
-        self.username = u;
-        
-        NSString *p = [[NSString alloc] initWithString:password];
-        self.password = p;
+        _username = username.copy;
+        _password = password.copy;
         
     }
     return self;
@@ -26,8 +23,8 @@
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    id username = [self.username copyWithZone:zone];
-    id password = [self.password copyWithZone:zone];
+    id username = [_username copyWithZone:zone];
+    id password = [_password copyWithZone:zone];
     id copy = [[[self class] alloc] initWithUsername:username andPassword:password];
     return copy;
 }

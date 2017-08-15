@@ -120,7 +120,8 @@
     if (!mysql_real_connect(connectionHandle, host, user, password, schema, port,
                             NULL,  /* default socket */ server.flags)) {
         NSString *errorDescription;
-        errorDescription = [[NSString alloc] initWithFormat:@"%s", mysql_error(connectionHandle)];
+        const char *mysql_err = mysql_error(connectionHandle);
+        errorDescription = [[NSString alloc] initWithFormat:@"%s", mysql_err];
         unsigned int errorCode = mysql_errno(connectionHandle);
         if (errorDescription.length <= 0) {
             errorDescription = NSLocalizedString(@"Failed to connect", @"Failed to connect");
@@ -185,24 +186,21 @@
     }
 }
 
-- (void)enableTransactions
-{
+- (void)enableTransactions {
     @synchronized (self) {
         transactionsEnabled=YES;
         mysql_autocommit(_connection, 0);
     }
 }
 
-- (void)disableTransactions
-{
+- (void)disableTransactions {
     @synchronized (self) {
         transactionsEnabled=NO;
         mysql_autocommit(_connection, 1);
     }
 }
 
-- (void)commitTransaction
-{
+- (void)commitTransaction {
     @synchronized (self) {
         if (mysql_commit(_connection)) {
             [MysqlCommitException raiseConnection:self withFormat:@"Transaction commit failed (%s)",mysql_error(_connection)];
@@ -210,8 +208,7 @@
     }
 }
 
-- (void)rollbackTransaction
-{
+- (void)rollbackTransaction {
     @synchronized (self) {
         if (mysql_rollback(_connection)) {
             [MysqlRollbackException raiseConnection:self withFormat:@"Transaction rollback failed (%s)",mysql_error(_connection)];
@@ -219,8 +216,7 @@
     }
 }
 
-- (void)sendIdle  __attribute__ ((noreturn))
-{
+- (void)sendIdle __attribute__ ((noreturn)) {
     @autoreleasepool {
         [NSThread currentThread].name = @"Mysql Idle Thread";
         while (YES) {
@@ -234,8 +230,7 @@
     }
 }
 
-- (void)startIdle
-{
+- (void)startIdle {
     [self performSelectorInBackground: @selector(sendIdle)
                            withObject: nil];
 }

@@ -387,7 +387,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self removeKeyboard];
     [self disableTextFields];
     
-    self.navigationItem.prompt = message;
+    self.navigationItem.prompt = message.copy;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [self disableNavigation];

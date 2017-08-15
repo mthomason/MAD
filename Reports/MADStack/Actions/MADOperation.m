@@ -10,6 +10,7 @@
 #import <os/log.h>
 #import <Foundation/NSKeyValueObserving.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSError.h>
 #import "MADOperationCondition.h"
 #import "MADOperationConditionResult.h"
 #import "MADOperationObserver.h"
@@ -29,9 +30,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
     MADOperationState _state;
 }
 
-- (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
-}
+#pragma mark -
+#pragma mark Static functions
+
+- (void)dealloc { }
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -257,7 +259,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)finishWithError:(NSError *)error {
     if (error) {
-        NSArray *errorArray = [[NSArray alloc] initWithObjects:error, nil];
+        NSError *errorCopy = error.copy;
+        NSArray *errorArray = [[NSArray alloc] initWithObjects:errorCopy, nil ];
         [self finish:errorArray];
     } else {
         [self finish:nil];
@@ -292,8 +295,6 @@ static NSString * const MADOperatorSelectorState        = @"state";
         self.state = MADOperationStateFinished;
 
     }
-    //[self.conditions removeAllObjects];
-    //[self.observers removeAllObjects];
 }
 
     /**

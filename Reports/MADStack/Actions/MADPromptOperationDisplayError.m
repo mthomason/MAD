@@ -111,9 +111,10 @@ static NSString * const TextYes = @"Dismiss";
         localizedFailureReason = error.localizedFailureReason;
     }
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason
-                                                                             message: localizedDescription
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertController *alertController;
+    alertController = [UIAlertController alertControllerWithTitle: localizedFailureReason
+                                                          message: localizedDescription
+                                                   preferredStyle: UIAlertControllerStyleAlert];
 
     MADPromptOperationDisplayError * __weak weakSelf = self;
     NSString *title = NSLocalizedString(TextYes, TextYes);
@@ -121,14 +122,11 @@ static NSString * const TextYes = @"Dismiss";
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction * _Nonnull action) {
-        MADPromptOperationDisplayError * __strong sself = weakSelf;
-        sself.result = YES;
-        sself.alertDisplayed = YES;
-        //[sself finish];
-                                                         defer(^{
-                                                             [sself performSelectorInBackground:@selector(finish) withObject:nil];
-                                                         });
-        sself.viewController = nil;
+        MADPromptOperationDisplayError *strongself = weakSelf;
+        strongself.result = YES;
+        strongself.alertDisplayed = YES;
+        [strongself performSelector:@selector(finish)];
+        strongself.viewController = nil;
     }];
     
     [alertController addAction:actionOK];
@@ -141,6 +139,5 @@ static NSString * const TextYes = @"Dismiss";
         [sViewController presentViewController: alertController animated: YES completion: nil];
     }];
 }
-
 
 @end

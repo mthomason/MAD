@@ -119,19 +119,40 @@ static NSString * const MADButtonCancel                = @"Cancel";
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
+    UIAlertController * __weak weakAlertController = alertController;
     UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
+        UIAlertController *strongAlertController = weakAlertController;
         MADPromptOperationPassword *sself = weakself;
-        [sself finish: YES password: ((UITextField *)alertController.textFields.firstObject).text];
+        sself.alertDisplayed = YES;
+        sself.source = MADCredentialSourcePasswordPrompt;
+        sself.userContinue = YES;
+        sself.password = ((UITextField *)strongAlertController.textFields.firstObject).text.copy;
+        sself.gotPassword = YES;
+        sself.result = YES;
+        for (UITextField *field in strongAlertController.textFields) {
+            field.delegate = nil;
+        }
+        [sself performSelector:@selector(finish)];
+                                                              
     }];
     
     UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
                                                                 style: UIAlertActionStyleCancel
                                                               handler: ^(UIAlertAction *action) {
-        MADPromptOperationPassword * sself = weakself;
+        UIAlertController *strongAlertController = weakAlertController;
+        MADPromptOperationPassword *sself = weakself;
         sself.alertDisplayed = YES;
-        [sself userCancel];
+        sself.userContinue = NO;
+        sself.password = nil;
+        sself.result = NO;
+        sself.gotPassword = NO;
+        for (UITextField *field in strongAlertController.textFields) {
+            field.delegate = nil;
+        }
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([sself class]) code:173 userInfo:nil];
+        [sself performSelector:@selector(finishWithError:) withObject:error];
     }];
     
     [alertController addAction:actionAlertOK];
@@ -144,34 +165,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: alertController animated: YES completion:NULL];
+        [topViewController  presentViewController: weakAlertController animated: YES completion:NULL];
     }];
 
-}
-
-- (void)finish:(BOOL)success password:(NSString *)password {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-    self.alertDisplayed = YES;
-    self.source = MADCredentialSourcePasswordPrompt;
-    self.userContinue = YES;
-    self.password = password;
-    self.gotPassword = YES;
-    self.result = YES;
-    //defer(^{
-        [self performSelectorInBackground:@selector(finish) withObject:nil];
-    //});
-}
-
-- (void)userCancel {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-    self.userContinue = NO;
-    self.password = nil;
-    self.result = NO;
-    self.gotPassword = NO;
-    //defer(^{
-        //NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
-        //[self performSelectorInBackground:@selector(finishWithError:) withObject:error];
-    //});
 }
 
 #pragma mark - UITextFieldDelegate

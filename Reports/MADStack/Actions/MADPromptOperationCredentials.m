@@ -7,6 +7,7 @@
 //
 
 #import "MADPromptOperationCredentials.h"
+#import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
@@ -16,9 +17,6 @@
 #import <MADCocoaExtensions/MADTextField.h>
 #import "MADKeyChainOperationGet.h"
 #import "MADMutualExclusive.h"
-#import "MADDefer.h"
-
-#import <os/log.h>
 
 static NSString * const MADTitleCredentials            = @"Credentials";
 static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
@@ -36,8 +34,8 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     @property (nonatomic, readwrite, assign) BOOL alertDisplayed;
 
-    @property (nonatomic, assign, readwrite) MADCredentialSource source;
-    @property (nonatomic, copy, readwrite) MADCredential *credentials;
+    @property (nonatomic, readwrite, assign) MADCredentialSource source;
+    @property (nonatomic, readwrite, copy) MADCredential *credentials;
 
     @property (nonatomic, readwrite, assign) BOOL bypass;
     @property (nonatomic, readwrite, assign) BOOL userContinue;
@@ -54,8 +52,9 @@ static NSString * const MADButtonCancel                = @"Cancel";
     os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 }
 
-- (instancetype)initWithUsernameKey:(NSString *)usernameKey passwordKey:(NSString *)passwordKey
-                                                      andViewController:(UIViewController *)viewController {
+- (instancetype)initWithUsernameKey:(NSString *)usernameKey
+                        passwordKey:(NSString *)passwordKey
+                  andViewController:(UIViewController *)viewController {
 
     if (self = [super init]) {
 
@@ -95,10 +94,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     self.displayingPrompt = YES;
 
-    NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
-    NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
 
     __block NSString *password;
     __block NSString *username;
@@ -107,116 +102,116 @@ static NSString * const MADButtonCancel                = @"Cancel";
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
-    void (^ __nullable actionTextFieldWithConfigurationUsername)(UITextField *textField);
-    void (^ __nullable actionTextFieldWithConfigurationPassword)(UITextField *textField);
-    
     MADPromptOperationCredentials * __weak weakself = self;
     
-    UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "OK");
-        MADPromptOperationCredentials *strongself = weakself;
-        username = ((UITextField *)alertController.textFields.firstObject).text;
-        password = ((UITextField *)(alertController.textFields)[1]).text;
 
-        MADCredential *credentials = nil;
-        if (username != nil && password != nil) {
-            credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
-            strongself.gotCredentials = YES;
-            strongself.source = MADCredentialSourceCredentialPrompt;
-        }
-        [strongself finish:YES credentials:credentials];
-        strongself.alertDisplayed = YES;
-        strongself.userContinue = success;
-        strongself.credentials = credentials.copy;
-        strongself.result = YES;
-        defer(^{
-            [strongself performSelectorInBackground:@selector(finish) withObject:nil];
-        });
-/*
-        MADPromptOperationCredentials __weak *weakself2 = strongself;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            MADPromptOperationCredentials *strongself2 = weakself2;
-            //[strongself2 finish];
-            [strongself2 performSelectorInBackground:@selector(finish) withObject:nil];
-         });
-  */      
-    }];
     
-    UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
-                                                                style: UIAlertActionStyleCancel
-                                                              handler: ^(UIAlertAction *action) {
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "Cancel");
-        MADPromptOperationCredentials *strongself = weakself;
-        password = nil; username = nil;
-        success = NO;
-        strongself.alertDisplayed = YES;
-        strongself.userContinue = NO;
-        strongself.credentials = nil;
-        strongself.result = NO;
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([strongself class]) code:173 userInfo:nil];
-        MADPromptOperationCredentials * __weak weakself2 = strongself;
-                                                                  
-                                                                  
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            MADPromptOperationCredentials *strongself2 = weakself2;
-            [strongself2 userCancel];
-            [strongself2 performSelectorInBackground:@selector(finishWithError:) withObject:error];
-        });
+    //UIViewController * __weak weakViewController = self.viewController;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
+        NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title message: message
+                                                                          preferredStyle: UIAlertControllerStyleAlert];
+        
+        UIAlertController * __weak weakAlertController = alertController;
+        
+        UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "OK");
+            MADPromptOperationCredentials *strongself = weakself;
+            UIAlertController *strongAlertController = weakAlertController;
+            username = ((UITextField *)strongAlertController.textFields.firstObject).text.copy;
+            password = ((UITextField *)(strongAlertController.textFields)[1]).text.copy;
+            
+            MADCredential *credentials = nil;
+            if (username != nil && password != nil) {
+                credentials = [[MADCredential alloc] initWithUsername:username andPassword:password];
+                strongself.gotCredentials = YES;
+                strongself.source = MADCredentialSourceCredentialPrompt;
+            }
+            strongself.alertDisplayed = YES;
+            strongself.userContinue = success;
+            strongself.credentials = credentials.copy;
+            strongself.result = YES;
+            for (UITextField *field in strongAlertController.textFields) {
+                field.delegate = nil;
+            }
+            [strongself performSelector:@selector(finish)];
+            strongAlertController = nil;
+        }];
+        
+        UIAlertAction *actionAlertCancel;
+        actionAlertCancel = [UIAlertAction actionWithTitle: cancel
+                                                     style: UIAlertActionStyleCancel
+                                                   handler: ^(UIAlertAction *action) {
+            os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "Cancel");
+            MADPromptOperationCredentials *strongself = weakself;
+            password = nil; username = nil;
+            success = NO;
+            strongself.alertDisplayed = YES;
+            strongself.userContinue = NO;
+            strongself.credentials = nil;
+            strongself.result = NO;
+            for (UITextField *field in weakAlertController.textFields) {
+                field.delegate = nil;
+            }
+            NSError *error = [NSError errorWithDomain:NSStringFromClass([strongself class])
+                                                 code:173 userInfo:nil];
+            [strongself performSelector:@selector(finishWithError:) withObject:error];
+        }];
+        
+        [alertController addAction:actionAlertOK];
+        [alertController addAction:actionAlertCancel];
+        
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            MADPromptOperationCredentials *strongself = weakself;
+            UILabel *labelUsername = [[UILabel alloc] init];
+            NSString *token = @"Username: ";
+            labelUsername.textColor = [UIColor lightGrayColor];
+            labelUsername.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+            labelUsername.text = NSLocalizedString(token, token);
+            [labelUsername sizeToFit];
+            textField.leftView = labelUsername;
+            textField.secureTextEntry = NO;
+            textField.leftViewMode = UITextFieldViewModeAlways;
+            textField.text = @"";
+            textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            textField.clearButtonMode = UITextFieldViewModeAlways;
+            
+            textField.delegate = strongself;
+        }];
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            MADPromptOperationCredentials *strongself = weakself;
+            UILabel *passwordLabel = [[UILabel alloc] init];
+            NSString *token = @"Password: ";
+            passwordLabel.textColor = [UIColor lightGrayColor];
+            passwordLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+            passwordLabel.text = NSLocalizedString(token, token);
+            [passwordLabel sizeToFit];
+            textField.leftView = passwordLabel;
+            textField.secureTextEntry = YES;
+            textField.leftViewMode = UITextFieldViewModeAlways;
+            textField.text = @"";
+            textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            textField.clearButtonMode = UITextFieldViewModeAlways;
+            textField.delegate = strongself;
+        }];
 
-    }];
-    
-    
-    actionTextFieldWithConfigurationUsername = ^(UITextField *textField) {
-        MADPromptOperationCredentials *strongself = weakself;
-        MADTextField *textFieldFormatter = [[MADTextField alloc] init];
-        textFieldFormatter.handleConfigureUsername(textField);
-        textField.delegate = strongself;
-    };
-    
-    actionTextFieldWithConfigurationPassword = ^(UITextField *textField) {
-        MADPromptOperationCredentials *strongself = weakself;
-        MADTextField *textFieldFormatter = [[MADTextField alloc] init];
-        textFieldFormatter.handleConfigurePassword(textField);
-        textField.delegate = strongself;
-    };
-
-    [alertController addAction:actionAlertOK];
-    [alertController addAction:actionAlertCancel];
-    [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationUsername];
-    [alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfigurationPassword];
-    
-    UIViewController *viewController = self.viewController;
-    viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [viewController  presentViewController: alertController animated: YES completion:^{
-//        [self performSelectorInBackground:@selector(finish) withObject:nil];
+        
+        UIViewController *viewController = self.viewController;
+        viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [viewController  presentViewController: alertController animated: YES completion:^{
+            [weakAlertController.textFields enumerateObjectsUsingBlock:^(UITextField * _Nonnull textField, NSUInteger idx, BOOL * _Nonnull stop) {
+                ((UILabel *)textField.leftView).textColor = textField.isFirstResponder ? [UIColor darkGrayColor] : [UIColor lightGrayColor];
+                [textField.leftView setNeedsDisplay];
+            }];
+        }];
     }];
 
 }
 
-- (void)finish:(BOOL)success credentials:(MADCredential *)credentials {
-    self.alertDisplayed = YES;
-    self.userContinue = success;
-    self.credentials = credentials.copy;
-    self.result = YES;
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-    //defer(^{
-        //[self performSelectorInBackground:@selector(finish) withObject:nil];
-    //});
-}
-
-- (void)userCancel {
-    self.alertDisplayed = YES;
-    self.userContinue = NO;
-    self.credentials = nil;
-    self.result = NO;
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-    //defer(^{
-        //NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:173 userInfo:nil];
-        //[self performSelectorInBackground:@selector(finishWithError:) withObject:error];
-    //});
-}
-
-#pragma mark - UITextFieldDelegate
+#pragma mark -
+#pragma mark UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     ((UILabel *)textField.leftView).textColor = [UIColor darkGrayColor];

@@ -27,21 +27,21 @@
 - (void)execute {
     os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
     MADOperationBackgroundTaskBegin * __weak weakself = self;
     
-    UIBackgroundTaskIdentifier identifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+    NSString *taskName = @"com.everdayapps.operation.document.create.begin";
+    self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName: taskName
+                                                                                 expirationHandler: ^{
         MADOperationBackgroundTaskBegin *sself = weakself;
         [[UIApplication sharedApplication] endBackgroundTask:sself.backgroundTaskIdentifier];
         sself.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
     }];
 
-    self.backgroundTaskIdentifier = identifier;
-    
     if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
         [self finish];
     } else {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:22 userInfo:nil];
+        NSString *domain = NSStringFromClass(self.class);
+        NSError *error = [NSError errorWithDomain:domain code:22 userInfo:nil];
         [self finishWithError:error];
     }
     

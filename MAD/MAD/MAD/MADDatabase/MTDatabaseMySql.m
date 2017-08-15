@@ -83,7 +83,7 @@
     BOOL success = NO;
     MysqlConnection *conn = nil;
     
-    NSError *connError = nil;
+    NSError * __autoreleasing connError = nil;
     if (connection && credentals) {
         
         MysqlServer *serv = [[MysqlServer alloc] init];
