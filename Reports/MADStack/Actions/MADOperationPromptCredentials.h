@@ -1,13 +1,13 @@
 //
-//  MADPromptOperationCredentials.h
+//  MADOperationPromptCredentials.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/15/16.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADPromptOperationCredentials_h
-#define MAD_Designer_MADPromptOperationCredentials_h
+#ifndef MAD_Designer_MADOperationPromptCredentials_h
+#define MAD_Designer_MADOperationPromptCredentials_h
 
 #import "MADOperation.h"
 #import <MAD/MADCredential.h>
@@ -19,7 +19,7 @@
 
 @class UIViewController;
 
-@interface MADPromptOperationCredentials : MADOperation
+@interface MADOperationPromptCredentials : MADOperation
     <MADOperationConditionPolarQuestionResultProtocol, MADKeyChainKeyValueProtocol,
         MADOperationHoldsCredentialsProtocol, MADOperationConditionDisplayedAlertProtocol>
 

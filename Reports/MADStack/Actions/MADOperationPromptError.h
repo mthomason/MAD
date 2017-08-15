@@ -1,13 +1,13 @@
 //
-//  MADPromptOperationDisplayError.h
+//  MADOperationPromptError.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADPromptOperationDisplayError_h
-#define MAD_Designer_MADPromptOperationDisplayError_h
+#ifndef MAD_Designer_MADOperationPromptError_h
+#define MAD_Designer_MADOperationPromptError_h
 
 #import "MADOperation.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
@@ -15,7 +15,7 @@
 
 @class UIViewController;
 
-@interface MADPromptOperationDisplayError : MADOperation
+@interface MADOperationPromptError : MADOperation
     <MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
     
     - (instancetype)initWithViewController:(UIViewController * __weak)viewController;

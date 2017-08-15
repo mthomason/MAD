@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADPromptOperationPassword_h
-#define MAD_Designer_MADPromptOperationPassword_h
+#ifndef MAD_Designer_MADOperationPromptPassword_h
+#define MAD_Designer_MADOperationPromptPassword_h
 
 #import "MADOperation.h"
 #import <UIKit/UIViewController.h>
@@ -20,7 +20,7 @@
 #import "MADOperationKeyChainPut.h"
 
 
-@interface MADPromptOperationPassword : MADOperation
+@interface MADOperationPromptPassword : MADOperation
     <MADOperationResultStringProtocol,
         MADKeyChainKeyValueProtocol,
         MADOperationHoldsPasswordProtocol,

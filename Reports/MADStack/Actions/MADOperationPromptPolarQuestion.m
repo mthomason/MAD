@@ -1,12 +1,12 @@
 //
-//  MADPromptOperationPolarQuestion.m
+//  MADOperationPromptPolarQuestion.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/18/16.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADPromptOperationPolarQuestion.h"
+#import "MADOperationPromptPolarQuestion.h"
 #import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
@@ -15,7 +15,7 @@
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
 
-@interface MADPromptOperationPolarQuestion ()
+@interface MADOperationPromptPolarQuestion ()
 
     @property (nonatomic, readwrite, assign) BOOL result;
     @property (nonatomic, copy) NSString *title;
@@ -25,7 +25,7 @@ static NSString * const TextNo = @"No";
 
 @end
 
-@implementation MADPromptOperationPolarQuestion
+@implementation MADOperationPromptPolarQuestion
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
@@ -63,11 +63,11 @@ static NSString * const TextNo = @"No";
                                                                              message: self.message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
-    MADPromptOperationPolarQuestion * __weak weakSelf = self;
+    MADOperationPromptPolarQuestion * __weak weakSelf = self;
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction * _Nonnull action) {
-        MADPromptOperationPolarQuestion * __strong sself = weakSelf;
+        MADOperationPromptPolarQuestion * __strong sself = weakSelf;
         sself.result = YES;
         sself.alertDisplayed = YES;
         [sself performSelector:@selector(finish)];
@@ -76,7 +76,7 @@ static NSString * const TextNo = @"No";
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
                                                            style: UIAlertActionStyleCancel
                                                          handler: ^(UIAlertAction * _Nonnull action) {
-        MADPromptOperationPolarQuestion * __strong sself = weakSelf;
+        MADOperationPromptPolarQuestion * __strong sself = weakSelf;
         sself.result = NO;
         sself.alertDisplayed = YES;
         NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: MADConditionFailed userInfo: nil];

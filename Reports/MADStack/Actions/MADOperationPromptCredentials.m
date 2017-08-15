@@ -1,12 +1,12 @@
 //
-//  MADPromptOperationCredentials.m
+//  MADOperationPromptCredentials.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/15/16.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADPromptOperationCredentials.h"
+#import "MADOperationPromptCredentials.h"
 #import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
@@ -24,7 +24,7 @@ static NSString * const MADMessageCredentials          = @"Please enter your cre
 static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 
-@interface MADPromptOperationCredentials()
+@interface MADOperationPromptCredentials()
     <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
@@ -46,7 +46,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 @end
 
-@implementation MADPromptOperationCredentials
+@implementation MADOperationPromptCredentials
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
@@ -102,7 +102,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
     NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
     
-    MADPromptOperationCredentials * __weak weakself = self;
+    MADOperationPromptCredentials * __weak weakself = self;
     
 
     
@@ -118,7 +118,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         
         UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
             os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "OK");
-            MADPromptOperationCredentials *strongself = weakself;
+            MADOperationPromptCredentials *strongself = weakself;
             UIAlertController *strongAlertController = weakAlertController;
             username = ((UITextField *)strongAlertController.textFields.firstObject).text.copy;
             password = ((UITextField *)(strongAlertController.textFields)[1]).text.copy;
@@ -146,7 +146,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                      style: UIAlertActionStyleCancel
                                                    handler: ^(UIAlertAction *action) {
             os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "Cancel");
-            MADPromptOperationCredentials *strongself = weakself;
+            MADOperationPromptCredentials *strongself = weakself;
             password = nil; username = nil;
             success = NO;
             strongself.alertDisplayed = YES;
@@ -165,7 +165,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
         [alertController addAction:actionAlertCancel];
         
         [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            MADPromptOperationCredentials *strongself = weakself;
+            MADOperationPromptCredentials *strongself = weakself;
             UILabel *labelUsername = [[UILabel alloc] init];
             NSString *token = @"Username: ";
             labelUsername.textColor = [UIColor lightGrayColor];
@@ -182,7 +182,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
             textField.delegate = strongself;
         }];
         [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            MADPromptOperationCredentials *strongself = weakself;
+            MADOperationPromptCredentials *strongself = weakself;
             UILabel *passwordLabel = [[UILabel alloc] init];
             NSString *token = @"Password: ";
             passwordLabel.textColor = [UIColor lightGrayColor];

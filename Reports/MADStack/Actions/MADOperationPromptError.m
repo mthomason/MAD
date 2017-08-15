@@ -1,12 +1,12 @@
 //
-//  MADPromptOperationDisplayError.m
+//  MADOperationPromptError.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADPromptOperationDisplayError.h"
+#import "MADOperationPromptError.h"
 #import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
@@ -15,7 +15,7 @@
 
 static NSString * const TextYes = @"Dismiss";
 
-@interface MADPromptOperationDisplayError ()
+@interface MADOperationPromptError ()
 
     @property (nonatomic, readwrite, assign) BOOL result;
     @property (nonatomic, copy) NSError *error;
@@ -24,7 +24,7 @@ static NSString * const TextYes = @"Dismiss";
 
 @end
 
-@implementation MADPromptOperationDisplayError
+@implementation MADOperationPromptError
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
@@ -118,13 +118,13 @@ static NSString * const TextYes = @"Dismiss";
                                                           message: localizedDescription
                                                    preferredStyle: UIAlertControllerStyleAlert];
 
-    MADPromptOperationDisplayError * __weak weakSelf = self;
+    MADOperationPromptError * __weak weakSelf = self;
     NSString *title = NSLocalizedString(TextYes, TextYes);
     
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction * _Nonnull action) {
-        MADPromptOperationDisplayError *strongself = weakSelf;
+        MADOperationPromptError *strongself = weakSelf;
         strongself.result = YES;
         strongself.alertDisplayed = YES;
         [strongself performSelector:@selector(finish)];

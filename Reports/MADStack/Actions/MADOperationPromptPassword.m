@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADPromptOperationPassword.h"
+#import "MADOperationPromptPassword.h"
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
@@ -26,7 +26,7 @@ static NSString * const MADMessagePassword             = @"Please enter your pas
 static NSString * const MADButtonContinue              = @"Continue";
 static NSString * const MADButtonCancel                = @"Cancel";
 
-@interface MADPromptOperationPassword ()
+@interface MADOperationPromptPassword ()
     <UITextFieldDelegate>
 
     @property (nonatomic, weak) UIViewController *viewController;
@@ -45,7 +45,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
 @end
 
-@implementation MADPromptOperationPassword
+@implementation MADOperationPromptPassword
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
@@ -107,7 +107,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField);
 
-    MADPromptOperationPassword * __weak weakself = self;
+    MADOperationPromptPassword * __weak weakself = self;
 
     actionTextFieldWithConfiguration = ^(UITextField *textField) {
         
@@ -124,7 +124,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                             style: UIAlertActionStyleDefault
                                                           handler: ^(UIAlertAction *action) {
         UIAlertController *strongAlertController = weakAlertController;
-        MADPromptOperationPassword *sself = weakself;
+        MADOperationPromptPassword *sself = weakself;
         sself.alertDisplayed = YES;
         sself.source = MADCredentialSourcePasswordPrompt;
         sself.userContinue = YES;
@@ -142,7 +142,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
                                                                 style: UIAlertActionStyleCancel
                                                               handler: ^(UIAlertAction *action) {
         UIAlertController *strongAlertController = weakAlertController;
-        MADPromptOperationPassword *sself = weakself;
+        MADOperationPromptPassword *sself = weakself;
         sself.alertDisplayed = YES;
         sself.userContinue = NO;
         sself.password = nil;
