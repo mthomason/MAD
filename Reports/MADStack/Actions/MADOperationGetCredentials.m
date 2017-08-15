@@ -6,13 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADGetCredentialsOperation.h"
+#import "MADOperationGetCredentials.h"
 #import <os/log.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDatabaseConnection.h>
 #import "NSOperation+Advanced.h"
 #import "MADOperationQueue.h"
-#import "MADKeyChainOperationGet.h"
+#import "MADOperationKeyChainGet.h"
 #import "MADPromptOperationCredentials.h"
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
@@ -20,7 +20,7 @@
 #import "MADPromptOperationPolarQuestion.h"
 #import "MADPromptOperationDisplayError.h"
 #import "MADOperationDatabaseTestConnection.h"
-#import "MADKeyChainOperationPut.h"
+#import "MADOperationKeyChainPut.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
 #import "MADOperationBooleanAnd.h"
@@ -30,7 +30,7 @@ static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
 static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to save your password?";
 
-@interface MADGetCredentialsOperation ()
+@interface MADOperationGetCredentials ()
 
     @property (nonatomic, copy) NSString *username;
     @property (nonatomic, copy) NSString *password;
@@ -41,7 +41,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 @end
 
-@implementation MADGetCredentialsOperation {
+@implementation MADOperationGetCredentials {
     NSString *_keyUsername, *_keyPassword;
     BOOL _finishedPromptPassword;
     BOOL _finishedPromptCredentals;
@@ -129,7 +129,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     //    [self finish];
     //}
     
-    if ([operation isKindOfClass:[MADKeyChainOperationGet class]]) {
+    if ([operation isKindOfClass:[MADOperationKeyChainGet class]]) {
         
     } else if ([operation isKindOfClass:[MADPromptOperationPassword class]]) {
         _finishedPromptPassword = ((MADPromptOperationPassword *)operation).alertDisplayedAffirmed;
@@ -168,9 +168,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     // Operation 1: Read username.
     // -------------------------
-    MADKeyChainOperationGet *getUsername;
+    MADOperationKeyChainGet *getUsername;
 
-    getUsername = [[MADKeyChainOperationGet alloc] initWithKey: _keyUsername
+    getUsername = [[MADOperationKeyChainGet alloc] initWithKey: _keyUsername
                                                withDescription: MTKeyChainUsernameAccountDesc];
     getUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
     
@@ -203,8 +203,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Operation 3: Read password
     // Conditions:  Username is found.
     // ---------------------------------------------------
-    MADKeyChainOperationGet *getPassword;
-    getPassword = [[MADKeyChainOperationGet alloc] initWithKey: _keyPassword
+    MADOperationKeyChainGet *getPassword;
+    getPassword = [[MADOperationKeyChainGet alloc] initWithKey: _keyPassword
                                                withDescription: MTKeyChainPasswordAccountDesc];
     getPassword.readOperationType = MADKeyChainReadOperationTypePassword;
     [getPassword addDependency:getUsername];
@@ -312,8 +312,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Dependency:  Prompt save credentials.
     // Conditions:  User said yes to save credentials.
     // ---------------------------------------------------
-    MADKeyChainOperationPut *putUsername;
-    putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
+    MADOperationKeyChainPut *putUsername;
+    putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
     MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
     promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSaveCredntials.identifier];
     [putUsername addDependency:promptCredntials];
@@ -325,15 +325,15 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // Conditions:  User said yes to save credentials OR
     //              User said yes to save password.
     // ---------------------------------------------------
-    MADKeyChainOperationPut *putPasswordCredentials;
-    putPasswordCredentials = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+    MADOperationKeyChainPut *putPasswordCredentials;
+    putPasswordCredentials = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
     MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmativePassword;
     promptToSaveCredntialsAffirmativePassword = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSaveCredntials.identifier];
     [putPasswordCredentials addDependency:promptCredntials];
     [putPasswordCredentials addDependency:promptSaveCredntials];
     [putPasswordCredentials addCondition:promptToSaveCredntialsAffirmativePassword];
     
-    MADKeyChainOperationPut *putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+    MADOperationKeyChainPut *putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
     MADOperationConditionPolarQuestionAffirmative *promptToSavePasswordAffirmative;
     promptToSavePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
     [putPassword addDependency:promptPassword];

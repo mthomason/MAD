@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADKeyChainOperationGet.h"
+#import "MADOperationKeyChainGet.h"
 #import <MAD/MTKeyChain.h>
 #import <Security/SecItem.h>
 #import <CoreFoundation/CFData.h>
@@ -15,7 +15,7 @@
 
 #import <os/log.h>
 
-@interface MADKeyChainOperationGet ()
+@interface MADOperationKeyChainGet ()
 
     @property (nonatomic, readwrite, copy) NSString *key;
     @property (nonatomic, readwrite, copy) NSString *keyDescription;
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation MADKeyChainOperationGet
+@implementation MADOperationKeyChainGet
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);

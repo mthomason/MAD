@@ -15,7 +15,7 @@
 
 @class UIViewController, MADDatabaseConnection, MADCredential;
 
-@interface MADGetCredentialsOperation : MADGroupOperation
+@interface MADOperationGetCredentials : MADGroupOperation
     <MADOperationHoldsCredentialsProtocol>
 
     - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADKeyChainOperationPut.h"
+#import "MADOperationKeyChainPut.h"
 #import <security/SecBase.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
@@ -19,14 +19,14 @@
 static const short StatusNotFound = 35;
 static NSString * const ErrorDomain = @"MADKCP";
 
-@interface MADKeyChainOperationPut ()
+@interface MADOperationKeyChainPut ()
 
     @property (nonatomic, copy) NSString *key;
     @property (nonatomic, copy) NSString *keyDescription;
 
 @end
 
-@implementation MADKeyChainOperationPut
+@implementation MADOperationKeyChainPut
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);

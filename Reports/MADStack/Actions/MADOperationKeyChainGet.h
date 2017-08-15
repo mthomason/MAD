@@ -12,7 +12,7 @@
 #import "MADOperation.h"
 #import "MADOperationResultStringProtocol.h"
 
-@interface MADKeyChainOperationGet : MADOperation
+@interface MADOperationKeyChainGet : MADOperation
     <MADOperationResultStringProtocol>
 
     - (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description;
