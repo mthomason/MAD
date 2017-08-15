@@ -1,13 +1,13 @@
 //
-//  MADKeyChainOperationGet.h
+//  MADOperationKeyChainGet.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/16/16.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_Designer_MADKeyChainOperationGet_h
-#define MAD_Designer_MADKeyChainOperationGet_h
+#ifndef MAD_Designer_MADOperationKeyChainGet_h
+#define MAD_Designer_MADOperationKeyChainGet_h
 
 #import "MADOperation.h"
 #import "MADOperationResultStringProtocol.h"

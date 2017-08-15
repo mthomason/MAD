@@ -12,7 +12,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
 
-#import "MADGetCredentialsOperation.h"
+#import "MADOperationGetCredentials.h"
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 #import "MADOperationRefreshInitialize.h"
 #import "MADOperationRefresh.h"
@@ -23,7 +23,7 @@
 @interface MADOperationRefreshReload ()
 
     @property (nonatomic, readwrite, weak) MADocument *document;
-    @property (nonatomic, readwrite, strong) MADGetCredentialsOperation *getCredentials;
+    @property (nonatomic, readwrite, strong) MADOperationGetCredentials *getCredentials;
     @property (nonatomic, readwrite, assign) BOOL completedSuccessfully;
 
 @end
@@ -33,7 +33,7 @@
 - (void)dealloc { }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    MADGetCredentialsOperation *getCredentials = self.getCredentials;
+    MADOperationGetCredentials *getCredentials = self.getCredentials;
     if (getCredentials.gotCredentials) {
         MADCredential *c = getCredentials.credentials.copy;
         return c;
@@ -47,8 +47,8 @@
               databaseConnection: (MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
 
-        MADGetCredentialsOperation *getCredentials;
-        getCredentials= [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+        MADOperationGetCredentials *getCredentials;
+        getCredentials= [[MADOperationGetCredentials alloc] initWithDatabaseConnection: databaseConnection
                                                                         viewController: viewController];
         self.getCredentials = getCredentials;
         

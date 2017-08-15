@@ -14,7 +14,7 @@
 #import "MADOperationConditionHasResultStringResult.h"
 #import "MADOperation.h"
 #import "NSError+MADOperationErrors.h"
-#import "MADKeyChainOperationGet.h"
+#import "MADOperationKeyChainGet.h"
 #import "MADOperationConditionResult.h"
 #import <MAD/MADErrorUserInfo.h>
 

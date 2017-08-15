@@ -15,7 +15,7 @@
 #import <MAD/MADCredentialSourceType.h>
 
 #import <MADCocoaExtensions/MADTextField.h>
-#import "MADKeyChainOperationGet.h"
+#import "MADOperationKeyChainGet.h"
 #import "MADMutualExclusive.h"
 
 static NSString * const MADTitleCredentials            = @"Credentials";

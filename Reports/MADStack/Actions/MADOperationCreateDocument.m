@@ -18,8 +18,8 @@
 
 #import "MADOperationQueue.h"
 #import "MADOperationUniqueUrlForFilename.h"
-#import "MADKeyChainOperationPut.h"
-#import "MADGetCredentialsOperation.h"
+#import "MADOperationKeyChainPut.h"
+#import "MADOperationGetCredentials.h"
 #import "MADOperationCreateDocumentCreateDocument.h"
 #import "MADOperationBackgroundTaskBegin.h"
 #import "MADOperationBackgroundTaskEnd.h"
@@ -32,7 +32,7 @@
 #import "MADOperationConditionTestConnectionSuccess.h"
 #import "MADPromptOperationPolarQuestion.h"
 #import "MADOperationKeyChainDeletePassword.h"
-#import "MADKeyChainOperationGet.h"
+#import "MADOperationKeyChainGet.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionHasResultString.h"
 #import "MADOperationConditionDisplayedAlertConfirm.h"
@@ -92,8 +92,8 @@
         // Operation 1: Get database credentials from keychain or user.
         // -------------------------
         
-        MADGetCredentialsOperation *getCredentials;
-        getCredentials = [[MADGetCredentialsOperation alloc] initWithDatabaseConnection: databaseConnection
+        MADOperationGetCredentials *getCredentials;
+        getCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection: databaseConnection
                                                                          viewController: viewController];
         
         // ---------------------------------------------------
@@ -141,8 +141,8 @@
         MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
         promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
 
-        MADKeyChainOperationPut *putUsername;
-        putUsername = [[MADKeyChainOperationPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
+        MADOperationKeyChainPut *putUsername;
+        putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
         [putUsername addDependency:promptSavePassword];
         [putUsername addCondition:promptToSaveCredntialsAffirmative];
         
@@ -151,8 +151,8 @@
         // Dependency:  Prompt save credentials.
         // Conditions:  User said yes to save credentials..
         // ---------------------------------------------------
-        MADKeyChainOperationPut *putPassword;
-        putPassword = [[MADKeyChainOperationPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+        MADOperationKeyChainPut *putPassword;
+        putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
         [putPassword addDependency:promptSavePassword];
         [putPassword addCondition:promptToSaveCredntialsAffirmative];
         
@@ -214,8 +214,8 @@
         [closeDocument addCondition: conditionConnectionConnectionSuccess];
         
         //Test if credentals are saved
-        MADKeyChainOperationGet *operationGetUsername;
-        operationGetUsername = [[MADKeyChainOperationGet alloc] initWithKey: keyUsername
+        MADOperationKeyChainGet *operationGetUsername;
+        operationGetUsername = [[MADOperationKeyChainGet alloc] initWithKey: keyUsername
                                                             withDescription: MTKeyChainUsernameAccountDesc];
         operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         [operationGetUsername addDependency: displayErrorCredentials];
