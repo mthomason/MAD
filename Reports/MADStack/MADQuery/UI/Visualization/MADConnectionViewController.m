@@ -48,8 +48,8 @@
 #import "MADOperationQueue.h"
 
 #import "MADOperationKeyChainGet.h"
-#import "MADPromptOperationCredentials.h"
-#import "MADPromptOperationPassword.h"
+#import "MADOperationPromptCredentials.h"
+#import "MADOperationPromptPassword.h"
 
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"

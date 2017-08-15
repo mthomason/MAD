@@ -80,7 +80,7 @@
 #import "MADOperationQueue.h"
 #import "MADOperationRefreshReload.h"
 
-#import "MADPromptOperationDisplayError.h"
+#import "MADOperationPromptError.h"
 
 #import "MADOperationObserver.h"
 #import "MADLabelTitle.h"
@@ -1431,8 +1431,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         //MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
         //for (NSError *error in errors) {
-        //    MADPromptOperationDisplayError *operationErrorDisplay =
-        //    [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+        //    MADOperationPromptError *operationErrorDisplay =
+        //    [[MADOperationPromptError alloc] initWithError:error viewController:self];
         //    [operationQueue addOperation:operationErrorDisplay];
         //
         //}

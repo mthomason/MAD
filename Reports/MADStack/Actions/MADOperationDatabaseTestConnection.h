@@ -10,7 +10,7 @@
 #define MAD_Designer_MADDatabaseOperationTestConnection_h
 
 #import "MADOperation.h"
-#import "MADPromptOperationDisplayError.h"
+#import "MADOperationPromptError.h"
 #import "MADOperationPromptErrorProtocol.h"
 #import "MADOperationDatabaseTestConnectionProtocol.h"
 

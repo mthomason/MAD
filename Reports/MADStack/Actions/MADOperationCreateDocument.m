@@ -30,7 +30,7 @@
 #import "MADOperationCreateDocumentFirstTimeSetup.h"
 #import "MADOperationDatabaseTestConnection.h"
 #import "MADOperationConditionTestConnectionSuccess.h"
-#import "MADPromptOperationPolarQuestion.h"
+#import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationKeyChainDeletePassword.h"
 #import "MADOperationKeyChainGet.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
@@ -105,8 +105,8 @@
         [testConnectionOperationCredentials addDependency:getCredentials];
         
         
-        MADPromptOperationDisplayError *displayErrorCredentials;
-        displayErrorCredentials = [[MADPromptOperationDisplayError alloc] initWithViewController:viewController];
+        MADOperationPromptError *displayErrorCredentials;
+        displayErrorCredentials = [[MADOperationPromptError alloc] initWithViewController:viewController];
         [displayErrorCredentials addDependency:testConnectionOperationCredentials];
         
         
@@ -124,8 +124,8 @@
         NSString *TextSaveToKeyChainMessage = @"Would you like to save your password?";
         NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
         NSString *messagePasswordPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
-        MADPromptOperationPolarQuestion *promptSavePassword;
-        promptSavePassword = [[MADPromptOperationPolarQuestion alloc] initWithTitle: title
+        MADOperationPromptPolarQuestion *promptSavePassword;
+        promptSavePassword = [[MADOperationPromptPolarQuestion alloc] initWithTitle: title
                                                                             message: messagePasswordPrompt
                                                                      viewController: viewController];
         [promptSavePassword addDependency: testConnectionOperationCredentials];
@@ -222,8 +222,8 @@
         [operationGetUsername addDependency: testConnectionOperationCredentials];
         
         //If connection failed and credentals are saved, prompt to delete credentals.
-        MADPromptOperationPolarQuestion *promptDeleteCredntials;
-        promptDeleteCredntials = [[MADPromptOperationPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
+        MADOperationPromptPolarQuestion *promptDeleteCredntials;
+        promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
                                                                                 message: @"Would you like to remove the saved credentials"
                                                                          viewController: viewController];
         [promptDeleteCredntials addDependency: displayErrorCredentials];

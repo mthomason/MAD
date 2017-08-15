@@ -10,7 +10,7 @@
 #import <asl.h>
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
-#import "MADPromptOperationPolarQuestion.h"
+#import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import "MADOperationConditionResult.h"
 #import "NSError+MADOperationErrors.h"

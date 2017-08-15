@@ -21,7 +21,7 @@
 #import "MADAttributedStringCommon.h"
 
 #import "MADOperationQueue.h"
-#import "MADPromptOperationDisplayError.h"
+#import "MADOperationPromptError.h"
 #import "MADBlockOperation.h"
 
 @interface MADInformationTableViewController ()
@@ -35,7 +35,7 @@
 
     if (error != nil) {
         MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
-        MADPromptOperationDisplayError *operationErrorDisplay = [[MADPromptOperationDisplayError alloc] initWithError:error viewController:self];
+        MADOperationPromptError *operationErrorDisplay = [[MADOperationPromptError alloc] initWithError:error viewController:self];
         MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self dismissViewControllerAnimated:YES completion:nil];
