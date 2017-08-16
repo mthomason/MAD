@@ -12,11 +12,12 @@
 #import "MADGroupOperation.h"
 #import <MAD/MADCredential.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import "MADKeyChainKeyValueProtocol.h"
 
 @class UIViewController, MADDatabaseConnection, MADCredential;
 
 @interface MADOperationGetCredentials : MADGroupOperation
-    <MADOperationHoldsCredentialsProtocol>
+    <MADOperationHoldsCredentialsProtocol, MADKeyChainKeyValueProtocol>
 
     - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                 viewController: (UIViewController *)viewController;

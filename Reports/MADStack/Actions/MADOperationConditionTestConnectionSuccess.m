@@ -74,46 +74,28 @@
 
 @implementation MADOperationConditionTestConnectionSuccess
 
-- (NSString *)name {
-    return NSStringFromClass(self.class);
-}
+- (NSString *)name { return NSStringFromClass(self.class); }
 
 #pragma mark - Condition
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    MADOperationConditionResult *result;
-    if ([super evaludateForOperationSimple:operation]) {
-        result = [MADOperationConditionResult newOperationConditionResultSatisfied];
-    } else {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                       andMessage:@"Test connection failed."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed: error];
-    }
-    return result;
+    return [super evaludateForOperationSimple:operation] ?
+        [MADOperationConditionResult newOperationConditionResultSatisfied] :
+        [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
 }
 
 @end
 
 @implementation MADOperationConditionTestConnectionFailuare
 
-- (NSString *)name {
-    return NSStringFromClass(self.class);
-}
+- (NSString *)name { return NSStringFromClass(self.class); }
 
 #pragma mark - Condition
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    MADOperationConditionResult *result;
-    if ([super evaludateForOperationSimple:operation]) {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                       andMessage:@"Test connection was successful."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed: error];
-    } else {
-        result = [MADOperationConditionResult newOperationConditionResultSatisfied];
-    }
-    return result;
+    return [super evaludateForOperationSimple:operation] ?
+        [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name] :
+        [MADOperationConditionResult newOperationConditionResultSatisfied];
 }
 
 @end

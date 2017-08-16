@@ -63,30 +63,15 @@
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     MADOperationConditionResult *result = nil;
     if (dependencies.count == 0) {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                       andMessage:@"Not satisified."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
         return result;
     }
     
     for (NSOperation *dependency in dependencies) {
-    
         if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
             [self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
-            
-            if (((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
-                
-                result = [MADOperationConditionHasResultStringResult newOperationConditionResultSatisfied];
-                
-                ((MADOperationConditionHasResultStringResult *)result).result = ((NSObject <MADOperationResultStringProtocol> *) dependency).value;
-                
-            } else {
-                MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                               andMessage:@"Not satisified."];
-                NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-                result = [MADOperationConditionResult newOperationConditionResultFailed:error];
-            }
+            result = [MADOperationConditionHasResultStringResult newOperationCondition: (NSObject <MADOperationResultStringProtocol> *)dependency
+                                                                                  name: self.name];
             break;
         }
     }
@@ -94,10 +79,7 @@
     if (result != nil) {
         return result;
     } else {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                       andMessage:@"Not satisified."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
         return result;
     }
     

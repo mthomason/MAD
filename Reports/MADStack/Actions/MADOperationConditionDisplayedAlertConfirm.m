@@ -47,10 +47,7 @@
     MADOperationConditionResult *result = nil;
     
     if (dependencies.count == 0) {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                       andMessage:@"Not satisified."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
         return result;
     }
     
@@ -59,14 +56,14 @@
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)]) {
             
             BOOL condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayedAffirmed];
-            if (_reverseCondition) { condition = !condition; }
-            result = [MADOperationConditionResult newOperationConditionResult:condition name:self.name];
+            result = [MADOperationConditionResult newOperationConditionResult: _reverseCondition ? !condition : condition
+                                                                         name: self.name];
             break;
             
         } else if ([dependency conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
             BOOL condition = [((NSObject <MADOperationHoldsCredentialsProtocol> *)dependency) manuallyInputtedCredentials];
-            if (_reverseCondition) { condition = !condition; }
-            result = [MADOperationConditionResult newOperationConditionResult:condition name:self.name];
+            result = [MADOperationConditionResult newOperationConditionResult: _reverseCondition ? !condition : condition
+                                                                         name: self.name];
             break;
         }
     }

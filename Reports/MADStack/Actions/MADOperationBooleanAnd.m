@@ -60,22 +60,8 @@
             break;
         }
     }
-    
-    MADOperationConditionResult *result;
-    if (succes) {
-    
-        result = [MADOperationConditionResult newOperationConditionResultSatisfied];
-        return result;
-        
-    } else {
-    
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Not Satisified"
-                                                                       andMessage:@"Not satisified."];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
-        return result;
-        
-    }
+    return [MADOperationConditionResult newOperationConditionResult: succes
+                                                               name: self.name];
 }
 
 @end

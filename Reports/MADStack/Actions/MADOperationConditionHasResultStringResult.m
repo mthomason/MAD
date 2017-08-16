@@ -7,7 +7,34 @@
 //
 
 #import "MADOperationConditionHasResultStringResult.h"
+#import <Foundation/NSString.h>
+#import "MADOperationResultStringProtocol.h"
 
 @implementation MADOperationConditionHasResultStringResult
+
++ (instancetype)newOperationConditionResult:(BOOL)satisfied
+                                      value:(NSString *)value
+                                       name:(NSString *)name {
+    id operationCondition;
+    if (satisfied) {
+        operationCondition = [self newOperationConditionResultSatisfied];
+        ((MADOperationConditionHasResultStringResult *)operationCondition).result = value.copy;
+    } else {
+        operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
+    }
+    return operationCondition;
+}
+
++ (instancetype)newOperationCondition:(NSObject <MADOperationResultStringProtocol> *)delegate
+                                 name:(NSString *)name {
+    id operationCondition;
+    if (delegate.success) {
+        operationCondition = [self newOperationConditionResultSatisfied];
+        ((MADOperationConditionHasResultStringResult *)operationCondition).result = delegate.value.copy;
+    } else {
+        operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
+    }
+    return operationCondition;
+}
 
 @end

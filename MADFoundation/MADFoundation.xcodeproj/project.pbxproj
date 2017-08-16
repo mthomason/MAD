@@ -146,6 +146,7 @@
 		4C9372B81BACFDB200D6BD62 /* MADFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				4CB98D751F43D4120043B583 /* Operations */,
 				4C1E54E21E5639B900E3FAF0 /* MADDataTableType.h */,
 				4CDA62D01D08021A00E95859 /* MADConstantsDocumentExtentions.h */,
 				4CDA62D11D08021A00E95859 /* MADConstantsDocumentExtentions.m */,
@@ -201,6 +202,13 @@
 				4C9372B41BACFCA200D6BD62 /* Foundation.framework */,
 			);
 			name = Resouces;
+			sourceTree = "<group>";
+		};
+		4CB98D751F43D4120043B583 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Operations;
 			sourceTree = "<group>";
 		};
 		4CF09A3C1BB23FA8007BCF7A /* Protocols */ = {

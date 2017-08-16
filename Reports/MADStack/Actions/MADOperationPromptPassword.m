@@ -163,9 +163,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
 
     UIViewController * __weak wViewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        UIAlertController *strongAlertController = weakAlertController;
         UIViewController *topViewController = wViewController;
         topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-        [topViewController  presentViewController: weakAlertController animated: YES completion:NULL];
+        [topViewController  presentViewController: strongAlertController animated: YES completion:NULL];
     }];
 
 }

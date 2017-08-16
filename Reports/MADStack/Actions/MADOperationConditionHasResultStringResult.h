@@ -12,9 +12,15 @@
 #import "MADOperationConditionResult.h"
 
 @class MADCredential;
+@protocol MADOperationResultStringProtocol;
 
 @interface MADOperationConditionHasResultStringResult : MADOperationConditionResult
 
+    + (instancetype)newOperationConditionResult:(BOOL)satisfied
+                                          value:(NSString *)value
+                                           name:(NSString *)name;
+    + (instancetype)newOperationCondition:(NSObject <MADOperationResultStringProtocol> *)delegate
+                                     name:(NSString *)name;
     @property (nonatomic, copy) NSString *result;
 
 @end

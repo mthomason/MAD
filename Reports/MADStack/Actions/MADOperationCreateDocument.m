@@ -117,8 +117,8 @@
         [taskBegin addDependency: displayErrorCredentials];
         
         // ---------------------------------------------------
-        // Operation 6: Prompt save password
-        // Conditions:  User entered a password.
+        // Operation:   Prompt save credentials
+        // Conditions:  User entered a credentials.
         // ---------------------------------------------------
         NSString *TextSaveToKeyChain = @"Save to KeyChain";
         NSString *TextSaveToKeyChainMessage = @"Would you like to save your password?";
@@ -133,28 +133,31 @@
         [promptSavePassword addCondition: conditionEnteredPassword];
         [promptSavePassword addCondition: conditionConnectionConnectionSuccess];
         
+        MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
+        promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
+        
         // ---------------------------------------------------
-        // Operation 7: Save username
+        // Operation:   Save username
         // Dependency:  Prompt save credentials.
         // Conditions:  User said yes to save credentials.
         // ---------------------------------------------------
-        MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
-        promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
 
         MADOperationKeyChainPut *putUsername;
         putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
-        [putUsername addDependency:promptSavePassword];
-        [putUsername addCondition:promptToSaveCredntialsAffirmative];
+        [putUsername addDependency: promptSavePassword];
+        [putUsername addDependency: getCredentials];
+        [putUsername addCondition: promptToSaveCredntialsAffirmative];
         
         // ---------------------------------------------------
-        // Operation 8: Save password
+        // Operation:   Save password
         // Dependency:  Prompt save credentials.
         // Conditions:  User said yes to save credentials..
         // ---------------------------------------------------
         MADOperationKeyChainPut *putPassword;
         putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
-        [putPassword addDependency:promptSavePassword];
-        [putPassword addCondition:promptToSaveCredntialsAffirmative];
+        [putPassword addDependency: promptSavePassword];
+        [putPassword addDependency: getCredentials];
+        [putPassword addCondition: promptToSaveCredntialsAffirmative];
         
         // Create the document file on disk.
         MADOperationCreateDocumentCreateDocument *createDocument;

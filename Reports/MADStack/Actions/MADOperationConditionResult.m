@@ -41,14 +41,18 @@ NSString * MADOperationConditionKey = @"OperationCondition";
     if (satisfied) {
         operationCondition = [self newOperationConditionResultSatisfied];
     } else {
-        NSString *message = @"Not Satisified";
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: message
-                                                                       andMessage: message];
-        NSError *error = [errorUserInfo errorWithDomain: name
-                                                   code: MADConditionFailed];
-        operationCondition = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
     }
     return operationCondition;
+}
+
++ (instancetype)newOperationConditionResultFailedNotSatisfied:(NSString *)name {
+    NSString *message = @"Not Satisified";
+    MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: message
+                                                                   andMessage: message];
+    NSError *error = [errorUserInfo errorWithDomain: name
+                                               code: MADConditionFailed];
+    return [MADOperationConditionResult newOperationConditionResultFailed:error];
 }
 
 + (instancetype)newOperationConditionResultFailed:(NSError *)error {
