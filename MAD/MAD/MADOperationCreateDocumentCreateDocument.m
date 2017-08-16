@@ -8,10 +8,11 @@
 
 #import "MADOperationCreateDocumentCreateDocument.h"
 #import <os/log.h>
-#import <MAD/MADDocumentProtocol.h>
 
+#import <MADFoundation/MADCredential.h>
+
+#import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
-#import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADDatabaseConnection.h>
