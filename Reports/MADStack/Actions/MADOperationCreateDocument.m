@@ -16,7 +16,8 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADCredential.h>
 
-#import "MADOperationQueue.h"
+#import <MADFoundation/MADOperationQueue.h>
+
 #import "MADOperationUniqueUrlForFilename.h"
 #import "MADOperationKeyChainPut.h"
 #import "MADOperationGetCredentials.h"

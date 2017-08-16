@@ -30,9 +30,9 @@
 #import "MADButtonTwitter.h"
 #import "ACAccountStore+Social.h"
 
-#import "MADOperationQueue.h"
+#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationPromptError.h"
-#import "MADBlockOperation.h"
+#import <MADFoundation/MADBlockOperation.h>
 
 #import "MADAttributedStringCommon.h"
 

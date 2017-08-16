@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationBackgroundTaskEnd_h
 #define MAD_Designer_MADOperationBackgroundTaskEnd_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @interface MADOperationBackgroundTaskEnd : MADOperation
 

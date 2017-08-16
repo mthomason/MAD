@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationPromptError_h
 #define MAD_Designer_MADOperationPromptError_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import "MADOperationConditionDisplayedAlert.h"
 

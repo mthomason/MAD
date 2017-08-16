@@ -7,15 +7,14 @@
 //
 
 #import "MADOperationConditionPolarQuestionNegative.h"
+#import <os/log.h>
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
-#import "MADOperationConditionResult.h"
-#import "NSError+MADOperationErrors.h"
-#import <MAD/MADErrorUserInfo.h>
-
-#import <os/log.h>
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
 
 @interface MADOperationConditionPolarQuestionNegative ()
 

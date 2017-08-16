@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationConditionHasCredientialsResult_h
 #define MAD_Designer_MADOperationConditionHasCredientialsResult_h
 
-#import "MADOperationConditionResult.h"
+#import <MADFoundation/MADOperationConditionResult.h>
 
 @class MADCredential;
 

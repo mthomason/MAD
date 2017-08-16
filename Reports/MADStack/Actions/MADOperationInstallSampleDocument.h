@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADInstallOperationSampleDocument_h
 #define MAD_Designer_MADInstallOperationSampleDocument_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @interface MADOperationInstallSampleDocument : MADOperation
 

@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationGetCredentials_h
 #define MAD_Designer_MADOperationGetCredentials_h
 
-#import "MADGroupOperation.h"
+#import <MADFoundation/MADGroupOperation.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import "MADKeyChainKeyValueProtocol.h"

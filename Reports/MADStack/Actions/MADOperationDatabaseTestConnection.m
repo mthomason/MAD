@@ -12,13 +12,13 @@
 #import <Foundation/NSBundle.h>
 
 #import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import <MAD/MADDatabaseProtocol.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MAD/MADErrorUserInfo.h>
 #import <MAD/MADDataTable.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 

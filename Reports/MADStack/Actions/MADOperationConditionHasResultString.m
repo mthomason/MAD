@@ -11,11 +11,11 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
 #import "MADOperationConditionHasResultStringResult.h"
-#import "MADOperation.h"
-#import "NSError+MADOperationErrors.h"
+#import <MADFoundation/MADOperation.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
 #import "MADOperationKeyChainGet.h"
-#import "MADOperationConditionResult.h"
-#import <MAD/MADErrorUserInfo.h>
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import <os/log.h>
 

@@ -22,6 +22,28 @@
 		4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372EB1BAD215B00D6BD62 /* NSData+Comparson.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372F21BAD215B00D6BD62 /* NSData+Comparson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372EC1BAD215B00D6BD62 /* NSData+Comparson.m */; };
 		4CB8EE051E1A3CE400193295 /* MADAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF09A441BB25EDF007BCF7A /* MADAppDelegate.m */; };
+		4CB98D781F43D4770043B583 /* MADOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D761F43D4770043B583 /* MADOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D791F43D4770043B583 /* MADOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D771F43D4770043B583 /* MADOperation.m */; };
+		4CB98D7E1F43D48E0043B583 /* MADBlockOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D7A1F43D48E0043B583 /* MADBlockOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D7F1F43D48E0043B583 /* MADBlockOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D7B1F43D48E0043B583 /* MADBlockOperation.m */; };
+		4CB98D801F43D48E0043B583 /* MADGroupOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D7C1F43D48E0043B583 /* MADGroupOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D811F43D48E0043B583 /* MADGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D7D1F43D48E0043B583 /* MADGroupOperation.m */; };
+		4CB98D871F43D4BA0043B583 /* MADBlockObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D821F43D4BA0043B583 /* MADBlockObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D881F43D4BA0043B583 /* MADBlockObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D831F43D4BA0043B583 /* MADBlockObserver.m */; };
+		4CB98D891F43D4BA0043B583 /* MADOperationCondition.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D841F43D4BA0043B583 /* MADOperationCondition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D8A1F43D4BA0043B583 /* MADOperationConditionResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D851F43D4BA0043B583 /* MADOperationConditionResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D8B1F43D4BA0043B583 /* MADOperationConditionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D861F43D4BA0043B583 /* MADOperationConditionResult.m */; };
+		4CB98D8D1F43D4DA0043B583 /* MADOperationObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D8C1F43D4DA0043B583 /* MADOperationObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D901F43D4F70043B583 /* MADOperationQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D8E1F43D4F70043B583 /* MADOperationQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D911F43D4F70043B583 /* MADOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D8F1F43D4F70043B583 /* MADOperationQueue.m */; };
+		4CB98D941F43D5310043B583 /* NSOperation+Advanced.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D921F43D5310043B583 /* NSOperation+Advanced.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D951F43D5310043B583 /* NSOperation+Advanced.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D931F43D5310043B583 /* NSOperation+Advanced.m */; };
+		4CB98D981F43D5490043B583 /* MADExclusivityController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D961F43D5490043B583 /* MADExclusivityController.h */; };
+		4CB98D991F43D5490043B583 /* MADExclusivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D971F43D5490043B583 /* MADExclusivityController.m */; };
+		4CB98D9C1F43D5790043B583 /* NSError+MADOperationErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98D9D1F43D5790043B583 /* NSError+MADOperationErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */; };
+		4CB98DA01F43D5F40043B583 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB98DA11F43D5F40043B583 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */; };
 		4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9AAEC1C8C2D3B00420CFF /* MADDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */; };
 		4CDA62CE1D08009300E95859 /* UIScreen+Properties.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDA62CC1D08009300E95859 /* UIScreen+Properties.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -66,6 +88,28 @@
 		4C9372CE1BACFF0F00D6BD62 /* MADDataColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataColumn.m; sourceTree = "<group>"; };
 		4C9372EB1BAD215B00D6BD62 /* NSData+Comparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Comparson.h"; path = "Categories/NSData+Comparson.h"; sourceTree = "<group>"; };
 		4C9372EC1BAD215B00D6BD62 /* NSData+Comparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Comparson.m"; path = "Categories/NSData+Comparson.m"; sourceTree = "<group>"; };
+		4CB98D761F43D4770043B583 /* MADOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperation.h; sourceTree = "<group>"; };
+		4CB98D771F43D4770043B583 /* MADOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperation.m; sourceTree = "<group>"; };
+		4CB98D7A1F43D48E0043B583 /* MADBlockOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBlockOperation.h; sourceTree = "<group>"; };
+		4CB98D7B1F43D48E0043B583 /* MADBlockOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBlockOperation.m; sourceTree = "<group>"; };
+		4CB98D7C1F43D48E0043B583 /* MADGroupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGroupOperation.h; sourceTree = "<group>"; };
+		4CB98D7D1F43D48E0043B583 /* MADGroupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGroupOperation.m; sourceTree = "<group>"; };
+		4CB98D821F43D4BA0043B583 /* MADBlockObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBlockObserver.h; sourceTree = "<group>"; };
+		4CB98D831F43D4BA0043B583 /* MADBlockObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBlockObserver.m; sourceTree = "<group>"; };
+		4CB98D841F43D4BA0043B583 /* MADOperationCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationCondition.h; sourceTree = "<group>"; };
+		4CB98D851F43D4BA0043B583 /* MADOperationConditionResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionResult.h; sourceTree = "<group>"; };
+		4CB98D861F43D4BA0043B583 /* MADOperationConditionResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionResult.m; sourceTree = "<group>"; };
+		4CB98D8C1F43D4DA0043B583 /* MADOperationObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationObserver.h; sourceTree = "<group>"; };
+		4CB98D8E1F43D4F70043B583 /* MADOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationQueue.h; sourceTree = "<group>"; };
+		4CB98D8F1F43D4F70043B583 /* MADOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationQueue.m; sourceTree = "<group>"; };
+		4CB98D921F43D5310043B583 /* NSOperation+Advanced.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOperation+Advanced.h"; sourceTree = "<group>"; };
+		4CB98D931F43D5310043B583 /* NSOperation+Advanced.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOperation+Advanced.m"; sourceTree = "<group>"; };
+		4CB98D961F43D5490043B583 /* MADExclusivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExclusivityController.h; sourceTree = "<group>"; };
+		4CB98D971F43D5490043B583 /* MADExclusivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExclusivityController.m; sourceTree = "<group>"; };
+		4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MADOperationErrors.h"; sourceTree = "<group>"; };
+		4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MADOperationErrors.m"; sourceTree = "<group>"; };
+		4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADErrorUserInfo.h; sourceTree = "<group>"; };
+		4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADErrorUserInfo.m; sourceTree = "<group>"; };
 		4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataType.h; sourceTree = "<group>"; };
 		4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataType.m; sourceTree = "<group>"; };
 		4CDA62CC1D08009300E95859 /* UIScreen+Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScreen+Properties.h"; path = "Categories/UIScreen+Properties.h"; sourceTree = "<group>"; };
@@ -207,6 +251,28 @@
 		4CB98D751F43D4120043B583 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */,
+				4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */,
+				4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */,
+				4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */,
+				4CB98D921F43D5310043B583 /* NSOperation+Advanced.h */,
+				4CB98D931F43D5310043B583 /* NSOperation+Advanced.m */,
+				4CB98D8C1F43D4DA0043B583 /* MADOperationObserver.h */,
+				4CB98D761F43D4770043B583 /* MADOperation.h */,
+				4CB98D771F43D4770043B583 /* MADOperation.m */,
+				4CB98D7A1F43D48E0043B583 /* MADBlockOperation.h */,
+				4CB98D7B1F43D48E0043B583 /* MADBlockOperation.m */,
+				4CB98D7C1F43D48E0043B583 /* MADGroupOperation.h */,
+				4CB98D7D1F43D48E0043B583 /* MADGroupOperation.m */,
+				4CB98D821F43D4BA0043B583 /* MADBlockObserver.h */,
+				4CB98D831F43D4BA0043B583 /* MADBlockObserver.m */,
+				4CB98D841F43D4BA0043B583 /* MADOperationCondition.h */,
+				4CB98D851F43D4BA0043B583 /* MADOperationConditionResult.h */,
+				4CB98D861F43D4BA0043B583 /* MADOperationConditionResult.m */,
+				4CB98D8E1F43D4F70043B583 /* MADOperationQueue.h */,
+				4CB98D8F1F43D4F70043B583 /* MADOperationQueue.m */,
+				4CB98D961F43D5490043B583 /* MADExclusivityController.h */,
+				4CB98D971F43D5490043B583 /* MADExclusivityController.m */,
 			);
 			name = Operations;
 			sourceTree = "<group>";
@@ -232,20 +298,32 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CB98D781F43D4770043B583 /* MADOperation.h in Headers */,
+				4CB98D8D1F43D4DA0043B583 /* MADOperationObserver.h in Headers */,
 				4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */,
+				4CB98DA01F43D5F40043B583 /* MADErrorUserInfo.h in Headers */,
 				4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */,
 				4CDA62DB1D0803ED00E95859 /* MADURL.h in Headers */,
+				4CB98D801F43D48E0043B583 /* MADGroupOperation.h in Headers */,
 				4C7C00D81EE2A46C00E7A5B1 /* NSString+Common.h in Headers */,
 				4CF09A491BB2791D007BCF7A /* MADApplication.h in Headers */,
 				4C8278B91DB74E1D005313F5 /* MADLog.h in Headers */,
+				4CB98D981F43D5490043B583 /* MADExclusivityController.h in Headers */,
+				4CB98D901F43D4F70043B583 /* MADOperationQueue.h in Headers */,
 				4CDA62D71D08032B00E95859 /* MADFilename.h in Headers */,
+				4CB98D9C1F43D5790043B583 /* NSError+MADOperationErrors.h in Headers */,
+				4CB98D871F43D4BA0043B583 /* MADBlockObserver.h in Headers */,
 				4CDA62CE1D08009300E95859 /* UIScreen+Properties.h in Headers */,
 				4CF09A401BB23FA8007BCF7A /* MADApplicationProtocol.h in Headers */,
 				4C9372F11BAD215B00D6BD62 /* NSData+Comparson.h in Headers */,
+				4CB98D891F43D4BA0043B583 /* MADOperationCondition.h in Headers */,
 				4CF09A421BB23FA8007BCF7A /* MADCacheProtocol.h in Headers */,
+				4CB98D941F43D5310043B583 /* NSOperation+Advanced.h in Headers */,
 				4CF09A451BB25EDF007BCF7A /* MADAppDelegate.h in Headers */,
+				4CB98D8A1F43D4BA0043B583 /* MADOperationConditionResult.h in Headers */,
 				4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */,
 				4CF09A411BB23FA8007BCF7A /* MADDataProtocol.h in Headers */,
+				4CB98D7E1F43D48E0043B583 /* MADBlockOperation.h in Headers */,
 				4C1E54E31E5639B900E3FAF0 /* MADDataTableType.h in Headers */,
 				4C9372CF1BACFF0F00D6BD62 /* MADDataColumn.h in Headers */,
 			);
@@ -348,15 +426,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CB98DA11F43D5F40043B583 /* MADErrorUserInfo.m in Sources */,
+				4CB98D7F1F43D48E0043B583 /* MADBlockOperation.m in Sources */,
 				4CDA62D61D08032B00E95859 /* MADFilename.m in Sources */,
+				4CB98D881F43D4BA0043B583 /* MADBlockObserver.m in Sources */,
 				4C9372F21BAD215B00D6BD62 /* NSData+Comparson.m in Sources */,
+				4CB98D991F43D5490043B583 /* MADExclusivityController.m in Sources */,
 				4CB9AAEC1C8C2D3B00420CFF /* MADDataType.m in Sources */,
 				4C9372D01BACFF0F00D6BD62 /* MADDataColumn.m in Sources */,
+				4CB98D911F43D4F70043B583 /* MADOperationQueue.m in Sources */,
+				4CB98D791F43D4770043B583 /* MADOperation.m in Sources */,
 				4C7C00D91EE2A46C00E7A5B1 /* NSString+Common.m in Sources */,
 				4CB8EE051E1A3CE400193295 /* MADAppDelegate.m in Sources */,
+				4CB98D9D1F43D5790043B583 /* NSError+MADOperationErrors.m in Sources */,
 				4CF09A4A1BB2791D007BCF7A /* MADApplication.m in Sources */,
+				4CB98D811F43D48E0043B583 /* MADGroupOperation.m in Sources */,
 				4CDA62DA1D0803ED00E95859 /* MADURL.m in Sources */,
 				4CDA62CF1D08009300E95859 /* UIScreen+Properties.m in Sources */,
+				4CB98D8B1F43D4BA0043B583 /* MADOperationConditionResult.m in Sources */,
+				4CB98D951F43D5310043B583 /* NSOperation+Advanced.m in Sources */,
 				4C8278B71DB73D4B005313F5 /* MADLog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,7 +9,7 @@
 #ifndef MADDesigner_MADOperationUniqueUrlForFilename_h
 #define MADDesigner_MADOperationUniqueUrlForFilename_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @protocol MADOperationUniqueUrlForFilenameProtocol <NSObject>
     - (NSURL *)uniqueUrl;

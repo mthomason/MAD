@@ -9,12 +9,12 @@
 #import "MADOperationConditionDisplayedAlertConfirm.h"
 #import <os/log.h>
 #import <Foundation/NSArray.h>
-#import <MAD/MADErrorUserInfo.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-#import "MADOperation.h"
-#import "MADOperationConditionResult.h"
+#import <MADFoundation/MADOperation.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
+#import <MADFoundation/MADOperationConditionResult.h>
 #import "MADOperationConditionDisplayedAlert.h"
-#import "NSError+MADOperationErrors.h"
 
 @implementation MADOperationConditionDisplayedAlertConfirm
 

@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationConditionPolarQuestionNegative_h
 #define MAD_Designer_MADOperationConditionPolarQuestionNegative_h
 
-#import "MADOperationCondition.h"
+#import <MADFoundation/MADOperationCondition.h>
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 
 @interface MADOperationConditionPolarQuestionNegative : NSObject

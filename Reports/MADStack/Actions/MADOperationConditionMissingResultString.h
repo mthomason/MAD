@@ -10,7 +10,7 @@
 #define MAD_Designer_MADOperationConditionMissingResultString_h
 
 #import <Foundation/NSObject.h>
-#import "MADOperationCondition.h"
+#import <MADFoundation/MADOperationCondition.h>
 
 @interface MADOperationConditionMissingResultString : NSObject
     <MADOperationCondition>

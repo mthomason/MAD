@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADDatabaseOperationTestConnection_h
 #define MAD_Designer_MADDatabaseOperationTestConnection_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import "MADOperationPromptError.h"
 #import "MADOperationPromptErrorProtocol.h"
 #import "MADOperationDatabaseTestConnectionProtocol.h"

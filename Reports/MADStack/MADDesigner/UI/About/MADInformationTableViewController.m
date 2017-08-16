@@ -20,9 +20,9 @@
 #import "MADButtonTwitter.h"
 #import "MADAttributedStringCommon.h"
 
-#import "MADOperationQueue.h"
+#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationPromptError.h"
-#import "MADBlockOperation.h"
+#import <MADFoundation/MADBlockOperation.h>
 
 @interface MADInformationTableViewController ()
     <MFMailComposeViewControllerDelegate>

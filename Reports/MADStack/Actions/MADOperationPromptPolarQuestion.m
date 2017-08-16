@@ -10,7 +10,7 @@
 #import <os/log.h>
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
-#import "NSError+MADOperationErrors.h"
+#import <MADFoundation/NSError+MADOperationErrors.h>
 
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";

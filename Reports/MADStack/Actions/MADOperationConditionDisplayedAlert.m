@@ -8,18 +8,15 @@
 
 #import "MADOperationConditionDisplayedAlert.h"
 
-#import "MADOperationConditionResult.h"
-#import "MADOperation.h"
+#import <os/log.h>
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 
-#import "MADOperationConditionResult.h"
-#import "NSError+MADOperationErrors.h"
-
-#import <MAD/MADErrorUserInfo.h>
-
-#import <os/log.h>
+#import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADOperation.h>
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
 
 @interface MADOperationConditionDisplayedAlert ()
 

@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADCreateDocumentOperation_h
 #define MAD_Designer_MADCreateDocumentOperation_h
 
-#import "MADGroupOperation.h"
+#import <MADFoundation/MADGroupOperation.h>
 
 @class UIViewController, MADDatabaseConnection;
 

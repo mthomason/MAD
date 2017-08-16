@@ -36,13 +36,13 @@
 #import <MADSqlite3/sqlite3.h>
 
 #import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 #import "MTQueryCacheDeleteAllFromTable.h"
 #import "MADDataTable.h"
 
 #import "MADDatabaseConnection.h"
-#import "MADErrorUserInfo.h"
 #import "MTQuery.h"
 #import "MADDatabaseTable.h"
 

@@ -24,7 +24,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
 
-#import "MADErrorUserInfo.h"
+#import <MADFoundation/MADErrorUserInfo.h>
 
 NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";

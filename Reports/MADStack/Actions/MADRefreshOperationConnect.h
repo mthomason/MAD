@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADRefreshOperationConnect_h
 #define MAD_Designer_MADRefreshOperationConnect_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @interface MADRefreshOperationConnect : MADOperation
 

@@ -34,6 +34,7 @@
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -47,7 +48,6 @@
 #import "MADSortOrder.h"
 #import "MADConstants.h"
 
-#import "MADErrorUserInfo.h"
 
 #import "MADDataTable.h"
 

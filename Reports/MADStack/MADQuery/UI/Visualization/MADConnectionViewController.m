@@ -44,8 +44,8 @@
 
 #import <MADFileManager/MADFileUtilities.h>
 
-#import "MADOperationObserver.h"
-#import "MADOperationQueue.h"
+#import <MADFoundation/MADOperationObserver.h>
+#import <MADFoundation/MADOperationQueue.h>
 
 #import "MADOperationKeyChainGet.h"
 #import "MADOperationPromptCredentials.h"

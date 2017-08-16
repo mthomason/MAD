@@ -10,7 +10,7 @@
 #define MAD_Designer_MADOperationConditionDisplayedAlert_h
 
 #import <Foundation/NSObject.h>
-#import "MADOperationCondition.h"
+#import <MADFoundation/MADOperationCondition.h>
 
 @protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
     - (BOOL)alertDisplayed;

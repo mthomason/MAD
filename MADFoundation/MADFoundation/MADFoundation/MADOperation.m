@@ -6,14 +6,14 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import <os/log.h>
 #import <Foundation/NSKeyValueObserving.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
-#import "MADOperationCondition.h"
-#import "MADOperationConditionResult.h"
-#import "MADOperationObserver.h"
+#import <MADFoundation/MADOperationCondition.h>
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/MADOperationObserver.h>
 #import "MADBlockObserver.h"
 
 static NSString * const MADOperatorSelectorIsReady      = @"isReady";

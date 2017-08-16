@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADDocumentOperationCloseDocument_h
 #define MAD_Designer_MADDocumentOperationCloseDocument_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @interface MADOperationDocumentCloseDocument : MADOperation
 

@@ -32,6 +32,9 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADOperation.h>
+#import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADOperationObserver.h>
 
 #import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADDocumentManagerProtocol.h>
@@ -73,10 +76,6 @@
 #import "MADQueryVisualizationViewController.h"
 
 #import "MADTabBarController.h"
-
-#import "MADOperation.h"
-#import "MADOperationQueue.h"
-#import "MADOperationObserver.h"
 
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"

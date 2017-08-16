@@ -11,12 +11,12 @@
 #import <MAD/MADCredential.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
+#import <MADFoundation/MADOperationQueue.h>
 
 #import "MADOperationGetCredentials.h"
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 #import "MADOperationRefreshInitialize.h"
 #import "MADOperationRefresh.h"
-#import "MADOperationQueue.h"
 
 #import <os/log.h>
 

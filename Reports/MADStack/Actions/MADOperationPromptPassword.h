@@ -9,8 +9,8 @@
 #ifndef MAD_Designer_MADOperationPromptPassword_h
 #define MAD_Designer_MADOperationPromptPassword_h
 
-#import "MADOperation.h"
 #import <UIKit/UIViewController.h>
+#import <MADFoundation/MADOperation.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 #import <MAD/MADOperationHoldsPasswordProtocol.h>

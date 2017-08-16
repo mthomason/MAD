@@ -15,7 +15,7 @@
 
 #include <assert.h>
 
-#import "MADOperationQueue.h"
+#import <MADFoundation/MADOperationQueue.h>
 
 @interface MADCacheManager ()
     @property (nonatomic, strong, readonly) MADOperationQueue *queueForCachingData;

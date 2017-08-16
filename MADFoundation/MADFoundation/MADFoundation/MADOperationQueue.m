@@ -9,7 +9,7 @@
 #import "MADOperationQueue.h"
 #import <os/log.h>
 #import <Foundation/NSArray.h>
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import "NSOperation+Advanced.h"
 #import "MADBlockObserver.h"
 #import "MADOperationCondition.h"

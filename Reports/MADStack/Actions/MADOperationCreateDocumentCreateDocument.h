@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADCreateDocumentOperationCreateDocument_h
 #define MAD_Designer_MADCreateDocumentOperationCreateDocument_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @class MADocument, MADDatabaseConnection;
 

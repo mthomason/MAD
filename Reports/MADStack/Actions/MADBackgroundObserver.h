@@ -10,7 +10,7 @@
 #define MAD_Designer_MADBackgroundObserver_h
 
 #import <Foundation/NSObject.h>
-#import "MADBlockObserver.h"
+#import <MADFoundation/MADBlockObserver.h>
 
 @interface MADBackgroundObserver : NSObject <MADOperationObserver>
 

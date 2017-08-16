@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationKeyChainPut_h
 #define MAD_Designer_MADOperationKeyChainPut_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import "MADKeyChainKeyValueProtocol.h"
 
 @interface MADOperationKeyChainPut : MADOperation

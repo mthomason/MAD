@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADBlockOperation_h
 #define MAD_Designer_MADBlockOperation_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 typedef void(^OperationCompletionBlock)(void);
 typedef void(^OperationBlock)(OperationCompletionBlock completionBlock);

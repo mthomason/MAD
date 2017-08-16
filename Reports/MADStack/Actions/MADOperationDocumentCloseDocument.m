@@ -7,10 +7,10 @@
 //
 
 #import "MADOperationDocumentCloseDocument.h"
-#import <MAD/MADocument.h>
-#import <MAD/MADErrorUserInfo.h>
-#import "MADOperationCreateDocumentCreateDocument.h"
 #import <os/log.h>
+#import <MADFoundation/MADErrorUserInfo.h>
+#import <MAD/MADocument.h>
+#import "MADOperationCreateDocumentCreateDocument.h"
 
 @implementation MADOperationDocumentCloseDocument
 

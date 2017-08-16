@@ -7,7 +7,7 @@
 //
 
 #import "ACAccountStore+Social.h"
-#import <MAD/MADErrorUserInfo.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 @implementation ACAccountStore (Social)
 

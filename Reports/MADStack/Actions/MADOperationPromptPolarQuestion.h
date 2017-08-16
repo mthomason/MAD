@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationPromptPolarQuestion_h
 #define MAD_Designer_MADOperationPromptPolarQuestion_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import "MADOperationConditionDisplayedAlert.h"
 

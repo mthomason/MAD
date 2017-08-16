@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADGroupOperation_h
 #define MAD_Designer_MADGroupOperation_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @class NSOperation, MADOperationQueue;
 

@@ -9,13 +9,11 @@
 #import "MADOperationConditionTestConnectionSuccess.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSOperation.h>
-#import <MAD/MADErrorUserInfo.h>
-#import "MADOperation.h"
+#import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADOperation.h>
 #import "MADOperationDatabaseTestConnectionProtocol.h"
-#import "NSError+MADOperationErrors.h"
-#import "MADOperationConditionResult.h"
-#import "MADOperationConditionResult.h"
-
+#import <MADFoundation/NSError+MADOperationErrors.h>
+#import <MADFoundation/MADOperationConditionResult.h>
 
 @implementation MADOperationConditionTestConnection
 

@@ -10,8 +10,10 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UIAlert.h>
-#import "MADOperation.h"
-#import "MADOperationConditionResult.h"
+
+#import <MADFoundation/MADOperation.h>
+
+#import <MADFoundation/MADOperationConditionResult.h>
 
 #import <os/log.h>
 

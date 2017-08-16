@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationConditionPolarQuestionResultProtocol_h
 #define MAD_Designer_MADOperationConditionPolarQuestionResultProtocol_h
 
-#import "MADOperationConditionResult.h"
+#import <MADFoundation/MADOperationConditionResult.h>
 
 @protocol MADOperationConditionPolarQuestionResultProtocol <NSObject>
     - (BOOL)result;

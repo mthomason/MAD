@@ -77,12 +77,12 @@
 #import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
 
-#import "MADOperationQueue.h"
+#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationRefreshReload.h"
 
 #import "MADOperationPromptError.h"
 
-#import "MADOperationObserver.h"
+#import <MADFoundation/MADOperationObserver.h>
 #import "MADLabelTitle.h"
 #import "MADDocumentScroller.h"
 #import "MADPageSliderProtocol.h"

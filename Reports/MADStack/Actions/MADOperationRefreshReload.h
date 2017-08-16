@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADRefreshReloadOperation_h
 #define MAD_Designer_MADRefreshReloadOperation_h
 
-#import "MADGroupOperation.h"
+#import <MADFoundation/MADGroupOperation.h>
 
 @class UIViewController, MADocument, MADDatabaseConnection;
 

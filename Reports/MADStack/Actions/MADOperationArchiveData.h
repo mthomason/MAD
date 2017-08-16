@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationArchiveData_h
 #define MAD_Designer_MADOperationArchiveData_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 @interface MADOperationArchiveData : MADOperation
 

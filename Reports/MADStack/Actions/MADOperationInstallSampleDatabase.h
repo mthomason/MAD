@@ -9,7 +9,7 @@
 #ifndef Reports_MADInstallOperationSampleDatabase_h
 #define Reports_MADInstallOperationSampleDatabase_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 
 extern NSString * const MADUpgradeInstalledSamples;
 extern NSString * const MADUpgradeInstalledChinook;

@@ -10,8 +10,8 @@
 #import <os/log.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDatabaseConnection.h>
-#import "NSOperation+Advanced.h"
-#import "MADOperationQueue.h"
+#import <MADFoundation/NSOperation+Advanced.h>
+#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationKeyChainGet.h"
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationConditionMissingResultString.h"

@@ -9,13 +9,11 @@
 #ifndef MAD_Designer_MADOperationBackgroundTaskBegin_h
 #define MAD_Designer_MADOperationBackgroundTaskBegin_h
 
-#import "MADOperation.h"
 #import <UIKit/UIApplication.h>
+#import <MADFoundation/MADOperation.h>
 
 @protocol MADOperationBackgroundTaskProtocol <NSObject>
-
     - (UIBackgroundTaskIdentifier)backgroundTaskIdentifier;
-
 @end
 
 @interface MADOperationBackgroundTaskBegin : MADOperation

@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADOperationPromptCredentials_h
 #define MAD_Designer_MADOperationPromptCredentials_h
 
-#import "MADOperation.h"
+#import <MADFoundation/MADOperation.h>
 #import <MAD/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>

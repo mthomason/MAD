@@ -15,6 +15,7 @@
 #import <Foundation/NSError.h>
 
 #import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
@@ -40,7 +41,6 @@
 #import "MADDatabaseProtocol.h"
 
 #import "MADCredential.h"
-#import "MADErrorUserInfo.h"
 
 #import "MADDatabaseConnection.h"
 

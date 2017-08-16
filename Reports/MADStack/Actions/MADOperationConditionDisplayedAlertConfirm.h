@@ -10,7 +10,7 @@
 #define MAD_Designer_MADOperationConditionDisplayedAlertConfirm_h
 
 #import <Foundation/NSObject.h>
-#import "MADOperationCondition.h"
+#import <MADFoundation/MADOperationCondition.h>
 
 @interface MADOperationConditionDisplayedAlertConfirm : NSObject
     <MADOperationCondition>
