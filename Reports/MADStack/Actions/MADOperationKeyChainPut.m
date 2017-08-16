@@ -11,8 +11,8 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSArray.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MTKeyChain.h>
-#import <MAD/MADCredential.h>
 
 #import <os/log.h>
 

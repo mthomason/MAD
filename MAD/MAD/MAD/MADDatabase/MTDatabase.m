@@ -24,7 +24,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MADDatabaseConnection.h"
 #import "MADNotificationDidReadRows.h"
-#import "MADCredential.h"
+#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import "MADDatabaseProtocol.h"
 

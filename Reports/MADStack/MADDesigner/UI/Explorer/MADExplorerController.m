@@ -35,6 +35,7 @@
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationObserver.h>
+#import <MADFoundation/MADCredential.h>
 
 #import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADDocumentManagerProtocol.h>
@@ -53,7 +54,6 @@
 #import <MAD/MADAppLaunchContext.h>
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
-#import <MAD/MADCredential.h>
 
 #import "MADExplorerControllerProtocol.h"
 

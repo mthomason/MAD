@@ -38,12 +38,12 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDataTable.h>
 #import <MAD/MTQueryTest.h>
-#import <MAD/MADCredential.h>
 #import <MAD/MADProgress.h>
 #import <MAD/MADNotificationProgress.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
+#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADOperationQueue.h>
 

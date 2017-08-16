@@ -10,7 +10,7 @@
 #define MAD_Designer_MADOperationGetCredentials_h
 
 #import <MADFoundation/MADGroupOperation.h>
-#import <MAD/MADCredential.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import "MADKeyChainKeyValueProtocol.h"
 
@@ -21,9 +21,6 @@
 
     - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                 viewController: (UIViewController *)viewController;
-    @property (readonly) MADCredential *credentials;
-    @property (readonly) BOOL gotCredentials;
-    @property (readonly) BOOL manuallyInputtedCredentials;
 
 @end
 

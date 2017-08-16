@@ -11,7 +11,7 @@
 
 #import <UIKit/UIViewController.h>
 #import <MADFoundation/MADOperation.h>
-#import <MAD/MADCredential.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 #import <MAD/MADOperationHoldsPasswordProtocol.h>
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"

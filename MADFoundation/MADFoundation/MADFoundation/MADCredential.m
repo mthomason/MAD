@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADCredential.h"
 #import <Foundation/NSString.h>
+#import <MADFoundation/MADCredential.h>
 
 @implementation MADCredential
 

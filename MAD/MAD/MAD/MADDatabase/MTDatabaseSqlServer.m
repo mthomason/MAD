@@ -33,6 +33,7 @@
 #import <MADTdsClient/sybdb.h>
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADCredential.h>
 #import "MADDatabaseConnectionsPropertiesCredentals.h"
 
 #import "RptqDatabaseSchemaTable.h"
@@ -52,8 +53,6 @@
 #import "MTQuery.h"
 
 #import "MTDatabaseProcessSqlServer.h"
-
-#import "MADCredential.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

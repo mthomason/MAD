@@ -8,7 +8,7 @@
 
 #import "MADOperationRefreshReload.h"
 #import <Foundation/NSArray.h>
-#import <MAD/MADCredential.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MADFoundation/MADOperationQueue.h>

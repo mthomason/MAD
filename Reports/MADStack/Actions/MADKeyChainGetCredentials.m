@@ -7,7 +7,7 @@
 //
 
 #import "MADKeyChainGetCredentials.h"
-#import <MAD/MADCredential.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MTKeyChain.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UILabel.h>

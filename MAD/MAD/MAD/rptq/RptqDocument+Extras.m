@@ -29,9 +29,7 @@
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 
 #import "MADDatabaseConnection.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
-#import "MTDatabaseSqlite3.h"
+#import "MTDatabase.h"
 
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"

@@ -16,6 +16,7 @@
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADCredential.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
@@ -39,8 +40,6 @@
 #import "RptqQueryField+Extras.h"
 
 #import "MADDatabaseProtocol.h"
-
-#import "MADCredential.h"
 
 #import "MADDatabaseConnection.h"
 

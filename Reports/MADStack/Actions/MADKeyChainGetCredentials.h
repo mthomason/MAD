@@ -10,7 +10,7 @@
 #define MAD_Designer_MADKeyChainGetCredentials_h
 
 #import <MADFoundation/MADOperation.h>
-#import <MAD/MADCredential.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 
 @class MADCredential, UIViewController;

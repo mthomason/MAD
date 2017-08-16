@@ -35,6 +35,7 @@
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/NSString+Common.h>
 #import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADCredential.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -55,7 +56,6 @@
 #import "MTQueryFull.h"
 
 #import "MADConstants.h"
-#import "MADCredential.h"
 
 #import "MADActivityIndicator.h"
 #import "MADocumentState.h"

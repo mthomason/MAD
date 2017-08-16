@@ -34,9 +34,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
     @property (nonatomic, copy) NSString *username;
     @property (nonatomic, copy) NSString *password;
+
     @property (nonatomic, assign) BOOL passwordSet;
     @property (nonatomic, assign) BOOL usernameSet;
-
     @property (nonatomic, assign) BOOL shortCircut;
 
 @end
@@ -58,7 +58,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         _finishedPromptPassword = NO;
         _finishedPromptCredentals = NO;
 
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
         if (!(_shortCircut = ![databaseConnection requiresCredientals])) {
             [self addOperationsToGetCredentialsWithDatabaseConnection:databaseConnection
                                                        viewController:viewController];

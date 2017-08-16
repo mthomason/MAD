@@ -6,8 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADOperationCreateDocumentFirstTimeSetup.h"
+#import <os/log.h>
 #import <CoreData/NSManagedObjectContext.h>
+
+#import "MADOperationCreateDocumentFirstTimeSetup.h"
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocument+extras.h>
@@ -15,7 +17,6 @@
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import "MADOperationCreateDocumentCreateDocument.h"
-#import <os/log.h>
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()
 

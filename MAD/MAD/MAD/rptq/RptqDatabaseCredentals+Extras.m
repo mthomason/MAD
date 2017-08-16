@@ -23,9 +23,6 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import "RptqDatabase+Extras.h"
-#import "MTDatabaseSqlite3.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
 #import "MADDatabaseConnection.h"
 #import "MADDatabaseType.h"
 

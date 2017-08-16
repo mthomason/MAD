@@ -11,7 +11,7 @@
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
-#import <MAD/MADCredential.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 
 #import <MADCocoaExtensions/MADTextField.h>

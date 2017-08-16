@@ -9,8 +9,8 @@
 #import "MADKeyChainSaveCredentials.h"
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MTKeyChain.h>
-#import <MAD/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 #import "MADKeyChainGetCredentials.h"
 

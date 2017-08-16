@@ -13,6 +13,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSURL.h>
 
+#import <MADFoundation/MADCredential.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDataTableFast.h>
@@ -20,7 +21,6 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-#import <MAD/MADCredential.h>
 #import <MAD/MTQueryFull.h>
 
 #import "MADOperationRefreshInitialize.h"

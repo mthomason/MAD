@@ -11,7 +11,7 @@
 #import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
 #import "MADDefer.h"
-#import "MADOperationPromptErrorProtocol.h"
+#import <MAD/MADOperationPromptErrorProtocol.h>
 
 static NSString * const TextYes = @"Dismiss";
 

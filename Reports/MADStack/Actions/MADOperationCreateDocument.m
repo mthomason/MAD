@@ -14,21 +14,21 @@
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MTKeyChain.h>
-#import <MAD/MADCredential.h>
 
+#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationQueue.h>
 
-#import "MADOperationUniqueUrlForFilename.h"
 #import "MADOperationKeyChainPut.h"
 #import "MADOperationGetCredentials.h"
-#import "MADOperationCreateDocumentCreateDocument.h"
-#import "MADOperationBackgroundTaskBegin.h"
-#import "MADOperationBackgroundTaskEnd.h"
-#import "MADOperationCreateDocumentAddConnection.h"
-#import "MADOperationCreateDocumentImportSchema.h"
-#import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
-#import "MADOperationDocumentCloseDocument.h"
-#import "MADOperationCreateDocumentFirstTimeSetup.h"
+#import <MAD/MADOperationUniqueUrlForFilename.h>
+#import <MAD/MADOperationCreateDocumentCreateDocument.h>
+#import <MAD/MADOperationBackgroundTaskBegin.h>
+#import <MAD/MADOperationCreateDocumentFirstTimeSetup.h>
+#import <MAD/MADOperationBackgroundTaskEnd.h>
+#import <MAD/MADOperationCreateDocumentAddConnection.h>
+#import <MAD/MADOperationCreateDocumentImportSchema.h>
+#import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
+#import <MAD/MADOperationDocumentCloseDocument.h>
 #import "MADOperationDatabaseTestConnection.h"
 #import "MADOperationConditionTestConnectionSuccess.h"
 #import "MADOperationPromptPolarQuestion.h"
@@ -88,6 +88,7 @@
         uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
                                                                                    pathExtension: MADFileExtentionMobleApplicationDocument
                                                                            andDocumentsDirectory: documentsDirectory];
+        uniqueUrlForFilename.name = @"com.everydayapps.mad.operation.uniqueurl";
         
         // ---------------------------------------------------
         // Operation 1: Get database credentials from keychain or user.
@@ -96,6 +97,7 @@
         MADOperationGetCredentials *getCredentials;
         getCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection: databaseConnection
                                                                          viewController: viewController];
+        getCredentials.name = @"com.everydayapps.mad.operation.credentials.get";
         
         // ---------------------------------------------------
         // Operation 1: Test the database connection.
@@ -103,16 +105,18 @@
         
         MADOperationDatabaseTestConnection *testConnectionOperationCredentials;
         testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+        testConnectionOperationCredentials.name = @"com.everydayapps.mad.operation.connection.test";
         [testConnectionOperationCredentials addDependency:getCredentials];
-        
         
         MADOperationPromptError *displayErrorCredentials;
         displayErrorCredentials = [[MADOperationPromptError alloc] initWithViewController:viewController];
+        displayErrorCredentials.name = @"com.everydayapps.mad.operation.displayerror";
         [displayErrorCredentials addDependency:testConnectionOperationCredentials];
         
         
         // Start a background task
         MADOperationBackgroundTaskBegin *taskBegin = [[MADOperationBackgroundTaskBegin alloc] init];
+        taskBegin.name = @"com.everydayapps.mad.operation.document.create.begin";
         [taskBegin addDependency: getCredentials];
         [taskBegin addDependency: testConnectionOperationCredentials];
         [taskBegin addDependency: displayErrorCredentials];
@@ -129,6 +133,7 @@
         promptSavePassword = [[MADOperationPromptPolarQuestion alloc] initWithTitle: title
                                                                             message: messagePasswordPrompt
                                                                      viewController: viewController];
+        promptSavePassword.name = @"com.everydayapps.mad.operation.credentials.prompt.save";
         [promptSavePassword addDependency: testConnectionOperationCredentials];
         [promptSavePassword addDependency: getCredentials];
         [promptSavePassword addCondition: conditionEnteredPassword];
@@ -145,6 +150,7 @@
 
         MADOperationKeyChainPut *putUsername;
         putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
+        putUsername.name = @"com.everydayapps.mad.operation.credentials.save.username";
         [putUsername addDependency: promptSavePassword];
         [putUsername addDependency: getCredentials];
         [putUsername addCondition: promptToSaveCredntialsAffirmative];
@@ -156,6 +162,7 @@
         // ---------------------------------------------------
         MADOperationKeyChainPut *putPassword;
         putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+        putPassword.name = @"com.everydayapps.mad.operation.credentials.save.password";
         [putPassword addDependency: promptSavePassword];
         [putPassword addDependency: getCredentials];
         [putPassword addCondition: promptToSaveCredntialsAffirmative];
@@ -163,6 +170,7 @@
         // Create the document file on disk.
         MADOperationCreateDocumentCreateDocument *createDocument;
         createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
+        createDocument.name = @"com.everydayapps.mad.operation.document.create.file";
         [createDocument addDependency: getCredentials];  // This is because the document uses this task as delegate to get credentials.
         [createDocument addDependency: uniqueUrlForFilename];
         [createDocument addDependency: taskBegin];
@@ -173,6 +181,7 @@
         // Do first time document setup.
         MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup;
         firstTimeSetup = [[MADOperationCreateDocumentFirstTimeSetup alloc] init];
+        firstTimeSetup.name = @"com.everydayapps.mad.operation.document.create.setup";
         [firstTimeSetup addDependency: createDocument];
         [firstTimeSetup addDependency: displayErrorCredentials];
         [firstTimeSetup addDependency: testConnectionOperationCredentials];
@@ -181,6 +190,7 @@
         // Add databaes connection to document.
         MADOperationCreateDocumentAddConnection *addConnection;
         addConnection = [[MADOperationCreateDocumentAddConnection alloc] initWithDatabaseConnection:databaseConnection];
+        addConnection.name = @"com.everydayapps.mad.operation.document.create.connection";
         [addConnection addDependency: createDocument];
         [addConnection addDependency: firstTimeSetup];
         [addConnection addDependency: displayErrorCredentials];
@@ -190,6 +200,7 @@
         // Import schema into document.
         MADOperationCreateDocumentImportSchema *importSchema;
         importSchema = [[MADOperationCreateDocumentImportSchema alloc] initWithDatabaseConnection:databaseConnection];
+        importSchema.name = @"com.everydayapps.mad.operation.document.import.schema";
         [importSchema addDependency: createDocument];
         [importSchema addDependency: addConnection];
         [importSchema addDependency: displayErrorCredentials];
@@ -200,6 +211,7 @@
         // Save the new document.
         MADOperationCreateDocumentSaveAndCloseNewDocument *saveOperation;
         saveOperation = [[MADOperationCreateDocumentSaveAndCloseNewDocument alloc] init];
+        saveOperation.name = @"com.everydayapps.mad.operation.document.save";
         [saveOperation addDependency: createDocument];
         [saveOperation addDependency: importSchema];
         [saveOperation addDependency: displayErrorCredentials];
@@ -209,6 +221,7 @@
         // Close the new document.
         MADOperationDocumentCloseDocument *closeDocument;
         closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
+        closeDocument.name = @"com.everydayapps.mad.operation.document.close";
         [closeDocument addDependency: createDocument];
         [closeDocument addDependency: saveOperation];
         [closeDocument addDependency: displayErrorCredentials];
@@ -221,6 +234,7 @@
         MADOperationKeyChainGet *operationGetUsername;
         operationGetUsername = [[MADOperationKeyChainGet alloc] initWithKey: keyUsername
                                                             withDescription: MTKeyChainUsernameAccountDesc];
+        operationGetUsername.name = @"com.everydayapps.mad.operation.keychain.read.username";
         operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         [operationGetUsername addDependency: displayErrorCredentials];
         [operationGetUsername addDependency: testConnectionOperationCredentials];
@@ -230,6 +244,7 @@
         promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
                                                                                 message: @"Would you like to remove the saved credentials"
                                                                          viewController: viewController];
+        promptDeleteCredntials.name = @"com.everydayapps.mad.operation.credentials.prompt.delete";
         [promptDeleteCredntials addDependency: displayErrorCredentials];
         [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
         [promptDeleteCredntials addDependency: operationGetUsername];
