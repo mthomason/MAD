@@ -7,13 +7,13 @@
 //
 
 #import "MADOperationKeyChainGet.h"
-#import <MAD/MTKeyChain.h>
+#import <os/log.h>
 #import <Security/SecItem.h>
 #import <CoreFoundation/CFData.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 
-#import <os/log.h>
+#import <MAD/MTKeyChain.h>
 
 @interface MADOperationKeyChainGet ()
 
