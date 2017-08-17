@@ -51,8 +51,8 @@
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
 
-#import "MADOperationConditionMissingResultString.h"
-#import "MADOperationConditionHasResultString.h"
+#import <MAD/MADOperationConditionMissingResultString.h>
+#import <MAD/MADOperationConditionHasResultString.h>
 
 #import "MADLabelTitle.h"
 

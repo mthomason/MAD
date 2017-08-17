@@ -32,10 +32,10 @@
 #import <MAD/MADOperationDocumentCloseDocument.h>
 #import "MADOperationGetCredentials.h"
 #import "MADOperationDatabaseTestConnection.h"
-#import "MADOperationConditionTestConnectionSuccess.h"
+#import <MAD/MADOperationConditionTestConnectionSuccess.h>
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
-#import "MADOperationConditionHasResultString.h"
+#import <MAD/MADOperationConditionHasResultString.h>
 #import "MADOperationConditionDisplayedAlertConfirm.h"
 
 @interface MADOperationCreateDocument ()

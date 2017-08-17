@@ -17,8 +17,8 @@
 
 #import <MAD/MADOperationKeyChainGet.h>
 #import "MADOperationPromptCredentials.h"
-#import "MADOperationConditionMissingResultString.h"
-#import "MADOperationConditionHasResultString.h"
+#import <MAD/MADOperationConditionMissingResultString.h>
+#import <MAD/MADOperationConditionHasResultString.h>
 #import "MADOperationPromptPassword.h"
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationPromptError.h"
@@ -26,7 +26,7 @@
 #import <MAD/MADOperationKeyChainPut.h>
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
-#import "MADOperationBooleanAnd.h"
+#import <MAD/MADOperationBooleanAnd.h>
 
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
