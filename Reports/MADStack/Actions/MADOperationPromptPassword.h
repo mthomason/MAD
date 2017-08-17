@@ -16,8 +16,8 @@
 #import <MAD/MADOperationHoldsPasswordProtocol.h>
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import "MADOperationConditionDisplayedAlert.h"
-#import "MADOperationKeyChainGet.h"
-#import "MADOperationKeyChainPut.h"
+#import <MAD/MADOperationKeyChainGet.h>
+#import <MAD/MADOperationKeyChainPut.h>
 
 
 @interface MADOperationPromptPassword : MADOperation

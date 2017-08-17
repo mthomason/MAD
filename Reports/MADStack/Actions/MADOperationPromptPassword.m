@@ -14,7 +14,7 @@
 #import <MADFoundation/MADCredential.h>
 #import <MAD/MADCredentialSourceType.h>
 #import <MADCocoaExtensions/MADTextField.h>
-#import "MADOperationKeyChainGet.h"
+#import <MAD/MADOperationKeyChainGet.h>
 #import "MADOperationPromptCredentials.h"
 #import "MADMutualExclusive.h"
 

@@ -15,7 +15,7 @@
 #import <MADFoundation/NSOperation+Advanced.h>
 #import <MADFoundation/MADOperationQueue.h>
 
-#import "MADOperationKeyChainGet.h"
+#import <MAD/MADOperationKeyChainGet.h>
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultString.h"
@@ -23,7 +23,7 @@
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationPromptError.h"
 #import "MADOperationDatabaseTestConnection.h"
-#import "MADOperationKeyChainPut.h"
+#import <MAD/MADOperationKeyChainPut.h>
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
 #import "MADOperationBooleanAnd.h"

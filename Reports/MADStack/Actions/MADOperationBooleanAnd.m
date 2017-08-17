@@ -8,9 +8,11 @@
 
 #import "MADOperationBooleanAnd.h"
 #import <os/log.h>
+
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
+
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationCondition.h>

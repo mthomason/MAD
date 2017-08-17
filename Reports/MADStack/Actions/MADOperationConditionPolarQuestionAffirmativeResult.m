@@ -8,7 +8,7 @@
 
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import <Foundation/NSString.h>
-#import "MADOperationResultStringProtocol.h"
+#import <MAD/MADOperationResultStringProtocol.h>
 
 @implementation MADOperationConditionPolarQuestionAffirmativeResult
 

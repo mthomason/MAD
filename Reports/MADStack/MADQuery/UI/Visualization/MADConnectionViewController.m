@@ -47,7 +47,7 @@
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADOperationQueue.h>
 
-#import "MADOperationKeyChainGet.h"
+#import <MAD/MADOperationKeyChainGet.h>
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
 

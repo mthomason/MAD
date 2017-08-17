@@ -1,5 +1,5 @@
 //
-//  MADOperationConditionHasCredientialsResult.h
+//  MADOperationConditionHasResultStringResult.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/17/16.

@@ -12,7 +12,7 @@
 #import <MADFoundation/MADGroupOperation.h>
 #import <MADFoundation/MADCredential.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-#import "MADKeyChainKeyValueProtocol.h"
+#import <MAD/MADKeyChainKeyValueProtocol.h>
 
 @class UIViewController, MADDatabaseConnection, MADCredential;
 

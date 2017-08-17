@@ -18,8 +18,9 @@
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationQueue.h>
 
-#import "MADOperationKeyChainPut.h"
-#import "MADOperationGetCredentials.h"
+#import <MAD/MADOperationKeyChainGet.h>
+#import <MAD/MADOperationKeyChainPut.h>
+#import <MAD/MADOperationKeyChainDeletePassword.h>
 #import <MAD/MADOperationUniqueUrlForFilename.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MAD/MADOperationBackgroundTaskBegin.h>
@@ -29,11 +30,10 @@
 #import <MAD/MADOperationCreateDocumentImportSchema.h>
 #import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
+#import "MADOperationGetCredentials.h"
 #import "MADOperationDatabaseTestConnection.h"
 #import "MADOperationConditionTestConnectionSuccess.h"
 #import "MADOperationPromptPolarQuestion.h"
-#import "MADOperationKeyChainDeletePassword.h"
-#import "MADOperationKeyChainGet.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionHasResultString.h"
 #import "MADOperationConditionDisplayedAlertConfirm.h"

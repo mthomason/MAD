@@ -1,5 +1,5 @@
 //
-//  MADOperationConditionHasCredientialsResult.m
+//  MADOperationConditionHasResultStringResult.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/17/16.
@@ -8,7 +8,7 @@
 
 #import "MADOperationConditionHasResultStringResult.h"
 #import <Foundation/NSString.h>
-#import "MADOperationResultStringProtocol.h"
+#import <MAD/MADOperationResultStringProtocol.h>
 
 @implementation MADOperationConditionHasResultStringResult
 

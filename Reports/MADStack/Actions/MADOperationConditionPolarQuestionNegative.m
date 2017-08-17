@@ -11,10 +11,10 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADErrorUserInfo.h>
-#import "MADOperationPromptPolarQuestion.h"
-#import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
+#import "MADOperationPromptPolarQuestion.h"
+#import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 
 @interface MADOperationConditionPolarQuestionNegative ()
 

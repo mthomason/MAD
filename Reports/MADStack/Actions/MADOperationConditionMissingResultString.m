@@ -21,7 +21,7 @@
 #import <MADFoundation/NSError+MADOperationErrors.h>
 
 #import "MADOperationConditionHasResultStringResult.h"
-#import "MADOperationKeyChainGet.h"
+#import <MAD/MADOperationKeyChainGet.h>
 
 @interface MADOperationConditionMissingResultString ()
 

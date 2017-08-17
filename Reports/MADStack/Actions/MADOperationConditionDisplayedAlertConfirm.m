@@ -10,10 +10,10 @@
 #import <os/log.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADErrorUserInfo.h>
-#import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationConditionResult.h>
+#import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import "MADOperationConditionDisplayedAlert.h"
 
 @implementation MADOperationConditionDisplayedAlertConfirm
