@@ -29,3 +29,15 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADFilename.h>
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADOperationCondition.h>
+#import <MADFoundation/MADOperation.h>
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/MADBlockObserver.h>
+#import <MADFoundation/MADBlockOperation.h>
+#import <MADFoundation/MADGroupOperation.h>
+#import <MADFoundation/MADOperationObserver.h>
+#import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/NSOperation+Advanced.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>

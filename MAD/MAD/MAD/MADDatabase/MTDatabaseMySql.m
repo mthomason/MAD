@@ -101,7 +101,7 @@
         
         success = (conn && connError == nil);
         NSError __autoreleasing *errorC = [connError copy];
-        if (errorC) {
+        if (errorC != nil && *error != nil) {
             *error = errorC;
         }
     }
@@ -140,7 +140,7 @@
             result = YES;
         }
     } else {
-        if (dberror != nil) {
+        if (dberror != nil && *error != nil) {
             NSError *userError = [dberror copy];
             *error = userError;
         }
@@ -157,7 +157,7 @@
     }
     NSError * __autoreleasing executeError = nil;
     BOOL result = [self executeQuery:query withDataTable:dataTable andError:&executeError];
-    if (executeError != nil) {
+    if (executeError != nil && *error != nil) {
         NSError * __autoreleasing errorResult = [executeError copy];
         *error = errorResult;
     }

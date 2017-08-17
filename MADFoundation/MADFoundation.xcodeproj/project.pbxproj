@@ -257,6 +257,7 @@
 		4CB98D751F43D4120043B583 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				4CB98D841F43D4BA0043B583 /* MADOperationCondition.h */,
 				4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */,
 				4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */,
 				4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */,
@@ -272,7 +273,6 @@
 				4CB98D7D1F43D48E0043B583 /* MADGroupOperation.m */,
 				4CB98D821F43D4BA0043B583 /* MADBlockObserver.h */,
 				4CB98D831F43D4BA0043B583 /* MADBlockObserver.m */,
-				4CB98D841F43D4BA0043B583 /* MADOperationCondition.h */,
 				4CB98D851F43D4BA0043B583 /* MADOperationConditionResult.h */,
 				4CB98D861F43D4BA0043B583 /* MADOperationConditionResult.m */,
 				4CB98D8E1F43D4F70043B583 /* MADOperationQueue.h */,

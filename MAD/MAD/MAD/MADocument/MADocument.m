@@ -1093,7 +1093,9 @@ void madwarn(char *err,  const char*err2) { }
                              safelyToURL: self.urlGuts
                         forSaveOperation: saveOperation
                                    error: &error])) {
-        *outError = error;
+        if (*outError != nil) {
+            *outError = error;
+        }
         return NO;
     }
     MADArchiveManager *archiveManager;

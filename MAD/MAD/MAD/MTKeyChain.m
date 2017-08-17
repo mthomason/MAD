@@ -280,7 +280,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
             deleteError = [NSError errorWithDomain:@"MADKeyChain" code:deleteStatus userInfo:nil];
         }
     }
-    if (deleteError != nil) {
+    if (deleteError != nil && *error != nil) {
         *error = deleteError;
     }
 }
