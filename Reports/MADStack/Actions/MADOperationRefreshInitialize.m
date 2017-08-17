@@ -8,16 +8,15 @@
 
 #import "MADOperationRefreshInitialize.h"
 
-#import <MAD/MADDataTable.h>
-
-#import <MAD/MADDataTableFast.h>
+#import <os/log.h>
 
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
+#import <MAD/MADDataTable.h>
+#import <MAD/MADDataTableFast.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -34,7 +33,6 @@
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 
-#import <os/log.h>
 
 @interface MADOperationRefreshInitialize ()
 
