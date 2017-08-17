@@ -59,7 +59,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", operation.description.UTF8String);
+    os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
 
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     MADOperationConditionResult *result = nil;

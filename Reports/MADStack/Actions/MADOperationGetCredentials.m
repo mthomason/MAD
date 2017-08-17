@@ -166,6 +166,14 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     _keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
     _keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
     
+    // Condition: Username is missing.
+    MADOperationConditionMissingResultString *conditionReadUsernameFailed;
+    conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey: _keyUsername];
+
+    // Condition: Username is found.
+    MADOperationConditionHasResultString *conditionReadUsername;
+    conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey: _keyUsername];
+
     // ---------------------------------------------------
     // Operation 1: Read username.
     // -------------------------
@@ -174,15 +182,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     getUsername = [[MADOperationKeyChainGet alloc] initWithKey: _keyUsername
                                                withDescription: MTKeyChainUsernameAccountDesc];
     getUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
-    
-    // Condition: Username is missing.
-    MADOperationConditionMissingResultString *conditionReadUsernameFailed;
-    conditionReadUsernameFailed = [[MADOperationConditionMissingResultString alloc] initWithKey: _keyUsername];
-    
-    // Condition: Username is found.
-    MADOperationConditionHasResultString *conditionReadUsername;
-    conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey: _keyUsername];
-
     
     // ---------------------------------------------------
     // Operation 2: Prompt for credentials if condition is met.

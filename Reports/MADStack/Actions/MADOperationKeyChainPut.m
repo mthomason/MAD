@@ -41,7 +41,8 @@ static NSString * const ErrorDomain = @"MADKCP";
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+    os_log_info(OS_LOG_DEFAULT, "Begin %s: %s",
+                NSStringFromClass(self.class).UTF8String, self.key.UTF8String);
 
     if (self.cancelled) return [self finish];
 
@@ -58,7 +59,6 @@ static NSString * const ErrorDomain = @"MADKCP";
                 break;
             }
         }
-        
     }
     
     if (self.cancelled) return [self finish];

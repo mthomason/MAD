@@ -32,7 +32,7 @@
 @implementation MADOperationConditionMissingResultString
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithKey:(NSString *)key {
@@ -57,7 +57,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+    os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
 
     MADOperationConditionResult *result = nil;
     NSString *kNotSatisified = @"Not Satisified";
@@ -70,9 +70,11 @@
     for (NSOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
             [self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
-            result = [MADOperationConditionHasResultStringResult newOperationCondition: (NSObject <MADOperationResultStringProtocol> *)dependency
-                                                                                  name: self.name];
-            break;
+            if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
+                result = [MADOperationConditionHasResultStringResult newOperationCondition: (NSObject <MADOperationResultStringProtocol> *)dependency
+                                                                                      name: self.name];
+                break;
+            }
         }
     }
     
