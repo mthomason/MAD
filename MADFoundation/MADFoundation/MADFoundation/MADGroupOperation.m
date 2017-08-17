@@ -128,7 +128,7 @@
 }
 
 - (void)cleanup {
-    [super cleanup];
+    //[super cleanup];
     self.internalQueue.delegate = nil;
     [self.internalQueue cancelAllOperations];
 }

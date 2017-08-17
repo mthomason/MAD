@@ -16,7 +16,7 @@
 #import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 
-#import "MADOperationDatabaseTestConnectionProtocol.h"
+#import "MADOperationTestResults.h"
 
 @implementation MADOperationConditionTestConnection
 
@@ -51,11 +51,11 @@
     
     for (NSOperation *dependency in dependencies) {
         
-        if ([dependency conformsToProtocol:@protocol(MADOperationDatabaseTestConnectionProtocol)]) {
-            NSObject <MADOperationDatabaseTestConnectionProtocol> *testConnection;
-            testConnection = (NSObject <MADOperationDatabaseTestConnectionProtocol> *)dependency;
+        if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)]) {
+            NSObject <MADOperationTestResults> *testConnection;
+            testConnection = (NSObject <MADOperationTestResults> *)dependency;
             if (testConnection) {
-                if (testConnection.success) {
+                if (testConnection.isSuccess) {
                     result = YES;
                 } else {
                     result = NO;

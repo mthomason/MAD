@@ -37,6 +37,7 @@
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import <MAD/MADOperationConditionHasResultString.h>
 #import "MADOperationConditionDisplayedAlertConfirm.h"
+#import "MADOperationConditionSuccess.h"
 
 @interface MADOperationCreateDocument ()
     <MADOperationCreateDocumentImportSchemaProtocol>
@@ -99,6 +100,7 @@
                                                                          viewController: viewController];
         getCredentials.name = @"com.everydayapps.mad.operation.credentials.get";
         
+        
         // ---------------------------------------------------
         // Operation 1: Test the database connection.
         // -------------------------
@@ -110,7 +112,7 @@
         
         MADOperationPromptError *displayErrorCredentials;
         displayErrorCredentials = [[MADOperationPromptError alloc] initWithViewController:viewController];
-        displayErrorCredentials.name = @"com.everydayapps.mad.operation.displayerror";
+        displayErrorCredentials.name = @"com.everydayapps.mad.operation.display.error.credentials";
         [displayErrorCredentials addDependency:testConnectionOperationCredentials];
         
         
@@ -203,10 +205,24 @@
         importSchema.name = @"com.everydayapps.mad.operation.document.import.schema";
         [importSchema addDependency: createDocument];
         [importSchema addDependency: addConnection];
+        [importSchema addDependency: getCredentials];
         [importSchema addDependency: displayErrorCredentials];
         [importSchema addDependency: testConnectionOperationCredentials];
         [importSchema addCondition: conditionConnectionConnectionSuccess];
         importSchema.parentOperation = self;
+        
+        MADOperationConditionSuccess *conditionSuccessImport;
+        conditionSuccessImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
+
+        MADOperationConditionSuccess *conditionFailedImport;
+        conditionFailedImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
+        conditionFailedImport.reverseCondition = YES;
+
+        MADOperationPromptError *displayErrorImport;
+        displayErrorImport = [[MADOperationPromptError alloc] initWithViewController:viewController];
+        displayErrorImport.name = @"com.everydayapps.mad.operation.display.error.import.schema";
+        [displayErrorImport addDependency: importSchema];
+        [displayErrorImport addCondition: conditionFailedImport];
         
         // Save the new document.
         MADOperationCreateDocumentSaveAndCloseNewDocument *saveOperation;
@@ -217,18 +233,22 @@
         [saveOperation addDependency: displayErrorCredentials];
         [saveOperation addDependency: testConnectionOperationCredentials];
         [saveOperation addCondition: conditionConnectionConnectionSuccess];
+        [saveOperation addCondition: conditionSuccessImport];
+        
         
         // Close the new document.
         MADOperationDocumentCloseDocument *closeDocument;
         closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
         closeDocument.name = @"com.everydayapps.mad.operation.document.close";
         [closeDocument addDependency: createDocument];
+        [closeDocument addDependency: importSchema];
         [closeDocument addDependency: saveOperation];
         [closeDocument addDependency: displayErrorCredentials];
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addDependency: displayErrorCredentials];
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addCondition: conditionConnectionConnectionSuccess];
+        [closeDocument addCondition: conditionSuccessImport];
         
         //Test if credentals are saved
         MADOperationKeyChainGet *operationGetUsername;
@@ -274,6 +294,7 @@
                                                          uniqueUrlForFilename,
                                                          getCredentials,
                                                          taskBegin,
+                                                         displayErrorImport,
                                                          createDocument,
                                                          displayErrorCredentials,
                                                          testConnectionOperationCredentials,
@@ -305,26 +326,23 @@
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
     if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
-        [((MADOperation *)operation) cleanup];
+        //[((MADOperation *)operation) cleanup];
         
         [self finish];
         [self cleanup];
 
     } else if ([operation isKindOfClass:[MADOperationDatabaseTestConnection class]]) {
-        [((MADOperation *)operation) cleanup];
+        //[((MADOperation *)operation) cleanup];
         _connectionSuccess = ((MADOperationDatabaseTestConnection *)operation).success;
     } else if ([operation isKindOfClass:[MADOperationCreateDocumentSaveAndCloseNewDocument class]]) {
-        [((MADOperation *)operation) cleanup];
+        //[((MADOperation *)operation) cleanup];
         _successCreate = errors.count == 0;
     } else if ([operation isKindOfClass:[MADOperationCreateDocumentImportSchema class]]) {
-        [((MADOperation *)operation) cleanup];
+        //[((MADOperation *)operation) cleanup];
         ((MADOperationCreateDocumentImportSchema *)operation).parentOperation = nil;
     } else {
-        [((MADOperation *)operation) cleanup];
+        //[((MADOperation *)operation) cleanup];
     }
-    
-    
-
 }
 
 - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {

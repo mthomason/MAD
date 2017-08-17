@@ -12,19 +12,19 @@
 #import <MADFoundation/MADOperation.h>
 #import "MADOperationPromptError.h"
 #import <MAD/MADOperationPromptErrorProtocol.h>
-#import "MADOperationDatabaseTestConnectionProtocol.h"
+#import <MAD/MADOperationTestResults.h>
 
 @class MADDatabaseConnection, MADCredential;
 
 @interface MADOperationDatabaseTestConnection : MADOperation
-    <MADOperationPromptErrorProtocol, MADOperationDatabaseTestConnectionProtocol>
-
-    @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign) BOOL success;
+    <MADOperationPromptErrorProtocol, MADOperationTestResults>
 
     - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection;
     - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
                                    credentials:(MADCredential *)credentials;
+
+    @property (nonatomic, readonly, strong) NSError *error;
+    @property (nonatomic, readonly, assign, getter=isSuccess) BOOL success;
 
 @end
 

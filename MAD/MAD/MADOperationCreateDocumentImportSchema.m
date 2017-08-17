@@ -32,6 +32,7 @@
 
 @implementation MADOperationCreateDocumentImportSchema {
     NSError *_displayError;
+    NSUInteger _tag;
 }
 
 - (void)dealloc {
@@ -47,6 +48,7 @@
         self.databaseConnection = databaseConnection.copy;
         self.success = NO;
         _displayError = nil;
+        _tag = self.hash;
     }
     return self;
 }
@@ -60,6 +62,10 @@
 
 - (NSError *)error {
     return _displayError;
+}
+
+- (NSUInteger)tag {
+    return _tag;
 }
 
 - (BOOL)isAsynchronous { return YES; }

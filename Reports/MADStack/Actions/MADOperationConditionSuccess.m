@@ -7,15 +7,35 @@
 //
 
 #import "MADOperationConditionSuccess.h"
+#import <os/log.h>
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>
-#import "MADOperationDatabaseTestConnectionProtocol.h"
+#import <MAD/MADOperationTestResults.h>
+
+@interface MADOperationConditionSuccess ()
+
+    @property (nonatomic, readwrite, copy) NSString *key;
+
+@end
+
 
 @implementation MADOperationConditionSuccess
 
-#pragma mark - Condition
+- (void)dealloc {
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+}
+
+- (instancetype)initWithKey:(NSString *)key {
+    if (self = [super init]) {
+        _key = key.copy;
+    }
+    return self;
+}
+
+#pragma mark -
+#pragma mark Condition
 
 - (NSString *)name {
     return NSStringFromClass(super.class);
@@ -29,37 +49,46 @@
     return nil;
 }
 
-- (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
+- (void)evaluateForOperation:(MADOperation *)operation
+                  completion:(void (^)(MADOperationConditionResult *))completion {
     MADOperationConditionResult *result;
     result = [self evaluateForOperation:operation];
     completion(result);
 }
 
-- (BOOL)evaludateForOperationSimple:(MADOperation *)operation {
-    NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
-    BOOL result = NO;
+- (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
+    os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
     
+    NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
+    MADOperationConditionResult *result = nil;
     if (dependencies.count == 0) {
-        result = NO;
+        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
         return result;
     }
     
-    for (NSOperation *dependency in dependencies) {
-        
-        if ([dependency conformsToProtocol:@protocol(MADOperationDatabaseTestConnectionProtocol)]) {
-            NSObject <MADOperationDatabaseTestConnectionProtocol> *testConnection;
-            testConnection = (NSObject <MADOperationDatabaseTestConnectionProtocol> *)dependency;
-            if (testConnection) {
-                if (testConnection.success) {
-                    result = YES;
-                } else {
-                    result = NO;
-                }
-                break;
-            }
+    for (MADOperation *dependency in dependencies) {
+        NSString *dependencyName = ((MADOperation <MADOperationTestResults> *) dependency).name;
+        if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)] &&
+            dependencyName != nil &&
+            [_key isEqualToString: dependencyName]) {
+            result = [self result:YES];
+            break;
         }
     }
-    return result;
+    
+    return result != nil ? result : [self result: NO];
+}
+
+
+
+- (MADOperationConditionResult *)result:(BOOL)success {
+    return !_reverseCondition ?
+            (success ?
+                [MADOperationConditionResult newOperationConditionResultSatisfied] :
+                [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name]) :
+            (success ?
+                [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name] :
+                [MADOperationConditionResult newOperationConditionResultSatisfied]);
 }
 
 @end

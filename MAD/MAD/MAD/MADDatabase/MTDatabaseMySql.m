@@ -329,7 +329,7 @@
                                           onConnection: conn
                                          extendedNames: YES
                                                  error: &errorFetch];
-    if (outError == nil && errorFetch != nil) {
+    if (*outError == nil && errorFetch != nil) {
         NSDictionary *userInfo = @{NSUnderlyingErrorKey: errorFetch};
         NSString *domain = NSStringFromClass(self.class);
         *outError = [NSError errorWithDomain:domain code:934 userInfo:userInfo];

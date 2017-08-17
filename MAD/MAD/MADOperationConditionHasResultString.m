@@ -83,7 +83,6 @@
         result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
         return result;
     }
-    
 }
 
 @end

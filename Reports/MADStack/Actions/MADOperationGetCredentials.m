@@ -22,7 +22,6 @@
 #import "MADOperationPromptPassword.h"
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationPromptError.h"
-#import "MADOperationDatabaseTestConnection.h"
 #import <MAD/MADOperationKeyChainPut.h>
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
@@ -140,7 +139,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     if (_finishedPromptPassword && _finishedPromptCredentals) {
         //[self.internalQueue cancelAllOperations];
     }
-    [((MADOperation *)operation) cleanup];
+    //[((MADOperation *)operation) cleanup];
 }
 
 - (MADCredential *)credentials {
@@ -358,8 +357,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         os_log_info(OS_LOG_DEFAULT, "%s - block", __PRETTY_FUNCTION__);
         //[sself cancel];
         //[sself finish];
-        [sself finish];
-        [sself cleanup];
+        //[sself finish];
+        //[sself cleanup];
     }];
 
     [self addOperations:operations finishingOperation:finishingOperation];
