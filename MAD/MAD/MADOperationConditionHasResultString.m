@@ -16,9 +16,9 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
+#import <MAD/MADOperationResultStringProtocol.h>
 
 #import "MADOperationConditionHasResultStringResult.h"
-#import <MAD/MADOperationResultStringProtocol.h>
 
 @interface MADOperationConditionHasResultString ()
 
