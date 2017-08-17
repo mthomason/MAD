@@ -20,6 +20,8 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADBlockOperation.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADAlertController.h>
@@ -30,9 +32,7 @@
 #import "MADButtonTwitter.h"
 #import "ACAccountStore+Social.h"
 
-#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationPromptError.h"
-#import <MADFoundation/MADBlockOperation.h>
 
 #import "MADAttributedStringCommon.h"
 
@@ -181,7 +181,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
         case 0:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.label.textColor = [MADColorEverydayApps newColorBlueDark];
-            cell.label.text = @"MAD Designer";
+            cell.label.text = NSLocalizedString(@"MAD Designer", @"MAD Designer");
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleTop;
@@ -205,11 +205,14 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 
         case 2: {
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = @"By EVERYDAY APPS LLC in Cincinnati, OH.";
+            cell.label.text = NSLocalizedString(@"By EVERYDAY APPS LLC in Cincinnati, OH.",
+                                                @"By EVERYDAY APPS LLC in Cincinnati, OH.");
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
-            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget:self action:@selector(followEverydayApps) size:small];
+            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget: self
+                                                                              action: @selector(followEverydayApps)
+                                                                                size: small];
             cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];
@@ -218,7 +221,8 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
             
         case 3:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = @"Copyright EVERYDAY APPS LLC 2017.  All rights reserved.";
+            cell.label.text = NSLocalizedString(@"Copyright EVERYDAY APPS LLC 2017.  All rights reserved.",
+                                                @"Copyright EVERYDAY APPS LLC 2017.  All rights reserved.");
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
@@ -237,13 +241,14 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 
         case 5: {
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
+            cell.label.text = NSLocalizedString(@"Created by Michael Thomason for Everyday Apps.",
+                                                @"Created by Michael Thomason for Everyday Apps.");
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;
-            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget:self
-                                                                              action:@selector(followMichael)
-                                                                                size:small];
+            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget: self
+                                                                              action: @selector(followMichael)
+                                                                                size: small];
             cell.accessoryView = b;
             cell.marginStyle = MADTableViewCellMarginStyleBottom;
             [cell.label sizeToFit];

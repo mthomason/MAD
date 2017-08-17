@@ -419,7 +419,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     [labelTitle setNeedsDisplay];
     [labelTitleSub setNeedsDisplay];
     
-    activityIndicator = self.activityIndicator;
     SEL animateSwitch = isDownloading || isUploading ? @selector(startAnimating) :
                                                        @selector(stopAnimating);
     dispatch_block_t read_iamge = ^{

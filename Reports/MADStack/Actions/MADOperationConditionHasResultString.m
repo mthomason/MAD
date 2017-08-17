@@ -7,17 +7,18 @@
 //
 
 #import "MADOperationConditionHasResultString.h"
+#import <os/log.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
-#import "MADOperationConditionHasResultStringResult.h"
-#import <MADFoundation/MADOperation.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
-#import "MADOperationKeyChainGet.h"
+
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADOperation.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
 
-#import <os/log.h>
+#import "MADOperationConditionHasResultStringResult.h"
+#import "MADOperationResultStringProtocol.h"
 
 @interface MADOperationConditionHasResultString ()
 

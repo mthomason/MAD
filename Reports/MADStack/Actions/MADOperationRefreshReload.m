@@ -7,18 +7,19 @@
 //
 
 #import "MADOperationRefreshReload.h"
+#import <os/log.h>
 #import <Foundation/NSArray.h>
+
 #import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADOperationQueue.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MADFoundation/MADOperationQueue.h>
 
 #import "MADOperationGetCredentials.h"
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 #import "MADOperationRefreshInitialize.h"
 #import "MADOperationRefresh.h"
-
-#import <os/log.h>
 
 @interface MADOperationRefreshReload ()
 

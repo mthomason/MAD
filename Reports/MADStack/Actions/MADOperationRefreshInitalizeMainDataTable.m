@@ -11,8 +11,6 @@
 #import <MAD/MADDataTableFast.h>
 #import <MAD/MADDataTable.h>
 
-#import <os/log.h>
-
 @interface MADOperationRefreshInitializeMainDataTable ()
 
     @property (nonatomic, weak) MADocument *document;
@@ -21,10 +19,6 @@
 @end
 
 @implementation MADOperationRefreshInitializeMainDataTable
-
-- (void)dealloc {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-}
 
 - (instancetype)initWithDocument:(MADocument *)document {
     if (self = [super init]) {
@@ -37,8 +31,6 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-
     if (self.cancelled) {
         return [self finish];
     }

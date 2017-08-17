@@ -323,7 +323,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [self cleanup];
     
     id <MADDesignerDesignViewDataSource> datasource = _datasource;
-    CGFloat measurementSectionHeight = CGSizeZero.height;
+    CGFloat measurementSectionHeight;
 
     _numberOfSections = _dataSourceHas.numberOfSectionsInDesignView ?
                             [datasource numberOfSectionsInDesignView:self] : 0;

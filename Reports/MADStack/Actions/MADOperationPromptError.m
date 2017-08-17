@@ -9,25 +9,24 @@
 #import "MADOperationPromptError.h"
 #import <os/log.h>
 #import <UIKit/UIAlertController.h>
-#import "MADMutualExclusive.h"
-#import "MADDefer.h"
 #import <MAD/MADOperationPromptErrorProtocol.h>
+#import "MADMutualExclusive.h"
 
 static NSString * const TextYes = @"Dismiss";
 
 @interface MADOperationPromptError ()
 
     @property (nonatomic, readwrite, assign) BOOL result;
+    @property (nonatomic, readwrite, assign) BOOL alertDisplayed;
     @property (nonatomic, copy) NSError *error;
     @property (nonatomic, weak) UIViewController *viewController;
-    @property (nonatomic, readwrite, assign) BOOL alertDisplayed;
 
 @end
 
 @implementation MADOperationPromptError
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithViewController:(UIViewController * __weak)viewController {
@@ -67,7 +66,8 @@ static NSString * const TextYes = @"Dismiss";
         
         if ([dependency conformsToProtocol:@protocol(MADOperationPromptErrorProtocol)]) {
             
-            NSObject <MADOperationPromptErrorProtocol> *bumbDependency = (NSObject <MADOperationPromptErrorProtocol> *)dependency;
+            NSObject <MADOperationPromptErrorProtocol> *bumbDependency;
+            bumbDependency = (NSObject <MADOperationPromptErrorProtocol> *)dependency;
             if ([bumbDependency displayError]) {
                 
                 if (self.tagDependency == 0 || self.tagDependency == [bumbDependency tag]) {

@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationBooleanAnd.h"
+#import <os/log.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
@@ -15,8 +16,6 @@
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
-
-#import <os/log.h>
 
 @interface MADOperationBooleanAnd ()
 
