@@ -1038,7 +1038,7 @@ void madwarn(char *err,  const char*err2) { }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
-    BOOL success = NO;
+    __block BOOL success = NO;
 
     /// 1. Unarchive the MAD file; it's a zip file (tar.bz2 maybe).
     if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
@@ -1051,7 +1051,6 @@ void madwarn(char *err,  const char*err2) { }
     }
     
     /// 2. Read the unarchived file.  It's currently a Core Data file.
-    
     NSError *error = NULL;
     success = success ? [super readFromURL:_urlGuts error:&error] : NO;
     if (error) *outError = error;

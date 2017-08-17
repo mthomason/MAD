@@ -28,7 +28,8 @@ static NSString * const MADPathComponentData       = @"Data";
 
 @implementation MADFileUtilities
 
-+ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
++ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl
+                       withCoordinator:(BOOL)coordinator {
     BOOL isDirectory;
     
     NSString *destinationPath = destinationUrl.path.copy;
@@ -49,13 +50,17 @@ static NSString * const MADPathComponentData       = @"Data";
                                                                                    errorHandler: ErrorHandler];
             for (NSURL *fileURL in enumerator) {
                 NSURL *file = fileURL.copy;
-                [MADFileUtilities removeFileAtURL:file];
+                [MADFileUtilities removeFileAtURL:file withCoordinator:coordinator];
             }
             
             NSURL *file = destinationUrl.copy;
-            [MADFileUtilities removeFileAtURL:file];
+            [MADFileUtilities removeFileAtURL:file withCoordinator:coordinator];
         }
     }
+}
+
++ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
+    [self deleteCoreDataFilesAtDirectory:destinationUrl withCoordinator:YES];
 }
 
 + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {
@@ -88,7 +93,7 @@ static NSString * const MADPathComponentData       = @"Data";
                                                                        subdirectory: @""];
     
     for (NSURL *url in defaultListURLs) {
-        [self copyURLToDocumentsDirectory:url groupId:groupId];
+        [self copyURLToDocumentsDirectoryIfNotExist:url groupId:groupId];
     }
 }
 
@@ -351,6 +356,12 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeFileAndArchiveAtURL:(NSURL *)url {
+    [MADFileUtilities removeFilesAtURL:url];
+    [MADFileUtilities removeFileAtURL:url];
+    
+}
+
++ (void)removeFilesAtURL:(NSURL *)url {
     BOOL (^errorHandler)(NSURL *, NSError *);
     errorHandler = ^BOOL(NSURL *errorUrl, NSError *error) {
         //NSLog(@"Error %@", error);
@@ -365,12 +376,20 @@ static NSString * const MADPathComponentData       = @"Data";
     for (NSURL *fileURL in enumerator) {
         [MADFileUtilities removeFileAtURL:fileURL];
     }
-    [MADFileUtilities removeFileAtURL:url];
-    
 }
 
 + (void)removeFileAtURL:(NSURL *)url {
     [self removeFileAtURL:url completion:NULL];
+}
+
++ (void)removeFileAtURL:(NSURL *)url withCoordinator:(BOOL)coordinator {
+    if (coordinator) {
+        [self removeFileAtURL:url completion:NULL];
+    } else {
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        NSError *error;
+        [fileManager removeItemAtURL:url error:&error];
+    }
 }
 
 + (void)removeFileAtURL:(NSURL *)url completion:(void (^)(NSError *error))completion {
@@ -412,7 +431,7 @@ static NSString * const MADPathComponentData       = @"Data";
 
 #pragma mark - Convenience
 
-+ (void)copyURLToDocumentsDirectory:(NSURL *)url groupId:(NSString *)groupId {
++ (void)copyURLToDocumentsDirectoryIfNotExist:(NSURL *)url groupId:(NSString *)groupId {
     NSURL *localDocumentsDirectory = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupId];
     NSString *lastPathComponent = url.lastPathComponent;
     NSURL *toURL = [localDocumentsDirectory URLByAppendingPathComponent:lastPathComponent];

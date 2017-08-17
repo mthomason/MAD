@@ -11,11 +11,15 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADFile;
+@class MADFile, NSOperationQueue;
 
 @interface MADFileUtilities : NSObject
 
+    + (NSOperationQueue *)queue;
+
     + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl;
+    + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl
+                           withCoordinator:(BOOL)coordinator;
 
     + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url;
 
@@ -34,7 +38,9 @@
                     completion:(void (^)(NSURL *result, NSError *error))completion;
 
     + (void)removeFileAndArchiveAtURL:(NSURL *)url;
-    
+
+    + (void)removeFilesAtURL:(NSURL *)url;
+
     + (void)removeFileAtURL:(NSURL *)url;
 
     + (void)removeFileAtURL:(NSURL *)url

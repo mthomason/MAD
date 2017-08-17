@@ -71,6 +71,20 @@
 
 #pragma mark - Static
 
++ (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequestSortTables {
+    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
+    NSFetchRequest *request;
+    NSSortDescriptor *sort;
+    request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    NSString *keyName = NSStringFromSelector(@selector(name));
+    request.resultType = NSManagedObjectResultType;
+    sort = [NSSortDescriptor sortDescriptorWithKey: keyName
+                                         ascending: YES];
+    
+    request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
+    return request;
+}
+
 + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                                                 name:(NSString *)name
                                                         andQueryable:(BOOL)queryable {

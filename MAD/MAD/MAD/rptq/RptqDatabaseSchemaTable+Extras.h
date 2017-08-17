@@ -25,6 +25,9 @@
 
     + (RptqDatabaseSchemaTable *)databaseSchemaTableForDatabase:(RptqDatabase *)database andTableName:(NSString *)name;
 
+
+    + (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequestSortTables;
+
 @end
 
 #endif

@@ -11,10 +11,11 @@
 #endif
 
 #import "MADQueryBuilderAddTableViewController.h"
+#import <os/log.h>
 #import <CoreData/NSFetchedResultsController.h>
 #import <CoreData/NSExpressionDescription.h>
 #import <UIKit/UILabel.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDatabaseSchemaTable+Extras.h>
 
 @implementation MADQueryBuilderAddTableViewController
 
@@ -22,70 +23,23 @@
 
 - (NSFetchedResultsController *)fetchedResultsController {
     NSManagedObjectContext *managedObjectContext;
-    if (_fetchedResultsController == nil && ((managedObjectContext = _managedObjectContext)) != nil) {
-        NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-        NSFetchRequest *request;
-        NSSortDescriptor *sort;
-        request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    if (_fetchedResultsController == nil &&
+        ((managedObjectContext = _managedObjectContext)) != nil) {
         
-        NSUInteger expressionCount = 2;
-        NSExpressionDescription *expressionDescription[expressionCount];
+        NSFetchRequest *request = [RptqDatabaseSchemaTable fetchRequestSortTables];
+        NSFetchedResultsController *controller;
+        controller = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                         managedObjectContext: managedObjectContext
+                                                           sectionNameKeyPath: nil
+                                                                    cacheName: nil];
         
-        NSString *keySelf = NSStringFromSelector(@selector(self));
-        NSString *keyName = NSStringFromSelector(@selector(name));
-        
-        NSString *keys[] = {
-            keySelf,
-            keyName,
-        };
-        
-        NSExpression *expressions[] = {
-            [NSExpression expressionForEvaluatedObject],
-            [NSExpression expressionForKeyPath: keyName],
-        };
-        
-        NSAttributeType types[] = {
-            NSObjectIDAttributeType,
-            NSStringAttributeType,
-        };
-        
-        for (NSUInteger i=0; i<expressionCount; i++) {
-            expressionDescription[i] = [[NSExpressionDescription alloc] init];
-            expressionDescription[i].name = keys[i].copy;
-            expressionDescription[i].expression = expressions[i];
-            expressionDescription[i].expressionResultType = types[i];
-        }
-        
-        NSArray *propertiesToFetch;
-        propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
-                                                       count: (NSUInteger)expressionCount];
-        
-        request.propertiesToFetch = propertiesToFetch;
-        request.resultType = NSDictionaryResultType;
-        
-        sort = [NSSortDescriptor sortDescriptorWithKey: keyName
-                                             ascending: YES];
-        
-        request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
-        
-        NSFetchedResultsController *fetchedResultsController;
-        fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                       managedObjectContext: managedObjectContext
-                                                                         sectionNameKeyPath: nil
-                                                                                  cacheName: nil];
         NSError *error = nil;
-        if (![fetchedResultsController performFetch:&error]) {
-            NSLog(@"Error: (%@, %@)", error.localizedDescription, error.localizedFailureReason);
+        if (![controller performFetch:&error]) {
+            os_log_error(OS_LOG_DEFAULT, "Error: %@ (%@)",
+                         error.localizedDescription, error.localizedFailureReason);
         }
-        
-        for (NSUInteger i=0; i<expressionCount; i++) {
-            expressionDescription[i] = nil;
-            keys[i] = nil;
-            expressions[i] = nil;
-        }
-        
-        fetchedResultsController.delegate = self;
-        _fetchedResultsController = fetchedResultsController;
+        controller.delegate = self;
+        _fetchedResultsController = controller;
     }
     return _fetchedResultsController;
 }
@@ -99,13 +53,14 @@
 #pragma mark -
 #pragma mark Table View Data Source Protocol
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"MADIdentifierTableViewCellAddTable";
     static NSString *keyName;
     if (keyName == nil) keyName = NSStringFromSelector(@selector(name));
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
-    NSDictionary *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
-    NSString *name = result[keyName];
+    RptqDatabaseSchemaTable *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
+    NSString *name = result.name;
     cell.textLabel.text = name.copy;
     return cell;
 }

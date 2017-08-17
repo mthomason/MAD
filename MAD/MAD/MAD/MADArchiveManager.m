@@ -23,6 +23,7 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSFileWrapper.h>
+#import <Foundation/NSFileCoordinator.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -118,18 +119,17 @@ int restore_backup(char *, char *, char *);
 }
 
 - (int)unarchiveV8 {
-    int success = 0;
-    BOOL isDirectory, fileExist;
+    __block int success = 0;
     int r;
-    //NSURL *urlGuts = _filewrapper.copy;
+    BOOL isDirectory, fileExist;
+
     NSString *destinationPath = _filewrapper.path;
     NSString *destinationLastPathComponent = _filewrapper.lastPathComponent;
-    NSURL *destinationURL = _filewrapper.URLByDeletingLastPathComponent;
+    NSURL *destinationURL = _filewrapper.URLByDeletingLastPathComponent.copy;
     
     NSError * __autoreleasing errorCreate = nil;
-    [MADFileUtilities deleteCoreDataFilesAtDirectory: _filewrapper];
+    [MADFileUtilities deleteCoreDataFilesAtDirectory: _filewrapper withCoordinator:NO];
     
-    char *dest = 0, *filename = 0, *source = 0;
     fileExist = [[NSFileManager defaultManager] fileExistsAtPath: destinationPath
                                                      isDirectory: &isDirectory];
     
@@ -149,23 +149,23 @@ int restore_backup(char *, char *, char *);
         if (!sucessExist) success = -1;
     }
     if (success >= 0) {
-        dest = strdup(destinationURL.fileSystemRepresentation);
-        filename = strdup(destinationLastPathComponent.fileSystemRepresentation);
         
-        if (((r = chdir(dest))) != 0) {
+        if (((r = chdir(destinationURL.fileSystemRepresentation))) != 0) {
             asl_log(NULL, NULL, ASL_LEVEL_DEBUG,
-                    "Error %d: %s. Chdir (%s) failed.", errno, strerror(errno), dest);
-            
+                    "Error %d: %s. Chdir (%s) failed.", errno, strerror(errno), destinationURL.fileSystemRepresentation);
             success = -1;
         } else {
+            char *source = 0, *dest = 0, *filename = 0;
+            dest = strdup(destinationURL.fileSystemRepresentation);
+            filename = strdup(destinationLastPathComponent.fileSystemRepresentation);
             source = strdup(_archive.fileSystemRepresentation);
             success = mad_extract(source, dest, filename);
+            if (dest != 0) free(dest);
+            if (filename != 0) free(filename);
+            if (source != 0) free(source);
+
         }
     }
-
-    if (dest != 0) free(dest);
-    if (filename != 0) free(filename);
-    if (source != 0) free(source);
 
     return success;
 }

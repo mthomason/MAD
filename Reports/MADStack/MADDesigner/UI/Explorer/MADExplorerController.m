@@ -356,9 +356,6 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     if (self = [super initWithCoder:aDecoder]) {
         
-        const char *MADQueueFileViewController;
-        MADQueueFileViewController = "com.everydayapps.mad.designer.file.explorer.controller";
-        
         _shouldShowAddDocumentPopover = YES;
         _getUserCloudPrefsFirstCall = YES;
         _aboutViewControllerOnScreen = NO;
@@ -366,11 +363,6 @@ typedef NS_ENUM(short, MADExplorerState) {
         _cloudActivityRunning = NO;
         _cloudActivityRunningDisplay = NO;
         _activityIndicatorRightVisible = NO;
-
-        void (^handleCellLayout)(MADCollectionViewCellDocument *cell);
-        handleCellLayout = ^(MADCollectionViewCellDocument *cell) {
-            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
-        };
 
         MADOpenDocumentManager *openFileManager;
         openFileManager = [[MADOpenDocumentManager alloc] init];
@@ -403,52 +395,52 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     _state = MADExplorerStateReady;
     
-        MADOperationQueue *operationQueueBackground;
-        NSOperation *getUserCloudPreferences;
-        MADOperation *operation;
-        NSOperation *resetReceipt;
-        
-        MADAppDelegate delegate = [MADApplication AppDelegate];
-        NSString *groupID = [delegate groupIdentifier].copy;
-        
-        operationQueueBackground = [[MADOperationQueue alloc] init];
-        operationQueueBackground.maxConcurrentOperationCount = 1;
-        
-        operation = [[MADOperationInstallSampleDatabase alloc] init];
-        [operationQueueBackground addOperation:operation];
-        
-        operation = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
-                                                                  fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                groupIdentifier: groupID
-                                                                    installFlag: MADUpgradeInstalledSamplesLondon];
-        operation.identifier = MADIDInstallOperationSampleDocumentLondon;
-        [operation addObserver:self];
-        [operationQueueBackground addOperation:operation];
-        
-        operation = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
-                                                                  fileExtension: MADFileExtentionMobleApplicationDocument
-                                                                groupIdentifier: groupID
-                                                                    installFlag: MADUpgradeInstalledSamplesMusic];
-        operation.identifier = MADIDInstallOperationSampleDocumentMusic;
-        [operation addObserver:self];
-        [operationQueueBackground addOperation:operation];
-        
-        SEL storeReceipt = @selector(resetReceipt);
-        id target = [MTVerificationController sharedInstance];
-        resetReceipt = [[NSInvocationOperation alloc] initWithTarget: target
-                                                            selector: storeReceipt
-                                                              object: NULL];
-        
-        [operationQueueBackground addOperation:resetReceipt];
-        
-        SEL cloudPrefs = @selector(updateCloudPreferences);
-        
-        MADExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
-        getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: fileExplorerDataSource
-                                                                       selector: cloudPrefs
-                                                                         object: NULL];
-        [operationQueueBackground addOperation:getUserCloudPreferences];
-        
+    MADOperationQueue *operationQueueBackground;
+    NSOperation *getUserCloudPreferences;
+    MADOperation *operation;
+    NSOperation *resetReceipt;
+    
+    MADAppDelegate delegate = [MADApplication AppDelegate];
+    NSString *groupID = [delegate groupIdentifier].copy;
+    
+    operationQueueBackground = [[MADOperationQueue alloc] init];
+    operationQueueBackground.maxConcurrentOperationCount = 1;
+    
+    operation = [[MADOperationInstallSampleDatabase alloc] init];
+    [operationQueueBackground addOperation:operation];
+    
+    operation = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+                                                              fileExtension: MADFileExtentionMobleApplicationDocument
+                                                            groupIdentifier: groupID
+                                                                installFlag: MADUpgradeInstalledSamplesLondon];
+    operation.identifier = MADIDInstallOperationSampleDocumentLondon;
+    [operation addObserver:self];
+    [operationQueueBackground addOperation:operation];
+    
+    operation = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+                                                              fileExtension: MADFileExtentionMobleApplicationDocument
+                                                            groupIdentifier: groupID
+                                                                installFlag: MADUpgradeInstalledSamplesMusic];
+    operation.identifier = MADIDInstallOperationSampleDocumentMusic;
+    [operation addObserver:self];
+    [operationQueueBackground addOperation:operation];
+    
+    SEL storeReceipt = @selector(resetReceipt);
+    id target = [MTVerificationController sharedInstance];
+    resetReceipt = [[NSInvocationOperation alloc] initWithTarget: target
+                                                        selector: storeReceipt
+                                                          object: NULL];
+    
+    [operationQueueBackground addOperation:resetReceipt];
+    
+    SEL cloudPrefs = @selector(updateCloudPreferences);
+    
+    MADExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
+    getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: fileExplorerDataSource
+                                                                   selector: cloudPrefs
+                                                                     object: NULL];
+    [operationQueueBackground addOperation:getUserCloudPreferences];
+    
     
     NSString *hint;
     hint = NSLocalizedString(MADHintBarButtonItemEdit, MADHintBarButtonItemEdit);
