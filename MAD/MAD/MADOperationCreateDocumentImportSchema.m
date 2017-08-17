@@ -30,7 +30,9 @@
 
 @end
 
-@implementation MADOperationCreateDocumentImportSchema
+@implementation MADOperationCreateDocumentImportSchema {
+    NSError *_displayError;
+}
 
 - (void)dealloc {
     os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
@@ -44,8 +46,20 @@
     if (self = [super init]) {
         self.databaseConnection = databaseConnection.copy;
         self.success = NO;
+        _displayError = nil;
     }
     return self;
+}
+
+#pragma mark -
+#pragma mark MADOperationPromptErrorProtocol
+
+- (BOOL)displayError {
+    return _displayError != nil;
+}
+
+- (NSError *)error {
+    return _displayError;
 }
 
 - (BOOL)isAsynchronous { return YES; }
@@ -90,43 +104,49 @@
         if (dberror != nil) {
             success = NO;
             displayError = [dberror copy];
-            //bad connnection
-        } else {
-            NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
-            NSMutableArray *tables                 = [[NSMutableArray alloc] init];
-            
-            NSError *error = NULL;
-            NSArray *resultTables = [document.database getTablesFromConnection:dbconnection error:&error];
-            
-            [tables setArray:resultTables];
-            
-            NSUInteger counter = 0, numberOfTables = tables.count;
-            for (MADDatabaseTable *databaseTable in tables) {
-                @autoreleasepool {
-                    
-                    NSString *name = databaseTable.name.copy;
-                    [strongself.parentOperation updateImportProgressWithMessage: name
-                                                                       progress: (counter + 1) / numberOfTables];
-                    
-                    NSError *getFieldsError = NULL;
-                    NSArray *fieldsForTable = [document.database fieldsForTable: databaseTable.name
-                                                                     connection: dbconnection
-                                                                          error: &getFieldsError];
-                    
-                    NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
-                    tablesAndFields[databaseTable.name] = fields;
-                    
-                }
-                counter++;
-            }
-            
-            MADErrorContainer *additionalErrors;
-            additionalErrors = [rptqDocument storeTablesAndFieldsForTables: tables
-                                                             fieldsByTable: tablesAndFields
-                                                   andManagedObjectContext: private];
-            [errorContainer addErrorsFromContainer:additionalErrors];
-            
+            return;
         }
+        NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
+        NSMutableArray *tables                 = [[NSMutableArray alloc] init];
+        
+        NSError *error = NULL;
+        NSArray *resultTables = [document.database getTablesFromConnection:dbconnection error:&error];
+        
+        if (error != nil) {
+            success = NO;
+            displayError = error.copy;
+            return;
+        }
+        
+        [tables setArray:resultTables];
+        
+        NSUInteger counter = 0, numberOfTables = tables.count;
+        for (MADDatabaseTable *databaseTable in tables) {
+            @autoreleasepool {
+                
+                NSString *name = databaseTable.name.copy;
+                [strongself.parentOperation updateImportProgressWithMessage: name
+                                                                   progress: (counter + 1) / numberOfTables];
+                
+                NSError *getFieldsError = NULL;
+                NSArray *fieldsForTable = [document.database fieldsForTable: databaseTable.name
+                                                                 connection: dbconnection
+                                                                      error: &getFieldsError];
+                
+                NSArray *fields = [[NSArray alloc] initWithArray:fieldsForTable];
+                tablesAndFields[databaseTable.name] = fields;
+                
+            }
+            counter++;
+        }
+        
+        MADErrorContainer *additionalErrors;
+        additionalErrors = [rptqDocument storeTablesAndFieldsForTables: tables
+                                                         fieldsByTable: tablesAndFields
+                                               andManagedObjectContext: private];
+        [errorContainer addErrorsFromContainer:additionalErrors];
+        
+        
         
         [document.database closeProcess:dbconnection];
         
@@ -147,7 +167,11 @@
     } else {
         [self finishWithError:displayError];
     }
-    
+}
+
+- (void)finishWithError:(NSError *)error {
+    _displayError = error.copy;
+    [super finishWithError:error];
 }
 
 @end
