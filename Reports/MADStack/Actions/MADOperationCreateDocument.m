@@ -30,6 +30,7 @@
 #import <MAD/MADOperationCreateDocumentImportSchema.h>
 #import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
+#import <MAD/MADOperationDeleteFile.h>
 #import "MADOperationGetCredentials.h"
 #import "MADOperationDatabaseTestConnection.h"
 #import <MAD/MADOperationConditionTestConnectionSuccess.h>
@@ -235,7 +236,6 @@
         [saveOperation addCondition: conditionConnectionConnectionSuccess];
         [saveOperation addCondition: conditionSuccessImport];
         
-        
         // Close the new document.
         MADOperationDocumentCloseDocument *closeDocument;
         closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
@@ -249,6 +249,13 @@
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addCondition: conditionConnectionConnectionSuccess];
         [closeDocument addCondition: conditionSuccessImport];
+        
+        MADOperationDeleteFile *operationDeleteFile;
+        operationDeleteFile = [[MADOperationDeleteFile alloc] init];
+        [operationDeleteFile addDependency: uniqueUrlForFilename];
+        [operationDeleteFile addDependency: importSchema];
+        [operationDeleteFile addDependency: closeDocument];
+        [operationDeleteFile addCondition: conditionFailedImport];
         
         //Test if credentals are saved
         MADOperationKeyChainGet *operationGetUsername;
@@ -304,6 +311,7 @@
                                                          saveOperation,
                                                          closeDocument,
                                                          taskEnd,
+                                                         operationDeleteFile,
                                                          promptDeleteCredntials,
                                                          operationDeletePassword];
         

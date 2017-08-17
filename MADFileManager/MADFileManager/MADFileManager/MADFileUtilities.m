@@ -406,10 +406,7 @@ static NSString * const MADPathComponentData       = @"Data";
                                            queue:[self queue]
                                       byAccessor:^(NSError *accessError) {
         if (accessError) {
-            if (completion) {
-                completion(accessError);
-            }
-            
+            if (completion) completion(accessError);
             return;
         }
         
@@ -417,15 +414,11 @@ static NSString * const MADPathComponentData       = @"Data";
         
         NSError *error;
         
-        [fileManager removeItemAtURL:writing.URL error:&error];
+        BOOL successfulDelete = [fileManager removeItemAtURL:writing.URL error:&error];
         
-        if (successfulSecurityScopedResourceAccess) {
-            [url stopAccessingSecurityScopedResource];
-        }
+        if (successfulSecurityScopedResourceAccess) [url stopAccessingSecurityScopedResource];
         
-        if (completion) {
-            completion(error);
-        }
+        if (completion) completion(successfulDelete ? nil : error);
     }];
 }
 

@@ -96,7 +96,7 @@
     
     if (self.cancelled) return [self finish];
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self.document saveToURL: self.url
                 forSaveOperation: UIDocumentSaveForCreating
                completionHandler: ^(BOOL success) {
@@ -108,7 +108,7 @@
                 [self finishWithError:error];
             }
         }];
-    }];
+    //}];
 }
 
 @end

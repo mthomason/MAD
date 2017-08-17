@@ -37,7 +37,7 @@
     }
     
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADocument *doc = document;
         if (doc.documentState & UIDocumentStateClosed) {
             [self finish];
@@ -54,7 +54,7 @@
                 }
             }];
         }
-    }];
+    //}];
 }
 
 @end

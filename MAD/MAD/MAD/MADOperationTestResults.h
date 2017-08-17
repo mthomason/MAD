@@ -6,10 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/NSObject.h>
-
 #ifndef MADOperationTestResults_h
 #define MADOperationTestResults_h
+
+#import <Foundation/NSObject.h>
 
 @protocol MADOperationTestResults <NSObject>
 

@@ -37,7 +37,7 @@
     }
 
     MADOperation * __weak weakself = self;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADOperation *strongself = weakself;
         MADocument *doc = document;
         if (doc.documentState & UIDocumentStateClosed) {
@@ -63,7 +63,7 @@
             }];
         }
         
-    }];
+    //}];
     
 }
 

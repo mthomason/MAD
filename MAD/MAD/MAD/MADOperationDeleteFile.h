@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MADFoundation/MADFoundation.h>
+#ifndef MADOperationDeleteFile_h
+#define MADOperationDeleteFile_h
+
+#import <MADFoundation/MADOperation.h>
 
 @interface MADOperationDeleteFile : MADOperation
 
 @end
+
+#endif
