@@ -363,7 +363,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     MADLabelFileExplorerDocumentCellTitle *labelTitle;
     MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
     
-    UIActivityIndicatorView *activityIndicator;
     UIImageView *cloudIndicatorImageView;
     UIImage *cloudIndicatorImage;
 
@@ -419,18 +418,20 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     [labelTitle setNeedsDisplay];
     [labelTitleSub setNeedsDisplay];
     
-    SEL animateSwitch = isDownloading || isUploading ? @selector(startAnimating) :
-                                                       @selector(stopAnimating);
     dispatch_block_t read_iamge = ^{
         @autoreleasepool {
-            NSURL *metadataURL, *thumbnailUrl;
-            [self.activityIndicator performSelectorOnMainThread: animateSwitch
-                                                     withObject: nil
-                                                  waitUntilDone: NO];
-
-            metadataURL = metadata.URL.copy;
-            thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
-            self.imagePreview.thumbnailURL = thumbnailUrl;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                NSURL *metadataURL, *thumbnailUrl;
+                UIActivityIndicatorView *activityIndicatorView = self.activityIndicator;
+                if (isDownloading || isUploading) {
+                    [activityIndicatorView performSelector:@selector(startAnimating)];
+                } else {
+                    [activityIndicatorView performSelector:@selector(stopAnimating)];
+                }
+                metadataURL = metadata.URL.copy;
+                thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
+                self.imagePreview.thumbnailURL = thumbnailUrl;
+            }];
             
         }
     };

@@ -7,14 +7,13 @@
 //
 
 #import "MADOperationKeyChainPut.h"
+#import <os/log.h>
 #import <security/SecBase.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADCredential.h>
 #import <MAD/MTKeyChain.h>
-
-#import <os/log.h>
 
 static const short StatusNotFound = 35;
 static NSString * const ErrorDomain = @"MADKCP";
@@ -79,7 +78,9 @@ static NSString * const ErrorDomain = @"MADKCP";
 
 
             os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
-            NSError *error = [NSError errorWithDomain:ErrorDomain code:status userInfo:nil];
+            NSError *error = [NSError errorWithDomain: ErrorDomain
+                                                 code: status
+                                             userInfo: nil];
             [self finishWithError:error];
             
         }
@@ -87,7 +88,9 @@ static NSString * const ErrorDomain = @"MADKCP";
     } else {
 
         os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
-        NSError *error = [NSError errorWithDomain:ErrorDomain code:StatusNotFound userInfo:nil];
+        NSError *error = [NSError errorWithDomain: ErrorDomain
+                                             code: StatusNotFound
+                                         userInfo: nil];
         [self finishWithError:error];
         
     }

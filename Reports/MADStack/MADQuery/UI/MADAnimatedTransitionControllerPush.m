@@ -20,8 +20,8 @@
     toViewController = [context viewControllerForKey: UITransitionContextToViewControllerKey];
     fromViewController = [context viewControllerForKey: UITransitionContextFromViewControllerKey];
     CGRect toFrameFinal = [context finalFrameForViewController:toViewController];
-    CGRect fromFrameFinal = [context finalFrameForViewController:fromViewController];
-    CGRect toFrameInital = [context initialFrameForViewController:toViewController];
+    CGRect fromFrameFinal;
+    CGRect toFrameInital;
     CGRect fromFrameInital = [context initialFrameForViewController:fromViewController];
     
     toFrameInital = CGRectMake(toFrameFinal.origin.x + toFrameFinal.size.width,
