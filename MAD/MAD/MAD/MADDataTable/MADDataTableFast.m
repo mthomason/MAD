@@ -484,8 +484,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         
         int step_result = sqlite3_step(_statementInsert);
         
-        NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
-        
+        //NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
+    
         step_result = sqlite3_clear_bindings(_statementInsert);
         step_result = sqlite3_reset(_statementInsert);
         

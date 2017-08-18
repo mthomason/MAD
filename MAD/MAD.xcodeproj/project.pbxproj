@@ -1599,6 +1599,8 @@
 				4CE319531E4DAEE700EB5B85 /* Unused */,
 				4C401E441BAE4D8C00BAE5FC /* MADocument.h */,
 				4C401E451BAE4D8C00BAE5FC /* MADocument.m */,
+				4CC283121BADE85000775B72 /* MADPrintPageRenderer.h */,
+				4CC283131BADE85000775B72 /* MADPrintPageRenderer.m */,
 				4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */,
 				4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */,
 				4C235CD41D1F81A600D3D77C /* ReportSections */,
@@ -1914,12 +1916,25 @@
 		4CB98DF51F459B700043B583 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4CA0C6C91CA56CAD00222B8D /* MADProgress.h */,
+				4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */,
+				4CC2820D1BADE81A00775B72 /* MADAlignment.h */,
+				4C17AE291E4343F80056A0EA /* MADAlignment.m */,
 				4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */,
 				4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */,
 				4CC282081BADE81A00775B72 /* MADActivityIndicator.h */,
 				4CC282091BADE81A00775B72 /* MADActivityIndicator.m */,
 			);
 			name = UI;
+			sourceTree = "<group>";
+		};
+		4CB98DFF1F475F850043B583 /* Data Structures */ = {
+			isa = PBXGroup;
+			children = (
+				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
+				4CC281F11BADE80500775B72 /* MADArrayCaching.m */,
+			);
+			name = "Data Structures";
 			sourceTree = "<group>";
 		};
 		4CC283C91BADE90600775B72 /* rptq */ = {
@@ -2258,22 +2273,17 @@
 		4CF781461BADE5EA0050A67D /* MAD */ = {
 			isa = PBXGroup;
 			children = (
+				4CB98DFF1F475F850043B583 /* Data Structures */,
 				4CB98DF51F459B700043B583 /* UI */,
 				4CE3194F1E4D971000EB5B85 /* Types */,
 				4CE319501E4D971500EB5B85 /* Protocols */,
 				4CB98DDB1F455A7E0043B583 /* KeyChain */,
 				4CB98DA61F43F0860043B583 /* Operations */,
 				4CF781471BADE5EA0050A67D /* MAD.h */,
-				4CC283121BADE85000775B72 /* MADPrintPageRenderer.h */,
-				4CC283131BADE85000775B72 /* MADPrintPageRenderer.m */,
 				4CC281F21BADE80500775B72 /* MADConstants.h */,
 				4CC281F31BADE80500775B72 /* MADConstants.m */,
-				4CC2820D1BADE81A00775B72 /* MADAlignment.h */,
-				4C17AE291E4343F80056A0EA /* MADAlignment.m */,
 				4CC1C6FC1CFDED57006F1546 /* MADAppLaunchContext.h */,
 				4CC1C6FD1CFDED57006F1546 /* MADAppLaunchContext.m */,
-				4CA0C6C91CA56CAD00222B8D /* MADProgress.h */,
-				4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */,
 				4C4F125D1D0A0F130002294E /* MADQueryActiveQueryGroups */,
 				4C4754381CF35C3800BC9E02 /* c */,
 				4CA0C6D11CA79E7000222B8D /* Font Helper */,
@@ -2299,8 +2309,6 @@
 				4CC2820B1BADE81A00775B72 /* MADActivityItemProviderPdf.m */,
 				4CC282341BADE81A00775B72 /* MADErrorContainer.h */,
 				4CC282351BADE81A00775B72 /* MADErrorContainer.m */,
-				4CC281F01BADE80500775B72 /* MADArrayCaching.h */,
-				4CC281F11BADE80500775B72 /* MADArrayCaching.m */,
 				4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */,
 				4C47543A1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.m */,
 				4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */,
