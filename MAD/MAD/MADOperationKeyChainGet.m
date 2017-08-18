@@ -44,11 +44,11 @@
 
 - (void)execute {
     os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
-
     if (self.cancelled) return [self finish];
 
     CFDataRef queryData = NULL;
-    NSDictionary *queryDefination = [MTKeyChain queryDefination:self.key withDescription:self.keyDescription];
+    NSDictionary *queryDefination = [MTKeyChain queryDefination: self.key
+                                                withDescription: self.keyDescription];
     CFDictionaryRef queryDefinationC = (__bridge_retained CFDictionaryRef)queryDefination;
     OSStatus queryStatus = SecItemCopyMatching(queryDefinationC, (CFTypeRef *)&queryData);
     CFRelease(queryDefinationC);
@@ -56,9 +56,7 @@
     if (self.cancelled) return [self finish];
 
     if (queryData == NULL) {
-        NSString *domain = NSStringFromClass([self class]);
-        NSError *error = [NSError errorWithDomain:domain code:queryStatus userInfo:nil];
-        [self finishWithError:error];
+        [self finishWithErrorStatus:queryStatus];
         return;
 
     }
@@ -69,7 +67,8 @@
     switch (queryStatus) {
         case errSecSuccess:
             
-            result = [[NSString alloc] initWithData: resultData encoding: NSUTF8StringEncoding];
+            result = [[NSString alloc] initWithData: resultData
+                                           encoding: NSUTF8StringEncoding];
             self.value = result;
             self.success = YES;
             [self finish];
@@ -83,9 +82,15 @@
     if (self.success) {
         [self finish];
     } else {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:queryStatus userInfo:nil];
-        [self finishWithError:error];
+        [self finishWithErrorStatus:queryStatus];
     }
+}
+
+- (void)finishWithErrorStatus:(OSStatus)status {
+    NSError *error = [NSError errorWithDomain: NSStringFromClass([self class])
+                                         code: status
+                                     userInfo: nil];
+    [self finishWithError:error];
 }
 
 @end

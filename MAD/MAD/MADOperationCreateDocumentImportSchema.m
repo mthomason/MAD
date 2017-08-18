@@ -156,6 +156,8 @@
         
         [document.database closeProcess:dbconnection];
         
+        success = YES;
+        
         NSError * __autoreleasing saveError = nil;
         if (success) {
             success = [private save:&saveError];

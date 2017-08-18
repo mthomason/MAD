@@ -107,14 +107,18 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 - (void)removeObservers {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidFinishGatheringNotification
-                                object:_metadataQuery];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidUpdateNotification
-                                object:_metadataQuery];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidStartGatheringNotification
-                                object:_metadataQuery];
-    [notificationCenter removeObserver:self name:NSMetadataQueryGatheringProgressNotification
-                                object:_metadataQuery];
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryDidFinishGatheringNotification
+                                object: _metadataQuery];
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryDidUpdateNotification
+                                object: _metadataQuery];
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryDidStartGatheringNotification
+                                object: _metadataQuery];
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryGatheringProgressNotification
+                                object: _metadataQuery];
 
 }
 

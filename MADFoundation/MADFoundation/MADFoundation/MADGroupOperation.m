@@ -35,7 +35,7 @@
 @implementation MADGroupOperation
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations {

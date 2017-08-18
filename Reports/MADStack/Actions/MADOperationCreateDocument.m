@@ -248,11 +248,11 @@
         [closeDocument addDependency: displayErrorCredentials];
         [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addCondition: conditionConnectionConnectionSuccess];
-        [closeDocument addCondition: conditionSuccessImport];
         
         MADOperationDeleteFile *operationDeleteFile;
         operationDeleteFile = [[MADOperationDeleteFile alloc] init];
         [operationDeleteFile addDependency: uniqueUrlForFilename];
+        [operationDeleteFile addDependency: createDocument];
         [operationDeleteFile addDependency: importSchema];
         [operationDeleteFile addDependency: closeDocument];
         [operationDeleteFile addCondition: conditionFailedImport];
@@ -265,7 +265,7 @@
         operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         [operationGetUsername addDependency: displayErrorCredentials];
         [operationGetUsername addDependency: testConnectionOperationCredentials];
-        
+
         //If connection failed and credentals are saved, prompt to delete credentals.
         MADOperationPromptPolarQuestion *promptDeleteCredntials;
         promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
@@ -275,9 +275,7 @@
         [promptDeleteCredntials addDependency: displayErrorCredentials];
         [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
         [promptDeleteCredntials addDependency: operationGetUsername];
-        [promptDeleteCredntials addCondition: connectionConnectionFail];
-        [promptDeleteCredntials addCondition: conditionReadUsername];
-        
+        [promptDeleteCredntials addCondition: connectionConnectionFail];        
         
         MADOperationConditionPolarQuestionAffirmative *promptDeletePasswordAffirmative;
         promptDeletePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier: promptDeleteCredntials.identifier];
@@ -293,7 +291,12 @@
         [taskEnd addDependency: putPassword];
         [taskEnd addDependency: promptSavePassword];
         [taskEnd addDependency: taskBegin];
+        [taskEnd addDependency: importSchema];
+        [taskEnd addDependency: operationGetUsername];
+        [taskEnd addDependency: saveOperation];
         [taskEnd addDependency: closeDocument];
+        [taskEnd addDependency: promptDeleteCredntials];
+        [taskEnd addDependency: operationDeletePassword];
         
         NSArray <__kindof NSOperation *> *operations = @[promptSavePassword,
                                                          putUsername,
@@ -311,6 +314,7 @@
                                                          saveOperation,
                                                          closeDocument,
                                                          taskEnd,
+                                                         operationGetUsername,
                                                          operationDeleteFile,
                                                          promptDeleteCredntials,
                                                          operationDeletePassword];
@@ -354,7 +358,9 @@
 }
 
 - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {
-    [[MADNotificationProgress sharedObject] updateProgressOfObject:self withMessage:message progress:progress];
+    [[MADNotificationProgress sharedObject] updateProgressOfObject: self
+                                                       withMessage: message
+                                                          progress: progress];
 }
 
 @end

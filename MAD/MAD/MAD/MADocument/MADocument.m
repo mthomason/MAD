@@ -824,6 +824,7 @@ void madwarn(char *err,  const char*err2) { }
 - (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
     if (self = [super initWithFileURL:url]) {
         
+        _autosaveEnabled = YES;
         _urlGuts = [MADURL newURLDocumentArchiveForFileURL: url
                                                  extension: MADFileExtentionMobleApplicationDocumentArchive];
         _urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
@@ -1093,14 +1094,42 @@ void madwarn(char *err,  const char*err2) { }
                         forSaveOperation: saveOperation
                                    error: &error])) {
         if (*outError != nil) {
-            *outError = error;
+            *outError = error.copy;
         }
         return NO;
     }
+/*
+    NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+    NSFileAccessIntent *writing;
+    writing = [NSFileAccessIntent writingIntentWithURL:url
+                                               options:NSFileCoordinatorWritingForReplacing];
+    NSArray <NSFileAccessIntent *> *intents = [[NSArray alloc] initWithObjects:writing, nil];
+    [fileCoordinator coordinateAccessWithIntents: intents
+                                           queue: [MADFileUtilities queue]
+                                      byAccessor: ^(NSError *accessError) {
+        if (accessError) {
+            //if (completion) {
+            //    completion(accessError);
+            //}
+            
+            return;
+        }
+        
+        NSError *error;
+        MADArchiveManager *archiveManager;
+        archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
+                                                                archiveURL: self.fileURL];
+        BOOL success = [archiveManager archive:YES];
+        
+    }];
+
+    return YES;
+*/
     MADArchiveManager *archiveManager;
     archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
                                                             archiveURL: self.fileURL];
     return [archiveManager archive:YES];
+
 }
 
 - (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
@@ -1131,14 +1160,10 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)autosaveWithCompletionHandler:(void (^ __nullable)(BOOL success))completion {
 
-    if ([self hasUnsavedChanges]) {
-        
-        [self saveToURL: self.fileURL
-       forSaveOperation: UIDocumentSaveForOverwriting
-      completionHandler: completion];
-        
+    if (self.isAutosaveEnabled) {
+        [super autosaveWithCompletionHandler:completion];
     } else {
-        completion(YES);
+        completion(NO);
     }
     
 }

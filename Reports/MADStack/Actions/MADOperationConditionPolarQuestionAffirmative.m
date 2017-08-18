@@ -64,8 +64,10 @@
     for (MADOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
             dependency.identifier == self.tag) {
-            result = [MADOperationConditionPolarQuestionAffirmativeResult newOperationConditionResult: dependency
-                                                                                                 name: self.name];
+            if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
+                result = [MADOperationConditionPolarQuestionAffirmativeResult newOperationConditionResult: dependency
+                                                                                                     name: self.name];
+            }
             break;
         }
     }

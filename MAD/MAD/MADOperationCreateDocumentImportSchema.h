@@ -11,6 +11,7 @@
 
 #import <MADFoundation/MADOperation.h>
 #import <MAD/MADOperationPromptErrorProtocol.h>
+#import <MAD/MADOperationTestResults.h>
 
 @class MADDatabaseConnection;
 
@@ -19,7 +20,7 @@
 @end
 
 @interface MADOperationCreateDocumentImportSchema : MADOperation
-    <MADOperationPromptErrorProtocol>
+    <MADOperationPromptErrorProtocol, MADOperationTestResults>
     - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
     @property (nonatomic, weak) id <MADOperationCreateDocumentImportSchemaProtocol> parentOperation;
     @property (nonatomic, assign, readonly, getter=isSuccess) BOOL success;

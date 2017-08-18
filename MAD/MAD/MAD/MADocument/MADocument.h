@@ -63,6 +63,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
 
     @property (readwrite, nonatomic, assign)    BOOL limitResultsDesignMode;
+    @property (readwrite, nonatomic, assign, getter=isAutosaveEnabled)    BOOL autosaveEnabled;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
     - (instancetype)initWithFileURL:(NSURL *)url;

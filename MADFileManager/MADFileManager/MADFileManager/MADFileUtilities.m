@@ -207,7 +207,8 @@ static NSString * const MADPathComponentData       = @"Data";
                                                options:NSFileCoordinatorWritingForReplacing];
     NSArray <NSFileAccessIntent *> *intents = [[NSArray alloc] initWithObjects:writing, nil];
     [fileCoordinator coordinateAccessWithIntents: intents
-                                           queue: [self queue] byAccessor:^(NSError *accessError) {
+                                           queue: [self queue]
+                                      byAccessor: ^(NSError *accessError) {
         if (accessError) {
             if (completion) {
                 completion(accessError);

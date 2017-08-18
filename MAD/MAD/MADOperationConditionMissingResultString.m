@@ -32,7 +32,7 @@
 @implementation MADOperationConditionMissingResultString
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", __PRETTY_FUNCTION__);
+    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class));
 }
 
 - (instancetype)initWithKey:(NSString *)key {
@@ -60,7 +60,6 @@
     os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
 
     MADOperationConditionResult *result = nil;
-    NSString *kNotSatisified = @"Not Satisified";
     NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
     if (dependencies.count == 0) {
         result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
@@ -71,8 +70,9 @@
         if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
             [self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
             if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
-                result = [MADOperationConditionHasResultStringResult newOperationCondition: (NSObject <MADOperationResultStringProtocol> *)dependency
-                                                                                      name: self.name];
+                result = [MADOperationConditionHasResultStringResult newOperationConditionResult: YES
+                                                                                           value: ((NSObject <MADOperationResultStringProtocol> *)dependency).value
+                                                                                            name: self.name];
                 break;
             }
         }
@@ -81,10 +81,7 @@
     if (result != nil) {
         return result;
     } else {
-        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:kNotSatisified
-                                                                       andMessage:kNotSatisified];
-        NSError *error = [errorUserInfo errorWithDomain:self.name code:MADConditionFailed];
-        result = [MADOperationConditionResult newOperationConditionResultFailed:error];
+        result = [MADOperationConditionHasResultStringResult newOperationConditionResultFailedNotSatisfied:self.name];
         return result;
     }
     

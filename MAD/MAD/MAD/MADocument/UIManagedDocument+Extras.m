@@ -39,10 +39,35 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
     
     NSAssert(self.documentState & UIDocumentStateClosed, @"Document must be closed to call this!");
     
-    [self resetPersistentStore];
+    //[self resetPersistentStore];
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
 }
+
+/*+ (void)deleteFromDisk:(NSURL *)url completion:(void (^)(BOOL success))completion {
+    
+    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
+        NSError *deleteError = nil;
+        
+        NSArray *properties = [[NSArray alloc] initWithObjects:NSURLIsDirectoryKey, nil];
+        
+        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
+                                                                 includingPropertiesForKeys: properties
+                                                                                    options: NSDirectoryEnumerationSkipsHiddenFiles
+                                                                               errorHandler: ^BOOL(NSURL *obj, NSError *error) {
+                                                                                   return YES;
+                                                                               }];
+        for (NSURL *file in enumerator) {
+            [MADFileUtilities removeFileAtURL:file];
+        }
+        [MADFileUtilities removeFileAtURL:fileURL];
+        NSAssert(deleteError == nil, @"%@", deleteError);
+        completion(YES);
+    };
+    
+    
+    [self performAsynchronousFileAccessUsingBlock:asyncBlock];
+}*/
 
 - (void)resetPersistentStore {
     NSPersistentStoreCoordinator *persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;

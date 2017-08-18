@@ -100,10 +100,7 @@
         conn = [MysqlConnection connectToServer: serv error:&connError];
         
         success = (conn && connError == nil);
-        NSError __autoreleasing *errorC = [connError copy];
-        if (errorC != nil && *error != nil) {
-            *error = errorC;
-        }
+        if (!success) *error = [connError copy];
     }
     return success ? conn : nil;
 }
@@ -140,9 +137,8 @@
             result = YES;
         }
     } else {
-        if (dberror != nil && *error != nil) {
-            NSError *userError = [dberror copy];
-            *error = userError;
+        if (dberror != nil) {
+            *error = [dberror copy];
         }
     }
     return result;
@@ -157,9 +153,9 @@
     }
     NSError * __autoreleasing executeError = nil;
     BOOL result = [self executeQuery:query withDataTable:dataTable andError:&executeError];
-    if (executeError != nil && *error != nil) {
-        NSError * __autoreleasing errorResult = [executeError copy];
-        *error = errorResult;
+    if (executeError != nil) {
+        //NSError * __autoreleasing errorResult = [executeError copy];
+        *error = [executeError copy];
     }
     return result;
 }

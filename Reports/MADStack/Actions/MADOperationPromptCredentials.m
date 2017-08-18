@@ -83,6 +83,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     }
 }
 
+- (BOOL)manuallyInputtedCredentials {
+    return self.alertDisplayed && self.result;
+}
+
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
@@ -104,9 +108,6 @@ static NSString * const MADButtonCancel                = @"Cancel";
     
     MADOperationPromptCredentials * __weak weakself = self;
     
-
-    
-    //UIViewController * __weak weakViewController = self.viewController;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         
         NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);

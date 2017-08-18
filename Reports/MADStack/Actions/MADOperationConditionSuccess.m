@@ -30,6 +30,7 @@
 - (instancetype)initWithKey:(NSString *)key {
     if (self = [super init]) {
         _key = key.copy;
+        _reverseCondition = NO;
     }
     return self;
 }
@@ -62,7 +63,7 @@
     NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
     MADOperationConditionResult *result = nil;
     if (dependencies.count == 0) {
-        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
+        result = [self result: NO];
         return result;
     }
     
@@ -71,24 +72,24 @@
         if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)] &&
             dependencyName != nil &&
             [_key isEqualToString: dependencyName]) {
-            result = [self result:YES];
+            result = [self result: ((NSObject <MADOperationTestResults> *)dependency).success];
             break;
         }
     }
-    
+    if (result == nil) {
+        NSAssert(result != nil, @"We expect dependencies.");
+    }
     return result != nil ? result : [self result: NO];
 }
 
-
-
 - (MADOperationConditionResult *)result:(BOOL)success {
-    return !_reverseCondition ?
-            (success ?
-                [MADOperationConditionResult newOperationConditionResultSatisfied] :
-                [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name]) :
+    return _reverseCondition ?
             (success ?
                 [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name] :
-                [MADOperationConditionResult newOperationConditionResultSatisfied]);
+                [MADOperationConditionResult newOperationConditionResultSatisfied]) :
+            (success ?
+                [MADOperationConditionResult newOperationConditionResultSatisfied] :
+                [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name]);
 }
 
 @end

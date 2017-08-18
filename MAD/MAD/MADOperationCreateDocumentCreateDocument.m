@@ -88,8 +88,9 @@
     if (self.cancelled) return [self finish];
 
     //Create MADocument File and Remove Cache
-    MADocument *document = [[MADocument alloc] initWithFileURL: self.url andDatabaseConnection:self.databaseConnection];
-
+    MADocument *document = [[MADocument alloc] initWithFileURL: self.url
+                                         andDatabaseConnection: self.databaseConnection];
+    document.autosaveEnabled = NO;
     document.documentDelegate = self;
     [document archiveAndRemoveFileWrapper];
     self.document = document;

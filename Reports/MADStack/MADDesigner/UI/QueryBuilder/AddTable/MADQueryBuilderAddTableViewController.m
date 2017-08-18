@@ -70,10 +70,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSString *keySelf = NSStringFromSelector(@selector(self));
-    NSDictionary *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
-    NSManagedObjectID *objectID = result[keySelf];
-    [self.delegate viewController: self addedTableWithID: objectID];
+    NSManagedObject *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
+    [self.delegate viewController: self addedTableWithID: result.objectID];
 }
 
 @end

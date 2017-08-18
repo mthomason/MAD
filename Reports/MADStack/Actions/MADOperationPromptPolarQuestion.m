@@ -48,6 +48,10 @@ static NSString * const TextNo = @"No";
     return self;
 }
 
+- (BOOL)alertDisplayedAffirmed {
+    return self.alertDisplayed && self.result;
+}
+
 - (BOOL)isAsynchronous {
     return YES;
 }

@@ -71,8 +71,10 @@
     for (NSOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
             [self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
-            result = [MADOperationConditionHasResultStringResult newOperationCondition: (NSObject <MADOperationResultStringProtocol> *)dependency
-                                                                                  name: self.name];
+            if (((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
+                result = [MADOperationConditionHasResultStringResult newOperationCondition: (NSObject <MADOperationResultStringProtocol> *)dependency
+                                                                                      name: self.name];
+            }
             break;
         }
     }
