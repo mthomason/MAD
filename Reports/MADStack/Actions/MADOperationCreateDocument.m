@@ -272,10 +272,11 @@
                                                                                 message: @"Would you like to remove the saved credentials"
                                                                          viewController: viewController];
         promptDeleteCredntials.name = @"com.everydayapps.mad.operation.credentials.prompt.delete";
+        [promptDeleteCredntials addDependency: operationGetUsername];
         [promptDeleteCredntials addDependency: displayErrorCredentials];
         [promptDeleteCredntials addDependency: testConnectionOperationCredentials];
-        [promptDeleteCredntials addDependency: operationGetUsername];
-        [promptDeleteCredntials addCondition: connectionConnectionFail];        
+        [promptDeleteCredntials addCondition: connectionConnectionFail];
+        [promptDeleteCredntials addCondition: conditionReadUsername];
         
         MADOperationConditionPolarQuestionAffirmative *promptDeletePasswordAffirmative;
         promptDeletePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier: promptDeleteCredntials.identifier];
