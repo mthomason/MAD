@@ -19,13 +19,13 @@
 @implementation MADOperationBackgroundTaskBegin
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    ////os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
     MADOperationBackgroundTaskBegin * __weak weakself = self;
     

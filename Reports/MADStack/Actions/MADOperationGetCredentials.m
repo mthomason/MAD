@@ -16,16 +16,16 @@
 #import <MADFoundation/MADOperationQueue.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
-#import "MADOperationPromptCredentials.h"
 #import <MAD/MADOperationConditionMissingResultString.h>
 #import <MAD/MADOperationConditionHasResultString.h>
+#import <MAD/MADOperationKeyChainPut.h>
+#import <MAD/MADOperationBooleanAnd.h>
+#import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationPromptError.h"
-#import <MAD/MADOperationKeyChainPut.h>
 #import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
-#import <MAD/MADOperationBooleanAnd.h>
 
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
@@ -49,7 +49,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 }
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
@@ -73,7 +73,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
     if (_shortCircut) {
         [self finish];
     } else {

@@ -893,13 +893,7 @@ void madwarn(char *err,  const char*err2) { }
     NSURL *fileURL = strongDocument.fileURL.copy;
     NSURL *gutsUrl = strongDocument.urlGuts.copy;
     
-
-    //UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
-    //strongDocument.thumbnail = thumbnail;
-    //thumbnail = nil;
-    
     if (strongDocument != nil) {
-        //strongDocument.thumbnail = nil;
         if (![NSThread isMainThread]) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
@@ -911,56 +905,9 @@ void madwarn(char *err,  const char*err2) { }
                 completion(successClose, fileURL, gutsUrl);
             }];
         }
+    } else {
+        completion(YES, fileURL, gutsUrl);
     }
-
-    
-    //void (^closeCompletionHandler)(BOOL);
-    //void (^origionalCompletionHandler)(BOOL, NSURL *);
-    //origionalCompletionHandler = completion;
-    
-    //closeCompletionHandler = ^(BOOL successClose) {
-    //    completion(successClose, fileURL, gutsUrl);
-    //};
-    
-    //MADocument * __weak weakdoc = document;
-    /*void (^ saveCompletionHandler)(BOOL);
-     saveCompletionHandler = ^(BOOL success) {
-     
-     if (strongDocument != nil) {
-     if (success) {
-     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-     [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-     completion(successClose, fileURL, gutsUrl);
-     }];
-     }];
-     }
-     strongDocument.thumbnail = nil;
-     }
-     
-     };*/
-    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    
-    //UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithDocument:strongDocument];
-    //strongDocument.thumbnail = thumbnail;
-    //[strongDocument saveToURL: fileURL
-    //         forSaveOperation: UIDocumentSaveForOverwriting
-    //        completionHandler: ^(BOOL success) {
-    
-    //if (strongDocument != nil) {
-    //    strongDocument.thumbnail = nil;
-    //    //if (success) {
-    //    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    //        [strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-    //            completion(successClose, fileURL, gutsUrl);
-    //        }];
-    //    }];
-        //}
-    //}
-    
-    //      }];
-    //}];
-    
-    
 }
 
 // Helpers
@@ -1098,33 +1045,7 @@ void madwarn(char *err,  const char*err2) { }
         }
         return NO;
     }
-/*
-    NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
-    NSFileAccessIntent *writing;
-    writing = [NSFileAccessIntent writingIntentWithURL:url
-                                               options:NSFileCoordinatorWritingForReplacing];
-    NSArray <NSFileAccessIntent *> *intents = [[NSArray alloc] initWithObjects:writing, nil];
-    [fileCoordinator coordinateAccessWithIntents: intents
-                                           queue: [MADFileUtilities queue]
-                                      byAccessor: ^(NSError *accessError) {
-        if (accessError) {
-            //if (completion) {
-            //    completion(accessError);
-            //}
-            
-            return;
-        }
-        
-        NSError *error;
-        MADArchiveManager *archiveManager;
-        archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
-                                                                archiveURL: self.fileURL];
-        BOOL success = [archiveManager archive:YES];
-        
-    }];
 
-    return YES;
-*/
     MADArchiveManager *archiveManager;
     archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
                                                             archiveURL: self.fileURL];

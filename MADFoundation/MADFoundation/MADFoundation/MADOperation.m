@@ -82,6 +82,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (void)willEnqueue { self.state = MADOperationStatePending; }
 
 - (void)setState:(MADOperationState)newState {
+    os_log_info(OS_LOG_DEFAULT, "%s is %s", NSStringFromClass(self.class).UTF8String, MADStringOperationState(newState));
+
     // Manually fire the KVO notifications for state change, since this is "private".
     [self willChangeValueForKey:MADOperatorSelectorState];
     
@@ -147,7 +149,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (void)evaluateConditions {
-    NSAssert(self.state == MADOperationStatePending && !self.cancelled, @"evaluateConditions() was called out-of-order");
+    NSAssert(self.state == MADOperationStatePending && !self.cancelled,
+             @"evaluateConditions() was called out-of-order");
     
     self.state = MADOperationStateEvaluatingConditions;
     
@@ -272,7 +275,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
         operation has finished.
      */
 - (void)finish:(NSArray *)errors {
-    os_log_info(OS_LOG_DEFAULT, "Finish %s", NSStringFromClass(super.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Finish %s", NSStringFromClass(super.class).UTF8String);
     if (!self.hasFinishedAlready) {
         self.hasFinishedAlready = YES;
         self.state = MADOperationStateFinishing;

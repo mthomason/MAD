@@ -15,7 +15,7 @@
 @implementation MADOperationCreateDocumentSaveAndCloseNewDocument
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (BOOL)isAsynchronous {
@@ -23,10 +23,12 @@
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
     if (self.cancelled) return [self finish];
 
+    return [self finish];
+    /*
     MADocument * __weak document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
     for (NSOperation *dependency in dependencies) {
@@ -35,7 +37,8 @@
             break;
         }
     }
-
+     */
+/*
     MADOperation * __weak weakself = self;
     //[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         MADOperation *strongself = weakself;
@@ -64,7 +67,7 @@
         }
         
     //}];
-    
+    */
 }
 
 @end

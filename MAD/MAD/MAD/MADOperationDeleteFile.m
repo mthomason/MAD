@@ -15,11 +15,12 @@
 #import <MAD/MADocument.h>
 #import <MAD/UIManagedDocument+Extras.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
+#import <MAD/MADOperationTestResults.h>
 
 @implementation MADOperationDeleteFile
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (BOOL)isAsynchronous {
@@ -27,12 +28,13 @@
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
     
     if (self.cancelled) return [self finish];
     NSURL *fileURL;
     MADocument *document = nil;
     NSArray <NSOperation *> *dependencies = self.dependencies;
+    BOOL deleteFile = NO;
     for (NSOperation *dependency in dependencies) {
         if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {
             fileURL = ((id <MADOperationUniqueUrlForFilenameProtocol>)dependency).uniqueUrl.copy;
@@ -41,7 +43,11 @@
             document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
             break;
         }
+        if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)]) {
+            deleteFile = !((NSObject <MADOperationTestResults> *)dependency).success;
+        }
     }
+    if (!deleteFile) return [self finish];
 
     if (document != nil) {
         [document deleteFromDiskCompletion:^(BOOL success) {

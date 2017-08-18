@@ -26,7 +26,7 @@ static NSString * const TextYes = @"Dismiss";
 @implementation MADOperationPromptError
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithViewController:(UIViewController * __weak)viewController {
@@ -55,6 +55,10 @@ static NSString * const TextYes = @"Dismiss";
         //[self addCondition:condition];
     }
     return self;
+}
+
+- (BOOL)isAsynchronous {
+    return YES;
 }
 
 - (BOOL)alertDisplayedAffirmed { return self.alertDisplayed && self.result; }

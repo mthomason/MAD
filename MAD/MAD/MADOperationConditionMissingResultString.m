@@ -32,7 +32,7 @@
 @implementation MADOperationConditionMissingResultString
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class));
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class));
 }
 
 - (instancetype)initWithKey:(NSString *)key {
@@ -57,7 +57,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
 
     MADOperationConditionResult *result = nil;
     NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;

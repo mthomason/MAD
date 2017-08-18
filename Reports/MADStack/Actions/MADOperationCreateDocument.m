@@ -31,12 +31,12 @@
 #import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
 #import <MAD/MADOperationDeleteFile.h>
+#import <MAD/MADOperationConditionTestConnectionSuccess.h>
+#import <MAD/MADOperationConditionHasResultString.h>
 #import "MADOperationGetCredentials.h"
 #import "MADOperationDatabaseTestConnection.h"
-#import <MAD/MADOperationConditionTestConnectionSuccess.h>
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmative.h"
-#import <MAD/MADOperationConditionHasResultString.h>
 #import "MADOperationConditionDisplayedAlertConfirm.h"
 #import "MADOperationConditionSuccess.h"
 
@@ -51,7 +51,7 @@
 @implementation MADOperationCreateDocument
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithFilename: (NSString *)filename
@@ -242,20 +242,9 @@
         closeDocument.name = @"com.everydayapps.mad.operation.document.close";
         [closeDocument addDependency: createDocument];
         [closeDocument addDependency: importSchema];
+        [closeDocument addDependency: displayErrorCredentials];
+        [closeDocument addDependency: testConnectionOperationCredentials];
         [closeDocument addDependency: saveOperation];
-        [closeDocument addDependency: displayErrorCredentials];
-        [closeDocument addDependency: testConnectionOperationCredentials];
-        [closeDocument addDependency: displayErrorCredentials];
-        [closeDocument addDependency: testConnectionOperationCredentials];
-        [closeDocument addCondition: conditionConnectionConnectionSuccess];
-        
-        MADOperationDeleteFile *operationDeleteFile;
-        operationDeleteFile = [[MADOperationDeleteFile alloc] init];
-        [operationDeleteFile addDependency: uniqueUrlForFilename];
-        [operationDeleteFile addDependency: createDocument];
-        [operationDeleteFile addDependency: importSchema];
-        [operationDeleteFile addDependency: closeDocument];
-        [operationDeleteFile addCondition: conditionFailedImport];
         
         //Test if credentals are saved
         MADOperationKeyChainGet *operationGetUsername;
@@ -286,6 +275,15 @@
         [operationDeletePassword addDependency: promptDeleteCredntials];
         [operationDeletePassword addCondition: promptDeletePasswordAffirmative];
         
+        MADOperationDeleteFile *operationDeleteFile;
+        operationDeleteFile = [[MADOperationDeleteFile alloc] init];
+        [operationDeleteFile addDependency: uniqueUrlForFilename];
+        //[operationDeleteFile addDependency: createDocument];
+        [operationDeleteFile addDependency: importSchema];
+        //[operationDeleteFile addDependency: saveOperation];
+        [operationDeleteFile addDependency: closeDocument];
+        [operationDeleteFile addCondition: conditionFailedImport];
+
         MADOperationBackgroundTaskEnd *taskEnd;
         taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
         [taskEnd addDependency: putUsername];
@@ -329,7 +327,7 @@
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
     if (self.cancelled) return [self finish];
 

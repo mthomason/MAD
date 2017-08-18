@@ -24,6 +24,37 @@ typedef NS_ENUM(NSInteger, MADOperationState) {
     MADOperationStateFinished,
 };
 
+static inline const char *MADStringOperationState(MADOperationState);
+static inline const char *MADStringOperationState(MADOperationState state) {
+    switch (state) {
+        case MADOperationStateInitialized:
+            return "Initalized";
+            break;
+        case MADOperationStatePending:
+            return "Pending";
+            break;
+        case MADOperationStateEvaluatingConditions:
+            return "Eonditions";
+            break;
+        case MADOperationStateReady:
+            return "Ready";
+            break;
+        case MADOperationStateExecuting:
+            return "Executing";
+            break;
+        case MADOperationStateFinishing:
+            return "Finishing";
+            break;
+        case MADOperationStateFinished:
+            return "Finished";
+            break;
+            
+        default:
+            return nil;
+            break;
+    }
+};
+
 @protocol MADOperationCondition;
 @protocol MADOperationObserver;
 

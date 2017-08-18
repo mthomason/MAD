@@ -31,7 +31,7 @@ static NSString * const ErrorDomain = @"MADKCP";
 @implementation MADOperationKeyChainPut
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithKey:(NSString *)key description:(NSString *)description {
@@ -44,8 +44,7 @@ static NSString * const ErrorDomain = @"MADKCP";
 }
 
 - (void)execute {
-    os_log_info(OS_LOG_DEFAULT, "Begin %s: %s",
-                NSStringFromClass(self.class).UTF8String, self.key.UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Begin %s: %s", NSStringFromClass(self.class).UTF8String, self.key.UTF8String);
 
     if (self.cancelled) return [self finish];
 

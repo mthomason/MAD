@@ -46,7 +46,7 @@ static NSString * const MADButtonCancel                = @"Cancel";
 @implementation MADOperationPromptPassword
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (NSString *)key {

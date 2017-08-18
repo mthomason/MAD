@@ -18,7 +18,7 @@
 @implementation MADOperationQueue
 
 - (void)dealloc {
-    os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (void)addOperation:(NSOperation *)operation {
@@ -29,8 +29,10 @@
         typeof(self) __weak weakSelf = self;
         
         // Set up a block delegate. When operation finishes, invoke the delegate method to finish.
-        MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler: nil
-                                                                      produceHandler: ^(MADOperation * oper, NSOperation * newOp) {
+        MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler:^(MADOperation *oper) {
+            //os_log_info(OS_LOG_DEFAULT, "Starting operation %@", oper.name);
+            
+        }  produceHandler: ^(MADOperation * oper, NSOperation * newOp) {
 
             [weakSelf addOperation:newOp];
             
@@ -38,6 +40,7 @@
 
             MADOperationQueue *sself = weakSelf;
             [sself.delegate operationQueue:sself operationDidFinish:oper withErrors:errors];
+            //os_log_info(OS_LOG_DEFAULT, "Finished operation %@", oper.name);
             
         }];
         
