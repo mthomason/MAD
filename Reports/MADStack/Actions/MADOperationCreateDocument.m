@@ -28,7 +28,7 @@
 #import <MAD/MADOperationBackgroundTaskEnd.h>
 #import <MAD/MADOperationCreateDocumentAddConnection.h>
 #import <MAD/MADOperationCreateDocumentImportSchema.h>
-#import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
+//#import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
 #import <MAD/MADOperationDeleteFile.h>
 #import <MAD/MADOperationConditionTestConnectionSuccess.h>
@@ -224,7 +224,7 @@
         displayErrorImport.name = @"com.everydayapps.mad.operation.display.error.import.schema";
         [displayErrorImport addDependency: importSchema];
         [displayErrorImport addCondition: conditionFailedImport];
-        
+        /*
         // Save the new document.
         MADOperationCreateDocumentSaveAndCloseNewDocument *saveOperation;
         saveOperation = [[MADOperationCreateDocumentSaveAndCloseNewDocument alloc] init];
@@ -235,7 +235,7 @@
         [saveOperation addDependency: testConnectionOperationCredentials];
         [saveOperation addCondition: conditionConnectionConnectionSuccess];
         [saveOperation addCondition: conditionSuccessImport];
-        
+        */
         // Close the new document.
         MADOperationDocumentCloseDocument *closeDocument;
         closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
@@ -244,7 +244,7 @@
         [closeDocument addDependency: importSchema];
         [closeDocument addDependency: displayErrorCredentials];
         [closeDocument addDependency: testConnectionOperationCredentials];
-        [closeDocument addDependency: saveOperation];
+        //[closeDocument addDependency: saveOperation];
         
         //Test if credentals are saved
         MADOperationKeyChainGet *operationGetUsername;
@@ -292,7 +292,7 @@
         [taskEnd addDependency: taskBegin];
         [taskEnd addDependency: importSchema];
         [taskEnd addDependency: operationGetUsername];
-        [taskEnd addDependency: saveOperation];
+        //[taskEnd addDependency: saveOperation];
         [taskEnd addDependency: closeDocument];
         [taskEnd addDependency: promptDeleteCredntials];
         [taskEnd addDependency: operationDeletePassword];
@@ -310,7 +310,7 @@
                                                          firstTimeSetup,
                                                          addConnection,
                                                          importSchema,
-                                                         saveOperation,
+                                                         //saveOperation,
                                                          closeDocument,
                                                          taskEnd,
                                                          operationGetUsername,
@@ -327,12 +327,8 @@
 }
 
 - (void)execute {
-    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
-
     if (self.cancelled) return [self finish];
-
     [super execute];
-        
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
@@ -345,7 +341,7 @@
     } else if ([operation isKindOfClass:[MADOperationDatabaseTestConnection class]]) {
         //[((MADOperation *)operation) cleanup];
         _connectionSuccess = ((MADOperationDatabaseTestConnection *)operation).success;
-    } else if ([operation isKindOfClass:[MADOperationCreateDocumentSaveAndCloseNewDocument class]]) {
+    } else if ([operation isKindOfClass:[MADOperationDocumentCloseDocument class]]) {
         //[((MADOperation *)operation) cleanup];
         _successCreate = errors.count == 0;
     } else if ([operation isKindOfClass:[MADOperationCreateDocumentImportSchema class]]) {

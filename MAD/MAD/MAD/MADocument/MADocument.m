@@ -1819,7 +1819,11 @@ void madwarn(char *err,  const char*err2) { }
 - (id)debugQuickLookObject {
     NSMutableString *debug = [[NSMutableString alloc] init];
     [debug appendString:@"-------------------------------\n"];
+    [debug appendFormat:@"Class %@", NSStringFromClass(self.class)];
     [debug appendFormat:@"Filename:\t%@\n", [self filename]];
+    [debug appendFormat:@"Status:\t%@\n", [self documentStatus]];
+    [debug appendFormat:@"State:\t%lu\n", (unsigned long)[self documentState]];
+    [debug appendFormat:@"Delegate:\t%@\n", [self documentDelegate]];
     [debug appendString:@"-------------------------------\n"];
     return debug;
 }
