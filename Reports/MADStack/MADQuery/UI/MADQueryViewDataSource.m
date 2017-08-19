@@ -303,12 +303,14 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
     
     //NSLog(@"Commit editing style for index path: (%ld, %ld)",
     //      (long)indexPath.section, indexPath.row);
+    id <MADQueryViewControllerDatasourceProtocol> datasoruce = self.datasoruce;
     switch (style) {
             
         case UITableViewCellEditingStyleDelete:
-            [self.datasoruce deleteItemFromQuerySection: [self sectionAtIndex:(short)indexPath.section]
-                                          fromTableView: tableView
-                                            atIndexPath: indexPath];
+            [datasoruce queryDatasource: datasoruce
+                              tableView: tableView
+                             deleteItem: indexPath
+                            fromSection: [self sectionAtIndex:(short)indexPath.section]];
             break;
             
         case UITableViewCellEditingStyleInsert:
