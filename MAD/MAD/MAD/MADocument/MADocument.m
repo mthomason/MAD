@@ -1300,6 +1300,10 @@ void madwarn(char *err,  const char*err2) { }
         [newQueryFields removeAllObjects];
 
     }];
+    NSError * __autoreleasing error = NULL;
+    if (![self.managedObjectContext save:&error]) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+    }
     [self updateChangeCount: UIDocumentChangeDone];
 }
 
