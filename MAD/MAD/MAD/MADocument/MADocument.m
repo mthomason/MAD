@@ -12,6 +12,7 @@
 
 #import "MADocument.h"
 
+#import <os/log.h>
 #import <setjmp.h>
 #import <asl.h>
 
@@ -1272,7 +1273,9 @@ void madwarn(char *err,  const char*err2) { }
         query.hasQueryTables = tablesInQuery;
         
         NSError * __autoreleasing error = NULL;
-        [private save:&error];
+        if (![private save:&error]) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+        }
         [private refreshObject:newQueryTable mergeChanges:NO];
         
         for (RptqQueryField *field in newQueryFields) {
