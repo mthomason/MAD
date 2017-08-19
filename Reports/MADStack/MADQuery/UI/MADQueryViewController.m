@@ -598,7 +598,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
-
     [private performBlockAndWait: ^{
         
         
@@ -659,10 +658,17 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         if (![private save:&error]) {
             os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
         } else {
+            error = NULL;
+            NSManagedObjectContext *parentContext = [private parentContext];
+            [parentContext performBlockAndWait:^{
+                NSError * __autoreleasing errorParent = NULL;
+                if (![parentContext save:&errorParent]) {
+                    os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", errorParent.localizedDescription.UTF8String);
+                }
+            }];
             [self.queryViewDataSource numberOfTablesChanged: numberOfTables];
             [self.queryViewDataSource performFetchTables];
             //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
             [self.tableView beginUpdates];
             
             NSArray <NSIndexPath *> *indexPaths;
@@ -673,7 +679,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
                                                            inSection: 1];
             indexPaths = [[NSArray <NSIndexPath *> alloc] initWithObjects: displayIndex, nil];
             
-            if (indexesToAdd.count > 0) {
+            if (indexSetSections.count > 0) {
                 
                 [self.tableView insertRowsAtIndexPaths: indexPaths
                                       withRowAnimation: UITableViewRowAnimationAutomatic];
@@ -686,6 +692,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             }
             [self.tableView endUpdates];
 
+            //}];
         }
         [private refreshObject:newQueryTable mergeChanges:NO];
         
@@ -709,17 +716,37 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         
         [tablesInQuery removeAllObjects];
         [newQueryFields removeAllObjects];
+        /*[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            NSError * __autoreleasing error = NULL;
+            if (![self.document.managedObjectContext save:&error]) {
+                os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+            }
+            _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
+        [self.document updateChangeCount: UIDocumentChangeDone];
+        }];*/
+        
+        
         
     }];
-
+    
     NSError * __autoreleasing error = NULL;
     if (![self.document.managedObjectContext save:&error]) {
         os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
     }
     [self.document updateChangeCount: UIDocumentChangeDone];
+    [self.document autosaveWithCompletionHandler:^(BOOL success) {
+        [self.queryViewDataSource performFetchTables];
+    }];
     _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
-
-    [self.queryViewDataSource performFetchTables];
+    
+    
+/*
+    NSError * __autoreleasing error = NULL;
+    if (![self.document.managedObjectContext save:&error]) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+    }
+*/
+    //[self.queryViewDataSource performFetchTables];
 
 }
 

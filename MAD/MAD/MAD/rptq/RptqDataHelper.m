@@ -57,7 +57,7 @@
     //NSAssert(fetchResults.count == 0, "We expect some results.");
     
     int64_t identifier64 = 0;
-    if (!fetchResults.count) {
+    if (fetchResults.count > 0) {
         NSNumber *identifierNumber;
         if ((identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"]) != nil) {
             CFNumberGetValue((__bridge CFNumberRef)(identifierNumber), kCFNumberSInt64Type, &identifier64);
