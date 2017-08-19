@@ -91,29 +91,34 @@
     NSString *docSection = NSStringFromClass([RptqDocumentSection class]);
     NSString *rptqDocumentSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
 
-    id hasReportHeaderSection;
+    RptqDocumentSection *hasReportHeaderSection;
     hasReportHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                            inManagedObjectContext: context];
+    hasReportHeaderSection.identifier = 1;
     document.hasReportHeaderSection = hasReportHeaderSection;
     
-    id hasReportFooterSection;
+    RptqDocumentSection *hasReportFooterSection;
     hasReportFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                            inManagedObjectContext: context];
+    hasReportFooterSection.identifier = 2;
     document.hasReportFooterSection = hasReportFooterSection;
     
-    id hasPageHeaderSection;
+    RptqDocumentSection *hasPageHeaderSection;
     hasPageHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                          inManagedObjectContext: context];
+    hasPageHeaderSection.identifier = 3;
     document.hasPageHeaderSection = hasPageHeaderSection;
     
-    id hasPageFooterSection;
+    RptqDocumentSection *hasPageFooterSection;
     hasPageFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                          inManagedObjectContext: context];
+    hasPageFooterSection.identifier = 4;
     document.hasPageFooterSection = hasPageFooterSection;
     
-    id hasDetailSection;
+    RptqDocumentSection *hasDetailSection;
     hasDetailSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                      inManagedObjectContext: context];
+    hasDetailSection.identifier = 5;
     document.hasDetailSection = hasDetailSection;
     
     RptqDocumentSectionRows *headerRow;
