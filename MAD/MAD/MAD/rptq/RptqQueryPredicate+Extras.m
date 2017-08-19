@@ -21,6 +21,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
+#import <MADFoundation/MADErrorUserInfo.h>
+
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
@@ -31,6 +33,10 @@
 #import "RptqDataHelper.h"
 
 @implementation RptqQueryPredicate (Extras)
+
++ (NSString *)domain {
+    return @"mad.everydayapps.com.mad.rptq.predicate";
+}
 
 #pragma mark - Overrides
 
@@ -45,7 +51,13 @@
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
                                       comparsonOperator:(MADPredicateOperator)comparsonOperator
                                         andRightFieldID:(NSManagedObjectID *)rightFieldID
-                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                  error:(NSError * __autoreleasing *)error {
+    if (leftFieldID == nil || rightFieldID == nil) {
+        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field."];
+        *error = [e errorWithDomain:[self domain] code:2340];
+        return nil;
+    }
     RptqQueryField *leftField, *rightField;
     leftField = [managedObjectContext objectWithID:leftFieldID];
     rightField = [managedObjectContext objectWithID:rightFieldID];
@@ -65,7 +77,13 @@
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
                                       comparsonOperator:(MADPredicateOperator)comparsonOperator
                                           andRightValue:(NSString *)rightUserValue
-                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                  error:(NSError * __autoreleasing *)error {
+    if (leftFieldID == nil || rightUserValue == nil) {
+        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field or value."];
+        *error = [e errorWithDomain:[self domain] code:2341];
+        return nil;
+    }
     RptqQueryField *leftField;
     leftField = [managedObjectContext objectWithID:leftFieldID];
     NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
@@ -83,7 +101,13 @@
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
                                     comparsonOperator:(MADPredicateOperator)comparsonOperator
                                         andRightValue:(NSString *)rightUserValue
-                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                error:(NSError * __autoreleasing *)error {
+    if (leftUserValue == nil || rightUserValue == nil) {
+        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value."];
+        *error = [e errorWithDomain:[self domain] code:2342];
+        return nil;
+    }
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
     queryPredicate.hasRightField    = nil;
@@ -97,7 +121,13 @@
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
                                     comparsonOperator:(MADPredicateOperator)comparsonOperator
                                       andRightFieldID:(NSManagedObjectID /* RptqQueryField */ *)rightFieldID
-                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                error:(NSError * __autoreleasing *)error {
+    if (leftUserValue == nil || rightFieldID == nil) {
+        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value or field."];
+        *error = [e errorWithDomain:[self domain] code:2343];
+        return nil;
+    }
     RptqQueryField *rightField;
     rightField = [managedObjectContext objectWithID:rightFieldID];
     

@@ -24,8 +24,8 @@
         NSString *m = message == nil ? @"" : [[NSString alloc] initWithString:message];
         NSString *t = title == nil ? @"" : [[NSString alloc] initWithString:title];
         NSDictionary *userinfo = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    t, NSLocalizedDescriptionKey,
-                                    m, NSLocalizedFailureReasonErrorKey, nil];
+                                    m, NSLocalizedDescriptionKey,
+                                    t, NSLocalizedFailureReasonErrorKey, nil];
         self.userinfo = userinfo;
     }
     return self;

@@ -15,7 +15,7 @@
 
 @interface MADTableViewCellQueryGroup : MTAutoLayoutTableViewCell
 
-    @property (nonatomic, copy) NSManagedObjectID *tableID;
+    @property (nonatomic, copy) NSManagedObjectID *groupID;
 
     @property (nonatomic, weak) IBOutlet UILabel *labelDetail;
     @property (nonatomic, weak) IBOutlet UILabel *labelMain;

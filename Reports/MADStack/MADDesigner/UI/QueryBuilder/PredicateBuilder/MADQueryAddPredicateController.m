@@ -34,7 +34,7 @@
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField.h>
-
+#import <MADCocoaExtensions/NSError+Constructors.h>
 #import "MADTableViewControllerOpperators.h"
 
 @implementation MADQueryAddPredicateController
@@ -130,36 +130,46 @@
     MADocument *document = self.document;
     NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
     
+    NSError * __autoreleasing error = nil;
     if (self.leftValue == nil) {
         if (self.rightValue == nil) {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: self.fieldLeftID
                                                                        comparsonOperator: self.predicateOperator
                                                                          andRightFieldID: self.fieldRightID
-                                                       forManagedObjectContext: managedObjectContext];
+                                                                 forManagedObjectContext: managedObjectContext
+                                                                                   error: &error];
         } else {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: self.fieldLeftID
                                                                        comparsonOperator: self.predicateOperator
                                                                            andRightValue: self.rightValue
-                                                                 forManagedObjectContext: managedObjectContext];
+                                                                 forManagedObjectContext: managedObjectContext
+                                                                                   error: &error];
         }
     } else {
         if (self.rightValue == nil) {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftValue: self.leftValue
                                                                      comparsonOperator: self.predicateOperator
                                                                        andRightFieldID: self.fieldRightID
-                                                               forManagedObjectContext: managedObjectContext];
+                                                               forManagedObjectContext: managedObjectContext
+                                                                                 error: &error];
         } else {
             queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftValue: self.leftValue
                                                                      comparsonOperator: self.predicateOperator
                                                                          andRightValue: self.rightValue
-                                                               forManagedObjectContext: managedObjectContext];
+                                                               forManagedObjectContext: managedObjectContext
+                                                                                 error: &error];
         }
     }
-    
-    [document.activeDocumentModel addPredicate:queryPredicate];
-    [document saveContext];
-    
-    [self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
+
+    if (queryPredicate != nil && error == nil) {
+        [document.activeDocumentModel addPredicate:queryPredicate];
+        [document saveContext];
+        [self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
+    } else {
+        [NSError presentError:error onViewController:self completion:^(BOOL success) {
+            
+        }];
+    }
     
 }
 

@@ -428,7 +428,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             message = [MADAttributedStringQueryController newAttributedStringQuerySectionLinks: leftString
                                                                                    rightString: rightString
                                                                               linksDescription: [links linkDescription]];
-            ((MADTableViewCellQueryLink *)cell).tableID = links.objectID.copy;
+            ((MADTableViewCellQueryLink *)cell).linkID = links.objectID.copy;
             cell.textLabel.attributedText = message;
 
             break;
@@ -451,7 +451,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             message = [MADAttributedStringQueryController newAttributedStringQuerySectionGroupWithField: field
                                                                                                 andSort: sort];
             cell.textLabel.attributedText = message;
-            ((MADTableViewCellQueryGroup *)cell).tableID = group.objectID.copy;
+            ((MADTableViewCellQueryGroup *)cell).groupID = group.objectID.copy;
 
             break;
         }
@@ -479,7 +479,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             message = [MADAttributedStringQueryController newAttributedStringQueryPredicate: leftFieldDisplay
                                                                                      symbol: symbol
                                                                                   rightText: rightFieldDisplay];
-            ((MADTableViewCellQueryPredicate *)cell).tableID = predicate.objectID.copy;
+            ((MADTableViewCellQueryPredicate *)cell).predicateID = predicate.objectID.copy;
             cell.textLabel.attributedText = message;
             break;
         }

@@ -19,22 +19,26 @@
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftField
                                       comparsonOperator:(MADPredicateOperator)comparsonOperator
                                         andRightFieldID:(NSManagedObjectID *)rightField
-                                forManagedObjectContext:(NSManagedObjectContext *)context;
+                                forManagedObjectContext:(NSManagedObjectContext *)context
+                                                  error:(NSError * __autoreleasing *)error;
 
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftField
                                       comparsonOperator:(MADPredicateOperator)comparsonOperator
                                           andRightValue:(NSString *)rightUserValue
-                                forManagedObjectContext:(NSManagedObjectContext *)context;
+                                forManagedObjectContext:(NSManagedObjectContext *)context
+                                                  error:(NSError * __autoreleasing *)error;
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
                                     comparsonOperator:(MADPredicateOperator)comparsonOperator
                                         andRightValue:(NSString *)rightUserValue
-                              forManagedObjectContext:(NSManagedObjectContext *)context;
+                              forManagedObjectContext:(NSManagedObjectContext *)context
+                                                error:(NSError * __autoreleasing *)error;
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
                                     comparsonOperator:(MADPredicateOperator)comparsonOperator
                                       andRightFieldID:(NSManagedObjectID *)rightField
-                              forManagedObjectContext:(NSManagedObjectContext *)context;
+                              forManagedObjectContext:(NSManagedObjectContext *)context
+                                                error:(NSError * __autoreleasing *)error;
 
 + (void)deletePredicate:(RptqQueryPredicate *)predicate;
 - (NSString *)symbolForComparson;
