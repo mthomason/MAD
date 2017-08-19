@@ -70,7 +70,7 @@
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
     
-    NSError *error = nil;
+    NSError * __autoreleasing error = nil;
     NSArray *documents = [context executeFetchRequest:request error:&error];
     
     if (!error) {
@@ -95,7 +95,7 @@
     hasReportHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                            inManagedObjectContext: context];
     document.hasReportHeaderSection = hasReportHeaderSection;
-
+    
     id hasReportFooterSection;
     hasReportFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
                                                            inManagedObjectContext: context];
@@ -168,6 +168,19 @@
     document.hasPageHeaderSection.visibility = YES;
     document.hasPageFooterSection.visibility = YES;
     document.hasDetailSection.visibility = YES;
+
+    if (![hasReportHeaderSection validateForUpdate: &error]) {
+        os_log_error(OS_LOG_DEFAULT, "Error: %s", error.localizedDescription.UTF8String);
+    }
+    
+    if (![hasDetailSection validateForUpdate: &error]) {
+        os_log_error(OS_LOG_DEFAULT, "Error: %s", error.localizedDescription.UTF8String);
+    }
+    
+    error = nil;
+    if (![document validateForUpdate: &error]) {
+        os_log_error(OS_LOG_DEFAULT, "Error: %s", error.localizedDescription.UTF8String);
+    }
     
     return document;
 }

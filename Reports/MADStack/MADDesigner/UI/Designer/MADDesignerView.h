@@ -16,7 +16,6 @@
 @interface MADDesignerView : UIView
 
     @property (nonatomic, weak) IBOutlet MADDesignerScrollView *scroller;
-    @property (readonly, assign) CGSize contentViewSize;
 
 @end
 

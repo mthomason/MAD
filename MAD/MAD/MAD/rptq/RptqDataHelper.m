@@ -24,7 +24,7 @@
 
 + (int64_t)nextIdentifierForClass:(Class)class
              managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    
+
     NSString *path = NSStringFromSelector(@selector(identifier));
     NSExpressionDescription *edIdentifier;
     NSFetchRequest *request;
@@ -53,6 +53,8 @@
     
     NSError * __autoreleasing *error = NULL;
     fetchResults = [managedObjectContext executeFetchRequest:request error:error];
+    
+    //NSAssert(fetchResults.count == 0, "We expect some results.");
     
     int64_t identifier64 = 0;
     if (!fetchResults.count) {

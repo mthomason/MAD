@@ -180,4 +180,9 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
     [self.container setNeedsLayout];
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //self.container.bounds = CGRectMake(self.container.bounds.origin.x, self.container.bounds.origin.y, [self container].bounds.size.width, self.contentSize.height);
+}
+
 @end

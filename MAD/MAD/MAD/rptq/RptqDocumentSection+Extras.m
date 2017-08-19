@@ -636,6 +636,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 #pragma mark -
 #pragma mark Overrides
 
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]

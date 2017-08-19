@@ -797,7 +797,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
                                             (UIPresentationController *)controller {
     
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
-    
     if ([controller isEqual:self.showSQLPresentationController]) {
         
         if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {

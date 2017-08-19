@@ -2908,8 +2908,9 @@ END_deselectElementView:;
         [layoutManager layout];
 
     } completion:^(BOOL finished) {
-        
-        [weakself.view.scroller.container setNeedsUpdateConstraints];
+        typeof(self) strongself = weakself;
+        [strongself.view.scroller.container setNeedsUpdateConstraints];
+        [strongself.document updateChangeCount: UIDocumentChangeDone];
         
     }];
 }
