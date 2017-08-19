@@ -1300,7 +1300,7 @@ void madwarn(char *err,  const char*err2) { }
         [newQueryFields removeAllObjects];
 
     }];
-    
+    [self updateChangeCount: UIDocumentChangeDone];
 }
 
 - (void)addQueryGroupWithQueryField: (NSManagedObjectID *)queryFieldObjectID
@@ -1399,7 +1399,7 @@ void madwarn(char *err,  const char*err2) { }
         [footerSectionRows removeAllObjects];
 
     }];
-
+    [self updateChangeCount: UIDocumentChangeDone];
 }
 
 #pragma mark -
@@ -1594,6 +1594,7 @@ void madwarn(char *err,  const char*err2) { }
             os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
         }
     }];
+    [self updateChangeCount: UIDocumentChangeDone];
 
 }
 

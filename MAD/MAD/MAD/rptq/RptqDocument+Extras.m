@@ -81,12 +81,13 @@
             }
         }
     }
+    
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
                                                          inManagedObjectContext: context];
     
     RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription
                                    insertIntoManagedObjectContext: context];
-
+    
     NSString *docSection = NSStringFromClass([RptqDocumentSection class]);
     NSString *rptqDocumentSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
 

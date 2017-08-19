@@ -1101,10 +1101,11 @@ static const inline CGSize sizePopoverFonts() {
         [section setProducesFormFeed: newPageAfter];
         
         NSError * __autoreleasing error = NULL;
-        if (![private save:&error]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    error.localizedDescription.UTF8String);
+        BOOL success = NO;
+        if (!(success = [private save:&error])) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
         }
+
     }];
     
 }
@@ -1139,10 +1140,11 @@ static const inline CGSize sizePopoverFonts() {
         [[NSOperationQueue mainQueue] addOperationWithBlock:updateVisibility];
 
         NSError * __autoreleasing error = NULL;
-        if (![private save:&error]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    error.localizedDescription.UTF8String);
+        BOOL success = NO;
+        if (!(success = [private save:&error])) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
         }
+
     }];
 }
 
@@ -1159,7 +1161,10 @@ static const inline CGSize sizePopoverFonts() {
     [section setInterfaceHeight: collectionViewContentSize.height];
     
     NSError * __autoreleasing error = NULL;
-    if (![section.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    BOOL success = NO;
+    if (!(success = [section.managedObjectContext save:&error])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+    }
 
     
     NSNumber *key = @(section.identifier);
@@ -1167,7 +1172,9 @@ static const inline CGSize sizePopoverFonts() {
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
     [section setInterfaceHeight: collectionViewContentSize.height];
-    if (![section.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if (!(success = [section.managedObjectContext save:&error])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+    }
     
     [self.view setNeedsUpdateConstraints];
     
@@ -1231,10 +1238,11 @@ static const inline CGSize sizePopoverFonts() {
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
     NSError * __autoreleasing error = NULL;
-    if (![doc.managedObjectContext save:&error]) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                error.localizedDescription.UTF8String);
+    BOOL successSave = NO;
+    if (!(successSave = [doc.managedObjectContext save:&error])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
     }
+
 
     [doc saveToURL: doc.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
                
@@ -1857,10 +1865,11 @@ static const inline CGSize sizePopoverFonts() {
     completion = ^(UIAlertAction *action, NSString *text) {
         
         ((RptqDocumentElementLabel *)object).text = text.copy;
+        
         NSError * __autoreleasing error = NULL;
-        if (![object.managedObjectContext save:&error]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    error.localizedDescription.UTF8String);
+        BOOL successSave = NO;
+        if (!(successSave = [object.managedObjectContext save:&error])) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
         }
         
     };
@@ -1880,9 +1889,10 @@ static const inline CGSize sizePopoverFonts() {
                         withFieldOne:(NSManagedObjectID /* RptqQueryField */ *)fieldOne
                          andFieldTwo:(NSManagedObjectID /* RptqQueryField */ *)fieldTwo {
     
+    UIManagedDocument *document = self.document;
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = self.document.managedObjectContext;
+    private.parentContext = document.managedObjectContext;
     
     NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
     [private performBlock:^{
@@ -1891,14 +1901,13 @@ static const inline CGSize sizePopoverFonts() {
         [barcodeToEdit updateWithBarcode: barcode field1ID: fieldOne field2ID: fieldTwo];
 
         NSError * __autoreleasing error = NULL;
-        if (![private save:&error]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    error.localizedDescription.UTF8String);
+        BOOL successSave = NO;
+        if (!(successSave = [private save:&error])) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
         }
 
-
     }];
-    
+    [document updateChangeCount: UIDocumentChangeDone];
 }
 
 #pragma mark -
@@ -1909,14 +1918,15 @@ static const inline CGSize sizePopoverFonts() {
                               inputObject: (NSManagedObjectID *)objectID
                                 groupType: (MTAggregateGroupByType)groupType
                               groupNumber: (int32_t)groupNumber {
-    
+    UIManagedDocument *document = self.document;
     RptqDocumentElementAggregate *aggregateToEdit;
-    aggregateToEdit = [self.document.managedObjectContext objectWithID: self.aggregateToEditObjectID];
+    aggregateToEdit = [document.managedObjectContext objectWithID: self.aggregateToEditObjectID];
     [aggregateToEdit updateAggregateFunctionWithFunctionType: functionType
                                                    inputType: MTAggregateFunctionInputTypeField
                                                    groupType: groupType
                                            aggregateObjectID: objectID
                                                  groupNumber: i32abs(groupNumber)];
+    [document updateChangeCount: UIDocumentChangeDone];
 }
 
 #pragma mark -
@@ -1931,10 +1941,11 @@ static const inline CGSize sizePopoverFonts() {
     documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: field.identifier
                                                                        fromObjectContext: context];
     documentObject.referencesQueryField = field;
+    
     NSError * __autoreleasing error = NULL;
-    if (![field.managedObjectContext save:&error]) {
-        os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-                error.localizedDescription.UTF8String);
+    BOOL successSave = NO;
+    if (!(successSave = [field.managedObjectContext save:&error])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
     }
 
 }
@@ -2635,13 +2646,15 @@ static const inline CGSize sizePopoverFonts() {
     if (_editAggregate && _aggregateToEditObjectID != nil) {
         
         if (viewController.fieldObjectID != nil) {
+            UIManagedDocument *document = self.document;
             RptqDocumentElementAggregate *aggregateToEdit;
-            aggregateToEdit = [self.document.managedObjectContext objectWithID: _aggregateToEditObjectID];
+            aggregateToEdit = [document.managedObjectContext objectWithID: _aggregateToEditObjectID];
             [aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
                                                                 inputType: MTAggregateFunctionInputTypeField
                                                                 groupType: viewController.aggregateGroupByType
                                                         aggregateObjectID: viewController.fieldObjectID
                                                               groupNumber: viewController.groupTypeSectionNumber];
+            [document updateChangeCount: UIDocumentChangeDone];
         }
         
     } else {
@@ -2664,10 +2677,10 @@ static const inline CGSize sizePopoverFonts() {
 - (void)saveBarcodeLabel:(MTViewControllerBarcode *)viewController {
     
     if (_objectIdEditBarcode  != nil) {
-        
+        UIManagedDocument *document = self.document;
         MTBarcode *barcode = viewController.barcode;
         
-        NSManagedObjectContext *managedObjectContext = _document.managedObjectContext;
+        NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
         RptqDocumentElementBarcode *object;
         object = [RptqDocumentElementBarcode newDocumentElementWithIdentifier: _objectIdEditBarcode.longLongValue
                                                             fromObjectContext: managedObjectContext];
@@ -2675,6 +2688,7 @@ static const inline CGSize sizePopoverFonts() {
         [object updateWithBarcode: barcode
                          field1ID: viewController.queryField1ID
                          field2ID: viewController.queryField2ID];
+        [document updateChangeCount: UIDocumentChangeDone];
         _objectIdEditBarcode = nil;
         
     } else {

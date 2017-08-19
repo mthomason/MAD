@@ -12,10 +12,12 @@
 
 #import "RptqDocumentElementAggregate+Extras.h"
 
+#import <os/log.h>
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -180,8 +182,11 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
             break;
     }
     
-    NSError *error = nil;
-    [self.managedObjectContext save:&error];
+    BOOL success = NO;
+    NSError * __autoreleasing saveError = nil;
+    if (!(success = [self.managedObjectContext save:&saveError])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+    }
     
 }
 

@@ -11,7 +11,7 @@
 #endif
 
 #import "MADQueryViewController.h"
-
+#import <os/log.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSOrderedSet.h>
 
@@ -1135,7 +1135,9 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     NSManagedObject *predicate = [document.managedObjectContext objectWithID:objid];
     [document.managedObjectContext deleteObject:predicate];
     NSError *error = NULL;
-    if ([document.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
+    if ([document.managedObjectContext save:&error])
+        NSLog(@"Error saving managed object context: %@", error);
+    [document updateChangeCount: UIDocumentChangeDone];
 }
 
 - (void)deleteItemFromQuerySection: (MADIdentifierQueryViewSections)section
@@ -1278,10 +1280,11 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             }
         }
         
-    NSError * __autoreleasing error = nil;
-    BOOL success = [context save:&error];
-    //success = [private.parentContext save:error];
-    if (success) {
+    NSError * __autoreleasing error = NULL;
+    BOOL success = NO;
+    if (!(success = [context save:&error])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+    } else {
         [self.queryViewDataSource numberOfTablesChanged: numberOfTables];
         //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
         
@@ -1316,18 +1319,19 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         
         //}];
     }
-    
+    [document updateChangeCount: UIDocumentChangeDone];
+
     //}];
 }
 
 - (void)deleteQueryLinksFromTableView: (UITableView *)tableView
                           atIndexPath: (NSIndexPath *)indexPath {
-    
+    UIManagedDocument *document = self.document;
     MADTableViewCellQueryLink *cell = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
     NSManagedObjectID *tableID = cell.tableID;
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = self.document.managedObjectContext;
+    private.parentContext = document.managedObjectContext;
     
     [private performBlockAndWait:^{
         
@@ -1335,18 +1339,22 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         NSAssert(table != nil, @"Need a non-nil value for %@", tableID);
         [private deleteObject:table];
         
-        NSError * __autoreleasing error = nil;
-        [private save:&error];
-        
+        NSError * __autoreleasing error = NULL;
+        BOOL successSave = NO;
+        if (!(successSave = [private save:&error])) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+        }
     }];
+    [document updateChangeCount: UIDocumentChangeDone];
 }
 
 - (void)deleteQueryGroupFromTableView: (UITableView *)tableView
                           atIndexPath: (NSIndexPath *)indexPath {
     
+    UIManagedDocument *document = self.document;
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = self.document.managedObjectContext;
+    private.parentContext = document.managedObjectContext;
     
     void (^deleteGroup)(void) = ^{
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -1356,9 +1364,13 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         [self.document removeGroupWitObjectID:groupToRemove.objectID fromManagedObjectContext:private];
         
         NSError * __autoreleasing error = NULL;
-        [private save:&error];
+        BOOL successSave = NO;
+        if (!(successSave = [private save:&error])) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+        }
     };
     [private performBlockAndWait:deleteGroup];
+    [document updateChangeCount: UIDocumentChangeDone];
 }
 
 #pragma mark -

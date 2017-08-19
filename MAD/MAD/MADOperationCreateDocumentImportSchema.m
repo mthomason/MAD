@@ -173,6 +173,7 @@
         }
 
     }];
+    [document updateChangeCount:UIDocumentChangeDone];
     _success = success;
     if (_success) {
         [self finish];

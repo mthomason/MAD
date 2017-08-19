@@ -363,16 +363,6 @@ static NSString * const TextRedraw = @"Redraw";
     [self.viewControllerDelegate viewControllerDidFinish:self];
 }
 
-/*- (IBAction)done:(id)sender {
-    NSError *error = nil;
-    MADocument *document = self.document;
-    [document.managedObjectContext save:&error];
-    if (error != nil) {
-        [document.managedObjectContext save:&error];
-    }
-    [self.viewControllerDelegate viewControllerDidFinish:self];
-}*/
-
 - (IBAction)redrawQueryVisualization:(id)sender {
     [self.queryBuilderControllerAdvanced redraw: YES];
 }

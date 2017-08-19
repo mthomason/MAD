@@ -338,9 +338,12 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
             
             fromGroup.weight = toGroup.weight;
             toGroup.weight = fromGroup.weight;
+
+            MADocument *document = self.datasoruce.document;
             
             NSError *error = nil;
             [(self.queryGroupsController).managedObjectContext save:&error];
+            [document updateChangeCount: UIDocumentChangeDone];
 
             [self performFetchGroups];
             break;

@@ -76,6 +76,7 @@
             }
         }
     }];
+    [document updateChangeCount: UIDocumentChangeDone];
 
     [self finish];
 }

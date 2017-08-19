@@ -8,6 +8,7 @@
 
 #import "MADDesignerElementView.h"
 
+#import <os/log.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 
@@ -371,10 +372,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectID];
     [documentObject setSizeValue:size];
 
-    NSError * __autoreleasing *error = NULL;
-    [managedObjectContext save:error];
-    NSAssert(error == NULL, @"Error: %@", *error);
-    
+    BOOL success = NO;
+    NSError * __autoreleasing saveError = nil;
+    if (!(success = [managedObjectContext save:&saveError])) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+    }
 }
 
 - (void)applyBorder {
