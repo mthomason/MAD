@@ -1364,7 +1364,9 @@ void madwarn(char *err,  const char*err2) { }
         [query addHasQueryGroupsObject: queryGroup];
 
         NSError * __autoreleasing error = NULL;
-        [private save:&error];
+        if (![private save:&error]) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+        }
         
         RptqQueryField *groupByField = queryGroup.hasField;
         if (groupByField) {
@@ -1507,7 +1509,7 @@ void madwarn(char *err,  const char*err2) { }
     NSError *error;
     if (self.managedObjectContext != nil) {
         if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
-            NSLog(@"Error saving managed object context: %@", error);
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
             [self.managedObjectContext save:nil];
         }
     }
@@ -1588,7 +1590,9 @@ void madwarn(char *err,  const char*err2) { }
                                 withLayoutManager: layoutManager];
 
         NSError * __autoreleasing error = NULL;
-        if (![private save:&error]) NSLog(@"Error saving context: %@.", error);
+        if (![private save:&error]) {
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+        }
     }];
 
 }
@@ -1707,7 +1711,10 @@ void madwarn(char *err,  const char*err2) { }
         }
         
         NSError * __autoreleasing error = NULL;
-        if (![managedObjectContext save:&error]) NSLog(@"Error saving context: %@.", error);
+    if (![managedObjectContext save:&error]) {
+        os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+    }
+
     //}];
     
 

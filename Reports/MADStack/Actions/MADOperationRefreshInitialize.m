@@ -75,24 +75,24 @@
         }
     */
    
-    NSManagedObjectContext *private;
-    private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = doc.managedObjectContext;
+    //NSManagedObjectContext *private;
+    //private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    //private.parentContext = doc.managedObjectContext;
 
-    MADocument * __weak wdocument = doc;
-    [private performBlockAndWait:^{
-        MADocument *document = wdocument;
+    //MADocument * __weak wdocument = doc;
+    //[private performBlockAndWait:^{
+        //MADocument *document = wdocument;
 
-        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
+        RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: doc.managedObjectContext];
         if (rptqDocument == nil) {
-            rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
+            rptqDocument = [RptqDocument newDocumentForManagedObjectContext: doc.managedObjectContext];
         }
         
         RptqDatabase *rptqDatabase;;
         RptqQuery *rptqQuery;
         
         //Initialize main database
-        if (document.database == nil) {
+        if (doc.database == nil) {
             RptqDatabaseCredentals *rptqUser;
             MADDatabaseConnection *databaseConnection;
             MTDatabase *database;
@@ -100,29 +100,29 @@
             rptqQuery = rptqDatabase.hasQueries.anyObject;
             rptqUser = rptqQuery.inDatabase.ownedByUser;
             databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:rptqUser];
-            [document updateDatabaseWithConnection:databaseConnection];
+            [doc updateDatabaseWithConnection:databaseConnection];
             database = [MTDatabase newDatabaseWithConnection:databaseConnection];
         }
-        document.database.delegate = (id <MADDatabaseProtocol>)document;
+        doc.database.delegate = (id <MADDatabaseProtocol>)doc;
         
         if (rptqDatabase == nil || rptqQuery == nil) {
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
         }
         
-        NSArray *sortDescriptors = [rptqQuery sortDescriptorsForDatabase:document.database];
-        [document.dataTable sortUsingDescriptors:sortDescriptors];
+        NSArray *sortDescriptors = [rptqQuery sortDescriptorsForDatabase:doc.database];
+        [doc.dataTable sortUsingDescriptors:sortDescriptors];
         
         //Initialize the section layout manager... Not neede for creating the report.
-        [document resetSectionLayoutManagers];
+        [doc resetSectionLayoutManagers];
 
         MADReportFormatter *formatter;
-        formatter = [MADReportFormatter newReportFormatterWithLayout: document
+        formatter = [MADReportFormatter newReportFormatterWithLayout: doc
                                                              options: MADReportFormatterOptionsNone];
 
-        document.reportFormatter = formatter;
+        doc.reportFormatter = formatter;
         
-    }];
+    //}];
     [self finish];
     
 }

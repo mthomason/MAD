@@ -732,8 +732,9 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
     return dropIndex;
 }
 
-- (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
-     managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (void)addDocumentObject: (RptqDocumentElement *)documentObject
+            withDropPoint: (CGPoint)origin
+     managedObjectContext: (NSManagedObjectContext *)managedObjectContext {
     
     [documentObject setOriginPoint: origin];
     

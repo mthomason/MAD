@@ -160,12 +160,16 @@
         
         NSError * __autoreleasing saveError = nil;
         if (success) {
-            success = [private save:&saveError];
+            if (!(success = [private save:&saveError])) {
+                os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+            }
             if (saveError) {
                 displayError = [saveError copy];
             }
         } else {
-            [private save:&saveError];
+            if (!(success = [private save:&saveError])) {
+                os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+            }
         }
 
     }];

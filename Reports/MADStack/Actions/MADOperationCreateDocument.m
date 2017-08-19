@@ -327,7 +327,6 @@
 }
 
 - (void)execute {
-    if (self.cancelled) return [self finish];
     [super execute];
 }
 

@@ -13,6 +13,7 @@
 #import "MADDesignerViewController.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
+#import <os/log.h>
 #import <math.h>
 #import <asl.h>
 
@@ -1932,7 +1933,7 @@ static const inline CGSize sizePopoverFonts() {
     documentObject.referencesQueryField = field;
     NSError * __autoreleasing error = NULL;
     if (![field.managedObjectContext save:&error]) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+        os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                 error.localizedDescription.UTF8String);
     }
 
@@ -2692,7 +2693,7 @@ static const inline CGSize sizePopoverFonts() {
         if (queryField2ID != nil) {
             defination[MTDocumentObjectDefinationField2] = queryField2ID.copy;
         }
-        [self insertDocumentObjectWithDefination:defination];
+        [self insertDocumentObjectWithDefination: defination];
         
     }
     [self scrollToDetailSectionView];
@@ -2859,8 +2860,12 @@ END_deselectElementView:;
         NSArray *objects = [[NSArray alloc] initWithObjects:element, nil];
 
         NSError * __autoreleasing error = NULL;
-        [rptqDocument.managedObjectContext obtainPermanentIDsForObjects: objects
-                                                                  error: &error];
+        if (![rptqDocument.managedObjectContext obtainPermanentIDsForObjects: objects
+                                                                       error: &error]) {
+            if (error) {
+                os_log_error(OS_LOG_DEFAULT, "Error getting permanent IDs: %s" , error.localizedDescription.UTF8String);
+            }
+        }
         
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
                                    inSection: 0];
@@ -2878,7 +2883,7 @@ END_deselectElementView:;
 
         NSError * __autoreleasing saveError = NULL;
         if (![section.managedObjectContext save:&saveError]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                     saveError.localizedDescription.UTF8String);
         }
 

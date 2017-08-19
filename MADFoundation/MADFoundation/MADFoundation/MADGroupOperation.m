@@ -52,7 +52,7 @@
         _internalQueue.delegate = self;
     }
     for (NSOperation *op in operations){
-        //[_finishingOperation addDependency:op];
+        [_finishingOperation addDependency:op];
         [_internalQueue addOperation:op];
     }
 //    [self.internalQueue addOperation:self.finishingOperation];
@@ -75,6 +75,7 @@
 }
 
 - (void)execute {
+    if (self.cancelled) return [self finish];
     self.internalQueue.suspended = NO;
     [self.internalQueue addOperation:self.finishingOperation];
 }

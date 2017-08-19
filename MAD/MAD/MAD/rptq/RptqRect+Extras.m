@@ -8,6 +8,7 @@
 
 #import "RptqRect+Extras.h"
 
+#import <CoreData/NSEntityDescription.h>
 #import <CoreGraphics/CGGeometry.h>
 
 #import "RptqPoint.h"
@@ -25,6 +26,22 @@
     static NSString *key = nil;
     if (key == nil) key = NSStringFromSelector(@selector(size));
     return key;
+}
+
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+    if (self.origin == nil) {
+        NSString *name = NSStringFromClass([RptqPoint class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.origin = [NSEntityDescription insertNewObjectForEntityForName: name
+                                                    inManagedObjectContext: managedObjectContext];
+    }
+    if (self.size == nil) {
+        NSString *name = NSStringFromClass([RptqSize class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.size = [NSEntityDescription insertNewObjectForEntityForName: name
+                                                  inManagedObjectContext: managedObjectContext];
+    }
 }
 
 - (CGRect)frame {

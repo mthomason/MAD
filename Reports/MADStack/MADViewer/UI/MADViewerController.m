@@ -322,64 +322,86 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     _refreshing = NO;
     _startedRefresh = NO;
 
-    MADocument *document = self.document;
+    NSArray <NSOperation *> *operations = [self initalOperations];
+    [[NSOperationQueue mainQueue] addOperations:operations waitUntilFinished:NO];
+
+}
+
+- (NSArray <NSOperation *> *)initalOperations {
+    
+    NSMutableArray *initalOperations = [[NSMutableArray alloc] initWithCapacity: 12];
     
     MADOperationLoadDocument *opLoadDoc;
     MADOperationLoadPrintPageRender *opLoadPtr;
     NSInvocationOperation *invokeUpdateNumberOfPages, *invokeUpdateRecordsRead, *invokePageSliderNeedsLayout,
                           *invokeSetDisplayActive, *invokeReloadWithSize, *invokeTimerDealloc,
                           *invokeTimeSinceLastUpdate, *invokeRemoveObserver, *invokesetLastCacheDate;
+    
+    MADocument *document = self.document;
 
     opLoadDoc = [[MADOperationLoadDocument alloc] initWithDocument: document];
-    opLoadPtr = [[MADOperationLoadPrintPageRender alloc] initWithDocument: document];
-    
-    [opLoadPtr addDependency:opLoadDoc];
+    [initalOperations addObject:opLoadDoc];
 
+    opLoadPtr = [[MADOperationLoadPrintPageRender alloc] initWithDocument: document];
+    [opLoadPtr addDependency:opLoadDoc];
+    [initalOperations addObject:opLoadPtr];
+    
     
     invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self
                                                                      selector:@selector(updateNumberOfPages)
                                                                        object:nil];
     [invokeUpdateNumberOfPages addDependency:opLoadPtr];
-    
+    [initalOperations addObject:invokeUpdateNumberOfPages];
+
     invokeUpdateRecordsRead = [[NSInvocationOperation alloc] initWithTarget:self
                                                                    selector:@selector(updateRecordsRead)
                                                                      object:nil];
     [invokeUpdateRecordsRead addDependency:opLoadPtr];
+    [initalOperations addObject:invokeUpdateRecordsRead];
     
-    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:self.pageSlider selector:@selector(setNeedsLayout) object:nil];
+    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:self.pageSlider
+                                                                       selector:@selector(setNeedsLayout)
+                                                                         object:nil];
     [invokePageSliderNeedsLayout addDependency:opLoadPtr];
-
-    invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setLastCacheDate:) object:[NSDate date]];
+    [initalOperations addObject:invokePageSliderNeedsLayout];
+    
+    invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                  selector:@selector(setLastCacheDate:)
+                                                                    object:[NSDate date]];
     [invokesetLastCacheDate addDependency:opLoadPtr];
+    [initalOperations addObject:invokesetLastCacheDate];
     
-    invokeSetDisplayActive = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(setDisplayActive) object:nil];
+    invokeSetDisplayActive = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                  selector:@selector(setDisplayActive)
+                                                                    object:nil];
     [invokeSetDisplayActive addDependency:opLoadPtr];
+    [initalOperations addObject:invokeSetDisplayActive];
     
-    invokeReloadWithSize = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(reloadWithSize:) object:[NSValue valueWithCGSize:document.paper.paperSize]];
+    invokeReloadWithSize = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                selector:@selector(reloadWithSize:)
+                                                                  object:[NSValue valueWithCGSize:document.paper.paperSize]];
     [invokeReloadWithSize addDependency:opLoadPtr];
+    [initalOperations addObject:invokeReloadWithSize];
     
-    invokeTimerDealloc = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(timerDealloc) object:nil];
+    invokeTimerDealloc = [[NSInvocationOperation alloc] initWithTarget:self
+                                                              selector:@selector(timerDealloc)
+                                                                object:nil];
     [invokeTimerDealloc addDependency:opLoadPtr];
-    
-    invokeTimeSinceLastUpdate = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateTimeSinceLastRefresh:) object:nil];
+    [initalOperations addObject:invokeTimerDealloc];
+
+    invokeTimeSinceLastUpdate = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                     selector:@selector(updateTimeSinceLastRefresh:)
+                                                                       object:nil];
     [invokeTimeSinceLastUpdate addDependency:opLoadPtr];
+    [initalOperations addObject:invokeTimeSinceLastUpdate];
     
-    invokeRemoveObserver = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(removeObserverDidReadRowsFromDatabase:) object:document.database];
+    invokeRemoveObserver = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                selector:@selector(removeObserverDidReadRowsFromDatabase:)
+                                                                  object:document.database];
     [invokeRemoveObserver addDependency:opLoadPtr];
-
+    [initalOperations addObject:invokeRemoveObserver];
     
-    [[NSOperationQueue mainQueue] addOperation:opLoadDoc];
-    [[NSOperationQueue mainQueue] addOperation:opLoadPtr];
-    [[NSOperationQueue mainQueue] addOperation:invokeUpdateNumberOfPages];
-    [[NSOperationQueue mainQueue] addOperation:invokeUpdateRecordsRead];
-    [[NSOperationQueue mainQueue] addOperation:invokePageSliderNeedsLayout];
-    [[NSOperationQueue mainQueue] addOperation:invokesetLastCacheDate];
-    [[NSOperationQueue mainQueue] addOperation:invokeSetDisplayActive];
-    [[NSOperationQueue mainQueue] addOperation:invokeReloadWithSize];
-    [[NSOperationQueue mainQueue] addOperation:invokeTimerDealloc];
-    [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
-    [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
-
+    return initalOperations;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -1418,7 +1440,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark -
 #pragma mark MADOperationObserver
 
-- (void)operationDidStart:(MADOperation *)operation { }
+- (void)operationDidStart:(MADOperation *)operation {
+    if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
+        
+    }
+}
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 

@@ -95,12 +95,12 @@
     }];
     
     [self addOperations:operations finishingOperation:finishingOperation];
-    self.internalQueue.suspended = NO;
+    [super execute];
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
     if ([operation isKindOfClass:[MADOperationRefresh class]]) {
-        [self finish];
+        //[self finish];
     }
 }
 

@@ -12,6 +12,7 @@
 
 #import "RptqDocumentElement+Extras.h"
 
+#import <os/log.h>
 #import <asl.h>
 
 #import <UIKit/UIFontDescriptor.h>
@@ -659,9 +660,11 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet;
     fetchRequet = [self fetchRequestElement: identifier];
     NSError *error = NULL;
-    NSArray <RptqDocumentElement *> *elements = [context executeFetchRequest:fetchRequet error:&error];
+    NSArray <RptqDocumentElement *> *elements;
+    elements = [context executeFetchRequest: fetchRequet
+                                      error: &error];
     if (error != nil) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: %s.  %s.",
+        os_log_error(OS_LOG_DEFAULT, "Error: %s.  %s.",
                 error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
     }
     return elements.firstObject;
@@ -696,10 +699,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     
     // MARK: Auto increment row counter
     NSFetchRequest *request;
-    NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
+    NSString *entityNameSelf = NSStringFromClass([RptqDocumentElement class]);
     NSString *key = NSStringFromSelector(@selector(identifier));
     
-    request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+    request = [[NSFetchRequest alloc] initWithEntityName: entityNameSelf];
 
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: NO];
@@ -727,6 +730,58 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     NSArray <NSDictionary *> *fetchResults;
     fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
     
+    if (self.alignment == nil) {
+        NSString *name = NSStringFromClass([RptqAlignment class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.alignment = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+    }
+    if (self.border == nil) {
+        NSString *name = NSStringFromClass([RptqBorder class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.border = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                    inManagedObjectContext:managedObjectContext];
+    }
+    if (self.dropPoint == nil) {
+        NSString *name = NSStringFromClass([RptqPoint class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.dropPoint = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+    }
+    
+    if (self.margin == nil) {
+        NSString *name = NSStringFromClass([RptqDirectionalAsymmetry class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.margin = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+    }
+    
+    if (self.numericFormat == nil) {
+        NSString *name = NSStringFromClass([RptqNumericFormat class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.numericFormat = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+    }
+    if (self.padding == nil) {
+        NSString *name = NSStringFromClass([RptqDirectionalAsymmetry class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.padding = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+    }
+    if (self.rect == nil) {
+        NSString *name = NSStringFromClass([RptqRect class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.rect = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+    }
+    if (self.textStyle == nil) {
+        NSString *name = NSStringFromClass([RptqTextStyle class]);
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+        self.textStyle = [NSEntityDescription insertNewObjectForEntityForName:name
+                                                       inManagedObjectContext:managedObjectContext];
+        //self.updated = YES;
+    }
+    
     int64_t idNumber = 0;
     int64_t lastDropIndex = 0;
     if (fetchResults.count) {
@@ -750,6 +805,16 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
     self.identifier = idNumber;
     self.dropIndex = lastDropIndex;
     
+}
+
+- (BOOL)validateForInsert:(NSError * __autoreleasing *)error {
+    BOOL success;
+    NSError * __autoreleasing errorValidation = nil;
+    if (!(success = [super validateForInsert:&errorValidation])) {
+        *error = errorValidation.copy;
+        os_log_error(OS_LOG_DEFAULT, "Error: %s", errorValidation.localizedDescription.UTF8String);
+    }
+    return success;
 }
 
 - (void)setSizeWidth:(float)width {

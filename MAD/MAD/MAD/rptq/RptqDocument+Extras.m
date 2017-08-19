@@ -12,6 +12,7 @@
 
 #import "RptqDocument+Extras.h"
 
+#import <os/log.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
@@ -485,9 +486,12 @@
             NSOrderedSet *hasFields = [[NSOrderedSet alloc] initWithArray:schemaFields];
             rptqTable.hasFields = hasFields;
             
-            NSError *saveError = nil;
-            [rptqTable.managedObjectContext save:&saveError];
-            
+            BOOL success = NO;
+            NSError * __autoreleasing saveError = nil;
+            if (!(success = [rptqTable.managedObjectContext save:&saveError])) {
+                os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+            }
+
         } else {
             
             NSString *failureFormat = NSLocalizedString(@"Table %@ not Added.", @"Table %@ not Added.");

@@ -64,11 +64,16 @@
     private.parentContext = document.managedObjectContext;
     [private performBlockAndWait:^{
         BOOL success = [RptqDocument newDocumentForManagedObjectContext: private] != nil;
-        NSError *error = nil;
         if (success) {
-            success = [private save:&error];
+            NSError * __autoreleasing error = NULL;
+            if (!(success = [private save:&error])) {
+                os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+            }
         } else {
-            [private save:&error];
+            NSError * __autoreleasing error = NULL;
+            if (!(success = [private save:&error])) {
+                os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+            }
         }
     }];
 
