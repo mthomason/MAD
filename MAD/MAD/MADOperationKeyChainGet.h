@@ -10,7 +10,7 @@
 #define MAD_Designer_MADOperationKeyChainGet_h
 
 #import <MADFoundation/MADOperation.h>
-#import "MADOperationResultStringProtocol.h"
+#import <MADFoundation/MADOperationResultStringProtocol.h>
 
 @interface MADOperationKeyChainGet : MADOperation
     <MADOperationResultStringProtocol>

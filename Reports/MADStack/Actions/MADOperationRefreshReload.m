@@ -66,17 +66,13 @@
         return [self finish];
     }
 
-    [self addAllOperations];
-}
-
-- (void)addAllOperations {
-
     MADocument *document = _document;
     MADOperationRefreshInitializeMainDataTable *initializeMainDataTable;
     initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
     [initializeMainDataTable addDependency:self.getCredentials];
     
-    MADOperationRefreshInitialize *initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];
+    MADOperationRefreshInitialize *initialize;
+    initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];
     [initialize addDependency: initializeMainDataTable];
     [initialize addDependency: self.getCredentials];
     
@@ -85,7 +81,11 @@
     [refresh addDependency: self.getCredentials];
     [refresh addDependency: initialize];
     
-    NSArray <__kindof NSOperation *> *operations = [[NSArray alloc] initWithObjects: self.getCredentials, initializeMainDataTable, initialize, refresh, nil];
+    NSArray <__kindof NSOperation *> *operations;
+    operations = [[NSArray alloc] initWithObjects: self.getCredentials,
+                                                   initializeMainDataTable,
+                                                   initialize,
+                                                   refresh, nil];
         
     MADOperationRefreshReload * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -99,9 +99,9 @@
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    //if ([operation isKindOfClass:[MADOperationRefresh class]]) {
-    //    [self finish];
-    //}
+    if ([operation isKindOfClass:[MADOperationRefresh class]]) {
+        [self finish];
+    }
 }
 
 @end

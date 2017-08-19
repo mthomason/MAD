@@ -56,7 +56,7 @@
     return self;
 }
 
-- (BOOL)isAsynchronous { return NO; }
+- (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
     //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);

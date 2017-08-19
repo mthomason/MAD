@@ -42,7 +42,7 @@ static const short errCache = 2;
     return self;
 }
 
-- (BOOL)isAsynchronous { return NO; }
+- (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
     

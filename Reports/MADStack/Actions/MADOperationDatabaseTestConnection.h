@@ -11,8 +11,8 @@
 
 #import <MADFoundation/MADOperation.h>
 #import "MADOperationPromptError.h"
-#import <MAD/MADOperationPromptErrorProtocol.h>
-#import <MAD/MADOperationTestResults.h>
+#import <MADFoundation/MADOperationPromptErrorProtocol.h>
+#import <MADFoundation/MADOperationTestResults.h>
 
 @class MADDatabaseConnection, MADCredential;
 

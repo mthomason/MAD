@@ -41,3 +41,4 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/NSOperation+Advanced.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
+#import <MADFoundation/MADOperationTestResults.h>

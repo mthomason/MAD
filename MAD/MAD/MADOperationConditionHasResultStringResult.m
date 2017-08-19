@@ -8,7 +8,7 @@
 
 #import "MADOperationConditionHasResultStringResult.h"
 #import <Foundation/NSString.h>
-#import <MAD/MADOperationResultStringProtocol.h>
+#import <MADFoundation/MADOperationResultStringProtocol.h>
 
 @implementation MADOperationConditionHasResultStringResult
 

@@ -9,7 +9,7 @@
 #import "MADOperationPromptError.h"
 #import <os/log.h>
 #import <UIKit/UIAlertController.h>
-#import <MAD/MADOperationPromptErrorProtocol.h>
+#import <MADFoundation/MADOperationPromptErrorProtocol.h>
 #import "MADMutualExclusive.h"
 
 static NSString * const TextYes = @"Dismiss";

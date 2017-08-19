@@ -10,8 +10,8 @@
 #define MAD_Designer_MADCreateDocumentOperationImportSchema_h
 
 #import <MADFoundation/MADOperation.h>
-#import <MAD/MADOperationPromptErrorProtocol.h>
-#import <MAD/MADOperationTestResults.h>
+#import <MADFoundation/MADOperationPromptErrorProtocol.h>
+#import <MADFoundation/MADOperationTestResults.h>
 
 @class MADDatabaseConnection;
 

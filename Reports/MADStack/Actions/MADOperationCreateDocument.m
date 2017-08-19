@@ -31,8 +31,8 @@
 //#import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
 #import <MAD/MADOperationDeleteFile.h>
-#import <MAD/MADOperationConditionTestConnectionSuccess.h>
-#import <MAD/MADOperationConditionHasResultString.h>
+#import <MADFoundation/MADOperationConditionTestConnectionSuccess.h>
+#import <MADFoundation/MADOperationConditionHasResultString.h>
 #import "MADOperationGetCredentials.h"
 #import "MADOperationDatabaseTestConnection.h"
 #import "MADOperationPromptPolarQuestion.h"

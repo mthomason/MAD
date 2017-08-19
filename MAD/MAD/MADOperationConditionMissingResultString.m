@@ -19,9 +19,8 @@
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
-
+#import <MADFoundation/MADOperationResultStringProtocol.h>
 #import "MADOperationConditionHasResultStringResult.h"
-#import <MAD/MADOperationKeyChainGet.h>
 
 @interface MADOperationConditionMissingResultString ()
 

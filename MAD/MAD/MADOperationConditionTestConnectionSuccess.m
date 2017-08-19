@@ -16,7 +16,7 @@
 #import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 
-#import "MADOperationTestResults.h"
+#import <MADFoundation/MADOperationTestResults.h>
 
 @implementation MADOperationConditionTestConnection
 

@@ -14,17 +14,14 @@
 
 #import <MADFoundation/NSOperation+Advanced.h>
 #import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADOperationBooleanAnd.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
-#import <MAD/MADOperationConditionMissingResultString.h>
-#import <MAD/MADOperationConditionHasResultString.h>
+#import <MADFoundation/MADOperationConditionMissingResultString.h>
+#import <MADFoundation/MADOperationConditionHasResultString.h>
 #import <MAD/MADOperationKeyChainPut.h>
-#import <MAD/MADOperationBooleanAnd.h>
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
-#import "MADOperationPromptPolarQuestion.h"
-#import "MADOperationPromptError.h"
-#import "MADOperationConditionPolarQuestionAffirmative.h"
 #import "MADOperationConditionDisplayedAlert.h"
 
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";

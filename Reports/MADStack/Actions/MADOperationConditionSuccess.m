@@ -12,7 +12,7 @@
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>
-#import <MAD/MADOperationTestResults.h>
+#import <MADFoundation/MADOperationTestResults.h>
 
 @interface MADOperationConditionSuccess ()
 
