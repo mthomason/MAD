@@ -17,6 +17,7 @@
 
     + (int64_t)nextIdentifierForClass:(Class)class
         managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+    + (void)cleanup;
 
 @end
 

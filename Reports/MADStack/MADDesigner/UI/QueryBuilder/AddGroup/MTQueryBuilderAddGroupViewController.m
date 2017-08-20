@@ -43,9 +43,7 @@ static NSString * const TextDefault = @"Default";
 
 @implementation MTQueryBuilderAddGroupViewController
 
-- (void)dealloc {
-    //NSLog(@"\t%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     if (self = [super initWithStyle:style]) { }

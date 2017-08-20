@@ -140,6 +140,7 @@
 #import "MADNotificationFileUpdate.h"
 
 #import "NSPredicate+Creators.h"
+#import "RptqDataHelper.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -764,6 +765,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark NSObject
 
 - (void)dealloc {
+    [RptqDataHelper cleanup];
     _thumbnail = nil;
     _madManagedObjectModel = nil;
 }

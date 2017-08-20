@@ -221,9 +221,12 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
+    self.identifier = 1;
     if (self.managedObjectContext.parentContext && self.identifier <= 0) {
+        [[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
         self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
                                             managedObjectContext:self.managedObjectContext];
+        [[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
     }
 }
 
