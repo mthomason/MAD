@@ -14,6 +14,7 @@
 #import <MAD/MADHorizontalAlignmentType.h>
 #import <MAD/MADDocumentObjectType.h>
 #import "MADManagedObjectViewProtocol.h"
+#import "MADViewAnimationProtocol.h"
 
 @protocol UIGestureRecognizerDelegate;
 
@@ -29,7 +30,7 @@
 @end
 
 @interface MADDesignerElementView : UIView
-    <MADManagedObjectViewProtocol>
+    <MADManagedObjectViewProtocol, MADViewAnimationProtocol>
 
     @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
     @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;

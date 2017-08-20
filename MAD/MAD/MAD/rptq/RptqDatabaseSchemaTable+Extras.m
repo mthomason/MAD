@@ -95,8 +95,10 @@
     
     NSString *entityName = NSStringFromClass([self class]);
     
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
-    RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:managedObjectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName
+                                                   inManagedObjectContext: managedObjectContext];
+    RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity
+                                       insertIntoManagedObjectContext:managedObjectContext];
 
     rptqTable.name = name.copy;
     rptqTable.queryable = queryable;
@@ -109,8 +111,11 @@
     
     NSString *entityName = NSStringFromClass([self class]);
     
-    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
-    RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
+    NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName
+                                                   inManagedObjectContext: objectContext];
+    RptqDatabaseSchemaTable *rptqTable;
+    rptqTable = [[self alloc] initWithEntity:tableEntity
+              insertIntoManagedObjectContext:objectContext];
 
     rptqTable.name = table.name.copy;
     rptqTable.queryable = table.queryable;

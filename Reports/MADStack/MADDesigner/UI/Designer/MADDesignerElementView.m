@@ -317,8 +317,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 }
 
 - (void)flash:(void (^)(BOOL finished))completion {
-
-
     void (^animates)(void);
     animates = ^{
         self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];

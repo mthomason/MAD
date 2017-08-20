@@ -544,8 +544,8 @@
     
 }
 
-- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination {
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination
+                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
     MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;

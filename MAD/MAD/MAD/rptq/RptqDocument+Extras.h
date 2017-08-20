@@ -43,7 +43,8 @@
 
     - (void)addQueryLink:(RptqQueryLinks *)queryLink;
     - (void)addPredicate:(RptqQueryPredicate *)predicate;
-    - (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination;
+    - (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination
+                          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
 
     - (MTPaperType)paperType;

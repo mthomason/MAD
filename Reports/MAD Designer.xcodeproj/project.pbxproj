@@ -1843,6 +1843,7 @@
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageArrowDown@2x.png"; path = "Reports/UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
 		4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaPresentationController.h; sourceTree = "<group>"; };
 		4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaPresentationController.m; sourceTree = "<group>"; };
+		4C7E1CAE1F49579E002CBBBE /* MADViewAnimationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewAnimationProtocol.h; sourceTree = "<group>"; };
 		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C88A3431E6691ED009F8BFE /* MADPageStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPageStatusView.h; path = MADStack/MADPageStatusView.h; sourceTree = "<group>"; };
 		4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPageStatusView.m; path = MADStack/MADPageStatusView.m; sourceTree = "<group>"; };
@@ -2804,6 +2805,7 @@
 				4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */,
 				4CDFC99A1EDEFAE7008E1AD6 /* MADElementViewManager.h */,
 				4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */,
+				4C7E1CAE1F49579E002CBBBE /* MADViewAnimationProtocol.h */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;

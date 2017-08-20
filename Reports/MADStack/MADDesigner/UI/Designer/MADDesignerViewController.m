@@ -2045,15 +2045,16 @@ static const inline CGSize sizePopoverFonts() {
                 
                 if (_identifierJustDisplayed == identifier) {
                     __typeof(self) __weak wself = self;
-                    [elementView flash:^(BOOL finished) {
-                        if (finished) {
-                            typeof(self) sself = wself;
-                            if (sself) {
-                                sself->_identifierJustDisplayed = -1;
+                    if ([elementView conformsToProtocol:@protocol(MADViewAnimationProtocol)]) {
+                        [elementView flash:^(BOOL finished) {
+                            if (finished) {
+                                typeof(self) sself = wself;
+                                if (sself) {
+                                    sself->_identifierJustDisplayed = -1;
+                                }
                             }
-                        }
-                    }];
-                    
+                        }];
+                    }
                 }
                 
             }
@@ -2852,7 +2853,6 @@ END_deselectElementView:;
     
     MADocument *document = self.document;
     RptqDocument *rptqDocument = document.activeDocumentModel;
-    RptqDocumentSection *section = rptqDocument.hasDetailSection;
     
     MADDesignerSectionView *collectionView;
     MADSectionLayoutManager *layoutManager;
@@ -2861,24 +2861,27 @@ END_deselectElementView:;
     NSNumber *identifier = [[NSNumber alloc] initWithLongLong:collectionView.identifier];
     layoutManager = document.sectionLayoutManagers[identifier];
     
+    NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
     MADDesignerViewController * __weak weakself = self;
     [collectionView performBatchUpdates:^{
 
+        RptqDocument *bgRptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: managedObjectContext];
+        RptqDocumentSection *bgSection = rptqDocument.hasDetailSection;
+        
         MADDesignerViewController * sself = weakself;
         
         NSIndexPath *path;
         NSArray *indexPathsInserted;
         MADSectionLayoutAttributes *layoutAttribute;
-        RptqDocumentElement *element = [rptqDocument addDocumentObject:documentObjectDefination];
+        RptqDocumentElement *element = [bgRptqDocument addDocumentObject: documentObjectDefination
+                                                    managedObjectContext: managedObjectContext];
 
         NSArray *objects = [[NSArray alloc] initWithObjects:element, nil];
 
         NSError * __autoreleasing error = NULL;
-        if (![rptqDocument.managedObjectContext obtainPermanentIDsForObjects: objects
-                                                                       error: &error]) {
-            if (error) {
-                os_log_error(OS_LOG_DEFAULT, "Error getting permanent IDs: %s" , error.localizedDescription.UTF8String);
-            }
+        if (![managedObjectContext obtainPermanentIDsForObjects: objects
+                                                          error: &error]) {
+            os_log_error(OS_LOG_DEFAULT, "Error getting permanent IDs: %s" , error.localizedDescription.UTF8String);
         }
         
         path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
@@ -2889,14 +2892,14 @@ END_deselectElementView:;
         layoutAttribute.frame = [element elementViewFrameDesignerFrameCalculated];
         
         indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
-        [section addDocumentObject: element
-                     withDropPoint: layoutAttribute.frame.origin
-              managedObjectContext: section.managedObjectContext];
+        [bgSection addDocumentObject: element
+                       withDropPoint: layoutAttribute.frame.origin
+                managedObjectContext: managedObjectContext];
         
         [collectionView insertItemsAtIndexPaths: indexPathsInserted];
 
         NSError * __autoreleasing saveError = NULL;
-        if (![section.managedObjectContext save:&saveError]) {
+        if (![managedObjectContext save:&saveError]) {
             os_log_info(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                     saveError.localizedDescription.UTF8String);
         }
@@ -2909,9 +2912,10 @@ END_deselectElementView:;
 
     } completion:^(BOOL finished) {
         typeof(self) strongself = weakself;
+        MADocument *doc = strongself.document;
         [strongself.view.scroller.container setNeedsUpdateConstraints];
-        [strongself.document updateChangeCount: UIDocumentChangeDone];
-        
+        [doc updateChangeCount: UIDocumentChangeDone];
+        [doc autosaveWithCompletionHandler:^(BOOL success) { }];
     }];
 }
 
