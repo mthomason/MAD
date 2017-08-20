@@ -71,7 +71,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSManagedObject *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
-    [self.delegate viewController: self addedTableWithID: result.objectID];
+    [self.delegate viewController: self addedQueryTableWithID: result.objectID];
 }
 
 @end

@@ -844,7 +844,10 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark MADQueryBuilderAddTableDelegate
 
 - (void)viewController: (MADQueryBuilderAddTableViewController *)viewController
-      addedTableWithID: (NSManagedObjectID *)objectID {
+ addedQueryTableWithID: (NSManagedObjectID *)objectID {
+    
+    MADocument *document = self.document;
+    typeof(self) __weak weakself = self;
     
     [self dismissViewController];
     
@@ -852,9 +855,9 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     
     NSManagedObjectContext *private;
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    private.parentContext = self.document.managedObjectContext;
+    private.parentContext = document.managedObjectContext;
     [private performBlockAndWait: ^{
-        
+        typeof(self) strongself = weakself;
         
         
         RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
@@ -921,33 +924,15 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
                     os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", errorParent.localizedDescription.UTF8String);
                 }
             }];
-            [self.queryViewDataSource numberOfTablesChanged: numberOfTables];
-            [self.queryViewDataSource performFetchTables];
-            //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self.tableView beginUpdates];
-            
-            NSArray <NSIndexPath *> *indexPaths;
-            NSUInteger tableIndex = [self.queryViewDataSource.queryTablesController.fetchedObjects indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
+            [strongself.queryViewDataSource performFetchTables];
+
+            NSUInteger tableIndex = [strongself.queryViewDataSource.queryTablesController.fetchedObjects indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 return newQueryTable.identifier == obj.identifier;
             }];
-            NSIndexPath *displayIndex = [NSIndexPath indexPathForRow: (NSInteger)tableIndex
-                                                           inSection: 1];
-            indexPaths = [[NSArray <NSIndexPath *> alloc] initWithObjects: displayIndex, nil];
             
-            if (indexSetSections.count > 0) {
-                
-                [self.tableView insertRowsAtIndexPaths: indexPaths
-                                      withRowAnimation: UITableViewRowAnimationAutomatic];
-                [self.tableView insertSections: indexSetSections
-                              withRowAnimation: UITableViewRowAnimationAutomatic];
-                
-            } else {
-                [self.tableView insertRowsAtIndexPaths: indexPaths
-                                      withRowAnimation: UITableViewRowAnimationAutomatic];
-            }
-            [self.tableView endUpdates];
-            
-            //}];
+            [self tableView: strongself.tableView insertTable:tableIndex andSection:indexSetSections];
+
         }
         [private refreshObject:newQueryTable mergeChanges:NO];
         
@@ -975,24 +960,34 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     }];
     
     NSError * __autoreleasing error = NULL;
-    if (![self.document.managedObjectContext save:&error]) {
+    if (![document.managedObjectContext save:&error]) {
         os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
     }
-    [self.document updateChangeCount: UIDocumentChangeDone];
-    [self.document autosaveWithCompletionHandler:^(BOOL success) {
+    [document updateChangeCount: UIDocumentChangeDone];
+    [document autosaveWithCompletionHandler:^(BOOL success) {
         [self.queryViewDataSource performFetchTables];
     }];
     _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
     
+}
+
+- (void)tableView:(UITableView *)tableView
+      insertTable:(NSUInteger)tableIndex
+       andSection:(NSIndexSet *)sections {
     
-    /*
-     NSError * __autoreleasing error = NULL;
-     if (![self.document.managedObjectContext save:&error]) {
-     os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
-     }
-     */
-    //[self.queryViewDataSource performFetchTables];
+    NSArray <NSIndexPath *> *tablePaths;
+    NSIndexPath *tablePath = [NSIndexPath indexPathForRow: (NSInteger)tableIndex
+                                                inSection: 1];
+    tablePaths = [[NSArray <NSIndexPath *> alloc] initWithObjects: tablePath, nil];
     
+    [tableView beginUpdates];
+    [tableView insertRowsAtIndexPaths: tablePaths
+                     withRowAnimation: UITableViewRowAnimationAutomatic];
+    if (sections.count > 0) {
+        [tableView insertSections: sections
+                 withRowAnimation: UITableViewRowAnimationAutomatic];
+    }
+    [tableView endUpdates];
 }
 
 #pragma mark -

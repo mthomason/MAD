@@ -19,7 +19,7 @@
 
 @protocol MADQueryBuilderAddTableDelegate
     - (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
-          addedTableWithID:(NSManagedObjectID *)objectID;
+     addedQueryTableWithID:(NSManagedObjectID *)objectID;
 @end
 
 @interface MADQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
