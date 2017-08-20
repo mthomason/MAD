@@ -75,8 +75,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
                            andSortOrder:(MADSortOrder)sortOrder;
 
-    - (void)addQuerySelectTableForSchemeTableWithObjectID:(NSManagedObjectID *)objectID;
-
     - (void)removeDocumentObjectWithObjectID:(int64_t)objectID;
 
     - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId

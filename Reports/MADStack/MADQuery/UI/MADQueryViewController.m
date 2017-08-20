@@ -574,8 +574,6 @@ BOOL storeEnabled() {
 
 - (void)deleteQueryTableFromTableView: (UITableView *)tableView
                           atIndexPath: (NSIndexPath *)indexPath {
-    NSLog(@"%s: (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
-    
     MADocument *document = self.document;
     MADocument * __weak weakDocument = document;
     [self ingnoreManagedObjectContextChanges:document.managedObjectContext];
@@ -843,6 +841,31 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark MADQueryBuilderAddTableDelegate
 
+- (NSIndexSet *)newSectionsTableCountStart:(NSUInteger)numberOfTables
+                             tableCountEnd:(NSUInteger)numberOfTablesEnd
+                          reportingEnabled:(BOOL)reportingEnabled {
+
+    MADQueryViewDataSource *oldQueryLayout, *newQueryLayout;
+    oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
+                                                           reportingEnabled: reportingEnabled
+                                                        handleConfigureCell: nil];
+    
+    newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTablesEnd
+                                                           reportingEnabled: reportingEnabled
+                                                        handleConfigureCell: nil];
+    NSMutableIndexSet *indexesToAdd = newQueryLayout.sectionTypesIndexs.mutableCopy;
+    [indexesToAdd removeIndexes:oldQueryLayout.sectionTypesIndexs];
+    __block short ctr = 0;
+    NSMutableIndexSet *indexSetSections = [[NSMutableIndexSet alloc] init];
+    [newQueryLayout.sectionTypesIndexs enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([indexesToAdd containsIndex:idx]) {
+            [indexSetSections addIndex:(NSUInteger)ctr];
+        }
+        ctr++;
+    }];
+    return indexSetSections;
+}
+
 - (void)viewController: (MADQueryBuilderAddTableViewController *)viewController
  addedQueryTableWithID: (NSManagedObjectID *)objectID {
     
@@ -864,25 +887,14 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
         RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
         RptqQuery *query = rptqDatabase.hasQueries.anyObject;
-        
+
         NSUInteger numberOfTablesOld = query.hasQueryTables.count;
         NSUInteger numberOfTables = numberOfTablesOld + 1;
         BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
-        MADQueryViewDataSource *oldQueryLayout, *newQueryLayout;
-        oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTablesOld
-                                                               reportingEnabled: reportingEnabled
-                                                            handleConfigureCell: nil];
-        
-        newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
-                                                               reportingEnabled: reportingEnabled
-                                                            handleConfigureCell: nil];
-        NSMutableIndexSet *indexesToAdd = newQueryLayout.sectionTypesIndexs.mutableCopy;
-        [indexesToAdd removeIndexes:oldQueryLayout.sectionTypesIndexs];
-        
+
         RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable: schemaTable
                                                                            database: rptqDatabase
                                                             forManagedObjectContext: private];
-        //newQueryTable.inQuery = query;
         
         NSMutableSet <RptqQueryTable *> *tablesInQuery;
         NSMutableSet <RptqQueryField *> *newQueryFields;
@@ -904,14 +916,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         [tablesInQuery addObject:newQueryTable];
         query.hasQueryTables = tablesInQuery;
         
-        __block short ctr = 0;
-        NSMutableIndexSet *indexSetSections = [[NSMutableIndexSet alloc] init];
-        [newQueryLayout.sectionTypesIndexs enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([indexesToAdd containsIndex:idx]) {
-                [indexSetSections addIndex:(NSUInteger)ctr];
-            }
-            ctr++;
-        }];
         NSError * __autoreleasing error = NULL;
         if (![private save:&error]) {
             os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
@@ -930,6 +934,10 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             NSUInteger tableIndex = [strongself.queryViewDataSource.queryTablesController.fetchedObjects indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 return newQueryTable.identifier == obj.identifier;
             }];
+            
+            NSIndexSet *indexSetSections = [self newSectionsTableCountStart: numberOfTablesOld
+                                                              tableCountEnd: numberOfTables
+                                                           reportingEnabled: reportingEnabled];
             
             [self tableView: strongself.tableView insertTable:tableIndex andSection:indexSetSections];
 
