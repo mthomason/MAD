@@ -94,8 +94,10 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    if (self.managedObjectContext.parentContext && self.identifier <= 0) {
+        self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                            managedObjectContext:self.managedObjectContext];
+    }
 }
 
 - (NSUInteger)sectionCount { return MADSectionCountWithGroupCount(self.hasQueryGroups.count); }

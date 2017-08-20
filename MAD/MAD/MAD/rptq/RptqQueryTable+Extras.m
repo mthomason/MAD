@@ -53,8 +53,10 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                        managedObjectContext:self.managedObjectContext];
+    if (self.managedObjectContext.parentContext && self.identifier <= 0) {
+        self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                            managedObjectContext:self.managedObjectContext];
+    }
 }
 
 + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID

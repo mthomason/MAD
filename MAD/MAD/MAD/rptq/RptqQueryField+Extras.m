@@ -16,10 +16,13 @@
     #import <objc/runtime.h>
 #endif
 
+#import <os/log.h>
+
 #import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSError.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -37,8 +40,20 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                           managedObjectContext:self.managedObjectContext];
+    if (self.managedObjectContext.parentContext && self.identifier <= 0) {
+        self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+                                            managedObjectContext:self.managedObjectContext];
+    }
+}
+
+- (BOOL)validateForInsert:(NSError * _Nullable __autoreleasing *)error {
+    BOOL success;
+    NSError * __autoreleasing errorValidation = nil;
+    if (!(success = [super validateForInsert:&errorValidation])) {
+        *error = errorValidation.copy;
+        os_log_error(OS_LOG_DEFAULT, "Error: %s", errorValidation.localizedDescription.UTF8String);
+    }
+    return success;
 }
 
 + (NSString *)keyInQueryTable {

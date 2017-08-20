@@ -35,14 +35,6 @@
     return sectionRow;
 }
 
-- (void)awakeFromInsert {
-    [super awakeFromInsert];
-}
-
-- (void)awakeFromFetch {
-    [super awakeFromFetch];
-}
-
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
     [super awakeFromSnapshotEvents:flag];
     switch (flag) {
