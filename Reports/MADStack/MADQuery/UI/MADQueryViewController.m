@@ -918,14 +918,16 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
         
         NSError * __autoreleasing error = NULL;
         if (![private save:&error]) {
-            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+            os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s",
+                        error.localizedDescription.UTF8String);
         } else {
             error = NULL;
             NSManagedObjectContext *parentContext = [private parentContext];
             [parentContext performBlockAndWait:^{
                 NSError * __autoreleasing errorParent = NULL;
                 if (![parentContext save:&errorParent]) {
-                    os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", errorParent.localizedDescription.UTF8String);
+                    os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s",
+                                errorParent.localizedDescription.UTF8String);
                 }
             }];
             [strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
