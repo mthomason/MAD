@@ -289,8 +289,12 @@ void madwarn(char *err,  const char*err2) { }
     [self.undoManager registerUndoWithTarget:self handler:undoHandler];
 }
 
-- (NSInteger)numberOfPages {
-    return _reportFormatter != nil ? _reportFormatter.numberOfPages : -1;
+- (NSUInteger)numberOfPages {
+    return _reportFormatter != nil ? _reportFormatter.numberOfPages : 0;
+}
+
+- (NSUInteger)numberOfResults {
+    return _dataTable != nil ? _dataTable.rowCounter : 0;
 }
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {

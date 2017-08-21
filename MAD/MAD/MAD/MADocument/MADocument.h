@@ -65,7 +65,8 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readwrite, nonatomic, assign)    BOOL limitResultsDesignMode;
     @property (readwrite, nonatomic, assign, getter=isAutosaveEnabled)    BOOL autosaveEnabled;
 
-    @property (nonatomic, readonly) NSInteger numberOfPages;
+    @property (nonatomic, readonly) NSUInteger numberOfPages;
+    @property (nonatomic, readonly) NSUInteger numberOfResults;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
     - (instancetype)initWithFileURL:(NSURL *)url;
