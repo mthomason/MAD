@@ -322,9 +322,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     _refreshing = NO;
     _startedRefresh = NO;
 
-    NSArray <NSOperation *> *operations = [self initalOperations];
-    [[NSOperationQueue mainQueue] addOperations:operations waitUntilFinished:NO];
-
 }
 
 - (NSArray <NSOperation *> *)initalOperations {
@@ -346,6 +343,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [opLoadPtr addDependency:opLoadDoc];
     [initalOperations addObject:opLoadPtr];
     
+    /*
+     
+     updateNumberOfPages
+     updateRecordsRead
+     setLastCacheDate:
+     setDisplayActive
+     reloadWithSize:
+     timerDealloc
+     updateTimeSinceLastRefresh:
+     removeObserverDidReadRowsFromDatabase:
+     
+     */
     
     invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self
                                                                      selector:@selector(updateNumberOfPages)
@@ -363,6 +372,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                        selector:@selector(setNeedsLayout)
                                                                          object:nil];
     [invokePageSliderNeedsLayout addDependency:opLoadPtr];
+    [invokePageSliderNeedsLayout addDependency:invokeUpdateRecordsRead];
+    [invokePageSliderNeedsLayout addDependency:invokeUpdateNumberOfPages];
     [initalOperations addObject:invokePageSliderNeedsLayout];
     
     invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self
@@ -392,14 +403,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     invokeTimeSinceLastUpdate = [[NSInvocationOperation alloc] initWithTarget:self
                                                                      selector:@selector(updateTimeSinceLastRefresh:)
                                                                        object:nil];
-    [invokeTimeSinceLastUpdate addDependency:opLoadPtr];
-    [initalOperations addObject:invokeTimeSinceLastUpdate];
+    [invokeTimeSinceLastUpdate addDependency: opLoadPtr];
+    [invokeTimeSinceLastUpdate addDependency: invokeTimerDealloc];
+    [initalOperations addObject: invokeTimeSinceLastUpdate];
     
     invokeRemoveObserver = [[NSInvocationOperation alloc] initWithTarget:self
                                                                 selector:@selector(removeObserverDidReadRowsFromDatabase:)
                                                                   object:document.database];
-    [invokeRemoveObserver addDependency:opLoadPtr];
-    [initalOperations addObject:invokeRemoveObserver];
+    [invokeRemoveObserver addDependency: invokeReloadWithSize];
+    [invokeRemoveObserver addDependency: opLoadPtr];
+    [initalOperations addObject: invokeRemoveObserver];
     
     return initalOperations;
 }
@@ -418,6 +431,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
+    
+    NSArray <NSOperation *> *initalOperations = [self initalOperations];
+    [[NSOperationQueue mainQueue] addOperations:initalOperations waitUntilFinished:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
