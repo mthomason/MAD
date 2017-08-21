@@ -66,9 +66,9 @@ static const short errCache = 2;
         }
         
         if (credientals == nil) {
-            NSError *error = [NSError errorWithDomain: @"MADCache"
-                                                 code: errCache + 1
-                                             userInfo: nil];
+            NSError * __autoreleasing error = [NSError errorWithDomain: @"MADCache"
+                                                                  code: errCache + 1
+                                                              userInfo: nil];
             [self finishWithError:error];
             return;
         }

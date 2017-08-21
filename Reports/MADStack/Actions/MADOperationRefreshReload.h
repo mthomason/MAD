@@ -1,5 +1,5 @@
 //
-//  MADRefreshReloadOperation.h
+//  MADOperationRefreshReload.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/2/16.
@@ -12,6 +12,7 @@
 #import <MADFoundation/MADGroupOperation.h>
 
 @class UIViewController, MADocument, MADDatabaseConnection;
+@protocol MADOperationRefreshReloadProtocol;
 
 @interface MADOperationRefreshReload : MADGroupOperation
 
@@ -19,7 +20,7 @@
     @property (nonatomic, readonly, weak) MADocument *document;
 
     - (instancetype)initWithDocument: (MADocument *)document
-                      viewController: (UIViewController *)viewController
+                      viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
                   databaseConnection: (MADDatabaseConnection *)databaseConnection;
 
 @end

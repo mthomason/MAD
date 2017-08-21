@@ -1012,6 +1012,7 @@
 		4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
+		4CC982721F4AC32000E0496A /* MADLabelPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */; };
 		4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */; };
 		4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18661DA14A5C0093B166 /* libarchive.a */; };
 		4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18691DA14AC70093B166 /* libmysqlclient.a */; };
@@ -2324,6 +2325,9 @@
 		4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageBolt20@2x.png"; path = "Reports/UIImageBolt20@2x.png"; sourceTree = "<group>"; };
 		4CC909031D0FCA1E007A1C75 /* MADViewControllerBarcodeOptionsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADViewControllerBarcodeOptionsDelegate.h; path = MADStack/MADBarcodes/UI/MADViewControllerBarcodeOptionsDelegate.h; sourceTree = "<group>"; };
 		4CC909041D0FCBCF007A1C75 /* MADViewControllerBarcodeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADViewControllerBarcodeDelegate.h; path = MADStack/MADBarcodes/UI/MADViewControllerBarcodeDelegate.h; sourceTree = "<group>"; };
+		4CC982701F4AC32000E0496A /* MADLabelPageSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelPageSlider.h; sourceTree = "<group>"; };
+		4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelPageSlider.m; sourceTree = "<group>"; };
+		4CC982731F4ACDB300E0496A /* MADOperationRefreshReloadProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshReloadProtocol.h; sourceTree = "<group>"; };
 		4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationItemTitleView.h; path = MADStack/Common/UI/MADNavigationItemTitleView.h; sourceTree = SOURCE_ROOT; };
 		4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationItemTitleView.m; path = MADStack/Common/UI/MADNavigationItemTitleView.m; sourceTree = SOURCE_ROOT; };
 		4CCE18661DA14A5C0093B166 /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = opt/lib/archive/libarchive.a; sourceTree = "<group>"; };
@@ -3495,6 +3499,8 @@
 				4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */,
 				4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */,
 				4C15F32E1E4C9B940072BE5F /* MADPageSliderProtocol.h */,
+				4CC982701F4AC32000E0496A /* MADLabelPageSlider.h */,
+				4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -3750,6 +3756,7 @@
 		4C5B560F1C9A2DF7005C19D9 /* Report */ = {
 			isa = PBXGroup;
 			children = (
+				4CC982731F4ACDB300E0496A /* MADOperationRefreshReloadProtocol.h */,
 				4CF6AFBE1CAFB55C00D3AD11 /* MADOperationRefreshReload.h */,
 				4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */,
 				4CF6AFC11CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.h */,
@@ -6317,6 +6324,7 @@
 				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
 				4C6D2F011E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m in Sources */,
 				4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */,
+				4CC982721F4AC32000E0496A /* MADLabelPageSlider.m in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
 				4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */,
 				4CAEE72B1E55EB65009A6096 /* MADDriverSelectorNavigationItem.m in Sources */,

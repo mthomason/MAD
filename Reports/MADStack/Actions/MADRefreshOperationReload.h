@@ -11,8 +11,13 @@
 
 #import <MADFoundation/MADOperation.h>
 
-@interface MADRefreshOperationReload : MADOperation
+@class NSObject, MADocument;
 
+@protocol MADOperationRefreshReloadProtocol;
+
+@interface MADRefreshOperationReload : MADOperation
+    - (instancetype)initWithDocument: (MADocument *)document
+                      viewController: (NSObject <MADOperationRefreshReloadProtocol> *)viewController;
 @end
 
 #endif

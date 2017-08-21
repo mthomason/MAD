@@ -15,6 +15,7 @@
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADTabBarItemProtocol.h"
 #import "MADOperationRefreshReload.h"
+#import "MADOperationRefreshReloadProtocol.h"
 
 @protocol MADViewControllerStandardProtocol;
 

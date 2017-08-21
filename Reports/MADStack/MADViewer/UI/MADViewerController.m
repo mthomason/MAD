@@ -348,6 +348,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
      
      updateNumberOfPages
      updateRecordsRead
+     layoutPageSlider
      setLastCacheDate:
      setDisplayActive
      reloadWithSize:
@@ -617,6 +618,52 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
     [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
     
+}
+
+- (void)operation:(MADOperation *)operation reloadWithSize:(CGSize)size {
+    
+}
+
+- (void)operation:(MADOperation *)operation setLastCacheDate:(NSDate *)date {
+    self.lastCacheDate = date.copy;
+}
+
+- (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
+    if (active) {
+        [self setDisplayActive];
+    } else {
+        [self setDisplayInactive];
+    }
+}
+
+- (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
+    
+    MADPrintPageRenderer *printPageRenderer;
+    printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+    self.printPageRendererReport = printPageRenderer;
+    
+    [self ignoreFormatter: document.reportFormatter];
+
+    MADPageViewAttributes *pageAttributes;
+    pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
+                                                                  total: _currentLocation.totalPages
+                                                                   size: document.paperSize];
+    
+    MADDocumentPageController *page =
+    [MADDocumentPageController newReportPageViewControllerWithDocument: document
+                                                        pageAttributes: pageAttributes];
+    page.view.frame = self.view.bounds;
+    page.delegate = self;
+    
+    NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
+    
+    [self setViewControllers: viewControllers
+                   direction: UIPageViewControllerNavigationDirectionForward
+                    animated: NO
+                  completion: nil];
+    
+    [self setDisplayActive];
+
 }
 
 #pragma mark -

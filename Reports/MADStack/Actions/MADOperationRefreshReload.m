@@ -26,6 +26,8 @@
     @property (nonatomic, readwrite, weak) MADocument *document;
     @property (nonatomic, readwrite, strong) MADOperationGetCredentials *getCredentials;
     @property (nonatomic, readwrite, assign) BOOL completedSuccessfully;
+    @property (nonatomic, readwrite, strong) UIViewController <MADOperationRefreshReloadProtocol> *viewController;
+    @property (nonatomic, readwrite, strong) MADDatabaseConnection *databaseConnection;
 
 @end
 
@@ -44,15 +46,12 @@
 }
 
 - (instancetype)initWithDocument: (MADocument *)document
-                  viewController: (UIViewController *)viewController
+                  viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
               databaseConnection: (MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
 
-        MADOperationGetCredentials *getCredentials;
-        getCredentials= [[MADOperationGetCredentials alloc] initWithDatabaseConnection: databaseConnection
-                                                                        viewController: viewController];
-        self.getCredentials = getCredentials;
-        
+        _databaseConnection = databaseConnection;
+        _viewController = viewController;
         _document = document;
         _completedSuccessfully = NO;
 
@@ -66,7 +65,13 @@
         return [self finish];
     }
 
+    MADOperationGetCredentials *getCredentials;
+    getCredentials= [[MADOperationGetCredentials alloc] initWithDatabaseConnection: _databaseConnection
+                                                                    viewController: _viewController];
+    self.getCredentials = getCredentials;
+
     MADocument *document = _document;
+    
     MADOperationRefreshInitializeMainDataTable *initializeMainDataTable;
     initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
     [initializeMainDataTable addDependency:self.getCredentials];
@@ -90,6 +95,8 @@
     MADOperationRefreshReload * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
         MADOperationRefreshReload *sself = wself;
+        sself.viewController = nil;
+        sself.databaseConnection = nil;
         sself.completedSuccessfully = YES;
         [sself finish];
     }];
