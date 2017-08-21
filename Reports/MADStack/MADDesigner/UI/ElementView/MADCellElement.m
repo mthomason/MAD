@@ -39,14 +39,26 @@
     UIMenuController *menu = [UIMenuController sharedMenuController];
     NSArray *menuMenuItems = menu.menuItems.count > 0 ? menu.menuItems : [[NSArray alloc] init];
     NSMutableArray <UIMenuItem *> *menuItems = [[NSMutableArray alloc] initWithArray: menuMenuItems];
-    UIMenuItem *menuItemEdit;
-    UIMenuItem *menuItemFormat;
-    NSString *edit = NSLocalizedString(@"Edit", @"Edit");
-    NSString *format = NSLocalizedString(@"Format", @"Format");
-    menuItemEdit = [[UIMenuItem alloc] initWithTitle: edit action: @selector(edit:)];
-    menuItemFormat = [[UIMenuItem alloc] initWithTitle: format action: @selector(format:)];
-    [menuItems addObject:menuItemEdit];
-    [menuItems addObject:menuItemFormat];
+
+    NSUInteger indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return obj.action == @selector(edit:);
+    }];
+    if (indexOfActions == NSNotFound) {
+        UIMenuItem *menuItemEdit;
+        NSString *edit = NSLocalizedString(@"Edit", @"Edit");
+        menuItemEdit = [[UIMenuItem alloc] initWithTitle: edit action: @selector(edit:)];
+        [menuItems addObject:menuItemEdit];
+    }
+
+    indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return obj.action == @selector(format:);
+    }];
+    if (indexOfActions == NSNotFound) {
+        UIMenuItem *menuItemFormat;
+        NSString *format = NSLocalizedString(@"Format", @"Format");
+        menuItemFormat = [[UIMenuItem alloc] initWithTitle: format action: @selector(format:)];
+        [menuItems addObject:menuItemFormat];
+    }
     menu.menuItems = menuItems;
 }
 
