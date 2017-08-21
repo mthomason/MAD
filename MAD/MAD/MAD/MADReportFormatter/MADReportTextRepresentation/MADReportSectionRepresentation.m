@@ -9,6 +9,8 @@
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
 #import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 @interface MADReportSectionRepresentation ()
 
@@ -37,8 +39,16 @@
     return self;
 }
 
-- (void)addRow:(MADReportSectionRowsRepresentation *)row {
-    [_rows addObject:row];
+- (void)addRow:(MADReportSectionRowsRepresentation *)row error:(NSError * __autoreleasing *)error {
+    @try {
+        [_rows addObject:row];
+    } @catch (NSException *exception) {
+        MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
+                                                                  andMessage:@"Failed to add null value."];
+        *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:49832];
+    } @finally {
+        
+    }
 }
 
 - (NSUInteger)numberOfRows { return self.rows.count; }

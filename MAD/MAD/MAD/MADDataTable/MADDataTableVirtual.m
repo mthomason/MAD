@@ -202,7 +202,7 @@
     return data;
 }
 
-- (void)addRow:(NSArray *)row {
+- (void)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
     NSUInteger index = 0;
     NSUInteger numberOfColumns = [self numberOfColumns];
     NSMutableDictionary *indexedRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];

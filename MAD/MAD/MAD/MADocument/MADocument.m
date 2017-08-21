@@ -1334,6 +1334,7 @@ void madwarn(char *err,  const char*err2) { }
 
     }];
     [self updateChangeCount: UIDocumentChangeDone];
+    [self autosaveWithCompletionHandler:^(BOOL success) { }];
 }
 
 #pragma mark -

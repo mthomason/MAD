@@ -540,8 +540,8 @@ static inline CGRect SectionBounds(CGRect pageRect,
             
             [rowRepresentation addLine:line];
         }
-        
-        [sectionRepresentation addRow:rowRepresentation];
+        NSError * __autoreleasing error = nil;
+        [sectionRepresentation addRow:rowRepresentation error:&error];
     }
     
 END_DrawSection:;

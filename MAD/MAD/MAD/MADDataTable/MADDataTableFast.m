@@ -432,7 +432,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 
 
-- (void)addRow:(NSArray <id> *)row {
+- (void)addRow:(NSArray <id> *)row error:(NSError * __autoreleasing *)error {
 
     _rowDataLastInserted = row;
     
@@ -491,8 +491,11 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         step_result = sqlite3_clear_bindings(_statementInsert);
         step_result = sqlite3_reset(_statementInsert);
         
-        NSAssert(step_result == SQLITE_OK, @"sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
-        
+        if (step_result == SQLITE_OK) {
+            MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
+                                                                      andMessage:[NSString stringWithFormat:@"sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(sqlite_database)]];
+            *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:328943];
+        }
     } else {
 
         MTQuery *query;
@@ -522,7 +525,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         [rowData addObject:obj];
         
     }
-    [self addRow:rowData];
+    NSError * __autoreleasing error = nil;
+    [self addRow:rowData error:&error];
     
     //}
     

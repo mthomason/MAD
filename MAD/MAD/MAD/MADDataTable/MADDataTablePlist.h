@@ -44,7 +44,7 @@ typedef enum MADDataTableParameters : short {
     - (void)loadFromCacheWithUrl:(NSURL *)url;
 
     - (void)addColumn:(MADDataColumn *)column;
-    - (void)addRow:(NSArray *)row;
+    - (void)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error;
     - (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
 
     - (void)sortUsingDescriptors:(NSArray *)sortDescriptors;
