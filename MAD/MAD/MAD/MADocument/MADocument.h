@@ -75,6 +75,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (instancetype)initWithFileURL:(NSURL *)url
               andDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
 
+    - (void)format;
     - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
     - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID

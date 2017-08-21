@@ -220,9 +220,7 @@ void madwarn(char *err,  const char*err2) { }
 
 @end
 
-@implementation MADocument {
-    BOOL _didRefresh;
-}
+@implementation MADocument
 
 @synthesize sectionLayoutManagers = _sectionLayoutManagers;
 
@@ -307,6 +305,11 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)setRefreshed:(BOOL)refreshed {
     _reportFormatter.didRefresh = refreshed;
+}
+
+- (void)format {
+    [self.reportFormatter formatForSize:self.paperSize
+                         contentChanged:NO];
 }
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {
@@ -897,8 +900,6 @@ void madwarn(char *err,  const char*err2) { }
                           selector: @selector(handleDocumentStateChanged:)
                               name: UIDocumentStateChangedNotification
                             object: self];
-        
-        _didRefresh = NO;
     }
     return self;
 }
