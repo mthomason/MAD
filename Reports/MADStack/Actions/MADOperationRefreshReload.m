@@ -134,7 +134,7 @@
 }
 
 - (void)updateNumberOfRecords:(NSUInteger)numberOfRecords {
-    if (self.messageQueue.operationCount < 1) {
+    if (self.messageQueue.operationCount < 2) {
         typeof(self) __weak weakself = self;
         [self.messageQueue addOperationWithBlock:^{
             NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
@@ -143,6 +143,7 @@
             }];
             NSArray *ops = @[op];
             [[NSOperationQueue mainQueue] addOperations:ops waitUntilFinished:YES];
+            usleep((useconds_t)floor((1/11)*1000)); //delay updates... 1/11th of a second
         }];
     }
     
