@@ -168,50 +168,57 @@ static inline CGFloat MaxDimension(CGSize size) {
     
     double tickValue = self.maximumValue / (numberOfTicks - 1);
     
+
+    typeof(self) __weak weakself = self;
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
-        
-            @autoreleasepool {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                @autoreleasepool {
+                    typeof(self) strongself = weakself;
+                    NSString *pageNumber;
+                    pageNumber = [[NSString alloc] initWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
+                    
+                    UILabel *label;
+                    label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                      rect.size.width, strongself.stringHeight)];
+                    UIColor *clearColor = [UIColor clearColor];
+                    label.backgroundColor = clearColor;
+                    label.textAlignment = NSTextAlignmentRight;
+                    label.text = pageNumber;
+                    label.font = [UIFont boldSystemFontOfSize:9.0000f];
+                    UIColor *darkTextColor = [UIColor darkTextColor];
+                    UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
+                    label.textColor = textColor;
+                    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+                    label.translatesAutoresizingMaskIntoConstraints = YES;
+                    UIColor *drawingColor = strongself.enabledColor ? [MADColorEverydayApps newColorRed] : [UIColor lightGrayColor];
+                    label.tintColor = drawingColor;
+                    
+                    label.transform = CGAffineTransformTranslate(label.transform,
+                                                                 label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
+                                                                 label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
+                    
+                    label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x ,
+                                                                 drawingPoint.y + offsetTopBottom);
+                    
+                    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+                    label.translatesAutoresizingMaskIntoConstraints = YES;
+                    label.layer.shadowOpacity = 6.0;
+                    label.layer.shadowRadius = 0.0;
+                    label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
+                    
+                    UIColor *blueColor = [MADColorEverydayApps newColorBlue];
+                    label.layer.shadowColor = blueColor.CGColor;
+                    
+                    [strongself.vibrancyView addSubview:label];
+                    [strongself.labels addObject:label];
+                    
+                }
 
-                NSString *pageNumber;
-                pageNumber = [[NSString alloc] initWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
-                
-                UILabel *label;
-                label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                  rect.size.width, _stringHeight)];
-                UIColor *clearColor = [UIColor clearColor];
-                label.backgroundColor = clearColor;
-                label.textAlignment = NSTextAlignmentRight;
-                label.text = pageNumber;
-                label.font = [UIFont boldSystemFontOfSize:9.0000f];
-                UIColor *darkTextColor = [UIColor darkTextColor];
-                UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
-                label.textColor = textColor;
-                label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-                label.translatesAutoresizingMaskIntoConstraints = YES;
-                UIColor *drawingColor = self.enabledColor ? [MADColorEverydayApps newColorRed] : [UIColor lightGrayColor];
-                label.tintColor = drawingColor;
-                
-                label.transform = CGAffineTransformTranslate(label.transform,
-                                                             label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
-                                                             label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
-                
-                label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x ,
-                                                             drawingPoint.y + offsetTopBottom);
-                
-                label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-                label.translatesAutoresizingMaskIntoConstraints = YES;
-                label.layer.shadowOpacity = 6.0;
-                label.layer.shadowRadius = 0.0;
-                label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
-
-                UIColor *blueColor = [MADColorEverydayApps newColorBlue];
-                label.layer.shadowColor = blueColor.CGColor;
-                
-                [self.vibrancyView addSubview:label];
-                [self.labels addObject:label];
-
-            }
+            });
+        });
         }
         drawingPoint = CGPointMake(drawingPoint.x,
                                    drawingPoint.y + _stringHeight + distanceBetweenTicks);
