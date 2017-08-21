@@ -289,6 +289,10 @@ void madwarn(char *err,  const char*err2) { }
     [self.undoManager registerUndoWithTarget:self handler:undoHandler];
 }
 
+- (NSInteger)numberOfPages {
+    return _reportFormatter != nil ? _reportFormatter.numberOfPages : -1;
+}
+
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {
     NSString *actionName = NSLocalizedString(italic ? @"Italic" : @"Disable Italic",
                                              italic ? @"Italic" : @"Disable Italic");
