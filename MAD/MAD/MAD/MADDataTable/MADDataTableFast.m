@@ -20,6 +20,7 @@
 #import <MADSqlite3/sqlite3.h>
 
 #import <Foundation/NSKeyedArchiver.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSCoder.h>
@@ -44,6 +45,7 @@
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
 
@@ -747,11 +749,21 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
-                 andColumnIdentifier:(NSString *)columnIdentifier {
+                 andColumnIdentifier:(NSString *)columnIdentifier
+                               error:(NSError * __autoreleasing *)error {
     NSString *columnName = [self columnNameForIdentifier:columnIdentifier];
     NSArray *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
-    NSAssert([self.columnKeys containsObject:columnName], @"Searching for a field that doesn't exist");
+    if (![self.columnKeys containsObject:columnName]) {
+        NSString *title = NSLocalizedString(@"Error", @"Error");
+        NSString *message = NSLocalizedString(@"Missing results", @"Missing results");
+        MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title
+                                                                       andMessage:message];
+        *error = [errorUserInfo errorWithDomain: NSStringFromClass(self.class)
+                                           code: 8927];
 
+        return nil;
+    }
+    
     NSDictionary * result = nil;
     NSString *tableName = [self tableName].copy;
     
@@ -768,8 +780,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTQuery * query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowId
                                                   object: options];
     sqlite3_stmt *statement = NULL;
-    NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
+    NSError * __autoreleasing errorSQL = nil;
+    NSString *sql = [query getSqlWithError:&errorSQL];
     
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
@@ -782,13 +794,15 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         int stepResult = sqlite3_step(statement);
         if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
             result = [self newCurrentObject:statement fieldKey:columnName];
-            
-            //MADIndex * lastDataForCacheId = [[MADIndex alloc] initWithIndex:cacheId
-            //                                                      andObject:result];
-            //self.lastDataForCacheId = lastDataForCacheId;
-            
         } else {
-            // FIXME: Log error.
+            const char *sqlite3message = sqlite3_errstr(stepResult);
+            NSString *title = NSLocalizedString(@"Error", @"Error");
+            NSString *message = [NSString stringWithFormat:@"%s", sqlite3message];
+            MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title
+                                                                           andMessage:message];
+            *error = [errorUserInfo errorWithDomain: NSStringFromClass(self.class)
+                                               code: stepResult];
+            
             result = [[NSDictionary alloc] init];
         }
     }

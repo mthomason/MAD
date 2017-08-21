@@ -98,10 +98,6 @@
     [super execute];
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
-    if ([operation isKindOfClass:[MADOperationRefresh class]]) {
-        //[self finish];
-    }
-}
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors { }
 
 @end

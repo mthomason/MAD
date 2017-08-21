@@ -2054,14 +2054,14 @@ static const inline CGSize sizePopoverFonts() {
                 if (_identifierJustDisplayed == identifier) {
                     __typeof(self) __weak wself = self;
                     if ([elementView conformsToProtocol:@protocol(MADViewAnimationProtocol)]) {
-                        [elementView flash:^(BOOL finished) {
-                            if (finished) {
+                        //[elementView flash:^(BOOL finished) {
+                        //    if (finished) {
                                 typeof(self) sself = wself;
                                 if (sself) {
                                     sself->_identifierJustDisplayed = -1;
                                 }
-                            }
-                        }];
+                        //    }
+                        //}];
                     }
                 }
                 

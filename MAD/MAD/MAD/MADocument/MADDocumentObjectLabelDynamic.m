@@ -43,9 +43,10 @@
         NSString *qa = [item.referencesQueryField.inQueryTable queryAlias];
         NSString *tableFieldKey = [datasource.database newSafeQueryField: item.referencesQueryField.databaseSchemaField.name
                                                                 andTable: qa];
-
+        NSError * __autoreleasing error = nil;
         NSDictionary *rowData = [datasource.dataTable copyDataForCacheId: definition.detailRowId
-                                                     andColumnIdentifier: tableFieldKey];
+                                                     andColumnIdentifier: tableFieldKey
+                                                                   error: &error];
         if (rowData != nil) {
             
             NSString *text = [item formattedString: item.referencesQueryField.databaseSchemaField.dataType

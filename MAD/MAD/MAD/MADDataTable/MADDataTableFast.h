@@ -29,7 +29,9 @@
 
     - (id)runSelectQuery:(MTQuery *)query;
 
-    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId andColumnIdentifier:(NSString *)columnIdentifier;
+    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
+                     andColumnIdentifier:(NSString *)columnIdentifier
+                                   error:(NSError * __autoreleasing *)error;
 
 @end
 
