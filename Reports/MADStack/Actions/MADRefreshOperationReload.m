@@ -104,7 +104,7 @@
     }];
     updateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
         typeof(self) __strong sself = weakself;
-        [sself.viewController operation:sself updateRecordsRead:document.numberOfResults];
+        [sself.viewController operation:sself updatePages:document.numberOfPages];
     }];
     operations = @[updateRecordsRead, finishReload];
     [[NSOperationQueue mainQueue] addOperations: operations

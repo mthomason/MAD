@@ -108,7 +108,9 @@
     MADOperationRefreshReload * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
         MADOperationRefreshReload *sself = wself;
-        [sself ignoreDatabase:sself.document.database];
+        MADocument *sdocument = sself.document;
+        [sself ignoreDatabase:sdocument.database];
+        [sself updateNumberOfRecords:sdocument.numberOfResults];
         sself.viewController = nil;
         sself.databaseConnection = nil;
         sself.completedSuccessfully = YES;

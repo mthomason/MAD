@@ -551,75 +551,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark -
 #pragma mark Operations
 
-- (void)relaodByBlocks {
-    NSInvocationOperation *invokeUpdateNumberOfPages, *invokeUpdateRecordsRead,
-                          *invokePageSliderNeedsLayout, *invokeSetDisplayActive,
-                          *invokeReloadWithSize, *invokeTimerDealloc,
-                          *invokeTimeSinceLastUpdate, *invokeRemoveObserver,
-                          *invokesetLastCacheDate;
-    
-    MADocument *document = self.document;
-    
-    NSValue *paperSize = [NSValue valueWithCGSize:document.paper.paperSize];
-
-    invokeUpdateNumberOfPages = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                     selector:@selector(updateNumberOfPages)
-                                                                       object:nil];
-    
-    invokeUpdateRecordsRead = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                   selector:@selector(updateRecordsRead)
-                                                                     object:nil];
-    [invokeUpdateRecordsRead addDependency:invokeUpdateNumberOfPages];
-    
-    invokePageSliderNeedsLayout = [[NSInvocationOperation alloc] initWithTarget:self.pageSlider
-                                                                       selector:@selector(setNeedsLayout)
-                                                                         object:nil];
-    [invokePageSliderNeedsLayout addDependency:invokeUpdateRecordsRead];
-    
-    invokesetLastCacheDate = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                  selector:@selector(setLastCacheDate:)
-                                                                    object:[NSDate date]];
-    [invokesetLastCacheDate addDependency:invokePageSliderNeedsLayout];
-    
-    invokeSetDisplayActive = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                  selector:@selector(setDisplayActive)
-                                                                    object:nil];
-    [invokeSetDisplayActive addDependency:invokesetLastCacheDate];
-    
-    
-    invokeReloadWithSize = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                selector:@selector(reloadWithSize:)
-                                                                  object:paperSize];
-    [invokeReloadWithSize addDependency:invokeSetDisplayActive];
-    
-    invokeTimerDealloc = [[NSInvocationOperation alloc] initWithTarget:self
-                                                              selector:@selector(timerDealloc)
-                                                                object:nil];
-    [invokeTimerDealloc addDependency:invokeReloadWithSize];
-    
-    invokeTimeSinceLastUpdate = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                     selector:@selector(updateTimeSinceLastRefresh:)
-                                                                       object:nil];
-    [invokeTimeSinceLastUpdate addDependency:invokeTimerDealloc];
-    
-    invokeRemoveObserver = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                selector:@selector(removeObserverDidReadRowsFromDatabase:)
-                                                                  object:document.database];
-    [invokeRemoveObserver addDependency:invokeTimeSinceLastUpdate];
-    
-    
-    [[NSOperationQueue mainQueue] addOperation:invokeUpdateNumberOfPages];
-    [[NSOperationQueue mainQueue] addOperation:invokeUpdateRecordsRead];
-    [[NSOperationQueue mainQueue] addOperation:invokePageSliderNeedsLayout];
-    [[NSOperationQueue mainQueue] addOperation:invokesetLastCacheDate];
-    [[NSOperationQueue mainQueue] addOperation:invokeSetDisplayActive];
-    [[NSOperationQueue mainQueue] addOperation:invokeReloadWithSize];
-    [[NSOperationQueue mainQueue] addOperation:invokeTimerDealloc];
-    [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
-    [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
-    
-}
-
 - (void)operation:(MADOperation *)operation setLastCacheDate:(NSDate *)date {
     self.lastCacheDate = date.copy;
 }
@@ -633,13 +564,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
-    
+
     MADPrintPageRenderer *printPageRenderer;
     printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
     self.printPageRendererReport = printPageRenderer;
     
-    [self ignoreFormatter: document.reportFormatter];
-
     MADPageViewAttributes *pageAttributes;
     pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
                                                                   total: _currentLocation.totalPages
@@ -1036,8 +965,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self setDisplayInactive];
 
         MADocument *document = self.document;
-
-        [self addObserverDidReadRowsToDatabase:document.database];
         
         MADOperationRefreshReload *refreshOperation;
         refreshOperation = [[MADOperationRefreshReload alloc] initWithDocument:document
@@ -1054,19 +981,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (IBAction)zoomToFit:(id)sender { }
 
 - (IBAction)zoomToFullScreen:(id)sender { }
-
-- (void)addObserverDidReadRowsToDatabase:(MTDatabase *)database {
-    //[[NSNotificationCenter defaultCenter] addObserver: self
-    //                                         selector: @selector(reportDocumentDidReadRows:)
-    //                                             name: MADNotificationDidReadRowsName
-    //                                           object: database];
-}
-
-- (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
-    //[[NSNotificationCenter defaultCenter] removeObserver: self
-    //                                                name: MADNotificationDidReadRowsName
-    //                                              object: database];
-}
 
 #pragma mark -
 #pragma mark Acivities
@@ -1095,95 +1009,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         //[self.popoverControllerActivity dismissPopoverAnimated:YES];
         completion(YES);
     }
-}
-
-#pragma mark -
-#pragma mark Load data
-
-- (void)reloadWithSize:(NSValue *)viewBoundsWrapper {
-    CGSize viewBounds = [viewBoundsWrapper CGSizeValue];
-
-    if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
-        self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
-    }
-    
-    [self setDisplayInactive];
-
-    MADocument *document = self.document;
-    
-    [document prepareForQuery];
-    
-    [self watchFormatter: document.reportFormatter];
-    
-    document.reportFormatter.didRefresh = self->_startedRefresh;
-    [document.reportFormatter formatForSize:viewBounds contentChanged: NO];
-    
-    MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
-    self.printPageRendererReport = printPageRenderer;
-    
-    [self ignoreFormatter: document.reportFormatter];
-    [self updateNumberOfPages];
-    
-    if (self) {
-        MADPageViewAttributes *pageAttributes;
-        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
-                                                                      total: _currentLocation.totalPages
-                                                                       size: document.paper.paperSize];
-        
-        MADDocumentPageController *page =
-        [MADDocumentPageController newReportPageViewControllerWithDocument: document
-                                                            pageAttributes: pageAttributes];
-        page.view.frame = self.view.bounds;
-        page.delegate = self;
-        
-        NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
-        
-        [self setViewControllers: viewControllers
-                       direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO
-                      completion: nil];
-        
-        [self setDisplayActive];
-    }
-    
-    _refreshing = NO;
-    _startedRefresh = NO;
-    
-    [self operation:nil updateRecordsRead:document.dataTable.rowCounter];
-    
-    document.reportFormatter.didRefresh = NO;
-    
-    if (self.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
-        
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        
-        if (_didRefreshBeforeReaload) {
-            NSString *body = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
-            notification.alertBody = body;
-            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-            _didRefreshBeforeReaload = NO;
-        }
-        
-        NSNumber *bgtask;
-        bgtask = [[NSNumber alloc] initWithUnsignedInteger: self.backgroundTaskIdRefresh];
-        self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-        [[UIApplication sharedApplication] handoffBackground:bgtask];
-    }
-}
-
-#pragma mark - Post Report Notifications
-
-- (void)watchFormatter:(MADReportFormatter *)formatter {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reportFormatterDidFormatPage:)
-                                                 name: MADNotificationDidFormatPagesName
-                                               object: formatter];
-}
-
-- (void)ignoreFormatter:(MADReportFormatter *)formatter {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationDidFormatPagesName
-                                                  object: formatter];
 }
 
 #pragma mark -
@@ -1347,10 +1172,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.timerLabelTimeSinceRefreh = t;
 }
 
-- (void)updateRecordsRead {
-    [self operation:nil updateRecordsRead:self.document.dataTable.rowCounter];
-}
-
 #pragma mark -
 #pragma mark Report Notifications
 
@@ -1382,12 +1203,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: records];
     [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
 
-}
-
-- (void)updateNumberOfPages {
-    _currentLocation.totalPages = self.document.reportFormatter.numberOfPages;
-    [self operation:nil updatePages: (_currentLocation.totalPages > 0 ? (_currentLocation.totalPages - 1) : 0)];
-    //[self setDisplayActive];
 }
 
 - (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages {
