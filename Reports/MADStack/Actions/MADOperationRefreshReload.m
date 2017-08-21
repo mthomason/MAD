@@ -15,23 +15,30 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MADDatabaseConnection.h>
+#import <MAD/MADNotificationDidReadRows.h>
 
 #import "MADOperationGetCredentials.h"
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 #import "MADOperationRefreshInitialize.h"
 #import "MADOperationRefresh.h"
+#import "MADRefreshOperationReload.h"
+#import "MADOperationRefreshReloadProtocol.h"
 
 @interface MADOperationRefreshReload ()
 
     @property (nonatomic, readwrite, weak) MADocument *document;
     @property (nonatomic, readwrite, strong) MADOperationGetCredentials *getCredentials;
     @property (nonatomic, readwrite, assign) BOOL completedSuccessfully;
-    @property (nonatomic, readwrite, strong) UIViewController <MADOperationRefreshReloadProtocol> *viewController;
+    @property (nonatomic, readwrite, strong) id /* UIViewController * */ <MADOperationRefreshReloadProtocol> viewController;
     @property (nonatomic, readwrite, strong) MADDatabaseConnection *databaseConnection;
+
+    @property (nonatomic, strong) NSOperationQueue *messageQueue;
 
 @end
 
-@implementation MADOperationRefreshReload
+@implementation MADOperationRefreshReload {
+    NSUInteger _skipCount, _displayCount;
+}
 
 - (void)dealloc { }
 
@@ -49,12 +56,14 @@
                   viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
               databaseConnection: (MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
-
+        _skipCount = 0, _displayCount = 0;
         _databaseConnection = databaseConnection;
         _viewController = viewController;
         _document = document;
         _completedSuccessfully = NO;
-
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        queue.maxConcurrentOperationCount = 1;
+        self.messageQueue = queue;
     }
     return self;
 }
@@ -67,42 +76,87 @@
 
     MADOperationGetCredentials *getCredentials;
     getCredentials= [[MADOperationGetCredentials alloc] initWithDatabaseConnection: _databaseConnection
-                                                                    viewController: _viewController];
-    self.getCredentials = getCredentials;
-
+                                                                    viewController: (UIViewController *)_viewController];
     MADocument *document = _document;
+    
     
     MADOperationRefreshInitializeMainDataTable *initializeMainDataTable;
     initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
-    [initializeMainDataTable addDependency:self.getCredentials];
+    [initializeMainDataTable addDependency: getCredentials];
     
     MADOperationRefreshInitialize *initialize;
     initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];
     [initialize addDependency: initializeMainDataTable];
-    [initialize addDependency: self.getCredentials];
+    [initialize addDependency: getCredentials];
     
     MADOperationRefresh *refresh = [[MADOperationRefresh alloc] initWithDocument:document];
     [refresh addDependency: initializeMainDataTable];
-    [refresh addDependency: self.getCredentials];
+    [refresh addDependency: getCredentials];
     [refresh addDependency: initialize];
     
+    MADRefreshOperationReload *reload = [[MADRefreshOperationReload alloc] initWithDocument: document
+                                                                             viewController: (NSObject <MADOperationRefreshReloadProtocol> *)_viewController];
+    [reload addDependency:refresh];
+    
     NSArray <__kindof NSOperation *> *operations;
-    operations = [[NSArray alloc] initWithObjects: self.getCredentials,
+    operations = [[NSArray alloc] initWithObjects: getCredentials,
                                                    initializeMainDataTable,
                                                    initialize,
+                                                   reload,
                                                    refresh, nil];
         
     MADOperationRefreshReload * __weak wself = self;
     NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
         MADOperationRefreshReload *sself = wself;
+        [sself ignoreDatabase:sself.document.database];
         sself.viewController = nil;
         sself.databaseConnection = nil;
         sself.completedSuccessfully = YES;
+        [sself.messageQueue cancelAllOperations];
+        sself.messageQueue = nil;
         [sself finish];
     }];
     
+    [self watchDatabase:document.database];
+    
     [self addOperations:operations finishingOperation:finishingOperation];
+
+    self.getCredentials = getCredentials;
+
     [super execute];
+}
+
+- (void)reportDocumentDidReadRows:(NSNotification *)sender {
+    NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
+    [self updateNumberOfRecords:rowNumber.unsignedIntegerValue];
+}
+
+- (void)updateNumberOfRecords:(NSUInteger)numberOfRecords {
+    if (self.messageQueue.operationCount < 1) {
+        typeof(self) __weak weakself = self;
+        [self.messageQueue addOperationWithBlock:^{
+            NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+                typeof(self) sself = weakself;
+                [sself.viewController operation:sself updateRecordsRead:numberOfRecords];
+            }];
+            NSArray *ops = @[op];
+            [[NSOperationQueue mainQueue] addOperations:ops waitUntilFinished:YES];
+        }];
+    }
+    
+}
+
+- (void)watchDatabase:(MTDatabase *)database {
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(reportDocumentDidReadRows:)
+                                                 name: MADNotificationDidReadRowsName
+                                               object: database];
+}
+
+- (void)ignoreDatabase:(MTDatabase *)database {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationDidReadRowsName
+                                                  object: database];
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors { }

@@ -135,7 +135,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
 
 - (void)updateDisplay {
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
         [self.display replaceCharactersInRange: NSMakeRange(0, self.display.length)
                           withAttributedString: self.statusMessage1];
         if (self.statusMessage2.length > 0) {
@@ -148,7 +148,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
         
         NSAttributedString *display = self.display.copy;
         self.attributedText = display;
-    }];
+    //}];
 }
 
 @end

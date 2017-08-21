@@ -434,8 +434,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self updateNavigationPrompt:animated];
     [self.navigationController.toolbar setNeedsLayout];
     
-    NSArray <NSOperation *> *initalOperations = [self initalOperations];
-    [self.loadDocumentViewerQueue addOperations:initalOperations waitUntilFinished:NO];
+    //NSArray <NSOperation *> *initalOperations = [self initalOperations];
+    //[self.loadDocumentViewerQueue addOperations:initalOperations waitUntilFinished:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -493,17 +493,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self updateTimeSinceLastRefresh:self];
     
     UIBarButtonItem *barButtonItemRefresh;
-    barButtonItemRefresh= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
-                                                                        target: self
-                                                                        action: @selector(refresh:)];
+    barButtonItemRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
+                                                                         target: self
+                                                                         action: @selector(refresh:)];
     barButtonItemRefresh.enabled = YES;
     [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
                                                        animated: YES];
 
     UIBarButtonItem *barButtonItemDone;
-    barButtonItemDone= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                        target: nil
-                                                                        action: @selector(done:)];
+    barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                      target: nil
+                                                                      action: @selector(done:)];
     barButtonItemDone.enabled = YES;
     [self.tabBarController.navigationItem setLeftBarButtonItem: barButtonItemDone
                                                       animated: YES];
@@ -617,10 +617,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [[NSOperationQueue mainQueue] addOperation:invokeTimerDealloc];
     [[NSOperationQueue mainQueue] addOperation:invokeTimeSinceLastUpdate];
     [[NSOperationQueue mainQueue] addOperation:invokeRemoveObserver];
-    
-}
-
-- (void)operation:(MADOperation *)operation reloadWithSize:(CGSize)size {
     
 }
 
@@ -877,24 +873,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 #pragma mark -
-#pragma mark Report Notifications
-
-- (void)reportFormatterDidFormatPage:(NSNotification *)sender {
-    NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
-    [self.labelStatus updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
-}
-
-- (void)reportDocumentDidReadRows:(NSNotification *)sender {
-    NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
-    [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
-}
-
-#pragma mark -
 #pragma mark UI Updates
 
 - (void)setDisplayActive {
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
         self.pageingEnabled = YES;
         self.tabBarItemsEnabled = YES;
@@ -911,12 +894,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
                                                            animated: YES];
         
-    }];
+    //}];
 }
 
 - (void)setDisplayInactive {
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
         self.pageingEnabled = NO;
         self.tabBarItemsEnabled = NO;
@@ -934,7 +917,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
                                                            animated: YES];
         
-    }];
+    //}];
 }
 
 - (void)setPageingEnabled:(BOOL)enabled {
@@ -1073,16 +1056,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (IBAction)zoomToFullScreen:(id)sender { }
 
 - (void)addObserverDidReadRowsToDatabase:(MTDatabase *)database {
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reportDocumentDidReadRows:)
-                                                 name: MADNotificationDidReadRowsName
-                                               object: database];
+    //[[NSNotificationCenter defaultCenter] addObserver: self
+    //                                         selector: @selector(reportDocumentDidReadRows:)
+    //                                             name: MADNotificationDidReadRowsName
+    //                                           object: database];
 }
 
 - (void)removeObserverDidReadRowsFromDatabase:(MTDatabase *)database {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MADNotificationDidReadRowsName
-                                                  object: database];
+    //[[NSNotificationCenter defaultCenter] removeObserver: self
+    //                                                name: MADNotificationDidReadRowsName
+    //                                              object: database];
 }
 
 #pragma mark -
@@ -1368,6 +1351,32 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self operation:nil updateRecordsRead:self.document.dataTable.rowCounter];
 }
 
+#pragma mark -
+#pragma mark Report Notifications
+
+- (void)reportFormatterDidFormatPage:(NSNotification *)sender {
+    NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
+    [self.labelStatus updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
+}
+
+- (void)reportDocumentDidReadRows:(NSNotification *)sender {
+    NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
+    [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
+}
+
+#pragma mark -
+#pragma mark MADOperationRefreshReloadProtocol
+
+- (void)operation:(MADOperation *)operation didReadRows:(NSNotification *)sender {
+    NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
+    [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
+}
+
+- (void)operation:(MADOperation *)operation didFormatPage:(NSNotification *)sender {
+    NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
+    [self.labelStatus updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
+}
+
 - (void)operation:(MADOperation *)operation updateRecordsRead:(NSUInteger)records {
     NSNumber *numberOfResults;
     numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: records];
@@ -1386,6 +1395,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     if (round(slider.maximumValue) != round(numberOfPages)) {
         slider.maximumValue = numberOfPages;
     }
+    _currentLocation.totalPages = numberOfPages;
     [self.labelStatus updatePageStatus: _currentLocation.totalPages
                       currentPageIndex: _currentLocation.currentPage];
 }
@@ -1518,18 +1528,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
     if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
-        
-        if (((MADOperationRefreshReload *)operation).completedSuccessfully) {
-            [self relaodByBlocks];
-        }
-        
-        //MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
-        //for (NSError *error in errors) {
-        //    MADOperationPromptError *operationErrorDisplay =
-        //    [[MADOperationPromptError alloc] initWithError:error viewController:self];
-        //    [operationQueue addOperation:operationErrorDisplay];
-        //
-        //}
         
     }
 }

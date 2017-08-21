@@ -16,6 +16,8 @@
     - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active;
     - (void)operation:(MADOperation *)operation setLastCacheDate:(NSDate *)date;
     - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document;
+    - (void)operation:(MADOperation *)operation didReadRows:(NSNotification *)sender;
+    - (void)operation:(MADOperation *)operation didFormatPage:(NSNotification *)sender;
 
 @end
 

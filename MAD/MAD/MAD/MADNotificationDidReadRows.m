@@ -53,7 +53,7 @@ static MADNotificationDidReadRows *_sharedSingleton = nil;
 }
 
 - (void)database:(id)database readRow:(NSUInteger)row {
-    if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {
+    //if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {
         NSDate *lastUpdate = [NSDate date].copy;
         self.lastUpdate = lastUpdate;
         
@@ -65,7 +65,7 @@ static MADNotificationDidReadRows *_sharedSingleton = nil;
                                                                      object: database
                                                                    userInfo: parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
-    }
+    //}
 }
 
 @end

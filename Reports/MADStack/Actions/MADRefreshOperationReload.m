@@ -25,6 +25,7 @@
     @property (nonatomic, weak) MADocument *document;
     @property (nonatomic, weak) NSObject <MADOperationRefreshReloadProtocol> *viewController;
     @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
+    @property (nonatomic, strong) NSOperationQueue *messageQueue;
 
 @end
 
@@ -35,6 +36,9 @@
     if (self = [super init]) {
         _document = document;
         _viewController = viewController;
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        queue.maxConcurrentOperationCount = 1;
+        self.messageQueue = queue;
     }
     return self;
 }
@@ -52,22 +56,28 @@
     [self updateNumberOfPages:document.numberOfPages];
     
     // Update records read.
-    NSUInteger recordsRead = document.numberOfResults;
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    NSBlockOperation *updateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
         typeof(self) __strong sself = weakself;
-        [sself.viewController operation:sself updateRecordsRead:recordsRead];
+        [sself.viewController operation:sself updateRecordsRead:document.numberOfResults];
     }];
+    NSArray <__kindof NSOperation *> *operations = @[updateRecordsRead];
+    [[NSOperationQueue mainQueue] addOperations: operations
+                              waitUntilFinished: NO];
 
 
     if (self.cancelled) return [self finish];
 
     [self beginBackgroundTask];
 
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    NSBlockOperation *setDisplayInactive = [NSBlockOperation blockOperationWithBlock:^{
         typeof(self) __strong sself = weakself;
         [sself.viewController operation:sself setDisplayActive:NO];
     }];
+    operations = @[setDisplayInactive];
+    [[NSOperationQueue mainQueue] addOperations: operations
+                              waitUntilFinished: NO];
 
+    
     [document prepareForQuery];
     
     if (self.cancelled) {
@@ -88,17 +98,18 @@
         return [self finish];
     }
     
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        typeof(self) __strong sself = weakself;
-        [sself.viewController operation:nil updateRecordsRead:document.numberOfResults];
-    }];
-
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    NSBlockOperation *finishReload = [NSBlockOperation blockOperationWithBlock:^{
         typeof(self) __strong sself = weakself;
         [sself.viewController operation:nil finishReload:document];
     }];
-
-
+    updateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
+        typeof(self) __strong sself = weakself;
+        [sself.viewController operation:sself updateRecordsRead:document.numberOfResults];
+    }];
+    operations = @[updateRecordsRead, finishReload];
+    [[NSOperationQueue mainQueue] addOperations: operations
+                              waitUntilFinished: YES];
+    
     
     document.refreshed = NO;
 
@@ -124,15 +135,17 @@
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.viewController operation:self updatePages:numberOfPages];
-    }];
-}
-
-- (void)updateNumberOfRecords:(NSUInteger)numberOfRecords {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.viewController operation:self updateRecordsRead:numberOfRecords];
-    }];
+    if ([NSOperationQueue mainQueue].operationCount < 1) {
+        typeof(self) __weak weakself = self;
+        [self.messageQueue addOperationWithBlock:^{
+            NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+                typeof(self) sself = weakself;
+                [sself.viewController operation:sself updatePages:numberOfPages];
+            }];
+            NSArray *ops = @[op];
+            [[NSOperationQueue mainQueue] addOperations:ops waitUntilFinished:YES];
+        }];
+    }
 }
 
 #pragma mark -
@@ -158,11 +171,5 @@
     NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
     [self updateNumberOfPages: pageNumber.unsignedIntegerValue];
 }
-
-- (void)reportDocumentDidReadRows:(NSNotification *)sender {
-    NSNumber *rowNumber = sender.userInfo[MADDatabaseNumberOfRowsReadKey];
-    [self updateNumberOfRecords: rowNumber.unsignedIntegerValue];
-}
-
 
 @end
