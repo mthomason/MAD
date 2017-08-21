@@ -301,6 +301,14 @@ void madwarn(char *err,  const char*err2) { }
     return _paper.paperSize;
 }
 
+- (BOOL)didRefresh {
+    return _reportFormatter.didRefresh;
+}
+
+- (void)setRefreshed:(BOOL)refreshed {
+    _reportFormatter.didRefresh = refreshed;
+}
+
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {
     NSString *actionName = NSLocalizedString(italic ? @"Italic" : @"Disable Italic",
                                              italic ? @"Italic" : @"Disable Italic");

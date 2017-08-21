@@ -68,6 +68,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (nonatomic, readonly) NSUInteger numberOfPages;
     @property (nonatomic, readonly) NSUInteger numberOfResults;
     @property (nonatomic, readonly) CGSize paperSize;
+    @property (nonatomic, readwrite, getter=didRefresh) BOOL refreshed;
 
     + (instancetype)newManagedDocumentForURL:(NSURL *)url;
     - (instancetype)initWithFileURL:(NSURL *)url;
