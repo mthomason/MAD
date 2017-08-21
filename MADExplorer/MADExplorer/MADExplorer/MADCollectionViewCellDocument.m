@@ -123,6 +123,10 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 #pragma mark -
 #pragma mark Overrides
 
+- (void)setHidden:(BOOL)hidden {
+    [super setHidden:hidden];
+}
+
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
     [_labelTitle setSelected:selected];

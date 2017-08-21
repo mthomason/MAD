@@ -199,12 +199,11 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
        willDisplayCell:(nonnull MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    
+    typeof(_delegate) __strong fileExplorerDelegate = _delegate;
     cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    id <MADExplorerProtocol, UIGestureRecognizerDelegate> delegate = _delegate;
+    id <MADExplorerProtocol, UIGestureRecognizerDelegate> delegate = fileExplorerDelegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
     
     UILongPressGestureRecognizer *longPressGesture;
@@ -212,9 +211,9 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
                                                                      action: actionEdit];
     longPressGesture.delegate = delegate;
     [cell addGestureRecognizer: longPressGesture];
-    
+    typeof(_delegate) __weak weakdelegate = fileExplorerDelegate;
     cell.labelTitle.handleTap = ^(MADCollectionViewCellDocument *c) {
-        [self actionRename:c];
+        [weakdelegate actionRename:c];
     };
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
@@ -228,13 +227,12 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 - (void)collectionView:(UICollectionView *)collectionView
   didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
     forItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     id gestureToRemove = _longPressGestures[hash];
     [cell removeGestureRecognizer: gestureToRemove];
     [cell prepareForReuse];
     [_longPressGestures removeObjectForKey: hash];
+    cell.delegate = nil;
 }
 
 - (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action

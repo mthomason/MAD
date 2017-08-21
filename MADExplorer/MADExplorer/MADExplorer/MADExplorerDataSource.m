@@ -40,6 +40,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 }
 
 - (void)dealloc {
+    _handleCellConfiguration = nil;
     _delegate = nil;
     [_batchInserts removeAllIndexes];
     [_batchRemoves removeAllIndexes];
@@ -69,6 +70,8 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
         self.batchInserts = inserts,
         self.batchRemoves = removes,
         self.batchUpdates = updates;
+        
+        self.handleCellConfiguration = cellCondiguration;
     }
     return self;
 }
@@ -241,7 +244,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+                    cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
     
     id cell;

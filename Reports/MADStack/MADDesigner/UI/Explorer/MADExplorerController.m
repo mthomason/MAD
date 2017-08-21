@@ -379,6 +379,11 @@ typedef NS_ENUM(short, MADExplorerState) {
         UIBarButtonItem *editButton = [MADBarButtonItem newBarButtonItemEdit: self
                                                                       action: selector];
         self.barButtonItemEdit = editButton;
+        
+        MADFileExplorerViewDelegate *fileExplorerViewDelegate;
+        fileExplorerViewDelegate = [[MADFileExplorerViewDelegate alloc] init];
+        fileExplorerViewDelegate.delegate = self;
+        self.fileExplorerViewDelegate = fileExplorerViewDelegate;
 
     }
     return self;
@@ -543,13 +548,8 @@ typedef NS_ENUM(short, MADExplorerState) {
         [toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
         [self setToolbarItems:toolbarButtons animated:NO];
     }
-
-    MADFileExplorerViewDelegate *layoutGroupedDelegate;
-    layoutGroupedDelegate = [[MADFileExplorerViewDelegate alloc] init];
-    layoutGroupedDelegate.delegate = self;
-
-    self.collectionView.delegate = layoutGroupedDelegate;
-    self.fileExplorerViewDelegate = layoutGroupedDelegate;
+    
+    self.collectionView.delegate = self.fileExplorerViewDelegate;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -597,9 +597,10 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (MADExplorerDataSource *)fileExplorerDataSource {
     if (!_fileExplorerDataSource) {
         MADExplorerDataSource *datasource;
+        typeof(self) __weak weakself = self;
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
                                                         cellConfiguration:^(MADCollectionViewCellDocument *cell) {
-            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = self;
+            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = weakself;
         }];
         _fileExplorerDataSource = datasource;
     }

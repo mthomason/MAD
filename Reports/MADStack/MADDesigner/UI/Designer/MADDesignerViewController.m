@@ -2039,7 +2039,7 @@ static const inline CGSize sizePopoverFonts() {
             elementView.userInteractionEnabled = YES;
             cell.userInteractionEnabled = YES;
             cell.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.80];
-            cell.contentView.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:.50];
+            cell.contentView.backgroundColor = [[UIColor magentaColor] colorWithAlphaComponent:.50];
             elementView.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:.30];
             
             NSNumber *identifierNumber = @(identifier);
