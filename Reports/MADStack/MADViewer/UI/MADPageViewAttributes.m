@@ -19,14 +19,14 @@ static NSString * const keyContentScaleFactor   = @"f";
 
 @implementation MADPageViewAttributes
 
-- (instancetype)initWithCurrentPageNumber:(NSUInteger)currentPageNumber
-                       totalNumberOfPages:(NSUInteger)numberOfPages
-                        contentSizeInital:(CGSize)contentSizeInital {
+- (instancetype)initWithCurrentPage:(NSUInteger)currentPageNumber
+                              total:(NSUInteger)numberOfPages
+                               size:(CGSize)size {
     if (self = [super init]) {
         _pageNumber = currentPageNumber;
         _numberOfPages = numberOfPages;
         _zoomScaleInital = 1.0000f;
-        _contentSizeInital = contentSizeInital;
+        _contentSizeInital = size;
         _contentOffsetInital = CGPointZero;
         _contentScaleFactor = 0.0;
     }

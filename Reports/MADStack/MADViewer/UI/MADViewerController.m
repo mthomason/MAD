@@ -57,6 +57,9 @@
 #import <MAD/MADNotificationDidReadRows.h>
 #import <MAD/MTPaper.h>
 
+#import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADOperationObserver.h>
+
 #import "MADPrintingProtocol.h"
 #import "MADViewControllerStandardProtocol.h"
 
@@ -77,12 +80,10 @@
 #import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
 
-#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationRefreshReload.h"
 
 #import "MADOperationPromptError.h"
 
-#import <MADFoundation/MADOperationObserver.h>
 #import "MADLabelTitle.h"
 #import "MADDocumentScroller.h"
 #import "MADPageSliderProtocol.h"
@@ -433,7 +434,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [self.navigationController.toolbar setNeedsLayout];
     
     NSArray <NSOperation *> *initalOperations = [self initalOperations];
-    [[NSOperationQueue mainQueue] addOperations:initalOperations waitUntilFinished:NO];
+    [self.loadDocumentViewerQueue addOperations:initalOperations waitUntilFinished:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -460,9 +461,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADPageViewAttributes *pageAttributes;
         CGSize paperSize = document.paper.paperSize;
         NSUInteger pageNumber = self.currentPageNumber, pageCount = _currentLocation.totalPages;;
-        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: pageNumber
-                                                               totalNumberOfPages: pageCount
-                                                                contentSizeInital: paperSize];
+        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: pageNumber
+                                                                      total: pageCount
+                                                                       size: paperSize];
         page =
         [MADDocumentPageController newReportPageViewControllerWithDocument: document
                                                               pageAttributes: pageAttributes];
@@ -944,7 +945,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                 
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
                     
-                    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                    UIPrintInteractionController *sharedController;
+                    sharedController = [UIPrintInteractionController sharedPrintController];
                     
                     if (sharedController) {
                         
@@ -1094,17 +1096,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     if (self) {
         MADPageViewAttributes *pageAttributes;
-        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: self.currentPageNumber
-                                                               totalNumberOfPages: _currentLocation.totalPages
-                                                                contentSizeInital: document.paper.paperSize];
+        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
+                                                                      total: _currentLocation.totalPages
+                                                                       size: document.paper.paperSize];
         
-        MADDocumentPageController *pageOne =
+        MADDocumentPageController *page =
         [MADDocumentPageController newReportPageViewControllerWithDocument: document
                                                             pageAttributes: pageAttributes];
-        pageOne.view.frame = self.view.bounds;
-        pageOne.delegate = self;
+        page.view.frame = self.view.bounds;
+        page.delegate = self;
         
-        NSArray *viewControllers = [[NSArray alloc] initWithObjects:pageOne, nil];
+        NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
         
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
@@ -1117,7 +1119,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     _refreshing = NO;
     _startedRefresh = NO;
     
-    [self updateRecordsRead];
+    [self operation:nil updateRecordsRead:document.dataTable.rowCounter];
     
     document.reportFormatter.didRefresh = NO;
     
@@ -1177,9 +1179,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             UIScrollView *documentScroller = pageViewControllerLast.documentScroller;
 
             MADPageViewAttributes *pageAttributes;
-            pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber + 1
-                                                                   totalNumberOfPages: _currentLocation.totalPages
-                                                                    contentSizeInital: documentScroller.contentSize];
+            pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: visiblePageNumber + 1
+                                                                          total: _currentLocation.totalPages
+                                                                           size: documentScroller.contentSize];
             pageAttributes.zoomScaleInital = documentScroller.zoomScale;
             pageAttributes.contentOffsetInital = documentScroller.contentOffset;
             pageAttributes.contentScaleFactor = pageViewControllerLast.documentView.contentScaleFactor;
@@ -1214,9 +1216,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             
             UIScrollView *documentScroller = pageViewControllerPrevious.documentScroller;
             MADPageViewAttributes *pageAttributes;
-            pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPageNumber: visiblePageNumber - 1
-                                                                   totalNumberOfPages: _currentLocation.totalPages
-                                                                    contentSizeInital: documentScroller.contentSize];
+            pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: visiblePageNumber - 1
+                                                                          total: _currentLocation.totalPages
+                                                                           size: documentScroller.contentSize];
             pageAttributes.zoomScaleInital = documentScroller.zoomScale;
             pageAttributes.contentOffsetInital = documentScroller.contentOffset;
             pageAttributes.contentScaleFactor = pageViewControllerPrevious.documentView.contentScaleFactor;
@@ -1316,26 +1318,29 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)updateRecordsRead {
+    [self operation:nil updateRecordsRead:self.document.dataTable.rowCounter];
+}
+
+- (void)operation:(MADOperation *)operation updateRecordsRead:(NSUInteger)records {
     NSNumber *numberOfResults;
-    numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: self.document.dataTable.rowCounter];
+    numberOfResults = [[NSNumber alloc] initWithUnsignedInteger: records];
     [self.labelStatus updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
 
 }
 
 - (void)updateNumberOfPages {
     _currentLocation.totalPages = self.document.reportFormatter.numberOfPages;
-    [self updateNumberOfPages: (_currentLocation.totalPages > 0 ? (_currentLocation.totalPages - 1) : 0)];
+    [self operation:nil updatePages: (_currentLocation.totalPages > 0 ? (_currentLocation.totalPages - 1) : 0)];
     //[self setDisplayActive];
 }
 
-- (void)updateNumberOfPages:(NSUInteger)numberOfPages {
+- (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages {
     MADPageSlider *slider = self.pageSlider;
     if (round(slider.maximumValue) != round(numberOfPages)) {
         slider.maximumValue = numberOfPages;
     }
     [self.labelStatus updatePageStatus: _currentLocation.totalPages
                       currentPageIndex: _currentLocation.currentPage];
-
 }
 
 #pragma mark -

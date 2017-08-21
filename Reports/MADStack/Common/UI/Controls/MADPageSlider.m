@@ -19,6 +19,7 @@
 
 #import "MADSliderPageVertical.h"
 #import "MADPageSliderProtocol.h"
+#import "MADLabelPageSlider.h"
 
 static const CGFloat MADSliderPaginationWidth = 40.0000f;
 static NSString * const ConstTestStringValue = @"0";
@@ -69,6 +70,9 @@ static inline CGFloat MaxDimension(CGSize size) {
                                          context: nil];
     return CGSizeMake(bounds.size.width, bounds.size.height);
 }
+
+#pragma mark -
+#pragma mark Object
 
 - (void)dealloc {
     _sliderDelegate = nil;
@@ -128,6 +132,9 @@ static inline CGFloat MaxDimension(CGSize size) {
     return self;
 }
 
+#pragma mark -
+#pragma mark View
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -159,11 +166,10 @@ static inline CGFloat MaxDimension(CGSize size) {
         [label removeFromSuperview];
     }
     [self.labels removeAllObjects];
-    
     static CGFloat offsetTopBottom = 8.0000f;
-    CGFloat distanceBetweenTicks = numberOfTicks > 1 ?
-                            ((rect.size.height - offsetTopBottom * 2) / numberOfTicks) - _stringHeight :
-                            CGSizeZero.height;
+
+    CGFloat distanceBetweenTicks = [MADPageSlider distanceBetweenTicks:numberOfTicks height:_stringHeight
+                                                               padding:offsetTopBottom rect:rect];;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
     
     double tickValue = self.maximumValue / (numberOfTicks - 1);
@@ -177,41 +183,13 @@ static inline CGFloat MaxDimension(CGSize size) {
                 
                 @autoreleasepool {
                     typeof(self) strongself = weakself;
-                    NSString *pageNumber;
-                    pageNumber = [[NSString alloc] initWithFormat:@"%d", (int)roundl(i * tickValue + 1)];
                     
-                    UILabel *label;
-                    label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
+                    MADLabelPageSlider *label;
+                    label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
                                                                       rect.size.width, strongself.stringHeight)];
-                    UIColor *clearColor = [UIColor clearColor];
-                    label.backgroundColor = clearColor;
-                    label.textAlignment = NSTextAlignmentRight;
-                    label.text = pageNumber;
-                    label.font = [UIFont boldSystemFontOfSize:9.0000f];
-                    UIColor *darkTextColor = [UIColor darkTextColor];
-                    UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
-                    label.textColor = textColor;
-                    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-                    label.translatesAutoresizingMaskIntoConstraints = YES;
-                    UIColor *drawingColor = strongself.enabledColor ? [MADColorEverydayApps newColorRed] : [UIColor lightGrayColor];
-                    label.tintColor = drawingColor;
-                    
-                    label.transform = CGAffineTransformTranslate(label.transform,
-                                                                 label.frame.origin.x > 0 ? -1 * label.frame.origin.x : label.frame.origin.x,
-                                                                 label.frame.origin.y > 0 ? -1 * label.frame.origin.y : label.frame.origin.y);
-                    
-                    label.transform = CGAffineTransformTranslate(label.transform, drawingPoint.x ,
-                                                                 drawingPoint.y + offsetTopBottom);
-                    
-                    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-                    label.translatesAutoresizingMaskIntoConstraints = YES;
-                    label.layer.shadowOpacity = 6.0;
-                    label.layer.shadowRadius = 0.0;
-                    label.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
-                    
-                    UIColor *blueColor = [MADColorEverydayApps newColorBlue];
-                    label.layer.shadowColor = blueColor.CGColor;
-                    
+                    label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
+                    label.enabled = strongself.enabledColor;
+                    [label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
                     [strongself.vibrancyView addSubview:label];
                     [strongself.labels addObject:label];
                     
@@ -223,6 +201,13 @@ static inline CGFloat MaxDimension(CGSize size) {
         drawingPoint = CGPointMake(drawingPoint.x,
                                    drawingPoint.y + _stringHeight + distanceBetweenTicks);
     }
+}
+
++ (CGFloat)distanceBetweenTicks:(NSUInteger)numberOfTicks height:(CGFloat)height
+                        padding:(CGFloat)padding rect:(CGRect)rect {
+    return numberOfTicks > 1 ?
+                ((rect.size.height - padding * 2) / numberOfTicks) - height :
+                CGSizeZero.height;
 }
 
 - (void)didMoveToWindow {
@@ -238,6 +223,9 @@ static inline CGFloat MaxDimension(CGSize size) {
         self.slider = nil;
     }
 }
+
+#pragma mark -
+#pragma mark Custom
 
 - (void)setDisplayEnabled {
     self.enabledColor = YES;

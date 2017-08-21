@@ -6,8 +6,17 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef MAD_Designer_MADLabelPageSlider_h
+#define MAD_Designer_MADLabelPageSlider_h
+
+#import <UIKit/UILabel.h>
 
 @interface MADLabelPageSlider : UILabel
 
+    @property (nonatomic, assign) NSUInteger pageNumber;
+
+    - (void)translateToPoint:(CGPoint)drawingPoint;
+
 @end
+
+#endif
