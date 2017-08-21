@@ -1615,7 +1615,7 @@ static const inline CGSize sizePopoverFonts() {
     _lastMenuItemSelectRequiresElementView = YES;
     
     NSNumber *cellIdentifier = @(cell.identifier);
-    elementView = [self viewForObjectID:cellIdentifier];
+    elementView = [self.elementViewsDictionary objectForKey:cellIdentifier];;
     [self selectElementView: elementView];
     
 }
@@ -1722,7 +1722,7 @@ static const inline CGSize sizePopoverFonts() {
         MADDesignerViewController *strongself = weakself;
         if (!strongself) return;
         
-        UIView *viewToEdit = [strongself viewForObjectID: identifier];
+        UIView *viewToEdit = [strongself.elementViewsDictionary objectForKey:identifier];
         UINavigationController *navigation;
         navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
         MADocument *document = strongself.document;
@@ -1763,9 +1763,9 @@ static const inline CGSize sizePopoverFonts() {
     
 }
 
-- (void)editDocumentObjectBarcodeWithID:(NSNumber *)identifier {
+- (void)editDocumentObjectBarcodeWithID:(NSNumber *)objectID {
     
-    self.barcodeToEditObjectID = identifier.copy;
+    self.barcodeToEditObjectID = objectID.copy;
     
     MADDesignerViewController * __weak weakself = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -1773,7 +1773,7 @@ static const inline CGSize sizePopoverFonts() {
         MADDesignerViewController *strongself = weakself;
         if (!strongself) return;
         
-        UIView *viewToEdit = [strongself viewForObjectID:identifier];
+        UIView *viewToEdit = [self.elementViewsDictionary objectForKey:objectID];
 
         MTViewControllerBarcode *barcodeViewController;
         barcodeViewController = [MTViewControllerBarcode newViewControllerBarcode];
@@ -1781,7 +1781,7 @@ static const inline CGSize sizePopoverFonts() {
         barcodeViewController.delegate = strongself;
         barcodeViewController.preferredContentSize = sizePopoverFonts();
         barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
-        barcodeViewController.bartcodeToEditObjectID = identifier.copy;
+        barcodeViewController.bartcodeToEditObjectID = objectID.copy;
 
         UIPopoverPresentationController *popoverController;
         popoverController = barcodeViewController.popoverPresentationController;
@@ -1798,8 +1798,8 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)editDocumentObjectBarcode:(RptqDocumentElement *)object {
     
-    NSNumber *objectIdentifier = @(object.identifier);
-    UIView *viewToEdit = [self viewForObjectID:objectIdentifier];
+    NSNumber *objectID = @(object.identifier);
+    UIView *viewToEdit = [self.elementViewsDictionary objectForKey:objectID];
     
     MTViewControllerBarcode *barcodeViewController = [MTViewControllerBarcode newViewControllerBarcode];
     barcodeViewController.document = self.document;
@@ -1827,7 +1827,7 @@ static const inline CGSize sizePopoverFonts() {
     
     self.objectIdEditDynamicLabel = @(object.identifier);
     
-    UIView *viewToEdit = [self viewForObjectID:self.objectIdEditDynamicLabel];
+    UIView *viewToEdit = [self.view.scroller.container.sectionLabels objectForKey:self.objectIdEditDynamicLabel];
     
     MADQueryChooseFieldController *chooseFieldViewController;
     chooseFieldViewController = [MADQueryChooseFieldController newQueryBuilderChooseFieldViewController];
@@ -1991,8 +1991,8 @@ static const inline CGSize sizePopoverFonts() {
     cell.delegate = self;
     
     CGSize documentObjectSize = [documentObject sizeCalculated];
-    CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y,
-                                  documentObjectSize.width, documentObjectSize.height);
+    CGRect cellBounds = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                   documentObjectSize.width, documentObjectSize.height);
     
     switch (documentObject.documentObjectType) {
         case MTDocumentObjectTypeFormula:
@@ -2029,10 +2029,18 @@ static const inline CGSize sizePopoverFonts() {
             [self.view.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
             [elementView addGestureRecognizer:pinchGesture];
             
-            elementView.frame = cellFrame;
+            if (cell.frame.origin.x < 0.0f || cell.frame.origin.y < 0.0f) {
+                cell.frame = cellBounds;
+            } else {
+                cell.bounds = cellBounds;
+            }
             cell.identifier = documentObject.identifier;
             
+            elementView.userInteractionEnabled = YES;
             cell.userInteractionEnabled = YES;
+            cell.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.80];
+            cell.contentView.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:.50];
+            elementView.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:.30];
             
             NSNumber *identifierNumber = @(identifier);
             if ([self.selectedElementIDs containsObject: identifierNumber]) {
@@ -2127,7 +2135,11 @@ static const inline CGSize sizePopoverFonts() {
             break;
         }
     }
-    
+
+    if (cell.frame.origin.x < 0.0f || cell.frame.origin.y < 0.0f) {
+        cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                cell.frame.size.width, cell.frame.size.height);
+    }
     //NSAssert(elementView != nil, @"We need an element view people.");
     if (elementView) {
         [self.visibleElementViews addObject:elementView];
@@ -2972,7 +2984,7 @@ END_deselectElementView:;
     return [self.view.scroller.container popoverRectForSelectedViews:views];
 }
 
-- (UIView *)viewForObjectID:(NSNumber *)objectID {
+/*- (UIView *)viewForObjectID:(NSNumber *)objectID {
 
     id result = [self.elementViewsDictionary objectForKey:objectID];
     if (result != nil) return result;
@@ -2984,7 +2996,7 @@ END_deselectElementView:;
 
     return result;
     //return [self.view.scroller.container viewWithTag: (NSInteger)objectID.hash];
-}
+}*/
 
 - (void)adjustContextOffsetForOpenPopover {
     if ([self padLike]) {
@@ -3440,7 +3452,7 @@ END_deselectElementView:;
         //Try quick hash method...
         BOOL quickHashWorks = YES;
         for (NSNumber *selectedObjectId in self.selectedElementIDs) {
-            UIView *selectedView = [self viewForObjectID:selectedObjectId];
+            UIView *selectedView = [self.elementViewsDictionary objectForKey:selectedObjectId];
             if (selectedView != nil) {
                 [results addObject:selectedView];
             } else {
@@ -3527,7 +3539,7 @@ END_deselectElementView:;
 - (MADDesignerElementView *)elementViewForManagedObject:(__kindof RptqDocumentElement *)managedObject {
     id elementView;
     NSNumber *identifier = @(managedObject.identifier);
-    elementView = [self viewForObjectID:identifier];
+    elementView = [self.elementViewsDictionary objectForKey:identifier];
     if (elementView == nil) {
         SEL handleTap = @selector(handleToggleElementView:);
         elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: managedObject

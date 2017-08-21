@@ -29,22 +29,22 @@
   @optional
 @end
 
-@interface MADDesignerElementView : UIView
-    <MADManagedObjectViewProtocol, MADViewAnimationProtocol>
-
+@protocol MADDesignerElementViewProtocol <NSObject>
+  @required
+    @property (nonatomic, readwrite, assign) BOOL displayWobbling;
+    @property (nonatomic, readwrite, assign) BOOL enableResizing;
     @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
-    @property (nonatomic, readwrite, assign, getter=isWobbling) BOOL displayWobbling;
-    @property (nonatomic, readwrite, assign, getter=isResizingEnabled) BOOL enableResizing;
+
+@end
+
+@interface MADDesignerElementView : UIView
+    <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
 
     @property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, readonly, copy) NSManagedObjectID *objectID;
 
     @property (nonatomic, strong) id displayObject;
     @property (nonatomic, readonly, copy) NSString *textRepresentation;
 
-    - (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
-                        tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
-                               tapSelector:(SEL)selector;
     + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
                                          tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
                                                 tapSelector:(SEL)selector;

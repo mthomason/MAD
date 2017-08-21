@@ -17,6 +17,10 @@
 
 @implementation MADCellElement
 
+- (void)dealloc {
+    NSLog(@"Dealloc");
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         [self commonInit];
@@ -111,6 +115,7 @@
 
 - (void)addElementView:(MADDesignerElementView *)elementView {
     [self.contentView addSubview:elementView];
+    [self.contentView bringSubviewToFront:elementView];
     self.elementView = elementView;
 }
 

@@ -20,19 +20,6 @@
 
 @implementation MADElementViewManager
 
-- (MADDesignerElementView *)elementViewForIdentifier:(NSNumber *)identifier {
-    id elementView;
-    //NSNumber *identifier = @(managedObject.identifier);
-    elementView = [self viewForObjectID:identifier];
-    if (elementView == nil) {
-        //SEL handleTap = @selector(handleToggleElementView:);
-        //elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: managedObject
-        //                                                           tapGestureDelegate: self
-        //                                                                  tapSelector: handleTap];
-    }
-    return elementView;
-}
-
 - (UIView *)viewForObjectID:(NSNumber *)objectID {
     return [self.elementViewsDictionary objectForKey:objectID];
 }

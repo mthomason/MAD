@@ -74,7 +74,9 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 @implementation MADDesignerElementView
 
 @synthesize identifier = _identifier;
-//@dynamic identifier;
+@synthesize displayWobbling = _displayWobbling;
+@synthesize enableResizing = _enableResizing;
+@synthesize displayHighlighted = _displayHighlighted;
 
 - (void)dealloc {
     if (_resizeHandles) {
@@ -88,9 +90,48 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 + (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
                                      tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
                                             tapSelector:(SEL)selector {
-    id elementView = [[self alloc] initWithDocumentObject: documentObject
-                                       tapGestureDelegate: tapGestureDelegate
-                                              tapSelector: selector];
+    CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
+    MADDesignerElementView <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol> *elementView;
+    switch (documentObject.documentObjectType) {
+        case MTDocumentObjectTypeImage:
+            elementView = [[MADDesignerElementImageView alloc] initWithFrame:rect];
+            break;
+        case MTDocumentObjectTypeBarcode:
+            elementView = [[MADDesignerElementBarcodeView alloc] initWithFrame:rect];
+            break;
+        default:
+            elementView = [[MADDesignerElementTextView alloc] initWithFrame:rect];
+            break;
+    }
+    
+    if (elementView) {
+        
+        elementView.identifier = documentObject.identifier;
+        elementView.objectID = documentObject.objectID.copy;
+        
+        elementView.translatesAutoresizingMaskIntoConstraints = YES;
+        elementView.backgroundColor = [UIColor clearColor];
+        elementView.clipsToBounds = NO;
+        elementView.autoresizingMask = MADViewAutoresizingFlexable();
+        elementView.displayWobbling = NO;
+        elementView.displayHighlighted = NO;
+        
+        
+        MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
+        for (UIView *view in resizeHandles.resizeHandles) {
+            [elementView addSubview:view];
+        }
+        elementView.resizeHandles = resizeHandles;
+        
+        [elementView updateWithElement:documentObject];
+        
+        elementView.managedObjectContext = documentObject.managedObjectContext;
+        UIGestureRecognizer *tap;
+        tap = [MADTapGestureRecognizer newTapGestureRecognizerTapWithTarget: tapGestureDelegate
+                                                                     action: selector
+                                                                   delegate: tapGestureDelegate];
+        [elementView addGestureRecognizer:tap];
+    }
     return elementView;
 }
 
@@ -472,6 +513,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (id <NSCopying>)key {
     return @(self.identifier);
+}
+
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
 }
 
 #pragma mark -

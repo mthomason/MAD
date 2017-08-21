@@ -29,6 +29,10 @@
 
 @dynamic displayObject;
 
+- (void)dealloc {
+    NSLog(@"Dealloc");
+}
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
@@ -174,6 +178,10 @@
                                    range:NSMakeRange(0, self.displayObject.length)];
         _underline = underline;
     }
+}
+
+- (void)removeFromSuperview {
+    [super removeFromSuperview];
 }
 
 @end
