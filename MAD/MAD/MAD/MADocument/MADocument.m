@@ -297,6 +297,10 @@ void madwarn(char *err,  const char*err2) { }
     return _dataTable != nil ? _dataTable.rowCounter : 0;
 }
 
+- (CGSize)paperSize {
+    return _paper.paperSize;
+}
+
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {
     NSString *actionName = NSLocalizedString(italic ? @"Italic" : @"Disable Italic",
                                              italic ? @"Italic" : @"Disable Italic");
