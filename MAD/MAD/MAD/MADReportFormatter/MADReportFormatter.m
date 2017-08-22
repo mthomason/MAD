@@ -48,8 +48,6 @@
 #import "MTDatabase.h"
 #import "MADDatabaseField.h"
 
-#import "MADReportFormatterCache.h"
-
 #import "MADArrayCaching.h"
 
 #import "MADNotificationDidFormatPage.h"
@@ -110,7 +108,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     @property (nonatomic, readwrite, strong)    MADArrayCaching <NSArray <MADSectionRepresentation *> *> *reportLayout;
 
     @property (nonatomic, readwrite, strong)    MADReportFormatterState *machineState;
-    @property (nonatomic, readwrite, strong)    MADReportFormatterCache *reportFormatterCache;
 
     @property (nonatomic, readwrite, strong)    NSMutableArray <__kindof MADSectionRepresentation *> *pageLayoutTemporary;
     @property (nonatomic, readwrite, strong)    NSArray <NSNumber *> *pageIndexesTemporary;
@@ -156,9 +153,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
         
         MADReportFormatterState *machineState = [[MADReportFormatterState alloc] init];
         self.machineState = machineState;
-        
-        MADReportFormatterCache *reportFormatterCache = [[MADReportFormatterCache alloc] init];
-        self.reportFormatterCache = reportFormatterCache;
         
         NSMutableArray <__kindof MADSectionRepresentation *> *temporaryLayoutForPage;
         temporaryLayoutForPage = [[NSMutableArray alloc] init];
@@ -352,20 +346,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     [self.reportLayout removeAllObjects];
 }
 
-- (void)dumpCache {
-    [self.reportFormatterCache dumpCache];
-}
-
-- (void)beginBulkInserts {
-    [self.reportIndexes beginBulkInserts];
-    [self.reportLayout beginBulkInserts];
-}
-
-- (void)endBulkInserts {
-    [self.reportLayout endBulkInserts];
-    [self.reportIndexes endBulkInserts];
-}
-
 - (void)loadLayoutAndIndexesFromCache {
 
     [self.reportIndexes finalizeDatabase];
@@ -454,7 +434,8 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     
     [self cleanupTemporaryIndexes];
     
-    [self beginBulkInserts];
+    [self.reportIndexes beginBulkInserts];
+    [self.reportLayout beginBulkInserts];
     
     [self formatDocumentAddReportHeader];
     [self formatDocumentAddPageHeader];
@@ -468,13 +449,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     NSArray <NSNumber *> *tdfp = [NSArray arrayWithArray:self.pageIndexesTemporary];
     [self.reportIndexes addObject:tdfp];
     
-    [self endBulkInserts];
+    [self.reportLayout endBulkInserts];
+    [self.reportIndexes endBulkInserts];
     
     [self cleanupTemporaryIndexes];
-    
-    [self.reportFormatterCache setLayout: self.reportLayout.identifier
-                              andIndexes: self.reportIndexes.identifier
-                                 forSize: self.page.layoutSize];
     
 }
 

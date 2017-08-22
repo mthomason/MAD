@@ -110,8 +110,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         _statementInsert = NULL;
         _statementSelect = NULL;
         
-        self.identifier = identifier.copy;
-        self.cachedDelegate = cachedDelegate;
+        _identifier = identifier.copy;
+        _cachedDelegate = cachedDelegate;
     }
     return self;
 }
@@ -253,7 +253,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSURL *)url {
     if (_url == nil) {
-        NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory].copy;
+        NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory];
         NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
         _url = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
     }
@@ -411,7 +411,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     query = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
     NSError * __autoreleasing error = NULL;
     return [self.database executeQuery:query withError:&error];
-
 }
 
 - (long long int)count {
@@ -450,9 +449,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         MTDatabaseSqlite3 *database;
         databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl:url];
         database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
-        int prepare_result = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1, &_statementEnumer,
-                                                NULL);
-        NSAssert(prepare_result == SQLITE_OK, @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
+        int prepare_result = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1,
+                                                &_statementEnumer, NULL);
+        NSAssert(prepare_result == SQLITE_OK,
+                 @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
     }
     return self;
 }

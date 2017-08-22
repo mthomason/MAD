@@ -88,6 +88,8 @@
 #import "MADDocumentScroller.h"
 #import "MADPageSliderProtocol.h"
 
+#import "MADRefreshOperationReload.h"
+
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
 static NSString * const MADTextNoCache = @"No Cache";
@@ -453,12 +455,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
+    MADocument *document = self.document;
     id page;
     NSArray *pages;
     if (self.loadDocumentViewerQueue.operationCount > 0) {
         page = [[UIViewController alloc] init];
     } else {
-        MADocument *document = self.document;
         MADPageViewAttributes *pageAttributes;
         CGSize paperSize = document.paper.paperSize;
         NSUInteger pageNumber = self.currentPageNumber, pageCount = _currentLocation.totalPages;;
@@ -507,6 +509,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     barButtonItemDone.enabled = YES;
     [self.tabBarController.navigationItem setLeftBarButtonItem: barButtonItemDone
                                                       animated: YES];
+    
+    MADRefreshOperationReload *reload = [[MADRefreshOperationReload alloc] initWithDocument: document
+                                                                             viewController: self];
+    [self.refreshQueue addOperation:reload];
 
 }
 
@@ -564,7 +570,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
+    [self finishReload:document];
+}
 
+- (void)finishReload:(MADocument *)document {
     MADPrintPageRenderer *printPageRenderer;
     printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
     self.printPageRendererReport = printPageRenderer;
@@ -588,7 +597,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                   completion: nil];
     
     [self setDisplayActive];
-
 }
 
 #pragma mark -
@@ -1177,6 +1185,23 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 #pragma mark -
+#pragma mark MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation {
+    if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
+        
+    }
+}
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
+        
+    }
+}
+
+#pragma mark -
 #pragma mark MADOperationRefreshReloadProtocol
 
 - (void)operation:(MADOperation *)operation didReadRows:(NSNotification *)sender {
@@ -1319,23 +1344,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (NSUInteger)currentPageNumber {
     return _currentLocation.currentPage + 1;
-}
-
-#pragma mark -
-#pragma mark MADOperationObserver
-
-- (void)operationDidStart:(MADOperation *)operation {
-    if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
-        
-    }
-}
-
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
-
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
-        
-    }
 }
 
 #pragma mark -

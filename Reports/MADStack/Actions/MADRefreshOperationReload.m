@@ -114,7 +114,6 @@
     document.refreshed = NO;
 
     [self endBackgroundTask];
-    
     [self finish];
 }
 
