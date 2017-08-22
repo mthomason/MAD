@@ -1242,10 +1242,8 @@ static const inline CGSize sizePopoverFonts() {
     if (!(successSave = [doc.managedObjectContext save:&error])) {
         os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
     }
-
-
-    [doc saveToURL: doc.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler: ^(BOOL success) {
-               
+    [doc updateChangeCount:UIDocumentChangeDone];
+    [doc autosaveWithCompletionHandler:^(BOOL success) {
         if (insertNewSection) {
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:(NSUInteger)numberOfRows - 1];
             [documentSectionView insertSections:indexSet];
@@ -1253,9 +1251,7 @@ static const inline CGSize sizePopoverFonts() {
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:(NSUInteger)numberOfRows];
             [documentSectionView deleteSections:indexSet];
         }
-
     }];
-    
 }
 
 #pragma mark -

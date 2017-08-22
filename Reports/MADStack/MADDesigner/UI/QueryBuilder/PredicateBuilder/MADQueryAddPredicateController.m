@@ -164,6 +164,7 @@
     if (queryPredicate != nil && error == nil) {
         [document.activeDocumentModel addPredicate:queryPredicate];
         [document saveContext];
+        [document autosaveWithCompletionHandler:^(BOOL success) { }];
         [self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     } else {
         [NSError presentError:error onViewController:self completion:^(BOOL success) {
