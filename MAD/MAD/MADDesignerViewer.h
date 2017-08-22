@@ -6,8 +6,18 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MADocumentViewer_h
+#define Reports_MADocumentViewer_h
+
+#import <Foundation/NSObject.h>
+
+@class NSManagedObjectContext;
+@protocol MADocumentDesignerProtocol;
 
 @interface MADDesignerViewer : NSObject
 
+    @property (nonatomic, weak) id <MADocumentDesignerProtocol> delegate;
+
 @end
+
+#endif

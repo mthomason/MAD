@@ -24,7 +24,8 @@
 
 @protocol MADActivityProtocol, MADocumentDelegate;
 
-@class NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState,
+@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument,
+        MADDatabaseConnection, MADModelDocument, MADocumentState,
         MADSectionLayoutManager, MTQueryFull, MTPaper;
 
 
@@ -42,13 +43,25 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
         MADReportFormatterDataSource,
         MADPrintPageRendererDataSourceProtocol>
 
+    @property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
+    @property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;
+    @property (nonatomic, readonly, strong) MADDesignerViewer *designerViewer;
+
+    @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
+    @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
+    @property (readonly, nonatomic, strong)     MTPaper *paper;
+    @property (readonly, nonatomic) NSUInteger numberOfPages;
+    @property (readonly, nonatomic) NSUInteger numberOfResults;
+    @property (readonly, nonatomic) CGSize paperSize;
+
+    //Layout
+
+    //Query
+
+    //Viewer
     @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
     @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
     @property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
-
-    @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
-
-    @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
 
     @property (readwrite, nonatomic, strong)    MADReportFormatter *printingReportFormatter;
 
@@ -59,15 +72,11 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readonly, nonatomic, copy)       NSString *filename;
     @property (readonly, nonatomic, strong)     MTQueryFull *mainQuery;
 
-    @property (readonly, nonatomic, strong)     MTPaper *paper;
     @property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
 
     @property (readwrite, nonatomic, assign)    BOOL limitResultsDesignMode;
     @property (readwrite, nonatomic, assign, getter=isAutosaveEnabled)    BOOL autosaveEnabled;
 
-    @property (nonatomic, readonly) NSUInteger numberOfPages;
-    @property (nonatomic, readonly) NSUInteger numberOfResults;
-    @property (nonatomic, readonly) CGSize paperSize;
     @property (nonatomic, readwrite, getter=didRefresh) BOOL refreshed;
     @property (nonatomic, readwrite, getter=hasCachedData) BOOL cachedData;
 
@@ -108,33 +117,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)resetCache;
     - (void)resetMainQuery;
     - (void)resetSectionLayoutManagers;
-
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBold:(BOOL)bold;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setStrikethrough:(BOOL)strikethrough;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setUnderline:(BOOL)underline;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontsize:(double)fontsize;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontname:(NSString *)fontname;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setVerticalAlignment:(int16_t)verticalAlignment;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setHorizontalAlignment:(int16_t)horizontalAlignment;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setSizeWidth:(float)width;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setSizeHeight:(float)height;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginBottom:(float)bottom;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginTop:(float)top;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginLeft:(float)left;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setMarginRight:(float)right;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingBottom:(float)bottom;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingTop:(float)top;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingLeft:(float)left;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setPaddingRight:(float)right;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderBottom:(float)bottom;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderTop:(float)top;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderLeft:(float)left;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBorderRight:(float)right;
-    - (void)updateElements:(NSSet <NSNumber *> *)identifiers
-                actionName:(NSString *)actionName
-             updateHandler:(void (^)(long long identifier))updateHandler
-               undoHandler:(void (^)(id target))undoHandler;
 
 @end
 

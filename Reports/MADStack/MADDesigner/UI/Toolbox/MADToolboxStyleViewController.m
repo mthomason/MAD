@@ -39,6 +39,7 @@
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDirectionalAsymmetry.h>
 #import <MAD/RptqTextStyle.h>
+#import <MAD/MADDesignerLayout.h>
 
 #import "MADControlState.h"
 
@@ -715,7 +716,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     labelFontName.font = font;
     labelFontName.text = familyName.copy;
 
-    [self.document updateElements:self.userSelectedObjectIDs setFontname:familyName];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs setFontname:familyName];
 }
 
 - (IBAction)handleFontSizeChanged:(UIStepper *)sender {
@@ -724,14 +725,14 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     attributedString = [MADToolboxStrings newAttributedStringFontSizeInPoints: sender.value
                                                                  withFontSize: labelFontSize.font.pointSize];
     labelFontSize.attributedText = attributedString;
-    [self.document updateElements:self.userSelectedObjectIDs setFontsize:sender.value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs setFontsize:sender.value];
 }
 
 - (IBAction)handleHorizontalAlignmentChanged:(UISegmentedControl *)sender {
     [self.segmentedControlHorizontalAlignment setBackgroundImage: nil
                                                         forState: UIControlStateNormal
                                                       barMetrics: UIBarMetricsDefault];
-    [self.document updateElements:self.userSelectedObjectIDs
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
            setHorizontalAlignment:(int16_t)sender.selectedSegmentIndex];
 }
 
@@ -750,7 +751,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     [self setStateInControl:self.buttonBold forState:self.controlStateBold];
     
     MADocument *document = self.document;
-    [document updateElements:self.userSelectedObjectIDs
+    [document.designerLayout updateElements:self.userSelectedObjectIDs
                      setBold:ControlStateIsOn(self.controlStateBold)];
 }
 
@@ -768,7 +769,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     [self setStateInControl:self.buttonItalic forState:self.controlStateItalic];
 
     MADocument *document = self.document;
-    [document updateElements:self.userSelectedObjectIDs
+    [document.designerLayout updateElements:self.userSelectedObjectIDs
                    setItalic:ControlStateIsOn(self.controlStateItalic)];
 }
 
@@ -790,7 +791,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     [self setStateInControl:self.buttonStrike forState:self.controlStateStrike];
 
     MADocument *document = self.document;
-    [document updateElements:self.userSelectedObjectIDs
+    [document.designerLayout updateElements:self.userSelectedObjectIDs
                      setStrikethrough:ControlStateIsOn(self.controlStateStrike)];
 }
 
@@ -811,7 +812,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     }
     [self setStateInControl:self.buttonUnderline forState:self.controlStateUnderline];
 
-    [self.document updateElements:self.userSelectedObjectIDs
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
                      setUnderline:ControlStateIsOn(self.controlStateUnderline)];
 }
 
@@ -820,15 +821,15 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 - (IBAction)handleContentWidthChanged:(id)sender {
     id display = [MADToolboxStrings newSizeWidthForValue:((UIStepper *)sender).value];
     self.labelSizeWidth.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                     setSizeWidth:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                    setSizeWidth:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleContentHeightChanged:(id)sender {
     id display = [MADToolboxStrings newSizeHeightForValue:((UIStepper *)sender).value];
     self.labelSizeHeight.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                    setSizeHeight:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                   setSizeHeight:(float)((UIStepper *)sender).value];
 }
 
 #pragma mark Margin
@@ -836,29 +837,29 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 - (IBAction)handleMarginTopChanged:(id)sender {
     id display = [MADToolboxStrings newMarginTopForValue: ((UIStepper *)sender).value];
     self.labelMarginTop.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                     setMarginTop:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                    setMarginTop:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleMarginBottomChanged:(id)sender {
     id display = [MADToolboxStrings newMarginBottomForValue:((UIStepper *)sender).value];
     self.labelMarginBottom.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                  setMarginBottom:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                 setMarginBottom:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleMarginLeftChanged:(id)sender {
     id display = [MADToolboxStrings newMarginLeftForValue: ((UIStepper *)sender).value];
     self.labelMarginLeft.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                    setMarginLeft:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                   setMarginLeft:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleMarginRightChanged:(id)sender {
     id display = [MADToolboxStrings newMarginRightForValue: ((UIStepper *)sender).value];
     self.labelMarginRight.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                   setMarginRight:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                  setMarginRight:(float)((UIStepper *)sender).value];
 }
 
 #pragma mark Padding
@@ -866,29 +867,29 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 - (IBAction)handlePaddingTopChanged:(id)sender {
     id display = [MADToolboxStrings newMarginTopForValue: ((UIStepper *)sender).value];
     self.labelPaddingTop.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                    setPaddingTop:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                   setPaddingTop:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handlePaddingBottomChanged:(id)sender {
     id display = [MADToolboxStrings newMarginBottomForValue:((UIStepper *)sender).value];
     self.labelPaddingBottom.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                 setPaddingBottom:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                setPaddingBottom:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handlePaddingLeftChanged:(id)sender {
     id display = [MADToolboxStrings newMarginLeftForValue: ((UIStepper *)sender).value];
     self.labelPaddingLeft.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                   setPaddingLeft:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                  setPaddingLeft:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handlePaddingRightChanged:(id)sender {
     id display = [MADToolboxStrings newMarginRightForValue: ((UIStepper *)sender).value];
     self.labelPaddingRight.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                  setPaddingRight:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                 setPaddingRight:(float)((UIStepper *)sender).value];
 }
 
 #pragma mark Border
@@ -896,29 +897,29 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 - (IBAction)handleBorderTopChanged:(id)sender {
     id display = [MADToolboxStrings newMarginTopForValue: ((UIStepper *)sender).value];
     self.labelBorderTop.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                     setBorderTop:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                    setBorderTop:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleBorderBottomChanged:(id)sender {
     id display = [MADToolboxStrings newMarginBottomForValue:((UIStepper *)sender).value];
     self.labelBorderBottom.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                  setBorderBottom:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                 setBorderBottom:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleBorderLeftChanged:(id)sender {
     id display = [MADToolboxStrings newMarginLeftForValue: ((UIStepper *)sender).value];
     self.labelBorderLeft.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                    setBorderLeft:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                   setBorderLeft:(float)((UIStepper *)sender).value];
 }
 
 - (IBAction)handleBorderRightChanged:(id)sender {
     id display = [MADToolboxStrings newMarginRightForValue: ((UIStepper *)sender).value];
     self.labelBorderRight.attributedText = display;
-    [self.document updateElements:self.userSelectedObjectIDs
-                   setBorderRight:(float)((UIStepper *)sender).value];
+    [self.document.designerLayout updateElements:self.userSelectedObjectIDs
+                                  setBorderRight:(float)((UIStepper *)sender).value];
 }
 
 #pragma mark -

@@ -6,8 +6,18 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef Reports_MADocumentQuery_h
+#define Reports_MADocumentQuery_h
+
+#import <Foundation/NSObject.h>
+
+@class NSManagedObjectContext;
+@protocol MADocumentDesignerProtocol;
 
 @interface MADDesignerQuery : NSObject
 
+    @property (nonatomic, weak) id <MADocumentDesignerProtocol> delegate;
+
 @end
+
+#endif

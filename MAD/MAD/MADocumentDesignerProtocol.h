@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADocumentDesignerProtocol_h
-#define MADocumentDesignerProtocol_h
+#ifndef MAD_MADocumentDesignerProtocol_h
+#define MAD_MADocumentDesignerProtocol_h
 
+@class NSUndoManager, NSManagedObjectContext;
+@protocol MADocumentDesignerProtocol <NSObject>
+
+    @property (strong, null_resettable) NSUndoManager *undoManager;
+    @property (nonatomic, strong, readonly, null_resettable) NSManagedObjectContext *managedObjectContext;
+
+@end
 
 #endif /* MADocumentDesignerProtocol_h */
