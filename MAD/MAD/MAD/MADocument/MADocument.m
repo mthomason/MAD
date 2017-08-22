@@ -228,10 +228,12 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark MADPrintPageRendererDataSourceProtocol
 
 @dynamic filename;
+@dynamic refreshed;
 
 @synthesize database = _database;
 @synthesize dataTable = _dataTable;
 @synthesize reportFormatter = _reportFormatter;
+@synthesize cachedData = _cachedData;
 
 #pragma mark -
 #pragma mark Adjust
@@ -1422,7 +1424,8 @@ void madwarn(char *err,  const char*err2) { }
                                                waitUntilDone: NO];
 }
 
-#pragma mark - MADDatabaseProtocol
+#pragma mark -
+#pragma mark MADDatabaseProtocol
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     MADCredential *credentials = [self.documentDelegate getCredentialsForKey:key];
@@ -1444,7 +1447,8 @@ void madwarn(char *err,  const char*err2) { }
     }
 }
 
-#pragma mark - MADReportFormatterDataSource Protocol
+#pragma mark -
+#pragma mark MADReportFormatterDataSource Protocol
 
 - (NSEnumerator *)enumeratorForReportData {
     return [self.dataTable enumeratorForKeyObjectsSorted];
@@ -1459,7 +1463,16 @@ void madwarn(char *err,  const char*err2) { }
     return  [self.dataTable copyDataForCacheId:cachedID];
 }
 
-#pragma mark - Helpers
+#pragma mark -
+#pragma mark Helpers
+
+- (BOOL)hasCachedData {
+    return _cachedData;
+}
+
+- (void)setCachedData:(BOOL)cachedData {
+    _cachedData = cachedData;
+}
 
 - (void)saveContext {
     NSError *error;
