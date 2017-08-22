@@ -805,48 +805,38 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark UI Updates
 
 - (void)setDisplayActive {
-
-    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-
-        self.pageingEnabled = YES;
-        self.tabBarItemsEnabled = YES;
-        self.pageSlider.enabled = YES;
-        self.barButtonItemActivity.enabled = YES;
-        self->_refreshing = NO;
-        self->_updatingOfTimerIsPaused = NO;
-
-        UIBarButtonItem *barButtonItemRefresh;
-        barButtonItemRefresh= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
-                                                                            target: self
-                                                                            action: @selector(refresh:)];
-        barButtonItemRefresh.enabled = YES;
-        [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
-                                                           animated: YES];
-        
-    //}];
+    self.pageingEnabled = YES;
+    self.tabBarItemsEnabled = YES;
+    self.pageSlider.enabled = YES;
+    self.barButtonItemActivity.enabled = YES;
+    self->_refreshing = NO;
+    self->_updatingOfTimerIsPaused = NO;
+    
+    UIBarButtonItem *barButtonItemRefresh;
+    barButtonItemRefresh= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
+                                                                        target: self
+                                                                        action: @selector(refresh:)];
+    barButtonItemRefresh.enabled = YES;
+    [self.navigationItem setRightBarButtonItem: barButtonItemRefresh
+                                      animated: YES];
 }
 
 - (void)setDisplayInactive {
-
-    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-
-        self.pageingEnabled = NO;
-        self.tabBarItemsEnabled = NO;
-        self.pageSlider.enabled = NO;
-        self.barButtonItemActivity.enabled = NO;
-        self->_refreshing = YES;
-        self->_updatingOfTimerIsPaused = NO;
-
-        UIActivityIndicatorView *activityIndicator;
-        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
-        activityIndicator.hidden = NO;
-        activityIndicator.hidesWhenStopped = NO;
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-        [activityIndicator startAnimating];
-        [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
-                                                           animated: YES];
-        
-    //}];
+    self.pageingEnabled = NO;
+    self.tabBarItemsEnabled = NO;
+    self.pageSlider.enabled = NO;
+    self.barButtonItemActivity.enabled = NO;
+    self->_refreshing = YES;
+    self->_updatingOfTimerIsPaused = NO;
+    
+    UIActivityIndicatorView *activityIndicator;
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
+    activityIndicator.hidden = NO;
+    activityIndicator.hidesWhenStopped = NO;
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [activityIndicator startAnimating];
+    [self.navigationItem setRightBarButtonItem: barButtonItem
+                                      animated: YES];
 }
 
 - (void)setPageingEnabled:(BOOL)enabled {
@@ -1002,7 +992,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     return self;
 }
 
-- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller completion:(void (^)(BOOL))completion {
+- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
+                             completion:(void (^)(BOOL))completion {
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         completion(YES);
     } else {
