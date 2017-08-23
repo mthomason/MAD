@@ -265,6 +265,11 @@ void madwarn(char *err,  const char*err2) { }
     _reportFormatter.didRefresh = refreshed;
 }
 
+- (void)formatContentChange {
+    [self.reportFormatter formatForSize:self.paperSize
+                         contentChanged:YES];
+}
+
 - (void)format {
     [self.reportFormatter formatForSize:self.paperSize
                          contentChanged:NO];

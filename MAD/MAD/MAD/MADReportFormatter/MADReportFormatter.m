@@ -230,7 +230,9 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
                     _overrideIdentifier.hash;
 }
 
-- (NSComparisonResult)compareValue:(id)value withValue:(id)value2 usingSelector:(SEL)selector {
+- (NSComparisonResult)compareValue:(id)value
+                         withValue:(id)value2
+                     usingSelector:(SEL)selector {
     NSComparisonResult comparsonResult;
     
     if (value == [NSNull null]) {
@@ -375,6 +377,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     self.reportLayout = lyarray;
     
     [self cleanupTemporaryIndexes];
+    self.sections = nil;
 }
 
 - (void)loadFromCacheWithSize:(CGSize)printableSize {
@@ -387,10 +390,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 #pragma mark Formatting
 
 - (BOOL)needsFormat {
-    os_log_debug(OS_LOG_DEFAULT, "Needs format (self.didRefresh): %s", self.didRefresh ? "yes" : "no");
-    os_log_debug(OS_LOG_DEFAULT, "Needs format (self.reportIndexes.count): %s", self.reportIndexes.count > 0 ? "yes" : "no");
-    os_log_debug(OS_LOG_DEFAULT, "Needs format (self.reportLayout.count): %s", self.reportLayout.count > 0 ? "yes" : "no");
-    os_log_debug(OS_LOG_DEFAULT, "Needs format (![self.datasource cacheExist]): %s", ![self.datasource cacheExist] ? "yes" : "no");
     id <MADReportFormatterDataSource> datasource = self.datasource;
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||

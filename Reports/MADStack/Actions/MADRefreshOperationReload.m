@@ -18,7 +18,7 @@
 #import "MADPageViewAttributes.h"
 
 #import "MADOperationRefreshReloadProtocol.h"
-
+#import "MADOperationRefresh.h"
 
 @interface MADRefreshOperationReload ()
 
@@ -85,10 +85,15 @@
         return [self finish];
     }
 
-    
     [self watchFormatter: document.reportFormatter];
-    
-    [document format];
+    NSUInteger indexDependencyRefresh = [self.dependencies indexOfObjectPassingTest:^BOOL(NSOperation * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj isKindOfClass:[MADOperationRefresh class]];
+    }];
+    if (indexDependencyRefresh == NSNotFound) {
+        [document format];
+    } else {
+        [document formatContentChange];
+    }
 
     [self ignoreFormatter: document.reportFormatter];
 

@@ -36,6 +36,12 @@ static NSString * const MTArrayCachedColumnKey = @"ci";
 static NSString * const MTArrayCachedColumnValue = @"ck";
 static NSString * const MTArrayCachedExtension = @"madac";
 
+typedef NS_ENUM(short, MADObjectInitalized) {
+    MADObjectInitalizedYes = 2,
+    MADObjectInitalizedNo = 3,
+    MADObjectInitalizedNotSets = 4,
+};
+
 #ifdef MAD_MTArrayCached_DEBUG
 void sqliteCallbackFunc(void *foo, const char* statement);
 void sqliteCallbackFunc(void *foo, const char* statement) {
@@ -67,7 +73,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 @end
 
 @implementation MADArrayCaching {
-    int _numberOfRows;
+    MADObjectInitalized _hasNumberOfRows;
+    long long _numberOfRows;
     NSURL *_url;
     sqlite3_stmt *_statementInsert;
     sqlite3_stmt *_statementSelect;
@@ -104,6 +111,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     if (self = [super init]) {
         
         _state = MADArrayCachingStateInital;
+        _hasNumberOfRows = MADObjectInitalizedNotSets;
+        _numberOfRows = 0;
         
         NSAssert(cachedDelegate != nil, @"We need delegate to get cache location.");
 
@@ -169,7 +178,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         self.state = MADArrayCachingStateLoaded;
     }
     [self prepareStatements];
-    _numberOfRows = (int)self.count;
+    _numberOfRows = 0;
+    _hasNumberOfRows = MADObjectInitalizedNo;
 }
 
 - (void)beginBulkInserts {
@@ -322,6 +332,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
             sqlite3_clear_bindings(statementInsert);
         }
     });
+    _hasNumberOfRows = MADObjectInitalizedYes;
     ++_numberOfRows;
 }
 
@@ -346,7 +357,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
             }
         }
     });
-    _numberOfRows++;// = numberOfRows;
+    _hasNumberOfRows = MADObjectInitalizedYes;
+    _numberOfRows++;;
 }
 
 - (NSData *)readDataAtIndex:(NSUInteger)index {
@@ -414,6 +426,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (BOOL)removeAllObjects {
     _lastObjectSelected = nil;
     _numberOfRows = 0;
+    _hasNumberOfRows = MADObjectInitalizedNotSets;
     MTQuery *query;
     query = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
     NSError * __autoreleasing error = NULL;
@@ -421,15 +434,19 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (long long int)count {
-    __block sqlite_int64 lastRowid = 0;
-    sqlite3_stmt *stmt_count = _statementCount;
-    
-    int stepResult = sqlite3_step(stmt_count);
-    if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
-        lastRowid = sqlite3_column_int64(stmt_count, 0) + 1;
-        sqlite3_reset(stmt_count);
+    if (_hasNumberOfRows != MADObjectInitalizedYes) {
+        sqlite_int64 count = 0;
+        sqlite3_stmt *stmt_count = _statementCount;
+        
+        int stepResult = sqlite3_step(stmt_count);
+        if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
+            count = sqlite3_column_int64(stmt_count, 0) + 1;
+            sqlite3_reset(stmt_count);
+        }
+        _hasNumberOfRows = MADObjectInitalizedYes;
+        _numberOfRows = count;
     }
-    return lastRowid;
+    return _numberOfRows;
 }
 
 - (BOOL)isEmpty { return _numberOfRows > 0; }
