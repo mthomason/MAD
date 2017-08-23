@@ -213,11 +213,15 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     UIView *documentView = self.documentView;
-    documentView.center = self.view.center;
+    MADDocumentScroller *documentScroller = self.documentScroller;
+    [MADDocumentPageController centerDocumentView: documentView
+                                 insideScrollView: documentScroller
+                                   topLayoutGuide: self.topLayoutGuide
+                                bottomLayoutGuide: self.bottomLayoutGuide
+                                           margin: PageEdgeInsetMargin];
     if (_initalLayout) {
         _initalLayout = NO;
         
-        MADDocumentScroller *documentScroller = self.documentScroller;
         documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInsetForScrollView: documentScroller
                                                                                                        insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         
@@ -232,7 +236,6 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
         [documentScroller setZoomScale: self.pageViewAttributes.zoomScaleInital animated:NO];
         documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
     }
-    
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
