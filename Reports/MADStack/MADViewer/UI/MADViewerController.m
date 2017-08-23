@@ -1017,7 +1017,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
        viewControllerAfterViewController:(MADDocumentPageController *)pageViewControllerLast {
     MADDocumentPageController *result = nil;
 
-    if (viewerViewController->_pageIsAnimating == NO) {
+    //if (viewerViewController->_pageIsAnimating == NO) {
         NSUInteger visiblePageNumber = 0;
         pageViewControllerLast.view.autoresizingMask = UIViewAutoresizingFlexibleHeight |
                                                        UIViewAutoresizingFlexibleWidth;
@@ -1048,7 +1048,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             result.view.autoresizingMask = MADViewAutoresizingFlexable();
             result.view.translatesAutoresizingMaskIntoConstraints = YES;
         }
-    }
+    //}
     return result;
     
 }
@@ -1057,7 +1057,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
       viewControllerBeforeViewController:(MADDocumentPageController *)pageViewControllerPrevious {
     MADDocumentPageController *result = nil;
     
-    if (viewerViewController->_pageIsAnimating == NO) {
+    //if (viewerViewController->_pageIsAnimating == NO) {
         
         NSUInteger visiblePageNumber = 0;
         
@@ -1087,7 +1087,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             result.view.translatesAutoresizingMaskIntoConstraints = YES;
         }
         
-    }
+    //}
 
     return result;
 }
@@ -1115,16 +1115,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 }
 
+- (void)pageViewController:(MADViewerController *)pageViewController
+                            willTransitionToViewControllers:(NSArray *)pendingViewControllers {
+    pageViewController->_pageIsAnimating = YES;
+}
+
 - (UIPageViewControllerSpineLocation)pageViewController:(MADViewerController *)pageViewController
                    spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
     pageViewController->_pageIsAnimating = NO;
     return UIPageViewControllerSpineLocationMin;
 
-}
-
-- (void)pageViewController:(MADViewerController *)pageViewController
-                            willTransitionToViewControllers:(NSArray *)pendingViewControllers {
-    pageViewController->_pageIsAnimating = YES;
 }
 
 #pragma mark -

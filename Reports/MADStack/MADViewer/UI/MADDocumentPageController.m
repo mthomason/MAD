@@ -145,6 +145,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)dealloc {
     [_documentView removeFromSuperview];
+    [_documentScroller removeFromSuperview];
 }
 
 - (instancetype)initWithDocument:(MADocument *)document
@@ -167,29 +168,29 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
     MTPaper *paper = self.document.paper;
     
-    MADDocumentScroller *scrollView = [[MADDocumentScroller alloc] initWithFrame:self.view.frame];
-    scrollView.contentSize = paper.paperSize;
-    scrollView.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin,
+    MADDocumentScroller *documentScroller = [[MADDocumentScroller alloc] initWithFrame:self.view.frame];
+    documentScroller.contentSize = paper.paperSize;
+    documentScroller.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin,
                                                PageEdgeInsetMargin, PageEdgeInsetMargin);
-    scrollView.autoresizingMask = MADViewAutoresizingFlexable();
-    scrollView.translatesAutoresizingMaskIntoConstraints = YES;
-    scrollView.delegate = self;
+    documentScroller.autoresizingMask = MADViewAutoresizingFlexable();
+    documentScroller.translatesAutoresizingMaskIntoConstraints = YES;
+    documentScroller.delegate = self;
     
     self.view.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:.80];
     
-    MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
-    renderedReportView.backgroundColor = [UIColor whiteColor];
-    renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+    MADReportPageView *documentView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
+    documentView.backgroundColor = [UIColor whiteColor];
+    documentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
                                           UIViewAutoresizingFlexibleRightMargin;
-    renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;
-    renderedReportView.delegatePage = self;
-    [scrollView addSubview:renderedReportView];
+    documentView.translatesAutoresizingMaskIntoConstraints = YES;
+    documentView.delegatePage = self;
+    [documentScroller addSubview:documentView];
 
-    self.documentView = renderedReportView;
+    self.documentView = documentView;
 
-    scrollView.delegate = self;
-    [self.view addSubview: scrollView];
-    self.documentScroller = scrollView;
+    documentScroller.delegate = self;
+    [self.view addSubview: documentScroller];
+    self.documentScroller = documentScroller;
 
 }
 
@@ -206,8 +207,6 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.documentScroller removeFromSuperview];
-    [self.documentView removeFromSuperview];
 }
 
 - (void)viewDidLayoutSubviews {
