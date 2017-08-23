@@ -12,6 +12,8 @@
 
 #import "MADReportFormatter.h"
 
+#import <os/log.h>
+
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectModel.h>
@@ -58,6 +60,7 @@
 #import "MADSectionRepresentation.h"
 #import "MADSectionsLayout.h"
 #import "MADSectionLayout.h"
+#import "MADSectionGroupLayout.h"
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
@@ -113,8 +116,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     @property (nonatomic, readwrite, strong)    NSArray <NSNumber *> *pageIndexesTemporary;
 
     @property (nonatomic, readwrite, strong)    NSArray *lastComparsonValues;
-
-    @property (nonatomic, readwrite, strong)    NSDictionary <NSNumber *, MADSectionLayout *> *sectionTemplate;
 
 @end
 
@@ -270,7 +271,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 }
 
 - (void)cleanupTemporaryIndexes {
-    [_pageLayoutTemporary removeAllObjects];
+    [self.pageLayoutTemporary removeAllObjects];
     NSArray *pageIndexesTemporary = [[NSArray alloc] init];
     self.pageIndexesTemporary = pageIndexesTemporary;
 }
@@ -386,6 +387,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 #pragma mark Formatting
 
 - (BOOL)needsFormat {
+    os_log_debug(OS_LOG_DEFAULT, "Needs format (self.didRefresh): %s", self.didRefresh ? "yes" : "no");
+    os_log_debug(OS_LOG_DEFAULT, "Needs format (self.reportIndexes.count): %s", self.reportIndexes.count > 0 ? "yes" : "no");
+    os_log_debug(OS_LOG_DEFAULT, "Needs format (self.reportLayout.count): %s", self.reportLayout.count > 0 ? "yes" : "no");
+    os_log_debug(OS_LOG_DEFAULT, "Needs format (![self.datasource cacheExist]): %s", ![self.datasource cacheExist] ? "yes" : "no");
     id <MADReportFormatterDataSource> datasource = self.datasource;
     NSAssert(datasource != nil, @"We need a datatable way before here");
     return self.didRefresh ||
@@ -416,16 +421,25 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     }
 }
 
+- (MADSectionsLayout *)sections {
+    if (_sections == nil) {
+        MADocument *layout = _layout;
+        if (layout != nil) {
+            MTDatabase *database = layout.database;
+            MADSectionsLayout *sections;
+            sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: layout.managedObjectContext
+                                                                 databaseClass: [database class]];
+            _sections = sections;
+        }
+    }
+    return _sections;
+}
+
 - (void)formatDocument {
     
     MADocument *layout = _layout;
-    NSManagedObjectContext *managedObjectContext = layout.managedObjectContext;
     
-    MADSectionsLayout *sections;
-    Class databaseClass = [layout.database class];
-    sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: managedObjectContext
-                                                         databaseClass: databaseClass];
-    self.sections = sections;
+    self.sections = nil;
     
     [layout resetSectionLayoutManagers];
     
@@ -523,7 +537,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     while (groupLevel >= 1) {
         @autoreleasepool {
             NSLog(@"Group: %@", self.sections.groupFooters[groupLevel - 1]);
-            MADSectionLayout *section = self.sections.groupFooters[groupLevel - 1];
+            MADSectionGroupLayout *section = self.sections.groupFooters[groupLevel - 1];
             [self formatDocumentAddHeightFromSection: section];
             [self layoutAddGroupFooterAtLevel:groupLevel-1];
         }
@@ -562,7 +576,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
                                                       usingSelector: sortDesc.selector];
             
             if (comparsonResult != NSOrderedSame) {
-                MADSectionLayout *section = self.sections.groupFooters[groupLevel - 1];
+                MADSectionGroupLayout *section = self.sections.groupFooters[groupLevel - 1];
                 [self formatDocumentAddHeightFromSection: section];
                 [self layoutAddGroupFooterAtLevel:groupLevel - 1];
             }
@@ -593,7 +607,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     }
 }
 
-- (void)formatDocumentAddHeightFromSection:(MADSectionLayout *)section {
+- (void)formatDocumentAddHeightFromSection:(__kindof MADSectionLayout *)section {
     if (section.producesFormFeed) {
         [self formatDocumentForcePageBreakWithFooterHeight: self.sections.pageFooter.displayHeight];
     } else {

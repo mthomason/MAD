@@ -13,11 +13,19 @@
 
 @protocol MADCacheProtocol;
 
+typedef NS_ENUM(int16_t, MADArrayCachingState) {
+    MADArrayCachingStateInital = 2,
+    MADArrayCachingStateLoading = 3,
+    MADArrayCachingStateLoaded = 5,
+    MADArrayCachingStateEmpty = 6,
+};
+
 @interface MADArrayCaching<ObjectType> : NSEnumerator
 
     @property (nonatomic, readwrite, weak, nullable) id <MADCacheProtocol> cachedDelegate;
     @property (nonatomic, readonly, copy, nonnull) NSString * identifier;
     @property (readonly) long long int count;
+    @property (nonatomic, readonly, assign) MADArrayCachingState state;
 
     - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
                                  cachedDelegate:(id <MADCacheProtocol> _Nullable)cachedDelegate;

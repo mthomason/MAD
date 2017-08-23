@@ -54,6 +54,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     @property (nonatomic, strong, readwrite) MADIndex *lastObjectSelected;
 
     @property (nonatomic, copy, readonly) NSURL *url;
+    @property (nonatomic, readwrite, assign) MADArrayCachingState state;
 
 @end
 
@@ -102,6 +103,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                     cachedDelegate:(id <MADCacheProtocol>)cachedDelegate {
     if (self = [super init]) {
         
+        _state = MADArrayCachingStateInital;
+        
         NSAssert(cachedDelegate != nil, @"We need delegate to get cache location.");
 
         _archivingQueue = dispatch_queue_create("MADArrayCachingQueue", DISPATCH_QUEUE_SERIAL);
@@ -130,7 +133,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)initializeDatabase {
-    
+    self.state = MADArrayCachingStateLoading;
     NSURL *url = [self url];
     [self reopenDatabaseAtUrl:url];
     if (![self.database tableExist:MTArrayCachedTableName]) {
@@ -161,6 +164,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                  unique: NO];
 
         _numberOfRows = 0;
+        self.state = MADArrayCachingStateEmpty;
+    } else {
+        self.state = MADArrayCachingStateLoaded;
     }
     [self prepareStatements];
     _numberOfRows = (int)self.count;
@@ -175,6 +181,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     NSURL *url = [self url];
     [self reopenDatabaseAtUrl: url];
     [self prepareStatements];
+
 }
 
 - (BOOL)prepareStatements {
@@ -414,15 +421,15 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (long long int)count {
-    //__block sqlite_int64 lastRowid = 0;
-    //sqlite3_stmt *stmt_count = _statementCount;
+    __block sqlite_int64 lastRowid = 0;
+    sqlite3_stmt *stmt_count = _statementCount;
     
-    //int stepResult = sqlite3_step(stmt_count);
-    //if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
-    //    lastRowid = sqlite3_column_int64(stmt_count, 0) + 1;
-    //    sqlite3_reset(stmt_count);
-    //}
-    return _numberOfRows;
+    int stepResult = sqlite3_step(stmt_count);
+    if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
+        lastRowid = sqlite3_column_int64(stmt_count, 0) + 1;
+        sqlite3_reset(stmt_count);
+    }
+    return lastRowid;
 }
 
 - (BOOL)isEmpty { return _numberOfRows > 0; }

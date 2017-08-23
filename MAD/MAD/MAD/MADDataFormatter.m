@@ -35,4 +35,8 @@
 
 - (BOOL)needsFormat { return YES; }
 
+- (void)setDidRefresh:(BOOL)didRefresh {
+    _didRefresh = didRefresh;
+}
+
 @end

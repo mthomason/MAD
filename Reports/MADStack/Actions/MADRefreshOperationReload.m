@@ -88,7 +88,6 @@
     
     [self watchFormatter: document.reportFormatter];
     
-    document.refreshed = YES;
     [document format];
 
     [self ignoreFormatter: document.reportFormatter];

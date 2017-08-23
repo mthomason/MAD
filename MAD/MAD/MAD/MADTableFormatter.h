@@ -13,8 +13,6 @@
 
 @interface MADTableFormatter : MADDataFormatter
 
-    @property (nonatomic, assign) BOOL didRefresh;
-
     - (instancetype)initWithQuery:(MTQuery *)query;
 
 @end
