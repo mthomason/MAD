@@ -51,16 +51,9 @@ static NSString * const TextRedraw = @"Redraw";
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
 
-    //@property (nonatomic, strong) UIBarButtonItem *barButtonItemRevealQuery;
-    //@property (nonatomic, strong) UIBarButtonItem *barButtonItemDone;
-
-    @property (nonatomic, strong) UIPopoverController *popover;
-
     @property (nonatomic, assign) BOOL localEditing;
     @property (nonatomic, assign) BOOL setupDetail;
     @property (nonatomic, assign) BOOL setupInitalLayout;
-
-    //@property (readonly) MADTabBarController *tabBarController;
 
 @end
 
@@ -98,11 +91,7 @@ static NSString * const TextRedraw = @"Redraw";
     return UIStatusBarStyleLightContent;
 }
 
-- (void)dealloc {
-    //_barButtonItemDone.target = nil;
-    //_barButtonItemEdit.target = nil;
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     
@@ -118,42 +107,9 @@ static NSString * const TextRedraw = @"Redraw";
     return self;
 }
 
-/*- (UINavigationController *)navigationController {
-    UINavigationController *navigationController;
-    navigationController = [super navigationController];
-    if (navigationController != nil) {
-        
-    }
-    return navigationController;
-}*/
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    //id redraw = NSLocalizedString(TextRedraw, TextRedraw);
-    
-    //id barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-    //                                                                     target: self.parentViewController
-    //                                                                     action: @selector(done:)];
-    //self.barButtonItemDone = barButtonItemDone;
-    
-    //id barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
-    //                                                               style: UIBarButtonItemStylePlain
-    //                                                              target: self
-    //                                                              action: @selector(redrawQueryVisualization:)];
-    //self.barButtonItemRevealQuery = barButtonItemRevealQuery;
-
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-    
-    /*UITabBarController *tabBarController = self.tabBarController;
-    UINavigationItem *navigationItem = tabBarController.navigationItem;
-
-    NSURL *fileURL = _document.fileURL;
-    NSString *lastPathComponent = fileURL.lastPathComponent;
-    navigationItem.prompt = lastPathComponent.copy;*/
-
-
-    //self.queryBuilderControllerAdvanced.document = document;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -170,9 +126,6 @@ static NSString * const TextRedraw = @"Redraw";
         buttonSQL = _barButtonItemSQL;
 
         buttonSQL.tintColor = whiteColor.copy;
-        
-        //navigationController.navigationBar.tintColor = whiteColor.copy;
-        //navigationController.navigationItem.titleView.tintColor = whiteColor.copy;
 
         _setupInitalLayout = YES;
     }
@@ -184,12 +137,6 @@ static NSString * const TextRedraw = @"Redraw";
     [self setToolbarItems:toolbarItems animated:YES];
     [self.detailNavigationController setToolbarItems:toolbarItems animated:animated];
     //[self.view setNeedsLayout];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    //UIView *titleView = self.navigationItem.titleView;
-    //[titleView sizeToFit];
 }
 
 + (NSString *)Title {
@@ -204,36 +151,6 @@ static NSString * const TextRedraw = @"Redraw";
     }
     return _title;
 }
-
-/*- (UINavigationItem *)navigationItem {
-    UINavigationItem *navigationItem = [super navigationItem];
-    if (navigationItem.titleView == nil) {
-        
-        //MADLabelTitle *titleView;
-        UIBarButtonItem *editButton, *doneButton;
-        NSString *title;
-
-        title = self.title;
-        //titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-        //titleView.text = title.copy;
-        
-        navigationItem.leftItemsSupplementBackButton = YES;
-        navigationItem.hidesBackButton = NO;
-
-        //navigationItem.titleView = titleView;
-
-        doneButton = _barButtonItemDone;
-        navigationItem.leftBarButtonItem = doneButton;
-        
-        editButton = self.editButtonItem;
-        editButton.target = self;
-        editButton.action = @selector(edit:);
-        navigationItem.rightBarButtonItem = editButton;
-        
-
-    }
-    return navigationItem;
-}*/
 
 - (UINavigationController *)detailNavigationController {
     if (_detailNavigationController == nil) {
@@ -270,23 +187,6 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    //MADQueryViewController *queryBuilderController;
-    
-    //queryBuilderController = self.queryBuilderController;
-    //[queryBuilderController reloadMainDocumentAnimated: animated];
-    
-    NSNumber *animateObject = [[NSNumber alloc] initWithBool:animated];
-    
-    //[[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
-    //    if (isLicensedUser == NO) {
-    //        NSInvocationOperation *operation;
-    //        operation = [[NSInvocationOperation alloc] initWithTarget:self
-    //                                                         selector:@selector(layoutForUnlicensedUser:)
-    //                                                           object:animateObject];
-    //        [[NSOperationQueue mainQueue] addOperation:operation];
-    //    }
-    //}];
 }
 
 - (void)layoutForUnlicensedUser:(NSNumber *)animated {
@@ -297,8 +197,6 @@ static NSString * const TextRedraw = @"Redraw";
     UIBarButtonItem *barButtonItemRevealQuery;
     
     animate = animated.boolValue;
-    
-    //barButtonItemRevealQuery = self.barButtonItemRevealQuery;
     
     toolbarItemsFull = self.toolbarItems;
     toolbarItemsLimited = toolbarItemsFull.mutableCopy;
@@ -317,45 +215,21 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    //UINavigationController *detailNavigationController;
-    //detailNavigationController = self.detailNavigationController;
-    //[detailNavigationController popToRootViewControllerAnimated:animated];
-    
     self.viewControllerDelegate = nil;
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    //[self.navigationItem setLeftBarButtonItem:nil animated:animated];
-    //[self.navigationItem setRightBarButtonItem:nil animated:animated];
     _detailNavigationController = nil;
     _queryBuilderController = nil;
     _queryBuilderControllerAdvanced = nil;
-    //NSArray *viewControllers = [[NSArray alloc] init];
-    //[self setViewControllers:viewControllers animated]
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
     if (sender == self) {
         MADocument *document = self.document;
         [(segue.destinationViewController) setDocument: document];
         [segue.destinationViewController reloadMainDocumentAnimated:YES];
-        
-    } else {
-        
-        if (self.popover != nil) {
-            if ((self.popover).popoverVisible) {
-                [self.popover dismissPopoverAnimated:YES];
-            }
-        }
-        
-        if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-            ((UIStoryboardPopoverSegue *)segue).popoverController.delegate = self;
-            self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;
-            //[self.tabBarController disableTabBarItems];
-        }
     }
 }
 
@@ -384,42 +258,6 @@ static NSString * const TextRedraw = @"Redraw";
     }];
     _viewControllerDelegate = nil;
 }
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
-    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
-            //[self.view setNeedsDisplay];
-        };
-    } else {
-        transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
-    }
-    //UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        //[toView setNeedsDisplay];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-    }];
-    
-}
-
-
-/*- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
-              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
-    
-    [super willTransitionToTraitCollection: newCollection
-                 withTransitionCoordinator: coordinator];
-    
-    if (!self.isViewLoaded) return;
-        
-    UIView *titleView = self.navigationItem.titleView;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [titleView sizeToFit];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [titleView sizeToFit];
-    }];
-    
-}*/
 
 #pragma mark - MTTabBarImageProtocol
 
@@ -427,36 +265,8 @@ static NSString * const TextRedraw = @"Redraw";
     return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 
-/*- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection
-              withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        
-    }];
-}*/
-
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
-    //self.presentationController
-    
-    /*
-    typeof(__kindof UITabBarController) *tabBarController;
-    tabBarController = self.tabBarController;
-    
-    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-    
-        BOOL animate = previousTraitCollection != nil;
-        NSString *prompt = _document.fileURL.lastPathComponent;
-        [UIView setAnimationsEnabled:animate];
-        tabBarController.navigationItem.prompt = prompt.copy;
-        [UIView setAnimationsEnabled:YES];
-    
-    } else {
-        
-        tabBarController.navigationItem.prompt = nil;
-    }*/
 }
 
 #pragma mark - UISplitViewControllerDelegate
@@ -560,17 +370,8 @@ static NSString * const TextRedraw = @"Redraw";
 
 }
 
-#pragma mark - UIPopoverControllerDelegate
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return YES;
-}
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    //[self.tabBarController enableTabBarItems];
-}
-
-#pragma mark - Override
+#pragma mark -
+#pragma mark Override
 
 - (void)setDocument:(MADocument *)document {
     if (document != _document) {
@@ -584,11 +385,5 @@ static NSString * const TextRedraw = @"Redraw";
         }
     }
 }
-
-//- (void)done:(id)sender {
-//    if (self.navigationController respondsToSelector:@selector(done:)) {
-//        [self.navigationController done:sender];
-//    }
-//}
 
 @end
