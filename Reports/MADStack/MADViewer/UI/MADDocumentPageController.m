@@ -175,6 +175,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     scrollView.translatesAutoresizingMaskIntoConstraints = YES;
     scrollView.delegate = self;
     
+    self.view.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:.80];
+    
     MADReportPageView *renderedReportView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
     renderedReportView.backgroundColor = [UIColor whiteColor];
     renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
@@ -210,6 +212,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    UIView *documentView = self.documentView;
+    documentView.center = self.view.center;
     if (_initalLayout) {
         _initalLayout = NO;
         
@@ -226,7 +230,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
                                                                      PageEdgeInsetMargin);
         
         [documentScroller setZoomScale: self.pageViewAttributes.zoomScaleInital animated:NO];
-        self.documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
+        documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
     }
     
 }

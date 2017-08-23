@@ -469,7 +469,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                        size: paperSize];
         page =
         [MADDocumentPageController newReportPageViewControllerWithDocument: document
-                                                              pageAttributes: pageAttributes];
+                                                            pageAttributes: pageAttributes];
 
         ((MADDocumentPageController *)page).view.frame = self.view.bounds;
         ((MADDocumentPageController *)page).delegate = self;
