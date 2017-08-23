@@ -408,7 +408,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
             [self setLayoutSize:printableSize];
             [self loadLayoutAndIndexesFromCache];
             if (self.needsFormat) {
-                
                 if (contextChanged) {
                     [self dropIndexes];
                 }
@@ -456,10 +455,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     [self formatDocumentAddReportFooter];
     
     NSArray <MADSectionRepresentation *> *tlfp;
-    tlfp = [NSMutableArray arrayWithArray:self.pageLayoutTemporary];
+    tlfp = [[NSMutableArray alloc] initWithArray:self.pageLayoutTemporary];
     [self.reportLayout addObject:tlfp];
     
-    NSArray <NSNumber *> *tdfp = [NSArray arrayWithArray:self.pageIndexesTemporary];
+    NSArray <NSNumber *> *tdfp;
+    tdfp = [[NSArray alloc] initWithArray:self.pageIndexesTemporary];
     [self.reportIndexes addObject:tdfp];
     
     [self.reportLayout endBulkInserts];
