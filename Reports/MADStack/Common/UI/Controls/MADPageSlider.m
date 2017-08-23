@@ -71,6 +71,13 @@ static inline CGFloat MaxDimension(CGSize size) {
     return CGSizeMake(bounds.size.width, bounds.size.height);
 }
 
++ (CGFloat)distanceBetweenTicks:(NSUInteger)numberOfTicks height:(CGFloat)height
+                        padding:(CGFloat)padding rect:(CGRect)rect {
+    return numberOfTicks > 1 ?
+                ((rect.size.height - padding * 2) / numberOfTicks) - height :
+                CGSizeZero.height;
+}
+
 #pragma mark -
 #pragma mark Object
 
@@ -131,51 +138,6 @@ static inline CGFloat MaxDimension(CGSize size) {
     }
     return self;
 }
-
-#pragma mark -
-#pragma mark Lazy load
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
-- (UIVisualEffectView *)vibrancyView {
-    if (_vibrancyView == nil) {
-        NSAssert([self.effect isKindOfClass:[UIBlurEffect class]], @"We expect a blur effect.");
-        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:(UIBlurEffect *)self.effect];
-        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
-        vibrancyView.frame = self.frame;
-        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
-        vibrancyView.contentView.tintColor = [UIColor redColor];
-        [self.contentView addSubview:vibrancyView];
-        _vibrancyView = vibrancyView;
-    }
-    return _vibrancyView;
-}
-#pragma GCC diagnostic pop
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
-- (MADSliderPageVertical *)pageSlider {
-    if (_slider == nil) {
-        MADSliderPageVertical *slider = [[MADSliderPageVertical alloc] init];
-        [slider addTarget: self action: @selector(handleSliderChangedPage:)
-         forControlEvents: UIControlEventValueChanged];
-        
-        [slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
-         forControlEvents: UIControlEventTouchUpInside];
-        
-        UITapGestureRecognizer *tapGestureRecognizer;
-        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                       action: @selector(handleGestureTapSlider:)];
-        [slider addGestureRecognizer:tapGestureRecognizer];
-        
-        slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
-        self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
-        [self.contentView addSubview:slider];
-        _slider = slider;
-    }
-    return _slider;
-}
-#pragma GCC diagnostic pop
 
 #pragma mark -
 #pragma mark View
@@ -251,13 +213,6 @@ static inline CGFloat MaxDimension(CGSize size) {
     }
 }
 
-+ (CGFloat)distanceBetweenTicks:(NSUInteger)numberOfTicks height:(CGFloat)height
-                        padding:(CGFloat)padding rect:(CGRect)rect {
-    return numberOfTicks > 1 ?
-                ((rect.size.height - padding * 2) / numberOfTicks) - height :
-                CGSizeZero.height;
-}
-
 - (void)didMoveToWindow {
     [super didMoveToWindow];
     if (self.window == nil) {
@@ -273,36 +228,52 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 #pragma mark -
-#pragma mark Custom
+#pragma mark Lazy load
 
-- (void)setDisplayEnabled {
-    self.enabledColor = YES;
-}
-
-- (void)setDisplayDisabled {
-    self.enabledColor = NO;
-}
-
-- (void)handleGestureTapSlider:(UIGestureRecognizer *)tap {
-    UISlider *slider = (UISlider *)tap.view;
-    if (slider.highlighted == NO) {
-        CGPoint pt = [tap locationInView: slider];
-        float percentage = (float)(pt.x / slider.bounds.size.width);
-        float delta = percentage * (slider.maximumValue - slider.minimumValue);
-        float value = slider.minimumValue + delta;
-        [slider setValue:value animated:YES];
-        [self handleSliderDidFinishDrag:slider];
-        [self handleSliderChangedPage:slider];
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+- (UIVisualEffectView *)vibrancyView {
+    if (_vibrancyView == nil) {
+        NSAssert([self.effect isKindOfClass:[UIBlurEffect class]], @"We expect a blur effect.");
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:(UIBlurEffect *)self.effect];
+        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
+        vibrancyView.frame = self.frame;
+        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
+        vibrancyView.contentView.tintColor = [UIColor redColor];
+        [self.contentView addSubview:vibrancyView];
+        _vibrancyView = vibrancyView;
     }
+    return _vibrancyView;
 }
+#pragma GCC diagnostic pop
 
-- (void)handleSliderChangedPage:(UISlider *)sender {
-    [self.sliderDelegate sliderDidChangeToPage:(NSUInteger)lroundf(sender.value)];
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+- (MADSliderPageVertical *)pageSlider {
+    if (_slider == nil) {
+        MADSliderPageVertical *slider = [[MADSliderPageVertical alloc] init];
+        [slider addTarget: self action: @selector(handleSliderChangedPage:)
+         forControlEvents: UIControlEventValueChanged];
+        
+        [slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
+         forControlEvents: UIControlEventTouchUpInside];
+        
+        UITapGestureRecognizer *tapGestureRecognizer;
+        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                       action: @selector(handleGestureTapSlider:)];
+        [slider addGestureRecognizer:tapGestureRecognizer];
+        
+        slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
+        self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
+        [self.contentView addSubview:slider];
+        _slider = slider;
+    }
+    return _slider;
 }
+#pragma GCC diagnostic pop
 
-- (void)handleSliderDidFinishDrag:(UISlider *)sender {
-    sender.value = lroundf(sender.value);               // Sets your slider to this value
-}
+#pragma mark -
+#pragma mark Page slider wrappers
 
 - (float)value {
     return self.pageSlider.value;
@@ -317,20 +288,12 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)setMinimumValue:(float)minimumValue {
-    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.pageSlider.minimumValue = minimumValue;
-        [self setNeedsLayout];
-    //}];
+    self.pageSlider.minimumValue = minimumValue;
+    [self setNeedsLayout];
 }
 
 - (float)maximumValue {
     return self.pageSlider.maximumValue;
-}
-
-- (NSUInteger)maximumNumberOfLabels {
-    return availableLabelSlots(MaxDimension(self.frame.size),
-                               self.stringHeight,
-                               self.maximumValue) / 2 + 1;
 }
 
 - (void)setMaximumValue:(float)maximumValue {
@@ -344,7 +307,6 @@ static inline CGFloat MaxDimension(CGSize size) {
         [self setNeedsLayout];
     //}];
 }
-
 
 - (void)setEnabled:(BOOL)enabled {
     
@@ -364,6 +326,60 @@ static inline CGFloat MaxDimension(CGSize size) {
     return self.pageSlider.isEnabled;
 }
 
+#pragma mark -
+#pragma mark Event handlers
+
+- (void)handleSliderChangedPage:(UISlider *)sender {
+    [self.sliderDelegate sliderDidChangeToPage:(NSUInteger)lroundf(sender.value)];
+}
+
+- (void)handleSliderDidFinishDrag:(UISlider *)sender {
+    sender.value = lroundf(sender.value);               // Sets your slider to this value
+}
+
+- (void)handleGestureTapSlider:(UIGestureRecognizer *)tap {
+    UISlider *slider = (UISlider *)tap.view;
+    if (slider.highlighted == NO) {
+        CGPoint pt = [tap locationInView: slider];
+        float percentage = (float)(pt.x / slider.bounds.size.width);
+        float delta = percentage * (slider.maximumValue - slider.minimumValue);
+        float value = slider.minimumValue + delta;
+        [slider setValue:value animated:YES];
+        [self handleSliderDidFinishDrag:slider];
+        [self handleSliderChangedPage:slider];
+    }
+}
+
+#pragma mark -
+#pragma mark Custom
+
+- (void)setDisplayEnabled {
+    self.enabledColor = YES;
+}
+
+- (void)setDisplayDisabled {
+    self.enabledColor = NO;
+}
+
+- (NSUInteger)maximumNumberOfLabels {
+    return availableLabelSlots(MaxDimension(self.frame.size),
+                               self.stringHeight,
+                               self.maximumValue) / 2 + 1;
+}
+
+- (void)rotateBoundingSize:(CGSize)boundingSize inContext:(CGContextRef)context {
+    CGAffineTransform translate1 = CGAffineTransformMakeTranslation(boundingSize.width / 2.0000f,
+                                                                    boundingSize.width / 2.0000f);
+    CGAffineTransform rotate = CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
+    CGAffineTransform translateBack = CGAffineTransformMakeTranslation(-boundingSize.width / 2.0000f,
+                                                                       -boundingSize.width / 2.0000f);
+    CGContextConcatCTM(context, translate1);
+    CGContextConcatCTM(context, rotate);
+    CGContextConcatCTM(context, translateBack);
+}
+
+#pragma mark Drawing
+
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point
            inContext:(CGContextRef)context {
     
@@ -376,17 +392,6 @@ static inline CGFloat MaxDimension(CGSize size) {
     
     return CGRectMake(point.x, point.y, boundingSize.width, boundingSize.height);
     
-}
-
-- (void)rotateBoundingSize:(CGSize)boundingSize inContext:(CGContextRef)context {
-    CGAffineTransform translate1 = CGAffineTransformMakeTranslation(boundingSize.width / 2.0000f,
-                                                                    boundingSize.width / 2.0000f);
-    CGAffineTransform rotate = CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
-    CGAffineTransform translateBack = CGAffineTransformMakeTranslation(-boundingSize.width / 2.0000f,
-                                                                       -boundingSize.width / 2.0000f);
-    CGContextConcatCTM(context, translate1);
-    CGContextConcatCTM(context, rotate);
-    CGContextConcatCTM(context, translateBack);
 }
 
 @end
