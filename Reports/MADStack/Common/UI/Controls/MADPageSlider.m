@@ -219,6 +219,7 @@ static inline CGFloat MaxDimension(CGSize size) {
         for (UILabel *label in self.labels) {
             [label removeFromSuperview];
         }
+        _lastNumberOfTicks = 0;
         [self.vibrancyView removeFromSuperview];
         [self.pageSlider removeFromSuperview];
         [self.labels removeAllObjects];
@@ -288,6 +289,9 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)setMinimumValue:(float)minimumValue {
+    if (self.pageSlider.minimumValue != minimumValue || minimumValue == 0.0) {
+        _lastNumberOfTicks = 0;
+    }
     self.pageSlider.minimumValue = minimumValue;
     [self setNeedsLayout];
 }
@@ -297,15 +301,16 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)setMaximumValue:(float)maximumValue {
+    if (self.pageSlider.minimumValue != maximumValue || maximumValue == 0.0) {
+        _lastNumberOfTicks = 0;
+    }
     if (_labels == nil) {
         NSMutableArray *labels;
         labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
         _labels = labels;
     }
-    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.pageSlider.maximumValue = maximumValue;
-        [self setNeedsLayout];
-    //}];
+    self.pageSlider.maximumValue = maximumValue;
+    [self setNeedsLayout];
 }
 
 - (void)setEnabled:(BOOL)enabled {

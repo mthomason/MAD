@@ -110,6 +110,8 @@
         typeof(self) __strong sself = weakself;
         [sself.viewController operation:sself updatePages:document.numberOfPages];
     }];
+    [finishReload addDependency:updateRecordsRead];
+    
     operations = @[updateRecordsRead, finishReload];
     [[NSOperationQueue mainQueue] addOperations: operations
                               waitUntilFinished: YES];
