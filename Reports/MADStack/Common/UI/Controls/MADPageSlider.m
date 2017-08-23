@@ -47,16 +47,16 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 @interface MADPageSlider ()
 
-    @property (nonatomic, weak) MADSliderPageVertical *slider;
-    @property (nonatomic, weak) UIVisualEffectView *vibrancyView;
-
-    @property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
     @property (nonatomic, assign) CGFloat stringHeight;
 
     @property (nonatomic, assign) CGRect lastRect;
     @property (nonatomic, assign) unsigned long lastNumberOfTicks;
 
     @property (nonatomic, assign) BOOL enabledColor;
+
+    @property (nonatomic, weak, getter=pageSlider) MADSliderPageVertical *slider;
+    @property (nonatomic, weak) UIVisualEffectView *vibrancyView;
+    @property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
 
 @end
 
@@ -84,7 +84,7 @@ static inline CGFloat MaxDimension(CGSize size) {
     if (self = [super initWithEffect:effect]) {
         
         self.contentView.tintColor = [UIColor blueColor];
-        
+        /*
         UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
         UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
         vibrancyView.frame = self.frame;
@@ -113,7 +113,7 @@ static inline CGFloat MaxDimension(CGSize size) {
         self.backgroundColor = [lightBlue colorWithAlphaComponent:0.3333f];
         
         self.slider = slider;
-        
+        */
         UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
         NSNumber *strokeWidth = @-1.0000f;
         NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -133,17 +133,65 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 #pragma mark -
+#pragma mark Lazy load
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+- (UIVisualEffectView *)vibrancyView {
+    if (_vibrancyView == nil) {
+        NSAssert([self.effect isKindOfClass:[UIBlurEffect class]], @"We expect a blur effect.");
+        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:(UIBlurEffect *)self.effect];
+        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
+        vibrancyView.frame = self.frame;
+        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
+        vibrancyView.contentView.tintColor = [UIColor redColor];
+        [self.contentView addSubview:vibrancyView];
+        _vibrancyView = vibrancyView;
+    }
+    return _vibrancyView;
+}
+#pragma GCC diagnostic pop
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+- (MADSliderPageVertical *)pageSlider {
+    if (_slider == nil) {
+        MADSliderPageVertical *slider = [[MADSliderPageVertical alloc] init];
+        [slider addTarget: self action: @selector(handleSliderChangedPage:)
+         forControlEvents: UIControlEventValueChanged];
+        
+        [slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
+         forControlEvents: UIControlEventTouchUpInside];
+        
+        UITapGestureRecognizer *tapGestureRecognizer;
+        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                       action: @selector(handleGestureTapSlider:)];
+        [slider addGestureRecognizer:tapGestureRecognizer];
+        
+        slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
+        self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
+        [self.contentView addSubview:slider];
+        _slider = slider;
+    }
+    return _slider;
+}
+#pragma GCC diagnostic pop
+
+#pragma mark -
 #pragma mark View
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    self.vibrancyView.frame = self.bounds;
+    self.pageSlider.frame = self.bounds;
     
     self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth,
                             CGPointZero.y,
                             MADSliderPaginationWidth,
                             self.superview.frame.size.height);
     
-    self.slider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
+    self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                        MADSliderPaginationWidth, self.superview.frame.size.height);
 
     if (self.labels == nil) {
@@ -217,10 +265,10 @@ static inline CGFloat MaxDimension(CGSize size) {
             [label removeFromSuperview];
         }
         [self.vibrancyView removeFromSuperview];
-        [self.slider removeFromSuperview];
+        [self.pageSlider removeFromSuperview];
         [self.labels removeAllObjects];
-        self.vibrancyView = nil;
-        self.slider = nil;
+        _vibrancyView = nil;
+        _slider = nil;
     }
 }
 
@@ -257,11 +305,11 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (float)value {
-    return self.slider.value;
+    return self.pageSlider.value;
 }
 
 - (void)setValue:(float)value {
-    self.slider.value = value;
+    self.pageSlider.value = value;
 }
 
 - (float)minimumValue {
@@ -269,14 +317,14 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)setMinimumValue:(float)minimumValue {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.slider.minimumValue = minimumValue;
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.pageSlider.minimumValue = minimumValue;
         [self setNeedsLayout];
-    }];
+    //}];
 }
 
 - (float)maximumValue {
-    return self.slider.maximumValue;
+    return self.pageSlider.maximumValue;
 }
 
 - (NSUInteger)maximumNumberOfLabels {
@@ -291,16 +339,16 @@ static inline CGFloat MaxDimension(CGSize size) {
         labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
         _labels = labels;
     }
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        self.slider.maximumValue = maximumValue;
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.pageSlider.maximumValue = maximumValue;
         [self setNeedsLayout];
-    }];
+    //}];
 }
 
 
 - (void)setEnabled:(BOOL)enabled {
     
-    if (self.slider.enabled) {
+    if (self.pageSlider.enabled) {
         self.tintColor = [MADColorEverydayApps newColorRed];
         [self setDisplayEnabled];
         
