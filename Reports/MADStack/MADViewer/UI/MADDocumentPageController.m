@@ -102,13 +102,13 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
                                                             margin:(const CGFloat)margin {
     
     documentView.center = documentCenterPoint(scrollView.bounds.size, scrollView.contentSize, margin);
-    scrollView.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInsetForScrollView: scrollView
-                                                                                               insets: boundsInsets(topLayoutGuide, bottomLayoutGuide)];
+    scrollView.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: scrollView
+                                                                                bounds: boundsInsets(topLayoutGuide, bottomLayoutGuide)];
     
 }
 
-+ (UIEdgeInsets)ScrollIndicatorInsetForScrollView:(UIScrollView *)scrollView
-                                           insets:(UIEdgeInsets)insets {
++ (UIEdgeInsets)ScrollIndicatorInset:(UIScrollView *)scrollView
+                              bounds:(UIEdgeInsets)insets {
     return UIEdgeInsetsMake(EdgeInsetForScrollIndicator(scrollView.bounds.size.height,
                                                         scrollView.contentSize.height,
                                                         insets.top,
@@ -221,8 +221,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     if (_initalLayout) {
         _initalLayout = NO;
         
-        documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInsetForScrollView: documentScroller
-                                                                                                       insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
+        documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: documentScroller
+                                                                                          bounds: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         
         MADocument *document = self.document;
         documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize,
@@ -248,8 +248,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
         documentScroller.scrollIndicatorInsets =
-        [MADDocumentPageController ScrollIndicatorInsetForScrollView: self.documentScroller
-                                                              insets: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
+        [MADDocumentPageController ScrollIndicatorInset: self.documentScroller
+                                                 bounds: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
         documentScroller.contentOffset = nextContentOffset;
         documentScroller.bounds = MADRectOfSize(size);
         
