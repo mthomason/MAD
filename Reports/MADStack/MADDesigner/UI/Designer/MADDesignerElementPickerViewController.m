@@ -73,7 +73,8 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 @implementation MADDesignerElementPickerViewController
 
-#pragma mark - Storyboard Interactions
+#pragma mark -
+#pragma mark Storyboard Interactions
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
     return NO;
@@ -98,7 +99,8 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 
 
-#pragma mark - View lifecycle
+#pragma mark -
+#pragma mark View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -140,13 +142,15 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
     self.dataSource = dataSource;
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Actions
 
 - (IBAction)done:(id)sender {
     [self.objectSelectorDelegate viewControllerDidFinish: self];
 }
 
-#pragma mark - UICollectionViewDataSource
+#pragma mark -
+#pragma mark UICollectionViewDataSource
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -232,7 +236,8 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
     return 1;
 }
 
-#pragma mark - UICollectionViewFlowLayoutDelegate
+#pragma mark -
+#pragma mark UICollectionViewFlowLayoutDelegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout*)collectionViewLayout
@@ -242,10 +247,11 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 }
 
-#pragma mark - Actions
+#pragma mark -
+#pragma mark Actions
 
-#pragma mark
-#pragma mark - Aggregate Functions View Controller Delegate Protocol
+#pragma mark -
+#pragma mark Aggregate Functions View Controller Delegate Protocol
 
 - (void)didSelectFunction:(MTAggregateFunctionType)functionType {
     [self displaySelectedFunction:functionType];
