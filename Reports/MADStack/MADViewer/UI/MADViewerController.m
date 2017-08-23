@@ -22,7 +22,6 @@
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UINavigationController.h>
-#import <UIKit/UIPopoverController.h>
 #import <UIKit/UIPopoverPresentationController.h>
 #import <UIKit/UIPrintInteractionController.h>
 #import <UIKit/UIResponder.h>
@@ -124,7 +123,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 @interface MADViewerController ()
     <UIPopoverPresentationControllerDelegate,
-        UIPopoverControllerDelegate,
         UIStateRestoring,
         UIPageViewControllerDelegate,
         UIPageViewControllerDataSource,
@@ -159,10 +157,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     @property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
     @property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
-
-#pragma mark Controllers
-
-    //@property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
 #pragma mark 
 
@@ -1280,15 +1274,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 #pragma mark -
-#pragma mark UIPopoverControllerDelegate
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return YES;
-}
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [(MADTabBarController *)self.tabBarController enableTabBarItems];
-}
+#pragma mark MADActivityProtocol
 
 - (UIViewController *)activeViewController { return self; }
 
