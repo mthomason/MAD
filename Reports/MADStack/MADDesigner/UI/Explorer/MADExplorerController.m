@@ -1185,7 +1185,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 
 - (void)viewControllerDidCancel:(id)sender {
     [self viewControllerDidFinish:sender];
-    self.fileExplorerViewDelegate.showingPopover = NO;
 }
 
 #pragma mark -
