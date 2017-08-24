@@ -258,14 +258,14 @@ static const inline CGSize sizePopoverFonts() {
 @end
 
 @implementation MADDesignerViewController {
-    int64_t _identifierJustDisplayed;
-    CGFloat _zoomScaleRestore;
     BOOL _editAggregate;
     BOOL _toolboxVisible;
     BOOL _sectionSettingsVisible;
     BOOL _insetsSetup;
     BOOL _shownAndHidden;
     BOOL _lastMenuItemSelectRequiresElementView;
+    int64_t _identifierJustDisplayed;
+    CGFloat _zoomScaleRestore;
     CGRect _boundsOnDisappear;
 }
 
