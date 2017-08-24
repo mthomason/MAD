@@ -130,6 +130,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         UISearchBarDelegate,
         UIPopoverControllerDelegate,
         UIPopoverPresentationControllerDelegate,
+        UIAdaptivePresentationControllerDelegate,
         MADExplorerProtocol,
         MADDocumentManagerProtocol,
         MADocumentDelegate,
@@ -195,6 +196,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     BOOL _shouldShowAddDocumentPopover;
     BOOL _aboutViewControllerOnScreen;
+    BOOL _infoControllerOnScreen;
     
     BOOL _isActivityIndicatorRightVisible;
     BOOL _activityIndicatorRightVisible;
@@ -353,6 +355,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         
         _shouldShowAddDocumentPopover = YES;
         _getUserCloudPrefsFirstCall = YES;
+        _infoControllerOnScreen = NO;
         _aboutViewControllerOnScreen = NO;
         _updatingEnabled = YES;
         _cloudActivityRunning = NO;
@@ -551,7 +554,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     [super viewDidAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     _aboutViewControllerOnScreen = NO;
-    
+    _infoControllerOnScreen = NO;
     if (self.pendingLaunchContext) {
         [self configureViewControllerWithLaunchContext:self.pendingLaunchContext];
     }
@@ -1177,10 +1180,12 @@ typedef NS_ENUM(short, MADExplorerState) {
     [self dismissViewControllerAnimated:YES completion:nil];
     _shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
+    self.fileExplorerViewDelegate.showingPopover = NO;
 }
 
 - (void)viewControllerDidCancel:(id)sender {
     [self viewControllerDidFinish:sender];
+    self.fileExplorerViewDelegate.showingPopover = NO;
 }
 
 #pragma mark -
@@ -1326,26 +1331,38 @@ typedef NS_ENUM(short, MADExplorerState) {
 
 - (IBAction)actionInformation:(id)sender {
     
-    UINavigationController *infoViewController;
-    infoViewController = [MADNavigationController newNavigationController:MADNavigationControllerTypeInformation];
-    infoViewController.modalPresentationStyle = UIModalPresentationPopover;
-    infoViewController.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
-    
-    NSArray *passthoughViews = [self defaultPassthroughViews];
-    
-    UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-    ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
-    ppc.backgroundColor = [UIColor clearColor];
-    ppc.delegate = self;
-    ppc.barButtonItem = sender;
-    
-    self.infoPopoverPresentationController = ppc;
-    
-    [self presentViewController:infoViewController animated:YES completion:nil];
+    if (_aboutViewControllerOnScreen) {
+        _aboutViewControllerOnScreen = NO;
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    }
+    if (_infoControllerOnScreen) {
+        _infoControllerOnScreen = NO;
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    } else {
+        UINavigationController *infoViewController;
+        infoViewController = [MADNavigationController newNavigationController:MADNavigationControllerTypeInformation];
+        infoViewController.modalPresentationStyle = UIModalPresentationPopover;
+        infoViewController.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
+        
+        NSArray *passthoughViews = [self defaultPassthroughViews];
+        
+        UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
+        ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
+        ppc.backgroundColor = [UIColor clearColor];
+        ppc.delegate = self;
+        ppc.barButtonItem = sender;
+        
+        self.infoPopoverPresentationController = ppc;
+        
+        [self presentViewController:infoViewController animated:YES completion:nil];
+    }
 }
 
 - (IBAction)actionAbout:(id)sender {
-    
+    if (_infoControllerOnScreen) {
+        _infoControllerOnScreen = NO;
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    }
     if (_aboutViewControllerOnScreen) {
         _aboutViewControllerOnScreen = NO;
         [self dismissViewControllerAnimated:YES completion:^{ }];
@@ -1417,9 +1434,10 @@ typedef NS_ENUM(short, MADExplorerState) {
     licensing = [MADNavigationController newNavigationController: MADNavigationControllerTypeLicensing];
     licensing.modalPresentationStyle = UIModalPresentationFormSheet;
     licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    licensing.presentationController.delegate = self;
     ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
+    self.fileExplorerViewDelegate.showingPopover = YES;
     [self showViewController:licensing animated: YES];
-    
 }
 
 - (IBAction)actionCancel:(id)sender {

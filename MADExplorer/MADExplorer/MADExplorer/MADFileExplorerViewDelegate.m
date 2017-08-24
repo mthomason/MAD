@@ -184,7 +184,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         NSArray <NSIndexPath *> *visibleItems;
         visibleItems = [[sdelegate fileExplorerView] indexPathsForVisibleItems];
         id <MADExplorerProtocol, UIGestureRecognizerDelegate> __weak wdelegate = sdelegate;
-        [visibleItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (NSIndexPath * _Nonnull obj in visibleItems) {
             MADCollectionViewCellDocument *visibleCell;
             visibleCell = (MADCollectionViewCellDocument *)[[wdelegate fileExplorerView] cellForItemAtIndexPath:obj];
             if (showingPopover) {
@@ -192,7 +192,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
             } else {
                 visibleCell.labelTitle.textColor = visibleCell.labelTitle.enabledTextColor.copy;
             }
-        }];
+        }
         _showingPopover = showingPopover;
     }
 }
