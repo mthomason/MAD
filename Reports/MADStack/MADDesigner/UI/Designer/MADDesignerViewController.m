@@ -30,6 +30,7 @@
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIMenuController.h>
 #import <UIKit/NSStringDrawing.h>
+#import <UIKit/UIPopoverPresentationController.h>
 
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObjectContext.h>

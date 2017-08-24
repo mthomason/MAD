@@ -10,6 +10,7 @@
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UITabBarController.h>
+#import <UIKit/UIPopoverPresentationController.h>
 
 #import "MADToolboxPresentationController.h"
 #import "MADViewControllerProtocol.h"

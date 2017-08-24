@@ -14,6 +14,7 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UITabBarController.h>
+#import <UIKit/UIPopoverPresentationController.h>
 
 #import <Foundation/NSKeyValueObserving.h>
 

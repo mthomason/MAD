@@ -310,17 +310,6 @@ BOOL storeEnabled() {
     return action == @selector(unwindToQueryBuilder:);
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction: (SEL)action
-                                      fromViewController: (UIViewController *)fromViewController
-                                              withSender: (id)sender {
-    id result;
-    result = action == @selector(unwindToQueryBuilder:) ?
-            self : [super viewControllerForUnwindSegueAction: action
-                                          fromViewController: fromViewController
-                                                  withSender: sender];
-    return result;
-}
-
 #pragma mark -
 #pragma mark UIViewController
 
@@ -339,8 +328,6 @@ BOOL storeEnabled() {
 
     self.navigationItem.prompt = nil;
     self.tableView.dataSource = self.queryViewDataSource;
-
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {

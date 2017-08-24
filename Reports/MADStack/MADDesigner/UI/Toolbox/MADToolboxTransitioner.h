@@ -11,7 +11,8 @@
 
 #import <UIKit/UIViewControllerTransitioning.h>
 #import <UIKit/UIPopoverSupport.h>
-#import <UIKit/UIPopoverPresentationController.h>
+
+@protocol UIPopoverPresentationControllerDelegate;
 
 @protocol MADToolboxAnimatedTransitioningProtocol <NSObject>
 
