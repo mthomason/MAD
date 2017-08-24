@@ -306,22 +306,28 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 
     _wobbling = YES;
     float r = wobbleFactor();
-    
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    [UIView animateWithDuration: 0.2 animations: ^{
-        self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-    } completion: ^(BOOL finished) {
+
+    typeof(self) __weak weakself = self;
+    [UIView animateWithDuration: 0.2000f animations: ^{
+        weakself.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
+    } completion: ^(BOOL finishedInital) {
                          
-        [UIView animateWithDuration: 0.2
-                              delay: 0
+        [UIView animateWithDuration: 0.20000f
+                              delay: 0.0
                             options: UIViewAnimationOptionAllowUserInteraction |
                                         UIViewAnimationOptionRepeat |
                                         UIViewAnimationOptionAutoreverse |
                                         UIViewAnimationOptionBeginFromCurrentState
                          animations: ^(void){
                              [UIView setAnimationRepeatCount: MAXFLOAT];
-                             self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
-    } completion: nil];
+                             weakself.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
+                         } completion:^(BOOL finished) {
+                             typeof(self) strongself = weakself;
+                             if (!finished && strongself.wobbling) {
+                                 [strongself startWobble];
+                             }
+                         }];
     }];
 }
 
@@ -332,10 +338,14 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 }
 
 - (void)setWobbling:(BOOL)wobbling {
-    if (_wobbling != wobbling) {
-        if ((_wobbling = wobbling)) [self startWobble];
+    if (_wobbling != wobbling || (wobbling && _working == NO)) {
+        if ((_wobbling = wobbling) && (_working = wobbling)) [self startWobble];
         else [self stopWobble];
     }
+}
+
+- (void)setTransform:(CGAffineTransform)transform {
+    [super setTransform:transform];
 }
 
 #pragma mark Progress

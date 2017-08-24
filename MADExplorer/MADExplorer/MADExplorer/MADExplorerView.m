@@ -19,7 +19,6 @@
             MADExplorerView *view;
             view = [MADExplorerView appearance];
             view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-
         }
     }
 }

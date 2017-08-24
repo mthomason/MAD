@@ -55,6 +55,7 @@
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
 
+#import "MADExplorerViewLayout.h"
 #import "MADExplorerControllerProtocol.h"
 
 #import "MADAboutTableViewController.h"
@@ -599,6 +600,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
                                                         cellConfiguration:^(MADCollectionViewCellDocument *cell) {
             if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = weakself;
+                                                            ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
         }];
         _fileExplorerDataSource = datasource;
     }
@@ -1541,10 +1543,6 @@ typedef NS_ENUM(short, MADExplorerState) {
         self.collectionView.allowsSelection = YES;
         self.collectionView.allowsMultipleSelection = YES;
         
-        //NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
-        //if (visibleItems != nil)
-        //    [self.collectionView reloadItemsAtIndexPaths:visibleItems];
-        
         for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
             cell.wobbling = YES;
         }
@@ -1558,7 +1556,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (IBAction)actionDone:(id)sender {
 
     self.editing = NO;
-    //self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     self.barButtonItemAddNewDocument.enabled = YES;
     self.barButtonItemAbout.enabled = YES;
     self.barButtonItemLicensing.enabled = YES;

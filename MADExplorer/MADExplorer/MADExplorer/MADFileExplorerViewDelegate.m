@@ -274,7 +274,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
             }
         }
     };
-    
+    cell.wobbling = self.isEditing;
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     _longPressGestures[hash] = longPressGesture;
     
