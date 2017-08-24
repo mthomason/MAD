@@ -129,16 +129,6 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
     return NO;
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    UIViewController *viewController = self.unwindViewController;
-    return viewController ? viewController :
-                        [super viewControllerForUnwindSegueAction: action
-                                               fromViewController: fromViewController
-                                                       withSender: sender];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"] ||

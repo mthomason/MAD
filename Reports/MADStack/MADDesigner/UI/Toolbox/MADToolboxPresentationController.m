@@ -16,9 +16,6 @@
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UIPopoverPresentationController.h>
 
-#import <Foundation/NSKeyValueObserving.h>
-
-#import "MADToolboxTransitioner.h"
 #import "MADDimmingView.h"
 #import "MADViewControllerProtocol.h"
 

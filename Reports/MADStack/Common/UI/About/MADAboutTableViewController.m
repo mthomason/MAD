@@ -114,17 +114,6 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
     }
 }
 
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    return action == @selector(unwindToAbout:) ?
-            self :
-            [super viewControllerForUnwindSegueAction: action
-                                   fromViewController: fromViewController
-                                           withSender: sender];
-}
-
 - (NSString *)versionText {
     NSString *versionTextKey = NSLocalizedString(@"v%@", @"v%@");
     NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
