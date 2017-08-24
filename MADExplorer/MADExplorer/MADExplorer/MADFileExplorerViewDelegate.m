@@ -228,23 +228,57 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
     cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    id <MADExplorerProtocol, UIGestureRecognizerDelegate> delegate = fileExplorerDelegate;
     SEL actionEdit = @selector(actionActivateEditMode:);
     
     UILongPressGestureRecognizer *longPressGesture;
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
                                                                      action: actionEdit];
-    longPressGesture.delegate = delegate;
+    longPressGesture.delegate = fileExplorerDelegate;
     [cell addGestureRecognizer: longPressGesture];
-    typeof(_delegate) __weak weakdelegate = fileExplorerDelegate;
-    cell.labelTitle.handleTap = ^(MADCollectionViewCellDocument *c) {
-        [weakdelegate actionRename:c];
+    typeof(self) __weak weakself = self;
+    cell.labelTitle.handleTap = ^(UILabel *titleLabel) {
+        UIView *superview = titleLabel.superview;
+        do {
+            superview = superview.superview;
+        } while (superview != nil && ![superview isKindOfClass:[UICollectionViewCell class]]);
+        if (superview == nil) return;
+        NSAssert([superview isKindOfClass:[UICollectionViewCell class]], @"We expect a collection view");
+        UICollectionViewCell *c = (UICollectionViewCell *)superview;
+        typeof(self) strongself = weakself;
+        id <MADExplorerProtocol, UIGestureRecognizerDelegate> fileDelegate;
+        fileDelegate = strongself.delegate;
+        if (!strongself.isEditing) {
+            [strongself actionRename:c];
+        } else {
+            UICollectionView *fileExplorerView = fileDelegate.fileExplorerView;
+            NSIndexPath *tappedCellPath = [fileExplorerView indexPathForCell:c];
+            if (tappedCellPath != nil) {
+                if (c.isSelected) {
+                    if ([strongself collectionView:fileExplorerView
+                     shouldDeselectItemAtIndexPath:tappedCellPath]) {
+                        [fileExplorerView deselectItemAtIndexPath: tappedCellPath
+                                                         animated: YES];
+                        [strongself collectionView:fileExplorerView
+                        didDeselectItemAtIndexPath:tappedCellPath];
+                    }
+                } else {
+                    if ([strongself collectionView:fileExplorerView
+                       shouldSelectItemAtIndexPath:tappedCellPath]) {
+                        [fileExplorerView selectItemAtIndexPath: tappedCellPath
+                                                       animated: YES
+                                                 scrollPosition: UICollectionViewScrollPositionNone];
+                        [strongself collectionView:fileExplorerView
+                          didSelectItemAtIndexPath:tappedCellPath];
+                    }
+                }
+            }
+        }
     };
     
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     _longPressGestures[hash] = longPressGesture;
     
-    MADMetaData *metadata = [delegate metadataForItemAtIndexPath:indexPath];
+    MADMetaData *metadata = [fileExplorerDelegate metadataForItemAtIndexPath:indexPath];
     [cell updateDisplayForMetaData:metadata editing:_editing];
 
 }

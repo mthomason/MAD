@@ -791,6 +791,11 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+//    BOOL result = YES;
+//    if (self.isEditing &&
+//        [gestureRecognizer.view isKindOfClass:[MADLabelFileExplorerDocumentCellTitle class]]) {
+//        result = NO;
+//    }
     return YES;
 }
 
@@ -1678,6 +1683,8 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (IBAction)actionRename:(id)sender {
+    
+    if (self.isEditing) return;
     
     MADCollectionViewCellDocument *cellDocument;
     

@@ -62,8 +62,8 @@
     }
 }
 
-- (void)handleTapGestureRecognizer:(UITapGestureRecognizer *)sender {
-    if (_handleTap) _handleTap(sender);
+- (void)handleTapGestureRecognizer:(id)sender {
+    if (_handleTap) _handleTap(self);
 }
 
 @end
