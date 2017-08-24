@@ -15,6 +15,7 @@
   @required
 
     - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
+    - (UICollectionView *)fileExplorerView;
     - (BOOL)isFileViewEditing;
     - (void)openDocumentAtURL:(NSURL *)url;
     - (void)explorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected;

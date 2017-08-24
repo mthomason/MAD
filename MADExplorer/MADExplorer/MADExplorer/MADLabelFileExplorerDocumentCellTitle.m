@@ -47,6 +47,14 @@
     return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorRed];
 }
 
+- (UIColor *)disabledTextColor {
+    return _selected ? [UIColor whiteColor] : [UIColor lightGrayColor];
+}
+
+- (UIColor *)enabledTextColor {
+    return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorBlue];
+}
+
 - (void)setSelected:(BOOL)selected {
     if (_selected != selected) {
         _selected = selected;

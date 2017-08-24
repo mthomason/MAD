@@ -72,6 +72,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 @implementation MADFileExplorerViewDelegate
 
+@synthesize showingPopover = _showingPopover;
+
 - (void)dealloc {
     _predicateKindOfLongPressGestureRecognizer = nil;
     _testLabel = nil;
@@ -176,6 +178,29 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 #pragma mark -
 #pragma mark Overrides
 
+- (void)setShowingPopover:(BOOL)showingPopover {
+    if (_showingPopover != showingPopover) {
+        id <MADExplorerProtocol, UIGestureRecognizerDelegate> sdelegate = self.delegate;
+        NSArray <NSIndexPath *> *visibleItems;
+        visibleItems = [[sdelegate fileExplorerView] indexPathsForVisibleItems];
+        id <MADExplorerProtocol, UIGestureRecognizerDelegate> __weak wdelegate = sdelegate;
+        [visibleItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            MADCollectionViewCellDocument *visibleCell;
+            visibleCell = (MADCollectionViewCellDocument *)[[wdelegate fileExplorerView] cellForItemAtIndexPath:obj];
+            if (showingPopover) {
+                visibleCell.labelTitle.textColor = visibleCell.labelTitle.disabledTextColor.copy;
+            } else {
+                visibleCell.labelTitle.textColor = visibleCell.labelTitle.enabledTextColor.copy;
+            }
+        }];
+        _showingPopover = showingPopover;
+    }
+}
+
+- (BOOL)isShowingPopover {
+    return _showingPopover;
+}
+
 - (NSPredicate *)predicateKindOfLongPressGestureRecognizer {
     
     if (_predicateKindOfLongPressGestureRecognizer == nil) {
@@ -231,7 +256,13 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
     id gestureToRemove = _longPressGestures[hash];
     [cell removeGestureRecognizer: gestureToRemove];
     [cell prepareForReuse];
+    if (self.isShowingPopover) {
+        cell.labelTitle.textColor = cell.labelTitle.disabledTextColor.copy;
+    } else {
+        cell.labelTitle.textColor = cell.labelTitle.enabledTextColor.copy;
+    }
     [_longPressGestures removeObjectForKey: hash];
+
     cell.delegate = nil;
 }
 

@@ -97,7 +97,6 @@ const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
 static NSString * const MADIdentifierFileLondon                 = @"London";
 static NSString * const MADIdentifierFileMusic                  = @"Music";
 
-NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUpgradeInstalledSamplesLondon               = @"MADUpgradeInstalledSamplesLondon";
 NSString * const MADUpgradeInstalledSamplesMusic                = @"MADUpgradeInstalledSamplesMusic";
@@ -162,10 +161,6 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
     @property (nonatomic, weak)     IBOutlet    UIBarButtonItem *barButtonItemLicensing;
 
     @property (nonatomic, strong)   MADTabBarController *tabController;
-
-    @property (nonatomic, strong)   UIPopoverController *openDocumentPopoverController;
-    @property (nonatomic, strong)   UIPopoverController *licensingPopoverController;
-    @property (nonatomic, strong)   UIPopoverController *popoverControllerActivity;
 
     @property (nonatomic, weak)     UIPopoverPresentationController *infoPopoverPresentationController;
     @property (nonatomic, weak)     UIPopoverPresentationController *aboutPopoverPresentationController;
@@ -879,13 +874,13 @@ typedef NS_ENUM(short, MADExplorerState) {
     [controller removeFromParentViewController];
 }
 
-- (void)showViewController:(UIViewController *)vc sender:(id)sender {
+- (void)showViewController:(UIViewController *)vc animated:(BOOL)animated {
     if (self.presentedViewController != nil) {
-        [self dismissViewControllerAnimated: YES completion:^{
-            [self presentViewController: vc animated: YES completion: nil];
+        [self dismissViewControllerAnimated: animated completion:^{
+            [self presentViewController: vc animated: animated completion: nil];
         }];
     } else {
-        [self presentViewController: vc animated: YES completion: nil];
+        [self presentViewController: vc animated: animated completion: nil];
     }
 }
 
@@ -1125,47 +1120,6 @@ typedef NS_ENUM(short, MADExplorerState) {
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    
-    BOOL shouldPerformSegueWithIdentifier = YES;
-    if ([identifier isEqualToString:MTSegueShowAddDocument]) {
-        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            shouldPerformSegueWithIdentifier = _shouldShowAddDocumentPopover;
-            _shouldShowAddDocumentPopover = NO;
-            self.barButtonItemAddNewDocument.enabled = NO;
-        }
-    }
-    return shouldPerformSegueWithIdentifier;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [super prepareForSegue:segue sender:sender];
-    [self dismissAllPopovers];
-}
-
-- (BOOL)dismissAllPopovers {
-    
-    BOOL result = NO;
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        
-        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
-        if (self.openDocumentPopoverController != nil)
-            [allpopovers addObject:self.openDocumentPopoverController];
-        if (self.licensingPopoverController != nil)
-            [allpopovers addObject:self.licensingPopoverController];
-        
-        for (UIPopoverController *popoverController in allpopovers) {
-            if (popoverController.popoverVisible) {
-                [popoverController dismissPopoverAnimated:YES];
-                result = YES;
-            }
-        }
-        
-    }
-    return result;
-    
-}
-
 #pragma mark -
 #pragma mark - UITextFieldDelegate
 
@@ -1180,7 +1134,6 @@ typedef NS_ENUM(short, MADExplorerState) {
     _shouldShowAddDocumentPopover = YES;
 
     self.barButtonItemAddNewDocument.enabled = YES;
-    [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
     MADocument *openDocument = self.activeDocumentManager.openDocument;
     if (openDocument && !(openDocument.documentState & UIDocumentStateClosed)) {
@@ -1217,7 +1170,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 
 - (void)viewControllerDidFinish:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     _shouldShowAddDocumentPopover = YES;
     [self.barButtonItemAddNewDocument setEnabled:YES];
 }
@@ -1352,6 +1304,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     UINavigationController *navigationControl;
     navigationControl = [MADNavigationController newNavigationController: MADNavigationControllerTypeNewDocument];
     navigationControl.modalPresentationStyle = UIModalPresentationFormSheet;
+    navigationControl.presentationController.delegate = self;
     
     MADDriverSelectorController *databaseDriverSelector;
     databaseDriverSelector = (MADDriverSelectorController *)navigationControl.topViewController;
@@ -1363,7 +1316,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     UIPresentationController *pc = navigationControl.presentationController;
     pc.presentedView.backgroundColor = [UIColor whiteColor];
-    [self showViewController:navigationControl sender:self];
+    [self showViewController:navigationControl animated:YES];
 }
 
 - (IBAction)actionInformation:(id)sender {
@@ -1413,7 +1366,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         
         self.aboutPopoverPresentationController = ppc;
         
-        [self showViewController:aboutViewController sender:self];
+        [self showViewController:aboutViewController animated: YES];
     }
 }
 
@@ -1449,9 +1402,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     documentInformation.metadataItems = metadataItems;
     
-    [self showViewController:documentInformation sender:self];
-    
-    [self actionDone:sender];
+    [self showViewController:documentInformation animated: YES];
     
 }
 
@@ -1462,7 +1413,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     licensing.modalPresentationStyle = UIModalPresentationFormSheet;
     licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
-    [self showViewController:licensing sender:self];
+    [self showViewController:licensing animated: YES];
     
 }
 
@@ -1564,6 +1515,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
+        self.barButtonItemLicensing.enabled = NO;
         self.collectionView.allowsSelection = YES;
         self.collectionView.allowsMultipleSelection = YES;
         
@@ -1587,8 +1539,8 @@ typedef NS_ENUM(short, MADExplorerState) {
     //self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
     self.barButtonItemAddNewDocument.enabled = YES;
     self.barButtonItemAbout.enabled = YES;
+    self.barButtonItemLicensing.enabled = YES;
     self.barButtonItemInformation.enabled = YES;
-    
     self.barButtonItemTrash.enabled = NO;
     self.barButtonItemInformationDocument.enabled = NO;
     self.barButtonItemDuplicate.enabled = NO;
@@ -1664,13 +1616,13 @@ typedef NS_ENUM(short, MADExplorerState) {
         [wrappedUrls addObject:fileURL];
     }
     
-    NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-    UICollectionViewCell *documentCell;
-    for (NSInteger i=0; i<numberOfItemsInSection; i++) {
-        indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-        documentCell = [self.collectionView cellForItemAtIndexPath:indexPath];
-        documentCell.selected = NO;
-    }
+    //NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
+    //UICollectionViewCell *documentCell;
+    //for (NSInteger i=0; i<numberOfItemsInSection; i++) {
+    //    indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+    //    documentCell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    //    documentCell.selected = NO;
+    //}
     
     NSArray *applicationActivities, *excludedActivityTypes;
     applicationActivities = [[NSArray alloc] init];
@@ -1683,6 +1635,9 @@ typedef NS_ENUM(short, MADExplorerState) {
     activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
                                                                applicationActivities: applicationActivities];
     activityViewController.excludedActivityTypes = excludedActivityTypes;
+    activityViewController.modalPresentationStyle = UIModalPresentationPopover;
+    activityViewController.popoverPresentationController.barButtonItem = sender;
+    activityViewController.popoverPresentationController.delegate = self;
     
     MADExplorerController * __weak weakself = self;
     activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
@@ -1694,22 +1649,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         
     };
     
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        if (self.popoverControllerActivity == nil ||
-            self.popoverControllerActivity.isPopoverVisible == NO) {
-
-            UIPopoverController *popoverController;
-            popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-            popoverController.delegate = self;
-            [popoverController presentPopoverFromBarButtonItem: self.barButtonItemAction
-                                      permittedArrowDirections: UIPopoverArrowDirectionAny
-                                                      animated: YES];
-            self.popoverControllerActivity = popoverController;
-            
-        }
-    } else {
-        [self presentViewController:activityViewController animated:YES completion:^{ }];
-    }
+    [self presentViewController:activityViewController animated:YES completion:^{ }];
 }
 
 - (IBAction)actionDelete:(id)sender {
@@ -1776,7 +1716,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         if (name.length <= 0) {
             UIAlertController *alertError;
             alertError = [MADAlertController newAlertControllerErrorValidationFilename];
-            [self showViewController:alertError sender:self];
+            [self showViewController:alertError animated: YES];
             shortcircut = YES;
         }
         
@@ -1785,7 +1725,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         if (!shortcircut && [self.class isUniqueFilename:name inDirectory:url]) {
             UIAlertController *alertError;
             alertError = [MADAlertController newAlertControllerErrorFileExist];
-            [self showViewController:alertError sender:self];
+            [self showViewController:alertError animated: YES];
             shortcircut = YES;
         }
         
@@ -1819,7 +1759,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                                             confirm: handleConfermation
                                                                              cancel: nil];
     
-    [self showViewController:alert sender:self];
+    [self showViewController:alert animated: YES];
     
 }
 
@@ -1832,7 +1772,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     if ([MFMailComposeViewController canSendMail] == NO) {
         id alert;
         alert = [MADAlertController newAlertControllerNotConfiguredForEmail];
-        [self showViewController:alert sender:self];
+        [self showViewController:alert animated: YES];
         return;
     }
 
@@ -1861,7 +1801,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                                                  mimeType: mimeType
                                                                        userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
         mailComposer.mailComposeDelegate = self;
-        [self showViewController:mailComposer sender:self];
+        [self showViewController:mailComposer animated: YES];
     }
 
     
@@ -1930,13 +1870,18 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark - 
 #pragma mark UIPopoverPresentationControllerDelegate
 
-- (void)prepareForPopoverPresentation: (UIPopoverPresentationController *)controller { }
+- (void)prepareForPopoverPresentation: (UIPopoverPresentationController *)controller {
+    self.fileExplorerViewDelegate.showingPopover = YES;
+    //[self.collectionView reloadData];
+}
 
 - (BOOL)popoverPresentationControllerShouldDismissPopover: (UIPopoverPresentationController *)controller {
     return YES;
 }
 
 - (void)popoverPresentationControllerDidDismissPopover: (UIPopoverPresentationController *)controller {
+    self.fileExplorerViewDelegate.showingPopover = NO;
+    //[self.collectionView reloadData];
     
     controller.passthroughViews = nil;
     controller.barButtonItem = nil;

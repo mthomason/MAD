@@ -23,6 +23,7 @@
                                         UIGestureRecognizerDelegate> delegate;
 
     @property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;
+    @property (nonatomic, readwrite, assign, getter=isShowingPopover) BOOL showingPopover;
 
     @property (readonly) NSUInteger numberOfItemsSelected;
     @property (readonly) NSUInteger numberOfItemsHighlighted;
