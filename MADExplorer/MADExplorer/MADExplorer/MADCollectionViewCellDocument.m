@@ -109,12 +109,13 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 #pragma mark NSObject
 
 - (void)dealloc {
+    [self.layer removeAllAnimations];
     [self setSelectedBackgroundView:nil];
 }
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    _wobbling = false;
+    _wobbling = NO;
     UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc]
                                       initWithFrame:self.contentView.frame];
     [self setSelectedBackgroundView: selectedBackgroundView];
@@ -122,6 +123,12 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 
 #pragma mark -
 #pragma mark Overrides
+
+- (void)removeFromSuperview {
+    _wobbling = NO;
+    _working = NO;
+    [super removeFromSuperview];
+}
 
 - (void)setHidden:(BOOL)hidden {
     [super setHidden:hidden];
@@ -306,6 +313,8 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 
     _wobbling = YES;
     float r = wobbleFactor();
+    [self.layer removeAllAnimations];
+    self.transform = CGAffineTransformIdentity;
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
 
     typeof(self) __weak weakself = self;
@@ -324,7 +333,7 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
                              weakself.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
                          } completion:^(BOOL finished) {
                              typeof(self) strongself = weakself;
-                             if (!finished && strongself.wobbling) {
+                             if (!finished && strongself.wobbling && strongself.superview != nil) {
                                  [strongself startWobble];
                              }
                          }];
@@ -338,8 +347,8 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
 }
 
 - (void)setWobbling:(BOOL)wobbling {
-    if (_wobbling != wobbling || (wobbling && _working == NO)) {
-        if ((_wobbling = wobbling) && (_working = wobbling)) [self startWobble];
+    if (_wobbling != wobbling) {
+        if ((_wobbling = wobbling)) [self startWobble];
         else [self stopWobble];
     }
 }

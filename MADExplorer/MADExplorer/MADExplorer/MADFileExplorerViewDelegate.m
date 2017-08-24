@@ -274,7 +274,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
             }
         }
     };
-    cell.wobbling = self.isEditing;
+    [cell setWobbling: self.isEditing];
     NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
     _longPressGestures[hash] = longPressGesture;
     
@@ -296,7 +296,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
         cell.labelTitle.textColor = cell.labelTitle.enabledTextColor.copy;
     }
     [_longPressGestures removeObjectForKey: hash];
-
+    cell.wobbling = NO;
+    cell.working = NO;
     cell.delegate = nil;
 }
 

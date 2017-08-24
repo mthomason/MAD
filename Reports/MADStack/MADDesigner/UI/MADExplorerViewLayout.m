@@ -7,6 +7,7 @@
 //
 
 #import "MADExplorerViewLayout.h"
+#import <MADExplorer/MADCollectionViewCellDocument.h>
 
 @implementation MADExplorerViewLayout
 
@@ -25,6 +26,23 @@
     }
 
     return elementAttributes;
+}
+
+- (void)finalizeCollectionViewUpdates {
+    [super finalizeCollectionViewUpdates];
+    /*typeof(self) __weak weakself = self;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [weakself.collectionView.visibleCells enumerateObjectsUsingBlock:^(__kindof UICollectionViewCell * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj isKindOfClass:[MADCollectionViewCellDocument class]]) {
+                    if (((MADCollectionViewCellDocument *)obj).isWobbling) {
+                        ((MADCollectionViewCellDocument *)obj).wobbling = NO;
+                        ((MADCollectionViewCellDocument *)obj).wobbling = YES;
+                    }
+                }
+            }];
+        });
+    });*/
 }
 
 @end
