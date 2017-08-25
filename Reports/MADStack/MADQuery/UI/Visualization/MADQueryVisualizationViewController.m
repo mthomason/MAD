@@ -44,6 +44,7 @@
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQueryLinks.h>
+#import <MAD/RptqQueryLinks+Extras.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryTable.h>
 
@@ -339,7 +340,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                                object: firstQuery];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(insertQueryLink:)
+                                             selector: @selector(handleInsertQueryLink:)
                                                  name: MADNotificationQueryLinkInsert
                                                object: firstQuery];
     
@@ -456,9 +457,16 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark -
 #pragma mark NSManagedObjectContext Observer
 
-- (void)managedObjectContextWillSave:(NSNotification *)notification { }
+- (void)managedObjectContextWillSave:(NSNotification *)notification {
+    NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
+    NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
+    NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
+
+    
+}
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
+    /*
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
@@ -468,6 +476,24 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
 #pragma mark Handle inserted objects
     
+    for (id insertedObject in insertedObjects) {
+        
+        if ([insertedObject isKindOfClass:[RptqQueryLinks class]]) {
+            
+            //User adding a link starting point...
+            RptqQueryLinks *insertedQueryLinks = insertedObject;
+            //[self insertQueryLink:insertedQueryLinks];
+            
+        } else if ([insertedObject isKindOfClass:[RptqQueryTable class]]) {
+            
+            //User adding a table starting point...
+            RptqQueryTable *insertedQueryTable = insertedObject;
+            //[self insertQueryTable:insertedQueryTable];
+        }
+    }
+    
+#pragma mark Handle updated objects
+
     CGFloat height;
     NSUInteger rootTableCount;
 
@@ -505,8 +531,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                         [self removeViewController:updatedItem];
                         
                         for (RptqQueryLinks *link in updatedQuery.hasQueryLinks) {
-                            if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
-                                [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
+                            if ([link isConnectedToTable:updatedTable]) {
                                 effectedLinkID = @(link.identifier);
                                 MADConnectorView *connectorView = self.connectionViewsByObjectID[effectedLinkID];
                                 [connectorView removeFromSuperview];
@@ -515,11 +540,24 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                             }
                         }
                         needsLayout = YES;
-                        
                     }
                 }
             }
         }
+    }
+
+#pragma mark Handle deleted objects
+
+    if (deletedObjects.count > 0) {
+        NSNumber *effectedLinkID = nil;
+        for (RptqQueryLinks *link in deletedObjects) {
+            effectedLinkID = @(link.identifier);
+            MADConnectorView *connectorView = self.connectionViewsByObjectID[effectedLinkID];
+            [connectorView removeFromSuperview];
+            
+            [self.view setNeedsLayout];
+        }
+        needsLayout = YES;
     }
     
 #pragma mark Handle deleted objects
@@ -532,6 +570,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     //}
 
     //[self.view layoutIfNeeded];
+     
+     */
 }
 
 #pragma mark -
@@ -748,7 +788,33 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     }
 }
 
-- (void)insertQueryLink:(NSNotification *)note {
+/*- (void)handleInsertQueryLink:(RptqQueryLinks *)insertedLink {
+    //if (![note.name isEqualToString:MADNotificationQueryLinkInsert]) return;
+    
+    MADHierarchicalChildController *leftTVC, *rightTVC;
+    
+    //MADModelQueryLink *insertedLink;
+    NSEnumerator <MADModelQueryLink *> *insertedLinks;
+    //insertedLinks = note.userInfo.objectEnumerator;
+    NSNumber *leftQueryTableID, *rightQueryTableID;
+    //for (insertedLink in insertedLinks) {
+        
+        leftQueryTableID = @(insertedLink.hasLeftField.inQueryTable.identifier);
+        leftTVC = self.controllersByObjectID[leftQueryTableID];
+        
+        rightQueryTableID = @(insertedLink.hasRightField.inQueryTable.identifier);
+        rightTVC = self.controllersByObjectID[rightQueryTableID];
+        
+        [self.rootTables removeObject: leftQueryTableID];
+        
+        if ([leftTVC isEqual:rightTVC] == NO) {
+            [self addLinkViewControllerForQueryLinkModel: insertedLink
+                                                animated: YES];
+        }
+    //}
+}*/
+
+- (void)handleInsertQueryLink:(NSNotification *)note {
     if (![note.name isEqualToString:MADNotificationQueryLinkInsert]) return;
 
     MADHierarchicalChildController *leftTVC, *rightTVC;
@@ -771,14 +837,13 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
             [self addLinkViewControllerForQueryLinkModel: insertedLink
                                                 animated: YES];
         }
-
     }
 }
 
 #pragma mark Remove Query Visualization Items
 
 - (void)deleteQueryTable:(NSNotification *)note {
-    if (![note.name isEqualToString:MADNotificationQueryLinkDelete]) return;
+    if (![note.name isEqualToString:MADNotificationQueryTableDelete]) return;
     
     MADModelQueryTable *deletedTable;
     MADHierarchicalChildController *viewController;

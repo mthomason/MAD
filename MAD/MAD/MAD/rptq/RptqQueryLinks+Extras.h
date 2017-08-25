@@ -29,7 +29,7 @@ extern NSString * const MTLinkSqlLeftOuterJoin;
 extern NSString * const MTLinkSqlRightOuterJoin;
 extern NSString * const MTLinkSqlFullOuterJoin;
 
-@class RptqDocument, RptqQueryLinks;
+@class RptqDocument, RptqQueryTable;
 
 @interface RptqQueryLinks (Extras) <MTProtocolLog>
 
@@ -43,6 +43,7 @@ extern NSString * const MTLinkSqlFullOuterJoin;
     + (NSString *)ReuseIdForLinkType:(MADLinkType)type;
     + (NSString *)newLocalizedNameForLinkType:(MADLinkType)type;
     + (NSString *)SqlForLinkType:(MADLinkType)type;
+    - (BOOL)isConnectedToTable:(RptqQueryTable *)table;
 
 @end
 

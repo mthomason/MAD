@@ -612,10 +612,6 @@ BOOL storeEnabled() {
                 objectToDelete = hasTable;
             }
         }];
-        [hasQueryTables removeObject:objectToDelete];
-        rptqQuery.hasQueryTables = hasQueryTables.copy;
-        
-        numberOfTables--;
         
         __block short ctr = 0;
         NSMutableIndexSet *indexSetSections = [[NSMutableIndexSet alloc] init];
@@ -670,6 +666,10 @@ BOOL storeEnabled() {
             }
         }
     
+        [hasQueryTables removeObject:objectToDelete];
+        rptqQuery.hasQueryTables = hasQueryTables.copy;
+        [private deleteObject:objectToDelete];
+        numberOfTables--;
         
         NSError * __autoreleasing error = NULL;
         BOOL success = NO;

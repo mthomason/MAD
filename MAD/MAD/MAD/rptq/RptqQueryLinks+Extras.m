@@ -169,6 +169,11 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 #pragma mark -
 #pragma mark Overrides
 
+- (BOOL)isConnectedToTable:(RptqQueryTable *)table {
+    return ([self.hasLeftField.inQueryTable.objectID isEqual: table.objectID] ||
+            [self.hasRightField.inQueryTable.objectID isEqual: table.objectID]);
+}
+
 - (void)awakeFromInsert {
     [super awakeFromInsert];
     if (self.managedObjectContext.parentContext && self.identifier <= 0) {
