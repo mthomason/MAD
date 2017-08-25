@@ -476,7 +476,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         NSMutableArray *updatedTables;
         updatedTables = [[NSMutableArray alloc] initWithCapacity:updatedObjects.count];
 
-        /*for (const id updatedObject in updatedObjects) {
+        for (const id updatedObject in updatedObjects) {
             
             if ([updatedObject isKindOfClass:[RptqQueryTable class]]) {
                 [updatedTables addObject:updatedObject];
@@ -488,25 +488,27 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
         if (updatedQuery && updatedTables.count > 0) {
             
-            MADQueryVisualizationSchemaViewController *updatedItem;
-
+            MADHierarchicalChildController *updatedItem;
+            
+            NSNumber *updatedTableID = nil, *effectedLinkID = nil;
             for (RptqQueryTable *updatedTable in updatedTables) {
                 if (![updatedTable.inQuery.objectID isEqual:updatedQuery.objectID]) {
 
+                    updatedTableID = @(updatedTable.identifier);
                     //Table was remvoed from query... so remove it from screen.
-                    updatedItem = self.controllersByObjectID[updatedTable.objectID];
+                    updatedItem = self.controllersByObjectID[updatedTableID];
                     
                     if (updatedItem != nil) {
                         
-                        [self.rootTables removeObject:updatedTable.objectID];
-                        [self.cacheData removeTableDefinationForObjectID:updatedTable.objectID];
+                        [self.rootTables removeObject:updatedTableID];
+                        [self.cacheManager.cacheData removeTableDefinationForObjectID:updatedTable.identifier];
                         [self removeViewController:updatedItem];
                         
                         for (RptqQueryLinks *link in updatedQuery.hasQueryLinks) {
                             if ([link.hasLeftField.inQueryTable.objectID isEqual: updatedTable.objectID] ||
                                 [link.hasRightField.inQueryTable.objectID isEqual: updatedTable.objectID]) {
-                                
-                                MADConnectorView *connectorView = self.connectionViewsByObjectID[link.objectID];
+                                effectedLinkID = @(link.identifier);
+                                MADConnectorView *connectorView = self.connectionViewsByObjectID[effectedLinkID];
                                 [connectorView removeFromSuperview];
                                 
                                 [self.view setNeedsLayout];
@@ -517,7 +519,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                     }
                 }
             }
-        }*/
+        }
     }
     
 #pragma mark Handle deleted objects

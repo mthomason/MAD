@@ -395,11 +395,23 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
                             shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-    
-    return _editing ?
-        [_selected[(NSUInteger)indexPath.section] containsIndex:(NSUInteger)indexPath.item] :
-        YES;
+    BOOL shouldDeselect = NO;
+    NSUInteger section = (NSUInteger)indexPath.section;
+    if (_editing) {
+        typeof(_delegate) delegate = _delegate;
+        if ([_selected[section] containsIndex:(NSUInteger)indexPath.item]) {
+            shouldDeselect = YES;
+        } else if ([[delegate fileExplorerView].indexPathsForSelectedItems containsObject:indexPath]) {
+            shouldDeselect = YES;
+            [_selected[section] removeAllIndexes];
+            typeof(self) __weak weakself = self;
+            [[delegate fileExplorerView].indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [weakself.selected[section] addIndex:(NSUInteger)obj.row];
+            }];
+            
+        }
+    }
+    return shouldDeselect;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
