@@ -100,24 +100,27 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
             //id keys = note.userInfo.keyEnumerator;
             //id objects = note.userInfo.objectEnumerator;
             
-            NSSet *deletedObjects;
-            NSSet *updatedObjects;
-            NSSet *insertedObjects;
-            NSSet *invalidatedObjects;
+            NSSet *deletedObjects, *updatedObjects, *insertedObjects, *invalidatedObjects;
 
+            NSString *keyManagedObjectContext;
+            NSManagedObjectContext *objectContext;
+            
+            keyManagedObjectContext = NSStringFromSelector(@selector(managedObjectContext));
+            objectContext = [note.userInfo objectForKey:keyManagedObjectContext];
             insertedObjects = [note.userInfo objectForKey:NSInsertedObjectsKey];
             [insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
                 
                 if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-                    //typeof(self) sself = wself;
-                    //MADModelQuery *query = sself.firstQuery;
-                    //[query insertQueryLinkID:((NSManagedObject *)obj).objectID];
+                    typeof(self) sself = wself;
+                    MADModelQuery *query = sself.firstQuery;
+                    NSNumber *idnQueryLink = @(((RptqQueryLinks *)obj).identifier);
+                    [query insertQueryLinkID:idnQueryLink];
                 }
                 
                 if ([obj isKindOfClass:[RptqQueryTable class]]) {
-                    //typeof(self) sself = wself;
-                    //MADModelQuery *query = sself.firstQuery;
-                    //[query insertQueryTableID:((NSManagedObject *)obj).objectID];
+                    typeof(self) sself = wself;
+                    MADModelQuery *query = sself.firstQuery;
+                    [query insertQueryTable: obj];
                 }
                 
             }];

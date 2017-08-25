@@ -1148,7 +1148,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     [self.scrollView.contentView addSubview: viewController.view];
     [self.scrollView.contentView addConstraints: constraints.allValues];
 
-    //if (animated) {
+    if (animated) {
         [UIView animateWithDuration:0.5000f animations: ^{
             [viewController.view setAlpha:1.0000f];
         } completion:^(BOOL finished) {
@@ -1158,11 +1158,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                 completion();
             }
         }];
-    //} else {
-    //    [viewController endAppearanceTransition];
-    //    [viewController didMoveToParentViewController:self];
-    //    completion();
-    //}
+    } else {
+        [viewController endAppearanceTransition];
+        [viewController didMoveToParentViewController:self];
+        completion();
+    }
 }
 
 #pragma mark -

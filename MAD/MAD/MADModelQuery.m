@@ -36,6 +36,8 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 
 #import "NSPredicate+Creators.h"
 
@@ -221,6 +223,24 @@
 
 }
 
+- (void)insertTableRptqQueryTable:(RptqQueryTable *)queryTable {
+    if (queryTable == nil) return;
+    
+    MADModelQueryTable *modelQueryTable;
+    modelQueryTable = [[MADModelQueryTable alloc] initWithIdentifier: queryTable.identifier
+                                                           dropIndex: queryTable.dropIndex
+                                                         schemaTable: queryTable.databaseSchemaTable.identifier
+                                                          inDatabase: _inDatabase];
+    
+    for (RptqQueryField *queryField in queryTable.hasQueryFields) {
+        [modelQueryTable addField: queryField.identifier
+                      schemaField: queryField.databaseSchemaField.identifier];
+        NSNumber *qtidn = @(modelQueryTable.identifier);
+        [_queryTableIDs addObject:qtidn];
+        [_tables setObject:modelQueryTable forKey:qtidn];
+    }
+}
+
 - (void)insertTablesFromFetchRequestResults:(NSArray <NSDictionary *> *)results {
     if (!results.count) return;
     
@@ -359,18 +379,12 @@
 
 // #MARK: Insert
 
-- (void)insertQueryTableID:(NSNumber *)queryTableID {
+- (void)insertQueryTable:(RptqQueryTable *)queryTable {
     MADModelQueryTable *table;
+    NSNumber *queryTableID = @(queryTable.identifier);
     if ((table = [_tables objectForKey:queryTableID])) return;
-
-    NSArray <NSDictionary *> *results;
-
-    NSError * __autoreleasing error = NULL;
-    NSFetchRequest *fetchRequest = [RptqQueryField fetchRequestFieldKeys:queryTableID.longLongValue];
-    results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    
-    NSAssert(results != nil && error == nil, @"What? %@", error);
-    [self insertTablesFromFetchRequestResults:results];
+    [self insertTableRptqQueryTable:queryTable];
+    table = [_tables objectForKey:queryTableID];
     
     NSDictionary *userInfo;
     userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:table, queryTableID, nil];
@@ -381,9 +395,38 @@
     }];
 }
 
+- (void)insertQueryTableID:(NSNumber *)queryTableID
+      managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    MADModelQueryTable *table;
+    if ((table = [_tables objectForKey:queryTableID])) return;
+    
+    NSArray <NSDictionary *> *results;
+    
+    NSError * __autoreleasing error = NULL;
+    NSFetchRequest *fetchRequest = [RptqQueryField fetchRequestFieldKeys:queryTableID.longLongValue];
+    results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    NSAssert(results != nil && error == nil, @"What? %@", error);
+    [self insertTablesFromFetchRequestResults:results];
+    table = [_tables objectForKey:queryTableID];
+    
+    NSDictionary *userInfo;
+    userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:table, queryTableID, nil];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationQueryTableInsert
+                                                            object: self
+                                                          userInfo: userInfo];
+    }];
+}
+
+- (void)insertQueryTableID:(NSNumber *)queryTableID {
+    [self insertQueryTableID:queryTableID managedObjectContext:_managedObjectContext];
+}
+
 
 /// FIXME: Predicate is broken... maybe more... unused, but I think it's needed.
-- (void)insertQueryLinkID:(NSNumber *)queryLinkID {
+- (void)insertQueryLinkID:(NSNumber *)queryLinkID
+     managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     MADModelQueryLink *link;
     if ((link = [_links objectForKey:queryLinkID])) return;
     
@@ -400,13 +443,13 @@
                                                              options: 0];
     NSError * __autoreleasing error = NULL;
     NSFetchRequest *fetchRequest = [MADModelQueryLink fetchRequest:isQueryLink];
-    results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     NSAssert(results != nil && error == nil, @"What? %@", error);
     [self insertLinksFromFetchRequestResults:results];
-
+    
     expressionInQuery[0] = nil;
     expressionInQuery[1] = nil;
-
+    
     NSDictionary *userInfo;
     userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:link, queryLinkID, nil];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -414,6 +457,10 @@
                                                             object: self
                                                           userInfo: userInfo];
     }];
+}
+
+- (void)insertQueryLinkID:(NSNumber *)queryLinkID {
+    [self insertQueryLinkID:queryLinkID managedObjectContext:_managedObjectContext];
 }
 
 
