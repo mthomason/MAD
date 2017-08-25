@@ -889,6 +889,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                 MADHierarchicalChildViewDefination *tableDefination;
                 tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
                 tableDefination.root = YES;
+                NSNumber *controllerID = @(orphanedTableIDs.longLongValue);
+                MADHierarchicalChildController *tableController;
+                tableController = self.controllersByObjectID[controllerID];
+                tableController.root = YES;
                 [self.rootTables addObject: objectID];
                 objectID = nil;
             }
