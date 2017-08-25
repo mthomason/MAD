@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADViewController_h
+#define Reports_MADViewController_h
+
+#import <UIKit/UIViewController.h>
 
 @interface MADViewController : UIViewController
 
+    + (instancetype)newViewControllerQueryVisulization;
+
 @end
+
+#endif

@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Reports_MADStoryboard_h
+#define Reports_MADStoryboard_h
+
+#import <UIKit/UIStoryboard.h>
 
 @interface MADStoryboard : UIStoryboard
 
++ (instancetype)newStoryboardQuery;
+
 @end
+
+#endif

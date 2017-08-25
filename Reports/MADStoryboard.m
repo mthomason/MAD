@@ -10,4 +10,10 @@
 
 @implementation MADStoryboard
 
++ (instancetype)newStoryboardQuery {
+    id storyboard = [UIStoryboard storyboardWithName: @"MADQuery"
+                                              bundle: [NSBundle mainBundle]];
+    return storyboard;
+}
+
 @end

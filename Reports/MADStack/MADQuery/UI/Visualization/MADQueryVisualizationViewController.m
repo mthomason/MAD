@@ -86,6 +86,8 @@
 #import "MADQueryVisualizationModel.h"
 #import "MADHierarchicalDisplayModel.h"
 
+#import "MADViewController.h"
+
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTLinkedList.h>
@@ -137,11 +139,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Static functions and keys
 
 + (instancetype)newQueryVisualizationViewController:(MADocument *)document {
-    UIStoryboard *storyboard;
-    id controller;
-    storyboard = [UIStoryboard storyboardWithName: @"MADQuery"
-                                           bundle: [NSBundle mainBundle]];
-    controller = [storyboard instantiateViewControllerWithIdentifier: @"MADStoryboardIDQueryVisulization"];
+    id controller = [MADViewController newViewControllerQueryVisulization];
     [controller setDocument: document];
     return controller;
 }
