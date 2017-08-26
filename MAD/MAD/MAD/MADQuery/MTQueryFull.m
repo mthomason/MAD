@@ -184,8 +184,10 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         origin =        [graph vertexForObject: queryLink.hasLeftField.inQueryTable.objectID];
         destination =   [graph vertexForObject: queryLink.hasRightField.inQueryTable.objectID];
         
-        [graph addEdgeWithOrigin:origin destination:destination
-                          object:queryLink.objectID andWeight:weight];
+        [graph addEdgeWithOrigin: origin
+                     destination: destination
+                          object: queryLink.objectID
+                       andWeight: weight];
     }
     
     

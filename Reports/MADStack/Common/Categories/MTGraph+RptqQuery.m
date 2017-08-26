@@ -53,13 +53,19 @@
         NSNumber *weight = @(1);
         
         NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;
+
+        NSNumber *identifier, *leftFieldID, *rightFieldID;
+        MTVertex *vertexOrigin, *vertexDestination;
         for (MADModelQueryLink *link in queryLinkEnumerator) {
-            MTVertex *vertexOrigin =        [self vertexForObject:@(link.leftFieldIdentifier.tableID)];
-            MTVertex *vertexDestination =   [self vertexForObject:@(link.rightFieldIdentifier.tableID)];
+            leftFieldID =       @(link.leftFieldIdentifier.tableID);
+            rightFieldID =      @(link.rightFieldIdentifier.tableID);
+            vertexOrigin =        [self vertexForObject:leftFieldID];
+            vertexDestination =   [self vertexForObject:rightFieldID];
             
+            identifier = @(link.identifier);
             [self addEdgeWithOrigin: vertexOrigin
                         destination: vertexDestination
-                             object: @(link.identifier)
+                             object: identifier
                           andWeight: weight];
         }
     }

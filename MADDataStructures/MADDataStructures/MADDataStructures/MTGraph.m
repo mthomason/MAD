@@ -76,7 +76,7 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 // MARK: Add new vertex to adjacency list.
 - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object {
     id obj = [object copy];
-    MTVertex *vertex = [[MTVertex alloc] initWithID:self.idUniqueVertices
+    MTVertex *vertex = [[MTVertex alloc] initWithID: self.idUniqueVertices
                                           andObject: obj];
     self.idUniqueVertices = (self.idUniqueVertices + 1);
     [self.vertices addObject:vertex];
@@ -269,7 +269,9 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
     MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
     MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
     
-    [self depthFirstSearchVisitWithCurrentVertex:nil counter:&counter listOfEdges:&resultEdges
+    [self depthFirstSearchVisitWithCurrentVertex:nil
+                                         counter:&counter
+                                     listOfEdges:&resultEdges
                                   listOfVertices:&resultVertices];
     
     for (MTVertex *vertex in self.vertices) {

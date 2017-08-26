@@ -1145,11 +1145,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         [UIView animateWithDuration:0.5000f animations: ^{
             [viewController.view setAlpha:1.0000f];
         } completion:^(BOOL finished) {
-            if (finished) {
-                [viewController endAppearanceTransition];
-                [viewController didMoveToParentViewController:self];
-                completion();
-            }
+            [viewController endAppearanceTransition];
+            [viewController didMoveToParentViewController:self];
+            completion();
         }];
     } else {
         [viewController endAppearanceTransition];
