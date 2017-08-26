@@ -73,13 +73,13 @@
 @synthesize identifier = _identifier;
 @synthesize root = _root;
 
-static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"MADIdentifierViewControllerQueryVisualizationSchema";
+static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQueryTableViewController";
 
 + (instancetype)newQueryVisualizationSchemaViewController {
     UIStoryboard *storyboard;
     id controller;
     storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL];
-    controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierViewControllerQueryVisualizationSchema];
+    controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierQueryTableViewController];
     return controller;
 }
 
