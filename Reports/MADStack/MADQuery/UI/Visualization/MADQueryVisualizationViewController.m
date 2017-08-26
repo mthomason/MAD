@@ -128,7 +128,7 @@ static NSString *keyHeight  = @"h";
 
 static inline CGPoint MADPointInsertTable(CGFloat, NSUInteger);
 static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCount) {
-    return CGPointMake(CGPointZero.x + 500, viewHeight / (tableCount + 2) * (tableCount + 1));
+    return CGPointMake(CGPointZero.x + 300, viewHeight / (tableCount + 2) * (tableCount + 1));
 }
 
 @implementation MADQueryVisualizationViewController
@@ -733,31 +733,36 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
             
             tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableIdentifier] : nil;
             
-            [self addSchemaViewControllerForTableID: tableIdentifier
-                                             center: hasCache ? tableDef.center : self.scrollView.contentView.center
-                                               root: topLevel
-                                           animated: animated
-                                         completion: ^{
-                                             
-                                             //Layout Query View if Related to Table
-                                             typeof(self) sself = wself;
-                                             NSEnumerator <MADModelQueryLink *> *queryLinks;
-                                             MADModelQueryLink *link;
-                                             queryLinks = query.links.objectEnumerator;
-                                             for (link in queryLinks) {
-                                                 if (link.leftFieldIdentifier.tableID == tableIdentifier ||
-                                                     link.rightFieldIdentifier.tableID == tableIdentifier) {
-                                                     [sself layoutQueryLinkViewControllerWithModelObject:link];
-                                                 }
-                                             }
-                                             
-                                             NSEnumerator <MADConnectorView *> *views;
-                                             UIView *view;
-                                             views = sself.connectionViewsByObjectID.objectEnumerator;
-                                             for (view in views) {
-                                                 [sself.scrollView.contentView bringSubviewToFront:view];
-                                             }
-                                         }];
+            void(^completion)(void) = ^() {
+                //Layout Query View if Related to Table
+                typeof(self) sself = wself;
+                MADModelDocument *modelDocument = sself.document.documentModel;
+                MADModelQuery *modelQuery;
+                modelQuery = modelDocument.databases.firstObject.queries.firstObject;
+                NSEnumerator <MADModelQueryLink *> *queryLinks;
+                MADModelQueryLink *link;
+                queryLinks = modelQuery.links.objectEnumerator;
+                for (link in queryLinks) {
+                    if (link.leftFieldIdentifier.tableID == tableIdentifier ||
+                        link.rightFieldIdentifier.tableID == tableIdentifier) {
+                        [sself layoutQueryLinkViewControllerWithModelObject:link];
+                    }
+                }
+                
+                NSEnumerator <MADConnectorView *> *views;
+                UIView *view;
+                views = sself.connectionViewsByObjectID.objectEnumerator;
+                for (view in views) {
+                    [sself.scrollView.contentView bringSubviewToFront:view];
+                }
+
+            };
+            
+            [self addQueryTableViewController: tableIdentifier
+                                       center: hasCache ? tableDef.center : self.scrollView.contentView.center
+                                         root: topLevel
+                                     animated: animated
+                                   completion: completion];
         }
     }
 }
@@ -773,11 +778,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     CGFloat contentViewHeight = self.scrollView.contentView.bounds.size.height;
     for (insertedTable in insertedTables) {
         [self.rootTables addObject: insertedTable.objectID];
-        [self addSchemaViewControllerForTableID: insertedTable.identifier
-                                         center: MADPointInsertTable(contentViewHeight,
-                                                                     self.rootTables.count)
-                                           root: YES
-                                       animated: YES completion: ^{ }];
+        [self addQueryTableViewController: insertedTable.identifier
+                                   center: MADPointInsertTable(contentViewHeight / 2, self.rootTables.count)
+                                     root: YES
+                                 animated: YES completion: ^{ }];
     }
 }
 
@@ -1159,11 +1163,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark -
 #pragma mark Adding Child View Controllers
 
-- (void)addSchemaViewControllerForTableID:(int64_t)identifier
-                                   center:(CGPoint)center
-                                     root:(BOOL)root
-                                 animated:(BOOL)animated
-                               completion:(void(^)(void))completion {
+- (void)addQueryTableViewController:(int64_t)identifier
+                             center:(CGPoint)center
+                               root:(BOOL)root
+                           animated:(BOOL)animated
+                         completion:(void(^)(void))completion {
     MADQueryTableViewController *viewController;
     viewController = [MADQueryTableViewController newQueryVisualizationSchemaViewController];
     viewController.document = self.document;
