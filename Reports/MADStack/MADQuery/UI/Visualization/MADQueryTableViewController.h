@@ -18,7 +18,7 @@
 
 @class UITableView, MADocument, MTSchemaFieldCell, NSManagedObjectID, UITableView;
 
-@interface MADQueryVisualizationSchemaViewController : UIViewController
+@interface MADQueryTableViewController : UIViewController
     <MADViewControllerDocumentProtocol,
         MADManagedObjectViewProtocol,
         MADHierarchicalGroupingNodeProtocol>

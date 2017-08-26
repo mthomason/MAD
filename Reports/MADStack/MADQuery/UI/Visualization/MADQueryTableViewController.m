@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADQueryVisualizationSchemaViewController.h"
+#import "MADQueryTableViewController.h"
 
 #import <QuartzCore/CALayer.h>
 
@@ -53,7 +53,7 @@
 #import "MADQueryVisualizationSchemaDelegate.h"
 #import "MADSchemaFieldCellProtocol.h"
 
-@interface MADQueryVisualizationSchemaViewController ()
+@interface MADQueryTableViewController ()
     <UITableViewDataSource,
         UITableViewDelegate,
         MADSchemaFieldCellProtocol>
@@ -85,7 +85,7 @@ static NSString * const MADIdentifierViewControllerQueryVisualizationSchema = @"
 
 + (void)initialize {
     [super initialize];
-    if (self == [MADQueryVisualizationSchemaViewController self]) {
+    if (self == [MADQueryTableViewController self]) {
         @autoreleasepool {
             UILabel <UIAppearance> *appearanceProxy;
             NSArray <Class <UIAppearanceContainer>> *classes;
