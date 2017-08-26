@@ -90,4 +90,8 @@
     return self;
 }
 
+- (BOOL)isTopLevel:(NSNumber *)identifier {
+    return [self.startingPoints containsObject:identifier];
+}
+
 @end

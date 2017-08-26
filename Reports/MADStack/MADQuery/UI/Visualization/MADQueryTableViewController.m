@@ -84,9 +84,9 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
     id controller;
     storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierQueryTableViewController];
-    ((MADQueryTableViewController *)controller).identifier = identifier;
-    ((MADQueryTableViewController *)controller).delegate = delegate;
     ((MADQueryTableViewController *)controller).document = document;
+    ((MADQueryTableViewController *)controller).delegate = delegate;
+    ((MADQueryTableViewController *)controller).identifier = identifier;
     ((MADQueryTableViewController *)controller).root = root;
     return controller;
 }
@@ -148,7 +148,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 - (void)setIdentifier:(int64_t)identifier {
 
     if (_identifier != identifier) {
-        
+        NSAssert(self.document != nil, @"We expect a document.");
         ((MADQueryVisualizationSchemaView *)self.view).identifier = identifier;
         _identifierQueryTable = identifier;
         

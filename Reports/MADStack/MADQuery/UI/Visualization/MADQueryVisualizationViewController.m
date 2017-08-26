@@ -743,7 +743,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     }
     
     BOOL topLevel;
-    MTVertex *tableIdVertext;
+    MTVertex *vertexTableID;
     NSNumber *objectID;
     MADHierarchicalChildViewDefination *tableDef;
     
@@ -751,18 +751,17 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     for (MTPair *pair in topologicallySortedTables) {
 
-        tableIdVertext = pair.former;
+        vertexTableID = pair.former;
 
-        if (tableIdVertext.object != nil) {
+        if (vertexTableID.object != nil) {
             
-            objectID = ((NSNumber *)tableIdVertext.object).copy;
-            int64_t tableIdentifier = objectID.longLongValue;
+            objectID = ((NSNumber *)vertexTableID.object).copy;
+            int64_t tableID = objectID.longLongValue;
             
-            topLevel = [queryVisualizationModel.startingPoints containsObject:objectID];
+            if ((topLevel = [queryVisualizationModel isTopLevel:objectID]))
+                [self.rootTables addObject: objectID];
             
-            if (topLevel) [self.rootTables addObject: objectID];
-            
-            tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableIdentifier] : nil;
+            tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableID] : nil;
             
             void(^completion)(void) = ^() {
                 //Layout Query View if Related to Table
@@ -774,8 +773,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                 
                 MADModelQueryLink *link;
                 for (link in queryLinks) {
-                    if (link.leftFieldIdentifier.tableID == tableIdentifier ||
-                        link.rightFieldIdentifier.tableID == tableIdentifier) {
+                    if (link.leftFieldIdentifier.tableID == tableID ||
+                        link.rightFieldIdentifier.tableID == tableID) {
                         [sself layoutQueryLinkViewControllerWithModelObject:link];
                     }
                 }
@@ -790,7 +789,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
             };
             
             MADQueryTableViewController *viewController;
-            viewController = [MADQueryTableViewController newQueryTableViewController:tableIdentifier
+            viewController = [MADQueryTableViewController newQueryTableViewController:tableID
                                                                                  root:topLevel
                                                                              delegate:self
                                                                              document:self.document];
@@ -1154,7 +1153,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     CGRect leftTableViewControllerFrame = leftTableViewController.frame;
     repositionRect(&leftCellFrameInTable, &(leftTableViewControllerFrame), leftTableBottomY);
     CGRect convertedRect = [self.contentView convertRect: leftCellFrameInTable
-                                                           fromView: leftTableViewController.view];
+                                                fromView: leftTableViewController.view];
     leftCellAnchorPoint = CGCenterOfRect(convertedRect);
     translatePoint(&leftCellAnchorPoint, padding, 0.0000f);
     rightTableBottomY = bottomLeftY(rightTableViewController.frame);

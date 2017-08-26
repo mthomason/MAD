@@ -22,6 +22,8 @@
     @property (nonatomic, strong, readonly) NSArray <NSNumber *> *startingPoints;
     @property (nonatomic, assign, readonly, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
 
+    - (BOOL)isTopLevel:(NSNumber *)identifier;
+
 @end
 
 #endif
