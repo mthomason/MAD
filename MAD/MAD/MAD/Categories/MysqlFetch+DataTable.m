@@ -153,7 +153,8 @@
                 MysqlFetchField *field = [[MysqlFetchField alloc] initWithField:myStatement->fields[x] fieldName:fieldName];
                 [fieldCollector addObject:field];
                 
-                MADDataColumn *dataColumn = [MysqlFetch dataColumnForFieldName:fieldName mySqlField:myStatement->fields[x]];
+                MADDataColumn *dataColumn = [MysqlFetch dataColumnForFieldName: fieldName
+                                                                    mySqlField: myStatement->fields[x]];
                 [*dataTable addColumn:dataColumn];
                 
                 bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];

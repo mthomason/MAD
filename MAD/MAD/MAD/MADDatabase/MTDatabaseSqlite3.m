@@ -15,6 +15,7 @@
 #import <string.h>
 #import <stdlib.h>
 #import <stdio.h>
+#import <os/log.h>
 
 #import <dispatch/time.h>
 #import <dispatch/semaphore.h>
@@ -481,10 +482,13 @@ void sqliteLog(void *foo, const char* statement) {
     
     
     if (statement == NULL) {
-        int prepare_result;
-        prepare_result = sqlite3_prepare_v2(_database, csql, -1, &statement, NULL);
-        NSAssert(prepare_result == SQLITE_OK, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
-        success = prepare_result == SQLITE_OK;
+        if (sqlite3_prepare_v2(_database, csql, -1, &statement, NULL) != SQLITE_OK) {
+            os_log_debug(OS_LOG_DEFAULT, "%s at %s", sqlite3_errmsg(_database),
+                     __PRETTY_FUNCTION__);
+            success = NO;
+        } else {
+            success = YES;
+        }
         if (binaryBindings.count > 0) {
             for (MADDatabaseDataBinding *databinding in binaryBindings) {
                 [self bindStatement:(void **)&statement withBindings:databinding];
@@ -498,118 +502,118 @@ void sqliteLog(void *foo, const char* statement) {
         }
     }
     
-    if (returnsResults) {
+    if (returnsResults && success) {
         
-        if (success) {
+        
+        int numberOfColumns = sqlite3_column_count(statement);
+        numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
+        [dataTable removeAllObjects];
+        
+        NSUInteger rowCounter = 0;
+        int sqlite3_step_result;
+        while (SQLITE_ROW == (sqlite3_step_result = sqlite3_step(statement))) {
             
-            int numberOfColumns = sqlite3_column_count(statement);
-            numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
-            [dataTable removeAllObjects];
-            
-            NSUInteger rowCounter = 0;
-            int sqlite3_step_result;
-            while (SQLITE_ROW == (sqlite3_step_result = sqlite3_step(statement))) {
-                
-                if (rowCounter == 0) {  //If first time around, calculate column information.
-                    for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
+            if (rowCounter == 0) {  //If first time around, calculate column information.
+                for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
+                    
+                    //@autoreleasepool {
+                    
+                    NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
+                    
+                    MADDataColumn *dataColumn;
+                    dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
+                    
+                    int affentyType = sqlite3_column_type(statement, (int)columnCounter);
+                    
+                    const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
+                    NSAssert(columnName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+                    
+                    const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
+                    const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
+                    
+                    char const *pzDataType = NULL;
+                    char const *pzCollSeq = NULL;
+                    int pNotNull = 0;
+                    int pPrimaryKey = 0;
+                    int pAutoinc = 0;
+                    
+                    if (tableName != NULL) {
                         
-                        //@autoreleasepool {
-
-                            NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
-                            
-                            MADDataColumn *dataColumn;
-                            dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
-                            
-                            int affentyType = sqlite3_column_type(statement, (int)columnCounter);
-
-                            const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
-                            NSAssert(columnName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
-                            
-                            const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
-                            const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
+                        /*
+                         
+                         int sqlite3_table_column_metadata(
+                         sqlite3 *db,                // Connection handle
+                         const char *zDbName,        // Database name or NULL
+                         const char *zTableName,     // Table name
+                         const char *zColumnName,    // Column name
+                         char const **pzDataType,    // OUTPUT: Declared data type
+                         char const **pzCollSeq,      OUTPUT: Collation sequence name
+                         int *pNotNull,               OUTPUT: True if NOT NULL constraint exists
+                         int *pPrimaryKey,            OUTPUT: True if column part of PK
+                         int *pAutoinc                OUTPUT: True if column is auto-increment
+                         );
+                         */
                         
-                            char const *pzDataType = NULL;
-                            char const *pzCollSeq = NULL;
-                            int pNotNull = 0;
-                            int pPrimaryKey = 0;
-                            int pAutoinc = 0;
-                            
-                            if (tableName != NULL) {
-                                
-                                /*
-                                 
-                                 int sqlite3_table_column_metadata(
-                                 sqlite3 *db,                // Connection handle
-                                const char *zDbName,        // Database name or NULL
-                                const char *zTableName,     // Table name
-                                const char *zColumnName,    // Column name
-                                char const **pzDataType,    // OUTPUT: Declared data type
-                                char const **pzCollSeq,      OUTPUT: Collation sequence name
-                                int *pNotNull,               OUTPUT: True if NOT NULL constraint exists
-                                int *pPrimaryKey,            OUTPUT: True if column part of PK
-                                int *pAutoinc                OUTPUT: True if column is auto-increment
-                                );
-                                 */
-                                
-                                int metadata_result;
-                                metadata_result = sqlite3_table_column_metadata(_database,
-                                                                                databaseName,
-                                                                                tableName,
-                                                                                columnName,
-                                                                                &pzDataType,
-                                                                                &pzCollSeq,
-                                                                                &pNotNull,
-                                                                                &pPrimaryKey,
-                                                                                &pAutoinc);
-                                //NSAssert(metadata_result == SQLITE_OK, @"%s at %s",
-                                //         sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
-                            }
-                            
-                            dataColumn.fieldName = fieldName;
-                            dataColumn.nativeType = (int16_t)affentyType;
-                            MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
-                            dataColumn.type = columnType;
-                            
-                            dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
-                            dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
-                            dataColumn.notNull = pNotNull ? NO : pNotNull;
-                            [dataTable addColumn:dataColumn];
-                        //}
+                        int metadata_result;
+                        metadata_result = sqlite3_table_column_metadata(_database,
+                                                                        databaseName,
+                                                                        tableName,
+                                                                        columnName,
+                                                                        &pzDataType,
+                                                                        &pzCollSeq,
+                                                                        &pNotNull,
+                                                                        &pPrimaryKey,
+                                                                        &pAutoinc);
+                        //NSAssert(metadata_result == SQLITE_OK, @"%s at %s",
+                        //         sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
                     }
                     
-                    [dataTable beginBulkInsert];
-                }
-                [self readRow:rowCounter];
-                
-                NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
-                
-                for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
+                    dataColumn.fieldName = fieldName;
+                    dataColumn.nativeType = (int16_t)affentyType;
+                    MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
+                    dataColumn.type = columnType;
                     
-                    resultsForRow[fieldKeys[(NSUInteger)colCtr]] = [MADDatabaseResultValue newDatabaseResultValue:statement
-                                                                                                     columnNumber:colCtr];
-                    
+                    dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
+                    dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
+                    dataColumn.notNull = pNotNull ? NO : pNotNull;
+                    [dataTable addColumn:dataColumn];
+                    //}
                 }
                 
-                [dataTable addRowWithDataForFieldKeys:resultsForRow];
-                //resultsForRow = nil;
-                rowCounter++;
+                [dataTable beginBulkInsert];
             }
-            //NSLog(@"%@", queryString);
-            //NSLog(@"%d-%d: %s", sqlite3_errcode(_database), sqlite3_step_result, sqlite3_errmsg(_database));
-
-            [dataTable endBulkInsert];
+            [self readRow:rowCounter];
             
+            NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
+            
+            for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
+                
+                resultsForRow[fieldKeys[(NSUInteger)colCtr]] = [MADDatabaseResultValue newDatabaseResultValue:statement
+                                                                                                 columnNumber:colCtr];
+                
+            }
+            
+            [dataTable addRowWithDataForFieldKeys:resultsForRow];
+            //resultsForRow = nil;
+            rowCounter++;
         }
-    } else {
-        //NSLog(@"Failed to run query.");
-        // FIXME: Handle failures.
-        int step_result = sqlite3_step(statement);
-        //NSAssert(Sqlite3StepResultOK(step_result), @"sqlite3_step failed (Result: %d -[%s]).", step_result, (char *)sqlite3_errmsg(_database));
+        
+        [dataTable endBulkInsert];
     }
+    
+    if (!returnsResults) {
+        if (!Sqlite3StepResultOK(sqlite3_step(statement))) {
+            os_log_debug(OS_LOG_DEFAULT, "%s",
+                         (char *)sqlite3_errmsg(_database));
+        }
+    }
+    
     if (partOfTransactionSet == NO) {
-        sqlite3_clear_bindings(statement);
-        success = sqlite3_finalize(statement) == SQLITE_OK;
-        NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+        if (statement != NULL) {
+            sqlite3_clear_bindings(statement);
+            success = sqlite3_finalize(statement) == SQLITE_OK;
+            NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+        }
     } else {
         success = sqlite3_reset(statement) == SQLITE_OK;
         NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
@@ -689,8 +693,9 @@ void sqliteLog(void *foo, const char* statement) {
     return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
-+ (id <NSCopying>)newObject: (void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
-       withType: (MADDataType)type {
++ (id <NSCopying>)newObject: (void * /* sqlite3_stmt * */)statement
+            forColumnNumber:(int)columnCounter
+                   withType: (MADDataType)type {
 
     id <NSCopying> columnValue;
     switch (type) {

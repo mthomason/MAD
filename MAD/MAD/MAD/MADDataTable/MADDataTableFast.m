@@ -12,6 +12,7 @@
 
 #import "MADDataTableFast.h"
 
+#import <os/log.h>
 #import <dispatch/dispatch.h>
 #import <stdio.h>
 
@@ -377,8 +378,11 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     [self.columnKeys addObject:columnName];
 
     NSString *tableName = [self tableName];
-    [self addColumn:column toTable:tableName columnName:columnName createTable:createTable
-             unique:NO];
+    [self addColumn: column
+            toTable: tableName
+         columnName: columnName
+        createTable: createTable
+             unique: NO];
     self.columns[columnName] = column;
 }
 
@@ -407,8 +411,11 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     }
 }
 
-- (void)addColumn:(MADDataColumn *)column toTable:(NSString *)table
-       columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
+- (void)addColumn:(MADDataColumn *)column
+          toTable:(NSString *)table
+       columnName:(NSString *)columnName
+      createTable:(BOOL)create
+           unique:(BOOL)unique {
     
     BOOL success = NO;
     NSError * __autoreleasing errorQuery = NULL;
@@ -424,10 +431,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                             uniqueColumnHack: unique
                                               columnAffinity: columnAffinity];
     query.database = _databaseForInserts;
-    success = [_databaseForInserts executeQuery:query withError:&errorQuery];
-    NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
-             __PRETTY_FUNCTION__);
-
+    if (!(success = [_databaseForInserts executeQuery:query withError:&errorQuery])) {
+        os_log_debug(OS_LOG_DEFAULT,
+                     "%s at %s",
+                     sqlite3_errmsg(_databaseForInserts->_database),
+                     __PRETTY_FUNCTION__);
+    }
 }
 
 

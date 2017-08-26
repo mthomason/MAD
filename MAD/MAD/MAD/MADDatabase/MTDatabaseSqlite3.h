@@ -47,7 +47,8 @@ typedef NSString MADSqlite3SortDescription;
     + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
                                                                 ascending:(BOOL)ascending;
 
-    + (id <NSCopying>)newObject:(void * /* sqlite3_stmt * */)statement forColumnNumber:(int)columnCounter
+    + (id <NSCopying>)newObject:(void * /* sqlite3_stmt * */)statement
+                forColumnNumber:(int)columnCounter
                        withType:(MADDataType)type;
 
     - (BOOL)executeQuery:(MTQuery *)query withDataTable:(__kindof MADDataTable *)dataTable
