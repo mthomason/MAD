@@ -64,7 +64,7 @@
 
 @end
 
-@implementation MADQueryVisualizationSchemaViewController {
+@implementation MADQueryTableViewController {
     int64_t _identifierQueryTable;
     int64_t _identifierSchemaTable;
 }

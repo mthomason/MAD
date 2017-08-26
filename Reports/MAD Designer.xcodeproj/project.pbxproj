@@ -151,7 +151,7 @@
 		4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA101BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m */; };
 		4C26BA201BAF150F00456DC8 /* MADHierarchicalDisplayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA131BAF150F00456DC8 /* MADHierarchicalDisplayModel.m */; };
 		4C26BA211BAF150F00456DC8 /* MADQueryVisualizationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA151BAF150F00456DC8 /* MADQueryVisualizationModel.m */; };
-		4C26BA221BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA171BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m */; };
+		4C26BA221BAF150F00456DC8 /* MADQueryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA171BAF150F00456DC8 /* MADQueryTableViewController.m */; };
 		4C26BA231BAF150F00456DC8 /* MADHierarchicalChildViewDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA191BAF150F00456DC8 /* MADHierarchicalChildViewDefination.m */; };
 		4C26BA241BAF150F00456DC8 /* MADQueryVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */; };
 		4C26BA311BAF999800456DC8 /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA301BAF999800456DC8 /* MADUser.m */; };
@@ -1402,8 +1402,8 @@
 		4C26BA131BAF150F00456DC8 /* MADHierarchicalDisplayModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADHierarchicalDisplayModel.m; sourceTree = "<group>"; };
 		4C26BA141BAF150F00456DC8 /* MADQueryVisualizationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationModel.h; sourceTree = "<group>"; };
 		4C26BA151BAF150F00456DC8 /* MADQueryVisualizationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationModel.m; sourceTree = "<group>"; };
-		4C26BA161BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaViewController.h; sourceTree = "<group>"; };
-		4C26BA171BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaViewController.m; sourceTree = "<group>"; };
+		4C26BA161BAF150F00456DC8 /* MADQueryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryTableViewController.h; sourceTree = "<group>"; };
+		4C26BA171BAF150F00456DC8 /* MADQueryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryTableViewController.m; sourceTree = "<group>"; };
 		4C26BA181BAF150F00456DC8 /* MADHierarchicalChildViewDefination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADHierarchicalChildViewDefination.h; sourceTree = "<group>"; };
 		4C26BA191BAF150F00456DC8 /* MADHierarchicalChildViewDefination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADHierarchicalChildViewDefination.m; sourceTree = "<group>"; };
 		4C26BA1A1BAF150F00456DC8 /* MADQueryVisualizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationViewController.h; sourceTree = "<group>"; };
@@ -4303,8 +4303,8 @@
 				4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */,
 				4C26BA1A1BAF150F00456DC8 /* MADQueryVisualizationViewController.h */,
 				4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */,
-				4C26BA161BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.h */,
-				4C26BA171BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m */,
+				4C26BA161BAF150F00456DC8 /* MADQueryTableViewController.h */,
+				4C26BA171BAF150F00456DC8 /* MADQueryTableViewController.m */,
 				4C3DCBAE1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.h */,
 				4C3DCBAF1BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m */,
 				4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */,
@@ -6411,7 +6411,7 @@
 				4C26BA201BAF150F00456DC8 /* MADHierarchicalDisplayModel.m in Sources */,
 				4CB98DF81F45AB610043B583 /* MADOperationConditionSuccess.m in Sources */,
 				4C401ED91BAE5E9000BAE5FC /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
-				4C26BA221BAF150F00456DC8 /* MADQueryVisualizationSchemaViewController.m in Sources */,
+				4C26BA221BAF150F00456DC8 /* MADQueryTableViewController.m in Sources */,
 				4C4020441BAE92F200BAE5FC /* NSLayoutConstraint+Designer.m in Sources */,
 				4C401FC01BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
 				4C994F111BDCA3A90058627A /* MADDesignerSectionLayoutController.m in Sources */,

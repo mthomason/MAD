@@ -64,7 +64,7 @@
 
 #import "MADConnectorView.h"
 
-#import "MADQueryVisualizationSchemaViewController.h"
+#import "MADQueryTableViewController.h"
 
 #import "MADAffineTransformSwing.h"
 
@@ -410,7 +410,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     UIViewController *childContoller;
     NSArray *childControllers = self.childViewControllers;
     for (childContoller in childControllers) {
-        if ([childContoller isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
+        if ([childContoller isKindOfClass:[MADQueryTableViewController class]]) {
 
             MADHierarchicalChildViewDefination *tableDefination;
             tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:((MADHierarchicalChildController *)childContoller).identifier];
@@ -907,12 +907,12 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark - Layout
 
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
-    if ([sender isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
+    if ([sender isKindOfClass:[MADQueryTableViewController class]]) {
         
-        MADQueryVisualizationSchemaViewController *controller;
+        MADQueryTableViewController *controller;
         
         NSEnumerator <MADModelQueryLink *> *links; MADModelQueryLink *link;
-        controller = (MADQueryVisualizationSchemaViewController *)sender;
+        controller = (MADQueryTableViewController *)sender;
         
         links = self.document.documentModel.firstQuery.links.objectEnumerator;
         
@@ -1164,8 +1164,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                      root:(BOOL)root
                                  animated:(BOOL)animated
                                completion:(void(^)(void))completion {
-    MADQueryVisualizationSchemaViewController *viewController;
-    viewController = [MADQueryVisualizationSchemaViewController newQueryVisualizationSchemaViewController];
+    MADQueryTableViewController *viewController;
+    viewController = [MADQueryTableViewController newQueryVisualizationSchemaViewController];
     viewController.document = self.document;
     viewController.delegate = self;
     viewController.identifier = identifier;
