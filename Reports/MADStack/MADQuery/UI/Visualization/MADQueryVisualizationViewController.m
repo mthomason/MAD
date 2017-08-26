@@ -745,10 +745,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     BOOL topLevel;
     MTVertex *vertexTableID;
     NSNumber *objectID;
-    MADHierarchicalChildViewDefination *tableDef;
     
     typeof(self) __weak wself = self;
     
+    NSMutableArray <MADQueryTableViewController *> *viewControllers;
+    viewControllers = [[NSMutableArray alloc] init];
     for (MTPair *pair in topologicallySortedTables) {
 
         vertexTableID = pair.former;
@@ -761,46 +762,136 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
             if ((topLevel = [queryVisualizationModel isTopLevel:objectID]))
                 [self.rootTables addObject: objectID];
             
-            tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableID] : nil;
-            
-            void(^completion)(void) = ^() {
-                //Layout Query View if Related to Table
-                typeof(self) sself = wself;
-                MADModelDocument *modelDocument = sself.document.documentModel;
-                MADModelQuery *modelQuery = modelDocument.firstQuery;
-                NSEnumerator <MADModelQueryLink *> *queryLinks;
-                queryLinks = modelQuery.links.objectEnumerator;
-                
-                MADModelQueryLink *link;
-                for (link in queryLinks) {
-                    if (link.leftFieldIdentifier.tableID == tableID ||
-                        link.rightFieldIdentifier.tableID == tableID) {
-                        [sself layoutQueryLinkViewControllerWithModelObject:link];
-                    }
-                }
-                
-                NSEnumerator <MADConnectorView *> *views;
-                UIView *view;
-                views = sself.connectionViewsByObjectID.objectEnumerator;
-                for (view in views) {
-                    [sself.contentView bringSubviewToFront:view];
-                }
-
-            };
-            
             MADQueryTableViewController *viewController;
             viewController = [MADQueryTableViewController newQueryTableViewController:tableID
                                                                                  root:topLevel
                                                                              delegate:self
                                                                              document:self.document];
             viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-            
-            [self addViewController: viewController
-                             center: hasCache ? tableDef.center : self.contentView.center
-                               root: topLevel
-                           animated: animated
-                         completion: completion];
+            [viewControllers addObject:viewController];
         }
+    }
+
+    for (MADQueryTableViewController *viewController in viewControllers) {
+
+        
+        int64_t tableID = viewController.identifier;
+
+        MADHierarchicalChildViewDefination *tableDef;
+        tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableID] : nil;
+        
+        CGPoint center = hasCache ? tableDef.center : self.contentView.center;
+        NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
+        constraints = [self constraints:viewController center:center];
+        
+        NSNumber *identifier = @(viewController.identifier);
+        [self.constraints setObject:constraints forKey:identifier];
+        viewController.root = [queryVisualizationModel isTopLevel:identifier];
+        
+        self.controllersByObjectID[identifier] = viewController;;
+        
+        UIPanGestureRecognizer *panGesture;
+        panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
+        
+        [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
+
+        [viewController.view addGestureRecognizer:panGesture];
+        [viewController willMoveToParentViewController:self];
+        
+        [self addChildViewController:viewController];
+        
+        [viewController beginAppearanceTransition:YES animated:YES];
+        
+        viewController.view.center = center;
+        viewController.view.alpha = animated ? 0.00000f : 1.0000f;
+        [self.contentView addSubview: viewController.view];
+        [self.contentView addConstraints: constraints.allValues];
+
+        void(^completion)(void) = ^() {
+            //Layout Query View if Related to Table
+            typeof(self) sself = wself;
+            MADModelDocument *modelDocument = sself.document.documentModel;
+            MADModelQuery *modelQuery = modelDocument.firstQuery;
+            NSEnumerator <MADModelQueryLink *> *queryLinks;
+            queryLinks = modelQuery.links.objectEnumerator;
+            
+            MADModelQueryLink *link;
+            for (link in queryLinks) {
+                if (link.leftFieldIdentifier.tableID == tableID ||
+                    link.rightFieldIdentifier.tableID == tableID) {
+                    [sself layoutQueryLinkViewControllerWithModelObject:link];
+                }
+            }
+            
+            NSEnumerator <MADConnectorView *> *views;
+            UIView *view;
+            views = sself.connectionViewsByObjectID.objectEnumerator;
+            for (view in views) {
+                [sself.contentView bringSubviewToFront:view];
+            }
+        };
+
+        if (animated) {
+            [UIView animateWithDuration:0.5000f animations: ^{
+                [viewController.view setAlpha:1.0000f];
+            } completion:^(BOOL finished) {
+                [viewController endAppearanceTransition];
+                [viewController didMoveToParentViewController:self];
+                completion();
+            }];
+        } else {
+            [viewController endAppearanceTransition];
+            [viewController didMoveToParentViewController:self];
+            completion();
+        }
+                
+    }
+}
+
+- (void)addViewController:(MADHierarchicalChildController *)viewController
+                   center:(CGPoint)center
+                     root:(BOOL)root
+                 animated:(BOOL)animated
+               completion:(void(^)(void))completion {
+    
+    NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
+    constraints = [self constraints:viewController center:center];
+    
+    NSNumber *identifier = @(viewController.identifier);
+    [self.constraints setObject:constraints forKey:identifier];
+    viewController.root = root;
+    
+    self.controllersByObjectID[identifier] = viewController;;
+    
+    UIPanGestureRecognizer *panGesture;
+    panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
+    
+    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
+    
+    [viewController.view addGestureRecognizer:panGesture];
+    [viewController willMoveToParentViewController:self];
+    
+    [self addChildViewController:viewController];
+    
+    [viewController beginAppearanceTransition:YES animated:YES];
+    
+    viewController.view.center = center;
+    viewController.view.alpha = animated ? 0.00000f : 1.0000f;
+    [self.contentView addSubview: viewController.view];
+    [self.contentView addConstraints: constraints.allValues];
+    
+    if (animated) {
+        [UIView animateWithDuration:0.5000f animations: ^{
+            [viewController.view setAlpha:1.0000f];
+        } completion:^(BOOL finished) {
+            [viewController endAppearanceTransition];
+            [viewController didMoveToParentViewController:self];
+            completion();
+        }];
+    } else {
+        [viewController endAppearanceTransition];
+        [viewController didMoveToParentViewController:self];
+        completion();
     }
 }
 
@@ -1224,53 +1315,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                                          action: @selector(handlePanPiece:)];
     panGesture.delegate = delegate;
     return panGesture;
-}
-
-- (void)addViewController:(MADHierarchicalChildController *)viewController
-                   center:(CGPoint)center
-                     root:(BOOL)root
-                 animated:(BOOL)animated
-               completion:(void(^)(void))completion {
-    
-    NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-    constraints = [self constraints:viewController center:center];
-    
-    NSNumber *identifier = @(viewController.identifier);
-    [self.constraints setObject:constraints forKey:identifier];
-    viewController.root = root;
-
-    self.controllersByObjectID[identifier] = viewController;;
-
-    UIPanGestureRecognizer *panGesture;
-    panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
-
-    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
-
-    [viewController.view addGestureRecognizer:panGesture];
-    [viewController willMoveToParentViewController:self];
-    
-    [self addChildViewController:viewController];
-
-    [viewController beginAppearanceTransition:YES animated:YES];
-    
-    viewController.view.center = center;
-    viewController.view.alpha = animated ? 0.00000f : 1.0000f;
-    [self.contentView addSubview: viewController.view];
-    [self.contentView addConstraints: constraints.allValues];
-
-    if (animated) {
-        [UIView animateWithDuration:0.5000f animations: ^{
-            [viewController.view setAlpha:1.0000f];
-        } completion:^(BOOL finished) {
-            [viewController endAppearanceTransition];
-            [viewController didMoveToParentViewController:self];
-            completion();
-        }];
-    } else {
-        [viewController endAppearanceTransition];
-        [viewController didMoveToParentViewController:self];
-        completion();
-    }
 }
 
 #pragma mark -
