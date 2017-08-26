@@ -13,7 +13,7 @@
 #import <MAD/MADModelDataProtocol.h>
 
 @class MADModelDatabase, MADModelQueryTable, MADModelQueryLink, MADModelTable, RptqQueryTable,
-       NSOrderedSet<__covariant ObjectType>,
+       RptqQueryLinks, NSOrderedSet<__covariant ObjectType>,
        NSMutableDictionary<KeyType, ObjectType>;
 
 @interface MADModelQuery : MADModel
@@ -34,6 +34,7 @@
     - (NSSet <NSNumber *> *)tablesInLinks;
     - (NSSet <NSNumber *> *)orphanedQueryTables;
     - (void)insertQueryTable:(RptqQueryTable *)queryTable;
+    - (void)insertQueryLink:(RptqQueryLinks *)queryLink;
     - (void)deleteQueryLinkID:(NSNumber *)queryLink;
     - (void)deleteQueryTableID:(NSNumber *)queryTable;
     - (void)insertQueryTableID:(NSNumber *)queryTableID;

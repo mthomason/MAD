@@ -11,7 +11,8 @@
 
 #import "MADModel.h"
 
-@class MADModelQuery, MADTableFieldReference, MADTableFieldIdentifier, NSPredicate, NSFetchRequest;
+@class MADModelQuery, MADTableFieldReference, MADTableFieldIdentifier, NSPredicate, NSFetchRequest,
+        RptqQueryLinks;
 
 @interface MADModelQueryLink : MADModel
     <MADModelIDProtocol>
@@ -23,6 +24,7 @@
                            leftTableID:(int64_t)leftTableID
                           rightFieldID:(int64_t)rightFieldID
                           rightTableID:(int64_t)rightTableID;
+    - (instancetype)initWithRptqQueryLink:(RptqQueryLinks *)queryLink;
 
     @property (nonatomic, weak) MADModelQuery *inQuery;
     @property (nonatomic, readonly, strong) MADTableFieldReference *leftFieldReference;

@@ -222,21 +222,16 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 
-    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        
-        for (UIViewController *subviewController in self.childViewControllers) {
-        
-            [self didMoveFieldRect: subviewController animated: YES];
-            
-        }
-        
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        
-            [self.view setNeedsDisplay];
-            
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
-        
+    if (CGSizeEqualToSize(size, self.view.bounds.size)) return;
+    
+    for (UIViewController *subviewController in self.childViewControllers) {
+        [self didMoveFieldRect: subviewController animated: YES];
     }
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.view setNeedsDisplay];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+    
 }
 
 #pragma mark -

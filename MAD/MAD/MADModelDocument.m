@@ -114,7 +114,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
                     typeof(self) sself = wself;
                     MADModelQuery *query = sself.firstQuery;
                     NSNumber *idnQueryLink = @(((RptqQueryLinks *)obj).identifier);
-                    [query insertQueryLinkID:idnQueryLink];
+                    [query insertQueryLink:obj];
                 }
                 
                 if ([obj isKindOfClass:[RptqQueryTable class]]) {

@@ -223,24 +223,6 @@
 
 }
 
-- (void)insertTableRptqQueryTable:(RptqQueryTable *)queryTable {
-    if (queryTable == nil) return;
-    
-    MADModelQueryTable *modelQueryTable;
-    modelQueryTable = [[MADModelQueryTable alloc] initWithIdentifier: queryTable.identifier
-                                                           dropIndex: queryTable.dropIndex
-                                                         schemaTable: queryTable.databaseSchemaTable.identifier
-                                                          inDatabase: _inDatabase];
-    
-    for (RptqQueryField *queryField in queryTable.hasQueryFields) {
-        [modelQueryTable addField: queryField.identifier
-                      schemaField: queryField.databaseSchemaField.identifier];
-        NSNumber *qtidn = @(modelQueryTable.identifier);
-        [_queryTableIDs addObject:qtidn];
-        [_tables setObject:modelQueryTable forKey:qtidn];
-    }
-}
-
 - (void)insertTablesFromFetchRequestResults:(NSArray <NSDictionary *> *)results {
     if (!results.count) return;
     
@@ -345,10 +327,8 @@
                                                          rightFieldID: rfid
                                                          rightTableID: rtid];
             [_links setObject:queryLink forKey:qlidObj];
-            
         }
     }
-
 }
 
 // Fetches the needed data from RptqQueryLinks.
@@ -379,6 +359,23 @@
 
 // #MARK: Insert
 
+- (void)insertQueryLink:(RptqQueryLinks *)queryLink {
+    if (queryLink == nil) return;
+    NSNumber *queryLinkID = @(queryLink.identifier);
+    [_queryLinkIDs addObject:queryLinkID];
+    MADModelQueryLink *modelQueryLink;
+    modelQueryLink = [[MADModelQueryLink alloc] initWithRptqQueryLink:queryLink];
+    [_links setObject:modelQueryLink forKey:queryLinkID];
+    
+    NSDictionary *userInfo;
+    userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:modelQueryLink, queryLinkID, nil];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationQueryLinkInsert
+                                                            object: self
+                                                          userInfo: userInfo];
+    }];
+}
+
 - (void)insertQueryTable:(RptqQueryTable *)queryTable {
     MADModelQueryTable *table;
     NSNumber *queryTableID = @(queryTable.identifier);
@@ -393,6 +390,24 @@
                                                             object: self
                                                           userInfo: userInfo];
     }];
+}
+
+- (void)insertTableRptqQueryTable:(RptqQueryTable *)queryTable {
+    if (queryTable == nil) return;
+    
+    MADModelQueryTable *modelQueryTable;
+    modelQueryTable = [[MADModelQueryTable alloc] initWithIdentifier: queryTable.identifier
+                                                           dropIndex: queryTable.dropIndex
+                                                         schemaTable: queryTable.databaseSchemaTable.identifier
+                                                          inDatabase: _inDatabase];
+    
+    for (RptqQueryField *queryField in queryTable.hasQueryFields) {
+        [modelQueryTable addField: queryField.identifier
+                      schemaField: queryField.databaseSchemaField.identifier];
+        NSNumber *qtidn = @(modelQueryTable.identifier);
+        [_queryTableIDs addObject:qtidn];
+        [_tables setObject:modelQueryTable forKey:qtidn];
+    }
 }
 
 - (void)insertQueryTableID:(NSNumber *)queryTableID
@@ -423,6 +438,39 @@
     [self insertQueryTableID:queryTableID managedObjectContext:_managedObjectContext];
 }
 
+- (void)insertQueryLink:(RptqQueryLinks *)queryLinkID
+   managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    MADModelQueryLink *link;
+    if ((link = [_links objectForKey:queryLinkID])) return;
+    
+    NSExpression *expressionInQuery[2];
+    NSArray <NSDictionary *> *results;
+    expressionInQuery[0] = [NSExpression expressionForEvaluatedObject];
+    expressionInQuery[1] = [NSExpression expressionForConstantValue: queryLinkID];
+    
+    NSPredicate *isQueryLink;
+    isQueryLink = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
+                                                     rightExpression: expressionInQuery[1]
+                                                            modifier: NSDirectPredicateModifier
+                                                                type: NSEqualToPredicateOperatorType
+                                                             options: 0];
+    NSError * __autoreleasing error = NULL;
+    NSFetchRequest *fetchRequest = [MADModelQueryLink fetchRequest:isQueryLink];
+    results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSAssert(results != nil && error == nil, @"What? %@", error);
+    [self insertLinksFromFetchRequestResults:results];
+    
+    expressionInQuery[0] = nil;
+    expressionInQuery[1] = nil;
+    
+    NSDictionary *userInfo;
+    userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:link, queryLinkID, nil];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationQueryLinkInsert
+                                                            object: self
+                                                          userInfo: userInfo];
+    }];
+}
 
 /// FIXME: Predicate is broken... maybe more... unused, but I think it's needed.
 - (void)insertQueryLinkID:(NSNumber *)queryLinkID

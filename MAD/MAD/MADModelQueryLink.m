@@ -20,8 +20,10 @@
 
 #import "MADTableFieldIdentifier.h"
 
-#import "RptqQueryLinks.h"
+#import "RptqQuery.h"
+#import "RptqQueryTable.h"
 #import "RptqQueryField.h"
+#import "RptqQueryLinks.h"
 
 @interface MADModelQueryLink ()
 
@@ -133,6 +135,22 @@
         self.leftFieldIdentifier = leftFieldIdentifier;
         rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
                                                                      andFieldID: leftFieldID];
+        self.rightFieldIdentifier = rightFieldIdentifier;
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithRptqQueryLink:(RptqQueryLinks *)queryLink {
+    
+    if (self = [self initWithIdentifier:queryLink.identifier]) {
+        
+        MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
+        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasLeftField.inQueryTable.identifier
+                                                                    andFieldID: queryLink.hasLeftField.identifier];
+        self.leftFieldIdentifier = leftFieldIdentifier;
+        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasRightField.inQueryTable.identifier
+                                                                     andFieldID: queryLink.hasLeftField.identifier];
         self.rightFieldIdentifier = rightFieldIdentifier;
         
     }
