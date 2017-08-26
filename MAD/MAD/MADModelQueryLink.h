@@ -32,10 +32,15 @@
     @property (nonatomic, readonly, strong) MADTableFieldIdentifier *leftFieldIdentifier;
     @property (nonatomic, readonly, strong) MADTableFieldIdentifier *rightFieldIdentifier;
 
-    @property (nonatomic, readonly) NSNumber *tableIDLeft;
-    @property (nonatomic, readonly) NSNumber *tableIDRight;
-    @property (nonatomic, readonly) NSNumber *fieldIDLeft;
-    @property (nonatomic, readonly) NSNumber *fieldIDRight;
+    @property (nonatomic, readonly) NSNumber * leftTableObjectID;
+    @property (nonatomic, readonly) NSNumber * rightTableObjectID;
+    @property (nonatomic, readonly) NSNumber * leftFieldObjectID;
+    @property (nonatomic, readonly) NSNumber * rightFieldObjectID;
+
+    @property (nonatomic, readonly) int64_t leftTableID;
+    @property (nonatomic, readonly) int64_t rightTableID;
+    @property (nonatomic, readonly) int64_t leftFieldID;
+    @property (nonatomic, readonly) int64_t rightFieldID;
 
     - (BOOL)isAdjacentToQueryTable:(int64_t)queryTableID;
 

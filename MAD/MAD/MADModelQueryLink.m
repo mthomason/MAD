@@ -174,10 +174,16 @@
     return tables;
 }
 
-- (NSNumber *)tableIDLeft { return [self.leftFieldIdentifier tableObjectID]; }
-- (NSNumber *)tableIDRight { return [self.rightFieldIdentifier tableObjectID]; }
-- (NSNumber *)fieldIDLeft { return [self.leftFieldIdentifier fieldObjectID]; }
-- (NSNumber *)fieldIDRight { return [self.rightFieldIdentifier fieldObjectID]; }
+- (NSNumber *)leftTableObjectID { return [self.leftFieldIdentifier tableObjectID]; }
+- (NSNumber *)rightTableObjectID { return [self.rightFieldIdentifier tableObjectID]; }
+- (NSNumber *)leftFieldObjectID { return [self.leftFieldIdentifier fieldObjectID]; }
+- (NSNumber *)rightFieldObjectID { return [self.rightFieldIdentifier fieldObjectID]; }
+
+- (int64_t)leftTableID { return [self.leftFieldIdentifier tableID]; }
+- (int64_t)rightTableID { return [self.rightFieldIdentifier tableID]; }
+- (int64_t)leftFieldID { return [self.leftFieldIdentifier fieldID]; }
+- (int64_t)rightFieldID { return [self.rightFieldIdentifier fieldID]; }
+
 
 /*- (NSSet <MADTableFieldReference *> *)tableFieldReferences {
     NSSet *tables = [[NSSet alloc] initWithObjects:_leftFieldReference,

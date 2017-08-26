@@ -1128,29 +1128,24 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     MADModelTable *rightTable, *leftTable;
     MADModelField *rightField, *leftField;
     MADModelQueryTable *rightQueryTable, *leftQueryTable;
-    MADModelQueryField *leftQueryField, *rightQueryField;
+    MADModelQueryField *rightQueryField, *leftQueryField;
     
-    rightQueryTable = firstQuery.tables[link.tableIDRight];
-    leftQueryTable = firstQuery.tables[link.tableIDLeft];
-    
+    rightQueryTable = firstQuery.tables[link.rightTableObjectID];
     rightTable = firstDatabase.tableDictionary[rightQueryTable.schemaTableID];
-    leftTable = firstDatabase.tableDictionary[leftQueryTable.schemaTableID];
-    
-    leftQueryField = leftQueryTable.queryFields[link.fieldIDLeft];
-    rightQueryField = rightQueryTable.queryFields[link.fieldIDRight];
-    
+    rightQueryField = rightQueryTable.queryFields[link.rightFieldObjectID];
     rightField = rightTable.fields[rightQueryField.schemaFieldID];
-    leftField = leftTable.fields[leftQueryField.schemaFieldID];
-    
-    leftTableViewController = self.controllersByObjectID[link.tableIDLeft];
-
-    leftCellFrameInTable = [leftTableViewController rectForFieldID: leftField.identifier
-                                                            inView: leftTableViewController.view];
-    
-    rightTableViewController = self.controllersByObjectID[link.tableIDRight];
+    rightTableViewController = self.controllersByObjectID[link.rightTableObjectID];
     rightCellFrameInTable = [rightTableViewController rectForFieldID: rightField.identifier
                                                               inView: rightTableViewController.view];
 
+    leftQueryTable = firstQuery.tables[link.leftTableObjectID];
+    leftTable = firstDatabase.tableDictionary[leftQueryTable.schemaTableID];
+    leftQueryField = leftQueryTable.queryFields[link.leftFieldObjectID];
+    leftField = leftTable.fields[leftQueryField.schemaFieldID];
+    leftTableViewController = self.controllersByObjectID[link.leftTableObjectID];
+    leftCellFrameInTable = [leftTableViewController rectForFieldID: leftField.identifier
+                                                            inView: leftTableViewController.view];
+    
     leftTableBottomY = bottomLeftY(leftTableViewController.frame);
     
     CGRect leftTableViewControllerFrame = leftTableViewController.frame;
@@ -1168,21 +1163,24 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                          fromView: rightTableViewController.view];
     rightCellAnchorPoint = CGCenterOfRect(convertedRect);
     translatePoint(&rightCellAnchorPoint, -padding, 0.0000f);
-
-    MADDirection direction;
-    direction = leftCellAnchorPoint.x < rightCellAnchorPoint.x ? MADDirectionLeft : MADDirectionRight;
     
+    connectorView.leftViewIsInital = directionHorizontal(leftCellAnchorPoint, rightCellAnchorPoint) == MADDirectionLeft;
+
     CGFloat extraInset = 0.0000f;
     connectorView.topLeftToBottomRight = updateAnchorPoints(&leftCellAnchorPoint,
                                                             leftCellFrameInTable.size.height,
                                                             &rightCellAnchorPoint,
                                                             rightCellFrameInTable.size.height,
                                                             &extraInset);
-    connectorView.leftViewIsInital = direction == MADDirectionLeft;
     connectorView.frame = mainFrame(leftCellAnchorPoint,
                                     rightCellAnchorPoint,
                                     extraInset, 0.0000f, 10.0000f);
     [connectorView setNeedsDisplay];
+}
+
+MADDirection directionHorizontal(CGPoint, CGPoint);
+MADDirection directionHorizontal(CGPoint l, CGPoint r) {
+    return l.x < r.x ? MADDirectionLeft : MADDirectionRight;
 }
 
 #pragma mark -
