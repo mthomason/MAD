@@ -130,11 +130,13 @@
     if (self = [self initWithIdentifier:identifier]) {
         
         MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
-        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rightTableID
-                                                                    andFieldID: rightFieldID];
+        
+        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
+                                                                    andFieldID: leftFieldID];
         self.leftFieldIdentifier = leftFieldIdentifier;
-        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
-                                                                     andFieldID: leftFieldID];
+        
+        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rightTableID
+                                                                     andFieldID: rightFieldID];
         self.rightFieldIdentifier = rightFieldIdentifier;
         
     }
@@ -146,11 +148,13 @@
     if (self = [self initWithIdentifier:queryLink.identifier]) {
         
         MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
+        
         leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasLeftField.inQueryTable.identifier
                                                                     andFieldID: queryLink.hasLeftField.identifier];
         self.leftFieldIdentifier = leftFieldIdentifier;
+        
         rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasRightField.inQueryTable.identifier
-                                                                     andFieldID: queryLink.hasLeftField.identifier];
+                                                                     andFieldID: queryLink.hasRightField.identifier];
         self.rightFieldIdentifier = rightFieldIdentifier;
         
     }
