@@ -1185,7 +1185,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                            animated:(BOOL)animated
                          completion:(void(^)(void))completion {
     MADQueryTableViewController *viewController;
-    viewController = [MADQueryTableViewController newQueryVisualizationSchemaViewController];
+    viewController = [MADQueryTableViewController newQueryTableViewController];
     viewController.document = self.document;
     viewController.delegate = self;
     viewController.identifier = identifier;

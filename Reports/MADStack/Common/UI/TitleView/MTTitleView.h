@@ -19,4 +19,15 @@
 
 @end
 
+typedef NS_ENUM(int16_t, MADTitleViewQueryTableStyle) {
+    MADTitleViewQueryTableRoot = 2,
+    MADTitleViewQueryTableChild = 3,
+};
+
+@interface MADTitleViewQueryTable : MTTitleView
+
+    @property (nonatomic, assign) MADTitleViewQueryTableStyle style;
+
+@end
+
 #endif

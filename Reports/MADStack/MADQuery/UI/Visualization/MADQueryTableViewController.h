@@ -23,7 +23,7 @@
         MADManagedObjectViewProtocol,
         MADHierarchicalGroupingNodeProtocol>
 
-    + (instancetype)newQueryVisualizationSchemaViewController;
+    + (instancetype)newQueryTableViewController;
 
     @property (nonatomic, weak) IBOutlet UITableView *tableView;
     @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;

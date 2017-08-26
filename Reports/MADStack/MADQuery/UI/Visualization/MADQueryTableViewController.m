@@ -41,6 +41,7 @@
 #import <MAD/MADModelQuery.h>
 #import <MAD/MADModelQueryTable.h>
 #import <MAD/MADModelQueryField.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MTTitleView.h"
 #import "MTSchemaFieldCell.h"
@@ -58,7 +59,7 @@
         UITableViewDelegate,
         MADSchemaFieldCellProtocol>
 
-    @property (nonatomic, weak) IBOutlet MTTitleView *titleView;
+    @property (nonatomic, weak) IBOutlet MADTitleViewQueryTable *titleView;
     @property (nonatomic, weak) IBOutlet UIView *containerView;
     @property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
 
@@ -75,7 +76,7 @@
 
 static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQueryTableViewController";
 
-+ (instancetype)newQueryVisualizationSchemaViewController {
++ (instancetype)newQueryTableViewController {
     UIStoryboard *storyboard;
     id controller;
     storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL];
@@ -160,8 +161,8 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 #pragma mark MADHierarchicalGroupingNodeProtocol
 
 - (void)setRoot:(BOOL)root {
-    if ((_root = root)) self.toolbar.barTintColor = [UIColor blueColor];
-    else self.toolbar.barTintColor = [UIColor darkGrayColor];
+    self.titleView.style = root ? MADTitleViewQueryTableRoot : MADTitleViewQueryTableChild;
+    self.toolbar.barTintColor = root ? [MADColorEverydayApps newColorBlue] : [UIColor whiteColor];
 }
 
 - (CGRect)frame {
@@ -182,7 +183,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
                                                          inSection: 0];
         rectForRow = [self.tableView rectForRowAtIndexPath: cellIndexPath];
     }
-    return [self.tableView convertRect:rectForRow toView:containerView];
+    return [self.tableView convertRect: rectForRow toView: containerView];
 }
 
 #pragma mark -
@@ -217,7 +218,8 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 }
 
 
-#pragma mark - Table view delegate
+#pragma mark -
+#pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
@@ -225,7 +227,8 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
     return 16.0000f;
 }
 
-#pragma mark - Table view datasource
+#pragma mark -
+#pragma mark Table view datasource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -254,11 +257,15 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
     return (NSInteger)table.fieldIDs.count;
 }
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark -
+#pragma mark UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self.delegate didMoveFieldRect:self animated:NO];
 }
+
+#pragma mark -
+#pragma mark Helper
 
 - (id <NSCopying>)key {
     return @(self.identifier);
