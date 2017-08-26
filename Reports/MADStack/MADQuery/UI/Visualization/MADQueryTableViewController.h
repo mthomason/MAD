@@ -18,6 +18,9 @@
 
 @class UITableView, MADocument, MTSchemaFieldCell, NSManagedObjectID, UITableView;
 
+extern const CGFloat MADSchemaViewDefaultWidth;
+extern const CGFloat MADSchemaViewDefaultHeight;
+
 @interface MADQueryTableViewController : UIViewController
     <MADViewControllerDocumentProtocol,
         MADManagedObjectViewProtocol,

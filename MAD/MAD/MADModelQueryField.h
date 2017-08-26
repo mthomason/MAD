@@ -24,6 +24,7 @@
     @property (nonatomic, weak) MADModelQueryTable *inQueryTable;
 
     - (MADModelField *)schemaField;
+    - (NSNumber *) schemaFieldID;
     @property (nonatomic, readonly) int64_t schemaFieldIdentifier;
 
 @end

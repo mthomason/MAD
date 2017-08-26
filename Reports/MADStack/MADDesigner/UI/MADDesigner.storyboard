@@ -218,14 +218,14 @@
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="X8d-qj-glr" customClass="MADQueryVisualizationSchemaView">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
+                        <rect key="frame" x="0.0" y="0.0" width="120" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KMv-5c-f7e">
-                                <rect key="frame" x="10" y="10" width="520" height="600"/>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KMv-5c-f7e">
+                                <rect key="frame" x="0.0" y="0.0" width="120" height="140"/>
                                 <subviews>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOi-BF-VzE">
-                                        <rect key="frame" x="0.0" y="0.0" width="520" height="24"/>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOi-BF-VzE">
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="24"/>
                                         <color key="backgroundColor" red="0.086274512110000007" green="0.41568627949999998" blue="0.5411764979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="24" id="a09-W0-mb1"/>
@@ -234,7 +234,7 @@
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="HKu-ve-maU"/>
                                             <barButtonItem style="plain" id="TQO-M5-ZFI">
                                                 <view key="customView" contentMode="scaleToFill" id="OIP-Z8-kxy" customClass="MADTitleViewQueryTable">
-                                                    <rect key="frame" x="185" y="2" width="150" height="20"/>
+                                                    <rect key="frame" x="-15" y="2" width="150" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </view>
@@ -244,15 +244,15 @@
                                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="barTintColor" red="0.086274512112140656" green="0.41568627953529358" blue="0.54117649793624878" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </toolbar>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8TZ-dQ-78r">
-                                        <rect key="frame" x="0.0" y="24" width="520" height="576"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8TZ-dQ-78r">
+                                        <rect key="frame" x="0.0" y="24" width="120" height="116"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MTSchemaFieldCellIdentifier" rowHeight="22" id="dBI-d3-jvF" customClass="MTSchemaFieldCell">
-                                                <rect key="frame" x="0.0" y="22" width="520" height="22"/>
+                                                <rect key="frame" x="0.0" y="22" width="120" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dBI-d3-jvF" id="UZi-dw-D1s">
-                                                    <rect key="frame" x="0.0" y="0.0" width="520" height="21.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="120" height="21.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2W-9c-j0G">
@@ -294,17 +294,17 @@
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="KMv-5c-f7e" firstAttribute="top" secondItem="X8d-qj-glr" secondAttribute="top" constant="10" id="6wu-kl-DSG"/>
-                            <constraint firstAttribute="trailing" secondItem="KMv-5c-f7e" secondAttribute="trailing" constant="10" id="LBv-bW-ZxA"/>
-                            <constraint firstItem="KMv-5c-f7e" firstAttribute="leading" secondItem="X8d-qj-glr" secondAttribute="leading" constant="10" id="Ykh-mb-3lg"/>
-                            <constraint firstAttribute="bottom" secondItem="KMv-5c-f7e" secondAttribute="bottom" constant="10" id="eEI-XY-5aU"/>
+                            <constraint firstItem="KMv-5c-f7e" firstAttribute="top" secondItem="X8d-qj-glr" secondAttribute="top" id="6wu-kl-DSG"/>
+                            <constraint firstAttribute="trailing" secondItem="KMv-5c-f7e" secondAttribute="trailing" id="LBv-bW-ZxA"/>
+                            <constraint firstItem="KMv-5c-f7e" firstAttribute="leading" secondItem="X8d-qj-glr" secondAttribute="leading" id="Ykh-mb-3lg"/>
+                            <constraint firstAttribute="bottom" secondItem="KMv-5c-f7e" secondAttribute="bottom" id="eEI-XY-5aU"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="540" height="620"/>
+                    <size key="freeformSize" width="120" height="140"/>
                     <connections>
                         <outlet property="containerView" destination="KMv-5c-f7e" id="7U7-Fr-dpU"/>
                         <outlet property="tableView" destination="8TZ-dQ-78r" id="Y1d-uC-B1u"/>

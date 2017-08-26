@@ -74,6 +74,8 @@
 @synthesize identifier = _identifier;
 @synthesize root = _root;
 
+const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
+const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
 static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQueryTableViewController";
 
 + (instancetype)newQueryTableViewController:(int64_t)identifier
@@ -107,6 +109,10 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
     }
 }
 
+- (CGSize)preferredContentSize {
+    return CGSizeMake(MADSchemaViewDefaultWidth, MADSchemaViewDefaultHeight);
+}
+
 - (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -114,13 +120,22 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
     return self;
 }
 
+/*- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self.titleView setNeedsLayout];
+    [self.containerView setNeedsLayout];
+    [self.tableView setNeedsLayout];
+}*/
+
 #pragma mark -
 #pragma mark UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.containerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.containerView.layer.cornerRadius =  3.0000f;
     self.containerView.clipsToBounds = YES;
     

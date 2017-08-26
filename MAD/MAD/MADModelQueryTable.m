@@ -109,6 +109,10 @@
     return _schemaTable;
 }
 
+- (NSNumber *)schemaTableID {
+    return @(_schemaTable);
+}
+
 - (NSString *)databaseSchemaTableName {
     NSNumber *key = @(_schemaTable);
     return [_database.tableDictionary objectForKey:key].name;

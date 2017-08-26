@@ -60,6 +60,10 @@
 - (int64_t) schemaFieldIdentifier {
     return _schemaField;
 }
+
+- (NSNumber *) schemaFieldID {
+    return @(_schemaField);
+}
 /*
 - (NSString *)debugDescription {
     NSString *debugDescription;

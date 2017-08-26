@@ -24,6 +24,7 @@
 
     @property (nonatomic, weak) MADModelQuery *inQuery;
     @property (nonatomic, readonly) int64_t schemaTable;
+    @property (nonatomic, readonly) NSNumber *schemaTableID;
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSNumber *, MADModelQueryField *> *queryFields;
     @property (nonatomic, readonly, strong) NSMutableOrderedSet <NSNumber *> *queryFieldIDs;
 

@@ -122,9 +122,6 @@ typedef NSMutableDictionary <NSNumber *,
 
 @end
 
-static const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
-static const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
-
 static NSString *keyCenterX = @"x";
 static NSString *keyCenterY = @"y";
 static NSString *keyWidth   = @"w";
@@ -707,28 +704,14 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     [self.controllersByObjectID removeAllObjects];
     [self.connectionViewsByObjectID removeAllObjects];
     
-    BOOL hasCache = NO;
     MADModelQuery *query;
     MADModelDocument *document;
-    MADHierarchicalDisplayModel *cacheData;
     
     MTLinkedList *topologicallySortedTables;
     NSManagedObjectContext *managedObjectContext;
-    NSString *path;
 
     document = _document.documentModel;
-    query = document.databases.firstObject.queries.firstObject;
-    
-    path = self.localCacheFileURL.filePathURL.path;
-    if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        cacheData = [self.cacheManager loadCache];
-        hasCache = cacheData != nil;
-    }
-    
-    if (hasCache) {
-        self.scrollView.contentOffset = cacheData.scrollViewContentOffset;
-        self.scrollView.zoomScale = cacheData.scrollViewZoomScale;
-    }
+    query = document.firstQuery;
     
     MADQueryVisualizationModel *queryVisualizationModel;
     queryVisualizationModel = [[MADQueryVisualizationModel alloc] initWithQuery:query];
@@ -738,9 +721,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
     queryLinkEnumerator = query.links.objectEnumerator;
-    for (MADModelQueryLink *link in queryLinkEnumerator) {
-        [self addLinkViewControllerForQueryLinkModel:link animated:animated];
-    }
     
     BOOL topLevel;
     MTVertex *vertexTableID;
@@ -772,15 +752,59 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         }
     }
 
-    for (MADQueryTableViewController *viewController in viewControllers) {
+    
+    BOOL hasCache = NO;
+    MADHierarchicalDisplayModel *cacheData;
+    NSString *path = self.localCacheFileURL.filePathURL.path.copy;
+    if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        cacheData = [self.cacheManager loadCache];
+        hasCache = cacheData != nil;
+    }
+    
+    if (hasCache) {
+        self.scrollView.contentOffset = cacheData.scrollViewContentOffset;
+        self.scrollView.zoomScale = cacheData.scrollViewZoomScale;
+    }
+    
+    void(^completion)(void) = ^() {
+        typeof(self) sself = wself;
+        MADModelDocument *modelDocument = sself.document.documentModel;
+        MADModelQuery *modelQuery = modelDocument.firstQuery;
+        NSEnumerator <MADModelQueryLink *> *queryLinks;
+        queryLinks = modelQuery.links.objectEnumerator;
+        
+        MADModelQueryLink *link;
+        for (link in queryLinks) {
+            [sself addLinkViewControllerForQueryLinkModel:link animated:animated];
+        }
+        
+        NSEnumerator <MADConnectorView *> *views;
+        views = sself.connectionViewsByObjectID.objectEnumerator;
+        for (UIView *view in views) {
+            [sself.contentView bringSubviewToFront:view];
+        }
+    };
+    
+    [self addViewControllers: viewControllers
+                   cacheData: hasCache? cacheData : nil
+     queryVisualizationModel: queryVisualizationModel
+                    animated: animated
+                  completion: completion];
+}
 
+- (void)addViewControllers:(NSArray <MADQueryTableViewController *> *)viewControllers
+                 cacheData:(MADHierarchicalDisplayModel *)cacheData
+   queryVisualizationModel:(MADQueryVisualizationModel *)queryVisualizationModel
+                  animated:(BOOL)animated
+                completion:(void(^)(void))completion {
+    for (MADQueryTableViewController *viewController in viewControllers) {
         
         int64_t tableID = viewController.identifier;
-
-        MADHierarchicalChildViewDefination *tableDef;
-        tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableID] : nil;
         
-        CGPoint center = hasCache ? tableDef.center : self.contentView.center;
+        MADHierarchicalChildViewDefination *tableDef;
+        tableDef = cacheData != nil ? [cacheData tableDefinationForObjectID:tableID] : nil;
+        
+        CGPoint center = cacheData != nil ? tableDef.center : self.contentView.center;
         NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
         constraints = [self constraints:viewController center:center];
         
@@ -794,7 +818,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
         
         [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
-
+        
         [viewController.view addGestureRecognizer:panGesture];
         [viewController willMoveToParentViewController:self];
         
@@ -802,50 +826,35 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         
         [viewController beginAppearanceTransition:YES animated:YES];
         
+        viewController.view.bounds = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                viewController.preferredContentSize.width,
+                                                viewController.preferredContentSize.height);
         viewController.view.center = center;
         viewController.view.alpha = animated ? 0.00000f : 1.0000f;
         [self.contentView addSubview: viewController.view];
         [self.contentView addConstraints: constraints.allValues];
 
-        void(^completion)(void) = ^() {
-            //Layout Query View if Related to Table
-            typeof(self) sself = wself;
-            MADModelDocument *modelDocument = sself.document.documentModel;
-            MADModelQuery *modelQuery = modelDocument.firstQuery;
-            NSEnumerator <MADModelQueryLink *> *queryLinks;
-            queryLinks = modelQuery.links.objectEnumerator;
-            
-            MADModelQueryLink *link;
-            for (link in queryLinks) {
-                if (link.leftFieldIdentifier.tableID == tableID ||
-                    link.rightFieldIdentifier.tableID == tableID) {
-                    [sself layoutQueryLinkViewControllerWithModelObject:link];
-                }
-            }
-            
-            NSEnumerator <MADConnectorView *> *views;
-            UIView *view;
-            views = sself.connectionViewsByObjectID.objectEnumerator;
-            for (view in views) {
-                [sself.contentView bringSubviewToFront:view];
-            }
-        };
-
-        if (animated) {
-            [UIView animateWithDuration:0.5000f animations: ^{
-                [viewController.view setAlpha:1.0000f];
-            } completion:^(BOOL finished) {
-                [viewController endAppearanceTransition];
-                [viewController didMoveToParentViewController:self];
-                completion();
-            }];
-        } else {
+        if (!animated) {
             [viewController endAppearanceTransition];
             [viewController didMoveToParentViewController:self];
-            completion();
         }
-                
     }
+
+    if (!animated) return completion();
+    
+    typeof(self) __weak weakself = self;
+    [UIView animateWithDuration:0.5000f animations: ^{
+        for (MADQueryTableViewController *viewController in viewControllers) {
+            [viewController.view setAlpha:1.0000f];
+        }
+    } completion:^(BOOL finished) {
+        for (MADQueryTableViewController *viewController in viewControllers) {
+            [viewController endAppearanceTransition];
+            [viewController didMoveToParentViewController:weakself];
+        }
+        completion();
+    }];
+
 }
 
 - (void)addViewController:(MADHierarchicalChildController *)viewController
@@ -895,65 +904,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     }
 }
 
-/*- (void)addQueryTables:(MADQueryVisualizationModel *)queryVisualizationModel
-              animated:(BOOL)animated
-            completion:(void(^)(void))completion {
-    
-    BOOL topLevel;
-    MTVertex *tableIdVertext;
-    NSNumber *objectID;
-    MTLinkedList *topologicallySortedTables = queryVisualizationModel.topologicallySortedTables;
-    MADHierarchicalChildViewDefination *tableDef;
-    for (MTPair *pair in topologicallySortedTables) {
-        
-        tableIdVertext = pair.former;
-        
-        if (tableIdVertext.object != nil) {
-            
-            objectID = ((NSNumber *)tableIdVertext.object).copy;
-            int64_t tableIdentifier = objectID.longLongValue;
-            
-            topLevel = [queryVisualizationModel.startingPoints containsObject:objectID];
-            
-            if (topLevel) [self.rootTables addObject: objectID];
-            
-            tableDef = hasCache ? [cacheData tableDefinationForObjectID:tableIdentifier] : nil;
-            
-            void(^completion)(void) = ^() {
-                //Layout Query View if Related to Table
-                typeof(self) sself = wself;
-                MADModelDocument *modelDocument = sself.document.documentModel;
-                MADModelQuery *modelQuery;
-                modelQuery = modelDocument.databases.firstObject.queries.firstObject;
-                NSEnumerator <MADModelQueryLink *> *queryLinks;
-                MADModelQueryLink *link;
-                queryLinks = modelQuery.links.objectEnumerator;
-                for (link in queryLinks) {
-                    if (link.leftFieldIdentifier.tableID == tableIdentifier ||
-                        link.rightFieldIdentifier.tableID == tableIdentifier) {
-                        [sself layoutQueryLinkViewControllerWithModelObject:link];
-                    }
-                }
-                
-                NSEnumerator <MADConnectorView *> *views;
-                UIView *view;
-                views = sself.connectionViewsByObjectID.objectEnumerator;
-                for (view in views) {
-                    [sself.contentView bringSubviewToFront:view];
-                }
-                
-            };
-            
-            [self addQueryTableViewController: tableIdentifier
-                                       center: hasCache ? tableDef.center : self.contentView.center
-                                         root: topLevel
-                                     animated: animated
-                                   completion: completion];
-        }
-    }
-    
-}*/
-
 #pragma mark Add Query Visualization Items
 
 - (void)insertQueryTable:(NSNotification *)note {
@@ -981,32 +931,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
     }
 }
-
-/*- (void)handleInsertQueryLink:(RptqQueryLinks *)insertedLink {
-    //if (![note.name isEqualToString:MADNotificationQueryLinkInsert]) return;
-    
-    MADHierarchicalChildController *leftTVC, *rightTVC;
-    
-    //MADModelQueryLink *insertedLink;
-    NSEnumerator <MADModelQueryLink *> *insertedLinks;
-    //insertedLinks = note.userInfo.objectEnumerator;
-    NSNumber *leftQueryTableID, *rightQueryTableID;
-    //for (insertedLink in insertedLinks) {
-        
-        leftQueryTableID = @(insertedLink.hasLeftField.inQueryTable.identifier);
-        leftTVC = self.controllersByObjectID[leftQueryTableID];
-        
-        rightQueryTableID = @(insertedLink.hasRightField.inQueryTable.identifier);
-        rightTVC = self.controllersByObjectID[rightQueryTableID];
-        
-        [self.rootTables removeObject: leftQueryTableID];
-        
-        if ([leftTVC isEqual:rightTVC] == NO) {
-            [self addLinkViewControllerForQueryLinkModel: insertedLink
-                                                animated: YES];
-        }
-    //}
-}*/
 
 - (void)handleInsertQueryLink:(NSNotification *)note {
     if (![note.name isEqualToString:MADNotificationQueryLinkInsert]) return;
@@ -1157,12 +1081,12 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         }
     };
     
-    CGRect(^mainFrame)(CGPoint, CGPoint, CGFloat, CGFloat) =
-    ^ CGRect(CGPoint acl, CGPoint acr, CGFloat insete, CGFloat insets) {
+    CGRect(^mainFrame)(CGPoint, CGPoint, CGFloat, CGFloat, CGFloat) =
+    ^ CGRect(CGPoint acl, CGPoint acr, CGFloat insete, CGFloat insets, CGFloat insetsY) {
         return CGRectMake(acl.x - insets - insete,
-                          acl.y - insets,
+                          acl.y - insets - insetsY,
                           acr.x - acl.x + (insets * 2) + (insete * 2),
-                          acr.y - acl.y + (insets * 2));
+                          acr.y - acl.y + (insets * 2) + insetsY * 2);
     };
     
     BOOL(^updateAnchorPoints)(CGPoint *, CGFloat, CGPoint *, CGFloat, CGFloat *extraInset) =
@@ -1199,43 +1123,31 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     MADHierarchicalChildController *leftTableViewController, *rightTableViewController;
     
     MADocument *document = self.document;
-    MADModelQuery *firstQuery = document.documentModel.firstQuery;
-    
-    NSNumber *keyRightQueryTableID = @(link.rightFieldIdentifier.tableID);
-    NSNumber *keyLeftQueryTableID = @(link.leftFieldIdentifier.tableID);
-    NSNumber *keyRightSchemaTable, *keyLeftSchemaTable;
-
-    NSNumber *keyRightFieldID = @(link.rightFieldIdentifier.fieldID);
-    NSNumber *keyLeftFieldID = @(link.leftFieldIdentifier.fieldID);
-
     MADModelDatabase *firstDatabase = document.documentModel.firstDatabase;
-    MADModelQueryTable *rightQueryTable, *leftQueryTable;
+    MADModelQuery *firstQuery = firstDatabase.firstQuery;
     MADModelTable *rightTable, *leftTable;
     MADModelField *rightField, *leftField;
+    MADModelQueryTable *rightQueryTable, *leftQueryTable;
+    MADModelQueryField *leftQueryField, *rightQueryField;
     
-    rightQueryTable = [firstQuery.tables objectForKey:keyRightQueryTableID];
-    leftQueryTable = [firstQuery.tables objectForKey:keyLeftQueryTableID];
+    rightQueryTable = firstQuery.tables[link.tableIDRight];
+    leftQueryTable = firstQuery.tables[link.tableIDLeft];
     
-    keyRightSchemaTable = @(rightQueryTable.schemaTable);
-    keyLeftSchemaTable = @(leftQueryTable.schemaTable);
+    rightTable = firstDatabase.tableDictionary[rightQueryTable.schemaTableID];
+    leftTable = firstDatabase.tableDictionary[leftQueryTable.schemaTableID];
     
-    rightTable = [firstDatabase.tableDictionary objectForKey:keyRightSchemaTable];
-    leftTable = [firstDatabase.tableDictionary objectForKey:keyLeftSchemaTable];
+    leftQueryField = leftQueryTable.queryFields[link.fieldIDLeft];
+    rightQueryField = rightQueryTable.queryFields[link.fieldIDRight];
     
-    MADModelQueryField *leftQueryField = [leftQueryTable.queryFields objectForKey:keyLeftFieldID];
-    MADModelQueryField *rightQueryField = [rightQueryTable.queryFields objectForKey:keyRightFieldID];
+    rightField = rightTable.fields[rightQueryField.schemaFieldID];
+    leftField = leftTable.fields[leftQueryField.schemaFieldID];
     
-    NSNumber *leftSchemaFieldID = @(leftQueryField.schemaFieldIdentifier);
-    NSNumber *rightSchemaFieldID = @(rightQueryField.schemaFieldIdentifier);
-    rightField = [rightTable.fields objectForKey:rightSchemaFieldID];
-    leftField = [leftTable.fields objectForKey:leftSchemaFieldID];
-    
-    leftTableViewController = self.controllersByObjectID[keyLeftQueryTableID];
+    leftTableViewController = self.controllersByObjectID[link.tableIDLeft];
 
     leftCellFrameInTable = [leftTableViewController rectForFieldID: leftField.identifier
                                                             inView: leftTableViewController.view];
     
-    rightTableViewController = self.controllersByObjectID[keyRightQueryTableID];
+    rightTableViewController = self.controllersByObjectID[link.tableIDRight];
     rightCellFrameInTable = [rightTableViewController rectForFieldID: rightField.identifier
                                                               inView: rightTableViewController.view];
 
@@ -1253,7 +1165,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     repositionRect(&rightCellFrameInTable, &(rightTableViewControllerFrame), rightTableBottomY);
     
     convertedRect = [self.contentView convertRect: rightCellFrameInTable
-                                                    fromView: rightTableViewController.view];
+                                         fromView: rightTableViewController.view];
     rightCellAnchorPoint = CGCenterOfRect(convertedRect);
     translatePoint(&rightCellAnchorPoint, -padding, 0.0000f);
 
@@ -1269,7 +1181,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     connectorView.leftViewIsInital = direction == MADDirectionLeft;
     connectorView.frame = mainFrame(leftCellAnchorPoint,
                                     rightCellAnchorPoint,
-                                    extraInset, 10.0000f);
+                                    extraInset, 0.0000f, 10.0000f);
     [connectorView setNeedsDisplay];
 }
 
@@ -1287,13 +1199,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (NSDictionary <NSString *, NSLayoutConstraint *> *)constraints:(MADHierarchicalChildController *)viewController
                                                           center:(CGPoint)center {
-    NSLayoutConstraint *width, *height;
+    NSLayoutConstraint *width, *height, *centerX, *centerY;
     width = [MADLayoutConstraint newLayoutConstraint: viewController.view
-                                               width: MADSchemaViewDefaultWidth];
+                                               width: viewController.preferredContentSize.width];
     height = [MADLayoutConstraint newLayoutConstraint: viewController.view
-                                               height: MADSchemaViewDefaultHeight];
-    
-    NSLayoutConstraint *centerX, *centerY;
+                                               height: viewController.preferredContentSize.height];
     centerX = [MADLayoutConstraint newLayoutConstraint: viewController.view
                                                 toView: self.contentView
                                                centerX: center.x];
@@ -1327,13 +1237,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     connectorView.identifier = link.identifier;
     connectorView.autoresizesSubviews = NO;
     connectorView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.connectionViewsByObjectID[link.objectID] = connectorView;
-    
-    if (!animated) {
-        [self layoutQueryLinkViewControllerWithModelObject:link];
-    }
-    
+
     CGRect desiredFrame = connectorView.frame;
     CGPoint desiredCenter = connectorView.center;
     CGAffineTransform desiredTransform = connectorView.transform;
@@ -1342,6 +1246,12 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     connectorView.center = desiredCenter;
     if (animated) {
         connectorView.transform = animated ? CGAffineTransformIdentity : MADAffineTransformSwing();
+    }
+    
+    self.connectionViewsByObjectID[link.objectID] = connectorView;
+    
+    if (!animated) {
+        [self layoutQueryLinkViewControllerWithModelObject:link];
     }
     
     [self.contentView addSubview:connectorView];
@@ -1358,11 +1268,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                               delay: 0.0000f
                             options: UIViewAnimationOptionCurveEaseInOut
                          animations: animateTwo
-                         completion: ^(BOOL finished) {
-                         
-                         }];
-    } else {
-        animateTwo();
+                         completion: ^(BOOL finished) { }];
     }
     
     if (animated) {
