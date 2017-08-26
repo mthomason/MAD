@@ -1101,7 +1101,7 @@ static NSString * const DialogSpace = @"--";
     NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                                         boldFont, NSFontAttributeName, nil];
 
-    NSMutableAttributedString *localizedAttributedMessage;
+    id localizedAttributedMessage;
     NSString *message = NSLocalizedString(@"Font size", "Font size");
     localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: message
                                                                         attributes: attributes];

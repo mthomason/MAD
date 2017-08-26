@@ -9,6 +9,10 @@
 #ifndef MADOperationPromptErrorProtocol_h
 #define MADOperationPromptErrorProtocol_h
 
+#import <Foundation/NSObject.h>
+
+@class NSError;
+
 @protocol MADOperationPromptErrorProtocol <NSObject>
 
     - (NSError *)error;

@@ -95,12 +95,12 @@ static const CGFloat PaddingSize = 5.00000f;
 }
 
 - (void)toggleOpenWithUserAction:(BOOL)userAction {
-    
-    (self.disclosureButton).selected = !self.disclosureButton.isSelected;
+    UIButton *disclosureButton = self.disclosureButton;
+    (disclosureButton).selected = !disclosureButton.isSelected;
     
     if (userAction) {
         id <MADSectionHeaderViewDelegate> superDelegate = self.delegate;
-        if ((self.disclosureButton).selected) {
+        if ((disclosureButton).selected) {
             if ([superDelegate respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
                 [superDelegate sectionHeaderView:self sectionOpened:self.section];
             }

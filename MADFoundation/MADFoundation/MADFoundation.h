@@ -15,20 +15,19 @@ FOUNDATION_EXPORT double MADFoundationVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
 
-#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADOperationPromptErrorProtocol.h>
+#import <MADFoundation/MADOperationResultStringProtocol.h>
 #import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADAssert.h>
 #import <MADFoundation/MADDataType.h>
-#import <MADFoundation/NSData+Comparson.h>
-#import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADFilename.h>
 #import <MADFoundation/MADDataTableType.h>
-#import <MADFoundation/NSString+Common.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationCondition.h>
@@ -40,5 +39,12 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/NSOperation+Advanced.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationTestResults.h>
+#import <MADFoundation/MADOperationBooleanAnd.h>
+#import <MADFoundation/MADOperationConditionHasResultString.h>
+#import <MADFoundation/MADOperationConditionMissingResultString.h>
+#import <MADFoundation/MADOperationConditionTestConnectionSuccess.h>
+#import <MADFoundation/NSData+Comparson.h>
+#import <MADFoundation/UIScreen+Properties.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
+#import <MADFoundation/NSString+Common.h>

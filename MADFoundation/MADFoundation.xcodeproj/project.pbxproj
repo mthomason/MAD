@@ -11,7 +11,6 @@
 		4C21E3FD1CFE2B7B008E7B48 /* MADAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C21E3FC1CFE2B7B008E7B48 /* MADAssert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7C00D81EE2A46C00E7A5B1 /* NSString+Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7C00D61EE2A46C00E7A5B1 /* NSString+Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7C00D91EE2A46C00E7A5B1 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C00D71EE2A46C00E7A5B1 /* NSString+Common.m */; };
-		4C8278B71DB73D4B005313F5 /* MADLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8278B61DB73D4B005313F5 /* MADLog.m */; };
 		4C8278B91DB74E1D005313F5 /* MADLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278B81DB73D61005313F5 /* MADLog.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C93729D1BACFC9200D6BD62 /* MADFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372A51BACFC9200D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */; };
@@ -524,7 +523,6 @@
 				4CB98D8B1F43D4BA0043B583 /* MADOperationConditionResult.m in Sources */,
 				4CB98D951F43D5310043B583 /* NSOperation+Advanced.m in Sources */,
 				4CB98E111F47BA720043B583 /* MADOperationConditionHasResultStringResult.m in Sources */,
-				4C8278B71DB73D4B005313F5 /* MADLog.m in Sources */,
 				4CB98E131F47BA720043B583 /* MADOperationConditionHasResultString.m in Sources */,
 				4CB98E151F47BA720043B583 /* MADOperationConditionMissingResultString.m in Sources */,
 			);

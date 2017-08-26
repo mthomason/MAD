@@ -26,8 +26,6 @@
 
 #import "MTDatabaseSqlite3.h"
 
-#import <MADFoundation/MADLog.h>
-
 @interface MADDataTableObjectEnumerator ()
 
     @property (nonatomic, strong) NSDictionary *columns;
@@ -41,11 +39,6 @@
 @implementation MADDataTableObjectEnumerator {
     sqlite3_stmt *_statement;
     BOOL _empty;
-}
-
-void sqliteCallback(void *foo, const char* statement);
-void sqliteCallback(void *foo, const char* statement) {
-    MADLogDebug(@"=> %s", statement);
 }
 
 - (void)dealloc {

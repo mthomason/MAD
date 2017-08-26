@@ -39,7 +39,8 @@
     return self;
 }
 
-- (void)addRow:(MADReportSectionRowsRepresentation *)row error:(NSError * __autoreleasing *)error {
+- (void)addRow:(nonnull MADReportSectionRowsRepresentation *)row
+         error:(NSError * __nullable __autoreleasing * __nullable)error {
     @try {
         [_rows addObject:row];
     } @catch (NSException *exception) {
