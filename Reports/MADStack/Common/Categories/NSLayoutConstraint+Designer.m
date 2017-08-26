@@ -58,8 +58,8 @@
     return constraints;
 }
 
-+ (instancetype)newLayoutConstraintToolBoxView:(id)toolbox height:(CGFloat)height {
-    id constraint = [NSLayoutConstraint constraintWithItem: toolbox
++ (instancetype)newLayoutConstraint:(id)view height:(CGFloat)height {
+    id constraint = [NSLayoutConstraint constraintWithItem: view
                                                  attribute: NSLayoutAttributeHeight
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: nil
@@ -126,14 +126,53 @@
     return constraint;
 }
 
-+ (instancetype)newLayoutConstraintView:(UIView *)view height:(CGFloat)height {
-    id constraint = [NSLayoutConstraint constraintWithItem: view
-                                                 attribute: NSLayoutAttributeHeight
-                                                 relatedBy: NSLayoutRelationGreaterThanOrEqual
-                                                    toItem: nil
-                                                 attribute: NSLayoutAttributeNotAnAttribute
-                                                multiplier: 1.0000f
-                                                  constant: height];
++ (instancetype)newLayoutConstraintView:(id)view height:(CGFloat)height {
+    id constraint;
+    constraint = [self constraintWithItem: view
+                                attribute: NSLayoutAttributeHeight
+                                relatedBy: NSLayoutRelationGreaterThanOrEqual
+                                   toItem: nil
+                                attribute: NSLayoutAttributeNotAnAttribute
+                               multiplier: 1.0000f
+                                 constant: height];
+    ((NSLayoutConstraint *)constraint).priority = UILayoutPriorityDefaultHigh;
+    return constraint;
+}
+
++ (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerX:(CGFloat)centerX {
+    id constraint;
+    constraint = [self constraintWithItem: view
+                                attribute: NSLayoutAttributeCenterX
+                                relatedBy: NSLayoutRelationEqual
+                                   toItem: view2
+                                attribute: NSLayoutAttributeLeftMargin
+                               multiplier: 1.0000f
+                                 constant: centerX];
+    return constraint;
+}
+
++ (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerY:(CGFloat)centerY {
+    id constraint;
+    constraint = [self constraintWithItem: view
+                                attribute: NSLayoutAttributeCenterY
+                                relatedBy: NSLayoutRelationEqual
+                                   toItem: view2
+                                attribute: NSLayoutAttributeTopMargin
+                               multiplier: 1.0000f
+                                 constant: centerY];
+    return constraint;
+}
+
++ (instancetype)newLayoutConstraint:(id)view width:(CGFloat)width {
+    id constraint;
+    constraint = [self constraintWithItem: view
+                                attribute: NSLayoutAttributeWidth
+                                relatedBy: NSLayoutRelationEqual
+                                   toItem: nil
+                                attribute: NSLayoutAttributeNotAnAttribute
+                               multiplier: 1.0000f
+                                 constant: width];
+    ((NSLayoutConstraint *)constraint).priority = UILayoutPriorityDefaultHigh;
     return constraint;
 }
 

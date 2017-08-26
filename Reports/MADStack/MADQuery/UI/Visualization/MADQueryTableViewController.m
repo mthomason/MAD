@@ -76,11 +76,18 @@
 
 static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQueryTableViewController";
 
-+ (instancetype)newQueryTableViewController {
++ (instancetype)newQueryTableViewController:(int64_t)identifier
+                                       root:(BOOL)root
+                                   delegate:(id <MADQueryVisualizationSchemaDelegate>)delegate
+                                   document:(MADocument *)document {
     UIStoryboard *storyboard;
     id controller;
     storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierQueryTableViewController];
+    ((MADQueryTableViewController *)controller).identifier = identifier;
+    ((MADQueryTableViewController *)controller).delegate = delegate;
+    ((MADQueryTableViewController *)controller).document = document;
+    ((MADQueryTableViewController *)controller).root = root;
     return controller;
 }
 

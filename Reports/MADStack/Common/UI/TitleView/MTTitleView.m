@@ -57,11 +57,13 @@ static inline CGRect LabelRect(CGRect bounds) {
     switch (style) {
         case MADTitleViewQueryTableRoot:
             self.label.textColor = [UIColor whiteColor];
-            self.label.font = [UIFont monospacedDigitSystemFontOfSize:12.0f weight:UIFontWeightSemibold];
+            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0f
+                                                               weight: UIFontWeightSemibold];
             break;
         case MADTitleViewQueryTableChild:
             self.label.textColor = [MADColorEverydayApps newColorBlue];
-            self.label.font = [UIFont monospacedDigitSystemFontOfSize:11.0f weight:UIFontWeightMedium];
+            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0f
+                                                               weight: UIFontWeightMedium];
             break;
             
         default:

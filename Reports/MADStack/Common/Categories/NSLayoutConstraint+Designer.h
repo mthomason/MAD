@@ -37,7 +37,6 @@
     + (instancetype)newLayoutConstraintView:(UIView *)view height:(CGFloat)height;
     + (instancetype)newLayoutConstraintViewBottom:(id)item container:(id)toItem;
     + (instancetype)newLayoutConstraintToolBoxBottom:(id)item container:(id)toItem;
-    + (instancetype)newLayoutConstraintToolBoxView:(id)toolbox height:(CGFloat)height;
     + (instancetype)newLayoutConstraintToolboxHeightHidden:(id)item;
     + (instancetype)newLayoutConstraintView:(id)view containerLeft:(id)container;
     + (instancetype)newLayoutConstraintView:(UIView *)view containerRight:(id)container;
@@ -45,6 +44,11 @@
     + (instancetype)newLayoutConstraintScroller:(id)scroller bottom:(id)bottom;
     + (instancetype)newLayoutConstraintToolbarHeightHidden:(id)toolbar;
     + (instancetype)newLayoutConstraintContent:(id)container width:(CGFloat)width;
+
+    + (instancetype)newLayoutConstraint:(id)view height:(CGFloat)height;
+    + (instancetype)newLayoutConstraint:(id)view width:(CGFloat)width;
+    + (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerX:(CGFloat)centerX;
+    + (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerY:(CGFloat)centerY;
 
 @end
 
