@@ -40,6 +40,7 @@
     - (void)insertQueryTableID:(NSNumber *)queryTableID;
     - (void)insertQueryTableID:(NSNumber *)queryTableID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (void)insertQueryLinkID:(NSNumber *)queryLinkID;
+    - (NSSet <NSNumber /*MADModelQueryLink*/ *> *)linksForQueryTable:(int64_t)queryTableID;
 
 @end
 

@@ -637,15 +637,16 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     [MADGestureRecognizerAnchorPoint adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
-    UIWindow *window = [UIApplication sharedApplication].windows[0];
-    NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-    NSNumber *tableIdentifier = @(tableID);
-    constraints = [self.constraints objectForKey: tableIdentifier];
+    UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
     CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
                                         toView: self.scrollView.contentView];
+    NSNumber *tableIdentifier = @(tableID);
+    NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
+    constraints = [self.constraints objectForKey: tableIdentifier];
     constraints[keyCenterX].constant = pointInView.x;
     constraints[keyCenterY].constant = pointInView.y;
 
+    
     [self didMoveFieldRect: self.controllersByObjectID[tableIdentifier]
                   animated: NO];
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -656,6 +657,21 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
             tableDefination.center = pointInView;
         }
         [self archiveCache];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *gestureView = gestureRecognizer.view;
+        if (gestureView != nil) {
+            [self.scrollView.contentView bringSubviewToFront:gestureView];
+            NSEnumerator <MADConnectorView *> *views;
+            MADConnectorView *view;
+            NSSet <NSNumber /*MADModelQueryLink*/ *> *queryLinks;
+            queryLinks = [self.document.documentModel.firstQuery linksForQueryTable:tableID];
+            views = self.connectionViewsByObjectID.objectEnumerator;
+            for (view in views) {
+                if ([queryLinks containsObject:view.key]) {
+                    [self.scrollView.contentView bringSubviewToFront:view];
+                }
+            }
+        }
     }
 }
 

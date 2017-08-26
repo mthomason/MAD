@@ -291,6 +291,16 @@
     }
 }
 
+- (NSSet <NSNumber /*MADModelQueryLink*/ *> *)linksForQueryTable:(int64_t)queryTableID {
+    NSMutableSet *results = [[NSMutableSet alloc] initWithCapacity:self.links.count];
+    [self.links enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, MADModelQueryLink * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([obj isAdjacentToQueryTable:queryTableID]) {
+            [results addObject:obj.objectID];
+        }
+    }];
+    return results;
+}
+
 - (void)insertLinksFromFetchRequestResults:(NSArray <NSDictionary *> *)results {
     if (!results.count) return;
 

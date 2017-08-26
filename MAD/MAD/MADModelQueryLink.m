@@ -161,6 +161,11 @@
     return self;
 }
 
+- (BOOL)isAdjacentToQueryTable:(int64_t)queryTableID {
+    return _leftFieldIdentifier.tableID == queryTableID ||
+            _rightFieldIdentifier.tableID == queryTableID;
+}
+
 - (NSSet <NSNumber *> *)tables {
     NSNumber *tableLeft = @(_leftFieldIdentifier.tableID),
              *tableRight = @(_rightFieldIdentifier.tableID);
