@@ -781,6 +781,26 @@ BOOL storeEnabled() {
 }
 
 #pragma mark -
+#pragma mark UIPopoverPresentationControllerDelegate
+
+- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController {
+    
+}
+
+- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    return YES;
+}
+
+- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    [(MADTabBarController *)self.tabBarController enableTabBarItems];
+}
+
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController
+          willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView  * __nonnull * __nonnull)view {
+    
+}
+
+#pragma mark -
 #pragma mark MTQueryBuilderPredicateFormatDelegate
 
 - (void)viewController:(MADQueryPredicateFormatController *)controller
@@ -820,7 +840,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
           andSortOrder: (MADSortOrder)sortOrder {
     
     [self dismissViewController];
-    
     [self.document addQueryGroupWithQueryField: queryFieldID
                                   andSortOrder: sortOrder];
 }
