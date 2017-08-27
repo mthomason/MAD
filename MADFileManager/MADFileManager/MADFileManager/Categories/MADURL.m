@@ -71,25 +71,19 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (instancetype)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL {
     
     NSInteger ctr = 0;
-    NSURL *result;
-    MADURL *unqiueURL;
+    id unqiueURL;
     NSString *pathExtension, *name, *path, *maybe;
     
     pathExtension = origionalURL.pathExtension.copy;
     name = origionalURL.lastPathComponent.stringByDeletingPathExtension.copy;
-    unqiueURL = origionalURL.copy;
-    path = unqiueURL.path.copy;
     
     do {
         maybe = [name stringByAppendingFormat:@" %ld", (long)ctr];
         [maybe stringByAppendingPathExtension: pathExtension];
         
-        result = [origionalURL.baseURL URLByAppendingPathComponent:maybe isDirectory:NO];
-        unqiueURL = result.copy;
-        
+        unqiueURL = [origionalURL.baseURL URLByAppendingPathComponent:maybe isDirectory:NO];
+        path = ((NSURL *)unqiueURL).path.copy;
         ctr++;
-        
-        path = unqiueURL.path.copy;
     } while ([[NSFileManager defaultManager] fileExistsAtPath:path]);
     
     return unqiueURL;

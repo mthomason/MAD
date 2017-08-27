@@ -50,10 +50,10 @@
         CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberDoubleType, &_height);
         
         number = object[keyPathNumberOfRows];
-        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt32Type, &_numberOfRows);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_numberOfRows);
         
         number = object[keyPathType];
-        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_type);
+        CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_type);
         
         number = object[keyPathVisibility];
         _visibility = number.boolValue;
