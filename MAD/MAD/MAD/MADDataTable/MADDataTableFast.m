@@ -371,7 +371,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     BOOL createTable = self.columnKeys.count == 0;
     char buf[22];
     buf[0] = 'c';
-    ultoa(column.identifier.hash, (buf+1));
+    //ultoa(column.identifier.hash, (buf+1));
+    ultoa(column.fieldName.hash, (buf+1));
     char *ptr = buf;
     NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 

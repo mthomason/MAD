@@ -63,7 +63,8 @@
             uniqueValue = uniqueObj.boolValue;
         }
         
-        NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName columnName:columnName
+        NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName
+                                                        columnName:columnName
                                                           datatype:column.type
                                                       isPrimaryKey:column.isPrimaryKey
                                                        createTable:createTable.boolValue ?
@@ -82,7 +83,8 @@
                  uniqueColumnHack: (BOOL)uniqueColumnHack
                    columnAffinity: (NSString *)columnAffinity {
     if (self = [super init]) {
-        NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName columnName:columnName
+        NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName
+                                                        columnName:columnName
                                                           datatype:column.type
                                                       isPrimaryKey:column.isPrimaryKey
                                                        createTable:createTable

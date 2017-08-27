@@ -146,15 +146,21 @@
                 NSString *table = [MysqlFetch tableForField: myStatement->fields[x]];
                 [sourceTables addObject:table];
                 
-                NSString *fieldName = useExtendedNames || sourceTables.count > 1 ? [MysqlFetch fieldNameForField:myStatement->fields[x] andTable:table] :
-                [MysqlFetch fieldNameForField:myStatement->fields[x]];
+                NSString *fieldName;
+                fieldName = useExtendedNames || sourceTables.count > 1 ?
+                                [MysqlFetch fieldNameForField:myStatement->fields[x] andTable:table] :
+                                [MysqlFetch fieldNameForField:myStatement->fields[x]];
                 [fieldNameCollector addObject:fieldName];
                 
-                MysqlFetchField *field = [[MysqlFetchField alloc] initWithField:myStatement->fields[x] fieldName:fieldName];
+                NSLog(@"Fiend name: %@", fieldName);
+                
+                MysqlFetchField *field = [[MysqlFetchField alloc] initWithField: myStatement->fields[x]
+                                                                      fieldName: fieldName];
                 [fieldCollector addObject:field];
                 
-                MADDataColumn *dataColumn = [MysqlFetch dataColumnForFieldName: fieldName
-                                                                    mySqlField: myStatement->fields[x]];
+                MADDataColumn *dataColumn;
+                dataColumn = [MysqlFetch dataColumnForFieldName: fieldName
+                                                     mySqlField: myStatement->fields[x]];
                 [*dataTable addColumn:dataColumn];
                 
                 bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
