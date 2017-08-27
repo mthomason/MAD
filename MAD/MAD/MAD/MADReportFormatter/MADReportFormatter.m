@@ -308,7 +308,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 }
 
 - (CGFloat)heightForSectionWithObjectIdentifier:(NSNumber *)objectID {
-    NSNumber * __autoreleasing sectionHeight = self.sections.heightForSectionID[objectID];
+    NSNumber *sectionHeight = self.sections.heightForSectionID[objectID];
     return sectionHeight.floatValue;
 }
 

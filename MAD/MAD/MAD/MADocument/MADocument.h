@@ -50,9 +50,9 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
     @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
     @property (readonly, nonatomic, strong)     MTPaper *paper;
-    @property (readonly, nonatomic) NSUInteger numberOfPages;
-    @property (readonly, nonatomic) NSUInteger numberOfResults;
-    @property (readonly, nonatomic) CGSize paperSize;
+    @property (readonly, nonatomic)             NSUInteger numberOfPages;
+    @property (readonly, nonatomic)             NSUInteger numberOfResults;
+    @property (readonly, nonatomic)             CGSize paperSize;
 
     //Layout
 
