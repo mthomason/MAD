@@ -1070,6 +1070,7 @@
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */; };
 		4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */; };
+		4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */; };
 		4CF6AFC01CAFB55C00D3AD11 /* MADOperationRefreshReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */; };
 		4CF6AFC31CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC21CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m */; };
 		4CF6AFC61CAFC14200D3AD11 /* MADOperationRefreshInitialize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC51CAFC14200D3AD11 /* MADOperationRefreshInitialize.m */; };
@@ -2406,6 +2407,8 @@
 		4CF46DCC1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADManagedObjectCollectionViewCell.h; path = MADStack/MADDesigner/UI/MADManagedObjectCollectionViewCell.h; sourceTree = "<group>"; };
 		4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADManagedObjectCollectionViewCell.m; path = MADStack/MADDesigner/UI/MADManagedObjectCollectionViewCell.m; sourceTree = "<group>"; };
 		4CF46DCF1CF2EDD400D93406 /* MADManagedObjectViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADManagedObjectViewProtocol.h; path = ../../MADDesigner/UI/MADManagedObjectViewProtocol.h; sourceTree = "<group>"; };
+		4CF6AA241F5269790061B0C6 /* MADExplorerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerAnimatedTransitioning.h; sourceTree = "<group>"; };
+		4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExplorerAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4CF6AFBE1CAFB55C00D3AD11 /* MADOperationRefreshReload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshReload.h; sourceTree = "<group>"; };
 		4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefreshReload.m; sourceTree = "<group>"; };
 		4CF6AFC11CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshInitalizeMainDataTable.h; sourceTree = "<group>"; };
@@ -3264,6 +3267,8 @@
 				4C401ED51BAE5E9000BAE5FC /* MADStoreViewController.m */,
 				4C401ED61BAE5E9000BAE5FC /* MTLicensingViewController.h */,
 				4C401ED71BAE5E9000BAE5FC /* MTLicensingViewController.m */,
+				4CF6AA241F5269790061B0C6 /* MADExplorerAnimatedTransitioning.h */,
+				4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -6167,6 +6172,7 @@
 				4C4020401BAE92F200BAE5FC /* NSAttributedString+Logo.m in Sources */,
 				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
+				4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */,
 				4C6D2EF51E6DE4F6008EFE5D /* MADSortOrderNavigationItem.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
 				4CF304101D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m in Sources */,

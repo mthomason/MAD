@@ -89,6 +89,8 @@
 
 #import "MADSearchBar.h"
 
+#import "MADExplorerAnimatedTransitioning.h"
+
 #import "AppDelegate.h"
 
 const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
@@ -1433,11 +1435,24 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     MADNavigationController *licensing;
     licensing = [MADNavigationController newNavigationController: MADNavigationControllerTypeLicensing];
+    
+    //licensing.modalPresentationStyle = UIModalPresentationFormSheet;
+    //licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    //MADExplorerAnimatedTransitioningDelegate *transitioningDelegate;
+    //transitioningDelegate = [[MADExplorerAnimatedTransitioningDelegate alloc] init];
+    
+    licensing.providesPresentationContextTransitionStyle = YES;
+    licensing.definesPresentationContext = YES;
     licensing.modalPresentationStyle = UIModalPresentationFormSheet;
     licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     licensing.presentationController.delegate = self;
     ((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
+    //licensing.transitioningDelegate = transitioningDelegate;
     self.fileExplorerViewDelegate.showingPopover = YES;
+    
+    //self.navigationController.transitioningDelegate = transitioningDelegate;
+  //  self.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [self showViewController:licensing animated: YES];
 }
 

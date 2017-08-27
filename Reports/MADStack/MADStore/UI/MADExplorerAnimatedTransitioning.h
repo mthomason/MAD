@@ -6,8 +6,20 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#ifndef MAD_Designer_MADExplorerAnimatedTransitioning_h
+#define MAD_Designer_MADExplorerAnimatedTransitioning_h
 
-@interface MADExplorerAnimatedTransitioning : NSObject
+#import <Foundation/NSObject.h>
+#import <UIKit/UIViewControllerTransitioning.h>
+
+@interface MADExplorerAnimatedTransitioningDelegate : NSObject
+    <UIViewControllerTransitioningDelegate>
 
 @end
+
+@interface MADExplorerAnimatedTransitioning : NSObject
+    <UIViewControllerAnimatedTransitioning>
+
+@end
+
+#endif

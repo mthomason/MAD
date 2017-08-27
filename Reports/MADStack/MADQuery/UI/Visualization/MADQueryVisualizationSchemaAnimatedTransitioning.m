@@ -16,8 +16,8 @@
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
                                                       presentingViewController:(UIViewController *)presenting
                                                           sourceViewController:(UIViewController *)source {
-    // Provide our Cool presentation controller
-    return [[MADQueryVisualizationSchemaPresentationController alloc] initWithPresentedViewController:presented presentingViewController:presenting];
+    return [[MADQueryVisualizationSchemaPresentationController alloc] initWithPresentedViewController:presented
+                                                                             presentingViewController:presenting];
 }
 
 - (MADQueryVisualizationSchemaAnimatedTransitioning *)animationController {
@@ -30,15 +30,11 @@
                                                                    presentingController:(UIViewController *)presenting
                                                                        sourceController:(UIViewController *)source {
     MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
-//    [animationController setIsPresentation:YES];
-    
     return animationController;
 }
 
 - (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
-//    [animationController setIsPresentation:NO];
-    
     return animationController;
 }
 

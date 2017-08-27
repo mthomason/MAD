@@ -8,8 +8,11 @@
 
 #import "MADStoreViewController.h"
 
+#import <UIKit/UIView.h>
+
 #import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/MADAlertController.h>
+#import <MADCocoaExtensions/UIView+Animations.h>
 
 #import "MTStoreKitController.h"
 #import "MTVerificationController.h"
@@ -56,8 +59,6 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
         priceFormatter = [[NSNumberFormatter alloc] init];
         priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
         self.priceFormatter = priceFormatter;
-        
-        
         self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
 
     }
@@ -75,9 +76,22 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
     self.collectionView.scrollEnabled = YES;
     self.collectionView.scrollsToTop = YES;
     self.collectionView.allowsSelection = YES;
-    
+    //self.collectionView.trans
+    self.collectionView.backgroundColor = [UIColor clearColor];//[[UIColor redColor] colorWithAlphaComponent:.90];
+    self.navigationController.view.backgroundColor = [UIColor clearColor];//[[UIColor greenColor] colorWithAlphaComponent:.70];
+    self.view.backgroundColor = [UIColor clearColor];//[[UIColor purpleColor] colorWithAlphaComponent:.30];
+    self.collectionView.backgroundView = nil;
     ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset =
                                         UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
+    
+    self.collectionView.backgroundColor = [UIColor clearColor];
+    
+    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    visualEffectsView.tintColor = [UIColor redColor];
+    visualEffectsView.frame = self.collectionView.frame;
+    visualEffectsView.autoresizingMask = MADViewAutoresizingFlexable();
+    self.collectionView.backgroundView = visualEffectsView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
