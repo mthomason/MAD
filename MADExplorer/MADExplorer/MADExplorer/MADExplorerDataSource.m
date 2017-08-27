@@ -202,15 +202,16 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
     [updates removeObjectsInArray:inserts];
     [updates removeObjectsInArray:removes];
 
-
-    void (^handleCompletion)(BOOL, NSError *);
-    handleCompletion = ^(BOOL success, NSError *error) { completion(YES, nil); };
     [self.delegate documentManagerDidChangeContent: inserts
                                            removes: removes
                                            updates: updates
-                                        completion: handleCompletion];
+                                        completion: ^(BOOL success, NSError *error) {
+                                            [inserts removeAllObjects],
+                                            [removes removeAllObjects],
+                                            [updates removeAllObjects];
 
-    [inserts removeAllObjects], [removes removeAllObjects], [updates removeAllObjects];
+                                            completion(YES, nil);
+                                        }];
 
 }
 
