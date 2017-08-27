@@ -1015,7 +1015,6 @@
 		4CC982721F4AC32000E0496A /* MADLabelPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */; };
 		4CC982881F50E6E800E0496A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982871F50E6E800E0496A /* MADViewController.m */; };
 		4CC9828B1F50E74600E0496A /* MADStoryboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC9828A1F50E74600E0496A /* MADStoryboard.m */; };
-		4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */; };
 		4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18661DA14A5C0093B166 /* libarchive.a */; };
 		4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18691DA14AC70093B166 /* libmysqlclient.a */; };
 		4CCE186C1DA14AC70093B166 /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186A1DA14AC70093B166 /* libclientlib.a */; };
@@ -6164,7 +6163,6 @@
 				4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */,
-				4CCDB2941E21738400B4232E /* MADNavigationItemTitleView.m in Sources */,
 				4C401F7F1BAE7EB500BAE5FC /* MADRulerView.m in Sources */,
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,

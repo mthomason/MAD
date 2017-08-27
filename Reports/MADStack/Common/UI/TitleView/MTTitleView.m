@@ -9,6 +9,7 @@
 #import "MTTitleView.h"
 #import <UIKit/UILabel.h>
 #import <UIKit/UIGraphics.h>
+#import <UIKit/UIViewControllerTransitionCoordinator.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 static CGFloat Padding = 2.0;

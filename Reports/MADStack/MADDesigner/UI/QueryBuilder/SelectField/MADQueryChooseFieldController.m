@@ -48,7 +48,7 @@
 
 #import "MADDatabaseTableSectionHeaderView.h"
 
-#import "MADNavigationItemTitleView.h"
+//#import "MADNavigationItemTitleView.h"
 
 
 typedef NSArray <MADSchemaFieldSelectorModel *> MADSectionInfoArray;

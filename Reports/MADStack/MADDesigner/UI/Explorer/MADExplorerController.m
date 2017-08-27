@@ -742,18 +742,17 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark -
 #pragma mark UIViewController
 
+
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.collectionView setNeedsDisplay];
+        [self.navigationItem.titleView sizeToFit];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
 
-    if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            [self.collectionView setNeedsDisplay];
-        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        }];
-    }
-
+    }];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

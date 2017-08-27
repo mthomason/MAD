@@ -34,11 +34,14 @@
     attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
     
     super.text = safetext;
-    
     self.attributedText = attributedText;
-    
+
     [self sizeToFit];
-    
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.center = CGPointMake(self.superview.center.x, self.center.y);
 }
 
 @end
