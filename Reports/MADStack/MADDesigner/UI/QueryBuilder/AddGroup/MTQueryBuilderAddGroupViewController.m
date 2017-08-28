@@ -19,6 +19,7 @@
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UINavigationBar.h>
 
 #import <MAD/MADocument.h>
 
@@ -37,7 +38,6 @@ static NSString * const TextDefault = @"Default";
 @interface MTQueryBuilderAddGroupViewController ()
 
     @property (nonatomic, copy) NSManagedObjectID *fieldId;
-    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @end
 
@@ -55,10 +55,10 @@ static NSString * const TextDefault = @"Default";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.barButtonItemSave.enabled = NO;
     self.sortOrder = MADSortOrderAccending;
     NSString *accending = NSLocalizedString(@"Accending", @"Accending");
     self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
+    [self updateSaveButtonState];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -84,10 +84,15 @@ static NSString * const TextDefault = @"Default";
 #pragma mark -
 #pragma mark Delegates
 
-#pragma mark Choose Field
+#pragma mark UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
+
+#pragma mark MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
                                     withFieldID: (NSManagedObjectID *)fieldID {
+    if (fieldID == nil) return;
     
     NSManagedObjectContext *context = self.document.managedObjectContext;
     RptqQueryField *queryField = [context objectWithID: fieldID];
@@ -98,10 +103,11 @@ static NSString * const TextDefault = @"Default";
     self.fieldId = queryField.objectID.copy;
     self.fieldName = fieldName.copy;
     self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
-    self.barButtonItemSave.enabled = YES;
+
+    [self updateSaveButtonState];
 }
 
-#pragma mark Sort Type
+#pragma mark MADQueryBuilderSortTypeDelegate
 
 - (void)viewController:(UIViewController *)viewController
      didSelectSortType:(MADSortOrder)sortOrderType {
@@ -147,8 +153,10 @@ static NSString * const TextDefault = @"Default";
 }
 
 #pragma mark -
-#pragma mark Table view delegate
+#pragma mark Helpers
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)updateSaveButtonState {
+    self.navigationItem.rightBarButtonItem.enabled = [self fieldId] != nil;
+}
 
 @end

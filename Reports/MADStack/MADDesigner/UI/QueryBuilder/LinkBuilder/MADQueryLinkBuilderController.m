@@ -93,42 +93,6 @@
     }
 }
 
-- (void)setupJoinController:(MADQueryAddLinkJoinTypeController *)controller {
-    controller.delegate = self;
-    controller.document = self.document;
-}
-
-- (void)setupFieldController1:(MADQueryChooseFieldController *)controller {
-    [self setupFieldController:controller excludeTable:self.firstTableID];
-}
-
-- (void)setupFieldController2:(MADQueryChooseFieldController *)controller {
-    [self setupFieldController:controller excludeTable:self.secondTableID];
-}
-
-- (void)setupFieldController:(MADQueryChooseFieldController *)controller
-                excludeTable:(NSManagedObjectID *)excludeTableID {
-    if (controller == nil) return;
-    
-    MADocument *document = self.document;
-    controller.delegate = self;
-    controller.document = document;
-
-    if (excludeTableID != nil) {
-        NSManagedObjectContext *moc = document.managedObjectContext;
-        RptqQueryTable *excludeTable = [moc objectWithID:excludeTableID];
-        NSString *alias = excludeTable.alias.copy;
-        NSArray <NSString *> *excludeTables = alias != nil ?
-                                        [[NSArray alloc] initWithObjects:alias, nil] :
-                                        [[NSArray alloc] init];
-        controller.excludeTables = excludeTables;
-    } else {
-        NSArray *excludeTables = [[NSArray alloc] init];
-        controller.excludeTables = excludeTables;
-    }
-    
-}
-
 #pragma mark -
 #pragma mark Actions
 
@@ -212,6 +176,45 @@
 - (void)viewController:(UIViewController *)viewController addLinkJoinType:(MADLinkType)result {
     [self setJoinType:result];
     [self.navigationController popToViewController: self animated: YES];
+}
+
+#pragma mark -
+#pragma mark Helpers
+
+- (void)setupJoinController:(MADQueryAddLinkJoinTypeController *)controller {
+    controller.delegate = self;
+    controller.document = self.document;
+}
+
+- (void)setupFieldController1:(MADQueryChooseFieldController *)controller {
+    [self setupFieldController:controller excludeTable:self.firstTableID];
+}
+
+- (void)setupFieldController2:(MADQueryChooseFieldController *)controller {
+    [self setupFieldController:controller excludeTable:self.secondTableID];
+}
+
+- (void)setupFieldController:(MADQueryChooseFieldController *)controller
+                excludeTable:(NSManagedObjectID *)excludeTableID {
+    if (controller == nil) return;
+    
+    MADocument *document = self.document;
+    controller.delegate = self;
+    controller.document = document;
+
+    if (excludeTableID != nil) {
+        NSManagedObjectContext *moc = document.managedObjectContext;
+        RptqQueryTable *excludeTable = [moc objectWithID:excludeTableID];
+        NSString *alias = excludeTable.alias.copy;
+        NSArray <NSString *> *excludeTables = alias != nil ?
+                                        [[NSArray alloc] initWithObjects:alias, nil] :
+                                        [[NSArray alloc] init];
+        controller.excludeTables = excludeTables;
+    } else {
+        NSArray *excludeTables = [[NSArray alloc] init];
+        controller.excludeTables = excludeTables;
+    }
+    
 }
 
 #pragma mark -
