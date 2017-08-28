@@ -67,7 +67,8 @@ BOOL Sqlite3StepResultOK(int result) {
 int compare_string_utf8_localized_asc_collation(void *data, int len1, const void *arg1, int len2, const void *arg2) {
     id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
     id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
-    return str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] : NSOrderedDescending;
+    return str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] :
+                         NSOrderedDescending;
 }
 
 //#ifdef MAD_MTDatabaseSqlite3_DEBUG
@@ -347,20 +348,21 @@ void sqliteLog(void *foo, const char* statement) {
                     success = sqlite3_bind_text(*statement, databinding.columnNumber,
                                                 ((NSString *)databinding.value).UTF8String,
                                                 (int)strlen(((NSString *)databinding.value).UTF8String),
-                                                SQLITE_STATIC);
+                                                SQLITE_TRANSIENT);
                 } else if ([databinding.value isKindOfClass:[NSData class]]) {
                     success = sqlite3_bind_blob(*statement,
                                                 databinding.columnNumber,
                                                 ((NSData *)databinding.value).bytes,
                                                 (int)((NSData *)databinding.value).length,
-                                                SQLITE_STATIC);
+                                                SQLITE_TRANSIENT);
                 }
                 
                 break;
             }
                 
             case MADDataTypeInteger: {
-                success = sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue);
+                success = sqlite3_bind_int64(*statement, databinding.columnNumber,
+                                             ((NSNumber *)databinding.value).longLongValue);
                 break;
             }
                 
@@ -371,12 +373,13 @@ void sqliteLog(void *foo, const char* statement) {
                     success = sqlite3_bind_text(*statement, databinding.columnNumber,
                                                 ((NSString *)databinding.value).UTF8String,
                                                 (int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding],
-                                                SQLITE_STATIC);
+                                                SQLITE_TRANSIENT);
                     
                 } else if ([databinding.value isKindOfClass:[NSDateComponents class]]) {
                     
-                    //NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
-                    NSDate *date = ((NSDateComponents *)databinding.value).date;
+                    NSDate *date = ((NSDateComponents *)databinding.value).date != nil ?
+                                        ((NSDateComponents *)databinding.value).date :
+                                        [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
                     success = sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970);
                     
                 } else {
@@ -402,7 +405,8 @@ void sqliteLog(void *foo, const char* statement) {
                 
         }
     }
-    NSAssert(success == SQLITE_OK, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+    NSAssert(success == SQLITE_OK, @"Error: '%s, %s'.", __PRETTY_FUNCTION__,
+                                   sqlite3_errmsg(_database));
     return (success == SQLITE_OK);
 }
 
@@ -852,7 +856,9 @@ void sqliteLog(void *foo, const char* statement) {
     success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
+                char *err = 0;
 
+    //sqlite3_exec((sqlite3 *)self->_database, "PRAGMA journal_mode = MEMORY", NULL, NULL, &err);
 
     NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
     MTQuery *query = [[MTQueryCacheBeginTransaction alloc] init];

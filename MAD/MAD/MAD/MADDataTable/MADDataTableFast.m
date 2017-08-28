@@ -475,7 +475,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
             success = prepare_result == SQLITE_OK;
             sqlite3_free(csql);
             csql = NULL;
-            
         }
         
         NSUInteger columnCounter = 0;
@@ -502,8 +501,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         step_result = sqlite3_reset(_statementInsert);
         
         if (step_result == SQLITE_OK) {
+            NSString *e = [NSString stringWithFormat:@"sqlite3_finalize failed (%s).",
+                               (char *)sqlite3_errmsg(sqlite_database)];
             MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
-                                                                      andMessage:[NSString stringWithFormat:@"sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(sqlite_database)]];
+                                                                      andMessage:e];
             *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:328943];
         }
     } else {
