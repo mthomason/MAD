@@ -55,7 +55,6 @@
 #import "MADSortOrder.h"
 #import "MADConstants.h"
 
-
 #import "MADDataTable.h"
 
 #import "MTQuery.h"
