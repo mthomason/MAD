@@ -783,44 +783,28 @@
 		4CC3D72C1BCB6D9500BDA5D3 /* MADIcon44x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63C1BCB6D9400BDA5D3 /* MADIcon44x58.png */; };
 		4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63D1BCB6D9400BDA5D3 /* MADIcon64.png */; };
 		4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63E1BCB6D9400BDA5D3 /* MADIcon64x64.png */; };
-		4CC3D72F1BCB6D9500BDA5D3 /* Icon-29-Designer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63F1BCB6D9400BDA5D3 /* Icon-29-Designer-Lagacy.png */; };
-		4CC3D7301BCB6D9500BDA5D3 /* Icon-29-Designer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6401BCB6D9400BDA5D3 /* Icon-29-Designer-Lagacy@2x.png */; };
 		4CC3D7311BCB6D9500BDA5D3 /* Icon-29-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6411BCB6D9400BDA5D3 /* Icon-29-Designer-Modern.png */; };
 		4CC3D7321BCB6D9500BDA5D3 /* Icon-29-Designer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6421BCB6D9400BDA5D3 /* Icon-29-Designer-Modern@2x.png */; };
-		4CC3D7331BCB6D9500BDA5D3 /* Icon-29-Viewer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6431BCB6D9400BDA5D3 /* Icon-29-Viewer-Lagacy.png */; };
-		4CC3D7341BCB6D9500BDA5D3 /* Icon-29-Viewer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6441BCB6D9400BDA5D3 /* Icon-29-Viewer-Lagacy@2x.png */; };
 		4CC3D7351BCB6D9500BDA5D3 /* Icon-29-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6451BCB6D9400BDA5D3 /* Icon-29-Viewer-Modern.png */; };
 		4CC3D7361BCB6D9500BDA5D3 /* Icon-29-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6461BCB6D9400BDA5D3 /* Icon-29-Viewer-Modern@2x.png */; };
 		4CC3D7371BCB6D9500BDA5D3 /* Icon-40-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6471BCB6D9400BDA5D3 /* Icon-40-Designer-Modern.png */; };
 		4CC3D7381BCB6D9500BDA5D3 /* Icon-40-Designer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6481BCB6D9400BDA5D3 /* Icon-40-Designer-Modern@2x.png */; };
 		4CC3D7391BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6491BCB6D9400BDA5D3 /* Icon-40-Viewer-Modern.png */; };
 		4CC3D73A1BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D64A1BCB6D9400BDA5D3 /* Icon-40-Viewer-Modern@2x.png */; };
-		4CC3D73B1BCB6D9500BDA5D3 /* Icon-50-Designer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D64B1BCB6D9400BDA5D3 /* Icon-50-Designer-Lagacy.png */; };
-		4CC3D73C1BCB6D9500BDA5D3 /* Icon-50-Designer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D64C1BCB6D9400BDA5D3 /* Icon-50-Designer-Lagacy@2x.png */; };
 		4CC3D73D1BCB6D9500BDA5D3 /* Icon-50-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D64D1BCB6D9400BDA5D3 /* Icon-50-Designer-Modern.png */; };
 		4CC3D73E1BCB6D9500BDA5D3 /* Icon-50-Designer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D64E1BCB6D9400BDA5D3 /* Icon-50-Designer-Modern@2x.png */; };
-		4CC3D73F1BCB6D9500BDA5D3 /* Icon-50-Viewer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D64F1BCB6D9400BDA5D3 /* Icon-50-Viewer-Lagacy.png */; };
-		4CC3D7401BCB6D9500BDA5D3 /* Icon-50-Viewer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6501BCB6D9400BDA5D3 /* Icon-50-Viewer-Lagacy@2x.png */; };
 		4CC3D7411BCB6D9500BDA5D3 /* Icon-50-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6511BCB6D9400BDA5D3 /* Icon-50-Viewer-Modern.png */; };
 		4CC3D7421BCB6D9500BDA5D3 /* Icon-50-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6521BCB6D9400BDA5D3 /* Icon-50-Viewer-Modern@2x.png */; };
-		4CC3D7431BCB6D9500BDA5D3 /* Icon-57-Designer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6531BCB6D9400BDA5D3 /* Icon-57-Designer-Lagacy.png */; };
-		4CC3D7441BCB6D9500BDA5D3 /* Icon-57-Designer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6541BCB6D9400BDA5D3 /* Icon-57-Designer-Lagacy@2x.png */; };
 		4CC3D7451BCB6D9500BDA5D3 /* Icon-57-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6551BCB6D9400BDA5D3 /* Icon-57-Designer-Modern.png */; };
 		4CC3D7461BCB6D9500BDA5D3 /* Icon-57-Designer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6561BCB6D9400BDA5D3 /* Icon-57-Designer-Modern@2x.png */; };
-		4CC3D7471BCB6D9500BDA5D3 /* Icon-57-Viewer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6571BCB6D9400BDA5D3 /* Icon-57-Viewer-Lagacy.png */; };
-		4CC3D7481BCB6D9500BDA5D3 /* Icon-57-Viewer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6581BCB6D9400BDA5D3 /* Icon-57-Viewer-Lagacy@2x.png */; };
 		4CC3D7491BCB6D9500BDA5D3 /* Icon-57-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6591BCB6D9400BDA5D3 /* Icon-57-Viewer-Modern.png */; };
 		4CC3D74A1BCB6D9500BDA5D3 /* Icon-57-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D65A1BCB6D9400BDA5D3 /* Icon-57-Viewer-Modern@2x.png */; };
 		4CC3D74B1BCB6D9500BDA5D3 /* Icon-60-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D65B1BCB6D9400BDA5D3 /* Icon-60-Designer-Modern.png */; };
 		4CC3D74C1BCB6D9500BDA5D3 /* Icon-60-Designer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D65C1BCB6D9400BDA5D3 /* Icon-60-Designer-Modern@2x.png */; };
 		4CC3D74D1BCB6D9500BDA5D3 /* Icon-60-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D65D1BCB6D9400BDA5D3 /* Icon-60-Viewer-Modern.png */; };
 		4CC3D74E1BCB6D9500BDA5D3 /* Icon-60-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D65E1BCB6D9400BDA5D3 /* Icon-60-Viewer-Modern@2x.png */; };
-		4CC3D74F1BCB6D9500BDA5D3 /* Icon-72-Designer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D65F1BCB6D9400BDA5D3 /* Icon-72-Designer-Lagacy.png */; };
-		4CC3D7501BCB6D9500BDA5D3 /* Icon-72-Designer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6601BCB6D9400BDA5D3 /* Icon-72-Designer-Lagacy@2x.png */; };
 		4CC3D7511BCB6D9500BDA5D3 /* Icon-72-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6611BCB6D9400BDA5D3 /* Icon-72-Designer-Modern.png */; };
 		4CC3D7521BCB6D9500BDA5D3 /* Icon-72-Designer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6621BCB6D9400BDA5D3 /* Icon-72-Designer-Modern@2x.png */; };
-		4CC3D7531BCB6D9500BDA5D3 /* Icon-72-Viewer-Lagacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6631BCB6D9400BDA5D3 /* Icon-72-Viewer-Lagacy.png */; };
-		4CC3D7541BCB6D9500BDA5D3 /* Icon-72-Viewer-Lagacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6641BCB6D9400BDA5D3 /* Icon-72-Viewer-Lagacy@2x.png */; };
 		4CC3D7551BCB6D9500BDA5D3 /* Icon-72-Viewer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6651BCB6D9400BDA5D3 /* Icon-72-Viewer-Modern.png */; };
 		4CC3D7561BCB6D9500BDA5D3 /* Icon-72-Viewer-Modern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6661BCB6D9400BDA5D3 /* Icon-72-Viewer-Modern@2x.png */; };
 		4CC3D7571BCB6D9500BDA5D3 /* Icon-76-Designer-Modern.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6671BCB6D9400BDA5D3 /* Icon-76-Designer-Modern.png */; };
@@ -2408,6 +2392,7 @@
 		4CF46DCF1CF2EDD400D93406 /* MADManagedObjectViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADManagedObjectViewProtocol.h; path = ../../MADDesigner/UI/MADManagedObjectViewProtocol.h; sourceTree = "<group>"; };
 		4CF6AA241F5269790061B0C6 /* MADExplorerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExplorerAnimatedTransitioning.m; sourceTree = "<group>"; };
+		4CF6AA271F5405DC0061B0C6 /* Icon-Designer.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Icon-Designer.pdf"; sourceTree = "<group>"; };
 		4CF6AFBE1CAFB55C00D3AD11 /* MADOperationRefreshReload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshReload.h; sourceTree = "<group>"; };
 		4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefreshReload.m; sourceTree = "<group>"; };
 		4CF6AFC11CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshInitalizeMainDataTable.h; sourceTree = "<group>"; };
@@ -4396,6 +4381,7 @@
 		4CC3D6371BCB6D9400BDA5D3 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				4CF6AA271F5405DC0061B0C6 /* Icon-Designer.pdf */,
 				4CC3D6381BCB6D9400BDA5D3 /* document */,
 				4CC3D63F1BCB6D9400BDA5D3 /* Icon-29-Designer-Lagacy.png */,
 				4CC3D6401BCB6D9400BDA5D3 /* Icon-29-Designer-Lagacy@2x.png */,
@@ -5454,7 +5440,6 @@
 				4CC3D7CA1BCB6D9500BDA5D3 /* UIImagePatternMarbled@2x.png in Resources */,
 				4CC3D7C31BCB6D9500BDA5D3 /* UIImagePatternLinen.png in Resources */,
 				4C76F0C114B529E6005DCE49 /* UIImagePictureFrame.png in Resources */,
-				4CC3D7531BCB6D9500BDA5D3 /* Icon-72-Viewer-Lagacy.png in Resources */,
 				4CC3D8131BCB6D9500BDA5D3 /* UIButtonSelected@2x.png in Resources */,
 				4CC3D79C1BCB6D9500BDA5D3 /* UIImagePatternCharcoalFlecks@2x.png in Resources */,
 				4CC3D8101BCB6D9500BDA5D3 /* UIButtonHighlighted.png in Resources */,
@@ -5505,12 +5490,10 @@
 				4CC3D7E81BCB6D9500BDA5D3 /* UIImagePatternWhiteDiagonal@2x.png in Resources */,
 				4CC3D7651BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
 				4CC3D7461BCB6D9500BDA5D3 /* Icon-57-Designer-Modern@2x.png in Resources */,
-				4CC3D7331BCB6D9500BDA5D3 /* Icon-29-Viewer-Lagacy.png in Resources */,
 				4C00817A14B6CAAF003DF437 /* UIImageItalic20@2x.png in Resources */,
 				4CC3D7AB1BCB6D9500BDA5D3 /* UIImagePatternGraphPaper.png in Resources */,
 				4CC3D80F1BCB6D9500BDA5D3 /* UIButton@2x.png in Resources */,
 				4CC3D7E41BCB6D9500BDA5D3 /* UIImagePatternTextured@2x.png in Resources */,
-				4CC3D72F1BCB6D9500BDA5D3 /* Icon-29-Designer-Lagacy.png in Resources */,
 				4CC3D7B81BCB6D9500BDA5D3 /* UIImagePatternKraftPaper2.png in Resources */,
 				4CC3D76A1BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png in Resources */,
 				4CC3D7451BCB6D9500BDA5D3 /* Icon-57-Designer-Modern.png in Resources */,
@@ -5535,7 +5518,6 @@
 				4CC3D7841BCB6D9500BDA5D3 /* MADImageClear.psd in Resources */,
 				4C3DCC1A1BCAEFA900ABE231 /* Images.xcassets in Resources */,
 				4CC3D7A11BCB6D9500BDA5D3 /* UIImagePatternFibers1.png in Resources */,
-				4CC3D7401BCB6D9500BDA5D3 /* Icon-50-Viewer-Lagacy@2x.png in Resources */,
 				4C00819014B83E92003DF437 /* UIImageStacks20.png in Resources */,
 				4CC3D7AA1BCB6D9500BDA5D3 /* UIImagePatternGoldVellum@2x.png in Resources */,
 				4CC3D7931BCB6D9500BDA5D3 /* UIImagePatternBlueTextured.png in Resources */,
@@ -5553,7 +5535,6 @@
 				4CC3D7351BCB6D9500BDA5D3 /* Icon-29-Viewer-Modern.png in Resources */,
 				4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */,
 				4CC3D7E61BCB6D9500BDA5D3 /* UIImagePatternWhiteColumns@2x.png in Resources */,
-				4CC3D73B1BCB6D9500BDA5D3 /* Icon-50-Designer-Lagacy.png in Resources */,
 				4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */,
 				4CC3D7C61BCB6D9500BDA5D3 /* UIImagePatternLinenWeave@2x.png in Resources */,
 				4CC3D7C41BCB6D9500BDA5D3 /* UIImagePatternLinen@2x.png in Resources */,
@@ -5578,7 +5559,6 @@
 				4CE8A03E14C019B4007C8345 /* UIImageDocuments20.png in Resources */,
 				4CC3D7721BCB6D9500BDA5D3 /* MADImageIconInfo.png in Resources */,
 				4CC3D7D51BCB6D9500BDA5D3 /* UIImagePatternPebbled.png in Resources */,
-				4CC3D7541BCB6D9500BDA5D3 /* Icon-72-Viewer-Lagacy@2x.png in Resources */,
 				4CC3D7641BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png in Resources */,
 				4CFEE80B1BB7993300AFAA0A /* MADQueryAddTable.storyboard in Resources */,
 				4CC3D7521BCB6D9500BDA5D3 /* Icon-72-Designer-Modern@2x.png in Resources */,
@@ -5612,16 +5592,13 @@
 				4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */,
 				4CC3D7731BCB6D9500BDA5D3 /* MADImageIconInfo@2x.png in Resources */,
 				4CC3D75B1BCB6D9500BDA5D3 /* MADBarcode64.png in Resources */,
-				4CC3D7341BCB6D9500BDA5D3 /* Icon-29-Viewer-Lagacy@2x.png in Resources */,
 				4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */,
-				4CC3D73F1BCB6D9500BDA5D3 /* Icon-50-Viewer-Lagacy.png in Resources */,
 				4CC3D7EF1BCB6D9500BDA5D3 /* UIImagePatternYellowLined.png in Resources */,
 				4CC3D7711BCB6D9500BDA5D3 /* MADImageIconDuplicate.png in Resources */,
 				4CC3D76D1BCB6D9500BDA5D3 /* MADImageBackgroundIcon.png in Resources */,
 				4CC3D7551BCB6D9500BDA5D3 /* Icon-72-Viewer-Modern.png in Resources */,
 				4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */,
 				4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */,
-				4CC3D7431BCB6D9500BDA5D3 /* Icon-57-Designer-Lagacy.png in Resources */,
 				4CC3D80D1BCB6D9500BDA5D3 /* UIBarButtonItemPaintRoller@2x.png in Resources */,
 				4CC3D7811BCB6D9500BDA5D3 /* MADImageToolbarDuplicate@2x.png in Resources */,
 				4CC3D7B11BCB6D9500BDA5D3 /* UIImagePatternGreenWithFibers.png in Resources */,
@@ -5631,13 +5608,11 @@
 				4CC3D7971BCB6D9500BDA5D3 /* UIImagePatternBuffTextured.png in Resources */,
 				4CC3D76B1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
 				4CC3D7DA1BCB6D9500BDA5D3 /* UIImagePatternPinkWithFlecks@2x.png in Resources */,
-				4CC3D7471BCB6D9500BDA5D3 /* Icon-57-Viewer-Lagacy.png in Resources */,
 				4CC3D7511BCB6D9500BDA5D3 /* Icon-72-Designer-Modern.png in Resources */,
 				4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4CC3D7D11BCB6D9500BDA5D3 /* UIImagePatternNotebook.png in Resources */,
 				4CC3D8071BCB6D9500BDA5D3 /* UIBarButtonItemMadDesigner@2x.png in Resources */,
 				4CC3D80C1BCB6D9500BDA5D3 /* UIBarButtonItemPaintRoller.png in Resources */,
-				4CC3D74F1BCB6D9500BDA5D3 /* Icon-72-Designer-Lagacy.png in Resources */,
 				4CC3D78F1BCB6D9500BDA5D3 /* UIImagePatternBlueCrepe.png in Resources */,
 				4CC3D7F91BCB6D9500BDA5D3 /* MTSliderThumb.png in Resources */,
 				4CC3D74D1BCB6D9500BDA5D3 /* Icon-60-Viewer-Modern.png in Resources */,
@@ -5645,7 +5620,6 @@
 				4CC3D7C71BCB6D9500BDA5D3 /* UIImagePatternMarbled.png in Resources */,
 				4CB56ECE1AC683CC00756775 /* my_config.he in Resources */,
 				4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */,
-				4CC3D7481BCB6D9500BDA5D3 /* Icon-57-Viewer-Lagacy@2x.png in Resources */,
 				4CC3D73A1BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern@2x.png in Resources */,
 				4C401EE41BAE5E9000BAE5FC /* MADStore.storyboard in Resources */,
 				4CC3D7EA1BCB6D9500BDA5D3 /* UIImagePatternWhiteStationary@2x.png in Resources */,
@@ -5669,7 +5643,6 @@
 				4C3DCC161BCAEFA900ABE231 /* chinook.sqlite3 in Resources */,
 				4C26B9DE1BAF148B00456DC8 /* MADImageChevronRightTall.png in Resources */,
 				4CC3D7831BCB6D9500BDA5D3 /* MADImageChevronRightTall.psd in Resources */,
-				4CC3D7441BCB6D9500BDA5D3 /* Icon-57-Designer-Lagacy@2x.png in Resources */,
 				4CC3D7CB1BCB6D9500BDA5D3 /* UIImagePatternMetallicBlack.png in Resources */,
 				4CC3D8091BCB6D9500BDA5D3 /* UIBarButtonItemMadViewer8.png in Resources */,
 				4CC3D7391BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern.png in Resources */,
@@ -5710,7 +5683,6 @@
 				4CC3D7681BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png in Resources */,
 				4CC3D7A01BCB6D9500BDA5D3 /* UIImagePatternFiberDarkGray@2x.png in Resources */,
 				4CC3D7961BCB6D9500BDA5D3 /* UIImagePatternBlueVellum@2x.png in Resources */,
-				4CC3D73C1BCB6D9500BDA5D3 /* Icon-50-Designer-Lagacy@2x.png in Resources */,
 				4CC3D7D01BCB6D9500BDA5D3 /* UIImagePatternMetallicFlecks@2x.png in Resources */,
 				4CC3D8141BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */,
@@ -5733,7 +5705,6 @@
 				4CC3D7411BCB6D9500BDA5D3 /* Icon-50-Viewer-Modern.png in Resources */,
 				4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
 				4CC3D79D1BCB6D9500BDA5D3 /* UIImagePatternCrepe.png in Resources */,
-				4CC3D7501BCB6D9500BDA5D3 /* Icon-72-Designer-Lagacy@2x.png in Resources */,
 				4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
 				4CC3D7E91BCB6D9500BDA5D3 /* UIImagePatternWhiteStationary.png in Resources */,
 				4CC3D7DE1BCB6D9500BDA5D3 /* UIImagePatternRedVellum@2x.png in Resources */,
@@ -5765,7 +5736,6 @@
 				4CC3D7F71BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png in Resources */,
 				4CC3D7F21BCB6D9500BDA5D3 /* MADImageCarat@2x.png in Resources */,
 				4CC3D7FD1BCB6D9500BDA5D3 /* MTSliderThumbRotate@2x.png in Resources */,
-				4CC3D7301BCB6D9500BDA5D3 /* Icon-29-Designer-Lagacy@2x.png in Resources */,
 				4CFEE7FD1BB77C4000AFAA0A /* MADQuerySelectField.storyboard in Resources */,
 				4CC3D7941BCB6D9500BDA5D3 /* UIImagePatternBlueTextured@2x.png in Resources */,
 				4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */,

@@ -46,6 +46,8 @@
 
 #import <MADFoundation/NSString+Common.h>
 
+#import <MAD/madmath.h>
+
 #import <MAD/MADReportSection.h>
 
 #import <MAD/MADocument.h>
@@ -77,8 +79,6 @@
 #import <MAD/RptqBorder.h>
 #import <MAD/RptqRect.h>
 #import <MAD/RptqSize.h>
-
-#import <MAD/madmath.h>
 
 #import "MADTabBarController.h"
 
