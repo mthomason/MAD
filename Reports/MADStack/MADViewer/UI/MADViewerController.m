@@ -327,7 +327,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.pageSlider.sliderDelegate = self;
     self.dataSource = self;
     self.delegate = self;
-    //self.presentationController.delegate = self;
     
     MADPageSlider *pageSlider = self.pageSlider;
     [self.view addSubview: pageSlider];
@@ -568,21 +567,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (MADPrintPageRenderer *)printPageRenderer {
     return self.printPageRendererReport;
 }
-
-/*
-#pragma mark - UIStateRestore
-
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super decodeRestorableStateWithCoder:coder];
-}
-
-- (void)applicationFinishedRestoringState {
-    [super applicationFinishedRestoringState];
-}*/
 
 #pragma mark -
 #pragma mark MADPageSliderDelegate
