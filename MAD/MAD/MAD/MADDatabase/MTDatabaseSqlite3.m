@@ -346,9 +346,14 @@ void sqliteLog(void *foo, const char* statement) {
                 if ([databinding.value isKindOfClass:[NSString class]]) {
                     success = sqlite3_bind_text(*statement, databinding.columnNumber,
                                                 ((NSString *)databinding.value).UTF8String,
-                                                (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
+                                                (int)strlen(((NSString *)databinding.value).UTF8String),
+                                                SQLITE_STATIC);
                 } else if ([databinding.value isKindOfClass:[NSData class]]) {
-                    success = sqlite3_bind_blob(*statement, databinding.columnNumber, ((NSData *)databinding.value).bytes, (int)((NSData *)databinding.value).length, SQLITE_TRANSIENT);
+                    success = sqlite3_bind_blob(*statement,
+                                                databinding.columnNumber,
+                                                ((NSData *)databinding.value).bytes,
+                                                (int)((NSData *)databinding.value).length,
+                                                SQLITE_STATIC);
                 }
                 
                 break;
@@ -363,11 +368,15 @@ void sqliteLog(void *foo, const char* statement) {
                 
                 if ([databinding.value isKindOfClass:[NSString class]]) {
 
-                    success = sqlite3_bind_text(*statement, databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
+                    success = sqlite3_bind_text(*statement, databinding.columnNumber,
+                                                ((NSString *)databinding.value).UTF8String,
+                                                (int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding],
+                                                SQLITE_STATIC);
                     
                 } else if ([databinding.value isKindOfClass:[NSDateComponents class]]) {
                     
-                    NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
+                    //NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
+                    NSDate *date = ((NSDateComponents *)databinding.value).date;
                     success = sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970);
                     
                 } else {
