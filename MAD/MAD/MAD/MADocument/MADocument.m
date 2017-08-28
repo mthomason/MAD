@@ -201,6 +201,8 @@ void madwarn(char *err,  const char*err2) { }
 @interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseProtocol,
                             MADocumentDesignerProtocol>
 
+    @property (readwrite, nonatomic, strong) MADReportFormatter *printingReportFormatter;
+
     @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
     @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
     @property (nonatomic, readwrite, strong) NSDictionary *madPersistentStoreOptions;

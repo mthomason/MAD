@@ -63,8 +63,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
     @property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
 
-    @property (readwrite, nonatomic, strong)    MADReportFormatter *printingReportFormatter;
-
     @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
 
     @property (readonly, nonatomic, strong)     NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
