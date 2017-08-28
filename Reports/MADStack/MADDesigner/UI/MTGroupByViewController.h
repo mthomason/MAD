@@ -32,7 +32,7 @@ extern NSString * const MADGroupByViewControllerIdentifier;
     @property (nonatomic, assign, readonly) int32_t aggregateGroupNumber;
 
     - (void)selectGroupType:(MTAggregateGroupByType)groupByType
-          withSectionNumber:(NSUInteger)sectionNumber;
+          withSectionNumber:(int32_t)sectionNumber;
 
 @end
 

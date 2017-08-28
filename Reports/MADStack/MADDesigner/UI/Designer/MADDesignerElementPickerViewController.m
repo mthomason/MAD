@@ -64,7 +64,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
     @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
     @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
     @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-    @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
+    @property (nonatomic, assign) int32_t aggregateGroupBySectionNumber;
     @property (nonatomic, strong) NSArray *dataSource;
 
     - (IBAction)done:(id)sender;
@@ -329,7 +329,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
     [self.navigationBar popNavigationItemAnimated:YES];
 }
 
-- (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
+- (void)didSelectGroupBySectionNumber:(int32_t)groupNumber {
     self.aggregateGroupByType = MTAggregateGroupByTypeSection;
     self.aggregateGroupBySectionNumber = groupNumber;
     [self displaySelectedGroupByType];
@@ -347,7 +347,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
         
             case MTAggregateGroupByTypeSection: {
 
-                NSUInteger group = self.aggregateGroupBySectionNumber;
+                int32_t group = self.aggregateGroupBySectionNumber;
                 NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [[NSString alloc] initWithFormat:format, group];
                 cell.detailTextLabel.text = detail;

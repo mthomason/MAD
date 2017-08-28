@@ -45,7 +45,8 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
     self.navigationItem.hidesBackButton = NO;
     
     MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
+    titleView.text = NSLocalizedString(@"Group By",
+                                       @"Title of form that allows you to choose an item to group other items by...");
     self.navigationItem.titleView = titleView;
 
     NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
@@ -86,7 +87,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
     _aggregateGroupType = groupType;
 }
 
-- (void)setGroupTypeSectionWithNumber:(NSUInteger)sectionNumber {
+- (void)setGroupTypeSectionWithNumber:(int32_t)sectionNumber {
     _aggregateGroupNumber = sectionNumber;
     _aggregateGroupType = MTAggregateGroupByTypeSection;
 }
@@ -154,7 +155,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
             break;
         
         default: {
-            NSUInteger groupNumber = (NSUInteger)indexPath.row - 2;
+            int32_t groupNumber = (int32_t)indexPath.row - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
             [delegate didSelectGroupBySectionNumber: groupNumber];
@@ -180,7 +181,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
             
         default: {
             [self setGroupType:MTAggregateGroupByTypeSection];
-            [self setGroupTypeSectionWithNumber: (NSUInteger)indexPath.row - 2];
+            [self setGroupTypeSectionWithNumber: (int32_t)indexPath.row - 2];
             break;
         }
             
@@ -189,7 +190,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 }
 
 - (void)selectGroupType:(MTAggregateGroupByType)groupByType
-      withSectionNumber:(NSUInteger)sectionNumber {
+      withSectionNumber:(int32_t)sectionNumber {
     _aggregateGroupType = groupByType;
     _aggregateGroupNumber = sectionNumber;
 }

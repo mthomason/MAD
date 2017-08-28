@@ -139,9 +139,11 @@ static NSString * const TextDefault = @"Default";
 }
 
 - (IBAction)save:(id)sender {
-    [self.delegate viewController: self
-           addedGroupOnQueryField: self.fieldId
-                     andSortOrder: self.sortOrder];
+    if (self.fieldId != nil) {
+        [self.delegate viewController: self
+               addedGroupOnQueryField: self.fieldId
+                         andSortOrder: self.sortOrder];
+    }
 }
 
 #pragma mark -

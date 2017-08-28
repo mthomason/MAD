@@ -97,10 +97,10 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
+- (void)didSelectGroupBySectionNumber:(int32_t)groupNumber {
     NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
     NSString *detail = [[NSString alloc] initWithFormat:format, groupNumber];
-    self.groupTypeSectionNumber = (int32_t)groupNumber;
+    self.groupTypeSectionNumber = groupNumber;
     self.aggregateGroupByType = MTAggregateGroupByTypeSection;
     self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
 
@@ -318,7 +318,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         destinationViewController.delegate = self;
         destinationViewController.document = document;
         [destinationViewController selectGroupType: _aggregateGroupByType
-                                 withSectionNumber: (NSUInteger)_groupTypeSectionNumber];
+                                 withSectionNumber: _groupTypeSectionNumber];
         
     } else if ([segue.identifier isEqualToString:@"MADSegueAggregateFunctionField"]) {
     

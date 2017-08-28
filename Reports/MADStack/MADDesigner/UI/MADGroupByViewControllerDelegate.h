@@ -13,7 +13,7 @@
 
     - (void)didSelectGroupByPage;
     - (void)didSelectGroupByReport;
-    - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber;
+    - (void)didSelectGroupBySectionNumber:(int32_t)groupNumber;
 
 @end
 
