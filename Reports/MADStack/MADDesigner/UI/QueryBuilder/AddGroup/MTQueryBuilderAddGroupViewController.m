@@ -56,7 +56,7 @@ static NSString * const TextDefault = @"Default";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.sortOrder = MADSortOrderAccending;
-    NSString *accending = NSLocalizedString(@"Accending", @"Accending");
+    NSString *accending = NSLocalizedString(TextAccending, TextAccending);
     self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
     [self updateSaveButtonState];
 }
