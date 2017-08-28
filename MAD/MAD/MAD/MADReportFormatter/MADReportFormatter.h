@@ -50,14 +50,14 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
     //  Use this to cache in location other than default.
     @property (nonatomic, copy, readwrite) NSString *overrideIdentifier;
 
-    - (void)formatForSize:(CGSize)printableSize;
-    - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
+    - (void)format:(CGSize)printableSize;
+    - (void)format:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
 
-    - (void)loadFromCacheWithSize:(CGSize)printableSize;
+    - (void)loadFromCache:(CGSize)printableSize;
 
-    - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
+    - (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumerator:(NSUInteger)pageIndex;
 
-    - (CGFloat)heightForSectionWithObjectIdentifier:(NSNumber *)identifier;
+    - (CGFloat)heightSection:(NSNumber *)identifier;
 
     - (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex;
 

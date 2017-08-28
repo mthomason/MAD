@@ -405,7 +405,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
     [self.textRepresentation removeAllPages];
     document = (reportFormatter.layout).activeDocumentModel;
     
-    NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumeratorForPage:pageIndex];
+    NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumerator:pageIndex];
     
     MADReportPageRepresentation *pageRepresentation =
             [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
@@ -425,7 +425,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
         
         sectionIdentifier = @(documentSection.identifier);
         rect = SectionBounds(pageRect,
-                             HeightWithVisibility([reportFormatter heightForSectionWithObjectIdentifier:sectionIdentifier],
+                             HeightWithVisibility([reportFormatter heightSection:sectionIdentifier],
                                                   documentSection.visibility),
                              documentSection.visibility,
                              pageSection.sectionType,
@@ -618,7 +618,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     if (pageIndex < numberOfPages) {
         
         CGFloat originY = pageRect.origin.y;
-        NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumeratorForPage:pageIndex];
+        NSEnumerator *layoutEnumerator = [self.reportFormatter layoutEnumerator:pageIndex];
         for (NSDictionary *pageSection in layoutEnumerator) {
             
             RptqDocumentSection *documentSection = [document documentSectionForType:pageSection.sectionType andLevel:pageSection.groupLevel];

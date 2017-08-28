@@ -203,7 +203,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     return resultData;
 }
 
-- (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumeratorForPage:(NSUInteger)pageIndex {
+- (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumerator:(NSUInteger)pageIndex {
     NSArray <MADSectionRepresentation *> *pageLayout = self.reportLayout[pageIndex];
     return pageLayout.objectEnumerator;
 }
@@ -307,7 +307,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     return _reportIndexes[pageIndex];
 }
 
-- (CGFloat)heightForSectionWithObjectIdentifier:(NSNumber *)objectID {
+- (CGFloat)heightSection:(NSNumber *)objectID {
     NSNumber *sectionHeight = self.sections.heightForSectionID[objectID];
     return sectionHeight.floatValue;
 }
@@ -380,7 +380,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     self.sections = nil;
 }
 
-- (void)loadFromCacheWithSize:(CGSize)printableSize {
+- (void)loadFromCache:(CGSize)printableSize {
     self.didRefresh = NO;
     [self setLayoutSize: printableSize];
     [self loadLayoutAndIndexesFromCache];
@@ -397,11 +397,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
                 ![datasource cacheExist];
 }
 
-- (void)formatForSize:(CGSize)printableSize {
-    [self formatForSize:printableSize contentChanged:YES];
+- (void)format:(CGSize)printableSize {
+    [self format:printableSize contentChanged:YES];
 }
 
-- (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
+- (void)format:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
     if (contextChanged == NO || self.needsFormat) {
         @synchronized(self) {
@@ -415,7 +415,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
             }
         }
     } else {
-        [self formatForSize:printableSize contentChanged:NO];
+        [self format:printableSize contentChanged:NO];
     }
 }
 

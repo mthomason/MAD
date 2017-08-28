@@ -24,12 +24,14 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIPopoverPresentationController.h>
 #import <UIKit/UIPrintInteractionController.h>
-#import <UIKit/UIResponder.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UITabBarItem.h>
 #import <UIKit/UIToolbar.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+
+#import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADOperationObserver.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
@@ -41,26 +43,22 @@
 #import <MAD/MADDataTable.h>
 
 #import <MAD/MADPrintPageRenderer.h>
+#import <MAD/MADReportFormatter.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-
-#import <MAD/MADReportFormatter.h>
+#import <MAD/MTPaper.h>
 
 #import <MAD/MADDatabaseConnection.h>
-
 #import <MAD/MADDataTableFast.h>
 
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 #import <MAD/MADNotificationDidReadRows.h>
-#import <MAD/MTPaper.h>
-
-#import <MADFoundation/MADOperationQueue.h>
-#import <MADFoundation/MADOperationObserver.h>
 
 #import "MADPrintingProtocol.h"
 #import "MADViewControllerStandardProtocol.h"
+#import "MADPageSliderProtocol.h"
 
 #import "MADTabBarController.h"
 
@@ -71,23 +69,20 @@
 #import "MADSliderPageVertical.h"
 #import "MADLabelStatus.h"
 
-#import "UIApplication+Extras.h"
 #import "UIViewController+tabBarItem.h"
-#import "NSDate+Extras.h"
 
-#import "MTStoreKitController+Features.h"
 #import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
 
 #import "MADOperationRefreshReload.h"
 
-#import "MADOperationPromptError.h"
-
 #import "MADLabelTitle.h"
 #import "MADDocumentScroller.h"
-#import "MADPageSliderProtocol.h"
-
 #import "MADRefreshOperationReload.h"
+
+#import "NSDate+Extras.h"
+#import "MTStoreKitController+Features.h"
+#import "UIApplication+Extras.h"
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
@@ -1343,7 +1338,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     if (![self isCancelled]) {
         __block BOOL blockComplete = NO;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
+            [document.reportFormatter loadFromCache: document.paper.paperSize];
             blockComplete = YES;
         });
         
@@ -1492,7 +1487,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
     if (![self isCancelled]) {
         __block BOOL blockComplete = NO;
         //dispatch_async(dispatch_get_main_queue(), ^{
-            [document.reportFormatter loadFromCacheWithSize: document.paper.paperSize];
+            [document.reportFormatter loadFromCache: document.paper.paperSize];
             blockComplete = YES;
         //});
         

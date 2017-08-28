@@ -162,7 +162,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
         
         
         [reportFormatter setMarginUsingPrintableRect:PdfTrimBox(letterRect)];
-        [reportFormatter formatForSize:letterRect.size contentChanged:NO];
+        [reportFormatter format:letterRect.size contentChanged:NO];
         
         
         [[NSNotificationCenter defaultCenter] removeObserver: sdocument

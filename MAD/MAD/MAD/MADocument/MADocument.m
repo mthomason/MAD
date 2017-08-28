@@ -267,13 +267,11 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (void)formatContentChange {
-    [self.reportFormatter formatForSize:self.paperSize
-                         contentChanged:YES];
+    [self.reportFormatter format:self.paperSize contentChanged:YES];
 }
 
 - (void)format {
-    [self.reportFormatter formatForSize:self.paperSize
-                         contentChanged:NO];
+    [self.reportFormatter format:self.paperSize contentChanged:NO];
 }
 
 - (NSArray *)groupLevelKeys:(NSUInteger)rowID {
@@ -775,7 +773,7 @@ void madwarn(char *err,  const char*err2) { }
     self.printingReportFormatter.layoutSize = controller.printPaper.paperSize;
     self.printingReportFormatter.marginUsingPrintableRect = controller.printPaper.printableRect;
     self.printingReportFormatter.didRefresh = YES;
-    [self.printingReportFormatter formatForSize: controller.printPaper.paperSize
+    [self.printingReportFormatter format: controller.printPaper.paperSize
                                  contentChanged: NO];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)controller {
