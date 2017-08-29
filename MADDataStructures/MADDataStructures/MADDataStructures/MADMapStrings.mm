@@ -50,17 +50,17 @@ class MADMad {
 
 @implementation MADMapStrings
 
-- (instancetype)initWithType:(MADDataType)t {
+- (instancetype)initWithType:(MADMapDataType)t {
     typeof(self) map;
     switch (t) {
     
-        case MADDataTypeShort:
+        case MADMapDataTypeShort:
             map = [[MADMapStringsShort alloc] init];
             break;
-        case MADDataTypeInteger:
+        case MADMapDataTypeInteger:
             map = [[MADMapStringsInteger alloc] init];
             break;
-        case MADDataTypeUnsignedInteger:
+        case MADMapDataTypeUnsignedInteger:
             map = [[MADMapStringsUnsignedInteger alloc] init];
             break;
             

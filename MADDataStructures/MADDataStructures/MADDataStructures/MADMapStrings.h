@@ -13,15 +13,15 @@
 
 @class NSString;
 
-typedef NS_ENUM(short, MADDataType) {
-    MADDataTypeShort,
-    MADDataTypeInteger,
-    MADDataTypeUnsignedInteger,
+typedef NS_ENUM(short, MADMapDataType) {
+    MADMapDataTypeShort,
+    MADMapDataTypeInteger,
+    MADMapDataTypeUnsignedInteger,
 };
 
 @protocol MADMapStringsProtocol <NSObject>
 
-    - (instancetype)initWithType:(MADDataType)t;
+    - (instancetype)initWithType:(MADMapDataType)t;
     - (unsigned long)count;
 
 @end

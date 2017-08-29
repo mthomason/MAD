@@ -12,9 +12,9 @@
 #import <MADAPI/MTDatabase.h>
 #import <Foundation/NSString.h>
 
-#import <MADFoundation/MADDataType.h>
+#import <MADAPI/MADDatabaseCacheProtocol.h>
 
-#import "MADDatabaseCacheProtocol.h"
+#import <MADFoundation/MADDataType.h>
 
 BOOL Sqlite3StepResultOK(int result);
 
