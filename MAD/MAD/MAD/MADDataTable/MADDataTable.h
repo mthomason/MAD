@@ -10,13 +10,8 @@
 #define MAD_MADDataTable_Factory_h
 
 #import <MAD/MADDataTablePlist.h>
-#import <MADFoundation/MADDataTableType.h>
 
 @interface MADDataTable : MADDataTablePlist
-
-    + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
-    + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
-    + (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID;
 
 @end
 

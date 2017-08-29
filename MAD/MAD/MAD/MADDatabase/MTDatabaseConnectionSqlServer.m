@@ -14,8 +14,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
 
-#import "RptqDatabaseCredentals.h"
-
 @implementation MTDatabaseConnectionSqlServer
 
 @synthesize database = _database;
@@ -27,13 +25,13 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals {
     
     id dbConnection = nil;
     
     dbConnection = [[self alloc] initWithHost: credentals.host
                                        server: credentals.server
-                                     database: credentals.dbname
+                                     database: credentals.database
                                       andPort: credentals.port];
     
     return dbConnection;

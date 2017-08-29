@@ -46,6 +46,10 @@
     }
 }
 
+- (NSString *)database {
+    return self.dbname;
+}
+
 - (NSString *)databaseSchemaName {
     NSString *result = @"";
     MADDatabaseType databaseType = [self.inDatabase databaseType];

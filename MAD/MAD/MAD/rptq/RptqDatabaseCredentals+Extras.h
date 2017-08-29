@@ -9,10 +9,12 @@
 #ifndef Reports_RptqUserCredentals_Extras_h
 #define Reports_RptqUserCredentals_Extras_h
 
-#import <MAD/RptqDatabaseCredentals.h>
 #import <CoreData/NSFetchRequest.h>
+#import <MAD/RptqDatabaseCredentals.h>
+#import <MAD/MADDatabaseConnectionsPropertiesCredentals.h>
 
 @interface RptqDatabaseCredentals (Extras)
+    <MADDatabaseConnectionsPropertiesCredentals>
 
     + (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext;
     + (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext;

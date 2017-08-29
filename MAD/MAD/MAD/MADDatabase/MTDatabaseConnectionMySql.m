@@ -12,7 +12,6 @@
 
 #import "MTDatabaseConnectionMySql.h"
 #import <Foundation/NSCharacterSet.h>
-#import "RptqDatabaseCredentals.h"
 
 @implementation MTDatabaseConnectionMySql
 
@@ -25,11 +24,11 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals {
     
     id dbConnection;
     dbConnection = [[self alloc] initWithHost: credentals.host
-                                     database: credentals.dbname
+                                     database: credentals.database
                                       andPort: credentals.port];
     
     return dbConnection;

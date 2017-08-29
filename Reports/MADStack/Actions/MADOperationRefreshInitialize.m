@@ -21,6 +21,7 @@
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTQueryFull.h>
+#import <MAD/MTDatabase+Constructor.h>
 
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
@@ -30,9 +31,9 @@
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
+#import <MAD/RptqDatabaseCredentals+Extras.h>
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
-
 
 @interface MADOperationRefreshInitialize ()
 
@@ -99,11 +100,11 @@
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
             rptqUser = rptqQuery.inDatabase.ownedByUser;
-            databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:rptqUser];
+            databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:rptqUser];
             [doc updateDatabaseWithConnection:databaseConnection];
             database = [MTDatabase newDatabaseWithConnection:databaseConnection];
         }
-        doc.database.delegate = (id <MADDatabaseProtocol>)doc;
+        doc.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
         
         if (rptqDatabase == nil || rptqQuery == nil) {
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;

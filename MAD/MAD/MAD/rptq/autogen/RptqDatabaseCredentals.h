@@ -10,7 +10,7 @@
 #define MAD_RptqDatabaseCredentals_h
 
 #import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+//#import <CoreData/NSFetchRequest.h>
 
 @class RptqDatabase;
 
@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface RptqDatabaseCredentals (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *driverID;
 @property (nonatomic) int64_t identifier;

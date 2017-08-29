@@ -53,7 +53,6 @@
 #import "MADConstants.h"
 
 #import "MADDataTableObjectEnumerator.h"
-#import "MTDatabaseSqlite3.h"
 #import "MADDatabaseConnection.h"
 
 #import "MTQuery.h"
@@ -71,13 +70,10 @@
 #import "MADQueryCacheIndexDropParameters.h"
 #import "MADQuerySelectParameters.h"
 
-#import "MTDatabaseSqlite3.h"
-
 #import "MADQueryCacheIndexCreateParameters.h"
 #import "MTQueryCacheSelectRowIds.h"
 
-#import "MTDatabase.h"
-#import "MADDatabaseProtocol.h"
+#import "MADDatabaseResultsProtocol.h"
 
 #import "MADQueryCacheIndexCreateParameters.h"
 
@@ -85,6 +81,9 @@
 #import "MADQueryParameters.h"
 #import "MADDataTablePlist.h"
 #import "MADDatabaseDataBinding.h"
+
+#import "MTDatabaseSqlite3.h"
+#import "MTDatabase+Constructor.h"
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
@@ -314,7 +313,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     @autoreleasepool {
         database = [[MTDatabaseSqlite3 alloc] init];
-        database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
+        database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
         
         connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
         database.databaseConnection = connection;
@@ -330,7 +329,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     @autoreleasepool {
         connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
         database = [MTDatabaseSqlite3 newDatabaseWithConnection:connection];
-        database.delegate = (id <MADDatabaseProtocol>)cacheDelegate;
+        database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
         self.databaseForSelects = database;
         database = nil;
         connection = nil;

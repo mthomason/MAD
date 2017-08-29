@@ -18,7 +18,7 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
-#import "RptqDatabaseCredentals.h"
+#import "MADDatabaseConnectionsPropertiesCredentals.h"
 
 @implementation MTDatabaseConnectionSqlite3
 
@@ -28,12 +28,12 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals {
 
     id dbConnection;
     //dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
     
-    NSString *databaseFilename = credentals.dbname.copy;
+    NSString *databaseFilename = credentals.database.copy;
     
     // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
     //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.

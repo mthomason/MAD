@@ -25,6 +25,10 @@
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
+#import "MTDatabase+Constructor.h"
+
+#import "RptqDatabaseCredentals+Extras.h"
+
 @implementation MTQueryMaxFieldLength
 
 - (instancetype)initWithObject:(id)object {
@@ -40,8 +44,8 @@
         self.queryObject = array;
         RptqDatabaseSchemaField *field = array.firstObject;
 
-        RptqDatabaseCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
-        id databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:userCredentals];
+        id databaseConnection;
+        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:field.inTable.inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
     }

@@ -27,7 +27,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 #import <MAD/MADDataTable.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQuery.h>
@@ -37,13 +37,14 @@
 #import <MAD/MTQuery.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
+#import <MAD/MADDataTable+Constructor.h>
 
 #import "MADTableLayout.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
 
 @interface MADTableController ()
-    <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseProtocol>
+    <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseResultsProtocol>
 
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, strong) MADDataTable *datatable;

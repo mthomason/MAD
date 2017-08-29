@@ -11,11 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@protocol MADDatabaseProtocol;
+@protocol MADDatabaseResultsProtocol;
 
 @protocol MADDatabaseCacheProtocol <NSObject>
 
-    - (id <MADDatabaseProtocol>)delegate;
+    - (id <MADDatabaseResultsProtocol>)delegate;
     - (BOOL)tableExist:(NSString *)tablename;
 
     - (void)beginBulkInsert;

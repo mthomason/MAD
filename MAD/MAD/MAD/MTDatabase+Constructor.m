@@ -7,7 +7,50 @@
 //
 
 #import "MTDatabase+Constructor.h"
+#import "MADDatabaseConnection.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlite3.h"
+#import "MTDatabaseSqlServer.h"
 
-@implementation MTDatabase (Constructor)
+@class MTDatabaseSqlite3;
+
+@implementation MTDatabase (Comparson)
+
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
+    
+    id result = nil;
+    
+    switch (connection.databaseType) {
+        case MADDatabaseTypeSqlite3:
+            result = [[MTDatabaseSqlite3 alloc] init];
+            
+            break;
+            
+        case MADDatabaseTypeTDS:
+            result = [[MTDatabaseSqlServer alloc] init];
+            
+            break;
+            
+        case MADDatabaseTypeMySQL:
+            result = [[MTDatabaseMySql alloc] init];
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    [result setDatabaseConnection:connection];
+    
+    if ([result respondsToSelector:@selector(openDatabase)]) {
+        [result openDatabase];
+    }
+    
+    return result;
+}
+
+- (void)openDatabase {
+    
+}
 
 @end

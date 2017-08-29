@@ -30,6 +30,33 @@
     return c;
 }
 
++ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals {
+    
+    id dbConnection = nil;
+    switch (credentals.databaseType) {
+        case MADDatabaseTypeSqlite3:
+            dbConnection = [MTDatabaseConnectionSqlite3 newDatabaseConnectionWithCredentals:credentals];
+            
+            break;
+            
+        case MADDatabaseTypeTDS:
+            dbConnection = [MTDatabaseConnectionSqlServer newDatabaseConnectionWithCredentals:credentals];
+            
+            break;
+            
+        case MADDatabaseTypeMySQL:
+            dbConnection = [MTDatabaseConnectionMySql newDatabaseConnectionWithCredentals:credentals];
+            break;
+            
+        default:
+            NSAssert(NO, @"Unknown database type");
+            break;
+    }
+    
+    return dbConnection;
+    
+}
+
 + (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
                                          host:(NSString *)host
                                      database:(NSString *)database
@@ -66,49 +93,22 @@
     return dbConnection;
 }
 
++ (instancetype)newDatabaseConnectionForUrl:(NSURL *)url {
+    id dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+    return dbConnection;
+}
+
 + (instancetype)newDatabaseConnectionForObject:(id)connectionObject {
     
     id resultCredentals = nil;
     
-    if ([connectionObject isKindOfClass:[RptqDatabaseCredentals class]]) {
+    if ([connectionObject conformsToProtocol:@protocol(MADDatabaseConnectionsPropertiesCredentals)]) {
         resultCredentals = [self newDatabaseConnectionWithCredentals:connectionObject];
         
     } else if ([connectionObject isKindOfClass:[NSURL class]]) {
         resultCredentals = [self newDatabaseConnectionForUrl:connectionObject];
     }
     return resultCredentals;
-}
-
-+ (instancetype)newDatabaseConnectionForUrl:(NSURL *)url {
-    id dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-    return dbConnection;
-}
-
-+ (instancetype)newDatabaseConnectionWithCredentals:(RptqDatabaseCredentals *)credentals {
-
-    id dbConnection = nil;
-    switch (credentals.databaseType) {
-        case MADDatabaseTypeSqlite3:
-            dbConnection = [MTDatabaseConnectionSqlite3 newDatabaseConnectionWithCredentals:credentals];
-            
-            break;
-            
-        case MADDatabaseTypeTDS:
-            dbConnection = [MTDatabaseConnectionSqlServer newDatabaseConnectionWithCredentals:credentals];
-            
-            break;
-            
-        case MADDatabaseTypeMySQL:
-            dbConnection = [MTDatabaseConnectionMySql newDatabaseConnectionWithCredentals:credentals];
-            break;
-            
-        default:
-            NSAssert(NO, @"Unknown database type");
-            break;
-    }
-    
-    return dbConnection;
-
 }
 
 + (NSString *)Identifier {
@@ -139,7 +139,6 @@
             break;
     }
     return identifier;
-    
 }
 
 @end

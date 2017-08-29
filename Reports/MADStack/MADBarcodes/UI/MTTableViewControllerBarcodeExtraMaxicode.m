@@ -14,7 +14,7 @@
 
 #import <CoreData/NSManagedObjectContext.h>
 
-#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
@@ -36,6 +36,7 @@
 
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
+#import <MAD/MADDataTable+Constructor.h>
 
 #import "MADQueryChooseFieldController.h"
 

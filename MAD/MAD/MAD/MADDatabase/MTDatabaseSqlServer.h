@@ -21,8 +21,6 @@ extern NSString * const MTDatabaseConnectionAppName;
 
 @interface MTDatabaseSqlServer : MTDatabase
 
-    - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
-
     - (NSString *)identifier;
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;

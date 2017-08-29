@@ -15,19 +15,21 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 
-#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADDataTable.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-
 #import <MAD/MADOperationKeyChainGet.h>
+#import <MAD/MADDataTable+Constructor.h>
 
 #import <os/log.h>
 
+#import <MAD/MTDatabase+Constructor.h>
+
 @interface MADOperationDatabaseTestConnection ()
-    <MADDatabaseProtocol>
+    <MADDatabaseResultsProtocol>
 
     //Parameters
     @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;

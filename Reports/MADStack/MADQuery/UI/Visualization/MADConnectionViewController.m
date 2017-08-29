@@ -14,12 +14,9 @@
 
 #import <os/log.h>
 
-#import "MADViewControllerStandardProtocol.h"
-
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
-#import <UIKit/UIAlertController.h>
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UILocalNotification.h>
 
@@ -29,15 +26,11 @@
 #import <MADExplorer/MADSaveFileProtocol.h>
 
 #import <MAD/MADDocumentProtocol.h>
-#import <MAD/MADDatabaseProtocol.h>
-#import <MAD/MADConstants.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MTKeyChain.h>
-#import <MAD/MADDataTable.h>
-#import <MAD/MTQueryTest.h>
 #import <MAD/MADProgress.h>
 #import <MAD/MADNotificationProgress.h>
 
@@ -48,21 +41,17 @@
 #import <MADFoundation/MADOperationQueue.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
+
+#import "MADViewControllerStandardProtocol.h"
+
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
-
-#import <MADFoundation/MADOperationConditionMissingResultString.h>
-#import <MADFoundation/MADOperationConditionHasResultString.h>
 
 #import "MADLabelTitle.h"
 
 #import "MADProgressView.h"
 
-#import "MADOperationDatabaseTestConnection.h"
-
 #import "MADOperationCreateDocument.h"
-
-#import "UIApplication+Extras.h"
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -71,7 +60,7 @@ static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MADConnectionViewController()
-    <MADOperationObserver, MADocumentDelegate, MADDatabaseProtocol>
+    <MADOperationObserver, MADocumentDelegate, MADDatabaseResultsProtocol>
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
@@ -443,7 +432,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 #pragma mark -
-#pragma mark MADDatabaseProtocol
+#pragma mark MADDatabaseResultsProtocol
 
 - (void)resetAfterConnectionString:(NSString *)connectionString failedTest:(NSArray *)errors {
     [self enableUserInteraction];

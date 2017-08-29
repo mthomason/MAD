@@ -38,7 +38,7 @@
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
-#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -74,7 +74,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 }
 
 @interface MTViewControllerBarcodeOptions ()
-    <MADDatabaseProtocol,
+    <MADDatabaseResultsProtocol,
         MTTableViewControllerStaticSelectRowDelegate>
 
     @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
@@ -898,7 +898,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     }
 }
 
-#pragma mark - MADDatabaseProtocol
+#pragma mark - MADDatabaseResultsProtocol
 
 - (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.sampleDataTable;

@@ -25,31 +25,19 @@
 #import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MADMySQLFetchProtocol.h>
 
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MTQuery.h"
 
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "MADDatabaseProtocol.h"
-
+#import "MADDatabaseResultsProtocol.h"
 #import "MADDatabaseConnection.h"
+#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADDatabaseTable.h"
+#import "MADDatabaseField.h"
+
+#import "MADDataTable.h"
+#import "MADDataTable+Constructor.h"
 
 #import "MysqlFetch+DataTable.h"
 
-#import "MTQuery.h"
-
-#import "MADDataTable.h"
-#import "MADDatabaseTable.h"
-#import "MADDatabaseField.h"
 
 @interface MTDatabaseMySql ()
     <MADMySQLFetchProtocol>
@@ -76,7 +64,7 @@
             connectionError:(NSError * __autoreleasing *)error {
 
     if (credentals == nil) {
-        credentals = [self copyCredentalsWithConnection:connection];
+        credentals = [self credentalsWithConnection:connection];
     }
 
     BOOL success = NO;
@@ -105,7 +93,8 @@
     return success ? conn : nil;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
+- (BOOL)executeQuery:(MTQuery *)query
+       withDataTable:(MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
     id connectionSettings = self.databaseConnection;
@@ -160,7 +149,7 @@
     return result;
 }
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+- (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable
          withError:(NSError * __autoreleasing *)error {
     
@@ -183,11 +172,12 @@
     return NSStringFromClass([self class]);
 }
 
-- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
+- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
     
     id connectionSettings = self.databaseConnection;
     NSError * __autoreleasing connectionError = nil;
-    MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
+    MysqlConnection *conn;
+    conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
     if (conn && connectionError == nil) {
         
         NSError *fetchError = nil;
@@ -195,7 +185,7 @@
         MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
         MADDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
                                               onConnection: conn error: &fetchError];
-        NSMutableArray *results = nil;
+        NSMutableArray <MADDatabaseTable *> *results = nil;
         if (fetchError == nil) {
             NSUInteger resultsCount = [dataTable count];
             results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
@@ -213,7 +203,7 @@
     }
 }
 
-- (void)closeProcess:(id)process {
+- (void)closeConnection:(id)process {
     mysql_close(((MysqlConnection *)process).connection);
 }
 

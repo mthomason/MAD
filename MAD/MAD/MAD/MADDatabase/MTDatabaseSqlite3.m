@@ -54,7 +54,7 @@
 #import "MTQueryCacheEndTransaction.h"
 #import "MTQueryCacheSyncDefault.h"
 
-#import "MADDatabaseProtocol.h"
+#import "MADDatabaseResultsProtocol.h"
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
@@ -309,8 +309,8 @@ void sqliteLog(void *foo, const char* statement) {
     return exist;
 }
 
-- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
+- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
+    NSMutableArray <MADDatabaseTable *> *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
 	sqlite3_stmt *statement;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
@@ -461,12 +461,12 @@ void sqliteLog(void *foo, const char* statement) {
     }
 }
 
-- (BOOL)executeSql:(NSString *)sql
+- (BOOL)executeSQL:(NSString *)sql
          fieldKeys:(NSArray *)fieldKeys
       onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable
          withError:(NSError * __autoreleasing *)error {
-    BOOL result = [self executeSql: sql
+    BOOL result = [self executeSQL: sql
                          fieldKeys: fieldKeys
                       onConnection: dbconn
                    intoResultTable: dataTable
@@ -477,7 +477,7 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 
-- (BOOL)executeSql: (NSString *)sql
+- (BOOL)executeSQL: (NSString *)sql
          fieldKeys: (NSArray *)fieldKeys
       onConnection: (id)dbconn
    intoResultTable: (MADDataTable *)dataTable
@@ -676,7 +676,7 @@ void sqliteLog(void *foo, const char* statement) {
         //NSAssert(dataTable != nil, @"Need a datatable");
         
         NSError * __autoreleasing *executeError = NULL;
-        status = [self executeSql: queryString
+        status = [self executeSQL: queryString
                         fieldKeys: query.fieldKeys
                      onConnection: nil
                   intoResultTable: dataTable
@@ -706,9 +706,9 @@ void sqliteLog(void *foo, const char* statement) {
     return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
-+ (id <NSCopying>)newObject: (void * /* sqlite3_stmt * */)statement
-            forColumnNumber:(int)columnCounter
-                   withType: (MADDataType)type {
++ (id <NSCopying>)object: (void * /* sqlite3_stmt * */)statement
+         forColumnNumber:(int)columnCounter
+                withType: (MADDataType)type {
 
     id <NSCopying> columnValue;
     switch (type) {

@@ -48,8 +48,10 @@
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
+#import "MADDataTable+Constructor.h"
+
 #import "MADDocumentProtocol.h"
-#import "MADDatabaseProtocol.h"
+#import "MADDatabaseResultsProtocol.h"
 #import "MADocumentDesignerProtocol.h"
 
 #import "MADSortOrder.h"
@@ -146,6 +148,8 @@
 #import "NSPredicate+Creators.h"
 #import "RptqDataHelper.h"
 
+#import "MTDatabase+Constructor.h"
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 /*
@@ -197,7 +201,7 @@ void msg(const char *err) { }
 void madwarn(char *err,  const char*err2);
 void madwarn(char *err,  const char*err2) { }
 
-@interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseProtocol,
+@interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseResultsProtocol,
                             MADocumentDesignerProtocol>
 
     @property (readwrite, nonatomic, strong) MADReportFormatter *printingReportFormatter;
@@ -956,7 +960,7 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 #pragma mark -
-#pragma mark MADDatabaseProtocol
+#pragma mark MADDatabaseResultsProtocol
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
     MADCredential *credentials = [self.documentDelegate getCredentialsForKey:key];
@@ -1272,8 +1276,7 @@ void madwarn(char *err,  const char*err2) { }
 - (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     MADDatabaseConnection *connection;
-    RptqDatabaseCredentals *ownedByUser = database.ownedByUser;
-    connection = [MADDatabaseConnection newDatabaseConnectionForObject: ownedByUser];
+    connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals: database.ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     self.database = db;

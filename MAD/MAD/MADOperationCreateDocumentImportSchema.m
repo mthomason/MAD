@@ -10,6 +10,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 #import <MAD/MADDatabaseTable.h>
 #import <MAD/MADDatabaseField.h>
 #import <MAD/MADDatabaseConnection.h>
@@ -116,7 +117,8 @@
         NSMutableArray *tables                 = [[NSMutableArray alloc] init];
         
         NSError *error = NULL;
-        NSArray *resultTables = [document.database getTablesFromConnection:dbconnection error:&error];
+        NSArray *resultTables = [document.database getTablesFromConnection:dbconnection
+                                                                     error:&error];
         
         if (error != nil) {
             success = NO;
@@ -154,7 +156,7 @@
         
         
         
-        [document.database closeProcess:dbconnection];
+        [document.database closeConnection:dbconnection];
         
         success = YES;
         

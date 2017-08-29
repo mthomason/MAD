@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQuerySampleDataTable.h"
-#import "MADDatabaseProtocol.h"
+#import "MADDatabaseResultsProtocol.h"
 
 #import <CoreData/NSManagedObjectID.h>
 #import <Foundation/NSURL.h>
@@ -30,8 +30,13 @@
 #import "MADDataTable.h"
 #import "MADDataTablePlist.h"
 
+#import "MTDatabase+Constructor.h"
+#import "MADDataTable+Constructor.h"
+
+#import "RptqDatabaseCredentals+Extras.h"
+
 @interface MTQuerySampleDataTable ()
-    <MADDatabaseProtocol>
+    <MADDatabaseResultsProtocol>
 
     @property (nonatomic, strong) MADDataTable *dataTableMaxFieldLength;
 
@@ -47,7 +52,7 @@
                  @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
         MADDatabaseConnection *databaseConnection;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
+        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
         MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.database = db;

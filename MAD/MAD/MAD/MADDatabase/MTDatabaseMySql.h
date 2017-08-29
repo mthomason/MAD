@@ -16,8 +16,6 @@
 
 @interface MTDatabaseMySql : MTDatabase
 
-    - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
-
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;

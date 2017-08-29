@@ -31,6 +31,8 @@
 #import "MTQueryCacheAddColumn.h"
 #import "MTDatabaseSqlite3.h"
 
+#import "MTDatabase+Constructor.h"
+
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
 static NSString * const MTArrayCachedColumnValue = @"ck";

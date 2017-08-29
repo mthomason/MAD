@@ -26,19 +26,14 @@
 #import <MADCocoaExtensions/MADAlertController.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MADDataTable.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 #import <MAD/MADDatabaseConnection.h>
 
-#import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
-
-#import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
-
-#import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
+#import <MAD/MADDataTable+Constructor.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
@@ -64,7 +59,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                                 @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()
-    <MADDatabaseProtocol, MTViewControllerBarcodePreviewDelegate>
+    <MADDatabaseResultsProtocol, MTViewControllerBarcodePreviewDelegate>
 
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 

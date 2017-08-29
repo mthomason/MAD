@@ -6,8 +6,18 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MAD/MAD.h>
+#ifndef MAD_MADDataTable_Constructor_h
+#define MAD_MADDataTable_Constructor_h
+
+#import <MAD/MADDataTable.h>
+#import <MADFoundation/MADDataTableType.h>
 
 @interface MADDataTable (Constructor)
 
+    + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
+    + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
+    + (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID;
+
 @end
+
+#endif

@@ -463,7 +463,7 @@
                 credentals.dbname = databaseConnection.database.copy;
                 break;
             }
-                
+            
             default:
                 break;
         }

@@ -31,24 +31,18 @@
 #import <Foundation/NSTimeZone.h>
 
 #import <MADTdsClient/sybdb.h>
+
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADCredential.h>
+
+#import "MADDatabaseResultsProtocol.h"
 #import "MADDatabaseConnectionsPropertiesCredentals.h"
-
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-#import "RptqQueryField.h"
-
-#import "MADDatabaseProtocol.h"
-
 #import "MADDatabaseConnection.h"
-
-#import "MADDataTable.h"
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"
+
+#import "MADDataTable.h"
 
 #import "MTQuery.h"
 
@@ -106,12 +100,12 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     }
 }
 
-- (void)closeProcess:(id)process {
+- (void)closeConnection:(id)process {
     DBPROCESS *dbconn = [process process];
     dbclose(dbconn);
 }
 
-- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
+- (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
     
     __block MTDatabaseSqlServer *blockSelf = self;
     
@@ -129,7 +123,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
             if (dbconn && dberror == nil) {
                 
-                id results = nil;
+                NSMutableArray  <MADDatabaseTable *> *results = nil;
                 NSError *error = nil;
 
                 dbcmd(dbconn, "SELECT name FROM sys.tables");
@@ -307,7 +301,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return success;
 }
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+- (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn];
 }
@@ -1329,7 +1323,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             connectionError:(NSError *__autoreleasing *)error {
     
     if (credentals == nil) {
-        credentals = [self copyCredentalsWithConnection:connection];
+        credentals = [self credentalsWithConnection:connection];
     }
     
     DBPROCESS *dbconn = NULL;
@@ -1415,7 +1409,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 #pragma mark - Reading Tables
 
-- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)process error:(NSError * __autoreleasing *)outError {
+- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)process
+                                                    error:(NSError * __autoreleasing *)outError {
     id results = nil;
 //    NSError *error = nil;
     DBPROCESS *dbconn = [process process];
@@ -1527,7 +1522,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     completion(error == nil, error, results);
 }
 
-- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+- (void)getTablesFromConnection:(id)process
+                     completion:(void (^)(BOOL, NSError *, NSArray *))completion {
     
     id results = nil;
     NSError *error = nil;

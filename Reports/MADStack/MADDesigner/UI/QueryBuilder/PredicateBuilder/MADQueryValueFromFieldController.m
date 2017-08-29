@@ -31,7 +31,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MAD/MADDatabaseProtocol.h>
+#import <MAD/MADDatabaseResultsProtocol.h>
 
 #import <MAD/MADDataTable.h>
 

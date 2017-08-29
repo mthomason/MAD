@@ -20,10 +20,14 @@
 #import "MTDatabase.h"
 #import "MADDataTable.h"
 #import "MADDatabaseConnection.h"
-#import "MADDatabaseProtocol.h"
+#import "MADDatabaseResultsProtocol.h"
+#import "MTDatabase+Constructor.h"
+#import "MADDataTable+Constructor.h"
+
+#import "RptqDatabaseCredentals+Extras.h"
 
 @interface MTQuerySampleDataField ()
-    <MADDatabaseProtocol>
+    <MADDatabaseResultsProtocol>
 
     @property (nonatomic, strong) MADDataTable *datatable;
 
@@ -44,7 +48,7 @@
         MTDatabase *db;
         
         userCredentals = ((RptqDatabaseSchemaField *)object).inTable.inDatabase.ownedByUser;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnectionForObject:userCredentals];
+        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:userCredentals];
         
         db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         db.delegate = self;

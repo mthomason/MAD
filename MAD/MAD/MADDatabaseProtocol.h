@@ -9,13 +9,51 @@
 #ifndef MADDatabaseProtocol_h
 #define MADDatabaseProtocol_h
 
-@class MADCredential, MADDataTable, NSString, MTQuery;
+@class MADDatabaseTable, MADDatabaseField, MADDataTable, MADDatabaseConnection, MADCredential, MTQuery;
 
-@protocol MADDatabaseProtocol <NSObject>
+@protocol MADDatabaseDataSource <NSObject>
+  @required
+
+    - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion;
+
+    - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn
+                                                        error:(NSError * __autoreleasing *)error;
+    - (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
+                                          connection: (id)dbconn
+                                               error: (NSError * __autoreleasing *)error;
+
+    - (id)connectWithConnection:(MADDatabaseConnection *)connection
+                     credentals:(MADCredential *)credentals
+                connectionError:(NSError * __autoreleasing *)error;
+
+    - (BOOL)executeSQL:(NSString *)sql
+             fieldKeys:(NSArray *)fieldKeys
+          onConnection:(id)dbconn
+       intoResultTable:(MADDataTable *)dataTable
+             withError:(NSError * __autoreleasing *)error;
+
+    - (BOOL)executeQuery:(MTQuery *)query
+               withError:(NSError * __autoreleasing *)error;
+    - (BOOL)executeQuery:(MTQuery *)query
+           withDataTable:(MADDataTable *)dataTable
+                andError:(NSError * __autoreleasing *)error;
+
+    - (NSString *)sqlSampleDataForField:(NSString *)fieldName
+                               andTable:(NSString *)tableName;
+
+  @optional
+    - (void)closeConnection:(id)process;
+@end
+
+
+@protocol MADDatabaseDelegate <NSObject>
   @required
   @optional
-    - (MADCredential *)getCredentialsForKey:(NSString *)key;
-    - (MADDataTable *)dataTableForQuery:(MTQuery *)query;
+@end
+
+@protocol MADDatabaseDBProtocol <NSObject>
+  @required
+  @optional
 @end
 
 #endif /* MADDatabaseProtocol_h */

@@ -11,7 +11,7 @@
 
 #import <UIKit/UITableViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
-#import <MAD/MADDatabaseConnection.h>
+#import <MAD/MADDatabaseType.h>
 
 @protocol MADViewControllerStandardProtocol, MADSaveFileProtocol;
 

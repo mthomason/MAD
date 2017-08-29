@@ -6,8 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MAD/MAD.h>
+#ifndef Reports_MTDatabase_Constructor_h
+#define Reports_MTDatabase_Constructor_h
+
+#import <MAD/MTDatabase.h>
 
 @interface MTDatabase (Constructor)
 
+    + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
+
 @end
+
+#endif

@@ -16,17 +16,14 @@
 #import <Foundation/NSArray.h>
 
 #import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADErrorUserInfo.h>
 
 #import "MADDataTable.h"
 
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlite3.h"
-#import "MTDatabaseSqlServer.h"
 #import "MADDatabaseConnection.h"
 #import "MADNotificationDidReadRows.h"
-#import <MADFoundation/MADCredential.h>
-#import <MADFoundation/MADErrorUserInfo.h>
-#import "MADDatabaseProtocol.h"
+#import "MADDatabaseResultsProtocol.h"
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
@@ -34,10 +31,6 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                                                 @"%@ %@ %@ "
                                                                 @"%@ %@ "
                                                                 @"LIMIT 511;";
-
-@interface MTDatabase ()
-
-@end
 
 @implementation MTDatabase
 
@@ -49,42 +42,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return self;
 }
 
-+ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
-    
-    id result = nil;
-    
-    switch (connection.databaseType) {
-        case MADDatabaseTypeSqlite3:
-            result = [[MTDatabaseSqlite3 alloc] init];
-            
-            break;
-            
-        case MADDatabaseTypeTDS:
-            result = [[MTDatabaseSqlServer alloc] init];
-            
-            break;
-            
-        case MADDatabaseTypeMySQL:
-            result = [[MTDatabaseMySql alloc] init];
-            
-            break;
-            
-        default:
-            break;
-    }
-    
-    [result setDatabaseConnection:connection];
-    
-    if ([result respondsToSelector:@selector(openDatabase)]) {
-        [result openDatabase];
-    }
-    
-    return result;
-}
-
-- (MADCredential *)copyCredentalsWithConnection:(MADDatabaseConnection *)connection {
+- (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection {
     NSString *key = [connection connectionString];
-    id <MADDatabaseProtocol> delegate = _delegate;
+    id <MADDatabaseResultsProtocol> delegate = _delegate;
     BOOL responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
     MADCredential *results = nil;
     if (responds) {
@@ -148,12 +108,12 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (MADSafeQueryField *)fieldAliasForField:(NSString *)fieldName
                              andTableName:(NSString *)tableName {
     NSString *fieldAlias;
-    //if (fieldName.length && tableName.length) {
-    //    fieldAlias = [fieldName stringByAppendingPeriod];
-    //    fieldAlias = [fieldAlias stringByAppendingString:tableName];
-    //} else {
+    if (fieldName.length && tableName.length) {
+        fieldAlias = [fieldName stringByAppendingPeriod];
+        fieldAlias = [fieldAlias stringByAppendingString:tableName];
+    } else {
         fieldAlias = [fieldName stringByAppendingString:tableName];
-    //}
+    }
     //NSString *result = [self newSafeIdentifier:fieldAlias];
     return fieldAlias;
 }
@@ -166,7 +126,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return alias;
 }
 
-- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
+- (void)getTables: (void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
     reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
@@ -244,9 +204,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     [[MADNotificationDidReadRows sharedObject] database:self readRow:row];
 }
 
-- (void)closeProcess:(id)process {}
+- (void)closeConnection:(id)process {}
 
-- (BOOL)executeSql:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
+- (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";

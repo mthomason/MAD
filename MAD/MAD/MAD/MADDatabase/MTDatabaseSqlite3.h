@@ -27,7 +27,6 @@ typedef NSString MADSqlite3SortDescription;
     void * /* sqlite3 * */ _database;
 }
     - (void *)databaseHandle NS_RETURNS_INNER_POINTER;
-    - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
     - (NSString *)identifier;
 
@@ -47,19 +46,12 @@ typedef NSString MADSqlite3SortDescription;
     + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
                                                                 ascending:(BOOL)ascending;
 
-    + (id <NSCopying>)newObject:(void * /* sqlite3_stmt * */)statement
-                forColumnNumber:(int)columnCounter
-                       withType:(MADDataType)type;
-
-    - (BOOL)executeQuery:(MTQuery *)query withDataTable:(__kindof MADDataTable *)dataTable
-                andError:(NSError * __autoreleasing *)error;
-
     - (void)executeQueryWithSql:(NSString *)queryString
             queryBinaryBindings:(NSArray *)queryBinaryBindings
                  queryFieldKeys:(NSArray *)queryFieldKeys
                  transactionSet:(BOOL)partOfTransactionSet;
 
-    - (BOOL)executeSql: (NSString *)sql
+    - (BOOL)executeSQL: (NSString *)sql
              fieldKeys: (NSArray *)fieldKeys
           onConnection: (id)dbconn
        intoResultTable: (MADDataTable *)dataTable
