@@ -11,7 +11,7 @@
 
 #import <MADFoundation/MADDataTable.h>
 
-@protocol MADCacheProtocol, MADDataProtocol;
+@protocol MADCacheProtocol, MADDataProtocol, MADQueryDataBindingProtocol;
 
 @class MTQuery, MTDatabaseSqlite3;
 
@@ -27,7 +27,7 @@
     - (NSString *)columnKeyForColumnName:(NSString *)columnName;
     - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
-    - (id)runSelectQuery:(MTQuery *)query;
+    - (id)runSelectQuery:(MTQuery <MADQueryDataBindingProtocol> *)query;
 
     - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
                      andColumnIdentifier:(NSString *)columnIdentifier

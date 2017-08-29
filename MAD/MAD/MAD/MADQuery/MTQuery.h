@@ -25,6 +25,14 @@ extern NSString * const MADIdentifierROWID;
 @class NSMutableArray, NSMutableDictionary,
        MTDatabase, MADDataTable, RptqQuery;
 
+@protocol MADQueryDataBindingProtocol <NSObject>
+    @property (nonatomic, strong) NSMutableArray *binaryBindings;
+@end
+
+@protocol MADQueryFieldKeysProtocol <NSObject>
+    @property (nonatomic, strong) NSMutableArray *fieldKeys;
+@end
+
 @interface MTQuery : NSObject
 
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
@@ -32,11 +40,7 @@ extern NSString * const MADIdentifierROWID;
     @property (nonatomic, weak) MADDataTable *dataTable;
     @property (nonatomic, strong, readwrite) MTDatabase *database;
 
-    @property (nonatomic, strong) id queryObject;
     @property (nonatomic, strong) NSMutableDictionary *fields;
-    @property (nonatomic, strong) NSMutableArray *fieldKeys;
-    @property (nonatomic, strong) NSMutableArray *binaryBindings;   // Used by database to bind
-                                                                    //   NSData to insert statements
     @property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
 
     @property (nonatomic, assign, readonly) MADQueryType type;
@@ -51,6 +55,17 @@ extern NSString * const MADIdentifierROWID;
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
+
+    - (instancetype)initWithObject:(id)object;
+
+    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
+
+    @property (nonatomic, readonly) BOOL returnsResults;
+    @property (nonatomic, readonly) BOOL partOfTransactionSet;
+
+@end
+
+@interface MTQuery (MADQueryFieldKeysProtocol)    //Intended for use by MTQuery subclasses only
 
     - (instancetype)initWithObject:(id)object;
 

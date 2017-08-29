@@ -299,7 +299,11 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     NSError * __autoreleasing sqlError = nil;
     NSString *sql = [query getSql:self error:&sqlError];
     if (sqlError == nil) {
-        success = [self runSQL:sql onDataTable:dataTable fieldKeys:query.fieldKeys process:process];
+        success = [self runSQL: sql
+                   onDataTable: dataTable
+                     fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
+                                    ((MTQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
+                       process: process];
     }
     return success;
 }

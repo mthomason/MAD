@@ -27,17 +27,21 @@
 
 @interface MTQuerySampleDataField ()
 
+    @property (nonatomic, strong) id queryObject;
     @property (nonatomic, strong) MADDataTable *datatable;
 
 @end
 
 @implementation MTQuerySampleDataField
 
+@synthesize fieldKeys = _fieldKeys;
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
+        NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+        self.fieldKeys = fieldKeys;
+
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]],
                  @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
 

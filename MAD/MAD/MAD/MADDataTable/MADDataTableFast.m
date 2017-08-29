@@ -443,7 +443,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     }
 }
 
-
+- (NSMutableArray <MADDatabaseDataBinding *> *)binaryBindings {
+    if (_binaryBindings == nil) {
+        NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
+        binaryBindings = [[NSMutableArray alloc] init];
+        _binaryBindings = binaryBindings;
+    }
+    return _binaryBindings;
+}
 
 - (void)addRow:(NSArray <id> *)row error:(NSError * __autoreleasing *)error {
 
@@ -462,12 +469,6 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         [self.bulkInsertQuery update];
         
         BOOL success = YES;
-        
-        if (self.binaryBindings == nil) {
-            NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
-            binaryBindings = [[NSMutableArray alloc] init];
-            self.binaryBindings = binaryBindings;
-        }
         
         if (_statementInsert == NULL) {
             NSString *sql = [[NSString alloc] initWithString: [_bulkInsertQuery getSql:nil]];
@@ -933,7 +934,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                         columns,            selectFieldDescriptors,
                                                         nil];
     
-    MTQuery * query = [[MADQuerySelectItemsForGroup alloc] initWithObject:querySelect];
+    MTQuery <MADQueryDataBindingProtocol> *query;
+    query = [[MADQuerySelectItemsForGroup alloc] initWithObject:querySelect];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSql:&error];
@@ -1163,7 +1165,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return key;
 }
 
-- (id)runSelectQuery:(MTQuery *)query {
+- (id)runSelectQuery:(MTQuery <MADQueryDataBindingProtocol> *)query {
     id result = nil;
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;

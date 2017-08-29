@@ -12,7 +12,7 @@
 #import "MTQuery.h"
 
 @interface MADQuerySelectItemsForGroup : MTQuery
-
+    <MADQueryDataBindingProtocol>
 @end
 
 #endif

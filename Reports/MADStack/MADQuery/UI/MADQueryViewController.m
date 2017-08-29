@@ -1583,7 +1583,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
         db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
     }
-    tableController = [[MADTableController alloc] initWithQuery:rquery database:db];
+    tableController = [[MADTableController alloc] initWithQuery:rquery database:db
+                                                        tableID:schemaTable.objectID];
     
     [self.navigationController pushViewController: tableController animated: YES];
     

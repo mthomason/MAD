@@ -13,7 +13,7 @@
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 
 @interface MTQuerySampleDataField : MTQuery
-    <MADDatabaseResultsProtocol>
+    <MADDatabaseResultsProtocol, MADQueryFieldKeysProtocol>
 
     - (NSString *)getSql:(NSError * __autoreleasing *)error;
 

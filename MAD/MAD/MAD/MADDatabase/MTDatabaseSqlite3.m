@@ -661,7 +661,7 @@ void sqliteLog(void *foo, const char* statement) {
     return success;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query
+- (BOOL)executeQuery:(MTQuery <MADQueryDataBindingProtocol> *)query
        withDataTable:(__kindof MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
 
@@ -678,12 +678,13 @@ void sqliteLog(void *foo, const char* statement) {
         
         NSError * __autoreleasing *executeError = NULL;
         status = [self executeSQL: queryString
-                        fieldKeys: query.fieldKeys
+                        fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
+                                    ((MTQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
                      onConnection: nil
                   intoResultTable: dataTable
                    transactionSet: query.partOfTransactionSet
                    returnsResults: query.returnsResults
-                   binaryBindings: query.binaryBindings
+                   binaryBindings: [query conformsToProtocol:@protocol(MADQueryDataBindingProtocol)] ? query.binaryBindings : nil
                         withError: executeError];
         
         NSAssert(executeError == NULL, @"Error: %@", (*executeError).localizedDescription);

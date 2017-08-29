@@ -31,11 +31,20 @@
 
 #import "RptqDatabaseCredentals+Extras.h"
 
+@interface MTQueryMaxFieldLength ()
+    @property (nonatomic, strong) id queryObject;
+@end
+
 @implementation MTQueryMaxFieldLength
+
+@synthesize fieldKeys = _fieldKeys;
 
 - (instancetype)initWithObject:(id)object {
 
     if (self = [super initWithObject:object]) {
+
+        NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+        self.fieldKeys = fieldKeys;
         
         NSAssert([object respondsToSelector:@selector(array)], @"MTQueryMaxFieldLength expects to respond to array (hint, send an order set..");
 

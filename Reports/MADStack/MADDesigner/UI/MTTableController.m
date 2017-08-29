@@ -65,7 +65,7 @@
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MTQuery *)query database:(MTDatabase *)database {
+- (instancetype)initWithQuery:(MTQuery *)query database:(MTDatabase *)database tableID:(NSManagedObjectID *)tableID {
     
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
@@ -78,7 +78,7 @@
         
         MADDataTable *datatable;
         
-        datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
+        datatable = [MADTableController dataTableWithObjectId: tableID];
         self.datatable = datatable;
         
         tableLayout.delegate = self;

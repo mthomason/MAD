@@ -39,17 +39,18 @@
     return self;
 }
 
-- (void)addRow:(nonnull MADReportSectionRowsRepresentation *)row
+- (BOOL)addRow:(nonnull MADReportSectionRowsRepresentation *)row
          error:(NSError * __nullable __autoreleasing * __nullable)error {
+    BOOL success = YES;
     @try {
         [_rows addObject:row];
     } @catch (NSException *exception) {
         MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
                                                                   andMessage:@"Failed to add null value."];
         *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:49832];
-    } @finally {
-        
-    }
+        success = NO;
+    } @finally { }
+    return success;
 }
 
 - (NSUInteger)numberOfRows { return self.rows.count; }

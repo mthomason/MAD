@@ -42,15 +42,21 @@
 @interface MTQuerySampleDataTable ()
     <MADDatabaseResultsProtocol>
 
+    @property (nonatomic, strong) id queryObject;
     @property (nonatomic, strong) MADDataTable *dataTableMaxFieldLength;
 
 @end
 
 @implementation MTQuerySampleDataTable
 
+@synthesize fieldKeys = _fieldKeys;
+
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
+        NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+        self.fieldKeys = fieldKeys;
+
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]],
                  @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 

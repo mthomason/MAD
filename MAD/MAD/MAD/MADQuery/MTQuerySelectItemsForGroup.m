@@ -30,8 +30,13 @@
 
 @implementation MADQuerySelectItemsForGroup
 
+@synthesize binaryBindings = _binaryBindings;
+
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
+        
+        NSMutableArray *binaryBindings = [[NSMutableArray alloc] init];
+        self.binaryBindings = binaryBindings;
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.",
                  NSStringFromClass([self class]));

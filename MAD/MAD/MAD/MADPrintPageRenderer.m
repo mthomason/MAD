@@ -12,6 +12,7 @@
 
 #import "MADPrintPageRenderer.h"
 
+#import <os/log.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
@@ -542,7 +543,9 @@ static inline CGRect SectionBounds(CGRect pageRect,
             [rowRepresentation addLine:line];
         }
         NSError * __autoreleasing error = nil;
-        [sectionRepresentation addRow:rowRepresentation error:&error];
+        if (![sectionRepresentation addRow:rowRepresentation error:&error]) {
+            os_log_error(OS_LOG_DEFAULT, "%s", error.localizedDescription.UTF8String);
+        }
     }
     
 END_DrawSection:;

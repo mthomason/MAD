@@ -13,6 +13,7 @@
 #import "MADQueryParameters.h"
 
 @interface MTQueryCacheAddRow : MTQuery
+    <MADQueryDataBindingProtocol>
 
     @property (nonatomic, weak) id <MADQueryParametersStandardProtocol,
                                     MADQueryParametersColumnKeysProtocol,

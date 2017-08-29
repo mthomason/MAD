@@ -12,7 +12,7 @@
 #import "MTQuery.h"
 
 @interface MTQueryCacheAggregateFunction : MTQuery
-
+    <MADQueryDataBindingProtocol>
 @end
 
 #endif

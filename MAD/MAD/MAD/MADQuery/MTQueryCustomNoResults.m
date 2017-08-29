@@ -14,7 +14,7 @@
 #import <Foundation/NSException.h>
 
 @interface MTQueryCustomNoResults ()
-
+    @property (nonatomic, strong) id queryObject;
 @end
 
 @implementation MTQueryCustomNoResults

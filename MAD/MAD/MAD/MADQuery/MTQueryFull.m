@@ -78,12 +78,13 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 }
 
 @interface MTQueryFull ()
-
+    @property (nonatomic, strong) id queryObject;
     @property (nonatomic, copy) NSManagedObjectID *objectID;
-
 @end
 
 @implementation MTQueryFull
+
+@synthesize fieldKeys = _fieldKeys;
 
 - (void)dealloc {
     self.dataDelegate = nil;
@@ -93,6 +94,10 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 - (instancetype)initWithQuery: (RptqQuery *)query
                 andQueryLimit: (NSUInteger)queryLimit {
     if (self = [super initWithObject:query]) {
+        
+        NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+        self.fieldKeys = fieldKeys;
+
         _objectID = query.objectID.copy;
         _limitResults = queryLimit;
         
@@ -109,6 +114,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     
     NSAssert([object isKindOfClass:[NSDictionary class]],
              @"MTQueryFull expects NSDictionary with parameters.");
+
+    NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+    self.fieldKeys = fieldKeys;
 
     NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
     NSNumber *queryLimitWrapper = object[@"MADQueryLimit"];

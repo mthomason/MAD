@@ -68,7 +68,9 @@
                                                                     fieldIndex: counterBinings
                                                                          value: columnValue];
             }
-            [self.binaryBindings addObject:databinding];
+            if ([self conformsToProtocol:@protocol(MADQueryDataBindingProtocol)]) {
+                [((MTQuery <MADQueryDataBindingProtocol> *)self).binaryBindings addObject:databinding];
+            }
             [sql appendFormat:@"%@ = ?", columnHandle];
             counterBinings++;
             counter++;

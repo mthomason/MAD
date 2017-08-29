@@ -40,7 +40,12 @@ static NSString * const SqlDelimitorObject = @", %@";
     NSString *_sqlColumnPart;
 }
 
+@synthesize binaryBindings = _binaryBindings;
+
 - (void)update {
+
+    NSMutableArray *binaryBindings = [[NSMutableArray alloc] init];
+    self.binaryBindings = binaryBindings;
 
     id <MADQueryParametersStandardProtocol,
         MADQueryParametersColumnKeysProtocol,

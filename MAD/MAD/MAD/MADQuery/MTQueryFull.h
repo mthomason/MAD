@@ -14,7 +14,7 @@
 @class NSManagedObjectID, NSManagedObjectContext;
 
 @interface MTQueryFull : MTQuery
-
+    <MADQueryFieldKeysProtocol>
     - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
 
     - (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext

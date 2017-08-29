@@ -12,6 +12,7 @@
 #import "MTQuery.h"
 
 @interface MTQueryMaxFieldLength : MTQuery
+    <MADQueryFieldKeysProtocol>
 
     - (NSString *)getSql:(NSError * __autoreleasing *)error;
 

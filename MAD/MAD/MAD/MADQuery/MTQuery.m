@@ -54,17 +54,9 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 - (BOOL)partOfTransactionSet { return NO; }
 
 - (instancetype)initWithObject:(id)object {
-    
     if (self = [super init]) {
-        
-        NSMutableArray *binaryBindings = [[NSMutableArray alloc] init];
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
-        NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
-
-        self.binaryBindings = binaryBindings;
         self.fields = fieldInfo;
-        self.fieldKeys = fieldKeys;
-
     }
     return self;
 }
@@ -81,13 +73,17 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
     [self.fields removeAllObjects];
-    [self.fieldKeys removeAllObjects];
+    if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
+    }
     return @"";
 }
 
 - (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error {
     [self.fields removeAllObjects];
-    [self.fieldKeys removeAllObjects];
+    if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
+    }
     if (self.database == nil) {
         self.database = database;
     }
@@ -103,14 +99,16 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
-    return (index < self.fieldKeys.count) ? self.fieldKeys[index] : nil;
+    NSString *key = nil;
+    if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+        key = (index < ((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys.count) ?
+                ((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys[index] : nil;
+    }
+    return key;
 }
 
 - (NSMutableDictionary *)fields {
     return _fields == nil ? _fields = [NSMutableDictionary new] : _fields;
-}
-- (NSMutableArray *)fieldKeys {
-    return _fieldKeys == nil ? _fieldKeys = [NSMutableArray new] : _fieldKeys;
 }
 
 @end

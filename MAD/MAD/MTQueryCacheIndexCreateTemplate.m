@@ -12,6 +12,10 @@
 
 #import "MADCacheIndexType.h"
 
+@interface MTQueryCacheIndexCreateTemplate ()
+    @property (nonatomic, strong) id queryObject;
+@end
+
 @implementation MTQueryCacheIndexCreateTemplate {
     NSUInteger _groupCount;
 }
