@@ -1,17 +1,17 @@
 //
-//  MADDatabaseConnectionsPropertiesCredentals.h
+//  MADConnectionsPropertiesProtocol.h
 //  MAD
 //
 //  Created by Michael on 2/16/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDatabaseConnectionsPropertiesCredentals_h
-#define MADDatabaseConnectionsPropertiesCredentals_h
+#ifndef MADConnectionsPropertiesProtocol_h
+#define MADConnectionsPropertiesProtocol_h
 
 #import <MAD/MADDatabaseType.h>
 
-@protocol MADDatabaseConnectionsPropertiesCredentals <NSObject>
+@protocol MADConnectionsPropertiesProtocol <NSObject>
   @optional
     @property (readonly, nonatomic, copy)      NSString  *domain;
     @property (readonly, nonatomic, copy)      NSString  *host;
@@ -22,4 +22,4 @@
     @property (readonly, nonatomic, assign)    MADDatabaseType databaseType;
 @end
 
-#endif /* MADDatabaseConnectionsPropertiesCredentals_h */
+#endif /* MADConnectionsPropertiesProtocol_h */
