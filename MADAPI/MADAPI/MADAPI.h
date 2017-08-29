@@ -16,6 +16,7 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADAPI/PublicHeader.h>
 
+#import <MADAPI/MADDatabaseProtocol.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseType.h>
 #import <MADAPI/MADNotificationDidReadRows.h>

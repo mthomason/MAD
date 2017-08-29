@@ -16,6 +16,7 @@
 		4CF6AAC21F551AAB0061B0C6 /* MADNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */; };
 		4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAC81F55204A0061B0C6 /* MADDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */; };
+		4CF6AACA1F5524050061B0C6 /* MADDatabaseProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 		4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNotificationDidReadRows.m; sourceTree = "<group>"; };
 		4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnection.h; sourceTree = "<group>"; };
 		4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnection.m; sourceTree = "<group>"; };
+		4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
+				4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */,
 				4CF6AABB1F5519280061B0C6 /* MADDatabaseResultsProtocol.h */,
 				4CF6AABC1F5519280061B0C6 /* MADDatabaseType.h */,
 				4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */,
@@ -115,6 +118,7 @@
 				4CF6AABD1F5519280061B0C6 /* MADDatabaseResultsProtocol.h in Headers */,
 				4CF6AABE1F5519280061B0C6 /* MADDatabaseType.h in Headers */,
 				4CF6AAC01F551A5B0061B0C6 /* MADNotificationDidReadRows.h in Headers */,
+				4CF6AACA1F5524050061B0C6 /* MADDatabaseProtocol.h in Headers */,
 				4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,7 +13,7 @@
 
 #import <Foundation/NSObject.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MAD/MADDatabaseProtocol.h>
+#import <MADAPI/MADDatabaseProtocol.h>
 
 typedef NSString MADSafeQueryField;
 
