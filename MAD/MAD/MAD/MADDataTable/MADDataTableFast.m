@@ -61,6 +61,7 @@
 #import "MADDataTableObjectEnumerator.h"
 
 #import "MTQuery.h"
+#import "MTQuery+Extras.h"
 #import "MTQueryCacheAddRow.h"
 #import "MTQueryCacheIndexDrop.h"
 #import "MTQueryCacheAddColumn.h"

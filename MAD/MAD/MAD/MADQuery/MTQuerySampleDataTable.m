@@ -31,6 +31,8 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTablePlist.h>
 
+#import "MTQuery+Extras.h"
+
 #import "MTDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
 #import "MADDatabaseField+Constructor.h"

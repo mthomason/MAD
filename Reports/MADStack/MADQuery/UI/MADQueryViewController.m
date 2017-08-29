@@ -37,6 +37,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
+#import <MAD/MTQuery+Extras.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>

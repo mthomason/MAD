@@ -44,6 +44,7 @@
 #import <MAD/MADocument.h>
 #import <MADAPI/MTDatabase.h>
 #import <MAD/RptqQueryField+Extras.h>
+#import <MAD/MTQuery+Extras.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
 

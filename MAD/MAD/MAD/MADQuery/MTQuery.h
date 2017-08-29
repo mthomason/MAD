@@ -41,8 +41,6 @@ extern NSString * const MADIdentifierROWID;
 
     @property (nonatomic, assign, readonly) MADQueryType type;
 
-    - (instancetype)initWithQueryType:(MADQueryType)type object:(id)object;
-
     - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
 
     - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error;

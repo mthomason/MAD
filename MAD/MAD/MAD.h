@@ -13,6 +13,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
 #import <MAD/MADocument.h>
 #import <MAD/MADActivityProtocol.h>
+#import <MAD/MADActivityItemProviderDelegate.h>
 
 #import <MAD/MADDataFormatter.h>
 
@@ -97,4 +98,4 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
 #import <MAD/MADSchemaFieldSelectorModel.h>
 
-#import <MAD/MADActivityItemProviderDelegate.h>
+#import <MAD/MTQuery+Extras.h>

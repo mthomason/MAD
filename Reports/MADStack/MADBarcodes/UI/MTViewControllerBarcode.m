@@ -35,6 +35,7 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 #import <MAD/MADDataTable+Constructor.h>
+#import <MAD/MTQuery+Extras.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>

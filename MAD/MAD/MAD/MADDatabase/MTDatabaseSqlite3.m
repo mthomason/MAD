@@ -46,8 +46,8 @@
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
-#import "MTQueryCacheDeleteAllFromTable.h"
 
+#import "MTQueryCacheDeleteAllFromTable.h"
 #import "MTQuery.h"
 
 #import "MTQueryCacheSyncOff.h"

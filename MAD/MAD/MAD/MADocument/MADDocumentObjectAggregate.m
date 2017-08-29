@@ -26,6 +26,7 @@
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADArrayCaching.h"
 #import "MTQuery.h"
+#import "MTQuery+Extras.h"
 #import "MADAggregateFunctionGroupByType.h"
 
 #import "MADDocumentObjectReference.h"
