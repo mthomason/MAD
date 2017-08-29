@@ -23,9 +23,9 @@
 #import <CoreData/NSEntityDescription.h>
 
 #import <MADAPI/MADDatabaseType.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import "RptqDatabase+Extras.h"
-#import "MADDatabaseConnection.h"
 
 #import "RptqDataHelper.h"
 

@@ -44,6 +44,7 @@
 #import <MADFoundation/NSString+Common.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -69,7 +70,6 @@
 #import "MADocumentState.h"
 
 #import "MADReportFormatter.h"
-#import "MADDatabaseConnection.h"
 
 #import "MADNotificationDidFormatPage.h"
 

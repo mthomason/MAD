@@ -11,11 +11,11 @@
 #endif
 
 #import "MTQueryCacheIndexDrop.h"
-#import "MTDatabase.h"
-#import "MADDatabaseConnection.h"
-#import "MADQueryCacheIndexDropParameters.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import "MTDatabase.h"
+#import "MADQueryCacheIndexDropParameters.h"
 
 @interface MTQueryCacheIndexDrop ()
 

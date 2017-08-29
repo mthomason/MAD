@@ -18,8 +18,6 @@
 
 #import "madlib.h"
 
-#import <MADSqlite3/sqlite3.h>
-
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSString.h>
@@ -35,7 +33,10 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSOperation.h>
 
+#import <MADSqlite3/sqlite3.h>
+
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADDataStructures/MADIndex.h>
 
@@ -56,7 +57,6 @@
 #import "MADConstants.h"
 
 #import "MADDataTableObjectEnumerator.h"
-#import "MADDatabaseConnection.h"
 
 #import "MTQuery.h"
 #import "MTQueryCacheAddRow.h"

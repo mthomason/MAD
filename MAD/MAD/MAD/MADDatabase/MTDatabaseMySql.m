@@ -20,6 +20,7 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
@@ -30,7 +31,6 @@
 
 #import "MTQuery.h"
 
-#import "MADDatabaseConnection.h"
 #import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"

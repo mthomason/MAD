@@ -22,8 +22,7 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
-
-#import "MADDatabaseConnection.h"
+#import <MADAPI/MADDatabaseConnection.h>
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 

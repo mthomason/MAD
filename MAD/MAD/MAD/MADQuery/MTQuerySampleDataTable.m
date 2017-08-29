@@ -19,6 +19,7 @@
 #import <Foundation/NSError.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
@@ -26,7 +27,6 @@
 
 #import "MTDatabase.h"
 #import "MADDatabaseField.h"
-#import "MADDatabaseConnection.h"
 
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTablePlist.h>

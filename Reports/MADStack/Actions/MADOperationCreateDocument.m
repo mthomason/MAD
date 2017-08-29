@@ -10,7 +10,7 @@
 
 #import <os/log.h>
 
-#import <MAD/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MTKeyChain.h>

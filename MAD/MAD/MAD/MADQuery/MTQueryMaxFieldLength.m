@@ -15,8 +15,9 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
 
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import "MTDatabase.h"
-#import "MADDatabaseConnection.h"
 #import "MADDatabaseField.h"
 
 #import "RptqDatabase.h"

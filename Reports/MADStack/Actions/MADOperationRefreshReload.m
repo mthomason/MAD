@@ -14,9 +14,9 @@
 #import <MADFoundation/MADOperationQueue.h>
 
 #import <MADAPI/MADNotificationDidReadRows.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MADDatabaseConnection.h>
 
 #import "MADOperationGetCredentials.h"
 #import "MADOperationRefreshInitalizeMainDataTable.h"

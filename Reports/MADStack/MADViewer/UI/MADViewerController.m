@@ -35,6 +35,7 @@
 #import <MADFoundation/MADOperationObserver.h>
 
 #import <MADAPI/MADNotificationDidReadRows.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
@@ -51,7 +52,6 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTPaper.h>
 
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADDataTableFast.h>
 
 #import <MAD/MADActivityItemProviderPdf.h>

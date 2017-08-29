@@ -9,13 +9,14 @@
 #import <os/log.h>
 #import <CoreData/NSManagedObjectContext.h>
 
-#import "MADOperationCreateDocumentFirstTimeSetup.h"
-#import <MAD/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocument+extras.h>
 #import <MAD/RptqDatabase+extras.h>
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
+#import "MADOperationCreateDocumentFirstTimeSetup.h"
 #import "MADOperationCreateDocumentCreateDocument.h"
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()

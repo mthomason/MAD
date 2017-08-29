@@ -20,6 +20,8 @@
 
 #import <MADDataStructures/MADIndex.h>
 
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
@@ -27,7 +29,6 @@
 
 #import "MTQueryCacheDeleteAllFromTable.h"
 
-#import "MADDatabaseConnection.h"
 #import "MTQueryCacheAddColumn.h"
 #import "MTDatabaseSqlite3.h"
 

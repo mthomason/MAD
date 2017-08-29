@@ -33,13 +33,14 @@
 #import <MADTdsClient/sybdb.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
-#import <MADCocoaExtensions/BDHost.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADCredential.h>
 
+#import <MADCocoaExtensions/BDHost.h>
+
 #import "MADConnectionsPropertiesProtocol.h"
-#import "MADDatabaseConnection.h"
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"
 

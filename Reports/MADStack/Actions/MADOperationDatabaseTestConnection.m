@@ -17,10 +17,10 @@
 #import <MADFoundation/MADCredential.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADDataTable+Constructor.h>

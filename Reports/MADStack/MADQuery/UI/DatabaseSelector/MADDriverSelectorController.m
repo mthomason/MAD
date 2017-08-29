@@ -19,7 +19,7 @@
 #import <UIKit/UIVisualEffectView.h>
 #import <UIKit/UIStoryboardSegue.h>
 
-#import <MAD/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MADViewControllerStandardProtocol.h"

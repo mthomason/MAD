@@ -14,11 +14,13 @@
 #import <Foundation/NSURL.h>
 
 #import <MADFoundation/MADCredential.h>
+
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDataTableFast.h>
 #import <MAD/MTQuery.h>
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MTQueryFull.h>

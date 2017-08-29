@@ -7,8 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import <MAD/MTDatabase.h>
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTQueryTest.h>
 

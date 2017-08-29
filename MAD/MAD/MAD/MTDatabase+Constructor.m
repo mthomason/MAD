@@ -7,7 +7,7 @@
 //
 
 #import "MTDatabase+Constructor.h"
-#import "MADDatabaseConnection.h"
+#import <MADAPI/MADDatabaseConnection.h>
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseSqlServer.h"

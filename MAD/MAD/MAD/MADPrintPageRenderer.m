@@ -18,8 +18,9 @@
 #import <UIKit/UIInterface.h>
 #import <UIKit/NSParagraphStyle.h>
 
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import "MADocument.h"
-#import "MADDatabaseConnection.h"
 #import "MADDatabaseField.h"
 
 #import "RptqDocument+Extras.h"

@@ -16,13 +16,13 @@
 
 #import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
 
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import <MAD/MADocument.h>
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 
 #import <MAD/MADSQLJoinType.h>
 
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
 
 @interface MADQueryAddLinkJoinTypeController ()

@@ -9,7 +9,7 @@
 #ifndef Reports_MADDatabaseConnection_Constructor_h
 #define Reports_MADDatabaseConnection_Constructor_h
 
-#import <MAD/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 @interface MADDatabaseConnection (Constructor)
 

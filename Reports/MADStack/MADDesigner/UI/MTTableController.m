@@ -29,8 +29,8 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseField.h>

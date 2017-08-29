@@ -39,10 +39,10 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQueryField+Extras.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>

@@ -16,11 +16,11 @@
 #import <Foundation/NSURL.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
-#import "MADDatabaseConnection.h"
 #import "MTDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
 

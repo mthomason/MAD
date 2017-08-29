@@ -25,10 +25,11 @@
 
 #import <MADExplorer/MADSaveFileProtocol.h>
 
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MTKeyChain.h>

@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseConnectionMySql_h
 #define Reports_MTDatabaseConnectionMySql_h
 
-#import "MADDatabaseConnection.h"
+#import <MADAPI/MADDatabaseConnection.h>
 #import "MADConnectionsPropertiesProtocol.h"
 
 @interface MTDatabaseConnectionMySql : MADDatabaseConnection

@@ -9,12 +9,13 @@
 #import "MADOperationGetCredentials.h"
 #import <os/log.h>
 
-#import <MAD/MTKeyChain.h>
-#import <MAD/MADDatabaseConnection.h>
-
 #import <MADFoundation/NSOperation+Advanced.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationBooleanAnd.h>
+
+#import <MADAPI/MADDatabaseConnection.h>
+
+#import <MAD/MTKeyChain.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MADFoundation/MADOperationConditionMissingResultString.h>

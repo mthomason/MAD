@@ -26,10 +26,11 @@
 
 #import <UIKit/UIImage.h>
 
+#import <MADAPI/MADDatabaseConnection.h>
+
 #import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 
-#import "MADDatabaseConnection.h"
 #import "MTDatabase.h"
 
 #import "RptqQueryGroup+Extras.h"

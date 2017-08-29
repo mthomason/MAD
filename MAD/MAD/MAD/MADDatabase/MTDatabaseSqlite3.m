@@ -35,6 +35,7 @@
 #import <Foundation/NSString.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADSqlite3/sqlite3.h>
 
@@ -45,7 +46,6 @@
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 #import "MTQueryCacheDeleteAllFromTable.h"
 
-#import "MADDatabaseConnection.h"
 #import "MTQuery.h"
 #import "MADDatabaseTable.h"
 
