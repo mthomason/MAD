@@ -1054,6 +1054,7 @@
 		4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */; };
 		4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */; };
 		4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */; };
+		4CF6AAC41F551C4D0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AAC31F551C4D0061B0C6 /* MADAPI.framework */; };
 		4CF6AFC01CAFB55C00D3AD11 /* MADOperationRefreshReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */; };
 		4CF6AFC31CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC21CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m */; };
 		4CF6AFC61CAFC14200D3AD11 /* MADOperationRefreshInitialize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC51CAFC14200D3AD11 /* MADOperationRefreshInitialize.m */; };
@@ -2393,6 +2394,7 @@
 		4CF6AA241F5269790061B0C6 /* MADExplorerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExplorerAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4CF6AA271F5405DC0061B0C6 /* Icon-Designer.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Icon-Designer.pdf"; sourceTree = "<group>"; };
+		4CF6AAC31F551C4D0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "MADAPI/build/Debug-iphoneos/MADAPI.framework"; sourceTree = "<group>"; };
 		4CF6AFBE1CAFB55C00D3AD11 /* MADOperationRefreshReload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshReload.h; sourceTree = "<group>"; };
 		4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefreshReload.m; sourceTree = "<group>"; };
 		4CF6AFC11CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshInitalizeMainDataTable.h; sourceTree = "<group>"; };
@@ -2492,6 +2494,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF6AAC41F551C4D0061B0C6 /* MADAPI.framework in Frameworks */,
 				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
 				4CB98A921E13839400B3A580 /* MADDataStructures.framework in Frameworks */,
 				4CB98A941E13839400B3A580 /* MADCocoaExtensions.framework in Frameworks */,
@@ -4022,6 +4025,7 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CF6AAC31F551C4D0061B0C6 /* MADAPI.framework */,
 				4C5716751E622278007780A0 /* MADFoundation.framework */,
 				4CA9D79B1E13820800ED9D78 /* MADDataStructures.framework */,
 				4CA9D7991E13820200ED9D78 /* MADCocoaExtensions.framework */,

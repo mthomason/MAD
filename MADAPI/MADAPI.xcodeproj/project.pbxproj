@@ -12,6 +12,8 @@
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AABD1F5519280061B0C6 /* MADDatabaseResultsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AABB1F5519280061B0C6 /* MADDatabaseResultsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AABE1F5519280061B0C6 /* MADDatabaseType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AABC1F5519280061B0C6 /* MADDatabaseType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF6AAC01F551A5B0061B0C6 /* MADNotificationDidReadRows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF6AAC21F551AAB0061B0C6 /* MADNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +35,8 @@
 		4CF6AAAF1F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CF6AABB1F5519280061B0C6 /* MADDatabaseResultsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseResultsProtocol.h; sourceTree = "<group>"; };
 		4CF6AABC1F5519280061B0C6 /* MADDatabaseType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseType.h; sourceTree = "<group>"; };
+		4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNotificationDidReadRows.h; sourceTree = "<group>"; };
+		4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNotificationDidReadRows.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,8 @@
 				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
 				4CF6AABB1F5519280061B0C6 /* MADDatabaseResultsProtocol.h */,
 				4CF6AABC1F5519280061B0C6 /* MADDatabaseType.h */,
+				4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */,
+				4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */,
 				4CF6AAA31F5518BB0061B0C6 /* Info.plist */,
 			);
 			path = MADAPI;
@@ -102,6 +108,7 @@
 				4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */,
 				4CF6AABD1F5519280061B0C6 /* MADDatabaseResultsProtocol.h in Headers */,
 				4CF6AABE1F5519280061B0C6 /* MADDatabaseType.h in Headers */,
+				4CF6AAC01F551A5B0061B0C6 /* MADNotificationDidReadRows.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF6AAC21F551AAB0061B0C6 /* MADNotificationDidReadRows.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +277,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -315,7 +323,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -329,6 +337,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -347,6 +356,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				DYLIB_COMPATIBILITY_VERSION = 1;

@@ -18,4 +18,4 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseType.h>
-
+#import <MADAPI/MADNotificationDidReadRows.h>

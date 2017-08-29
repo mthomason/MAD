@@ -34,6 +34,8 @@
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationObserver.h>
 
+#import <MADAPI/MADNotificationDidReadRows.h>
+
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -54,7 +56,6 @@
 
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
-#import <MAD/MADNotificationDidReadRows.h>
 
 #import "MADPrintingProtocol.h"
 #import "MADViewControllerStandardProtocol.h"

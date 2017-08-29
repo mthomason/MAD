@@ -10,10 +10,11 @@
 #import <os/log.h>
 #import "UIApplication+Extras.h"
 
+#import <MADAPI/MADNotificationDidReadRows.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MADPrintPageRenderer.h>
 #import <MAD/MADNotificationDidFormatPage.h>
-#import <MAD/MADNotificationDidReadRows.h>
 #import "MADDocumentPageController.h"
 #import "MADPageViewAttributes.h"
 
