@@ -34,21 +34,21 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 
-#import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADDatabaseDataBinding.h>
-
 #import <MADSqlite3/sqlite3.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADDataTable.h>
 
-#import "MADDatabaseConnectionsPropertiesURLProtocol.h"
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseDataBinding.h>
+
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import "MTQueryCacheDeleteAllFromTable.h"
 
 #import "MTQuery.h"
-#import <MADAPI/MADDatabaseTable.h>
 
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeOverride.h"

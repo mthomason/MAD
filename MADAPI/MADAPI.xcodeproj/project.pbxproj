@@ -27,6 +27,7 @@
 		4CF6AADA1F5526DE0061B0C6 /* MADDatabaseDataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAD81F5526DE0061B0C6 /* MADDatabaseDataBinding.m */; };
 		4CF6AADD1F5528710061B0C6 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */; };
 		4CF6AADF1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AADE1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		4CF6AAD81F5526DE0061B0C6 /* MADDatabaseDataBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseDataBinding.m; sourceTree = "<group>"; };
 		4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4CF6AADE1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseCacheProtocol.h; sourceTree = "<group>"; };
+		4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionsPropertiesURLProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 				4CF6AAD81F5526DE0061B0C6 /* MADDatabaseDataBinding.m */,
 				4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */,
 				4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */,
+				4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */,
 				4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */,
 				4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */,
 				4CF6AAA31F5518BB0061B0C6 /* Info.plist */,
@@ -164,6 +167,7 @@
 				4CF6AACA1F5524050061B0C6 /* MADDatabaseProtocol.h in Headers */,
 				4CF6AAD51F5526A00061B0C6 /* MADDatabaseTable.h in Headers */,
 				4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */,
+				4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

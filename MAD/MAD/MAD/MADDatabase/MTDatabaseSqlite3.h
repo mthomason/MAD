@@ -9,12 +9,12 @@
 #ifndef Reports_MADDatabaseSqlite3_h
 #define Reports_MADDatabaseSqlite3_h
 
-#import <MADAPI/MTDatabase.h>
 #import <Foundation/NSString.h>
 
-#import <MADAPI/MADDatabaseCacheProtocol.h>
-
 #import <MADFoundation/MADDataType.h>
+
+#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabaseCacheProtocol.h>
 
 BOOL Sqlite3StepResultOK(int result);
 

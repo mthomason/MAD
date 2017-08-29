@@ -23,7 +23,6 @@
 		4C1E54EC1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54EE1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54F01E56666100E3FAF0 /* MADConnectionsPropertiesProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54EF1E56666100E3FAF0 /* MADConnectionsPropertiesProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C1E54F21E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F11E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h */; };
 		4C1E54F41E56693100E3FAF0 /* MADHorizontalAlignmentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F31E56693100E3FAF0 /* MADHorizontalAlignmentType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54F61E56694E00E3FAF0 /* MADVerticalAlignmentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F51E56694E00E3FAF0 /* MADVerticalAlignmentType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54F81E56698800E3FAF0 /* MADAlignment_t.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F71E56698800E3FAF0 /* MADAlignment_t.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -640,7 +639,6 @@
 		4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsPasswordProtocol.h; sourceTree = "<group>"; };
 		4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsCredentialsProtocol.h; sourceTree = "<group>"; };
 		4C1E54EF1E56666100E3FAF0 /* MADConnectionsPropertiesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADConnectionsPropertiesProtocol.h; path = MAD/MADConnectionsPropertiesProtocol.h; sourceTree = "<group>"; };
-		4C1E54F11E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionsPropertiesURLProtocol.h; path = MAD/MADDatabaseConnectionsPropertiesURLProtocol.h; sourceTree = "<group>"; };
 		4C1E54F31E56693100E3FAF0 /* MADHorizontalAlignmentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADHorizontalAlignmentType.h; path = MAD/MADHorizontalAlignmentType.h; sourceTree = "<group>"; };
 		4C1E54F51E56694E00E3FAF0 /* MADVerticalAlignmentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVerticalAlignmentType.h; sourceTree = "<group>"; };
 		4C1E54F71E56698800E3FAF0 /* MADAlignment_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlignment_t.h; path = MAD/MADAlignment_t.h; sourceTree = "<group>"; };
@@ -2096,7 +2094,6 @@
 				4C1E54EB1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h */,
 				4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */,
 				4C1E54EF1E56666100E3FAF0 /* MADConnectionsPropertiesProtocol.h */,
-				4C1E54F11E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -2592,7 +2589,6 @@
 				4C35E26D1EC9E7480090D1BF /* RptqRect+Extras.h in Headers */,
 				4C401E331BAE3DCB00BAE5FC /* MTDatabaseMySql.h in Headers */,
 				4C35E2651EC9D6CA0090D1BF /* RptqDirectionalAsymmetry+Extras.h in Headers */,
-				4C1E54F21E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

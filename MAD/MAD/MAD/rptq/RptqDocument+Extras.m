@@ -29,7 +29,8 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import "MADConnectionsPropertiesProtocol.h"
-#import "MADDatabaseConnectionsPropertiesURLProtocol.h"
+
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 
 #import <MADAPI/MTDatabase.h>
 #import <MADAPI/MADDatabaseTable.h>
