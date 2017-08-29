@@ -11,9 +11,6 @@
          location = "group:MADFeedback/MADFeedback.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:MADDatabase/MADDatabase.xcodeproj">
-      </FileRef>
-      <FileRef
          location = "group:MADFoundation/MADFoundation.xcodeproj">
       </FileRef>
       <FileRef
