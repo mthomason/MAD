@@ -21,6 +21,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
+#import <MADAPI/MADDatabaseTable.h>
+
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDocument.h"
@@ -31,7 +33,6 @@
 #import "RptqQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-#import "MADDatabaseTable.h"
 
 #import "RptqDataHelper.h"
 

@@ -30,10 +30,10 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabaseField.h>
 
 #import <MAD/RptqQuery.h>
-#import <MADAPI/MTDatabase.h>
-#import <MAD/MADDatabaseField.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>

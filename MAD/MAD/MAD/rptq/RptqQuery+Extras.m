@@ -24,7 +24,7 @@
 
 #import <MADFoundation/NSString+Common.h>
 
-#import "MADDatabaseField.h"
+#import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MTDatabase.h>
 
 #import "RptqDocument.h"

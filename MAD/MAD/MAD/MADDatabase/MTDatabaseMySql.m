@@ -21,6 +21,8 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseField.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
@@ -32,8 +34,6 @@
 #import "MTQuery.h"
 
 #import "MADConnectionsPropertiesProtocol.h"
-#import "MADDatabaseTable.h"
-#import "MADDatabaseField.h"
 
 #import "MADDataTable+Constructor.h"
 

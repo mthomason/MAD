@@ -15,8 +15,7 @@
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
-
-#import "MADDatabaseDataBinding.h"
+#import <MADAPI/MADDatabaseDataBinding.h>
 
 // FIXME: Remove dependency on MTDatabaseSqlite3
 #import "MTDatabaseSqlite3.h"

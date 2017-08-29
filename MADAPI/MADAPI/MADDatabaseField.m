@@ -11,9 +11,9 @@
 #endif
 
 #import "MADDatabaseField.h"
-#import "NSData+Comparson.h"
 #import <Foundation/NSString.h>
 #import <MADFoundation/MADDataType.h>
+#import <MADFoundation/NSData+Comparson.h>
 
 static inline BOOL isDataTypeNumeric(MADDataType type);
 static inline BOOL isDataTypeNumeric(MADDataType type) {

@@ -52,6 +52,8 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 
+#import <MADAPI/MADDatabaseDataBinding.h>
+
 #import <MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import "MADConstants.h"
@@ -80,7 +82,6 @@
 
 
 #import "MADQueryParameters.h"
-#import "MADDatabaseDataBinding.h"
 
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabase+Constructor.h"

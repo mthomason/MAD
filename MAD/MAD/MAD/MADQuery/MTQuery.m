@@ -22,6 +22,8 @@
 
 #import <MADFoundation/MADDataColumn.h>
 
+#import <MADAPI/MADDatabaseDataBinding.h>
+
 #import "MTQueryCacheSelectRowId.h"
 #import "MTQuerySampleDataField.h"
 #import "MTQuerySampleDataTable.h"
@@ -50,8 +52,6 @@
 
 #import "MADQueryCacheDeleteAllFromTableParameters.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "MADDatabaseDataBinding.h"
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 

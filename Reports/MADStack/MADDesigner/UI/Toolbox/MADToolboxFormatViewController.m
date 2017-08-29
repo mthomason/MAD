@@ -24,8 +24,10 @@
 #import <MAD/RptqNumericFormat.h>
 
 #import <MAD/MADocument.h>
+
 #import <MADAPI/MTDatabase.h>
-#import <MAD/MADDatabaseField.h>
+#import <MADAPI/MADDatabaseField.h>
+
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MADDatabaseDataBinding_h
-#define MAD_MADDatabaseDataBinding_h
+#ifndef MADAPI_MADDatabaseDataBinding_h
+#define MADAPI_MADDatabaseDataBinding_h
 
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>

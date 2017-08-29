@@ -9,7 +9,7 @@
 #ifndef Reports_MADDatabaseField_Constructor_h
 #define Reports_MADDatabaseField_Constructor_h
 
-#import <MAD/MADDatabaseField.h>
+#import <MADAPI/MADDatabaseField.h>
 
 @class RptqDatabaseSchemaField;
 

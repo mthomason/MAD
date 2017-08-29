@@ -20,7 +20,7 @@
 
 #import <MADFoundation/NSString+Common.h>
 
-#import "MADDatabaseField.h"
+#import <MADAPI/MADDatabaseField.h>
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 

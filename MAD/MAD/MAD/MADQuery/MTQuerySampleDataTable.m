@@ -26,7 +26,7 @@
 #import "RptqDatabase.h"
 
 #import <MADAPI/MTDatabase.h>
-#import "MADDatabaseField.h"
+#import <MADAPI/MADDatabaseField.h>
 
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTablePlist.h>

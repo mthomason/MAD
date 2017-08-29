@@ -12,7 +12,7 @@
 #import <MADFoundation/MADDataType.h>
 
 #import <MADAPI/MTDatabase.h>
-#import "MADDatabaseField.h"
+#import <MADAPI/MADDatabaseField.h>
 
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"

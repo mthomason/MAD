@@ -7,22 +7,24 @@
 //
 
 #import "MADOperationCreateDocumentImportSchema.h"
+
+#import <os/log.h>
+
 #import <CoreData/NSManagedObjectContext.h>
+
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseField.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MADDatabaseTable.h>
-#import <MAD/MADDatabaseField.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 
 #import "MADOperationCreateDocumentCreateDocument.h"
-
-#import <os/log.h>
 
 @interface MADOperationCreateDocumentImportSchema ()
 

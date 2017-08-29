@@ -21,7 +21,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import "MADocument.h"
-#import "MADDatabaseField.h"
+#import <MADAPI/MADDatabaseField.h>
 
 #import "RptqDocument+Extras.h"
 #import "RptqDocument+Extras.h"

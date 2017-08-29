@@ -18,7 +18,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADAPI/MTDatabase.h>
-#import "MADDatabaseField.h"
+#import <MADAPI/MADDatabaseField.h>
 
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"

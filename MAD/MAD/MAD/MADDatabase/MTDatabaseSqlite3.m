@@ -36,6 +36,7 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseDataBinding.h>
 
 #import <MADSqlite3/sqlite3.h>
 
@@ -47,9 +48,8 @@
 #import "MTQueryCacheDeleteAllFromTable.h"
 
 #import "MTQuery.h"
-#import "MADDatabaseTable.h"
+#import <MADAPI/MADDatabaseTable.h>
 
-#import "MADDatabaseDataBinding.h"
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeOverride.h"
 #import "MTQueryCacheBeginTransaction.h"
