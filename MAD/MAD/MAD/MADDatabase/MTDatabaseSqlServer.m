@@ -37,7 +37,7 @@
 #import <MADFoundation/MADCredential.h>
 
 #import "MADDatabaseResultsProtocol.h"
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseConnection.h"
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"
@@ -70,7 +70,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 @interface MTDatabaseSqlServer ()
 
-    @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
 
 @end
 

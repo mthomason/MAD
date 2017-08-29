@@ -11,10 +11,10 @@
 
 #import <CoreData/NSFetchRequest.h>
 #import <MAD/RptqDatabaseCredentals.h>
-#import <MAD/MADDatabaseConnectionsPropertiesCredentals.h>
+#import <MAD/MADConnectionsPropertiesProtocol.h>
 
 @interface RptqDatabaseCredentals (Extras)
-    <MADDatabaseConnectionsPropertiesCredentals>
+    <MADConnectionsPropertiesProtocol>
 
     + (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext;
     + (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext;

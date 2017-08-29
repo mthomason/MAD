@@ -12,10 +12,10 @@
 #import <Foundation/NSObject.h>
 #import "MADDatabaseType.h"
 
-@protocol MADDatabaseConnectionsPropertiesCredentals;
+@protocol MADConnectionsPropertiesProtocol;
 
 @protocol MADDatabaseConnectionConstructors <NSObject>
-    + (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals;
+    + (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 @end
 
 @protocol MADDatabaseConnectionsProperties <NSObject>

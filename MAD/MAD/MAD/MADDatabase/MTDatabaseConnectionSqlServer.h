@@ -10,12 +10,12 @@
 #define Reports_MTDatabaseConnectionSqlServer_h
 
 #import "MADDatabaseConnection.h"
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADConnectionsPropertiesProtocol.h"
 
 @interface MTDatabaseConnectionSqlServer : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,
         MADDatabaseConnectionsProperties,
-        MADDatabaseConnectionsPropertiesCredentals,
+        MADConnectionsPropertiesProtocol,
         NSCopying>
     
     - (instancetype)initWithHost:(NSString *)host

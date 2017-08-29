@@ -30,7 +30,7 @@
     return c;
 }
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
     
     id dbConnection = nil;
     switch (credentals.databaseType) {
@@ -102,7 +102,7 @@
     
     id resultCredentals = nil;
     
-    if ([connectionObject conformsToProtocol:@protocol(MADDatabaseConnectionsPropertiesCredentals)]) {
+    if ([connectionObject conformsToProtocol:@protocol(MADConnectionsPropertiesProtocol)]) {
         resultCredentals = [self newDatabaseConnectionWithCredentals:connectionObject];
         
     } else if ([connectionObject isKindOfClass:[NSURL class]]) {

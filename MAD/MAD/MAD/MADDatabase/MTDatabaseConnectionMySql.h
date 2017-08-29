@@ -10,12 +10,12 @@
 #define Reports_MTDatabaseConnectionMySql_h
 
 #import "MADDatabaseConnection.h"
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADConnectionsPropertiesProtocol.h"
 
 @interface MTDatabaseConnectionMySql : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,
         MADDatabaseConnectionsProperties,
-        MADDatabaseConnectionsPropertiesCredentals,
+        MADConnectionsPropertiesProtocol,
         NSCopying>
 
     - (instancetype)initWithHost:(NSString *)host

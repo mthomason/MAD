@@ -18,7 +18,7 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADConnectionsPropertiesProtocol.h"
 
 @implementation MTDatabaseConnectionSqlite3
 
@@ -28,7 +28,7 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADDatabaseConnectionsPropertiesCredentals> *)credentals {
++ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
 
     id dbConnection;
     //dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];

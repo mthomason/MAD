@@ -26,7 +26,7 @@
 
 #import <UIKit/UIImage.h>
 
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 
 #import "MADDatabaseConnection.h"
@@ -436,8 +436,8 @@
         
         switch (database.databaseConnection.databaseType) {
             case MADDatabaseTypeMySQL: {
-                MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
-                databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
+                MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
+                databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
                 credentals.port = databaseConnection.port;
                 credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
                 credentals.host = databaseConnection.server.copy;
@@ -454,8 +454,8 @@
             }
 
             case MADDatabaseTypeTDS: {
-                MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
-                databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)database.databaseConnection;
+                MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
+                databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
                 credentals.port = databaseConnection.port;
                 credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
                 credentals.server = databaseConnection.server.copy;

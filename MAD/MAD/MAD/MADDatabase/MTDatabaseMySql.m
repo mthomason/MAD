@@ -29,7 +29,7 @@
 
 #import "MADDatabaseResultsProtocol.h"
 #import "MADDatabaseConnection.h"
-#import "MADDatabaseConnectionsPropertiesCredentals.h"
+#import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"
 
@@ -42,7 +42,7 @@
 @interface MTDatabaseMySql ()
     <MADMySQLFetchProtocol>
 
-    @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *databaseConnection;
+    @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
 
 @end
 
@@ -59,7 +59,7 @@
 }
 
 // FIXME: Return error.
-- (id)connectWithConnection:(MADDatabaseConnection <MADDatabaseConnectionsPropertiesCredentals> *)connection
+- (id)connectWithConnection:(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)connection
                  credentals:(MADCredential *)credentals
             connectionError:(NSError * __autoreleasing *)error {
 
