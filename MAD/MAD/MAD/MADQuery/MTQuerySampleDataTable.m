@@ -32,6 +32,7 @@
 
 #import "MTDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
+#import "MADDatabaseField+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
 

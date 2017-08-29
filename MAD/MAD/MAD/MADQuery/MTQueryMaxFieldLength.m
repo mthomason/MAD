@@ -26,6 +26,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 
 #import "MTDatabase+Constructor.h"
+#import "MADDatabaseField+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
 

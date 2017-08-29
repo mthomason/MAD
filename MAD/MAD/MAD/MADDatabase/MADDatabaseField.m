@@ -64,16 +64,6 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
     return self;
 }
 
-+ (instancetype)newDatabaseFieldWithSchemaField:(RptqDatabaseSchemaField *)schemaField {
-    MADDatabaseField *result = [[MADDatabaseField alloc] init];
-    result.name = schemaField.name.copy;
-    result.fieldType = schemaField.dataType;
-    result.fieldTypeNative = schemaField.dataTypeNative;
-    result.decimals = schemaField.decimals;
-    result.primaryKey = schemaField.primaryKey;
-    return result;
-}
-
 - (instancetype)copyWithZone:(NSZone *)zone {
     MADDatabaseField *copy = [[[self class] allocWithZone:zone] init];
     copy.name = _name.copy;
