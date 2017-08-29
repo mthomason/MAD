@@ -8,6 +8,8 @@
 
 #import "MADOperationDatabaseTestConnection.h"
 
+#import <os/log.h>
+
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 
@@ -18,16 +20,13 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MTDatabase.h>
 
-#import <MAD/MTDatabase.h>
-#import <MAD/MTQueryTest.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import <MAD/MTQueryTest.h>
 #import <MAD/MADOperationKeyChainGet.h>
-#import <MAD/MADDataTable+Constructor.h>
-
-#import <os/log.h>
-
 #import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDataTable+Constructor.h>
 
 @interface MADOperationDatabaseTestConnection ()
     <MADDatabaseResultsProtocol>

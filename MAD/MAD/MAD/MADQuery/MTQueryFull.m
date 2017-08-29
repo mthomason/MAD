@@ -53,7 +53,7 @@
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementAggregate.h"
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MADDatabaseField.h"
 #import "MADQueryPredicate.h"
 #import "MADQueryLimitClause.h"

@@ -19,7 +19,7 @@
 
 #import <MAD/MADDataTableFast.h>
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MTQueryFull.h>

@@ -10,7 +10,7 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTQueryTest.h>
 

@@ -20,7 +20,7 @@
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MTDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
 

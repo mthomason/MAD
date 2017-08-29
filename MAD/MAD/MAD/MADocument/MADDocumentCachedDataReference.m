@@ -15,7 +15,7 @@
 #import "RptqQueryField.h"
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElement+Extras.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MADDataTableFast.h"
 #import <MADFoundation/MADDataType.h>
 

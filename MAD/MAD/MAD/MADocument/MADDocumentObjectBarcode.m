@@ -11,7 +11,7 @@
 #import <Foundation/NSString.h>
 #import <MADBarcodes/MTBarcode.h>
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 #import "MADDataTableFast.h"
 #import "MADDocumentObjectReference.h"

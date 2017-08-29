@@ -34,7 +34,7 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 
 #import "MADCellTextInput.h"
 

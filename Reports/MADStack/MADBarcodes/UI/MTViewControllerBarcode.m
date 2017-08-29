@@ -26,7 +26,7 @@
 #import <MADCocoaExtensions/MADAlertController.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>

@@ -13,7 +13,7 @@
 #import "MTQueryCacheDropTable.h"
 #import <Foundation/NSString.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 @interface MTQueryCacheDropTable ()
     @property (nonatomic, copy) NSString *tableName;

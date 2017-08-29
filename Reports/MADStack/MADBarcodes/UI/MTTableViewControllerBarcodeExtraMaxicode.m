@@ -31,7 +31,7 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADocument.h>
 
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 
 #import <MAD/MTQuery.h>
 

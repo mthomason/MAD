@@ -23,7 +23,7 @@
 
 #import "RptqDatabaseSchemaField.h"
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MADDataTableFast.h"
 
 #import "MADDocumentObjectReference.h"

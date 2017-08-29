@@ -32,7 +32,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/RptqQuery.h>
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 #import <MAD/MADDatabaseField.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MADDataFormatter.h>

@@ -214,8 +214,6 @@
 		4C401E031BAE3CAD00BAE5FC /* MADReportFormatterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DFC1BAE3CAD00BAE5FC /* MADReportFormatterCache.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C401E061BAE3CAD00BAE5FC /* MADPageOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DFF1BAE3CAD00BAE5FC /* MADPageOptions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C401E071BAE3CAD00BAE5FC /* MADPageOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E001BAE3CAD00BAE5FC /* MADPageOptions.m */; };
-		4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C401E241BAE3DCB00BAE5FC /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */; };
 		4C401E251BAE3DCB00BAE5FC /* MADDatabaseCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E0B1BAE3DCB00BAE5FC /* MADDatabaseCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E291BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E0F1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h */; };
 		4C401E2A1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E101BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.m */; };
@@ -846,8 +844,6 @@
 		4C401DFD1BAE3CAD00BAE5FC /* MADReportFormatterCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportFormatterCache.m; path = MAD/MADReportFormatter/MADReportFormatterCache.m; sourceTree = "<group>"; };
 		4C401DFF1BAE3CAD00BAE5FC /* MADPageOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPageOptions.h; path = MAD/MADReportFormatter/MADPageOptions.h; sourceTree = "<group>"; };
 		4C401E001BAE3CAD00BAE5FC /* MADPageOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPageOptions.m; path = MAD/MADReportFormatter/MADPageOptions.m; sourceTree = "<group>"; };
-		4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabase.h; path = MAD/MADDatabase/MTDatabase.h; sourceTree = "<group>"; };
-		4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabase.m; path = MAD/MADDatabase/MTDatabase.m; sourceTree = "<group>"; };
 		4C401E0B1BAE3DCB00BAE5FC /* MADDatabaseCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseCacheProtocol.h; path = MAD/MADDatabase/MADDatabaseCacheProtocol.h; sourceTree = "<group>"; };
 		4C401E0F1BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDatabaseConnectionMySql.h; path = MAD/MADDatabase/MTDatabaseConnectionMySql.h; sourceTree = "<group>"; };
 		4C401E101BAE3DCB00BAE5FC /* MTDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDatabaseConnectionMySql.m; path = MAD/MADDatabase/MTDatabaseConnectionMySql.m; sourceTree = "<group>"; };
@@ -1562,8 +1558,6 @@
 				4C04EE6B1CA9587700582422 /* Connections */,
 				4C7281CA1E274A8D00C58DBE /* MADDatabase.h */,
 				4C7281CB1E274A8D00C58DBE /* MADDatabase.m */,
-				4C401E091BAE3DCB00BAE5FC /* MTDatabase.h */,
-				4C401E0A1BAE3DCB00BAE5FC /* MTDatabase.m */,
 				4C401E211BAE3DCB00BAE5FC /* MADDatabaseTable.h */,
 				4C401E221BAE3DCB00BAE5FC /* MADDatabaseTable.m */,
 				4C401E171BAE3DCB00BAE5FC /* MADDatabaseField.h */,
@@ -2310,7 +2304,6 @@
 				4C59398B1E3EF7E400582271 /* RptqDocumentElementLabelLink.h in Headers */,
 				4C7C00D31EE28AFD00E7A5B1 /* MADModelIDProtocol.h in Headers */,
 				4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */,
-				4C401E231BAE3DCB00BAE5FC /* MTDatabase.h in Headers */,
 				4C401E311BAE3DCB00BAE5FC /* MADDatabaseField.h in Headers */,
 				4C994F351BDDD85D0058627A /* MADAccessibilityLine.h in Headers */,
 				4C401E251BAE3DCB00BAE5FC /* MADDatabaseCacheProtocol.h in Headers */,
@@ -2904,7 +2897,6 @@
 				4CA3548E1D20DB900072BD38 /* MADReportSectionEnumerator.m in Sources */,
 				4CC282661BADE81E00775B72 /* MADDataFormatter.m in Sources */,
 				4C692B411E1EAF9500DC2CB0 /* madmalloc.c in Sources */,
-				4C401E241BAE3DCB00BAE5FC /* MTDatabase.m in Sources */,
 				4CC982831F4BB99600E0496A /* MADDesignerLayout.m in Sources */,
 				4CD79FA81EC862840093B2CE /* RptqAlignment.m in Sources */,
 				4CDFC98E1EDB9133008E1AD6 /* MADSectionLayout.m in Sources */,

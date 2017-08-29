@@ -16,7 +16,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MTDatabaseSqlite3.h"
 #import "MADQueryCacheIndexCreateParameters.h"
 

@@ -14,7 +14,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MADQueryCacheIndexDropParameters.h"
 
 @interface MTQueryCacheIndexDrop ()

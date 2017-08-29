@@ -19,5 +19,6 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 #import <MADAPI/MADDatabaseProtocol.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseType.h>
+#import <MADAPI/MTDatabase.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
 #import <MADAPI/MADDatabaseConnection.h>

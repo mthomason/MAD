@@ -56,7 +56,7 @@
 
 #import "MADReportFormatter.h"
 #import "MTQuery.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 #import "MADReportFormatter.h"
 #import "MADArrayCaching.h"

@@ -11,7 +11,7 @@
 
 #import <MADFoundation/MADDataType.h>
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MADDatabaseField.h"
 
 #import "RptqQueryTable.h"

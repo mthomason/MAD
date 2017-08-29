@@ -49,7 +49,7 @@
 #import <MAD/MADReportFormatter.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 #import <MAD/MTPaper.h>
 
 #import <MAD/MADDataTableFast.h>

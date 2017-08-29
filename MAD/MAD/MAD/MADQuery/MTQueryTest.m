@@ -11,7 +11,8 @@
 #endif
 
 #import "MTQueryTest.h"
-#import "MTDatabase.h"
+#import <MADFoundation/MADDataProtocol.h>
+#import <MADAPI/MTDatabase.h>
 #import <Foundation/NSString.h>
 
 @implementation MTQueryTest

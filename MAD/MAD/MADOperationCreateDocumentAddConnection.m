@@ -9,8 +9,8 @@
 #import "MADOperationCreateDocumentAddConnection.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MTDatabase.h>
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>

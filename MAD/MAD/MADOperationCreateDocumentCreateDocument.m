@@ -12,10 +12,10 @@
 #import <MADFoundation/MADCredential.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MTDatabase.h>
 
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 
 #import "MADOperationUniqueUrlForFilename.h"

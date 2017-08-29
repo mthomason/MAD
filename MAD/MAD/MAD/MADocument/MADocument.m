@@ -126,7 +126,7 @@
 #import "RptqDirectionalAsymmetry.h"
 
 #import "MADDataTableFast.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 #import "MADModel.h"
 #import "MADModelDocument.h"

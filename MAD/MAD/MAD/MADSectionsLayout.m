@@ -13,7 +13,7 @@
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSBundle.h>
 #import <CoreData/NSManagedObjectContext.h>
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import "MADSectionLayout.h"

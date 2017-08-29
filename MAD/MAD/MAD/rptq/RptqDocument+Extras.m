@@ -31,7 +31,7 @@
 #import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"

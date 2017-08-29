@@ -47,7 +47,7 @@
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryGroup+Extras.h"
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import "MADDatabaseField.h"
 
 #import "MADArrayCaching.h"

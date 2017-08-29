@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabase_Constructor_h
 #define Reports_MTDatabase_Constructor_h
 
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 
 @interface MTDatabase (Constructor)
 

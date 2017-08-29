@@ -18,7 +18,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryField.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import <Foundation/NSString.h>
 
 @interface MADQuerySelectExpressionActiveFields ()

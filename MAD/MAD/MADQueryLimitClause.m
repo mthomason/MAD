@@ -7,7 +7,7 @@
 //
 
 #import "MADQueryLimitClause.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 #import <Foundation/NSString.h>
 
 @interface MADQueryLimitClause ()

@@ -13,7 +13,7 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import "RptqDocumentElementAggregate+Extras.h"
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 #import "RptqDocumentElement+Extras.h"
 #import "RptqQueryField.h"

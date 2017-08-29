@@ -18,7 +18,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTDatabase.h>
+#import <MADAPI/MTDatabase.h>
 #import <MAD/MADDataTableFast.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MADConstants.h>

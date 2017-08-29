@@ -9,7 +9,7 @@
 #ifndef Reports_MTDatabaseSqlServer_h
 #define Reports_MTDatabaseSqlServer_h
 
-#import "MTDatabase.h"
+#import <MADAPI/MTDatabase.h>
 
 extern NSString * const MTDatabaseConnectionUsername;
 extern NSString * const MTDatabaseConnectionPassword;
