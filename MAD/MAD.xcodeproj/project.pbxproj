@@ -606,7 +606,6 @@
 		4CF46DD31CF2FC9800D93406 /* MADQueryLinkType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF46DD71CF32D1C00D93406 /* MADSQLJointType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */; };
 		4CF46DD91CF32D5700D93406 /* MADSQLJoinType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CF6AA2A1F5437E30061B0C6 /* MADDatabaseResultsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA291F5437E30061B0C6 /* MADDatabaseResultsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA2D1F544D380061B0C6 /* MTDatabase+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA2B1F544D380061B0C6 /* MTDatabase+Constructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA2E1F544D380061B0C6 /* MTDatabase+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA2C1F544D380061B0C6 /* MTDatabase+Constructor.m */; };
 		4CF6AA311F544FD40061B0C6 /* MADDataTable+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA2F1F544FD40061B0C6 /* MADDataTable+Constructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -615,6 +614,7 @@
 		4CF6AA361F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA341F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m */; };
 		4CF6AA411F5507280061B0C6 /* MADDatabaseField+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA3F1F5507280061B0C6 /* MADDatabaseField+Constructor.h */; };
 		4CF6AA421F5507280061B0C6 /* MADDatabaseField+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA401F5507280061B0C6 /* MADDatabaseField+Constructor.m */; };
+		4CF6AA921F5515260061B0C6 /* MADDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA911F5515260061B0C6 /* MADDatabase.framework */; };
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
@@ -1247,7 +1247,6 @@
 		4CF46DD11CF2F90B00D93406 /* MADDatabaseProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDatabaseProtocol.h; sourceTree = "<group>"; };
 		4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSQLJointType.m; path = MAD/MADSQLJointType.m; sourceTree = "<group>"; };
 		4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSQLJoinType.h; sourceTree = "<group>"; };
-		4CF6AA291F5437E30061B0C6 /* MADDatabaseResultsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseResultsProtocol.h; path = MAD/MADDatabaseResultsProtocol.h; sourceTree = "<group>"; };
 		4CF6AA2B1F544D380061B0C6 /* MTDatabase+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTDatabase+Constructor.h"; path = "MAD/MTDatabase+Constructor.h"; sourceTree = "<group>"; };
 		4CF6AA2C1F544D380061B0C6 /* MTDatabase+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MTDatabase+Constructor.m"; path = "MAD/MTDatabase+Constructor.m"; sourceTree = "<group>"; };
 		4CF6AA2F1F544FD40061B0C6 /* MADDataTable+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADDataTable+Constructor.h"; sourceTree = "<group>"; };
@@ -1256,6 +1255,7 @@
 		4CF6AA341F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADDatabaseConnection+Constructor.m"; path = "MAD/MADDatabaseConnection+Constructor.m"; sourceTree = "<group>"; };
 		4CF6AA3F1F5507280061B0C6 /* MADDatabaseField+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADDatabaseField+Constructor.h"; path = "MAD/MADDatabaseField+Constructor.h"; sourceTree = "<group>"; };
 		4CF6AA401F5507280061B0C6 /* MADDatabaseField+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADDatabaseField+Constructor.m"; path = "MAD/MADDatabaseField+Constructor.m"; sourceTree = "<group>"; };
+		4CF6AA911F5515260061B0C6 /* MADDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDatabase.framework; path = "../MADDatabase/build/Debug-iphoneos/MADDatabase.framework"; sourceTree = "<group>"; };
 		4CF781441BADE5EA0050A67D /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781471BADE5EA0050A67D /* MAD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
 		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MAD/Info.plist; sourceTree = "<group>"; };
@@ -1277,6 +1277,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF6AA921F5515260061B0C6 /* MADDatabase.framework in Frameworks */,
 				4C5478F31E6140B90043682E /* MADBarcodes.framework in Frameworks */,
 				4CCE18601DA149950093B166 /* libarchive.a in Frameworks */,
 				4CCE18751DA14B400093B166 /* libsybdb.a in Frameworks */,
@@ -2042,6 +2043,7 @@
 		4CCB845C1D882556001F9F29 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CF6AA911F5515260061B0C6 /* MADDatabase.framework */,
 				4C5478F21E6140B90043682E /* MADBarcodes.framework */,
 				4CCE18731DA14B400093B166 /* libsybdb.a */,
 				4CCE18741DA14B400093B166 /* libct.a */,
@@ -2138,7 +2140,6 @@
 				4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */,
 				4C1E54EF1E56666100E3FAF0 /* MADConnectionsPropertiesProtocol.h */,
 				4C1E54F11E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h */,
-				4CF6AA291F5437E30061B0C6 /* MADDatabaseResultsProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -2643,7 +2644,6 @@
 				4C35E26D1EC9E7480090D1BF /* RptqRect+Extras.h in Headers */,
 				4C401E331BAE3DCB00BAE5FC /* MTDatabaseMySql.h in Headers */,
 				4C35E2651EC9D6CA0090D1BF /* RptqDirectionalAsymmetry+Extras.h in Headers */,
-				4CF6AA2A1F5437E30061B0C6 /* MADDatabaseResultsProtocol.h in Headers */,
 				4C1E54F21E56673100E3FAF0 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3160,6 +3160,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)Database/build/Debug-iphoneos",
+				);
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -3214,6 +3218,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)Database/build/Debug-iphoneos",
+				);
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;

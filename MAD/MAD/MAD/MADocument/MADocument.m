@@ -43,6 +43,8 @@
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/NSString+Common.h>
 
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MADFileManager/MADFileUtilities.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
@@ -52,7 +54,6 @@
 #import "MADDataTable+Constructor.h"
 
 #import "MADDocumentProtocol.h"
-#import "MADDatabaseResultsProtocol.h"
 #import "MADocumentDesignerProtocol.h"
 
 #import "MADSortOrder.h"

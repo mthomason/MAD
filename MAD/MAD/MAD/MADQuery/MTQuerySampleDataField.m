@@ -15,12 +15,12 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
 #import <MADFoundation/MADDataTable.h>
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
 #import "MADDatabaseConnection.h"
-#import "MADDatabaseResultsProtocol.h"
 #import "MTDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
 

@@ -19,6 +19,8 @@
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTable.h>
 
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
 #import <MADMySQL/MysqlFetch.h>
@@ -28,7 +30,6 @@
 
 #import "MTQuery.h"
 
-#import "MADDatabaseResultsProtocol.h"
 #import "MADDatabaseConnection.h"
 #import "MADConnectionsPropertiesProtocol.h"
 #import "MADDatabaseTable.h"

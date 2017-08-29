@@ -35,6 +35,8 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSOperation.h>
 
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MADDataStructures/MADIndex.h>
 
 #import <MADFileManager/MADFileUtilities.h>
@@ -73,8 +75,6 @@
 
 #import "MADQueryCacheIndexCreateParameters.h"
 #import "MTQueryCacheSelectRowIds.h"
-
-#import "MADDatabaseResultsProtocol.h"
 
 #import "MADQueryCacheIndexCreateParameters.h"
 

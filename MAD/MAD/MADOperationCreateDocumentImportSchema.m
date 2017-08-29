@@ -8,9 +8,9 @@
 
 #import "MADOperationCreateDocumentImportSchema.h"
 #import <CoreData/NSManagedObjectContext.h>
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
-#import <MAD/MADDatabaseResultsProtocol.h>
 #import <MAD/MADDatabaseTable.h>
 #import <MAD/MADDatabaseField.h>
 #import <MAD/MADDatabaseConnection.h>

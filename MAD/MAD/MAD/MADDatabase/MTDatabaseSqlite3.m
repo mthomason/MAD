@@ -34,6 +34,8 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MADSqlite3/sqlite3.h>
 
 #import <MADFoundation/MADDataColumn.h>
@@ -54,7 +56,6 @@
 #import "MTQueryCacheEndTransaction.h"
 #import "MTQueryCacheSyncDefault.h"
 
-#import "MADDatabaseResultsProtocol.h"
 
 NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";

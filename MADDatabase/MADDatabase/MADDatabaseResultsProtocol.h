@@ -9,6 +9,8 @@
 #ifndef MADDatabaseResultsProtocol_h
 #define MADDatabaseResultsProtocol_h
 
+#import <Foundation/NSObject.h>
+
 @class MADCredential, MADDataTable, NSString, MTQuery;
 
 @protocol MADDatabaseResultsProtocol <NSObject>

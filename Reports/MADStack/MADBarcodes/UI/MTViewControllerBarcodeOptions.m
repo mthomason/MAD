@@ -38,7 +38,8 @@
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
-#import <MAD/MADDatabaseResultsProtocol.h>
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>

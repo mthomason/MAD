@@ -14,7 +14,7 @@
 
 #import <CoreData/NSManagedObjectContext.h>
 
-#import <MAD/MADDatabaseResultsProtocol.h>
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>

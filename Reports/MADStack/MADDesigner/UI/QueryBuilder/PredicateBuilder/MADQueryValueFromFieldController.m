@@ -21,6 +21,8 @@
 
 #import <MADFoundation/MADDataTable.h>
 
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
@@ -33,8 +35,6 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MAD/MADDatabaseResultsProtocol.h>
-
 
 #import "MADCellTextInput.h"
 

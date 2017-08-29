@@ -16,7 +16,8 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 
-#import <MAD/MADDatabaseResultsProtocol.h>
+#import <MADDatabase/MADDatabaseResultsProtocol.h>
+
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADDatabaseConnection.h>
