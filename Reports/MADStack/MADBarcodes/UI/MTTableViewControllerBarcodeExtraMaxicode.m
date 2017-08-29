@@ -35,7 +35,12 @@
 
 #import <MAD/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
+#import <MAD/MTDatabase+Constructor.h>
 
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqDatabase.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 #import <MAD/MADDataTable+Constructor.h>
@@ -81,8 +86,17 @@
     self.dataTableSampleData = dataTable;
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: schemaField];
+    
+    
+    MADDatabaseConnection *connection;
+    connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)schemaField.inTable.inDatabase.ownedByUser)];
+    MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+    if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+        db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);
+    }
     NSError * __autoreleasing error = NULL;
-    BOOL success = [querySampleDataField performQueryWithError:&error];
+    BOOL success = [db executeQuery:querySampleDataField withError:&error];
+    
     if (success) {
         MADDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
         self.dataTableSampleData = dt;

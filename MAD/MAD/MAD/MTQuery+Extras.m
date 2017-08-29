@@ -9,6 +9,9 @@
 #import "MTQuery+Extras.h"
 
 #import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+
+#import "MADQueryCacheSelectLimitOffsetParamaters.h"
 
 #import "MTQueryCacheSelectRowId.h"
 #import "MTQuerySampleDataField.h"
@@ -148,6 +151,50 @@
             break;
     }
     return query;
+}
+
++ (NSDictionary *)newQueryDefinitionSelect: (NSArray *)columnKeys
+                                 tableName: (NSString *)tableName
+                           sortDescriptors: (NSArray *)sortDescriptors {
+
+    NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
+    NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
+    NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
+
+    id definition = [[NSDictionary alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
+                                                                tableName, keyTableName,
+                                                                sortDescriptors, keySortDescriptors,
+                                                                nil];
+    return definition;
+}
+
++ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                 withLimit:(NSUInteger)limit
+                                 andOffset:(NSUInteger)offset
+                                 dropRowid:(BOOL)droprowid {
+    
+    NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
+    NSNumber *limitw = [[NSNumber alloc] initWithUnsignedInteger: limit];
+    NSNumber *offsetw = [[NSNumber alloc] initWithUnsignedInteger: offset];
+    NSNumber *keyLimit = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersLimit];
+    NSNumber *keyOffset = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersOffset];
+    queryDefination[keyLimit] = limitw;
+    queryDefination[keyOffset] = offsetw;
+    if (droprowid) {
+        NSNumber *keyDropRow = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
+        NSNumber *dropRowidObj = @YES;
+        queryDefination[keyDropRow] = dropRowidObj;
+    }
+    return  queryDefination;
+
+}
+
++ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                 withLimit:(NSUInteger)limit
+                                 andOffset:(NSUInteger)offset {
+    return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
+                                andOffset:offset
+                                dropRowid:NO];
 }
 
 @end

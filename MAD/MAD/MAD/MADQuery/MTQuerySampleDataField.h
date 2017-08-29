@@ -10,10 +10,12 @@
 #define Reports_MTQuerySampleDataField_h
 
 #import "MTQuery.h"
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 @interface MTQuerySampleDataField : MTQuery
+    <MADDatabaseResultsProtocol>
 
-    - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
+    - (NSString *)getSql:(NSError * __autoreleasing *)error;
 
 @end
 

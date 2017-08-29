@@ -24,11 +24,11 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
-    [super getSqlWithError:error];
-    
-    MADSafeQueryField *key = [self.database newSafeIdentifier:@"f1"];
-    NSString *selectPart = [self.database selectPart];
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
+    [super getSql:error];
+    MTDatabase *database = self.database;
+    MADSafeQueryField *key = [database newSafeIdentifier:@"f1"];
+    NSString *selectPart = [database selectPart];
     NSString *sql = [[NSString alloc] initWithFormat:@"%@ 255 AS %@", selectPart, key];
     return sql;
 }

@@ -8,8 +8,9 @@
 
 #import "MTQueryCacheAggregateFunction.h"
 #import <Foundation/NSException.h>
-#import <RptqDocumentElementAggregate+Extras.h>
-#import <MADQueryCacheAggregateFunctionParamaters.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
+#import <MAD/MADQueryCacheAggregateFunctionParamaters.h>
+#import <MAD/MTQuery+Sqlite3.h>
 
 static inline const char *functionName(MTAggregateFunctionType functionType);
 static inline const char *functionName(MTAggregateFunctionType functionType) {
@@ -99,7 +100,7 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     
     NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT %s(%@) FROM %@",
                             functionName(self.functionType), self.columnKey, self.tableName];

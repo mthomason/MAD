@@ -49,17 +49,12 @@
 @implementation MTQuerySampleDataTable
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
+    if (self = [super initWithObject:object]) {
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]],
                  @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
-        MADDatabaseConnection *databaseConnection;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((RptqDatabaseSchemaTable *)object).inDatabase.ownedByUser];
-        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
         MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
-        self.database = db;
         self.dataTableMaxFieldLength = dataTable;
         self.queryObject = object;
 
@@ -67,9 +62,9 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     NSError * __autoreleasing sqlError = NULL;
-    [super getSqlWithError: &sqlError];
+    [super getSql: &sqlError];
     if (sqlError && error != NULL) {
       *error = sqlError;
     }

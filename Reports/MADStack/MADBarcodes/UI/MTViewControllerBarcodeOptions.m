@@ -40,11 +40,16 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MTDatabase.h>
 
 #import <MAD/MADocument.h>
-#import <MADAPI/MTDatabase.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/MTQuery+Extras.h>
+#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
 
@@ -852,12 +857,15 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                 object: field.databaseSchemaField];
     NSError * __autoreleasing error = NULL;
-    BOOL success = [querySampleDataField performQueryWithError:&error];
+    
+    MADDatabaseConnection *dbConnection;
+    dbConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)field.databaseSchemaField.inTable.inDatabase.ownedByUser)];
+    MTDatabase *database = [MTDatabase newDatabaseWithConnection:dbConnection];
+    if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+        database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);
+    }
+    BOOL success = [database executeQuery:querySampleDataField withError:&error];
 
-    
-    MTDatabase *database;
-    database = querySampleDataField.database;
-    
     if (success) {
         MADDataTable * __weak dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
         self.sampleDataTable = dt;

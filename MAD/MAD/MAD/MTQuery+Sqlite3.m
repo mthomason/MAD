@@ -7,13 +7,16 @@
 //
 
 #import "MTQuery+Sqlite3.h"
+
 #import <Foundation/NSString.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSNull.h>
 
 #import <MADFoundation/MADDataColumn.h>
+#import <MADAPI/MADDatabaseDataBinding.h>
 
 #import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
@@ -43,6 +46,55 @@
         }
     }
     return sql;
+}
+
+- (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+    if (whereClause.count > 0) {
+        NSUInteger counter = 0, counterBinings = 0;
+        for (NSDictionary *condition in whereClause) {
+            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
+            NSString *columnHandle = condition[@"c"];
+            NSString *columnValue = condition[@"v"];
+            
+            
+            MADDatabaseDataBinding *databinding;
+            if ([[NSNull null] isEqual: columnValue]) {
+                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
+                                                                    fieldIndex: counterBinings
+                                                                         value: columnValue];
+            } else {
+                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHandle:columnHandle]
+                                                                    fieldIndex: counterBinings
+                                                                         value: columnValue];
+            }
+            [self.binaryBindings addObject:databinding];
+            [sql appendFormat:@"%@ = ?", columnHandle];
+            counterBinings++;
+            counter++;
+        }
+    }
+    return sql;
+}
+
+- (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+    BOOL firstTime = YES;
+    if (rowids.count > 0) {
+        for (NSNumber *rowido in rowids) {
+            [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
+            [sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];
+            firstTime = NO;
+        }
+    } else {
+        [sql setString:@" WHERE rowid = -1 "];
+    }
+    return sql;
+}
+
+- (MADDataType)columnTypeForColumnHandle:(NSString *)columnHandle {
+    MADDataColumn * __weak column = self.columns[columnHandle];
+    return column.type;
 }
 
 @end

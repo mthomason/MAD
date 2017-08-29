@@ -41,7 +41,8 @@ extern NSString * const MADIdentifierROWID;
 
     @property (nonatomic, assign, readonly) MADQueryType type;
 
-    - (NSString *)getSqlWithError:(NSError * __autoreleasing *)error;
+    - (NSString *)getSql:(NSError * __autoreleasing *)error;
+    - (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error;
 
     - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error;
 
@@ -53,21 +54,11 @@ extern NSString * const MADIdentifierROWID;
 
     - (instancetype)initWithObject:(id)object;
 
-    - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
-    - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
-    - (MADDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
-
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
     @property (nonatomic, readonly) BOOL returnsResults;
     @property (nonatomic, readonly) BOOL partOfTransactionSet;
 
-    + (NSDictionary *)newQueryDefinitionSelect:(NSArray *)columnKeys
-                                     tableName:(NSString *)tableName
-                               sortDescriptors:(NSArray *)sortDescriptors;
-    + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                     withLimit:(NSUInteger)limit
-                                     andOffset:(NSUInteger)offset;
 @end
 
 #endif

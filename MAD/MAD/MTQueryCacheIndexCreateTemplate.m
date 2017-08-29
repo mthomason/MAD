@@ -31,7 +31,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
 
     NSMutableString *sql;
     if (_groupCount > 0) {

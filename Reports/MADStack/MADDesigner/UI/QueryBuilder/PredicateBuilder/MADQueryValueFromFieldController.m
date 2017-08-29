@@ -30,11 +30,16 @@
 #import <MAD/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
 #import <MAD/MTKeyChain.h>
+#import <MAD/MTDatabase+Constructor.h>
 
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
+#import <MAD/RptqDatabaseCredentals+Extras.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDatabase.h>
 
 #import <MAD/MADocument.h>
+
 #import <MADAPI/MTDatabase.h>
 
 #import "MADCellTextInput.h"
@@ -162,20 +167,34 @@
 
 - (void)loadPickerView {
 
-    RptqDatabaseSchemaField *field = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
-    
+    RptqDatabaseSchemaField *schemaField;
+    schemaField = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
+
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                                object: field];
+                                                                object: schemaField];
 
     self.querySampleDataField = querySampleDataField;
     
     MADQueryValueFromFieldController * __weak weakself2 = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         __strong MADQueryValueFromFieldController *strongself2 = weakself2;
+        RptqDatabaseSchemaField *field;
+        field = [strongself2.document.managedObjectContext objectWithID: strongself2.schemaFieldObjectId];
+        RptqDatabaseCredentals *userCredentals;
+        userCredentals = field.inTable.inDatabase.ownedByUser;
         
+        MADDatabaseConnection *databaseConnection;
+        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:userCredentals];
+        
+        MTDatabase *database;
+        database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        if ([strongself2.querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+            database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);
+        }
+
         NSError * __autoreleasing error = NULL;
-        BOOL success = [querySampleDataField performQueryWithError:&error];
-        
+        BOOL success = [database executeQuery:querySampleDataField withError:&error];
+
         if (success) {
             MADQueryValueFromFieldController * __weak weakself3 = strongself2;
             dispatch_sync(dispatch_get_main_queue(), ^{

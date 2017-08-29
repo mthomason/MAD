@@ -92,9 +92,9 @@
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol,
-        MADQueryParametersColumnKeysProtocol,
-        MADQueryParametersColumnMetaProtocol,
-        MADQueryParametersColumnDataProtocol>
+                                    MADQueryParametersColumnKeysProtocol,
+                                    MADQueryParametersColumnMetaProtocol,
+                                    MADQueryParametersColumnDataProtocol>
 
     @property (nonatomic, readwrite, strong) MTDatabaseSqlite3 *databaseForInserts;
     @property (nonatomic, readwrite, strong) MTDatabaseSqlite3 *databaseForSelects;
@@ -470,7 +470,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         }
         
         if (_statementInsert == NULL) {
-            NSString *sql = [[NSString alloc] initWithString: [_bulkInsertQuery getSqlWithError:nil]];
+            NSString *sql = [[NSString alloc] initWithString: [_bulkInsertQuery getSql:nil]];
             char *csql = sqlite3_mprintf(sql.UTF8String);
             int prepare_result = sqlite3_prepare_v2(sqlite_database, csql, -1, &_statementInsert, NULL);
             NSAssert(prepare_result == SQLITE_OK, @"ExecuteQueryWithSql failed (%s).",
@@ -671,7 +671,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
             queryCreateIndex.dataDelegate = dataDelegate;
             
             NSError * __autoreleasing sqlError = NULL;
-            NSString *sqlResult = [queryCreateIndex getSqlWithError: &sqlError];
+            NSString *sqlResult = [queryCreateIndex getSql: &sqlError];
             if (sqlResult.length > 0) {
                 queries[groupCounter] = sqlResult.copy;
             }
@@ -799,7 +799,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                   object: options];
     sqlite3_stmt *statement = NULL;
     NSError * __autoreleasing errorSQL = nil;
-    NSString *sql = [query getSqlWithError:&errorSQL];
+    NSString *sql = [query getSql:&errorSQL];
     
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
@@ -858,7 +858,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                   object: options];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
+    NSString *sql = [query getSql:&error];
     
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
@@ -936,7 +936,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     MTQuery * query = [[MADQuerySelectItemsForGroup alloc] initWithObject:querySelect];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
+    NSString *sql = [query getSql:&error];
     
     char *queryString = sqlite3_mprintf(sql.UTF8String);
     
@@ -982,7 +982,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     if (row != NSNotFound && limit > 0) {
         sqlite3_stmt *statement = NULL;
         NSError *error = nil;
-        NSString *sql = [query getSqlWithError:&error];
+        NSString *sql = [query getSql:&error];
         
         const char *sqlc = sql.UTF8String;
         char *queryString = sqlite3_mprintf((char *) sqlc);
@@ -1167,7 +1167,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     id result = nil;
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
+    NSString *sql = [query getSql:&error];
     
     const char *sqlc = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlc);

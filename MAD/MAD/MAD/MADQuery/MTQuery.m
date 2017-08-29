@@ -27,10 +27,6 @@
 #import <MADAPI/MTDatabase.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
-#import "MADQueryCacheDeleteAllFromTableParameters.h"
-
-#import "MADQueryCacheFullParameters.h"
-
 NSString * const MTQueryKeyPredicateColumn  = @"c";
 NSString * const MTQueryKeyPredicateValue   = @"v";
 NSString * const MADIdentifierROWID         = @"ROWID";
@@ -74,19 +70,31 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error {
-    NSError * __autoreleasing * qerror = NULL;
-    BOOL success = [self.database executeQuery:self withError:qerror];
+    NSError * __autoreleasing qerror = NULL;
+    BOOL success = [self.database executeQuery:self withError:&qerror];
     if (!success && qerror != NULL && error != NULL) {
-        error = qerror;
+        *error = qerror;
     }
     NSAssert(qerror == NULL, @"Error: %@", (*error).localizedDescription);
     return success;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     [self.fields removeAllObjects];
     [self.fieldKeys removeAllObjects];
     return @"";
+}
+
+- (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error {
+    [self.fields removeAllObjects];
+    [self.fieldKeys removeAllObjects];
+    if (self.database == nil) {
+        self.database = database;
+    }
+    NSError * __autoreleasing e = nil;
+    NSString *sql = [self getSql:&e];
+    if (e != nil) { *error = e; }
+    return sql;
 }
 
 - (NSString *)sqlGroupByExpressionWithQuery:(RptqQuery *)query {
@@ -103,102 +111,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 - (NSMutableArray *)fieldKeys {
     return _fieldKeys == nil ? _fieldKeys = [NSMutableArray new] : _fieldKeys;
-}
-
-#pragma mark - Helper functions for the query cache
-// FIXME: These are not yet useable for anything but Sqlite3.
-
-- (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    if (whereClause.count > 0) {
-        NSUInteger counter = 0, counterBinings = 0;
-        for (NSDictionary *condition in whereClause) {
-            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
-            NSString *columnHandle = condition[@"c"];
-            NSString *columnValue = condition[@"v"];
-            
-            
-            MADDatabaseDataBinding *databinding;
-            if ([[NSNull null] isEqual: columnValue]) {
-                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
-                                                                    fieldIndex: counterBinings
-                                                                         value: columnValue];
-            } else {
-                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
-                                                                    fieldIndex: counterBinings
-                                                                         value: columnValue];
-            }
-            [self.binaryBindings addObject:databinding];
-            [sql appendFormat:@"%@ = ?", columnHandle];
-            counterBinings++;
-            counter++;
-        }
-    }
-    return sql;
-}
-
-- (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    BOOL firstTime = YES;
-    if (rowids.count > 0) {
-        for (NSNumber *rowido in rowids) {
-            [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
-            [sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];
-            firstTime = NO;
-        }
-    } else {
-        [sql setString:@" WHERE rowid = -1 "];
-    }
-    return sql;
-}
-
-- (MADDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
-    MADDataColumn * __weak column = self.columns[columnHandle];
-    return column.type;
-}
-
-+ (NSDictionary *)newQueryDefinitionSelect: (NSArray *)columnKeys
-                                 tableName: (NSString *)tableName
-                           sortDescriptors: (NSArray *)sortDescriptors {
-
-    NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
-    NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
-    NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
-
-    id definition = [[NSDictionary alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
-                                                                tableName, keyTableName,
-                                                                sortDescriptors, keySortDescriptors,
-                                                                nil];
-    return definition;
-}
-
-+ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                 withLimit:(NSUInteger)limit
-                                 andOffset:(NSUInteger)offset
-                                 dropRowid:(BOOL)droprowid {
-    
-    NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
-    NSNumber *limitw = [[NSNumber alloc] initWithUnsignedInteger: limit];
-    NSNumber *offsetw = [[NSNumber alloc] initWithUnsignedInteger: offset];
-    NSNumber *keyLimit = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersLimit];
-    NSNumber *keyOffset = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersOffset];
-    queryDefination[keyLimit] = limitw;
-    queryDefination[keyOffset] = offsetw;
-    if (droprowid) {
-        NSNumber *keyDropRow = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
-        NSNumber *dropRowidObj = @YES;
-        queryDefination[keyDropRow] = dropRowidObj;
-    }
-    return  queryDefination;
-
-}
-
-+ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                 withLimit:(NSUInteger)limit
-                                 andOffset:(NSUInteger)offset {
-    return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
-                                andOffset:offset
-                                dropRowid:NO];
 }
 
 @end

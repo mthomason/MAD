@@ -107,8 +107,8 @@
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
         myFetch.delegate = self;
         
-        NSError *sqlError = nil;
-        NSString *queryString = [query getSqlWithError:&sqlError];
+        NSError * __autoreleasing sqlError = nil;
+        NSString *queryString = [query getSql:self error:&sqlError];
         if (queryString.length > 0 && sqlError == nil) {
             [myFetch fetchWithCommand: queryString
                             dataTable: &dataTable

@@ -103,7 +103,7 @@ static NSString * const SqlDelimitorObject = @", %@";
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     if (_sql == nil) {
         [self update];
     }

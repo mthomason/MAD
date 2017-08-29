@@ -107,13 +107,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (MADSafeQueryField *)fieldAliasForField:(NSString *)fieldName
                              andTableName:(NSString *)tableName {
     NSString *fieldAlias;
-    if (fieldName.length && tableName.length) {
-        fieldAlias = [fieldName stringByAppendingPeriod];
-        fieldAlias = [fieldAlias stringByAppendingString:tableName];
-    } else {
-        fieldAlias = [fieldName stringByAppendingString:tableName];
-    }
-    //NSString *result = [self newSafeIdentifier:fieldAlias];
+    fieldAlias = [fieldName stringByAppendingString:tableName];
     return fieldAlias;
 }
 
@@ -121,7 +115,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                withSafeTableName:(NSString *)safeTableName {
     NSString *tableAlias = [safeTableName stringByAppendingPeriod];
     MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
-    NSString * __autoreleasing alias = [tableAlias stringByAppendingString:fieldName];
+    NSString *alias = [tableAlias stringByAppendingString:fieldName];
     return alias;
 }
 

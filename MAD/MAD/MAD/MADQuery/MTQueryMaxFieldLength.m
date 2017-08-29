@@ -55,9 +55,9 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     NSError * __autoreleasing sqlError = NULL;
-    [super getSqlWithError: &sqlError];
+    [super getSql: &sqlError];
     if (sqlError && *error == NULL) {
         *error = sqlError;
     }

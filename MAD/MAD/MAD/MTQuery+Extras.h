@@ -14,6 +14,12 @@
 @interface MTQuery (Extras)
 
     - (instancetype)initWithQueryType:(MADQueryType)type object:(id)object;
+    + (NSDictionary *)newQueryDefinitionSelect:(NSArray *)columnKeys
+                                     tableName:(NSString *)tableName
+                               sortDescriptors:(NSArray *)sortDescriptors;
+    + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                     withLimit:(NSUInteger)limit
+                                     andOffset:(NSUInteger)offset;
 
 @end
 

@@ -31,11 +31,14 @@
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 #import <MAD/MADDataTable+Constructor.h>
 #import <MAD/MTQuery+Extras.h>
+#import <MAD/MTDatabase+Constructor.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
@@ -185,8 +188,14 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                                                                object: databaseSchemaField1];
             querySampleDataField.database.delegate = self;
             self.query = querySampleDataField;
+            
+            MADDatabaseConnection *connection;
+            connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)queryField1.databaseSchemaField.inTable.inDatabase.ownedByUser)];
+            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+                db.delegate = self;
             NSError * __autoreleasing error = NULL;
-            BOOL success = [self.query performQueryWithError:&error];
+            BOOL success = [db executeQuery:self.query withError:&error];
+
             if (success) {
                 
                 NSArray *allObjects = [self.dataTableSampleData allObjects];
@@ -229,8 +238,17 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             querySampleDataField.database.delegate = self;
             self.query2 = querySampleDataField;
             NSError * __autoreleasing error = NULL;
-            BOOL success = [self.query2 performQueryWithError:&error];
 
+            MADDatabaseConnection *connection;
+            connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)queryField2.databaseSchemaField.inTable.inDatabase.ownedByUser)];
+            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+            if ([self.query2 conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+                db.delegate = self;
+            }
+            BOOL success = [db executeQuery:querySampleDataField withError:&error];
+
+            
+            
             if (success) {
                 NSArray *allObjects = [self.dataTableSampleData2 allObjects];
                 (self.optionsViewController).sampleBarcodeData2dComponent = allObjects;

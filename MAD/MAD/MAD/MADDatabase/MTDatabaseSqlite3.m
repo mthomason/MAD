@@ -622,7 +622,7 @@ void sqliteLog(void *foo, const char* statement) {
         }
     }
     
-    if (partOfTransactionSet == NO) {
+    if (!partOfTransactionSet) {
         if (statement != NULL) {
             sqlite3_clear_bindings(statement);
             success = sqlite3_finalize(statement) == SQLITE_OK;
@@ -666,8 +666,8 @@ void sqliteLog(void *foo, const char* statement) {
             andError:(NSError * __autoreleasing *)error {
 
     BOOL status = NO;
-    NSError * __autoreleasing *sqlError = NULL;
-    NSString *sqlResult = [query getSqlWithError: sqlError];
+    NSError * __autoreleasing sqlError = NULL;
+    NSString *sqlResult = [query getSql:self error:&sqlError];
     NSString *queryString = [[NSString alloc] initWithString: sqlResult];
     
     NSAssert(sqlError == NULL, @"Error %@", @"Could not create query string.");

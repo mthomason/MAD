@@ -38,6 +38,9 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MAD/MTDatabase+Constructor.h>
+
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
@@ -1556,11 +1559,11 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
     NSIndexPath *indexPathUpdate;
     MADTableController *tableController;
-    //MADLabelTitle *titleView;
+    
     RptqQueryTable *table, *tableWrapped;
     MTQuery *rquery;
     RptqDatabaseSchemaTable *schemaTable;
-    //NSString *name;
+
     NSFetchedResultsController *queryTablesResultsController;
     MADQueryViewDataSource *queryViewDataSource;
     
@@ -1573,16 +1576,14 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     table = tableWrapped;
     schemaTable = table.databaseSchemaTable;
     
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:schemaTable.inDatabase.ownedByUser];
+    MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
     rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
-    tableController = [[MADTableController alloc] initWithQuery:rquery];
-    
-    //titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-    
-    //name = schemaTable.name;
-    //titleView.text = name.copy;
-    
-    //tableController.navigationItem.title = name.copy;
-    //tableController.navigationItem.titleView = titleView;
+    if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+        db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
+    }
+    tableController = [[MADTableController alloc] initWithQuery:rquery database:db];
     
     [self.navigationController pushViewController: tableController animated: YES];
     

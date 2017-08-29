@@ -40,7 +40,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
     return sql;
 }

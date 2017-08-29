@@ -46,6 +46,7 @@
 @interface MADTableController ()
     <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseResultsProtocol>
 
+    @property (nonatomic, strong) MTDatabase *database;
     @property (nonatomic, strong) MTQuery *query;
     @property (nonatomic, strong) MADDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
@@ -64,7 +65,7 @@
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuery *)query database:(MTDatabase *)database {
     
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
@@ -76,14 +77,15 @@
         query.database.delegate = self;
         
         MADDataTable *datatable;
+        
         datatable = [MADTableController dataTableWithObjectId: ((RptqQuery *)query.queryObject).objectID];
         self.datatable = datatable;
         
         tableLayout.delegate = self;
         MADDataFormatter *tableFormatter = [[MADDataFormatter alloc] initWithQuery:query];
         self.tableFormatter = tableFormatter;
+        self.database = database;
         self.query = query;
-        
     }
     return self;
 }
@@ -138,17 +140,18 @@
     [self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
     
     MADTableController * __weak weakSelf = self;
+
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    
     dispatch_async(queue, ^{
         
         MADTableController *strongself = weakSelf;
         MADTableController * __weak weakSelf2 = strongself;
-        NSError * __autoreleasing errorPerformQuery = NULL;
-        BOOL success = [strongself.tableFormatter.query performQueryWithError: &errorPerformQuery];
         
+        NSError * __autoreleasing errorPerformQuery = NULL;
+        strongself.tableFormatter.query.dataTable = strongself.datatable;
+        BOOL success = [strongself.database executeQuery:strongself.tableFormatter.query
+                                               withError:&errorPerformQuery];
         MADTableController *strongself2 = weakSelf2;
-
         UIBarButtonItem *rightBarButtonItem = strongself2.navigationItem.rightBarButtonItem;
         SEL selector = @selector(setRightBarButtonItem:);
         [strongself2.navigationItem performSelectorOnMainThread: selector

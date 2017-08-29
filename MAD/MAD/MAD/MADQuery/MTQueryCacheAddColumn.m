@@ -23,12 +23,9 @@
 @class MTDatabaseSqlite3;
 
 @interface MTQueryCacheAddColumn ()
-<MADQueryParametersStandardProtocol,
-    MADQueryParametersColumnKeysProtocol,
-    MADQueryParametersColumnMetaProtocol,
-    MADQueryParametersColumnDataProtocol>
 
     @property (nonatomic, strong) NSString *sql;
+    @property (nonatomic, strong) NSString *tableName;
 
 @end
 
@@ -45,7 +42,7 @@
         MADDataColumn *column = object[keyDataColumn];
         
         id keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnTableName];
-        NSString *tableName = object[keyTableName];
+        self.tableName = object[keyTableName];
         
         id keyColumnName = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnColumnName];
         NSString *columnName = object[keyColumnName];
@@ -63,7 +60,7 @@
             uniqueValue = uniqueObj.boolValue;
         }
         
-        NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:tableName
+        NSString *sql = [MTQueryCacheAddColumn newSqlWithTableName:self.tableName
                                                         columnName:columnName
                                                           datatype:column.type
                                                       isPrimaryKey:column.isPrimaryKey
@@ -96,7 +93,11 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)queryTableName {
+    return self.tableName;
+}
+
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     return self.sql;
 }
 

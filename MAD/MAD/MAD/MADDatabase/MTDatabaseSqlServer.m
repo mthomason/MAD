@@ -296,8 +296,8 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 - (BOOL)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process
    withDataTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
-    NSError *sqlError = nil;
-    NSString *sql = [query getSqlWithError:&sqlError];
+    NSError * __autoreleasing sqlError = nil;
+    NSString *sql = [query getSql:self error:&sqlError];
     if (sqlError == nil) {
         success = [self runSQL:sql onDataTable:dataTable fieldKeys:query.fieldKeys process:process];
     }

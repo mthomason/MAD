@@ -18,7 +18,7 @@
     return self = [super initWithObject:object];
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     return @"PRAGMA synchronous=NORMAL;";
 }
 

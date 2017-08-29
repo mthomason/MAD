@@ -33,7 +33,7 @@
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     NSString *tablename = self.tableName;
     NSString * __autoreleasing Sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", tablename];
     return Sql;

@@ -81,7 +81,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
     return self;
 }
 
-- (NSString *)getSqlWithError:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
     NSString *result = [[NSString alloc] initWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@",
                         self.columnName, self.tableName,
                         self.sqlSpeedPredicate, self.columnName, self.sqlSpeedSorting];
