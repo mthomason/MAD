@@ -43,7 +43,7 @@
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/NSString+Common.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 

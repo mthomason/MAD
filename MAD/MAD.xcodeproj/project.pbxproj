@@ -613,7 +613,7 @@
 		4CF6AA361F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA341F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m */; };
 		4CF6AA411F5507280061B0C6 /* MADDatabaseField+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA3F1F5507280061B0C6 /* MADDatabaseField+Constructor.h */; };
 		4CF6AA421F5507280061B0C6 /* MADDatabaseField+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA401F5507280061B0C6 /* MADDatabaseField+Constructor.m */; };
-		4CF6AA921F5515260061B0C6 /* MADDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA911F5515260061B0C6 /* MADDatabase.framework */; };
+		4CF6AABA1F5519130061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AAB91F5519130061B0C6 /* MADAPI.framework */; };
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
@@ -1254,6 +1254,7 @@
 		4CF6AA3F1F5507280061B0C6 /* MADDatabaseField+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADDatabaseField+Constructor.h"; path = "MAD/MADDatabaseField+Constructor.h"; sourceTree = "<group>"; };
 		4CF6AA401F5507280061B0C6 /* MADDatabaseField+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADDatabaseField+Constructor.m"; path = "MAD/MADDatabaseField+Constructor.m"; sourceTree = "<group>"; };
 		4CF6AA911F5515260061B0C6 /* MADDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDatabase.framework; path = "../MADDatabase/build/Debug-iphoneos/MADDatabase.framework"; sourceTree = "<group>"; };
+		4CF6AAB91F5519130061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "../MADAPI/build/Debug-iphoneos/MADAPI.framework"; sourceTree = "<group>"; };
 		4CF781441BADE5EA0050A67D /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781471BADE5EA0050A67D /* MAD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
 		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MAD/Info.plist; sourceTree = "<group>"; };
@@ -1275,7 +1276,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF6AA921F5515260061B0C6 /* MADDatabase.framework in Frameworks */,
+				4CF6AABA1F5519130061B0C6 /* MADAPI.framework in Frameworks */,
 				4C5478F31E6140B90043682E /* MADBarcodes.framework in Frameworks */,
 				4CCE18601DA149950093B166 /* libarchive.a in Frameworks */,
 				4CCE18751DA14B400093B166 /* libsybdb.a in Frameworks */,
@@ -2041,6 +2042,7 @@
 		4CCB845C1D882556001F9F29 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CF6AAB91F5519130061B0C6 /* MADAPI.framework */,
 				4CF6AA911F5515260061B0C6 /* MADDatabase.framework */,
 				4C5478F21E6140B90043682E /* MADBarcodes.framework */,
 				4CCE18731DA14B400093B166 /* libsybdb.a */,
@@ -3159,6 +3161,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)Database/build/Debug-iphoneos",
+					"$(PROJECT_DIR)API/build/Debug-iphoneos",
 				);
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -3217,6 +3220,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)Database/build/Debug-iphoneos",
+					"$(PROJECT_DIR)API/build/Debug-iphoneos",
 				);
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;

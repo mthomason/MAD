@@ -20,7 +20,7 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/NSString+Common.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import "MADDatabaseConnection.h"
 #import "MADNotificationDidReadRows.h"

@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDatabase_Extras_h
 #define Reports_RptqDatabase_Extras_h
 
-#import <MADDatabase/MADDatabaseType.h>
+#import <MADAPI/MADDatabaseType.h>
 
 #import "RptqDatabase.h"
 

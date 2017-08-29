@@ -19,7 +19,7 @@
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTable.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>

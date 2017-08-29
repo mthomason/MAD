@@ -32,7 +32,7 @@
 
 #import <MADTdsClient/sybdb.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MADCocoaExtensions/BDHost.h>
 #import <MADFoundation/MADDataColumn.h>

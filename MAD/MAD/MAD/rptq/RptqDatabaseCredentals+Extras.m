@@ -22,7 +22,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import <MADDatabase/MADDatabaseType.h>
+#import <MADAPI/MADDatabaseType.h>
 
 #import "RptqDatabase+Extras.h"
 #import "MADDatabaseConnection.h"

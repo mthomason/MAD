@@ -9,7 +9,7 @@
 #ifndef MADModelDatabase_h
 #define MADModelDatabase_h
 
-#import <MADDatabase/MADDatabaseType.h>
+#import <MADAPI/MADDatabaseType.h>
 
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDataProtocol.h>

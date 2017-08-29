@@ -12,7 +12,7 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/NSObject.h>
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MAD/MADDatabaseProtocol.h>
 
 typedef NSString MADSafeQueryField;

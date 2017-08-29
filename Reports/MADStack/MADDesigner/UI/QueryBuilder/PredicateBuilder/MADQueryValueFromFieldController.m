@@ -21,7 +21,7 @@
 
 #import <MADFoundation/MADDataTable.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>

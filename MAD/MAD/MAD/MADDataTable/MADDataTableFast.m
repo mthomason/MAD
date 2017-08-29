@@ -35,7 +35,7 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSOperation.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MADDataStructures/MADIndex.h>
 

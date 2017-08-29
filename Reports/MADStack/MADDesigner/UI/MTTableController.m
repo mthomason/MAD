@@ -28,7 +28,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQuery.h>

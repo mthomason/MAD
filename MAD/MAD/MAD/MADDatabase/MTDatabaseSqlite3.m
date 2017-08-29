@@ -34,7 +34,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MADSqlite3/sqlite3.h>
 

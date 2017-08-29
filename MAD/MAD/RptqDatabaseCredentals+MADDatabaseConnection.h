@@ -9,7 +9,7 @@
 #ifndef Reports_RptqUserCredentals_MADDatabaseConnection_h
 #define Reports_RptqUserCredentals_MADDatabaseConnection_h
 
-#import <MADDatabase/MADDatabaseType.h>
+#import <MADAPI/MADDatabaseType.h>
 
 #import <MAD/RptqDatabaseCredentals.h>
 

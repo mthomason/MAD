@@ -28,7 +28,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import <MAD/MADDatabaseConnection.h>
 

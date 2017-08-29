@@ -9,7 +9,7 @@
 #ifndef MADConnectionsPropertiesProtocol_h
 #define MADConnectionsPropertiesProtocol_h
 
-#import <MADDatabase/MADDatabaseType.h>
+#import <MADAPI/MADDatabaseType.h>
 
 @protocol MADConnectionsPropertiesProtocol <NSObject>
   @optional

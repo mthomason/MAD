@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObjCRuntime.h>
 
 //! Project version number for MADAPI.
 FOUNDATION_EXPORT double MADAPIVersionNumber;
@@ -16,4 +16,6 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADAPI/PublicHeader.h>
 
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseType.h>
 

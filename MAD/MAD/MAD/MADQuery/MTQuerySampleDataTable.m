@@ -18,7 +18,7 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSError.h>
 
-#import <MADDatabase/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
 
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
