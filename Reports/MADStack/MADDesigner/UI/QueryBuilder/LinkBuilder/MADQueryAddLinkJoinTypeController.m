@@ -23,6 +23,7 @@
 #import <MAD/MADSQLJoinType.h>
 
 #import <MAD/MADDatabaseConnection.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
 
 @interface MADQueryAddLinkJoinTypeController ()
 

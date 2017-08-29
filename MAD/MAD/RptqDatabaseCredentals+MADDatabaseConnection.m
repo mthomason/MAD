@@ -8,7 +8,7 @@
 
 #import "RptqDatabaseCredentals+MADDatabaseConnection.h"
 #import <Foundation/NSString.h>
-#import "MADDatabaseConnection.h"
+#import "MADDatabaseConnection+Constructor.h"
 
 @implementation RptqDatabaseCredentals (MADDatabaseConnection)
 

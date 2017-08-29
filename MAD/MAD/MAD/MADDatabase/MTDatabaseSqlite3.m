@@ -856,8 +856,8 @@ void sqliteLog(void *foo, const char* statement) {
     success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
-                char *err = 0;
 
+    //char *err = 0;
     //sqlite3_exec((sqlite3 *)self->_database, "PRAGMA journal_mode = MEMORY", NULL, NULL, &err);
 
     NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;

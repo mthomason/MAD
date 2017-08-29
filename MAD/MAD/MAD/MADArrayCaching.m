@@ -32,6 +32,7 @@
 #import "MTDatabaseSqlite3.h"
 
 #import "MTDatabase+Constructor.h"
+#import "MADDatabaseConnection+Constructor.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -316,14 +317,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)addObject:(id _Nonnull)object {
     _lastObjectSelected = nil;    
     NSAssert(object != nil, @"Need an object.");
-    int numberOfRows = _numberOfRows;
+    long long numberOfRows = _numberOfRows;
     sqlite3_stmt *statementInsert = _statementInsert;
     id objectToAdd = object;
     dispatch_sync(self.archivingQueue, ^{
         NSData *data;
         data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd];
         int bind_result;
-        bind_result = sqlite3_bind_int(statementInsert, 1, numberOfRows);
+        bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
         NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
         bind_result = sqlite3_bind_blob(statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
         NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
@@ -340,13 +341,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (void)writeData:(NSData *)data {
     
-    int numberOfRows = _numberOfRows;
+    long long numberOfRows = _numberOfRows;
     sqlite3_stmt *statementInsert = _statementInsert;
     NSData *dataToWrite = data;
     dispatch_async(self.archivingQueue, ^{
         @autoreleasepool {
             int bind_result;
-            bind_result = sqlite3_bind_int(statementInsert, 1, numberOfRows);
+            bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
             NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
             bind_result = sqlite3_bind_blob(statementInsert, 2, dataToWrite.bytes, (int)dataToWrite.length, SQLITE_STATIC);
             NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);

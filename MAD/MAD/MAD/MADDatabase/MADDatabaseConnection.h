@@ -15,6 +15,7 @@
 @protocol MADConnectionsPropertiesProtocol;
 
 @protocol MADDatabaseConnectionConstructors <NSObject>
+  @optional
     + (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 @end
 
@@ -28,15 +29,6 @@
 
 @interface MADDatabaseConnection : NSObject
     <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying>
-
-    + (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
-                                             host:(NSString *)host
-                                         database:(NSString *)database
-                                             port:(NSInteger)port;
-
-    + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url;
-
-    + (NSString *)Identifier:(MADDatabaseType)databaseType;
 
 @end
 

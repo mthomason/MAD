@@ -5,6 +5,9 @@
       location = "container:"
       name = "Resources">
       <FileRef
+         location = "group:MADDatabase/MADDatabase.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MADFeedback/MADFeedback.xcodeproj">
       </FileRef>
       <FileRef

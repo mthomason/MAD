@@ -85,6 +85,8 @@
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabase+Constructor.h"
 
+#import "MADDatabaseConnection+Constructor.h"
+
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol,

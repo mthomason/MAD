@@ -28,6 +28,8 @@
 
 #import "RptqDataHelper.h"
 
+#import "MADDatabaseConnection+Constructor.h"
+
 @implementation RptqDatabaseCredentals (Extras)
 
 + (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest {

@@ -611,7 +611,7 @@
 		4CF6AA2E1F544D380061B0C6 /* MTDatabase+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA2C1F544D380061B0C6 /* MTDatabase+Constructor.m */; };
 		4CF6AA311F544FD40061B0C6 /* MADDataTable+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA2F1F544FD40061B0C6 /* MADDataTable+Constructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA321F544FD40061B0C6 /* MADDataTable+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA301F544FD40061B0C6 /* MADDataTable+Constructor.m */; };
-		4CF6AA351F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA331F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.h */; };
+		4CF6AA351F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA331F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA361F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA341F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.m */; };
 		4CF6AA411F5507280061B0C6 /* MADDatabaseField+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA3F1F5507280061B0C6 /* MADDatabaseField+Constructor.h */; };
 		4CF6AA421F5507280061B0C6 /* MADDatabaseField+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA401F5507280061B0C6 /* MADDatabaseField+Constructor.m */; };

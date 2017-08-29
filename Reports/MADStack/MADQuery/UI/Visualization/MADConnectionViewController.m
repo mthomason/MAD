@@ -29,18 +29,18 @@
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseConnection.h>
+#import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADProgress.h>
 #import <MAD/MADNotificationProgress.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADOperationQueue.h>
-
-#import <MAD/MADOperationKeyChainGet.h>
 
 #import "MADViewControllerStandardProtocol.h"
 
