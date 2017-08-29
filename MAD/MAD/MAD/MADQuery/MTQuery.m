@@ -17,17 +17,17 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
+#import <Foundation/NSDictionary.h>
 
-#import <MADQueryCacheSelectLimitOffsetParamaters.h>
+#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
 
+#import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
+#import <MADAPI/MTDatabase.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 #import "MADQueryCacheDeleteAllFromTableParameters.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
 
 #import "MADQueryCacheFullParameters.h"
 
@@ -37,7 +37,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @interface MTQuery ()
 
-@property (nonatomic, assign, readwrite) MADQueryType type;
+    @property (nonatomic, assign, readwrite) MADQueryType type;
 
 @end
 
@@ -89,11 +89,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return @"";
 }
 
-- (NSString *)getSqlForAllFieldsInTable:(RptqDatabaseSchemaTable *)table {
-    NSString *tableName = table.toString;
-    return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
-}
-
 - (NSString *)sqlGroupByExpressionWithQuery:(RptqQuery *)query {
     //Group is done on the reporting client side, so we do not add group by information here.
     return @"";
@@ -137,32 +132,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
             [sql appendFormat:@"%@ = ?", columnHandle];
             counterBinings++;
             counter++;
-        }
-    }
-    return sql;
-}
-
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    if (sortDescriptors.count > 0) {
-        NSUInteger sortCounter = 0;
-        [sql appendString:@" ORDER BY "];
-        
-        NSString *key;
-        for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-            if (sortCounter != 0) [sql appendString:@", "];
-            MADDataColumn *dataColumn = nil;
-            if (self.columns) {
-                if ((key = sortDescriptor.key)) {
-                    dataColumn = self.columns[key];
-                }
-            }
-            NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            MADSqlite3SortDescription *sortDirection;
-            sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
-                                                                            ascending: sortDescriptor.ascending];
-            [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
-            sortCounter++;
         }
     }
     return sql;

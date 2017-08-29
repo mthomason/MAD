@@ -55,7 +55,6 @@ extern NSString * const MADIdentifierROWID;
 
     - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
     - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
-    - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
     - (MADDataType)columnTypeForColumnHanle:(NSString *)columnHandle;            //For "cache" sqltie3
 
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;

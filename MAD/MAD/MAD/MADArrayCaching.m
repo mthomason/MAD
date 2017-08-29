@@ -25,7 +25,7 @@
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
-#import <MADQueryCacheSelectLimitOffsetParamaters.h>
+#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import "MTQueryCacheDeleteAllFromTable.h"
 

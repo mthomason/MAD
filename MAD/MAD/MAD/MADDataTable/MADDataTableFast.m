@@ -54,7 +54,7 @@
 
 #import <MADAPI/MADDatabaseDataBinding.h>
 
-#import <MADQueryCacheSelectLimitOffsetParamaters.h>
+#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import "MADConstants.h"
 

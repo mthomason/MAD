@@ -601,6 +601,8 @@
 		4CF6AABA1F5519130061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AAB91F5519130061B0C6 /* MADAPI.framework */; };
 		4CF6AAE41F552FDC0061B0C6 /* MTQuery+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAE21F552FDC0061B0C6 /* MTQuery+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAE51F552FDC0061B0C6 /* MTQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAE31F552FDC0061B0C6 /* MTQuery+Extras.m */; };
+		4CF6AAE81F5533350061B0C6 /* MTQuery+Sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAE61F5533350061B0C6 /* MTQuery+Sqlite3.h */; };
+		4CF6AAE91F5533350061B0C6 /* MTQuery+Sqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAE71F5533350061B0C6 /* MTQuery+Sqlite3.m */; };
 		4CF781481BADE5EA0050A67D /* MAD.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF781471BADE5EA0050A67D /* MAD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF781441BADE5EA0050A67D /* MAD.framework */; };
 		4CF781541BADE5EA0050A67D /* MADTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF781531BADE5EA0050A67D /* MADTests.m */; };
@@ -1229,6 +1231,8 @@
 		4CF6AAB91F5519130061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "../MADAPI/build/Debug-iphoneos/MADAPI.framework"; sourceTree = "<group>"; };
 		4CF6AAE21F552FDC0061B0C6 /* MTQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTQuery+Extras.h"; path = "MAD/MTQuery+Extras.h"; sourceTree = "<group>"; };
 		4CF6AAE31F552FDC0061B0C6 /* MTQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MTQuery+Extras.m"; path = "MAD/MTQuery+Extras.m"; sourceTree = "<group>"; };
+		4CF6AAE61F5533350061B0C6 /* MTQuery+Sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTQuery+Sqlite3.h"; path = "MAD/MTQuery+Sqlite3.h"; sourceTree = "<group>"; };
+		4CF6AAE71F5533350061B0C6 /* MTQuery+Sqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MTQuery+Sqlite3.m"; path = "MAD/MTQuery+Sqlite3.m"; sourceTree = "<group>"; };
 		4CF781441BADE5EA0050A67D /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF781471BADE5EA0050A67D /* MAD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAD.h; sourceTree = "<group>"; };
 		4CF781491BADE5EA0050A67D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MAD/Info.plist; sourceTree = "<group>"; };
@@ -1498,6 +1502,8 @@
 				4C401D721BAE3BD500BAE5FC /* MTQuery.m */,
 				4CF6AAE21F552FDC0061B0C6 /* MTQuery+Extras.h */,
 				4CF6AAE31F552FDC0061B0C6 /* MTQuery+Extras.m */,
+				4CF6AAE61F5533350061B0C6 /* MTQuery+Sqlite3.h */,
+				4CF6AAE71F5533350061B0C6 /* MTQuery+Sqlite3.m */,
 				4C4F126E1D0A634D0002294E /* MADQueryPredicate.h */,
 				4C4F126F1D0A634D0002294E /* MADQueryPredicate.m */,
 				4C4F12721D0A656B0002294E /* MADQueryLimitClause.h */,
@@ -2549,6 +2555,7 @@
 				4C7C00D01EE289BA00E7A5B1 /* NSPredicate+Creators.h in Headers */,
 				4CDFC9931EDB92F1008E1AD6 /* MADSectionGroupLayout.h in Headers */,
 				4C235CD71D1F81E900D3D77C /* MADReportSectionsEnumerator.h in Headers */,
+				4CF6AAE81F5533350061B0C6 /* MTQuery+Sqlite3.h in Headers */,
 				4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */,
 				4C401E351BAE3DCB00BAE5FC /* MTDatabaseProcessSqlServer.h in Headers */,
 				4C401D6A1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h in Headers */,
@@ -2939,6 +2946,7 @@
 				4C401DEC1BAE3BD800BAE5FC /* MTQueryDefinitionTable.m in Sources */,
 				4CFA87451E446B96002903B7 /* MADModelQueryLink.m in Sources */,
 				4C401DCC1BAE3BD600BAE5FC /* MTQueryCacheJournalModeDefault.m in Sources */,
+				4CF6AAE91F5533350061B0C6 /* MTQuery+Sqlite3.m in Sources */,
 				4CA354921D228CFC0072BD38 /* MADReportSectionReportHeader.m in Sources */,
 				4C401DB61BAE3BD600BAE5FC /* MTQuery.m in Sources */,
 				4C3080E21D053EB800A7D597 /* MADFontDescriptor.m in Sources */,

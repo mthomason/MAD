@@ -10,9 +10,13 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
+
 #import <MADFoundation/MADDataColumn.h>
+
 #import <MADAPI/MADDatabaseDataBinding.h>
+
 #import "MADQuerySelectParameters.h"
+#import "MTQuery+Sqlite3.h"
 
 @interface MADQuerySelectItemsForGroup ()
 
