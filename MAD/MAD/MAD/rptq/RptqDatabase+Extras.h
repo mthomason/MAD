@@ -9,8 +9,9 @@
 #ifndef Reports_RptqDatabase_Extras_h
 #define Reports_RptqDatabase_Extras_h
 
+#import <MADDatabase/MADDatabaseType.h>
+
 #import "RptqDatabase.h"
-#import "MADDatabaseType.h"
 
 #define MADDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MADDatabaseTypeSalesforceCom", @"MADDatabaseTypeDatabaseCom", @"MADDatabaseTypeMySQL", @"MADDatabaseTypeMicrosoftSqlAzure", @"MADDatabaseTypeAmazonSimpleDb", @"MADDatabaseTypeMicrosoftSqlServer", @"MADDatabaseTypeOracle", @"MADDatabaseTypeODBC", @"MADDatabaseTypeGooleAppEngine", @"MADDatabaseTypeNone", nil]
 

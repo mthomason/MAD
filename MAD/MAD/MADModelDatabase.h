@@ -9,9 +9,10 @@
 #ifndef MADModelDatabase_h
 #define MADModelDatabase_h
 
+#import <MADDatabase/MADDatabaseType.h>
+
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDataProtocol.h>
-#import <MAD/MADDatabaseType.h>
 
 @class MADModelTable, MADModelQuery, NSOrderedSet<__covariant ObjectType>;
 

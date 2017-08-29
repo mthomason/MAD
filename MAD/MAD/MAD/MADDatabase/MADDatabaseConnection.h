@@ -10,7 +10,7 @@
 #define Reports_MADDatabaseConnection_h
 
 #import <Foundation/NSObject.h>
-#import "MADDatabaseType.h"
+#import <MADDatabase/MADDatabaseType.h>
 
 @protocol MADConnectionsPropertiesProtocol;
 
