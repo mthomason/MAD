@@ -2512,8 +2512,8 @@ static const inline CGSize sizePopoverFonts() {
     
     NSError * __autoreleasing error = NULL;
     if (![element.managedObjectContext save:&error]) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                error.localizedDescription.UTF8String);
+        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
+                     error.localizedDescription.UTF8String);
     }
 }
 
@@ -2960,8 +2960,8 @@ END_deselectElementView:;
         [document.managedObjectContext deleteObject:elementB];
         NSError * __autoreleasing err = NULL;
         if (![document.managedObjectContext save:&err]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
-                    err.localizedDescription.UTF8String);
+            os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
+                         err.localizedDescription.UTF8String);
         }
     }];
 }
@@ -3026,7 +3026,7 @@ END_deselectElementView:;
         
         NSError * __autoreleasing error = NULL;
         if (![self.document.managedObjectContext save:&error]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+            os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                     error.localizedDescription.UTF8String);
         }
     }
@@ -3042,7 +3042,7 @@ END_deselectElementView:;
         [self deselectAllElementsAnimated:YES];
         NSError * __autoreleasing error = NULL;
         if (![self.document.managedObjectContext save:&error]) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+            os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                     error.localizedDescription.UTF8String);
         }
     }
@@ -3237,7 +3237,7 @@ END_deselectElementView:;
                                        managedObjectContext: managedObjectContext];
                     NSError * __autoreleasing error = NULL;
                     if (![managedObjectContext save:&error]) {
-                        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+                        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                                 error.localizedDescription.UTF8String);
                     }
 
@@ -3260,7 +3260,7 @@ END_deselectElementView:;
                     
                     NSError * __autoreleasing error = NULL;
                     if (![managedObjectContext save:&error]) {
-                        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+                        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                                 error.localizedDescription.UTF8String);
                     }
                     
@@ -3652,7 +3652,7 @@ END_deselectElementView:;
 - (IBAction)actionDone:(id)sender {
     NSError * __autoreleasing error = NULL;
     if (![self.document.managedObjectContext save:&error]) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                 error.localizedDescription.UTF8String);
     }
     if (![self dismissAllPopovers]) {
@@ -3700,7 +3700,7 @@ END_deselectElementView:;
     [self deselectAllElementsAnimated:YES];
     NSError * __autoreleasing error = NULL;
     if (![self.document.managedObjectContext save:&error]) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error saving managed object context: %s.",
+        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
                 error.localizedDescription.UTF8String);
     }
 }

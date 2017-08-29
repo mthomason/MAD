@@ -17,7 +17,7 @@
 #import <assert.h>
 #import <copyfile.h>
 
-#import <asl.h>
+#import <os/log.h>
 
 #import "archive.h"
 #import "archive_entry.h"
@@ -56,7 +56,7 @@ int mad_copy_data(struct archive *ar, struct archive *aw) {
 static inline bool path_exist(const char *path) {
     int access_i = access(path, F_OK);
     if ((access_i < 0)) {
-        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Debug (path_exist)(%d): %s.", errno, strerror(errno));
+        os_log_debug(OS_LOG_DEFAULT, "Debug (path_exist)(%d): %s.", errno, strerror(errno));
         return false;
     } else {
         return true;
@@ -158,11 +158,10 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     
     switch (source_status.st_mode) {
         case S_IFDIR: {
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Source file is a directory.  Going to try to copy it.");
+            os_log_debug(OS_LOG_DEFAULT, "Source file is a directory.  Going to try to copy it.");
             if (copyfile(source, dest, NULL,
                          COPYFILE_RECURSIVE | COPYFILE_ALL | COPYFILE_COPY_DATA | COPYFILE_COPY_XATTR) < 0) {
-                asl_log(NULL, NULL, ASL_LEVEL_ERR,
-                        "Error (%d): %s\n\tFailed to copy directory %s to %s.", errno, strerror(errno), source, dest);
+                os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s\n\tFailed to copy directory %s to %s.", errno, strerror(errno), source, dest);
                 return ARCHIVE_FAILED;
             } else {
                 return ARCHIVE_OK;
@@ -171,7 +170,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         }
             
         case S_IFREG:
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Source file is a regular file.  Going to try to unarchive it.");
+            os_log_debug(OS_LOG_DEFAULT, "Source file is a regular file.  Going to try to unarchive it.");
             break;
             
         default:
@@ -186,11 +185,11 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     int flags, r, ar;
     bool mkdirstatus = 0;
     
-    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Unpacking archiver.");
+    os_log_debug(OS_LOG_DEFAULT, "Unpacking archiver.");
     // Does dest exist?
     
     if (!path_exist(dest)) {
-        asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Destination doesn't exist.  Going to create path.");
+        os_log_debug(OS_LOG_DEFAULT, "Destination doesn't exist.  Going to create path.");
         mkdirstatus = mad_mkdir(dest);
         assert(mkdirstatus);
     }
@@ -200,24 +199,24 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         ARCHIVE_EXTRACT_ACL |
         ARCHIVE_EXTRACT_FFLAGS;
 
-    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Enable unarchiver.");
+    os_log_debug(OS_LOG_DEFAULT, "Enable unarchiver.");
     
     source_archive = archive_read_new();
     ar = archive_read_support_format_all(source_archive);
     archive_function_result_handler(ar, "Archive enabled format all.");
 
-    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Enabled support for bzip2.");
+    os_log_debug(OS_LOG_DEFAULT, "Enabled support for bzip2.");
     
     ar = archive_read_support_filter_bzip2(source_archive);
     archive_function_result_handler(ar, "Archive enbled format bzip2.");
     
-    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Set disk options.");
+    os_log_debug(OS_LOG_DEFAULT, "Set disk options.");
 
     dest_archive = archive_write_disk_new();
     ar = archive_write_disk_set_options(dest_archive, flags);
     archive_function_result_handler(ar, "Archive correctly set disk options.");
 
-    asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Archive set standard lookup.");
+    os_log_debug(OS_LOG_DEFAULT, "Archive set standard lookup.");
 
     ar = archive_write_disk_set_standard_lookup(dest_archive);
     archive_function_result_handler(ar, "Archive correctly set standard lookup.");
@@ -226,13 +225,12 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
     
     if (r < 0) {
         if (r == ARCHIVE_FATAL) {
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG,
-                    "archive_read_open_filename returned %d.  Probably opening an old file.  Not an error.", r);
+            os_log_debug(OS_LOG_DEFAULT, "archive_read_open_filename returned %d.  Probably opening an old file.  Not an error.", r);
             
         } else {
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Error: archiver failed with %d", r);
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Probably not an archive, but an older format.");
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "Aborting extraction.");
+            os_log_debug(OS_LOG_DEFAULT, "Error: archiver failed with %d", r);
+            os_log_debug(OS_LOG_DEFAULT, "Probably not an archive, but an older format.");
+            os_log_debug(OS_LOG_DEFAULT, "Aborting extraction.");
         }
 
         goto EXTRACT_MAD_FAIL;  // Problably using non archvie format.
@@ -286,12 +284,12 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
         if (r >= ARCHIVE_OK && archive_entry_size(source_archive_entry) > 0) {
             r = mad_copy_data(source_archive, dest_archive);
             if (r < ARCHIVE_WARN) {
-                asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error (%d): mad_copy_data", r);
+                os_log_debug(OS_LOG_DEFAULT, "Error (%d): mad_copy_data", r);
                 goto EXTRACT_MAD_FAIL;
             }
         } else {
             const char *error = archive_error_string(dest_archive);
-            asl_log(NULL, NULL, ASL_LEVEL_DEBUG, "%s", error);
+            os_log_debug(OS_LOG_DEFAULT, "%s", error);
         }
         
         archive_write_finish_entry(dest_archive);
@@ -363,18 +361,18 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
     struct stat st;
     
     if ((status = stat(filename, &st)) < 0) {
-        asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to get file status for %s.", filename);
+        os_log_debug(OS_LOG_DEFAULT, "Failed to get file status for %s.", filename);
     } else {
         entry = archive_entry_new2(archive);
         archive_entry_copy_stat(entry, &st);
         archive_entry_set_pathname(entry, relativePath);
         mad_archive_entry_set_attributes(&entry, &st);
         if ((status = archive_write_header(archive, entry)) != ARCHIVE_OK) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error: archive_write_header() returned %d.", status);
+            os_log_debug(OS_LOG_DEFAULT, "Error: archive_write_header() returned %d.", status);
         }
         
         if ((fd = open(filename, O_RDONLY)) == -1) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Failed to open file %s.\n", filename);
+            os_log_debug(OS_LOG_DEFAULT, "Failed to open file %s.\n", filename);
         } else {
             status = 0;
             la_ssize_t w_size;
@@ -383,7 +381,7 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
             }
             
             if ((status = close(fd)) == -1) {
-                asl_log(NULL, NULL, ASL_LEVEL_ERR, "Error (%d): %s.", errno, strerror(errno));
+                os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
             }
         }
     }

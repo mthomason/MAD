@@ -556,7 +556,7 @@ void madwarn(char *err,  const char*err2) { }
         archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
                                                                 archiveURL: url];
         if (!(success = [archiveManager unarchive])) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "Document unarchive failed.");
+            os_log_debug(OS_LOG_DEFAULT, "Document unarchive failed.");
         }
     }
     
@@ -573,13 +573,13 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
     [super handleError:error userInteractionPermitted:userInteractionPermitted];
-    asl_log(NULL, NULL, ASL_LEVEL_ERR, "MADocument Error (Show UI %s): %s\n\t%s",
+    os_log_debug(OS_LOG_DEFAULT, "MADocument Error (Show UI %s): %s\n\t%s",
             userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String,
             error.localizedDescription.UTF8String);
     NSArray *detailErrors;
     if((detailErrors = [error.userInfo objectForKey:NSDetailedErrorsKey]).count > 0) {
         for (NSError *detailError in detailErrors) {
-            asl_log(NULL, NULL, ASL_LEVEL_ERR, "  Error: %s\n\t%s",
+            os_log_debug(OS_LOG_DEFAULT, "  Error: %s\n\t%s",
                     detailError.localizedFailureReason.UTF8String,
                     detailError.localizedDescription.UTF8String);
         }
