@@ -30,6 +30,7 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 
+#import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationObserver.h>
 
@@ -40,7 +41,6 @@
 #import <MADDataStructures/MTPair.h>
 
 #import <MAD/MADActivityItemProviderDelegate.h>
-#import <MAD/MADDataTable.h>
 
 #import <MAD/MADPrintPageRenderer.h>
 #import <MAD/MADReportFormatter.h>

@@ -38,10 +38,10 @@
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/MADDataTable.h>
 
 #import "MADDatabaseConnectionsPropertiesURLProtocol.h"
 #import "MTQueryCacheDeleteAllFromTable.h"
-#import "MADDataTable.h"
 
 #import "MADDatabaseConnection.h"
 #import "MTQuery.h"

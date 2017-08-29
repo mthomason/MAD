@@ -9,7 +9,7 @@
 #ifndef Reports_MADDataTableVirtual_h
 #define Reports_MADDataTableVirtual_h
 
-#import "MADDataTablePlist.h"
+#import <MADFoundation/MADDataTablePlist.h>
 
 @interface MADDataTableVirtual : MADDataTablePlist
 

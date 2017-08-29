@@ -6,10 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MADDataTable_Factory_h
-#define MAD_MADDataTable_Factory_h
+#ifndef MADFoundation_MADDataTable_Plist_h
+#define MADFoundation_MADDataTable_Plist_h
 
-#import <MAD/MADDataTablePlist.h>
+#import <MADFoundation/MADDataTablePlist.h>
 
 @interface MADDataTable : MADDataTablePlist
 

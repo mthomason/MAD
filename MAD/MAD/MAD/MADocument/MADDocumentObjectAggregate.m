@@ -7,21 +7,26 @@
 //
 
 #import "MADDocumentObjectAggregate.h"
+
 #import <Foundation/NSString.h>
+
+#import <MADFoundation/MADDataTable.h>
+
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "MTDatabase.h"
+
 #import "RptqDocumentElement+Extras.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentElementAggregate.h"
+
 #import "MADDataTableFast.h"
 #import "MADReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADArrayCaching.h"
 #import "MTQuery.h"
 #import "MADAggregateFunctionGroupByType.h"
-#import "MADDataTable.h"
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"

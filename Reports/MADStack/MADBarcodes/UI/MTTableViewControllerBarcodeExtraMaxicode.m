@@ -22,11 +22,11 @@
 #import <CoreData/NSManagedObjectID.h>
 
 #import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADDataTable.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
 #import <MAD/MTKeyChain.h>
-#import <MAD/MADDataTable.h>
 #import <MAD/MADocument.h>
 
 #import <MAD/MTDatabase.h>

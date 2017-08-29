@@ -13,7 +13,8 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
-#import <MAD/MADDataTable.h>
+#import <MADFoundation/MADDataTable.h>
+
 #import <MAD/MADDataTableFast.h>
 #import <MAD/MADocument.h>
 #import <MAD/MTDatabase.h>

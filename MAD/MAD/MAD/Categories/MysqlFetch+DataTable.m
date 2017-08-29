@@ -31,6 +31,8 @@
 
 #import <MADMySQL/MADMySQLFetchProtocol.h>
 
+#import <MADFoundation/MADDataTable.h>
+
 #ifndef __OBJC_GC__
 #define BLOB_DEFAULT_SIZE 10000
 #else

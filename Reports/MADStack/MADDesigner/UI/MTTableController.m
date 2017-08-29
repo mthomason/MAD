@@ -22,16 +22,15 @@
 #import <UIKit/NSStringDrawing.h>
 
 #import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADDataTable.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MAD/MADDatabaseResultsProtocol.h>
-#import <MAD/MADDataTable.h>
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/RptqQuery.h>
-#import <MAD/MADDataTable.h>
 #import <MAD/MTDatabase.h>
 #import <MAD/MADDatabaseField.h>
 #import <MAD/MTQuery.h>

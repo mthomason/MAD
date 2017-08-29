@@ -9,7 +9,7 @@
 #ifndef Reports_MADDataTableFast_h
 #define Reports_MADDataTableFast_h
 
-#import "MADDataTable.h"
+#import <MADFoundation/MADDataTable.h>
 
 @protocol MADCacheProtocol, MADDataProtocol;
 

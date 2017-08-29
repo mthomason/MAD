@@ -42,7 +42,7 @@
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"
 
-#import "MADDataTable.h"
+#import <MADFoundation/MADDataTable.h>
 
 #import "MTQuery.h"
 

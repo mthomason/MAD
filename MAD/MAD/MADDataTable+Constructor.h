@@ -9,7 +9,7 @@
 #ifndef MAD_MADDataTable_Constructor_h
 #define MAD_MADDataTable_Constructor_h
 
-#import <MAD/MADDataTable.h>
+#import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTableType.h>
 
 @interface MADDataTable (Constructor)

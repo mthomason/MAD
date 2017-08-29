@@ -15,15 +15,15 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADErrorUserInfo.h>
+#import <MADFoundation/NSString+Common.h>
 
-#import "MADDataTable.h"
+#import "MADDatabaseResultsProtocol.h"
 
 #import "MADDatabaseConnection.h"
 #import "MADNotificationDidReadRows.h"
-#import "MADDatabaseResultsProtocol.h"
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 

@@ -17,6 +17,7 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADDataTable.h>
 
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlServer.h>
@@ -33,7 +34,6 @@
 #import "MADDatabaseTable.h"
 #import "MADDatabaseField.h"
 
-#import "MADDataTable.h"
 #import "MADDataTable+Constructor.h"
 
 #import "MysqlFetch+DataTable.h"

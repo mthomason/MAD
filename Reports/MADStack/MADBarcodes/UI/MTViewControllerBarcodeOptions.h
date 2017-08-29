@@ -9,9 +9,10 @@
 #ifndef Barcodes_MTViewControllerBarcodeOptions_h
 #define Barcodes_MTViewControllerBarcodeOptions_h
 
+#import <MADFoundation/MADDataTable.h>
+
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTQuery.h>
-#import <MAD/MADDataTable.h>
 
 #import <MADBarcodes/MADBarcodeBorderStyle.h>
 

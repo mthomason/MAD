@@ -39,6 +39,7 @@
 
 #import <MADFileManager/MADFileUtilities.h>
 
+#import <MADFoundation/MADDataTablePlist.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -79,7 +80,6 @@
 
 
 #import "MADQueryParameters.h"
-#import "MADDataTablePlist.h"
 #import "MADDatabaseDataBinding.h"
 
 #import "MTDatabaseSqlite3.h"

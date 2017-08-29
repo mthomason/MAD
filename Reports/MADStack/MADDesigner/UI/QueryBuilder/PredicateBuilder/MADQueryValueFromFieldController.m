@@ -19,6 +19,8 @@
 #import <UIKit/UITableView.h>
 #import <UIKit/UIPickerView.h>
 
+#import <MADFoundation/MADDataTable.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
@@ -33,7 +35,6 @@
 #import <MAD/MADDatabaseConnection.h>
 #import <MAD/MADDatabaseResultsProtocol.h>
 
-#import <MAD/MADDataTable.h>
 
 #import "MADCellTextInput.h"
 

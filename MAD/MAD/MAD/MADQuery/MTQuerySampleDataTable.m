@@ -27,8 +27,8 @@
 #import "MADDatabaseField.h"
 #import "MADDatabaseConnection.h"
 
-#import "MADDataTable.h"
-#import "MADDataTablePlist.h"
+#import <MADFoundation/MADDataTable.h>
+#import <MADFoundation/MADDataTablePlist.h>
 
 #import "MTDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"

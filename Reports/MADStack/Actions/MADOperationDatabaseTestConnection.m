@@ -12,6 +12,7 @@
 #import <Foundation/NSBundle.h>
 
 #import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 
@@ -19,7 +20,6 @@
 #import <MAD/MTDatabase.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADDatabaseConnection.h>
-#import <MAD/MADDataTable.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADDataTable+Constructor.h>
