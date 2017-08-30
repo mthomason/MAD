@@ -17,7 +17,7 @@
 
 #import "MADQuerySelectParameters.h"
 #import "MTQuery+Sqlite3.h"
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 @interface MADQuerySelectItemsForGroup ()
 

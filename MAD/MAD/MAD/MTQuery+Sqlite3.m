@@ -18,7 +18,7 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
-#import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
+#import <MADSqlite3/MTDatabaseSqlite3.h>   //FIXME: Should only be included in Cache subset
 
 @implementation MTQuery (Sqlite3)
 

@@ -24,14 +24,14 @@
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 // FIXME: Remove dependency on MTDatabaseSqlite3
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 #import "MADQueryCacheAddRowParameters.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 static NSString * const SqlDelimitor = @", ";
 static NSString * const SqlDelimitorObject = @", %@";

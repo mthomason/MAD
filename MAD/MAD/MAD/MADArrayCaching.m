@@ -27,10 +27,10 @@
 
 #import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
 
-#import "MTQueryCacheDeleteAllFromTable.h"
+#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
 
 #import "MTQueryCacheAddColumn.h"
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 
 #import "MTDatabase+Constructor.h"
 #import "MADDatabaseConnection+Constructor.h"

@@ -11,10 +11,10 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataColumn.h>
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 #import "MADQuerySelectParameters.h"
 
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 static NSString * const JoinPredicateWhere = @" WHERE ";
 

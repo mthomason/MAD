@@ -10,7 +10,7 @@
 #define Reports_MADQuery_h
 
 #import <Foundation/NSObject.h>
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 @interface MADQuery : NSObject
 

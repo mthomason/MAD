@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheSyncOff.h"
-#import <MAD/MADQueryType.h>
+#import <MADAPI/MADQueryType.h>
 
 @implementation MTQueryCacheSyncOff
 

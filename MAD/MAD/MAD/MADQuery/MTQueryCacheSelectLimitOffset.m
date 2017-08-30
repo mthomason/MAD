@@ -13,10 +13,10 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <MADFoundation/MADDataColumn.h>
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 
 #import "MADQueryCacheSelectLimitOffsetParamaters.h"
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 @interface MTQueryCacheSelectLimitOffset ()
     @property (nonatomic, strong) NSString *sql;

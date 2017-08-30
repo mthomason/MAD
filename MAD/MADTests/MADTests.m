@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <MADSqlite3/sqlite3.h>
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 #import "MADocument.h"
 #import <objc/runtime.h>
 #import <malloc/malloc.h>

@@ -65,7 +65,7 @@
 #import "MADQuerySelectExpressionAllFields.h"
 #import "MADQuerySelectExpressionActiveFields.h"
 
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 static inline BOOL isKindOfRptqQuery(id obj);
 static inline BOOL isKindOfRptqQuery(id obj) {

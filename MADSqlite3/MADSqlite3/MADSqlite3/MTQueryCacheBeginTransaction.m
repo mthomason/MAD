@@ -11,7 +11,7 @@
 #endif
 
 #import "MTQueryCacheBeginTransaction.h"
-#import <MAD/MADQueryType.h>
+#import <MADAPI/MADQueryType.h>
 
 @implementation MTQueryCacheBeginTransaction
 

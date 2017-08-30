@@ -13,7 +13,7 @@
 #import "MTQueryCacheVacuum.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
-#import <MAD/MADQueryType.h>
+#import <MADAPI/MADQueryType.h>
 
 @implementation MTQueryCacheVacuum
 

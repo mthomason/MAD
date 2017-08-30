@@ -19,7 +19,7 @@
 
 #import "MADQueryCacheAddColumnParameters.h"
 #import "MADQueryParameters.h"
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 @class MTDatabaseSqlite3;
 

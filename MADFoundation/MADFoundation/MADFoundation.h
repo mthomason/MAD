@@ -49,6 +49,7 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADOperationConditionHasResultString.h>
 #import <MADFoundation/MADOperationConditionMissingResultString.h>
 #import <MADFoundation/MADOperationConditionTestConnectionSuccess.h>
+#import <MADFoundation/MADOperationConditionHasResultStringResult.h>
 
 #import <MADFoundation/MADAssert.h>
 #import <MADFoundation/NSData+Comparson.h>

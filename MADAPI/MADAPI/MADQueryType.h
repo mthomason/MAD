@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADQueryType_h
-#define MADQueryType_h
+#ifndef MADAPI_MADQueryType_h
+#define MADAPI_MADQueryType_h
 
 typedef NS_ENUM(NSUInteger, MADQueryType) {
     MADQueryTypeUnknown = 0,

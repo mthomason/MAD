@@ -31,3 +31,4 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 #import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQueryType.h>

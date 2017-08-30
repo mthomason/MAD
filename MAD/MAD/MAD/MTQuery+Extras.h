@@ -10,7 +10,7 @@
 #define Reports_MTQuery_Extras_h
 
 #import <MADAPI/MTQuery.h>
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 @interface MTQuery (Extras)
 

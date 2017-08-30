@@ -8,12 +8,14 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-//! Project version number for MADSqlite3.
 FOUNDATION_EXPORT double MADSqlite3VersionNumber;
-
-//! Project version string for MADSqlite3.
 FOUNDATION_EXPORT const unsigned char MADSqlite3VersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <MADSqlite3/PublicHeader.h>
-
 #import <MADSqlite3/sqlite3.h>
+#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MTQueryCacheBeginTransaction.h>
+#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
+#import <MADSqlite3/MTQueryCacheEndTransaction.h>
+#import <MADSqlite3/MTQueryCacheJournalModeOverride.h>
+#import <MADSqlite3/MTQueryCacheSyncDefault.h>
+#import <MADSqlite3/MTQueryCacheSyncOff.h>

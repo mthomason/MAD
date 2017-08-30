@@ -67,7 +67,7 @@
 #import "MTQueryCacheAddColumn.h"
 #import "MTQueryCacheVacuum.h"
 #import "MTQueryCacheDropTable.h"
-#import "MTQueryCacheDeleteAllFromTable.h"
+#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
 #import "MTQuerySelectItemsForGroup.h"
 #import "MTQueryCacheIndexCreate.h"
 #import "MTQueryCacheSelectLimitOffset.h"
@@ -84,7 +84,7 @@
 
 #import "MADQueryParameters.h"
 
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 #import "MTDatabase+Constructor.h"
 
 #import "MADDatabaseConnection+Constructor.h"

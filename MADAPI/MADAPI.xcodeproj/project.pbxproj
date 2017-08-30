@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C2D77E71F569EEB005415F7 /* MTQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77E51F569EEB005415F7 /* MTQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D77E81F569EEB005415F7 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77E61F569EEB005415F7 /* MTQuery.m */; };
+		4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D780A1F56D4EA005415F7 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		4C2D77E51F569EEB005415F7 /* MTQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuery.h; sourceTree = "<group>"; };
 		4C2D77E61F569EEB005415F7 /* MTQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuery.m; sourceTree = "<group>"; };
+		4C2D780A1F56D4EA005415F7 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryType.h; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				4CF6AACC1F5524BF0061B0C6 /* MTDatabase.m */,
 				4C2D77E51F569EEB005415F7 /* MTQuery.h */,
 				4C2D77E61F569EEB005415F7 /* MTQuery.m */,
+				4C2D780A1F56D4EA005415F7 /* MADQueryType.h */,
 				4CF6AAD11F5526A00061B0C6 /* MADDatabaseTable.h */,
 				4CF6AAD21F5526A00061B0C6 /* MADDatabaseTable.m */,
 				4CF6AACF1F5526A00061B0C6 /* MADDatabaseField.h */,
@@ -164,6 +167,7 @@
 			files = (
 				4C2D77E71F569EEB005415F7 /* MTQuery.h in Headers */,
 				4CF6AACD1F5524BF0061B0C6 /* MTDatabase.h in Headers */,
+				4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */,
 				4CF6AADF1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h in Headers */,
 				4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */,
 				4CF6AABD1F5519280061B0C6 /* MADDatabaseResultsProtocol.h in Headers */,

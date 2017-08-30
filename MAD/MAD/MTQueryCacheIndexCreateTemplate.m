@@ -11,7 +11,7 @@
 #import <Foundation/NSDictionary.h>
 
 #import "MADCacheIndexType.h"
-#import <MAD/MADQueryType.h>
+#import <MADAPI/MADQueryType.h>
 
 @interface MTQueryCacheIndexCreateTemplate ()
     @property (nonatomic, strong) id queryObject;

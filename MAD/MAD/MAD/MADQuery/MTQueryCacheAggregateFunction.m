@@ -11,7 +11,7 @@
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 #import <MAD/MADQueryCacheAggregateFunctionParamaters.h>
 #import <MAD/MTQuery+Sqlite3.h>
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 static inline const char *functionName(MTAggregateFunctionType functionType);
 static inline const char *functionName(MTAggregateFunctionType functionType) {

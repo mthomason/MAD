@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTQuery_h
-#define Reports_MTQuery_h
+#ifndef MADAPI_Reports_MTQuery_h
+#define MADAPI_Reports_MTQuery_h
 
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>

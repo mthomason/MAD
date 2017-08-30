@@ -13,8 +13,8 @@
 #import "MTQueryCacheDeleteAllFromTable.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
+#import <MADAPI/MADQueryType.h>
 #import "MADQueryCacheDeleteAllFromTableParameters.h"
-#import "MADQueryType.h"
 
 @interface MTQueryCacheDeleteAllFromTable ()
 
@@ -42,7 +42,7 @@
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
+    NSString *sql = [[NSString alloc] initWithFormat:@"DELETE FROM %@", self.tableName];
     return sql;
 }
 

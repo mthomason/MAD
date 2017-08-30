@@ -151,7 +151,7 @@
 
 #import "MTDatabase+Constructor.h"
 
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 #import "MTQuery+Extras.h"
 
@@ -973,24 +973,12 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (MADDataTable *)dataTableForQuery:(MTQuery *)query {
-    
-    switch (query.type) {
-            
-        case MADQueryTypeFull:
-            self.dataTable.dataDelegate = self;
-            return self.dataTable;
-            break;
-            
-        default:
-            return nil;
-            break;
-    }
-    /*if ([query isKindOfClass:[MTQueryFull class]]) {
+    if ([query isKindOfClass:[MTQueryFull class]]) {
         self.dataTable.dataDelegate = self;
         return self.dataTable;
     } else {
         return nil;
-    }*/
+    }
 }
 
 #pragma mark -

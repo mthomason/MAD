@@ -17,9 +17,9 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MTDatabase.h>
-#import "MTDatabaseSqlite3.h"
+#import <MADSqlite3/MTDatabaseSqlite3.h>
 #import "MADQueryCacheIndexCreateParameters.h"
-#import "MADQueryType.h"
+#import <MADAPI/MADQueryType.h>
 
 @interface MTQueryCacheIndexCreate ()
 
