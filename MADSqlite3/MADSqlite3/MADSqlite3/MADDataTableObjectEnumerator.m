@@ -24,8 +24,8 @@
 
 #import <MADAPI/MTQuery.h>
 
-#import "MTDatabase+Constructor.h"
 #import <MADSqlite3/MTDatabaseSqlite3.h>
+#import "MTDatabase+Constructor.h"
 
 @interface MADDataTableObjectEnumerator ()
 

@@ -17,23 +17,22 @@
 #import <Foundation/NSKeyedArchiver.h>
 
 #import <MADSqlite3/sqlite3.h>
+#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
+
+#import <MADFoundation/MADCacheProtocol.h>
+#import <MADFoundation/MADDataColumn.h>
 
 #import <MADDataStructures/MADIndex.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import <MADFoundation/MADCacheProtocol.h>
-#import <MADFoundation/MADDataColumn.h>
-
-#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
-
-#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
-
+#import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
 #import "MTQueryCacheAddColumn.h"
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+
+#import "MADDatabaseConnection+Constructor.h"
 
 #import "MTDatabase+Constructor.h"
-#import "MADDatabaseConnection+Constructor.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";

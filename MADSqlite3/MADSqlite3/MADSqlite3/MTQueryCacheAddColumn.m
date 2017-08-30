@@ -11,15 +11,17 @@
 #endif
 
 #import "MTQueryCacheAddColumn.h"
+
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataType.h>
 
+#import <MADAPI/MADQueryType.h>
+
 #import "MADQueryCacheAddColumnParameters.h"
 #import "MADQueryParameters.h"
-#import <MADAPI/MADQueryType.h>
 
 @class MTDatabaseSqlite3;
 

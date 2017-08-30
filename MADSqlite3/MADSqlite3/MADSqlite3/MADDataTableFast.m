@@ -33,15 +33,6 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSOperation.h>
 
-#import <MADSqlite3/sqlite3.h>
-
-#import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-
-#import <MADDataStructures/MADIndex.h>
-
-#import <MADFileManager/MADFileUtilities.h>
-
 #import <MADFoundation/MADDataTablePlist.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
@@ -52,7 +43,17 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 
+#import <MADDataStructures/MADIndex.h>
+
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+
+#import <MADSqlite3/sqlite3.h>
+#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
+#import <MADSqlite3/MTDatabaseSqlite3.h>
+
 #import <MADAPI/MADDatabaseDataBinding.h>
+#import <MADAPI/MTQuery.h>
 
 #import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
 
@@ -60,33 +61,25 @@
 
 #import "MADDataTableObjectEnumerator.h"
 
-#import <MADAPI/MTQuery.h>
 #import "MTQuery+Extras.h"
+#import "MTQuerySelectItemsForGroup.h"
+#import "MTQueryCacheIndexCreate.h"
+#import "MTQueryCacheSelectLimitOffset.h"
 #import "MTQueryCacheAddRow.h"
 #import "MTQueryCacheIndexDrop.h"
 #import "MTQueryCacheAddColumn.h"
 #import "MTQueryCacheVacuum.h"
 #import "MTQueryCacheDropTable.h"
-#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
-#import "MTQuerySelectItemsForGroup.h"
-#import "MTQueryCacheIndexCreate.h"
-#import "MTQueryCacheSelectLimitOffset.h"
-
-#import "MADQueryCacheAddRowParameters.h"
-#import "MADQueryCacheIndexDropParameters.h"
-#import "MADQuerySelectParameters.h"
-
-#import "MADQueryCacheIndexCreateParameters.h"
 #import "MTQueryCacheSelectRowIds.h"
 
+#import "MADQueryCacheAddRowParameters.h"
+#import "MADQuerySelectParameters.h"
+#import "MADQueryCacheIndexDropParameters.h"
 #import "MADQueryCacheIndexCreateParameters.h"
-
-
+#import "MADQueryCacheIndexCreateParameters.h"
 #import "MADQueryParameters.h"
 
-#import <MADSqlite3/MTDatabaseSqlite3.h>
 #import "MTDatabase+Constructor.h"
-
 #import "MADDatabaseConnection+Constructor.h"
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
