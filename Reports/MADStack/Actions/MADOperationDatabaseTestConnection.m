@@ -26,7 +26,7 @@
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MTDatabase+Constructor.h>
-#import <MAD/MADDataTable+Constructor.h>
+#import <MAD/MADDataTableVirtual.h>
 
 @interface MADOperationDatabaseTestConnection ()
     <MADDatabaseResultsProtocol>
@@ -131,8 +131,7 @@
     
     MADDatabaseConnection *databaseConnection = self.databaseConnection;
     MTQueryTest *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
-    MADDataTable *datatable = [MADDataTable newDataTableOfType: MADDataTableTypeVirtual
-                                                  withObjectID: databaseConnection.hash];
+    __kindof MADDataTable *datatable = [[MADDataTableVirtual alloc] initWithId: databaseConnection.hash];
     
     self.datatable = datatable;
     

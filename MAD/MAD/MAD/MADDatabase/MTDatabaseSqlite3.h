@@ -22,7 +22,8 @@ BOOL Sqlite3StepResultOK(int result);
 
 typedef NSString MADSqlite3SortDescription;
 
-@interface MTDatabaseSqlite3 : MTDatabase <MADDatabaseCacheProtocol> {
+@interface MTDatabaseSqlite3 : MTDatabase
+    <MADDatabaseCacheProtocol> {
   @public
     void * /* sqlite3 * */ _database;
 }

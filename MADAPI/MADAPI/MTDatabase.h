@@ -32,6 +32,8 @@ extern NSString * const MADSqlTextFromPart;
 @interface MTDatabase : NSObject
     <MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseDBProtocol>
 
+    //+ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
+
     @property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
     @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
 

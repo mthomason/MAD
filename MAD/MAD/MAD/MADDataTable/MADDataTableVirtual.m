@@ -14,8 +14,8 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSDictionary.h>
 #import <MADFoundation/MADDataColumn.h>
-#import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 @interface MADDataTableVirtual ()
 

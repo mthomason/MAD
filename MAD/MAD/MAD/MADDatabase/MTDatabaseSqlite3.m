@@ -6,10 +6,6 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-//#ifndef MAD_MTDatabaseSqlite3_DEBUG
-//#define MAD_MTDatabaseSqlite3_DEBUG
-//#endif
-
 #import "MTDatabaseSqlite3.h"
 
 #import <string.h>
@@ -47,9 +43,9 @@
 
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 
-#import "MTQueryCacheDeleteAllFromTable.h"
 #import <MADAPI/MTQuery.h>
 
+#import "MTQueryCacheDeleteAllFromTable.h"
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeOverride.h"
 #import "MTQueryCacheBeginTransaction.h"

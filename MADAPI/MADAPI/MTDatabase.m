@@ -33,12 +33,17 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 @implementation MTDatabase
 
-- (instancetype)init {
+/*- (instancetype)init {
     if (self = [super init]) {
         NSMutableArray *errors = [[NSMutableArray alloc] init];
         self.errors = errors;
     }
     return self;
+}*/
+
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
+    id database = [[self alloc] init];
+    return database;
 }
 
 - (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection {
