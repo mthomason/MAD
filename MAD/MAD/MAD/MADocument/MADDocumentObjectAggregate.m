@@ -21,10 +21,10 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentElementAggregate.h"
 
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 #import "MADReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
-#import "MADArrayCaching.h"
+#import <MADSqlite3/MADArrayCaching.h>
 #import <MADAPI/MTQuery.h>
 #import "MTQuery+Extras.h"
 #import "MADAggregateFunctionGroupByType.h"

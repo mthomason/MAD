@@ -13,7 +13,7 @@
 #import <MADFoundation/MADDataTableType.h>
 
 #import "MADDataTableVirtual.h"
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 
 @implementation MADDataTable (Constructor)
 

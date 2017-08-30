@@ -16,7 +16,7 @@
 #import "MADocument.h"
 #import "MADPrintPageRenderer.h"
 #import "MADReportFormatter.h"
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 #import "MTPaper.h"
 
 static inline CGRect imageSizeForPaperSize(CGSize paperSize);

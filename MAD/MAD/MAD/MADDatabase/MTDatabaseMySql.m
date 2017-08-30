@@ -32,8 +32,7 @@
 #import <MADMySQL/MADMySQLFetchProtocol.h>
 
 #import <MADAPI/MTQuery.h>
-
-#import "MADConnectionsPropertiesProtocol.h"
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 #import "MADDataTable+Constructor.h"
 

@@ -19,7 +19,7 @@
 
 #import <MAD/MADocument.h>
 #import <MADAPI/MTDatabase.h>
-#import <MAD/MADDataTableFast.h>
+#import <MADSqlite3/MADDataTableFast.h>
 #import <MADAPI/MTQuery.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>

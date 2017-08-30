@@ -10,7 +10,7 @@
 #define Reports_MTDatabaseConnectionSqlServer_h
 
 #import <MADAPI/MADDatabaseConnection.h>
-#import "MADConnectionsPropertiesProtocol.h"
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 @interface MTDatabaseConnectionSqlServer : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,

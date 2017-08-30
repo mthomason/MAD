@@ -60,7 +60,7 @@
 #import <MADAPI/MTDatabase.h>
 
 #import "MADReportFormatter.h"
-#import "MADArrayCaching.h"
+#import <MADSqlite3/MADArrayCaching.h>
 
 #import "MADSectionRepresentation.h"
 
@@ -74,7 +74,7 @@
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
 #import "MADParameters+QueryCacheAggregate.h"

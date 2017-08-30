@@ -16,7 +16,7 @@
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElement+Extras.h"
 #import <MADAPI/MTDatabase.h>
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 #import <MADFoundation/MADDataType.h>
 
 @interface MADDocumentCachedDataReference ()

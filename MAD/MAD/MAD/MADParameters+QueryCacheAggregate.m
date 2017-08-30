@@ -7,14 +7,16 @@
 //
 
 #import "MADParameters+QueryCacheAggregate.h"
-#import "MADQueryCacheAggregateFunctionParamaters.h"
-#import "MADDataTableFast.h"
 
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+
+#import <MADSqlite3/MADDataTableFast.h>
+
+#import "MADQueryCacheAggregateFunctionParamaters.h"
 
 @implementation MADParameters
 

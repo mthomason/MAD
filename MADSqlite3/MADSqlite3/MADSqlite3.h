@@ -11,7 +11,6 @@
 FOUNDATION_EXPORT double MADSqlite3VersionNumber;
 FOUNDATION_EXPORT const unsigned char MADSqlite3VersionString[];
 
-#import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MTDatabaseSqlite3.h>
 #import <MADSqlite3/MTQueryCacheBeginTransaction.h>
 #import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
@@ -19,3 +18,5 @@ FOUNDATION_EXPORT const unsigned char MADSqlite3VersionString[];
 #import <MADSqlite3/MTQueryCacheJournalModeOverride.h>
 #import <MADSqlite3/MTQueryCacheSyncDefault.h>
 #import <MADSqlite3/MTQueryCacheSyncOff.h>
+#import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
+#import <MADSqlite3/MADDataTableFast.h>

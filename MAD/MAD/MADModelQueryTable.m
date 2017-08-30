@@ -18,7 +18,7 @@
 #import <Foundation/NSOrderedSet.h>
 #import <Foundation/NSURL.h>
 
-#import "madlib.h"
+#import <MADFoundation/madlib.h>
 
 #import "MADModelDatabase.h"
 #import "MADModelTable.h"

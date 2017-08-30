@@ -28,7 +28,7 @@
 
 #import "MADActivityIndicator.h"
 #import "MTPaper.h"
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 #import "MADNotificationDidFormatPage.h"
 
 static inline CGFloat halfinch();

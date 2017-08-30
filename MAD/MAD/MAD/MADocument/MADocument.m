@@ -125,7 +125,7 @@
 #import "MADSectionLayoutManager.h"
 #import "RptqDirectionalAsymmetry.h"
 
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 #import <MADAPI/MTDatabase.h>
 
 #import "MADModel.h"

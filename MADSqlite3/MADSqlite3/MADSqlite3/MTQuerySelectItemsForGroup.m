@@ -14,10 +14,10 @@
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADAPI/MADDatabaseDataBinding.h>
+#import <MADAPI/MADQueryType.h>
 
 #import "MADQuerySelectParameters.h"
 #import "MTQuery+Sqlite3.h"
-#import <MADAPI/MADQueryType.h>
 
 @interface MADQuerySelectItemsForGroup ()
 

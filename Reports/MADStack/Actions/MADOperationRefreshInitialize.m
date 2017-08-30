@@ -16,10 +16,11 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
-
-#import <MAD/MADDataTableFast.h>
-#import <MAD/MADocument.h>
 #import <MADAPI/MTDatabase.h>
+
+#import <MADSqlite3/MADDataTableFast.h>
+
+#import <MAD/MADocument.h>
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MTQueryFull.h>

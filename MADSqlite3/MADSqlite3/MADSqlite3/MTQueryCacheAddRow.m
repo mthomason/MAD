@@ -14,10 +14,10 @@
 
 #import <stdio.h>
 #import <string.h>
-#import "madlib.h"
 
 #import <Foundation/NSArray.h>
 
+#import <MADFoundation/madlib.h>
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADAPI/MADDatabaseConnection.h>

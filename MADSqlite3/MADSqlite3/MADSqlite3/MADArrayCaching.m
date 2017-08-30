@@ -28,11 +28,9 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
+
+#import "MTDatabaseConnectionSqlite3.h"
 #import "MTQueryCacheAddColumn.h"
-
-#import "MADDatabaseConnection+Constructor.h"
-
-#import "MTDatabase+Constructor.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -132,11 +130,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
-    MADDatabaseConnection *databaseConnection;
     MTDatabaseSqlite3 *database;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl:url];
-    database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
-    
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+    database = [[MTDatabaseSqlite3 alloc] init];
+    [database setDatabaseConnection:databaseConnection];
+    [database openDatabase];
+
 #ifdef MAD_MTArrayCached_DEBUG
     sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
 #endif
@@ -474,8 +474,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         
         MADDatabaseConnection *databaseConnection;
         MTDatabaseSqlite3 *database;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl:url];
-        database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
+        databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+        
+        database = [[MTDatabaseSqlite3 alloc] init];
+        [database setDatabaseConnection:databaseConnection];
+        [database openDatabase];
         int prepare_result = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1,
                                                 &_statementEnumer, NULL);
         NSAssert(prepare_result == SQLITE_OK,

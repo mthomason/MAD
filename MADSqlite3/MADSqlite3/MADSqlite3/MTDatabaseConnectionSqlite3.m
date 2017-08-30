@@ -18,7 +18,7 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
-#import "MADConnectionsPropertiesProtocol.h"
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 @implementation MTDatabaseConnectionSqlite3
 

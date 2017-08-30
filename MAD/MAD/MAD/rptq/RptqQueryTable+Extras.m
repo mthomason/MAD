@@ -28,7 +28,7 @@
 
 #import <MADFoundation/NSString+Common.h>
 
-#import "madlib.h"
+#import <MADFoundation/madlib.h>
 
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase+Extras.h"

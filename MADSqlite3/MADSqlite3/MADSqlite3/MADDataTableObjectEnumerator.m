@@ -25,7 +25,6 @@
 #import <MADAPI/MTQuery.h>
 
 #import <MADSqlite3/MTDatabaseSqlite3.h>
-#import "MTDatabase+Constructor.h"
 
 @interface MADDataTableObjectEnumerator ()
 
@@ -57,7 +56,9 @@
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         self.fastEnumerationObjects = fastEnumerationObjects;
 
-        MTDatabaseSqlite3 *database = [MTDatabaseSqlite3 newDatabaseWithConnection:databaseConnection];
+        MTDatabaseSqlite3 *database = [[MTDatabaseSqlite3 alloc] init];
+        [database setDatabaseConnection:databaseConnection];
+        [database openDatabase];
         self.databaseForQuery = database;
 
         _empty = columnKeys.count == 0;

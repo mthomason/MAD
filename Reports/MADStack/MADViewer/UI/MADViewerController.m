@@ -52,7 +52,7 @@
 #import <MADAPI/MTDatabase.h>
 #import <MAD/MTPaper.h>
 
-#import <MAD/MADDataTableFast.h>
+#import <MADSqlite3/MADDataTableFast.h>
 
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>

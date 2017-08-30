@@ -10,8 +10,8 @@
 #define Reports_RptqUserCredentals_Extras_h
 
 #import <CoreData/NSFetchRequest.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 #import <MAD/RptqDatabaseCredentals.h>
-#import <MAD/MADConnectionsPropertiesProtocol.h>
 
 @interface RptqDatabaseCredentals (Extras)
     <MADConnectionsPropertiesProtocol>

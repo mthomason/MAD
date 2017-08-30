@@ -10,13 +10,11 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 
 #import <os/log.h>
 #import <dispatch/dispatch.h>
 #import <stdio.h>
-
-#import "madlib.h"
 
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSBundle.h>
@@ -33,6 +31,7 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSOperation.h>
 
+#import <MADFoundation/madlib.h>
 #import <MADFoundation/MADDataTablePlist.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
@@ -46,7 +45,7 @@
 #import <MADDataStructures/MADIndex.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
+#import <MADSqlite3/MTDatabaseConnectionSqlite3.h>
 
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
@@ -55,32 +54,25 @@
 #import <MADAPI/MADDatabaseDataBinding.h>
 #import <MADAPI/MTQuery.h>
 
-#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
+#import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
 
-#import "MADConstants.h"
+#import <MADSqlite3/MTQuerySelectItemsForGroup.h>
+#import <MADSqlite3/MTQueryCacheIndexCreate.h>
+#import <MADSqlite3/MTQueryCacheSelectLimitOffset.h>
+#import <MADSqlite3/MTQueryCacheAddRow.h>
+#import <MADSqlite3/MTQueryCacheIndexDrop.h>
+#import <MADSqlite3/MTQueryCacheAddColumn.h>
+#import <MADSqlite3/MTQueryCacheVacuum.h>
+#import <MADSqlite3/MTQueryCacheDropTable.h>
+#import <MADSqlite3/MTQueryCacheSelectRowIds.h>
+
+#import <MADSqlite3/MADQueryCacheAddRowParameters.h>
+#import <MADSqlite3/MADQuerySelectParameters.h>
+#import <MADSqlite3/MADQueryCacheIndexDropParameters.h>
+#import <MADSqlite3/MADQueryCacheIndexCreateParameters.h>
+#import <MADSqlite3/MADQueryParameters.h>
 
 #import "MADDataTableObjectEnumerator.h"
-
-#import "MTQuery+Extras.h"
-#import "MTQuerySelectItemsForGroup.h"
-#import "MTQueryCacheIndexCreate.h"
-#import "MTQueryCacheSelectLimitOffset.h"
-#import "MTQueryCacheAddRow.h"
-#import "MTQueryCacheIndexDrop.h"
-#import "MTQueryCacheAddColumn.h"
-#import "MTQueryCacheVacuum.h"
-#import "MTQueryCacheDropTable.h"
-#import "MTQueryCacheSelectRowIds.h"
-
-#import "MADQueryCacheAddRowParameters.h"
-#import "MADQuerySelectParameters.h"
-#import "MADQueryCacheIndexDropParameters.h"
-#import "MADQueryCacheIndexCreateParameters.h"
-#import "MADQueryCacheIndexCreateParameters.h"
-#import "MADQueryParameters.h"
-
-#import "MTDatabase+Constructor.h"
-#import "MADDatabaseConnection+Constructor.h"
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
@@ -111,6 +103,50 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     BOOL _bulkInsertLoop;
     BOOL _sortDescriptorsSet;
     sqlite3_stmt *_statementInsert;
+}
+
++ (NSDictionary *)newQueryDefinitionSelect: (NSArray *)columnKeys
+                                 tableName: (NSString *)tableName
+                           sortDescriptors: (NSArray *)sortDescriptors {
+
+    NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
+    NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
+    NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
+
+    id definition = [[NSDictionary alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
+                                                                tableName, keyTableName,
+                                                                sortDescriptors, keySortDescriptors,
+                                                                nil];
+    return definition;
+}
+
++ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                 withLimit:(NSUInteger)limit
+                                 andOffset:(NSUInteger)offset
+                                 dropRowid:(BOOL)droprowid {
+    
+    NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
+    NSNumber *limitw = [[NSNumber alloc] initWithUnsignedInteger: limit];
+    NSNumber *offsetw = [[NSNumber alloc] initWithUnsignedInteger: offset];
+    NSNumber *keyLimit = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersLimit];
+    NSNumber *keyOffset = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersOffset];
+    queryDefination[keyLimit] = limitw;
+    queryDefination[keyOffset] = offsetw;
+    if (droprowid) {
+        NSNumber *keyDropRow = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
+        NSNumber *dropRowidObj = @YES;
+        queryDefination[keyDropRow] = dropRowidObj;
+    }
+    return  queryDefination;
+
+}
+
++ (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
+                                 withLimit:(NSUInteger)limit
+                                 andOffset:(NSUInteger)offset {
+    return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
+                                andOffset:offset
+                                dropRowid:NO];
 }
 
 - (void)dealloc {
@@ -311,8 +347,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     @autoreleasepool {
         database = [[MTDatabaseSqlite3 alloc] init];
         database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
-        
-        connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
+        connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
         database.databaseConnection = connection;
         
         [(MTDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
@@ -324,8 +359,11 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     }
     
     @autoreleasepool {
-        connection = [MADDatabaseConnection newDatabaseConnectionForUrl:urlFastCache];
-        database = [MTDatabaseSqlite3 newDatabaseWithConnection:connection];
+        
+        connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+        database = [[MTDatabaseSqlite3 alloc] init];
+        [database setDatabaseConnection:connection];
+        [database openDatabase];
         database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
         self.databaseForSelects = database;
         database = nil;
@@ -749,16 +787,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return [MTQuery newQueryDefinitionSelect:self.columnKeys
-                                   tableName:[self tableName]
-                             sortDescriptors:self.sortDescriptors];
+    return [self.class newQueryDefinitionSelect:self.columnKeys
+                                      tableName:[self tableName]
+                                sortDescriptors:self.sortDescriptors];
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSUInteger)limit
                                        andOffset:(NSUInteger)offset {
-    return [MTQuery newQueryDefinitionSelect:[self queryDefinationSelect]
-                                   withLimit:limit
-                                   andOffset:offset];
+    return [self.class newQueryDefinitionSelect:[self queryDefinationSelect]
+                                      withLimit:limit
+                                      andOffset:offset];
 }
 
 - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
@@ -790,8 +828,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                              columnKeys,         keyFieldKey,
                              tableName,          keyTableNmae, nil];
     
-    MTQuery * query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowId
-                                                  object: options];
+    MTQuery * query = [[MTQueryCacheSelectRowIds alloc] initWithObject: options];
     sqlite3_stmt *statement = NULL;
     NSError * __autoreleasing errorSQL = nil;
     NSString *sql = [query getSql:&errorSQL];
@@ -849,8 +886,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                     self.columnKeys,    keyFieldKey,
                                     tableName,          keyTableNmae, nil];
     
-    MTQuery * query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheSelectRowId
-                                                  object: options];
+    MTQuery * query = [[MTQueryCacheSelectRowIds alloc] initWithObject: options];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSql:&error];
@@ -1024,7 +1060,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                        columns:nil];
     NSURL *urlFastCache = self.urlFastCache;
     MADDatabaseConnection *databaseConnection;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
+    databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
     objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                 columns: self.columns
                                                                              columnKeys: self.columnKeys
@@ -1045,7 +1081,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     MADDatabaseConnection *connection;
     MADDataColumn *rowid;
-    connection= [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
+    connection= [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 
     rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
     rowid.type = MADDataTypeInteger;
@@ -1100,7 +1136,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                   columns:nil];
         
         MADDatabaseConnection *dbConnection;
-        dbConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
+        dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
         enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
                                                                               columns: self.columns
                                                                            columnKeys: columnKeys
@@ -1124,7 +1160,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                      dropRowID:NO
                                                                        columns:nil];
     
-    dbConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: self.urlFastCache];
+    dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
     enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
                                                                           columns: self.columns
                                                                        columnKeys: self.columnKeys
@@ -1292,7 +1328,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSURL *urlFastCache = self.urlFastCache;
     MADDatabaseConnection *databaseConnection;
     NSEnumerator *data;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUrl: urlFastCache];
+    databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
     data = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                     columns: columns
                                                                  columnKeys: columnKeys

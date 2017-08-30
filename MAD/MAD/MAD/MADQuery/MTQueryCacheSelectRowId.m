@@ -10,8 +10,8 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
-#import "MADQuerySelectParameters.h"
 #import <MADAPI/MADQueryType.h>
+#import <MADSqlite3/MADQuerySelectParameters.h>
 
 static NSString * const WildCard = @"*";
 static NSString * const SqlDelimitor = @", ";

@@ -50,7 +50,7 @@
 #import <MADAPI/MTDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
-#import "MADArrayCaching.h"
+#import <MADSqlite3/MADArrayCaching.h>
 
 #import "MADNotificationDidFormatPage.h"
 #import "MADPageOptions.h"

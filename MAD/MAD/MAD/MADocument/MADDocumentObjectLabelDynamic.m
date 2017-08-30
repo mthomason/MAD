@@ -24,7 +24,7 @@
 #import "RptqDatabaseSchemaField.h"
 
 #import <MADAPI/MTDatabase.h>
-#import "MADDataTableFast.h"
+#import <MADSqlite3/MADDataTableFast.h>
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"

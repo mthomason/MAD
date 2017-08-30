@@ -45,7 +45,7 @@
 
 #import <MADCocoaExtensions/BDHost.h>
 
-#import "MADConnectionsPropertiesProtocol.h"
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 #import <MADAPI/MTQuery.h>
 

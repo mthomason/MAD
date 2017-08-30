@@ -12,7 +12,7 @@
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADSqlite3/MTDatabaseSqlite3.h>
-#import "MADQuerySelectParameters.h"
+#import <MADSqlite3/MADQuerySelectParameters.h>
 
 #import <MADAPI/MADQueryType.h>
 
