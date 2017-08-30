@@ -18,12 +18,12 @@
 
 @implementation MADDataFormatter
 
-+ (instancetype)newDataFormatter:(MTQuery *)query {
++ (instancetype)newDataFormatter:(MTQuery <MADQueryDatabaseProtocol> *)query {
     id result = [[self alloc] initWithQuery:query];
     return result;
 }
 
-- (instancetype)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query {
     if (self = [super init]) {
         self.query = query;
         self.didRefresh = NO;

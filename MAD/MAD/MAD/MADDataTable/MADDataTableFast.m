@@ -668,7 +668,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
             parameters.groupName = [self indexNameForGroupLevel: sortDescCtr
                                                       andIndex: groupCounter].copy;
             
-            MTQuery *queryCreateIndex = [[MTQueryCacheIndexCreate alloc] initWithObject:parameters];
+            MTQuery <MADQueryDataDelegateProtocol> *queryCreateIndex;
+            queryCreateIndex = [[MTQueryCacheIndexCreate alloc] initWithObject:parameters];
             queryCreateIndex.dataDelegate = dataDelegate;
             
             NSError * __autoreleasing sqlError = NULL;

@@ -49,11 +49,17 @@
 
 @implementation MTQuerySampleDataTable
 
+@synthesize fields = _fields;
 @synthesize fieldKeys = _fieldKeys;
+@synthesize dataTable = _dataTable;
+@synthesize database = _database;
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
+        NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
+        self.fields = fieldInfo;
+
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
         self.fieldKeys = fieldKeys;
 
@@ -96,8 +102,9 @@
     }
     
     NSOrderedSet *fields = table.hasFields;
-    MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
-                                                               object: fields];
+    MTQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght;
+    queryMaxFieldLenght = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
+                                                                                            object: fields];
     queryMaxFieldLenght.database.delegate = self;
 
     NSError * __autoreleasing blockError = NULL;

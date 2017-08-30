@@ -47,7 +47,7 @@
     <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseResultsProtocol>
 
     @property (nonatomic, strong) MTDatabase *database;
-    @property (nonatomic, strong) MTQuery *query;
+    @property (nonatomic, strong) MTQuery <MADQueryDatabaseProtocol> *query;
     @property (nonatomic, strong) MADDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
     @property (nonatomic, strong, readwrite) NSArray *fieldKeys;
@@ -59,13 +59,16 @@
     BOOL _firstTimeViewDidAppear;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+    ((MTQuery <MADQueryDataTableProtocol >*)self.query).dataTable = nil;
+}
 
 - (MADDataTable *)dataTableForQuery:(MTQuery *)query {
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MTQuery *)query database:(MTDatabase *)database tableID:(NSManagedObjectID *)tableID {
+- (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query database:(MTDatabase *)database
+                      tableID:(NSManagedObjectID *)tableID {
     
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
@@ -145,18 +148,20 @@
     dispatch_async(queue, ^{
         
         MADTableController *strongself = weakSelf;
-        MADTableController * __weak weakSelf2 = strongself;
         
+        MTQuery *queryTableFormatter = strongself.tableFormatter.query;
+        if ([queryTableFormatter conformsToProtocol:@protocol(MADQueryDataTableProtocol)]) {
+            ((MTQuery <MADQueryDataTableProtocol> *)queryTableFormatter).dataTable = strongself.datatable;
+        }
         NSError * __autoreleasing errorPerformQuery = NULL;
-        strongself.tableFormatter.query.dataTable = strongself.datatable;
-        BOOL success = [strongself.database executeQuery:strongself.tableFormatter.query
+        BOOL success = [strongself.database executeQuery:queryTableFormatter
                                                withError:&errorPerformQuery];
-        MADTableController *strongself2 = weakSelf2;
-        UIBarButtonItem *rightBarButtonItem = strongself2.navigationItem.rightBarButtonItem;
+        //MADTableController *strongself2 = weakSelf2;
+        UIBarButtonItem *rightBarButtonItem = strongself.navigationItem.rightBarButtonItem;
         SEL selector = @selector(setRightBarButtonItem:);
-        [strongself2.navigationItem performSelectorOnMainThread: selector
-                                                     withObject: rightBarButtonItem
-                                                  waitUntilDone: NO];
+        [strongself.navigationItem performSelectorOnMainThread: selector
+                                                    withObject: rightBarButtonItem
+                                                waitUntilDone: NO];
         
         selector = @selector(stopAnimating);
         [activityIndicator performSelectorOnMainThread: selector
@@ -165,14 +170,14 @@
         
         if (!success && errorPerformQuery) {
             
-            NSString *key = strongself2.query.database.databaseConnection.connectionString.copy;
+            NSString *key = strongself.query.database.databaseConnection.connectionString.copy;
             void (^deleteKey)(BOOL);
             deleteKey = ^(BOOL displayErrorSuccess) {
                 [MTKeyChain deleteKey:key];
             };
             
             NSError *serror = [errorPerformQuery copyWithZone:nil];
-            MADTableController * __weak weakself4 = strongself2;
+            MADTableController * __weak weakself4 = strongself;
             dispatch_block_t showError = ^{
                 MADTableController *sself = weakself4;
                 [NSError presentError: serror
@@ -185,8 +190,9 @@
             dispatch_sync(dispatch_get_main_queue(), showError);
             
         }
-        [strongself2 performSelectorOnMainThread: @selector(invalidateLayout)
-                                      withObject: strongself2 waitUntilDone: NO];
+        [strongself performSelectorOnMainThread: @selector(invalidateLayout)
+                                     withObject: strongself
+                                  waitUntilDone: NO];
         
         
     });
@@ -369,7 +375,7 @@
     
     NSUInteger column = (NSUInteger)section;
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
-    MADDatabaseField *field = self.query.fields[fieldKey];
+    MADDatabaseField *field = ((MTQuery <MADQueryFieldKeysProtocol> *)self.query).fields[fieldKey];
     NSUInteger maxNumberOfCharacters = field.calculatedWidth;
     if (maxNumberOfCharacters <= 0) {
         maxNumberOfCharacters = 4;

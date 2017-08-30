@@ -274,8 +274,9 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 - (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
     MADDataTable *dataTable;
-    if (query.dataTable) {
-        dataTable = query.dataTable;
+    if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
+        ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
+        dataTable = ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable;
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }

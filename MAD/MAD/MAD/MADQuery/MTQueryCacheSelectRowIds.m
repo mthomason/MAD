@@ -20,13 +20,20 @@
 
 @implementation MTQueryCacheSelectRowIds
 
-- (instancetype)initWithRowIDs:(NSArray *)rowIDs tableName:(NSString *)tableName
-               sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns {
+@synthesize columns = _columns;
+
+- (instancetype)initWithRowIDs:(NSArray *)rowIDs
+                     tableName:(NSString *)tableName
+               sortDescriptors:(NSArray *)sortDescriptors
+                       columns:(NSDictionary *)columns {
     if (self = [super init]) {
+        self.columns = columns.copy;
         NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ ", tableName];
         [sql appendString:[self whereClauseWithRowIds:rowIDs]];
         [sql appendString:[self orderByClauseWithSortDescriptors:sortDescriptors]];
         self.sql = sql;
+        
+        self.columns = nil;
     }
     return self;
 }
@@ -41,9 +48,13 @@
         key = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
         NSArray *rowIDs = object[key];
         
+        NSNumber *keyColumns = @(MADQuerySelectColumns);
+        NSDictionary *columns = object[keyColumns];
+        self.columns = columns.copy;
+        
         key = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
         NSString *tableName = object[key];
-        
+
         key = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
         NSArray *array = object[key];
         NSArray *sortDescriptors = [NSArray arrayWithArray:array];
@@ -52,6 +63,8 @@
         [sql appendString:[self whereClauseWithRowIds:rowIDs]];
         [sql appendString:[self orderByClauseWithSortDescriptors:sortDescriptors]];
         self.sql = sql;
+        
+        self.columns = nil;
     }
     return self;
 }

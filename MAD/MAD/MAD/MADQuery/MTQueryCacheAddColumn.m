@@ -31,6 +31,8 @@
 
 @implementation MTQueryCacheAddColumn
 
+@synthesize database = _database;
+
 // FIXME: This is currently SQLite specific.
 
 - (instancetype)initWithObject:(id)object {

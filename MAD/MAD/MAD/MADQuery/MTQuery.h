@@ -30,35 +30,37 @@ extern NSString * const MADIdentifierROWID;
 @end
 
 @protocol MADQueryFieldKeysProtocol <NSObject>
+    @property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *, id> *fields;
     @property (nonatomic, strong) NSMutableArray *fieldKeys;
+@end
+
+@protocol MADQueryColumnsProtocol <NSObject>
+    @property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
+@end
+
+@protocol MADQueryDataTableProtocol <NSObject>
+    @property (nonatomic, strong) MADDataTable *dataTable;
+@end
+
+@protocol MADQueryDatabaseProtocol <NSObject>
+    @property (nonatomic, strong) MTDatabase *database;
+@end
+
+@protocol MADQueryDataDelegateProtocol <NSObject>
+    @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+@end
+
+@protocol MADQueryUpdatableProtocol <NSObject>
+    - (void)update;
 @end
 
 @interface MTQuery : NSObject
 
-    @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
-
-    @property (nonatomic, weak) MADDataTable *dataTable;
-    @property (nonatomic, strong, readwrite) MTDatabase *database;
-
-    @property (nonatomic, strong) NSMutableDictionary *fields;
-    @property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
+    - (instancetype)initWithObject:(id)object;
 
     @property (nonatomic, assign, readonly) MADQueryType type;
 
     - (NSString *)getSql:(NSError * __autoreleasing *)error;
-    - (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error;
-
-    - (BOOL)performQueryWithError:(NSError * __autoreleasing *)error;
-
-    - (void)update;
-
-@end
-
-@interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
-
-    - (instancetype)initWithObject:(id)object;
-
-    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
     @property (nonatomic, readonly) BOOL returnsResults;
     @property (nonatomic, readonly) BOOL partOfTransactionSet;
@@ -67,12 +69,14 @@ extern NSString * const MADIdentifierROWID;
 
 @interface MTQuery (MADQueryFieldKeysProtocol)    //Intended for use by MTQuery subclasses only
 
-    - (instancetype)initWithObject:(id)object;
-
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
-    @property (nonatomic, readonly) BOOL returnsResults;
-    @property (nonatomic, readonly) BOOL partOfTransactionSet;
+@end
+
+@interface MTQuery (MADQueryDatabaseProtocol)    //Intended for use by MTQuery subclasses only
+
+    - (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error;
+    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end
 

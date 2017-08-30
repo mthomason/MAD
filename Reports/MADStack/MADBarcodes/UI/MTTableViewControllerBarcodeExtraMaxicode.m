@@ -84,8 +84,9 @@
     RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
     MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
     self.dataTableSampleData = dataTable;
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                                object: schemaField];
+    MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+    querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+                                                                                             object: schemaField];
     
     
     MADDatabaseConnection *connection;

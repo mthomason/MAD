@@ -130,7 +130,7 @@
     }
     
     MADDatabaseConnection *databaseConnection = self.databaseConnection;
-    MTQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
+    MTQueryTest *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
     MADDataTable *datatable = [MADDataTable newDataTableOfType: MADDataTableTypeVirtual
                                                   withObjectID: databaseConnection.hash];
     

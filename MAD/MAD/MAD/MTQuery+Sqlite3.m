@@ -32,9 +32,12 @@
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             if (sortCounter != 0) [sql appendString:@", "];
             MADDataColumn *dataColumn = nil;
-            if (self.columns) {
-                if ((key = sortDescriptor.key)) {
-                    dataColumn = self.columns[key];
+            
+            if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
+                if (((MTQuery <MADQueryColumnsProtocol> *)self).columns != nil) {
+                    if ((key = sortDescriptor.key)) {
+                        dataColumn = ((MTQuery <MADQueryColumnsProtocol> *)self).columns[key];
+                    }
                 }
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
@@ -95,8 +98,11 @@
 }
 
 - (MADDataType)columnTypeForColumnHandle:(NSString *)columnHandle {
-    MADDataColumn * __weak column = self.columns[columnHandle];
-    return column.type;
+    MADDataColumn *column;
+    if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
+        column = ((id <MADQueryColumnsProtocol>)self).columns[columnHandle];
+    }
+    return column != nil ? column.type : 0;
 }
 
 @end

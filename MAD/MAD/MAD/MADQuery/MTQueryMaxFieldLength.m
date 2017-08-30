@@ -37,7 +37,9 @@
 
 @implementation MTQueryMaxFieldLength
 
+@synthesize fields = _fields;
 @synthesize fieldKeys = _fieldKeys;
+@synthesize database = _database;
 
 - (instancetype)initWithObject:(id)object {
 
@@ -45,6 +47,9 @@
 
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
         self.fieldKeys = fieldKeys;
+        
+        NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
+        self.fields = fieldInfo;
         
         NSAssert([object respondsToSelector:@selector(array)], @"MTQueryMaxFieldLength expects to respond to array (hint, send an order set..");
 

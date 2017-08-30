@@ -28,6 +28,12 @@
     NSString *_sql;
 }
 
+@synthesize dataDelegate = _dataDelegate;
+
+- (void)dealloc {
+    _dataDelegate = nil;
+}
+
 - (instancetype)initWithObject:(MADQueryCacheIndexCreateParameters *)object {
     if (self = [super initWithObject:object]) {
         
@@ -45,7 +51,7 @@
             
             NSString *keySortDescriptor = sortDescriptor.key;
             
-            MADDataColumn *column = object.columns[keySortDescriptor];
+            MADDataColumn *column = columns[keySortDescriptor];
             
             NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
             sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType

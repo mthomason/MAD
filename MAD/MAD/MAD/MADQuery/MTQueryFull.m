@@ -84,7 +84,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 @implementation MTQueryFull
 
+@synthesize fields = _fields;
 @synthesize fieldKeys = _fieldKeys;
+@synthesize dataDelegate = _dataDelegate;
 
 - (void)dealloc {
     self.dataDelegate = nil;
@@ -97,6 +99,9 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
         self.fieldKeys = fieldKeys;
+        
+        NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
+        self.fields = fieldInfo;
 
         _objectID = query.objectID.copy;
         _limitResults = queryLimit;

@@ -14,6 +14,7 @@
 @class MADDataColumn;
 
 @interface MTQueryCacheAddColumn : MTQueryCache
+    <MADQueryDatabaseProtocol>
 
     - (instancetype)initWithTableName:(NSString *)tableName
                            columnName:(NSString *)columnName

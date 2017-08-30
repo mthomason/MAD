@@ -68,6 +68,7 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
 @implementation MTQueryCacheAggregateFunction
 
 @synthesize binaryBindings = _binaryBindings;
+@synthesize columns = _columns;
 
 - (instancetype)initWithObject:(id)object {
 

@@ -182,10 +182,10 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         if (self.queryField1ID != nil) {
 
             RptqQueryField *queryField1 = [moc objectWithID: self.queryField1ID];
-            MTQuery *querySampleDataField;
+            MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
             RptqDatabaseSchemaField *databaseSchemaField1 = queryField1.databaseSchemaField;
-            querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                               object: databaseSchemaField1];
+            querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+                                                                                                     object: databaseSchemaField1];
             querySampleDataField.database.delegate = self;
             self.query = querySampleDataField;
             
@@ -231,10 +231,10 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         if (self.queryField2ID != nil) {
             
             RptqQueryField *queryField2;
-            MTQuery *querySampleDataField;
+            MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
             queryField2 = [moc objectWithID: self.queryField2ID];
-            querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                               object: queryField2.databaseSchemaField];
+            querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+                                                                                                     object: queryField2.databaseSchemaField];
             querySampleDataField.database.delegate = self;
             self.query2 = querySampleDataField;
             NSError * __autoreleasing error = NULL;

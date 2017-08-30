@@ -11,11 +11,8 @@
 
 #import "MTQuery.h"
 
-//@class MTDatabaseSqlite3;
-
 @interface MTQueryCache : MTQuery
-
-    //@property (nonatomic, weak, readwrite) MTDatabaseSqlite3 *database;
+    <MADQueryDatabaseProtocol>
 
 @end
 

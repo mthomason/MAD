@@ -170,8 +170,9 @@
     RptqDatabaseSchemaField *schemaField;
     schemaField = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
 
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                                object: schemaField];
+    MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+    querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+                                                                                             object: schemaField];
 
     self.querySampleDataField = querySampleDataField;
     

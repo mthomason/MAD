@@ -12,7 +12,8 @@
 #import "MTQuery.h"
 
 @interface MTQuerySampleDataTable : MTQuery
-    <MADQueryFieldKeysProtocol>
+    <MADQueryFieldKeysProtocol, MADQueryDataTableProtocol, MADQueryDatabaseProtocol,
+        MADQueryDatabaseProtocol>
 
     - (NSString *)getSql:(NSError * __autoreleasing *)error;
 

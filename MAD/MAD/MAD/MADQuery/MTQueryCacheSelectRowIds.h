@@ -12,6 +12,7 @@
 #import "MTQuery.h"
 
 @interface MTQueryCacheSelectRowIds : MTQuery
+    <MADQueryColumnsProtocol>
 
 - (instancetype)initWithRowIDs:(NSArray *)rowIDs tableName:(NSString *)tableName
                sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns;

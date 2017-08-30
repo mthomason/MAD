@@ -12,16 +12,17 @@
 #import <objc/NSObject.h>
 
 @class MTQuery;
+@protocol MADQueryDatabaseProtocol;
 
 @interface MADDataFormatter : NSObject
 
-    + (instancetype)newDataFormatter:(MTQuery *)query;
+    + (instancetype)newDataFormatter:(MTQuery <MADQueryDatabaseProtocol> *)query;
 
-    @property (nonatomic, strong) MTQuery *query;
+    @property (nonatomic, strong) MTQuery <MADQueryDatabaseProtocol> *query;
     @property (nonatomic, assign) BOOL didRefresh;
     @property (nonatomic, assign, readonly) BOOL needsFormat;
 
-    - (instancetype)initWithQuery:(MTQuery *)query;
+    - (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query;
 
 @end
 

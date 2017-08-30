@@ -31,6 +31,7 @@
 @implementation MADQuerySelectItemsForGroup
 
 @synthesize binaryBindings = _binaryBindings;
+@synthesize columns = _columns;
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
@@ -43,16 +44,15 @@
         
         NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
         NSString *tableName = object[keyTableName];
-        self.tableName = tableName;
+        self.tableName = tableName.copy;
         
         NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
         NSArray *sortDescriptors = object[keySortDescriptors];
-        self.sortDescriptors = sortDescriptors;
+        self.sortDescriptors = sortDescriptors.copy;
         
         NSNumber *keyFieldKeys = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
         NSArray *columnKeys = object[keyFieldKeys];
-        
-        NSMutableArray *mutableColumnKeys = [[NSMutableArray alloc] initWithArray: columnKeys];
+        NSMutableArray *mutableColumnKeys = columnKeys.mutableCopy;
         [mutableColumnKeys addObject:MADIdentifierROWID];
         self.columnKeys = mutableColumnKeys;
         
@@ -62,7 +62,7 @@
         
         NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
         NSDictionary *columns = object[keyFieldDescriptors];
-        NSMutableDictionary *mutableColumns = [NSMutableDictionary dictionaryWithDictionary:columns];
+        NSMutableDictionary *mutableColumns = columns.mutableCopy;
         
         MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
         rowid.type = MADDataTypeInteger;

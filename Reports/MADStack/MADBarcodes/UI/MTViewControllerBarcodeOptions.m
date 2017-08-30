@@ -854,8 +854,9 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
         [delegate didSetField2ID:fieldID];
     }
     
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                                object: field.databaseSchemaField];
+    MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+    querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+                                                                                             object: field.databaseSchemaField];
     NSError * __autoreleasing error = NULL;
     
     MADDatabaseConnection *dbConnection;
@@ -968,11 +969,12 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 
 - (void)barcodeMaxicodeDidChooseSampleData:(NSArray *)sampleData {
     self.sampleBarcodeDataMaxicode = sampleData;
+    id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
     if (sampleData.count > 0) {
         id result = [sampleData[0] allObjects].lastObject;
-        [self.delegate barcodeMaxicodeDidSetPrimaryData:result];
+        [delegate barcodeMaxicodeDidSetPrimaryData:result];
     } else {
-        [self.delegate barcodeMaxicodeDidSetPrimaryData:nil];
+        [delegate barcodeMaxicodeDidSetPrimaryData:nil];
     }
 }
 

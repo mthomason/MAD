@@ -28,13 +28,15 @@
 @interface MTQuerySampleDataField ()
 
     @property (nonatomic, strong) id queryObject;
-    @property (nonatomic, strong) MADDataTable *datatable;
 
 @end
 
 @implementation MTQuerySampleDataField
 
+@dynamic fields;
 @synthesize fieldKeys = _fieldKeys;
+@synthesize dataTable = _dataTable;
+@synthesize database = _database;
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
@@ -47,7 +49,7 @@
 
         NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;
         MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier:identifier];
-        self.datatable = dataTable;
+        self.dataTable = dataTable;
         self.queryObject = object;
         
     }
@@ -65,11 +67,15 @@
 }
 
 - (MADDataTable *)dataTableForQuery:(MTQuery *)query {
-    return self.datatable;
+    return self.dataTable;
 }
 
 - (MADQueryType)type {
     return MADQueryTypeSampleDataTable;
+}
+
+- (NSMutableDictionary <NSString *, id> *)fields {
+    return nil;
 }
 
 @end

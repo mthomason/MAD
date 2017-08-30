@@ -12,6 +12,7 @@
 #import "MTQuery.h"
 
 @interface MTQueryCacheIndexCreate : MTQuery
+    <MADQueryDataDelegateProtocol>
 
 @end
 

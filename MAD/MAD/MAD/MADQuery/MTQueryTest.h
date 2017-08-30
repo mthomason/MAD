@@ -14,9 +14,8 @@
 @class MADDatabaseConnection;
 
 @interface MTQueryTest : MTQuery
+    <MADQueryDatabaseProtocol>
 
-    @property (nonatomic, weak) MTDatabase *database;
-    
     - (instancetype)initWithObject:(MADDatabaseConnection *)object;
 
 @end

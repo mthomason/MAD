@@ -120,7 +120,7 @@ static NSString * const SqlDelimitorObject = @", %@";
 }
 
 - (BOOL)partOfTransactionSet {
-    return YES;  //Can't use YES here, because insert is bound with different values on each run.
+    return YES;
 }
 
 - (MADQueryType)type {

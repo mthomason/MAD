@@ -39,10 +39,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 @implementation MTQuery
 
-- (void)dealloc {
-    _dataDelegate = nil;
-}
-
 - (void)update {
 
 }
@@ -54,38 +50,27 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 - (BOOL)partOfTransactionSet { return NO; }
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super init]) {
-        NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
-        self.fields = fieldInfo;
-    }
+    if (self = [super init]) { }
     return self;
 }
 
-- (BOOL)performQueryWithError:(NSError * __autoreleasing *)error {
-    NSError * __autoreleasing qerror = NULL;
-    BOOL success = [self.database executeQuery:self withError:&qerror];
-    if (!success && qerror != NULL && error != NULL) {
-        *error = qerror;
-    }
-    NSAssert(qerror == NULL, @"Error: %@", (*error).localizedDescription);
-    return success;
-}
-
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    [self.fields removeAllObjects];
     if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
         [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
     }
     return @"";
 }
 
 - (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error {
-    [self.fields removeAllObjects];
     if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
         [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
     }
-    if (self.database == nil) {
-        self.database = database;
+    if ([self conformsToProtocol:@protocol(MADQueryDatabaseProtocol)]) {
+        if (((MTQuery <MADQueryDatabaseProtocol> *)self).database == nil) {
+            ((MTQuery <MADQueryDatabaseProtocol> *)self).database = database;
+        }
     }
     NSError * __autoreleasing e = nil;
     NSString *sql = [self getSql:&e];
@@ -105,10 +90,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
                 ((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys[index] : nil;
     }
     return key;
-}
-
-- (NSMutableDictionary *)fields {
-    return _fields == nil ? _fields = [NSMutableDictionary new] : _fields;
 }
 
 @end
