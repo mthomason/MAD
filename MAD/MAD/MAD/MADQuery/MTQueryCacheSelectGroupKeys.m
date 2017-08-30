@@ -14,6 +14,8 @@
 #import "MTDatabaseSqlite3.h"
 #import "MADQuerySelectParameters.h"
 
+#import "MADQueryType.h"
+
 static NSString * const JoinPredicateWhere = @" WHERE ";
 
 @interface MTQueryCacheSelectGroupKeys ()

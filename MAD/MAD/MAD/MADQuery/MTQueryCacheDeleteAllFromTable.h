@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheDeleteAllFromTable_h
 #define Reports_MTQueryCacheDeleteAllFromTable_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheDeleteAllFromTable : MTQuery
 

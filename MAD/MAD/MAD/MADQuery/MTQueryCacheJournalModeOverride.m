@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryCacheJournalModeOverride.h"
+#import "MADQueryType.h"
 
 @implementation MTQueryCacheJournalModeOverride
 

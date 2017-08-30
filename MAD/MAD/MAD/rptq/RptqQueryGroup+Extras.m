@@ -82,8 +82,8 @@
                   managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     
-    NSExpression *predicateExpression[2];
-    NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
+    //NSExpression *predicateExpression[2];
+    //NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
     //predicateExpression[0] = [NSExpression expressionForKeyPath: keyInQuery];
     //predicateExpression[1] = [NSExpression expressionForConstantValue: objectID];
     

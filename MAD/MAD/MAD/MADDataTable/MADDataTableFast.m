@@ -60,7 +60,7 @@
 
 #import "MADDataTableObjectEnumerator.h"
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 #import "MTQuery+Extras.h"
 #import "MTQueryCacheAddRow.h"
 #import "MTQueryCacheIndexDrop.h"

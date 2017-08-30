@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQuerydefinitionPredicate.h"
+#import "MTQueryDefinitionPredicate.h"
 
 @implementation MTQueryDefinitionPredicate
 

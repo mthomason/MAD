@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryTest_h
 #define Reports_MTQueryTest_h
 
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 
 @class MADDatabaseConnection;
 

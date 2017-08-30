@@ -30,6 +30,7 @@
 #import "MADDatabaseField+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
+#import "MADQueryType.h"
 
 @interface MTQueryMaxFieldLength ()
     @property (nonatomic, strong) id queryObject;

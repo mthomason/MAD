@@ -36,7 +36,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MTDatabase+Constructor.h>
@@ -1561,7 +1561,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     MADTableController *tableController;
     
     RptqQueryTable *table, *tableWrapped;
-    MTQuery *rquery;
+    MTQuery <MADQueryDatabaseProtocol> *rquery;
     RptqDatabaseSchemaTable *schemaTable;
 
     NSFetchedResultsController *queryTablesResultsController;
@@ -1579,7 +1579,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     MADDatabaseConnection *databaseConnection;
     databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:schemaTable.inDatabase.ownedByUser];
     MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
-    rquery = [[MTQuery alloc] initWithQueryType:MADQueryTypeSampleDataTable object:schemaTable];
+    rquery = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
+                                                                               object: schemaTable];
     if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
         db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
     }

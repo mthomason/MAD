@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheIndexDrop_h
 #define Reports_MTQueryCacheIndexDrop_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheIndexDrop : MTQuery
 

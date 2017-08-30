@@ -11,7 +11,13 @@
 #endif
 
 #import "MTQueryCacheAddRow.h"
+
+#import <stdio.h>
+#import <string.h>
+#import "madlib.h"
+
 #import <Foundation/NSArray.h>
+
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
@@ -24,9 +30,8 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
-#import <stdio.h>
-#import <string.h>
-#import "madlib.h"
+
+#import "MADQueryType.h"
 
 static NSString * const SqlDelimitor = @", ";
 static NSString * const SqlDelimitorObject = @", %@";

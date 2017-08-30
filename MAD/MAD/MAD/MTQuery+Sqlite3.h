@@ -9,7 +9,7 @@
 #ifndef Reports_MTQuery_Extras_h
 #define Reports_MTQuery_Extras_h
 
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 
 @interface MTQuery (Sqlite3)
 

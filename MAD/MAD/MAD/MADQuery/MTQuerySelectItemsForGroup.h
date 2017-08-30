@@ -9,7 +9,7 @@
 #ifndef Reports_MADQuerySelectItemsForGroup_h
 #define Reports_MADQuerySelectItemsForGroup_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MADQuerySelectItemsForGroup : MTQuery
     <MADQueryDataBindingProtocol, MADQueryColumnsProtocol>

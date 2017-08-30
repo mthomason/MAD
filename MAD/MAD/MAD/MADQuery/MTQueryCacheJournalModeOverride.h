@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheJournalModeOverride_h
 #define Reports_MTQueryCacheJournalModeOverride_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheJournalModeOverride : MTQuery
 

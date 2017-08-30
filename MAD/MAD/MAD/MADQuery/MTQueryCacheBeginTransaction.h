@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheBeginTransaction_h
 #define Reports_MTQueryCacheBeginTransaction_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheBeginTransaction : MTQuery
 

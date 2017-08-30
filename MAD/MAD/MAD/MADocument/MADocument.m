@@ -61,7 +61,7 @@
 #import "MADConstants.h"
 
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 #import "MTQueryFull.h"
 
 #import "MADConstants.h"
@@ -150,6 +150,10 @@
 #import "RptqDataHelper.h"
 
 #import "MTDatabase+Constructor.h"
+
+#import "MADQueryType.h"
+
+#import "MTQuery+Extras.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -969,18 +973,24 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (MADDataTable *)dataTableForQuery:(MTQuery *)query {
-
+    
     switch (query.type) {
-        
+            
         case MADQueryTypeFull:
             self.dataTable.dataDelegate = self;
             return self.dataTable;
             break;
-    
+            
         default:
             return nil;
             break;
     }
+    /*if ([query isKindOfClass:[MTQueryFull class]]) {
+        self.dataTable.dataDelegate = self;
+        return self.dataTable;
+    } else {
+        return nil;
+    }*/
 }
 
 #pragma mark -

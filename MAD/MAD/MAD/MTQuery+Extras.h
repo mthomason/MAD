@@ -9,9 +9,12 @@
 #ifndef Reports_MTQuery_Extras_h
 #define Reports_MTQuery_Extras_h
 
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
+#import "MADQueryType.h"
 
 @interface MTQuery (Extras)
+
+    @property (nonatomic, assign, readonly) MADQueryType type;
 
     - (instancetype)initWithQueryType:(MADQueryType)type object:(id)object;
     + (NSDictionary *)newQueryDefinitionSelect:(NSArray *)columnKeys

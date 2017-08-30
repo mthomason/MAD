@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheSelectLimitOffset_h
 #define Reports_MTQueryCacheSelectLimitOffset_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @class MADDataColumn, NSSortDescriptor;
 

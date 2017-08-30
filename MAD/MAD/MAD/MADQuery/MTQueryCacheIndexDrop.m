@@ -16,6 +16,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MTDatabase.h>
 #import "MADQueryCacheIndexDropParameters.h"
+#import "MADQueryType.h"
 
 @interface MTQueryCacheIndexDrop ()
 

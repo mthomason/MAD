@@ -16,6 +16,7 @@
 #import "MTDatabaseSqlite3.h"
 
 #import "MADQueryCacheSelectLimitOffsetParamaters.h"
+#import "MADQueryType.h"
 
 @interface MTQueryCacheSelectLimitOffset ()
     @property (nonatomic, strong) NSString *sql;

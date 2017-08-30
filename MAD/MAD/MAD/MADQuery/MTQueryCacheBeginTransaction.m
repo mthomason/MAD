@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryCacheBeginTransaction.h"
+#import <MAD/MADQueryType.h>
 
 @implementation MTQueryCacheBeginTransaction
 
@@ -24,6 +25,10 @@
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheBeginTransaction;
 }
 
 @end

@@ -10,7 +10,8 @@
 #define MADQueryType_h
 
 typedef NS_ENUM(NSUInteger, MADQueryType) {
-    MADQueryTypeMaxFieldLength,
+    MADQueryTypeUnknown = 0,
+    MADQueryTypeMaxFieldLength = 1,
     MADQueryTypeCustomSql,
     MADQueryTypeFull,
     MADQueryTypeConnectionTest,
@@ -34,7 +35,8 @@ typedef NS_ENUM(NSUInteger, MADQueryType) {
     MADQueryTypeCacheSelectRowIds,
     MADQueryTypeCacheSelectGroupKeys,
     MADQueryTypeCacheSelectItemsForGroupKeys,
-    MADQueryTypeCacheAggregateFunction
+    MADQueryTypeCacheAggregateFunction,
+    MADQueryTypeCacheIndexCreateTemplate
 };
 
 #endif /* MADQueryType_h */

@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryFull_h
 #define Reports_MTQueryFull_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
-@class NSManagedObjectID, NSManagedObjectContext;
+@class NSManagedObjectID, NSManagedObjectContext, RptqQuery;
 
 @interface MTQueryFull : MTQuery
     <MADQueryFieldKeysProtocol, MADQueryDataDelegateProtocol>

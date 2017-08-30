@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheSyncOff_h
 #define Reports_MTQueryCacheSyncOff_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheSyncOff : MTQuery
 

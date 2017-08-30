@@ -22,7 +22,7 @@
 
 #import <MADSqlite3/sqlite3.h>
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 #import "MTDatabase+Constructor.h"
 #import "MTDatabaseSqlite3.h"

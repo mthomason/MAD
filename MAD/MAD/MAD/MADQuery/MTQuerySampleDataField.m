@@ -24,6 +24,7 @@
 #import "MADDataTable+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
+#import "MADQueryType.h"
 
 @interface MTQuerySampleDataField ()
 

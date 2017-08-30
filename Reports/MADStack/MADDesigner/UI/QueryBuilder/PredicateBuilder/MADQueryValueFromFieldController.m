@@ -27,7 +27,7 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MTDatabase+Constructor.h>

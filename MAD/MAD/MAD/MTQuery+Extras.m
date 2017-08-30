@@ -41,6 +41,8 @@
 
 @implementation MTQuery (Extras)
 
+@dynamic type;
+
 - (instancetype)initWithQueryType:(MADQueryType)type object:(id)parameters {
     id query;
     

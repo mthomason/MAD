@@ -12,6 +12,7 @@
 #import <Foundation/NSException.h>
 #import "MADQuerySelectParameters.h"
 #import "MTQuery+Sqlite3.h"
+#import "MADQueryType.h"
 
 @interface MTQueryCacheSelectRowIds ()
     @property (nonatomic, copy) NSString *sql;

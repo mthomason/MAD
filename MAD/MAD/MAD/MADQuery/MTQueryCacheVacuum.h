@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheVacuum_h
 #define Reports_MTQueryCacheVacuum_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheVacuum : MTQuery
 

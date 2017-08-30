@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryCacheSyncOff.h"
+#import <MAD/MADQueryType.h>
 
 @implementation MTQueryCacheSyncOff
 
@@ -24,6 +25,10 @@
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheSyncModeOff;
 }
 
 @end

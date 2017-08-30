@@ -14,6 +14,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import "MADQueryCacheDeleteAllFromTableParameters.h"
+#import "MADQueryType.h"
 
 @interface MTQueryCacheDeleteAllFromTable ()
 

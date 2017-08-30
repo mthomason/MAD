@@ -31,7 +31,7 @@
 #import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MADMySQLFetchProtocol.h>
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 #import "MADConnectionsPropertiesProtocol.h"
 

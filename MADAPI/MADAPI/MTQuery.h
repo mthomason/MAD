@@ -12,8 +12,6 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
-#import "MADQueryType.h"
-
 #pragma mark Types of specific paramamters accepted for each query
 
 @protocol MADDataProtocol;
@@ -22,8 +20,7 @@ extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
-@class NSMutableArray, NSMutableDictionary,
-       MTDatabase, MADDataTable, RptqQuery;
+@class NSMutableArray, NSMutableDictionary, MTDatabase, MADDataTable;
 
 @protocol MADQueryDataBindingProtocol <NSObject>
     @property (nonatomic, strong) NSMutableArray *binaryBindings;
@@ -57,8 +54,6 @@ extern NSString * const MADIdentifierROWID;
 @interface MTQuery : NSObject
 
     - (instancetype)initWithObject:(id)object;
-
-    @property (nonatomic, assign, readonly) MADQueryType type;
 
     - (NSString *)getSql:(NSError * __autoreleasing *)error;
 

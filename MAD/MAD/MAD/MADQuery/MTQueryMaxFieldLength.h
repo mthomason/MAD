@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryMaxFieldLength_h
 #define Reports_MTQueryMaxFieldLength_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryMaxFieldLength : MTQuery
     <MADQueryFieldKeysProtocol, MADQueryDatabaseProtocol>

@@ -11,6 +11,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 #import "MADQuerySelectParameters.h"
+#import "MADQueryType.h"
 
 static NSString * const WildCard = @"*";
 static NSString * const SqlDelimitor = @", ";

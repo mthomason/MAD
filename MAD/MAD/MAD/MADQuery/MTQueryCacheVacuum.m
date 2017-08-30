@@ -13,6 +13,7 @@
 #import "MTQueryCacheVacuum.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <MAD/MADQueryType.h>
 
 @implementation MTQueryCacheVacuum
 
@@ -31,6 +32,10 @@
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheVacuum;
 }
 
 @end

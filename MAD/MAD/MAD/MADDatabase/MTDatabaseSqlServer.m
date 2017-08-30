@@ -47,7 +47,7 @@
 
 #import "MADConnectionsPropertiesProtocol.h"
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 #import "MTDatabaseProcessSqlServer.h"
 

@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCache_h
 #define Reports_MTQueryCache_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCache : MTQuery
     <MADQueryDatabaseProtocol>

@@ -13,6 +13,7 @@
 #import "MTQueryCacheEndTransaction.h"
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MTDatabase.h>
+#import <MAD/MADQueryType.h>
 
 @interface MTQueryCacheEndTransaction ()
 
@@ -30,6 +31,10 @@
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheEndTransaction;
 }
 
 @end

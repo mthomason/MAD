@@ -448,7 +448,7 @@
     [self insertQueryTableID:queryTableID managedObjectContext:_managedObjectContext];
 }
 
-- (void)insertQueryLink:(RptqQueryLinks *)queryLinkID
+- (void)insertQueryLink:(NSNumber *)queryLinkID
    managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     MADModelQueryLink *link;
     if ((link = [_links objectForKey:queryLinkID])) return;

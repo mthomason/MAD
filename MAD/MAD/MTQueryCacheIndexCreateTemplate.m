@@ -11,6 +11,7 @@
 #import <Foundation/NSDictionary.h>
 
 #import "MADCacheIndexType.h"
+#import <MAD/MADQueryType.h>
 
 @interface MTQueryCacheIndexCreateTemplate ()
     @property (nonatomic, strong) id queryObject;
@@ -55,6 +56,10 @@
 
 - (NSUInteger)parameterCount {
     return _groupCount * 2 + 2;
+}
+
+- (MADQueryType)type {
+    return MADQueryTypeCacheIndexCreateTemplate;
 }
 
 @end

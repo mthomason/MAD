@@ -17,7 +17,7 @@
 #import <MADCocoaExtensions/MADAlertController.h>
 
 #import <MAD/MADocument.h>
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 #import <MAD/MTQueryFull.h>
 
 #import "MADViewControllerStandardProtocol.h"

@@ -11,13 +11,13 @@
 #endif
 
 #import "MADTableFormatter.h"
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @implementation MADTableFormatter
 
 @dynamic didRefresh;
 
-- (instancetype)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query {
     if (self = [super initWithQuery:query]) {
 
         self.query = query;

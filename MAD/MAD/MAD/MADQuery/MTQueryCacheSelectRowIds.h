@@ -9,7 +9,7 @@
 #ifndef Reports_MTQueryCacheSelectRowIds_h
 #define Reports_MTQueryCacheSelectRowIds_h
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 @interface MTQueryCacheSelectRowIds : MTQuery
     <MADQueryColumnsProtocol>

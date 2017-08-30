@@ -11,7 +11,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADAPI/MTDatabase.h>
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 #import <MAD/MTQueryTest.h>
 
 @interface MADDesignerUnitTests : XCTestCase

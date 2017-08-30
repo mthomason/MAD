@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQuery.h"
+#import <MADAPI/MTQuery.h>
 
 #import <Foundation/NSNull.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -19,7 +19,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSDictionary.h>
 
-#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
+//#import <MAD/MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -32,8 +32,6 @@ NSString * const MTQueryKeyPredicateValue   = @"v";
 NSString * const MADIdentifierROWID         = @"ROWID";
 
 @interface MTQuery ()
-
-    @property (nonatomic, assign, readwrite) MADQueryType type;
 
 @end
 
@@ -76,11 +74,6 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     NSString *sql = [self getSql:&e];
     if (e != nil) { *error = e; }
     return sql;
-}
-
-- (NSString *)sqlGroupByExpressionWithQuery:(RptqQuery *)query {
-    //Group is done on the reporting client side, so we do not add group by information here.
-    return @"";
 }
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {

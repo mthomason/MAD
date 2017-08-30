@@ -19,6 +19,7 @@
 #import <MADAPI/MTDatabase.h>
 #import "MTDatabaseSqlite3.h"
 #import "MADQueryCacheIndexCreateParameters.h"
+#import "MADQueryType.h"
 
 @interface MTQueryCacheIndexCreate ()
 

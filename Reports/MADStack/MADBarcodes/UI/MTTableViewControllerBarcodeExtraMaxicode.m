@@ -33,7 +33,7 @@
 
 #import <MADAPI/MTDatabase.h>
 
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
 #import <MAD/MTDatabase+Constructor.h>
 

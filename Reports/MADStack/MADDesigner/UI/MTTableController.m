@@ -34,7 +34,7 @@
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MAD/RptqQuery.h>
-#import <MAD/MTQuery.h>
+#import <MADAPI/MTQuery.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDataTable+Constructor.h>
