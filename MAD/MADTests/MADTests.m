@@ -57,12 +57,12 @@
     // Use XCTAssert and related functions to verify your tests produce the correct results.
 }
 
-- (void)testSqlite3ErrorMessage {
+/*- (void)testSqlite3ErrorMessage {
     const char *errorName = NULL, *errorMessage = NULL;
     mad_sqlite3Err(SQLITE_OK, &errorName, &errorMessage);
     NSString *fullMessage = [[NSString alloc] initWithFormat:@"%s: %s", errorName, errorMessage];
     NSLog(@"%@", fullMessage);
-}
+}*/
 
 - (NSUInteger)math1:(NSUInteger)i offset:(NSUInteger)offset multiplier:(NSUInteger)multiplier {
     return i * multiplier + offset;

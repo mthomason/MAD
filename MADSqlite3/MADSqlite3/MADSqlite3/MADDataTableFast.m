@@ -64,6 +64,7 @@
 #import <MADSqlite3/MTQueryCacheAddColumn.h>
 #import <MADSqlite3/MTQueryCacheVacuum.h>
 #import <MADSqlite3/MTQueryCacheDropTable.h>
+#import <MADSqlite3/MTQueryCacheSelectRowId.h>
 #import <MADSqlite3/MTQueryCacheSelectRowIds.h>
 
 #import <MADSqlite3/MADQueryCacheAddRowParameters.h>
@@ -351,8 +352,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         database.databaseConnection = connection;
         
         [(MTDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
-         SQLITE_OPEN_CREATE |
-         SQLITE_OPEN_FULLMUTEX];
+                                                              SQLITE_OPEN_CREATE |
+                                                              SQLITE_OPEN_FULLMUTEX];
         self.databaseForInserts = database;
         database = nil;
         connection = nil;
@@ -820,15 +821,15 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
     NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
-    NSNumber *keyTableNmae = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+    NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
     
     NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:cacheId];
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-                             cacheID,           keyRowId,
-                             columnKeys,         keyFieldKey,
-                             tableName,          keyTableNmae, nil];
+                             cacheID,       keyRowId,
+                             columnKeys,    keyFieldKey,
+                             tableName,     keyTableName, nil];
     
-    MTQuery * query = [[MTQueryCacheSelectRowIds alloc] initWithObject: options];
+    MTQuery *query = [[MTQueryCacheSelectRowId alloc] initWithObject: options];
     sqlite3_stmt *statement = NULL;
     NSError * __autoreleasing errorSQL = nil;
     NSString *sql = [query getSql:&errorSQL];
@@ -878,15 +879,15 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
     NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
-    NSNumber *keyTableNmae = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+    NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
     NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:cacheId];
 
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     cacheID,            keyRowId,
                                     self.columnKeys,    keyFieldKey,
-                                    tableName,          keyTableNmae, nil];
+                                    tableName,          keyTableName, nil];
     
-    MTQuery * query = [[MTQueryCacheSelectRowIds alloc] initWithObject: options];
+    MTQuery * query = [[MTQueryCacheSelectRowId alloc] initWithObject: options];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSql:&error];

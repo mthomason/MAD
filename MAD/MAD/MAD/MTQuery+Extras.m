@@ -18,8 +18,9 @@
 #import <MADSqlite3/MTQueryCacheSyncDefault.h>
 #import <MADSqlite3/MTQueryCacheSyncOff.h>
 #import <MADSqlite3/MTQueryCacheJournalModeOverride.h>
+#import <MADSqlite3/MTQueryCacheSelectRowId.h>
+#import <MADSqlite3/MTQueryCacheSelectRowIds.h>
 
-#import "MTQueryCacheSelectRowId.h"
 #import "MTQuerySampleDataField.h"
 #import "MTQuerySampleDataTable.h"
 #import "MTQueryFull.h"
@@ -49,6 +50,10 @@
         
         case MADQueryTypeCacheSelectRowId:
             query = [[MTQueryCacheSelectRowId alloc] initWithObject:parameters];
+            break;
+
+        case MADQueryTypeCacheSelectRowIds:
+            query = [[MTQueryCacheSelectRowIds alloc] initWithObject:parameters];
             break;
 
         case MADQueryTypeMaxFieldLength:

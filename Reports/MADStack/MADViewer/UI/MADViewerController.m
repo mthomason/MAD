@@ -632,9 +632,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         pageAttributes.contentSizeInital = documentScroller.contentSize;
         pageAttributes.contentScaleFactor = visiblePageViewController.documentView.contentScaleFactor;
         
-        MADDocumentPageController *pageOne =
-            [[MADDocumentPageController alloc] initWithDocument: self.document
-                                               andPageAttributtes: pageAttributes];
+        MADDocumentPageController *pageOne;
+        pageOne = [[MADDocumentPageController alloc] initWithDocument: self.document
+                                                   andPageAttributtes: pageAttributes];
 
         pageOne.view.frame = self.view.bounds;
         pageOne.view.backgroundColor = self.view.backgroundColor.copy;
@@ -647,7 +647,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         _refreshing = NO;
         [self setViewControllers: viewControllers
                        direction: UIPageViewControllerNavigationDirectionForward
-                        animated: NO completion:^(BOOL finished) {
+                        animated: NO
+                      completion: ^(BOOL finished) {
         
             if (finished) {
                 [pageOne.view setNeedsDisplay];

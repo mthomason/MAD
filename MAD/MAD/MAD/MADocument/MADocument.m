@@ -318,7 +318,7 @@ void madwarn(char *err,  const char*err2) { }
     NSDictionary *parameters;
     parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
     
-    MADDataTableFast *datatable = [MADDataTableFast newDataTableWithDefinition:parameters];
+    MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
     datatable.cacheDelegate = self;
     [datatable loadFromCacheWithUrl:self.urlDataTableCache];
     self.dataTable = datatable;

@@ -25,6 +25,11 @@
 #import <MADFoundation/MADDataType.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
+#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabaseField.h>
+
+#import <MADSqlite3/MADArrayCaching.h>
+
 #import "MADReportFormatterDataSourceProtocol.h"
 
 #import "MADSectionRepresentation.h"
@@ -46,11 +51,6 @@
 #import "RptqQuery+Extras.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryGroup+Extras.h"
-
-#import <MADAPI/MTDatabase.h>
-#import <MADAPI/MADDatabaseField.h>
-
-#import <MADSqlite3/MADArrayCaching.h>
 
 #import "MADNotificationDidFormatPage.h"
 #import "MADPageOptions.h"

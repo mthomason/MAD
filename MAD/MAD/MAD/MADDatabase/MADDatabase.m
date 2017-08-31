@@ -10,8 +10,8 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import "MTDatabaseMySql.h"
 #import <MADSqlite3/MTDatabaseSqlite3.h>
+#import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 
 NSString * const MADIdentifierDatabaseMySQL     = @"MySQL";
