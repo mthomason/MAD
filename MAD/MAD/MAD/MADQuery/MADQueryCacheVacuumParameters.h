@@ -9,8 +9,8 @@
 #ifndef MAD_MADQueryCacheVacuumParameters_h
 #define MAD_MADQueryCacheVacuumParameters_h
 
-typedef NS_ENUM(short, MTQueryCacheVacuumParameters) {
-    MTQueryCacheVacuumConnection,
+typedef NS_ENUM(short, MADQueryCacheVacuumParameters) {
+    MADQueryCacheVacuumConnection,
 };
 
 #endif /* Header_h */

@@ -23,7 +23,7 @@
 #import <MADAPI/MADQuery.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-#import <MAD/MTQueryFull.h>
+#import <MAD/MADQueryFull.h>
 
 #import "MADOperationRefreshInitialize.h"
 
@@ -87,7 +87,7 @@ static const short errCache = 2;
     private.parentContext = document.managedObjectContext;
 
     __block NSString *queryString = nil;
-    MTQueryFull *query = document.mainQuery;
+    MADQueryFull *query = document.mainQuery;
     [private performBlockAndWait:^{
         NSError *sqlError = NULL;
         queryString = [query copySQLWithManagedObjectContext: private

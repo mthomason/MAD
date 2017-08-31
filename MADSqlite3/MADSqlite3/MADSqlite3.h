@@ -12,18 +12,18 @@ FOUNDATION_EXPORT double MADSqlite3VersionNumber;
 FOUNDATION_EXPORT const unsigned char MADSqlite3VersionString[];
 
 #import <MADSqlite3/MADDatabaseSqlite3.h>
-#import <MADSqlite3/MTQueryCacheBeginTransaction.h>
-#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
-#import <MADSqlite3/MTQueryCacheEndTransaction.h>
-#import <MADSqlite3/MTQueryCacheJournalModeOverride.h>
-#import <MADSqlite3/MTQueryCacheSyncDefault.h>
-#import <MADSqlite3/MTQueryCacheSyncOff.h>
+#import <MADSqlite3/MADQueryCacheBeginTransaction.h>
+#import <MADSqlite3/MADQueryCacheDeleteAllFromTable.h>
+#import <MADSqlite3/MADQueryCacheEndTransaction.h>
+#import <MADSqlite3/MADQueryCacheJournalModeOverride.h>
+#import <MADSqlite3/MADQueryCacheSyncDefault.h>
+#import <MADSqlite3/MADQueryCacheSyncOff.h>
 #import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADArrayCaching.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADSqlite3/MADQuery+Sqlite3.h>
-#import <MADSqlite3/MTQueryCacheDropTable.h>
+#import <MADSqlite3/MADQueryCacheDropTable.h>
 #import <MADSqlite3/MADQuerySelectParameters.h>
-#import <MADSqlite3/MTQueryCacheSelectRowId.h>
-#import <MADSqlite3/MTQueryCacheSelectRowIds.h>
+#import <MADSqlite3/MADQueryCacheSelectRowId.h>
+#import <MADSqlite3/MADQueryCacheSelectRowIds.h>

@@ -1,5 +1,5 @@
 //
-//  MTQueryCache.m
+//  MADQueryCache.m
 //  MAD
 //
 //  Created by Michael Thomason on 7/6/14.

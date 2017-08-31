@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheDeleteAllFromTable.m
+//  MADQueryCacheDeleteAllFromTable.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/23/14.
@@ -33,7 +33,7 @@
 
 - (instancetype)initWithObject:(NSDictionary *)object {
     if (self = [super init]) {
-        NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MTQueryCacheDeleteAllFromTableTableName);
+        NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MADQueryCacheDeleteAllFromTableTableName);
         NSString *tableName = object[keyMTQueryCacheDeleteAllFromTableTableName];
         _tableName = tableName.copy;
         

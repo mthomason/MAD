@@ -99,7 +99,7 @@
 - (IBAction)save:(id)sender {
     if (self.firstFieldID && self.secondFieldID) {
         
-        id <MTQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
+        id <MADQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
         queryLinkDelegate = self.queryLinkDelegate;
         
         MADocument *document = self.document;

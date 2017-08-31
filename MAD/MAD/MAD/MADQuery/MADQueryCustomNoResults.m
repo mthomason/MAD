@@ -1,5 +1,5 @@
 //
-//  MTQueryCustomSql.m
+//  MADQueryCustomSql.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/13/14.
@@ -24,7 +24,7 @@
     self = [super initWithObject:object];
     if (self) {
         
-        NSAssert([object isKindOfClass:[NSString class]], @"MTQueryCustomSql expects NSString.");
+        NSAssert([object isKindOfClass:[NSString class]], @"MADQueryCustomSql expects NSString.");
         NSString *queryString = [[NSString alloc] initWithString:object];
         self.queryObject = queryString;
         

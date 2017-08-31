@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheIndexDrop.m
+//  MADQueryCacheIndexDrop.m
 //  MAD
 //
 //  Created by Michael Thomason on 5/7/14.
@@ -30,8 +30,8 @@
     self = [super initWithObject:object];
     if (self) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheIndexDrop expects NSDictionary.");
-        NSNumber *keyIndexName = [[NSNumber alloc] initWithUnsignedInteger: MTQueryCacheIndexDropIndexName];
+        NSAssert([object isKindOfClass:[NSDictionary class]], @"MADQueryCacheIndexDrop expects NSDictionary.");
+        NSNumber *keyIndexName = [[NSNumber alloc] initWithUnsignedInteger: MADQueryCacheIndexDropIndexName];
         NSString *result = [[NSString alloc] initWithFormat:@"DROP INDEX IF EXISTS main.%@", object[keyIndexName]];
         _sql = result;
         

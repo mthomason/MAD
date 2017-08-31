@@ -1,5 +1,5 @@
 //
-//  MTQueryDefinitionGroup.m
+//  MADQueryDefinitionGroup.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/21/14.

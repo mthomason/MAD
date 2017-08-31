@@ -23,7 +23,7 @@
 
 @end
 
-@implementation MTQueryBuilderSortTypeViewController
+@implementation MADQueryBuilderSortTypeViewController
 
 @synthesize delegate = _delegate;
 

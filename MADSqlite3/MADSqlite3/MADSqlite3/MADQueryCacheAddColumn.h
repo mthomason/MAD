@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheAddColumn.h
+//  MADQueryCacheAddColumn.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/19/14.
@@ -9,11 +9,11 @@
 #ifndef Reports_MTQueryCacheAddColumn_h
 #define Reports_MTQueryCacheAddColumn_h
 
-#import "MTQueryCache.h"
+#import "MADQueryCache.h"
 
 @class MADDataColumn;
 
-@interface MADQueryCacheAddColumn : MTQueryCache
+@interface MADQueryCacheAddColumn : MADQueryCache
     <MADQueryDatabaseProtocol>
 
     - (instancetype)initWithTableName:(NSString *)tableName

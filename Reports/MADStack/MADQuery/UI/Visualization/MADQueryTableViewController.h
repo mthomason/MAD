@@ -1,5 +1,5 @@
 //
-//  MTQueryBuilderAdvancedSchemaViewController.h
+//  MADQueryBuilderAdvancedSchemaViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/15/13.

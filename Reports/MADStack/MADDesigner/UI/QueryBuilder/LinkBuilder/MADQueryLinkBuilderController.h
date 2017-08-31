@@ -18,7 +18,7 @@
 
 @class MADQueryLinkBuilderController, RptqQueryLinks;
 
-@protocol MTQueryBuilderLinkBuilderDelegate
+@protocol MADQueryBuilderLinkBuilderDelegate
     - (void)viewController:(MADQueryLinkBuilderController *)controller
             addedQueryLink:(NSManagedObjectID *)linkID;
 @end
@@ -29,7 +29,7 @@
         MADQueryBuilderAddLinkJoinTypeDelegate,
         MADQueryChooseFieldProtocol>
 
-    @property (nonatomic, weak) id <MTQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
+    @property (nonatomic, weak) id <MADQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
     @property (nonatomic, weak) MADocument *document;
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldOne;

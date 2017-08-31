@@ -1,18 +1,19 @@
 //
-//  MTQueryCacheRowIds.m
+//  MADQueryCacheRowIds.m
 //  MAD
 //
 //  Created by Michael Thomason on 5/24/14.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADQueryCacheSelectRowIds.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+
+#import <MADAPI/MADQueryType.h>
+#import "MADQueryCacheSelectRowIds.h"
 #import "MADQuerySelectParameters.h"
 #import "MADQuery+Sqlite3.h"
-#import <MADAPI/MADQueryType.h>
 
 @interface MADQueryCacheSelectRowIds ()
     @property (nonatomic, copy) NSString *sql;

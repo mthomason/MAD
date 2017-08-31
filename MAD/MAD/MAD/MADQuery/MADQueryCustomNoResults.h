@@ -1,5 +1,5 @@
 //
-//  MTQueryCustomSql.h
+//  MADQueryCustomSql.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/13/14.

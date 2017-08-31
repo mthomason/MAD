@@ -1,5 +1,5 @@
 //
-//  MTQuerySampleDataTable.m
+//  MADQuerySampleDataTable.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/22/14.
@@ -64,7 +64,7 @@
         self.fieldKeys = fieldKeys;
 
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]],
-                 @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
+                 @"MADQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
         MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
         self.dataTableMaxFieldLength = dataTable;

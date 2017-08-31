@@ -18,7 +18,7 @@
 
 #import <MAD/MADocument.h>
 #import <MADAPI/MADQuery.h>
-#import <MAD/MTQueryFull.h>
+#import <MAD/MADQueryFull.h>
 
 #import "MADViewControllerStandardProtocol.h"
 

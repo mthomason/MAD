@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheIndexCreateTemplate.h
+//  MADQueryCacheIndexCreateTemplate.h
 //  MAD
 //
 //  Created by Michael on 1/17/17.

@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheIndexCreateTemplate.m
+//  MADQueryCacheIndexCreateTemplate.m
 //  MAD
 //
 //  Created by Michael on 1/17/17.
@@ -24,7 +24,7 @@
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheIndexDrop expects NSDictionary.");
+        NSAssert([object isKindOfClass:[NSDictionary class]], @"MADQueryCacheIndexDrop expects NSDictionary.");
         
         NSNumber *keyGroupCount = [[NSNumber alloc] initWithShort:MADCacheIndexTypeGroupCount];
         NSNumber *groupCount = object[keyGroupCount];

@@ -236,16 +236,8 @@
 				4CF09A3C1BB23FA8007BCF7A /* Protocols */,
 				4C9372E21BAD0E5C00D6BD62 /* Categories */,
 				4C9372E11BAD0E4C00D6BD62 /* DataTable */,
-				4C9372E01BAD0E3500D6BD62 /* Types */,
 			);
 			path = MADFoundation;
-			sourceTree = "<group>";
-		};
-		4C9372E01BAD0E3500D6BD62 /* Types */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Types;
 			sourceTree = "<group>";
 		};
 		4C9372E11BAD0E4C00D6BD62 /* DataTable */ = {

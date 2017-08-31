@@ -1,5 +1,5 @@
 //
-//  MTQueryMaxFieldLength.m
+//  MADQueryMaxFieldLength.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/1/14.
@@ -52,7 +52,7 @@
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
         self.fields = fieldInfo;
         
-        NSAssert([object respondsToSelector:@selector(array)], @"MTQueryMaxFieldLength expects to respond to array (hint, send an order set..");
+        NSAssert([object respondsToSelector:@selector(array)], @"MADQueryMaxFieldLength expects to respond to array (hint, send an order set..");
 
         NSArray *array = [object array];
         

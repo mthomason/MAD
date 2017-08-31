@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheSelectGroupKeys.m
+//  MADQueryCacheSelectGroupKeys.m
 //  MAD
 //
 //  Created by Michael Thomason on 5/21/14.
@@ -49,8 +49,8 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
         NSArray * __weak selectPredicates = object[keySelectPredicates];
         for (NSDictionary *predicate in selectPredicates) {
             
-            NSString *left = predicate[MTQueryKeyPredicateColumn];
-            NSString *right = predicate[MTQueryKeyPredicateValue];
+            NSString *left = predicate[MADQueryKeyPredicateColumn];
+            NSString *right = predicate[MADQueryKeyPredicateValue];
             if (i > 0) {
                 [sqlPredicate appendString:@" AND "];
             }

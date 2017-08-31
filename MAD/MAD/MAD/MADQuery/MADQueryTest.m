@@ -1,5 +1,5 @@
 //
-//  MTQueryTest.m
+//  MADQueryTest.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/2/14.

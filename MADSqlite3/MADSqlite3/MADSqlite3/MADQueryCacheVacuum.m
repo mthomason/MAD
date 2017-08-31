@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheVacuum.m
+//  MADQueryCacheVacuum.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/23/14.
@@ -15,13 +15,13 @@
 #import <Foundation/NSDictionary.h>
 #import <MADAPI/MADQueryType.h>
 
-@implementation MTQueryCacheVacuum
+@implementation MADQueryCacheVacuum
 
 - (instancetype)initWithObject:(id)object {
 
     if (self = [super init]) {
         NSAssert([object isKindOfClass:[NSDictionary class]],
-                        @"MTQueryCacheVacuum expects NSDictionary.");
+                        @"MADQueryCacheVacuum expects NSDictionary.");
     }
     return self;
 }

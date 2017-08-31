@@ -1,5 +1,5 @@
 //
-//  MTQueryBuilderAdvancedViewController.h
+//  MADQueryBuilderAdvancedViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/14/13.

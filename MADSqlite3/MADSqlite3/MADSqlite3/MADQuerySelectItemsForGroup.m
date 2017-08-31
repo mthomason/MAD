@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQuerySelectItemsForGroup.h"
+#import "MADQuerySelectItemsForGroup.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>

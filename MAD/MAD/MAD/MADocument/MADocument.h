@@ -26,7 +26,7 @@
 
 @class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument,
         MADDatabaseConnection, MADModelDocument, MADocumentState,
-        MADSectionLayoutManager, MTQueryFull, MTPaper;
+        MADSectionLayoutManager, MADQueryFull, MTPaper;
 
 
 extern NSString * const MADMimeType;
@@ -68,7 +68,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     @property (readonly, nonatomic, strong)     NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
     @property (readonly, nonatomic, copy)       NSString *filename;
-    @property (readonly, nonatomic, strong)     MTQueryFull *mainQuery;
+    @property (readonly, nonatomic, strong)     MADQueryFull *mainQuery;
 
     @property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
 

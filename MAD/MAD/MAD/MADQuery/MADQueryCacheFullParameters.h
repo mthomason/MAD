@@ -9,9 +9,9 @@
 #ifndef MAD_MADQueryCacheFullParameters_h
 #define MAD_MADQueryCacheFullParameters_h
 
-typedef NS_ENUM(short, MTQueryCacheFullParameters) {
-    MTQueryCacheFullReportName,
-    MTQueryCacheFullQuerySchema,
+typedef NS_ENUM(short, MADQueryCacheFullParameters) {
+    MADQueryCacheFullReportName,
+    MADQueryCacheFullQuerySchema,
 };
 
 #endif /* Header_h */

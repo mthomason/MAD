@@ -23,7 +23,7 @@
 #import <MAD/MADocument.h>
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
-#import <MAD/MTQueryFull.h>
+#import <MAD/MADQueryFull.h>
 #import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqDocument.h>

@@ -41,7 +41,7 @@
 #import "MADModelDocument.h"
 #import "MADModelDatabase.h"
 
-#import "MTQueryFull.h"
+#import "MADQueryFull.h"
 
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSection.h"

@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheSelectLimitOffset.m
+//  MADQueryCacheSelectLimitOffset.m
 //  MAD
 //
 //  Created by Michael Thomason on 5/18/14.
@@ -122,29 +122,29 @@
     NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.",
              NSStringFromClass([self class]));
 
-    id keyLimit = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersLimit];
+    id keyLimit = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersLimit];
     NSNumber *limitO = object[keyLimit];
     
-    id keyOffset = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersOffset];
+    id keyOffset = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersOffset];
     NSNumber *offsetO = object[keyOffset];
     
     NSUInteger limit = limitO ? limitO.unsignedIntegerValue : NSNotFound;     // Careful not to fuck this up!
     NSUInteger offset = offsetO ? offsetO.unsignedIntegerValue : NSNotFound;  // Careful not to fuck this up!
     
-    id keyTableNames = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersTableNames];
+    id keyTableNames = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersTableNames];
     NSString *tableName = object[keyTableNames];
     
-    id keyColumnKeys = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumnKeys];
+    id keyColumnKeys = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersColumnKeys];
     NSArray *columnKeys = object[keyColumnKeys];
     
-    id keySortDesc = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersSortDesc];
+    id keySortDesc = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersSortDesc];
     NSArray *sortDesc = object[keySortDesc];
     
     
-    id keyColumns = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersColumns];
+    id keyColumns = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersColumns];
     NSDictionary *columns = object[keyColumns];
     
-    id keyRowID = [[NSNumber alloc] initWithShort: MTQueryCacheSelectLimitOffsetParamatersDropRowid];
+    id keyRowID = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersDropRowid];
     NSNumber *dropRowid = object[keyRowID];
     
 

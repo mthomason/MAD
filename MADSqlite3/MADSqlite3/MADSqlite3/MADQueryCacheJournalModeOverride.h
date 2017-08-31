@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheJournalModeOverride.h
+//  MADQueryCacheJournalModeOverride.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/23/14.

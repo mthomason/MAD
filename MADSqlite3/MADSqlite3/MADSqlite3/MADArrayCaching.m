@@ -18,7 +18,7 @@
 
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
-#import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
+#import <MADSqlite3/MADQueryCacheDeleteAllFromTable.h>
 
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -30,7 +30,7 @@
 #import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import "MADDatabaseConnectionSqlite3.h"
-#import "MTQueryCacheAddColumn.h"
+#import "MADQueryCacheAddColumn.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
@@ -287,9 +287,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
            unique:(BOOL)unique {
     
     NSString *columnAffinity = [MADSqlite3NativeType newSqlite3NativeType:column.type];
-    MTQueryCacheAddColumn *queryCacheAddColumn;
+    MADQueryCacheAddColumn *queryCacheAddColumn;
     queryCacheAddColumn =
-        [[MTQueryCacheAddColumn alloc] initWithTableName: table
+        [[MADQueryCacheAddColumn alloc] initWithTableName: table
                                               columnName: columnName
                                                   column: column
                                              createTable: create
@@ -431,7 +431,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     _numberOfRows = 0;
     _hasNumberOfRows = MADObjectInitalizedNotSets;
     MADQuery *query;
-    query = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
+    query = [[MADQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
     NSError * __autoreleasing error = NULL;
     return [self.database executeQuery:query withError:&error];
 }

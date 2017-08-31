@@ -62,7 +62,7 @@
 
 
 #import <MADAPI/MADQuery.h>
-#import "MTQueryFull.h"
+#import "MADQueryFull.h"
 
 #import "MADConstants.h"
 
@@ -220,7 +220,7 @@ void madwarn(char *err,  const char*err2) { }
 
     @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
     @property (nonatomic, readwrite, strong) MADDatabase *database;
-    @property (nonatomic, readwrite, strong) MTQueryFull *mainQuery;
+    @property (nonatomic, readwrite, strong) MADQueryFull *mainQuery;
 
     @property (nonatomic, readwrite, strong) NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
@@ -973,7 +973,7 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (MADDataTable *)dataTableForQuery:(MADQuery *)query {
-    if ([query isKindOfClass:[MTQueryFull class]]) {
+    if ([query isKindOfClass:[MADQueryFull class]]) {
         self.dataTable.dataDelegate = self;
         return self.dataTable;
     } else {
@@ -1231,8 +1231,8 @@ void madwarn(char *err,  const char*err2) { }
         if (database) {
             
             RptqQuery *rquery = database.defaultQuery;
-            MTQueryFull *mainQuery;
-            mainQuery = [[MTQueryFull alloc] initWithQuery: rquery
+            MADQueryFull *mainQuery;
+            mainQuery = [[MADQueryFull alloc] initWithQuery: rquery
                                              andQueryLimit: self.limitResultsDesignMode ?
                                                                     50 : NSUIntegerMax];
             mainQuery.dataDelegate = self;

@@ -1,6 +1,6 @@
 //
-//  MTQueryBuilderContainerController.h
-//  MTQueryBuilderContainerController
+//  MADQueryBuilderContainerController.h
+//  MADQueryBuilderContainerController
 //
 //  Created by Michael Thomason on 2/13/13.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.

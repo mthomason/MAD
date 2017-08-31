@@ -1,5 +1,5 @@
 //
-//  MTQuerySampleDataField.m
+//  MADQuerySampleDataField.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/22/14.
@@ -46,7 +46,7 @@
         self.fieldKeys = fieldKeys;
 
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]],
-                 @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
+                 @"MADQuerySampleDataField expects RptqDatabaseSchemaField.");
 
         NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;
         MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier:identifier];

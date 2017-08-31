@@ -1,5 +1,5 @@
 //
-//  MTQueryVisulizationLinkDefination.h
+//  MADQueryVisulizationLinkDefination.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 9/3/15.

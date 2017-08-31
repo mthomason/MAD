@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheRowIds.h
+//  MADQueryCacheRowIds.h
 //  MAD
 //
 //  Created by Michael Thomason on 5/24/14.

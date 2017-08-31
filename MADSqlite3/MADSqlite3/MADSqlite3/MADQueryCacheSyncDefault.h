@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheSyncOn.h
+//  MADQueryCacheSyncOn.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/23/14.

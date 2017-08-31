@@ -15,7 +15,7 @@
 
 @class MADQueryPredicateFormatController;
 
-@protocol MTQueryBuilderPredicateFormatDelegate <MADViewControllerStandardProtocol>
+@protocol MADQueryBuilderPredicateFormatDelegate <MADViewControllerStandardProtocol>
     - (void)viewController:(MADQueryPredicateFormatController *)controller
        addedQueryPredicate:(RptqQueryPredicate *)predicate;
 @end
@@ -24,7 +24,7 @@
     <MADViewControllerStandardProtocol,
         MADQueryAddPredicateProtocol>
 
-    @property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate,
+    @property (nonatomic, weak) id <MADQueryBuilderPredicateFormatDelegate,
                                         MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) MADocument *document;
 

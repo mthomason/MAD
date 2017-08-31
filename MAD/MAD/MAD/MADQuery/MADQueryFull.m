@@ -1,5 +1,5 @@
 //
-//  MTQueryReport.m
+//  MADQueryReport.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/22/14.
@@ -119,12 +119,12 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 - (instancetype)initWithObject:(NSDictionary *)object {
     
     NSAssert([object isKindOfClass:[NSDictionary class]],
-             @"MTQueryFull expects NSDictionary with parameters.");
+             @"MADQueryFull expects NSDictionary with parameters.");
 
     NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
     self.fieldKeys = fieldKeys;
 
-    NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MTQueryCacheFullQuerySchema];
+    NSNumber *parameterScheam = [[NSNumber alloc] initWithShort: MADQueryCacheFullQuerySchema];
     NSNumber *queryLimitWrapper = object[@"MADQueryLimit"];
     NSUInteger queryLimit = queryLimitWrapper.unsignedIntegerValue;
     RptqQuery *query = object[parameterScheam];

@@ -9,8 +9,8 @@
 #ifndef MAD_MADQueryCacheIndexDropParameters_h
 #define MAD_MADQueryCacheIndexDropParameters_h
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheIndexDropParameters) {
-    MTQueryCacheIndexDropIndexName,
+typedef NS_ENUM(NSUInteger, MADQueryCacheIndexDropParameters) {
+    MADQueryCacheIndexDropIndexName,
 };
 
 #endif /* Header_h */

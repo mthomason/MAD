@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheAddColumn.m
+//  MADQueryCacheAddColumn.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/19/14.
@@ -41,24 +41,24 @@
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryCacheAddColumn expects NSDictionary.");
+        NSAssert([object isKindOfClass:[NSDictionary class]], @"MADQueryCacheAddColumn expects NSDictionary.");
         
-        id keyDataColumn = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnDataColumn];
+        id keyDataColumn = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnDataColumn];
         MADDataColumn *column = object[keyDataColumn];
         
-        id keyTableName = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnTableName];
+        id keyTableName = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnTableName];
         self.tableName = object[keyTableName];
         
-        id keyColumnName = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnColumnName];
+        id keyColumnName = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnColumnName];
         NSString *columnName = object[keyColumnName];
         
-        id keyCreateTable = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnCreateTable];
+        id keyCreateTable = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnCreateTable];
         NSNumber *createTable = object[keyCreateTable];
         
-        id keyColumnAffinity = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnAffinity];
+        id keyColumnAffinity = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnAffinity];
         NSString *columnAffinity = object[keyColumnAffinity];
         
-        id keyColumnUnique = [[NSNumber alloc] initWithShort: MTQueryCacheAddColumnUnique];
+        id keyColumnUnique = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnUnique];
         NSNumber *uniqueObj = object[keyColumnUnique];
         BOOL uniqueValue = NO;
         if (uniqueObj != nil) {

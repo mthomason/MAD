@@ -12,7 +12,7 @@
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADQuery.h>
-#import <MAD/MTQueryTest.h>
+#import <MAD/MADQueryTest.h>
 
 @interface MADDesignerUnitTests : XCTestCase
 
@@ -38,7 +38,7 @@
                                                                      database: @"employees"
                                                                          port: 3306];
     
-    MADQuery *queryTest = [[MTQueryTest alloc] initWithObject: databaseConnection];
+    MADQuery *queryTest = [[MADQueryTest alloc] initWithObject: databaseConnection];
     NSError * __autoreleasing error = NULL;
     BOOL success = [queryTest.database executeQuery:queryTest withError: &error];
     XCTAssertNil(error, @"Got an error (%s): %@", __PRETTY_FUNCTION__, error);

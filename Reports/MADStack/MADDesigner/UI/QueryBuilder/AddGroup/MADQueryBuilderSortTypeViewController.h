@@ -1,5 +1,5 @@
 //
-//  MTQueryBuilderSortTypeViewController.h
+//  MADQueryBuilderSortTypeViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/4/12.
@@ -13,8 +13,6 @@
 #import <MAD/MADSortOrder.h>
 
 @protocol MADQueryBuilderSortTypeDelegate;
-
-@class MADQueryBuilderSortTypeViewController;
 
 @interface MADQueryBuilderSortTypeViewController : UITableViewController
     <UITableViewDelegate>

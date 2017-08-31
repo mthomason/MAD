@@ -27,8 +27,8 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
-NSString * const MTQueryKeyPredicateColumn  = @"c";
-NSString * const MTQueryKeyPredicateValue   = @"v";
+NSString * const MADQueryKeyPredicateColumn  = @"c";
+NSString * const MADQueryKeyPredicateValue   = @"v";
 NSString * const MADIdentifierROWID         = @"ROWID";
 
 @interface MADQuery ()

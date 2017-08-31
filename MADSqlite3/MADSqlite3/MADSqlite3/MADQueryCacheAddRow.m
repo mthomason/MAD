@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheAddRow.m
+//  MADQueryCacheAddRow.m
 //  MAD
 //
 //  Created by Michael Thomason on 4/19/14.

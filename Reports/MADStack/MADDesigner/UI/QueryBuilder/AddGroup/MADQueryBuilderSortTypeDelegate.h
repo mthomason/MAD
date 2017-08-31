@@ -11,7 +11,7 @@
 
 #import <MAD/MADSortOrder.h>
 
-@class MTQueryBuilderSortTypeViewController;
+@class MADQueryBuilderSortTypeViewController;
 
 @protocol MADQueryBuilderSortTypeDelegate
     - (void)viewController:(UIViewController *)viewController

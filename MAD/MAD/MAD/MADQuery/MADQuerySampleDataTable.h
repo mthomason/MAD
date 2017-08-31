@@ -1,5 +1,5 @@
 //
-//  MTQuerySampleDataTable.h
+//  MADQuerySampleDataTable.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/22/14.

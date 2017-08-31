@@ -1,5 +1,5 @@
 //
-//  MTQueryMaxFieldLength.h
+//  MADQueryMaxFieldLength.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/1/14.

@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheSelectLimitOffset.h
+//  MADQueryCacheSelectLimitOffset.h
 //  MAD
 //
 //  Created by Michael Thomason on 5/18/14.

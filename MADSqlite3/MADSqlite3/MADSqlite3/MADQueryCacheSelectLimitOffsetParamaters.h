@@ -9,14 +9,14 @@
 #ifndef MADQueryCacheSelectLimitOffsetParamaters_h
 #define MADQueryCacheSelectLimitOffsetParamaters_h
 
-typedef NS_ENUM(short, MTQueryCacheSelectLimitOffsetParamaters) {
-    MTQueryCacheSelectLimitOffsetParamatersLimit,
-    MTQueryCacheSelectLimitOffsetParamatersOffset,
-    MTQueryCacheSelectLimitOffsetParamatersTableNames,
-    MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
-    MTQueryCacheSelectLimitOffsetParamatersColumns,
-    MTQueryCacheSelectLimitOffsetParamatersSortDesc,
-    MTQueryCacheSelectLimitOffsetParamatersDropRowid
+typedef NS_ENUM(short, MADQueryCacheSelectLimitOffsetParamaters) {
+    MADQueryCacheSelectLimitOffsetParamatersLimit,
+    MADQueryCacheSelectLimitOffsetParamatersOffset,
+    MADQueryCacheSelectLimitOffsetParamatersTableNames,
+    MADQueryCacheSelectLimitOffsetParamatersColumnKeys,
+    MADQueryCacheSelectLimitOffsetParamatersColumns,
+    MADQueryCacheSelectLimitOffsetParamatersSortDesc,
+    MADQueryCacheSelectLimitOffsetParamatersDropRowid
 };
 
 #endif /* MADQueryCacheSelectLimitOffsetParamaters_h */

@@ -9,8 +9,8 @@
 #ifndef MAD_MADQueryCacheConnectionParameters_h
 #define MAD_MADQueryCacheConnectionParameters_h
 
-typedef NS_ENUM(NSUInteger, MTQueryCacheConnectionParameters) {
-    MTQueryCacheConnection,
+typedef NS_ENUM(NSUInteger, MADQueryCacheConnectionParameters) {
+    MADQueryCacheConnection,
 };
 
 #endif /* MADQueryCacheConnectionParameters_h */

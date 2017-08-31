@@ -26,7 +26,7 @@
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
 
-#import "MTQueryBuilderSortTypeViewController.h"
+#import "MADQueryBuilderSortTypeViewController.h"
 #import "MADQueryChooseFieldController.h"
 
 #import "MADQueryBuilderAddGroupDelegate.h"
@@ -63,9 +63,9 @@ static NSString * const TextDefault = @"Default";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showGroupSortOrders"]) {
-        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
-            ((MTQueryBuilderSortTypeViewController *)segue.destinationViewController).initalSortOrder = self.sortOrder;
-            ((MTQueryBuilderSortTypeViewController *)segue.destinationViewController).delegate = self;
+        if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderSortTypeViewController class]]) {
+            ((MADQueryBuilderSortTypeViewController *)segue.destinationViewController).initalSortOrder = self.sortOrder;
+            ((MADQueryBuilderSortTypeViewController *)segue.destinationViewController).delegate = self;
         }
     } else if ([segue.identifier isEqualToString:@"showAddGroupByField"]) {
         if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {

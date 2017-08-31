@@ -1,5 +1,5 @@
 //
-//  MTQueryCacheAggregateFunction.m
+//  MADQueryCacheAggregateFunction.m
 //  MAD
 //
 //  Created by Michael Thomason on 6/1/14.

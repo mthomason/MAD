@@ -67,7 +67,7 @@
 #import "MADWatermarkView.h"
 
 #import "MADQueryBuilderAddTableViewController.h"
-#import "MTQueryBuilderAddGroupViewController.h"
+#import "MADQueryBuilderAddGroupViewController.h"
 #import "MADQueryPredicateFormatController.h"
 
 #import "MADTableViewCellQueryTableName.h"
@@ -144,10 +144,10 @@ BOOL storeEnabled() {
         MADQueryBuilderAddTableDelegate,
         MADQueryBuilderAddGroupDelegate,
         MADViewControllerStandardProtocol,
-        MTQueryBuilderLinkBuilderDelegate,
+        MADQueryBuilderLinkBuilderDelegate,
         MADViewControllerStandardProtocol,
         MADDesignerSectionLayoutDelegate,
-        MTQueryBuilderPredicateFormatDelegate,
+        MADQueryBuilderPredicateFormatDelegate,
         MADQueryViewControllerDatasourceProtocol>
 
     @property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
@@ -805,7 +805,7 @@ BOOL storeEnabled() {
 }
 
 #pragma mark -
-#pragma mark MTQueryBuilderPredicateFormatDelegate
+#pragma mark MADQueryBuilderPredicateFormatDelegate
 
 - (void)viewController:(MADQueryPredicateFormatController *)controller
    addedQueryPredicate:(RptqQueryPredicate *)predicate {
@@ -813,7 +813,7 @@ BOOL storeEnabled() {
 }
 
 #pragma mark -
-#pragma mark MTQueryBuilderLinkBuilderDelegate
+#pragma mark MADQueryBuilderLinkBuilderDelegate
 
 - (void)viewController:(MADQueryLinkBuilderController *)controller
         addedQueryLink:(NSManagedObjectID *)linkID {
@@ -837,9 +837,9 @@ BOOL storeEnabled() {
 }
 
 #pragma mark -
-#pragma mark MTQueryBuilderAddGroupDelegate
+#pragma mark MADQueryBuilderAddGroupDelegate
 
-- (void)viewController: (MTQueryBuilderAddGroupViewController *)viewController
+- (void)viewController: (MADQueryBuilderAddGroupViewController *)viewController
 addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
           andSortOrder: (MADSortOrder)sortOrder {
     
@@ -1426,8 +1426,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
                                                         UIModalPresentationOverFullScreen;
     UIPresentationController *pc = navigationController.presentationController;
     pc.delegate = self;
-    MTQueryBuilderAddGroupViewController *tvc;
-    tvc = (MTQueryBuilderAddGroupViewController *)navigationController.topViewController;
+    MADQueryBuilderAddGroupViewController *tvc;
+    tvc = (MADQueryBuilderAddGroupViewController *)navigationController.topViewController;
     tvc.delegate = self;
     tvc.document = self.document;
     [self presentViewController:navigationController animated:YES completion:^{

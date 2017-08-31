@@ -16,8 +16,8 @@
 
 @protocol MADDataProtocol;
 
-extern NSString * const MTQueryKeyPredicateColumn;
-extern NSString * const MTQueryKeyPredicateValue;
+extern NSString * const MADQueryKeyPredicateColumn;
+extern NSString * const MADQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
 @class NSMutableArray, NSMutableDictionary, MADDatabase, MADDataTable;
