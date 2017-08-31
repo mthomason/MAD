@@ -19,7 +19,7 @@ extern NSString * const MTDatabaseConnectionHost;
 extern NSString * const MTDatabaseConnectionServer;
 extern NSString * const MTDatabaseConnectionAppName;
 
-@interface MTDatabaseSqlServer : MTDatabase
+@interface MADDatabaseSQLServer : MTDatabase
 
     - (NSString *)identifier;
 

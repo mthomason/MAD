@@ -14,7 +14,7 @@
 
 @class RptqDatabaseSchemaTable;
 
-@interface MTDatabaseMySql : MTDatabase
+@interface MADDatabaseMySQL : MTDatabase
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;

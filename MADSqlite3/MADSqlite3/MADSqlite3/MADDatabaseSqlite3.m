@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDatabaseSqlite3.h"
+#import "MADDatabaseSqlite3.h"
 
 #import <string.h>
 #import <stdlib.h>
@@ -76,7 +76,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 //#endif
 
-@interface MTDatabaseSqlite3 ()
+@interface MADDatabaseSqlite3 ()
 
     @property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesURL> *databaseConnection;
 
@@ -580,7 +580,7 @@ void sqliteLog(void *foo, const char* statement) {
                     
                     dataColumn.fieldName = fieldName;
                     dataColumn.nativeType = (int16_t)affentyType;
-                    MADDataType columnType = [MTDatabaseSqlite3 dataTypeForAffentyType:affentyType];
+                    MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
                     dataColumn.type = columnType;
                     
                     dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
@@ -800,7 +800,7 @@ void sqliteLog(void *foo, const char* statement) {
     return result;
 }
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    MADSafeQueryField * result = [MTDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
+    MADSafeQueryField * result = [MADDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
     return result;
 }
 

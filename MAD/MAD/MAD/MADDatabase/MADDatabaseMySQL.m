@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDatabaseMySql.h"
+#import "MADDatabaseMySQL.h"
 
 #import <mysql.h>
 
@@ -39,7 +39,7 @@
 #import "MysqlFetch+DataTable.h"
 
 
-@interface MTDatabaseMySql ()
+@interface MADDatabaseMySQL ()
     <MADMySQLFetchProtocol>
 
     @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
@@ -218,7 +218,7 @@
 }
 
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    id safeIdentifier = [MTDatabaseMySql newSafeQueryField:fieldName andTable:tableName];
+    id safeIdentifier = [MADDatabaseMySQL newSafeQueryField:fieldName andTable:tableName];
     return safeIdentifier;
 }
 

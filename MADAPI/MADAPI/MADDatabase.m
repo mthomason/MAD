@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabase.h"
+#import "MADDatabase.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
@@ -31,7 +31,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                                                 @"%@ %@ "
                                                                 @"LIMIT 511;";
 
-@implementation MTDatabase
+@implementation MADDatabase
 
 /*- (instancetype)init {
     if (self = [super init]) {
@@ -91,7 +91,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    id safeField = [MTDatabase newSafeQueryField:fieldName andTable:tableName];
+    id safeField = [MADDatabase newSafeQueryField:fieldName andTable:tableName];
     return safeField;
 }
 

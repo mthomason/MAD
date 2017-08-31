@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDatabaseSqlServer.h"
+#import "MADDatabaseSQLServer.h"
 
 #import <string.h>
 #import <stdlib.h>
@@ -71,7 +71,7 @@ static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPreci
 
 static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
-@interface MTDatabaseSqlServer ()
+@interface MADDatabaseSQLServer ()
 
     @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
 
@@ -110,7 +110,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
     
-    __block MTDatabaseSqlServer *blockSelf = self;
+    __block MADDatabaseSQLServer *blockSelf = self;
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
@@ -469,7 +469,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                        MTDatabaseColumnPrecision : columPercision             //Column percision
                                        };
                         
-                        dataColumn = [[MADDataColumn alloc] initWithType: [MTDatabaseSqlServer dataTypeForNativeType:columnType]
+                        dataColumn = [[MADDataColumn alloc] initWithType: [MADDatabaseSQLServer dataTypeForNativeType:columnType]
                                                                     name: columnNameString
                                                                   number: columnCtr
                                                                  dataLen: columnNumberBytes
@@ -1365,7 +1365,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return safeQueryField;
 }
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    return [MTDatabaseSqlServer newSafeQueryField:fieldName andTable:tableName];
+    return [MADDatabaseSQLServer newSafeQueryField:fieldName andTable:tableName];
 }
 
 + (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {

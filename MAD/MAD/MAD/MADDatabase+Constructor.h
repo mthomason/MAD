@@ -1,5 +1,5 @@
 //
-//  MTDatabase+Constructor.h
+//  MADDatabase+Constructor.h
 //  MAD
 //
 //  Created by Michael on 8/28/17.
@@ -9,9 +9,9 @@
 #ifndef Reports_MTDatabase_Constructor_h
 #define Reports_MTDatabase_Constructor_h
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
-@interface MTDatabase (Constructor)
+@interface MADDatabase (Constructor)
 
     + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
 

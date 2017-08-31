@@ -21,7 +21,7 @@ extern NSString * const MADSqlTextFromPart;
 
 @protocol MADDatabaseResultsProtocol, MADDatabaseConnectionsProperties;
 
-@class NSMutableArray, MADCredential, MADDatabaseConnection, MTDatabase, MADDatabaseTable,
+@class NSMutableArray, MADCredential, MADDatabaseConnection, MADDatabase, MADDatabaseTable,
        MADDataTable, MTQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
@@ -29,7 +29,7 @@ extern NSString * const MADSqlTextFromPart;
     - (void)displayError:(NSError *)error;
 @end
 
-@interface MTDatabase : NSObject
+@interface MADDatabase : NSObject
     <MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseDBProtocol>
 
     //+ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
