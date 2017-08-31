@@ -6,7 +6,8 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "London.mad"
+      "filename" : "London.mad",
+      "universal-type-identifier" : "com.everydayapps.productivity.mad"
     }
   ]
 }

@@ -26,6 +26,7 @@
 		4C00819114B83E92003DF437 /* UIImageStacks20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */; };
 		4C00819214B83E92003DF437 /* UIImageWrench20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818E14B83E92003DF437 /* UIImageWrench20.png */; };
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
+		4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */; };
 		4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */; };
 		4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153DB1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m */; };
 		4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */; };
@@ -1246,6 +1247,7 @@
 		4C00818D14B83E92003DF437 /* UIImageStacks20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageStacks20@2x.png"; path = "Reports/UIImageStacks20@2x.png"; sourceTree = "<group>"; };
 		4C00818E14B83E92003DF437 /* UIImageWrench20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageWrench20.png; path = Reports/UIImageWrench20.png; sourceTree = "<group>"; };
 		4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageWrench20@2x.png"; path = "Reports/UIImageWrench20@2x.png"; sourceTree = "<group>"; };
+		4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Samples.xcassets; sourceTree = "<group>"; };
 		4C0153D71C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionPolarQuestionNegative.h; sourceTree = "<group>"; };
 		4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionPolarQuestionNegative.m; sourceTree = "<group>"; };
 		4C0153DA1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionDisplayedAlert.h; sourceTree = "<group>"; };
@@ -3293,6 +3295,7 @@
 				4C3DCC0D1BCAEFA900ABE231 /* Samples */,
 				4C3DCC131BCAEFA900ABE231 /* MADFeatures.plist */,
 				4C3DCC141BCAEFA900ABE231 /* Images.xcassets */,
+				4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */,
 				4C3DCC151BCAEFA900ABE231 /* Settings.bundle */,
 			);
 			path = Assets;
@@ -5729,6 +5732,7 @@
 				4CC3D7BF1BCB6D9500BDA5D3 /* UIImagePatternLeaf.png in Resources */,
 				4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */,
 				4CC3D8061BCB6D9500BDA5D3 /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
+				4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */,
 				4CC3D7B61BCB6D9500BDA5D3 /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4CC3D75D1BCB6D9500BDA5D3 /* MADBarcode64@2x.png in Resources */,
 				4CC3D7F71BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png in Resources */,

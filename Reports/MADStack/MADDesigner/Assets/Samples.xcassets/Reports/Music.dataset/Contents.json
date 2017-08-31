@@ -6,7 +6,8 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "Music.mad"
+      "filename" : "Music.mad",
+      "universal-type-identifier" : "com.everydayapps.productivity.mad"
     }
   ]
 }

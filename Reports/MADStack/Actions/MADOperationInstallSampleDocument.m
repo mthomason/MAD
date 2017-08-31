@@ -54,6 +54,8 @@
         return [self finish];
     }
     
+    //[NSBundle bundleWithIdentifier:<#(nonnull NSString *)#>]
+    
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:_installFlag];
     if (!installed) {
         
