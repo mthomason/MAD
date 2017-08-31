@@ -1,5 +1,5 @@
 //
-//  MTQuery+Extras.h
+//  MADQuery+Extras.h
 //  MAD
 //
 //  Created by Michael on 8/29/17.
@@ -9,10 +9,10 @@
 #ifndef Reports_MTQuery_Extras_h
 #define Reports_MTQuery_Extras_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import <MADAPI/MADQueryType.h>
 
-@interface MTQuery (Extras)
+@interface MADQuery (Extras)
 
     @property (nonatomic, assign, readonly) MADQueryType type;
 

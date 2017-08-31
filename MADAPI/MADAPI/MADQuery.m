@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 #import <Foundation/NSNull.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -31,11 +31,11 @@ NSString * const MTQueryKeyPredicateColumn  = @"c";
 NSString * const MTQueryKeyPredicateValue   = @"v";
 NSString * const MADIdentifierROWID         = @"ROWID";
 
-@interface MTQuery ()
+@interface MADQuery ()
 
 @end
 
-@implementation MTQuery
+@implementation MADQuery
 
 - (void)update {
 

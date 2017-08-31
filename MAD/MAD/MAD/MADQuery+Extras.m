@@ -1,12 +1,12 @@
 //
-//  MTQuery+Extras.m
+//  MADQuery+Extras.m
 //  MAD
 //
 //  Created by Michael on 8/29/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQuery+Extras.h"
+#import "MADQuery+Extras.h"
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
@@ -31,7 +31,7 @@
 #import "MTQueryCacheSelectGroupKeys.h"
 #import "MTQueryCacheAggregateFunction.h"
 
-@implementation MTQuery (Extras)
+@implementation MADQuery (Extras)
 
 @dynamic type;
 

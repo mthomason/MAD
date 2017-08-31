@@ -1,5 +1,5 @@
 //
-//  MTQuery+Sqlite3.h
+//  MADQuery+Sqlite3.h
 //  MAD
 //
 //  Created by Michael on 8/29/17.
@@ -9,9 +9,9 @@
 #ifndef Reports_MTQuery_Extras_h
 #define Reports_MTQuery_Extras_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQuery (Sqlite3)
+@interface MADQuery (Sqlite3)
 
     - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;
     - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;

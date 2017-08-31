@@ -1,12 +1,12 @@
 //
-//  MTQuery+Sqlite3.m
+//  MADQuery+Sqlite3.m
 //  MAD
 //
 //  Created by Michael on 8/29/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQuery+Sqlite3.h"
+#import "MADQuery+Sqlite3.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSArray.h>
@@ -20,7 +20,7 @@
 
 #import <MADSqlite3/MADDatabaseSqlite3.h>   //FIXME: Should only be included in Cache subset
 
-@implementation MTQuery (Sqlite3)
+@implementation MADQuery (Sqlite3)
 
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
@@ -34,9 +34,9 @@
             MADDataColumn *dataColumn = nil;
             
             if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
-                if (((MTQuery <MADQueryColumnsProtocol> *)self).columns != nil) {
+                if (((MADQuery <MADQueryColumnsProtocol> *)self).columns != nil) {
                     if ((key = sortDescriptor.key)) {
-                        dataColumn = ((MTQuery <MADQueryColumnsProtocol> *)self).columns[key];
+                        dataColumn = ((MADQuery <MADQueryColumnsProtocol> *)self).columns[key];
                     }
                 }
             }
@@ -72,7 +72,7 @@
                                                                          value: columnValue];
             }
             if ([self conformsToProtocol:@protocol(MADQueryDataBindingProtocol)]) {
-                [((MTQuery <MADQueryDataBindingProtocol> *)self).binaryBindings addObject:databinding];
+                [((MADQuery <MADQueryDataBindingProtocol> *)self).binaryBindings addObject:databinding];
             }
             [sql appendFormat:@"%@ = ?", columnHandle];
             counterBinings++;

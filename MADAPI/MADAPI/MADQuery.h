@@ -51,7 +51,7 @@ extern NSString * const MADIdentifierROWID;
     - (void)update;
 @end
 
-@interface MTQuery : NSObject
+@interface MADQuery : NSObject
 
     - (instancetype)initWithObject:(id)object;
 
@@ -62,13 +62,13 @@ extern NSString * const MADIdentifierROWID;
 
 @end
 
-@interface MTQuery (MADQueryFieldKeysProtocol)    //Intended for use by MTQuery subclasses only
+@interface MADQuery (MADQueryFieldKeysProtocol)    //Intended for use by MTQuery subclasses only
 
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end
 
-@interface MTQuery (MADQueryDatabaseProtocol)    //Intended for use by MTQuery subclasses only
+@interface MADQuery (MADQueryDatabaseProtocol)    //Intended for use by MTQuery subclasses only
 
     - (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error;
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
