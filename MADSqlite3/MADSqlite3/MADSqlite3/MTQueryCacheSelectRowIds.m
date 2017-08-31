@@ -47,7 +47,13 @@
         id key;
 
         key = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
-        NSArray *rowIDs = object[key];
+        NSArray *rowIDs = [object objectForKey:key];
+        
+        if (rowIDs == nil) {
+            key = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
+            NSNumber *rowID = [object objectForKey: key];
+            rowIDs = [[NSArray alloc] initWithObjects:rowID, nil];
+        }
         
         NSNumber *keyColumns = @(MADQuerySelectColumns);
         NSDictionary *columns = object[keyColumns];
