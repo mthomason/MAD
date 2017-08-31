@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C00A36A1F57F0F200F6A6C1 /* libmysqlclient.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3671F57F0F200F6A6C1 /* libmysqlclient.a */; };
+		4C00A36B1F57F0F200F6A6C1 /* libcrypto.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3681F57F0F200F6A6C1 /* libcrypto.a */; };
+		4C00A36C1F57F0F200F6A6C1 /* libssl.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3691F57F0F200F6A6C1 /* libssl.a */; };
 		4C0CC9221DA6130F00B5A190 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18771DA14B830093B166 /* libmysqlclient.a */; };
 		4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D31DA6255900B5A190 /* mysql.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C0CCACE1DA626FF00B5A190 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D91DA6255900B5A190 /* mysql_version.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -64,6 +67,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C00A3671F57F0F200F6A6C1 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = ../opt/lib/mysqlclient/libmysqlclient.a; sourceTree = "<group>"; };
+		4C00A3681F57F0F200F6A6C1 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../opt/lib/openssl/libcrypto.a; sourceTree = "<group>"; };
+		4C00A3691F57F0F200F6A6C1 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../opt/lib/openssl/libssl.a; sourceTree = "<group>"; };
 		4C0CC9251DA6255900B5A190 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4C0CC9261DA6255900B5A190 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4C0CC9271DA6255900B5A190 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -663,9 +669,9 @@
 			isa = PBXGroup;
 			children = (
 				4C4F06311F57C99B00E09E54 /* MADFoundation.framework */,
+				4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */,
 				4C33DDBF1DA56EE5005A73CD /* openssl */,
 				4C865F431DA5276B0057678C /* mysqlclient */,
-				4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */,
 				4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */,
 				4CDCEF251D8D859A00A5A32E /* libc++.tbd */,
 			);
@@ -675,6 +681,9 @@
 		4C70148A1BACDC6800301713 = {
 			isa = PBXGroup;
 			children = (
+				4C00A3671F57F0F200F6A6C1 /* libmysqlclient.a */,
+				4C00A3681F57F0F200F6A6C1 /* libcrypto.a */,
+				4C00A3691F57F0F200F6A6C1 /* libssl.a */,
 				4CAEE7341E563659009A6096 /* Resources */,
 				4C7014961BACDC6800301713 /* Source */,
 				4C7014A21BACDC6800301713 /* MADMySQLTests */,
@@ -872,6 +881,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A36A1F57F0F200F6A6C1 /* libmysqlclient.a in Resources */,
+				4C00A36B1F57F0F200F6A6C1 /* libcrypto.a in Resources */,
+				4C00A36C1F57F0F200F6A6C1 /* libssl.a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

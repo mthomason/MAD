@@ -7,6 +7,7 @@
 //
 
 #import "MADOperationInstallSampleDocument.h"
+#import <UIKit/NSDataAsset.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSUserDefaults.h>
@@ -52,7 +53,7 @@
     if (self.cancelled) {
         return [self finish];
     }
-
+    
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:_installFlag];
     if (!installed) {
         
@@ -73,15 +74,14 @@
         }
         
         if (!installed) {
-            NSURL *origin = [self resourceUrl];
-            NSError *error;
             destination = [destination URLByAppendingPathExtension: _fileExtension];
-            installed = [[NSFileManager defaultManager] copyItemAtURL: origin
-                                                                toURL: destination
-                                                                error: &error];
+            
+            NSError *error;
+            NSDataAsset *sampleDoc = [[NSDataAsset alloc] initWithName:_filename];
+            installed = [sampleDoc.data writeToURL:destination options:NSDataWritingAtomic error:&error];
+            
         }
-        NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-        [standardUserDefaults setBool:installed forKey:_installFlag];
+        [[NSUserDefaults standardUserDefaults] setBool:installed forKey:_installFlag];
     }
     [self finish];
 }

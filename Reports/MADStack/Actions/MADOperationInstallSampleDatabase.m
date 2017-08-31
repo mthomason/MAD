@@ -11,6 +11,7 @@
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSBundle.h>
+#import <UIKit/NSDataAsset.h>
 
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplication.h>
@@ -39,10 +40,10 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
     NSURL *fileURL, *databaseURL;
     NSError *error = nil;
-
-    if (self.cancelled) goto FINISH;
+    NSDataAsset *sampleDB;
 
     BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
+
     if (installed) goto FINISH;
 
     
@@ -51,9 +52,8 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
     
     if (databaseURL == nil) goto FINISH;
     
-    installed = [[NSFileManager defaultManager] copyItemAtURL: fileURL
-                                                        toURL: databaseURL
-                                                        error: &error];
+    sampleDB = [[NSDataAsset alloc] initWithName:MTSampleDatabaseChinook];
+    installed = [sampleDB.data writeToURL:databaseURL options:NSDataWritingAtomic error:&error];
     
     if (installed) {
         NSString *filepath = databaseURL.path;

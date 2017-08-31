@@ -20,10 +20,9 @@
 
 #import <MADFoundation/MADDataColumn.h>
 
-#import <MADSqlite3/sqlite3.h>
-
 #import <MADAPI/MADQuery.h>
 
+#import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 
 @interface MADDataTableObjectEnumerator ()
