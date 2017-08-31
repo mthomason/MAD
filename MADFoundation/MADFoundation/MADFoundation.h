@@ -31,12 +31,12 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADDataTablePlist.h>
 #import <MADFoundation/MADDataTableVirtual.h>
 
+#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADURL.h>
 
 #import <MADFoundation/MADFilename.h>
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADErrorUserInfo.h>
-#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>

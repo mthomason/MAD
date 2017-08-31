@@ -9,7 +9,7 @@
 #ifndef Reports_MysqlFetch_DataTable_h
 #define Reports_MysqlFetch_DataTable_h
 
-#import <MADMySQL/MysqlFetch.h>
+#import "MysqlFetch.h"
 
 @interface MysqlFetch (DataTable)
 

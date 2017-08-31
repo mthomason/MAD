@@ -7,7 +7,7 @@
 //
 
 #import "MysqlFetch+DataTable.h"
-#import <string.h>
+
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
@@ -19,16 +19,16 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSDateFormatter.h>
 #import <Foundation/NSCalendar.h>
+#import <string.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>
 
-#import <MADMySQL/MysqlConnection.h>
-#import <MADMySQL/MysqlFetchField.h>
-#import <MADMySQL/MADDataTypeMySQL.h>
-#import <MADMySQL/MysqlException.h>
-#import <MADMySQL/MADMySQLFetchProtocol.h>
+#import "MADDataTypeMySQL.h"
+#import "MysqlConnection.h"
+#import "MysqlFetchField.h"
+#import "MysqlException.h"
 
 #ifndef __OBJC_GC__
 #define BLOB_DEFAULT_SIZE 10000

@@ -6,15 +6,15 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADMySQLFetchProtocol_h
-#define MADMySQLFetchProtocol_h
+#ifndef MADMySQL_MADMySQLFetchProtocol_h
+#define MADMySQL_MADMySQLFetchProtocol_h
 
-@class MADDataTable, MADQuery;
+/* @class MADDataTable, MADQuery;
 
 @protocol MADMySQLFetchProtocol
 @optional
     - (MADDataTable *)dataTableForQuery:(MADQuery *)query;
     - (void)didFetchRow:(NSUInteger)row;
-@end
+@end */
 
 #endif /* MADMySQLFetchProtocol_h */

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MADCredential_h
-#define MAD_MADCredential_h
+#ifndef MADFoundation_MADCredential_h
+#define MADFoundation_MADCredential_h
 
 #import <Foundation/NSObject.h>
 

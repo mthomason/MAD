@@ -6,15 +6,19 @@
 //  Copyright 2007-2010 Karl Kraft. All rights reserved.
 //
 
-#ifndef MAD_MysqlFetch_h
-#define MAD_MysqlFetch_h
+#ifndef MADMySQL_MysqlFetch_h
+#define MADMySQL_MysqlFetch_h
 
 #import <Foundation/NSObject.h>
 #import "mysql.h"
 
-@protocol MADMySQLFetchProtocol;
-
 @class MysqlConnection, MADQuery, MADDataTable;
+
+@protocol MADMySQLFetchProtocol
+  @optional
+    - (MADDataTable *)dataTableForQuery:(MADQuery *)query;
+    - (void)didFetchRow:(NSUInteger)row;
+@end
 
 @interface MysqlFetch : NSObject
 

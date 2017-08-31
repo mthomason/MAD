@@ -19,22 +19,21 @@
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTableVirtual.h>
+#import <MADFoundation/MADCredential.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADDatabaseField.h>
-
-#import <MADMySQL/MysqlConnection.h>
-#import <MADMySQL/MysqlServer.h>
-#import <MADMySQL/MysqlFetch.h>
-#import <MADMySQL/MysqlFetchField.h>
-#import <MADMySQL/MADDataTypeMySQL.h>
-#import <MADMySQL/MADMySQLFetchProtocol.h>
-
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
+//#import "MADMySQLFetchProtocol.h"
+#import "MysqlConnection.h"
+#import "MysqlServer.h"
+#import "MysqlFetch.h"
+#import "MysqlFetchField.h"
+#import "MADDataTypeMySQL.h"
 #import "MysqlFetch+DataTable.h"
 
 
