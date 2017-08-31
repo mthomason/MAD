@@ -200,8 +200,6 @@
 		4C11F1451BA9008D00EC2C58 /* MADSqlite3 */ = {
 			isa = PBXGroup;
 			children = (
-				4CB5D9151F57A02000CC2E8E /* MTQueryCacheSelectRowId.h */,
-				4CB5D9161F57A02000CC2E8E /* MTQueryCacheSelectRowId.m */,
 				4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */,
 				4C2D78451F56F030005415F7 /* MADArrayCaching.h */,
 				4C2D78461F56F030005415F7 /* MADArrayCaching.m */,
@@ -251,6 +249,8 @@
 				4C2D781A1F56ED4C005415F7 /* MTQueryCacheIndexDrop.m */,
 				4C2D781B1F56ED4C005415F7 /* MTQueryCacheSelectLimitOffset.h */,
 				4C2D781C1F56ED4C005415F7 /* MTQueryCacheSelectLimitOffset.m */,
+				4CB5D9151F57A02000CC2E8E /* MTQueryCacheSelectRowId.h */,
+				4CB5D9161F57A02000CC2E8E /* MTQueryCacheSelectRowId.m */,
 				4C2D781D1F56ED4C005415F7 /* MTQueryCacheSelectRowIds.h */,
 				4C2D781E1F56ED4C005415F7 /* MTQueryCacheSelectRowIds.m */,
 				4C2D781F1F56ED4C005415F7 /* MTQueryCacheVacuum.h */,

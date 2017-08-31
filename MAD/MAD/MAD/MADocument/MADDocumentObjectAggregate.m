@@ -43,9 +43,12 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
     if (self = [super initWithDefinition:definition]) {
         
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-        datasource = datasource;
+        datasource = definition.datasource;
+        
         RptqDocumentElementAggregate *isAggregate;
+        
         isAggregate = (RptqDocumentElementAggregate *)definition.item;
+        
         RptqQueryField *aggregateField = isAggregate.aggregateField;
         RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
         

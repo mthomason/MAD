@@ -80,17 +80,22 @@ static inline const char *functionName(MTAggregateFunctionType functionType) {
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSNumber *keyRowIds = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateRowids];
+        NSNumber *keyRowIds, *keyFieldDescriptors, *keyGroupByType, *keyTableName;
+
+        keyRowIds = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateRowids];
+        
+        keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateFieldDescriptors];
+        keyTableName = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateTableName];
+        keyGroupByType = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateGroupByType];
+
         NSArray *rowids = object[keyRowIds];
         self.rowids = rowids;
-       
-        NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateFieldDescriptors];
+
         self.columns = object[keyFieldDescriptors];
         
-        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateTableName];
+
         self.tableName = object[keyTableName];
         
-        NSNumber *keyGroupByType = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateGroupByType];
         self.groupByType = ((NSNumber *)object[keyGroupByType]).shortValue;
         
         NSNumber *keyAggregateFunctionType = [[NSNumber alloc] initWithShort: MADParametersQueryCacheAggregateAggregateFunctionType];
