@@ -16,6 +16,9 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 
 
 #import <MADFoundation/madlib.h>
+
+#import <MADFoundation/BDHost.h>
+
 #import <MADFoundation/MADOperationPromptErrorProtocol.h>
 #import <MADFoundation/MADOperationResultStringProtocol.h>
 #import <MADFoundation/MADApplicationProtocol.h>
