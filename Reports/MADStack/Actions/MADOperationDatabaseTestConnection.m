@@ -17,6 +17,7 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADDataTableVirtual.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -26,7 +27,6 @@
 #import <MAD/MADQueryTest.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADDatabase+Constructor.h>
-#import <MAD/MADDataTableVirtual.h>
 
 @interface MADOperationDatabaseTestConnection ()
     <MADDatabaseResultsProtocol>

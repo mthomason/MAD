@@ -7,12 +7,13 @@
 //
 
 #import "MADDataTable+Constructor.h"
+
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 
 #import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADDataTableVirtual.h>
 
-#import "MADDataTableVirtual.h"
 #import <MADSqlite3/MADDataTableFast.h>
 
 @implementation MADDataTable (Constructor)
