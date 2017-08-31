@@ -13,12 +13,12 @@
 
 @protocol MADCacheProtocol, MADDataProtocol, MADQueryDataBindingProtocol;
 
-@class MTQuery, MTDatabaseSqlite3;
+@class MTQuery, MADDatabaseSqlite3;
 
 @interface MADDataTableFast : MADDataTable
     <NSCoding, NSFastEnumeration>
 
-    @property (nonatomic, strong, readonly) MTDatabaseSqlite3 *databaseForSelects;
+    @property (nonatomic, strong, readonly) MADDatabaseSqlite3 *databaseForSelects;
 
     @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
     @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;

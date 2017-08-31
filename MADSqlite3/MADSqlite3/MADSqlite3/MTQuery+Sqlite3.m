@@ -18,7 +18,7 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
-#import <MADSqlite3/MTDatabaseSqlite3.h>   //FIXME: Should only be included in Cache subset
+#import <MADSqlite3/MADDatabaseSqlite3.h>   //FIXME: Should only be included in Cache subset
 
 @implementation MTQuery (Sqlite3)
 
@@ -42,7 +42,7 @@
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
             MADSqlite3SortDescription *sortDirection;
-            sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
+            sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
                                                                             ascending: sortDescriptor.ascending];
             [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;

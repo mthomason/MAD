@@ -26,7 +26,7 @@
 #import <MADCocoaExtensions/MADAlertController.h>
 
 #import <MAD/MADocument.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -38,7 +38,7 @@
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 #import <MAD/MADDataTable+Constructor.h>
 #import <MAD/MTQuery+Extras.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MTBarcodeCode39Iso16388.h>
@@ -191,7 +191,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             
             MADDatabaseConnection *connection;
             connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)queryField1.databaseSchemaField.inTable.inDatabase.ownedByUser)];
-            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+            MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
                 db.delegate = self;
             NSError * __autoreleasing error = NULL;
             BOOL success = [db executeQuery:self.query withError:&error];
@@ -241,7 +241,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
             MADDatabaseConnection *connection;
             connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)queryField2.databaseSchemaField.inTable.inDatabase.ownedByUser)];
-            MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+            MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
             if ([self.query2 conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
                 db.delegate = self;
             }

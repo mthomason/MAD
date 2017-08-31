@@ -15,7 +15,7 @@
 #import "RptqQueryField.h"
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElement+Extras.h"
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADFoundation/MADDataType.h>
 
@@ -40,7 +40,7 @@
     return self;
 }
 
-- (instancetype)initWithDatabase:(MTDatabase *)database
+- (instancetype)initWithDatabase:(MADDatabase *)database
             referencesQueryField:(RptqDocumentElement *)documentObject {
 
     if (self = [super init]) {

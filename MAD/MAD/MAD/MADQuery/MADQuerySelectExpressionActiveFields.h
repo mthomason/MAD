@@ -16,7 +16,7 @@
 
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
 
-    - (instancetype)initWithDatabase:(MTDatabase *)database
+    - (instancetype)initWithDatabase:(MADDatabase *)database
              forManagedObjectContext:(NSManagedObjectContext *)context;
 
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;

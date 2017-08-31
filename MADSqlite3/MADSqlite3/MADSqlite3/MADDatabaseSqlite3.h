@@ -1,5 +1,5 @@
 //
-//  MTDatabaseSqlite3.h
+//  MADDatabaseSqlite3.h
 //  MAD
 //
 //  Created by Michael Thomason on 10/23/13.
@@ -13,7 +13,7 @@
 
 #import <MADFoundation/MADDataType.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseCacheProtocol.h>
 
 BOOL Sqlite3StepResultOK(int result);
@@ -22,7 +22,7 @@ BOOL Sqlite3StepResultOK(int result);
 
 typedef NSString MADSqlite3SortDescription;
 
-@interface MADDatabaseSqlite3 : MTDatabase
+@interface MADDatabaseSqlite3 : MADDatabase
     <MADDatabaseCacheProtocol> {
   @public
     void * /* sqlite3 * */ _database;

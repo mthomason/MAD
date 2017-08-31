@@ -46,7 +46,7 @@
 
 @end
 
-@implementation MTDatabaseMySql
+@implementation MADDatabaseMySQL
 
 @dynamic databaseConnection;
 
@@ -165,7 +165,7 @@
     NSString *title = NSLocalizedString(@"Notice", @"Notice");
     NSString *failureReason = NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.");
     NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : failureReason};
-    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:43421 userInfo:errorInfo];
+    NSError *error = [NSError errorWithDomain:@"MADDatabase" code:43421 userInfo:errorInfo];
     return error;
 }
 

@@ -39,7 +39,7 @@
 #import <MADAPI/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -1578,7 +1578,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     
     MADDatabaseConnection *databaseConnection;
     databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:schemaTable.inDatabase.ownedByUser];
-    MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
     rquery = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
                                                                                object: schemaTable];
     if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {

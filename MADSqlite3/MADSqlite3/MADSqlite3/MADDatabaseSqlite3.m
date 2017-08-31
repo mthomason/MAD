@@ -1,5 +1,5 @@
 //
-//  MTDatabaseSqlite3.m
+//  MADDatabaseSqlite3.m
 //  MAD
 //
 //  Created by Michael Thomason on 10/23/13.
@@ -53,9 +53,9 @@
 #import "MTQueryCacheSyncDefault.h"
 
 
-NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
-NSString * const MTDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
-NSString * const MTDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
+NSString * const MADDatabaseSqlite3SafeQuote = @"\"";
+NSString * const MADDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
+NSString * const MADDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
 
 BOOL Sqlite3StepResultOK(int result) {
     return (result == SQLITE_OK) || (result == SQLITE_ROW) || (result == SQLITE_DONE);
@@ -82,7 +82,7 @@ void sqliteLog(void *foo, const char* statement) {
 
 @end
 
-@implementation MTDatabaseSqlite3 {
+@implementation MADDatabaseSqlite3 {
     sqlite3_stmt *_bulkStatement;
     BOOL _isOpen;
 }
@@ -775,7 +775,7 @@ void sqliteLog(void *foo, const char* statement) {
         case MADDataTypeDateTime:
         case MADDataTypeGeometry:
         default: {
-            //NSAssert(NO, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
+            //NSAssert(NO, @"Type is not expected...  Should really be encapsulated in MADDatabaseSqlite3: %lu", (unsigned long)type);
             if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                 const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {
@@ -796,7 +796,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatField, tableName, fieldName];
+    id result = [[NSString alloc] initWithFormat:MADDatabaseSqlite3SafeFormatField, tableName, fieldName];
     return result;
 }
 - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
@@ -805,12 +805,12 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
-    id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
+    id result = [[NSString alloc] initWithFormat:MADDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
     return result;
 }
 
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
-    id result = [[NSString alloc] initWithFormat:MTDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
+    id result = [[NSString alloc] initWithFormat:MADDatabaseSqlite3SafeFormatIdentifier, fieldOrTableName];
     return result;
 }
 
@@ -1410,7 +1410,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
         case MADDataTypeDateTime:
         case MADDataTypeGeometry:
         default: {
-            //NSAssert(NO, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
+            //NSAssert(NO, @"Type is not expected...  Should really be encapsulated in MADDatabaseSqlite3: %lu", (unsigned long)type);
             if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                 const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {

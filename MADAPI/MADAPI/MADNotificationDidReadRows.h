@@ -14,12 +14,12 @@
 extern NSString * const MADNotificationDidReadRowsName;
 extern NSString * const MADDatabaseNumberOfRowsReadKey;
 
-@class MTDatabase;
+@class MADDatabase;
 
 @interface MADNotificationDidReadRows : NSObject
 
     + (MADNotificationDidReadRows *)sharedObject;
-    - (void)database:(MTDatabase *)database readRow:(NSUInteger)row;
+    - (void)database:(MADDatabase *)database readRow:(NSUInteger)row;
 
 @end
 

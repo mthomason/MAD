@@ -18,7 +18,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryField.h"
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <Foundation/NSString.h>
 
 @interface MADQuerySelectExpressionActiveFields ()
@@ -30,7 +30,7 @@
 
 @implementation MADQuerySelectExpressionActiveFields
 
-- (instancetype)initWithDatabase:(MTDatabase *)database
+- (instancetype)initWithDatabase:(MADDatabase *)database
          forManagedObjectContext:(NSManagedObjectContext *)context {
 
     if (self = [super init]) {

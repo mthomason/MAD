@@ -9,12 +9,12 @@
 #ifndef Reports_MTDatabaseMySql_h
 #define Reports_MTDatabaseMySql_h
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADFoundation/MADDataType.h>
 
 @class RptqDatabaseSchemaTable;
 
-@interface MADDatabaseMySQL : MTDatabase
+@interface MADDatabaseMySQL : MADDatabase
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;

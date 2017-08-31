@@ -1,20 +1,20 @@
 //
-//  MTDatabase+Constructor.m
+//  MADDatabase+Constructor.m
 //  MAD
 //
 //  Created by Michael on 8/28/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDatabase+Constructor.h"
+#import "MADDatabase+Constructor.h"
 #import <MADAPI/MADDatabaseConnection.h>
-#import "MTDatabaseMySql.h"
-#import <MADSqlite3/MTDatabaseSqlite3.h>
-#import "MTDatabaseSqlServer.h"
+#import "MADDatabaseMySQL.h"
+#import <MADSqlite3/MADDatabaseSqlite3.h>
+#import "MADDatabaseSQLServer.h"
 
-@class MTDatabaseSqlite3;
+@class MADDatabaseSqlite3;
 
-@implementation MTDatabase (Comparson)
+@implementation MADDatabase (Comparson)
 
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
     
@@ -22,17 +22,17 @@
     
     switch (connection.databaseType) {
         case MADDatabaseTypeSqlite3:
-            result = [[MTDatabaseSqlite3 alloc] init];
+            result = [[MADDatabaseSqlite3 alloc] init];
             
             break;
             
         case MADDatabaseTypeTDS:
-            result = [[MTDatabaseSqlServer alloc] init];
+            result = [[MADDatabaseSQLServer alloc] init];
             
             break;
             
         case MADDatabaseTypeMySQL:
-            result = [[MTDatabaseMySql alloc] init];
+            result = [[MADDatabaseMySQL alloc] init];
             
             break;
             

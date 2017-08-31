@@ -25,7 +25,7 @@
 
 #import <MAD/MADocument.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MAD/RptqDocumentElement.h>

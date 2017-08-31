@@ -12,7 +12,7 @@
 
 #import "MTQueryCacheEndTransaction.h"
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADQueryType.h>
 
 @interface MTQueryCacheEndTransaction ()

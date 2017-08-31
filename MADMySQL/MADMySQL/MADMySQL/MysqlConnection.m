@@ -134,7 +134,7 @@
             userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                             errorDescription, NSLocalizedDescriptionKey, nil];
             NSError * __autoreleasing errorFailedToConnect;
-            errorFailedToConnect = [NSError errorWithDomain: @"MTDatabaseMySql"
+            errorFailedToConnect = [NSError errorWithDomain: @"MADDatabaseMySQL"
                                                        code: (NSInteger)errorCode
                                                    userInfo: userInfo];
             *error = errorFailedToConnect;

@@ -13,7 +13,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <MADFoundation/MADDataColumn.h>
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #import "MADQueryCacheSelectLimitOffsetParamaters.h"
 #import <MADAPI/MADQueryType.h>
@@ -87,7 +87,7 @@
                         key = nil;
                     }
                     MADSqlite3SortDescription *sortDescription;
-                    sortDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType)dataColumn.nativeType
+                    sortDescription = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType)dataColumn.nativeType
                                                                                       ascending: sortDescriptor.ascending];
                     [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
                     sortCounter++;

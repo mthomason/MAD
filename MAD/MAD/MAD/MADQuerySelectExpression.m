@@ -19,11 +19,11 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryTable+Extras.h"
 #import "RptqQueryField.h"
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 @implementation MADQuerySelectExpression
 
-- (instancetype)initWithDatabase:(MTDatabase *)database
+- (instancetype)initWithDatabase:(MADDatabase *)database
                           tables:(NSArray <MTPair *> *)tables
            usingOnlyActiveFields:(BOOL)onlyActiveFields
          forManagedObjectContext:(NSManagedObjectContext *)context {

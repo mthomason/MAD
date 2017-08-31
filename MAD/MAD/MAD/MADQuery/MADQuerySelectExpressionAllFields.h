@@ -15,7 +15,7 @@
 
 @interface MADQuerySelectExpressionAllFields : MADQuerySelectExpression
 
-    - (instancetype)initWithDatabase:(MTDatabase *)database
+    - (instancetype)initWithDatabase:(MADDatabase *)database
                               tables:(NSArray <MTPair *> *)tables
              forManagedObjectContext:(NSManagedObjectContext *)context;
 

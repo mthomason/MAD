@@ -49,7 +49,7 @@
 
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #import <MADAPI/MADDatabaseDataBinding.h>
 #import <MADAPI/MTQuery.h>
@@ -82,8 +82,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                     MADQueryParametersColumnMetaProtocol,
                                     MADQueryParametersColumnDataProtocol>
 
-    @property (nonatomic, readwrite, strong) MTDatabaseSqlite3 *databaseForInserts;
-    @property (nonatomic, readwrite, strong) MTDatabaseSqlite3 *databaseForSelects;
+    @property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForInserts;
+    @property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForSelects;
 
     @property (nonatomic, readwrite, strong) NSURL *urlFastCache;
     @property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
@@ -342,16 +342,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
     
-    MTDatabaseSqlite3 *database;
+    MADDatabaseSqlite3 *database;
     MADDatabaseConnection *connection;
 
     @autoreleasepool {
-        database = [[MTDatabaseSqlite3 alloc] init];
+        database = [[MADDatabaseSqlite3 alloc] init];
         database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
         connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
         database.databaseConnection = connection;
         
-        [(MTDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
+        [(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
                                                               SQLITE_OPEN_CREATE |
                                                               SQLITE_OPEN_FULLMUTEX];
         self.databaseForInserts = database;
@@ -362,7 +362,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     @autoreleasepool {
         
         connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
-        database = [[MTDatabaseSqlite3 alloc] init];
+        database = [[MADDatabaseSqlite3 alloc] init];
         [database setDatabaseConnection:connection];
         [database openDatabase];
         database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
@@ -837,7 +837,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
     
-    MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+    MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
     BOOL success = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1,
                                       &statement, NULL) == SQLITE_OK;
     
@@ -895,7 +895,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     const char *sqlUTF8String = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
 
-    MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+    MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
     BOOL success = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1,
                                       &statement, NULL) == SQLITE_OK;
     
@@ -973,7 +973,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     char *queryString = sqlite3_mprintf(sql.UTF8String);
     
-    MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+    MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
     
     BOOL success = sqlite3_prepare_v2(databaseForSelects->_database,
                                       queryString, -1, &statement, NULL) == SQLITE_OK;
@@ -1020,7 +1020,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
         const char *sqlc = sql.UTF8String;
         char *queryString = sqlite3_mprintf((char *) sqlc);
         
-        MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+        MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 
         BOOL success = sqlite3_prepare_v2(databaseForSelects->_database,
                                           queryString, -1, &statement, NULL) == SQLITE_OK;
@@ -1204,7 +1204,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     const char *sqlc = sql.UTF8String;
     char *queryString = sqlite3_mprintf((char *) sqlc);
-    MTDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+    MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
     
     BOOL success = sqlite3_prepare_v2(databaseForSelects->_database,
                                       queryString, -1, &statement, NULL) == SQLITE_OK;
@@ -1309,7 +1309,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     __block BOOL internalBulkInsertLoop = _bulkInsertLoop;
     dispatch_barrier_sync(self.queueBulkAdd, ^{
         internalBulkInsertLoop = NO;
-        [(MTDatabaseSqlite3 *)myself.databaseForInserts endBulkInsert];
+        [(MADDatabaseSqlite3 *)myself.databaseForInserts endBulkInsert];
     });
     _bulkInsertLoop = internalBulkInsertLoop;
 }

@@ -11,12 +11,12 @@
 
 #import <Foundation/NSObject.h>
 
-@class RptqQueryPredicate, MTDatabase, NSSet <__covariant ObjectType>, NSString;
+@class RptqQueryPredicate, MADDatabase, NSSet <__covariant ObjectType>, NSString;
 
 @interface MADQueryPredicate : NSObject
 
     - (instancetype)initWithQueryPredicates:(NSSet <RptqQueryPredicate *> *)queryPredicates
-                                andDatabase:(MTDatabase *)database;
+                                andDatabase:(MADDatabase *)database;
 
     @property (nonatomic, readonly, strong) NSString *sql;
 

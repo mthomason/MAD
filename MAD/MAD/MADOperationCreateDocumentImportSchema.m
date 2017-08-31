@@ -14,7 +14,7 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADDatabaseField.h>
 

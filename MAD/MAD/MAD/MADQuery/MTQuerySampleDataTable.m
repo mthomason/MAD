@@ -25,7 +25,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase.h"
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MADFoundation/MADDataTable.h>
@@ -33,7 +33,7 @@
 
 #import "MTQuery+Extras.h"
 
-#import "MTDatabase+Constructor.h"
+#import "MADDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
 #import "MADDatabaseField+Constructor.h"
 
@@ -138,7 +138,7 @@
 }
 
 + (NSString *)sqlAllFieldsInTable: (RptqDatabaseSchemaTable *)schemaTable
-                    usingDatabase: (MTDatabase *)database {
+                    usingDatabase: (MADDatabase *)database {
     NSUInteger *fieldCounter = 0;
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     NSString *safeTableName = [database tableAliasForTable:schemaTable.toString];

@@ -9,11 +9,11 @@
 #ifndef MAD_MADDataProtocol_h
 #define MAD_MADDataProtocol_h
 
-@class MTDatabase;
+@class MADDatabase;
 
 @protocol MADDataProtocol <NSObject>
     - (NSArray *)sortDescriptors;
-    - (MTDatabase *)database;
+    - (MADDatabase *)database;
 @end
 
 #endif

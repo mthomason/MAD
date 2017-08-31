@@ -28,7 +28,7 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
@@ -417,7 +417,7 @@
     return [section producesFormFeed];
 }
 
-- (void)storeDatabaseConnectionDefination:(MTDatabase *)database
+- (void)storeDatabaseConnectionDefination:(MADDatabase *)database
                   forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
     int64_t cid = (int64_t)self.hasDatabaseSchemas.count + 1;

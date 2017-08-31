@@ -12,7 +12,7 @@
 
 #import "MTQueryTest.h"
 #import <MADFoundation/MADDataProtocol.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <Foundation/NSString.h>
 #import <MADAPI/MADQueryType.h>
 
@@ -27,7 +27,7 @@
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
     [super getSql:error];
-    MTDatabase *database = self.database;
+    MADDatabase *database = self.database;
     MADSafeQueryField *key = [database newSafeIdentifier:@"f1"];
     NSString *selectPart = [database selectPart];
     NSString *sql = [[NSString alloc] initWithFormat:@"%@ 255 AS %@", selectPart, key];

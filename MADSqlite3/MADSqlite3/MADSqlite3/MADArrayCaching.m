@@ -17,7 +17,7 @@
 #import <Foundation/NSKeyedArchiver.h>
 
 #import <MADSqlite3/sqlite3.h>
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
 
 #import <MADFoundation/MADCacheProtocol.h>
@@ -52,7 +52,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 @interface MADArrayCaching ()
 
-    @property (nonatomic, strong, readwrite) MTDatabaseSqlite3 *database;
+    @property (nonatomic, strong, readwrite) MADDatabaseSqlite3 *database;
 
     @property (nonatomic, copy, readwrite) NSString *identifier;
     @property (nonatomic, copy, readwrite) dispatch_queue_t archivingQueue;
@@ -130,10 +130,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
-    MTDatabaseSqlite3 *database;
+    MADDatabaseSqlite3 *database;
     MADDatabaseConnection *databaseConnection;
     databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-    database = [[MTDatabaseSqlite3 alloc] init];
+    database = [[MADDatabaseSqlite3 alloc] init];
     [database setDatabaseConnection:databaseConnection];
     [database openDatabase];
 
@@ -214,7 +214,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     }
     __block BOOL success = YES;
     if (_statementInsert == NULL) {
-        MTDatabaseSqlite3 *database = self.database;
+        MADDatabaseSqlite3 *database = self.database;
         __block sqlite3_stmt *stmt_insert = _statementInsert;
         dispatch_sync(self.archivingQueue, ^{
             @autoreleasepool {
@@ -241,7 +241,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     }
     BOOL success = YES;
     if (_statementSelect == NULL) {
-        MTDatabaseSqlite3 *database = self.database;
+        MADDatabaseSqlite3 *database = self.database;
         int prepare_result = sqlite3_prepare_v2(database->_database, queryString.UTF8String, -1,
                                      &_statementSelect, NULL);
         NSAssert(prepare_result == SQLITE_OK, @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
@@ -262,7 +262,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     }
     BOOL success = YES;
     if (_statementCount == NULL) {
-        MTDatabaseSqlite3 *database = self.database;
+        MADDatabaseSqlite3 *database = self.database;
         int prepare_result = sqlite3_prepare_v2(database->_database, queryString.UTF8String,
                                      -1, &_statementCount, NULL);
         NSAssert(prepare_result == SQLITE_OK, @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
@@ -473,10 +473,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                          MTArrayCachedColumnKey];
         
         MADDatabaseConnection *databaseConnection;
-        MTDatabaseSqlite3 *database;
+        MADDatabaseSqlite3 *database;
         databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
         
-        database = [[MTDatabaseSqlite3 alloc] init];
+        database = [[MADDatabaseSqlite3 alloc] init];
         [database setDatabaseConnection:databaseConnection];
         [database openDatabase];
         int prepare_result = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1,

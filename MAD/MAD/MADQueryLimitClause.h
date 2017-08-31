@@ -11,12 +11,12 @@
 
 #import <Foundation/NSObject.h>
 
-@class MTDatabase;
+@class MADDatabase;
 
 @interface MADQueryLimitClause : NSObject
 
     - (instancetype)initWithLimit:(NSUInteger)limit
-                      andDatabase:(MTDatabase *)database;
+                      andDatabase:(MADDatabase *)database;
 
     @property (nonatomic, readonly, strong) NSString *sql;
     

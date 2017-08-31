@@ -16,7 +16,7 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 
@@ -24,7 +24,7 @@
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MTQueryFull.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
@@ -99,13 +99,13 @@
         if (doc.database == nil) {
             RptqDatabaseCredentals *rptqUser;
             MADDatabaseConnection *databaseConnection;
-            MTDatabase *database;
+            MADDatabase *database;
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
             rptqUser = rptqQuery.inDatabase.ownedByUser;
             databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:rptqUser];
             [doc updateDatabaseWithConnection:databaseConnection];
-            database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+            database = [MADDatabase newDatabaseWithConnection:databaseConnection];
         }
         doc.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
         

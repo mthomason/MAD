@@ -20,7 +20,7 @@ extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
-@class NSMutableArray, NSMutableDictionary, MTDatabase, MADDataTable;
+@class NSMutableArray, NSMutableDictionary, MADDatabase, MADDataTable;
 
 @protocol MADQueryDataBindingProtocol <NSObject>
     @property (nonatomic, strong) NSMutableArray *binaryBindings;
@@ -40,7 +40,7 @@ extern NSString * const MADIdentifierROWID;
 @end
 
 @protocol MADQueryDatabaseProtocol <NSObject>
-    @property (nonatomic, strong) MTDatabase *database;
+    @property (nonatomic, strong) MADDatabase *database;
 @end
 
 @protocol MADQueryDataDelegateProtocol <NSObject>
@@ -70,7 +70,7 @@ extern NSString * const MADIdentifierROWID;
 
 @interface MTQuery (MADQueryDatabaseProtocol)    //Intended for use by MTQuery subclasses only
 
-    - (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error;
+    - (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error;
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end

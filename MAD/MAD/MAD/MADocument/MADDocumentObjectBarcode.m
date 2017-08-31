@@ -11,7 +11,7 @@
 #import <Foundation/NSString.h>
 #import <MADBarcodes/MTBarcode.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 #import "MADDocumentObjectReference.h"
@@ -39,7 +39,7 @@
     if (self = [super init]) {
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
         RptqDocumentElementBarcode *item;
-        MTDatabase *database;
+        MADDatabase *database;
         
         datasource = definition.datasource;
         item = definition.item;

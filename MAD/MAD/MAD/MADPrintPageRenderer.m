@@ -57,7 +57,7 @@
 
 #import "MADReportFormatter.h"
 #import <MADAPI/MTQuery.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import "MADReportFormatter.h"
 #import <MADSqlite3/MADArrayCaching.h>
@@ -616,7 +616,7 @@ NSComparator accessibilityLineComparson = ^NSComparisonResult(MADAccessibilityLi
     RptqDatabase *databaseSchemas = document.hasDatabaseSchemas.anyObject;
     
     MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnectionForUserCredentals:databaseSchemas.ownedByUser];
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    MADDatabase *database = [MADDatabase newDatabaseWithConnection:databaseConnection];
     
     NSUInteger numberOfPages = self.reportFormatter.numberOfPages;
     if (pageIndex < numberOfPages) {

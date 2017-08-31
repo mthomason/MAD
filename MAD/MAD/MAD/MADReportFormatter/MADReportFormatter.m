@@ -25,7 +25,7 @@
 #import <MADFoundation/MADDataType.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MADSqlite3/MADArrayCaching.h>
@@ -423,7 +423,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
     if (_sections == nil) {
         MADocument *layout = _layout;
         if (layout != nil) {
-            MTDatabase *database = layout.database;
+            MADDatabase *database = layout.database;
             MADSectionsLayout *sections;
             sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: layout.managedObjectContext
                                                                  databaseClass: [database class]];

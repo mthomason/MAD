@@ -1,5 +1,5 @@
 //
-//  MTDatabaseSqlServer.m
+//  MADDatabaseSQLServer.m
 //  Reports
 //
 //  Created by Michael Thomason on 6/18/13.
@@ -77,7 +77,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 @end
 
-@implementation MTDatabaseSqlServer
+@implementation MADDatabaseSQLServer
 
 @dynamic databaseConnection;
 
@@ -1300,7 +1300,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         DBSETLSECURE(login);
         if (*error == nil) {
         
-            NSString *IPAddress = [MTDatabaseSqlServer IPAddressForServer:self.databaseConnection.server];
+            NSString *IPAddress = [MADDatabaseSQLServer IPAddressForServer:self.databaseConnection.server];
             char *s = (char *)[IPAddress cStringUsingEncoding:NSUTF8StringEncoding];
             dbconn = dbopen(login, s);
             if (dbconn == NULL) {
@@ -1668,7 +1668,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                     }
                     if (name != nil) {
                         MADDatabaseField *databaseField = [[MADDatabaseField alloc] initWithName:name];
-                        databaseField.fieldTypeNative = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
+                        databaseField.fieldTypeNative = [MADDatabaseSQLServer dataTypeForNativeType:typeBind];
                         databaseField.fieldType = databaseField.fieldTypeNative;
                         databaseField.width = (int64_t)lengthBind;
                         databaseField.decimals = (int16_t)scaleBind;

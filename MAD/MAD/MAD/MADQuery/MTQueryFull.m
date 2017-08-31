@@ -53,7 +53,7 @@
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementAggregate.h"
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 #import "MADQueryPredicate.h"
 #import "MADQueryLimitClause.h"
@@ -156,7 +156,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
         
     NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
     
-    MTDatabase *database = [self.dataDelegate database];
+    MADDatabase *database = [self.dataDelegate database];
     NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
 
 
@@ -293,7 +293,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 
     NSInteger tableCounter = 0;
-    MTDatabase *database = [self.dataDelegate database];
+    MADDatabase *database = [self.dataDelegate database];
 
     for (MTVertex *vertexTable in tables) {
         if (vertexTable) {

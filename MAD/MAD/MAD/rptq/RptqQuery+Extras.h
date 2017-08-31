@@ -11,13 +11,13 @@
 
 #import "RptqQuery.h"
 
-@class RptqDocument, MTDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
+@class RptqDocument, MADDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 
 @interface RptqQuery (Extras)
 
     - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
     - (NSArray <RptqQueryGroup *> *)sortedQueryGroups;
-    - (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database;
+    - (NSArray *)sortDescriptorsForDatabase:(MADDatabase *)database;
     - (NSUInteger)sectionCount;
     + (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;

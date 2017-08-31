@@ -11,11 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class MTDatabase, NSManagedObjectContext;
+@class MADDatabase, NSManagedObjectContext;
 
 @interface MADQuerySelectExpression : NSObject
 
-    - (instancetype)initWithDatabase:(MTDatabase *)database
+    - (instancetype)initWithDatabase:(MADDatabase *)database
                               tables:(NSArray *)tables
                usingOnlyActiveFields:(BOOL)onlyActiveFields
              forManagedObjectContext:(NSManagedObjectContext *)context;

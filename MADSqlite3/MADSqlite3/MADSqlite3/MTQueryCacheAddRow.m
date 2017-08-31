@@ -23,8 +23,8 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
-// FIXME: Remove dependency on MTDatabaseSqlite3
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+// FIXME: Remove dependency on MADDatabaseSqlite3
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 #import "MADQueryCacheAddRowParameters.h"
 
 #import <Foundation/NSString.h>
@@ -91,7 +91,7 @@ static NSString * const SqlDelimitorObject = @", %@";
     for (NSUInteger columnCounter=0; columnCounter<columnCount; columnCounter++) {
         fieldName = columnKeys[columnCounter];
         
-        MADSafeQueryField *safeFieldName = [MTDatabaseSqlite3 newSafeIdentifier:fieldName];
+        MADSafeQueryField *safeFieldName = [MADDatabaseSqlite3 newSafeIdentifier:fieldName];
         if (columnCounter > 0) {
             [colmunNames appendFormat:SqlDelimitorObject, safeFieldName];
         } else {

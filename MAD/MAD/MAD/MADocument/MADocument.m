@@ -126,7 +126,7 @@
 #import "RptqDirectionalAsymmetry.h"
 
 #import <MADSqlite3/MADDataTableFast.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import "MADModel.h"
 #import "MADModelDocument.h"
@@ -149,7 +149,7 @@
 #import "NSPredicate+Creators.h"
 #import "RptqDataHelper.h"
 
-#import "MTDatabase+Constructor.h"
+#import "MADDatabase+Constructor.h"
 
 #import <MADAPI/MADQueryType.h>
 
@@ -219,7 +219,7 @@ void madwarn(char *err,  const char*err2) { }
     @property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
     @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
-    @property (nonatomic, readwrite, strong) MTDatabase *database;
+    @property (nonatomic, readwrite, strong) MADDatabase *database;
     @property (nonatomic, readwrite, strong) MTQueryFull *mainQuery;
 
     @property (nonatomic, readwrite, strong) NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
@@ -326,8 +326,8 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection {
-    MTDatabase *database;
-    database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    MADDatabase *database;
+    database = [MADDatabase newDatabaseWithConnection:databaseConnection];
     self.database = database;
 }
 
@@ -418,7 +418,7 @@ void madwarn(char *err,  const char*err2) { }
         self.extraInformation = extraInfo;
         
         if (databaseConnection != nil) {
-            MTDatabase *database = [MTDatabase newDatabaseWithConnection: databaseConnection];
+            MADDatabase *database = [MADDatabase newDatabaseWithConnection: databaseConnection];
             self.database = database;
         }
         
@@ -658,7 +658,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark MADocument Overrides
 
-- (void)setDatabase:(MTDatabase *)database {
+- (void)setDatabase:(MADDatabase *)database {
     if (_database != database) {
         _database = database;
         _database.delegate = self;
@@ -1264,7 +1264,7 @@ void madwarn(char *err,  const char*err2) { }
     self.reportFormatter = nil;
 }
 
-- (MTDatabase *)database {
+- (MADDatabase *)database {
     if (!_database) {
         RptqDocument *document = [self activeDocumentModel];
         [self initializeMainDatabase:document];
@@ -1276,7 +1276,7 @@ void madwarn(char *err,  const char*err2) { }
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     MADDatabaseConnection *connection;
     connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals: database.ownedByUser];
-    MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+    MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     self.database = db;
 }

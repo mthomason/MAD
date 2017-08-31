@@ -31,11 +31,11 @@
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADocument.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import <MADAPI/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabaseSchemaField.h>
@@ -91,7 +91,7 @@
     
     MADDatabaseConnection *connection;
     connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)schemaField.inTable.inDatabase.ownedByUser)];
-    MTDatabase *db = [MTDatabase newDatabaseWithConnection:connection];
+    MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
     if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
         db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);
     }

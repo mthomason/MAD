@@ -20,12 +20,12 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MTQueryTest.h>
 #import <MAD/MADOperationKeyChainGet.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 #import <MAD/MADDataTableVirtual.h>
 
 @interface MADOperationDatabaseTestConnection ()
@@ -36,7 +36,7 @@
     @property (nonatomic, copy) MADCredential *credentials;
 
     //Store
-    @property (nonatomic, strong) MTDatabase *database;
+    @property (nonatomic, strong) MADDatabase *database;
     @property (nonatomic, strong) MADDataTable *datatable;
 
     //Results
@@ -135,7 +135,7 @@
     
     self.datatable = datatable;
     
-    MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+    MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
     db.delegate = self;
     queryTest.database = db;
     self.database = db;

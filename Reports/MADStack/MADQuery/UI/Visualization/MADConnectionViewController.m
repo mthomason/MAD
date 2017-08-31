@@ -29,7 +29,7 @@
 
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MTKeyChain.h>

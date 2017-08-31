@@ -30,7 +30,7 @@
 #import <MADAPI/MTQuery.h>
 #import <MAD/MTQuery+Extras.h>
 #import <MAD/MTKeyChain.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
@@ -40,7 +40,7 @@
 
 #import <MAD/MADocument.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import "MADCellTextInput.h"
 
@@ -187,8 +187,8 @@
         MADDatabaseConnection *databaseConnection;
         databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:userCredentals];
         
-        MTDatabase *database;
-        database = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        MADDatabase *database;
+        database = [MADDatabase newDatabaseWithConnection:databaseConnection];
         if ([strongself2.querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
             database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);
         }

@@ -24,7 +24,7 @@
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 NSString * const MTQueryKeyPredicateColumn  = @"c";
@@ -60,7 +60,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
     return @"";
 }
 
-- (NSString *)getSql:(MTDatabase *)database error:(NSError * __autoreleasing *)error {
+- (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error {
     if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
         [((MTQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
         [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];

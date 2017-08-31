@@ -40,12 +40,12 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/MTQuery+Extras.h>
-#import <MAD/MTDatabase+Constructor.h>
+#import <MAD/MADDatabase+Constructor.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -861,7 +861,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     
     MADDatabaseConnection *dbConnection;
     dbConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)field.databaseSchemaField.inTable.inDatabase.ownedByUser)];
-    MTDatabase *database = [MTDatabase newDatabaseWithConnection:dbConnection];
+    MADDatabase *database = [MADDatabase newDatabaseWithConnection:dbConnection];
     if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
         database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);
     }

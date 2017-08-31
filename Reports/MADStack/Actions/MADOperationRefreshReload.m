@@ -150,14 +150,14 @@
     
 }
 
-- (void)watchDatabase:(MTDatabase *)database {
+- (void)watchDatabase:(MADDatabase *)database {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reportDocumentDidReadRows:)
                                                  name: MADNotificationDidReadRowsName
                                                object: database];
 }
 
-- (void)ignoreDatabase:(MTDatabase *)database {
+- (void)ignoreDatabase:(MADDatabase *)database {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationDidReadRowsName
                                                   object: database];

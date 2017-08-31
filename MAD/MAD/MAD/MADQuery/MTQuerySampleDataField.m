@@ -19,8 +19,8 @@
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
-#import <MADAPI/MTDatabase.h>
-#import "MTDatabase+Constructor.h"
+#import <MADAPI/MADDatabase.h>
+#import "MADDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"

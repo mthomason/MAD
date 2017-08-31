@@ -17,7 +17,7 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
 #import "RptqDatabase.h"
@@ -26,7 +26,7 @@
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
-#import "MTDatabase+Constructor.h"
+#import "MADDatabase+Constructor.h"
 #import "MADDatabaseField+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
@@ -63,7 +63,7 @@
 
         id databaseConnection;
         databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:field.inTable.inDatabase.ownedByUser];
-        MTDatabase *db = [MTDatabase newDatabaseWithConnection:databaseConnection];
+        MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
     }
     

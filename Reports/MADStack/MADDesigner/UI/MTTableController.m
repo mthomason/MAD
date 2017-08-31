@@ -30,7 +30,7 @@
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MAD/RptqQuery.h>
@@ -46,7 +46,7 @@
 @interface MADTableController ()
     <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseResultsProtocol>
 
-    @property (nonatomic, strong) MTDatabase *database;
+    @property (nonatomic, strong) MADDatabase *database;
     @property (nonatomic, strong) MTQuery <MADQueryDatabaseProtocol> *query;
     @property (nonatomic, strong) MADDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
@@ -67,7 +67,7 @@
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query database:(MTDatabase *)database
+- (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query database:(MADDatabase *)database
                       tableID:(NSManagedObjectID *)tableID {
     
     NSUInteger rowCount = 0;

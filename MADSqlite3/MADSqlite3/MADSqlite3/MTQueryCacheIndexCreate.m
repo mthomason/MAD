@@ -16,8 +16,8 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MTDatabase.h>
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 #import "MADQueryCacheIndexCreateParameters.h"
 #import <MADAPI/MADQueryType.h>
 
@@ -55,7 +55,7 @@
             MADDataColumn *column = columns[keySortDescriptor];
             
             NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            sortDirection = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType
+            sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType
                                                                             ascending: sortDescriptor.ascending];
             [sql appendFormat:(sortCounter == 0) ? @"%@ %@" : @", %@ %@", keySortDescriptor, sortDirection];
             sortCounter++;

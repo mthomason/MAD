@@ -7,7 +7,7 @@
 //
 
 #import "MADQueryLimitClause.h"
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <Foundation/NSString.h>
 
 @interface MADQueryLimitClause ()
@@ -19,7 +19,7 @@
 @implementation MADQueryLimitClause
 
 - (instancetype)initWithLimit:(NSUInteger)limit
-                  andDatabase:(MTDatabase *)database {
+                  andDatabase:(MADDatabase *)database {
     if (self = [super init]) {
         NSString *limitClause = [database sqlLimitClause: limit];
         self.sql = [[NSString alloc] initWithString: limitClause];

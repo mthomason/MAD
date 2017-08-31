@@ -25,7 +25,7 @@
 #import <MADFoundation/NSString+Common.h>
 
 #import <MADAPI/MADDatabaseField.h>
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -123,7 +123,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
     return sortedArray;
 }
 
-- (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)database {
+- (NSArray *)sortDescriptorsForDatabase:(MADDatabase *)database {
 
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     

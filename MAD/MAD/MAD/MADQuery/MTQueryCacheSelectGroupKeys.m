@@ -11,7 +11,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADDataColumn.h>
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADSqlite3/MADQuerySelectParameters.h>
 
 #import <MADAPI/MADQueryType.h>
@@ -74,7 +74,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
 
         NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
 
-        MADSqlite3SortDescription *sqlSpeedSortingDescription = [MTDatabaseSqlite3 newSqlite3SortDescriptionForColumnType:dataColumn.nativeType
+        MADSqlite3SortDescription *sqlSpeedSortingDescription = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType:dataColumn.nativeType
                                                                                                                 ascending:self.accending];
         NSString *sqlSpeedSort = [NSString stringWithString:sqlSpeedSortingDescription];
         self.sqlSpeedSorting = sqlSpeedSort;

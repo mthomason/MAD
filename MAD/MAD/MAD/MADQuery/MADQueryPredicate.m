@@ -11,7 +11,7 @@
 
 #import <MADFoundation/MADDataType.h>
 
-#import <MADAPI/MTDatabase.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 
 #import "RptqQueryTable.h"
@@ -34,7 +34,7 @@
 @implementation MADQueryPredicate
 
 - (instancetype)initWithQueryPredicates:(NSSet <RptqQueryPredicate *> *)queryPredicates
-                            andDatabase:(MTDatabase *)database {
+                            andDatabase:(MADDatabase *)database {
     if (self = [super init]) {
         
         NSMutableString *result = [[NSMutableString alloc] initWithString:@""];

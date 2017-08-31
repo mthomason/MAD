@@ -24,14 +24,14 @@
 
 #import <MADAPI/MTQuery.h>
 
-#import <MADSqlite3/MTDatabaseSqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 @interface MADDataTableObjectEnumerator ()
 
     @property (nonatomic, strong) NSDictionary *columns;
     @property (nonatomic, strong) NSArray *columnKeys;
 
-    @property (nonatomic, strong) MTDatabaseSqlite3 *databaseForQuery;
+    @property (nonatomic, strong) MADDatabaseSqlite3 *databaseForQuery;
     @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
 
 @end
@@ -56,7 +56,7 @@
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         self.fastEnumerationObjects = fastEnumerationObjects;
 
-        MTDatabaseSqlite3 *database = [[MTDatabaseSqlite3 alloc] init];
+        MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
         [database setDatabaseConnection:databaseConnection];
         [database openDatabase];
         self.databaseForQuery = database;

@@ -11,11 +11,11 @@
 
 #import <Foundation/NSObject.h>
 
-@class MTDatabase, MADDataTableFast, MADReportFormatter;
+@class MADDatabase, MADDataTableFast, MADReportFormatter;
 
 @protocol MADPrintPageRendererDataSourceProtocol <NSObject>
 
-    @property (readonly, nonatomic, strong) MTDatabase *database;
+    @property (readonly, nonatomic, strong) MADDatabase *database;
     @property (readonly, nonatomic, strong) MADDataTableFast *dataTable;
     @property (readwrite, nonatomic, strong) MADReportFormatter *reportFormatter;
 

@@ -13,7 +13,7 @@
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
-@class NSManagedObjectContext, MTDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
+@class NSManagedObjectContext, MADDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
        RptqQueryPredicate, RptqQueryLinks;
 
 @interface RptqDocument (Extras)
@@ -30,7 +30,7 @@
     - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
                                           withNumberOfGroups:(NSUInteger)numberOfGroups;
                                           
-    - (void)storeDatabaseConnectionDefination:(MTDatabase *)database
+    - (void)storeDatabaseConnectionDefination:(MADDatabase *)database
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
     - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
                                            fieldsByTable:(NSDictionary *)fieldsByTable
