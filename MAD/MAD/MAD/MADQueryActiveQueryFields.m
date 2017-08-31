@@ -107,7 +107,7 @@
     NSError *error = nil;
     NSArray *objects = [context executeFetchRequest:fetchRequest
                                               error:&error];
-    return [NSArray arrayWithArray:objects];
+    return objects;
     
 }
 
