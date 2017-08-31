@@ -41,10 +41,8 @@
 		4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */; };
 		4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */; };
 		4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */; };
-		4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205941BA7E2A2000E6A59 /* BDHost.m */; };
 		4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */; };
-		4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059B1BA7E2A2000E6A59 /* BDHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C71BA7E2A2000E6A59 /* CGGeometry+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -114,10 +112,8 @@
 		4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CGGeometry+Extras.m"; path = "MADCocoaExtensions/CGGeometry+Extras.m"; sourceTree = "<group>"; };
 		4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Constructors.m"; path = "MADCocoaExtensions/NSError+Constructors.m"; sourceTree = "<group>"; };
 		4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+EverydayApps.m"; path = "MADCocoaExtensions/UIColor+EverydayApps.m"; sourceTree = "<group>"; };
-		4C5205941BA7E2A2000E6A59 /* BDHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BDHost.m; path = MADCocoaExtensions/BDHost.m; sourceTree = "<group>"; };
 		4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "MADCocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
 		4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+Helpers.m"; path = "MADCocoaExtensions/UIApplication+Helpers.m"; sourceTree = "<group>"; };
-		4C52059B1BA7E2A2000E6A59 /* BDHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BDHost.h; path = MADCocoaExtensions/BDHost.h; sourceTree = "<group>"; };
 		4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "MADCocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
 		4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "MADCocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
 		4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+EverydayApps.h"; path = "MADCocoaExtensions/UIColor+EverydayApps.h"; sourceTree = "<group>"; };
@@ -224,10 +220,8 @@
 				4C52058B1BA7E2A2000E6A59 /* UIView+Animations.h */,
 				4C52058C1BA7E2A2000E6A59 /* UIView+Animations.m */,
 				4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */,
-				4C5205941BA7E2A2000E6A59 /* BDHost.m */,
 				4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */,
 				4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */,
-				4C52059B1BA7E2A2000E6A59 /* BDHost.h */,
 				4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */,
 				4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */,
 				4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */,
@@ -285,7 +279,6 @@
 				4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */,
 				4C5767441E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h in Headers */,
 				4C6F35111E40C1C100F4744F /* MADBorderStyle.h in Headers */,
-				4C5205C61BA7E2A2000E6A59 /* BDHost.h in Headers */,
 				4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */,
 				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
 				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
@@ -420,7 +413,6 @@
 				4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
 				4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */,
-				4C5205BF1BA7E2A2000E6A59 /* BDHost.m in Sources */,
 				4C5205B71BA7E2A2000E6A59 /* UIView+Animations.m in Sources */,
 				4CB9AAE81C8C244B00420CFF /* MADThread.m in Sources */,
 				4CE645891CE86B76000368BD /* MADNumericConstants.c in Sources */,
