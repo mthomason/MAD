@@ -29,7 +29,8 @@ static NSString * const SqlFormat = @", %@";
 - (instancetype)initWithObject:(id)object {
     if (self = [super initWithObject:object]) {
         
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
+        NSAssert([object isKindOfClass:[NSDictionary class]],
+                 @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
         NSNumber *key = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
         NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
@@ -37,7 +38,8 @@ static NSString * const SqlFormat = @", %@";
         
         NSArray *columnKeys = object[key];
         
-        NSString *columnNames = columnKeys.count > 0 ? [columnKeys componentsJoinedByString:@", "] : WildCard;
+        NSString *columnNames = columnKeys.count > 0 ?
+                                    [columnKeys componentsJoinedByString:@", "] : WildCard;
         
         NSString *sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld",
                          columnNames, object[keyTableName], (long)((NSNumber *)object[keyRowId]).integerValue];;
