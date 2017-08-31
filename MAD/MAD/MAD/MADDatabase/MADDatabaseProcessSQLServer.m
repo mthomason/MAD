@@ -6,10 +6,10 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDatabaseProcessSqlServer.h"
+#import "MADDatabaseProcessSQLServer.h"
 #import <MADTdsClient/sybdb.h>
 
-@implementation MTDatabaseProcessSqlServer {
+@implementation MADDatabaseProcessSQLServer {
     DBPROCESS *dbconn;
 }
 

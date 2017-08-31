@@ -10,11 +10,11 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseConnectionSqlServer.h"
+#import "MADDatabaseConnectionSQLServer.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
 
-@implementation MTDatabaseConnectionSqlServer
+@implementation MADDatabaseConnectionSQLServer
 
 @synthesize database = _database;
 @synthesize server = _server;

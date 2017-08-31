@@ -13,7 +13,7 @@
 //#import <MADTdsClient/MADTdsClient.h>
 //#import "sybdb.h"
 
-@interface MTDatabaseProcessSqlServer : NSObject
+@interface MADDatabaseProcessSQLServer : NSObject
 
     - (instancetype)initWithProcess:(void /* DBPROCESS */ *)process;
     - (void /* DBPROCESS */ *)process NS_RETURNS_INNER_POINTER;
