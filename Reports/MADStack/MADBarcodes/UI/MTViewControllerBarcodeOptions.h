@@ -12,7 +12,7 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import <MAD/MTKeyChain.h>
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 #import <MADBarcodes/MADBarcodeBorderStyle.h>
 

@@ -98,4 +98,4 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
 #import <MAD/MADSchemaFieldSelectorModel.h>
 
-#import <MAD/MTQuery+Extras.h>
+#import <MAD/MADQuery+Extras.h>

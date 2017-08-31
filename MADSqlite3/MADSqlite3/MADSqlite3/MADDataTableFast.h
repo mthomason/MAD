@@ -13,7 +13,7 @@
 
 @protocol MADCacheProtocol, MADDataProtocol, MADQueryDataBindingProtocol;
 
-@class MTQuery, MADDatabaseSqlite3;
+@class MADQuery, MADDatabaseSqlite3;
 
 @interface MADDataTableFast : MADDataTable
     <NSCoding, NSFastEnumeration>
@@ -27,7 +27,7 @@
     - (NSString *)columnKeyForColumnName:(NSString *)columnName;
     - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
-    - (id)runSelectQuery:(MTQuery <MADQueryDataBindingProtocol> *)query;
+    - (id)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
 
     - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
                      andColumnIdentifier:(NSString *)columnIdentifier

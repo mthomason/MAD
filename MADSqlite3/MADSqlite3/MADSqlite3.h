@@ -22,7 +22,7 @@ FOUNDATION_EXPORT const unsigned char MADSqlite3VersionString[];
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADArrayCaching.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
-#import <MADSqlite3/MTQuery+Sqlite3.h>
+#import <MADSqlite3/MADQuery+Sqlite3.h>
 #import <MADSqlite3/MTQueryCacheDropTable.h>
 #import <MADSqlite3/MADQuerySelectParameters.h>
 #import <MADSqlite3/MTQueryCacheSelectRowId.h>

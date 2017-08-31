@@ -1,5 +1,5 @@
 //
-//  MTQuery.h
+//  MADQuery.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/18/14.
@@ -62,13 +62,13 @@ extern NSString * const MADIdentifierROWID;
 
 @end
 
-@interface MADQuery (MADQueryFieldKeysProtocol)    //Intended for use by MTQuery subclasses only
+@interface MADQuery (MADQueryFieldKeysProtocol)    //Intended for use by MADQuery subclasses only
 
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end
 
-@interface MADQuery (MADQueryDatabaseProtocol)    //Intended for use by MTQuery subclasses only
+@interface MADQuery (MADQueryDatabaseProtocol)    //Intended for use by MADQuery subclasses only
 
     - (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error;
     - (NSString *)fieldKeyForIndex:(NSUInteger)index;

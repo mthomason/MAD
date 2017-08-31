@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheDropTable_h
 #define Reports_MTQueryCacheDropTable_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheDropTable : MTQuery
+@interface MTQueryCacheDropTable : MADQuery
 
 @end
 

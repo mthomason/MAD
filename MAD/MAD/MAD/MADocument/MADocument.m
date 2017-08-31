@@ -61,7 +61,7 @@
 #import "MADConstants.h"
 
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import "MTQueryFull.h"
 
 #import "MADConstants.h"
@@ -153,7 +153,7 @@
 
 #import <MADAPI/MADQueryType.h>
 
-#import "MTQuery+Extras.h"
+#import "MADQuery+Extras.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -972,7 +972,7 @@ void madwarn(char *err,  const char*err2) { }
     return credentials;
 }
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     if ([query isKindOfClass:[MTQueryFull class]]) {
         self.dataTable.dataDelegate = self;
         return self.dataTable;
@@ -1224,7 +1224,7 @@ void madwarn(char *err,  const char*err2) { }
 
 }
 
-- (MTQuery *)mainQuery {
+- (MADQuery *)mainQuery {
     if (!_mainQuery) {
         RptqDocument *document = [self activeDocumentModel];
         RptqDatabase *database = document.defaultDatabase;

@@ -47,7 +47,7 @@
 
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 #import "MADDatabaseProcessSQLServer.h"
 
@@ -272,18 +272,18 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return result;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
     MADDataTable *dataTable;
     if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
-        ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
-        dataTable = ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable;
+        ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
+        dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }
     return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
+- (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
     NSError * __autoreleasing dberror = nil;
@@ -294,7 +294,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
     return success;
 }
 
-- (BOOL)runQuery:(MTQuery *)query onProcess:(MADDatabaseProcessSQLServer *)process
+- (BOOL)runQuery:(MADQuery *)query onProcess:(MADDatabaseProcessSQLServer *)process
    withDataTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
     NSError * __autoreleasing sqlError = nil;
@@ -303,7 +303,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
         success = [self runSQL: sql
                    onDataTable: dataTable
                      fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
-                                    ((MTQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
+                                    ((MADQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
                        process: process];
     }
     return success;

@@ -10,7 +10,7 @@
 #import <Foundation/NSException.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 #import <MAD/MADQueryCacheAggregateFunctionParamaters.h>
-#import <MADSqlite3/MTQuery+Sqlite3.h>
+#import <MADSqlite3/MADQuery+Sqlite3.h>
 #import <MADAPI/MADQueryType.h>
 
 static inline const char *functionName(MTAggregateFunctionType functionType);

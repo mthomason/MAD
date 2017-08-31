@@ -67,7 +67,7 @@
                                        andTable: ((RptqDatabaseSchemaField *)self.queryObject).inTable.name];
 }
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return self.dataTable;
 }
 

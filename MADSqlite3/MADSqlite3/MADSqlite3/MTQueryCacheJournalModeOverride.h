@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheJournalModeOverride_h
 #define Reports_MTQueryCacheJournalModeOverride_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheJournalModeOverride : MTQuery
+@interface MTQueryCacheJournalModeOverride : MADQuery
 
 @end
 

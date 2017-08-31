@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheBeginTransaction_h
 #define Reports_MTQueryCacheBeginTransaction_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheBeginTransaction : MTQuery
+@interface MTQueryCacheBeginTransaction : MADQuery
 
 @end
 

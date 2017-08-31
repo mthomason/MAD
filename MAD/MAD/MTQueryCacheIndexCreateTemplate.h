@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheIndexCreate_h
 #define Reports_MTQueryCacheIndexCreate_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheIndexCreateTemplate : MTQuery
+@interface MTQueryCacheIndexCreateTemplate : MADQuery
 
 @end
 

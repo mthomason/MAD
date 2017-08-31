@@ -27,8 +27,8 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
-#import <MADAPI/MTQuery.h>
-#import <MAD/MTQuery+Extras.h>
+#import <MADAPI/MADQuery.h>
+#import <MAD/MADQuery+Extras.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDatabase+Constructor.h>
 
@@ -60,7 +60,7 @@
     @property (nonatomic, strong) NSArray *pickerData;
     @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
-    @property (nonatomic, strong) MTQuery *querySampleDataField;
+    @property (nonatomic, strong) MADQuery *querySampleDataField;
     @property (nonatomic, strong) MADDataTable *dataTable;
 
 @end
@@ -170,8 +170,8 @@
     RptqDatabaseSchemaField *schemaField;
     schemaField = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
 
-    MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-    querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+    MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+    querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                              object: schemaField];
 
     self.querySampleDataField = querySampleDataField;

@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheSelectGroupKeys_h
 #define Reports_MTQueryCacheSelectGroupKeys_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheSelectGroupKeys : MTQuery
+@interface MTQueryCacheSelectGroupKeys : MADQuery
 
 @end
 

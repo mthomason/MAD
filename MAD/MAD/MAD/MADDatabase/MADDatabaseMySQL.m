@@ -31,7 +31,7 @@
 #import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MADMySQLFetchProtocol.h>
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 #import "MADDataTable+Constructor.h"
@@ -50,7 +50,7 @@
 
 @dynamic databaseConnection;
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return [self.delegate dataTableForQuery:query];
 }
 
@@ -93,7 +93,7 @@
     return success ? conn : nil;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query
+- (BOOL)executeQuery:(MADQuery *)query
        withDataTable:(MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
     BOOL result = NO;
@@ -133,11 +133,11 @@
     return result;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
     MADDataTable *dataTable;
     if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
-        ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
-        dataTable = ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable;
+        ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
+        dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }

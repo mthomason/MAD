@@ -11,13 +11,13 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADCredential, MADDataTable, NSString, MTQuery;
+@class MADCredential, MADDataTable, NSString, MADQuery;
 
 @protocol MADDatabaseResultsProtocol <NSObject>
   @required
   @optional
     - (MADCredential *)getCredentialsForKey:(NSString *)key;
-    - (MADDataTable *)dataTableForQuery:(MTQuery *)query;
+    - (MADDataTable *)dataTableForQuery:(MADQuery *)query;
 @end
 
 #endif /* MADDatabaseResultsProtocol_h */

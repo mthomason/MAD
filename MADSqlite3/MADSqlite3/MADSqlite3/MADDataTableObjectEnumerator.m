@@ -22,7 +22,7 @@
 
 #import <MADSqlite3/sqlite3.h>
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 
@@ -50,7 +50,7 @@
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection
                                    columns:(NSDictionary *)columns
                                 columnKeys:(NSArray *)columnKeys
-                                     query:(MTQuery *)query {
+                                     query:(MADQuery *)query {
     if (self = [super init]) {
         
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];

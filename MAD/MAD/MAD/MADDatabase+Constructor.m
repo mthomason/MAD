@@ -8,8 +8,8 @@
 
 #import "MADDatabase+Constructor.h"
 #import <MADAPI/MADDatabaseConnection.h>
-#import "MADDatabaseMySQL.h"
 #import <MADSqlite3/MADDatabaseSqlite3.h>
+#import "MADDatabaseMySQL.h"
 #import "MADDatabaseSQLServer.h"
 
 @class MADDatabaseSqlite3;

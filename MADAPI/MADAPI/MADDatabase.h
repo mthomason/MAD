@@ -22,7 +22,7 @@ extern NSString * const MADSqlTextFromPart;
 @protocol MADDatabaseResultsProtocol, MADDatabaseConnectionsProperties;
 
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MADDatabase, MADDatabaseTable,
-       MADDataTable, MTQuery, MADDatabaseField;
+       MADDataTable, MADQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
   @required

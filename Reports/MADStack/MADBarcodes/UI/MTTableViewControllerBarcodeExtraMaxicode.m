@@ -33,8 +33,8 @@
 
 #import <MADAPI/MADDatabase.h>
 
-#import <MADAPI/MTQuery.h>
-#import <MAD/MTQuery+Extras.h>
+#import <MADAPI/MADQuery.h>
+#import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqDatabaseSchemaTable.h>
@@ -84,8 +84,8 @@
     RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
     MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
     self.dataTableSampleData = dataTable;
-    MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-    querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+    MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+    querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                              object: schemaField];
     
     

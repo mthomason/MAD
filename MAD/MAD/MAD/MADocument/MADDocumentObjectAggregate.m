@@ -25,8 +25,8 @@
 #import "MADReportFormatter.h"
 #import "MADParameters+QueryCacheAggregate.h"
 #import <MADSqlite3/MADArrayCaching.h>
-#import <MADAPI/MTQuery.h>
-#import "MTQuery+Extras.h"
+#import <MADAPI/MADQuery.h>
+#import "MADQuery+Extras.h"
 #import "MADAggregateFunctionGroupByType.h"
 
 #import "MADDocumentObjectReference.h"
@@ -268,7 +268,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         }
         
         
-        id query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
+        id query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
                                                object: queryParameters];
         result = [dataTable runSelectQuery:query];
         
@@ -316,7 +316,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                 break;
         }
         
-        id query = [[MTQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
+        id query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
                                                object: queryParameters];
         result = [dataTable runSelectQuery:query];
         

@@ -9,10 +9,10 @@
 #ifndef Reports_MTQueryCacheAddRow_h
 #define Reports_MTQueryCacheAddRow_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import "MADQueryParameters.h"
 
-@interface MTQueryCacheAddRow : MTQuery
+@interface MTQueryCacheAddRow : MADQuery
     <MADQueryDataBindingProtocol, MADQueryUpdatableProtocol>
 
     @property (nonatomic, weak) id <MADQueryParametersStandardProtocol,

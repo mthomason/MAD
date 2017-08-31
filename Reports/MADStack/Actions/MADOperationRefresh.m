@@ -20,7 +20,7 @@
 #import <MAD/MADocument.h>
 #import <MADAPI/MADDatabase.h>
 #import <MADSqlite3/MADDataTableFast.h>
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MTQueryFull.h>

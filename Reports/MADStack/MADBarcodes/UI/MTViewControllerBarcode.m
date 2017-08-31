@@ -37,7 +37,7 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 #import <MAD/MADDataTable+Constructor.h>
-#import <MAD/MTQuery+Extras.h>
+#import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
 
 #import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
@@ -82,8 +82,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     @property (nonatomic, weak) IBOutlet UIView *topView;
     @property (nonatomic, weak) IBOutlet UIView *bottomView;
 
-    @property (nonatomic, strong) MTQuery *query;
-    @property (nonatomic, strong) MTQuery *query2;
+    @property (nonatomic, strong) MADQuery *query;
+    @property (nonatomic, strong) MADQuery *query2;
 
     @property (nonatomic, strong) MADDataTable *dataTableSampleData;
     @property (nonatomic, strong) MADDataTable *dataTableSampleData2;
@@ -182,9 +182,9 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         if (self.queryField1ID != nil) {
 
             RptqQueryField *queryField1 = [moc objectWithID: self.queryField1ID];
-            MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+            MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
             RptqDatabaseSchemaField *databaseSchemaField1 = queryField1.databaseSchemaField;
-            querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+            querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                                      object: databaseSchemaField1];
             querySampleDataField.database.delegate = self;
             self.query = querySampleDataField;
@@ -231,9 +231,9 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         if (self.queryField2ID != nil) {
             
             RptqQueryField *queryField2;
-            MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+            MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
             queryField2 = [moc objectWithID: self.queryField2ID];
-            querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+            querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                                      object: queryField2.databaseSchemaField];
             querySampleDataField.database.delegate = self;
             self.query2 = querySampleDataField;
@@ -278,7 +278,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 1024.0000f);
 }
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
 
     if ([query isEqual:self.query]) {
         return self.dataTableSampleData;

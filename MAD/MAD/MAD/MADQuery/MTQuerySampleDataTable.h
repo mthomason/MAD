@@ -9,9 +9,9 @@
 #ifndef Reports_MTQuerySampleDataTable_h
 #define Reports_MTQuerySampleDataTable_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQuerySampleDataTable : MTQuery
+@interface MTQuerySampleDataTable : MADQuery
     <MADQueryFieldKeysProtocol, MADQueryDataTableProtocol, MADQueryDatabaseProtocol,
         MADQueryDatabaseProtocol>
 

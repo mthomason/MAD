@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheSyncDefault_h
 #define Reports_MTQueryCacheSyncDefault_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheSyncDefault : MTQuery
+@interface MTQueryCacheSyncDefault : MADQuery
 
 @end
 

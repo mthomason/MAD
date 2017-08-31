@@ -9,11 +9,11 @@
 #ifndef Reports_MTQueryCacheSelectLimitOffset_h
 #define Reports_MTQueryCacheSelectLimitOffset_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 @class MADDataColumn, NSSortDescriptor;
 
-@interface MTQueryCacheSelectLimitOffset : MTQuery
+@interface MTQueryCacheSelectLimitOffset : MADQuery
 
     - (instancetype)initWithColumnKeys: (NSArray <NSString *> *)columnKeys
                              tableName: (NSString *)tableName

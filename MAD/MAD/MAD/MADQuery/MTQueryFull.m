@@ -269,7 +269,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
             NSDictionary *errorInfo;
             errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                             message, NSLocalizedDescriptionKey, nil];
-            *error = [NSError errorWithDomain: @"MTQuery"
+            *error = [NSError errorWithDomain: @"MADQuery"
                                          code: 5774
                                      userInfo: errorInfo];
             [result setString:@""];

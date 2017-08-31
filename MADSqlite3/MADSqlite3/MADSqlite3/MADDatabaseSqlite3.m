@@ -43,7 +43,7 @@
 
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 #import "MTQueryCacheDeleteAllFromTable.h"
 #import "MTQueryCacheSyncOff.h"
@@ -657,7 +657,7 @@ void sqliteLog(void *foo, const char* statement) {
     return success;
 }
 
-- (BOOL)executeQuery:(MTQuery <MADQueryDataBindingProtocol> *)query
+- (BOOL)executeQuery:(MADQuery <MADQueryDataBindingProtocol> *)query
        withDataTable:(__kindof MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
 
@@ -675,7 +675,7 @@ void sqliteLog(void *foo, const char* statement) {
         NSError * __autoreleasing *executeError = NULL;
         status = [self executeSQL: queryString
                         fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
-                                    ((MTQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
+                                    ((MADQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
                      onConnection: nil
                   intoResultTable: dataTable
                    transactionSet: query.partOfTransactionSet
@@ -692,12 +692,12 @@ void sqliteLog(void *foo, const char* statement) {
 
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
 
     MADDataTable *dataTable;
     if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
-        ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
-        dataTable = ((MTQuery <MADQueryDataTableProtocol> *)query).dataTable;
+        ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
+        dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
     } else {
         dataTable = [self.delegate dataTableForQuery:query];
     }
@@ -828,7 +828,7 @@ void sqliteLog(void *foo, const char* statement) {
     
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         
-        MTQuery *dropTable;
+        MADQuery *dropTable;
         BOOL successQuery = NO;
         for (MADDatabaseTable *table in tables) {
             dropTable = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:table.name];
@@ -845,13 +845,13 @@ void sqliteLog(void *foo, const char* statement) {
     
     BOOL success = NO;
     NSError * __autoreleasing errorQuerySyncMode = NULL;
-    MTQuery *querySyncMode = [[MTQueryCacheSyncOff alloc] init];
+    MADQuery *querySyncMode = [[MTQueryCacheSyncOff alloc] init];
     success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
     NSError * __autoreleasing errorQueryJournalMode = NULL;
-    MTQuery *queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
+    MADQuery *queryJournalMode = [[MTQueryCacheJournalModeOverride alloc] init];
     success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
@@ -860,7 +860,7 @@ void sqliteLog(void *foo, const char* statement) {
     //sqlite3_exec((sqlite3 *)self->_database, "PRAGMA journal_mode = MEMORY", NULL, NULL, &err);
 
     NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
-    MTQuery *query = [[MTQueryCacheBeginTransaction alloc] init];
+    MADQuery *query = [[MTQueryCacheBeginTransaction alloc] init];
     success = [self executeQuery:query withError:&errorQueryCacheBeginTransaction];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
@@ -872,20 +872,20 @@ void sqliteLog(void *foo, const char* statement) {
     BOOL success = NO;
 
     NSError * __autoreleasing errorCacheEndTransaction = NULL;
-    MTQuery *query = [[MTQueryCacheEndTransaction alloc] init];
+    MADQuery *query = [[MTQueryCacheEndTransaction alloc] init];
     success = [self executeQuery:query withError:&errorCacheEndTransaction];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
     NSError * __autoreleasing errorQuerySyncMode = NULL;
-    MTQuery *querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
+    MADQuery *querySyncMode = [[MTQueryCacheSyncDefault alloc] init];
     success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
     NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
              __PRETTY_FUNCTION__);
 
     /*
      NSError * __autoreleasing errorJournalMode = NULL;
-     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MADQueryTypeCacheJournalModeDefault object:@{}];
+     MADQuery *queryJournalMode = [[MADQuery alloc] initWithQueryType:MADQueryTypeCacheJournalModeDefault object:@{}];
      [queryJournalMode performQueryWithDatabase:self withError:&errorJournalMode];
     */
     

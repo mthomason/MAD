@@ -31,7 +31,7 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTablePlist.h>
 
-#import "MTQuery+Extras.h"
+#import "MADQuery+Extras.h"
 
 #import "MADDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
@@ -102,8 +102,8 @@
     }
     
     NSOrderedSet *fields = table.hasFields;
-    MTQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght;
-    queryMaxFieldLenght = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
+    MADQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght;
+    queryMaxFieldLenght = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
                                                                                             object: fields];
     queryMaxFieldLenght.database.delegate = self;
 
@@ -157,7 +157,7 @@
     return sql;
 }
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return self.dataTableMaxFieldLength;
 }
 

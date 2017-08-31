@@ -1,5 +1,5 @@
 //
-//  MTQuery.m
+//  MADQuery.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/18/14.
@@ -54,20 +54,20 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
     if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
-        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
-        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
+        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
+        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
     }
     return @"";
 }
 
 - (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error {
     if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
-        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
-        [((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
+        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
+        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
     }
     if ([self conformsToProtocol:@protocol(MADQueryDatabaseProtocol)]) {
-        if (((MTQuery <MADQueryDatabaseProtocol> *)self).database == nil) {
-            ((MTQuery <MADQueryDatabaseProtocol> *)self).database = database;
+        if (((MADQuery <MADQueryDatabaseProtocol> *)self).database == nil) {
+            ((MADQuery <MADQueryDatabaseProtocol> *)self).database = database;
         }
     }
     NSError * __autoreleasing e = nil;
@@ -79,8 +79,8 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
     NSString *key = nil;
     if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
-        key = (index < ((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys.count) ?
-                ((MTQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys[index] : nil;
+        key = (index < ((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys.count) ?
+                ((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys[index] : nil;
     }
     return key;
 }

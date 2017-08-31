@@ -177,7 +177,7 @@
     return self.credentials;
 }
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return self.datatable;
 }
 

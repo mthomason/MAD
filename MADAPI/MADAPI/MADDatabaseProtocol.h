@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADDatabaseTable, MADDatabaseField, MADDataTable, MADDatabaseConnection, MADCredential, MTQuery;
+@class MADDatabaseTable, MADDatabaseField, MADDataTable, MADDatabaseConnection, MADCredential, MADQuery;
 
 @protocol MADDatabaseDataSource <NSObject>
   @required
@@ -34,9 +34,9 @@
        intoResultTable:(MADDataTable *)dataTable
              withError:(NSError * __autoreleasing *)error;
 
-    - (BOOL)executeQuery:(MTQuery *)query
+    - (BOOL)executeQuery:(MADQuery *)query
                withError:(NSError * __autoreleasing *)error;
-    - (BOOL)executeQuery:(MTQuery *)query
+    - (BOOL)executeQuery:(MADQuery *)query
            withDataTable:(MADDataTable *)dataTable
                 andError:(NSError * __autoreleasing *)error;
 

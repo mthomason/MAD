@@ -9,11 +9,11 @@
 #ifndef Reports_MTQueryFull_h
 #define Reports_MTQueryFull_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 @class NSManagedObjectID, NSManagedObjectContext, RptqQuery;
 
-@interface MTQueryFull : MTQuery
+@interface MTQueryFull : MADQuery
     <MADQueryFieldKeysProtocol, MADQueryDataDelegateProtocol>
     - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
 

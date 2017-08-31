@@ -9,11 +9,11 @@
 #ifndef Reports_MTQueryTest_h
 #define Reports_MTQueryTest_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
 @class MADDatabaseConnection;
 
-@interface MTQueryTest : MTQuery
+@interface MTQueryTest : MADQuery
     <MADQueryDatabaseProtocol>
 
     - (instancetype)initWithObject:(MADDatabaseConnection *)object;

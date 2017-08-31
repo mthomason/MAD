@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheDeleteAllFromTable_h
 #define Reports_MTQueryCacheDeleteAllFromTable_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheDeleteAllFromTable : MTQuery
+@interface MTQueryCacheDeleteAllFromTable : MADQuery
 
     - (instancetype)initWithTableName:(NSString *)tableName;
 

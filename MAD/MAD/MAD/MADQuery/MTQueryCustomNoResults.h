@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCustomNoResults_h
 #define Reports_MTQueryCustomNoResults_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCustomNoResults : MTQuery
+@interface MTQueryCustomNoResults : MADQuery
 
 @end
 

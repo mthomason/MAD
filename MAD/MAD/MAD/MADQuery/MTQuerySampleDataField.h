@@ -9,10 +9,10 @@
 #ifndef Reports_MTQuerySampleDataField_h
 #define Reports_MTQuerySampleDataField_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 
-@interface MTQuerySampleDataField : MTQuery
+@interface MTQuerySampleDataField : MADQuery
     <MADDatabaseResultsProtocol, MADQueryFieldKeysProtocol, MADQueryDataTableProtocol,
         MADQueryDatabaseProtocol>
 

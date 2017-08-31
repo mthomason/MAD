@@ -9,11 +9,11 @@
 #ifndef MADMySQLFetchProtocol_h
 #define MADMySQLFetchProtocol_h
 
-@class MADDataTable, MTQuery;
+@class MADDataTable, MADQuery;
 
 @protocol MADMySQLFetchProtocol
 @optional
-    - (MADDataTable *)dataTableForQuery:(MTQuery *)query;
+    - (MADDataTable *)dataTableForQuery:(MADQuery *)query;
     - (void)didFetchRow:(NSUInteger)row;
 @end
 

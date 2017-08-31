@@ -14,7 +14,7 @@
 
 @protocol MADMySQLFetchProtocol;
 
-@class MysqlConnection, MTQuery, MADDataTable;
+@class MysqlConnection, MADQuery, MADDataTable;
 
 @interface MysqlFetch : NSObject
 

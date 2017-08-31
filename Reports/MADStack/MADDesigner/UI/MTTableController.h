@@ -11,14 +11,14 @@
 
 #import <UIKit/UICollectionViewController.h>
 
-@class MADDataFormatter, MADDatabase, MTQuery, NSManagedObjectID;
+@class MADDataFormatter, MADDatabase, MADQuery, NSManagedObjectID;
 @protocol MADQueryDatabaseProtocol;
 
 @interface MADTableController : UICollectionViewController
 
     @property (nonatomic, strong, readonly) MADDataFormatter *tableFormatter;
 
-    - (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query
+    - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query
                          database:(MADDatabase *)database
                           tableID:(NSManagedObjectID *)tableID;
     - (NSUInteger)rowCount;

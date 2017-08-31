@@ -11,7 +11,7 @@
 
 #import <Foundation/NSEnumerator.h>
 
-@class MADDatabaseConnection, MTQuery;
+@class MADDatabaseConnection, MADQuery;
 
 @interface MADDataTableObjectEnumerator : NSEnumerator
 
@@ -21,7 +21,7 @@
     - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
                                        columns: (NSDictionary *)columns
                                     columnKeys: (NSArray *)columnKeys
-                                         query: (MTQuery *)query;
+                                         query: (MADQuery *)query;
 
 @end
 

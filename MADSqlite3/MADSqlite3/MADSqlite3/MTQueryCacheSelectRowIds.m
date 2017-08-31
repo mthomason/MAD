@@ -11,7 +11,7 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
 #import "MADQuerySelectParameters.h"
-#import "MTQuery+Sqlite3.h"
+#import "MADQuery+Sqlite3.h"
 #import <MADAPI/MADQueryType.h>
 
 @interface MTQueryCacheSelectRowIds ()

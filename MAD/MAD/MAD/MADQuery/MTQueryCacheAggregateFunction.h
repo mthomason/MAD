@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheAggregateFunction_h
 #define Reports_MTQueryCacheAggregateFunction_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheAggregateFunction : MTQuery
+@interface MTQueryCacheAggregateFunction : MADQuery
     <MADQueryDataBindingProtocol, MADQueryColumnsProtocol>
 @end
 

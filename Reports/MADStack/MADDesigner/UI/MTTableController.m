@@ -34,7 +34,7 @@
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MAD/RptqQuery.h>
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 #import <MAD/MADDataFormatter.h>
 #import <MAD/MTKeyChain.h>
 #import <MAD/MADDataTable+Constructor.h>
@@ -47,7 +47,7 @@
     <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseResultsProtocol>
 
     @property (nonatomic, strong) MADDatabase *database;
-    @property (nonatomic, strong) MTQuery <MADQueryDatabaseProtocol> *query;
+    @property (nonatomic, strong) MADQuery <MADQueryDatabaseProtocol> *query;
     @property (nonatomic, strong) MADDataTable *datatable;
     @property (nonatomic, strong, readwrite) MADDataFormatter *tableFormatter;
     @property (nonatomic, strong, readwrite) NSArray *fieldKeys;
@@ -60,14 +60,14 @@
 }
 
 - (void)dealloc {
-    ((MTQuery <MADQueryDataTableProtocol >*)self.query).dataTable = nil;
+    ((MADQuery <MADQueryDataTableProtocol >*)self.query).dataTable = nil;
 }
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MTQuery <MADQueryDatabaseProtocol> *)query database:(MADDatabase *)database
+- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query database:(MADDatabase *)database
                       tableID:(NSManagedObjectID *)tableID {
     
     NSUInteger rowCount = 0;
@@ -149,9 +149,9 @@
         
         MADTableController *strongself = weakSelf;
         
-        MTQuery *queryTableFormatter = strongself.tableFormatter.query;
+        MADQuery *queryTableFormatter = strongself.tableFormatter.query;
         if ([queryTableFormatter conformsToProtocol:@protocol(MADQueryDataTableProtocol)]) {
-            ((MTQuery <MADQueryDataTableProtocol> *)queryTableFormatter).dataTable = strongself.datatable;
+            ((MADQuery <MADQueryDataTableProtocol> *)queryTableFormatter).dataTable = strongself.datatable;
         }
         NSError * __autoreleasing errorPerformQuery = NULL;
         BOOL success = [strongself.database executeQuery:queryTableFormatter
@@ -375,7 +375,7 @@
     
     NSUInteger column = (NSUInteger)section;
     NSString *fieldKey = [self.query fieldKeyForIndex:column];
-    MADDatabaseField *field = ((MTQuery <MADQueryFieldKeysProtocol> *)self.query).fields[fieldKey];
+    MADDatabaseField *field = ((MADQuery <MADQueryFieldKeysProtocol> *)self.query).fields[fieldKey];
     NSUInteger maxNumberOfCharacters = field.calculatedWidth;
     if (maxNumberOfCharacters <= 0) {
         maxNumberOfCharacters = 4;

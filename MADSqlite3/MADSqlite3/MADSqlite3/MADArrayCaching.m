@@ -430,7 +430,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     _lastObjectSelected = nil;
     _numberOfRows = 0;
     _hasNumberOfRows = MADObjectInitalizedNotSets;
-    MTQuery *query;
+    MADQuery *query;
     query = [[MTQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
     NSError * __autoreleasing error = NULL;
     return [self.database executeQuery:query withError:&error];

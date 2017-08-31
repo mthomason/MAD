@@ -9,9 +9,9 @@
 #ifndef Reports_MTQueryCacheSelectRowIds_h
 #define Reports_MTQueryCacheSelectRowIds_h
 
-#import <MADAPI/MTQuery.h>
+#import <MADAPI/MADQuery.h>
 
-@interface MTQueryCacheSelectRowIds : MTQuery
+@interface MTQueryCacheSelectRowIds : MADQuery
     <MADQueryColumnsProtocol>
 
 - (instancetype)initWithRowIDs:(NSArray *)rowIDs tableName:(NSString *)tableName

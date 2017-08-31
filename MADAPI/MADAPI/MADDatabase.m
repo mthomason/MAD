@@ -61,7 +61,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return results;
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withDataTable:(MADDataTable *)dataTable
+- (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable
             andError:(NSError * __autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
@@ -71,7 +71,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (BOOL)executeQuery:(MTQuery *)query withError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
     reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];

@@ -44,7 +44,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqQueryField+Extras.h>
-#import <MAD/MTQuery+Extras.h>
+#import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
@@ -854,8 +854,8 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
         [delegate didSetField2ID:fieldID];
     }
     
-    MTQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-    querySampleDataField = (MTQuery <MADQueryDatabaseProtocol> *)[[MTQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+    MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+    querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                              object: field.databaseSchemaField];
     NSError * __autoreleasing error = NULL;
     
@@ -911,7 +911,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 
 #pragma mark - MADDatabaseResultsProtocol
 
-- (MADDataTable *)dataTableForQuery:(MTQuery *)query {
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return self.sampleDataTable;
 }
 
