@@ -13,7 +13,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADNotificationProgress.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationQueue.h>
@@ -65,8 +65,8 @@
         _successCreate = NO;
         
         NSString *key = databaseConnection.connectionString;
-        NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-        NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+        NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
+        NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
 
         MADOperationConditionHasResultString *conditionReadUsername;
         conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
@@ -152,7 +152,7 @@
         // ---------------------------------------------------
 
         MADOperationKeyChainPut *putUsername;
-        putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MTKeyChainUsernameAccountDesc];
+        putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MADKeyChainUsernameAccountDesc];
         putUsername.name = @"com.everydayapps.mad.operation.credentials.save.username";
         [putUsername addDependency: promptSavePassword];
         [putUsername addDependency: getCredentials];
@@ -164,7 +164,7 @@
         // Conditions:  User said yes to save credentials..
         // ---------------------------------------------------
         MADOperationKeyChainPut *putPassword;
-        putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MTKeyChainPasswordAccountDesc];
+        putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MADKeyChainPasswordAccountDesc];
         putPassword.name = @"com.everydayapps.mad.operation.credentials.save.password";
         [putPassword addDependency: promptSavePassword];
         [putPassword addDependency: getCredentials];
@@ -249,7 +249,7 @@
         //Test if credentals are saved
         MADOperationKeyChainGet *operationGetUsername;
         operationGetUsername = [[MADOperationKeyChainGet alloc] initWithKey: keyUsername
-                                                            withDescription: MTKeyChainUsernameAccountDesc];
+                                                            withDescription: MADKeyChainUsernameAccountDesc];
         operationGetUsername.name = @"com.everydayapps.mad.operation.keychain.read.username";
         operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
         [operationGetUsername addDependency: displayErrorCredentials];

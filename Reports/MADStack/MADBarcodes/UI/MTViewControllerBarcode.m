@@ -216,7 +216,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                                key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                                
                                alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                                   [MTKeyChain deleteKey:key];
+                                   [MADKeyChain deleteKey:key];
                                } cancel:nil];
                                
                                [weakself2 presentViewController: alertController
@@ -263,7 +263,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
                                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                                UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                                   [MTKeyChain deleteKey:key];
+                                   [MADKeyChain deleteKey:key];
                                } cancel:nil];
                                [strongself2 presentViewController:alertController animated:YES
                                                        completion:nil];

@@ -15,7 +15,7 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MADFoundation/MADOperationConditionMissingResultString.h>
@@ -86,8 +86,8 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
         return [self finish];
 
     NSString *key = databaseConnection.connectionString;
-    _keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-    _keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+    _keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
+    _keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
     
     // Condition: Username is missing.
     MADOperationConditionMissingResultString *conditionReadUsernameFailed;
@@ -103,7 +103,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     MADOperationKeyChainGet *getUsername;
 
     getUsername = [[MADOperationKeyChainGet alloc] initWithKey: _keyUsername
-                                               withDescription: MTKeyChainUsernameAccountDesc];
+                                               withDescription: MADKeyChainUsernameAccountDesc];
     getUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
     
     // ---------------------------------------------------
@@ -128,7 +128,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
     // ---------------------------------------------------
     MADOperationKeyChainGet *getPassword;
     getPassword = [[MADOperationKeyChainGet alloc] initWithKey: _keyPassword
-                                               withDescription: MTKeyChainPasswordAccountDesc];
+                                               withDescription: MADKeyChainPasswordAccountDesc];
     getPassword.readOperationType = MADKeyChainReadOperationTypePassword;
     [getPassword addDependency:getUsername];
     [getPassword addCondition:conditionReadUsername];

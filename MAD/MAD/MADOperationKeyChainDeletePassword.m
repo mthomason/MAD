@@ -9,7 +9,7 @@
 #import "MADOperationKeyChainDeletePassword.h"
 #import <os/log.h>
 #import <Foundation/NSString.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 
 @interface MADOperationKeyChainDeletePassword ()
 
@@ -43,7 +43,7 @@
 
     NSAssert(_key != nil, @"Need a key.");
     NSError * __autoreleasing error = nil;
-    [MTKeyChain deleteSavedPasswordForKey: _key error: &error];
+    [MADKeyChain deleteSavedPasswordForKey: _key error: &error];
     if (error != nil) {
         [self finishWithError:error];
     } else {

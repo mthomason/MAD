@@ -32,7 +32,7 @@
 #import <MADAPI/MADDatabase.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADErrorContainer.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 #import <MAD/MADProgress.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
@@ -443,7 +443,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)displayErrors:(NSArray <__kindof NSError *> *)errors forConnectionString:(NSString *)connectionString {
     [MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL success) {
-        [MTKeyChain deleteKey:connectionString];
+        [MADKeyChain deleteKey:connectionString];
     }];
 }
 

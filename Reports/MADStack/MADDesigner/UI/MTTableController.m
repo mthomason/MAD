@@ -36,7 +36,7 @@
 #import <MAD/RptqQuery.h>
 #import <MADAPI/MADQuery.h>
 #import <MAD/MADDataFormatter.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 #import <MAD/MADDataTable+Constructor.h>
 
 #import "MADTableLayout.h"
@@ -173,7 +173,7 @@
             NSString *key = strongself.query.database.databaseConnection.connectionString.copy;
             void (^deleteKey)(BOOL);
             deleteKey = ^(BOOL displayErrorSuccess) {
-                [MTKeyChain deleteKey:key];
+                [MADKeyChain deleteKey:key];
             };
             
             NSError *serror = [errorPerformQuery copyWithZone:nil];

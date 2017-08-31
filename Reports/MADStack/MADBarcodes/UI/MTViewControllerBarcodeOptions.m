@@ -897,7 +897,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                        strongself = weakself;
                        
                        alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                           [MTKeyChain deleteKey:connectionString];
+                           [MADKeyChain deleteKey:connectionString];
                        } cancel:nil];
                        
                        [strongself presentViewController:alertController animated:YES

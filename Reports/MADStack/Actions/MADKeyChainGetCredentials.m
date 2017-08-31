@@ -8,7 +8,7 @@
 
 #import "MADKeyChainGetCredentials.h"
 #import <MADFoundation/MADCredential.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UILabel.h>
 
@@ -79,10 +79,10 @@ static NSString * const MADButtonCancel                = @"Cancel";
     CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
 
     //Read username and password.
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:self.key];
+    NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:self.key];
     OSStatus queryStatusUsername = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
     
-    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:self.key];
+    NSDictionary *queryPassword = [MADKeyChain queryPasswordDefination:self.key];
     OSStatus queryStatusPassword = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
     
     char status = PromptForUsernameAndPassword;

@@ -29,7 +29,7 @@
 
 #import <MADAPI/MADQuery.h>
 #import <MAD/MADQuery+Extras.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 #import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqQueryField+Extras.h>
@@ -224,7 +224,7 @@
                 
                 [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
                        UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                                   [MTKeyChain deleteKey:key];
+                                   [MADKeyChain deleteKey:key];
                        } cancel:nil];
                        [weak1 presentViewController:alertController animated:YES
                                          completion:nil];
@@ -243,7 +243,7 @@
                                completion:^(BOOL presentErrorSuccess) {
                                
                                    UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                                       [MTKeyChain deleteKey:key];
+                                       [MADKeyChain deleteKey:key];
                                    } cancel:nil];
                                    [weak1 presentViewController:alertController animated:YES
                                                      completion:nil];

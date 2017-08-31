@@ -1,5 +1,5 @@
 //
-//  MTKeyChain.m
+//  MADKeyChain.m
 //  Reports
 //
 //  Created by Michael Thomason on 8/5/13.
@@ -26,8 +26,8 @@
 
 #import <MADFoundation/MADErrorUserInfo.h>
 
-NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
-NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
+NSString * const MADKeyChainUsernameAccountDesc = @"Client Database Username";
+NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 
 @implementation MADKeyChain
 
@@ -59,7 +59,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     query = [[NSDictionary alloc] initWithObjectsAndKeys:
                 (__bridge NSString *)kSecClassGenericPassword, (__bridge NSString *)(kSecClass),
                 keyUsername, (__bridge NSString *)(kSecAttrService),
-                MTKeyChainUsernameAccountDesc, (__bridge NSString *)(kSecAttrAccount),
+                MADKeyChainUsernameAccountDesc, (__bridge NSString *)(kSecAttrAccount),
                 yes, (__bridge NSString *)(kSecReturnData), nil];
     return query;
 }
@@ -71,7 +71,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     query = [[NSDictionary alloc] initWithObjectsAndKeys:
                 (__bridge NSString *)kSecClassGenericPassword, (__bridge NSString *)(kSecClass),
                 keyPassword, (__bridge NSString *)(kSecAttrService),
-                MTKeyChainPasswordAccountDesc, (__bridge NSString *)(kSecAttrAccount),
+                MADKeyChainPasswordAccountDesc, (__bridge NSString *)(kSecAttrAccount),
                 yes, (__bridge NSString *)(kSecReturnData), nil];
     return query;
 }
@@ -94,7 +94,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
               (__bridge NSString *)(kSecAttrService) : keyUsername,
-              (__bridge NSString *)(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
+              (__bridge NSString *)(kSecAttrAccount) : MADKeyChainUsernameAccountDesc,
               (__bridge NSString *)(kSecValueData) : data};
     return query;
 }
@@ -124,7 +124,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
               (__bridge NSString *)(kSecAttrService): keyUsername,
-              (__bridge NSString *)(kSecAttrAccount): MTKeyChainUsernameAccountDesc};
+              (__bridge NSString *)(kSecAttrAccount): MADKeyChainUsernameAccountDesc};
     return query;
 }
 
@@ -145,7 +145,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
               (__bridge NSString *)(kSecAttrService) : keyPassword,
-              (__bridge NSString *)(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
+              (__bridge NSString *)(kSecAttrAccount) : MADKeyChainPasswordAccountDesc,
               (__bridge NSString *)(kSecValueData) : data};
     return query;
 }
@@ -155,7 +155,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
               (__bridge NSString *)(kSecAttrService): keyPassword,
-              (__bridge NSString *)(kSecAttrAccount): MTKeyChainPasswordAccountDesc};
+              (__bridge NSString *)(kSecAttrAccount): MADKeyChainPasswordAccountDesc};
     return query;
 }
 
@@ -188,13 +188,13 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
     OSStatus status = [MADKeyChain saveToken: username
                                      forKey: keyUsername
-                            withDescription: MTKeyChainUsernameAccountDesc];
+                            withDescription: MADKeyChainUsernameAccountDesc];
     
     if (status == errSecSuccess) {
         NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
         [MADKeyChain saveToken: password
                        forKey: keyPassword
-              withDescription: MTKeyChainPasswordAccountDesc];
+              withDescription: MADKeyChainPasswordAccountDesc];
     }
     return status;
 }
@@ -203,7 +203,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
     return [MADKeyChain saveToken: password
                           forKey: keyPassword
-                 withDescription: MTKeyChainPasswordAccountDesc];
+                 withDescription: MADKeyChainPasswordAccountDesc];
 }
 
 + (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key  {
@@ -211,7 +211,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
     return [MADKeyChain saveToken: username
                           forKey: keyUsername
-                 withDescription: MTKeyChainUsernameAccountDesc];
+                 withDescription: MADKeyChainUsernameAccountDesc];
 }
 
 + (OSStatus)saveToken:(NSString *)token

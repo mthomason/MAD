@@ -13,7 +13,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 
 @interface MADOperationKeyChainGet ()
 
@@ -47,7 +47,7 @@
     if (self.cancelled) return [self finish];
 
     CFDataRef queryData = NULL;
-    NSDictionary *queryDefination = [MTKeyChain queryDefination: self.key
+    NSDictionary *queryDefination = [MADKeyChain queryDefination: self.key
                                                 withDescription: self.keyDescription];
     CFDictionaryRef queryDefinationC = (__bridge_retained CFDictionaryRef)queryDefination;
     OSStatus queryStatus = SecItemCopyMatching(queryDefinationC, (CFTypeRef *)&queryData);

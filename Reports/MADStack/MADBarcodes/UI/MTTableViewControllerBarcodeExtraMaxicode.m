@@ -28,7 +28,7 @@
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 #import <MAD/MADocument.h>
 
 #import <MADAPI/MADDatabase.h>
@@ -110,7 +110,7 @@
              onViewController: wself
                    completion:^(BOOL presentErrorSuccess) {
                        NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                       [MTKeyChain deleteKey:key];
+                       [MADKeyChain deleteKey:key];
                    }];
         
     }

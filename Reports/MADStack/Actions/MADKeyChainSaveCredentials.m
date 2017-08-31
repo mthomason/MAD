@@ -10,7 +10,7 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
 #import <MADFoundation/MADCredential.h>
-#import <MAD/MTKeyChain.h>
+#import <MAD/MADKeyChain.h>
 #import <MAD/MADCredentialSourceType.h>
 #import "MADKeyChainGetCredentials.h"
 
@@ -62,7 +62,7 @@ const short errUserCancel = 1;
     switch (source) {
         case MADCredentialSourceCredentialPrompt: {
             [self promptToSave:^(UIAlertAction *action) {
-                OSStatus status = [MTKeyChain saveUsername: self.credential.username
+                OSStatus status = [MADKeyChain saveUsername: self.credential.username
                                                andPassword: self.credential.password
                                                     forKey: self.key];
                 if (status == errSecSuccess) {
@@ -78,7 +78,7 @@ const short errUserCancel = 1;
             
             
             [self promptToSave:^(UIAlertAction *action) {
-                OSStatus status = [MTKeyChain savePassword: self.credential.password
+                OSStatus status = [MADKeyChain savePassword: self.credential.password
                                                     forKey: self.key];
                 if (status == errSecSuccess) {
                     [self finish];

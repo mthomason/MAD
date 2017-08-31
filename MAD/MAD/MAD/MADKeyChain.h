@@ -1,5 +1,5 @@
 //
-//  MTKeyChain.h
+//  MADKeyChain.h
 //  Reports
 //
 //  Created by Michael Thomason on 8/5/13.
@@ -11,8 +11,8 @@
 
 #import <Foundation/NSObject.h>
 
-extern NSString * const MTKeyChainUsernameAccountDesc;
-extern NSString * const MTKeyChainPasswordAccountDesc;
+extern NSString * const MADKeyChainUsernameAccountDesc;
+extern NSString * const MADKeyChainPasswordAccountDesc;
 
 @interface MADKeyChain : NSObject
 
