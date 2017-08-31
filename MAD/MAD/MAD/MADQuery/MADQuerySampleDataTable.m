@@ -18,18 +18,17 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSError.h>
 
+#import <MADFoundation/MADDataTable.h>
+#import <MADFoundation/MADDataTablePlist.h>
+
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseField.h>
 
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase.h"
-
-#import <MADAPI/MADDatabase.h>
-#import <MADAPI/MADDatabaseField.h>
-
-#import <MADFoundation/MADDataTable.h>
-#import <MADFoundation/MADDataTablePlist.h>
 
 #import "MADQuery+Extras.h"
 

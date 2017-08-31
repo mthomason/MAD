@@ -18,6 +18,7 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTable.h>
+#import <MADFoundation/MADDataTableVirtual.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -33,8 +34,6 @@
 
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
-
-#import "MADDataTable+Constructor.h"
 
 #import "MysqlFetch+DataTable.h"
 
@@ -183,7 +182,8 @@
         
         NSError *fetchError = nil;
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-        MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+        NSString *identifier = @"v999";
+        MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
         MADDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
                                               onConnection: conn error: &fetchError];
         NSMutableArray <MADDatabaseTable *> *results = nil;
@@ -245,7 +245,8 @@
     NSError *error = nil;
     MysqlConnection *connection = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+    NSString *identifier = @"v999";
+    MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
     MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
                                              dataTable: &dataTableVirtual
                                           onConnection: connection
@@ -283,7 +284,8 @@
     NSError * __autoreleasing error = nil;
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+    NSString *identifier = @"v999";
+    MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
     MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
                                              dataTable: &dataTableVirtual
                                           onConnection: conn
@@ -310,7 +312,8 @@
     NSError *errorFetch = nil;
     MysqlConnection *conn = dbconn;
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v999"];
+    NSString *identifier = @"v999";
+    MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
     MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
                                              dataTable: &dataTableVirtual
                                           onConnection: conn
@@ -346,15 +349,17 @@
     NSMutableDictionary *resultsDictionary = nil;
     
     MADSafeQueryField *safeTableName = [self newSafeIdentifier:tableName];
-    NSString *command = [[NSString alloc] initWithFormat:@"SHOW COLUMNS FROM %@;", safeTableName];
+    NSString *formatShowColumns = @"SHOW COLUMNS FROM %@;";
+    NSString *command = [[NSString alloc] initWithFormat:formatShowColumns, safeTableName];
     
     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-    MADDataTable *dataTableVirtual = [MADDataTable newDataTableForIdentifier:@"v9998"];
+    NSString *identifier = @"v9998";
+    MADDataTable *dataTableVirtual1 = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
     NSError * __autoreleasing errorShowColumns = nil;
     NSError * __autoreleasing errorColumnMetaData = nil;
     
     MADDataTable *dataTable = [myFetch fetchWithCommand: command
-                                              dataTable: &dataTableVirtual
+                                              dataTable: &dataTableVirtual1
                                            onConnection: conn
                                                   error: &errorShowColumns];
     if (errorShowColumns == nil) {
@@ -369,9 +374,12 @@
             resultsDictionary[safeId] = field;
         }
         
-        MADDataTable *dataTableVirtual2 = [MADDataTable newDataTableForIdentifier:@"v9997"];
+        NSString *identifier2 = @"v9997";
+        MADDataTable *dataTableVirtual2 = [[MADDataTableVirtual alloc] initWithId:identifier2.hash];
         safeTableName = [self newSafeIdentifier:tableName];
-        NSString *command2 = [[NSString alloc] initWithFormat:@"SELECT * FROM %@ LIMIT 0;", safeTableName];
+        
+        NSString *formatSelectAll = @"SELECT * FROM %@ LIMIT 0;";
+        NSString *command2 = [[NSString alloc] initWithFormat:formatSelectAll, safeTableName];
         MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
         MADDataTable *dataTable2 = [myFetch2 fetchWithCommand: command2
                                                     dataTable: &dataTableVirtual2
@@ -379,13 +387,12 @@
                                                         error: &errorColumnMetaData];
         if (errorColumnMetaData == nil) {
             NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
+            
+            MADDatabaseField *databaseField;
             for (MADDataColumn *dataColumn in columnsEnumerator) {
-                MADDatabaseField *databaseField = resultsDictionary[dataColumn.fieldName];
-                
+                databaseField = resultsDictionary[dataColumn.fieldName];
                 databaseField.fieldTypeNative = dataColumn.nativeType;
-                
-                MADDataType fieldType = [MADDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];
-                databaseField.fieldType = fieldType;
+                databaseField.fieldType = [MADDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];;
                 databaseField.width = dataColumn.dataLength;
                 databaseField.decimals = (int16_t)dataColumn.dataPercision;
                 databaseField.primaryKey = dataColumn.isPrimaryKey;

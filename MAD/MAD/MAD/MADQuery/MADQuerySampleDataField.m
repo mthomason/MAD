@@ -12,19 +12,21 @@
 
 #import "MADQuerySampleDataField.h"
 #import <CoreData/NSManagedObjectID.h>
+
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
+
 #import <MADFoundation/MADDataTable.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADQueryType.h>
+
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
-#import <MADAPI/MADDatabase.h>
+#import "RptqDatabaseCredentals+Extras.h"
 #import "MADDatabase+Constructor.h"
 #import "MADDataTable+Constructor.h"
-
-#import "RptqDatabaseCredentals+Extras.h"
-#import <MADAPI/MADQueryType.h>
 
 @interface MADQuerySampleDataField ()
 
