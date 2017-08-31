@@ -1,5 +1,5 @@
 //
-//  MTDatabaseConnectionSqlite3.m
+//  MADDatabaseConnectionSqlite3.m
 //  MAD
 //
 //  Created by Michael Thomason on 3/19/14.
@@ -31,7 +31,7 @@
 + (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
 
     id dbConnection;
-    //dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+    //dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
     
     NSString *databaseFilename = credentals.database.copy;
     

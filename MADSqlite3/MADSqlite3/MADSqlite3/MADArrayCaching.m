@@ -29,7 +29,7 @@
 
 #import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
 
-#import "MTDatabaseConnectionSqlite3.h"
+#import "MADDatabaseConnectionSqlite3.h"
 #import "MTQueryCacheAddColumn.h"
 
 static NSString * const MTArrayCachedTableName = @"ac";
@@ -132,7 +132,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
     MADDatabaseSqlite3 *database;
     MADDatabaseConnection *databaseConnection;
-    databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+    databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
     database = [[MADDatabaseSqlite3 alloc] init];
     [database setDatabaseConnection:databaseConnection];
     [database openDatabase];
@@ -474,7 +474,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         
         MADDatabaseConnection *databaseConnection;
         MADDatabaseSqlite3 *database;
-        databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+        databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
         
         database = [[MADDatabaseSqlite3 alloc] init];
         [database setDatabaseConnection:databaseConnection];

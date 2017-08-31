@@ -45,7 +45,7 @@
 #import <MADDataStructures/MADIndex.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADSqlite3/MTDatabaseConnectionSqlite3.h>
+#import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MTQueryCacheDeleteAllFromTable.h>
@@ -348,7 +348,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     @autoreleasepool {
         database = [[MADDatabaseSqlite3 alloc] init];
         database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
-        connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+        connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
         database.databaseConnection = connection;
         
         [(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
@@ -361,7 +361,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     
     @autoreleasepool {
         
-        connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+        connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
         database = [[MADDatabaseSqlite3 alloc] init];
         [database setDatabaseConnection:connection];
         [database openDatabase];
@@ -1061,7 +1061,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                        columns:nil];
     NSURL *urlFastCache = self.urlFastCache;
     MADDatabaseConnection *databaseConnection;
-    databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
+    databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
     objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                                 columns: self.columns
                                                                              columnKeys: self.columnKeys
@@ -1082,7 +1082,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     MADDatabaseConnection *connection;
     MADDataColumn *rowid;
-    connection= [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+    connection= [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 
     rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
     rowid.type = MADDataTypeInteger;
@@ -1137,7 +1137,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                   columns:nil];
         
         MADDatabaseConnection *dbConnection;
-        dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+        dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
         enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
                                                                               columns: self.columns
                                                                            columnKeys: columnKeys
@@ -1161,7 +1161,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                                                      dropRowID:NO
                                                                        columns:nil];
     
-    dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+    dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
     enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
                                                                           columns: self.columns
                                                                        columnKeys: self.columnKeys
@@ -1329,7 +1329,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSURL *urlFastCache = self.urlFastCache;
     MADDatabaseConnection *databaseConnection;
     NSEnumerator *data;
-    databaseConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
+    databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
     data = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                     columns: columns
                                                                  columnKeys: columnKeys

@@ -11,8 +11,8 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
 
-#import <MADSqlite3/MTDatabaseConnectionSqlite3.h>
-#import "MTDatabaseConnectionMySql.h"
+#import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
+#import "MADDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlServer.h"
 
 @implementation MADDatabaseConnection (Constructor)
@@ -26,7 +26,7 @@
     
     switch (databaseType) {
         case MADDatabaseTypeSqlite3:
-            dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+            dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
 
             break;
             
@@ -39,7 +39,7 @@
             break;
             
         case MADDatabaseTypeMySQL:
-            dbConnection = [[MTDatabaseConnectionMySql alloc] initWithHost: host
+            dbConnection = [[MADDatabaseConnectionMySql alloc] initWithHost: host
                                                                   database: database
                                                                    andPort: port];
             break;
@@ -54,7 +54,7 @@
 }
 
 + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url {
-    id dbConnection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+    id dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
     return dbConnection;
 }
 
@@ -76,7 +76,7 @@
     id dbConnection = nil;
     switch (credentals.databaseType) {
         case MADDatabaseTypeSqlite3:
-            dbConnection = [MTDatabaseConnectionSqlite3 newDatabaseConnectionWithCredentals:credentals];
+            dbConnection = [MADDatabaseConnectionSqlite3 newDatabaseConnectionWithCredentals:credentals];
             
             break;
             
@@ -86,7 +86,7 @@
             break;
             
         case MADDatabaseTypeMySQL:
-            dbConnection = [MTDatabaseConnectionMySql newDatabaseConnectionWithCredentals:credentals];
+            dbConnection = [MADDatabaseConnectionMySql newDatabaseConnectionWithCredentals:credentals];
             break;
             
         default:
@@ -103,7 +103,7 @@
     
     switch (databaseType) {
         case MADDatabaseTypeSqlite3:
-            identifier = [MTDatabaseConnectionSqlite3 Identifier];
+            identifier = [MADDatabaseConnectionSqlite3 Identifier];
             
             break;
             
@@ -113,7 +113,7 @@
             break;
             
         case MADDatabaseTypeMySQL:
-            identifier = [MTDatabaseConnectionMySql Identifier];
+            identifier = [MADDatabaseConnectionMySql Identifier];
             break;
             
         default:

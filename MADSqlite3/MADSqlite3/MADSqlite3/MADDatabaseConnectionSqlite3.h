@@ -1,5 +1,5 @@
 //
-//  MTDatabaseConnectionSqlite3.h
+//  MADDatabaseConnectionSqlite3.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/19/14.
