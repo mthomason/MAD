@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTKeyChain.h"
+#import "MADKeyChain.h"
 
 #import <dispatch/dispatch.h>
 #import <Security/SecItem.h>
@@ -29,7 +29,7 @@
 NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 
-@implementation MTKeyChain
+@implementation MADKeyChain
 
 + (NSString *)newKeyForUsernameWithMainKey:(NSString *)key {
     id result = [[NSString alloc] initWithFormat:@"u:%@", key];
@@ -53,7 +53,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryUsernameDefination:(NSString *)key {
-    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+    NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
     NSNumber *yes = @YES;
     NSDictionary *query;
     query = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -65,7 +65,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryPasswordDefination:(NSString *)key {
-    NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+    NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
     NSNumber *yes = @YES;
     NSDictionary *query;
     query = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -89,7 +89,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryUsernameAdd:(NSString *)username key:(NSString *)key {
-    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+    NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
     NSData *data = [username dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
@@ -120,7 +120,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryUsernameUpdate:(NSString *)key {
-    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
+    NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
               (__bridge NSString *)(kSecAttrService): keyUsername,
@@ -140,7 +140,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryPasswordAdd:(NSString *)password key:(NSString *)key {
-    NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+    NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
     NSData *data = [password dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
@@ -151,7 +151,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryPasswordUpdate:(NSString *)key {
-    NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
+    NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
     NSDictionary *query;
     query = @{(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
               (__bridge NSString *)(kSecAttrService): keyPassword,
@@ -162,7 +162,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 + (NSError *)errorUserCanceled {
     NSString *title = NSLocalizedString(@"User Canceled", @"User Cancled");
     NSString *message = NSLocalizedString(@"User canceled save.", @"User canceled save.");
-    NSString *domain = @"MTKeyChain";
+    NSString *domain = @"MADKeyChain";
     MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: title
                                                                    andMessage: message];
     NSError *error = [errorUserInfo errorWithDomain: domain
@@ -172,7 +172,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 
 + (BOOL)credentialsExist:(NSString *)key {
     CFDataRef queryUsernameData = NULL;
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
+    NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:key];
     OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername,
                                                        (CFTypeRef *)&queryUsernameData);
     return errSecItemNotFound != queryUsernameStatus;
@@ -185,14 +185,14 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 + (OSStatus)saveUsername:(NSString *)username andPassword:(NSString *)password
                   forKey:(NSString *)key {
     
-    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-    OSStatus status = [MTKeyChain saveToken: username
+    NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
+    OSStatus status = [MADKeyChain saveToken: username
                                      forKey: keyUsername
                             withDescription: MTKeyChainUsernameAccountDesc];
     
     if (status == errSecSuccess) {
-        NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
-        [MTKeyChain saveToken: password
+        NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
+        [MADKeyChain saveToken: password
                        forKey: keyPassword
               withDescription: MTKeyChainPasswordAccountDesc];
     }
@@ -200,16 +200,16 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (OSStatus)savePassword:(NSString *)password forKey:(NSString *)key  {
-    NSString *keyPassword = [MTKeyChain newKeyForPasswordWithMainKey: key];
-    return [MTKeyChain saveToken: password
+    NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
+    return [MADKeyChain saveToken: password
                           forKey: keyPassword
                  withDescription: MTKeyChainPasswordAccountDesc];
 }
 
 + (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key  {
     
-    NSString *keyUsername = [MTKeyChain newKeyForUsernameWithMainKey: key];
-    return [MTKeyChain saveToken: username
+    NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
+    return [MADKeyChain saveToken: username
                           forKey: keyUsername
                  withDescription: MTKeyChainUsernameAccountDesc];
 }
@@ -229,14 +229,14 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
                                           (CFTypeRef *)&queryUsernameData);
     
     if (status == errSecItemNotFound) {
-        NSDictionary *queryAddUsername = [MTKeyChain queryAdd: token
+        NSDictionary *queryAddUsername = [MADKeyChain queryAdd: token
                                                        forKey: key
                                               withDescription: description];
         status = SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
     } else {
-        NSDictionary *updateQueryUsername = [MTKeyChain queryUpdate: key
+        NSDictionary *updateQueryUsername = [MADKeyChain queryUpdate: key
                                                     withDescription: description];
-        NSDictionary *changesUsername = [MTKeyChain queryUpdateData:token];
+        NSDictionary *changesUsername = [MADKeyChain queryUpdateData:token];
         status = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername,
                                (__bridge CFDictionaryRef)changesUsername);
     }
@@ -244,7 +244,7 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (void)deleteKey:(NSString *)key {
-    NSDictionary *query = [MTKeyChain newDictionaryQueryGeneric:key];
+    NSDictionary *query = [MADKeyChain newDictionaryQueryGeneric:key];
     
     CFDataRef queryData = NULL;
     
@@ -257,8 +257,8 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 
 + (void)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error {
     
-    NSDictionary *queryUsername = [MTKeyChain queryUsernameDefination:key];
-    NSDictionary *queryPassword = [MTKeyChain queryPasswordDefination:key];
+    NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:key];
+    NSDictionary *queryPassword = [MADKeyChain queryPasswordDefination:key];
     
     CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
     

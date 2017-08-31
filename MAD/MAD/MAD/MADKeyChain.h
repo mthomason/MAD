@@ -14,7 +14,7 @@
 extern NSString * const MTKeyChainUsernameAccountDesc;
 extern NSString * const MTKeyChainPasswordAccountDesc;
 
-@interface MTKeyChain : NSObject
+@interface MADKeyChain : NSObject
 
     + (OSStatus)saveUsername:(NSString *)username
                  andPassword:(NSString *)password
