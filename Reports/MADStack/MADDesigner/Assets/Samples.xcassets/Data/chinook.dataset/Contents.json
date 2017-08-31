@@ -6,7 +6,8 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "chinook.sqlite3"
+      "filename" : "chinook.sqlite3",
+      "universal-type-identifier" : "public.database"
     }
   ]
 }
