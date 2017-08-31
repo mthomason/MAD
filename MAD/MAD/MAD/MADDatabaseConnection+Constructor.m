@@ -13,7 +13,7 @@
 
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import "MADDatabaseConnectionMySql.h"
-#import "MTDatabaseConnectionSqlServer.h"
+#import "MADDatabaseConnectionSQLServer.h"
 
 @implementation MADDatabaseConnection (Constructor)
 
@@ -31,7 +31,7 @@
             break;
             
         case MADDatabaseTypeTDS:
-            dbConnection = [[MTDatabaseConnectionSqlServer alloc] initWithHost: host
+            dbConnection = [[MADDatabaseConnectionSQLServer alloc] initWithHost: host
                                                                         server: host
                                                                       database: database
                                                                        andPort: port];
@@ -81,7 +81,7 @@
             break;
             
         case MADDatabaseTypeTDS:
-            dbConnection = [MTDatabaseConnectionSqlServer newDatabaseConnectionWithCredentals:credentals];
+            dbConnection = [MADDatabaseConnectionSQLServer newDatabaseConnectionWithCredentals:credentals];
             
             break;
             
@@ -108,7 +108,7 @@
             break;
             
         case MADDatabaseTypeTDS:
-            identifier = [MTDatabaseConnectionSqlServer Identifier];
+            identifier = [MADDatabaseConnectionSQLServer Identifier];
             
             break;
             

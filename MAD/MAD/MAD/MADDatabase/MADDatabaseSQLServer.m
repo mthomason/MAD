@@ -49,7 +49,7 @@
 
 #import <MADAPI/MTQuery.h>
 
-#import "MTDatabaseProcessSqlServer.h"
+#import "MADDatabaseProcessSQLServer.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
@@ -287,14 +287,14 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
             andError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
     NSError * __autoreleasing dberror = nil;
-    MTDatabaseProcessSqlServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil connectionError:&dberror];
+    MADDatabaseProcessSQLServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil connectionError:&dberror];
     if (dbconn) {
         success = [self runQuery:query onProcess:dbconn withDataTable:dataTable withError: NULL];
     }
     return success;
 }
 
-- (BOOL)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process
+- (BOOL)runQuery:(MTQuery *)query onProcess:(MADDatabaseProcessSQLServer *)process
    withDataTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
     BOOL success = NO;
     NSError * __autoreleasing sqlError = nil;
@@ -315,7 +315,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 }
 
 - (BOOL)runSQL:(NSString *)sql onDataTable:(MADDataTable *)datatable fieldKeys:(NSArray *)fieldKeys
-       process:(MTDatabaseProcessSqlServer *)process {
+       process:(MADDatabaseProcessSQLServer *)process {
 
     BOOL rsuccess = NO;
     NSError *error = nil;
@@ -1339,12 +1339,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         
         NSError * __autoreleasing dberror = nil;
         dbconn = [self connect:credentals.username andPassword:credentals.password error:&dberror];
-        MTDatabaseProcessSqlServer *dbwrap = nil;
+        MADDatabaseProcessSQLServer *dbwrap = nil;
         error = &dberror;
         if (error && dberror) {
             [self.errors insertObject:dberror atIndex:0];
         } else {
-            dbwrap = [[MTDatabaseProcessSqlServer alloc] initWithProcess:dbconn];
+            dbwrap = [[MADDatabaseProcessSQLServer alloc] initWithProcess:dbconn];
         }
         
     }

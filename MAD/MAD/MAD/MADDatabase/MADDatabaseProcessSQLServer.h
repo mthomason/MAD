@@ -1,5 +1,5 @@
 //
-//  MTDatabaseProcessSqlServer.h
+//  MADDatabaseProcessSQLServer.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/31/14.

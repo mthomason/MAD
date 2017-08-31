@@ -1,5 +1,5 @@
 //
-//  MTDatabaseConnectionSqlServer.h
+//  MADDatabaseConnectionSQLServer.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/19/14.
