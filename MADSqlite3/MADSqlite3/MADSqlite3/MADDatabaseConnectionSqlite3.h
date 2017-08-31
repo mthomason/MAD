@@ -12,7 +12,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 
-@interface MTDatabaseConnectionSqlite3 : MADDatabaseConnection
+@interface MADDatabaseConnectionSqlite3 : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,
         MADDatabaseConnectionsProperties,
         MADDatabaseConnectionsPropertiesURL,

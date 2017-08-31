@@ -10,10 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseConnectionMySql.h"
+#import "MADDatabaseConnectionMySql.h"
 #import <Foundation/NSCharacterSet.h>
 
-@implementation MTDatabaseConnectionMySql
+@implementation MADDatabaseConnectionMySql
 
 @synthesize database = _database;
 @synthesize server = _server;

@@ -12,7 +12,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-@interface MTDatabaseConnectionMySql : MADDatabaseConnection
+@interface MADDatabaseConnectionMySql : MADDatabaseConnection
     <MADDatabaseConnectionConstructors,
         MADDatabaseConnectionsProperties,
         MADConnectionsPropertiesProtocol,

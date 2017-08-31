@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTDatabaseConnectionSqlite3.h"
+#import "MADDatabaseConnectionSqlite3.h"
 #import <Foundation/NSURL.h>
 
 #import <MADFoundation/MADURL.h>
@@ -20,7 +20,7 @@
 
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-@implementation MTDatabaseConnectionSqlite3
+@implementation MADDatabaseConnectionSqlite3
 
 @synthesize databaseUrl = _databaseUrl;
 @synthesize connectionString = _connectionString;
