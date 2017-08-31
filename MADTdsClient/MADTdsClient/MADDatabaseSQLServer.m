@@ -30,6 +30,7 @@
 #import <Foundation/NSDecimalNumber.h>
 #import <Foundation/NSTimeZone.h>
 
+#import <MADFoundation/BDHost.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADCredential.h>
@@ -42,8 +43,6 @@
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 #import <MADTdsClient/sybdb.h>
-
-#import <MADFoundation/BDHost.h>
 
 #import "MADDatabaseProcessSQLServer.h"
 

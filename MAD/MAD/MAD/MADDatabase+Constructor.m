@@ -10,7 +10,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
-#import "MADDatabaseSQLServer.h"
+#import <MADTdsClient/MADDatabaseSQLServer.h>
 
 @class MADDatabaseSqlite3;
 

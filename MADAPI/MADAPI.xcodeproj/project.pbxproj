@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C00A3541F57D15200F6A6C1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */; };
 		4C2D77E71F569EEB005415F7 /* MADQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77E51F569EEB005415F7 /* MADQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77E61F569EEB005415F7 /* MADQuery.m */; };
 		4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D780A1F56D4EA005415F7 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,7 +30,6 @@
 		4CF6AAD61F5526A00061B0C6 /* MADDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAD21F5526A00061B0C6 /* MADDatabaseTable.m */; };
 		4CF6AAD91F5526DE0061B0C6 /* MADDatabaseDataBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAD71F5526DE0061B0C6 /* MADDatabaseDataBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AADA1F5526DE0061B0C6 /* MADDatabaseDataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAD81F5526DE0061B0C6 /* MADDatabaseDataBinding.m */; };
-		4CF6AADD1F5528710061B0C6 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */; };
 		4CF6AADF1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AADE1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -45,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C2D77E51F569EEB005415F7 /* MADQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQuery.h; sourceTree = "<group>"; };
 		4C2D77E61F569EEB005415F7 /* MADQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQuery.m; sourceTree = "<group>"; };
 		4C2D780A1F56D4EA005415F7 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryType.h; sourceTree = "<group>"; };
@@ -80,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF6AADD1F5528710061B0C6 /* MADFoundation.framework in Frameworks */,
+				4C00A3541F57D15200F6A6C1 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,6 +157,7 @@
 		4CF6AADB1F5528710061B0C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */,
 				4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */,
 			);
 			name = Frameworks;
@@ -428,7 +430,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.MADAPI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -447,7 +450,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.MADAPI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};

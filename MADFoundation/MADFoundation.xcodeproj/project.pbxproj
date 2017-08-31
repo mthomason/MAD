@@ -706,9 +706,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADFoundation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SKIP_INSTALL = NO;
+				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = "";
 			};
 			name = Debug;
@@ -747,9 +750,12 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADFoundation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SKIP_INSTALL = NO;
+				USE_HEADERMAP = YES;
 			};
 			name = Release;
 		};

@@ -6,10 +6,11 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADFoundation_MADDataType_h
-#define MADFoundation_MADDataType_h
+#ifndef MAD_MADFoundation_MADDataType_h
+#define MAD_MADFoundation_MADDataType_h
 
-#import <Foundation/NSObjCRuntime.h>
+//#import <Foundation/NSObjCRuntime.h>
+#import <Foundation/NSObject.h>
 
 typedef NS_ENUM(int16_t, MADDataType) {
     MADDataTypeBit           = 0,

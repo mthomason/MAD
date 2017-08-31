@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C00A3651F57DBE800F6A6C1 /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5259361D894ACC00FEF1A1 /* libiconv.2.tbd */; };
 		4C0590CF1C7B6F3C00A1EC4A /* MADReportFormatterState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0590CD1C7B6F3C00A1EC4A /* MADReportFormatterState.h */; };
 		4C0590D01C7B6F3C00A1EC4A /* MADReportFormatterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590CE1C7B6F3C00A1EC4A /* MADReportFormatterState.m */; };
 		4C17AE2A1E4343F80056A0EA /* MADAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE291E4343F80056A0EA /* MADAlignment.m */; };
@@ -177,10 +178,6 @@
 		4C401E2A1BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E101BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m */; };
 		4C401E2D1BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E131BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h */; };
 		4C401E2E1BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E141BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m */; };
-		4C401E351BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E1B1BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.h */; };
-		4C401E361BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E1C1BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.m */; };
-		4C401E391BAE3DCB00BAE5FC /* MADDatabaseSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E1F1BAE3DCB00BAE5FC /* MADDatabaseSQLServer.h */; };
-		4C401E3A1BAE3DCB00BAE5FC /* MADDatabaseSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E201BAE3DCB00BAE5FC /* MADDatabaseSQLServer.m */; };
 		4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E441BAE4D8C00BAE5FC /* MADocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E451BAE4D8C00BAE5FC /* MADocument.m */; };
 		4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */; };
@@ -216,7 +213,6 @@
 		4C4F12881D0B948D0002294E /* MADQueryFullTableEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F12861D0B948D0002294E /* MADQueryFullTableEnumerator.h */; };
 		4C4F12891D0B948D0002294E /* MADQueryFullTableEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F12871D0B948D0002294E /* MADQueryFullTableEnumerator.m */; };
 		4C5259331D894AA200FEF1A1 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5259321D894AA200FEF1A1 /* libxml2.tbd */; };
-		4C5259371D894ACC00FEF1A1 /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5259361D894ACC00FEF1A1 /* libiconv.2.tbd */; };
 		4C5314931E2D85D0001627A7 /* MADDocumentObjectReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5314911E2D85D0001627A7 /* MADDocumentObjectReference.h */; };
 		4C5314941E2D85D0001627A7 /* MADDocumentObjectReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5314921E2D85D0001627A7 /* MADDocumentObjectReference.m */; };
 		4C5314971E2DB4FD001627A7 /* MADPrintPageRendererDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5314951E2DB4FD001627A7 /* MADPrintPageRendererDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -460,8 +456,6 @@
 		4CCE18631DA149EB0093B166 /* archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCE18611DA149EB0093B166 /* archive.h */; };
 		4CCE18641DA149EB0093B166 /* archive_entry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCE18621DA149EB0093B166 /* archive_entry.h */; };
 		4CCE18721DA14B0B0093B166 /* libbz2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18711DA14B0B0093B166 /* libbz2.a */; };
-		4CCE18751DA14B400093B166 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18731DA14B400093B166 /* libsybdb.a */; };
-		4CCE18761DA14B400093B166 /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18741DA14B400093B166 /* libct.a */; };
 		4CD79FA71EC862840093B2CE /* RptqAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD79F831EC862840093B2CE /* RptqAlignment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CD79FA81EC862840093B2CE /* RptqAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD79F841EC862840093B2CE /* RptqAlignment.m */; };
 		4CD79FAB1EC862840093B2CE /* RptqBorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD79F871EC862840093B2CE /* RptqBorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -730,10 +724,6 @@
 		4C401E101BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseConnectionMySql.m; path = MAD/MADDatabase/MADDatabaseConnectionMySql.m; sourceTree = "<group>"; };
 		4C401E131BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionSQLServer.h; path = MAD/MADDatabase/MADDatabaseConnectionSQLServer.h; sourceTree = "<group>"; };
 		4C401E141BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseConnectionSQLServer.m; path = MAD/MADDatabase/MADDatabaseConnectionSQLServer.m; sourceTree = "<group>"; };
-		4C401E1B1BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseProcessSQLServer.h; path = MAD/MADDatabase/MADDatabaseProcessSQLServer.h; sourceTree = "<group>"; };
-		4C401E1C1BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseProcessSQLServer.m; path = MAD/MADDatabase/MADDatabaseProcessSQLServer.m; sourceTree = "<group>"; };
-		4C401E1F1BAE3DCB00BAE5FC /* MADDatabaseSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseSQLServer.h; path = MAD/MADDatabase/MADDatabaseSQLServer.h; sourceTree = "<group>"; };
-		4C401E201BAE3DCB00BAE5FC /* MADDatabaseSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseSQLServer.m; path = MAD/MADDatabase/MADDatabaseSQLServer.m; sourceTree = "<group>"; };
 		4C401E441BAE4D8C00BAE5FC /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocument.h; path = MAD/MADocument/MADocument.h; sourceTree = "<group>"; };
 		4C401E451BAE4D8C00BAE5FC /* MADocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocument.m; path = MAD/MADocument/MADocument.m; sourceTree = "<group>"; };
 		4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocumentState.h; path = MAD/MADocument/MADocumentState.h; sourceTree = "<group>"; };
@@ -1108,11 +1098,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A3651F57DBE800F6A6C1 /* libiconv.2.tbd in Frameworks */,
 				4CF6AABA1F5519130061B0C6 /* MADAPI.framework in Frameworks */,
 				4C5478F31E6140B90043682E /* MADBarcodes.framework in Frameworks */,
 				4CCE18601DA149950093B166 /* libarchive.a in Frameworks */,
-				4CCE18751DA14B400093B166 /* libsybdb.a in Frameworks */,
-				4CCE18761DA14B400093B166 /* libct.a in Frameworks */,
 				4CCE18721DA14B0B0093B166 /* libbz2.a in Frameworks */,
 				4C744EFE1CE9B68C00243830 /* MADFoundation.framework in Frameworks */,
 				4CE233B01D8F7E1300949451 /* MADDataStructures.framework in Frameworks */,
@@ -1121,7 +1110,6 @@
 				4CE233B61D8F7E6A00949451 /* MADSqlite3.framework in Frameworks */,
 				4C744F021CE9B69800243830 /* MADMySQL.framework in Frameworks */,
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
-				4C5259371D894ACC00FEF1A1 /* libiconv.2.tbd in Frameworks */,
 				4C5259331D894AA200FEF1A1 /* libxml2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1151,10 +1139,6 @@
 		4C04EE6C1CA9589200582422 /* Drivers */ = {
 			isa = PBXGroup;
 			children = (
-				4C401E1F1BAE3DCB00BAE5FC /* MADDatabaseSQLServer.h */,
-				4C401E201BAE3DCB00BAE5FC /* MADDatabaseSQLServer.m */,
-				4C401E1B1BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.h */,
-				4C401E1C1BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.m */,
 			);
 			name = Drivers;
 			sourceTree = "<group>";
@@ -2080,7 +2064,6 @@
 				4C82C9871CF2077A00F244F6 /* madpath.h in Headers */,
 				4C0590CF1C7B6F3C00A1EC4A /* MADReportFormatterState.h in Headers */,
 				4C401E011BAE3CAD00BAE5FC /* MADReportFormatter.h in Headers */,
-				4C401E391BAE3DCB00BAE5FC /* MADDatabaseSQLServer.h in Headers */,
 				4C1E54EC1E56650400E3FAF0 /* MADOperationHoldsPasswordProtocol.h in Headers */,
 				4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */,
 				4CC283B71BADE8C400775B72 /* MADPrintPageRenderer.h in Headers */,
@@ -2305,7 +2288,6 @@
 				4CDFC9931EDB92F1008E1AD6 /* MADSectionGroupLayout.h in Headers */,
 				4C235CD71D1F81E900D3D77C /* MADReportSectionsEnumerator.h in Headers */,
 				4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */,
-				4C401E351BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.h in Headers */,
 				4C401D6A1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h in Headers */,
 				4C82C9801CF0B08A00F244F6 /* NSString+RelativePath.h in Headers */,
 				4C5939831E3EF7E400582271 /* RptqDocumentElementImage.h in Headers */,
@@ -2541,7 +2523,6 @@
 				4C401E6D1BAE4F4000BAE5FC /* NSData+Comparson.m in Sources */,
 				4CC9827F1F4BB98300E0496A /* MADDesignerViewer.m in Sources */,
 				4C4F12891D0B948D0002294E /* MADQueryFullTableEnumerator.m in Sources */,
-				4C401E361BAE3DCB00BAE5FC /* MADDatabaseProcessSQLServer.m in Sources */,
 				4C82C9811CF0B08A00F244F6 /* NSString+RelativePath.m in Sources */,
 				4C994F471BE2B1320058627A /* MADReportSectionRepresentation.m in Sources */,
 				4C5939841E3EF7E400582271 /* RptqDocumentElementImage.m in Sources */,
@@ -2595,7 +2576,6 @@
 				4CDFC9981EDB93DF008E1AD6 /* MADSectionsLayout.m in Sources */,
 				4C4F125C1D0A0DA80002294E /* MADQueryActiveQueryFields.m in Sources */,
 				4C5939B81E3EF7E400582271 /* RptqDocumentElementFormula.m in Sources */,
-				4C401E3A1BAE3DCB00BAE5FC /* MADDatabaseSQLServer.m in Sources */,
 				4CB98DC21F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m in Sources */,
 				4C401D2F1BAE3AF800BAE5FC /* MTPaperA4.m in Sources */,
 				4C401DF81BAE3BDA00BAE5FC /* MADQueryTest.m in Sources */,

@@ -608,7 +608,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADSqlite3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -633,7 +633,7 @@
 				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADSqlite3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};

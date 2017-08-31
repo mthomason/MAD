@@ -9,8 +9,8 @@
 //  MIT license
 //
 
-#ifndef MADExtensions_BDHost_h
-#define MADExtensions_BDHost_h
+#ifndef MADFoundation_MADExtensions_BDHost_h
+#define MADFoundation_MADExtensions_BDHost_h
 
 #import <Foundation/NSObject.h>
 

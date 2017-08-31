@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C00A34A1F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */; };
+		4C00A34B1F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3471F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m */; };
+		4C00A34C1F57CFA300F6A6C1 /* MADDatabaseSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3481F57CFA300F6A6C1 /* MADDatabaseSQLServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C00A34D1F57CFA300F6A6C1 /* MADDatabaseSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3491F57CFA300F6A6C1 /* MADDatabaseSQLServer.m */; };
+		4C00A35C1F57D97B00F6A6C1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A35B1F57D97B00F6A6C1 /* MADFoundation.framework */; };
+		4C00A35E1F57D98100F6A6C1 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A35D1F57D98100F6A6C1 /* MADAPI.framework */; };
+		4C00A3611F57DA6000F6A6C1 /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18801DA14BE10093B166 /* libct.a */; };
+		4C00A3621F57DA6000F6A6C1 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187F1DA14BE10093B166 /* libsybdb.a */; };
+		4C00A3641F57DAD400F6A6C1 /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */; };
 		4C66C14B1BA887D500663575 /* MADTdsClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C14A1BA887D500663575 /* MADTdsClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; };
 		4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66C1561BA887D500663575 /* MADTdsClientTests.m */; };
@@ -36,6 +45,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseProcessSQLServer.h; sourceTree = "<group>"; };
+		4C00A3471F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseProcessSQLServer.m; sourceTree = "<group>"; };
+		4C00A3481F57CFA300F6A6C1 /* MADDatabaseSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseSQLServer.h; sourceTree = "<group>"; };
+		4C00A3491F57CFA300F6A6C1 /* MADDatabaseSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSQLServer.m; sourceTree = "<group>"; };
+		4C00A35B1F57D97B00F6A6C1 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
+		4C00A35D1F57D98100F6A6C1 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADAPI.framework"; sourceTree = "<group>"; };
+		4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = usr/lib/libiconv.2.tbd; sourceTree = SDKROOT; };
 		4C66C1471BA887D500663575 /* MADTdsClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTdsClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C14A1BA887D500663575 /* MADTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTdsClient.h; sourceTree = "<group>"; };
 		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -62,6 +78,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A3641F57DAD400F6A6C1 /* libiconv.2.tbd in Frameworks */,
+				4C00A3611F57DA6000F6A6C1 /* libct.a in Frameworks */,
+				4C00A3621F57DA6000F6A6C1 /* libsybdb.a in Frameworks */,
+				4C00A35E1F57D98100F6A6C1 /* MADAPI.framework in Frameworks */,
+				4C00A35C1F57D97B00F6A6C1 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +97,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C00A34E1F57D0D100F6A6C1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */,
+				4C00A35D1F57D98100F6A6C1 /* MADAPI.framework */,
+				4C00A35B1F57D97B00F6A6C1 /* MADFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4C66C13D1BA887D500663575 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +114,7 @@
 				4C66C1491BA887D500663575 /* MADTdsClient */,
 				4C66C1551BA887D500663575 /* MADTdsClientTests */,
 				4C66C1481BA887D500663575 /* Products */,
+				4C00A34E1F57D0D100F6A6C1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +131,10 @@
 			isa = PBXGroup;
 			children = (
 				4C66C14A1BA887D500663575 /* MADTdsClient.h */,
+				4C00A3481F57CFA300F6A6C1 /* MADDatabaseSQLServer.h */,
+				4C00A3491F57CFA300F6A6C1 /* MADDatabaseSQLServer.m */,
+				4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */,
+				4C00A3471F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m */,
 				4C66C1631BA8880600663575 /* freetds */,
 				4C66C14C1BA887D500663575 /* Info.plist */,
 			);
@@ -164,6 +200,8 @@
 				4C66C1811BA8882300663575 /* odbcss.h in Headers */,
 				4C66C1831BA8882300663575 /* sqlfront.h in Headers */,
 				4C66C1851BA8882300663575 /* syberror.h in Headers */,
+				4C00A34C1F57CFA300F6A6C1 /* MADDatabaseSQLServer.h in Headers */,
+				4C00A34A1F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h in Headers */,
 				4C66C17D1BA8882300663575 /* bkpublic.h in Headers */,
 				4C66C1861BA8882300663575 /* sybfront.h in Headers */,
 				4C66C17E1BA8882300663575 /* cspublic.h in Headers */,
@@ -272,6 +310,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A34B1F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m in Sources */,
+				4C00A34D1F57CFA300F6A6C1 /* MADDatabaseSQLServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,9 +459,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = /Users/michael/Desktop/Reports/opt/lib/freetds;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTdsClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SKIP_INSTALL = YES;
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 			};
@@ -460,9 +502,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = /Users/michael/Desktop/Reports/opt/lib/freetds;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTdsClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SKIP_INSTALL = YES;
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 			};

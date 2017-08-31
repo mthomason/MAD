@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADFoundation_MADDataTable_Plist_h
-#define MADFoundation_MADDataTable_Plist_h
+#ifndef MADFoundation_MADDataTable_MADDataTablePlist_h
+#define MADFoundation_MADDataTable_MADDataTablePlist_h
 
 #import <MADFoundation/MADDataTablePlist.h>
 
