@@ -17,19 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-<<<<<<< HEAD
-	<string>8.0.125</string>
+	<string>8.0.1898</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.125</string>
-=======
-	<string>8.0.119</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>8.0.119</string>
->>>>>>> parent of 9cbf3ee... Get rid of unneeded files.
+	<string>8.0.1898</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>CFBundleShortVersionString</key>
+	<string>8.0.1898</string>
+	<key>CFBundleVersion</key>
+	<string>8.0.1898</string>
+	<key>MADBuildDate</key>
+	<string>2017-09-01T02:59:42EDT</string>
+	<key>MADRevision</key>
+	<string>3840</string>
+</dict>
 </plist>
