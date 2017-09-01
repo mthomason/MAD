@@ -7,17 +7,16 @@
 //
 
 #import "MADDocumentObjectLabelStatic.h"
-#import <UIKit/NSStringDrawing.h>
-#import "RptqDocumentElement.h"
-#import "RptqDocumentElementLabel.h"
-#import "MADElementStylizedText.h"
+#import <Foundation/NSString.h>
 #import "MADDocumentObjectReference.h"
+#import "MADPrintPageRendererDataSource.h"
 
 @implementation MADDocumentObjectLabelStatic
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
-        self.text = ((RptqDocumentElementLabel *)definition.item).text.copy;
+        NSString *text = [definition.datasource getLabelDataStatic:definition];
+        self.text = text.copy;
     }
     return self;
 }

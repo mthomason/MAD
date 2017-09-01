@@ -61,10 +61,10 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
         UICollectionViewDataSource,
         UICollectionViewDelegateFlowLayout>
 
-    @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
-    @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
     @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
     @property (nonatomic, assign) int32_t aggregateGroupBySectionNumber;
+    @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+    @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
     @property (nonatomic, strong) NSArray *dataSource;
 
     - (IBAction)done:(id)sender;

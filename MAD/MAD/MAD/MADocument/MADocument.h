@@ -26,7 +26,7 @@
 
 @class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument,
         MADDatabaseConnection, MADModelDocument, MADocumentState,
-        MADSectionLayoutManager, MADQueryFull, MTPaper;
+        MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery;
 
 
 extern NSString * const MADMimeType;
@@ -110,6 +110,11 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
     - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
 
     - (NSURL *)thumbnailURL;
+
+    - (BOOL)dataTableMakeCache;
+    - (BOOL)dataTableMakeCache:(NSURL *)url;
+    - (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage;
+    - (void)dataTableSort:(RptqQuery *)query;
 
     - (void)saveContext;
     - (void)prepareForQuery;

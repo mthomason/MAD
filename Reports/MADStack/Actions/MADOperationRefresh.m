@@ -8,6 +8,8 @@
 
 #import "MADOperationRefresh.h"
 
+#import <os/log.h>
+
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <Foundation/NSError.h>
@@ -16,18 +18,15 @@
 #import <MADFoundation/MADCredential.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADQuery.h>
 
 #import <MAD/MADocument.h>
-#import <MADAPI/MADDatabase.h>
-#import <MADSqlite3/MADDataTableFast.h>
-#import <MADAPI/MADQuery.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADQueryFull.h>
 
 #import "MADOperationRefreshInitialize.h"
-
-#import <os/log.h>
 
 static const short errCache = 2;
 
@@ -93,8 +92,7 @@ static const short errCache = 2;
         queryString = [query copySQLWithManagedObjectContext: private
                                                        error: &sqlError];
     }];
-    
-    document.dataTable.dataDelegate = document;
+    [document dataTableSetDataDelegate:document];
     NSError *executeError = NULL;
     BOOL success = [document.database executeSQL: queryString
                                        fieldKeys: query.fieldKeys
@@ -107,8 +105,7 @@ static const short errCache = 2;
         [self finishWithError:error];
         return;
     }
-
-    success = [document.dataTable cacheWithUrl:document.urlDataTableCache];
+    success = [document dataTableMakeCache];
     document.refreshed = YES;
     
     if (!success) {

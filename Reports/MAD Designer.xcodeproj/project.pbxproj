@@ -768,7 +768,6 @@
 		4CB98AA11E13839400B3A580 /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D78D1E1381C700ED9D78 /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CB98AA31E13839400B3A580 /* MAD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D78B1E1381B200ED9D78 /* MAD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CB98AA61E1383DC00B3A580 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D7971E1381FB00ED9D78 /* MADFileManager.framework */; };
-		4CB98AA71E1383DC00B3A580 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D7911E1381E700ED9D78 /* MADMySQL.framework */; };
 		4CB98AA81E1383DC00B3A580 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D78F1E1381D800ED9D78 /* MADBarcodes.framework */; };
 		4CB98AA91E1383DC00B3A580 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D78D1E1381C700ED9D78 /* MADExplorer.framework */; };
 		4CB98AAA1E1383DC00B3A580 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9D78B1E1381B200ED9D78 /* MAD.framework */; };
@@ -1510,9 +1509,6 @@
 		4C3DCBCE1BC9FF2200ABE231 /* MADViewerAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewerAppDelegate.h; sourceTree = "<group>"; };
 		4C3DCBCF1BC9FF2200ABE231 /* MADViewerAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewerAppDelegate.m; sourceTree = "<group>"; };
 		4C3DCBD21BCA000100ABE231 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4C3DCC0F1BCAEFA900ABE231 /* chinook.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = chinook.sqlite3; sourceTree = "<group>"; };
-		4C3DCC111BCAEFA900ABE231 /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = London.mad; sourceTree = "<group>"; };
-		4C3DCC121BCAEFA900ABE231 /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = Music.mad; sourceTree = "<group>"; };
 		4C3DCC131BCAEFA900ABE231 /* MADFeatures.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MADFeatures.plist; sourceTree = "<group>"; };
 		4C3DCC141BCAEFA900ABE231 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4C3DCC151BCAEFA900ABE231 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -2500,7 +2496,6 @@
 				4CB98AA61E1383DC00B3A580 /* MADFileManager.framework in Frameworks */,
 				4CB98A981E13839400B3A580 /* MADTdsClient.framework in Frameworks */,
 				4CB98A9A1E13839400B3A580 /* MADSqlite3.framework in Frameworks */,
-				4CB98AA71E1383DC00B3A580 /* MADMySQL.framework in Frameworks */,
 				4CB98AA81E1383DC00B3A580 /* MADBarcodes.framework in Frameworks */,
 				4CB98AA91E1383DC00B3A580 /* MADExplorer.framework in Frameworks */,
 				4CB98AAA1E1383DC00B3A580 /* MAD.framework in Frameworks */,
@@ -3148,32 +3143,6 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		4C3DCC0D1BCAEFA900ABE231 /* Samples */ = {
-			isa = PBXGroup;
-			children = (
-				4C3DCC0E1BCAEFA900ABE231 /* Databases */,
-				4C3DCC101BCAEFA900ABE231 /* Reports */,
-			);
-			path = Samples;
-			sourceTree = "<group>";
-		};
-		4C3DCC0E1BCAEFA900ABE231 /* Databases */ = {
-			isa = PBXGroup;
-			children = (
-				4C3DCC0F1BCAEFA900ABE231 /* chinook.sqlite3 */,
-			);
-			path = Databases;
-			sourceTree = "<group>";
-		};
-		4C3DCC101BCAEFA900ABE231 /* Reports */ = {
-			isa = PBXGroup;
-			children = (
-				4C3DCC111BCAEFA900ABE231 /* London.mad */,
-				4C3DCC121BCAEFA900ABE231 /* Music.mad */,
-			);
-			path = Reports;
-			sourceTree = "<group>";
-		};
 		4C401EB51BAE5E7100BAE5FC /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -3292,7 +3261,6 @@
 			isa = PBXGroup;
 			children = (
 				4C3DCC0C1BCAEFA900ABE231 /* Images */,
-				4C3DCC0D1BCAEFA900ABE231 /* Samples */,
 				4C3DCC131BCAEFA900ABE231 /* MADFeatures.plist */,
 				4C3DCC141BCAEFA900ABE231 /* Images.xcassets */,
 				4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */,

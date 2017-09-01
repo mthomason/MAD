@@ -116,8 +116,9 @@
 
 #import "RptqDocumentSectionRows.h"
 
-#import "RptqDocumentElement.h"
 #import "RptqDocumentElement+Extras.h"
+
+#import "RptqDocumentElementLabel.h"
 
 #import "RptqDocumentSectionEnumerator.h"
 #import "RptqRect.h"
@@ -154,6 +155,7 @@
 #import <MADAPI/MADQueryType.h>
 
 #import "MADQuery+Extras.h"
+#import "MADDocumentObjectReference.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -239,18 +241,49 @@ void madwarn(char *err,  const char*err2) { }
 
 @implementation MADocument
 
-@synthesize sectionLayoutManagers = _sectionLayoutManagers;
-
-#pragma mark -
-#pragma mark MADPrintPageRendererDataSourceProtocol
-
 @dynamic filename;
 @dynamic refreshed;
 
+@synthesize sectionLayoutManagers = _sectionLayoutManagers;
 @synthesize database = _database;
 @synthesize dataTable = _dataTable;
 @synthesize reportFormatter = _reportFormatter;
 @synthesize cachedData = _cachedData;
+
+#pragma mark -
+#pragma mark MADPrintPageRendererDataSourceProtocol
+
+
+
+- (NSString *)getLabelDataStatic:(MADDocumentObjectDataReference *)dataRef {
+    return ((RptqDocumentElementLabel *)dataRef.item).text;
+}
+
+- (NSString *)getLabelDataDynamic:(MADDocumentObjectDataReference *)dataRef {
+    
+    NSString *text = @"";
+    NSDictionary *rowData = nil;
+    __kindof RptqDocumentElement *item = dataRef.item;
+    
+    if ([item isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
+        NSString *qa = [((RptqDocumentElementLabelDataField *)item).referencesQueryField.inQueryTable queryAlias];
+        NSString *tableFieldKey = [self.database newSafeQueryField: ((RptqDocumentElementLabelDataField *)item).referencesQueryField.databaseSchemaField.name
+                                                                andTable: qa];
+        NSError * __autoreleasing error = nil;
+        rowData = [self.dataTable copyDataForCacheId: dataRef.detailRowId
+                                 andColumnIdentifier: tableFieldKey
+                                               error: &error];
+        if (rowData != nil) {
+            
+            text = [item formattedString: ((RptqDocumentElementLabelDataField *)item).referencesQueryField.databaseSchemaField.dataType
+                                forValue: rowData[tableFieldKey]];
+            if ([text isEqualToString:MTNullIdentifier]) {
+                text = @"";
+            }
+        }
+    }
+    return text;
+}
 
 #pragma mark -
 #pragma mark Adjust
@@ -999,6 +1032,23 @@ void madwarn(char *err,  const char*err2) { }
 
 #pragma mark -
 #pragma mark Helpers
+
+- (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage {
+    self.dataTable.dataDelegate = delegage;
+}
+
+- (BOOL)dataTableMakeCache {
+    return [self dataTableMakeCache:self.urlDataTableCache];
+}
+
+- (BOOL)dataTableMakeCache:(NSURL *)url {
+    return [self.dataTable cacheWithUrl:url];
+}
+
+- (void)dataTableSort:(RptqQuery *)query {
+    NSArray *sortDescriptors = [query sortDescriptorsForDatabase:self.database];
+    [self.dataTable sortUsingDescriptors:sortDescriptors];
+}
 
 - (BOOL)hasCachedData {
     return _cachedData;

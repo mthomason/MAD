@@ -21,7 +21,7 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 @interface MTDocumentObjectNewStaticLabelViewController ()
 
-@property (nonatomic, weak) IBOutlet UILabel *labelTextLabel;
+    @property (nonatomic, weak) IBOutlet UILabel *labelTextLabel;
 
 @end
 
@@ -51,7 +51,8 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
     [self.textField becomeFirstResponder];
     
     MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Static Label", @"Title of button to create a non-changing (static) text-label-document-object.");
+    titleView.text = NSLocalizedString(@"Static Label",
+                                       @"Title of button to create a non-changing (static) text-label-document-object.");
     self.navigationItem.titleView = titleView;
 
 }

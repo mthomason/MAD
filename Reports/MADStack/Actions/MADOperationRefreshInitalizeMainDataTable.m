@@ -7,9 +7,7 @@
 //
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
-#import <MADFoundation/MADDataTable.h>
 #import <MAD/MADocument.h>
-#import <MADSqlite3/MADDataTableFast.h>
 
 @interface MADOperationRefreshInitializeMainDataTable ()
 

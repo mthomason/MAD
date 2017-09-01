@@ -11,15 +11,19 @@
 #endif
 
 #import "MADQueryCacheIndexCreate.h"
-#import <MADFoundation/MADDataColumn.h>
+
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
+
+#import <MADFoundation/MADDataColumn.h>
+
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADQueryType.h>
+
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 #import "MADQueryCacheIndexCreateParameters.h"
-#import <MADAPI/MADQueryType.h>
 
 @interface MADQueryCacheIndexCreate ()
 

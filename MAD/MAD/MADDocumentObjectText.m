@@ -7,14 +7,17 @@
 //
 
 #import "MADDocumentObjectText.h"
+
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSStringDrawing.h>
+
 #import <MADCocoaExtensions/MADTextStyle.h>
+
 #import "RptqDocumentElement.h"
 #import "RptqTextStyle.h"
 #import "RptqAlignment.h"
+
 #import "MADDocumentObjectReference.h"
-#import "MADPrintPageRendererDataSource.h"
 #import "MADElementStylizedText.h"
 #import "MADAlignment.h"
 
@@ -34,11 +37,10 @@
 - (void)drawInRect:(CGRect)rect {
     MADElementStylizedText *attt;
     MADDocumentObjectDataReference *definition;
-
     RptqDocumentElement *item;
+
     definition = self.definition;
     item = definition.item;
-    
     attt = definition.fontDescriptors[item.objectID];
     
     if (attt == nil) {

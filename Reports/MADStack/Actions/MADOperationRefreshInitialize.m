@@ -18,19 +18,14 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
 
-#import <MADSqlite3/MADDataTableFast.h>
-
 #import <MAD/MADocument.h>
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADDatabase+Constructor.h>
 
-#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+extras.h>
-#import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+extras.h>
-#import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
@@ -113,10 +108,9 @@
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
         }
-        
-        NSArray *sortDescriptors = [rptqQuery sortDescriptorsForDatabase:doc.database];
-        [doc.dataTable sortUsingDescriptors:sortDescriptors];
-        
+    
+        [doc dataTableSort:rptqQuery];
+    
         //Initialize the section layout manager... Not neede for creating the report.
         [doc resetSectionLayoutManagers];
 
