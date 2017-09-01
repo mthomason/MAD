@@ -9,7 +9,7 @@
 #ifndef Reports_MADPluginManager_h
 #define Reports_MADPluginManager_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @interface MADPluginManager : NSObject
 
