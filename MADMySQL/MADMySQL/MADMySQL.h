@@ -8,17 +8,8 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-//! Project version number for MADMySQL.
 FOUNDATION_EXPORT double MADMySQLVersionNumber;
-
-//! Project version string for MADMySQL.
 FOUNDATION_EXPORT const unsigned char MADMySQLVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <MADMySQL/PublicHeader.h>
-
-//#import <MADMySQL/MADDataTypeMySQL.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
-//#import <MADMySQL/MysqlCommitException.h>
-//#import <MADMySQL/MysqlException.h>
-//#import <MADMySQL/MADMySQLFetchProtocol.h>
-//#import <MADMySQL/MysqlFetch.h>
+#import <MADMySQL/MADDatabaseConnectionMySql.h>

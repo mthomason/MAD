@@ -16,6 +16,8 @@
 		4C00A3611F57DA6000F6A6C1 /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18801DA14BE10093B166 /* libct.a */; };
 		4C00A3621F57DA6000F6A6C1 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187F1DA14BE10093B166 /* libsybdb.a */; };
 		4C00A3641F57DAD400F6A6C1 /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */; };
+		4C00A3711F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A36F1F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C00A3721F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3701F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m */; };
 		4C66C14B1BA887D500663575 /* MADTdsClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C14A1BA887D500663575 /* MADTdsClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; };
 		4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66C1561BA887D500663575 /* MADTdsClientTests.m */; };
@@ -52,6 +54,8 @@
 		4C00A35B1F57D97B00F6A6C1 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C00A35D1F57D98100F6A6C1 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADAPI.framework"; sourceTree = "<group>"; };
 		4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = usr/lib/libiconv.2.tbd; sourceTree = SDKROOT; };
+		4C00A36F1F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionSQLServer.h; sourceTree = "<group>"; };
+		4C00A3701F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionSQLServer.m; sourceTree = "<group>"; };
 		4C66C1471BA887D500663575 /* MADTdsClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTdsClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C14A1BA887D500663575 /* MADTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTdsClient.h; sourceTree = "<group>"; };
 		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 				4C66C14A1BA887D500663575 /* MADTdsClient.h */,
 				4C00A3481F57CFA300F6A6C1 /* MADDatabaseSQLServer.h */,
 				4C00A3491F57CFA300F6A6C1 /* MADDatabaseSQLServer.m */,
+				4C00A36F1F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h */,
+				4C00A3701F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m */,
 				4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */,
 				4C00A3471F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m */,
 				4C66C1631BA8880600663575 /* freetds */,
@@ -207,6 +213,7 @@
 				4C66C17E1BA8882300663575 /* cspublic.h in Headers */,
 				4C66C1821BA8882300663575 /* sqldb.h in Headers */,
 				4C66C1801BA8882300663575 /* ctpublic.h in Headers */,
+				4C00A3711F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h in Headers */,
 				4C66C17F1BA8882300663575 /* cstypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +319,7 @@
 			files = (
 				4C00A34B1F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m in Sources */,
 				4C00A34D1F57CFA300F6A6C1 /* MADDatabaseSQLServer.m in Sources */,
+				4C00A3721F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

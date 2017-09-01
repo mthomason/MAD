@@ -14,3 +14,4 @@ FOUNDATION_EXPORT const unsigned char MADTdsClientVersionString[];
 #import <MADTdsClient/sybdb.h>
 #import <MADTdsClient/tds_sysdep_public.h>
 #import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADTdsClient/MADDatabaseConnectionSQLServer.h>

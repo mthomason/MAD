@@ -174,10 +174,6 @@
 		4C401E031BAE3CAD00BAE5FC /* MADReportFormatterCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DFC1BAE3CAD00BAE5FC /* MADReportFormatterCache.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C401E061BAE3CAD00BAE5FC /* MADPageOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401DFF1BAE3CAD00BAE5FC /* MADPageOptions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C401E071BAE3CAD00BAE5FC /* MADPageOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E001BAE3CAD00BAE5FC /* MADPageOptions.m */; };
-		4C401E291BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E0F1BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.h */; };
-		4C401E2A1BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E101BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m */; };
-		4C401E2D1BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E131BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h */; };
-		4C401E2E1BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E141BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m */; };
 		4C401E481BAE4D8C00BAE5FC /* MADocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E441BAE4D8C00BAE5FC /* MADocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E451BAE4D8C00BAE5FC /* MADocument.m */; };
 		4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */; };
@@ -720,10 +716,6 @@
 		4C401DFD1BAE3CAD00BAE5FC /* MADReportFormatterCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportFormatterCache.m; path = MAD/MADReportFormatter/MADReportFormatterCache.m; sourceTree = "<group>"; };
 		4C401DFF1BAE3CAD00BAE5FC /* MADPageOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPageOptions.h; path = MAD/MADReportFormatter/MADPageOptions.h; sourceTree = "<group>"; };
 		4C401E001BAE3CAD00BAE5FC /* MADPageOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPageOptions.m; path = MAD/MADReportFormatter/MADPageOptions.m; sourceTree = "<group>"; };
-		4C401E0F1BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionMySql.h; path = MAD/MADDatabase/MADDatabaseConnectionMySql.h; sourceTree = "<group>"; };
-		4C401E101BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseConnectionMySql.m; path = MAD/MADDatabase/MADDatabaseConnectionMySql.m; sourceTree = "<group>"; };
-		4C401E131BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionSQLServer.h; path = MAD/MADDatabase/MADDatabaseConnectionSQLServer.h; sourceTree = "<group>"; };
-		4C401E141BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseConnectionSQLServer.m; path = MAD/MADDatabase/MADDatabaseConnectionSQLServer.m; sourceTree = "<group>"; };
 		4C401E441BAE4D8C00BAE5FC /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocument.h; path = MAD/MADocument/MADocument.h; sourceTree = "<group>"; };
 		4C401E451BAE4D8C00BAE5FC /* MADocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocument.m; path = MAD/MADocument/MADocument.m; sourceTree = "<group>"; };
 		4C401E461BAE4D8C00BAE5FC /* MADocumentState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADocumentState.h; path = MAD/MADocument/MADocumentState.h; sourceTree = "<group>"; };
@@ -1128,10 +1120,6 @@
 		4C04EE6B1CA9587700582422 /* Connections */ = {
 			isa = PBXGroup;
 			children = (
-				4C401E0F1BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.h */,
-				4C401E101BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m */,
-				4C401E131BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h */,
-				4C401E141BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m */,
 			);
 			name = Connections;
 			sourceTree = "<group>";
@@ -2225,7 +2213,6 @@
 				4CB98DD71F455A750043B583 /* MADOperationKeyChainPut.h in Headers */,
 				4CC282731BADE82000775B72 /* MADFont.h in Headers */,
 				4CCE18641DA149EB0093B166 /* archive_entry.h in Headers */,
-				4C401E291BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.h in Headers */,
 				4CB98DBB1F43F0A00043B583 /* MADOperationCreateDocumentAddConnection.h in Headers */,
 				4C401D381BAE3AF800BAE5FC /* MTPaperA9.h in Headers */,
 				4C401D321BAE3AF800BAE5FC /* MTPaperA6.h in Headers */,
@@ -2305,7 +2292,6 @@
 				4CB98DC11F43F0A00043B583 /* MADOperationBackgroundTaskEnd.h in Headers */,
 				4C401DD11BAE3BD600BAE5FC /* MADQueryCacheSelectGroupKeys.h in Headers */,
 				4C4F125B1D0A0DA80002294E /* MADQueryActiveQueryFields.h in Headers */,
-				4C401E2D1BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.h in Headers */,
 				4CC2846B1BADE98F00775B72 /* rptq.h in Headers */,
 				4C401D501BAE3AF800BAE5FC /* MTPaperB10.h in Headers */,
 				4C4F12741D0A656B0002294E /* MADQueryLimitClause.h in Headers */,
@@ -2626,7 +2612,6 @@
 				4C401D391BAE3AF800BAE5FC /* MTPaperA9.m in Sources */,
 				4CD85D101E444DC1005DA2AF /* MADModelTable.m in Sources */,
 				4C401D411BAE3AF800BAE5FC /* MTPaperB2.m in Sources */,
-				4C401E2A1BAE3DCB00BAE5FC /* MADDatabaseConnectionMySql.m in Sources */,
 				4C6F351F1E40EB0200F4744F /* RptqDatabaseCredentals.m in Sources */,
 				4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */,
 				4CA0C6CC1CA56CAD00222B8D /* MADProgress.m in Sources */,
@@ -2661,7 +2646,6 @@
 				4CC284731BADE99E00775B72 /* RptqDocument+Extras.m in Sources */,
 				4C401D471BAE3AF800BAE5FC /* MTPaperB5.m in Sources */,
 				4CEFDD161CF61EE80092C148 /* madmath.c in Sources */,
-				4C401E2E1BAE3DCB00BAE5FC /* MADDatabaseConnectionSQLServer.m in Sources */,
 				4C4F12791D0A70A90002294E /* MADQuerySelectExpression.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

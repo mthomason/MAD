@@ -12,8 +12,6 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADFoundation/MADDataType.h>
 
-@class RptqDatabaseSchemaTable;
-
 @interface MADDatabaseMySQL : MADDatabase
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;

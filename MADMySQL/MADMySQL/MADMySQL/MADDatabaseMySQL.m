@@ -28,7 +28,6 @@
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-//#import "MADMySQLFetchProtocol.h"
 #import "MysqlConnection.h"
 #import "MysqlServer.h"
 #import "MysqlFetch.h"

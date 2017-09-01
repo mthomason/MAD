@@ -12,8 +12,8 @@
 #import <Foundation/NSException.h>
 
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
-#import "MADDatabaseConnectionMySql.h"
-#import "MADDatabaseConnectionSQLServer.h"
+#import <MADMySQL/MADDatabaseConnectionMySql.h>
+#import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
 
 @implementation MADDatabaseConnection (Constructor)
 

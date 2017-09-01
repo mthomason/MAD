@@ -10,6 +10,9 @@
 		4C00A36A1F57F0F200F6A6C1 /* libmysqlclient.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3671F57F0F200F6A6C1 /* libmysqlclient.a */; };
 		4C00A36B1F57F0F200F6A6C1 /* libcrypto.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3681F57F0F200F6A6C1 /* libcrypto.a */; };
 		4C00A36C1F57F0F200F6A6C1 /* libssl.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3691F57F0F200F6A6C1 /* libssl.a */; };
+		4C00A3761F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C00A3771F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */; };
+		4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */; };
 		4C0CC9221DA6130F00B5A190 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18771DA14B830093B166 /* libmysqlclient.a */; };
 		4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D31DA6255900B5A190 /* mysql.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C0CCACE1DA626FF00B5A190 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D91DA6255900B5A190 /* mysql_version.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -19,7 +22,6 @@
 		4C0CCAD21DA6275300B5A190 /* client_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9B61DA6255900B5A190 /* client_plugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9FB1DA6255A00B5A190 /* typelib.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C0CCAD41DA6276700B5A190 /* my_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9951DA6255900B5A190 /* my_alloc.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C1E54DF1E5636BF00E3FAF0 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54DE1E5636B500E3FAF0 /* MADMySQLFetchProtocol.h */; };
 		4C33DF141DA58207005A73CD /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187C1DA14B8C0093B166 /* libcrypto.a */; };
 		4C4F062D1F57C20100E09E54 /* MADDatabaseMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4F062E1F57C20100E09E54 /* MADDatabaseMySQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */; };
@@ -70,6 +72,9 @@
 		4C00A3671F57F0F200F6A6C1 /* libmysqlclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqlclient.a; path = ../opt/lib/mysqlclient/libmysqlclient.a; sourceTree = "<group>"; };
 		4C00A3681F57F0F200F6A6C1 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../opt/lib/openssl/libcrypto.a; sourceTree = "<group>"; };
 		4C00A3691F57F0F200F6A6C1 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../opt/lib/openssl/libssl.a; sourceTree = "<group>"; };
+		4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionMySql.h; path = MADMySQL/MADDatabaseConnectionMySql.h; sourceTree = "<group>"; };
+		4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseConnectionMySql.m; path = MADMySQL/MADDatabaseConnectionMySql.m; sourceTree = "<group>"; };
+		4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMySQLFetchProtocol.h; path = MADMySQL/MADMySQLFetchProtocol.h; sourceTree = "<group>"; };
 		4C0CC9251DA6255900B5A190 /* gcc_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gcc_builtins.h; sourceTree = "<group>"; };
 		4C0CC9261DA6255900B5A190 /* generic-msvc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "generic-msvc.h"; sourceTree = "<group>"; };
 		4C0CC9271DA6255900B5A190 /* solaris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = solaris.h; sourceTree = "<group>"; };
@@ -265,7 +270,6 @@
 		4C0CC9FC1DA6255A00B5A190 /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
 		4C0CC9FD1DA6255A00B5A190 /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
 		4C0CC9FF1DA6255A00B5A190 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
-		4C1E54DE1E5636B500E3FAF0 /* MADMySQLFetchProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQLFetchProtocol.h; sourceTree = "<group>"; };
 		4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseMySQL.h; path = MADMySQL/MADDatabaseMySQL.h; sourceTree = "<group>"; };
 		4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseMySQL.m; path = MADMySQL/MADDatabaseMySQL.m; sourceTree = "<group>"; };
 		4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MysqlFetch+DataTable.h"; path = "MADMySQL/MysqlFetch+DataTable.h"; sourceTree = "<group>"; };
@@ -704,20 +708,22 @@
 		4C7014961BACDC6800301713 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4C1E54DE1E5636B500E3FAF0 /* MADMySQLFetchProtocol.h */,
 				4C7014971BACDC6800301713 /* MADMySQL.h */,
 				4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */,
 				4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */,
-				4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */,
-				4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */,
+				4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */,
+				4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */,
 				4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */,
 				4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */,
+				4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */,
+				4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */,
+				4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */,
+				4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */,
+				4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */,
 				4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */,
 				4C9373E01BAD2A8300D6BD62 /* MysqlCommitException.m */,
 				4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */,
 				4C9373D31BAD2A8300D6BD62 /* MysqlConnection.m */,
-				4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */,
-				4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */,
 				4C9373D01BAD2A8300D6BD62 /* MysqlFetchField.h */,
 				4C9373D11BAD2A8300D6BD62 /* MysqlFetchField.m */,
 				4C9373D51BAD2A8300D6BD62 /* MysqlInsert.h */,
@@ -786,8 +792,9 @@
 				4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */,
 				4C9372F91BAD244800D6BD62 /* MADDataTypeMySQL.h in Headers */,
 				4C9373EC1BAD2A8300D6BD62 /* MysqlFetchField.h in Headers */,
+				4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */,
+				4C00A3761F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h in Headers */,
 				4C9373EA1BAD2A8300D6BD62 /* MysqlFetch.h in Headers */,
-				4C1E54DF1E5636BF00E3FAF0 /* MADMySQLFetchProtocol.h in Headers */,
 				4C0CCACF1DA6272100B5A190 /* mysql_com.h in Headers */,
 				4C0CCAD01DA6273100B5A190 /* mysql_time.h in Headers */,
 				4C4F062D1F57C20100E09E54 /* MADDatabaseMySQL.h in Headers */,
@@ -901,6 +908,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A3771F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m in Sources */,
 				4C9373FD1BAD2A8300D6BD62 /* MysqlDelete.m in Sources */,
 				4C9374001BAD2A8300D6BD62 /* MysqlLiteral.m in Sources */,
 				4C9373FE1BAD2A8300D6BD62 /* MysqlException.m in Sources */,
