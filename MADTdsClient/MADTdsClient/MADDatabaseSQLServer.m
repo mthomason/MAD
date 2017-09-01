@@ -76,6 +76,14 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 @dynamic databaseConnection;
 
++ (NSString *)imageIconName {
+    return @"UIImageExportTypeSqlServer";
+}
+
++ (NSString *)driverName {
+    return @"SQL Server / TDS";
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

@@ -83,11 +83,19 @@ void sqliteLog(void *foo, const char* statement) {
 @end
 
 @implementation MADDatabaseSqlite3 {
-    sqlite3_stmt *_bulkStatement;
     BOOL _isOpen;
+    sqlite3_stmt *_bulkStatement;
 }
 
 @dynamic databaseConnection;
+
++ (NSString *)imageIconName {
+    return @"MADImageSqlite3";
+}
+
++ (NSString *)driverName {
+    return @"Sqlite 3";
+}
 
 //Converting native type to affinity type
 // using http://www.sqlite.org/datatype3.html

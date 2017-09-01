@@ -41,6 +41,14 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return self;
 }*/
 
++ (NSString *)imageIconName {
+    return @"";
+}
+
++ (NSString *)driverName {
+    return @"";
+}
+
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
     id database = [[self alloc] init];
     return database;

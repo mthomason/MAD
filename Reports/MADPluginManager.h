@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADPluginManager_h
+#define Reports_MADPluginManager_h
+
 #import <Foundation/Foundation.h>
 
 @interface MADPluginManager : NSObject
 
 @end
+
+#endif

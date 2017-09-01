@@ -173,7 +173,7 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (BOOL)application:(UIApplication *)application
                             didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    [[NSBundle mainBundle] load];
 
     /*
     MADVectorBool *vectorBool = [[MADVectorBool alloc] init];

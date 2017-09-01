@@ -35,10 +35,7 @@ NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSe
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceSqlServerIdentifier";
 
 @interface MADDriverSelectorController ()
-    <MADViewControllerStandardProtocol,
-        UITableViewDelegate>
-
-    @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
+    <MADViewControllerStandardProtocol, UITableViewDelegate>
 
 @end
 
@@ -57,8 +54,6 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.testCell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 44.0000f;
@@ -72,8 +67,9 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { return 2; }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType"];
-    //cell.vibrantTableViewCellDelegate = self;
+    
+    static NSString *cellID = @"MADTableViewCellConnectionType";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
 
     switch (indexPath.row) {
         case 0:

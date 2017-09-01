@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C00A3811F5955EF00F6A6C1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3801F5955EF00F6A6C1 /* Media.xcassets */; };
 		4C11F1471BA9008D00EC2C58 /* MADSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C11F14E1BA9008D00EC2C58 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11F1431BA9008D00EC2C58 /* MADSqlite3.framework */; };
 		4C11F1531BA9008D00EC2C58 /* MADSqlite3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */; };
@@ -85,9 +86,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C00A3801F5955EF00F6A6C1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MADSqlite3/Assets/Media.xcassets; sourceTree = "<group>"; };
 		4C11F1431BA9008D00EC2C58 /* MADSqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADSqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADSqlite3.h; sourceTree = "<group>"; };
-		4C11F1481BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C11F1481BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADSqlite3/Info.plist; sourceTree = "<group>"; };
 		4C11F14D1BA9008D00EC2C58 /* MADSqlite3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADSqlite3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSqlite3Tests.m; sourceTree = "<group>"; };
 		4C11F1541BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -178,9 +180,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C00A37B1F59500800F6A6C1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C11F1481BA9008D00EC2C58 /* Info.plist */,
+				4C00A3801F5955EF00F6A6C1 /* Media.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		4C11F1391BA9008D00EC2C58 = {
 			isa = PBXGroup;
 			children = (
+				4C00A37B1F59500800F6A6C1 /* Resources */,
 				4C11F1451BA9008D00EC2C58 /* MADSqlite3 */,
 				4C11F1511BA9008D00EC2C58 /* MADSqlite3Tests */,
 				4C11F1441BA9008D00EC2C58 /* Products */,
@@ -201,6 +213,8 @@
 			isa = PBXGroup;
 			children = (
 				4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */,
+				4C2D77E91F56CF20005415F7 /* MADDatabaseSqlite3.h */,
+				4C2D77EA1F56CF20005415F7 /* MADDatabaseSqlite3.m */,
 				4C2D78451F56F030005415F7 /* MADArrayCaching.h */,
 				4C2D78461F56F030005415F7 /* MADArrayCaching.m */,
 				4C2D785F1F56F636005415F7 /* MADDatabaseConnectionSqlite3.h */,
@@ -215,8 +229,6 @@
 				4C2D785C1F56F4F0005415F7 /* MADDataTableObjectEnumerator.m */,
 				4C2D78491F56F160005415F7 /* MADQuery+Sqlite3.h */,
 				4C2D784A1F56F160005415F7 /* MADQuery+Sqlite3.m */,
-				4C2D77E91F56CF20005415F7 /* MADDatabaseSqlite3.h */,
-				4C2D77EA1F56CF20005415F7 /* MADDatabaseSqlite3.m */,
 				4C2D78351F56ED8A005415F7 /* MADDataTableFast.h */,
 				4C2D78361F56ED8A005415F7 /* MADDataTableFast.m */,
 				4C2D783D1F56EF41005415F7 /* MADQuerySelectParameters.h */,
@@ -257,7 +269,6 @@
 				4C2D78201F56ED4C005415F7 /* MADQueryCacheVacuum.m */,
 				4C2D78211F56ED4C005415F7 /* MADQuerySelectItemsForGroup.h */,
 				4C2D78221F56ED4C005415F7 /* MADQuerySelectItemsForGroup.m */,
-				4C11F1481BA9008D00EC2C58 /* Info.plist */,
 				4C11F15D1BA9010100EC2C58 /* MADSqlite3 */,
 			);
 			path = MADSqlite3;
@@ -417,6 +428,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A3811F5955EF00F6A6C1 /* Media.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

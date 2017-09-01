@@ -18,6 +18,7 @@
 		4C00A3641F57DAD400F6A6C1 /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */; };
 		4C00A3711F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A36F1F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C00A3721F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3701F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m */; };
+		4C00A37D1F59506600F6A6C1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A37C1F59506600F6A6C1 /* Media.xcassets */; };
 		4C66C14B1BA887D500663575 /* MADTdsClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C14A1BA887D500663575 /* MADTdsClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; };
 		4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66C1561BA887D500663575 /* MADTdsClientTests.m */; };
@@ -56,9 +57,10 @@
 		4C00A3631F57DAD400F6A6C1 /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = usr/lib/libiconv.2.tbd; sourceTree = SDKROOT; };
 		4C00A36F1F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionSQLServer.h; sourceTree = "<group>"; };
 		4C00A3701F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionSQLServer.m; sourceTree = "<group>"; };
+		4C00A37C1F59506600F6A6C1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		4C66C1471BA887D500663575 /* MADTdsClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTdsClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C14A1BA887D500663575 /* MADTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTdsClient.h; sourceTree = "<group>"; };
-		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADTdsClient/Info.plist; sourceTree = "<group>"; };
 		4C66C1511BA887D500663575 /* MADTdsClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTdsClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C1561BA887D500663575 /* MADTdsClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsClientTests.m; sourceTree = "<group>"; };
 		4C66C1581BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -142,7 +144,6 @@
 				4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */,
 				4C00A3471F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m */,
 				4C66C1631BA8880600663575 /* freetds */,
-				4C66C14C1BA887D500663575 /* Info.plist */,
 			);
 			path = MADTdsClient;
 			sourceTree = "<group>";
@@ -159,8 +160,10 @@
 		4C66C1611BA887EB00663575 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C66C14C1BA887D500663575 /* Info.plist */,
 				4CCE187F1DA14BE10093B166 /* libsybdb.a */,
 				4CCE18801DA14BE10093B166 /* libct.a */,
+				4C00A37C1F59506600F6A6C1 /* Media.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CCE18811DA14BE10093B166 /* libsybdb.a in Resources */,
+				4C00A37D1F59506600F6A6C1 /* Media.xcassets in Resources */,
 				4CCE18821DA14BE10093B166 /* libct.a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

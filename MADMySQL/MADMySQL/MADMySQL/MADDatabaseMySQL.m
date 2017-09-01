@@ -47,6 +47,14 @@
 
 @dynamic databaseConnection;
 
++ (NSString *)imageIconName {
+    return @"UIImageExportTypeMySQL";
+}
+
++ (NSString *)driverName {
+    return @"MySQL Native Client";
+}
+
 - (MADDataTable *)dataTableForQuery:(MADQuery *)query {
     return [self.delegate dataTableForQuery:query];
 }

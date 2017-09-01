@@ -32,7 +32,8 @@ extern NSString * const MADSqlTextFromPart;
 @interface MADDatabase : NSObject
     <MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseDBProtocol>
 
-    //+ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
+    + (NSString *)imageIconName;
+    + (NSString *)driverName;
 
     @property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
     @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
