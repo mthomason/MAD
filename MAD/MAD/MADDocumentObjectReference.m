@@ -49,42 +49,42 @@
                                         itemID:(NSUInteger)itemID {
     id result;
     switch (element.type) {
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeAggregate:
             result = [[MADDocumentObjectDataReferenceAggregate alloc] initWithDataSource:datasource
                                                                                 delegate:delegate
                                                                                     page:page
                                                                                     item:element
                                                                                   itemID:itemID];
             break;
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             result = [[MADDocumentObjectDataReferenceImage alloc] initWithDataSource:datasource
                                                                             delegate:delegate
                                                                                 page:page
                                                                                 item:element
                                                                               itemID:itemID];
             break;
-        case MTDocumentObjectTypeLabelDynamic:
+        case MADPrintPageElementTypeLabelDynamic:
             result = [[MADDocumentObjectDataReferenceLabelDynamic alloc] initWithDataSource:datasource
                                                                                    delegate:delegate
                                                                                        page:page
                                                                                        item:element
                                                                                      itemID:itemID];
             break;
-        case MTDocumentObjectTypeLabelStatic:
+        case MADPrintPageElementTypeLabelStatic:
             result = [[MADDocumentObjectDataReferenceLabelStatic alloc] initWithDataSource:datasource
                                                                                   delegate:delegate
                                                                                       page:page
                                                                                       item:element
                                                                                     itemID:itemID];
             break;
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             result = [[MADDocumentObjectDataReferenceBarcode alloc] initWithDataSource:datasource
                                                                               delegate:delegate
                                                                                   page:page
                                                                                   item:element
                                                                                 itemID:itemID];
             break;
-        case MTDocumentObjectTypeWhtiespace:
+        case MADPrintPageElementTypeWhtiespace:
         default:
             result = [[self alloc] initWithDataSource:datasource delegate:delegate
                                                  page:page item:element itemID:itemID];
@@ -124,7 +124,7 @@
     return copy;
 }
 
-- (MTDocumentObjectType)type {
+- (MADPrintPageElementType)type {
     return self.item.documentObjectType;
 }
 

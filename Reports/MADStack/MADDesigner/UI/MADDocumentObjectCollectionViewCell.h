@@ -16,7 +16,7 @@
 
 @interface MADDocumentObjectCollectionViewCell : UICollectionViewCell
 
-    @property (nonatomic, assign) MTDocumentObjectType type;
+    @property (nonatomic, assign) MADPrintPageElementType type;
     @property (nonatomic, weak) IBOutlet UILabel *title;
     @property (nonatomic, weak) IBOutlet UILabel *detail;
 

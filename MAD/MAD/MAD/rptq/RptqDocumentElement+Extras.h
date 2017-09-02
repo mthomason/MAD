@@ -36,7 +36,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @interface RptqDocumentElement (Extras)
     <MTProtocolLog, RptqDocumentElementFactory>
 
-    @property (readonly) MTDocumentObjectType documentObjectType;
+    @property (readonly) MADPrintPageElementType documentObjectType;
     @property (readonly) CGRect frame;
 
     + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier

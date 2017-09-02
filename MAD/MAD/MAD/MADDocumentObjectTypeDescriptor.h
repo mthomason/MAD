@@ -30,10 +30,10 @@ typedef NSString MADDocumentObjectTypeDescriptor;
 
 @interface NSString (MADocumentObjectType)
 
-    + (NSString *)humanReadableStringForType:(MTDocumentObjectType)type;
-    + (NSString *)localizedStringForType:(MTDocumentObjectType)type;
-    + (NSString *)localizedDetailStringForType:(MTDocumentObjectType)type;
-    + (NSString *)localizedAddDetailStringForType:(MTDocumentObjectType)type;
+    + (NSString *)humanReadableStringForType:(MADPrintPageElementType)type;
+    + (NSString *)localizedStringForType:(MADPrintPageElementType)type;
+    + (NSString *)localizedDetailStringForType:(MADPrintPageElementType)type;
+    + (NSString *)localizedAddDetailStringForType:(MADPrintPageElementType)type;
 
 @end
 

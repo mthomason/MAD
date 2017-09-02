@@ -53,7 +53,7 @@
                                   insertIntoManagedObjectContext: managedObjectContext];
     
     element.source = formulaText;
-    element.type = MTDocumentObjectTypeFormula;
+    element.type = MADPrintPageElementTypeFormula;
     
     NSMutableOrderedSet <RptqDocumentElement *> *hasObjects;
     hasObjects = [document.hasDetailSection.hasRows[0] hasObjects].mutableCopy;

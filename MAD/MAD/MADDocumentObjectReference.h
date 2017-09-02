@@ -39,7 +39,7 @@
     @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
     @property (readwrite, nonatomic, weak) __kindof RptqDocumentElement *item;
 
-    @property (readonly, nonatomic, assign) MTDocumentObjectType type;
+    @property (readonly, nonatomic, assign) MADPrintPageElementType type;
     @property (readwrite, nonatomic, assign) NSUInteger pageIndex;
     @property (readwrite, nonatomic, assign) NSUInteger detailRowId;
 

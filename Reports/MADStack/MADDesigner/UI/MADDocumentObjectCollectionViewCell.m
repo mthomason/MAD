@@ -22,31 +22,31 @@
     self.detail.isAccessibilityElement = NO;
 }
 
-- (void)setType:(MTDocumentObjectType)type {
+- (void)setType:(MADPrintPageElementType)type {
     if (_type != type) {
         _type = type;
         switch (_type) {
-            case MTDocumentObjectTypeLabelDynamic:
+            case MADPrintPageElementTypeLabelDynamic:
                 self.title.text = [MADDocumentObjectCollectionViewCell TitleDynamic];
                 self.detail.text = [MADDocumentObjectCollectionViewCell DetailDynamic];
                 break;
-            case MTDocumentObjectTypeLabelStatic:
+            case MADPrintPageElementTypeLabelStatic:
                 self.title.text = [MADDocumentObjectCollectionViewCell TitleStatic];
                 self.detail.text = [MADDocumentObjectCollectionViewCell DetailStatic];
                 break;
-            case MTDocumentObjectTypeAggregate:
+            case MADPrintPageElementTypeAggregate:
                 self.title.text = [MADDocumentObjectCollectionViewCell TitleAggregate];
                 self.detail.text = [MADDocumentObjectCollectionViewCell DetailAggregate];
                 break;
-            case MTDocumentObjectTypeImage:
+            case MADPrintPageElementTypeImage:
                 self.title.text = [MADDocumentObjectCollectionViewCell TitleImage];
                 self.detail.text = [MADDocumentObjectCollectionViewCell DetailImage];
                 break;
-            case MTDocumentObjectTypeWhtiespace:
+            case MADPrintPageElementTypeWhtiespace:
                 self.title.text = [MADDocumentObjectCollectionViewCell TitleWhitespace];
                 self.detail.text = [MADDocumentObjectCollectionViewCell DetailWhitespace];
                 break;
-            case MTDocumentObjectTypeBarcode:
+            case MADPrintPageElementTypeBarcode:
                 self.title.text = [MADDocumentObjectCollectionViewCell TitleBarcode];
                 self.detail.text = [MADDocumentObjectCollectionViewCell DetailBarcode];
                 break;
@@ -60,22 +60,22 @@
 
 - (NSString *)accessibilityHint {
     switch (self.type) {
-        case MTDocumentObjectTypeLabelDynamic:
+        case MADPrintPageElementTypeLabelDynamic:
             return [MADDocumentObjectCollectionViewCell DetailDynamic];
             break;
-        case MTDocumentObjectTypeLabelStatic:
+        case MADPrintPageElementTypeLabelStatic:
             return [MADDocumentObjectCollectionViewCell DetailStatic];
             break;
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeAggregate:
             return [MADDocumentObjectCollectionViewCell DetailAggregate];
             break;
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             return [MADDocumentObjectCollectionViewCell DetailImage];
             break;
-        case MTDocumentObjectTypeWhtiespace:
+        case MADPrintPageElementTypeWhtiespace:
             return [MADDocumentObjectCollectionViewCell DetailWhitespace];
             break;
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             return [MADDocumentObjectCollectionViewCell DetailBarcode];
             break;
         default:
@@ -86,22 +86,22 @@
 
 - (NSString *)accessibilityLabel {
     switch (self.type) {
-        case MTDocumentObjectTypeLabelDynamic:
+        case MADPrintPageElementTypeLabelDynamic:
             return [MADDocumentObjectCollectionViewCell TitleDynamic];
             break;
-        case MTDocumentObjectTypeLabelStatic:
+        case MADPrintPageElementTypeLabelStatic:
             return [MADDocumentObjectCollectionViewCell TitleStatic];
             break;
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeAggregate:
             return [MADDocumentObjectCollectionViewCell TitleAggregate];
             break;
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             return [MADDocumentObjectCollectionViewCell TitleImage];
             break;
-        case MTDocumentObjectTypeWhtiespace:
+        case MADPrintPageElementTypeWhtiespace:
             return [MADDocumentObjectCollectionViewCell TitleWhitespace];
             break;
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             return [MADDocumentObjectCollectionViewCell TitleBarcode];
             break;
         default:

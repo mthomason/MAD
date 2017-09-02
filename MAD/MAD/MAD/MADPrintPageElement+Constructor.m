@@ -23,30 +23,30 @@
     id documentObject;
     switch (definition.type) {
             
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeAggregate:
             documentObject = [[MADPrintPageElementAggregate alloc] initWithDefinition:definition];
             break;
             
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             documentObject = [[MADPrintPageElementImage alloc] initWithDefinition:definition];
             break;
             
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             documentObject = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
             break;
             
-        case MTDocumentObjectTypeLabelDynamic:
+        case MADPrintPageElementTypeLabelDynamic:
             documentObject = [[MADPrintPageElementTextDynamic alloc] initWithDefinition:definition];
             break;
             
-        case MTDocumentObjectTypeLabelStatic:
+        case MADPrintPageElementTypeLabelStatic:
             documentObject = [[MADPrintPageElementTextStatic alloc] initWithDefinition:definition];
             break;
-            //case MTDocumentObjectTypeWhtiespace:
-            //case MTDocumentObjectTypeGroupKey:
-            //case MTDocumentObjectTypeChart:
-            //case MTDocumentObjectTypeFormula:
-            //case MTDocumentObjectTypeAggregateFunctionList:
+            //case MADPrintPageElementTypeWhtiespace:
+            //case MADPrintPageElementTypeGroupKey:
+            //case MADPrintPageElementTypeChart:
+            //case MADPrintPageElementTypeFormula:
+            //case MADPrintPageElementTypeAggregateFunctionList:
         default:
             documentObject = nil;
             break;

@@ -69,7 +69,7 @@
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
     
-    MTDocumentObjectType objectType = [self.delegate objectTypeRepresentedByCell:self];
+    MADPrintPageElementType objectType = [self.delegate objectTypeRepresentedByCell:self];
 
     BOOL deleteAction = action == @selector(delete:);
     BOOL editAction = action == @selector(edit:);
@@ -77,31 +77,31 @@
     
     switch (objectType) {
 
-        case MTDocumentObjectTypeLabelDynamic: {
+        case MADPrintPageElementTypeLabelDynamic: {
             result = deleteAction || editAction || formatAction;
             break;
         }
         
-        case MTDocumentObjectTypeLabelStatic: {
+        case MADPrintPageElementTypeLabelStatic: {
             result = deleteAction || editAction || formatAction;
             break;
         }
-        case MTDocumentObjectTypeAggregate: {
+        case MADPrintPageElementTypeAggregate: {
             result = deleteAction || editAction || formatAction;
             break;
         }
             
         // FIXME: Add ability to edit image fields.  84848422
 
-        case MTDocumentObjectTypeImage: {
+        case MADPrintPageElementTypeImage: {
             result = deleteAction || /*editAction ||*/ formatAction;
             break;
         }
-        case MTDocumentObjectTypeWhtiespace: {
+        case MADPrintPageElementTypeWhtiespace: {
             result = deleteAction || formatAction;
             break;
         }
-        case MTDocumentObjectTypeBarcode: {
+        case MADPrintPageElementTypeBarcode: {
             result = deleteAction || formatAction; // FIXME: Edit action broke on barcodes...
                                                    //   datasource is lost... || editAction;
             break;

@@ -16,7 +16,7 @@
     - (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell;
     - (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell;
     - (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (MTDocumentObjectType)objectTypeRepresentedByCell:(MADCellElement *)cell;
+    - (MADPrintPageElementType)objectTypeRepresentedByCell:(MADCellElement *)cell;
 
 @end
 

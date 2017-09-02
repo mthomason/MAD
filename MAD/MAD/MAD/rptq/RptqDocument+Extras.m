@@ -547,7 +547,7 @@
                       managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
-    MTDocumentObjectType objectType = (MTDocumentObjectType)objectTypeObj.unsignedIntegerValue;
+    MADPrintPageElementType objectType = (MADPrintPageElementType)objectTypeObj.unsignedIntegerValue;
     
     NSString *entityName;
     
@@ -556,7 +556,7 @@
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
     
     switch (objectType) {
-        case MTDocumentObjectTypeLabelDynamic: {
+        case MADPrintPageElementTypeLabelDynamic: {
             
             NSManagedObjectID *fieldObjectID;
             RptqQueryField *field;
@@ -576,11 +576,11 @@
 
             ((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
             
-            reportObject.type = MTDocumentObjectTypeLabelDynamic;
+            reportObject.type = MADPrintPageElementTypeLabelDynamic;
             
             break;
         }
-        case MTDocumentObjectTypeLabelStatic: {
+        case MADPrintPageElementTypeLabelStatic: {
             
             entityName = NSStringFromClass([RptqDocumentElementLabel class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
@@ -593,11 +593,11 @@
             
             ((RptqDocumentElementLabel *)reportObject).text = labelText;
 
-            reportObject.type = MTDocumentObjectTypeLabelStatic;
+            reportObject.type = MADPrintPageElementTypeLabelStatic;
             
             break;
         }
-        case MTDocumentObjectTypeAggregate: {
+        case MADPrintPageElementTypeAggregate: {
             
             entityName = NSStringFromClass([RptqDocumentElementAggregate class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
@@ -632,11 +632,11 @@
                     break;
             }
             
-            reportObject.type = MTDocumentObjectTypeAggregate;
+            reportObject.type = MADPrintPageElementTypeAggregate;
             
             break;
         }
-        case MTDocumentObjectTypeImage: {
+        case MADPrintPageElementTypeImage: {
             
             entityName = NSStringFromClass([RptqDocumentElementImage class]);
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
@@ -649,18 +649,18 @@
             ((RptqDocumentElementImage *)reportObject).image = image;
 
             [((RptqDocumentElementImage *)reportObject) setSizeValue: image.size];
-            ((RptqDocumentElementImage *)reportObject).type = MTDocumentObjectTypeImage;
+            ((RptqDocumentElementImage *)reportObject).type = MADPrintPageElementTypeImage;
             
             image = nil;
             
             break;
         }
-        case MTDocumentObjectTypeWhtiespace: {
-            reportObject.type = MTDocumentObjectTypeWhtiespace;
+        case MADPrintPageElementTypeWhtiespace: {
+            reportObject.type = MADPrintPageElementTypeWhtiespace;
             
             break;
         }
-        case MTDocumentObjectTypeBarcode: {
+        case MADPrintPageElementTypeBarcode: {
             
             MTBarcode *barcode = defination[MTDocumentObjectDefinationObject];
             NSManagedObjectID *field1ObjectId = defination[MTDocumentObjectDefinationField1];
@@ -672,7 +672,7 @@
             reportObject = [RptqDocumentElementBarcode barcodeWithMtBarcode: barcode
                                                              queryFieldOne: field1
                                                              queryFieldTwo: field2];
-            reportObject.type = MTDocumentObjectTypeBarcode;
+            reportObject.type = MADPrintPageElementTypeBarcode;
             
             break;
         }

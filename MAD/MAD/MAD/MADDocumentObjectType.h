@@ -11,18 +11,18 @@
 
 #import <CoreFoundation/CFAvailability.h>
 
-typedef CF_ENUM(int64_t, MTDocumentObjectType) {
-    MTDocumentObjectTypeLabelDynamic = 0,
-    MTDocumentObjectTypeLabelStatic = 1,
-    MTDocumentObjectTypeImage = 2,
-    MTDocumentObjectTypeChart = 3,
-    MTDocumentObjectTypeFormula = 4,
-    MTDocumentObjectTypeAggregate = 5,
-    MTDocumentObjectTypeGroupKey = 6,
-    MTDocumentObjectTypeAggregateFunctionList = 7,
-    MTDocumentObjectTypeWhtiespace = 8,
-    MTDocumentObjectTypeBarcode = 9,
-    MTDocumentObjectTypeLabelLink = 10
+typedef CF_ENUM(int64_t, MADPrintPageElementType) {
+    MADPrintPageElementTypeLabelDynamic = 0,
+    MADPrintPageElementTypeLabelStatic = 1,
+    MADPrintPageElementTypeImage = 2,
+    MADPrintPageElementTypeChart = 3,
+    MADPrintPageElementTypeFormula = 4,
+    MADPrintPageElementTypeAggregate = 5,
+    MADPrintPageElementTypeGroupKey = 6,
+    MADPrintPageElementTypeAggregateFunctionList = 7,
+    MADPrintPageElementTypeWhtiespace = 8,
+    MADPrintPageElementTypeBarcode = 9,
+    MADPrintPageElementTypeLabelLink = 10
 };
 
 #endif

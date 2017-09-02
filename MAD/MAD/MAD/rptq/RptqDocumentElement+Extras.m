@@ -1043,7 +1043,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 #pragma mark - Member
 
-- (MTDocumentObjectType)documentObjectType {
+- (MADPrintPageElementType)documentObjectType {
     return self.type;
 }
 
@@ -1210,39 +1210,39 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (NSString *)debugDescriptionType {
     switch (self.type) {
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeAggregate:
             return @"Aggregate";
             break;
             
-        case MTDocumentObjectTypeChart:
+        case MADPrintPageElementTypeChart:
             return @"Chart";
             break;
             
-        case MTDocumentObjectTypeFormula:
+        case MADPrintPageElementTypeFormula:
             return @"Formula";
             break;
             
-        case MTDocumentObjectTypeGroupKey:
+        case MADPrintPageElementTypeGroupKey:
             return @"Group Key";
             break;
 
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             return @"Image";
             break;
             
-        case MTDocumentObjectTypeLabelDynamic:
+        case MADPrintPageElementTypeLabelDynamic:
             return @"Dynamic";
             break;
             
-        case MTDocumentObjectTypeLabelStatic:
+        case MADPrintPageElementTypeLabelStatic:
             return @"Static";
             break;
             
-        case MTDocumentObjectTypeWhtiespace:
+        case MADPrintPageElementTypeWhtiespace:
             return @"Whitespace";
             break;
             
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             return @"Barcode";
             break;
 

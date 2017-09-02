@@ -16,7 +16,7 @@
 @end
 
 @implementation MADReportLineRepresentation {
-    MTDocumentObjectType _type;
+    MADPrintPageElementType _type;
 }
 
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
@@ -27,10 +27,10 @@
 }
 
 - (instancetype)init {
-    return [self initWithObject:@"" type:MTDocumentObjectTypeLabelStatic frame:CGRectZero];
+    return [self initWithObject:@"" type:MADPrintPageElementTypeLabelStatic frame:CGRectZero];
 }
 
-- (instancetype)initWithObject:(id)object type:(MTDocumentObjectType)type frame:(CGRect)frame {
+- (instancetype)initWithObject:(id)object type:(MADPrintPageElementType)type frame:(CGRect)frame {
     if (self = [super init]) {
         self.object = object;
         _frame = frame;

@@ -17,7 +17,7 @@
 @interface MADReportLineRepresentation : NSObject
     <MADTextRepresentationProtocol>
 
-    - (instancetype)initWithObject:(id)object type:(MTDocumentObjectType)type
+    - (instancetype)initWithObject:(id)object type:(MADPrintPageElementType)type
                              frame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
     @property (nonatomic, assign, readonly) CGRect frame;

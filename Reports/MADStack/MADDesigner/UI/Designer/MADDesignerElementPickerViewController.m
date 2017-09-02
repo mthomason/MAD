@@ -125,17 +125,17 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
     
     NSMutableArray *dataSource = [[NSMutableArray alloc] initWithCapacity:6];
-    NSNumber *labelDynamic =    [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelDynamic];
-    NSNumber *labelStatic =     [[NSNumber alloc] initWithShort:MTDocumentObjectTypeLabelStatic];
-    NSNumber *aggregate =       [[NSNumber alloc] initWithShort:MTDocumentObjectTypeAggregate];
-    NSNumber *image =           [[NSNumber alloc] initWithShort:MTDocumentObjectTypeImage];
-    NSNumber *whitespace =      [[NSNumber alloc] initWithShort:MTDocumentObjectTypeWhtiespace];
+    NSNumber *labelDynamic =    [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelDynamic];
+    NSNumber *labelStatic =     [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelStatic];
+    NSNumber *aggregate =       [[NSNumber alloc] initWithShort:MADPrintPageElementTypeAggregate];
+    NSNumber *image =           [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
+    NSNumber *whitespace =      [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
     NSArray *defaults = [[NSArray alloc] initWithObjects: labelDynamic, labelStatic, aggregate,
                                                           image, whitespace, nil];
     [dataSource addObjectsFromArray:defaults];
     
     if ([MTStoreKitController sharedObject].barcodeDesignerEnabled) {
-        NSNumber *barcode = [NSNumber numberWithShort: MTDocumentObjectTypeBarcode];
+        NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
         [dataSource addObject:barcode];
     }
     
@@ -159,23 +159,23 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
  
     switch (madob.shortValue) {
 
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeAggregate:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushAggregateLabelNew" sender:self];
             break;
 
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushBarcodeLabelNew" sender:self];
             break;
 
-        case  MTDocumentObjectTypeLabelDynamic:
+        case  MADPrintPageElementTypeLabelDynamic:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:self];
             break;
 
-        case MTDocumentObjectTypeLabelStatic:
+        case MADPrintPageElementTypeLabelStatic:
             [self performSegueWithIdentifier:@"MTIdentifierSeguePushStaticLabelNew" sender:self];
             break;
             
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             [self presentImagePicker];
             break;
 
@@ -286,7 +286,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
     
     switch (controller.view.tag) {
             
-        case MTDocumentObjectTypeLabelDynamic:
+        case MADPrintPageElementTypeLabelDynamic:
             
             //[self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:(id)];
             //[[self objectSelectorDelegate] viewControllerDidFinish:self];

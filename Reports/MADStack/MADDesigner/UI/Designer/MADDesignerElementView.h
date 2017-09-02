@@ -23,7 +23,7 @@
 
 @protocol MADDesignerElementViewDataSource <NSObject>
   @required
-    - (MTDocumentObjectType)documentObjectTypeForElementView:(MADDesignerElementView *)elementView;
+    - (MADPrintPageElementType)documentObjectTypeForElementView:(MADDesignerElementView *)elementView;
     - (id)documentObjectForElementView:(MADDesignerElementView *)elementView;
     - (CGSize)documentObjectSizeForElementView:(MADDesignerElementView *)elementView;
   @optional

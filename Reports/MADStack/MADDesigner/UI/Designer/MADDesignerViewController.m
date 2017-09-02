@@ -1474,7 +1474,7 @@ static const inline CGSize sizePopoverFonts() {
             self.hidesStatusBar = NO;
         }];
 
-        NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeImage];
+        NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeImage];
         NSDictionary *defination;
         defination = [[NSDictionary alloc] initWithObjectsAndKeys:
                       type,           MTDocumentObjectDefinationType,
@@ -1588,7 +1588,7 @@ static const inline CGSize sizePopoverFonts() {
 #pragma mark -
 #pragma mark MADCellElement Delegate
 
-- (MTDocumentObjectType)objectTypeRepresentedByCell:(MADCellElement *)cell {
+- (MADPrintPageElementType)objectTypeRepresentedByCell:(MADCellElement *)cell {
     RptqDocumentElement *element;
     element = [RptqDocumentElement newDocumentElementWithIdentifier: cell.identifier
                                                   fromObjectContext: _document.managedObjectContext];
@@ -1652,33 +1652,33 @@ static const inline CGSize sizePopoverFonts() {
                 
                 switch (objectToEdit.type) {
                         
-                    case MTDocumentObjectTypeAggregate: {
+                    case MADPrintPageElementTypeAggregate: {
                         NSNumber *objectID  = @(objectToEdit.identifier);
                         [self editDocumentObjectAggregateWithID: objectID
                                                        objectID: objectToEdit.objectID];
                         break;
                     }
                     
-                    case MTDocumentObjectTypeBarcode: {
+                    case MADPrintPageElementTypeBarcode: {
                         NSNumber *objectID  = @(objectToEdit.identifier);
                         [self editDocumentObjectBarcodeWithID: objectID];
                         break;
                     }
                     
-                    case MTDocumentObjectTypeImage: {
+                    case MADPrintPageElementTypeImage: {
                         [self editDocumentObjectImage: objectToEdit];
                         break;
                     }
                         
-                    case MTDocumentObjectTypeLabelDynamic:
+                    case MADPrintPageElementTypeLabelDynamic:
                         [self editDocumentObjectLabelDynamic:objectToEdit];
                         break;
                         
-                    case MTDocumentObjectTypeLabelStatic:
+                    case MADPrintPageElementTypeLabelStatic:
                         [self editDocumentObjectLabelStatic:objectToEdit];
                         break;
                         
-                    case MTDocumentObjectTypeWhtiespace:
+                    case MADPrintPageElementTypeWhtiespace:
                         break;
                         
                     default:
@@ -1982,10 +1982,10 @@ static const inline CGSize sizePopoverFonts() {
                                    documentObjectSize.width, documentObjectSize.height);
     
     switch (documentObject.documentObjectType) {
-        case MTDocumentObjectTypeFormula:
-        case MTDocumentObjectTypeLabelStatic:
-        case MTDocumentObjectTypeLabelDynamic:
-        case MTDocumentObjectTypeAggregate:
+        case MADPrintPageElementTypeFormula:
+        case MADPrintPageElementTypeLabelStatic:
+        case MADPrintPageElementTypeLabelDynamic:
+        case MADPrintPageElementTypeAggregate:
         default: {
             
             NSArray *subviews = cell.contentView.subviews;
@@ -2310,7 +2310,7 @@ static const inline CGSize sizePopoverFonts() {
     [self setDisplayActive];
     NSNumber *objTypeKey;
     NSDictionary *parameters;
-    objTypeKey = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelDynamic];
+    objTypeKey = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelDynamic];
     parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
                             objTypeKey,     MTDocumentObjectDefinationType,
                             field.objectID, MTDocumentObjectDefinationObject, nil];
@@ -2329,7 +2329,7 @@ static const inline CGSize sizePopoverFonts() {
     NSNumber *functionTypeNumber =  [[NSNumber alloc] initWithShort: functionType],
              *groupTypeNumber =     [[NSNumber alloc] initWithShort: groupType],
              *inputTypeNumber =     [[NSNumber alloc] initWithShort: inputType],
-             *objectType =          [[NSNumber alloc] initWithShort: MTDocumentObjectTypeAggregate];
+             *objectType =          [[NSNumber alloc] initWithShort: MADPrintPageElementTypeAggregate];
     
     NSDictionary *documentObject =  [[NSDictionary alloc] initWithObjectsAndKeys:
         functionTypeNumber,    MTDocumentObjectDefinationAggregateType,
@@ -2350,7 +2350,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
     [self setDisplayActive];
-    NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelStatic];
+    NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelStatic];
     NSDictionary *defination = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 type, MTDocumentObjectDefinationType,
                                 labelText, MTDocumentObjectDefinationObject, nil];
@@ -2616,7 +2616,7 @@ static const inline CGSize sizePopoverFonts() {
     NSNumber *type;
     NSDictionary *options;
 
-    type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeWhtiespace];
+    type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeWhtiespace];
     options = [[NSDictionary alloc] initWithObjectsAndKeys:
                                             type, MTDocumentObjectDefinationType, nil];
                                             
@@ -2631,7 +2631,7 @@ static const inline CGSize sizePopoverFonts() {
  
     NSManagedObjectID *objectID = dynamicFieldController.queryFieldID.copy;
 
-    NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeLabelDynamic];
+    NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelDynamic];
     NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     keyDynamic, MTDocumentObjectDefinationType,
                                     objectID, MTDocumentObjectDefinationObject, nil];
@@ -2694,7 +2694,7 @@ static const inline CGSize sizePopoverFonts() {
     } else {
         
         NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
-        NSNumber *type = [[NSNumber alloc] initWithShort: MTDocumentObjectTypeBarcode];
+        NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeBarcode];
         defination[MTDocumentObjectDefinationType] = type;
         defination[MTDocumentObjectDefinationObject] = viewController.barcode;
         

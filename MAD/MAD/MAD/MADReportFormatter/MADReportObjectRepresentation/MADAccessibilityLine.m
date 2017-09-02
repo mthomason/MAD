@@ -13,17 +13,17 @@
 
     @property (nonatomic, copy) NSValue *rect;
     @property (nonatomic, strong) id value;
-    @property (nonatomic, assign, readwrite) MTDocumentObjectType type;
+    @property (nonatomic, assign, readwrite) MADPrintPageElementType type;
 
 @end
 
 @implementation MADAccessibilityLine
 
 - (instancetype)init {
-    return [self initWithValue:@"" type:MTDocumentObjectTypeLabelStatic andFrame:CGRectZero];
+    return [self initWithValue:@"" type:MADPrintPageElementTypeLabelStatic andFrame:CGRectZero];
 }
 
-- (instancetype)initWithValue:(id)value type:(MTDocumentObjectType)type andFrame:(CGRect)frame {
+- (instancetype)initWithValue:(id)value type:(MADPrintPageElementType)type andFrame:(CGRect)frame {
     if (self = [super init]) {
 
         NSValue *r = [NSValue valueWithCGRect:frame];

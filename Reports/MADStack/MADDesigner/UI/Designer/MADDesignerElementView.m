@@ -93,10 +93,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
     MADDesignerElementView <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol> *elementView;
     switch (documentObject.documentObjectType) {
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             elementView = [[MADDesignerElementImageView alloc] initWithFrame:rect];
             break;
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             elementView = [[MADDesignerElementBarcodeView alloc] initWithFrame:rect];
             break;
         default:
@@ -142,10 +142,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
     
     switch (documentObject.documentObjectType) {
-        case MTDocumentObjectTypeImage:
+        case MADPrintPageElementTypeImage:
             self = [[MADDesignerElementImageView alloc] initWithFrame:rect];
             break;
-        case MTDocumentObjectTypeBarcode:
+        case MADPrintPageElementTypeBarcode:
             self = [[MADDesignerElementBarcodeView alloc] initWithFrame:rect];
             break;
         default:
