@@ -13,7 +13,7 @@
 
 @class MADDocumentObjectDataReferenceAggregate;
 
-@interface MADDocumentObjectAggregate : MADDocumentObjectText
+@interface MADPrintPageElementAggregate : MADDocumentObjectText
 
     - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition;
 

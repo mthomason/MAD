@@ -13,7 +13,7 @@
 
 @class MADDocumentObjectDataReferenceLabelStatic;
 
-@interface MADDocumentObjectLabelStatic : MADDocumentObjectText
+@interface MADPrintPageElementTextStatic : MADDocumentObjectText
 
     - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition;
 

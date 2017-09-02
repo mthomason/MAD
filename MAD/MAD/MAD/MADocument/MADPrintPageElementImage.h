@@ -13,7 +13,7 @@
 
 @class MADDocumentObjectDataReferenceImage;
 
-@interface MADDocumentObjectImage : MADPrintPageElement
+@interface MADPrintPageElementImage : MADPrintPageElement
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition;
 

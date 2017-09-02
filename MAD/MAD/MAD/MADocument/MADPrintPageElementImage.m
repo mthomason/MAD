@@ -6,16 +6,16 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectImage.h"
+#import "MADPrintPageElementImage.h"
 #import <UIKit/UIImage.h>
 
 #import "MADDocumentObjectReference.h"
 
-@interface MADDocumentObjectImage ()
+@interface MADPrintPageElementImage ()
     @property (nonatomic, strong) UIImage *image;
 @end
 
-@implementation MADDocumentObjectImage
+@implementation MADPrintPageElementImage
 
 - (void)dealloc {
     _image = nil;

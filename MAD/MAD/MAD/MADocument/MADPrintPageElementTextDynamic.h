@@ -13,7 +13,7 @@
 
 @class MADDocumentObjectDataReferenceLabelDynamic;
 
-@interface MADDocumentObjectLabelDynamic : MADDocumentObjectText
+@interface MADPrintPageElementTextDynamic : MADDocumentObjectText
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelDynamic *)definition;
 

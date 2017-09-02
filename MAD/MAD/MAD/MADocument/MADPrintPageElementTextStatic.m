@@ -6,12 +6,12 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectLabelStatic.h"
+#import "MADPrintPageElementTextStatic.h"
 #import <Foundation/NSString.h>
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-@implementation MADDocumentObjectLabelStatic
+@implementation MADPrintPageElementTextStatic
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition {
     if (self = [super initWithDefinition:definition]) {

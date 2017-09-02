@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectBarcode.h"
+#import "MADPrintPageElementBarcode.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
@@ -16,7 +16,7 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-@implementation MADDocumentObjectBarcode {
+@implementation MADPrintPageElementBarcode {
     MTBarcode *_drawingObject;
 }
 

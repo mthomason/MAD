@@ -12,7 +12,7 @@
 
 #import "MADPrintPageElement.h"
 
-@interface MADDocumentObjectText : MADPrintPageElement
+@interface MADPrintPageElementText : MADPrintPageElement
 
     - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 

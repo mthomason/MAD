@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectText.h"
+#import "MADPrintPageElementText.h"
 
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSStringDrawing.h>
@@ -21,11 +21,11 @@
 #import "MADElementStylizedText.h"
 #import "MADAlignment.h"
 
-@interface MADDocumentObjectText()
+@interface MADPrintPageElementText()
     @property (readwrite, nonatomic, weak) MADDocumentObjectDataReference *definition;
 @end
 
-@implementation MADDocumentObjectText
+@implementation MADPrintPageElementText
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super init]) {

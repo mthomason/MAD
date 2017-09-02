@@ -13,7 +13,7 @@
 
 @class MADDocumentObjectDataReference;
 
-@interface MADDocumentObjectBarcode : MADPrintPageElement
+@interface MADPrintPageElementBarcode : MADPrintPageElement
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectLabelDynamic.h"
+#import "MADPrintPageElementTextDynamic.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
@@ -14,7 +14,7 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-@implementation MADDocumentObjectLabelDynamic
+@implementation MADPrintPageElementTextDynamic
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelDynamic *)definition {
     if (self = [super initWithDefinition:definition]) {

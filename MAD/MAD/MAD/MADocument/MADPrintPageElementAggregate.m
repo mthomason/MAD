@@ -6,7 +6,7 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObjectAggregate.h"
+#import "MADPrintPageElementAggregate.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSArray.h>
@@ -15,7 +15,7 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-@implementation MADDocumentObjectAggregate
+@implementation MADPrintPageElementAggregate
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition {
     if (self = [super initWithDefinition:definition]) {
