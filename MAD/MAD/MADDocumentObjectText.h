@@ -10,9 +10,9 @@
 #ifndef Reports_MAD_MADDocumentObjectText_h
 #define Reports_MAD_MADDocumentObjectText_h
 
-#import "MADDocumentObject.h"
+#import "MADPrintPageElement.h"
 
-@interface MADDocumentObjectText : MADDocumentObject
+@interface MADDocumentObjectText : MADPrintPageElement
 
     - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 

@@ -87,14 +87,13 @@
 #import "MADPrintPageRendererDataSource.h"
 
 #import "MADDocumentObjectReference.h"
-#import "MADDocumentObject.h"
+#import "MADPrintPageElement.h"
+#import "MADPrintPageElement+Constructor.h"
 
 @class MTBarcode;
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
-
-static const char *MADQueueTextRepresentation = "com.everdayapps.mad.accessibility";
 
 static inline CGRect ElementBounds(CGRect, CGPoint);
 static inline CGFloat HeightWithVisibility(CGFloat, BOOL);
@@ -531,7 +530,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
                                                                                       page: pageIndex
                                                                                       item: item
                                                                                     itemID: pageSection.detailRowId];
-            drawingObject = [MADDocumentObject newDocumentObject:dataReference];
+            drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
             [drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
             line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
                                                                   type: item.documentObjectType

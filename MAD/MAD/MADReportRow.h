@@ -11,12 +11,12 @@
 
 #import <Foundation/NSObject.h>
 
-@class MADDocumentObject;
+@class MADPrintPageElement;
 
 @interface MADReportRow : NSObject
 
     @property (nonatomic, readonly, strong, getter=hasDocumentObjects)
-                                                NSArray <MADDocumentObject *> *hasDocumentObjects;
+                                                NSArray <MADPrintPageElement *> *hasDocumentObjects;
 
 @end
 

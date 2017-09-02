@@ -9,11 +9,11 @@
 #ifndef Reports_MAD_MADDocumentObjectBarcode_h
 #define Reports_MAD_MADDocumentObjectBarcode_h
 
-#import "MADDocumentObject.h"
+#import "MADPrintPageElement.h"
 
 @class MADDocumentObjectDataReference;
 
-@interface MADDocumentObjectBarcode : MADDocumentObject
+@interface MADDocumentObjectBarcode : MADPrintPageElement
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
 

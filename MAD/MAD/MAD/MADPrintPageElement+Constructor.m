@@ -1,12 +1,12 @@
 //
-//  MADDocumentObject.m
+//  MADPrintPageElement+Constructor.m
 //  MAD
 //
-//  Created by Michael Thomason on 6/5/16.
+//  Created by Michael on 9/2/17.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADDocumentObject.h"
+#import "MADPrintPageElement+Constructor.h"
 #import <Foundation/NSException.h>
 #import "MADDocumentObjectReference.h"
 
@@ -16,10 +16,10 @@
 #import "MADDocumentObjectBarcode.h"
 #import "MADDocumentObjectLabelStatic.h"
 
-@implementation MADDocumentObject
+@implementation MADPrintPageElement (Constructor)
 
 + (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition {
-
+    
     id documentObject;
     switch (definition.type) {
             
@@ -42,18 +42,16 @@
         case MTDocumentObjectTypeLabelStatic:
             documentObject = [[MADDocumentObjectLabelStatic alloc] initWithDefinition:definition];
             break;
-        //case MTDocumentObjectTypeWhtiespace:
-        //case MTDocumentObjectTypeGroupKey:
-        //case MTDocumentObjectTypeChart:
-        //case MTDocumentObjectTypeFormula:
-        //case MTDocumentObjectTypeAggregateFunctionList:
+            //case MTDocumentObjectTypeWhtiespace:
+            //case MTDocumentObjectTypeGroupKey:
+            //case MTDocumentObjectTypeChart:
+            //case MTDocumentObjectTypeFormula:
+            //case MTDocumentObjectTypeAggregateFunctionList:
         default:
             documentObject = nil;
             break;
     }
     return documentObject;
 }
-
-- (void)drawInRect:(CGRect)rect { }
 
 @end

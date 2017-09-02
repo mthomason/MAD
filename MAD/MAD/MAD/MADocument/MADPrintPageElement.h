@@ -1,5 +1,5 @@
 //
-//  MADDocumentObject.h
+//  MADPrintPageElement.h
 //  MAD
 //
 //  Created by Michael Thomason on 6/5/16.
@@ -11,14 +11,12 @@
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
-#import "MADDocumentObjectType.h"
 
 @class MADDocumentObjectDataReference;
 
-@interface MADDocumentObject : NSObject
+@interface MADPrintPageElement : NSObject
 
-    + (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition;
-
+    - (instancetype)initWithDefinition:(__kindof MADDocumentObjectDataReference *)definition;
     - (void)drawInRect:(CGRect)rect;
 
 @end

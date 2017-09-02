@@ -9,11 +9,11 @@
 #ifndef Reports_MAD_MADDocumentObjectImage_h
 #define Reports_MAD_MADDocumentObjectImage_h
 
-#import "MADDocumentObject.h"
+#import "MADPrintPageElement.h"
 
 @class MADDocumentObjectDataReferenceImage;
 
-@interface MADDocumentObjectImage : MADDocumentObject
+@interface MADDocumentObjectImage : MADPrintPageElement
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition;
 

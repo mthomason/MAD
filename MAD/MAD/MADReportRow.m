@@ -12,7 +12,7 @@
 @interface MADReportRow ()
 
     @property (nonatomic, readwrite, copy)      NSManagedObjectID *objectID;
-    @property (nonatomic, readwrite, strong)    NSArray <MADDocumentObject *> *documentObjects;
+    @property (nonatomic, readwrite, strong)    NSArray <MADPrintPageElement *> *documentObjects;
 
 @end
 
