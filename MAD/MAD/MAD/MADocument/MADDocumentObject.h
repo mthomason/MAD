@@ -17,7 +17,7 @@
 
 @interface MADDocumentObject : NSObject
 
-    + (instancetype)newDocumentObject:(MADDocumentObjectDataReference *)definition;
+    + (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition;
 
     - (void)drawInRect:(CGRect)rect;
 

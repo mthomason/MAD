@@ -18,7 +18,7 @@
 
 @implementation MADDocumentObject
 
-+ (instancetype)newDocumentObject:(MADDocumentObjectDataReference *)definition {
++ (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition {
 
     id documentObject;
     switch (definition.type) {
