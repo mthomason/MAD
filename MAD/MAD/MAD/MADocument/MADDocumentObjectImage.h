@@ -11,11 +11,11 @@
 
 #import "MADDocumentObject.h"
 
-@class RptqDocumentElementImage;
+@class MADDocumentObjectDataReferenceImage;
 
 @interface MADDocumentObjectImage : MADDocumentObject
 
-- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition;
 
 @end
 

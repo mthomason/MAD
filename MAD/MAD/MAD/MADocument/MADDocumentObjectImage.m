@@ -10,8 +10,6 @@
 #import <UIKit/UIImage.h>
 
 #import "MADDocumentObjectReference.h"
-#import "RptqDocumentElementImage.h"
-#import "RptqDocumentElement.h"
 
 @interface MADDocumentObjectImage ()
     @property (nonatomic, strong) UIImage *image;
@@ -23,9 +21,9 @@
     _image = nil;
 }
 
-- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition {
     if (self = [super init]) {
-        self.image = ((RptqDocumentElementImage *)definition.item).image.copy;
+        self.image = definition.image;
     }
     return self;
 }

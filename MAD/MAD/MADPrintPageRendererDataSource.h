@@ -21,13 +21,29 @@
     @property (readonly, nonatomic, strong) MADDataTableFast *dataTable;
     @property (readwrite, nonatomic, strong) MADReportFormatter *reportFormatter;
 
+    - (NSArray *)groupLevelKeys:(int64_t)rowID;
+    - (NSArray *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber;
+
     - (NSDictionary *)dataForRow:(NSUInteger)rowID;
-    - (NSArray *)groupLevelKeys:(NSUInteger)rowID;
+    - (NSDictionary *)dataForRowReportFirst;
+    - (NSDictionary *)dataForRowReportLast;
+    - (NSDictionary *)dataForRowPageFirst:(NSUInteger)pageIndex;
+    - (NSDictionary *)dataForRowPageLast:(NSUInteger)pageIndex;
+    - (NSDictionary *)dataForRow:(NSUInteger)rowID
+                          column:(NSString *)columnKey
+                           error:(NSError * __autoreleasing *)error;
+    - (NSArray <__kindof NSDictionary *> *)dataForGroups:(NSArray *)groupKeys
+                                                 groupID:(int64_t)groupID;
     - (__kindof NSObject <NSCopying> *)dataForRows:(NSArray *)rowIDs
                                             column:(NSString *)columnKey
                                             groups:(NSArray *)groupKeys
                                           function:(MTAggregateFunctionType)function
                                            groupBy:(MTAggregateGroupByType)groupBy;
+    - (NSUInteger)rowIDFirstOfReport;
+    - (NSUInteger)rowIDLastOfReport;
+    - (NSUInteger)rowIDFirstOfPage:(NSUInteger)page;
+    - (NSUInteger)rowIDLastOfPage:(NSUInteger)page;
+    - (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex;
 
     - (void)updatePrintingReportFormatter;
 

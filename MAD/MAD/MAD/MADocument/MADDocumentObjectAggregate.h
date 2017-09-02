@@ -11,11 +11,11 @@
 
 #import "MADDocumentObjectText.h"
 
-@class MADDocumentObjectDataReference;
+@class MADDocumentObjectDataReferenceAggregate;
 
 @interface MADDocumentObjectAggregate : MADDocumentObjectText
 
-    - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
+    - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition;
 
 @end
 

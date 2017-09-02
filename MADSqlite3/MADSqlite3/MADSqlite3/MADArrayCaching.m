@@ -436,7 +436,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return [self.database executeQuery:query withError:&error];
 }
 
-- (long long int)count {
+- (NSUInteger)count {
     if (_hasNumberOfRows != MADObjectInitalizedYes) {
         sqlite_int64 count = 0;
         sqlite3_stmt *stmt_count = _statementCount;
@@ -449,7 +449,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         _hasNumberOfRows = MADObjectInitalizedYes;
         _numberOfRows = count;
     }
-    return _numberOfRows;
+    return (NSUInteger)_numberOfRows;
 }
 
 - (BOOL)isEmpty { return _numberOfRows > 0; }

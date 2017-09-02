@@ -9,184 +9,97 @@
 #import "MADDocumentObjectAggregate.h"
 
 #import <Foundation/NSString.h>
-
-#import <MADFoundation/MADDataTable.h>
-
-#import "RptqDocumentElementAggregate+Extras.h"
-#import <MADAPI/MADDatabase.h>
-
-#import "RptqDocumentElement+Extras.h"
-#import "RptqQueryField.h"
-#import "RptqQueryTable+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocumentElementAggregate.h"
-
-#import <MADSqlite3/MADDataTableFast.h>
-#import "MADReportFormatter.h"
-#import "MADParameters+QueryCacheAggregate.h"
-#import <MADSqlite3/MADArrayCaching.h>
-#import <MADAPI/MADQuery.h>
-#import "MADQuery+Extras.h"
-#import "MADAggregateFunctionGroupByType.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
 
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
 
-static inline NSRange MADRangeToGroup(int64_t groupNumber);
-static inline NSRange MADRangeToGroup(int64_t groupNumber) {
-    return NSMakeRange(0, (NSUInteger)groupNumber + 1);
-}
-
 @implementation MADDocumentObjectAggregate
 
-- (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition {
     if (self = [super initWithDefinition:definition]) {
         
         NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
         datasource = definition.datasource;
         
-        RptqDocumentElementAggregate *isAggregate;
-        isAggregate = (RptqDocumentElementAggregate *)definition.item;
+        NSString *fieldKey = [definition fieldKey];
+        NSArray *groupKeys = [datasource groupKeys:(int64_t)definition.detailRowId
+                                       groupNumber:definition.groupNumber];
         
-        RptqQueryField *aggregateField = isAggregate.aggregateField;
-        RptqQueryTable *inQueryTable = aggregateField.inQueryTable;
-        
-        NSString *queryAlias = [inQueryTable queryAlias];
-        MADSafeQueryField *fieldKey;
-        fieldKey = [datasource.database newSafeQueryField: aggregateField.databaseSchemaField.name
-                                                 andTable: queryAlias];
-        
-        NSArray *groupKeys;
-        
-        int64_t groupNumber = isAggregate.groupNumber;
-        NSArray *groupLevelKeys = [datasource groupLevelKeys:definition.detailRowId];
-        if (groupNumber < (int64_t)groupLevelKeys.count) {
-            groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
-        }
-        
-        RptqDatabaseSchemaField *databaseSchemaField = aggregateField.databaseSchemaField;
-        MADDataType aggregateType = databaseSchemaField.dataType;
-        
-        BOOL calculateInMemory = isAggregate.functionType == MTAggregateFunctionTypeFirst ||
-                                 isAggregate.functionType == MTAggregateFunctionTypeLast;
         
         __kindof NSObject <NSCopying> *aggregateResult;
         
-        if (!calculateInMemory) {
+        if (![definition calculateInMemory]) {
             
             NSArray <NSNumber *> *rowIDsForPage;
-            rowIDsForPage = [datasource.reportFormatter rowIDsForPage:definition.pageIndex];
-            
-            aggregateResult = [datasource dataForRows:rowIDsForPage
-                                               column:fieldKey
-                                               groups:groupKeys
-                                             function:isAggregate.functionType
-                                              groupBy:isAggregate.groupType];
+            rowIDsForPage = [datasource rowIDsForPage:definition.pageIndex];
+            aggregateResult = [datasource dataForRows: rowIDsForPage
+                                               column: fieldKey
+                                               groups: groupKeys
+                                             function: definition.functionType
+                                              groupBy: definition.groupType];
             
         } else {    //Handle first and last
             
             NSArray <__kindof NSDictionary *> *dataForGroup = nil;
             NSDictionary *dataOfInterest = nil;
-            switch (isAggregate.groupType) {
+            switch (definition.groupType) {
                 case MTAggregateGroupByTypeSection: {
                     
-                    dataForGroup = [[self class] dataForAggregateGroupByTypeSection: groupNumber
-                                                                     groupLevelKeys: groupLevelKeys
-                                                                          dataTable: datasource.dataTable];
+                    dataForGroup = [datasource dataForGroups: groupKeys
+                                                     groupID: definition.groupNumber];
                     
-                    switch (isAggregate.functionType) {
+                    switch (definition.functionType) {
                         case MTAggregateFunctionTypeFirst:
-                            dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup[0] :
-                            [[self class] dictionaryEmptyStringForKey: fieldKey];
+                            dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup.firstObject :
+                                                                        @{fieldKey : @""};
                             break;
                         case MTAggregateFunctionTypeLast:
                             dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup.lastObject :
-                            [[self class] dictionaryEmptyStringForKey: fieldKey];
+                                                                         @{fieldKey : @""};
                             break;
                         default:
-                            dataOfInterest = [[self class] dictionaryEmptyStringForKey: fieldKey];
+                            dataOfInterest = @{fieldKey : @""};
                             break;
                     }
                     break;
                 }
                 case MTAggregateGroupByTypePage: {
-                    switch (isAggregate.functionType) {
-                        case MTAggregateFunctionTypeFirst: {
+                    
+                    switch (definition.functionType) {
                             
-                            //don't get data from report formattter
-                            //get it from data table
-                            
-                            NSUInteger firstRowid = NSUIntegerMax;
-                            MADDocumentSectionType section;
-                            for (MADSectionRepresentation *pageSection in datasource.reportFormatter.reportLayout[definition.pageIndex]) {
-                                section = pageSection.sectionType;
-                                if (section == MADDocumentSectionTypeBody) {
-                                    firstRowid = pageSection.detailRowId;
-                                    break;
-                                }
-                            }
-                            dataOfInterest =  firstRowid != NSUIntegerMax ? [datasource dataForRow:firstRowid] : nil;
-                            break;
-                        }
-                        case MTAggregateFunctionTypeLast: {
-                            
-                            NSUInteger lastRowid = NSUIntegerMax;
-                            MADDocumentSectionType section;
-                            for (MADSectionRepresentation *pageSection in [datasource.reportFormatter.reportLayout[definition.pageIndex] reverseObjectEnumerator]) {
-                                section = pageSection.sectionType;
-                                if (section == MADDocumentSectionTypeBody) {
-                                    lastRowid = pageSection.detailRowId;
-                                    break;
-                                }
-                            }
-                            dataOfInterest = lastRowid != NSUIntegerMax ? [datasource dataForRow:lastRowid] : nil;
+                        case MTAggregateFunctionTypeFirst:
+                            dataOfInterest = [datasource dataForRowPageFirst:definition.pageIndex];
                             break;
                             
-                        }
+                        case MTAggregateFunctionTypeLast:
+                            dataOfInterest = [datasource dataForRowPageLast:definition.pageIndex];
+                            break;
+                            
                         default:
-                            dataOfInterest = [[self class] dictionaryEmptyStringForKey: fieldKey];
+                            dataOfInterest = @{fieldKey : @""};
                             break;
                     }
                     break;
                 }
+                    
                 case MTAggregateGroupByTypeReport: {
-                    switch (isAggregate.functionType) {
-                        case MTAggregateFunctionTypeFirst: {
+                    
+                    switch (definition.functionType) {
                             
-                            NSUInteger firstRowid = NSUIntegerMax;
-                            MADDocumentSectionType section;
-                            for (MADSectionRepresentation *pageSection in  datasource.reportFormatter.reportLayout[0]) {
-                                section = pageSection.sectionType;
-                                if (section == MADDocumentSectionTypeBody) {
-                                    firstRowid = pageSection.detailRowId;
-                                    break;
-                                }
-                            }
-                            dataOfInterest =  firstRowid != NSUIntegerMax ? [datasource dataForRow:firstRowid] : nil;
+                        case MTAggregateFunctionTypeFirst:
+                            dataOfInterest = [datasource dataForRowReportFirst];
                             break;
-                        }
-                        case MTAggregateFunctionTypeLast: {
                             
-                            NSUInteger lastRowid = NSUIntegerMax;
-                            NSArray <MADSectionRepresentation *> *sectionArray;
-                            sectionArray = datasource.reportFormatter.reportLayout[(NSUInteger)datasource.reportFormatter.reportLayout.count - 1];
-                            NSEnumerator <__kindof MADSectionRepresentation *> *reverseObjectEnumerator = [sectionArray reverseObjectEnumerator];
-                            MADDocumentSectionType section;
-                            for (MADSectionRepresentation *pageSection in reverseObjectEnumerator) {
-                                section = pageSection.sectionType;
-                                if (section == MADDocumentSectionTypeBody) {
-                                    lastRowid = pageSection.detailRowId;
-                                    break;
-                                }
-                            }
-                            dataOfInterest = lastRowid != NSUIntegerMax ? [datasource dataForRow:lastRowid] : nil;
+                        case MTAggregateFunctionTypeLast:
+                            dataOfInterest = [datasource dataForRowReportLast];
                             break;
-                        }
-                        default: {
                             
-                            dataOfInterest = [[self class] dictionaryEmptyStringForKey: fieldKey];
+                        default:
+                            dataOfInterest = @{fieldKey : @""};
                             break;
-                        }
+                            
                     }
                     break;
                 }
@@ -196,34 +109,11 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
             aggregateResult = dataOfInterest[fieldKey];
         }
         
-        NSString *formattedString = [isAggregate formattedString: aggregateType
-                                                        forValue: aggregateResult];
-        
+        NSString *formattedString = [definition formattedStringForValue: aggregateResult];
         self.text = formattedString.copy;
-        if ([self.text isEqualToString:MTNullIdentifier]) {
-            self.text = @"";
-        }
         
     }
     return self;
-}
-
-+ (NSDictionary *)dictionaryEmptyStringForKey:(id)key {
-    id dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:@"", key, nil];
-    return dictionary;
-}
-
-+ (NSArray *)dataForAggregateGroupByTypeSection:(int64_t)groupNumber
-                                 groupLevelKeys:(NSArray *)groupLevelKeys
-                                      dataTable:(MADDataTable *)dataTable {
-    NSArray <__kindof NSDictionary *> *dataForGroup;
-    if (groupNumber < (int64_t)groupLevelKeys.count) {
-        NSArray *groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
-        dataForGroup = [dataTable objectsForGroupKeys:groupKeys];
-    } else {
-        dataForGroup = @[];
-    }
-    return dataForGroup;
 }
 
 - (void)drawInRect:(CGRect)rect {

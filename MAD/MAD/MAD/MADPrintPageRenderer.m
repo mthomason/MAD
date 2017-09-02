@@ -49,6 +49,9 @@
 
 #import "RptqDatabaseSchemaField.h"
 
+#import "RptqTextStyle.h"
+#import "RptqAlignment.h"
+
 #import "RptqDocumentElementLabel.h"
 #import "RptqDocumentElementLabelDataField+Extras.h"
 #import "RptqDocumentElementImage.h"
@@ -140,6 +143,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
 
 
 @interface MADPrintPageRenderer ()
+    <MADDocumentObjectDataReferenceProtocol>
 
     @property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
     @property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
@@ -150,7 +154,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
 
     @property (nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
 
-    @property (nonatomic, strong) MADDocumentObjectDataReference *dataReference;
+    @property (readwrite, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
 
 @end
 
@@ -267,9 +271,14 @@ static inline CGRect SectionBounds(CGRect pageRect,
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
     if (self = [super init]) {
         self.datasource = datasource;
-        self.dataReference = [[MADDocumentObjectDataReference alloc] initWithDataSource:datasource];
+        
         _showWaterMark = NO;
         _accessibilityCacheNeedsUpdate = NO;
+        
+        NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
+        fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *>alloc] init];
+        self.fontDescriptors = fontDescriptors;
+
     }
     return self;
 }
@@ -284,6 +293,20 @@ static inline CGRect SectionBounds(CGRect pageRect,
                                             (NSUInteger)self.datasource.reportFormatter.reportLayout.count];
     }
     return _textRepresentation;
+}
+
+- (NSDictionary <NSString *, id> *)fontAttributes:(MADDocumentObjectDataReference *)dataRef {
+    __kindof RptqDocumentElement *item = dataRef.item;
+    MADElementStylizedText *attt = self.fontDescriptors[item.objectID];
+    if (attt == nil) {
+        attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
+                                                       fontSize: item.fontsize
+                                                      textStyle: item.textStyle
+                                            horizontalAlignment: item.alignment.horizontal];
+        
+        self.fontDescriptors[item.objectID] = attt;
+    }
+    return attt.fontAttributes;
 }
 
 #pragma -
@@ -415,12 +438,8 @@ static inline CGRect SectionBounds(CGRect pageRect,
     RptqDocumentSection *documentSection;
     MADReportSectionRepresentation *sectionRepresentation;
     
-    self.dataReference.pageIndex = pageIndex;
-
     NSNumber *sectionIdentifier;
     for (MADSectionRepresentation *pageSection in layoutEnumerator) {
-
-        self.dataReference.detailRowId = pageSection.detailRowId;
         
         documentSection = [document documentSectionForType: pageSection.sectionType
                                                   andLevel: pageSection.groupLevel];
@@ -446,6 +465,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
                                          pageRect: pageRect
                                       pageSection: pageSection
                                          document: document
+                                        pageIndex: pageIndex
                                           ofPages: reportFormatter.numberOfPages
                                            offset: originY
                                     offsetElement: offsetElement
@@ -471,36 +491,11 @@ static inline CGRect SectionBounds(CGRect pageRect,
                                        pageRect: (CGRect)pageRect
                                     pageSection: (MADSectionRepresentation *)pageSection
                                        document: (RptqDocument *)document
+                                      pageIndex: (NSUInteger)pageIndex
                                         ofPages: (NSUInteger)numberOfPages
                                          offset: (CGFloat)originY
                                   offsetElement: (NSUInteger)offsetElement
                                 offsetCharacter: (NSUInteger)offsetCharacter {
-    
-    MADReportSectionRepresentation * _Nonnull sectionRepresentation;
-    
-    sectionRepresentation = [self drawSection: pageSection
-                              documentSection: documentSection
-                                       inRect: rect
-                                offsetElement: offsetElement];
-    
-
-    return sectionRepresentation;
-}
-
-+ (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [[self backgroundColorForDocumentSectionType:type] setFill];
-    CGPathRef path = CGPathCreateWithRect(rect, NULL);
-    CGContextAddPath(ctx, path);
-    CGContextDrawPath(ctx, kCGPathFill);
-    CGPathRelease(path);
-}
-
-- (MADReportSectionRepresentation *)drawSection: (MADSectionRepresentation *)pageSection
-                                documentSection: (RptqDocumentSection *)documentSection
-                                         inRect: (CGRect)sectionRect
-                                  offsetElement: (NSUInteger)offsetElement {
-    
     
     MADReportSectionRepresentation * _Nonnull sectionRepresentation;
     MADReportSectionRowsRepresentation * _Nonnull rowRepresentation;
@@ -521,7 +516,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
     
     MADDocumentSectionType type = [documentSection getDocumentSectionType];
     [MADPrintPageRenderer setBackgroundColorForSectionType: type
-                                                    inRect: sectionRect];
+                                                    inRect: rect];
     
     for (RptqDocumentSectionRows *row in rowsEnumerator) {
         
@@ -530,10 +525,14 @@ static inline CGRect SectionBounds(CGRect pageRect,
         
         for (RptqDocumentElement *item in documentObjectEnumerator) {
 
-            self.dataReference.item = item;
-
-            drawingObject = [MADDocumentObject newDocumentObject:self.dataReference];
-            [drawingObject drawInRect:ElementBounds(item.frame, sectionRect.origin)];
+            MADDocumentObjectDataReference *dataReference;
+            dataReference = [MADDocumentObjectDataReference newDocumentObjectDataReference: self.datasource
+                                                                                  delegate: self
+                                                                                      page: pageIndex
+                                                                                      item: item
+                                                                                    itemID: pageSection.detailRowId];
+            drawingObject = [MADDocumentObject newDocumentObject:dataReference];
+            [drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
             line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
                                                                   type: item.documentObjectType
                                                                  frame: item.frame];
@@ -551,6 +550,15 @@ static inline CGRect SectionBounds(CGRect pageRect,
 END_DrawSection:;
 
     return sectionRepresentation;
+}
+
++ (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [[self backgroundColorForDocumentSectionType:type] setFill];
+    CGPathRef path = CGPathCreateWithRect(rect, NULL);
+    CGContextAddPath(ctx, path);
+    CGContextDrawPath(ctx, kCGPathFill);
+    CGPathRelease(path);
 }
 
 #pragma mark -

@@ -24,7 +24,7 @@ typedef NS_ENUM(int16_t, MADArrayCachingState) {
 
     @property (nonatomic, readwrite, weak, nullable) id <MADCacheProtocol> cachedDelegate;
     @property (nonatomic, readonly, copy, nonnull) NSString * identifier;
-    @property (readonly) long long int count;
+    @property (readonly) NSUInteger count;
     @property (nonatomic, readonly, assign) MADArrayCachingState state;
 
     - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier

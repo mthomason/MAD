@@ -11,11 +11,11 @@
 
 #import "MADDocumentObjectText.h"
 
-@class MADDocumentObjectDataReference;
+@class MADDocumentObjectDataReferenceLabelStatic;
 
 @interface MADDocumentObjectLabelStatic : MADDocumentObjectText
 
-    - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition;
+    - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition;
 
 @end
 

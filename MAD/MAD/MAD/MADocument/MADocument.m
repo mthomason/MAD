@@ -48,6 +48,8 @@
 
 #import <MADFileManager/MADFileUtilities.h>
 
+#import <MADSqlite3/MADArrayCaching.h>
+
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -282,23 +284,6 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)format {
     [self.reportFormatter format:self.paperSize contentChanged:NO];
-}
-
-- (NSArray *)groupLevelKeys:(NSUInteger)rowID {
-        NSArray *groupLevelKeys;
-
-    if (self.reportFormatter.numberOfGroups > 0) {
-        
-        NSDictionary *row = [self.dataTable dataForRow: rowID];
-        groupLevelKeys = [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
-        return groupLevelKeys;
-        
-    } else {
-        
-        groupLevelKeys = [[NSArray alloc] init];
-        return groupLevelKeys;
-        
-    }
 }
 
 #pragma mark -
@@ -1001,6 +986,64 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark -
 #pragma mark MADPrintPageRendererDataSourceProtocol
 
+static inline NSRange MADRangeToGroup(int64_t groupNumber);
+static inline NSRange MADRangeToGroup(int64_t groupNumber) {
+    return NSMakeRange(0, (NSUInteger)groupNumber + 1);
+}
+
+- (NSDictionary *)dataForRow:(NSUInteger)rowID
+                      column:(NSString *)columnKey
+                       error:(NSError * __autoreleasing *)error {
+    NSError * __autoreleasing errorQ = nil;
+    NSDictionary *result = [self.dataTable dataForRow:rowID
+                                               column:columnKey
+                                                error:&errorQ];
+    if (errorQ != nil) {
+        *error = errorQ;
+    }
+    return result;
+}
+
+- (NSArray *)groupLevelKeys:(int64_t)rowID {
+    NSArray *groupLevelKeys;
+    
+    if (self.reportFormatter.numberOfGroups > 0) {
+        
+        NSDictionary *row = [self.dataTable dataForRow: (NSUInteger)rowID];
+        groupLevelKeys = [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
+        return groupLevelKeys;
+        
+    } else {
+        
+        groupLevelKeys = [[NSArray alloc] init];
+        return groupLevelKeys;
+        
+    }
+}
+
+- (NSArray *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber {
+    NSArray *groupKeys;
+    NSArray *groupLevelKeys = [self groupLevelKeys:rowID];
+    if (groupNumber < (int64_t)groupLevelKeys.count) {
+        groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
+    }
+    return groupKeys;
+}
+
+- (NSArray <__kindof NSDictionary *> *)dataForGroups:(NSArray *)groupKeys
+                                             groupID:(int64_t)groupID {
+    
+    NSArray <__kindof NSDictionary *> *dataForGroup;
+    if (groupID < (int64_t)groupKeys.count) {
+        NSArray *groupKeysInRange = [groupKeys subarrayWithRange: MADRangeToGroup(groupID)];
+        dataForGroup = [self.dataTable objectsForGroupKeys:groupKeysInRange];
+    } else {
+        dataForGroup = [[NSArray alloc] init];
+    }
+    
+    return dataForGroup;
+}
+
 - (__kindof NSObject <NSCopying> *)dataForRows:(NSArray *)rowIDs
                                         column:(NSString *)columnKey
                                         groups:(NSArray *)groupKeys
@@ -1020,6 +1063,99 @@ void madwarn(char *err,  const char*err2) { }
         result = [self.dataTable runSelectQuery:query];
     }
     return result;
+}
+
+- (NSUInteger)rowIDFirstOfReport {
+    NSUInteger rowID = NSUIntegerMax;
+    MADDocumentSectionType section;
+    NSArray <MADSectionRepresentation *> *pageLayout;
+    for (pageLayout in self.reportFormatter.reportLayout) {
+        for (MADSectionRepresentation *pageSection in pageLayout) {
+            section = pageSection.sectionType;
+            if (section == MADDocumentSectionTypeBody) {
+                rowID = pageSection.detailRowId;
+                goto END_rowIDFirstOfReport_Loop;
+            }
+        }
+    }
+END_rowIDFirstOfReport_Loop:;
+    return rowID;
+}
+
+- (NSUInteger)rowIDLastOfReport {
+    NSUInteger rowID = NSUIntegerMax;
+    MADDocumentSectionType section;
+    NSArray <MADSectionRepresentation *> *pageLayout;
+    NSUInteger reportLayoutCount = self.reportFormatter.reportLayout.count;
+    for (NSUInteger i=reportLayoutCount; i>0; i--) {
+        pageLayout = self.reportFormatter.reportLayout[i-1];
+        NSEnumerator <__kindof MADSectionRepresentation *> *reverseObjectEnumerator;
+        reverseObjectEnumerator = [pageLayout reverseObjectEnumerator];
+        for (MADSectionRepresentation *pageSection in reverseObjectEnumerator) {
+            section = pageSection.sectionType;
+            if (section == MADDocumentSectionTypeBody) {
+                rowID = pageSection.detailRowId;
+                goto END_rowIDLastOfReport_Loop;
+            }
+        }
+    }
+END_rowIDLastOfReport_Loop:;
+    return rowID;
+}
+
+- (NSUInteger)rowIDFirstOfPage:(NSUInteger)page {
+    NSUInteger rowID = NSUIntegerMax;
+    MADDocumentSectionType section;
+    NSArray <MADSectionRepresentation *> *pageLayout;
+    pageLayout = self.reportFormatter.reportLayout[page];
+    for (MADSectionRepresentation *pageSection in pageLayout) {
+        section = pageSection.sectionType;
+        if (section == MADDocumentSectionTypeBody) {
+            rowID = pageSection.detailRowId;
+            break;
+        }
+    }
+    return rowID;
+}
+
+- (NSUInteger)rowIDLastOfPage:(NSUInteger)page {
+    NSUInteger rowID = NSUIntegerMax;
+    MADDocumentSectionType section;
+    NSEnumerator <MADSectionRepresentation *> *enumerator;
+    enumerator = [self.reportFormatter.reportLayout[page] reverseObjectEnumerator];
+    for (MADSectionRepresentation *pageSection in enumerator) {
+        section = pageSection.sectionType;
+        if (section == MADDocumentSectionTypeBody) {
+            rowID = pageSection.detailRowId;
+            break;
+        }
+    }
+    return rowID;
+}
+
+- (NSDictionary *)dataForRowReportFirst {
+    NSUInteger firstRowID = [self rowIDFirstOfReport];
+    return firstRowID != NSUIntegerMax ? [self dataForRow:firstRowID] : nil;
+
+}
+
+- (NSDictionary *)dataForRowReportLast {
+    NSUInteger lastRowID = [self rowIDLastOfReport];
+    return lastRowID != NSUIntegerMax ? [self dataForRow:lastRowID] : nil;
+}
+
+- (NSDictionary *)dataForRowPageFirst:(NSUInteger)pageIndex {
+    NSUInteger firstRowid = [self rowIDFirstOfPage:pageIndex];
+    return firstRowid != NSUIntegerMax ? [self dataForRow:firstRowid] : nil;
+}
+
+- (NSDictionary *)dataForRowPageLast:(NSUInteger)pageIndex {
+    NSUInteger lastRowid = [self rowIDLastOfPage:pageIndex];
+    return lastRowid != NSUIntegerMax ? [self dataForRow:lastRowid] : nil;
+}
+
+- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex {
+    return [self.reportFormatter rowIDsForPage:pageIndex];
 }
 
 #pragma mark -
