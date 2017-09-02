@@ -44,7 +44,7 @@
         datasource = definition.datasource;
         item = definition.item;
         database = datasource.database;
-        NSDictionary *rowData = [datasource.dataTable copyDataForCacheId:definition.detailRowId];
+        NSDictionary *rowData = [datasource.dataTable dataForRow:definition.detailRowId];
         
         NSString *tableQueryAlias1 = [item.referencesField1.inQueryTable queryAlias];
         NSString *tableQueryAlias2 = [item.referencesField2.inQueryTable queryAlias];

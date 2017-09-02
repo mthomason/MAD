@@ -46,7 +46,6 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         datasource = definition.datasource;
         
         RptqDocumentElementAggregate *isAggregate;
-        
         isAggregate = (RptqDocumentElementAggregate *)definition.item;
         
         RptqQueryField *aggregateField = isAggregate.aggregateField;
@@ -71,20 +70,18 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         BOOL calculateInMemory = isAggregate.functionType == MTAggregateFunctionTypeFirst ||
                                  isAggregate.functionType == MTAggregateFunctionTypeLast;
         
-        id aggregateResult;
+        __kindof NSObject <NSCopying> *aggregateResult;
         
-        if (calculateInMemory == NO) {
+        if (!calculateInMemory) {
             
-            int16_t groupType = isAggregate.groupType;
             NSArray <NSNumber *> *rowIDsForPage;
             rowIDsForPage = [datasource.reportFormatter rowIDsForPage:definition.pageIndex];
             
-            aggregateResult = [[self class] newResultsForAggregateType: groupType
-                                                              function: isAggregate.functionType
-                                                              fieldKey: fieldKey
-                                                             groupKeys: groupKeys
-                                                                rowids: rowIDsForPage
-                                                         fromDataTable: datasource.dataTable];
+            aggregateResult = [datasource dataForRows:rowIDsForPage
+                                               column:fieldKey
+                                               groups:groupKeys
+                                             function:isAggregate.functionType
+                                              groupBy:isAggregate.groupType];
             
         } else {    //Handle first and last
             
@@ -100,14 +97,14 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                     switch (isAggregate.functionType) {
                         case MTAggregateFunctionTypeFirst:
                             dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup[0] :
-                            [[self class] newDictionaryEmptyStringForKey: fieldKey];
+                            [[self class] dictionaryEmptyStringForKey: fieldKey];
                             break;
                         case MTAggregateFunctionTypeLast:
                             dataOfInterest = (dataForGroup.count >= 1) ? dataForGroup.lastObject :
-                            [[self class] newDictionaryEmptyStringForKey: fieldKey];
+                            [[self class] dictionaryEmptyStringForKey: fieldKey];
                             break;
                         default:
-                            dataOfInterest = [[self class] newDictionaryEmptyStringForKey: fieldKey];
+                            dataOfInterest = [[self class] dictionaryEmptyStringForKey: fieldKey];
                             break;
                     }
                     break;
@@ -128,7 +125,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                                     break;
                                 }
                             }
-                            dataOfInterest =  firstRowid != NSUIntegerMax ? [datasource.dataTable copyDataForCacheId:firstRowid] : nil;
+                            dataOfInterest =  firstRowid != NSUIntegerMax ? [datasource dataForRow:firstRowid] : nil;
                             break;
                         }
                         case MTAggregateFunctionTypeLast: {
@@ -142,12 +139,12 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                                     break;
                                 }
                             }
-                            dataOfInterest = lastRowid != NSUIntegerMax ? [datasource.dataTable copyDataForCacheId:lastRowid] : nil;
+                            dataOfInterest = lastRowid != NSUIntegerMax ? [datasource dataForRow:lastRowid] : nil;
                             break;
                             
                         }
                         default:
-                            dataOfInterest = [[self class] newDictionaryEmptyStringForKey: fieldKey];
+                            dataOfInterest = [[self class] dictionaryEmptyStringForKey: fieldKey];
                             break;
                     }
                     break;
@@ -165,7 +162,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                                     break;
                                 }
                             }
-                            dataOfInterest =  firstRowid != NSUIntegerMax ? [datasource.dataTable copyDataForCacheId:firstRowid] : nil;
+                            dataOfInterest =  firstRowid != NSUIntegerMax ? [datasource dataForRow:firstRowid] : nil;
                             break;
                         }
                         case MTAggregateFunctionTypeLast: {
@@ -182,12 +179,12 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
                                     break;
                                 }
                             }
-                            dataOfInterest = lastRowid != NSUIntegerMax ? [datasource.dataTable copyDataForCacheId:lastRowid] : nil;
+                            dataOfInterest = lastRowid != NSUIntegerMax ? [datasource dataForRow:lastRowid] : nil;
                             break;
                         }
                         default: {
                             
-                            dataOfInterest = [[self class] newDictionaryEmptyStringForKey: fieldKey];
+                            dataOfInterest = [[self class] dictionaryEmptyStringForKey: fieldKey];
                             break;
                         }
                     }
@@ -211,7 +208,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
     return self;
 }
 
-+ (NSDictionary *)newDictionaryEmptyStringForKey:(id)key {
++ (NSDictionary *)dictionaryEmptyStringForKey:(id)key {
     id dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:@"", key, nil];
     return dictionary;
 }
@@ -227,102 +224,6 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
         dataForGroup = @[];
     }
     return dataForGroup;
-}
-
-+ (id)newDocumentObjectForAggregateType:(MTAggregateGroupByType)groupByType
-                               function:(MTAggregateFunctionType)function
-                               fieldKey:(NSString *)fieldKey
-                              groupKeys:(NSArray *)groupKeys
-                                 rowids:(NSArray *)rowids
-                          fromDataTable:(MADDataTableFast *)dataTable {
-    
-    id result = nil;
-    NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
-    
-    if (columnKey) {
-        id queryParameters;
-        
-        switch (groupByType) {
-            case MTAggregateGroupByTypePage: {
-                queryParameters = [MADParameters newParamatersAggregateByPageWithFieldKey: columnKey
-                                                                                andRowIds: rowids
-                                                                          andFunctionType: function
-                                                                             andDataTable: dataTable];
-                break;
-            }
-            case MTAggregateGroupByTypeReport:
-                queryParameters = [MADParameters newParametersAggregateByReportWithFieldKey: columnKey
-                                                                            andFunctionType: function
-                                                                               andDataTable: dataTable];
-                break;
-                
-            case MTAggregateGroupByTypeSection:
-                queryParameters = [MADParameters newParamatersAggregateByGroupKeys: groupKeys
-                                                                       andFieldKey: columnKey
-                                                                   andFunctionType: function
-                                                                      andDataTable: dataTable];
-                break;
-                
-            default:
-                break;
-        }
-        
-        
-        id query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
-                                               object: queryParameters];
-        result = [dataTable runSelectQuery:query];
-        
-    }
-    
-    return result;
-}
-
-// FIXME: Return error handler... remove credentals
-+ (id)newResultsForAggregateType:(MTAggregateGroupByType)groupByType
-                        function:(MTAggregateFunctionType)function
-                        fieldKey:(NSString *)fieldKey
-                       groupKeys:(NSArray *)groupKeys
-                          rowids:(NSArray *)rowids
-                   fromDataTable:(MADDataTableFast *)dataTable {
-    
-    id result = nil;
-    NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
-    
-    if (columnKey) {
-        id queryParameters;
-        
-        switch (groupByType) {
-            case MTAggregateGroupByTypePage: {
-                queryParameters = [MADParameters newParamatersAggregateByPageWithFieldKey: columnKey
-                                                                                andRowIds: rowids
-                                                                          andFunctionType: function
-                                                                             andDataTable: dataTable];
-                break;
-            }
-            case MTAggregateGroupByTypeReport:
-                queryParameters = [MADParameters newParametersAggregateByReportWithFieldKey: columnKey
-                                                                            andFunctionType: function
-                                                                               andDataTable: dataTable];
-                break;
-                
-            case MTAggregateGroupByTypeSection:
-                queryParameters = [MADParameters newParamatersAggregateByGroupKeys: groupKeys
-                                                                       andFieldKey: columnKey
-                                                                   andFunctionType: function
-                                                                      andDataTable: dataTable];
-                break;
-                
-            default:
-                break;
-        }
-        
-        id query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
-                                               object: queryParameters];
-        result = [dataTable runSelectQuery:query];
-        
-    }
-    
-    return result;
 }
 
 - (void)drawInRect:(CGRect)rect {

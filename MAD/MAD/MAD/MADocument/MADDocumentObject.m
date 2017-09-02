@@ -10,9 +10,6 @@
 #import <Foundation/NSException.h>
 #import "MADDocumentObjectReference.h"
 
-#import "RptqDocumentElement.h"
-#import "RptqDocumentElement+Extras.h"
-
 #import "MADDocumentObjectAggregate.h"
 #import "MADDocumentObjectLabelDynamic.h"
 #import "MADDocumentObjectImage.h"
@@ -24,7 +21,7 @@
 + (instancetype)newDocumentObject:(MADDocumentObjectDataReference *)definition {
 
     id documentObject;
-    switch (definition.item.documentObjectType) {
+    switch (definition.type) {
             
         case MTDocumentObjectTypeAggregate:
             documentObject = [[MADDocumentObjectAggregate alloc] initWithDefinition:definition];

@@ -37,6 +37,12 @@ typedef NS_ENUM(short, MADParametersType) {
                                                andFunctionType:(MTAggregateFunctionType)functionType
                                                   andDataTable:(MADDataTableFast *)dataTable;
 
+    + (instancetype)newParametersAggregateByType:(MTAggregateGroupByType)groupBy
+                                        function:(MTAggregateFunctionType)function
+                                          rowids:(NSArray *)rowids
+                                       groupKeys:(NSArray *)groupKeys
+                                        fieldKey:(NSString *)fieldKey
+                                       dataTable:(MADDataTableFast *)dataTable;
 @end
 
 #endif

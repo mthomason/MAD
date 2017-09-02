@@ -13,7 +13,7 @@
 
     - (BOOL)cacheExist;
     - (NSEnumerator <NSDictionary *> *)enumeratorForReportData;
-    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cachedID;
+    - (NSDictionary *)dataForRow:(NSUInteger)cachedID;
 
 @end
 

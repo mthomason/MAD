@@ -10,12 +10,13 @@
 #import <Foundation/NSString.h>
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageRendererDataSource.h"
+#import "RptqDocumentElementLabel.h"
 
 @implementation MADDocumentObjectLabelStatic
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReference *)definition {
     if (self = [super initWithDefinition:definition]) {
-        NSString *text = [definition.datasource getLabelDataStatic:definition];
+        NSString *text = ((RptqDocumentElementLabel *)definition.item).text;;
         self.text = text.copy;
     }
     return self;

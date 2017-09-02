@@ -10,6 +10,7 @@
 #define MAD_MADDocumentObjectReference_h
 
 #import <Foundation/NSObject.h>
+#import <MAD/MADDocumentObjectType.h>
 
 @protocol MADPrintPageRendererDataSourceProtocol;
 
@@ -25,8 +26,11 @@
     @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
     @property (readwrite, nonatomic, weak) __kindof RptqDocumentElement *item;
 
+    @property (readonly, nonatomic, assign) MTDocumentObjectType type;
     @property (readwrite, nonatomic, assign) NSUInteger pageIndex;
     @property (readwrite, nonatomic, assign) NSUInteger detailRowId;
+
+    - (NSDictionary <NSString *, id> *)fontAttributes;
 
 @end
 

@@ -35,26 +35,10 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
-    MADElementStylizedText *attt;
-    MADDocumentObjectDataReference *definition;
-    RptqDocumentElement *item;
-
-    definition = self.definition;
-    item = definition.item;
-    attt = definition.fontDescriptors[item.objectID];
-    
-    if (attt == nil) {
-        attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
-                                                       fontSize: item.fontsize
-                                                      textStyle: item.textStyle
-                                            horizontalAlignment: item.alignment.horizontal];
-        
-        definition.fontDescriptors[item.objectID] = attt;
-    }
-    
+    NSDictionary <NSString *, id> *fontAttributes = [self.definition fontAttributes];
     [self.text drawWithRect: rect
                     options: NSStringDrawingUsesLineFragmentOrigin
-                 attributes: attt.fontAttributes
+                 attributes: fontAttributes
                     context: nil];
     
 }

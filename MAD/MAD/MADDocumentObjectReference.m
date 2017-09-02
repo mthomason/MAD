@@ -8,7 +8,10 @@
 
 #import "MADDocumentObjectReference.h"
 #import <Foundation/NSDictionary.h>
-#import "RptqDocumentElement.h"
+#import "RptqDocumentElement+Extras.h"
+#import "RptqTextStyle.h"
+#import "RptqAlignment.h"
+#import "MADElementStylizedText.h"
 
 @interface MADDocumentObjectDataReference ()
 
@@ -43,6 +46,23 @@
     copy.pageIndex = _pageIndex;
     copy.datasource = _datasource;
     return copy;
+}
+
+- (MTDocumentObjectType)type {
+    return self.item.documentObjectType;
+}
+
+- (NSDictionary <NSString *, id> *)fontAttributes {
+    MADElementStylizedText *attt = self.fontDescriptors[self.item.objectID];
+    if (attt == nil) {
+        attt = [[MADElementStylizedText alloc] initWithFontName: self.item.fontname
+                                                       fontSize: self.item.fontsize
+                                                      textStyle: self.item.textStyle
+                                            horizontalAlignment: self.item.alignment.horizontal];
+        
+        self.fontDescriptors[self.item.objectID] = attt;
+    }
+    return attt.fontAttributes;
 }
 
 @end

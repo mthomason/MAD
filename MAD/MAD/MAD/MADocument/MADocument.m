@@ -56,10 +56,13 @@
 
 #import "MADDocumentProtocol.h"
 #import "MADocumentDesignerProtocol.h"
+#import "MADAggregateFunctionGroupByType.h"
+#import "MADAggregateFunctionType.h"
 
 #import "MADSortOrder.h"
 #import "MADConstants.h"
 
+#import "MADParameters+QueryCacheAggregate.h"
 
 #import <MADAPI/MADQuery.h>
 #import "MADQueryFull.h"
@@ -251,41 +254,6 @@ void madwarn(char *err,  const char*err2) { }
 @synthesize cachedData = _cachedData;
 
 #pragma mark -
-#pragma mark MADPrintPageRendererDataSourceProtocol
-
-
-
-- (NSString *)getLabelDataStatic:(MADDocumentObjectDataReference *)dataRef {
-    return ((RptqDocumentElementLabel *)dataRef.item).text;
-}
-
-- (NSString *)getLabelDataDynamic:(MADDocumentObjectDataReference *)dataRef {
-    
-    NSString *text = @"";
-    NSDictionary *rowData = nil;
-    __kindof RptqDocumentElement *item = dataRef.item;
-    
-    if ([item isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
-        NSString *qa = [((RptqDocumentElementLabelDataField *)item).referencesQueryField.inQueryTable queryAlias];
-        NSString *tableFieldKey = [self.database newSafeQueryField: ((RptqDocumentElementLabelDataField *)item).referencesQueryField.databaseSchemaField.name
-                                                                andTable: qa];
-        NSError * __autoreleasing error = nil;
-        rowData = [self.dataTable copyDataForCacheId: dataRef.detailRowId
-                                 andColumnIdentifier: tableFieldKey
-                                               error: &error];
-        if (rowData != nil) {
-            
-            text = [item formattedString: ((RptqDocumentElementLabelDataField *)item).referencesQueryField.databaseSchemaField.dataType
-                                forValue: rowData[tableFieldKey]];
-            if ([text isEqualToString:MTNullIdentifier]) {
-                text = @"";
-            }
-        }
-    }
-    return text;
-}
-
-#pragma mark -
 #pragma mark Adjust
 
 - (NSUInteger)numberOfPages {
@@ -321,7 +289,7 @@ void madwarn(char *err,  const char*err2) { }
 
     if (self.reportFormatter.numberOfGroups > 0) {
         
-        NSDictionary *row = [self.dataTable copyDataForCacheId: rowID];
+        NSDictionary *row = [self.dataTable dataForRow: rowID];
         groupLevelKeys = [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
         return groupLevelKeys;
         
@@ -1026,8 +994,32 @@ void madwarn(char *err,  const char*err2) { }
     return [[NSFileManager defaultManager] fileExistsAtPath: path];
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSUInteger)cachedID {
-    return  [self.dataTable copyDataForCacheId:cachedID];
+- (NSDictionary *)dataForRow:(NSUInteger)rowID {
+    return  [self.dataTable dataForRow:rowID];
+}
+
+#pragma mark -
+#pragma mark MADPrintPageRendererDataSourceProtocol
+
+- (__kindof NSObject <NSCopying> *)dataForRows:(NSArray *)rowIDs
+                                        column:(NSString *)columnKey
+                                        groups:(NSArray *)groupKeys
+                                      function:(MTAggregateFunctionType)function
+                                       groupBy:(MTAggregateGroupByType)groupBy {
+    
+    __kindof NSObject <NSCopying> *result = nil;
+    MADParameters *parameters = [MADParameters newParametersAggregateByType:groupBy
+                                                                   function:function
+                                                                     rowids:rowIDs
+                                                                  groupKeys:groupKeys
+                                                                   fieldKey:columnKey
+                                                                  dataTable:self.dataTable];
+    if (parameters != nil) {
+        id query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
+                                                object: parameters];
+        result = [self.dataTable runSelectQuery:query];
+    }
+    return result;
 }
 
 #pragma mark -

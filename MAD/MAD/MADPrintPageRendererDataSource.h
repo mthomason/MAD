@@ -10,6 +10,8 @@
 #define MAD_MADPrintPageRendererDataSourceProtocol_h
 
 #import <Foundation/NSObject.h>
+#import "MADAggregateFunctionGroupByType.h"
+#import "MADAggregateFunctionType.h"
 
 @class MADDatabase, MADDataTableFast, MADReportFormatter, RptqDocumentElement, MADDocumentObjectDataReference;
 
@@ -19,9 +21,13 @@
     @property (readonly, nonatomic, strong) MADDataTableFast *dataTable;
     @property (readwrite, nonatomic, strong) MADReportFormatter *reportFormatter;
 
-    - (NSString *)getLabelDataDynamic:(MADDocumentObjectDataReference *)dataRef;
-    - (NSString *)getLabelDataStatic:(MADDocumentObjectDataReference *)dataRef;
+    - (NSDictionary *)dataForRow:(NSUInteger)rowID;
     - (NSArray *)groupLevelKeys:(NSUInteger)rowID;
+    - (__kindof NSObject <NSCopying> *)dataForRows:(NSArray *)rowIDs
+                                            column:(NSString *)columnKey
+                                            groups:(NSArray *)groupKeys
+                                          function:(MTAggregateFunctionType)function
+                                           groupBy:(MTAggregateGroupByType)groupBy;
 
     - (void)updatePrintingReportFormatter;
 

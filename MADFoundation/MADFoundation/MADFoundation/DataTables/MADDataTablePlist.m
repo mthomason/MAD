@@ -166,7 +166,7 @@ static NSString * const StringEmpty = @"";
     return nil;
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId {
+- (NSDictionary *)dataForRow:(NSUInteger)cacheId {
     NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }

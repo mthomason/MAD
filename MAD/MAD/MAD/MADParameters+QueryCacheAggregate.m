@@ -73,6 +73,43 @@
     return paramaters;
 }
 
++ (instancetype)newParametersAggregateByType:(MTAggregateGroupByType)groupBy
+                                    function:(MTAggregateFunctionType)function
+                                      rowids:(NSArray *)rowids
+                                   groupKeys:(NSArray *)groupKeys
+                                    fieldKey:(NSString *)fieldKey
+                                   dataTable:(MADDataTableFast *)dataTable {
+    id parameters = nil;
+    NSString *columnKey = [dataTable columnKeyForColumnName:fieldKey];
+    if (columnKey == nil) return nil;
+
+    switch (groupBy) {
+        case MTAggregateGroupByTypePage: {
+            parameters = [MADParameters newParamatersAggregateByPageWithFieldKey: columnKey
+                                                                            andRowIds: rowids
+                                                                      andFunctionType: function
+                                                                         andDataTable: dataTable];
+            break;
+        }
+        case MTAggregateGroupByTypeReport:
+            parameters = [MADParameters newParametersAggregateByReportWithFieldKey: columnKey
+                                                                        andFunctionType: function
+                                                                           andDataTable: dataTable];
+            break;
+            
+        case MTAggregateGroupByTypeSection:
+            parameters = [MADParameters newParamatersAggregateByGroupKeys: groupKeys
+                                                                   andFieldKey: columnKey
+                                                               andFunctionType: function
+                                                                  andDataTable: dataTable];
+            break;
+            
+        default:
+            break;
+    }
+    return parameters;
+}
+
 + (instancetype)newParamatersAggregateByPageWithFieldKey:(NSString *)fieldKey
                                                andRowIds:(NSArray *)rowids
                                          andFunctionType:(MTAggregateFunctionType)functionType

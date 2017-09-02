@@ -27,11 +27,11 @@
     - (NSString *)columnKeyForColumnName:(NSString *)columnName;
     - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
-    - (id)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
+    - (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
 
-    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
-                     andColumnIdentifier:(NSString *)columnIdentifier
-                                   error:(NSError * __autoreleasing *)error;
+    - (NSDictionary *)dataForRow:(NSUInteger)cacheId
+                          column:(NSString *)columnIdentifier
+                           error:(NSError * __autoreleasing *)error;
 
 @end
 

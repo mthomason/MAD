@@ -800,10 +800,10 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
                                       andOffset:offset];
 }
 
-- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId
-                 andColumnIdentifier:(NSString *)columnIdentifier
-                               error:(NSError * __autoreleasing *)error {
-    NSString *columnName = [self columnNameForIdentifier:columnIdentifier];
+- (NSDictionary *)dataForRow:(NSUInteger)rowID
+                      column:(NSString *)columnKey
+                       error:(NSError * __autoreleasing *)error {
+    NSString *columnName = [self columnNameForIdentifier:columnKey];
     NSArray *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
     if (![self.columnKeys containsObject:columnName]) {
         NSString *title = NSLocalizedString(@"Error", @"Error");
@@ -823,7 +823,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
     NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
     
-    NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:cacheId];
+    NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:rowID];
     NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:
                              cacheID,       keyRowId,
                              columnKeys,    keyFieldKey,
@@ -865,7 +865,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 // FIXME: Return error handler... remove credentals
-- (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId {
+- (NSDictionary *)dataForRow:(NSUInteger)cacheId {
     
     if (self.lastDataForCacheId != nil) {
         if (cacheId == self.lastDataForCacheId.index) {
@@ -1196,7 +1196,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return key;
 }
 
-- (id)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
+- (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
     id result = nil;
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
@@ -1230,8 +1230,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
     return [self.columnKeys indexOfObject:key];
 }
 
-- (id <NSCopying>)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
-    id <NSCopying> result =  [MADDatabaseResultValue newDatabaseResultValue:statement columnNumber:columnIndex];
+- (NSObject <NSCopying> *)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
+    MADDatabaseResultValue *result =  [MADDatabaseResultValue newDatabaseResultValue: statement
+                                                                        columnNumber: columnIndex];
     return result;
 }
 

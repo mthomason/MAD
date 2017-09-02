@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.1902</string>
+	<string>8.0.1903</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.1902</string>
+	<string>8.0.1903</string>
 	<key>MADBuildDate</key>
-	<string>2017-09-01T05:54:49EDT</string>
+	<string>2017-09-01T20:38:56EDT</string>
 	<key>MADRevision</key>
-	<string>3844</string>
+	<string>3845</string>
 </dict>
 </plist>

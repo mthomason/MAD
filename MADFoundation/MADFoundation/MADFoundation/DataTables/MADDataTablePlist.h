@@ -72,7 +72,7 @@ typedef enum MADDataTableParameters : short {
     - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
     - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
-    - (NSDictionary *)copyDataForCacheId:(NSUInteger)cacheId;
+    - (NSDictionary *)dataForRow:(NSUInteger)rowID;
 
     - (NSString *)newFilenameMDCache;
 
