@@ -1,5 +1,5 @@
 //
-//  MADDocumentObjectText.m
+//  MADPrintPageElementText.m
 //  MAD
 //
 //  Created by Michael on 1/17/17.

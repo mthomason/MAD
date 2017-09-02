@@ -1,5 +1,5 @@
 //
-//  MADDocumentObjectBarcode.m
+//  MADPrintPageElementBarcode.m
 //  MAD
 //
 //  Created by Michael Thomason on 6/6/16.

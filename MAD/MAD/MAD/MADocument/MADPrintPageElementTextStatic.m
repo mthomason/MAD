@@ -1,5 +1,5 @@
 //
-//  MADDocumentObjectStaticLabel.m
+//  MADPrintPageElementTextStatic.m
 //  MAD
 //
 //  Created by Michael Thomason on 6/5/16.

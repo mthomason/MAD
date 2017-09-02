@@ -1,5 +1,5 @@
 //
-//  MADDocumentObjectAggregate.h
+//  MADPrintPageElementAggregate.h
 //  MAD
 //
 //  Created by Michael Thomason on 6/6/16.
@@ -9,11 +9,11 @@
 #ifndef Reports_MAD_MADDocumentObjectAggregate_h
 #define Reports_MAD_MADDocumentObjectAggregate_h
 
-#import "MADDocumentObjectText.h"
+#import "MADPrintPageElementText.h"
 
 @class MADDocumentObjectDataReferenceAggregate;
 
-@interface MADPrintPageElementAggregate : MADDocumentObjectText
+@interface MADPrintPageElementAggregate : MADPrintPageElementText
 
     - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition;
 

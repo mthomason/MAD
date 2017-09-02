@@ -9,11 +9,11 @@
 #ifndef Reports_MAD_MADDocumentObjectLabelStatic_h
 #define Reports_MAD_MADDocumentObjectLabelStatic_h
 
-#import "MADDocumentObjectText.h"
+#import "MADPrintPageElementText.h"
 
 @class MADDocumentObjectDataReferenceLabelStatic;
 
-@interface MADPrintPageElementTextStatic : MADDocumentObjectText
+@interface MADPrintPageElementTextStatic : MADPrintPageElementText
 
     - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition;
 

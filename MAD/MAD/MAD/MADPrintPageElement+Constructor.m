@@ -10,11 +10,11 @@
 #import <Foundation/NSException.h>
 #import "MADDocumentObjectReference.h"
 
-#import "MADDocumentObjectAggregate.h"
-#import "MADDocumentObjectLabelDynamic.h"
-#import "MADDocumentObjectImage.h"
-#import "MADDocumentObjectBarcode.h"
-#import "MADDocumentObjectLabelStatic.h"
+#import "MADPrintPageElementAggregate.h"
+#import "MADPrintPageElementTextDynamic.h"
+#import "MADPrintPageElementImage.h"
+#import "MADPrintPageElementBarcode.h"
+#import "MADPrintPageElementTextStatic.h"
 
 @implementation MADPrintPageElement (Constructor)
 
@@ -24,23 +24,23 @@
     switch (definition.type) {
             
         case MTDocumentObjectTypeAggregate:
-            documentObject = [[MADDocumentObjectAggregate alloc] initWithDefinition:definition];
+            documentObject = [[MADPrintPageElementAggregate alloc] initWithDefinition:definition];
             break;
             
         case MTDocumentObjectTypeImage:
-            documentObject = [[MADDocumentObjectImage alloc] initWithDefinition:definition];
+            documentObject = [[MADPrintPageElementImage alloc] initWithDefinition:definition];
             break;
             
         case MTDocumentObjectTypeBarcode:
-            documentObject = [[MADDocumentObjectBarcode alloc] initWithDefinition:definition];
+            documentObject = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
             break;
             
         case MTDocumentObjectTypeLabelDynamic:
-            documentObject = [[MADDocumentObjectLabelDynamic alloc] initWithDefinition:definition];
+            documentObject = [[MADPrintPageElementTextDynamic alloc] initWithDefinition:definition];
             break;
             
         case MTDocumentObjectTypeLabelStatic:
-            documentObject = [[MADDocumentObjectLabelStatic alloc] initWithDefinition:definition];
+            documentObject = [[MADPrintPageElementTextStatic alloc] initWithDefinition:definition];
             break;
             //case MTDocumentObjectTypeWhtiespace:
             //case MTDocumentObjectTypeGroupKey:

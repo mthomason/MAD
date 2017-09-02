@@ -1,5 +1,5 @@
 //
-//  MADDocumentObjectImage.m
+//  MADPrintPageElementImage.m
 //  MAD
 //
 //  Created by Michael Thomason on 6/6/16.
