@@ -14,6 +14,8 @@
 #import <Foundation/NSObject.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseProtocol.h>
+#import <MADAPI/MADDatabaseSQLProtocol.h>
+#import <MADAPI/MADPluginProtocol.h>
 
 typedef NSString MADSafeQueryField;
 
@@ -30,7 +32,8 @@ extern NSString * const MADSqlTextFromPart;
 @end
 
 @interface MADDatabase : NSObject
-    <MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseDBProtocol>
+    <MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource,
+        MADDatabaseDBProtocol, MADDatabaseSQLProtocol>
 
     + (NSString *)imageIconName;
     + (NSString *)driverName;
@@ -42,22 +45,6 @@ extern NSString * const MADSqlTextFromPart;
 
     - (NSString *)identifier;
     + (NSString *)identifier;
-
-    + (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
-    - (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName;
-    - (NSString *)tableAliasForTable:(NSString *)tableName;
-
-    - (NSString *)selectPart;
-    - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit;
-    - (NSString *)sqlLimitClause;
-    - (NSString *)sqlLimitClause:(NSUInteger)limit;
-    - (NSString *)fieldAliasForField:(NSString *)field withSafeTableName:(NSString *)safeTableName;
-    - (NSString *)fieldAliasForField:(NSString *)fieldName andTableName:(NSString *)tableName;
-    - (NSString *)tableAliasConnector;
-
-    - (NSString *)sqlAggregateFunctionLength;
-    - (NSString *)sqlAggregateFunctionMax;
 
     - (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection;
 

@@ -9,5 +9,13 @@
 #ifndef MADPluginProtocol_h
 #define MADPluginProtocol_h
 
+#import <Foundation/NSObject.h>
+
+@protocol MADPluginProtocol <NSObject>
+
+    + (NSString *)imageIconName;
+    + (NSString *)driverName;
+
+@end
 
 #endif /* MADPluginProtocol_h */

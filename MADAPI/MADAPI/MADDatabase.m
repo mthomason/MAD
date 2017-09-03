@@ -94,26 +94,6 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return nil;
 }
 
-+ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-    NSString *result = [tableName stringByAppendingPeriod];
-    return [result stringByAppendingString:fieldName];
-}
-
-- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
-    id safeField = [MADDatabase newSafeQueryField:fieldName andTable:tableName];
-    return safeField;
-}
-
-+ (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
-    id result = [[MADSafeQueryField alloc] initWithString: s];
-    return result;
-}
-
-- (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
-    id result = s.copy;
-    return result;
-}
-
 - (void *)databaseHandle {
     return NULL;
 }
@@ -125,24 +105,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return fieldAlias;
 }
 
-- (NSString *)fieldAliasForField:(NSString *)field
-               withSafeTableName:(NSString *)safeTableName {
-    NSString *tableAlias = [safeTableName stringByAppendingPeriod];
-    MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
-    NSString *alias = [tableAlias stringByAppendingString:fieldName];
-    return alias;
-}
-
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
-}
-
-- (NSArray <MADDatabaseField *> *)fieldsForTable:(NSString *)tableName connection:(id)dbconn error:(NSError *__autoreleasing *)error {
     NSString *reason;
     NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
     reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
@@ -166,46 +129,6 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 + (NSString *)identifier {
     return @"NONE";
-}
-
-- (NSString *)selectPart {
-    return @"SELECT\n";
-}
-
-- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit {   //Generally limited resuls are in a LIMIT part, but
-    return @"SELECT\n";                                   //  SQL Server uses the TOP part (not default here).
-}
-
-- (NSString *)sqlLimitClause {
-    return [self sqlLimitClause:  NSUIntegerMax];                    //No limit by default
-}
-
-- (NSString *)sqlLimitClause:(NSUInteger)limit {
-    NSString *sqlLimitClause = (limit > 0 && limit != NSUIntegerMax) ?
-        [[NSString alloc] initWithFormat: @"\nLIMIT %ld", (unsigned long)limit] :
-        @"";
-    return sqlLimitClause;
-}
-
-- (NSString *)sqlAggregateFunctionLength {
-    return @"LENGTH";
-}
-
-- (NSString *)sqlAggregateFunctionMax {
-    return @"MAX";
-}
-
-- (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
-    MADSafeQueryField *safeField = [self queryKey: fieldName table: tableName];
-    NSString *safeFieldAlias = [self fieldAliasForField: fieldName
-                                           andTableName: tableName];
-    MADSafeQueryField *safeTable = [self newSafeIdentifier:tableName];
-
-    NSString *selectPart = [self selectPart];
-    NSString *tableAliasConnector = [self tableAliasConnector];
-    return [NSString stringWithFormat:MADTextSqlSelectSampleDataForField,
-                                                    selectPart, safeField, tableAliasConnector,
-                                                    safeFieldAlias, @"\nFROM\n", safeTable];
 }
 
 - (void)readRow:(NSUInteger)row {
@@ -253,6 +176,89 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: reason
                                  userInfo: nil];
+}
+
+#pragma mark -
+#pragma mark MADDatabaseSQLProtocol
+
++ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+    NSString *result = [tableName stringByAppendingPeriod];
+    return [result stringByAppendingString:fieldName];
+}
+
+- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
+    id safeField = [MADDatabase newSafeQueryField:fieldName andTable:tableName];
+    return safeField;
+}
+
++ (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
+    id result = [[MADSafeQueryField alloc] initWithString: s];
+    return result;
+}
+
+- (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
+    id result = s.copy;
+    return result;
+}
+
+- (NSString *)selectPart {
+    return @"SELECT\n";
+}
+
+- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit {   //Generally limited resuls are in a LIMIT part, but
+    return @"SELECT\n";                                          //  SQL Server uses the TOP part (not default here).
+}
+
+- (NSString *)sqlLimitClause {
+    return [self sqlLimitClause:  NSUIntegerMax];                    //No limit by default
+}
+
+- (NSString *)sqlLimitClause:(NSUInteger)limit {
+    NSString *sqlLimitClause = (limit > 0 && limit != NSUIntegerMax) ?
+        [[NSString alloc] initWithFormat: @"\nLIMIT %ld", (unsigned long)limit] :
+        @"";
+    return sqlLimitClause;
+}
+
+- (NSString *)fieldAliasForField:(NSString *)field
+               withSafeTableName:(NSString *)safeTableName {
+    NSString *tableAlias = [safeTableName stringByAppendingPeriod];
+    MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
+    NSString *alias = [tableAlias stringByAppendingString:fieldName];
+    return alias;
+}
+
+- (NSArray <MADDatabaseField *> *)fieldsForTable:(NSString *)tableName
+                                      connection:(id)dbconn
+                                           error:(NSError *__autoreleasing *)error {
+    NSString *reason;
+    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                   reason: reason
+                                 userInfo: nil];
+}
+
+- (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
+    MADSafeQueryField *safeField = [self queryKey: fieldName table: tableName];
+    NSString *safeFieldAlias = [self fieldAliasForField: fieldName
+                                           andTableName: tableName];
+    MADSafeQueryField *safeTable = [self newSafeIdentifier:tableName];
+
+    NSString *selectPart = [self selectPart];
+    NSString *tableAliasConnector = [self tableAliasConnector];
+    NSString *result = [[NSString alloc] initWithFormat:MADTextSqlSelectSampleDataForField,
+                                                        selectPart, safeField, tableAliasConnector,
+                                                        safeFieldAlias, @"\nFROM\n", safeTable];
+    return result;
+}
+
+- (NSString *)sqlAggregateFunctionLength {
+    return @"LENGTH";
+}
+
+- (NSString *)sqlAggregateFunctionMax {
+    return @"MAX";
 }
 
 @end

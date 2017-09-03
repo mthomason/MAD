@@ -40,9 +40,6 @@
            withDataTable:(MADDataTable *)dataTable
                 andError:(NSError * __autoreleasing *)error;
 
-    - (NSString *)sqlSampleDataForField:(NSString *)fieldName
-                               andTable:(NSString *)tableName;
-
   @optional
     - (void)closeConnection:(id)process;
 @end
