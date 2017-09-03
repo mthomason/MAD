@@ -86,6 +86,7 @@
 
 #import "MADDesignerElementView.h"
 #import "MADDesignerElementTextView.h"
+#import "MADDesignerElementView+Constructor.h"
 
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
@@ -338,6 +339,7 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)dealloc {
     _reportSectionDatasource = nil;
+//    _layoutConstraintContainerWidth = nil;
 }
 
 #pragma mark -
@@ -581,10 +583,9 @@ static const inline CGSize sizePopoverFonts() {
                                                                          bottom: self.bottomLayoutGuide];
     constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container
                                                                 width: self.view.frame.size.width / self.view.scroller.zoomScale];
-    
     constraintContentLeft.priority = 999;
     constraintContentRight.priority = 999;
-
+    
     viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller
                                                                          view: self.topLayoutGuide];
 
@@ -694,6 +695,9 @@ static const inline CGSize sizePopoverFonts() {
     NSArray *emptyArray = [[NSArray alloc] init];
     [self setToolbarItems:emptyArray animated:animated];
     self.undoButton = nil;
+    MADocument *document = self.document;
+    [document saveContext];
+    [document autosaveWithCompletionHandler:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -712,7 +716,6 @@ static const inline CGSize sizePopoverFonts() {
     [self.view.scroller.container cleanup];
     
     _shownAndHidden = YES;
-    [self.document saveContext];
     [self removeObservers];
 
 }
@@ -802,6 +805,9 @@ static const inline CGSize sizePopoverFonts() {
     if (!isinf(ratio) && !isnan(ratio)) {
         self.layoutConstraintContainerWidth.constant = ratio;
     }
+    
+    [self.view.scroller.container setNeedsUpdateConstraints];
+    
     [super updateViewConstraints];
 
 }
@@ -837,6 +843,7 @@ static const inline CGSize sizePopoverFonts() {
     [coordinator animateAlongsideTransition: transition
                                  completion: ^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self adjustContextOffsetForOpenPopover];
+                                     [self.view setNeedsUpdateConstraints];
     }];
 
 }
@@ -928,10 +935,11 @@ static const inline CGSize sizePopoverFonts() {
         [self.view.scroller.container.ruler setNeedsDisplay];
         
         @autoreleasepool {
-            UIFontDescriptor *captionFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
+            UIFontDescriptor *fontDescriptor;
+            fontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleCaption1];
             
-            UIFont *font = [UIFont fontWithDescriptor: captionFontDescriptor
-                                                 size: captionFontDescriptor.pointSize / scrollView.zoomScale];
+            UIFont *font = [UIFont fontWithDescriptor: fontDescriptor
+                                                 size: fontDescriptor.pointSize / scrollView.zoomScale];
             NSDictionary *attributes;
             attributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
             NSArray <MADDesignerSectionLabel *> *sectionControlViewsArray = self.view.scroller.container.sectionLabels.allValues;
@@ -955,8 +963,6 @@ static const inline CGSize sizePopoverFonts() {
         [self.view.scroller.container invalidateIntrinsicContentSize];
         self.view.scroller.container.center = CGPointMake(ScrollViewCenterX(scrollView), ScrollViewCenterY(scrollView));
         
-        [self.view setNeedsUpdateConstraints];
-        
     }
     
 }
@@ -975,6 +981,7 @@ static const inline CGSize sizePopoverFonts() {
     NSString *formatter = NSLocalizedString(@"Scrolled to %@.", @"Scrolled to %@.");
     NSString *message = [NSString stringWithFormat: formatter, NSStringFromCGPoint(scrollView.contentOffset)];
     UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, message);
+    [self.view setNeedsUpdateConstraints];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
