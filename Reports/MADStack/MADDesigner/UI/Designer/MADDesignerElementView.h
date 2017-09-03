@@ -28,10 +28,6 @@
     @property (nonatomic, strong) id displayObject;
     @property (nonatomic, readonly, copy) NSString *textRepresentation;
 
-    + (instancetype)newDesignerElementView:(RptqDocumentElement *)documentObject
-                        tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
-                               tapSelector:(SEL)selector;
-
     - (void)setWobbleRunning:(BOOL)running;
     - (void)flash:(void (^)(BOOL finished))completion;
 

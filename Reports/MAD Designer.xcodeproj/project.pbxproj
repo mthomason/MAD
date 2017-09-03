@@ -30,6 +30,7 @@
 		4C00A3841F5964FB00F6A6C1 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3831F5964FB00F6A6C1 /* MADPluginManager.m */; };
 		4C00A38E1F5B869200F6A6C1 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */; };
 		4C00A38F1F5B86A200F6A6C1 /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C00A3941F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3931F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m */; };
 		4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */; };
 		4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153DB1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m */; };
 		4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */; };
@@ -1253,6 +1254,8 @@
 		4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "DerivedData/Build/Products/Debug-iphoneos/MADAPI.framework"; sourceTree = "<group>"; };
 		4C00A3901F5B9D5600F6A6C1 /* MADDesignerElementViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementViewProtocol.h; sourceTree = "<group>"; };
 		4C00A3911F5B9D6800F6A6C1 /* MADDesignerElementViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementViewDataSource.h; sourceTree = "<group>"; };
+		4C00A3921F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADDesignerElementView+Constructor.h"; sourceTree = "<group>"; };
+		4C00A3931F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADDesignerElementView+Constructor.m"; sourceTree = "<group>"; };
 		4C0153D71C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionPolarQuestionNegative.h; sourceTree = "<group>"; };
 		4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionPolarQuestionNegative.m; sourceTree = "<group>"; };
 		4C0153DA1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionDisplayedAlert.h; sourceTree = "<group>"; };
@@ -2772,6 +2775,8 @@
 				4C26B9E51BAF14A500456DC8 /* MADDesignerElementPickerViewController.m */,
 				4C26B9E61BAF14A500456DC8 /* MADDesignerElementView.h */,
 				4C26B9E71BAF14A500456DC8 /* MADDesignerElementView.m */,
+				4C00A3921F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.h */,
+				4C00A3931F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m */,
 				4CEA05A91ED3E6100062624F /* MADDesignerElementImageView.h */,
 				4CEA05AA1ED3E6100062624F /* MADDesignerElementImageView.m */,
 				4CEA05A31ED3E5970062624F /* MADDesignerElementTextView.h */,
@@ -6237,6 +6242,7 @@
 				4C6D2EEF1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m in Sources */,
 				4CB98D741F42BAC10043B583 /* MADOperationConditionDisplayedAlertConfirm.m in Sources */,
 				4C26B9C51BAF123A00456DC8 /* MADFontSelectorViewController.m in Sources */,
+				4C00A3941F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m in Sources */,
 				4CDFC9891EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m in Sources */,
 				4C401F761BAE7EB500BAE5FC /* MADDesignerScrollView.m in Sources */,
 				4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */,

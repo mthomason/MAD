@@ -6,8 +6,17 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADElementView_Constructor_h
+#define Reports_MADElementView_Constructor_h
+
 #import "MADDesignerElementView.h"
 
 @interface MADDesignerElementView (Constructor)
 
+    + (instancetype)newDesignerElementView:(RptqDocumentElement *)documentObject
+                        tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
+                               tapSelector:(SEL)selector;
+
 @end
+
+#endif
