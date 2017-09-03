@@ -10,19 +10,21 @@
 #define Reports_MADDesignerElementTextView_h
 
 #import "MADDesignerElementView.h"
+#import <MAD/MADHorizontalAlignmentType.h>
+#import <MAD/MADVerticalAlignmentType.h>
 
 @protocol MADTextElementProtocol <NSObject>
 
-- (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal;
-- (void)updateVerticalAlignment:(MADVerticalAlignment)vertical;
-- (void)updateFontName:(NSString *)fontname
-              fontSize:(double)fontsize
-                  bold:(BOOL)bold
-                italic:(BOOL)italic;
-- (void)updateFontSize:(double)fontsize;
-- (void)updateFontName:(NSString *)fontname;
-- (void)updateSetStrikethrough:(BOOL)strikethrough;
-- (void)updateSetUnderline:(BOOL)underline;
+    - (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal;
+    - (void)updateVerticalAlignment:(MADVerticalAlignment)vertical;
+    - (void)updateFontName:(NSString *)fontname
+                  fontSize:(double)fontsize
+                      bold:(BOOL)bold
+                    italic:(BOOL)italic;
+    - (void)updateFontSize:(double)fontsize;
+    - (void)updateFontName:(NSString *)fontname;
+    - (void)updateSetStrikethrough:(BOOL)strikethrough;
+    - (void)updateSetUnderline:(BOOL)underline;
 
 @end
 

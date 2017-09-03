@@ -18,7 +18,7 @@
 
 @implementation MADQueryTest
 
-@dynamic database;
+@synthesize database = _database;
 
 - (instancetype)initWithObject:(id)object {
     if (self = [super init]) { }

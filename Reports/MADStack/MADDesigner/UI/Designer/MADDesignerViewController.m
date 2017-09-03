@@ -3529,9 +3529,9 @@ END_deselectElementView:;
     elementView = [self.elementViewsDictionary objectForKey:identifier];
     if (elementView == nil) {
         SEL handleTap = @selector(handleToggleElementView:);
-        elementView = [MADDesignerElementView newDesignerElementViewForDocumentObject: managedObject
-                                                                   tapGestureDelegate: self
-                                                                          tapSelector: handleTap];
+        elementView = [MADDesignerElementView newDesignerElementView: managedObject
+                                                  tapGestureDelegate: self
+                                                         tapSelector: handleTap];
     }
     return elementView;
 }

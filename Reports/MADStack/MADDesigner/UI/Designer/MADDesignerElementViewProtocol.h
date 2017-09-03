@@ -9,5 +9,12 @@
 #ifndef MADDesignerElementViewProtocol_h
 #define MADDesignerElementViewProtocol_h
 
+@protocol MADDesignerElementViewProtocol <NSObject>
+  @required
+    @property (nonatomic, readwrite, assign) BOOL displayWobbling;
+    @property (nonatomic, readwrite, assign) BOOL enableResizing;
+    @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
+
+@end
 
 #endif /* MADDesignerElementViewProtocol_h */

@@ -28,6 +28,8 @@
 		4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00818F14B83E92003DF437 /* UIImageWrench20@2x.png */; };
 		4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */; };
 		4C00A3841F5964FB00F6A6C1 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3831F5964FB00F6A6C1 /* MADPluginManager.m */; };
+		4C00A38E1F5B869200F6A6C1 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */; };
+		4C00A38F1F5B86A200F6A6C1 /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */; };
 		4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153DB1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m */; };
 		4C0590D31C7CD82600A1EC4A /* MADDocumentScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */; };
@@ -998,8 +1000,6 @@
 		4CC982881F50E6E800E0496A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982871F50E6E800E0496A /* MADViewController.m */; };
 		4CC9828B1F50E74600E0496A /* MADStoryboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC9828A1F50E74600E0496A /* MADStoryboard.m */; };
 		4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18661DA14A5C0093B166 /* libarchive.a */; };
-		4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18691DA14AC70093B166 /* libmysqlclient.a */; };
-		4CCE186C1DA14AC70093B166 /* libclientlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186A1DA14AC70093B166 /* libclientlib.a */; };
 		4CCE186F1DA14AD90093B166 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186D1DA14AD90093B166 /* libssl.a */; };
 		4CCE18701DA14AD90093B166 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186E1DA14AD90093B166 /* libcrypto.a */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
@@ -1052,7 +1052,6 @@
 		4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */; };
 		4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */; };
 		4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA251F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m */; };
-		4CF6AAC41F551C4D0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AAC31F551C4D0061B0C6 /* MADAPI.framework */; };
 		4CF6AFC01CAFB55C00D3AD11 /* MADOperationRefreshReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFBF1CAFB55C00D3AD11 /* MADOperationRefreshReload.m */; };
 		4CF6AFC31CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC21CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m */; };
 		4CF6AFC61CAFC14200D3AD11 /* MADOperationRefreshInitialize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC51CAFC14200D3AD11 /* MADOperationRefreshInitialize.m */; };
@@ -1201,6 +1200,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4C00A38F1F5B86A200F6A6C1 /* MADAPI.framework in Embed Frameworks */,
 				4CB98A991E13839400B3A580 /* MADTdsClient.framework in Embed Frameworks */,
 				4CB98AA11E13839400B3A580 /* MADExplorer.framework in Embed Frameworks */,
 				4CB98A9D1E13839400B3A580 /* MADMySQL.framework in Embed Frameworks */,
@@ -1250,6 +1250,9 @@
 		4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Samples.xcassets; sourceTree = "<group>"; };
 		4C00A3821F5964FB00F6A6C1 /* MADPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPluginManager.h; sourceTree = "<group>"; };
 		4C00A3831F5964FB00F6A6C1 /* MADPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPluginManager.m; sourceTree = "<group>"; };
+		4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "DerivedData/Build/Products/Debug-iphoneos/MADAPI.framework"; sourceTree = "<group>"; };
+		4C00A3901F5B9D5600F6A6C1 /* MADDesignerElementViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementViewProtocol.h; sourceTree = "<group>"; };
+		4C00A3911F5B9D6800F6A6C1 /* MADDesignerElementViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementViewDataSource.h; sourceTree = "<group>"; };
 		4C0153D71C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionPolarQuestionNegative.h; sourceTree = "<group>"; };
 		4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionPolarQuestionNegative.m; sourceTree = "<group>"; };
 		4C0153DA1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionDisplayedAlert.h; sourceTree = "<group>"; };
@@ -2492,8 +2495,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C00A38E1F5B869200F6A6C1 /* MADAPI.framework in Frameworks */,
 				4C8C97B114C5C4C4007FB629 /* MobileCoreServices.framework in Frameworks */,
-				4CF6AAC41F551C4D0061B0C6 /* MADAPI.framework in Frameworks */,
 				4CB98A921E13839400B3A580 /* MADDataStructures.framework in Frameworks */,
 				4CB98A941E13839400B3A580 /* MADCocoaExtensions.framework in Frameworks */,
 				4CB98AA61E1383DC00B3A580 /* MADFileManager.framework in Frameworks */,
@@ -2503,8 +2506,6 @@
 				4CB98AA91E1383DC00B3A580 /* MADExplorer.framework in Frameworks */,
 				4CB98AAA1E1383DC00B3A580 /* MAD.framework in Frameworks */,
 				4CCE18671DA14A630093B166 /* libarchive.a in Frameworks */,
-				4CCE186B1DA14AC70093B166 /* libmysqlclient.a in Frameworks */,
-				4CCE186C1DA14AC70093B166 /* libclientlib.a in Frameworks */,
 				4CCE186F1DA14AD90093B166 /* libssl.a in Frameworks */,
 				4CCE18701DA14AD90093B166 /* libcrypto.a in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
@@ -2762,6 +2763,8 @@
 		4C26B9931BAF123A00456DC8 /* Designer */ = {
 			isa = PBXGroup;
 			children = (
+				4C00A3901F5B9D5600F6A6C1 /* MADDesignerElementViewProtocol.h */,
+				4C00A3911F5B9D6800F6A6C1 /* MADDesignerElementViewDataSource.h */,
 				4CAEE7331E562B98009A6096 /* MADElementPickerProtocol.h */,
 				4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */,
 				4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */,
@@ -3988,6 +3991,7 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C00A38D1F5B869200F6A6C1 /* MADAPI.framework */,
 				4CF6AAC31F551C4D0061B0C6 /* MADAPI.framework */,
 				4C5716751E622278007780A0 /* MADFoundation.framework */,
 				4CA9D79B1E13820800ED9D78 /* MADDataStructures.framework */,

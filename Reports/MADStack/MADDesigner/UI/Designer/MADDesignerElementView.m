@@ -45,8 +45,8 @@
 #import "MADElementCanvas.h"
 #import "MADResizeHandles.h"
 #import "MADResizeHandleView.h"
-#import "UITapGestureRecognizer+Designer.h"
 
+#import "UITapGestureRecognizer+Designer.h"
 #import "UIView+Extras.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
@@ -87,9 +87,9 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     }
 }
 
-+ (instancetype)newDesignerElementViewForDocumentObject:(RptqDocumentElement *)documentObject
-                                     tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
-                                            tapSelector:(SEL)selector {
++ (instancetype)newDesignerElementView:(RptqDocumentElement *)documentObject
+                    tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
+                           tapSelector:(SEL)selector {
     CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
     MADDesignerElementView <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol> *elementView;
     switch (documentObject.documentObjectType) {
@@ -108,21 +108,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         
         elementView.identifier = documentObject.identifier;
         elementView.objectID = documentObject.objectID.copy;
-        
-        elementView.translatesAutoresizingMaskIntoConstraints = YES;
-        elementView.backgroundColor = [UIColor clearColor];
-        elementView.clipsToBounds = NO;
-        elementView.autoresizingMask = MADViewAutoresizingFlexable();
-        elementView.displayWobbling = NO;
-        elementView.displayHighlighted = NO;
-        
-        
-        MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
-        for (UIView *view in resizeHandles.resizeHandles) {
-            [elementView addSubview:view];
-        }
-        elementView.resizeHandles = resizeHandles;
-        
         [elementView updateWithElement:documentObject];
         
         elementView.managedObjectContext = documentObject.managedObjectContext;
@@ -135,29 +120,8 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
     return elementView;
 }
 
-- (instancetype)initWithDocumentObject:(RptqDocumentElement *)documentObject
-                    tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
-                           tapSelector:(SEL)selector {
-    
-    CGRect rect = MADRectOfSize([documentObject sizeCalculated]);
-    
-    switch (documentObject.documentObjectType) {
-        case MADPrintPageElementTypeImage:
-            self = [[MADDesignerElementImageView alloc] initWithFrame:rect];
-            break;
-        case MADPrintPageElementTypeBarcode:
-            self = [[MADDesignerElementBarcodeView alloc] initWithFrame:rect];
-            break;
-        default:
-            self = [[MADDesignerElementTextView alloc] initWithFrame:rect];
-            break;
-    }
-    
-    if (self) {
-        
-        self.identifier = documentObject.identifier;
-        self.objectID = documentObject.objectID.copy;
-        
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = NO;
@@ -165,21 +129,11 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
         self.displayWobbling = NO;
         self.displayHighlighted = NO;
         
-        
         MADResizeHandles *resizeHandles = [[MADResizeHandles alloc] init];
         for (UIView *view in resizeHandles.resizeHandles) {
             [self addSubview:view];
         }
         self.resizeHandles = resizeHandles;
-        
-        [self updateWithElement:documentObject];
-        
-        self.managedObjectContext = documentObject.managedObjectContext;
-        UIGestureRecognizer *tap;
-        tap = [MADTapGestureRecognizer newTapGestureRecognizerTapWithTarget: tapGestureDelegate
-                                                                     action: selector
-                                                                   delegate: tapGestureDelegate];
-        [self addGestureRecognizer:tap];
     }
     return self;
 }
@@ -201,30 +155,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 #pragma mark -
 #pragma mark UIView
-
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
-}
-
-- (void)setBounds:(CGRect)bounds {
-    [super setBounds:bounds];
-}
-
-//Margin
-//Border
-//Padding
-//
-/*
- - (CGRect)paddingViewBounds {
-    return CGRectMake(CGPointZero.x, CGPointZero.y,
-                      paddingViewBoundsSizeWidth(self.padding.left,
-                                                 self.padding.right,
-                                                 self.rect.size.width),
-                      paddingViewBoundsSizeHeight(self.padding.top,
-                                                  self.padding.bottom,
-                                                  self.rect.size.height));
-}
- */
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
@@ -324,14 +254,6 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
-    //
-    RptqDocumentElement *element;
-    element = [_managedObjectContext objectWithID: _objectID];
-    
-    //self.frame = element.rect.frame;
-    
-    // Position handles
     [self.resizeHandles positionAroundRect:self.frame];
 }
 
