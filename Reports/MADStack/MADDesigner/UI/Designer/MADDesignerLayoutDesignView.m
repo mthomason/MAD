@@ -360,7 +360,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
         
         // Get new section label.
         sectionViewLabel = [self.datasource designView:self sectionLabelViewForSectionAtIndex:sectionIndex];
-        
+        sectionViewLabel.userInteractionEnabled = YES;
         tapGestureRecognizer = [MADTapGestureRecognizer newTapGestureRecognizerSectionToggleWithTarget:self
                                                                                                 action:@selector(handleTapLabel:)
                                                                                               delegate:self];

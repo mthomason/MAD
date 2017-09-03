@@ -2238,66 +2238,70 @@ static const inline CGSize sizePopoverFonts() {
 
 - (void)designView:(MADDesignerLayoutDesignView *)designView
     handleTapStray:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
-        if (self.presentedViewController != nil) {
-            [self actionHideToolbox];
-        }
+    
+    if (sender.state != UIGestureRecognizerStateEnded) return;
+
+    [[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
+    if (self.presentedViewController != nil) {
+        [self actionHideToolbox];
     }
 }
 
 - (void)designView:(MADDesignerLayoutDesignView *)designView
     handleTapLabel:(UITapGestureRecognizer *)sender {
     
-    if (sender.state == UIGestureRecognizerStateEnded) {
+    if (sender.state != UIGestureRecognizerStateEnded) return;
+    
+    MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
+    
+    [[UIMenuController sharedMenuController] setMenuVisible: NO
+                                                   animated: YES];
+    
+    [self dismissToolboxPresentationIfOpen];
+    
+    NSSet *selectedElementViews = [self selectedElementViews];
+    
+    BOOL hideToolbox = NO;
+    
+    if (selectedElementViews.count >= 1) {
+        hideToolbox = YES;
         
-        MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
+    }
+    
+    self.viewControllerToolbox.document = self.document;
+    
+    if (label.selected) {
         
-        [[UIMenuController sharedMenuController] setMenuVisible: NO
-                                                       animated: YES];
         
-        [self dismissToolboxPresentationIfOpen];
+        [label normalView];
+        hideToolbox = YES;
         
-        NSSet *selectedElementViews = [self selectedElementViews];
+    } else {
         
-        if (selectedElementViews.count >= 1) {
-            
-            [self actionHideToolbox];
-            
-        } else {
-            
-            self.viewControllerToolbox.document = self.document;
-            
-            if (label.selected) {
-                
-                
-                [label normalView];
-                [self actionHideToolbox];
-                
-            } else {
-                
-                [self deselectAllElementsAnimated:YES];
-                
-                
-                self.lastSelectedSectionControlPanel = label.tag;
-                self.lastSelectedLabel = label;
-                RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
-                MADDesignerSectionView *superView = [self getSectionViewForDocumentSection: section];
-                superView.selected = YES;
-                [label dimView];
-                [_viewControllerSectionLayoutSettings updateDisplay:section.height
-                                                         visibility:section.visibility
-                                                   producesFormFeed:section.producesFormFeed
-                                                       numberOfRows:section.numberOfRows];
-                
-                UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
-                _viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
-                _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
-                
-                [self actionShowSectionSettingsFromLabel:label];
-                
-            }
-        }
+        [self deselectAllElementsAnimated:YES];
+        
+        
+        self.lastSelectedSectionControlPanel = label.tag;
+        self.lastSelectedLabel = label;
+        RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
+        MADDesignerSectionView *superView = [self getSectionViewForDocumentSection: section];
+        superView.selected = YES;
+        [label dimView];
+        [_viewControllerSectionLayoutSettings updateDisplay:section.height
+                                                 visibility:section.visibility
+                                           producesFormFeed:section.producesFormFeed
+                                               numberOfRows:section.numberOfRows];
+        
+        UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
+        _viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+        _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+        
+        [self actionShowSectionSettingsFromLabel:label];
+        [self setDisplayInactive];
+    }
+    
+    if (hideToolbox) {
+        [self actionHideToolbox];
     }
 }
 
@@ -2498,17 +2502,17 @@ static const inline CGSize sizePopoverFonts() {
         switch (resizeAspect.direction) {
 
             case horizontal:
-                [element setSizeWidth:element.sizeContentView.width * gestureRecognizer.scale];
+                [element setSizeWidth:(float)(element.sizeContentView.width * gestureRecognizer.scale)];
                 break;
 
             case vertical:
-                [element setSizeHeight:element.sizeContentView.height * gestureRecognizer.scale];
+                [element setSizeHeight:(float)(element.sizeContentView.height * gestureRecognizer.scale)];
                 break;
                 
             default: {
                 CGSize s = element.sizeContentView;
-                [element setSizeWidth:s.width * gestureRecognizer.scale
-                               height:s.height * gestureRecognizer.scale];
+                [element setSizeWidth:(float)(s.width * gestureRecognizer.scale)
+                               height:(float)(s.height * gestureRecognizer.scale)];
                 break;
             }
         
@@ -2557,11 +2561,15 @@ static const inline CGSize sizePopoverFonts() {
 }
 
 - (void)handleTapStray:(UITapGestureRecognizer *)sender {
-    [self designView:nil handleTapStray:sender];
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self designView:nil handleTapStray:sender];
+    }
 }
 
 - (void)handleTapLabel:(UITapGestureRecognizer *)sender {
-    [self designView:nil handleTapLabel:sender];
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self designView:nil handleTapLabel:sender];
+    }
 }
 
 - (void)handleToggleElementView:(UITapGestureRecognizer *)sender {
@@ -3762,6 +3770,7 @@ END_deselectElementView:;
     
     if (_sectionSettingsVisible == NO) {
         _sectionSettingsVisible = YES;
+        [self adjustPassthroughViews];
         [self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES completion: ^{
             [self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
         }];
@@ -3780,8 +3789,16 @@ END_deselectElementView:;
 }
 
 - (NSSet <__kindof UIView *> *)passthroughViews {
-    NSSet <__kindof UIView *> *sectionLabels = self.view.scroller.container.passthroughContainers;
-    return [sectionLabels setByAddingObjectsFromSet:self.visibleElementViews];
+    NSMutableSet <__kindof UIView *> *sectionLabels;
+    NSSet <MADDesignerSectionView *> *sectionViews;
+    sectionViews = self.view.scroller.container.passthroughContainers;
+    sectionLabels = [[NSMutableSet alloc] initWithCapacity:sectionViews.count];
+    for (MADDesignerSectionView *view in sectionViews) {
+        [sectionLabels addObject:view.sectionLabel];
+    }
+    [sectionLabels unionSet:sectionViews];
+    [sectionLabels unionSet:self.visibleElementViews];
+    return sectionLabels;
 }
 
 @end
