@@ -185,4 +185,12 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
     //self.container.bounds = CGRectMake(self.container.bounds.origin.x, self.container.bounds.origin.y, [self container].bounds.size.width, self.contentSize.height);
 }
 
+- (NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *)sectionViews {
+    return self.container.sectionViews;
+}
+
+- (NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *)sectionLabels {
+    return self.container.sectionLabels;
+}
+
 @end

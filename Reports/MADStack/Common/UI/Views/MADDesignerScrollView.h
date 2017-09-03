@@ -11,7 +11,7 @@
 
 #import <UIKit/UIScrollView.h>
 
-@class UITapGestureRecognizer, MADDesignerLayoutDesignView;
+@class UITapGestureRecognizer, MADDesignerLayoutDesignView, MADDesignerSectionView, MADDesignerSectionLabel;
 
 @interface MADDesignerScrollView : UIScrollView
 
@@ -22,6 +22,9 @@
                       withPresentedRect:(CGRect)presentedRect
                           containerSize:(CGSize)containerSize
                              adjustment:(CGFloat)adjustment;
+
+    @property (nonatomic, readonly) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
+    @property (nonatomic, readonly) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
 
 @end
 

@@ -11,11 +11,14 @@
 
 #import <UIKit/UIView.h>
 
-@class MADDesignerScrollView;
+@class MADDesignerScrollView, MADDesignerSectionView, MADDesignerSectionLabel;
 
 @interface MADDesignerView : UIView
 
     @property (nonatomic, weak) IBOutlet MADDesignerScrollView *scroller;
+
+    @property (nonatomic, readonly) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
+    @property (nonatomic, readonly) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
 
 @end
 
