@@ -103,7 +103,7 @@
     NSOrderedSet *fields = table.hasFields;
     MADQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght;
     queryMaxFieldLenght = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
-                                                                                            object: fields];
+                                                                                              object: fields];
     queryMaxFieldLenght.database.delegate = self;
 
     NSError * __autoreleasing blockError = NULL;

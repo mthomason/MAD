@@ -88,7 +88,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals
+- (id)connectWithConnection:(MADDatabaseConnection *)connection
+                 credentals:(MADCredential *)credentals
             connectionError:(NSError * __autoreleasing *)error {
     return nil;
 }
@@ -98,7 +99,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
     return [result stringByAppendingString:fieldName];
 }
 
-- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
     id safeField = [MADDatabase newSafeQueryField:fieldName andTable:tableName];
     return safeField;
 }
@@ -150,8 +151,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
                                  userInfo: nil];
 }
 
-- (MADSafeQueryField *)tableAliasForTable:(NSString *)table {
-    return [self newSafeIdentifier: table];
+- (NSString *)tableAliasForTable:(NSString *)table {
+    NSString *tableAlias = [self newSafeIdentifier: table];
+    return tableAlias;
 }
 
 - (NSString *)tableAliasConnector {
@@ -194,7 +196,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
-    MADSafeQueryField *safeField = [self newSafeQueryField: fieldName andTable: tableName];
+    MADSafeQueryField *safeField = [self queryKey: fieldName table: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                            andTableName: tableName];
     MADSafeQueryField *safeTable = [self newSafeIdentifier:tableName];

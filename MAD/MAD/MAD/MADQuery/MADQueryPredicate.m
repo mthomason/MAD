@@ -55,8 +55,7 @@
                 RptqQueryField *leftField = queryPredicate.hasLeftField;
                 NSString *leftTableName = [leftField.inQueryTable queryAlias];
                 
-                leftValue = [database newSafeQueryField: leftField.databaseSchemaField.name
-                                               andTable: leftTableName];
+                leftValue = [database queryKey: leftField.databaseSchemaField.name table: leftTableName];
                 
             } else if (queryPredicate.leftFieldID != nil) {
                 
@@ -70,8 +69,7 @@
                 
                 RptqQueryField *rightField = queryPredicate.hasRightField;
                 NSString *rightTableName = [rightField.inQueryTable queryAlias];
-                rightValue = [database newSafeQueryField: rightField.databaseSchemaField.name
-                                                andTable: rightTableName];
+                rightValue = [database queryKey: rightField.databaseSchemaField.name table: rightTableName];
                 
             } else if (queryPredicate.rightFieldID != nil) {
                 

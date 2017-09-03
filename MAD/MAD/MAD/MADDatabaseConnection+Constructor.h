@@ -20,7 +20,7 @@
 
     + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url;
 
-    + (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
+    + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 
     + (NSString *)Identifier:(MADDatabaseType)databaseType;
 

@@ -860,7 +860,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     NSError * __autoreleasing error = NULL;
     
     MADDatabaseConnection *dbConnection;
-    dbConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)field.databaseSchemaField.inTable.inDatabase.ownedByUser)];
+    dbConnection = [MADDatabaseConnection newDatabaseConnection:((NSObject <MADConnectionsPropertiesProtocol> *)field.databaseSchemaField.inTable.inDatabase.ownedByUser)];
     MADDatabase *database = [MADDatabase newDatabaseWithConnection:dbConnection];
     if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
         database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);

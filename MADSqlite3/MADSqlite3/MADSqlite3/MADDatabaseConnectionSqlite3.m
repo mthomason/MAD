@@ -28,7 +28,7 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
 
     id dbConnection;
     //dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];

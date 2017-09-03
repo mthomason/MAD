@@ -807,7 +807,7 @@ void sqliteLog(void *foo, const char* statement) {
     id result = [[NSString alloc] initWithFormat:MADDatabaseSqlite3SafeFormatField, tableName, fieldName];
     return result;
 }
-- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
     MADSafeQueryField * result = [MADDatabaseSqlite3 newSafeQueryField:fieldName andTable:tableName];
     return result;
 }

@@ -223,7 +223,7 @@
     return safeIdentifier;
 }
 
-- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
     id safeIdentifier = [MADDatabaseMySQL newSafeQueryField:fieldName andTable:tableName];
     return safeIdentifier;
 }

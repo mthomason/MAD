@@ -1363,20 +1363,20 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return self.databaseConnection;
 }
 
-+ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
++ (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
     MADSafeQueryField *safeQueryField = [[MADSafeQueryField alloc] initWithFormat:@"[%@].[%@]", tableName, fieldName];
     return safeQueryField;
 }
-- (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
+- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
     return [MADDatabaseSQLServer newSafeQueryField:fieldName andTable:tableName];
 }
 
-+ (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
++ (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName {
     id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
     return result;
 }
 
-- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
+- (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName {
     id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
     return result;
 }
@@ -1405,8 +1405,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
     
-    MADSafeQueryField *safeField = [self newSafeQueryField: fieldName
-                                                  andTable: tableName];
+    MADSafeQueryField *safeField = [self queryKey: fieldName table: tableName];
     NSString *safeFieldAlias = [self fieldAliasForField: fieldName
                                       withSafeTableName: tableName];
     MADSafeQueryField *safeTable = [self newSafeIdentifier: tableName];

@@ -383,14 +383,14 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                             
                             NSString *lft = [leftField.inQueryTable queryAlias];
                             MADSafeQueryField *safeField;
-                            safeField = [database newSafeQueryField: leftField.databaseSchemaField.name
-                                                           andTable: lft];
+                            safeField = [database queryKey: leftField.databaseSchemaField.name
+                                                     table: lft];
                             [result appendString: safeField];
                             [result appendString:@" = "];
                             
                             NSString *rft = [rightField.inQueryTable queryAlias];
-                            safeField = [database newSafeQueryField: rightField.databaseSchemaField.name
-                                                           andTable: rft];
+                            safeField = [database queryKey: rightField.databaseSchemaField.name
+                                                     table: rft];
                             [result appendString: safeField];
                         }
                     }

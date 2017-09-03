@@ -33,7 +33,7 @@ typedef NSString MADSqlite3SortDescription;
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
     + (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
-    - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
     - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement

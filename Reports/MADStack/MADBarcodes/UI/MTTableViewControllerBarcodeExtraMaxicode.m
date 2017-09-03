@@ -90,7 +90,7 @@
     
     
     MADDatabaseConnection *connection;
-    connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)schemaField.inTable.inDatabase.ownedByUser)];
+    connection = [MADDatabaseConnection newDatabaseConnection:((NSObject <MADConnectionsPropertiesProtocol> *)schemaField.inTable.inDatabase.ownedByUser)];
     MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
     if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
         db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);

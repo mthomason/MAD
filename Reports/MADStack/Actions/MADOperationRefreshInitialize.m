@@ -98,7 +98,7 @@
             rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
             rptqQuery = rptqDatabase.hasQueries.anyObject;
             rptqUser = rptqQuery.inDatabase.ownedByUser;
-            databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:rptqUser];
+            databaseConnection = [MADDatabaseConnection newDatabaseConnection:rptqUser];
             [doc updateDatabaseWithConnection:databaseConnection];
             database = [MADDatabase newDatabaseWithConnection:databaseConnection];
         }

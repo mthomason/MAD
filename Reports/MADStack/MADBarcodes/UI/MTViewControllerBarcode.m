@@ -190,7 +190,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             self.query = querySampleDataField;
             
             MADDatabaseConnection *connection;
-            connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)queryField1.databaseSchemaField.inTable.inDatabase.ownedByUser)];
+            connection = [MADDatabaseConnection newDatabaseConnection:((NSObject <MADConnectionsPropertiesProtocol> *)queryField1.databaseSchemaField.inTable.inDatabase.ownedByUser)];
             MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
                 db.delegate = self;
             NSError * __autoreleasing error = NULL;
@@ -240,7 +240,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             NSError * __autoreleasing error = NULL;
 
             MADDatabaseConnection *connection;
-            connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:((NSObject <MADConnectionsPropertiesProtocol> *)queryField2.databaseSchemaField.inTable.inDatabase.ownedByUser)];
+            connection = [MADDatabaseConnection newDatabaseConnection:((NSObject <MADConnectionsPropertiesProtocol> *)queryField2.databaseSchemaField.inTable.inDatabase.ownedByUser)];
             MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
             if ([self.query2 conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
                 db.delegate = self;

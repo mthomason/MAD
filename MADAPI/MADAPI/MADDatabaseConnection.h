@@ -16,7 +16,7 @@
 
 @protocol MADDatabaseConnectionConstructors <NSObject>
   @optional
-    + (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
+    + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 @end
 
 @protocol MADDatabaseConnectionsProperties <NSObject>

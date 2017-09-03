@@ -1453,7 +1453,7 @@ END_rowIDLastOfReport_Loop:;
 - (void)initializeMainDatabase:(RptqDocument *)document {
     RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
     MADDatabaseConnection *connection;
-    connection = [MADDatabaseConnection newDatabaseConnectionWithCredentals: database.ownedByUser];
+    connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser];
     MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
     db.delegate = self;
     self.database = db;

@@ -52,17 +52,19 @@
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
         self.fields = fieldInfo;
         
-        NSAssert([object respondsToSelector:@selector(array)], @"MADQueryMaxFieldLength expects to respond to array (hint, send an order set..");
+        NSAssert([object respondsToSelector:@selector(array)],
+                 @"MADQueryMaxFieldLength expects to respond to array (hint, send an order set..");
 
         NSArray *array = [object array];
         
-        NSAssert([[array firstObject] isKindOfClass:[RptqDatabaseSchemaField class]], @"Need RptqDatabaseSchemaField's!");
+        NSAssert([[array firstObject] isKindOfClass:[RptqDatabaseSchemaField class]],
+                 @"Need RptqDatabaseSchemaField's!");
 
         self.queryObject = array;
         RptqDatabaseSchemaField *field = array.firstObject;
 
         id databaseConnection;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:field.inTable.inDatabase.ownedByUser];
+        databaseConnection = [MADDatabaseConnection newDatabaseConnection:field.inTable.inDatabase.ownedByUser];
         MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
         self.database = db;
     }
@@ -94,9 +96,8 @@
             [tables addObject:table];
 
             NSString *fieldAliasSafe = [self.database fieldAliasForField:field.name
-                                                              andTableName:field.inTable.name];
-            MADSafeQueryField *safeFieldName = [self.database newSafeQueryField:field.name
-                                                             andTable:field.inTable.name];
+                                                            andTableName:field.inTable.name];
+            MADSafeQueryField *safeFieldName = [self.database queryKey:field.name table:field.inTable.name];
             self.fields[fieldAliasSafe] = dbField;
             [self.fieldKeys addObject:fieldAliasSafe];
             
@@ -132,7 +133,6 @@
                                                 MADSqlTextFromPart, tableNamePart];
 
     }
-
     return sql;
 }
 

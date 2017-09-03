@@ -1577,7 +1577,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     schemaTable = table.databaseSchemaTable;
     
     MADDatabaseConnection *databaseConnection;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:schemaTable.inDatabase.ownedByUser];
+    databaseConnection = [MADDatabaseConnection newDatabaseConnection:schemaTable.inDatabase.ownedByUser];
     MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
     rquery = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
                                                                                object: schemaTable];

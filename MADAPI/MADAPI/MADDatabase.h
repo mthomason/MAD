@@ -43,19 +43,17 @@ extern NSString * const MADSqlTextFromPart;
     - (NSString *)identifier;
     + (NSString *)identifier;
 
-    + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
-    - (MADSafeQueryField *)tableAliasForTable:(NSString *)tableName;
+    + (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
+    - (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName;
+    - (NSString *)tableAliasForTable:(NSString *)tableName;
 
     - (NSString *)selectPart;
     - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit;
     - (NSString *)sqlLimitClause;
     - (NSString *)sqlLimitClause:(NSUInteger)limit;
-    - (NSString *)fieldAliasForField:(NSString *)field
-                   withSafeTableName:(NSString *)safeTableName;
-    - (NSString *)fieldAliasForField:(NSString *)fieldName
-                        andTableName:(NSString *)tableName;
+    - (NSString *)fieldAliasForField:(NSString *)field withSafeTableName:(NSString *)safeTableName;
+    - (NSString *)fieldAliasForField:(NSString *)fieldName andTableName:(NSString *)tableName;
     - (NSString *)tableAliasConnector;
 
     - (NSString *)sqlAggregateFunctionLength;

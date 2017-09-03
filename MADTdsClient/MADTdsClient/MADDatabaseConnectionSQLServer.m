@@ -25,7 +25,7 @@
 
 @dynamic identifier;
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
     
     id dbConnection = nil;
     

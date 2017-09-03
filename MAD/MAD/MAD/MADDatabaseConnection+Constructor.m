@@ -63,7 +63,7 @@
     id resultCredentals = nil;
     
     if ([connectionObject conformsToProtocol:@protocol(MADConnectionsPropertiesProtocol)]) {
-        resultCredentals = [self newDatabaseConnectionWithCredentals:connectionObject];
+        resultCredentals = [self newDatabaseConnection:connectionObject];
         
     } else if ([connectionObject isKindOfClass:[NSURL class]]) {
         resultCredentals = [self newDatabaseConnectionForUrl:connectionObject];
@@ -71,22 +71,22 @@
     return resultCredentals;
 }
 
-+ (instancetype)newDatabaseConnectionWithCredentals:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
     
     id dbConnection = nil;
     switch (credentals.databaseType) {
         case MADDatabaseTypeSqlite3:
-            dbConnection = [MADDatabaseConnectionSqlite3 newDatabaseConnectionWithCredentals:credentals];
+            dbConnection = [MADDatabaseConnectionSqlite3 newDatabaseConnection:credentals];
             
             break;
             
         case MADDatabaseTypeTDS:
-            dbConnection = [MADDatabaseConnectionSQLServer newDatabaseConnectionWithCredentals:credentals];
+            dbConnection = [MADDatabaseConnectionSQLServer newDatabaseConnection:credentals];
             
             break;
             
         case MADDatabaseTypeMySQL:
-            dbConnection = [MADDatabaseConnectionMySql newDatabaseConnectionWithCredentals:credentals];
+            dbConnection = [MADDatabaseConnectionMySql newDatabaseConnection:credentals];
             break;
             
         default:

@@ -24,7 +24,7 @@ extern NSString * const MTDatabaseConnectionAppName;
     - (NSString *)identifier;
 
     + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+    - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
     - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
 @end

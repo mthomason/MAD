@@ -172,8 +172,8 @@
     NSString *fieldKey, *queryAlias, *fieldName;
     fieldName = self.item.aggregateField.databaseSchemaField.name;
     queryAlias = [self.item.aggregateField.inQueryTable queryAlias];
-    fieldKey = [self.datasource.database newSafeQueryField: fieldName
-                                                  andTable: queryAlias];
+    fieldKey = [self.datasource.database queryKey: fieldName
+                                            table: queryAlias];
     return fieldKey;
 }
 
@@ -228,8 +228,7 @@
 - (NSString *)fieldKey {
     NSString *qa = [self.item.referencesQueryField.inQueryTable queryAlias];
     NSString *fieldName = self.item.referencesQueryField.databaseSchemaField.name;
-    NSString *fieldKey = [self.datasource.database newSafeQueryField: fieldName
-                                                            andTable: qa];
+    NSString *fieldKey = [self.datasource.database queryKey: fieldName table: qa];
     return fieldKey;
 }
 
@@ -262,8 +261,7 @@
     NSString *queryAlias = [self.item.referencesField1.inQueryTable queryAlias];
     NSString *fieldName = self.item.referencesField1.databaseSchemaField.name;
     MADSafeQueryField *fieldKey;
-    fieldKey = [self.datasource.database newSafeQueryField: fieldName
-                                                  andTable: queryAlias];
+    fieldKey = [self.datasource.database queryKey: fieldName table: queryAlias];
     return fieldKey;
 }
 
@@ -271,8 +269,7 @@
     NSString *queryAlias = [self.item.referencesField2.inQueryTable queryAlias];
     NSString *fieldName = self.item.referencesField2.databaseSchemaField.name;
     MADSafeQueryField *fieldKey;
-    fieldKey = [self.datasource.database newSafeQueryField: fieldName
-                                                  andTable: queryAlias];
+    fieldKey = [self.datasource.database queryKey: fieldName table: queryAlias];
     return fieldKey;
 }
 

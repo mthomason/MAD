@@ -185,7 +185,7 @@
         userCredentals = field.inTable.inDatabase.ownedByUser;
         
         MADDatabaseConnection *databaseConnection;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithCredentals:userCredentals];
+        databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
         
         MADDatabase *database;
         database = [MADDatabase newDatabaseWithConnection:databaseConnection];
