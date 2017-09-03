@@ -29,10 +29,10 @@
 		4C66C1811BA8882300663575 /* odbcss.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C1691BA8882300663575 /* odbcss.h */; };
 		4C66C1821BA8882300663575 /* sqldb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16A1BA8882300663575 /* sqldb.h */; };
 		4C66C1831BA8882300663575 /* sqlfront.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16B1BA8882300663575 /* sqlfront.h */; };
-		4C66C1841BA8882300663575 /* sybdb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16C1BA8882300663575 /* sybdb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C66C1841BA8882300663575 /* sybdb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16C1BA8882300663575 /* sybdb.h */; };
 		4C66C1851BA8882300663575 /* syberror.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16D1BA8882300663575 /* syberror.h */; };
 		4C66C1861BA8882300663575 /* sybfront.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16E1BA8882300663575 /* sybfront.h */; };
-		4C66C1871BA8882300663575 /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16F1BA8882300663575 /* tds_sysdep_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C66C1871BA8882300663575 /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16F1BA8882300663575 /* tds_sysdep_public.h */; };
 		4CCE18811DA14BE10093B166 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4CCE187F1DA14BE10093B166 /* libsybdb.a */; };
 		4CCE18821DA14BE10093B166 /* libct.a in Resources */ = {isa = PBXBuildFile; fileRef = 4CCE18801DA14BE10093B166 /* libct.a */; };
 /* End PBXBuildFile section */
@@ -119,8 +119,8 @@
 				4C66C1611BA887EB00663575 /* Resources */,
 				4C66C1491BA887D500663575 /* MADTdsClient */,
 				4C66C1551BA887D500663575 /* MADTdsClientTests */,
-				4C66C1481BA887D500663575 /* Products */,
 				4C00A34E1F57D0D100F6A6C1 /* Frameworks */,
+				4C66C1481BA887D500663575 /* Products */,
 			);
 			sourceTree = "<group>";
 		};

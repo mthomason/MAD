@@ -15,18 +15,17 @@
 		4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */; };
 		4C00A37F1F5951E200F6A6C1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A37E1F5951E200F6A6C1 /* Media.xcassets */; };
 		4C0CC9221DA6130F00B5A190 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18771DA14B830093B166 /* libmysqlclient.a */; };
-		4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D31DA6255900B5A190 /* mysql.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C0CCACE1DA626FF00B5A190 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D91DA6255900B5A190 /* mysql_version.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C0CCACF1DA6272100B5A190 /* mysql_com.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D51DA6255900B5A190 /* mysql_com.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C0CCAD01DA6273100B5A190 /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D81DA6255900B5A190 /* mysql_time.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C0CCAD11DA6274000B5A190 /* my_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9A51DA6255900B5A190 /* my_list.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D31DA6255900B5A190 /* mysql.h */; };
+		4C0CCACE1DA626FF00B5A190 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D91DA6255900B5A190 /* mysql_version.h */; };
+		4C0CCACF1DA6272100B5A190 /* mysql_com.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D51DA6255900B5A190 /* mysql_com.h */; };
+		4C0CCAD01DA6273100B5A190 /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9D81DA6255900B5A190 /* mysql_time.h */; };
+		4C0CCAD11DA6274000B5A190 /* my_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9A51DA6255900B5A190 /* my_list.h */; };
 		4C0CCAD21DA6275300B5A190 /* client_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9B61DA6255900B5A190 /* client_plugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9FB1DA6255A00B5A190 /* typelib.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C0CCAD41DA6276700B5A190 /* my_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9951DA6255900B5A190 /* my_alloc.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9FB1DA6255A00B5A190 /* typelib.h */; };
+		4C0CCAD41DA6276700B5A190 /* my_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9951DA6255900B5A190 /* my_alloc.h */; };
 		4C33DF141DA58207005A73CD /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187C1DA14B8C0093B166 /* libcrypto.a */; };
 		4C4F062D1F57C20100E09E54 /* MADDatabaseMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4F062E1F57C20100E09E54 /* MADDatabaseMySQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */; };
-		4C4F062F1F57C20100E09E54 /* MysqlFetch+DataTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C4F06301F57C20100E09E54 /* MysqlFetch+DataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */; };
 		4C4F06321F57C99B00E09E54 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4F06311F57C99B00E09E54 /* MADFoundation.framework */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -35,17 +34,15 @@
 		4C9372F91BAD244800D6BD62 /* MADDataTypeMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */; };
 		4C9372FA1BAD244800D6BD62 /* MADDataTypeMySQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */; };
 		4C9373E81BAD2A8300D6BD62 /* MysqlCommitException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */; };
-		4C9373E91BAD2A8300D6BD62 /* MysqlConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4C9373E91BAD2A8300D6BD62 /* MysqlConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */; };
 		4C9373EA1BAD2A8300D6BD62 /* MysqlFetch.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */; };
 		4C9373EB1BAD2A8300D6BD62 /* MysqlFetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */; };
-		4C9373EC1BAD2A8300D6BD62 /* MysqlFetchField.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D01BAD2A8300D6BD62 /* MysqlFetchField.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C9373ED1BAD2A8300D6BD62 /* MysqlFetchField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373D11BAD2A8300D6BD62 /* MysqlFetchField.m */; };
 		4C9373EE1BAD2A8300D6BD62 /* NSString+MysqlEscape.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373D21BAD2A8300D6BD62 /* NSString+MysqlEscape.m */; };
 		4C9373EF1BAD2A8300D6BD62 /* MysqlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373D31BAD2A8300D6BD62 /* MysqlConnection.m */; };
 		4C9373F01BAD2A8300D6BD62 /* MysqlInsert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373D41BAD2A8300D6BD62 /* MysqlInsert.m */; };
 		4C9373F31BAD2A8300D6BD62 /* MysqlTruncate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373D71BAD2A8300D6BD62 /* MysqlTruncate.m */; };
 		4C9373F41BAD2A8300D6BD62 /* MysqlException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373D81BAD2A8300D6BD62 /* MysqlException.h */; };
-		4C9373F81BAD2A8300D6BD62 /* MysqlServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9373DC1BAD2A8300D6BD62 /* MysqlServer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C9373FC1BAD2A8300D6BD62 /* MysqlCommitException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E01BAD2A8300D6BD62 /* MysqlCommitException.m */; };
 		4C9373FD1BAD2A8300D6BD62 /* MysqlDelete.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E11BAD2A8300D6BD62 /* MysqlDelete.m */; };
 		4C9373FE1BAD2A8300D6BD62 /* MysqlException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E21BAD2A8300D6BD62 /* MysqlException.m */; };
@@ -347,6 +344,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C00A3891F5B7C5F00F6A6C1 /* MySQLObjC */ = {
+			isa = PBXGroup;
+			children = (
+				4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */,
+				4C9373D31BAD2A8300D6BD62 /* MysqlConnection.m */,
+				4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */,
+				4C9373E01BAD2A8300D6BD62 /* MysqlCommitException.m */,
+				4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */,
+				4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */,
+				4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */,
+				4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */,
+				4C9373D01BAD2A8300D6BD62 /* MysqlFetchField.h */,
+				4C9373D11BAD2A8300D6BD62 /* MysqlFetchField.m */,
+				4C9373D51BAD2A8300D6BD62 /* MysqlInsert.h */,
+				4C9373D41BAD2A8300D6BD62 /* MysqlInsert.m */,
+				4C9373D61BAD2A8300D6BD62 /* MysqlTruncate.h */,
+				4C9373D71BAD2A8300D6BD62 /* MysqlTruncate.m */,
+				4C9373D81BAD2A8300D6BD62 /* MysqlException.h */,
+				4C9373E21BAD2A8300D6BD62 /* MysqlException.m */,
+				4C9373DA1BAD2A8300D6BD62 /* MysqlLiteral.h */,
+				4C9373E41BAD2A8300D6BD62 /* MysqlLiteral.m */,
+				4C9373DC1BAD2A8300D6BD62 /* MysqlServer.h */,
+				4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */,
+				4C9373DD1BAD2A8300D6BD62 /* MysqlUpdate.h */,
+				4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */,
+				4C9373DE1BAD2A8300D6BD62 /* MysqlDelete.h */,
+				4C9373E11BAD2A8300D6BD62 /* MysqlDelete.m */,
+				4C9373D91BAD2A8300D6BD62 /* MysqlIndex.h */,
+				4C9373E31BAD2A8300D6BD62 /* MysqlIndex.m */,
+				4C9373DB1BAD2A8300D6BD62 /* MysqlRollbackException.h */,
+				4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */,
+				4C9373DF1BAD2A8300D6BD62 /* NSString+MysqlEscape.h */,
+				4C9373D21BAD2A8300D6BD62 /* NSString+MysqlEscape.m */,
+			);
+			name = MySQLObjC;
+			sourceTree = "<group>";
+		};
 		4C0CC9231DA6255900B5A190 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -715,36 +749,7 @@
 				4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */,
 				4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */,
 				4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */,
-				4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */,
-				4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */,
-				4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */,
-				4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */,
-				4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */,
-				4C9373E01BAD2A8300D6BD62 /* MysqlCommitException.m */,
-				4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */,
-				4C9373D31BAD2A8300D6BD62 /* MysqlConnection.m */,
-				4C9373D01BAD2A8300D6BD62 /* MysqlFetchField.h */,
-				4C9373D11BAD2A8300D6BD62 /* MysqlFetchField.m */,
-				4C9373D51BAD2A8300D6BD62 /* MysqlInsert.h */,
-				4C9373D41BAD2A8300D6BD62 /* MysqlInsert.m */,
-				4C9373D61BAD2A8300D6BD62 /* MysqlTruncate.h */,
-				4C9373D71BAD2A8300D6BD62 /* MysqlTruncate.m */,
-				4C9373D81BAD2A8300D6BD62 /* MysqlException.h */,
-				4C9373E21BAD2A8300D6BD62 /* MysqlException.m */,
-				4C9373DA1BAD2A8300D6BD62 /* MysqlLiteral.h */,
-				4C9373E41BAD2A8300D6BD62 /* MysqlLiteral.m */,
-				4C9373DC1BAD2A8300D6BD62 /* MysqlServer.h */,
-				4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */,
-				4C9373DD1BAD2A8300D6BD62 /* MysqlUpdate.h */,
-				4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */,
-				4C9373DF1BAD2A8300D6BD62 /* NSString+MysqlEscape.h */,
-				4C9373D21BAD2A8300D6BD62 /* NSString+MysqlEscape.m */,
-				4C9373DE1BAD2A8300D6BD62 /* MysqlDelete.h */,
-				4C9373E11BAD2A8300D6BD62 /* MysqlDelete.m */,
-				4C9373D91BAD2A8300D6BD62 /* MysqlIndex.h */,
-				4C9373E31BAD2A8300D6BD62 /* MysqlIndex.m */,
-				4C9373DB1BAD2A8300D6BD62 /* MysqlRollbackException.h */,
-				4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */,
+				4C00A3891F5B7C5F00F6A6C1 /* MySQLObjC */,
 			);
 			name = Source;
 			path = MADMySQL;
@@ -794,16 +799,13 @@
 				4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */,
 				4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */,
 				4C9372F91BAD244800D6BD62 /* MADDataTypeMySQL.h in Headers */,
-				4C9373EC1BAD2A8300D6BD62 /* MysqlFetchField.h in Headers */,
 				4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */,
 				4C00A3761F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h in Headers */,
 				4C9373EA1BAD2A8300D6BD62 /* MysqlFetch.h in Headers */,
 				4C0CCACF1DA6272100B5A190 /* mysql_com.h in Headers */,
 				4C0CCAD01DA6273100B5A190 /* mysql_time.h in Headers */,
 				4C4F062D1F57C20100E09E54 /* MADDatabaseMySQL.h in Headers */,
-				4C4F062F1F57C20100E09E54 /* MysqlFetch+DataTable.h in Headers */,
 				4C0CCAD11DA6274000B5A190 /* my_list.h in Headers */,
-				4C9373F81BAD2A8300D6BD62 /* MysqlServer.h in Headers */,
 				4C9373E91BAD2A8300D6BD62 /* MysqlConnection.h in Headers */,
 				4C9373E81BAD2A8300D6BD62 /* MysqlCommitException.h in Headers */,
 				4C9373F41BAD2A8300D6BD62 /* MysqlException.h in Headers */,

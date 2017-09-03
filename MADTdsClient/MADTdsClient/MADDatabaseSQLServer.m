@@ -42,7 +42,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-#import <MADTdsClient/sybdb.h>
+#import "sybdb.h"
 
 #import "MADDatabaseProcessSQLServer.h"
 

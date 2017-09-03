@@ -7,7 +7,7 @@
 //
 
 #import "MADDatabaseProcessSQLServer.h"
-#import <MADTdsClient/sybdb.h>
+#import "sybdb.h"
 
 @implementation MADDatabaseProcessSQLServer {
     DBPROCESS *dbconn;
