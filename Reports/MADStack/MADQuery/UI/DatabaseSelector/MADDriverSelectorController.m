@@ -18,6 +18,7 @@
 #import <UIKit/UIImageView.h>
 #import <UIKit/UIVisualEffectView.h>
 #import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UIStoryboard.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -30,9 +31,6 @@
 
 NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Select database type.";
 NSString * const MADDriverSelectorControllerDefaultTitle                = @"New Report";
-
-NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
-NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceSqlServerIdentifier";
 
 @interface MADDriverSelectorController ()
     <MADViewControllerStandardProtocol, UITableViewDelegate>
@@ -105,43 +103,23 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    switch (indexPath.row) {
-
-        case 0:
-            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceMySqlIdentifier
-                                      sender: self];
-            break;
-            
-        case 1:
-            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceSqlServerIdentifier
-                                      sender: self];
-            break;
-            
-        default:
-            break;
-    }
+    [self showViewControllerConnection:indexPath.row];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-    MADDatabaseType dbId;
-    if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
-
-        ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
-        ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADDatabaseTypeMySQL;
-
-    } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
-    
-        ((MADConnectionViewController *)segue.destinationViewController).delegate = self;
-        ((MADConnectionViewController *)segue.destinationViewController).saveFileDelegate = self;
-        dbId = MADDatabaseTypeTDS;
-
-    }
-    if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {
-        ((MADConnectionViewController *)segue.destinationViewController).databaseType = dbId;
-    }
+- (void)showViewControllerConnection:(NSInteger)type {
+    NSString *storyboardName = @"MADCreateDocument";
+    NSString *viewControllerID = type == 0 ? @"MADConnectionViewControllerMySQL" :
+                                             @"MADConnectionViewControllerTDS";
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName
+                                                         bundle:nil];
+    MADConnectionViewController *connectionViewController;
+    connectionViewController = [storyboard instantiateViewControllerWithIdentifier:viewControllerID];
+    connectionViewController.delegate = self;
+    connectionViewController.saveFileDelegate = self;
+    connectionViewController.databaseType = type == 0 ? MADDatabaseTypeMySQL :
+                                                        MADDatabaseTypeTDS;
+    [self.navigationController pushViewController:connectionViewController
+                                         animated:YES];
 }
 
 - (void)viewControllerDidFinish:(id)sender {

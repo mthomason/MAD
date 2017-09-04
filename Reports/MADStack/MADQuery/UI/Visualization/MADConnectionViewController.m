@@ -19,6 +19,7 @@
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UILocalNotification.h>
+#import <UIKit/UIViewControllerTransitioning.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -47,12 +48,11 @@
 
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
+#import "MADOperationCreateDocument.h"
 
 #import "MADLabelTitle.h"
 
 #import "MADProgressView.h"
-
-#import "MADOperationCreateDocument.h"
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -61,26 +61,34 @@ static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MADConnectionViewController()
-    <MADOperationObserver, MADocumentDelegate, MADDatabaseResultsProtocol>
+    <MADOperationObserver, MADocumentDelegate, MADDatabaseResultsProtocol,
+        UITableViewDelegate, UIViewControllerTransitioningDelegate,
+        UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
+
+    @property (nonatomic, strong) MADProgressView *progressView;
+    @property (nonatomic, strong) MADOperationQueue *credentialQueue;
+
+    @property (nonatomic, assign) SEL actionSave;
+    @property (nonatomic, weak) id actionSaveTarget;
+
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
 
-    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
-
     @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    @property (nonatomic, strong) MADProgressView *progressView;
+    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+    @property (nonatomic, strong) IBOutletCollection(UITextField) NSArray *textFields;
 
-    @property (nonatomic, strong) MADOperationQueue *credentialQueue;
-
-    @property (nonatomic, assign) SEL actionSave;
-    @property (nonatomic, weak) id actionSaveTarget;
+    - (IBAction)save:(id)sender;
+    - (IBAction)usernameDidEndOnExit:(id)sender;
+    - (IBAction)hostDidEndOnExit:(id)sender;
+    - (IBAction)portDidEndOnExit:(id)sender;
 
 @end
 
@@ -267,7 +275,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
             [self removeObserverFromObjectForProgress:operation];
             [self resetPrompt];
             [self.delegate viewControllerDidFinish: self];
-            [self enableTextFields];
         }];
     } else {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
@@ -279,11 +286,14 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 #pragma mark -
-#pragma mark Actions
+#pragma mark Table view delegate
 
-- (void)cancel:(id)sender {
-    [self.delegate viewControllerDidCancel:self];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath: indexPath animated: NO];
 }
+
+#pragma mark -
+#pragma mark UIViewControllerAnimatedTransitioning
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
@@ -305,18 +315,16 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
-    
 }
 
-- (void)animationEnded:(BOOL)transitionCompleted {
-    if (transitionCompleted) {
-        
-    }
-}
+- (void)animationEnded:(BOOL)transitionCompleted { }
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
     return 0.4000f;
 }
+
+#pragma mark -
+#pragma mark UIViewControllerTransitioningDelegate
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     return nil;
@@ -336,109 +344,12 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return nil;
 }
 
-- (void)removeKeyboard {
-    [self.textFieldHost resignFirstResponder];
-    [self.textFieldPort resignFirstResponder];
-    [self.textFieldDatabase resignFirstResponder];
-    [self.textFieldReportName resignFirstResponder];
-}
-
-- (void)disableTextFields {
-    self.textFieldHost.enabled = NO;
-    self.textFieldPort.enabled = NO;
-    self.textFieldDatabase.enabled = NO;
-    self.textFieldReportName.enabled = NO;
-}
-
-- (void)enableTextFields {
-    self.textFieldHost.enabled = YES;
-    self.textFieldPort.enabled = YES;
-    self.textFieldDatabase.enabled = YES;
-    self.textFieldReportName.enabled = YES;
-}
-
-- (void)resetPrompt {
-    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
-                                                   MADConnectionViewControllerDefaultPrompt);
-}
-
-+ (UIProgressView *)progressViewWithWidth:(CGFloat)width {
-    UIProgressView *progressView;
-    progressView = [[UIProgressView alloc] initWithProgressViewStyle: UIProgressViewStyleDefault];
-    progressView.frame = CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y,
-                                    width, progressView.frame.size.height);
-    progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
-    progressView.trackTintColor = [UIColor grayColor];
-    return progressView;
-}
-
-- (void)disableUserInteractionWithMessage:(NSString *)message {
-    [self removeKeyboard];
-    [self disableTextFields];
-    
-    self.navigationItem.prompt = message.copy;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    
-    [self disableNavigation];
-    
-    UIActivityIndicatorView *activityIndicator;
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [activityIndicator startAnimating];
-    activityIndicator.hidden = NO;
-    activityIndicator.hidesWhenStopped = NO;
-    
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    barButtonItem.isAccessibilityElement = NO;
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-}
-
-- (void)enableUserInteraction {
-    [self enableNavigation];
-    [self enableTextFields];
-    UIBarButtonItem *buttonSave = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
-                                                                                target: self.actionSaveTarget
-                                                                                action: self.actionSave];
-    [self.navigationItem setRightBarButtonItem:buttonSave animated:YES];
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-    self.progressView.progress = 0.0000f;
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-}
-
-- (IBAction)save:(id)sender {
-    NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
-
-    [self.credentialQueue cancelAllOperations];
-    
-    NSString *message = NSLocalizedString(@"Importing schema.", @"Importing schema.");
-    [self disableUserInteractionWithMessage:message];
-    
-    id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
-    
-    MADDatabaseConnection *databaseConnection;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType
-                                                                         host: self.textFieldHost.text
-                                                                     database: self.textFieldDatabase.text
-                                                                         port: self.textFieldPort.text.integerValue];
-    
-    MADOperationCreateDocument *createDocument;
-    createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
-                                                       documentsDirectory: saveFileDelegate.documentDirectory
-                                                       databaseConnection: databaseConnection
-                                                           viewController: self];
-    [createDocument addObserver:self];
-    [self addObserverToObjectForProgress:createDocument];
-    [self.credentialQueue addOperation:createDocument];
-
-}
-
 #pragma mark -
 #pragma mark MADDatabaseResultsProtocol
 
 - (void)resetAfterConnectionString:(NSString *)connectionString failedTest:(NSArray *)errors {
     [self enableUserInteraction];
     [self displayErrors:errors forConnectionString:connectionString];
-
 }
 
 - (void)displayErrors:(NSArray <__kindof NSError *> *)errors forConnectionString:(NSString *)connectionString {
@@ -479,6 +390,32 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self.navigationItem setHidesBackButton:NO animated:YES];
 }
 
+#pragma mark -
+#pragma mark Actions
+
+- (IBAction)save:(id)sender {
+    NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
+    
+    [self.credentialQueue cancelAllOperations];
+    
+    NSString *message = NSLocalizedString(@"Importing schema.", @"Importing schema.");
+    [self disableUserInteractionWithMessage:message];
+    
+    id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
+    
+    MADDatabaseConnection *databaseConnection = [self databaseConnection];
+    
+    MADOperationCreateDocument *createDocument;
+    createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
+                                                       documentsDirectory: saveFileDelegate.documentDirectory
+                                                       databaseConnection: databaseConnection
+                                                           viewController: self];
+    [createDocument addObserver:self];
+    [self addObserverToObjectForProgress:createDocument];
+    [self.credentialQueue addOperation:createDocument];
+    
+}
+
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
 
 - (IBAction)schemaDidEndOnExit:(id)sender { }
@@ -499,11 +436,72 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self.delegate viewControllerDidCancel:self];
 }
 
-#pragma mark -
-#pragma mark Table view delegate
+#pragma mark Override Points
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath: indexPath animated: NO];
+- (MADDatabaseConnection *)databaseConnection {
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType
+                                                                         host: self.textFieldHost.text
+                                                                     database: self.textFieldDatabase.text
+                                                                         port: self.textFieldPort.text.integerValue];
+    return databaseConnection;
+}
+
+#pragma mark Helpers
+
+- (void)removeKeyboard {
+    for (UITextField *textField in self.textFields) {
+        [textField resignFirstResponder];
+    }
+}
+
+- (void)disableTextFields {
+    for (UITextField *textField in self.textFields) {
+        textField.enabled = NO;
+    }
+}
+
+- (void)enableTextFields {
+    for (UITextField *textField in self.textFields) {
+        textField.enabled = YES;
+    }
+}
+
+- (void)resetPrompt {
+    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
+                                                   MADConnectionViewControllerDefaultPrompt);
+}
+
+- (void)disableUserInteractionWithMessage:(NSString *)message {
+    [self removeKeyboard];
+    [self disableTextFields];
+    
+    self.navigationItem.prompt = message.copy;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
+    [self disableNavigation];
+    
+    UIActivityIndicatorView *activityIndicator;
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator startAnimating];
+    activityIndicator.hidden = NO;
+    activityIndicator.hidesWhenStopped = NO;
+    
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    barButtonItem.isAccessibilityElement = NO;
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+}
+
+- (void)enableUserInteraction {
+    [self enableNavigation];
+    [self enableTextFields];
+    UIBarButtonItem *buttonSave = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave
+                                                                                target: self.actionSaveTarget
+                                                                                action: self.actionSave];
+    [self.navigationItem setRightBarButtonItem:buttonSave animated:YES];
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+    self.progressView.progress = 0.0000f;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 @end

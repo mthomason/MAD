@@ -12,7 +12,7 @@
         <!--MySQL Setup-->
         <scene sceneID="Edh-Pk-V8O">
             <objects>
-                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="Q7F-2G-NiU" customClass="MADConnectionViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MADConnectionViewControllerMySQL" extendedLayoutIncludesOpaqueBars="YES" id="Q7F-2G-NiU" customClass="MADConnectionViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="qn1-96-lIN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -202,12 +202,21 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="tableViewCellDatabase" destination="IRc-fq-R5e" id="5uv-Q0-0Bi"/>
+                        <outlet property="tableViewCellDocumentName" destination="ujA-ph-gbw" id="rYM-xz-6Ra"/>
                         <outlet property="tableViewCellHost" destination="Jac-zS-ptd" id="Jwh-14-qRv"/>
                         <outlet property="tableViewCellPort" destination="XTN-DA-BUX" id="jno-gq-5Lp"/>
                         <outlet property="textFieldDatabase" destination="3We-d1-4zz" id="QYK-R7-LVK"/>
                         <outlet property="textFieldHost" destination="xaA-Xm-yaj" id="dgK-RK-mZz"/>
                         <outlet property="textFieldPort" destination="7DR-qs-HyU" id="Gfe-Ec-8rm"/>
-                        <outlet property="textFieldReportName" destination="Hla-vG-6Br" id="UcD-Mb-zoK"/>
+                        <outlet property="textFieldReportName" destination="Hla-vG-6Br" id="YX8-Td-kBx"/>
+                        <outletCollection property="textFields" destination="Hla-vG-6Br" id="IHm-NA-8NG"/>
+                        <outletCollection property="textFields" destination="xaA-Xm-yaj" id="gkJ-hD-U0V"/>
+                        <outletCollection property="textFields" destination="3We-d1-4zz" id="Uqo-ye-zz9"/>
+                        <outletCollection property="textFields" destination="7DR-qs-HyU" id="BB1-E1-otY"/>
+                        <outletCollection property="tableViewCells" destination="IRc-fq-R5e" id="jjE-XZ-NEg"/>
+                        <outletCollection property="tableViewCells" destination="XTN-DA-BUX" id="YnW-t3-Dvw"/>
+                        <outletCollection property="tableViewCells" destination="Jac-zS-ptd" id="wGY-Rh-Vf1"/>
+                        <outletCollection property="tableViewCells" destination="ujA-ph-gbw" id="Ohc-OY-RX3"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D5V-zv-hLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -220,7 +229,7 @@
                 <navigationController storyboardIdentifier="MADIdentifierNavControllerCreateDoc" autoresizesArchivedViewToFullSize="NO" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="overFullScreen" id="L6i-MR-x0P" customClass="MADNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Ytd-vG-tiO" customClass="MADNavigationBar">
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="Ytd-vG-tiO" customClass="MADNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -278,8 +287,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="Is4-hx-h6R" kind="push" identifier="MTSegueShowSetUpDatasourceSqlServerIdentifier" id="8S5-XO-ajH"/>
-                        <segue destination="Q7F-2G-NiU" kind="push" identifier="MTSegueShowSetUpDatasourceMySqlIdentifier" id="FtN-mk-b8x"/>
+                        <segue destination="Is4-hx-h6R" kind="show" identifier="MTSegueShowSetUpDatasourceSqlServerIdentifier" id="8S5-XO-ajH"/>
+                        <segue destination="Q7F-2G-NiU" kind="show" identifier="MTSegueShowSetUpDatasourceMySqlIdentifier" id="FtN-mk-b8x"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hfw-SS-aPc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -289,7 +298,7 @@
         <!--SQL Server-->
         <scene sceneID="ceB-0b-nqn">
             <objects>
-                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="Is4-hx-h6R" customClass="MADConnectionViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MADConnectionViewControllerTDS" extendedLayoutIncludesOpaqueBars="YES" id="Is4-hx-h6R" customClass="MADConnectionViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="URO-8U-hdM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -451,6 +460,9 @@
                         <outletCollection property="tableViewCells" destination="kcL-SH-KOI" id="xFF-ve-Uxq"/>
                         <outletCollection property="tableViewCells" destination="2BZ-Ey-fXv" id="9Ud-5m-nrG"/>
                         <outletCollection property="tableViewCells" destination="q3o-Am-Ny0" id="upf-EB-XTH"/>
+                        <outletCollection property="textFields" destination="u0p-Z4-ZuG" id="u5L-Vi-JJV"/>
+                        <outletCollection property="textFields" destination="xL2-Bl-Pui" id="2F5-iM-7Oi"/>
+                        <outletCollection property="textFields" destination="Utk-dc-mP3" id="OaZ-gM-Elw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVF-3t-Xbz" userLabel="First Responder" sceneMemberID="firstResponder"/>

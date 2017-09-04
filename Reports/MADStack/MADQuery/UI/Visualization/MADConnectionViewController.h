@@ -10,29 +10,17 @@
 #define MADDesigner_MADConnectionViewController_h
 
 #import <UIKit/UITableViewController.h>
-#import <UIKit/UIViewControllerTransitioning.h>
-
 #import <MADAPI/MADDatabaseType.h>
 
 @protocol MADViewControllerStandardProtocol, MADSaveFileProtocol;
 
 @interface MADConnectionViewController : UITableViewController
-    <UITableViewDelegate,
-        UIViewControllerTransitioningDelegate,
-        UIViewControllerAnimatedTransitioning,
-        UITextFieldDelegate>
-
+    
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
     @property (nonatomic, assign) MADDatabaseType databaseType;
-
-    - (IBAction)save:(id)sender;
-
-    - (IBAction)usernameDidEndOnExit:(id)sender;
-    - (IBAction)hostDidEndOnExit:(id)sender;
-    - (IBAction)portDidEndOnExit:(id)sender;
 
 @end
 
