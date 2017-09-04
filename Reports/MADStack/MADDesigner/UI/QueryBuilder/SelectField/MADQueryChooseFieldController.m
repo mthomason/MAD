@@ -25,6 +25,7 @@
 #import <UIKit/UIStoryboard.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <MAD/MADSchemaFieldSelectorModel.h>
 
@@ -41,8 +42,6 @@
 #import <MAD/RptqQueryField+Extras.h>
 
 #import <MAD/MADocument.h>
-
-#import "MADLabelTitle.h"
 
 #import "MADQueryChooseFieldProtocol.h"
 

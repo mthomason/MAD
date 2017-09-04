@@ -9,11 +9,9 @@
 #import "MADQueryAddGroupNavigationItem.h"
 #import <UIKit/UIAccessibility.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 @interface MADQueryAddGroupNavigationItem ()
-
-
 
 @end
 

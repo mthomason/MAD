@@ -21,12 +21,11 @@
 #import <UIKit/UINavigationBar.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
-
-#import "MADLabelTitle.h"
 
 NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewControllerIdentifier";
 

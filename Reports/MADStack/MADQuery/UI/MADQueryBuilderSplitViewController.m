@@ -26,8 +26,7 @@
 #import <MAD/MADocument.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import "MADQueryViewController.h"
 #import "MADViewControllerSQL.h"

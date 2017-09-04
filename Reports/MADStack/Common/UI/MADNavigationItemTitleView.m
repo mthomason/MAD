@@ -7,7 +7,7 @@
 //
 
 #import "MADNavigationItemTitleView.h"
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 @implementation MADNavigationItemTitleView
 

@@ -34,6 +34,8 @@
 #import <UIKit/UIStoryboard.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
+#import <MADCocoaExtensions/NSParagraphStyle+CommonStyles.h>
 
 #import <MAD/MADocument.h>
 #import <MADAPI/MADQuery.h>
@@ -61,7 +63,6 @@
 #import <MAD/MADModelQuery.h>
 
 #import "MADQueryViewSectionDelegate.h"
-#import "MADLabelTitle.h"
 #import "MADTabBarController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADWatermarkView.h"
@@ -87,8 +88,6 @@
 #import "MADViewControllerSQL.h"
 
 #import "UIViewController+tabBarItem.h"
-
-#import "NSParagraphStyle+CommonStyles.h"
 
 #import "MADQueryViewDataSource.h"
 

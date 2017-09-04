@@ -35,11 +35,13 @@
 #import <MADFoundation/MADOperationObserver.h>
 
 #import <MADAPI/MADNotificationDidReadRows.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <MADDataStructures/MTPair.h>
 
@@ -49,7 +51,6 @@
 #import <MAD/MADReportFormatter.h>
 
 #import <MAD/MADocument.h>
-#import <MADAPI/MADDatabase.h>
 #import <MAD/MTPaper.h>
 
 #import <MAD/MADActivityItemProviderPdf.h>
@@ -75,7 +76,6 @@
 
 #import "MADOperationRefreshReload.h"
 
-#import "MADLabelTitle.h"
 #import "MADDocumentScroller.h"
 #import "MADRefreshOperationReload.h"
 

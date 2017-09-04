@@ -23,6 +23,8 @@
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
+#import <MADCocoaExtensions/MADLabelTitle.h>
+
 #import "MADAggregateFunctionsViewControllerDelegate.h"
 #import "MADGroupByViewControllerDelegate.h"
 
@@ -30,8 +32,6 @@
 
 #import "MTGroupByViewController.h"
 #import "MADQueryChooseFieldController.h"
-
-#import "MADLabelTitle.h"
 
 #import "MTAggregateFunctionsViewController.h"
 

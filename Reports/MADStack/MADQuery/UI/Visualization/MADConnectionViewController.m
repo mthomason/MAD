@@ -22,9 +22,9 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
+#import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import <MADExplorer/MADSaveFileProtocol.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 
@@ -35,8 +35,6 @@
 #import <MAD/MADDatabaseConnection+Constructor.h>
 
 #import "MADViewControllerStandardProtocol.h"
-#import "MADLabelTitle.h"
-#import "MADProgressView.h"
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -297,7 +295,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     [self displayErrors:errors forConnectionString:connectionString];
 }
 
-- (void)displayErrors:(NSArray <__kindof NSError *> *)errors forConnectionString:(NSString *)connectionString {
+- (void)displayErrors:(NSArray <__kindof NSError *> *)errors
+  forConnectionString:(NSString *)connectionString {
     [MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL success) {
         [MADKeyChain deleteKey:connectionString];
     }];
@@ -378,6 +377,12 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return databaseConnection;
 }
 
+- (void)resetPrompt {
+    [self removeObserverFromObjectForProgress];
+    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
+                                                   MADConnectionViewControllerDefaultPrompt);
+}
+
 #pragma mark Helpers
 
 - (void)removeKeyboard {
@@ -396,12 +401,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     for (UITextField *textField in self.textFields) {
         textField.enabled = YES;
     }
-}
-
-- (void)resetPrompt {
-    [self removeObserverFromObjectForProgress];
-    self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
-                                                   MADConnectionViewControllerDefaultPrompt);
 }
 
 - (void)disableUserInteractionWithMessage:(NSString *)message {

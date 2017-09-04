@@ -7,7 +7,7 @@
 //
 
 #import "MADNavigationItemTitle.h"
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 @interface MADNavigationItemTitle ()
     @property (nonatomic, strong) MADLabelTitle *labelTitle;

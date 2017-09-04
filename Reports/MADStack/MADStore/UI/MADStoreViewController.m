@@ -13,6 +13,7 @@
 #import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import "MTStoreKitController.h"
 #import "MTVerificationController.h"
@@ -22,7 +23,6 @@
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
 #import "MADSalesReceipt.h"
-#import "MADLabelTitle.h"
 
 static NSString * const MADTextYouGotIt     = @"You Got It";
 static NSString * const MADTextYouItsYours  = @"It's Yours";

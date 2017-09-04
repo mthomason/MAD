@@ -17,7 +17,7 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFunctionsViewControllerIdentifier";
 

@@ -8,7 +8,7 @@
 
 #import "MADSelectValueNavigationItem.h"
 #import <UIKit/UIAccessibility.h>
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 @implementation MADSelectValueNavigationItem
 

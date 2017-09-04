@@ -336,7 +336,6 @@
 		4C401F761BAE7EB500BAE5FC /* MADDesignerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5B1BAE7EB500BAE5FC /* MADDesignerScrollView.m */; };
 		4C401F771BAE7EB500BAE5FC /* MADBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */; };
 		4C401F781BAE7EB500BAE5FC /* MADDimmingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F5F1BAE7EB500BAE5FC /* MADDimmingView.m */; };
-		4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F611BAE7EB500BAE5FC /* MADProgressView.m */; };
 		4C401F7A1BAE7EB500BAE5FC /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F631BAE7EB500BAE5FC /* MADWatermarkView.m */; };
 		4C401F7B1BAE7EB500BAE5FC /* MTBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F651BAE7EB500BAE5FC /* MTBlurView.m */; };
 		4C401F7C1BAE7EB500BAE5FC /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F671BAE7EB500BAE5FC /* MTBorderedView.m */; };
@@ -363,7 +362,6 @@
 		4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */; };
 		4C40203C1BAE92F200BAE5FC /* MTGraph+RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FE11BAE92F200BAE5FC /* MTGraph+RptqQuery.m */; };
 		4C40203F1BAE92F200BAE5FC /* MADAttributedStringCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FE71BAE92F200BAE5FC /* MADAttributedStringCommon.m */; };
-		4C4020401BAE92F200BAE5FC /* NSAttributedString+Logo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FE91BAE92F200BAE5FC /* NSAttributedString+Logo.m */; };
 		4C4020411BAE92F200BAE5FC /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FEB1BAE92F200BAE5FC /* NSData+AES256.m */; };
 		4C4020421BAE92F200BAE5FC /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FED1BAE92F200BAE5FC /* NSDate+Extras.m */; };
 		4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FEF1BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m */; };
@@ -372,7 +370,6 @@
 		4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF71BAE92F200BAE5FC /* NSMetadataItem+Description.m */; };
 		4C4020481BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FF91BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m */; };
 		4C4020491BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFB1BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.m */; };
-		4C40204A1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFD1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m */; };
 		4C40204C1BAE92F200BAE5FC /* MADButtonTwitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020011BAE92F200BAE5FC /* MADButtonTwitter.m */; };
 		4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020031BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m */; };
 		4C40204E1BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020051BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m */; };
@@ -670,7 +667,6 @@
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
 		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
 		4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */; };
-		4C692B481E1F13F000DC2CB0 /* MADLabelTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */; };
 		4C6C09C51F5CEB5200EDA039 /* MADDocumentCreationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */; };
 		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
 		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
@@ -1596,8 +1592,6 @@
 		4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBackgroundView.m; sourceTree = "<group>"; };
 		4C401F5E1BAE7EB500BAE5FC /* MADDimmingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDimmingView.h; sourceTree = "<group>"; };
 		4C401F5F1BAE7EB500BAE5FC /* MADDimmingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDimmingView.m; sourceTree = "<group>"; };
-		4C401F601BAE7EB500BAE5FC /* MADProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADProgressView.h; sourceTree = "<group>"; };
-		4C401F611BAE7EB500BAE5FC /* MADProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADProgressView.m; sourceTree = "<group>"; };
 		4C401F621BAE7EB500BAE5FC /* MADWatermarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADWatermarkView.h; sourceTree = "<group>"; };
 		4C401F631BAE7EB500BAE5FC /* MADWatermarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADWatermarkView.m; sourceTree = "<group>"; };
 		4C401F641BAE7EB500BAE5FC /* MTBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBlurView.h; sourceTree = "<group>"; };
@@ -1666,8 +1660,6 @@
 		4C401FE11BAE92F200BAE5FC /* MTGraph+RptqQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTGraph+RptqQuery.m"; sourceTree = "<group>"; };
 		4C401FE61BAE92F200BAE5FC /* MADAttributedStringCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAttributedStringCommon.h; path = Categories/MADAttributedStringCommon.h; sourceTree = "<group>"; };
 		4C401FE71BAE92F200BAE5FC /* MADAttributedStringCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAttributedStringCommon.m; path = Categories/MADAttributedStringCommon.m; sourceTree = "<group>"; };
-		4C401FE81BAE92F200BAE5FC /* NSAttributedString+Logo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Logo.h"; sourceTree = "<group>"; };
-		4C401FE91BAE92F200BAE5FC /* NSAttributedString+Logo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Logo.m"; sourceTree = "<group>"; };
 		4C401FEA1BAE92F200BAE5FC /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		4C401FEB1BAE92F200BAE5FC /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
 		4C401FEC1BAE92F200BAE5FC /* NSDate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extras.h"; sourceTree = "<group>"; };
@@ -1686,8 +1678,6 @@
 		4C401FF91BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMetadataQueryAttributeValueTuple+Description.m"; sourceTree = "<group>"; };
 		4C401FFA1BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMetadataQueryResultGroup+Description.h"; sourceTree = "<group>"; };
 		4C401FFB1BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMetadataQueryResultGroup+Description.m"; sourceTree = "<group>"; };
-		4C401FFC1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSParagraphStyle+CommonStyles.h"; sourceTree = "<group>"; };
-		4C401FFD1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSParagraphStyle+CommonStyles.m"; sourceTree = "<group>"; };
 		4C401FFE1BAE92F200BAE5FC /* MADStringEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStringEncryption.h; sourceTree = "<group>"; };
 		4C401FFF1BAE92F200BAE5FC /* MADStringEncryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStringEncryption.m; sourceTree = "<group>"; };
 		4C4020001BAE92F200BAE5FC /* MADButtonTwitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADButtonTwitter.h; sourceTree = "<group>"; };
@@ -1803,8 +1793,6 @@
 		4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = ../StaticResources/Fonts/FontAwesome.ttf; sourceTree = "<group>"; };
 		4C692B431E1F132400DC2CB0 /* MADNavigationItemTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationItemTitle.h; sourceTree = "<group>"; };
 		4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationItemTitle.m; sourceTree = "<group>"; };
-		4C692B461E1F13F000DC2CB0 /* MADLabelTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelTitle.h; sourceTree = "<group>"; };
-		4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelTitle.m; sourceTree = "<group>"; };
 		4C6C09C31F5CEB5100EDA039 /* MADDocumentCreationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManager.h; sourceTree = "<group>"; };
 		4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentCreationManager.m; sourceTree = "<group>"; };
 		4C6C09C61F5CF00E00EDA039 /* MADDocumentCreationManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerInterface.h; sourceTree = "<group>"; };
@@ -3300,8 +3288,6 @@
 				4C26BA2C1BAF999800456DC8 /* Types */,
 				4C401F031BAE6DF100BAE5FC /* UI */,
 				4C26BA2E1BAF999800456DC8 /* User */,
-				4C692B461E1F13F000DC2CB0 /* MADLabelTitle.h */,
-				4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */,
 			);
 			name = Common;
 			path = MADStack/Common;
@@ -3320,8 +3306,6 @@
 				4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */,
 				4C401FE01BAE92F200BAE5FC /* MTGraph+RptqQuery.h */,
 				4C401FE11BAE92F200BAE5FC /* MTGraph+RptqQuery.m */,
-				4C401FE81BAE92F200BAE5FC /* NSAttributedString+Logo.h */,
-				4C401FE91BAE92F200BAE5FC /* NSAttributedString+Logo.m */,
 				4C401FEA1BAE92F200BAE5FC /* NSData+AES256.h */,
 				4C401FEB1BAE92F200BAE5FC /* NSData+AES256.m */,
 				4C401FEC1BAE92F200BAE5FC /* NSDate+Extras.h */,
@@ -3340,8 +3324,6 @@
 				4C401FF91BAE92F200BAE5FC /* NSMetadataQueryAttributeValueTuple+Description.m */,
 				4C401FFA1BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.h */,
 				4C401FFB1BAE92F200BAE5FC /* NSMetadataQueryResultGroup+Description.m */,
-				4C401FFC1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.h */,
-				4C401FFD1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m */,
 				4C401FFE1BAE92F200BAE5FC /* MADStringEncryption.h */,
 				4C401FFF1BAE92F200BAE5FC /* MADStringEncryption.m */,
 				4C4020001BAE92F200BAE5FC /* MADButtonTwitter.h */,
@@ -3506,8 +3488,6 @@
 				4C401F5D1BAE7EB500BAE5FC /* MADBackgroundView.m */,
 				4C401F5E1BAE7EB500BAE5FC /* MADDimmingView.h */,
 				4C401F5F1BAE7EB500BAE5FC /* MADDimmingView.m */,
-				4C401F601BAE7EB500BAE5FC /* MADProgressView.h */,
-				4C401F611BAE7EB500BAE5FC /* MADProgressView.m */,
 				4C401F621BAE7EB500BAE5FC /* MADWatermarkView.h */,
 				4C401F631BAE7EB500BAE5FC /* MADWatermarkView.m */,
 				4C401F641BAE7EB500BAE5FC /* MTBlurView.h */,
@@ -6121,7 +6101,6 @@
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,
 				4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */,
-				4C4020401BAE92F200BAE5FC /* NSAttributedString+Logo.m in Sources */,
 				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
 				4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */,
@@ -6219,7 +6198,6 @@
 				4C401FC71BAE8AD500BAE5FC /* MTViewControllerBarcode.m in Sources */,
 				4CF6AFC31CAFBA4E00D3AD11 /* MADOperationRefreshInitalizeMainDataTable.m in Sources */,
 				4CAEE7321E55F201009A6096 /* MADStoreNavigationItem.m in Sources */,
-				4C40204A1BAE92F200BAE5FC /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C401EE71BAE5E9000BAE5FC /* MTLicensingViewController.m in Sources */,
 				4C26B9911BAF11FA00456DC8 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */,
@@ -6260,7 +6238,6 @@
 				4C401F801BAE7EB500BAE5FC /* MTTextView.m in Sources */,
 				4C401FC61BAE8AD500BAE5FC /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C780CE91BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m in Sources */,
-				4C692B481E1F13F000DC2CB0 /* MADLabelTitle.m in Sources */,
 				4C26B9C01BAF123A00456DC8 /* MADDocumentInformationTableViewController.m in Sources */,
 				4C26B96B1BAF11C800456DC8 /* MADOperationRegisterDefaults.m in Sources */,
 				4C4020461BAE92F200BAE5FC /* NSLayoutConstraint+QueryVisualization.m in Sources */,
@@ -6337,7 +6314,6 @@
 				4C30A5431E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m in Sources */,
 				4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
-				4C401F791BAE7EB500BAE5FC /* MADProgressView.m in Sources */,
 				4C4020511BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m in Sources */,
 				4C4020761BAE957D00BAE5FC /* MADUpgradeManager.m in Sources */,
 				4C26B9921BAF11FA00456DC8 /* MADVibrantTableViewCellImage.m in Sources */,

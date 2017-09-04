@@ -24,13 +24,13 @@
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
-#import <MAD/MADocument.h>
 #import <MADAPI/MADDatabase.h>
-
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
+#import <MAD/MADocument.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -57,8 +57,6 @@
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
 
 #import "MTViewControllerBarcodePreviewDelegate.h"
-
-#import "MADLabelTitle.h"
 
 static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier =
                                 @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";

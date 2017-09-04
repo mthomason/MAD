@@ -9,7 +9,7 @@
 #import "MADQueryNavigationItem.h"
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIApplication.h>
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 #import "MADQueryNavigationProtocol.h"
 
 @implementation MADQueryNavigationItem

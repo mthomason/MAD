@@ -9,7 +9,7 @@
 #import "MADSortOrderNavigationItem.h"
 #import <UIKit/UIAccessibility.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import "MADLabelTitle.h"
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 @implementation MADSortOrderNavigationItem
 

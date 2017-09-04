@@ -22,9 +22,14 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
+
 #import <MAD/MADocument.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryField+Extras.h>
 
 #import "MADElementPickerProtocol.h"
 
@@ -39,13 +44,6 @@
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentObjectCollectionViewCell.h"
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
-
-#import "MADLabelTitle.h"
 
 static const NSInteger MADViewTagAggregateFunctions             = 2003;
 static const NSInteger MADViewTagGroupByOptions                 = 2011;

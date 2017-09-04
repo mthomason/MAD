@@ -8,13 +8,10 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-//! Project version number for MADCocoaExtensions.
 FOUNDATION_EXPORT double MADCocoaExtensionsVersionNumber;
-
-//! Project version string for MADCocoaExtensions.
 FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <MADCocoaExtensions/PublicHeader.h>
+#import <MADCocoaExtensions/NSParagraphStyle+CommonStyles.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADLabel.h>

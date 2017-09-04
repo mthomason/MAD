@@ -28,6 +28,8 @@
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/MADMailComposeViewController.h>
 #import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
+#import <MADCocoaExtensions/MADProgressView.h>
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -63,7 +65,6 @@
 
 #import "MADExplorerSectionHeaderView.h"
 #import "MADSearchBar.h"
-#import "MADProgressView.h"
 
 #import "MADViewControllerStandardProtocol.h"
 #import "MADViewerController.h"
@@ -85,7 +86,6 @@
 #import "NSUserDefaults+MADDesigner.h"
 
 #import "MTStoreKitController+Features.h"
-#import "MADLabelTitle.h"
 
 #import "MADSearchBar.h"
 
