@@ -60,17 +60,99 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
+@class MADDocumentCreationManager;
+
+@protocol MADDocumentCreationManagerProtocol <NSObject>
+    
+    - (void)documentCreationManager:(MADDocumentCreationManager *)manager
+                          didFinish:(BOOL)success;
+
+@end
+
+@interface MADDocumentCreationManager : NSObject
+    <MADOperationObserver>
+
+    - (instancetype)initWithFilename: (NSString *)filename
+                            delegate: (NSObject <MADDocumentCreationManagerProtocol> *)delegate
+                  documentsDirectory: (NSURL *)documentsDirectory
+                  databaseConnection: (MADDatabaseConnection *)databaseConnection
+                      viewController: (UIViewController *)viewController;
+
+    @property (nonatomic, strong) MADOperationQueue *credentialQueue;
+    @property (nonatomic, weak) NSObject <MADDocumentCreationManagerProtocol> *delegate;
+    @property (nonatomic, weak) UIViewController *viewController;
+    @property (nonatomic, copy) NSString *filename;
+    @property (nonatomic, copy) NSURL *directory;
+    @property (nonatomic, strong) MADDatabaseConnection *connection;
+
+@end
+
+@implementation MADDocumentCreationManager
+
+- (instancetype)initWithFilename: (NSString *)filename
+                        delegate: (NSObject <MADDocumentCreationManagerProtocol> *)delegate
+              documentsDirectory: (NSURL *)documentsDirectory
+              databaseConnection: (MADDatabaseConnection *)databaseConnection
+                  viewController: (UIViewController *)viewController {
+    if (self = [super init]) {
+        MADOperationQueue *credentialQueue = [[MADOperationQueue alloc] init];
+        self.credentialQueue = credentialQueue;
+        self.delegate = delegate;
+        self.filename = filename.copy;
+        self.directory = documentsDirectory.copy;
+        self.connection = databaseConnection;
+        self.viewController = viewController;
+    }
+    return self;
+}
+
+- (void)start {
+    [self.credentialQueue cancelAllOperations];
+    
+    
+    MADOperationCreateDocument *createDocument;
+    createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.filename
+                                                       documentsDirectory: self.directory
+                                                       databaseConnection: self.connection
+                                                           viewController: self.viewController];
+    [createDocument addObserver:self];
+    [self.credentialQueue addOperation:createDocument];
+}
+
+#pragma mark -
+#pragma mark MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation { }
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+    
+    BOOL success = NO;
+    if ([operation isKindOfClass:[MADOperationCreateDocument class]]) {
+        if (((MADOperationCreateDocument *)operation).isSuccessConnection &&
+            ((MADOperationCreateDocument *)operation).isSuccessCreate) {
+            success = YES;
+        }
+    }
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        [self.delegate documentCreationManager:self didFinish:success];
+    }];
+}
+
+@end
+
 @interface MADConnectionViewController()
-    <MADOperationObserver, MADocumentDelegate, MADDatabaseResultsProtocol,
-        UITableViewDelegate, UIViewControllerTransitioningDelegate,
-        UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
+    <MADDocumentCreationManagerProtocol, UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
 
     @property (nonatomic, strong) MADProgressView *progressView;
     @property (nonatomic, strong) MADOperationQueue *credentialQueue;
 
+    @property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
+
     @property (nonatomic, assign) SEL actionSave;
     @property (nonatomic, weak) id actionSaveTarget;
-
 
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
@@ -93,6 +175,25 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 @end
 
 @implementation MADConnectionViewController
+
+#pragma mark -
+#pragma mark MADDocumentCreationManagerProtocol
+
+- (void)documentCreationManager:(MADDocumentCreationManager *)manager
+                      didFinish:(BOOL)success {
+    
+    [self removeObserverFromObjectForProgress];
+    self.documentCreationManager = nil;
+    [self resetPrompt];
+    if (success) {
+        [self.delegate viewControllerDidFinish: self];
+    } else {
+        [self enableUserInteraction];
+    }
+}
+
+#pragma mark -
+#pragma mark NSObject
 
 + (void)initialize {
     [super initialize];
@@ -227,17 +328,17 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark -
 #pragma mark Post Report Notifications
 
-- (void)addObserverToObjectForProgress:(id)obj {
+- (void)addObserverToObjectForProgress {
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(objectDidUpdateProgress:)
                                                  name: MADNotificationProgressIdentifier
-                                               object: obj];
+                                               object: nil];
 }
 
-- (void)removeObserverFromObjectForProgress:(id)obj {
+- (void)removeObserverFromObjectForProgress {
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationProgressIdentifier
-                                                  object: obj];
+                                                  object: nil];
 }
 
 #pragma mark -
@@ -250,39 +351,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
         self.progressView.progress = progress.progress;
         self.navigationItem.prompt = progress.message.copy;
     }];
-}
-
-#pragma mark -
-#pragma mark MADOperationObserver
-
-- (void)operationDidStart:(MADOperation *)operation { }
-
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
-
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-
-    //If document was created, then dismiss the form.  Otherwise, reset the form.
-    BOOL success = NO;
-    if ([operation isKindOfClass:[MADOperationCreateDocument class]]) {
-        if (((MADOperationCreateDocument *)operation).isSuccessConnection &&
-            ((MADOperationCreateDocument *)operation).isSuccessCreate) {
-            success = YES;
-        }
-    }
-    if (success) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            [self removeObserverFromObjectForProgress:operation];
-            [self resetPrompt];
-            [self.delegate viewControllerDidFinish: self];
-        }];
-    } else {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            [self removeObserverFromObjectForProgress:operation];
-            [self resetPrompt];
-            [self enableUserInteraction];
-        }];
-    }
 }
 
 #pragma mark -
@@ -396,24 +464,43 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 - (IBAction)save:(id)sender {
     NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
-    [self.credentialQueue cancelAllOperations];
-    
-    NSString *message = NSLocalizedString(@"Importing schema.", @"Importing schema.");
-    [self disableUserInteractionWithMessage:message];
-    
     id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
-    
+
+    MADDocumentCreationManager *documentCreationManager;
     MADDatabaseConnection *databaseConnection = [self databaseConnection];
+    documentCreationManager = [[MADDocumentCreationManager alloc] initWithFilename: self.textFieldReportName.text
+                                                                          delegate: self
+                                                                documentsDirectory: saveFileDelegate.documentDirectory
+                                                                databaseConnection: databaseConnection
+                                                                    viewController: self];
     
-    MADOperationCreateDocument *createDocument;
-    createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
-                                                       documentsDirectory: saveFileDelegate.documentDirectory
-                                                       databaseConnection: databaseConnection
-                                                           viewController: self];
-    [createDocument addObserver:self];
-    [self addObserverToObjectForProgress:createDocument];
-    [self.credentialQueue addOperation:createDocument];
+    NSString *message = NSLocalizedString(@"Importing schema.",
+                                          @"Importing schema.");
+    [self disableUserInteractionWithMessage:message];
+    [self addObserverToObjectForProgress];
+    [documentCreationManager start];
     
+    
+    
+    //[self.credentialQueue cancelAllOperations];
+    
+    //NSString *message = NSLocalizedString(@"Importing schema.",
+    //                                      @"Importing schema.");
+    //[self disableUserInteractionWithMessage:message];
+    
+    //MADDatabaseConnection *databaseConnection = [self databaseConnection];
+    
+    //MADOperationCreateDocument *createDocument;
+    //createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.textFieldReportName.text
+    //                                                   documentsDirectory: saveFileDelegate.documentDirectory
+    //                                                   databaseConnection: databaseConnection
+    //                                                       viewController: self];
+    //[createDocument addObserver:self];
+    //[self.credentialQueue addOperation:createDocument];
+    
+    
+    
+    self.documentCreationManager = documentCreationManager;
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
