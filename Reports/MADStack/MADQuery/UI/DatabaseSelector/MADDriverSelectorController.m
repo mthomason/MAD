@@ -21,16 +21,17 @@
 #import <UIKit/UIStoryboard.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADConnectionViewController.h>
+
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 
 #import "MADVibrantTableView.h"
-#import "MADConnectionViewController.h"
+
 
 #import "MADDocumentCreationManager.h"
-#import "MADConnectionViewController.h"
 #import "MADDocumentCreationManagerProtocol.h"
 
 NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Select database type.";
@@ -160,7 +161,7 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 - (void)documentCreationManager:(id <MADDocumentCreationManagerInterface>)manager
                       didFinish:(BOOL)success {
     MADConnectionViewController *connectionViewController = self.connectionViewController;
-    [connectionViewController resetPrompt];
+    [connectionViewController resetInterface];
     if (success) {
         [self.delegate viewControllerDidFinish: self];
     } else {

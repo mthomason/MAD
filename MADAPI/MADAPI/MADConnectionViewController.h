@@ -20,14 +20,18 @@
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
-    @property (nonatomic, assign) MADDatabaseType databaseType;
-
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    - (MADDatabaseConnection *)databaseConnection;
+    @property (nonatomic, assign) MADDatabaseType databaseType;
 
-    - (void)enableUserInteraction;
-    - (void)resetPrompt;
+    - (MADDatabaseConnection *)databaseConnection;  // Build your custom database connection
+                                                    //  based on the user input
+    - (void)resetInterface;                         // Call super
+    - (void)enableUserInteraction;                  // Call super
+
+    - (void)removeKeyboard;
+    - (void)disableTextFields;
+    - (void)enableTextFields;
 
 @end
 

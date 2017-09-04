@@ -25,16 +25,17 @@
 #import <MADFoundation/MADNotificationProgress.h>
 #import <MADFoundation/MADKeyChain.h>
 
-#import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/MADProgressView.h>
+
+#import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADErrorContainer.h>
 
-#import <MAD/MADDatabaseConnection+Constructor.h>
+//#import <MAD/MADDatabaseConnection+Constructor.h>
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -50,22 +51,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, assign) SEL actionSave;
     @property (nonatomic, weak) id actionSaveTarget;
 
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
-
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
-
-    @property (nonatomic, strong) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
-    @property (nonatomic, strong) IBOutletCollection(UITextField) NSArray *textFields;
-
     - (IBAction)save:(id)sender;
-    - (IBAction)usernameDidEndOnExit:(id)sender;
-    - (IBAction)hostDidEndOnExit:(id)sender;
-    - (IBAction)portDidEndOnExit:(id)sender;
 
 @end
 
@@ -348,20 +334,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
 
-- (IBAction)schemaDidEndOnExit:(id)sender { }
-
-- (IBAction)usernameDidEndOnExit:(id)sender { }
-
-- (IBAction)hostDidEndOnExit:(id)sender {
-    if ([self.textFieldPort canBecomeFirstResponder]) {
-        [self.textFieldPort becomeFirstResponder];
-    }
-}
-
-- (IBAction)portDidEndOnExit:(id)sender {
-    [self.textFieldPort resignFirstResponder];
-}
-
 - (IBAction)canceled:(id)sender {
     [self.delegate viewControllerDidCancel:self];
 }
@@ -369,15 +341,10 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark Override Points
 
 - (MADDatabaseConnection *)databaseConnection {
-    MADDatabaseConnection *databaseConnection;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnectionWithType: self.databaseType
-                                                                         host: self.textFieldHost.text
-                                                                     database: self.textFieldDatabase.text
-                                                                         port: self.textFieldPort.text.integerValue];
-    return databaseConnection;
+    @throw NSInternalInconsistencyException;
 }
 
-- (void)resetPrompt {
+- (void)resetInterface {
     [self removeObserverFromObjectForProgress];
     self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
                                                    MADConnectionViewControllerDefaultPrompt);
@@ -386,21 +353,15 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark Helpers
 
 - (void)removeKeyboard {
-    for (UITextField *textField in self.textFields) {
-        [textField resignFirstResponder];
-    }
+    [self.textFieldReportName resignFirstResponder];
 }
 
 - (void)disableTextFields {
-    for (UITextField *textField in self.textFields) {
-        textField.enabled = NO;
-    }
+    self.textFieldReportName.enabled = NO;
 }
 
 - (void)enableTextFields {
-    for (UITextField *textField in self.textFields) {
-        textField.enabled = YES;
-    }
+    self.textFieldReportName.enabled = YES;
 }
 
 - (void)disableUserInteractionWithMessage:(NSString *)message {

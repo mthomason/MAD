@@ -8,13 +8,12 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
-//! Project version number for MADAPI.
 FOUNDATION_EXPORT double MADAPIVersionNumber;
-
-//! Project version string for MADAPI.
 FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <MADAPI/PublicHeader.h>
+#import <MADAPI/MADConnectionViewController.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADAPI/MADDatabaseProtocol.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
@@ -22,9 +21,7 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 
 #import <MADAPI/MADDatabaseType.h>
-#import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
-#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADDatabaseField.h>

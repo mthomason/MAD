@@ -6,8 +6,13 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import <MADAPI/MADAPI.h>
+#ifndef MADAPI_MADConnectionSQLGenericViewController_h
+#define MADAPI_MADConnectionSQLGenericViewController_h
+
+#import <MADAPI/MADConnectionViewController.h>
 
 @interface MADConnectionSQLGenericViewController : MADConnectionViewController
 
 @end
+
+#endif
