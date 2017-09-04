@@ -2992,20 +2992,6 @@ END_deselectElementView:;
     return [self.container popoverRectForSelectedViews:views];
 }
 
-/*- (UIView *)viewForObjectID:(NSNumber *)objectID {
-
-    id result = [self.elementViewsDictionary objectForKey:objectID];
-    if (result != nil) return result;
-    
-    result = [self.view.sectionLabels objectForKey:objectID];
-    if (result != nil) return result;
-
-    result = [self.view.sectionViews objectForKey:objectID];
-
-    return result;
-    //return [self.container viewWithTag: (NSInteger)objectID.hash];
-}*/
-
 - (void)adjustContextOffsetForOpenPopover {
     if ([self padLike]) {
         if (_sectionSettingsVisible &&
