@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADTdsClient_MADConnectionViewController_h
-#define MADTdsClient_MADConnectionViewController_h
+#ifndef MADMySQL_MADConnectionViewController_h
+#define MADMySQL_MADConnectionViewController_h
 
 #import <UIKit/UITableViewController.h>
 #import <MADAPI/MADDatabaseType.h>
@@ -27,7 +27,7 @@
     - (MADDatabaseConnection *)databaseConnection;
 
     - (void)enableUserInteraction;
-    - (void)resetPrompt;
+    - (void)resetInterface;
 
 @end
 

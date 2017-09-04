@@ -377,7 +377,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     return databaseConnection;
 }
 
-- (void)resetPrompt {
+- (void)resetInterface {
     [self removeObserverFromObjectForProgress];
     self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
                                                    MADConnectionViewControllerDefaultPrompt);
