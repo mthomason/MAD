@@ -133,12 +133,6 @@
 		4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9BF1BAF123A00456DC8 /* MADToolboxViewController.m */; };
 		4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9D31BAF146700456DC8 /* MADVibrantTableViewCell.m */; };
 		4C26B9D61BAF146700456DC8 /* MADVibrantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9D41BAF146700456DC8 /* MADVibrantTableViewCell.xib */; };
-		4C26B9DE1BAF148B00456DC8 /* MADImageChevronRightTall.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9D81BAF148B00456DC8 /* MADImageChevronRightTall.png */; };
-		4C26B9DF1BAF148B00456DC8 /* MADImageChevronRightTall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9D91BAF148B00456DC8 /* MADImageChevronRightTall@2x.png */; };
-		4C26B9E01BAF148B00456DC8 /* MADImageChevronRightTall@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9DA1BAF148B00456DC8 /* MADImageChevronRightTall@3x.png */; };
-		4C26B9E11BAF148B00456DC8 /* MADImageClear.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9DB1BAF148B00456DC8 /* MADImageClear.png */; };
-		4C26B9E21BAF148B00456DC8 /* MADImageClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9DC1BAF148B00456DC8 /* MADImageClear@2x.png */; };
-		4C26B9E31BAF148B00456DC8 /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C26B9DD1BAF148B00456DC8 /* MADImageClear@3x.png */; };
 		4C26B9F81BAF14A500456DC8 /* MADDesignerElementPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9E51BAF14A500456DC8 /* MADDesignerElementPickerViewController.m */; };
 		4C26B9F91BAF14A500456DC8 /* MADDesignerElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9E71BAF14A500456DC8 /* MADDesignerElementView.m */; };
 		4C26B9FA1BAF14A500456DC8 /* MADDesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */; };
@@ -826,10 +820,6 @@
 		4CC3D76A1BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67B1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png */; };
 		4CC3D76B1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67C1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png */; };
 		4CC3D76C1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67D1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png */; };
-		4CC3D76D1BCB6D9500BDA5D3 /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67E1BCB6D9400BDA5D3 /* MADImageBackgroundIcon.png */; };
-		4CC3D76E1BCB6D9500BDA5D3 /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67F1BCB6D9400BDA5D3 /* MADImageBackgroundIcon@2x.png */; };
-		4CC3D76F1BCB6D9500BDA5D3 /* MADImageBackgroundIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6801BCB6D9400BDA5D3 /* MADImageBackgroundIcon@3x.png */; };
-		4CC3D7711BCB6D9500BDA5D3 /* MADImageIconDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6821BCB6D9400BDA5D3 /* MADImageIconDuplicate.png */; };
 		4CC3D7721BCB6D9500BDA5D3 /* MADImageIconInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6831BCB6D9400BDA5D3 /* MADImageIconInfo.png */; };
 		4CC3D7731BCB6D9500BDA5D3 /* MADImageIconInfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6841BCB6D9400BDA5D3 /* MADImageIconInfo@2x.png */; };
 		4CC3D7741BCB6D9500BDA5D3 /* MADImageIconInfoSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6851BCB6D9400BDA5D3 /* MADImageIconInfoSelected.png */; };
@@ -844,14 +834,8 @@
 		4CC3D77D1BCB6D9500BDA5D3 /* MADImageToolbarCloudUpload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D68E1BCB6D9400BDA5D3 /* MADImageToolbarCloudUpload@2x.png */; };
 		4CC3D77E1BCB6D9500BDA5D3 /* MADImageToolbarCloudUploadSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D68F1BCB6D9400BDA5D3 /* MADImageToolbarCloudUploadSelected.png */; };
 		4CC3D77F1BCB6D9500BDA5D3 /* MADImageToolbarCloudUploadSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6901BCB6D9400BDA5D3 /* MADImageToolbarCloudUploadSelected@2x.png */; };
-		4CC3D7801BCB6D9500BDA5D3 /* MADImageToolbarDuplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6911BCB6D9400BDA5D3 /* MADImageToolbarDuplicate.png */; };
-		4CC3D7811BCB6D9500BDA5D3 /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6921BCB6D9400BDA5D3 /* MADImageToolbarDuplicate@2x.png */; };
 		4CC3D7831BCB6D9500BDA5D3 /* MADImageChevronRightTall.psd in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6951BCB6D9400BDA5D3 /* MADImageChevronRightTall.psd */; };
 		4CC3D7841BCB6D9500BDA5D3 /* MADImageClear.psd in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6961BCB6D9400BDA5D3 /* MADImageClear.psd */; };
-		4CC3D7F11BCB6D9500BDA5D3 /* MADImageCarat.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D7051BCB6D9500BDA5D3 /* MADImageCarat.png */; };
-		4CC3D7F21BCB6D9500BDA5D3 /* MADImageCarat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D7061BCB6D9500BDA5D3 /* MADImageCarat@2x.png */; };
-		4CC3D7F31BCB6D9500BDA5D3 /* MADImageCaratOpen.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D7071BCB6D9500BDA5D3 /* MADImageCaratOpen.png */; };
-		4CC3D7F41BCB6D9500BDA5D3 /* MADImageCaratOpen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D7081BCB6D9500BDA5D3 /* MADImageCaratOpen@2x.png */; };
 		4CC3D7F51BCB6D9500BDA5D3 /* MTActivityProvidence.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D7091BCB6D9500BDA5D3 /* MTActivityProvidence.png */; };
 		4CC3D7F61BCB6D9500BDA5D3 /* MTActivityProvidence@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D70A1BCB6D9500BDA5D3 /* MTActivityProvidence@2x.png */; };
 		4CC3D7F71BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D70B1BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png */; };
@@ -1247,12 +1231,6 @@
 		4C26B9D21BAF146700456DC8 /* MADVibrantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableViewCell.h; sourceTree = "<group>"; };
 		4C26B9D31BAF146700456DC8 /* MADVibrantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableViewCell.m; sourceTree = "<group>"; };
 		4C26B9D41BAF146700456DC8 /* MADVibrantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MADVibrantTableViewCell.xib; path = MADStack/Common/UI/Effects/MADVibrantTableViewCell.xib; sourceTree = "<group>"; };
-		4C26B9D81BAF148B00456DC8 /* MADImageChevronRightTall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageChevronRightTall.png; sourceTree = "<group>"; };
-		4C26B9D91BAF148B00456DC8 /* MADImageChevronRightTall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageChevronRightTall@2x.png"; sourceTree = "<group>"; };
-		4C26B9DA1BAF148B00456DC8 /* MADImageChevronRightTall@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageChevronRightTall@3x.png"; sourceTree = "<group>"; };
-		4C26B9DB1BAF148B00456DC8 /* MADImageClear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageClear.png; sourceTree = "<group>"; };
-		4C26B9DC1BAF148B00456DC8 /* MADImageClear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@2x.png"; sourceTree = "<group>"; };
-		4C26B9DD1BAF148B00456DC8 /* MADImageClear@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@3x.png"; sourceTree = "<group>"; };
 		4C26B9E41BAF14A500456DC8 /* MADDesignerElementPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementPickerViewController.h; sourceTree = "<group>"; };
 		4C26B9E51BAF14A500456DC8 /* MADDesignerElementPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerElementPickerViewController.m; sourceTree = "<group>"; };
 		4C26B9E61BAF14A500456DC8 /* MADDesignerElementView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementView.h; sourceTree = "<group>"; };
@@ -2030,7 +2008,6 @@
 		4CC3D67F1BCB6D9400BDA5D3 /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
 		4CC3D6801BCB6D9400BDA5D3 /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
 		4CC3D6811BCB6D9400BDA5D3 /* MADImageIconDuplicate.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MADImageIconDuplicate.ai; sourceTree = "<group>"; };
-		4CC3D6821BCB6D9400BDA5D3 /* MADImageIconDuplicate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageIconDuplicate.png; sourceTree = "<group>"; };
 		4CC3D6831BCB6D9400BDA5D3 /* MADImageIconInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageIconInfo.png; sourceTree = "<group>"; };
 		4CC3D6841BCB6D9400BDA5D3 /* MADImageIconInfo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageIconInfo@2x.png"; sourceTree = "<group>"; };
 		4CC3D6851BCB6D9400BDA5D3 /* MADImageIconInfoSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageIconInfoSelected.png; sourceTree = "<group>"; };
@@ -2045,8 +2022,6 @@
 		4CC3D68E1BCB6D9400BDA5D3 /* MADImageToolbarCloudUpload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageToolbarCloudUpload@2x.png"; sourceTree = "<group>"; };
 		4CC3D68F1BCB6D9400BDA5D3 /* MADImageToolbarCloudUploadSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageToolbarCloudUploadSelected.png; sourceTree = "<group>"; };
 		4CC3D6901BCB6D9400BDA5D3 /* MADImageToolbarCloudUploadSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageToolbarCloudUploadSelected@2x.png"; sourceTree = "<group>"; };
-		4CC3D6911BCB6D9400BDA5D3 /* MADImageToolbarDuplicate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageToolbarDuplicate.png; sourceTree = "<group>"; };
-		4CC3D6921BCB6D9400BDA5D3 /* MADImageToolbarDuplicate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageToolbarDuplicate@2x.png"; sourceTree = "<group>"; };
 		4CC3D6941BCB6D9400BDA5D3 /* mad-swatches.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "mad-swatches.ai"; sourceTree = "<group>"; };
 		4CC3D6951BCB6D9400BDA5D3 /* MADImageChevronRightTall.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADImageChevronRightTall.psd; sourceTree = "<group>"; };
 		4CC3D6961BCB6D9400BDA5D3 /* MADImageClear.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADImageClear.psd; sourceTree = "<group>"; };
@@ -2054,10 +2029,6 @@
 		4CC3D6981BCB6D9400BDA5D3 /* MTActivityProvidence@2x.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "MTActivityProvidence@2x.ai"; sourceTree = "<group>"; };
 		4CC3D6991BCB6D9400BDA5D3 /* MTActivityProvidence~iPad.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "MTActivityProvidence~iPad.ai"; sourceTree = "<group>"; };
 		4CC3D69A1BCB6D9400BDA5D3 /* MTActivityProvidence~iPad@2x.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "MTActivityProvidence~iPad@2x.ai"; sourceTree = "<group>"; };
-		4CC3D7051BCB6D9500BDA5D3 /* MADImageCarat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageCarat.png; sourceTree = "<group>"; };
-		4CC3D7061BCB6D9500BDA5D3 /* MADImageCarat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageCarat@2x.png"; sourceTree = "<group>"; };
-		4CC3D7071BCB6D9500BDA5D3 /* MADImageCaratOpen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageCaratOpen.png; sourceTree = "<group>"; };
-		4CC3D7081BCB6D9500BDA5D3 /* MADImageCaratOpen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageCaratOpen@2x.png"; sourceTree = "<group>"; };
 		4CC3D7091BCB6D9500BDA5D3 /* MTActivityProvidence.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTActivityProvidence.png; sourceTree = "<group>"; };
 		4CC3D70A1BCB6D9500BDA5D3 /* MTActivityProvidence@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTActivityProvidence@2x.png"; sourceTree = "<group>"; };
 		4CC3D70B1BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTActivityProvidence~iPad.png"; sourceTree = "<group>"; };
@@ -2668,12 +2639,6 @@
 		4C26B9D71BAF148B00456DC8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				4C26B9D81BAF148B00456DC8 /* MADImageChevronRightTall.png */,
-				4C26B9D91BAF148B00456DC8 /* MADImageChevronRightTall@2x.png */,
-				4C26B9DA1BAF148B00456DC8 /* MADImageChevronRightTall@3x.png */,
-				4C26B9DB1BAF148B00456DC8 /* MADImageClear.png */,
-				4C26B9DC1BAF148B00456DC8 /* MADImageClear@2x.png */,
-				4C26B9DD1BAF148B00456DC8 /* MADImageClear@3x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -4107,7 +4072,6 @@
 				4CC3D67F1BCB6D9400BDA5D3 /* MADImageBackgroundIcon@2x.png */,
 				4CC3D6801BCB6D9400BDA5D3 /* MADImageBackgroundIcon@3x.png */,
 				4CC3D6811BCB6D9400BDA5D3 /* MADImageIconDuplicate.ai */,
-				4CC3D6821BCB6D9400BDA5D3 /* MADImageIconDuplicate.png */,
 				4CC3D6831BCB6D9400BDA5D3 /* MADImageIconInfo.png */,
 				4CC3D6841BCB6D9400BDA5D3 /* MADImageIconInfo@2x.png */,
 				4CC3D6851BCB6D9400BDA5D3 /* MADImageIconInfoSelected.png */,
@@ -4122,8 +4086,6 @@
 				4CC3D68E1BCB6D9400BDA5D3 /* MADImageToolbarCloudUpload@2x.png */,
 				4CC3D68F1BCB6D9400BDA5D3 /* MADImageToolbarCloudUploadSelected.png */,
 				4CC3D6901BCB6D9400BDA5D3 /* MADImageToolbarCloudUploadSelected@2x.png */,
-				4CC3D6911BCB6D9400BDA5D3 /* MADImageToolbarDuplicate.png */,
-				4CC3D6921BCB6D9400BDA5D3 /* MADImageToolbarDuplicate@2x.png */,
 				4CC3D6931BCB6D9400BDA5D3 /* masters */,
 				4CC3D69B1BCB6D9400BDA5D3 /* patterns */,
 				4CC3D7041BCB6D9500BDA5D3 /* ui */,
@@ -4246,10 +4208,6 @@
 		4CC3D7041BCB6D9500BDA5D3 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				4CC3D7051BCB6D9500BDA5D3 /* MADImageCarat.png */,
-				4CC3D7061BCB6D9500BDA5D3 /* MADImageCarat@2x.png */,
-				4CC3D7071BCB6D9500BDA5D3 /* MADImageCaratOpen.png */,
-				4CC3D7081BCB6D9500BDA5D3 /* MADImageCaratOpen@2x.png */,
 				4CC3D7091BCB6D9500BDA5D3 /* MTActivityProvidence.png */,
 				4CC3D70A1BCB6D9500BDA5D3 /* MTActivityProvidence@2x.png */,
 				4CC3D70B1BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png */,
@@ -5108,10 +5066,8 @@
 				4C26B9D61BAF146700456DC8 /* MADVibrantTableViewCell.xib in Resources */,
 				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
 				4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */,
-				4CC3D7F31BCB6D9500BDA5D3 /* MADImageCaratOpen.png in Resources */,
 				4CC3D75C1BCB6D9500BDA5D3 /* MADBarcode64.psd in Resources */,
 				4C26BA0C1BAF14F200456DC8 /* MADAboutApp.storyboard in Resources */,
-				4C26B9E11BAF148B00456DC8 /* MADImageClear.png in Resources */,
 				4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */,
 				4C00816B14B6C4EF003DF437 /* UIImageAlignLeft20@2x.png in Resources */,
 				4C00816C14B6C4EF003DF437 /* UIImageAlignRight20@2x.png in Resources */,
@@ -5150,7 +5106,6 @@
 				4CC3D7351BCB6D9500BDA5D3 /* Icon-29-Viewer-Modern.png in Resources */,
 				4C00819314B83E92003DF437 /* UIImageWrench20@2x.png in Resources */,
 				4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */,
-				4CC3D7F11BCB6D9500BDA5D3 /* MADImageCarat.png in Resources */,
 				4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */,
 				4CC3D7751BCB6D9500BDA5D3 /* MADImageIconInfoSelected@2x.png in Resources */,
 				4CC3D75F1BCB6D9500BDA5D3 /* MADInfinity64.psd in Resources */,
@@ -5188,13 +5143,10 @@
 				4CC3D7731BCB6D9500BDA5D3 /* MADImageIconInfo@2x.png in Resources */,
 				4CC3D75B1BCB6D9500BDA5D3 /* MADBarcode64.png in Resources */,
 				4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */,
-				4CC3D7711BCB6D9500BDA5D3 /* MADImageIconDuplicate.png in Resources */,
-				4CC3D76D1BCB6D9500BDA5D3 /* MADImageBackgroundIcon.png in Resources */,
 				4CC3D7551BCB6D9500BDA5D3 /* Icon-72-Viewer-Modern.png in Resources */,
 				4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */,
 				4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */,
 				4CC3D80D1BCB6D9500BDA5D3 /* UIBarButtonItemPaintRoller@2x.png in Resources */,
-				4CC3D7811BCB6D9500BDA5D3 /* MADImageToolbarDuplicate@2x.png in Resources */,
 				4CC3D7671BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscape.png in Resources */,
 				4CC3D7771BCB6D9500BDA5D3 /* MADImageToolbarCloud@2x.png in Resources */,
 				4CC3D76C1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */,
@@ -5210,35 +5162,28 @@
 				4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */,
 				4CC3D73A1BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern@2x.png in Resources */,
 				4C401EE41BAE5E9000BAE5FC /* MADStore.storyboard in Resources */,
-				4CC3D76F1BCB6D9500BDA5D3 /* MADImageBackgroundIcon@3x.png in Resources */,
 				4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */,
 				4CC3D7311BCB6D9500BDA5D3 /* Icon-29-Designer-Modern.png in Resources */,
-				4C26B9E31BAF148B00456DC8 /* MADImageClear@3x.png in Resources */,
 				4CC3D74C1BCB6D9500BDA5D3 /* Icon-60-Designer-Modern@2x.png in Resources */,
 				4CC3D7361BCB6D9500BDA5D3 /* Icon-29-Viewer-Modern@2x.png in Resources */,
 				4CC3D77A1BCB6D9500BDA5D3 /* MADImageToolbarCloudDownloadSelected.png in Resources */,
 				4CC3D7741BCB6D9500BDA5D3 /* MADImageIconInfoSelected.png in Resources */,
-				4C26B9DF1BAF148B00456DC8 /* MADImageChevronRightTall@2x.png in Resources */,
 				4CFEE80C1BB7993300AFAA0A /* MADQueryAddJoin.storyboard in Resources */,
 				4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
 				4C26BA6A1BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard in Resources */,
-				4C26B9DE1BAF148B00456DC8 /* MADImageChevronRightTall.png in Resources */,
 				4CC3D7831BCB6D9500BDA5D3 /* MADImageChevronRightTall.psd in Resources */,
 				4CC3D8091BCB6D9500BDA5D3 /* UIBarButtonItemMadViewer8.png in Resources */,
 				4CC3D7391BCB6D9500BDA5D3 /* Icon-40-Viewer-Modern.png in Resources */,
 				4CC3D80B1BCB6D9500BDA5D3 /* UIBarButtonItemMadViewer@2x.png in Resources */,
 				4CC3D77B1BCB6D9500BDA5D3 /* MADImageToolbarCloudDownloadSelected@2x.png in Resources */,
 				4CC3D7791BCB6D9500BDA5D3 /* MADImageToolbarCloudDownload@2x.png in Resources */,
-				4C26B9E21BAF148B00456DC8 /* MADImageClear@2x.png in Resources */,
 				4CFEE8021BB78CAB00AFAA0A /* MADQuerySelectOperator.storyboard in Resources */,
-				4C26B9E01BAF148B00456DC8 /* MADImageChevronRightTall@3x.png in Resources */,
 				4CC3D7421BCB6D9500BDA5D3 /* Icon-50-Viewer-Modern@2x.png in Resources */,
 				4C3DCC191BCAEFA900ABE231 /* MADFeatures.plist in Resources */,
 				4C401EDF1BAE5E9000BAE5FC /* ReceiptModule.ans1 in Resources */,
 				4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */,
 				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */,
-				4CC3D7F41BCB6D9500BDA5D3 /* MADImageCaratOpen@2x.png in Resources */,
 				4CC3D7F51BCB6D9500BDA5D3 /* MTActivityProvidence.png in Resources */,
 				4CC3D72A1BCB6D9500BDA5D3 /* MADIcon320.png in Resources */,
 				4CC3D8041BCB6D9500BDA5D3 /* UIBarButtonItemMadDesigner.png in Resources */,
@@ -5249,7 +5194,6 @@
 				4CC3D7681BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png in Resources */,
 				4CC3D8141BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */,
-				4CC3D76E1BCB6D9500BDA5D3 /* MADImageBackgroundIcon@2x.png in Resources */,
 				4C3DCC1B1BCAEFA900ABE231 /* Settings.bundle in Resources */,
 				4CC3D7FC1BCB6D9500BDA5D3 /* MTSliderThumbRotate.png in Resources */,
 				4CC3D7F81BCB6D9500BDA5D3 /* MTActivityProvidence~iPad@2x.png in Resources */,
@@ -5270,7 +5214,6 @@
 				4CC3D7371BCB6D9500BDA5D3 /* Icon-40-Designer-Modern.png in Resources */,
 				4CC3D7611BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
-				4CC3D7801BCB6D9500BDA5D3 /* MADImageToolbarDuplicate.png in Resources */,
 				4CC3D72C1BCB6D9500BDA5D3 /* MADIcon44x58.png in Resources */,
 				4CC3D80A1BCB6D9500BDA5D3 /* UIBarButtonItemMadViewer8@2x.png in Resources */,
 				4CC3D7581BCB6D9500BDA5D3 /* Icon-76-Designer-Modern@2x.png in Resources */,
@@ -5281,7 +5224,6 @@
 				4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */,
 				4CC3D75D1BCB6D9500BDA5D3 /* MADBarcode64@2x.png in Resources */,
 				4CC3D7F71BCB6D9500BDA5D3 /* MTActivityProvidence~iPad.png in Resources */,
-				4CC3D7F21BCB6D9500BDA5D3 /* MADImageCarat@2x.png in Resources */,
 				4CC3D7FD1BCB6D9500BDA5D3 /* MTSliderThumbRotate@2x.png in Resources */,
 				4CFEE7FD1BB77C4000AFAA0A /* MADQuerySelectField.storyboard in Resources */,
 				4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */,
