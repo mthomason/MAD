@@ -24,6 +24,8 @@
 
     @property (nonatomic, assign) MADDatabaseType databaseType;
 
+    @property (nonatomic, readonly) NSString *displayName;
+
     - (MADDatabaseConnection *)databaseConnection;  // Build your custom database connection
                                                     //  based on the user input
     - (void)resetInterface;                         // Call super

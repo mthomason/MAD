@@ -13,6 +13,7 @@
 #import "MADDatabaseConnectionSQLServer.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
+#import <MADAPI/MADDatabaseType.h>
 
 @implementation MADDatabaseConnectionSQLServer
 

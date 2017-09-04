@@ -20,6 +20,7 @@
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+#import <UIKit/UITableViewHeaderFooterView.h>
 
 #import <MADFoundation/MADProgress.h>
 #import <MADFoundation/MADNotificationProgress.h>
@@ -35,8 +36,6 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADErrorContainer.h>
 
-//#import <MAD/MADDatabaseConnection+Constructor.h>
-
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
 
@@ -46,22 +45,18 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 @interface MADConnectionSQLGenericViewController ()
     <UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
 
-    @property (nonatomic, strong) MADProgressView *progressView;
-
-    @property (nonatomic, assign) SEL actionSave;
-    @property (nonatomic, weak) id actionSaveTarget;
-
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
     @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
 
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
-
     @property (nonatomic, strong) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
     @property (nonatomic, strong) IBOutletCollection(UITextField) NSArray *textFields;
+
+    @property (nonatomic, strong) MADProgressView *progressView;
+
+    @property (nonatomic, assign) SEL actionSave;
+    @property (nonatomic, weak) id actionSaveTarget;
 
     - (IBAction)save:(id)sender;
     - (IBAction)usernameDidEndOnExit:(id)sender;
@@ -159,6 +154,9 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //UITableViewHeaderFooterView *headerView = [self.tableView headerViewForSection:2];
+    //headerView.textLabel = NSLocalizedString(@"Database Settings", @"Database Settings")
+    
     self.actionSave = self.navigationItem.rightBarButtonItem.action;
     self.actionSaveTarget = self.navigationItem.rightBarButtonItem.target;
     
@@ -234,6 +232,20 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
+}
+
+- (void)tableView:(UITableView *)tableView
+willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    if (section == 1 && [view isKindOfClass:[UITableViewHeaderFooterView class]]) {
+        NSString *displaySettings = NSLocalizedString(@"Database Settings",
+                                                      @"Database Settings");
+        NSString *displayName = [self displayName];
+        if (displayName.length > 0) {
+            displaySettings = [[NSString alloc] initWithFormat:@"%@ %@",
+                                                displayName, displaySettings];
+        }
+        ((UITableViewHeaderFooterView *)view).textLabel.text = displaySettings;
+    }
 }
 
 #pragma mark -

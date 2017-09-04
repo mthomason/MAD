@@ -56,6 +56,7 @@
 		4CCE187D1DA14B8C0093B166 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187B1DA14B8C0093B166 /* libssl.a */; };
 		4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF251D8D859A00A5A32E /* libc++.tbd */; };
 		4CDCEF281D8D85C800A5A32E /* libstdc++.6.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */; };
+		4CE0F5061F5D52AE00D828E1 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,6 +322,7 @@
 		4CCE187C1DA14B8C0093B166 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../opt/lib/openssl/libcrypto.a; sourceTree = "<group>"; };
 		4CDCEF251D8D859A00A5A32E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CDCEF271D8D85C800A5A32E /* libstdc++.6.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.tbd"; path = "usr/lib/libstdc++.6.tbd"; sourceTree = SDKROOT; };
+		4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADCreateDocument.storyboard; path = MADMySQL/MADCreateDocument.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -745,6 +747,7 @@
 		4C7014961BACDC6800301713 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */,
 				4C6C0A0E1F5D32B900EDA039 /* MADMySQLConnectionViewController.h */,
 				4C6C0A0F1F5D32B900EDA039 /* MADMySQLConnectionViewController.m */,
 				4C7014971BACDC6800301713 /* MADMySQL.h */,
@@ -901,6 +904,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C00A36A1F57F0F200F6A6C1 /* libmysqlclient.a in Resources */,
+				4CE0F5061F5D52AE00D828E1 /* MADCreateDocument.storyboard in Resources */,
 				4C00A36B1F57F0F200F6A6C1 /* libcrypto.a in Resources */,
 				4C00A37F1F5951E200F6A6C1 /* Media.xcassets in Resources */,
 				4C00A36C1F57F0F200F6A6C1 /* libssl.a in Resources */,
@@ -1133,7 +1137,7 @@
 					"-lc++",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADMySQL;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mysql;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1203,7 +1207,7 @@
 					"-lc++",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADMySQL;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mysql;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";

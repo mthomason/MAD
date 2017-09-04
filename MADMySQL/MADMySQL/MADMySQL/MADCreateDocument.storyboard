@@ -12,7 +12,7 @@
         <!--Connection Setup-->
         <scene sceneID="Edh-Pk-V8O">
             <objects>
-                <tableViewController storyboardIdentifier="MADConnectionViewControllerSQLGeneric" extendedLayoutIncludesOpaqueBars="YES" id="Q7F-2G-NiU" customClass="MADConnectionSQLGenericViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MADConnectionViewControllerSQLGeneric" extendedLayoutIncludesOpaqueBars="YES" id="Q7F-2G-NiU" customClass="MADMySQLConnectionViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="qn1-96-lIN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -222,87 +222,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D5V-zv-hLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="935" y="2756"/>
-        </scene>
-        <!--Connection Setup-->
-        <scene sceneID="tYp-Bb-vxs">
-            <objects>
-                <tableViewController storyboardIdentifier="MADConnectionViewControllerBasic" extendedLayoutIncludesOpaqueBars="YES" id="oCa-Sa-IRy" customClass="MADConnectionViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="I73-VC-rpX">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <sections>
-                            <tableViewSection headerTitle="Document Settings" id="rmA-w7-FMd">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="fly-t7-aY5">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fly-t7-aY5" id="INi-2F-gzL">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="60m-uh-eog">
-                                                    <rect key="frame" x="104" y="7" width="241" height="31"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="186" id="WnB-hR-0MF"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                                                    <connections>
-                                                        <action selector="usernameDidEndOnExit:" destination="oCa-Sa-IRy" eventType="editingDidEndOnExit" id="Syg-Jp-t8I"/>
-                                                        <outlet property="delegate" destination="oCa-Sa-IRy" id="vcI-oM-6id"/>
-                                                    </connections>
-                                                </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pvZ-d8-FkZ">
-                                                    <rect key="frame" x="30" y="13" width="66" height="20"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="60m-uh-eog" firstAttribute="leading" secondItem="INi-2F-gzL" secondAttribute="leading" constant="104" id="GkM-Aj-vzt"/>
-                                                <constraint firstAttribute="bottom" secondItem="60m-uh-eog" secondAttribute="bottom" constant="5" id="HPJ-KP-duF"/>
-                                                <constraint firstItem="pvZ-d8-FkZ" firstAttribute="leading" secondItem="INi-2F-gzL" secondAttribute="leading" constant="30" id="OFx-wK-xvB"/>
-                                                <constraint firstItem="60m-uh-eog" firstAttribute="top" secondItem="INi-2F-gzL" secondAttribute="top" constant="7" id="YMb-Ww-c2B"/>
-                                                <constraint firstItem="60m-uh-eog" firstAttribute="leading" secondItem="pvZ-d8-FkZ" secondAttribute="trailing" constant="8" symbolic="YES" id="i49-VD-aGT"/>
-                                                <constraint firstAttribute="bottom" secondItem="pvZ-d8-FkZ" secondAttribute="bottom" constant="10" id="mMX-nI-qNb"/>
-                                                <constraint firstItem="pvZ-d8-FkZ" firstAttribute="top" secondItem="INi-2F-gzL" secondAttribute="top" constant="13" id="r3R-OP-kDA"/>
-                                                <constraint firstAttribute="trailing" secondItem="60m-uh-eog" secondAttribute="trailing" constant="30" id="skh-sh-0sw"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="delegate" destination="oCa-Sa-IRy" id="yet-3H-kSM"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Connection Setup" id="gf6-6V-tgG">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="4U0-rK-bRZ">
-                            <connections>
-                                <action selector="canceled:" destination="oCa-Sa-IRy" id="e0c-rk-pa7"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="0Pj-fo-0Az">
-                            <connections>
-                                <action selector="save:" destination="oCa-Sa-IRy" id="l1C-Uq-7Ou"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <connections>
-                        <outlet property="tableViewCellDocumentName" destination="fly-t7-aY5" id="63O-sO-oKP"/>
-                        <outlet property="textFieldReportName" destination="60m-uh-eog" id="anS-dp-w1H"/>
-                        <outletCollection property="textFields" destination="60m-uh-eog" id="kfn-eU-jSr"/>
-                        <outletCollection property="tableViewCells" destination="fly-t7-aY5" id="lle-er-3Jk"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iK4-z9-Ljs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1591" y="2749"/>
         </scene>
     </scenes>
 </document>

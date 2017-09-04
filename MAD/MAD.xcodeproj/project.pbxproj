@@ -2790,7 +2790,7 @@
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MAD;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -2849,7 +2849,7 @@
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MAD;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

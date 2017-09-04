@@ -13,6 +13,10 @@
 
 @interface MADConnectionSQLGenericViewController : MADConnectionViewController
 
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
+
 @end
 
 #endif

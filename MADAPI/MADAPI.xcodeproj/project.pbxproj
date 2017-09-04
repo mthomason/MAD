@@ -21,7 +21,7 @@
 		4C6C0A091F5D329700EDA039 /* MADConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */; };
 		4C6C0A131F5D33AA00EDA039 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6C0A121F5D33AA00EDA039 /* MADCocoaExtensions.framework */; };
 		4C6C0A151F5D360400EDA039 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */; };
-		4C6C0A181F5D374600EDA039 /* MADConnectionSQLGenericViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */; };
+		4C6C0A181F5D374600EDA039 /* MADConnectionSQLGenericViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C0A191F5D374600EDA039 /* MADConnectionSQLGenericViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
@@ -472,7 +472,7 @@
 				INFOPLIST_FILE = MADAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.MADAPI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madapi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
@@ -492,7 +492,7 @@
 				INFOPLIST_FILE = MADAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.MADAPI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madapi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;

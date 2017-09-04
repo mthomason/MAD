@@ -115,10 +115,13 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 
 - (void)showViewControllerConnection:(NSInteger)type {
     NSString *storyboardName = @"MADCreateDocument";
-    NSString *viewControllerID = type == 0 ? @"MADConnectionViewControllerMySQL" :
-                                             @"MADConnectionViewControllerTDS";
+    NSString *viewControllerID = @"MADConnectionViewControllerSQLGeneric";
+    //NSString *viewControllerID = type == 0 ? @"MADConnectionViewControllerMySQL" :
+    //                                         @"MADConnectionViewControllerTDS";
+    NSString *nibName = type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient";
+    NSBundle *bundle = [NSBundle bundleWithIdentifier:nibName];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName
-                                                         bundle:nil];
+                                                         bundle:bundle];
     MADConnectionViewController *connectionViewController;
     connectionViewController = [storyboard instantiateViewControllerWithIdentifier:viewControllerID];
     connectionViewController.delegate = self;
@@ -145,7 +148,6 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 
 
     }
-    [self.delegate viewControllerDidFinish:self];
 }
 
 - (void)viewControllerDidCancel:(id)sender {

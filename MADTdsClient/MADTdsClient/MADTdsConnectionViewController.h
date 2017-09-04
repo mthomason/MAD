@@ -9,25 +9,9 @@
 #ifndef MADTdsClient_MADConnectionViewController_h
 #define MADTdsClient_MADConnectionViewController_h
 
-#import <UIKit/UITableViewController.h>
-#import <MADAPI/MADDatabaseType.h>
+#import <MADAPI/MADConnectionSQLGenericViewController.h>
 
-@protocol MADViewControllerStandardProtocol, MADSaveFileProtocol;
-@class MADDatabaseConnection;
-
-@interface MADConnectionViewController : UITableViewController
-
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
-    @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
-
-    @property (nonatomic, assign) MADDatabaseType databaseType;
-
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
-
-    - (MADDatabaseConnection *)databaseConnection;
-
-    - (void)enableUserInteraction;
-    - (void)resetInterface;
+@interface MADTdsConnectionViewController : MADConnectionSQLGenericViewController
 
 @end
 

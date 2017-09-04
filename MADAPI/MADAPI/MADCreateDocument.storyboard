@@ -61,7 +61,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="MySQL Database Settings" id="cO6-fm-mQE">
+                            <tableViewSection headerTitle="Database Settings" id="cO6-fm-mQE">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Jac-zS-ptd">
                                         <rect key="frame" x="0.0" y="147.5" width="375" height="44"/>

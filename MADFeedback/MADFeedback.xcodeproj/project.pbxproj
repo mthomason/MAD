@@ -380,7 +380,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_CFLAGS = "-Wno-error=unused-command-line-argument-hard-error-in-future";
-				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.Feedback;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.feedback;
 				PRODUCT_NAME = MADFeedback;
 				SKIP_INSTALL = YES;
 			};
@@ -409,7 +409,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.Feedback;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.feedback;
 				PRODUCT_NAME = MADFeedback;
 				SKIP_INSTALL = YES;
 			};
