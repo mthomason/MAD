@@ -21,6 +21,10 @@
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 
+#import <MADFoundation/MADProgress.h>
+#import <MADFoundation/MADNotificationProgress.h>
+#import <MADFoundation/MADKeyChain.h>
+
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/MADProgressView.h>
@@ -29,11 +33,6 @@
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADErrorContainer.h>
-
-#import <MADFoundation/MADProgress.h>
-#import <MADFoundation/MADNotificationProgress.h>
-
-#import <MADFoundation/MADKeyChain.h>
 
 #import <MAD/MADDatabaseConnection+Constructor.h>
 
