@@ -8,10 +8,14 @@
 
 # Tag major versions like "v3.0"
 
-#echo "Updating version/build number from git..."
-plist=${PROJECT_DIR}/Assets/MADMeta.plist
-plistwatchkitext=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ Extension/Info.plist
-plistwatchkitapp=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ App/Info.plist
+echo "Updating version/build number from git..."
+if [[ "${PROJECT_DIR}" == "" ]]; then
+PROJECT_DIR=/Users/michael/Desktop/Reports/Reports
+fi
+plist=${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist
+plist2=${PROJECT_DIR}/MADStack/MADDesigner/Info.plist
+#plistwatchkitext=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ Extension/Info.plist
+#plistwatchkitapp=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ App/Info.plist
 
 versionnum=$( git describe --abbrev=1 --tags | awk '{split($0,a,"-"); print a[1]}' )
 versionnum=${versionnum#"v"}
@@ -34,6 +38,18 @@ echo "No version number from git"
 exit 2
 fi
 
+buildctr=$(/usr/libexec/PlistBuddy -c "Print :MADBuildNumber" "${plist}")
+((buildctr++))
+
+#echo "Build counter"
+#echo "${buildctr}"
+
+#echo "Build number"
+#echo "${buildnum}"
+
+#echo "Current number"
+#echo "${currentvnum}"
+
 if [[ "${buildnum}" == "" ]]; then
 echo "No build number from git"
 exit 2
@@ -41,16 +57,19 @@ fi
 
 MADBuildDate=$(date +%FT%T%Z)
 /usr/libexec/PlistBuddy -c "Set :MADBuildDate $MADBuildDate" "${plist}"
+/usr/libexec/PlistBuddy -c "Set :MADBuildDate $MADBuildDate" "${plist2}"
 
-/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitext}"
-/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plistwatchkitapp}"
+/usr/libexec/PlistBuddy -c "Set :MADBuildNumber $buildctr" "${plist}"
+/usr/libexec/PlistBuddy -c "Set :MADBuildNumber $buildctr" "${plist2}"
+
 /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plist}"
+/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plist2}"
 echo "Updated version number to $versionnum"
 
-/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitext}"
-/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plistwatchkitapp}"
 /usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plist}"
+/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plist2}"
 echo "Updated build number to $currentvnum"
 
 /usr/libexec/Plistbuddy -c "Set MADRevision $buildnum" "${plist}"
+/usr/libexec/Plistbuddy -c "Set MADRevision $buildnum" "${plist2}"
 echo "Updated build number to $buildnum"
