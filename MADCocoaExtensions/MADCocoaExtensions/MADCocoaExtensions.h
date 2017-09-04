@@ -24,7 +24,6 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/MADTextField.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 
 #import <MADCocoaExtensions/MAD2dDirection.h>

@@ -310,10 +310,6 @@
 		4C9A35B11CEDF57C0048B71E /* madtar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9A35AF1CEDF57C0048B71E /* madtar.h */; };
 		4C9FB2761D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FB2741D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h */; };
 		4C9FB2771D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FB2751D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m */; };
-		4CA0C6C71CA56AC000222B8D /* MADNotificationProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C51CA56AC000222B8D /* MADNotificationProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA0C6C81CA56AC000222B8D /* MADNotificationProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6C61CA56AC000222B8D /* MADNotificationProgress.m */; };
-		4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA0C6C91CA56CAD00222B8D /* MADProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA0C6CC1CA56CAD00222B8D /* MADProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */; };
 		4CA3548A1D2087B10072BD38 /* MADocumentSectionType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA354891D2087B10072BD38 /* MADocumentSectionType.m */; };
 		4CA3548D1D20DB900072BD38 /* MADReportSectionEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA3548B1D20DB900072BD38 /* MADReportSectionEnumerator.h */; };
 		4CA3548E1D20DB900072BD38 /* MADReportSectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA3548C1D20DB900072BD38 /* MADReportSectionEnumerator.m */; };
@@ -857,10 +853,6 @@
 		4C9A35AF1CEDF57C0048B71E /* madtar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = madtar.h; sourceTree = "<group>"; };
 		4C9FB2741D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADParameters+QueryCacheAggregate.h"; path = "MAD/MADParameters+QueryCacheAggregate.h"; sourceTree = "<group>"; };
 		4C9FB2751D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADParameters+QueryCacheAggregate.m"; path = "MAD/MADParameters+QueryCacheAggregate.m"; sourceTree = "<group>"; };
-		4CA0C6C51CA56AC000222B8D /* MADNotificationProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNotificationProgress.h; path = MAD/MADNotificationProgress.h; sourceTree = "<group>"; };
-		4CA0C6C61CA56AC000222B8D /* MADNotificationProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNotificationProgress.m; path = MAD/MADNotificationProgress.m; sourceTree = "<group>"; };
-		4CA0C6C91CA56CAD00222B8D /* MADProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADProgress.h; path = MAD/MADProgress.h; sourceTree = "<group>"; };
-		4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADProgress.m; path = MAD/MADProgress.m; sourceTree = "<group>"; };
 		4CA354891D2087B10072BD38 /* MADocumentSectionType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocumentSectionType.m; path = MAD/MADocument/MADocumentSectionType.m; sourceTree = "<group>"; };
 		4CA3548B1D20DB900072BD38 /* MADReportSectionEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportSectionEnumerator.h; path = MAD/MADocument/ReportSections/MADReportSectionEnumerator.h; sourceTree = "<group>"; };
 		4CA3548C1D20DB900072BD38 /* MADReportSectionEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportSectionEnumerator.m; path = MAD/MADocument/ReportSections/MADReportSectionEnumerator.m; sourceTree = "<group>"; };
@@ -1581,8 +1573,6 @@
 			children = (
 				4C8278BA1DB76BFD005313F5 /* MADNotificationFileUpdate.h */,
 				4C8278BB1DB76BFD005313F5 /* MADNotificationFileUpdate.m */,
-				4CA0C6C51CA56AC000222B8D /* MADNotificationProgress.h */,
-				4CA0C6C61CA56AC000222B8D /* MADNotificationProgress.m */,
 				4CC2823A1BADE81A00775B72 /* MADNotificationDidFormatPage.h */,
 				4CC2823B1BADE81A00775B72 /* MADNotificationDidFormatPage.m */,
 			);
@@ -1667,8 +1657,6 @@
 		4CB98DF51F459B700043B583 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				4CA0C6C91CA56CAD00222B8D /* MADProgress.h */,
-				4CA0C6CA1CA56CAD00222B8D /* MADProgress.m */,
 				4CC2820D1BADE81A00775B72 /* MADAlignment.h */,
 				4C17AE291E4343F80056A0EA /* MADAlignment.m */,
 				4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */,
@@ -2119,7 +2107,6 @@
 				4C401E4A1BAE4D8C00BAE5FC /* MADocumentState.h in Headers */,
 				4CC284A11BADE9F800775B72 /* RptqDatabaseCredentals+Extras.h in Headers */,
 				4C1E54EE1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h in Headers */,
-				4CA0C6C71CA56AC000222B8D /* MADNotificationProgress.h in Headers */,
 				4C5939971E3EF7E400582271 /* RptqDatabaseSchemaField.h in Headers */,
 				4C401D421BAE3AF800BAE5FC /* MTPaperB3.h in Headers */,
 				4CC982851F4BBF2800E0496A /* MADocumentDesignerProtocol.h in Headers */,
@@ -2212,7 +2199,6 @@
 				4C235CE61D1F82D000D3D77C /* MADReportRow.h in Headers */,
 				4CA354AE1D27AA8D0072BD38 /* NSIndexPath+MADReportObjectIndex.h in Headers */,
 				4CFA87411E446A17002903B7 /* MADModelQueryField.h in Headers */,
-				4CA0C6CB1CA56CAD00222B8D /* MADProgress.h in Headers */,
 				4C4F12801D0A95810002294E /* MADQuerySelectExpressionActiveFields.h in Headers */,
 				4CD87BA91E3E4ADD00F562B4 /* RptqDataHelper.h in Headers */,
 				4C35E2711EC9E9500090D1BF /* RptqSize+Extras.h in Headers */,
@@ -2465,7 +2451,6 @@
 				4CC2847E1BADE9B300775B72 /* RptqDocumentElementFormula+Extras.m in Sources */,
 				4CD79FB01EC862840093B2CE /* RptqDirectionalAsymmetry.m in Sources */,
 				4CC9827B1F4BB96600E0496A /* MADDesignerQuery.m in Sources */,
-				4CA0C6C81CA56AC000222B8D /* MADNotificationProgress.m in Sources */,
 				4CC282761BADE82100775B72 /* MADKeyChain.m in Sources */,
 				4C5314941E2D85D0001627A7 /* MADDocumentObjectReference.m in Sources */,
 				4C9A35B01CEDF57C0048B71E /* madtar.m in Sources */,
@@ -2622,7 +2607,6 @@
 				4C401D411BAE3AF800BAE5FC /* MTPaperB2.m in Sources */,
 				4C6F351F1E40EB0200F4744F /* RptqDatabaseCredentals.m in Sources */,
 				4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */,
-				4CA0C6CC1CA56CAD00222B8D /* MADProgress.m in Sources */,
 				4C85A1291E3F322600545E94 /* RptqDocumentElementGroupKey+Extras.m in Sources */,
 				4CC282721BADE82000775B72 /* MADErrorContainer.m in Sources */,
 				4C235CE71D1F82D000D3D77C /* MADReportRow.m in Sources */,

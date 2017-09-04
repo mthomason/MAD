@@ -29,10 +29,12 @@
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
+#import <MADFoundation/MADProgress.h>
+
 #import <MAD/MADErrorContainer.h>
 #import <MAD/MADKeyChain.h>
-#import <MAD/MADProgress.h>
-#import <MAD/MADNotificationProgress.h>
+#import <MADFoundation/MADNotificationProgress.h>
+
 #import <MAD/MADDatabaseConnection+Constructor.h>
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);

@@ -10,7 +10,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSURL.h>
-#import "MADProgress.h"
+#import <MADFoundation/MADProgress.h>
 
 NSString * const MADNotificationIdentifierFileUpdate = @"MADProgressNotification";
 

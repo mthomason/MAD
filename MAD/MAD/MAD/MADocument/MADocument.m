@@ -42,6 +42,7 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADThread.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -51,7 +52,6 @@
 #import <MADSqlite3/MADArrayCaching.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/MADThread.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import "MADDataTable+Constructor.h"

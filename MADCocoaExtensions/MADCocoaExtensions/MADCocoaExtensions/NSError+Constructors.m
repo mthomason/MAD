@@ -12,7 +12,7 @@
 
 #import "NSError+Constructors.h"
 #import "UIApplication+Helpers.h"
-#import "MADThread.h"
+#import <MADFoundation/MADThread.h>
 
 #import <UIKit/UIAlertController.h>
 

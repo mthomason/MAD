@@ -65,8 +65,6 @@
 		4C6F35151E40D6D400F4744F /* MADPadding.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35141E40D6D400F4744F /* MADPadding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35161E40D8D200F4744F /* MADTextStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */; };
-		4CB9AAE71C8C244B00420CFF /* MADThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB9AAE51C8C244B00420CFF /* MADThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CB9AAE81C8C244B00420CFF /* MADThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9AAE61C8C244B00420CFF /* MADThread.m */; };
 		4CE645891CE86B76000368BD /* MADNumericConstants.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CE645871CE86B76000368BD /* MADNumericConstants.c */; };
 		4CE6458A1CE86B76000368BD /* MADNumericConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CE645881CE86B76000368BD /* MADNumericConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -143,8 +141,6 @@
 		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMargin.h; path = MADCocoaExtensions/MADMargin.h; sourceTree = "<group>"; };
 		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPadding.h; path = MADCocoaExtensions/MADPadding.h; sourceTree = "<group>"; };
 		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextStyle.h; path = MADCocoaExtensions/MADTextStyle.h; sourceTree = "<group>"; };
-		4CB9AAE51C8C244B00420CFF /* MADThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADThread.h; path = MADCocoaExtensions/MADThread.h; sourceTree = "<group>"; };
-		4CB9AAE61C8C244B00420CFF /* MADThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADThread.m; path = MADCocoaExtensions/MADThread.m; sourceTree = "<group>"; };
 		4CE645871CE86B76000368BD /* MADNumericConstants.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = MADNumericConstants.c; path = MADCocoaExtensions/MADNumericConstants.c; sourceTree = "<group>"; };
 		4CE645881CE86B76000368BD /* MADNumericConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNumericConstants.h; path = MADCocoaExtensions/MADNumericConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -223,8 +219,6 @@
 				4C5767451E1CB68500611F37 /* MADTextField.m */,
 				4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */,
 				4C3622B41CF343D9002B8649 /* MADCompassDirection.h */,
-				4CB9AAE51C8C244B00420CFF /* MADThread.h */,
-				4CB9AAE61C8C244B00420CFF /* MADThread.m */,
 				4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */,
 				4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */,
 				4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */,
@@ -321,7 +315,6 @@
 				4C5767481E1CB68500611F37 /* MADTextField.h in Headers */,
 				4C5205AE1BA7E2A2000E6A59 /* MADBarButtonItem.h in Headers */,
 				4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */,
-				4CB9AAE71C8C244B00420CFF /* MADThread.h in Headers */,
 				4C6C09E21F5D0DFF00EDA039 /* MADLabelTitle.h in Headers */,
 				4C3622C31CF351AB002B8649 /* MADLineSegment.h in Headers */,
 				4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */,
@@ -445,7 +438,6 @@
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
 				4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */,
 				4C5205B71BA7E2A2000E6A59 /* UIView+Animations.m in Sources */,
-				4CB9AAE81C8C244B00420CFF /* MADThread.m in Sources */,
 				4CE645891CE86B76000368BD /* MADNumericConstants.c in Sources */,
 				4C6C09E71F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */,
