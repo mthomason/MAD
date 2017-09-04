@@ -7,11 +7,11 @@
 #  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 
 # Tag major versions like "v3.0"
-
 echo "Updating version/build number from git..."
-if [[ "${PROJECT_DIR}" == "" ]]; then
+if [ "$PROJECT_DIR" = "" ]; then
 PROJECT_DIR=/Users/michael/Desktop/Reports/Reports
 fi
+cd $PROJECT_DIR
 plist=${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist
 plist2=${PROJECT_DIR}/MADStack/MADDesigner/Info.plist
 #plistwatchkitext=${PROJECT_DIR}/MAD\ Designer\ WatchKit\ Extension/Info.plist
@@ -33,7 +33,7 @@ currentvnum=${currentvnum#"v"}
 
 buildnum=$( git rev-list HEAD --count )
 
-if [[ "${versionnum}" == "" ]]; then
+if [ "${versionnum}" = "" ]; then
 echo "No version number from git"
 exit 2
 fi
@@ -50,7 +50,7 @@ buildctr=$(/usr/libexec/PlistBuddy -c "Print :MADBuildNumber" "${plist}")
 #echo "Current number"
 #echo "${currentvnum}"
 
-if [[ "${buildnum}" == "" ]]; then
+if [ "$buildnum" = "" ]; then
 echo "No build number from git"
 exit 2
 fi
