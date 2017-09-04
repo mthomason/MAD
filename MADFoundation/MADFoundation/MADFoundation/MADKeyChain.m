@@ -20,8 +20,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSBundle.h>
-
-#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <Foundation/NSError.h>
 
 #import <MADFoundation/MADThread.h>
 #import <MADFoundation/MADErrorUserInfo.h>
@@ -186,32 +185,28 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
                   forKey:(NSString *)key {
     
     NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
-    OSStatus status = [MADKeyChain saveToken: username
-                                     forKey: keyUsername
-                            withDescription: MADKeyChainUsernameAccountDesc];
+    OSStatus status = [MADKeyChain saveToken: username forKey: keyUsername
+                             withDescription: MADKeyChainUsernameAccountDesc];
     
     if (status == errSecSuccess) {
         NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
-        [MADKeyChain saveToken: password
-                       forKey: keyPassword
-              withDescription: MADKeyChainPasswordAccountDesc];
+        [MADKeyChain saveToken: password forKey: keyPassword
+               withDescription: MADKeyChainPasswordAccountDesc];
     }
     return status;
 }
 
 + (OSStatus)savePassword:(NSString *)password forKey:(NSString *)key  {
     NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
-    return [MADKeyChain saveToken: password
-                          forKey: keyPassword
-                 withDescription: MADKeyChainPasswordAccountDesc];
+    return [MADKeyChain saveToken: password forKey: keyPassword
+                  withDescription: MADKeyChainPasswordAccountDesc];
 }
 
 + (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key  {
     
     NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
-    return [MADKeyChain saveToken: username
-                          forKey: keyUsername
-                 withDescription: MADKeyChainUsernameAccountDesc];
+    return [MADKeyChain saveToken: username forKey: keyUsername
+                  withDescription: MADKeyChainUsernameAccountDesc];
 }
 
 + (OSStatus)saveToken:(NSString *)token
@@ -229,13 +224,12 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
                                           (CFTypeRef *)&queryUsernameData);
     
     if (status == errSecItemNotFound) {
-        NSDictionary *queryAddUsername = [MADKeyChain queryAdd: token
-                                                       forKey: key
-                                              withDescription: description];
+        NSDictionary *queryAddUsername;
+        queryAddUsername = [MADKeyChain queryAdd: token forKey: key withDescription: description];
         status = SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
     } else {
-        NSDictionary *updateQueryUsername = [MADKeyChain queryUpdate: key
-                                                    withDescription: description];
+        NSDictionary *updateQueryUsername;
+        updateQueryUsername = [MADKeyChain queryUpdate: key withDescription: description];
         NSDictionary *changesUsername = [MADKeyChain queryUpdateData:token];
         status = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername,
                                (__bridge CFDictionaryRef)changesUsername);
@@ -244,10 +238,9 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (void)deleteKey:(NSString *)key {
+    
     NSDictionary *query = [MADKeyChain newDictionaryQueryGeneric:key];
-    
     CFDataRef queryData = NULL;
-    
     OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) query,
                                                 (CFTypeRef *)&queryData);
     if (deleteStatus == errSecSuccess) {
