@@ -13,14 +13,21 @@
 #import <MADAPI/MADDatabaseType.h>
 
 @protocol MADViewControllerStandardProtocol, MADSaveFileProtocol;
+@class MADDatabaseConnection;
 
 @interface MADConnectionViewController : UITableViewController
-    
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
     @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
     @property (nonatomic, assign) MADDatabaseType databaseType;
+
+    @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
+
+    - (MADDatabaseConnection *)databaseConnection;
+
+    - (void)enableUserInteraction;
+    - (void)resetPrompt;
 
 @end
 

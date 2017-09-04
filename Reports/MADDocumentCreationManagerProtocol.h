@@ -9,6 +9,8 @@
 #ifndef MADDocumentCreationManagerProtocol_h
 #define MADDocumentCreationManagerProtocol_h
 
+@class MADDocumentCreationManager;
+
 @protocol MADDocumentCreationManagerProtocol <NSObject>
     - (void)documentCreationManager:(MADDocumentCreationManager *)manager
                           didFinish:(BOOL)success;

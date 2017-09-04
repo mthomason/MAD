@@ -29,11 +29,17 @@
 #import "MADConnectionViewController.h"
 #import "MADLabelTitle.h"
 
+#import "MADDocumentCreationManager.h"
+#import "MADConnectionViewController.h"
+#import "MADDocumentCreationManagerProtocol.h"
+
 NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Select database type.";
 NSString * const MADDriverSelectorControllerDefaultTitle                = @"New Report";
 
 @interface MADDriverSelectorController ()
-    <MADViewControllerStandardProtocol, UITableViewDelegate>
+    <MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
+    @property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
+    @property (nonatomic, weak) __kindof MADConnectionViewController *connectionViewController;
 
 @end
 
@@ -120,9 +126,24 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
                                                         MADDatabaseTypeTDS;
     [self.navigationController pushViewController:connectionViewController
                                          animated:YES];
+    self.connectionViewController = connectionViewController;
 }
 
 - (void)viewControllerDidFinish:(id)sender {
+    if ([sender isKindOfClass:[MADConnectionViewController class]]) {
+        MADDocumentCreationManager *documentCreationManager;
+        MADConnectionViewController *viewController = ((MADConnectionViewController *)sender);
+        MADDatabaseConnection *databaseConnection = [viewController databaseConnection];
+        documentCreationManager = [[MADDocumentCreationManager alloc] initWithFilename: viewController.textFieldReportName.text
+                                                                              delegate: self
+                                                                    documentsDirectory: self.documentDirectory
+                                                                    databaseConnection: databaseConnection
+                                                                        viewController: viewController];
+        [documentCreationManager start];
+        self.documentCreationManager = documentCreationManager;
+
+
+    }
     [self.delegate viewControllerDidFinish:self];
 }
 
@@ -131,6 +152,20 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 }
 - (IBAction)cancel:(id)sender {
     [self viewControllerDidCancel:sender];
+}
+
+#pragma mark -
+#pragma mark MADDocumentCreationManagerProtocol
+
+- (void)documentCreationManager:(id <MADDocumentCreationManagerInterface>)manager
+                      didFinish:(BOOL)success {
+    MADConnectionViewController *connectionViewController = self.connectionViewController;
+    [connectionViewController resetPrompt];
+    if (success) {
+        [self.delegate viewControllerDidFinish: self];
+    } else {
+        [connectionViewController enableUserInteraction];
+    }
 }
 
 @end

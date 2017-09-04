@@ -37,9 +37,6 @@
 #import "MADViewControllerStandardProtocol.h"
 #import "MADLabelTitle.h"
 #import "MADProgressView.h"
-#import "MADDocumentCreationManager.h"
-#import "MADDocumentCreationManagerInterface.h"
-#import "MADDocumentCreationManagerProtocol.h"
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -47,12 +44,10 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
 
-@interface MADConnectionViewController()
-    <MADDocumentCreationManagerProtocol, UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
+@interface MADConnectionViewController ()
+    <UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
 
     @property (nonatomic, strong) MADProgressView *progressView;
-
-    @property (nonatomic, strong) id <MADDocumentCreationManagerInterface> documentCreationManager;
 
     @property (nonatomic, assign) SEL actionSave;
     @property (nonatomic, weak) id actionSaveTarget;
@@ -65,7 +60,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
     @property (nonatomic, strong) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
     @property (nonatomic, strong) IBOutletCollection(UITextField) NSArray *textFields;
@@ -78,22 +72,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 @end
 
 @implementation MADConnectionViewController
-
-#pragma mark -
-#pragma mark MADDocumentCreationManagerProtocol
-
-- (void)documentCreationManager:(id <MADDocumentCreationManagerInterface>)manager
-                      didFinish:(BOOL)success {
-    
-    [self removeObserverFromObjectForProgress];
-    self.documentCreationManager = nil;
-    [self resetPrompt];
-    if (success) {
-        [self.delegate viewControllerDidFinish: self];
-    } else {
-        [self enableUserInteraction];
-    }
-}
 
 #pragma mark -
 #pragma mark NSObject
@@ -362,23 +340,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (IBAction)save:(id)sender {
     NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
-    
-    id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
-
-    id <MADDocumentCreationManagerInterface> documentCreationManager;
-    MADDatabaseConnection *databaseConnection = [self databaseConnection];
-    documentCreationManager = [[MADDocumentCreationManager alloc] initWithFilename: self.textFieldReportName.text
-                                                                          delegate: self
-                                                                documentsDirectory: saveFileDelegate.documentDirectory
-                                                                databaseConnection: databaseConnection
-                                                                    viewController: self];
-    
     NSString *message = NSLocalizedString(@"Importing schema.",
                                           @"Importing schema.");
     [self disableUserInteractionWithMessage:message];
     [self addObserverToObjectForProgress];
-    [documentCreationManager start];
-    self.documentCreationManager = documentCreationManager;
+    [self.delegate viewControllerDidFinish:self];
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
@@ -433,6 +399,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 }
 
 - (void)resetPrompt {
+    [self removeObserverFromObjectForProgress];
     self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
                                                    MADConnectionViewControllerDefaultPrompt);
 }
