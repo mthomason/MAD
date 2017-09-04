@@ -15,7 +15,7 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MADFoundation/MADOperationConditionMissingResultString.h>

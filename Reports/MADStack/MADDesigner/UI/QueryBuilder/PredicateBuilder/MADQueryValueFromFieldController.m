@@ -29,7 +29,7 @@
 
 #import <MADAPI/MADQuery.h>
 #import <MAD/MADQuery+Extras.h>
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADDatabase+Constructor.h>
 
 #import <MAD/RptqQueryField+Extras.h>

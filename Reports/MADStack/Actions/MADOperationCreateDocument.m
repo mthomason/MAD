@@ -13,7 +13,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADNotificationProgress.h>
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationQueue.h>

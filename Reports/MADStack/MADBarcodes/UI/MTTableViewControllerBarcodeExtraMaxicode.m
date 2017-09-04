@@ -28,7 +28,7 @@
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADocument.h>
 
 #import <MADAPI/MADDatabase.h>

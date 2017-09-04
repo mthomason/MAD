@@ -13,7 +13,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 
 @interface MADOperationKeyChainGet ()
 

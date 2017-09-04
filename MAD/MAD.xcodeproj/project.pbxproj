@@ -378,8 +378,6 @@
 		4CC282661BADE81E00775B72 /* MADDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282291BADE81A00775B72 /* MADDataFormatter.m */; };
 		4CC282731BADE82000775B72 /* MADFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282361BADE81A00775B72 /* MADFont.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282741BADE82000775B72 /* MADFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282371BADE81A00775B72 /* MADFont.m */; };
-		4CC282751BADE82100775B72 /* MADKeyChain.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC282381BADE81A00775B72 /* MADKeyChain.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CC282761BADE82100775B72 /* MADKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC282391BADE81A00775B72 /* MADKeyChain.m */; };
 		4CC282771BADE82100775B72 /* MADNotificationDidFormatPage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC2823A1BADE81A00775B72 /* MADNotificationDidFormatPage.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4CC282781BADE82100775B72 /* MADNotificationDidFormatPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2823B1BADE81A00775B72 /* MADNotificationDidFormatPage.m */; };
 		4CC283B71BADE8C400775B72 /* MADPrintPageRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC283121BADE85000775B72 /* MADPrintPageRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -919,8 +917,6 @@
 		4CC282291BADE81A00775B72 /* MADDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataFormatter.m; path = MAD/MADDataFormatter.m; sourceTree = "<group>"; };
 		4CC282361BADE81A00775B72 /* MADFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFont.h; path = MAD/MADFont.h; sourceTree = "<group>"; };
 		4CC282371BADE81A00775B72 /* MADFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFont.m; path = MAD/MADFont.m; sourceTree = "<group>"; };
-		4CC282381BADE81A00775B72 /* MADKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADKeyChain.h; path = MAD/MADKeyChain.h; sourceTree = "<group>"; };
-		4CC282391BADE81A00775B72 /* MADKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADKeyChain.m; path = MAD/MADKeyChain.m; sourceTree = "<group>"; };
 		4CC2823A1BADE81A00775B72 /* MADNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNotificationDidFormatPage.h; path = MAD/MADNotificationDidFormatPage.h; sourceTree = "<group>"; };
 		4CC2823B1BADE81A00775B72 /* MADNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNotificationDidFormatPage.m; path = MAD/MADNotificationDidFormatPage.m; sourceTree = "<group>"; };
 		4CC283121BADE85000775B72 /* MADPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPrintPageRenderer.h; path = MAD/MADPrintPageRenderer.h; sourceTree = "<group>"; };
@@ -1644,8 +1640,6 @@
 		4CB98DDB1F455A7E0043B583 /* KeyChain */ = {
 			isa = PBXGroup;
 			children = (
-				4CC282381BADE81A00775B72 /* MADKeyChain.h */,
-				4CC282391BADE81A00775B72 /* MADKeyChain.m */,
 			);
 			name = KeyChain;
 			sourceTree = "<group>";
@@ -2213,7 +2207,6 @@
 				4C3622BF1CF35017002B8649 /* MADDocumentTextRepresentationProtocol.h in Headers */,
 				4C401DDF1BAE3BD700BAE5FC /* MADQueryCustomNoResults.h in Headers */,
 				4CC282451BADE81A00775B72 /* MADActivityIndicator.h in Headers */,
-				4CC282751BADE82100775B72 /* MADKeyChain.h in Headers */,
 				4C8278C01DB76E19005313F5 /* MADNotificationProtocol.h in Headers */,
 				4C401D581BAE3AF800BAE5FC /* MTPaperC3.h in Headers */,
 				4C401DED1BAE3BD800BAE5FC /* MADQueryFull.h in Headers */,
@@ -2444,7 +2437,6 @@
 				4CC2847E1BADE9B300775B72 /* RptqDocumentElementFormula+Extras.m in Sources */,
 				4CD79FB01EC862840093B2CE /* RptqDirectionalAsymmetry.m in Sources */,
 				4CC9827B1F4BB96600E0496A /* MADDesignerQuery.m in Sources */,
-				4CC282761BADE82100775B72 /* MADKeyChain.m in Sources */,
 				4C5314941E2D85D0001627A7 /* MADDocumentObjectReference.m in Sources */,
 				4C9A35B01CEDF57C0048B71E /* madtar.m in Sources */,
 				4C401D5D1BAE3AF800BAE5FC /* MTPaperC5.m in Sources */,

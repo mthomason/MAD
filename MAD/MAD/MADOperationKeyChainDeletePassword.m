@@ -9,7 +9,7 @@
 #import "MADOperationKeyChainDeletePassword.h"
 #import <os/log.h>
 #import <Foundation/NSString.h>
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 
 @interface MADOperationKeyChainDeletePassword ()
 

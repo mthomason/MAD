@@ -10,7 +10,7 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
 #import <MADFoundation/MADCredential.h>
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADCredentialSourceType.h>
 #import "MADKeyChainGetCredentials.h"
 

@@ -33,7 +33,7 @@
 #import <MADFoundation/MADProgress.h>
 #import <MADFoundation/MADNotificationProgress.h>
 
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 
 #import <MAD/MADDatabaseConnection+Constructor.h>
 

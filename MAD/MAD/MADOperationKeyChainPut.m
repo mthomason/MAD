@@ -16,7 +16,7 @@
 
 #import <MADFoundation/MADCredential.h>
 
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 
 static const short StatusNotFound = 35;
 static NSString * const ErrorDomain = @"MADKCP";

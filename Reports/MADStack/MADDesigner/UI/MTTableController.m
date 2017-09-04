@@ -36,7 +36,7 @@
 #import <MAD/RptqQuery.h>
 #import <MADAPI/MADQuery.h>
 #import <MAD/MADDataFormatter.h>
-#import <MAD/MADKeyChain.h>
+#import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADDataTable+Constructor.h>
 
 #import "MADTableLayout.h"
