@@ -14,8 +14,6 @@
 #import <Foundation/NSDate.h>
 #import <Foundation/NSDateFormatter.h>
 
-#import <MADCocoaExtensions/NSError+Constructors.h>
-
 static NSString * const MADErrorContainerError  = @"e";
 static NSString * const MADErrorContainerDate   = @"d";
 
@@ -73,25 +71,6 @@ static NSString * const MADErrorContainerDate   = @"d";
         [result appendString:errorString];
     }
     return result;
-}
-
-- (void)presentAllErrorsWithCompletion:(void (^)(BOOL success))completion {
-    if (self.errors.count > 0) {
-        NSDictionary *errorHolder = self.errors.lastObject;
-        NSError *errorToShow = errorHolder[MADErrorContainerError];
-        [self.errors removeLastObject];
-        [NSError presentError: errorToShow
-             onViewController: nil
-                   completion: ^(BOOL success) {
-                       if (success) {
-                           [self presentAllErrorsWithCompletion:nil];
-                       }
-                   }];
-    } else {
-        if (completion) {
-            completion(YES);
-        }
-    }
 }
 
 - (NSArray <__kindof NSError *> *)allObjects {
