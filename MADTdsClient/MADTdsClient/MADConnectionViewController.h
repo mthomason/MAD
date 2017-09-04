@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDesigner_MADConnectionViewController_h
-#define MADDesigner_MADConnectionViewController_h
+#ifndef MADTdsClient_MADConnectionViewController_h
+#define MADTdsClient_MADConnectionViewController_h
 
 #import <UIKit/UITableViewController.h>
 #import <MADAPI/MADDatabaseType.h>

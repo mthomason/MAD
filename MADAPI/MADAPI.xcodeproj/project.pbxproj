@@ -17,6 +17,8 @@
 		4C6C09F11F5D29D100EDA039 /* MADViewControllerStandardProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C0A001F5D2F6000EDA039 /* MADErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09FE1F5D2F6000EDA039 /* MADErrorContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C0A011F5D2F6000EDA039 /* MADErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09FF1F5D2F6000EDA039 /* MADErrorContainer.m */; };
+		4C6C0A081F5D329700EDA039 /* MADConnectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A061F5D329700EDA039 /* MADConnectionViewController.h */; };
+		4C6C0A091F5D329700EDA039 /* MADConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -60,6 +62,8 @@
 		4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerStandardProtocol.h; sourceTree = "<group>"; };
 		4C6C09FE1F5D2F6000EDA039 /* MADErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADErrorContainer.h; sourceTree = "<group>"; };
 		4C6C09FF1F5D2F6000EDA039 /* MADErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADErrorContainer.m; sourceTree = "<group>"; };
+		4C6C0A061F5D329700EDA039 /* MADConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectionViewController.h; sourceTree = "<group>"; };
+		4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConnectionViewController.m; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,6 +132,8 @@
 		4CF6AAA11F5518BB0061B0C6 /* MADAPI */ = {
 			isa = PBXGroup;
 			children = (
+				4C6C0A061F5D329700EDA039 /* MADConnectionViewController.h */,
+				4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */,
 				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
 				4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */,
 				4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */,
@@ -201,6 +207,7 @@
 				4CF6AABE1F5519280061B0C6 /* MADDatabaseType.h in Headers */,
 				4CF6AAC01F551A5B0061B0C6 /* MADNotificationDidReadRows.h in Headers */,
 				4CF6AACA1F5524050061B0C6 /* MADDatabaseProtocol.h in Headers */,
+				4C6C0A081F5D329700EDA039 /* MADConnectionViewController.h in Headers */,
 				4CF6AAD51F5526A00061B0C6 /* MADDatabaseTable.h in Headers */,
 				4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */,
 				4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */,
@@ -314,6 +321,7 @@
 				4CF6AACE1F5524BF0061B0C6 /* MADDatabase.m in Sources */,
 				4C6C0A011F5D2F6000EDA039 /* MADErrorContainer.m in Sources */,
 				4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */,
+				4C6C0A091F5D329700EDA039 /* MADConnectionViewController.m in Sources */,
 				4CF6AAC81F55204A0061B0C6 /* MADDatabaseConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -28,6 +28,8 @@
 		4C4F062E1F57C20100E09E54 /* MADDatabaseMySQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */; };
 		4C4F06301F57C20100E09E54 /* MysqlFetch+DataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */; };
 		4C4F06321F57C99B00E09E54 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4F06311F57C99B00E09E54 /* MADFoundation.framework */; };
+		4C6C0A101F5D32B900EDA039 /* MADConnectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A0E1F5D32B900EDA039 /* MADConnectionViewController.h */; };
+		4C6C0A111F5D32B900EDA039 /* MADConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A0F1F5D32B900EDA039 /* MADConnectionViewController.m */; };
 		4C7014981BACDC6800301713 /* MADMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C70149F1BACDC6800301713 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7014941BACDC6800301713 /* MADMySQL.framework */; };
 		4C7014A41BACDC6800301713 /* MADMySQLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7014A31BACDC6800301713 /* MADMySQLTests.m */; };
@@ -275,6 +277,8 @@
 		4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MysqlFetch+DataTable.m"; path = "MADMySQL/MysqlFetch+DataTable.m"; sourceTree = "<group>"; };
 		4C4F06311F57C99B00E09E54 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C54AFA81D8C4BD200FE8B73 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
+		4C6C0A0E1F5D32B900EDA039 /* MADConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADConnectionViewController.h; path = MADMySQL/MADConnectionViewController.h; sourceTree = "<group>"; };
+		4C6C0A0F1F5D32B900EDA039 /* MADConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADConnectionViewController.m; path = MADMySQL/MADConnectionViewController.m; sourceTree = "<group>"; };
 		4C7014941BACDC6800301713 /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
 		4C7014991BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADMySQL/Info.plist; sourceTree = "<group>"; };
@@ -741,6 +745,8 @@
 		4C7014961BACDC6800301713 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4C6C0A0E1F5D32B900EDA039 /* MADConnectionViewController.h */,
+				4C6C0A0F1F5D32B900EDA039 /* MADConnectionViewController.m */,
 				4C7014971BACDC6800301713 /* MADMySQL.h */,
 				4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */,
 				4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */,
@@ -797,6 +803,7 @@
 				4C0CCAD21DA6275300B5A190 /* client_plugin.h in Headers */,
 				4C0CCACE1DA626FF00B5A190 /* mysql_version.h in Headers */,
 				4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */,
+				4C6C0A101F5D32B900EDA039 /* MADConnectionViewController.h in Headers */,
 				4C0CCACD1DA6261200B5A190 /* mysql.h in Headers */,
 				4C9372F91BAD244800D6BD62 /* MADDataTypeMySQL.h in Headers */,
 				4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */,
@@ -925,6 +932,7 @@
 				4C9373F01BAD2A8300D6BD62 /* MysqlInsert.m in Sources */,
 				4C9373EF1BAD2A8300D6BD62 /* MysqlConnection.m in Sources */,
 				4C4F06301F57C20100E09E54 /* MysqlFetch+DataTable.m in Sources */,
+				4C6C0A111F5D32B900EDA039 /* MADConnectionViewController.m in Sources */,
 				4C9373ED1BAD2A8300D6BD62 /* MysqlFetchField.m in Sources */,
 				4C4F062E1F57C20100E09E54 /* MADDatabaseMySQL.m in Sources */,
 				4C9373FC1BAD2A8300D6BD62 /* MysqlCommitException.m in Sources */,

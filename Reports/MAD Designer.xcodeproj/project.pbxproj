@@ -178,7 +178,6 @@
 		4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA571BAF99F000456DC8 /* MTSettingsViewController.m */; };
 		4C26BA6A1BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C26BA661BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard */; };
 		4C26BA701BAF9A7300456DC8 /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */; };
-		4C26BA731BAF9A8B00456DC8 /* MADConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */; };
 		4C26BA801BAF9AA700456DC8 /* MADDriverSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */; };
 		4C26BA8A1BAF9B3000456DC8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA871BAF9B3000456DC8 /* objcmad.c */; };
 		4C26BA971BAF9B9B00456DC8 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
@@ -1443,8 +1442,6 @@
 		4C26BA691BAF9A2B00456DC8 /* MADToolboxControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxControllerProtocol.h; sourceTree = "<group>"; };
 		4C26BA6D1BAF9A7300456DC8 /* MTViewControllerDynamicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerDynamicItem.h; sourceTree = "<group>"; };
 		4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
-		4C26BA711BAF9A8B00456DC8 /* MADConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADConnectionViewController.h; path = MADStack/MADQuery/UI/Visualization/MADConnectionViewController.h; sourceTree = "<group>"; };
-		4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADConnectionViewController.m; path = MADStack/MADQuery/UI/Visualization/MADConnectionViewController.m; sourceTree = "<group>"; };
 		4C26BA781BAF9AA700456DC8 /* MADDriverSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDriverSelectorController.h; path = MADStack/MADQuery/UI/DatabaseSelector/MADDriverSelectorController.h; sourceTree = "<group>"; };
 		4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDriverSelectorController.m; path = MADStack/MADQuery/UI/DatabaseSelector/MADDriverSelectorController.m; sourceTree = "<group>"; };
 		4C26BA841BAF9B3000456DC8 /* MADObjectIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADObjectIdentifier.h; sourceTree = "<group>"; };
@@ -3148,8 +3145,6 @@
 				4C1E55071E58295F00E3FAF0 /* Storyboard */,
 				4C26BA321BAF99BE00456DC8 /* Constants.h */,
 				4C26BA331BAF99BE00456DC8 /* Constants.m */,
-				4C26BA711BAF9A8B00456DC8 /* MADConnectionViewController.h */,
-				4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */,
 				4C6C09C71F5CF02200EDA039 /* MADDocumentCreationManagerProtocol.h */,
 				4C6C09C61F5CF00E00EDA039 /* MADDocumentCreationManagerInterface.h */,
 				4C6C09C31F5CEB5100EDA039 /* MADDocumentCreationManager.h */,
@@ -6073,7 +6068,6 @@
 				4C1E550D1E58363B00E3FAF0 /* MADNavigationControllerQuery.m in Sources */,
 				4CEBD0301E319535009FE2DC /* MADAnimatedTransitionControllerPush.m in Sources */,
 				4CA0C6B01CA3A48900222B8D /* MADDefer.m in Sources */,
-				4C26BA731BAF9A8B00456DC8 /* MADConnectionViewController.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m in Sources */,
 				4CA0C6B71CA5401000222B8D /* MADOperationCreateDocument.m in Sources */,
