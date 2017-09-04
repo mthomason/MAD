@@ -31,6 +31,7 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
+#import <MADAPI/MADErrorContainer.h>
 
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"
@@ -55,7 +56,6 @@
 #import "RptqDocumentElementBarcode+Extras.h"
 #import "RptqDocumentElementFormula+Extras.h"
 
-#import "MADErrorContainer.h"
 #import "MADReportSectionsEnumerator.h"
 
 #import "RptqDataHelper.h"

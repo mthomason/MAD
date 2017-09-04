@@ -17,10 +17,11 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADDatabaseField.h>
+#import <MADAPI/MADErrorContainer.h>
+
+#import <MADFoundation/MADNotificationProgress.h>
 
 #import <MAD/MADocument.h>
-#import <MADFoundation/MADNotificationProgress.h>
-#import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 

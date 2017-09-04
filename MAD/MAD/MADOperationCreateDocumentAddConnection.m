@@ -10,8 +10,8 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADErrorContainer.h>
 #import <MAD/MADocument.h>
-#import <MAD/MADErrorContainer.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 

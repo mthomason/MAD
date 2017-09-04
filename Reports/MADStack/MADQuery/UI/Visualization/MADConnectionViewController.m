@@ -28,12 +28,12 @@
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADErrorContainer.h>
 
 #import <MADFoundation/MADProgress.h>
-
-#import <MAD/MADErrorContainer.h>
-#import <MAD/MADKeyChain.h>
 #import <MADFoundation/MADNotificationProgress.h>
+
+#import <MAD/MADKeyChain.h>
 
 #import <MAD/MADDatabaseConnection+Constructor.h>
 
