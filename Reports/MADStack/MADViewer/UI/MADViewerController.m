@@ -57,7 +57,7 @@
 #import <MAD/MADNotificationDidFormatPage.h>
 
 #import "MADPrintingProtocol.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADPageSliderProtocol.h"
 
 #import "MADTabBarController.h"

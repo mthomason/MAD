@@ -12,7 +12,7 @@
 #import <UIKit/UITableViewController.h>
 #import <MAD/MADPredicateOperator.h>
 
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADQueryValueFromFieldControllerDelegate.h"
 
 #import "MADTableViewControllerOpperatorsDelegate.h"

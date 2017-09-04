@@ -66,7 +66,7 @@
 #import "MADExplorerSectionHeaderView.h"
 #import "MADSearchBar.h"
 
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"

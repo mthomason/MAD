@@ -12,7 +12,7 @@
 #import <UIKit/UINavigationController.h>
 #import "MADTabBarItemProtocol.h"
 #import "MADViewControllerDocumentProtocol.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @protocol MADViewControllerStandardProtocol;
 

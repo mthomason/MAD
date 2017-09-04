@@ -26,7 +26,8 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+
 #import "MADTableViewCellBase.h"
 
 #import "MADButtonTwitter.h"

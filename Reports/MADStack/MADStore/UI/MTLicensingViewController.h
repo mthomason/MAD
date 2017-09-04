@@ -10,7 +10,7 @@
 #define Reports_MTLicensingViewController_h
 
 #import <UIKit/UITableViewController.h>
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @interface MTLicensingViewController : UITableViewController

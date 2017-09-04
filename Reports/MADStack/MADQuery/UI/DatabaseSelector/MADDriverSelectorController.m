@@ -24,7 +24,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 #import "MADVibrantTableView.h"
 #import "MADConnectionViewController.h"

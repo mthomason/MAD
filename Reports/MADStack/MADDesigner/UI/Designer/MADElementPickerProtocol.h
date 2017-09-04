@@ -12,7 +12,7 @@
 #import <MAD/MADAggregateFunctionType.h>
 #import <MAD/MADAggregateFunctionInputType.h>
 #import <MAD/MADAggregateFunctionGroupByType.h>
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @protocol MADElementPickerProtocol
     <MADViewControllerStandardProtocol>

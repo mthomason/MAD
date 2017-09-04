@@ -11,7 +11,7 @@
 
 #import <UIKit/UISplitViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADTabBarItemProtocol.h"
 
 @class MADQueryVisualizationViewController, MADNavigationControllerQueryBuilder,

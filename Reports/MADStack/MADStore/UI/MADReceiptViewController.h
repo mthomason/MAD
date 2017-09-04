@@ -10,7 +10,7 @@
 #define MAD_Designer_MADReceiptViewController_h
 
 #import <UIKit/UITableViewController.h>
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @interface MADReceiptViewController : UITableViewController
 

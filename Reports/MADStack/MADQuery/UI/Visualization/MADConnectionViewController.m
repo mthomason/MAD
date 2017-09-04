@@ -26,6 +26,7 @@
 #import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MADErrorContainer.h>
@@ -33,8 +34,6 @@
 #import <MAD/MADProgress.h>
 #import <MAD/MADNotificationProgress.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
-
-#import "MADViewControllerStandardProtocol.h"
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);

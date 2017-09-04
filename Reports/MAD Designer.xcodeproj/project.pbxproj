@@ -1403,7 +1403,6 @@
 		4C26BA281BAF999800456DC8 /* MADViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerProtocol.h; sourceTree = "<group>"; };
 		4C26BA291BAF999800456DC8 /* MADPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPrintingProtocol.h; sourceTree = "<group>"; };
 		4C26BA2A1BAF999800456DC8 /* MADUnwindProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUnwindProtocol.h; sourceTree = "<group>"; };
-		4C26BA2B1BAF999800456DC8 /* MADViewControllerStandardProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerStandardProtocol.h; sourceTree = "<group>"; };
 		4C26BA2D1BAF999800456DC8 /* MADControlState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADControlState.h; sourceTree = "<group>"; };
 		4C26BA2F1BAF999800456DC8 /* MADUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUser.h; sourceTree = "<group>"; };
 		4C26BA301BAF999800456DC8 /* MADUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUser.m; sourceTree = "<group>"; };
@@ -2926,7 +2925,6 @@
 				4C26BA291BAF999800456DC8 /* MADPrintingProtocol.h */,
 				4CBBA94E1CFEA4640033F63B /* MADGroupByViewControllerDelegate.h */,
 				4C26BA2A1BAF999800456DC8 /* MADUnwindProtocol.h */,
-				4C26BA2B1BAF999800456DC8 /* MADViewControllerStandardProtocol.h */,
 				4CE3194E1E4D2C4B00EB5B85 /* MADCellElementDelegate.h */,
 			);
 			name = Protocols;

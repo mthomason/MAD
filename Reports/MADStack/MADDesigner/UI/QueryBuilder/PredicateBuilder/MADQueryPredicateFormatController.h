@@ -10,7 +10,7 @@
 #define Reports_MADQueryPredicateFormatController_h
 
 #import "MADQueryAddPredicateController.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADQueryBuilderAddPredicateDelegate.h"
 
 @class MADQueryPredicateFormatController;

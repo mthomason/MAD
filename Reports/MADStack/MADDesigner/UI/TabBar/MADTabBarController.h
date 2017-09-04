@@ -11,7 +11,7 @@
 
 #import <UIKit/UITabBarController.h>
 #import "MADViewControllerDocumentProtocol.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @class MADocument, MADQueryBuilderSplitViewController, MADDesignerViewController,
        MADViewerController;

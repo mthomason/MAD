@@ -19,7 +19,7 @@
 #import "MTVerificationController.h"
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADWatermarkView.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADReceiptViewController.h"
 #import "MADFeatures.h"
 #import "MADSalesReceipt.h"

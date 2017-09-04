@@ -10,7 +10,7 @@
 #define Reports_MADQueryBuilderAddTableViewController_h
 
 #import "MADTableViewControllerCoreDataResults.h"
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @class MADQueryBuilderAddTableViewController;
 @class RptqDatabaseSchemaTable;

@@ -11,7 +11,7 @@
 
 #import <UIKit/UICollectionViewController.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @interface MADStoreViewController : UICollectionViewController
     <MADViewControllerStandardProtocol, UICollectionViewDelegateFlowLayout>

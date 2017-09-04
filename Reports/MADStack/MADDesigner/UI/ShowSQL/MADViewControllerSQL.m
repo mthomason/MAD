@@ -20,7 +20,7 @@
 #import <MADAPI/MADQuery.h>
 #import <MAD/MADQueryFull.h>
 
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @implementation MADViewControllerSQL
 

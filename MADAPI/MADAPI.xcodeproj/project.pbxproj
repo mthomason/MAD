@@ -14,6 +14,7 @@
 		4C2D78641F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78631F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09C01F5C50A200EDA039 /* MADDatabaseSQLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09BF1F5C50A200EDA039 /* MADDatabaseSQLProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09C21F5C514A00EDA039 /* MADPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09C11F5C510C00EDA039 /* MADPluginProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6C09F11F5D29D100EDA039 /* MADViewControllerStandardProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -54,6 +55,7 @@
 		4C2D78631F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectionsPropertiesProtocol.h; sourceTree = "<group>"; };
 		4C6C09BF1F5C50A200EDA039 /* MADDatabaseSQLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseSQLProtocol.h; sourceTree = "<group>"; };
 		4C6C09C11F5C510C00EDA039 /* MADPluginProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADPluginProtocol.h; sourceTree = "<group>"; };
+		4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerStandardProtocol.h; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
+				4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */,
 				4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */,
 				4CF6AABB1F5519280061B0C6 /* MADDatabaseResultsProtocol.h */,
 				4CF6AADE1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h */,
@@ -179,6 +182,7 @@
 				4C2D77E71F569EEB005415F7 /* MADQuery.h in Headers */,
 				4CF6AACD1F5524BF0061B0C6 /* MADDatabase.h in Headers */,
 				4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */,
+				4C6C09F11F5D29D100EDA039 /* MADViewControllerStandardProtocol.h in Headers */,
 				4CF6AADF1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h in Headers */,
 				4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */,
 				4C6C09C21F5C514A00EDA039 /* MADPluginProtocol.h in Headers */,

@@ -64,7 +64,7 @@
 
 #import <MAD/MADTableFieldIdentifier.h>
 
-#import "MADViewControllerStandardProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 #import "MADConnectorView.h"
 
