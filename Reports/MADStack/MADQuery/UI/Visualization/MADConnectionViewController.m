@@ -38,6 +38,8 @@
 #import "MADLabelTitle.h"
 #import "MADProgressView.h"
 #import "MADDocumentCreationManager.h"
+#import "MADDocumentCreationManagerInterface.h"
+#import "MADDocumentCreationManagerProtocol.h"
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -80,7 +82,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 #pragma mark -
 #pragma mark MADDocumentCreationManagerProtocol
 
-- (void)documentCreationManager:(MADDocumentCreationManager *)manager
+- (void)documentCreationManager:(id <MADDocumentCreationManagerInterface>)manager
                       didFinish:(BOOL)success {
     
     [self removeObserverFromObjectForProgress];
@@ -363,7 +365,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     
     id <MADSaveFileProtocol> saveFileDelegate = self.saveFileDelegate;
 
-    MADDocumentCreationManager *documentCreationManager;
+    id <MADDocumentCreationManagerInterface> documentCreationManager;
     MADDatabaseConnection *databaseConnection = [self databaseConnection];
     documentCreationManager = [[MADDocumentCreationManager alloc] initWithFilename: self.textFieldReportName.text
                                                                           delegate: self
