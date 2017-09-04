@@ -1807,6 +1807,8 @@
 		4C692B471E1F13F000DC2CB0 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelTitle.m; sourceTree = "<group>"; };
 		4C6C09C31F5CEB5100EDA039 /* MADDocumentCreationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManager.h; sourceTree = "<group>"; };
 		4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentCreationManager.m; sourceTree = "<group>"; };
+		4C6C09C61F5CF00E00EDA039 /* MADDocumentCreationManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerInterface.h; sourceTree = "<group>"; };
+		4C6C09C71F5CF02200EDA039 /* MADDocumentCreationManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerProtocol.h; sourceTree = "<group>"; };
 		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
 		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -3162,6 +3164,8 @@
 				4C26BA331BAF99BE00456DC8 /* Constants.m */,
 				4C26BA711BAF9A8B00456DC8 /* MADConnectionViewController.h */,
 				4C26BA721BAF9A8B00456DC8 /* MADConnectionViewController.m */,
+				4C6C09C71F5CF02200EDA039 /* MADDocumentCreationManagerProtocol.h */,
+				4C6C09C61F5CF00E00EDA039 /* MADDocumentCreationManagerInterface.h */,
 				4C6C09C31F5CEB5100EDA039 /* MADDocumentCreationManager.h */,
 				4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */,
 				4CE1CA521CFC50E0001BD2D5 /* cpp */,

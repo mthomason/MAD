@@ -10,23 +10,10 @@
 #define MADDesigner_MADDocumentCreationManager_h
 
 #import <Foundation/NSObject.h>
-
-@class MADDocumentCreationManager, MADDatabaseConnection, UIViewController;
-
-@protocol MADDocumentCreationManagerProtocol <NSObject>
-    - (void)documentCreationManager:(MADDocumentCreationManager *)manager
-                          didFinish:(BOOL)success;
-@end
+#import "MADDocumentCreationManagerInterface.h"
 
 @interface MADDocumentCreationManager : NSObject
-
-    - (instancetype)initWithFilename: (NSString *)filename
-                            delegate: (NSObject <MADDocumentCreationManagerProtocol> *)delegate
-                  documentsDirectory: (NSURL *)documentsDirectory
-                  databaseConnection: (MADDatabaseConnection *)databaseConnection
-                      viewController: (UIViewController *)viewController;
-
-    - (void)start;
+    <MADDocumentCreationManagerInterface>
 
 @end
 

@@ -13,6 +13,7 @@
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationCreateDocument.h"
+#import "MADDocumentCreationManagerProtocol.h"
 
 @interface MADDocumentCreationManager ()
     <MADOperationObserver>

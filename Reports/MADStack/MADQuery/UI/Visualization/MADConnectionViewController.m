@@ -50,7 +50,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
     @property (nonatomic, strong) MADProgressView *progressView;
 
-    @property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
+    @property (nonatomic, strong) id <MADDocumentCreationManagerInterface> documentCreationManager;
 
     @property (nonatomic, assign) SEL actionSave;
     @property (nonatomic, weak) id actionSaveTarget;
@@ -65,7 +65,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
     @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
     @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    @property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+    @property (nonatomic, strong) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
     @property (nonatomic, strong) IBOutletCollection(UITextField) NSArray *textFields;
 
     - (IBAction)save:(id)sender;
