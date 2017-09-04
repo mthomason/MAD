@@ -37,19 +37,19 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.1954</string>
+	<string>8.0.1955</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.1954</string>
+	<string>8.0.1955</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADBuildDate</key>
-	<string>2017-09-04T06:01:04EDT</string>
+	<string>2017-09-04T07:26:28EDT</string>
 	<key>MADBuildNumber</key>
-	<string>33067</string>
+	<string>33068</string>
 	<key>MADRevision</key>
-	<string>3896</string>
+	<string>3897</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 EVERYDAY APPS LLC.  All rights reserved.</string>
 	<key>NSUbiquitousContainers</key>

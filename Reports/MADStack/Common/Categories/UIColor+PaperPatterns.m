@@ -12,8 +12,7 @@
 @implementation UIImage (PaperPatterns)
 
 + (instancetype)newImagePaperHomemade {
-    UIImage *image = [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
-    return image;
+    return [UIImage imageNamed:@"UIImagePatternHomemadePaper"];
 }
 
 + (instancetype)newImagePaperAqua {
@@ -376,6 +375,5 @@
     UIImage *image = [UIImage newImagePaperYellowLined];
     return [[UIColor alloc] initWithPatternImage: image];
 }
-
 
 @end
