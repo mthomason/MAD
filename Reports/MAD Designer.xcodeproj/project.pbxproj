@@ -7,13 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
-		4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
-		4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
 		4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
-		4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
-		4C00816B14B6C4EF003DF437 /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
-		4C00816C14B6C4EF003DF437 /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
 		4C00817914B6CAAF003DF437 /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
 		4C00817A14B6CAAF003DF437 /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
 		4C00817B14B6CAAF003DF437 /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
@@ -48,13 +42,7 @@
 		4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0C414B52ABE005DCE49 /* UIImageLandscape@2x.png */; };
 		4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
-		4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
-		4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
-		4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
 		4C0E77BF163B5AEC003B951E /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
-		4C0E77C0163B5AEC003B951E /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
-		4C0E77C1163B5AEC003B951E /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
-		4C0E77C2163B5AEC003B951E /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
 		4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
 		4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
 		4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
@@ -198,13 +186,7 @@
 		4C2F265D1B53FA1C004DFAEC /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C2F26611B53FA1C004DFAEC /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C2F26631B53FA1C004DFAEC /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
-		4C2F26641B53FA1C004DFAEC /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
-		4C2F26671B53FA1C004DFAEC /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
-		4C2F266A1B53FA1C004DFAEC /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
 		4C2F266F1B53FA1C004DFAEC /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
-		4C2F26781B53FA1C004DFAEC /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
-		4C2F267E1B53FA1C004DFAEC /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
-		4C2F267F1B53FA1C004DFAEC /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
 		4C2F26881B53FA1C004DFAEC /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
 		4C2F268B1B53FA1C004DFAEC /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
 		4C2F268D1B53FA1C004DFAEC /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
@@ -229,12 +211,6 @@
 		4C2F275D1B53FA1C004DFAEC /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C2F27601B53FA1C004DFAEC /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C2F27641B53FA1C004DFAEC /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
-		4C2F27781B53FA1C004DFAEC /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
-		4C2F277B1B53FA1C004DFAEC /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
-		4C2F277C1B53FA1C004DFAEC /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
-		4C2F277F1B53FA1C004DFAEC /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
-		4C2F27801B53FA1C004DFAEC /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
-		4C2F27831B53FA1C004DFAEC /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4C2F278B1B53FA1C004DFAEC /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4C2F279F1B53FA1C004DFAEC /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C2F27AD1B53FC37004DFAEC /* MAD Designer.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -396,12 +372,6 @@
 		4C67007D1BA133AB001C9D5A /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C6700801BA133AB001C9D5A /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C6700831BA133AB001C9D5A /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
-		4C6700921BA133AB001C9D5A /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
-		4C6700951BA133AB001C9D5A /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
-		4C6700961BA133AB001C9D5A /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
-		4C6700991BA133AB001C9D5A /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
-		4C67009A1BA133AB001C9D5A /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
-		4C67009D1BA133AB001C9D5A /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4C6700A31BA133AB001C9D5A /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4C6700B51BA133AB001C9D5A /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C67F9E81BA1043B001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -435,13 +405,7 @@
 		4C67FAE61BA1043B001C9D5A /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C67FAEA1BA1043B001C9D5A /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C67FAEC1BA1043B001C9D5A /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
-		4C67FAED1BA1043B001C9D5A /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
-		4C67FAF01BA1043B001C9D5A /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
-		4C67FAF31BA1043B001C9D5A /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
 		4C67FAF71BA1043B001C9D5A /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
-		4C67FAFF1BA1043B001C9D5A /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
-		4C67FB051BA1043B001C9D5A /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
-		4C67FB061BA1043B001C9D5A /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
 		4C67FB0F1BA1043B001C9D5A /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
 		4C67FB121BA1043B001C9D5A /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
 		4C67FB141BA1043B001C9D5A /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
@@ -467,12 +431,6 @@
 		4C67FBE11BA1043B001C9D5A /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C67FBE41BA1043B001C9D5A /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C67FBE71BA1043B001C9D5A /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
-		4C67FBF61BA1043B001C9D5A /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
-		4C67FBF91BA1043B001C9D5A /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
-		4C67FBFA1BA1043B001C9D5A /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
-		4C67FBFD1BA1043B001C9D5A /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
-		4C67FBFE1BA1043B001C9D5A /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
-		4C67FC011BA1043B001C9D5A /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4C67FC071BA1043B001C9D5A /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4C67FC191BA1043B001C9D5A /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C67FC351BA1183D001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -506,13 +464,7 @@
 		4C67FD331BA1183D001C9D5A /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C67FD371BA1183D001C9D5A /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C67FD391BA1183D001C9D5A /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
-		4C67FD3A1BA1183D001C9D5A /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
-		4C67FD3D1BA1183D001C9D5A /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
-		4C67FD401BA1183D001C9D5A /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
 		4C67FD441BA1183D001C9D5A /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
-		4C67FD4C1BA1183D001C9D5A /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
-		4C67FD521BA1183D001C9D5A /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
-		4C67FD531BA1183D001C9D5A /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
 		4C67FD5C1BA1183D001C9D5A /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
 		4C67FD5F1BA1183D001C9D5A /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
 		4C67FD611BA1183D001C9D5A /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
@@ -538,12 +490,6 @@
 		4C67FE2E1BA1183D001C9D5A /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C67FE311BA1183D001C9D5A /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C67FE341BA1183D001C9D5A /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
-		4C67FE431BA1183D001C9D5A /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
-		4C67FE461BA1183D001C9D5A /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
-		4C67FE471BA1183D001C9D5A /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
-		4C67FE4A1BA1183D001C9D5A /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
-		4C67FE4B1BA1183D001C9D5A /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
-		4C67FE4E1BA1183D001C9D5A /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4C67FE541BA1183D001C9D5A /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4C67FE661BA1183D001C9D5A /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C67FE841BA133AB001C9D5A /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
@@ -576,13 +522,7 @@
 		4C67FF821BA133AB001C9D5A /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C67FF861BA133AB001C9D5A /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C67FF881BA133AB001C9D5A /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
-		4C67FF891BA133AB001C9D5A /* UIImageAlignCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */; };
-		4C67FF8C1BA133AB001C9D5A /* UIImageAlignLeft20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */; };
-		4C67FF8F1BA133AB001C9D5A /* UIImageAlignRight20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */; };
 		4C67FF931BA133AB001C9D5A /* UIImageJustified20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */; };
-		4C67FF9B1BA133AB001C9D5A /* UIImageAlignCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */; };
-		4C67FFA11BA133AB001C9D5A /* UIImageAlignLeft20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */; };
-		4C67FFA21BA133AB001C9D5A /* UIImageAlignRight20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */; };
 		4C67FFAB1BA133AB001C9D5A /* UIImageItalic20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817114B6CAAF003DF437 /* UIImageItalic20.png */; };
 		4C67FFAE1BA133AB001C9D5A /* UIImageItalic20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */; };
 		4C67FFB01BA133AB001C9D5A /* UIImageStrikethrough20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */; };
@@ -795,18 +735,6 @@
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
 		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
 		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
-		4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
-		4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */; };
-		4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
-		4CE3141D1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */; };
-		4CE314211694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
-		4CE314221694BCEC00114431 /* UIImageAlignTop20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314131694BCEC00114431 /* UIImageAlignTop20.png */; };
-		4CE314261694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
-		4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */; };
-		4CE3142B1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
-		4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */; };
-		4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
-		4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4CE4EFB01CD08C58006CA2B0 /* MADCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE4EFAF1CD08C58006CA2B0 /* MADCacheManager.m */; };
 		4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
@@ -1005,13 +933,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignCenter20.png; path = Reports/UIImageAlignCenter20.png; sourceTree = "<group>"; };
-		4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignLeft20.png; path = Reports/UIImageAlignLeft20.png; sourceTree = "<group>"; };
-		4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignRight20.png; path = Reports/UIImageAlignRight20.png; sourceTree = "<group>"; };
 		4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageJustified20.png; path = Reports/UIImageJustified20.png; sourceTree = "<group>"; };
-		4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignCenter20@2x.png"; path = "Reports/UIImageAlignCenter20@2x.png"; sourceTree = "<group>"; };
-		4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignLeft20@2x.png"; path = "Reports/UIImageAlignLeft20@2x.png"; sourceTree = "<group>"; };
-		4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignRight20@2x.png"; path = "Reports/UIImageAlignRight20@2x.png"; sourceTree = "<group>"; };
 		4C00817114B6CAAF003DF437 /* UIImageItalic20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageItalic20.png; path = Reports/UIImageItalic20.png; sourceTree = "<group>"; };
 		4C00817214B6CAAF003DF437 /* UIImageItalic20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageItalic20@2x.png"; path = "Reports/UIImageItalic20@2x.png"; sourceTree = "<group>"; };
 		4C00817314B6CAAF003DF437 /* UIImageStrikethrough20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageStrikethrough20.png; path = Reports/UIImageStrikethrough20.png; sourceTree = "<group>"; };
@@ -1997,12 +1919,6 @@
 		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
 		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
 		4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVector.mm; path = MADStack/cpp/MADVector.mm; sourceTree = "<group>"; };
-		4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignVerticalCenter20.png; path = Reports/UIImageAlignVerticalCenter20.png; sourceTree = "<group>"; };
-		4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignVerticalCenter20@2x.png"; path = "Reports/UIImageAlignVerticalCenter20@2x.png"; sourceTree = "<group>"; };
-		4CE314131694BCEC00114431 /* UIImageAlignTop20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignTop20.png; path = Reports/UIImageAlignTop20.png; sourceTree = "<group>"; };
-		4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignTop20@2x.png"; path = "Reports/UIImageAlignTop20@2x.png"; sourceTree = "<group>"; };
-		4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageAlignBottom20.png; path = Reports/UIImageAlignBottom20.png; sourceTree = "<group>"; };
-		4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignBottom20@2x.png"; path = "Reports/UIImageAlignBottom20@2x.png"; sourceTree = "<group>"; };
 		4CE3194D1E4D2AB900EB5B85 /* MADReportPageViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportPageViewProtocol.h; path = ../../../MADReportPageViewProtocol.h; sourceTree = "<group>"; };
 		4CE3194E1E4D2C4B00EB5B85 /* MADCellElementDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCellElementDelegate.h; sourceTree = "<group>"; };
 		4CE4EFAE1CD08C58006CA2B0 /* MADCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCacheManager.h; path = MADStack/Managers/MADCacheManager.h; sourceTree = "<group>"; };
@@ -3408,23 +3324,11 @@
 				4C76F0C014B529E6005DCE49 /* UIImagePictureFrame@2x.png */,
 				4C76F0BB14B527E9005DCE49 /* UIImageToolbarDatabase.png */,
 				4C76F0BC14B527E9005DCE49 /* UIImageToolbarDatabase@2x.png */,
-				4C00816614B6C4EF003DF437 /* UIImageAlignCenter20@2x.png */,
-				4C00816714B6C4EF003DF437 /* UIImageAlignLeft20@2x.png */,
-				4C00816814B6C4EF003DF437 /* UIImageAlignRight20@2x.png */,
-				4C00815C14B6C3E9003DF437 /* UIImageAlignCenter20.png */,
-				4C00815D14B6C3E9003DF437 /* UIImageAlignLeft20.png */,
-				4C00815E14B6C3E9003DF437 /* UIImageAlignRight20.png */,
 				4C00815F14B6C3E9003DF437 /* UIImageJustified20.png */,
 				4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */,
 				4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */,
 				4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */,
 				4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */,
-				4CE314111694BCEC00114431 /* UIImageAlignVerticalCenter20.png */,
-				4CE314121694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png */,
-				4CE314131694BCEC00114431 /* UIImageAlignTop20.png */,
-				4CE314141694BCEC00114431 /* UIImageAlignTop20@2x.png */,
-				4CE314151694BCEC00114431 /* UIImageAlignBottom20.png */,
-				4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */,
 				4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */,
 				4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */,
 				4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */,
@@ -4797,14 +4701,8 @@
 				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
 				4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */,
 				4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
-				4C0E77BC163B5AEC003B951E /* UIImageAlignCenter20.png in Resources */,
-				4C0E77BD163B5AEC003B951E /* UIImageAlignLeft20.png in Resources */,
 				4CB56ECF1AC683CC00756775 /* my_config.he in Resources */,
-				4C0E77BE163B5AEC003B951E /* UIImageAlignRight20.png in Resources */,
 				4C0E77BF163B5AEC003B951E /* UIImageJustified20.png in Resources */,
-				4C0E77C0163B5AEC003B951E /* UIImageAlignCenter20@2x.png in Resources */,
-				4C0E77C1163B5AEC003B951E /* UIImageAlignLeft20@2x.png in Resources */,
-				4C0E77C2163B5AEC003B951E /* UIImageAlignRight20@2x.png in Resources */,
 				4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */,
 				4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */,
 				4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */,
@@ -4829,12 +4727,6 @@
 				4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */,
 				4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
-				4CE314181694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
-				4CE3141D1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
-				4CE314221694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
-				4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
-				4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
-				4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4C94ADE317C33C3100037FCB /* UIImageJustified@2x.png in Resources */,
@@ -4854,13 +4746,7 @@
 				4C2F265D1B53FA1C004DFAEC /* UIImageArrowDown.png in Resources */,
 				4C2F26611B53FA1C004DFAEC /* UIImageArrowDown@2x.png in Resources */,
 				4C2F26631B53FA1C004DFAEC /* cmake_install.cmake in Resources */,
-				4C2F26641B53FA1C004DFAEC /* UIImageAlignCenter20.png in Resources */,
-				4C2F26671B53FA1C004DFAEC /* UIImageAlignLeft20.png in Resources */,
-				4C2F266A1B53FA1C004DFAEC /* UIImageAlignRight20.png in Resources */,
 				4C2F266F1B53FA1C004DFAEC /* UIImageJustified20.png in Resources */,
-				4C2F26781B53FA1C004DFAEC /* UIImageAlignCenter20@2x.png in Resources */,
-				4C2F267E1B53FA1C004DFAEC /* UIImageAlignLeft20@2x.png in Resources */,
-				4C2F267F1B53FA1C004DFAEC /* UIImageAlignRight20@2x.png in Resources */,
 				4C2F26881B53FA1C004DFAEC /* UIImageItalic20.png in Resources */,
 				4C2F268B1B53FA1C004DFAEC /* UIImageItalic20@2x.png in Resources */,
 				4C2F268D1B53FA1C004DFAEC /* UIImageStrikethrough20.png in Resources */,
@@ -4885,12 +4771,6 @@
 				4C2F275D1B53FA1C004DFAEC /* UIImageExportTypeAppEngine.png in Resources */,
 				4C2F27601B53FA1C004DFAEC /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4C2F27641B53FA1C004DFAEC /* AppleIncRootCertificate.cer in Resources */,
-				4C2F27781B53FA1C004DFAEC /* UIImageAlignVerticalCenter20.png in Resources */,
-				4C2F277B1B53FA1C004DFAEC /* UIImageAlignVerticalCenter20@2x.png in Resources */,
-				4C2F277C1B53FA1C004DFAEC /* UIImageAlignTop20.png in Resources */,
-				4C2F277F1B53FA1C004DFAEC /* UIImageAlignTop20@2x.png in Resources */,
-				4C2F27801B53FA1C004DFAEC /* UIImageAlignBottom20.png in Resources */,
-				4C2F27831B53FA1C004DFAEC /* UIImageAlignBottom20@2x.png in Resources */,
 				4C2F278B1B53FA1C004DFAEC /* UIImageExportTypeSqlServer.png in Resources */,
 				4C2F279F1B53FA1C004DFAEC /* UIImageJustified@2x.png in Resources */,
 			);
@@ -4914,16 +4794,10 @@
 				4CC3D7601BCB6D9500BDA5D3 /* MADInfinity64@2x.png in Resources */,
 				4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */,
 				4CC3D7661BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
-				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
 				4C8DE2861BAFB11800AD1111 /* MADCreateDocument.storyboard in Resources */,
-				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
 				4C26B9D61BAF146700456DC8 /* MADVibrantTableViewCell.xib in Resources */,
-				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
 				4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */,
 				4C26BA0C1BAF14F200456DC8 /* MADAboutApp.storyboard in Resources */,
-				4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */,
-				4C00816B14B6C4EF003DF437 /* UIImageAlignLeft20@2x.png in Resources */,
-				4C00816C14B6C4EF003DF437 /* UIImageAlignRight20@2x.png in Resources */,
 				4CE0F5081F5D600D00D828E1 /* Patterns.xcassets in Resources */,
 				4C00817914B6CAAF003DF437 /* UIImageItalic20.png in Resources */,
 				4CC3D7651BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
@@ -5017,15 +4891,9 @@
 				4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CC3D7F61BCB6D9500BDA5D3 /* MTActivityProvidence@2x.png in Resources */,
 				4CFEE80A1BB7993300AFAA0A /* MADQueryAddPredicate.storyboard in Resources */,
-				4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
-				4CE3141C1694BCEC00114431 /* UIImageAlignVerticalCenter20@2x.png in Resources */,
-				4CE314211694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
 				4CC3D7761BCB6D9500BDA5D3 /* MADImageToolbarCloud.png in Resources */,
-				4CE314261694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
-				4CE3142B1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
 				4CC3D77D1BCB6D9500BDA5D3 /* MADImageToolbarCloudUpload@2x.png in Resources */,
 				4CC3D7611BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscape.png in Resources */,
-				4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4CC3D72C1BCB6D9500BDA5D3 /* MADIcon44x58.png in Resources */,
 				4CC3D80A1BCB6D9500BDA5D3 /* UIBarButtonItemMadViewer8@2x.png in Resources */,
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
@@ -5067,13 +4935,7 @@
 				4C67FAE61BA1043B001C9D5A /* UIImageArrowDown.png in Resources */,
 				4C67FAEA1BA1043B001C9D5A /* UIImageArrowDown@2x.png in Resources */,
 				4C67FAEC1BA1043B001C9D5A /* cmake_install.cmake in Resources */,
-				4C67FAED1BA1043B001C9D5A /* UIImageAlignCenter20.png in Resources */,
-				4C67FAF01BA1043B001C9D5A /* UIImageAlignLeft20.png in Resources */,
-				4C67FAF31BA1043B001C9D5A /* UIImageAlignRight20.png in Resources */,
 				4C67FAF71BA1043B001C9D5A /* UIImageJustified20.png in Resources */,
-				4C67FAFF1BA1043B001C9D5A /* UIImageAlignCenter20@2x.png in Resources */,
-				4C67FB051BA1043B001C9D5A /* UIImageAlignLeft20@2x.png in Resources */,
-				4C67FB061BA1043B001C9D5A /* UIImageAlignRight20@2x.png in Resources */,
 				4C67FB0F1BA1043B001C9D5A /* UIImageItalic20.png in Resources */,
 				4C67FB121BA1043B001C9D5A /* UIImageItalic20@2x.png in Resources */,
 				4C67FB141BA1043B001C9D5A /* UIImageStrikethrough20.png in Resources */,
@@ -5099,12 +4961,6 @@
 				4C67FBE11BA1043B001C9D5A /* UIImageExportTypeAppEngine.png in Resources */,
 				4C67FBE41BA1043B001C9D5A /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4C67FBE71BA1043B001C9D5A /* AppleIncRootCertificate.cer in Resources */,
-				4C67FBF61BA1043B001C9D5A /* UIImageAlignVerticalCenter20.png in Resources */,
-				4C67FBF91BA1043B001C9D5A /* UIImageAlignVerticalCenter20@2x.png in Resources */,
-				4C67FBFA1BA1043B001C9D5A /* UIImageAlignTop20.png in Resources */,
-				4C67FBFD1BA1043B001C9D5A /* UIImageAlignTop20@2x.png in Resources */,
-				4C67FBFE1BA1043B001C9D5A /* UIImageAlignBottom20.png in Resources */,
-				4C67FC011BA1043B001C9D5A /* UIImageAlignBottom20@2x.png in Resources */,
 				4C67FC071BA1043B001C9D5A /* UIImageExportTypeSqlServer.png in Resources */,
 				4C67FC191BA1043B001C9D5A /* UIImageJustified@2x.png in Resources */,
 			);
@@ -5123,13 +4979,7 @@
 				4C67FD331BA1183D001C9D5A /* UIImageArrowDown.png in Resources */,
 				4C67FD371BA1183D001C9D5A /* UIImageArrowDown@2x.png in Resources */,
 				4C67FD391BA1183D001C9D5A /* cmake_install.cmake in Resources */,
-				4C67FD3A1BA1183D001C9D5A /* UIImageAlignCenter20.png in Resources */,
-				4C67FD3D1BA1183D001C9D5A /* UIImageAlignLeft20.png in Resources */,
-				4C67FD401BA1183D001C9D5A /* UIImageAlignRight20.png in Resources */,
 				4C67FD441BA1183D001C9D5A /* UIImageJustified20.png in Resources */,
-				4C67FD4C1BA1183D001C9D5A /* UIImageAlignCenter20@2x.png in Resources */,
-				4C67FD521BA1183D001C9D5A /* UIImageAlignLeft20@2x.png in Resources */,
-				4C67FD531BA1183D001C9D5A /* UIImageAlignRight20@2x.png in Resources */,
 				4C67FD5C1BA1183D001C9D5A /* UIImageItalic20.png in Resources */,
 				4C67FD5F1BA1183D001C9D5A /* UIImageItalic20@2x.png in Resources */,
 				4C67FD611BA1183D001C9D5A /* UIImageStrikethrough20.png in Resources */,
@@ -5155,12 +5005,6 @@
 				4C67FE2E1BA1183D001C9D5A /* UIImageExportTypeAppEngine.png in Resources */,
 				4C67FE311BA1183D001C9D5A /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4C67FE341BA1183D001C9D5A /* AppleIncRootCertificate.cer in Resources */,
-				4C67FE431BA1183D001C9D5A /* UIImageAlignVerticalCenter20.png in Resources */,
-				4C67FE461BA1183D001C9D5A /* UIImageAlignVerticalCenter20@2x.png in Resources */,
-				4C67FE471BA1183D001C9D5A /* UIImageAlignTop20.png in Resources */,
-				4C67FE4A1BA1183D001C9D5A /* UIImageAlignTop20@2x.png in Resources */,
-				4C67FE4B1BA1183D001C9D5A /* UIImageAlignBottom20.png in Resources */,
-				4C67FE4E1BA1183D001C9D5A /* UIImageAlignBottom20@2x.png in Resources */,
 				4C67FE541BA1183D001C9D5A /* UIImageExportTypeSqlServer.png in Resources */,
 				4C67FE661BA1183D001C9D5A /* UIImageJustified@2x.png in Resources */,
 			);
@@ -5179,13 +5023,7 @@
 				4C67FF821BA133AB001C9D5A /* UIImageArrowDown.png in Resources */,
 				4C67FF861BA133AB001C9D5A /* UIImageArrowDown@2x.png in Resources */,
 				4C67FF881BA133AB001C9D5A /* cmake_install.cmake in Resources */,
-				4C67FF891BA133AB001C9D5A /* UIImageAlignCenter20.png in Resources */,
-				4C67FF8C1BA133AB001C9D5A /* UIImageAlignLeft20.png in Resources */,
-				4C67FF8F1BA133AB001C9D5A /* UIImageAlignRight20.png in Resources */,
 				4C67FF931BA133AB001C9D5A /* UIImageJustified20.png in Resources */,
-				4C67FF9B1BA133AB001C9D5A /* UIImageAlignCenter20@2x.png in Resources */,
-				4C67FFA11BA133AB001C9D5A /* UIImageAlignLeft20@2x.png in Resources */,
-				4C67FFA21BA133AB001C9D5A /* UIImageAlignRight20@2x.png in Resources */,
 				4C67FFAB1BA133AB001C9D5A /* UIImageItalic20.png in Resources */,
 				4C67FFAE1BA133AB001C9D5A /* UIImageItalic20@2x.png in Resources */,
 				4C67FFB01BA133AB001C9D5A /* UIImageStrikethrough20.png in Resources */,
@@ -5212,12 +5050,6 @@
 				4C67007D1BA133AB001C9D5A /* UIImageExportTypeAppEngine.png in Resources */,
 				4C6700801BA133AB001C9D5A /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4C6700831BA133AB001C9D5A /* AppleIncRootCertificate.cer in Resources */,
-				4C6700921BA133AB001C9D5A /* UIImageAlignVerticalCenter20.png in Resources */,
-				4C6700951BA133AB001C9D5A /* UIImageAlignVerticalCenter20@2x.png in Resources */,
-				4C6700961BA133AB001C9D5A /* UIImageAlignTop20.png in Resources */,
-				4C6700991BA133AB001C9D5A /* UIImageAlignTop20@2x.png in Resources */,
-				4C67009A1BA133AB001C9D5A /* UIImageAlignBottom20.png in Resources */,
-				4C67009D1BA133AB001C9D5A /* UIImageAlignBottom20@2x.png in Resources */,
 				4C6700A31BA133AB001C9D5A /* UIImageExportTypeSqlServer.png in Resources */,
 				4C6700B51BA133AB001C9D5A /* UIImageJustified@2x.png in Resources */,
 			);
