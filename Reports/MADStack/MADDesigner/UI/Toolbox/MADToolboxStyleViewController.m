@@ -74,7 +74,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 
 @end
 
-@interface MADToolboxStyleViewController()
+@interface MADToolboxStyleViewController ()
     <UITableViewDelegate>
 
     @property (nonatomic, assign) MTControlState controlStateBold;

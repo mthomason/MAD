@@ -90,6 +90,22 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     return document;
 }
 
+- (CGSize)preferredContentSize {
+    switch (self.sceneSelector.selectedSegmentIndex) {
+        case 0:
+            return CGSizeMake(320.0000, 240.0000f);
+            break;
+        case 1:
+            return CGSizeMake(320.0000, 480.0000f);
+            break;
+        case 2:
+            return CGSizeMake(320.0000, 280.0000f);
+            break;
+        default:
+            return CGSizeMake(320.0000f, 480.0000f);
+    }
+}
+
 #pragma mark -
 #pragma mark View Controller
 
@@ -142,8 +158,6 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
                forKeyPath: [MADToolboxViewController keyPathDocument]
                   options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
                   context: NULL];
-        
-
     }
     
     return self;
@@ -313,21 +327,25 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
         case 0:
             
             [self showStyleViewController];   //Handles this case alone...
+            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
             return;
             
             break;
             
         case 1:
+            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
             viewControllerToShow = self.layout;
             viewControllerToUpdate = self.layout;
             break;
             
         case 2:
+            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
             viewControllerToShow = self.format;
             viewControllerToUpdate = self.format;
             break;
             
         default:
+            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
             viewControllerToShow = self.layout;
             viewControllerToUpdate = self.layout;
             break;

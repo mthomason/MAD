@@ -47,4 +47,8 @@
     [super viewWillAppear:animated];
 }
 
+- (CGSize)preferredContentSize {
+    return self.viewControllers.firstObject.preferredContentSize;
+}
+
 @end
