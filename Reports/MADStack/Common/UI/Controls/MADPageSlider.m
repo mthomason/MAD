@@ -314,7 +314,7 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 - (void)setEnabled:(BOOL)enabled {
-    
+    self.pageSlider.enabled = enabled;
     if (self.pageSlider.enabled) {
         self.tintColor = [MADColorEverydayApps newColorRed];
         [self setDisplayEnabled];
@@ -322,9 +322,7 @@ static inline CGFloat MaxDimension(CGSize size) {
     } else {
         self.tintColor = [UIColor lightGrayColor];
         [self setDisplayDisabled];
-        
     }
-    
 }
 
 - (BOOL)isEnabled {

@@ -66,6 +66,7 @@
 
 #import "MADDocumentPageController.h"
 
+#import "MADPageSlider.h"
 #import "MADSliderPageVertical.h"
 #import "MADLabelStatus.h"
 

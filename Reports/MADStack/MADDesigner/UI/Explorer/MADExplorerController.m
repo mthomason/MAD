@@ -470,25 +470,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     
     hint = NSLocalizedString(MADHintBarButtonItemDetails, MADHintBarButtonItemDetails);
     self.barButtonItemInformationDocument.accessibilityHint = hint;
-    //[self.barButtonItemInformationDocument setTitle:@"\uf05a"];
-    //UIFont *font = [UIFont fontWithName:@"FontAwesome" size:25.0000f];;
-    
-    //UIColor *whiteColor = self.view.tintColor.copy;
-    //NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    //paragraphStyle.paragraphSpacing = 20.0;//1.75 * font.lineHeight;
-    //NSDictionary *attributes = [[NSDictionary alloc] initWithObjects: @[font]//, paragraphStyle]
-    //                                                         forKeys: @[NSFontAttributeName]];//, NSParagraphStyleAttributeName]];
-    //UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    //NSAttributedString *s = [[NSAttributedString alloc] initWithString:@"\uf05a" attributes:attributes];
-    //[label setAttributedText:s];
-    //[self.barButtonItemInformationDocument setTitleTextAttributes: attributes
-    //                                                     forState: UIControlStateNormal];
-    //self.barButtonItemInformationDocument.image = nil;
-    //label.textColor = self.view.tintColor.copy;
-   // self.barButtonItemInformationDocument.customView = label;
-    //[label sizeToFit];
-    
-    //[[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0.0000f, -15.0f) forBarMetrics:UIBarMetricsDefault];
+
     hint = NSLocalizedString(MADHintBarButtonItemInformation, MADHintBarButtonItemInformation);
     self.barButtonItemInformation.accessibilityHint = hint;
     

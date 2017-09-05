@@ -37,6 +37,8 @@
         self.continuous = YES;
         self.tintColor = [MADColorEverydayApps newColorRed];
         self.backgroundColor = [UIColor clearColor];
+        UIImage *image = [self imageEnabled];
+        [self setThumbImage: image forState: UIControlStateNormal];
         
     }
     return self;
@@ -50,10 +52,10 @@
 }
 
 - (UIImage *)imageDisabled {
-    if (_imageEnabled == nil) {
-        _imageEnabled = [UIImage imageNamed:@"MTSliderThumbRotateDisabled"];
+    if (_imageDisabled == nil) {
+        _imageDisabled = [UIImage imageNamed:@"MTSliderThumbRotateDisabled"];
     }
-    return _imageEnabled;
+    return _imageDisabled;
 }
 
 - (void)setEnabled:(BOOL)enabled {
