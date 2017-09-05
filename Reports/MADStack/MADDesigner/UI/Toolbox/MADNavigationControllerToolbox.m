@@ -9,6 +9,7 @@
 #import "MADNavigationControllerToolbox.h"
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIBarCommon.h>
+#import <UIKit/UIViewControllerTransitionCoordinator.h>
 #import "MADToolboxViewController.h"
 
 @interface MADNavigationControllerToolbox ()
@@ -40,22 +41,10 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    /*if (self.isBeingDismissed) {
-        NSArray *viewControllers = [[NSArray alloc] init];
-        [self setViewControllers:viewControllers animated:animated];
-    }*/
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    /*if (self.viewControllers.count == 0) {
-        id vc = [MADToolboxViewController newToolboxViewController];
-        [self pushViewController:vc animated:animated];
-//        NSArray *vcs = [[NSArray alloc] initWithObjects:vc, nil];
-//        [self setViewControllers:vcs animated:animated];
-    }*/
-    
 }
 
 @end

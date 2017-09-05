@@ -182,6 +182,8 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    self.sceneSelector.center = CGPointMake(self.view.center.x,
+                                            self.navigationItem.titleView.center.y);
 }
 
 #pragma mark -
