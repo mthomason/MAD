@@ -21,12 +21,14 @@
 #import <UIKit/UISegmentedControl.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIButton.h>
+#import <UIKit/UIImageView.h>
 #import <UIKit/UIStoryboardSegue.h>
 
 #import <MADCocoaExtensions/MADBorderStyle.h>
 #import <MADCocoaExtensions/MADMargin.h>
 #import <MADCocoaExtensions/MADPadding.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
@@ -145,24 +147,81 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
-    self.tableView.delegate = self;
+    
+    UISegmentedControl *segmentedControlHorizontalAlignment;
+    segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
 
+    UIFont *font = [UIFont fontWithName:@"FontAwesome" size:12.0000f];;
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
+                                                           forKey:NSFontAttributeName];
+    [segmentedControlHorizontalAlignment setTitleTextAttributes:attributes
+                                                       forState:UIControlStateNormal];
+    [segmentedControlHorizontalAlignment setTitle:@"\uf036" forSegmentAtIndex:0];
+    [segmentedControlHorizontalAlignment setTitle:@"\uf037" forSegmentAtIndex:1];
+    [segmentedControlHorizontalAlignment setTitle:@"\uf038" forSegmentAtIndex:2];
+    [segmentedControlHorizontalAlignment setTitle:@"\uf039" forSegmentAtIndex:3];
+    UIColor *w = [UIColor whiteColor];
+    NSDictionary *attributesSelected = @{
+                                         NSFontAttributeName : font,
+                                         NSStrokeColorAttributeName : w
+                                         };
+    NSAttributedString *boldButton, *boldButtonSelected;
+    boldButton = [[NSAttributedString alloc] initWithString: @"\uf26c"
+                                                 attributes: attributes];
+    boldButtonSelected = [[NSAttributedString alloc] initWithString: @"\uf26c"
+                                                         attributes: attributesSelected];
+    self.tableView.delegate = self;
+    UIColor *redColor = [MADColorEverydayApps newColorAnalogous4];
     self.buttonBold.layer.borderColor = self.view.tintColor.CGColor;
     self.buttonBold.layer.cornerRadius = CornerRadius;
     self.buttonBold.layer.borderWidth = BorderWidth;
+    [self.buttonBold setTitle:@"\uf032" forState:UIControlStateNormal];
+    [self.buttonBold setTitle:@"\uf032" forState:UIControlStateSelected];
+    [self.buttonBold setTitle:@"\uf032" forState:UIControlStateHighlighted];
+    [self.buttonBold setTitleColor:redColor forState:UIControlStateHighlighted];
+    [self.buttonBold setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+    [self.buttonBold setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    self.buttonBold.titleLabel.font = font;
+    self.buttonBold.imageView.image = nil;
     
+    redColor = [MADColorEverydayApps newColorAnalogous4];
     self.buttonItalic.layer.borderColor = self.view.tintColor.CGColor;
     self.buttonItalic.layer.cornerRadius = CornerRadius;
     self.buttonItalic.layer.borderWidth = BorderWidth;
+    [self.buttonItalic setTitle:@"\uf033" forState:UIControlStateNormal];
+    [self.buttonItalic setTitle:@"\uf033" forState:UIControlStateSelected];
+    [self.buttonItalic setTitle:@"\uf033" forState:UIControlStateHighlighted];
+    [self.buttonItalic setTitleColor:redColor forState:UIControlStateHighlighted];
+    [self.buttonItalic setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+    [self.buttonItalic setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    self.buttonItalic.titleLabel.font = font;
+    self.buttonItalic.imageView.image = nil;
     
+    redColor = [MADColorEverydayApps newColorAnalogous4];
     self.buttonStrike.layer.borderColor = self.view.tintColor.CGColor;
     self.buttonStrike.layer.cornerRadius = CornerRadius;
     self.buttonStrike.layer.borderWidth = BorderWidth;
+    [self.buttonStrike setTitle:@"\uf0cc" forState:UIControlStateNormal];
+    [self.buttonStrike setTitle:@"\uf0cc" forState:UIControlStateSelected];
+    [self.buttonStrike setTitle:@"\uf0cc" forState:UIControlStateHighlighted];
+    [self.buttonStrike setTitleColor:redColor forState:UIControlStateHighlighted];
+    [self.buttonStrike setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+    [self.buttonStrike setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    self.buttonStrike.titleLabel.font = font;
+    self.buttonStrike.imageView.image = nil;
     
+    redColor = [MADColorEverydayApps newColorAnalogous4];
     self.buttonUnderline.layer.borderColor = self.view.tintColor.CGColor;
     self.buttonUnderline.layer.cornerRadius = CornerRadius;
     self.buttonUnderline.layer.borderWidth = BorderWidth;
+    [self.buttonUnderline setTitle:@"\uf0cd" forState:UIControlStateNormal];
+    [self.buttonUnderline setTitle:@"\uf0cd" forState:UIControlStateSelected];
+    [self.buttonUnderline setTitle:@"\uf0cd" forState:UIControlStateHighlighted];
+    [self.buttonUnderline setTitleColor:redColor forState:UIControlStateHighlighted];
+    [self.buttonUnderline setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+    [self.buttonUnderline setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    self.buttonUnderline.titleLabel.font = font;
+    self.buttonUnderline.imageView.image = nil;
     
     _completedInitalLayout = NO;
 }
@@ -221,7 +280,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     
     switch (state) {
         case MTControlStateOn:
-            select = NO;
+            select = YES;
             highlight = YES;
             backgroundColor = self.view.tintColor;
             titleColor = [UIColor whiteColor];
@@ -246,42 +305,13 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
             break;
     }
     
-     control.selected = select;
-     control.highlighted = highlight;
+    control.highlighted = highlight;
+    control.selected = select;
     
     if ([control isKindOfClass:[UIButton class]]) {
         control.backgroundColor = backgroundColor;
-        control.tintColor = titleColor;
-        ((UIButton *)control).titleLabel.textColor = titleColor;
+        [((UIButton *)control) setTitleColor:titleColor forState:control.state];
     }
-    
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-
-    UIControl * __weak weakControl = control;
-    dispatch_async(queuePriorityBackground, ^{
-        
-        UIControl * strongControl = weakControl;
-        UIControl * __weak weakControl2 = strongControl;
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            UIControl *strongControl2 = weakControl2;
-            if (strongControl2) {
-                strongControl2.selected = select;
-                strongControl2.highlighted = highlight;
-                
-                if ([strongControl2 isKindOfClass:[UIButton class]]) {
-                    strongControl2.backgroundColor = backgroundColor;
-                    
-                    strongControl2.tintColor = titleColor;
-                    
-                    ((UIButton *)strongControl2).titleLabel.textColor = titleColor;
-                }
-            }
-            
-        }];
-        
-    });
 }
 
 - (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIds {
@@ -297,21 +327,22 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
     segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
 
     void(^updateControlsEnabled)(BOOL) = ^void(BOOL enabled) {
+
         self.buttonItalic.      enabled = enabled;
         self.buttonBold.        enabled = enabled;
         self.buttonStrike.      enabled = enabled;
         self.buttonUnderline.   enabled = enabled;
         self.buttonBold.selected = enabled;
-        self.buttonBold.highlighted = enabled;
+        //self.buttonBold.highlighted = enabled;
         
         self.buttonItalic.selected = enabled;
-        self.buttonItalic.highlighted = enabled;
+        //self.buttonItalic.highlighted = enabled;
         
         self.buttonStrike.selected = enabled;
-        self.buttonStrike.highlighted = enabled;
+        //self.buttonStrike.highlighted = enabled;
         
         self.buttonUnderline.selected = enabled;
-        self.buttonUnderline.highlighted = enabled;
+        //self.buttonUnderline.highlighted = enabled;
         
         segmentedControlHorizontalAlignment.selected = NO;
         segmentedControlHorizontalAlignment.highlighted = NO;
@@ -661,32 +692,9 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
         _controlStateStrike = numberStrike > 0 ? ( numberNotStrike > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
         _controlStateUnderline = numberUnderline > 0 ? ( numberNotUnderline > 0 ? MTControlStateAmbiguous : MTControlStateOn) : MTControlStateOff;
         
-        MTControlState controlStateHorizontalAlignment = numberOfHorazontalAlignments > 0 ? (numberOfHorazontalAlignments == 1 ? MTControlStateOn : MTControlStateAmbiguous) : MTControlStateOff;
-        
-        // FIXME: Needs ambigious state for segmented control.
-        
-        /*
-         if (controlStateHorizontalAlignment == MTControlStateAmbiguous) {
-         [_segmentedControlHorizontalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
-         UIColor *tentColor = [[MADColorEverydayApps newColor] colorWithAlphaComponent:0.5000f];
-         _segmentedControlHorizontalAlignment.backgroundColor = tentColor;
-         } else {
-         //[_segmentedControlHorizontalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-         _segmentedControlHorizontalAlignment.backgroundColor = [UIColor clearColor];
-         }
-         if (controlStateVerticalAlignment == MTControlStateAmbiguous) {
-         //UIImage *imageButtonSelected = [UIImage imageNamed:@"UIButtonSelected"];
-         [_segmentedControlVerticalAlignment setSelectedSegmentIndex:UISegmentedControlNoSegment];
-         //[_segmentedControlVerticalAlignment setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-         UIColor *tentColor = [[MADColorEverydayApps newColor] colorWithAlphaComponent:0.5000f];
-         _segmentedControlVerticalAlignment.backgroundColor = tentColor;
-         } else {
-         //[_segmentedControlVerticalAlignment setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-         _segmentedControlVerticalAlignment.backgroundColor = [UIColor clearColor];
-         }
-         */
-        
-        
+        MTControlState controlStateHorizontalAlignment = numberOfHorazontalAlignments > 0 ?
+                                                            (numberOfHorazontalAlignments == 1 ? MTControlStateOn : MTControlStateAmbiguous) :
+                                                            MTControlStateOff;
         [self setStateInControl:segmentedControlHorizontalAlignment forState:controlStateHorizontalAlignment];
         
         _fontLabelTableViewCell.userInteractionEnabled = YES;

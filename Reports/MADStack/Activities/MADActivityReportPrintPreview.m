@@ -36,8 +36,7 @@ typedef UIDocumentInteractionController MADocumentActivityController;
 }
 
 - (UIImage *)activityImage {
-    NSString *imageName = [UIScreen mainScreen] ? @"MTActivityProvidence~iPad" : @"MTActivityProvidence";
-    return [UIImage imageNamed:imageName];
+    return [UIImage imageNamed:@"MTActivityProvidence"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {

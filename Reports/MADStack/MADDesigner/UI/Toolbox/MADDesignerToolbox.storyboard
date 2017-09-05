@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7L5-RQ-3Zg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7L5-RQ-3Zg">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,7 +14,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MADIdentifierNavControllerFontPicker" extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="lbo-P9-ezy" customClass="MADNavigationControllerFontPicker" sceneMemberID="viewController">
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="GuT-1k-PhY">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="GuT-1k-PhY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -105,22 +105,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HaR-Wh-DSl">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaR-Wh-DSl">
                                                     <rect key="frame" x="20" y="8" width="62" height="29"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="29" id="Hhx-d4-hoT"/>
                                                         <constraint firstAttribute="width" constant="62" id="jNH-ij-U8f"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <state key="normal">
-                                                        <attributedString key="attributedTitle">
-                                                            <fragment content="B">
-                                                                <attributes>
-                                                                    <font key="NSFont" size="18" name="HelveticaNeue-Bold"/>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
-                                                    </state>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                                    <state key="normal" title="B"/>
                                                     <connections>
                                                         <action selector="toggleBold:" destination="4AC-SN-miY" eventType="touchUpInside" id="IQZ-Xf-PiT"/>
                                                     </connections>
@@ -133,13 +125,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <state key="normal">
-                                                        <attributedString key="attributedTitle">
-                                                            <fragment content="I">
-                                                                <attributes>
-                                                                    <font key="NSFont" size="15" name="HelveticaNeue-BoldItalic"/>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
+                                                        <attributedString key="attributedTitle"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="toggleItalic:" destination="4AC-SN-miY" eventType="touchUpInside" id="Kdd-Vv-4r1"/>
@@ -153,14 +139,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <state key="normal">
-                                                        <attributedString key="attributedTitle">
-                                                            <fragment content="S">
-                                                                <attributes>
-                                                                    <font key="NSFont" size="18" name="HelveticaNeue-Bold"/>
-                                                                    <integer key="NSStrikethrough" value="1"/>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
+                                                        <attributedString key="attributedTitle"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="toggleStrikeThrough:" destination="4AC-SN-miY" eventType="touchUpInside" id="ljB-z8-a0c"/>
@@ -174,14 +153,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <state key="normal">
-                                                        <attributedString key="attributedTitle">
-                                                            <fragment content="U">
-                                                                <attributes>
-                                                                    <font key="NSFont" size="18" name="HelveticaNeue-Bold"/>
-                                                                    <integer key="NSUnderline" value="1"/>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
+                                                        <attributedString key="attributedTitle"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="toggleUnderline:" destination="4AC-SN-miY" eventType="touchUpInside" id="upL-PI-AaA"/>
@@ -208,13 +180,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="bfw-sz-cpw">
+                                                <segmentedControl opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bfw-sz-cpw">
                                                     <rect key="frame" x="20" y="8" width="335" height="30"/>
                                                     <segments>
-                                                        <segment title="" image="UIImageAlignLeft20.png"/>
-                                                        <segment title="" image="UIImageAlignCenter20.png"/>
-                                                        <segment title="" image="UIImageAlignRight20.png"/>
-                                                        <segment title="" image="UIImageJustified20.png"/>
+                                                        <segment title=""/>
+                                                        <segment title=""/>
+                                                        <segment title=""/>
+                                                        <segment title=""/>
                                                     </segments>
                                                     <connections>
                                                         <action selector="handleHorizontalAlignmentChanged:" destination="4AC-SN-miY" eventType="valueChanged" id="zzL-Q5-xhX"/>
@@ -269,7 +241,7 @@
                 <navigationController storyboardIdentifier="MADIdentifierStoryboardToolboxInital" automaticallyAdjustsScrollViewInsets="NO" providesPresentationContextTransitionStyle="YES" modalPresentationStyle="overCurrentContext" id="7L5-RQ-3Zg" customClass="MADNavigationControllerToolbox" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleAspectFit" misplaced="YES" id="LtZ-CW-Izw" customClass="MADToolboxNavigationBar">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleAspectFit" id="LtZ-CW-Izw" customClass="MADToolboxNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1083,10 +1055,4 @@
             <point key="canvasLocation" x="1169" y="5649"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="UIImageAlignCenter20.png" width="20" height="20"/>
-        <image name="UIImageAlignLeft20.png" width="20" height="20"/>
-        <image name="UIImageAlignRight20.png" width="20" height="20"/>
-        <image name="UIImageJustified20.png" width="20" height="20"/>
-    </resources>
 </document>
