@@ -192,9 +192,7 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
         image = nil;
 
     }
-    
     return croppedImage;
-    
 }
 
 + (instancetype)newImageMadeSquare:(UIImage *)source NS_RETURNS_NOT_RETAINED {
