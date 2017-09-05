@@ -18,7 +18,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" id="z47-c9-bXd" customClass="MADExplorerNavigationBar">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" misplaced="YES" id="z47-c9-bXd" customClass="MADExplorerNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -46,7 +46,7 @@
         <scene sceneID="VNc-Cv-VMG">
             <objects>
                 <collectionViewController storyboardIdentifier="MADIdentifierFileExplorerViewController" autoresizesArchivedViewToFullSize="NO" title="MAD Designer" id="RNf-Mn-Gwm" customClass="MADExplorerController" sceneMemberID="viewController">
-                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="S1Y-rx-yH8" customClass="MADExplorerView">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="S1Y-rx-yH8" customClass="MADExplorerView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -148,7 +148,7 @@
                                 <action selector="actionActivity:" destination="RNf-Mn-Gwm" id="PCe-jL-Flk"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem enabled="NO" image="MADImageIconInfo.png" id="rW5-Le-DOq">
+                        <barButtonItem enabled="NO" image="MADImageIconInfo" width="24" id="rW5-Le-DOq">
                             <connections>
                                 <action selector="actionDocumentInformation:" destination="RNf-Mn-Gwm" id="WaP-Og-NBc"/>
                             </connections>
@@ -183,6 +183,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemAbout" destination="G1q-mJ-H8h" id="7CA-hW-xo3"/>
                         <outlet property="barButtonItemAction" destination="Osq-33-oRg" id="FMa-Mk-V0j"/>
@@ -222,7 +223,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MADImageIconInfo.png" width="28" height="28"/>
+        <image name="MADImageIconInfo" width="25" height="25"/>
         <image name="MADImageToolbarCloud.png" width="28" height="18"/>
         <image name="MADImageToolbarCloudDownload.png" width="22" height="22"/>
         <image name="UIImageDocumentBlank.png" width="64" height="64"/>

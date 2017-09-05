@@ -36,7 +36,7 @@ typedef UIDocumentInteractionController MADocumentActivityController;
 }
 
 - (UIImage *)activityImage {
-    return [UIImage imageNamed:@"MTActivityProvidence"];
+    return [UIImage imageNamed:@"MADActivityProvidence"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
@@ -46,7 +46,7 @@ typedef UIDocumentInteractionController MADocumentActivityController;
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
     for (id activityItem in activityItems) {
         if ([activityItem isKindOfClass:[NSURL class]]) {
-            self->_pdfurl = [((id <NSCopying>)activityItem) copyWithZone:nil];
+            _pdfurl = [((id <NSCopying>)activityItem) copyWithZone:nil];
         }
     }
 }
