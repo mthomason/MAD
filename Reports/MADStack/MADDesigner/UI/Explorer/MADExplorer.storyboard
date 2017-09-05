@@ -148,7 +148,7 @@
                                 <action selector="actionActivity:" destination="RNf-Mn-Gwm" id="PCe-jL-Flk"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem enabled="NO" image="MADImageIconInfo" width="24" id="rW5-Le-DOq">
+                        <barButtonItem enabled="NO" image="MADImageIconInfo" id="rW5-Le-DOq">
                             <connections>
                                 <action selector="actionDocumentInformation:" destination="RNf-Mn-Gwm" id="WaP-Og-NBc"/>
                             </connections>
