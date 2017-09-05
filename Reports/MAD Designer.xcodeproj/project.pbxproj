@@ -656,8 +656,6 @@
 		4CC3D72C1BCB6D9500BDA5D3 /* MADIcon44x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63C1BCB6D9400BDA5D3 /* MADIcon44x58.png */; };
 		4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63D1BCB6D9400BDA5D3 /* MADIcon64.png */; };
 		4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63E1BCB6D9400BDA5D3 /* MADIcon64x64.png */; };
-		4CC3D75B1BCB6D9500BDA5D3 /* MADBarcode64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D66B1BCB6D9400BDA5D3 /* MADBarcode64.png */; };
-		4CC3D75D1BCB6D9500BDA5D3 /* MADBarcode64@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D66D1BCB6D9400BDA5D3 /* MADBarcode64@2x.png */; };
 		4CC3D75E1BCB6D9500BDA5D3 /* MADInfinity64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */; };
 		4CC3D7601BCB6D9500BDA5D3 /* MADInfinity64@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6701BCB6D9400BDA5D3 /* MADInfinity64@2x.png */; };
 		4CC3D7611BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6721BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscape.png */; };
@@ -1791,9 +1789,6 @@
 		4CC3D6681BCB6D9400BDA5D3 /* Icon-76-Designer-Modern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76-Designer-Modern@2x.png"; sourceTree = "<group>"; };
 		4CC3D6691BCB6D9400BDA5D3 /* Icon-76-Viewer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76-Viewer-Modern.png"; sourceTree = "<group>"; };
 		4CC3D66A1BCB6D9400BDA5D3 /* Icon-76-Viewer-Modern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76-Viewer-Modern@2x.png"; sourceTree = "<group>"; };
-		4CC3D66B1BCB6D9400BDA5D3 /* MADBarcode64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADBarcode64.png; sourceTree = "<group>"; };
-		4CC3D66C1BCB6D9400BDA5D3 /* MADBarcode64.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADBarcode64.psd; sourceTree = "<group>"; };
-		4CC3D66D1BCB6D9400BDA5D3 /* MADBarcode64@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADBarcode64@2x.png"; sourceTree = "<group>"; };
 		4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADInfinity64.png; sourceTree = "<group>"; };
 		4CC3D66F1BCB6D9400BDA5D3 /* MADInfinity64.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADInfinity64.psd; sourceTree = "<group>"; };
 		4CC3D6701BCB6D9400BDA5D3 /* MADInfinity64@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADInfinity64@2x.png"; sourceTree = "<group>"; };
@@ -3859,9 +3854,6 @@
 				4CE0F52F1F5E113300D828E1 /* InAssetsPackage */,
 				4CF6AA271F5405DC0061B0C6 /* Icon-Designer.pdf */,
 				4CC3D6381BCB6D9400BDA5D3 /* document */,
-				4CC3D66B1BCB6D9400BDA5D3 /* MADBarcode64.png */,
-				4CC3D66C1BCB6D9400BDA5D3 /* MADBarcode64.psd */,
-				4CC3D66D1BCB6D9400BDA5D3 /* MADBarcode64@2x.png */,
 				4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */,
 				4CC3D66F1BCB6D9400BDA5D3 /* MADInfinity64.psd */,
 				4CC3D6701BCB6D9400BDA5D3 /* MADInfinity64@2x.png */,
@@ -4820,7 +4812,6 @@
 				4CC3D77C1BCB6D9500BDA5D3 /* MADImageToolbarCloudUpload.png in Resources */,
 				4C26BA031BAF14B300456DC8 /* MADAboutDocument.storyboard in Resources */,
 				4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */,
-				4CC3D75B1BCB6D9500BDA5D3 /* MADBarcode64.png in Resources */,
 				4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */,
 				4CC3D80D1BCB6D9500BDA5D3 /* UIBarButtonItemPaintRoller@2x.png in Resources */,
 				4CC3D7671BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscape.png in Resources */,
@@ -4873,7 +4864,6 @@
 				4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */,
 				4CC3D8061BCB6D9500BDA5D3 /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
 				4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */,
-				4CC3D75D1BCB6D9500BDA5D3 /* MADBarcode64@2x.png in Resources */,
 				4CC3D7FD1BCB6D9500BDA5D3 /* MTSliderThumbRotate@2x.png in Resources */,
 				4CFEE7FD1BB77C4000AFAA0A /* MADQuerySelectField.storyboard in Resources */,
 				4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */,
