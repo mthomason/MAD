@@ -27,14 +27,8 @@
 		4C0E77A8163B5AEC003B951E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C0E77A9163B5AEC003B951E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C0E77AA163B5AEC003B951E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
-		4C0E77D0163B5AEC003B951E /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
-		4C0E77D1163B5AEC003B951E /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
-		4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
-		4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
-		4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
-		4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
@@ -145,11 +139,7 @@
 		4C2F264D1B53FA1C004DFAEC /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD696FF1AD92458008A9ED3 /* QuickLook.framework */; };
 		4C2F26631B53FA1C004DFAEC /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4C2F26961B53FA1C004DFAEC /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
-		4C2F269C1B53FA1C004DFAEC /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
-		4C2F269E1B53FA1C004DFAEC /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
-		4C2F26B71B53FA1C004DFAEC /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C2F26C41B53FA1C004DFAEC /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
-		4C2F26E01B53FA1C004DFAEC /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C2F274F1B53FA1C004DFAEC /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C2F27571B53FA1C004DFAEC /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2F27591B53FA1C004DFAEC /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -305,7 +295,6 @@
 		4C611981199130700090ECC4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9AB1BAF123A00456DC8 /* MADTabBar.m */; };
-		4C6700031BA133AB001C9D5A /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C67006F1BA133AB001C9D5A /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C6700771BA133AB001C9D5A /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C6700791BA133AB001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -335,12 +324,8 @@
 		4C67FAD61BA1043B001C9D5A /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD696FF1AD92458008A9ED3 /* QuickLook.framework */; };
 		4C67FAEC1BA1043B001C9D5A /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4C67FB1C1BA1043B001C9D5A /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
-		4C67FB221BA1043B001C9D5A /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
-		4C67FB241BA1043B001C9D5A /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C67FB321BA1043B001C9D5A /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
-		4C67FB3F1BA1043B001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FB4C1BA1043B001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
-		4C67FB671BA1043B001C9D5A /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C67FBD31BA1043B001C9D5A /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C67FBDB1BA1043B001C9D5A /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C67FBDD1BA1043B001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -370,12 +355,8 @@
 		4C67FD231BA1183D001C9D5A /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD696FF1AD92458008A9ED3 /* QuickLook.framework */; };
 		4C67FD391BA1183D001C9D5A /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4C67FD691BA1183D001C9D5A /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
-		4C67FD6F1BA1183D001C9D5A /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
-		4C67FD711BA1183D001C9D5A /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C67FD7F1BA1183D001C9D5A /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
-		4C67FD8C1BA1183D001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FD991BA1183D001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
-		4C67FDB41BA1183D001C9D5A /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C67FE201BA1183D001C9D5A /* mysql_version.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56EB21AC683CC00756775 /* mysql_version.h.in */; };
 		4C67FE281BA1183D001C9D5A /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C67FE2A1BA1183D001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
@@ -404,17 +385,12 @@
 		4C67FF721BA133AB001C9D5A /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD696FF1AD92458008A9ED3 /* QuickLook.framework */; };
 		4C67FF881BA133AB001C9D5A /* cmake_install.cmake in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5E1AC683CC00756775 /* cmake_install.cmake */; };
 		4C67FFB81BA133AB001C9D5A /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E5F1AC683CC00756775 /* CMakeLists.txt */; };
-		4C67FFBE1BA133AB001C9D5A /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
-		4C67FFC01BA133AB001C9D5A /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C67FFCE1BA133AB001C9D5A /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
-		4C67FFDB1BA133AB001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */ = {isa = PBXBuildFile; fileRef = 4CB56E791AC683CC00756775 /* my_config.he */; };
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
 		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
 		4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */; };
 		4C6C09C51F5CEB5200EDA039 /* MADDocumentCreationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */; };
-		4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */; };
-		4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C6D2EEF1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EEE1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m */; };
 		4C6D2EF21E6DE469008EFE5D /* MADQueryAddGroupNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EF11E6DE469008EFE5D /* MADQueryAddGroupNavigationItem.m */; };
@@ -767,8 +743,6 @@
 		4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentScroller.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
-		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C15F32E1E4C9B940072BE5F /* MADPageSliderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageSliderProtocol.h; sourceTree = "<group>"; };
 		4C15F32F1E4CA0FB0072BE5F /* MADQueryViewDatasourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewDatasourceProtocol.h; sourceTree = "<group>"; };
 		4C15F3301E4CA22A0072BE5F /* MADHierarchicalGroupingNodeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADHierarchicalGroupingNodeProtocol.h; sourceTree = "<group>"; };
@@ -1288,8 +1262,6 @@
 		4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentCreationManager.m; sourceTree = "<group>"; };
 		4C6C09C61F5CF00E00EDA039 /* MADDocumentCreationManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerInterface.h; sourceTree = "<group>"; };
 		4C6C09C71F5CF02200EDA039 /* MADDocumentCreationManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerProtocol.h; sourceTree = "<group>"; };
-		4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlank.png; path = Reports/UIImageDocumentBlank.png; sourceTree = "<group>"; };
-		4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlank@2x.png"; path = "Reports/UIImageDocumentBlank@2x.png"; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C6D2EED1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryAddTableNavigationItem.h; sourceTree = "<group>"; };
 		4C6D2EEE1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryAddTableNavigationItem.m; sourceTree = "<group>"; };
@@ -3061,10 +3033,6 @@
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
 			isa = PBXGroup;
 			children = (
-				4C6CDFC514B8B22400DABF86 /* UIImageDocumentBlank.png */,
-				4C6CDFC614B8B22500DABF86 /* UIImageDocumentBlank@2x.png */,
-				4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */,
-				4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */,
 				4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */,
 				4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */,
 				4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */,
@@ -4388,18 +4356,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CC3D8181BCB6DE700BDA5D3 /* Images.xcassets in Resources */,
-				4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
 				4CB56ECF1AC683CC00756775 /* my_config.he in Resources */,
 				4CC3D8191BCB6DE700BDA5D3 /* MADFeatures.plist in Resources */,
-				4C0E77D0163B5AEC003B951E /* UIImageDocumentBlank.png in Resources */,
-				4C0E77D1163B5AEC003B951E /* UIImageDocumentBlank@2x.png in Resources */,
 				4CB56ECD1AC683CC00756775 /* CMakeLists.txt in Resources */,
 				4CB56ECB1AC683CC00756775 /* cmake_install.cmake in Resources */,
 				4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */,
 				4CB56EDB1AC683CC00756775 /* mysql_version.h.in in Resources */,
 				4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */,
 				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
-				4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 			);
@@ -4411,11 +4375,7 @@
 			files = (
 				4C2F26631B53FA1C004DFAEC /* cmake_install.cmake in Resources */,
 				4C2F26961B53FA1C004DFAEC /* CMakeLists.txt in Resources */,
-				4C2F269C1B53FA1C004DFAEC /* UIImageDocumentBlank.png in Resources */,
-				4C2F269E1B53FA1C004DFAEC /* UIImageDocumentBlank@2x.png in Resources */,
-				4C2F26B71B53FA1C004DFAEC /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C2F26C41B53FA1C004DFAEC /* my_config.he in Resources */,
-				4C2F26E01B53FA1C004DFAEC /* UIImageDocumentBlankPad.png in Resources */,
 				4C2F274F1B53FA1C004DFAEC /* mysql_version.h.in in Resources */,
 				4C2F27571B53FA1C004DFAEC /* UIImageExportTypeMySQL.png in Resources */,
 				4C2F27591B53FA1C004DFAEC /* UIImageExportTypeMySQL@2x.png in Resources */,
@@ -4449,10 +4409,8 @@
 				4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */,
 				4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */,
 				4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */,
-				4C6CDFC714B8B22600DABF86 /* UIImageDocumentBlank.png in Resources */,
 				4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */,
 				4CC3D7691BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortrait.png in Resources */,
-				4C6CDFC814B8B22600DABF86 /* UIImageDocumentBlank@2x.png in Resources */,
 				4CC3D7291BCB6D9500BDA5D3 /* MADIcon22x29.png in Resources */,
 				4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */,
 				4CC3D7641BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png in Resources */,
@@ -4464,14 +4422,12 @@
 				4CC3D7671BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscape.png in Resources */,
 				4CC3D76C1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */,
 				4CC3D76B1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
-				4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4CC3D7621BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscapeRetina.png in Resources */,
 				4CB56ECE1AC683CC00756775 /* my_config.he in Resources */,
 				4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */,
 				4C401EE41BAE5E9000BAE5FC /* MADStore.storyboard in Resources */,
 				4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */,
 				4CFEE80C1BB7993300AFAA0A /* MADQueryAddJoin.storyboard in Resources */,
-				4C13391E17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
 				4C26BA6A1BAF9A2B00456DC8 /* MADDesignerToolbox.storyboard in Resources */,
 				4CFEE8021BB78CAB00AFAA0A /* MADQuerySelectOperator.storyboard in Resources */,
 				4C3DCC191BCAEFA900ABE231 /* MADFeatures.plist in Resources */,
@@ -4514,12 +4470,8 @@
 			files = (
 				4C67FAEC1BA1043B001C9D5A /* cmake_install.cmake in Resources */,
 				4C67FB1C1BA1043B001C9D5A /* CMakeLists.txt in Resources */,
-				4C67FB221BA1043B001C9D5A /* UIImageDocumentBlank.png in Resources */,
-				4C67FB241BA1043B001C9D5A /* UIImageDocumentBlank@2x.png in Resources */,
 				4C67FB321BA1043B001C9D5A /* CarbonBlock.ttf in Resources */,
-				4C67FB3F1BA1043B001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C67FB4C1BA1043B001C9D5A /* my_config.he in Resources */,
-				4C67FB671BA1043B001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
 				4C67FBD31BA1043B001C9D5A /* mysql_version.h.in in Resources */,
 				4C67FBDB1BA1043B001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C67FBDD1BA1043B001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
@@ -4534,12 +4486,8 @@
 			files = (
 				4C67FD391BA1183D001C9D5A /* cmake_install.cmake in Resources */,
 				4C67FD691BA1183D001C9D5A /* CMakeLists.txt in Resources */,
-				4C67FD6F1BA1183D001C9D5A /* UIImageDocumentBlank.png in Resources */,
-				4C67FD711BA1183D001C9D5A /* UIImageDocumentBlank@2x.png in Resources */,
 				4C67FD7F1BA1183D001C9D5A /* CarbonBlock.ttf in Resources */,
-				4C67FD8C1BA1183D001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C67FD991BA1183D001C9D5A /* my_config.he in Resources */,
-				4C67FDB41BA1183D001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
 				4C67FE201BA1183D001C9D5A /* mysql_version.h.in in Resources */,
 				4C67FE281BA1183D001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C67FE2A1BA1183D001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
@@ -4554,12 +4502,8 @@
 			files = (
 				4C67FF881BA133AB001C9D5A /* cmake_install.cmake in Resources */,
 				4C67FFB81BA133AB001C9D5A /* CMakeLists.txt in Resources */,
-				4C67FFBE1BA133AB001C9D5A /* UIImageDocumentBlank.png in Resources */,
-				4C67FFC01BA133AB001C9D5A /* UIImageDocumentBlank@2x.png in Resources */,
 				4C67FFCE1BA133AB001C9D5A /* CarbonBlock.ttf in Resources */,
-				4C67FFDB1BA133AB001C9D5A /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4C67FFE81BA133AB001C9D5A /* my_config.he in Resources */,
-				4C6700031BA133AB001C9D5A /* UIImageDocumentBlankPad.png in Resources */,
 				4C67006F1BA133AB001C9D5A /* mysql_version.h.in in Resources */,
 				4C6700771BA133AB001C9D5A /* UIImageExportTypeMySQL.png in Resources */,
 				4C6700791BA133AB001C9D5A /* UIImageExportTypeMySQL@2x.png in Resources */,
