@@ -161,8 +161,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
     @property (nonatomic, strong) MADOperationQueue *refreshQueue;
 
-    @property (nonatomic, strong) NSOperationQueue *loadDocumentViewerQueue;
-
 @end
 
 @implementation UIResponder (MADViewerController)
@@ -277,12 +275,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADPageSlider *pageSlider = [[MADPageSlider alloc] init];
         self.pageSlider = pageSlider;
         
-        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-        queue.name = @"Load Document Viewer";
-        queue.maxConcurrentOperationCount = 1;
-        queue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
-        self.loadDocumentViewerQueue = queue;
-
     }
     return self;
 }
@@ -340,32 +332,27 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    MADLabelStatus *labelStatus;
     MADocument *document = self.document;
+    MADLabelStatus *labelStatus;
+    MADRefreshOperationReload *reload;
+    MADDocumentPageController *page;
+    MADPageViewAttributes *pageAttributes;
     NSMutableArray *toolbarItems;
-    UIBarButtonItem *barButtonItemRefresh, *barButtonItemDone, *barButtonLabelStatus;
-
-    id page;
-    NSArray *pages;
+    UIBarButtonItem *buttonRefresh, *buttonDone, *buttonStatus;
     
-    if (self.loadDocumentViewerQueue.operationCount > 0) {
-        page = [[UIViewController alloc] init];
-    } else {
-        MADPageViewAttributes *pageAttributes;
-        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
-                                                                      total: _currentLocation.totalPages
-                                                                       size: document.paper.paperSize];
-        page =
-        [MADDocumentPageController newDocumentPageController: document
-                                              pageAttributes: pageAttributes];
+    reload = [[MADRefreshOperationReload alloc] initWithDocument: document
+                                                  viewController: self];
 
-        ((MADDocumentPageController *)page).view.frame = self.view.bounds;
-        ((MADDocumentPageController *)page).delegate = self;
-
-    }
+    pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
+                                                                  total: _currentLocation.totalPages
+                                                                   size: document.paper.paperSize];
+    page = [MADDocumentPageController newDocumentPageController: document
+                                                 pageAttributes: pageAttributes];
     
-    pages = [[NSArray alloc] initWithObjects:page, nil];
+    page.view.frame = self.view.bounds;
+    page.delegate = self;
     
+    NSArray *pages = @[page];
     [self setViewControllers: pages
                    direction: UIPageViewControllerNavigationDirectionForward
                     animated: animated
@@ -376,32 +363,30 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y,
                                                                     30.0000f, 44.0000f)];
 
-    barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+    buttonStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
 
-    barButtonItemRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
-                                                                         target: self
-                                                                         action: @selector(refresh:)];
-    barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                      target: nil
-                                                                      action: @selector(done:)];
+    buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
+                                                                  target: self
+                                                                  action: @selector(refresh:)];
+    
+    buttonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                               target: nil
+                                                               action: @selector(done:)];
 
     self.labelStatus = labelStatus;
 
-    [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
+    [toolbarItems insertObject: buttonStatus atIndex: 0];
     [self setToolbarItems: toolbarItems animated:animated];
     [self.navigationController setToolbarHidden:NO animated:animated];
     
     [self updateTimeSinceLastRefresh:self];
     
-    barButtonItemRefresh.enabled = YES;
-    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
-                                                       animated: YES];
-    barButtonItemDone.enabled = YES;
-    [self.tabBarController.navigationItem setLeftBarButtonItem: barButtonItemDone
-                                                      animated: YES];
+    buttonRefresh.enabled = YES;
+    buttonDone.enabled = YES;
+
+    [self.tabBarController.navigationItem setRightBarButtonItem: buttonRefresh animated: YES];
+    [self.tabBarController.navigationItem setLeftBarButtonItem: buttonDone animated: YES];
     
-    MADRefreshOperationReload *reload = [[MADRefreshOperationReload alloc] initWithDocument: document
-                                                                             viewController: self];
     [self.refreshQueue addOperation:reload];
 
 }
@@ -445,51 +430,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 #pragma mark -
-#pragma mark Operations
-
-- (void)operation:(MADOperation *)operation setLastCacheDate:(NSDate *)date {
-    self.lastCacheDate = date.copy;
-}
-
-- (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
-    if (active) {
-        [self setDisplayActive];
-    } else {
-        [self setDisplayInactive];
-    }
-}
-
-- (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
-    [self finishReload:document];
-}
-
-- (void)finishReload:(MADocument *)document {
-    MADPrintPageRenderer *printPageRenderer;
-    printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
-    self.printPageRendererReport = printPageRenderer;
-    
-    MADPageViewAttributes *pageAttributes;
-    pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
-                                                                  total: _currentLocation.totalPages
-                                                                   size: document.paperSize];
-    
-    MADDocumentPageController *page =
-    [MADDocumentPageController newDocumentPageController: document
-                                          pageAttributes: pageAttributes];
-    page.view.frame = self.view.bounds;
-    page.delegate = self;
-    
-    NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
-    
-    [self setViewControllers: viewControllers
-                   direction: UIPageViewControllerNavigationDirectionForward
-                    animated: NO
-                  completion: nil];
-    
-    [self setDisplayActive];
-}
-
-#pragma mark -
 #pragma mark UIViewControllerTransitioningDelegate
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
@@ -510,15 +450,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark -
 #pragma mark UIViewControllerContextTransitioning
 
-// This is used for percent driven interactive transitions, as well as for container controllers that have companion animations that might need to
-// synchronize with the main animation.
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
     return 3.0;
 }
 
-// This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
-    //UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     self.pageSlider.alpha = 0.0f;
     NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
     [UIView animateWithDuration:transitionDuration animations:^{
@@ -536,9 +472,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     [super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-    }];
-    
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) { }];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size
@@ -1157,7 +1091,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (UIViewController *)activeViewController { return self; }
 
-#pragma mark - UIAccessibility
+#pragma mark -
+#pragma mark UIAccessibility
 
 - (BOOL)accessibilityScroll:(UIAccessibilityScrollDirection)direction {
     switch (direction) {
@@ -1239,6 +1174,51 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     NSArray *elements = @[self.parentViewController.view];
     return elements;
 }*/
+
+#pragma mark -
+#pragma mark Operations
+
+- (void)operation:(MADOperation *)operation setLastCacheDate:(NSDate *)date {
+    self.lastCacheDate = date.copy;
+}
+
+- (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
+    if (active) {
+        [self setDisplayActive];
+    } else {
+        [self setDisplayInactive];
+    }
+}
+
+- (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
+    [self finishReload:document];
+}
+
+- (void)finishReload:(MADocument *)document {
+    MADPrintPageRenderer *printPageRenderer;
+    printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+    self.printPageRendererReport = printPageRenderer;
+    
+    MADPageViewAttributes *pageAttributes;
+    pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
+                                                                  total: _currentLocation.totalPages
+                                                                   size: document.paperSize];
+    
+    MADDocumentPageController *page =
+    [MADDocumentPageController newDocumentPageController: document
+                                          pageAttributes: pageAttributes];
+    page.view.frame = self.view.bounds;
+    page.delegate = self;
+    
+    NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
+    
+    [self setViewControllers: viewControllers
+                   direction: UIPageViewControllerNavigationDirectionForward
+                    animated: NO
+                  completion: nil];
+    
+    [self setDisplayActive];
+}
 
 #pragma mark -
 #pragma mark Debugging
