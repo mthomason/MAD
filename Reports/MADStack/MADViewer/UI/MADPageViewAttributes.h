@@ -11,10 +11,13 @@
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MADPageViewAttributes : NSObject
     <NSCoding, NSCopying>
 
+    - (instancetype)initWithPosition:(MADReportPosition)position
+                                size:(CGSize)size;
     - (instancetype)initWithCurrentPage:(NSUInteger)currentPageNumber
                                   total:(NSUInteger)numberOfPages
                                    size:(CGSize)size;

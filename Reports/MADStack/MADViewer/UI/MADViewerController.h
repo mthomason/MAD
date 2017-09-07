@@ -20,8 +20,8 @@
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADViewerController : UIPageViewController
-    <MADViewControllerDocumentProtocol,
-        MADActivityProtocol, MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
+    <MADViewControllerDocumentProtocol, MADActivityProtocol,
+        MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
 
     @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 

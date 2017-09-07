@@ -22,9 +22,15 @@ static NSString * const keyContentScaleFactor   = @"f";
 - (instancetype)initWithCurrentPage:(NSUInteger)currentPageNumber
                               total:(NSUInteger)numberOfPages
                                size:(CGSize)size {
+    return [self initWithPosition: MADReportPositionMake(currentPageNumber - 1, numberOfPages)
+                             size: size];
+}
+
+- (instancetype)initWithPosition:(MADReportPosition)position
+                            size:(CGSize)size {
     if (self = [super init]) {
-        _pageNumber = currentPageNumber;
-        _numberOfPages = numberOfPages;
+        _pageNumber = position.currentPage + 1;
+        _numberOfPages = position.totalPages;
         _zoomScaleInital = 1.0000f;
         _contentSizeInital = size;
         _contentOffsetInital = CGPointZero;
