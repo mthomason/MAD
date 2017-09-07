@@ -901,8 +901,8 @@ typedef NS_ENUM(short, MADExplorerState) {
     UIBarButtonItem *barButtonItem;
     
     if ((_activityIndicatorRightVisible = visible)) {
+
         self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
-        
         UIActivityIndicatorView *activityIndicator;
         activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [activityIndicator startAnimating];
@@ -1039,8 +1039,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (void)explorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     switch (numberOfItemsSelected) {
             
         case 0:
@@ -1089,15 +1087,12 @@ typedef NS_ENUM(short, MADExplorerState) {
     self.activeDocumentManager.openDocument = document;
     
     [document openWithCompletionHandler:^(BOOL success) {
-        if (!success) {
-            //NSLog(@"Failed to open file");
-        } else {
+
+        if (success) {
             SEL selector = @selector(openViewer);
-            
             id operation = [[NSInvocationOperation alloc] initWithTarget: self
                                                                 selector: selector
                                                                   object: nil];
-            
             [[NSOperationQueue mainQueue] addOperation:operation];
         }
     }];

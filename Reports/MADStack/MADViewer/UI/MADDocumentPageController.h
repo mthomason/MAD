@@ -17,8 +17,8 @@
 
 @interface MADDocumentPageController : UIViewController
 
-    + (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document
-                                             pageAttributes:(MADPageViewAttributes *)pageAttributes;
+    + (instancetype)newDocumentPageController:(MADocument *)document
+                               pageAttributes:(MADPageViewAttributes *)pageAttributes;
 
     - (instancetype)initWithDocument:(MADocument *)document
                   andPageAttributtes:(MADPageViewAttributes *)pageAttributes;

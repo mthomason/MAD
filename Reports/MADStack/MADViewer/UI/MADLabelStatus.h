@@ -10,13 +10,14 @@
 #define MAD_Designer_MADLabelStatus_h
 
 #import <UIKit/UILabel.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 @interface MADLabelStatus : UILabel
 
     - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs;
     - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs;
 
-    - (void)updatePageStatus:(NSUInteger)numberOfPages currentPageIndex:(NSUInteger)currentPageIndex;
+    - (void)updatePageStatus:(MADReportPosition)reportPosition;
     - (void)updateStatusWithTime:(NSString *)timeMessage;
     - (void)updateStatusWithRecordsRead:(NSString *)message;
     - (void)updateStatusWithPageNumber:(NSString *)message;

@@ -130,8 +130,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark -
 #pragma mark Static Constructors
 
-+ (instancetype)newReportPageViewControllerWithDocument:(MADocument *)document
-                                         pageAttributes:(MADPageViewAttributes *)pageAttributes {
++ (instancetype)newDocumentPageController:(MADocument *)document
+                           pageAttributes:(MADPageViewAttributes *)pageAttributes {
     
     id pageViewController;
     pageViewController = [[self alloc] initWithDocument: document

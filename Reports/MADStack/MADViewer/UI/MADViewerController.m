@@ -146,7 +146,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark User Interface
 
     @property (nonatomic, strong)   MADPageSlider *pageSlider;
-    @property (nonatomic, strong)   MADLabelStatus *labelStatus;
+    @property (nonatomic, weak)   MADLabelStatus *labelStatus;
 
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
@@ -276,12 +276,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         
         MADPageSlider *pageSlider = [[MADPageSlider alloc] init];
         self.pageSlider = pageSlider;
-
-        MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x,
-                                                                                        CGPointZero.y,
-                                                                                        30.0000f,
-                                                                                        44.0000f)];
-        self.labelStatus = labelStatus;
         
         NSOperationQueue *queue = [[NSOperationQueue alloc] init];
         queue.name = @"Load Document Viewer";
@@ -346,21 +340,24 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
+    MADLabelStatus *labelStatus;
     MADocument *document = self.document;
+    NSMutableArray *toolbarItems;
+    UIBarButtonItem *barButtonItemRefresh, *barButtonItemDone, *barButtonLabelStatus;
+
     id page;
     NSArray *pages;
+    
     if (self.loadDocumentViewerQueue.operationCount > 0) {
         page = [[UIViewController alloc] init];
     } else {
         MADPageViewAttributes *pageAttributes;
-        CGSize paperSize = document.paper.paperSize;
-        NSUInteger pageNumber = self.currentPageNumber, pageCount = _currentLocation.totalPages;;
-        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: pageNumber
-                                                                      total: pageCount
-                                                                       size: paperSize];
+        pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: self.currentPageNumber
+                                                                      total: _currentLocation.totalPages
+                                                                       size: document.paper.paperSize];
         page =
-        [MADDocumentPageController newReportPageViewControllerWithDocument: document
-                                                            pageAttributes: pageAttributes];
+        [MADDocumentPageController newDocumentPageController: document
+                                              pageAttributes: pageAttributes];
 
         ((MADDocumentPageController *)page).view.frame = self.view.bounds;
         ((MADDocumentPageController *)page).delegate = self;
@@ -368,35 +365,37 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     }
     
     pages = [[NSArray alloc] initWithObjects:page, nil];
+    
     [self setViewControllers: pages
                    direction: UIPageViewControllerNavigationDirectionForward
                     animated: animated
                   completion: ^(BOOL finished) { }];
-
-    NSMutableArray *toolbarItems;
+    
     toolbarItems = self.toolbarItems.mutableCopy;
 
-    UIBarButtonItem *barButtonLabelStatus;
-    barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:self.labelStatus];
+    labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                    30.0000f, 44.0000f)];
 
-    [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
-    [self setToolbarItems: toolbarItems animated:animated];
-    
-    [self.navigationController setToolbarHidden:NO animated:animated];
-    [self updateTimeSinceLastRefresh:self];
-    
-    UIBarButtonItem *barButtonItemRefresh;
+    barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+
     barButtonItemRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
                                                                          target: self
                                                                          action: @selector(refresh:)];
-    barButtonItemRefresh.enabled = YES;
-    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
-                                                       animated: YES];
-
-    UIBarButtonItem *barButtonItemDone;
     barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                       target: nil
                                                                       action: @selector(done:)];
+
+    self.labelStatus = labelStatus;
+
+    [toolbarItems insertObject: barButtonLabelStatus atIndex: 0];
+    [self setToolbarItems: toolbarItems animated:animated];
+    [self.navigationController setToolbarHidden:NO animated:animated];
+    
+    [self updateTimeSinceLastRefresh:self];
+    
+    barButtonItemRefresh.enabled = YES;
+    [self.tabBarController.navigationItem setRightBarButtonItem: barButtonItemRefresh
+                                                       animated: YES];
     barButtonItemDone.enabled = YES;
     [self.tabBarController.navigationItem setLeftBarButtonItem: barButtonItemDone
                                                       animated: YES];
@@ -475,8 +474,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                    size: document.paperSize];
     
     MADDocumentPageController *page =
-    [MADDocumentPageController newReportPageViewControllerWithDocument: document
-                                                        pageAttributes: pageAttributes];
+    [MADDocumentPageController newDocumentPageController: document
+                                          pageAttributes: pageAttributes];
     page.view.frame = self.view.bounds;
     page.delegate = self;
     
@@ -618,8 +617,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         MADDocumentPageController *visiblePageViewController = [self visiblePageViewController];
         _currentLocation.currentPage = index;
         
-        [self.labelStatus updatePageStatus: _currentLocation.totalPages
-                          currentPageIndex: _currentLocation.currentPage];
+        [self.labelStatus updatePageStatus: _currentLocation];
 
         MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] init];
         pageAttributes.pageNumber = index + 1;
@@ -694,8 +692,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.tabBarItemsEnabled = YES;
     self.pageSlider.enabled = YES;
     self.barButtonItemActivity.enabled = YES;
-    self->_refreshing = NO;
-    self->_updatingOfTimerIsPaused = NO;
+    _refreshing = NO;
+    _updatingOfTimerIsPaused = NO;
     
     UIBarButtonItem *barButtonItemRefresh;
     barButtonItemRefresh= [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
@@ -711,8 +709,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     self.tabBarItemsEnabled = NO;
     self.pageSlider.enabled = NO;
     self.barButtonItemActivity.enabled = NO;
-    self->_refreshing = YES;
-    self->_updatingOfTimerIsPaused = NO;
+    _refreshing = YES;
+    _updatingOfTimerIsPaused = NO;
     
     UIActivityIndicatorView *activityIndicator;
     activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
@@ -982,8 +980,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         if (pageViewController.viewControllers.count > 0) {
             MADDocumentPageController *viewController = pageViewController.viewControllers[0];
             pageViewController->_currentLocation.currentPage = viewController.pageViewAttributes.pageNumber - 1;
-            [self.labelStatus updatePageStatus: _currentLocation.totalPages
-                              currentPageIndex: _currentLocation.currentPage];
+            [self.labelStatus updatePageStatus: _currentLocation];
             [pageViewController.pageSlider.pageSlider setValue: pageViewController->_currentLocation.currentPage
                                                       animated: YES];
         }
@@ -1104,8 +1101,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         slider.maximumValue = numberOfPages;
     }
     _currentLocation.totalPages = numberOfPages;
-    [self.labelStatus updatePageStatus: _currentLocation.totalPages
-                      currentPageIndex: _currentLocation.currentPage];
+    [self.labelStatus updatePageStatus: _currentLocation];
 }
 
 #pragma mark -

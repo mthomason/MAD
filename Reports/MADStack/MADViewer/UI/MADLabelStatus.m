@@ -87,13 +87,12 @@ static const CGFloat ToolbarFontPointSize       = 8.0000f;
     return self;
 }
 
-- (void)updatePageStatus:(NSUInteger)numberOfPages currentPageIndex:(NSUInteger)currentPageIndex {
+- (void)updatePageStatus:(MADReportPosition)reportPosition {
     NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY, MADTextPageXofY);
-    NSNumber *numberOfPagesNumber = @(numberOfPages);
-    NSNumber *currentPageNumber = @(currentPageIndex + 1);
-    NSString *start = [NSNumberFormatter localizedStringFromNumber: currentPageNumber
+    NSNumber *page = @(reportPosition.totalPages), *ofPages = @(reportPosition.currentPage + 1);
+    NSString *start = [NSNumberFormatter localizedStringFromNumber: page
                                                        numberStyle: NSNumberFormatterDecimalStyle];
-    NSString *end = [NSNumberFormatter localizedStringFromNumber: numberOfPagesNumber
+    NSString *end = [NSNumberFormatter localizedStringFromNumber: ofPages
                                                      numberStyle: NSNumberFormatterDecimalStyle];
     NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, start, end];
     [self updateStatusWithPageNumber:localizedPageOfPages];
