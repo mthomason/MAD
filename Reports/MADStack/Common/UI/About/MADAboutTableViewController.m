@@ -40,9 +40,7 @@
 static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutViewController";
 
 @interface MADAboutTableViewController ()
-    <MFMailComposeViewControllerDelegate,
-        UITableViewDelegate,
-        UITableViewDataSource>
+    <MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @end
 

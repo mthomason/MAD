@@ -39,6 +39,8 @@
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADCredential.h>
 
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+
 #import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADDocumentManagerProtocol.h>
 
@@ -65,8 +67,6 @@
 
 #import "MADExplorerSectionHeaderView.h"
 #import "MADSearchBar.h"
-
-#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADViewerController.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
@@ -91,11 +91,9 @@
 
 #import "MADExplorerAnimatedTransitioning.h"
 
-#import "AppDelegate.h"
-
-const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
-const NSUInteger MADIDInstallOperationSampleDocumentMusic       = 2;
-const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
+//const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
+//const NSUInteger MADIDInstallOperationSampleDocumentMusic       = 2;
+//const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
 
 static NSString * const MADIdentifierFileLondon                 = @"London";
 static NSString * const MADIdentifierFileMusic                  = @"Music";
@@ -419,7 +417,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                               fileExtension: MADFileExtentionMobleApplicationDocument
                                                             groupIdentifier: groupID
                                                                 installFlag: MADUpgradeInstalledSamplesLondon];
-    operation.identifier = MADIDInstallOperationSampleDocumentLondon;
+    operation.identifier = 3;
     [operation addObserver:self];
     [operationQueueBackground addOperation:operation];
     
@@ -427,7 +425,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                               fileExtension: MADFileExtentionMobleApplicationDocument
                                                             groupIdentifier: groupID
                                                                 installFlag: MADUpgradeInstalledSamplesMusic];
-    operation.identifier = MADIDInstallOperationSampleDocumentMusic;
+    operation.identifier = 2;
     [operation addObserver:self];
     [operationQueueBackground addOperation:operation];
     
@@ -1965,18 +1963,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (void)operationDidFinish:(MADOperation *)operation
                     errors:(NSArray *)errors {
     os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-
-    switch (operation.identifier) {
-
-        case MADIDInstallOperationSampleDocumentMusic:
-        case MADIDInstallOperationSampleDocumentLondon: {
-// FIXME: Trigger reload after install... without crashing.
-            break;
-        }
-            
-        default:
-            break;
-    }
 }
 
 #pragma mark -
