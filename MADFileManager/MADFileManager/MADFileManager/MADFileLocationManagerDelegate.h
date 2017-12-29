@@ -17,8 +17,8 @@
         - (void)didConfigureFilesController:(MADFilesController *)filesController;
         - (void)didDisconnectFromCloud:(id)sender;
 
-        - (NSString *)groupIdentifier;
-        - (NSString *)ubiquityIdentifier;
+        + (NSString *)groupIdentifier;
+        + (NSString *)ubiquityIdentifier;
         - (NSString *)fileExtention;
 
         @property (nonatomic, weak, readonly) UIViewController *presentingController;

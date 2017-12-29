@@ -62,11 +62,9 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 #pragma mark - MADApplicationProtocol
 
-- (NSString *)ubiquityIdentifier {
-    return MADUbiquityIdentifier;
-}
++ (NSString *)ubiquityIdentifier { return MADUbiquityIdentifier; }
 
-- (NSString *)groupIdentifier { return MADIdentifierGroup; }
++ (NSString *)groupIdentifier { return MADIdentifierGroup; }
 
 - (NSString *)name {
     NSString *trademark = self.trademark;

@@ -114,16 +114,12 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 #pragma mark -
 #pragma mark MADFileLocationManagerDelegate
 
-- (NSString *)groupIdentifier {
-    MADAppDelegate appDelegate = [MADApplication AppDelegate];
-    NSString *groupIdentifier = appDelegate.groupIdentifier.copy;
-    return  groupIdentifier;
++ (NSString *)groupIdentifier {
+    return [MADApplication groupIdentifier];
 }
 
-- (NSString *)ubiquityIdentifier {
-    MADAppDelegate appDelegate = [MADApplication AppDelegate];
-    NSString *ubiquityIdentifier = appDelegate.ubiquityIdentifier.copy;
-    return  ubiquityIdentifier;
++ (NSString *)ubiquityIdentifier {
+    return [MADApplication ubiquityIdentifier];
 }
 
 - (NSString *)fileExtention { return _extension; }

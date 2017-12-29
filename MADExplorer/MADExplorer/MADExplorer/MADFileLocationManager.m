@@ -158,11 +158,12 @@ static NSString * const MADFirstLaunch                                  = @"MADF
 - (void)setupFileStorageLocationsForCloud {
     //NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    UIViewController <MADFileLocationManagerDelegate> *safeDelegate = _delegate;
-
-    NSString *ubiquityIdentifier = [safeDelegate ubiquityIdentifier].copy;
-    NSString *groupIdentifier = [safeDelegate groupIdentifier].copy;
+    NSString *ubiquityIdentifier = [MADApplication ubiquityIdentifier];
+    NSString *groupIdentifier = [MADApplication groupIdentifier];
     
+    UIViewController <MADFileLocationManagerDelegate> *safeDelegate;
+    safeDelegate = (UIViewController <MADFileLocationManagerDelegate> *)_delegate;
+
     UIViewController <MADFileLocationManagerDelegate> * __weak weakDelegate = safeDelegate;
     typeof(self) __weak weakself = self;
     

@@ -13,8 +13,8 @@
 
 @protocol MADApplicationProtocol <NSObject>
 
-    - (NSString *)ubiquityIdentifier;
-    - (NSString *)groupIdentifier;
+    + (NSString *)ubiquityIdentifier;
+    + (NSString *)groupIdentifier;
 
     - (NSString *)applicationIdentifier;
     - (NSString *)applicationBundleIdentifier;

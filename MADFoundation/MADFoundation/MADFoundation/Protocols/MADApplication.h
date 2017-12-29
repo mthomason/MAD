@@ -15,6 +15,10 @@
 @interface MADApplication : NSObject
 
     + (MADAppDelegate)AppDelegate;
+
+    + (NSString *)groupIdentifier;
+    + (NSString *)ubiquityIdentifier;
+
     + (BOOL)isMADDesigner;
     + (BOOL)isMADViewer;
 

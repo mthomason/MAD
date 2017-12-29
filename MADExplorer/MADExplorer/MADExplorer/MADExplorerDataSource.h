@@ -31,7 +31,7 @@
 
     - (void)updateCloudPreferences;
 
-    - (NSString *)groupIdentifier;
+    + (NSString *)groupIdentifier;
 
     - (void)rename:(NSString *)newName itemAtIndex:(NSUInteger)index;
     - (void)removeItemAtIndex:(NSUInteger)index;

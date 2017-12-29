@@ -314,25 +314,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    NSArray *emptyArray = [[NSArray alloc] init];
-    [self setToolbarItems: emptyArray animated: animated];
-    //[self.navigationController setToolbarHidden:YES animated:animated];
     self.pageSlider.sliderDelegate = nil;
     [self.pageSlider removeFromSuperview];
-    //[self setViewControllers: nil
-    //               direction: UIPageViewControllerNavigationDirectionForward
-    //                animated: animated completion: nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
     MADocument *document = self.document;
-    MADLabelStatus *labelStatus;
     MADRefreshOperationReload *reload;
     MADDocumentPageController *page;
     MADPageViewAttributes *pageAttributes;
-    NSMutableArray *toolbarItems;
     UIBarButtonItem *buttonRefresh, *buttonDone, *buttonStatus;
     
     reload = [[MADRefreshOperationReload alloc] initWithDocument: document
@@ -346,18 +338,30 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     page.view.frame = self.view.bounds;
     page.delegate = self;
     
-    NSArray *pages = @[page];
+    NSArray <MADDocumentPageController *> *pages = @[page];
     [self setViewControllers: pages
                    direction: UIPageViewControllerNavigationDirectionForward
                     animated: animated
                   completion: ^(BOOL finished) { }];
     
-    toolbarItems = self.toolbarItems.mutableCopy;
+    NSUInteger statusLabelIndex;
+    statusLabelIndex = [self.toolbarItems indexOfObjectPassingTest:^BOOL(__kindof UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj.customView isKindOfClass:[MADLabelStatus class]];
+    }];
+    
+    if (statusLabelIndex == NSNotFound) {
+        MADLabelStatus *labelStatus;
+        NSMutableArray <__kindof UIBarButtonItem *> *toolbarItems;
+        toolbarItems = self.toolbarItems.mutableCopy;
+        labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                        30.0000f, 44.0000f)];
+        
+        buttonStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+        [toolbarItems insertObject: buttonStatus atIndex: 0];
+        [self setToolbarItems: toolbarItems animated:animated];
+        self.labelStatus = labelStatus;
+    }
 
-    labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                    30.0000f, 44.0000f)];
-
-    buttonStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
 
     buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
                                                                   target: self
@@ -367,10 +371,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                                                                target: nil
                                                                action: @selector(done:)];
 
-    self.labelStatus = labelStatus;
 
-    [toolbarItems insertObject: buttonStatus atIndex: 0];
-    [self setToolbarItems: toolbarItems animated:animated];
     [self.navigationController setToolbarHidden:NO animated:animated];
     
     [self updateTimeSinceLastRefresh:self];

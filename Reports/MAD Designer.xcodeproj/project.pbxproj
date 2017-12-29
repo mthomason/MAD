@@ -494,18 +494,6 @@
 		4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D63E1BCB6D9400BDA5D3 /* MADIcon64x64.png */; };
 		4CC3D75E1BCB6D9500BDA5D3 /* MADInfinity64.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */; };
 		4CC3D7601BCB6D9500BDA5D3 /* MADInfinity64@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6701BCB6D9400BDA5D3 /* MADInfinity64@2x.png */; };
-		4CC3D7611BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6721BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscape.png */; };
-		4CC3D7621BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscapeRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6731BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscapeRetina.png */; };
-		4CC3D7631BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadPortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6741BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadPortrait.png */; };
-		4CC3D7641BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6751BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png */; };
-		4CC3D7651BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6761BCB6D9400BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png */; };
-		4CC3D7661BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6771BCB6D9400BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png */; };
-		4CC3D7671BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6781BCB6D9400BDA5D3 /* MTImageLaunchViewerPadLandscape.png */; };
-		4CC3D7681BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D6791BCB6D9400BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png */; };
-		4CC3D7691BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67A1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortrait.png */; };
-		4CC3D76A1BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67B1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png */; };
-		4CC3D76B1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67C1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png */; };
-		4CC3D76C1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D67D1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png */; };
 		4CC3D8141BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D7281BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png */; };
 		4CC3D8181BCB6DE700BDA5D3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D8161BCB6DE700BDA5D3 /* Images.xcassets */; };
 		4CC3D8191BCB6DE700BDA5D3 /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D8171BCB6DE700BDA5D3 /* MADFeatures.plist */; };
@@ -934,14 +922,6 @@
 		4C28DDE21E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationCacheManager.m; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeMySQL.png; path = Reports/UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
 		4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeMySQL@2x.png"; path = "Reports/UIImageExportTypeMySQL@2x.png"; sourceTree = "<group>"; };
-		4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeSalesforce@2x.png"; path = "Reports/UIImageExportTypeSalesforce@2x.png"; sourceTree = "<group>"; };
-		4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeSalesforce.png; path = Reports/UIImageExportTypeSalesforce.png; sourceTree = "<group>"; };
-		4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeFacebook.png; path = Reports/UIImageExportTypeFacebook.png; sourceTree = "<group>"; };
-		4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeFacebook@2x.png"; path = "Reports/UIImageExportTypeFacebook@2x.png"; sourceTree = "<group>"; };
-		4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeTwitter.png; path = Reports/UIImageExportTypeTwitter.png; sourceTree = "<group>"; };
-		4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeTwitter@2x.png"; path = "Reports/UIImageExportTypeTwitter@2x.png"; sourceTree = "<group>"; };
-		4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeRSS.png; path = Reports/UIImageExportTypeRSS.png; sourceTree = "<group>"; };
-		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeRSS@2x.png"; path = "Reports/UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
 		4C2F27A51B53FA1C004DFAEC /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2F27A61B53FA1D004DFAEC /* app.everydayapps.mad.designer.watchkit.info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = app.everydayapps.mad.designer.watchkit.info.plist; path = /Users/mthomason/Desktop/Reports/Reports/app.everydayapps.mad.designer.watchkit.info.plist; sourceTree = "<absolute>"; };
 		4C2F3B391CA26495002CF271 /* MADMutualExclusive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMutualExclusive.h; sourceTree = "<group>"; };
@@ -1528,26 +1508,7 @@
 		4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADInfinity64.png; sourceTree = "<group>"; };
 		4CC3D66F1BCB6D9400BDA5D3 /* MADInfinity64.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADInfinity64.psd; sourceTree = "<group>"; };
 		4CC3D6701BCB6D9400BDA5D3 /* MADInfinity64@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADInfinity64@2x.png"; sourceTree = "<group>"; };
-		4CC3D6721BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchDesignerPadLandscape.png; sourceTree = "<group>"; };
-		4CC3D6731BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscapeRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchDesignerPadLandscapeRetina.png; sourceTree = "<group>"; };
-		4CC3D6741BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadPortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchDesignerPadPortrait.png; sourceTree = "<group>"; };
-		4CC3D6751BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchDesignerPadPortraitRetina.png; sourceTree = "<group>"; };
-		4CC3D6761BCB6D9400BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchDesignerPhone35PortraitRetina.png; sourceTree = "<group>"; };
-		4CC3D6771BCB6D9400BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchDesignerPhonePortraitRetina.png; sourceTree = "<group>"; };
-		4CC3D6781BCB6D9400BDA5D3 /* MTImageLaunchViewerPadLandscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchViewerPadLandscape.png; sourceTree = "<group>"; };
-		4CC3D6791BCB6D9400BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchViewerPadLandscapeRetina.png; sourceTree = "<group>"; };
-		4CC3D67A1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchViewerPadPortrait.png; sourceTree = "<group>"; };
-		4CC3D67B1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchViewerPadPortraitRetina.png; sourceTree = "<group>"; };
-		4CC3D67C1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchViewerPhone35PortraitRetina.png; sourceTree = "<group>"; };
-		4CC3D67D1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTImageLaunchViewerPhonePortraitRetina.png; sourceTree = "<group>"; };
-		4CC3D67E1BCB6D9400BDA5D3 /* MADImageBackgroundIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageBackgroundIcon.png; sourceTree = "<group>"; };
-		4CC3D67F1BCB6D9400BDA5D3 /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
-		4CC3D6801BCB6D9400BDA5D3 /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
 		4CC3D6811BCB6D9400BDA5D3 /* MADImageIconDuplicate.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MADImageIconDuplicate.ai; sourceTree = "<group>"; };
-		4CC3D6831BCB6D9400BDA5D3 /* MADImageIconInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageIconInfo.png; sourceTree = "<group>"; };
-		4CC3D6841BCB6D9400BDA5D3 /* MADImageIconInfo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageIconInfo@2x.png"; sourceTree = "<group>"; };
-		4CC3D6851BCB6D9400BDA5D3 /* MADImageIconInfoSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageIconInfoSelected.png; sourceTree = "<group>"; };
-		4CC3D6861BCB6D9400BDA5D3 /* MADImageIconInfoSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageIconInfoSelected@2x.png"; sourceTree = "<group>"; };
 		4CC3D6941BCB6D9400BDA5D3 /* mad-swatches.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "mad-swatches.ai"; sourceTree = "<group>"; };
 		4CC3D6951BCB6D9400BDA5D3 /* MADImageChevronRightTall.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADImageChevronRightTall.psd; sourceTree = "<group>"; };
 		4CC3D6961BCB6D9400BDA5D3 /* MADImageClear.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MADImageClear.psd; sourceTree = "<group>"; };
@@ -1900,6 +1861,14 @@
 				4C5CD3D6181ED238005FC6DD /* Misc Tool Images */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		4C14853D1FF61FA000A0D0B1 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				4C196F2D1B91092B0036D8A8 /* MADFeedback.framework */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		4C1E54FD1E56CAB100E3FAF0 /* Unused */ = {
@@ -2304,6 +2273,7 @@
 				4C8BE8521BAD457700F6E3F7 /* Resources */,
 				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
+				4C14853D1FF61FA000A0D0B1 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2981,14 +2951,6 @@
 			isa = PBXGroup;
 			children = (
 				4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */,
-				4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */,
-				4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */,
-				4C2AC30C1535910900738091 /* UIImageExportTypeTwitter.png */,
-				4C2AC30D1535910900738091 /* UIImageExportTypeTwitter@2x.png */,
-				4C2AC30815358FBA00738091 /* UIImageExportTypeFacebook.png */,
-				4C2AC30915358FBA00738091 /* UIImageExportTypeFacebook@2x.png */,
-				4C2AC30415358F0200738091 /* UIImageExportTypeSalesforce@2x.png */,
-				4C2AC30515358F0200738091 /* UIImageExportTypeSalesforce.png */,
 				4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */,
 				4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */,
 			);
@@ -3492,14 +3454,7 @@
 			children = (
 				4CC3D6371BCB6D9400BDA5D3 /* icons */,
 				4CC3D6711BCB6D9400BDA5D3 /* launch */,
-				4CC3D67E1BCB6D9400BDA5D3 /* MADImageBackgroundIcon.png */,
-				4CC3D67F1BCB6D9400BDA5D3 /* MADImageBackgroundIcon@2x.png */,
-				4CC3D6801BCB6D9400BDA5D3 /* MADImageBackgroundIcon@3x.png */,
 				4CC3D6811BCB6D9400BDA5D3 /* MADImageIconDuplicate.ai */,
-				4CC3D6831BCB6D9400BDA5D3 /* MADImageIconInfo.png */,
-				4CC3D6841BCB6D9400BDA5D3 /* MADImageIconInfo@2x.png */,
-				4CC3D6851BCB6D9400BDA5D3 /* MADImageIconInfoSelected.png */,
-				4CC3D6861BCB6D9400BDA5D3 /* MADImageIconInfoSelected@2x.png */,
 				4CC3D6931BCB6D9400BDA5D3 /* masters */,
 				4CC3D69B1BCB6D9400BDA5D3 /* patterns */,
 				4CC3D7041BCB6D9500BDA5D3 /* ui */,
@@ -3536,18 +3491,6 @@
 		4CC3D6711BCB6D9400BDA5D3 /* launch */ = {
 			isa = PBXGroup;
 			children = (
-				4CC3D6721BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscape.png */,
-				4CC3D6731BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadLandscapeRetina.png */,
-				4CC3D6741BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadPortrait.png */,
-				4CC3D6751BCB6D9400BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png */,
-				4CC3D6761BCB6D9400BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png */,
-				4CC3D6771BCB6D9400BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png */,
-				4CC3D6781BCB6D9400BDA5D3 /* MTImageLaunchViewerPadLandscape.png */,
-				4CC3D6791BCB6D9400BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png */,
-				4CC3D67A1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortrait.png */,
-				4CC3D67B1BCB6D9400BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png */,
-				4CC3D67C1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png */,
-				4CC3D67D1BCB6D9400BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png */,
 			);
 			path = launch;
 			sourceTree = "<group>";
@@ -4285,13 +4228,10 @@
 				4CC3D72B1BCB6D9500BDA5D3 /* MADIcon320x320.png in Resources */,
 				4CC3D7601BCB6D9500BDA5D3 /* MADInfinity64@2x.png in Resources */,
 				4CB56ECA1AC683CC00756775 /* cmake_install.cmake in Resources */,
-				4CC3D7661BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhonePortraitRetina.png in Resources */,
 				4C8DE2861BAFB11800AD1111 /* MADCreateDocument.storyboard in Resources */,
 				4C26B9D61BAF146700456DC8 /* MADVibrantTableViewCell.xib in Resources */,
 				4C26BA0C1BAF14F200456DC8 /* MADAboutApp.storyboard in Resources */,
 				4CE0F5081F5D600D00D828E1 /* Patterns.xcassets in Resources */,
-				4CC3D7651BCB6D9500BDA5D3 /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
-				4CC3D76A1BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortraitRetina.png in Resources */,
 				4C8DE2871BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard in Resources */,
 				4CFEE8281BB99DB200AFAA0A /* MADQuery.storyboard in Resources */,
 				4CC3D75E1BCB6D9500BDA5D3 /* MADInfinity64.png in Resources */,
@@ -4299,24 +4239,17 @@
 				4CBC501D1E1B508800B067AD /* MADMeta.plist in Resources */,
 				4C401F0E1BAE6DF100BAE5FC /* MADAbout.storyboard in Resources */,
 				4C3DCC1A1BCAEFA900ABE231 /* Images.xcassets in Resources */,
-				4CC3D7631BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadPortrait.png in Resources */,
 				4CB56ECC1AC683CC00756775 /* CMakeLists.txt in Resources */,
 				4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */,
 				4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */,
 				4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */,
-				4CC3D7691BCB6D9500BDA5D3 /* MTImageLaunchViewerPadPortrait.png in Resources */,
 				4CC3D7291BCB6D9500BDA5D3 /* MADIcon22x29.png in Resources */,
 				4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */,
-				4CC3D7641BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadPortraitRetina.png in Resources */,
 				4CFEE80B1BB7993300AFAA0A /* MADQueryAddTable.storyboard in Resources */,
 				4CFEE7F61BB773D800AFAA0A /* MADQueryAddGroup.storyboard in Resources */,
 				4C26BA031BAF14B300456DC8 /* MADAboutDocument.storyboard in Resources */,
 				4C8DE2851BAFB11800AD1111 /* MADDesigner.storyboard in Resources */,
 				4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */,
-				4CC3D7671BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscape.png in Resources */,
-				4CC3D76C1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */,
-				4CC3D76B1BCB6D9500BDA5D3 /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
-				4CC3D7621BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscapeRetina.png in Resources */,
 				4CB56ECE1AC683CC00756775 /* my_config.he in Resources */,
 				4CC3D72E1BCB6D9500BDA5D3 /* MADIcon64x64.png in Resources */,
 				4C401EE41BAE5E9000BAE5FC /* MADStore.storyboard in Resources */,
@@ -4329,13 +4262,11 @@
 				4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */,
 				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4CC3D72A1BCB6D9500BDA5D3 /* MADIcon320.png in Resources */,
-				4CC3D7681BCB6D9500BDA5D3 /* MTImageLaunchViewerPadLandscapeRetina.png in Resources */,
 				4CC3D8141BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4C3DCC1B1BCAEFA900ABE231 /* Settings.bundle in Resources */,
 				4C8DE26F1BAFA9A900AD1111 /* MADTableViewHeader.xib in Resources */,
 				4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CFEE80A1BB7993300AFAA0A /* MADQueryAddPredicate.storyboard in Resources */,
-				4CC3D7611BCB6D9500BDA5D3 /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4CC3D72C1BCB6D9500BDA5D3 /* MADIcon44x58.png in Resources */,
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */,
@@ -5064,7 +4995,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = app.everydayapps.mad.designer.watchkit.info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
 					"\"$(SRCROOT)/../opt/lib/openssl-1.1/openssl-1.1.0\"",
@@ -5124,7 +5055,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = app.everydayapps.mad.designer.watchkit.info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
 					"$(PROJECT_DIR)/../Compressor/library",
@@ -5208,7 +5139,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -5262,7 +5193,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -5321,7 +5252,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",
@@ -5389,7 +5320,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../opt/lib/freetds\"",
@@ -5533,7 +5464,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADBarcodes/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
@@ -5589,7 +5520,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADBarcodes/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
@@ -5647,7 +5578,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADQuery/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
@@ -5703,7 +5634,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADQuery/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
@@ -5761,7 +5692,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADExplorer/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",
@@ -5817,7 +5748,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADExplorer/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib",

@@ -16,9 +16,23 @@ static NSString * const MADApplicationIdMadDesigner                         = @"
 static NSString * const MADApplicationIdMadViewer                           = @"666003759";
 
 + (MADAppDelegate)AppDelegate {
-    id appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate;
+    if ([NSThread isMainThread]) {
+        appDelegate = [UIApplication sharedApplication].delegate;
+    } else {
+        appDelegate = [UIApplication sharedApplication].delegate;
+    }
     return appDelegate;
 }
+
++ (NSString *)groupIdentifier {
+    return [self groupIdentifier];
+}
+
++ (NSString *)ubiquityIdentifier {
+    return [self ubiquityIdentifier];
+}
+
 
 + (BOOL)isMADDesigner {
     MADAppDelegate appDelegate = [self AppDelegate];
