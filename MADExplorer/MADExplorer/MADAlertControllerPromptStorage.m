@@ -22,9 +22,9 @@
     NSString *title, *message, *localOnlyActionTitle, *cloudActionTitle;
     id storageController;
     UIAlertAction *option;
-    title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions),
-    message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions),
-    localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly),
+    title = NSLocalizedString(MADTitleChooseStorageOptions, MADTitleChooseStorageOptions);
+    message = NSLocalizedString(MADMessageChooseStorageOptions, MADMessageChooseStorageOptions);
+    localOnlyActionTitle = NSLocalizedString(MADTitleButtonLocalOnly, MADTitleButtonLocalOnly);
     cloudActionTitle = NSLocalizedString(MADTitleButtonCloud, MADTitleButtonCloud);
     
     storageController = [UIAlertController alertControllerWithTitle: title

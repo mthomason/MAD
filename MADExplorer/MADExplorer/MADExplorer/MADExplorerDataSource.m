@@ -202,10 +202,9 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
                                            removes: removes
                                            updates: updates
                                         completion: ^(BOOL success, NSError *error) {
-                                            [inserts removeAllObjects],
-                                            [removes removeAllObjects],
+                                            [inserts removeAllObjects];
+                                            [removes removeAllObjects];
                                             [updates removeAllObjects];
-
                                             completion(YES, nil);
                                         }];
 

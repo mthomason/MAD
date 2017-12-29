@@ -70,7 +70,7 @@
     for (section = 0; section < numberOfSections; section++) {
         
         numberOfItems = [delegate numberOfItemsInSection:section ofCollectionView:collectionView];
-        maxWidthForSection = CGSizeZero.width, maxHeightForSection = CGSizeZero.height;
+        maxWidthForSection = CGSizeZero.width; maxHeightForSection = CGSizeZero.height;
         layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
         
         sectionY = CGPointZero.y + sectionHeight * section;

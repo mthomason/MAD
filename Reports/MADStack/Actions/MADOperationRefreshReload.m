@@ -57,7 +57,7 @@
                   viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
               databaseConnection: (MADDatabaseConnection *)databaseConnection {
     if (self = [super init]) {
-        _skipCount = 0, _displayCount = 0;
+        _skipCount = 0; _displayCount = 0;
         _databaseConnection = databaseConnection;
         _viewController = viewController;
         _document = document;

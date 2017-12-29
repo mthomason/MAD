@@ -254,8 +254,8 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
     
     SHA1(input.bytes, input.length, hashData.mutableBytes);
     
-    bid = receipt[MTStoreKitIdentifierReceiptBid],
-    version = receipt[MTStoreKitIdentifierReceiptVersion],
+    bid = receipt[MTStoreKitIdentifierReceiptBid];
+    version = receipt[MTStoreKitIdentifierReceiptVersion];
     hashReceiptData = receipt[MTStoreKitIdentifierReceiptHash];
     
     if ([bundleID isEqualToString:bid] &&

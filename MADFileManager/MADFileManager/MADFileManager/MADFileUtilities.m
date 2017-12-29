@@ -107,7 +107,7 @@ static NSString * const MADPathComponentData       = @"Data";
         // Note the call to -URLForUbiquityContainerIdentifier: should be on a background queue.
         NSURL *documentsDirectoryURL, *documentsDirectoryLocal;
         NSArray <NSURL *> *localDocumentURLs;
-        documentsDirectoryURL = [MADURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID],
+        documentsDirectoryURL = [MADURL newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID];
         documentsDirectoryLocal = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
         
         localDocumentURLs = [fileManager contentsOfDirectoryAtURL: documentsDirectoryLocal

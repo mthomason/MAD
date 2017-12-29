@@ -328,8 +328,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     [self.metadataQuery disableUpdates];
     
     NSArray *insertedMetadataItemsOrNil, *removedMetadataItemsOrNil, *updatedMetadataItemsOrNil;
-    insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey],
-    removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey],
+    insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey];
+    removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey];
     updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
     
     NSArray *insertedMetadata = insertedMetadataItemsOrNil ?: [[NSArray alloc] init],
