@@ -40,8 +40,7 @@
     //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
     
     MADURL *appSupportDirectory;
-    MADAppDelegate appDelegate = [MADApplication AppDelegate];
-    id groupIdentifier = [appDelegate groupIdentifier].copy;
+    id groupIdentifier = [MADApplication groupIdentifier];
     appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
     
     NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename

@@ -22,15 +22,15 @@
 const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
 
 static inline double xPoint(NSInteger i, double offsetInPoints);
-static inline double cmInPoints();
-static inline double eigthInchInPoints();
-
-static inline double eigthInchInPoints() {
-    return 72.0000f / 8.0000f;
-}
+static inline double cmInPoints(void);
+static inline double eigthInchInPoints(void);
 
 static inline double cmInPoints() {
     return (72.0000f / 1.0000f) / 2.5400f;
+}
+
+static inline double eigthInchInPoints() {
+    return 72.0000f / 8.0000f;
 }
 
 static inline double xPoint(NSInteger i, double offsetInPoints) {

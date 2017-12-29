@@ -31,17 +31,17 @@
 #import <MADSqlite3/MADDataTableFast.h>
 #import "MADNotificationDidFormatPage.h"
 
-static inline CGFloat halfinch();
+static inline CGFloat halfinch(void);
 static inline CGFloat halfinch() {
     return 72.0000 / 72.0000;
 }
 
-static inline CGRect CellDefaultBounds();
+static inline CGRect CellDefaultBounds(void);
 static inline CGRect CellDefaultBounds() {
     return MADRectOfSize(CGSizeMake(230.0000f, 200.0000f));
 }
 
-static inline UIEdgeInsets PdfBorder();
+static inline UIEdgeInsets PdfBorder(void);
 static inline UIEdgeInsets PdfBorder() {
     return UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch());
 }

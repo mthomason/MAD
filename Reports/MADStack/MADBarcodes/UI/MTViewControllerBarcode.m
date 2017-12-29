@@ -110,9 +110,9 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
                                               withSender:(id)sender {
-    
-    return self.unwindViewController ?
-            self.unwindViewController :
+    UIViewController *viewController = self.unwindViewController;
+    return viewController ?
+            viewController :
             [super viewControllerForUnwindSegueAction: action
                            fromViewController: fromViewController
                                    withSender: sender];

@@ -191,9 +191,9 @@ CG_INLINE MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
     }
 }
 
-CG_INLINE CGSize CGSizeFingerDefault();
+CG_INLINE CGSize CGSizeFingerDefault(void);
 CG_INLINE CGSize
-CGSizeFingerDefault() {
+CGSizeFingerDefault(void) {
     return CGSizeMake(MTDefaultFingerSizeWidth, MTDefaultFingerSizeHeight);
 }
 

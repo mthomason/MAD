@@ -113,15 +113,24 @@
 - (void)actionWhatIsMad {
     [self performSegueWithIdentifier:@"MADStoryboardSegueWhatIsMAD" sender:self];
 }
-
 - (void)actionGoToEverydayAppsCom {
     NSURL *eda = [NSURL URLWithString: @"https://everydayapps.com"];
-    [[UIApplication sharedApplication] openURL:eda];
+    NSDictionary<NSString *,id> *options = @{
+                                                     
+                                                     };
+    [[UIApplication sharedApplication] openURL:eda
+                                       options:options
+                             completionHandler:^(BOOL success) { }];
 }
 
 - (void)actionTwitterVisitEverydayApps {
     NSURL *eda = [NSURL URLWithString: @"https://twitter.com/EverydayApps"];
-    [[UIApplication sharedApplication] openURL:eda];
+    NSDictionary<NSString *,id> *options = @{
+                                             
+                                             };
+    [[UIApplication sharedApplication] openURL:eda
+                                       options:options
+                             completionHandler:^(BOOL success) { }];
 }
 
 - (void)actionEmailUs {

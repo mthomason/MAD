@@ -16,6 +16,9 @@
     + (NSString *)ubiquityIdentifier;
     + (NSString *)groupIdentifier;
 
+    - (NSString *)ubiquityIdentifier;
+    - (NSString *)groupIdentifier;
+
     - (NSString *)applicationIdentifier;
     - (NSString *)applicationBundleIdentifier;
     - (NSString *)name;

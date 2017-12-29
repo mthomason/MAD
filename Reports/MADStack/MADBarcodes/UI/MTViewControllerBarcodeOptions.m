@@ -64,7 +64,7 @@
 static NSString * const SetDatasource = @"Set Datasource";
 static NSString * const StringEmpty = @"";
 
-static inline NSInteger tvsDefination();
+static inline NSInteger tvsDefination(void);
 static inline NSInteger tvsDefination() { return 0; }
 
 static inline NSInteger tvsRendering(BOOL has2dComponent);

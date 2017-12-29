@@ -48,12 +48,12 @@
                              password:(void (^)(UITextField *textField))passwordSetup
                                submit:(void (^)(NSString *username,
                                                 NSString *password))handlerContinue
-                               cancel:(void (^)())handlerCancel;
+                               cancel:(void (^)(void))handlerCancel;
 
     + (instancetype)newAlertControllerPromptForPasswordGivenUsername:(NSString *)username
                                           password:(void (^)(UITextField *textField))passwordSetup
                                             submit:(void (^)(NSString *password))handlerContinue
-                                            cancel:(void (^)())handlerCancel;
+                                            cancel:(void (^)(void))handlerCancel;
 
 @end
 

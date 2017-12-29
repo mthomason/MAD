@@ -166,10 +166,10 @@
     [self.navigationItem setRightBarButtonItem:nil animated:animated];;
 }
 
-- (id <UILayoutSupport>)topLayoutGuide {
+/*- (id <UILayoutSupport>)topLayoutGuide {
     UINavigationController __weak *navigationController = self.navigationController;
     return navigationController.topLayoutGuide;
-}
+}*/
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
     return self.selectedViewController;

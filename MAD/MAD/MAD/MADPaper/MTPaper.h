@@ -15,22 +15,22 @@
 #import <MAD/MADPaperType.h>
 
 static inline CGRect CGRectBoundsForSize(CGSize size);
-static inline CGRect CGRectPaperLetter();
+static inline CGRect CGRectPaperLetter(void);
 
-static inline CGSize CGSizePaperLetter();
-static inline CGSize CGSizePaperGovernmentLetter();
-static inline CGSize CGSizePaperLegal();
-static inline CGSize CGSizePaperA0();
-static inline CGSize CGSizePaperA1();
-static inline CGSize CGSizePaperA2();
-static inline CGSize CGSizePaperA3();
-static inline CGSize CGSizePaperA4();
-static inline CGSize CGSizePaperA5();
-static inline CGSize CGSizePaperA6();
-static inline CGSize CGSizePaperA7();
-static inline CGSize CGSizePaperA8();
-static inline CGSize CGSizePaperA9();
-static inline CGSize CGSizePaperA10();
+static inline CGSize CGSizePaperLetter(void);
+static inline CGSize CGSizePaperGovernmentLetter(void);
+static inline CGSize CGSizePaperLegal(void);
+static inline CGSize CGSizePaperA0(void);
+static inline CGSize CGSizePaperA1(void);
+static inline CGSize CGSizePaperA2(void);
+static inline CGSize CGSizePaperA3(void);
+static inline CGSize CGSizePaperA4(void);
+static inline CGSize CGSizePaperA5(void);
+static inline CGSize CGSizePaperA6(void);
+static inline CGSize CGSizePaperA7(void);
+static inline CGSize CGSizePaperA8(void);
+static inline CGSize CGSizePaperA9(void);
+static inline CGSize CGSizePaperA10(void);
 
 @interface MTPaper : NSObject
 

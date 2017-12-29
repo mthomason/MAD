@@ -33,14 +33,17 @@
                     [tempDict setValue: @"true" forKey: @"follow"];
     
                     NSURL *twitterFriendships = [NSURL URLWithString:@"https://api.twitter.com/1.1/friendships/create.json"];
-                    SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:twitterFriendships parameters:tempDict];
+                    SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                                                requestMethod:SLRequestMethodPOST
+                                                                          URL:twitterFriendships
+                                                                   parameters:tempDict];
                     [postRequest setAccount:twitterAccount];
                     [postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *returendError) {
                         if (!(success = urlResponse.statusCode == 200)) {
                             errorResponse = returendError;
                         }
                         #if DEBUG
-                            NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode],(long)returendError.code];
+                            NSString *output = [NSString stringWithFormat:@"HTTP response status: %li Error %ld", (long)[urlResponse statusCode], (long)returendError.code];
                             NSLog(@"%@error %@", output, returendError.description);
                         #endif
                     }];

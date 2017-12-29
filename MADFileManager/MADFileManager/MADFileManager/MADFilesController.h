@@ -55,7 +55,7 @@ typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents
     + (BOOL)isCloudReadilyAvailable;
     + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
                                          groupIdentifier: (NSString *)groupIdentifier
-                                                   delay: (void (^)())handleLongRunningCall
+                                                   delay: (void (^)(void))handleLongRunningCall
                                               completion: (MADBlockFileStorageLocation)handleCompletion;
 
     - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention

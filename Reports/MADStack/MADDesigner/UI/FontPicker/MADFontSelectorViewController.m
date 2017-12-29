@@ -106,12 +106,12 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
                                                                                      680.0000f);
 
     self.navigationController.navigationBar.frame = frameWithTopGuide(self.navigationController.navigationBar.frame,
-                                                                      self.topLayoutGuide.length);
+                                                                      self.view.safeAreaInsets.top);
     
-    self.tableView.contentInset = contentInset(self.topLayoutGuide.length, self.bottomLayoutGuide.length);
-    self.tableView.scrollIndicatorInsets = contentInset(self.topLayoutGuide.length, self.bottomLayoutGuide.length);
+    self.tableView.contentInset = contentInset(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom);
+    self.tableView.scrollIndicatorInsets = contentInset(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom);
     if (self.firstTimeViewWillLayoutSubviews) {
-        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
+        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.view.safeAreaInsets.top);
         self.firstTimeViewWillLayoutSubviews = NO;
     }
 

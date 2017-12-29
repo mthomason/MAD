@@ -62,7 +62,7 @@
 #import "MADSectionLayout.h"
 #import "MADSectionGroupLayout.h"
 
-static inline UIEdgeInsets MADEdgeInsetsQuarterInch();
+static inline UIEdgeInsets MADEdgeInsetsQuarterInch(void);
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
     return UIEdgeInsetsMake(fCGPointsForInches(1.0/4.0),
                             fCGPointsForInches(1.0/4.0),
@@ -70,7 +70,7 @@ static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
                             fCGPointsForInches(1.0/4.0));
 }
 
-static inline UIEdgeInsets MADEdgeInsetsEmpty();
+static inline UIEdgeInsets MADEdgeInsetsEmpty(void);
 static inline UIEdgeInsets MADEdgeInsetsEmpty() {
     return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height,
                             CGSizeZero.height, CGSizeZero.height);

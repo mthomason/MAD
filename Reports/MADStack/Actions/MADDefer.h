@@ -13,11 +13,11 @@
 
 @interface MADDefer : NSObject
 
-    @property (copy, nonatomic) void (^block)();
-    + (instancetype)defer:(void (^)())block;
+    @property (copy, nonatomic) void (^block)(void);
+    + (instancetype)defer:(void (^)(void))block;
 
 @end
 
-void defer(void (^block)());
+void defer(void (^block)(void));
 
 #endif

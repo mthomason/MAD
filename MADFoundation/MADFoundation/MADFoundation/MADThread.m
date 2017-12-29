@@ -12,7 +12,7 @@
 
 @implementation MADThread
 
-+ (void)safeSwitchToMainThread:(void(^)())completion {
++ (void)safeSwitchToMainThread:(void(^)(void))completion {
     if ([NSThread isMainThread]) {
         completion();
     } else {

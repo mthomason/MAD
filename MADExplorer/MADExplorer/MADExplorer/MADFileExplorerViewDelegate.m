@@ -52,8 +52,8 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 static const CGFloat fLabelWidth        = 124.0000f;
 static const CGFloat fLabelMaxHeight    = 300.0000f;
 
-static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect();
-static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect() {
+static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void);
+static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     return CGRectMake(CGPointZero.x, CGPointZero.y, fLabelWidth, fLabelMaxHeight);
 }
 

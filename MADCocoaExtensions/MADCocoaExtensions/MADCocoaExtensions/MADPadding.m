@@ -27,10 +27,7 @@ static inline MADLayoutPadding_t MADLayoutPaddingMake(Float64 l, Float64 r, Floa
 
 static inline MADLayoutPadding_t MADLayoutPaddingMakeQuick(Float64 p) {
     MADLayoutPadding_t padding;
-    padding.top = p;
-    padding.right = p;
-    padding.bottom = p;
-    padding.left = p;
+    padding.top = p; padding.right = p; padding.bottom = p; padding.left = p;
     return padding;
 }
 

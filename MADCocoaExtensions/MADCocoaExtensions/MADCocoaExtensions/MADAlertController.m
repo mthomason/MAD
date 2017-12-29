@@ -46,7 +46,7 @@ static NSString * const MADButtonRemove                = @"Remove";
 + (instancetype)newAlertControllerPromptForPasswordGivenUsername:(NSString *)username
                                                         password:(void (^)(UITextField *textField))passwordSetup
                                                           submit:(void (^)(NSString *password))handlerContinue
-                                                          cancel:(void (^)())handlerCancel {
+                                                          cancel:(void (^)(void))handlerCancel {
     NSString *MADTitlePassword = @"Password";
     NSString *MADMessagePassword = @"Please enter your password.";
     NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
@@ -86,7 +86,7 @@ static NSString * const MADButtonRemove                = @"Remove";
 + (instancetype)newAlertControllerPromptForUsername:(void (^)(UITextField *textField))usernameSetup
                                            password:(void (^)(UITextField *textField))passwordSetup
                                              submit:(void (^)(NSString *username, NSString *password))handlerContinue
-                                             cancel:(void (^)())handlerCancel {
+                                             cancel:(void (^)(void))handlerCancel {
     
     NSString *MADTitleCredentials = @"Credentials";
     NSString *MADMessageCredentials = @"Please enter your credentials.";

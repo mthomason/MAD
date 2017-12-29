@@ -226,8 +226,8 @@ static NSString * const MADFirstLaunch                                  = @"MADF
         
         MADFileLocationManager __weak *wself = strongself;
         
-        void (^handlerLocal)();
-        void (^handlerCloud)();
+        void (^handlerLocal)(void);
+        void (^handlerCloud)(void);
         
         handlerLocal = ^ {
             MADFileLocationManager *sself = wself;
@@ -400,8 +400,8 @@ static NSString * const MADFirstLaunch                                  = @"MADF
     id <MADFileLocationManagerDelegate> delegate = _delegate;
 
     NSString *groupIdentifer;
-    groupIdentifer = [self.class StorageOption] != MADAppStorageCloud ? [delegate groupIdentifier] :
-                                                                        [delegate ubiquityIdentifier];
+    groupIdentifer = [self.class StorageOption] != MADAppStorageCloud ? [MADApplication groupIdentifier] :
+                                                                        [MADApplication ubiquityIdentifier];
     return groupIdentifer.copy;
 }
 

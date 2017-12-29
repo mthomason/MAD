@@ -14,7 +14,7 @@
 
 @implementation MADDefer
 
-+ (instancetype)defer:(void (^)())block {
++ (instancetype)defer:(void (^)(void))block {
     MADDefer *defer =  [[MADDefer alloc] init];
     defer.block = block;
     return [defer autorelease];
@@ -28,7 +28,7 @@
 
 @end
 
-void defer(void (^block)()) {
+void defer(void (^block)(void)) {
     static MADDefer *d;
     d = [MADDefer defer:block];
 }

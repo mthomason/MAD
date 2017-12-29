@@ -200,7 +200,7 @@ static inline CGFloat MaxDimension(CGSize size) {
                     label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
                     label.enabled = strongself.enabledColor;
                     [label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
-                    [strongself.vibrancyView addSubview:label];
+                    [strongself.vibrancyView.contentView addSubview:label];
                     [strongself.labels addObject:label];
                     
                 }

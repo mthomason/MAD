@@ -20,17 +20,43 @@ static NSString * const MADApplicationIdMadViewer                           = @"
     if ([NSThread isMainThread]) {
         appDelegate = [UIApplication sharedApplication].delegate;
     } else {
-        appDelegate = [UIApplication sharedApplication].delegate;
+        @throw [NSException exceptionWithName: NSInternalInconsistencyException
+                                       reason: @"Only call on main thread."
+                                     userInfo: nil];
     }
     return appDelegate;
 }
 
 + (NSString *)groupIdentifier {
-    return [self groupIdentifier];
+    __block NSString *groupIdentifier = nil;
+    if ([NSThread isMainThread]) {
+        id <MADApplicationProtocol> appDelegate;
+        appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+        groupIdentifier = [appDelegate groupIdentifier];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            id <MADApplicationProtocol> appDelegate;
+            appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+            groupIdentifier = [appDelegate groupIdentifier];
+        });
+    }
+    return groupIdentifier;
 }
 
 + (NSString *)ubiquityIdentifier {
-    return [self ubiquityIdentifier];
+    __block NSString *ubiquityIdentifier = nil;
+    if ([NSThread isMainThread]) {
+        id <MADApplicationProtocol> appDelegate;
+        appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+        ubiquityIdentifier = [appDelegate ubiquityIdentifier];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            id <MADApplicationProtocol> appDelegate;
+            appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
+            ubiquityIdentifier = [appDelegate ubiquityIdentifier];
+        });
+    }
+    return ubiquityIdentifier;
 }
 
 

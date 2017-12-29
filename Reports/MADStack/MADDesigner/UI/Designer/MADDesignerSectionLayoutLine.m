@@ -249,13 +249,13 @@
 }
 
 - (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter {
-    NSUInteger item = 0;
+    NSInteger item = 0;
     NSInteger counter = 0;
     BOOL valueSet = NO;
     NSArray *indexPathsForItems = [self.collectionView indexPathsForVisibleItems];
     CGFloat sectionHeight = ((self.collectionView).frame.size.height / [self.collectionView numberOfSections]);
-    NSUInteger section = alienCenter.y / sectionHeight;
-    NSUInteger numberOfItemsInSameSection = 0;
+    NSInteger section = (NSInteger)(alienCenter.y / sectionHeight);
+    NSInteger numberOfItemsInSameSection = 0;
     
     for (NSIndexPath *indexPath in indexPathsForItems) {
         

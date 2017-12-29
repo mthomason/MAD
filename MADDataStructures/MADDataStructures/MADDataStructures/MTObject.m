@@ -22,7 +22,7 @@
 @implementation MTObject
 
 + (instancetype)newObject:(id <NSCopying>)object {
-    return [[self alloc] initWithObject:object];
+    return [[MTObject alloc] initWithObject:object];
 }
 
 - (instancetype)init {

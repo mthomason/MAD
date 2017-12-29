@@ -11,8 +11,8 @@
 
 #import <UIKit/UIView.h>
 
-static inline enum UIViewAutoresizing MADViewAutoresizingFlexable();
-static inline enum UIViewAutoresizing MADViewAutoresizingFlexable() {
+static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void);
+static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void) {
     return UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 

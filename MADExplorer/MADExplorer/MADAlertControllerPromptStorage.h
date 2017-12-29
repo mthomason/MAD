@@ -12,8 +12,8 @@
 #import <UIKit/UIAlertController.h>
 
 @interface MADAlertControllerPromptStorage : UIAlertController
-    + (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
-                                              cloud:(void (^)())handlerCloud;
+    + (instancetype)newAlertControllerPromptStorage:(void (^)(void))handlerLocal
+                                              cloud:(void (^)(void))handlerCloud;
 @end
 
 #endif

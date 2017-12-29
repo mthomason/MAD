@@ -110,7 +110,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
                                      groupIdentifier: (NSString *)groupIdentifier
-                                               delay: (void (^)())handleLongRunningCall
+                                               delay: (void (^)(void))handleLongRunningCall
                                           completion: (MADBlockFileStorageLocation)handleCompletion {
 
     //NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
@@ -119,7 +119,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 
         //NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
 
-        void (^longRunningCallBlock)() = [handleLongRunningCall copy];
+        void (^longRunningCallBlock)(void) = [handleLongRunningCall copy];
         
         [NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
                                 target: self
@@ -170,7 +170,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 + (void)handleLongRunningCloudUrlLookup:(NSTimer *)timer {
     //NSLog(@"Detected a long running cloud lookup.");
     if(timer.userInfo) {
-        void (^block)() = (void (^)())timer.userInfo;
+        void (^block)(void) = (void (^)(void))timer.userInfo;
         block();
     }
 }
@@ -453,7 +453,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
     //NSLog(@"File Coordinator did fail removing URL: %@", URL);
 
     typeof(self) __weak weakSelf = self;
-    void (^handleFailure)(void);
+    //void (^handleFailure)(void);
     /*handleFailure = ^{
         MADFilesController *sself = weakSelf;
         id <MADFilesControllerDelegate> delegate = sself.delegate;

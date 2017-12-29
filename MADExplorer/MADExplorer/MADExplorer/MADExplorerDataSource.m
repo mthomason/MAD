@@ -67,8 +67,8 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
                           *removes = [[NSMutableIndexSet alloc] init],
                           *updates = [[NSMutableIndexSet alloc] init];
 
-        self.batchInserts = inserts,
-        self.batchRemoves = removes,
+        self.batchInserts = inserts;
+        self.batchRemoves = removes;
         self.batchUpdates = updates;
         
         self.handleCellConfiguration = cellCondiguration;

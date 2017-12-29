@@ -33,47 +33,12 @@
 
 static const CGFloat PageEdgeInsetMargin = 3.0000f;
 
-static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id <UILayoutSupport>, id <UILayoutSupport>);
-static inline UIEdgeInsets boundsInsets(id<UILayoutSupport>, id<UILayoutSupport>);
+static inline UIEdgeInsets boundsInsets(CGFloat, CGFloat);
 static inline CGFloat zoomScale(CGFloat, CGFloat, CGFloat);
 static inline CGFloat EdgeInsetForScrollIndicator(CGFloat, CGFloat, CGFloat, CGFloat);
 static inline CGFloat MaximumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGFloat MinimumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
-
-static inline UIEdgeInsets MADEdgeInsetsForLayoutGuides(id <UILayoutSupport> topLayoutGuide,
-                                                        id <UILayoutSupport> bottomLayoutGuide) {
-    return UIEdgeInsetsMake(topLayoutGuide.length, CGSizeZero.width, bottomLayoutGuide.length, CGSizeZero.width);
-}
-
-static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
-    return 1 +  ( l2 - l1 - (m * 2) )  / l1;
-}
-
-static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
-                                                  CGFloat layoutGuideLength, CGFloat margin) {
-    return parentViewLength > subViewLength ?
-            ((parentViewLength - subViewLength) / 2.0000f) + margin : layoutGuideLength + margin;
-}
-
-static inline CGFloat MaximumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
-    return MAX(zoomScale(paper.width, container.width, margin),
-               zoomScale(paper.height, container.height, margin));
-}
-
-static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
-    return MIN(zoomScale(paper.width, container.width, margin),
-               zoomScale(paper.height, container.height, margin));
-}
-
-static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
-    return CGPointMake(contentSize.width * 0.5000f + MAX(((scrollerBoundsSize.width - (margin * 2)) - contentSize.width) * 0.5000f, 0.0000f),
-                       contentSize.height * 0.5000f + MAX(((scrollerBoundsSize.height - (margin * 2)) - contentSize.height) * 0.5000f, 0.0000f));
-}
-
-static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<UILayoutSupport> bottomLayoutGuide) {
-    return UIEdgeInsetsMake(topLayoutGuide.length, CGSizeZero.width, bottomLayoutGuide.length, CGSizeZero.width);
-}
 
 @interface MADDocumentPageController ()
     <UIAccessibilityReadingContent,
@@ -97,8 +62,8 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 #pragma mark Static Helpers
 
 + (void)centerDocumentView:(UIView *)documentView insideScrollView:(UIScrollView *)scrollView
-                                                    topLayoutGuide:(id <UILayoutSupport>)topLayoutGuide
-                                                 bottomLayoutGuide:(id <UILayoutSupport>)bottomLayoutGuide
+                                                    topLayoutGuide:(CGFloat)topLayoutGuide
+                                                 bottomLayoutGuide:(CGFloat)bottomLayoutGuide
                                                             margin:(const CGFloat)margin {
     
     documentView.center = documentCenterPoint(scrollView.bounds.size, scrollView.contentSize, margin);
@@ -215,14 +180,14 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
     MADDocumentScroller *documentScroller = self.documentScroller;
     [MADDocumentPageController centerDocumentView: documentView
                                  insideScrollView: documentScroller
-                                   topLayoutGuide: self.topLayoutGuide
-                                bottomLayoutGuide: self.bottomLayoutGuide
+                                   topLayoutGuide: self.view.safeAreaInsets.top
+                                bottomLayoutGuide: self.view.safeAreaInsets.bottom
                                            margin: PageEdgeInsetMargin];
     if (_initalLayout) {
         _initalLayout = NO;
         
         documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: documentScroller
-                                                                                          bounds: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
+                                                                                          bounds: boundsInsets(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom)];
         
         MADocument *document = self.document;
         documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize,
@@ -249,7 +214,7 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
         
         documentScroller.scrollIndicatorInsets =
         [MADDocumentPageController ScrollIndicatorInset: self.documentScroller
-                                                 bounds: MADEdgeInsetsForLayoutGuides(self.topLayoutGuide, self.bottomLayoutGuide)];
+                                                 bounds: boundsInsets(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom)];
         documentScroller.contentOffset = nextContentOffset;
         documentScroller.bounds = MADRectOfSize(size);
         
@@ -283,18 +248,18 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     [MADDocumentPageController centerDocumentView: self.documentView
-                                   insideScrollView: scrollView
-                                     topLayoutGuide: self.topLayoutGuide
-                                  bottomLayoutGuide: self.bottomLayoutGuide
-                                             margin: PageEdgeInsetMargin];
+                                 insideScrollView: scrollView
+                                   topLayoutGuide: self.view.safeAreaInsets.top
+                                bottomLayoutGuide: self.view.safeAreaInsets.bottom
+                                           margin: PageEdgeInsetMargin];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view
                         atScale:(CGFloat)scale {
     [MADDocumentPageController centerDocumentView: view
                                  insideScrollView: scrollView
-                                   topLayoutGuide: self.topLayoutGuide
-                                bottomLayoutGuide: self.bottomLayoutGuide
+                                   topLayoutGuide: self.view.safeAreaInsets.top
+                                bottomLayoutGuide: self.view.safeAreaInsets.bottom
                                            margin: PageEdgeInsetMargin];
     view.contentScaleFactor = scrollView.traitCollection.displayScale * scale;
     [view setNeedsDisplay];
@@ -346,3 +311,33 @@ static inline UIEdgeInsets boundsInsets(id<UILayoutSupport> topLayoutGuide, id<U
 }
 
 @end
+
+static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
+    return 1.00000000f +  ( l2 - l1 - (m * 2.00000000f) )  / l1;
+}
+
+static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
+                                                  CGFloat layoutGuideLength, CGFloat margin) {
+    return parentViewLength > subViewLength ?
+    ((parentViewLength - subViewLength) / 2.0000f) + margin : layoutGuideLength + margin;
+}
+
+static inline CGFloat MaximumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
+    return MAX(zoomScale(paper.width, container.width, margin),
+               zoomScale(paper.height, container.height, margin));
+}
+
+static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
+    return MIN(zoomScale(paper.width, container.width, margin),
+               zoomScale(paper.height, container.height, margin));
+}
+
+static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
+    return CGPointMake(contentSize.width * 0.5000f + MAX(((scrollerBoundsSize.width - (margin * 2)) - contentSize.width) * 0.5000f, 0.0000f),
+                       contentSize.height * 0.5000f + MAX(((scrollerBoundsSize.height - (margin * 2)) - contentSize.height) * 0.5000f, 0.0000f));
+}
+
+static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLayoutGuide) {
+    return UIEdgeInsetsMake(topLayoutGuide, CGSizeZero.width, bottomLayoutGuide, CGSizeZero.width);
+}
+

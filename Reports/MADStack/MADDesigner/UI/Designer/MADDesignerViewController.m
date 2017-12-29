@@ -184,12 +184,12 @@ static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
     return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
 }
 
-static const inline CGSize sizePopoverDefault();
+static const inline CGSize sizePopoverDefault(void);
 static const inline CGSize sizePopoverDefault() {
     return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
 }
 
-static const inline CGSize sizePopoverFonts();
+static const inline CGSize sizePopoverFonts(void);
 static const inline CGSize sizePopoverFonts() {
     return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
 }
@@ -584,14 +584,14 @@ static const inline CGSize sizePopoverFonts() {
     constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.scroller
                                                            containerTop: self.container];
     constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.scroller
-                                                                         bottom: self.bottomLayoutGuide];
+                                                                         bottom: self.container];
     constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.container
                                                                 width: self.view.frame.size.width / self.scroller.zoomScale];
     constraintContentLeft.priority = 999;
     constraintContentRight.priority = 999;
     
     viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.scroller
-                                                                         view: self.topLayoutGuide];
+                                                                         view: self.container];
 
     constraints = [[NSArray alloc] initWithObjects: constraintContentLeft,
                                                     constraintContentRight,
@@ -755,7 +755,8 @@ static const inline CGSize sizePopoverFonts() {
         
     } else {
         
-        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+        insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+                                  self.bottomLayoutGuide.length, CGSizeZero.width);
         
     }
     
@@ -786,8 +787,7 @@ static const inline CGSize sizePopoverFonts() {
         
         
         for (UICollectionView *sectionView in self.view.sectionViews.objectEnumerator) {
-            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height,
-                                                        CGSizeZero.width,
+            sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width,
                                                         CGSizeZero.height,
                                                         presentedRect.size.width - MTReportDesignerBorderPaddingSides);
             sectionView.scrollIndicatorInsets = sectionView.contentInset;
@@ -1716,7 +1716,7 @@ static const inline CGSize sizePopoverFonts() {
 
     MADDesignerViewController * __weak weakself = self;
     
-    void (^updateAggregate)();
+    void (^updateAggregate)(void);
     updateAggregate = ^{
         
         MADDesignerViewController *strongself = weakself;

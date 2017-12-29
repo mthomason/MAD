@@ -13,6 +13,10 @@
 
 #import "MADExplorerController.h"
 
+static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing);
+static inline CGRect CGRectTabBarOffscreen(CGRect rect);
+static inline CGRect CGRectTabBarOnscreen(CGRect rect);
+
 @implementation MADExplorerAnimatedCrossFadePop {
     BOOL _hideToolbar;
 }
@@ -49,22 +53,6 @@
 @end
 
 @implementation MADExplorerAnimated
-
-static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing);
-static inline CGRect CGRectTabBarOffscreen(CGRect rect);
-static inline CGRect CGRectTabBarOnscreen(CGRect rect);
-
-static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing)  {
-    return pushing ? CGRectTabBarOnscreen(rect) : CGRectTabBarOffscreen(rect);
-}
-
-static inline CGRect CGRectTabBarOffscreen(CGRect rect)  {
-    return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
-}
-
-static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
-    return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
-}
 
 + (instancetype)newFileExplorerAnimatedShowToolbar:(BOOL)showToolbar pushing:(BOOL)pushing {
     id instance = pushing ? [[MADExplorerAnimatedCrossFadePush alloc] initToolbar:showToolbar] :
@@ -148,3 +136,15 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
 }
 
 @end
+
+static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing)  {
+    return pushing ? CGRectTabBarOnscreen(rect) : CGRectTabBarOffscreen(rect);
+}
+
+static inline CGRect CGRectTabBarOffscreen(CGRect rect)  {
+    return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
+}
+
+static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
+    return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
+}

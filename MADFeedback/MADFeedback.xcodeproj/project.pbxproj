@@ -390,7 +390,7 @@
 				INFOPLIST_FILE = MADFeedback/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_CFLAGS = "-Wno-error=unused-command-line-argument-hard-error-in-future";
+				OTHER_CFLAGS = "-Wno-error=unused-command-line-argument";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.feedback;
 				PRODUCT_NAME = MADFeedback;
 				SKIP_INSTALL = YES;

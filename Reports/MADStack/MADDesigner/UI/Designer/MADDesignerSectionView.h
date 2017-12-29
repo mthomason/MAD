@@ -34,14 +34,14 @@ typedef NS_ENUM(NSUInteger, MADBorderState) {
     @property (nonatomic, assign) BOOL selected;
 
     - (void)removeItemAtIndex:(NSIndexPath *)deletePath
-                       update:(void (^)())update
-            animationComplete:(void (^)())animationComplete
-                   completion:(void (^)())completion;
+                       update:(void (^)(void))update
+            animationComplete:(void (^)(void))animationComplete
+                   completion:(void (^)(void))completion;
                        
     - (void)insertItemAtIndex:(NSIndexPath *)path
-                       update:(void (^)())update
-            animationComplete:(void (^)())animationComplete
-                   completion:(void (^)())completion;
+                       update:(void (^)(void))update
+            animationComplete:(void (^)(void))animationComplete
+                   completion:(void (^)(void))completion;
 
 @end
 

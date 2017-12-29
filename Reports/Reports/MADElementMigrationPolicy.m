@@ -440,10 +440,10 @@
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)styleTop, kCFNumberSInt16Type, &ts);
     CFNumberGetValue((__bridge CFNumberRef _Nonnull)styleBottom, kCFNumberSInt16Type, &bs);
 
-    id style = [[MADBorderStyle alloc] initWithLeft: widthLeft.doubleValue
-                                              right: widthRight.doubleValue
-                                                top: heightTop.doubleValue
-                                             bottom: heightBottom.doubleValue
+    id style = [[MADBorderStyle alloc] initWithLeft: widthLeft.floatValue
+                                              right: widthRight.floatValue
+                                                top: heightTop.floatValue
+                                             bottom: heightBottom.floatValue
                                           leftStyle: ls
                                          rightStyle: rs
                                            topStyle: ts

@@ -71,16 +71,12 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                   CGSizeZero.width,
-                                                   self.bottomLayoutGuide.length,
-                                                   CGSizeZero.width);
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
-                                                            CGSizeZero.width,
-                                                            self.bottomLayoutGuide.length,
-                                                            CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
+                                                   self.view.safeAreaInsets.bottom, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
+                                                            self.view.safeAreaInsets.bottom, CGSizeZero.width);
     if (self.completedInitalLayout == NO) {
-        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.topLayoutGuide.length) animated:NO];
+        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.view.safeAreaInsets.top) animated:NO];
         self.completedInitalLayout = YES;
     }
 }

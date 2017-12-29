@@ -237,7 +237,7 @@
 
     typeof(self) __weak wself = self;
 
-    void (^updateContent)();
+    void (^updateContent)(void);
     updateContent = ^{
         
         MADLocalFileCoordinator *sself = wself;

@@ -10,8 +10,8 @@
 
 @implementation MADAlertControllerPromptStorage
 
-+ (instancetype)newAlertControllerPromptStorage:(void (^)())handlerLocal
-                                          cloud:(void (^)())handlerCloud {
++ (instancetype)newAlertControllerPromptStorage:(void (^)(void))handlerLocal
+                                          cloud:(void (^)(void))handlerCloud {
 
     NSString *MADTitleButtonLocalOnly        = @"Local Only";
     NSString *MADTitleButtonCloud            = @"iCloud";
@@ -33,12 +33,16 @@
     
     option = [UIAlertAction actionWithTitle: localOnlyActionTitle
                                       style: UIAlertActionStyleDefault
-                                    handler: handlerLocal];
+                                    handler:^(UIAlertAction * _Nonnull action) {
+                                        handlerLocal();
+                                    }];
     [storageController addAction:option];
     
     option = [UIAlertAction actionWithTitle: cloudActionTitle
                                       style: UIAlertActionStyleDefault
-                                    handler: handlerCloud];
+                                    handler:^(UIAlertAction * _Nonnull action) {
+                                        handlerCloud();
+                                    }];
     [storageController addAction:option];
 
     return storageController;

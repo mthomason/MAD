@@ -34,12 +34,7 @@ const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
-static inline UIUserNotificationType MADUserNotificationType();
-static inline UIUserNotificationType MADUserNotificationType() {
-    return (UIUserNotificationType)(UIUserNotificationTypeAlert |
-                                        UIUserNotificationTypeBadge |
-                                        UIUserNotificationTypeSound);
-}
+static inline UIUserNotificationType MADUserNotificationType(void);
 
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
@@ -67,16 +62,24 @@ static inline UIUserNotificationType MADUserNotificationType() {
 
 - (NSString *)ubiquityIdentifier {
     if (!_ubiquityIdentifier) {
-        _ubiquityIdentifier = @"iCloud.com.everydayapps.mad.designer";
+        _ubiquityIdentifier = [AppDelegate ubiquityIdentifier];
     }
     return _ubiquityIdentifier;
 }
 
 - (NSString *)groupIdentifier {
     if (!_groupIdentifier) {
-        _groupIdentifier = @"group.everydayapps.mad";
+        _groupIdentifier = [AppDelegate groupIdentifier];
     }
     return _groupIdentifier;
+}
+
++ (NSString *)ubiquityIdentifier {
+    return @"iCloud.com.everydayapps.mad.designer";
+}
+
++ (NSString *)groupIdentifier {
+    return @"group.everydayapps.mad";
 }
 
 - (NSString *)name {
@@ -330,3 +333,9 @@ static inline UIUserNotificationType MADUserNotificationType() {
 }
 
 @end
+
+static inline UIUserNotificationType MADUserNotificationType() {
+    return (UIUserNotificationType)(UIUserNotificationTypeAlert |
+                                    UIUserNotificationTypeBadge |
+                                    UIUserNotificationTypeSound);
+}

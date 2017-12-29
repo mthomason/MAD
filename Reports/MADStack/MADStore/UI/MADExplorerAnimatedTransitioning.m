@@ -52,7 +52,7 @@
 
 
     CGRect initalFrameFrom = [transitionContext initialFrameForViewController:viewControllerFrom];
-    CGRect initalFrameTo = [transitionContext initialFrameForViewController:viewControllerTo];
+    //CGRect initalFrameTo = [transitionContext initialFrameForViewController:viewControllerTo];
     CGRect finalFrameFrom = [transitionContext finalFrameForViewController:viewControllerFrom];
     CGRect finalFrameTo = [transitionContext finalFrameForViewController:viewControllerTo];
     
