@@ -74,13 +74,9 @@ static inline UIUserNotificationType MADUserNotificationType(void);
     return _groupIdentifier;
 }
 
-+ (NSString *)ubiquityIdentifier {
-    return @"iCloud.com.everydayapps.mad.designer";
-}
++ (NSString *)ubiquityIdentifier { return @"iCloud.com.everydayapps.mad.designer"; }
 
-+ (NSString *)groupIdentifier {
-    return @"group.everydayapps.mad";
-}
++ (NSString *)groupIdentifier { return @"group.everydayapps.mad"; }
 
 - (NSString *)name {
     if (!_name) {

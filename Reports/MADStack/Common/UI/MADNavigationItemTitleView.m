@@ -19,7 +19,6 @@
         titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
         titleView.text = title.copy;
         self.titleView = titleView;
-
     }
     return self;
 }

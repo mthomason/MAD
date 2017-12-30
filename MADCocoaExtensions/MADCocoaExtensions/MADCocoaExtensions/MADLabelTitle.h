@@ -9,9 +9,11 @@
 #ifndef MAD_MADLabelTitle_h
 #define MAD_MADLabelTitle_h
 
-#import <UIKit/UILabel.h>
+#import <UIKit/UIView.h>
 
-@interface MADLabelTitle : UILabel
+@interface MADLabelTitle : UIView
+
+    @property (nonatomic, copy) NSString *text;
 
 @end
 

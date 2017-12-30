@@ -23,6 +23,7 @@
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UITableView.h>
 #import <UIKit/UIStoryboard.h>
+#import <UIKit/UILabel.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>

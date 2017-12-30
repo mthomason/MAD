@@ -7,41 +7,63 @@
 //
 
 #import "MADLabelTitle.h"
+#import <UIKit/UILabel.h>
 #import "NSAttributedString+Logo.h"
 #import <MADCocoaExtensions/UIView+Animations.h>
+
+@interface MADLabelTitle ()
+
+    @property (nonatomic, weak) UILabel *title;
+
+@end
 
 @implementation MADLabelTitle
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        self.autoresizingMask = MADViewAutoresizingFlexable();
-        self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.lineBreakMode = NSLineBreakByTruncatingTail;
-        self.numberOfLines = 1;
-        self.minimumScaleFactor = 0.8f;
-        self.adjustsFontSizeToFitWidth = YES;
-        [self setContentCompressionResistancePriority: 900
-                                              forAxis: UILayoutConstraintAxisHorizontal];
+
+    UILabel *title = [[UILabel alloc] initWithFrame:frame];
+    title.autoresizingMask = MADViewAutoresizingFlexable();
+    title.translatesAutoresizingMaskIntoConstraints = YES;
+    title.lineBreakMode = NSLineBreakByTruncatingTail;
+    title.numberOfLines = 1;
+    title.minimumScaleFactor = 0.80000000f;
+    title.adjustsFontSizeToFitWidth = YES;
+    [title sizeToFit];
+
+    if (self = [super initWithFrame:title.frame]) {
+        [self addSubview:title];
+        self.title = title;
     }
     return self;
 }
 
 - (void)setText:(NSString *)text {
-    MADAttributedStringLogo *attributedText;
-    NSString *safetext;
+
+    NSString *safetext = text.copy;
     
-    safetext = text.copy;
+    MADAttributedStringLogo *attributedText;
     attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
     
-    super.text = safetext;
-    self.attributedText = attributedText;
+    UILabel *title = self.title;
+    text = safetext;
+    title.attributedText = attributedText;
 
-    [self sizeToFit];
+    [title sizeToFit];
+    self.bounds = title.bounds;
+}
+
+- (NSString *)text {
+    return self.title.text;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.center = CGPointMake(self.superview.center.x, self.center.y);
+    self.title.frame = self.bounds;
+}
+
+- (CGSize)intrinsicContentSize {
+    [super intrinsicContentSize];
+    return UILayoutFittingExpandedSize;
 }
 
 @end

@@ -12,7 +12,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.topItem.titleView sizeToFit];
+    //[self.topItem.titleView sizeToFit];
 }
 
 - (UIBarStyle)barStyle {

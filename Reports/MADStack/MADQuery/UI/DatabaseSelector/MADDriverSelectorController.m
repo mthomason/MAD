@@ -19,6 +19,7 @@
 #import <UIKit/UIVisualEffectView.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIStoryboard.h>
+#import <UIKit/UILabel.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionViewController.h>

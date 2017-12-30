@@ -21,6 +21,7 @@
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 #import <UIKit/UITableViewHeaderFooterView.h>
+#import <UIKit/UILabel.h>
 
 #import <MADFoundation/MADProgress.h>
 #import <MADFoundation/MADNotificationProgress.h>

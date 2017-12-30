@@ -19,6 +19,7 @@
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
+#import <UIKit/UILabel.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
