@@ -20,7 +20,7 @@ typedef NS_ENUM(int16_t, MADArrayCachingState) {
     MADArrayCachingStateEmpty = 6,
 };
 
-@interface MADArrayCaching<ObjectType> : NSEnumerator
+@interface MADArrayCaching<ObjectType> : NSEnumerator<ObjectType>
 
     @property (nonatomic, readwrite, weak, nullable) id <MADCacheProtocol> cachedDelegate;
     @property (nonatomic, readonly, copy, nonnull) NSString * identifier;

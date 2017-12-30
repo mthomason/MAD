@@ -426,6 +426,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return result;
 }
 
+- (id)nextObject {
+    return _lastObjectSelected ? [self objectAtIndex: _lastObjectSelected.index + 1] :
+                                 [self objectAtIndex: 0];
+}
+
 - (BOOL)removeAllObjects {
     _lastObjectSelected = nil;
     _numberOfRows = 0;

@@ -401,11 +401,6 @@ BOOL storeEnabled() {
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
-                                                            self.view.safeAreaInsets.bottom, CGSizeZero.width);
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
-                                                   self.view.safeAreaInsets.bottom, CGSizeZero.width);
 }
 
 - (void)viewDidLayoutSubviews {
