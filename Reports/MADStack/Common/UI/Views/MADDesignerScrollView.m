@@ -117,8 +117,10 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
 }
 
 - (void)handleTapDoubleGesture:(UITapGestureRecognizer *)sender {
-    static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
     if (sender.state == UIGestureRecognizerStateEnded) {
+    static const float MADBackgroundScrollViewZoomScales[] = {0.50000000f, 0.75000000f,
+                                                              1.00000000f, 2.00000000f,
+                                                              3.00000000f};
         CGFloat initalZoomScale = self.zoomScale;
         CGFloat zoomScale = MADBackgroundScrollViewZoomScales[0];
         for (int i=0; i<5; i++) {
@@ -165,9 +167,9 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
     NSArray<__kindof UIView *> *subviews = self.subviews;
-    [subviews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
-        [view setNeedsDisplay];
-    }];
+    for (__kindof UIView *subview in self.subviews) {
+        [subview setNeedsDisplay];
+    }
 }
 
 - (void)setNeedsUpdateConstraints {
