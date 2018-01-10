@@ -10,7 +10,7 @@
 #define MADReportSectionDataSourceProtocol_h
 
 @class MADDesignerSectionView, MADDesignerSectionLabel, MADDesignerLayoutDesignView,
-        UITapGestureRecognizer;
+        UITapGestureRecognizer, NSNumber;
 
 @protocol MADDesignerDesignViewDataSource <NSObject>
 
@@ -26,7 +26,10 @@
 
     - (double)designView:(MADDesignerLayoutDesignView *)designView heightForSectionAtIndex:(NSUInteger)index;
     - (NSString *)designView:(MADDesignerLayoutDesignView *)designView titleForSectionAtIndex:(NSUInteger)index;
-    - (int64_t)designView:(MADDesignerLayoutDesignView *)designView identifierAtIndex:(NSUInteger)index;
+    - (int64_t)sectionID:(NSUInteger)index;
+    - (NSNumber *)sectionKey:(NSUInteger)sectionIndex;
+    - (NSNumber *)sectionKeyDetail;
+
   @optional
     - (MADDesignerSectionView *)designView:(MADDesignerLayoutDesignView *)designView
               sectionViewForSectionAtIndex:(NSUInteger)index;

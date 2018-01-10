@@ -79,9 +79,16 @@
     return [[self.sectionsLayout sectionLayoutAtIndex:index] localizedDisplay];
 }
 
-- (int64_t)designView:(MADDesignerLayoutDesignView *)designView
-    identifierAtIndex:(NSUInteger)index {
+- (int64_t)sectionID:(NSUInteger)index {
     return [[self.sectionsLayout sectionLayoutAtIndex:index] identifier];
+}
+
+- (NSNumber *)sectionKey:(NSUInteger)index {
+    return @([[self.sectionsLayout sectionLayoutAtIndex:index] identifier]);
+}
+
+- (NSNumber *)sectionKeyDetail {
+    return @(self.sectionsLayout.detail.identifier);
 }
 
 - (MADDesignerSectionView *)designView:(MADDesignerLayoutDesignView *)designView

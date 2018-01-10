@@ -3534,16 +3534,11 @@ END_deselectElementView:;
 
 - (void)scrollToDetailSectionView {
     if (self.presentedViewController != nil) {
-        UIView *sectionView = [self detailSectionView];
-        CGRect rect = sectionView.frame;
+        
         self.hidesStatusBar = NO;
-        [self.view.scroller scrollRectToVisible:rect animated:YES];
+        [self.view.scroller scrollRectToVisible: self.view.scroller.container.sectionLabelDetail.frame
+                                       animated: YES];
     }
-}
-
-- (UIView *)detailSectionView {
-    NSNumber *identifier = @(_document.activeDocumentModel.hasDetailSection.identifier);
-    return (UIView *)self.view.scroller.container.sectionLabels[identifier];
 }
 
 - (void)adjustSettingsLocation {

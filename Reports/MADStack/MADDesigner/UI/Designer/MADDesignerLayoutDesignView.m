@@ -314,8 +314,6 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 // Called to update the view.
 
-
-
 - (void)reloadData {
     
     if (_datasource == nil) return;
@@ -335,7 +333,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     [self.viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:self.rulerVerticalConstraints];
     [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:self.rulerHorizontalConstraints];
     
-    CGFloat measurementControlHeight = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
+    CGFloat measurementControlHeight = CGSizeZero.height + MTReportDesignerRulerHeight +
+                                                           MTReportDesignerBorderPaddingVertical;
     
     NSLayoutConstraint *constraintViewTop, *constraintViewHeight, *constraintLabelRight,
                        *lcLabelBottom, *lcLabelHeight;
@@ -353,7 +352,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
         measurementSectionHeight = [datasource designView:self heightForSectionAtIndex:sectionIndex];
         measurementControlHeight += MTReportDesignerBufferPaddingVertical + measurementSectionHeight;
-        reportSectionKey = @([datasource designView:self identifierAtIndex:sectionIndex]);
+        reportSectionKey = [datasource sectionKey:sectionIndex];
         
         // Get new section view.
         sectionView = [datasource designView:self sectionViewForSectionAtIndex:sectionIndex];
@@ -374,7 +373,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
                                                                  viewBottom: sectionView
                                                                     padding: MTReportDesignerBufferPaddingVertical];
         
-        constraintViewHeight = [MADLayoutConstraint newLayoutConstraintView: sectionView height: measurementSectionHeight];
+        constraintViewHeight = [MADLayoutConstraint newLayoutConstraintView: sectionView
+                                                                     height: measurementSectionHeight];
         
         constraintLabelRight = [MADLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel container: sectionView
                                                                           padding: MTReportDesignerSectionLabelPaddingRight];
@@ -437,6 +437,16 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     
     _needsReload = NO;
     _needsCleanup = YES;
+}
+
+- (MADDesignerSectionView *)sectionViewDetail {
+    NSNumber *identifier = [[self datasource] sectionKeyDetail];
+    return self.sectionViews[identifier];
+}
+
+- (MADDesignerSectionLabel *)sectionLabelDetail {
+    NSNumber *identifier = [[self datasource] sectionKeyDetail];
+    return self.sectionLabels[identifier];
 }
 
 - (void)reloadDataIfNeeded {
@@ -596,6 +606,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     }
     return _sectionLabels;
 }
+
 
 #pragma mark -
 #pragma mark Helpers

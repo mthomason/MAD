@@ -32,6 +32,9 @@ extern const CGFloat MTReportDesignerSectionLabelHeight;
     @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
     @property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
 
+    @property (readonly, nonatomic, strong) MADDesignerSectionView *sectionViewDetail;
+    @property (readonly, nonatomic, strong) MADDesignerSectionLabel *sectionLabelDetail;
+
     @property (readonly, nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;
 
     @property (readonly, nonatomic, strong) UITapGestureRecognizer *strayTouchGestureRecognizer;
