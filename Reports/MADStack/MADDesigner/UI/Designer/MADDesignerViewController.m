@@ -163,36 +163,11 @@ static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
 static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
 
 static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
-static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
-    return scrollView.contentSize.width * 0.5000f +
-            MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
-}
-
 static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
-static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
-    return scrollView.contentSize.height * 0.5000f +
-            MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
-}
-
 static inline CGFloat DetailDisplayFrameOriginX(CGFloat width);
-static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) {
-    return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail;
-}
-
 static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop);
-static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
-    return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
-}
-
 static const inline CGSize sizePopoverDefault(void);
-static const inline CGSize sizePopoverDefault() {
-    return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
-}
-
 static const inline CGSize sizePopoverFonts(void);
-static const inline CGSize sizePopoverFonts() {
-    return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
-}
 
 @interface MADDesignerViewController()
     <MADViewControllerBarcodeDelegate,
@@ -3802,3 +3777,29 @@ END_deselectElementView:;
 }
 
 @end
+
+static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
+    return scrollView.contentSize.width * 0.5000f +
+    MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
+}
+
+static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
+    return scrollView.contentSize.height * 0.5000f +
+    MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
+}
+
+static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) {
+    return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail;
+}
+
+static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) {
+    return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail;
+}
+
+static const inline CGSize sizePopoverDefault() {
+    return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
+}
+
+static const inline CGSize sizePopoverFonts() {
+    return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
+}

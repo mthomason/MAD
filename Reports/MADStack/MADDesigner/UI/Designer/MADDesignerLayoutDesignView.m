@@ -495,6 +495,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     _delegate = delegate;
 }
 
+#pragma mark -
 #pragma mark Lazy load
 
 - (NSMutableSet <NSNumber *> *)selectedElements {
@@ -596,7 +597,8 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
     return _sectionLabels;
 }
 
-#pragma mark - Helpers
+#pragma mark -
+#pragma mark Helpers
 
 - (void)removeBorderFromSections {
     //Remove border from the section views
