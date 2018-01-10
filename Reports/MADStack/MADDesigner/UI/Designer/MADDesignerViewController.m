@@ -208,6 +208,7 @@ static const inline CGSize sizePopoverFonts(void);
     @property (nonatomic, strong) MADPromptManager *promptManager;
 
     @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
+    @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerLeft;
 
     @property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
     @property (nonatomic, strong) MADDesignerSectionLayoutController *viewControllerSectionLayoutSettings;
@@ -577,12 +578,25 @@ static const inline CGSize sizePopoverFonts(void);
                                                     viewScrollerTop, nil];
     [self.view addConstraints:constraints];
 
+    self.layoutConstraintContainerLeft = constraintContentLeft;
     self.layoutConstraintContainerWidth = constraintWidth;
 
 }
 
+- (void)viewSafeAreaInsetsDidChange {
+    [self.view layoutIfNeeded];
+    self.layoutConstraintContainerWidth.constant = self.view.safeAreaLayoutGuide.layoutFrame.size.width -
+                                        (self.view.safeAreaInsets.left + self.view.safeAreaInsets.right);
+    self.layoutConstraintContainerLeft.constant = self.view.safeAreaInsets.left;
+    [UIView animateWithDuration:0.33333333f animations:^{
+        [self.view layoutIfNeeded];
+    }];
+    [super viewSafeAreaInsetsDidChange];
+}
+
 - (CGFloat)widthForCurrentZoom {
-    return self.view.frame.size.width / self.view.scroller.zoomScale;
+    return self.view.safeAreaLayoutGuide.layoutFrame.size.width / self.view.scroller.zoomScale;
+    //return self.view.frame.size.width / self.view.scroller.zoomScale;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
