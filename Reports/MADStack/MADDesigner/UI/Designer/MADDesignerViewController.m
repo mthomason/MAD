@@ -364,7 +364,6 @@ static const inline CGSize sizePopoverFonts(void);
         _zoomScaleRestore = -1.0000f;
         _shownAndHidden = NO;
         _editAggregate = NO;
-        
         _insetsSetup = NO;
         _toolboxVisible = NO;
         _sectionSettingsVisible = NO;
@@ -744,7 +743,7 @@ static const inline CGSize sizePopoverFonts(void);
     //self.view.scroller.contentInset = self.view.safeAreaInsets;// insets;
     //self.view.scroller.scrollIndicatorInsets = self.view.safeAreaInsets;// insets;
     //self.view.scroller.contentInset = self.view.safeAreaInsets;// insets;
-    self.view.scroller.scrollIndicatorInsets = self.view.scroller.safeAreaInsets;// insets;
+    //self.view.scroller.scrollIndicatorInsets = self.view.scroller.safeAreaInsets;// insets;
 
     NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
     NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.scroller.container.safeAreaInsets));
@@ -786,6 +785,9 @@ static const inline CGSize sizePopoverFonts(void);
             sectionView.scrollIndicatorInsets = UIEdgeInsetsZero;
         }
     }
+    
+    //self.view.scroller.contentInset = self.view.safeAreaInsets;// insets;
+    //self.view.scroller.scrollIndicatorInsets = self.view.safeAreaInsets;// insets;
     
 }
 
