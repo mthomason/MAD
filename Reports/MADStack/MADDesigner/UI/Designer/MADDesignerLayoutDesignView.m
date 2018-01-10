@@ -440,12 +440,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (MADDesignerSectionView *)sectionViewDetail {
-    NSNumber *identifier = [[self datasource] sectionKeyDetail];
+    NSNumber *identifier = [self.datasource sectionKeyDetail];
     return self.sectionViews[identifier];
 }
 
 - (MADDesignerSectionLabel *)sectionLabelDetail {
-    NSNumber *identifier = [[self datasource] sectionKeyDetail];
+    NSNumber *identifier = [self.datasource sectionKeyDetail];
     return self.sectionLabels[identifier];
 }
 
