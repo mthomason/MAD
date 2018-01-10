@@ -798,7 +798,7 @@ static const inline CGSize sizePopoverFonts() {
     if (presentedRect.origin.x > CGPointZero.x) {
         
         
-        for (UICollectionView *sectionView in self.view.sectionViews.objectEnumerator) {
+        for (UICollectionView *sectionView in self.view.scroller.container.sectionViews.objectEnumerator) {
             sectionView.contentInset = UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.width,
                                                         CGSizeZero.height,
                                                         presentedRect.size.width - MTReportDesignerBorderPaddingSides);
@@ -806,7 +806,7 @@ static const inline CGSize sizePopoverFonts() {
         }
         
     } else {
-        for (UICollectionView *sectionView in self.view.sectionViews.objectEnumerator) {
+        for (UICollectionView *sectionView in self.view.scroller.container.sectionViews.objectEnumerator) {
             sectionView.contentInset = UIEdgeInsetsZero;
             sectionView.scrollIndicatorInsets = UIEdgeInsetsZero;
         }
@@ -954,7 +954,7 @@ static const inline CGSize sizePopoverFonts() {
                                                  size: fontDescriptor.pointSize / scrollView.zoomScale];
             NSDictionary *attributes;
             attributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-            NSArray <MADDesignerSectionLabel *> *sectionControlViewsArray = self.view.sectionLabels.allValues;
+            NSArray <MADDesignerSectionLabel *> *sectionControlViewsArray = self.view.scroller.container.sectionLabels.allValues;
             MADDesignerSectionLabel *controlView;
             CGRect controlViewTextBounds;
             for (controlView in sectionControlViewsArray) {
@@ -1044,7 +1044,7 @@ static const inline CGSize sizePopoverFonts() {
         CGFloat pointsize = captionFont.pointSize;
         
         NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray;
-        sectionControlViewsArray = self.view.sectionLabels.allValues;
+        sectionControlViewsArray = self.view.scroller.container.sectionLabels.allValues;
         [sectionControlViewsArray enumerateObjectsWithOptions: NSEnumerationConcurrent
                                                    usingBlock: ^(__kindof MADDesignerSectionLabel * _Nonnull controlView,
                                                                  NSUInteger idx, BOOL * _Nonnull stop) {
@@ -1058,7 +1058,7 @@ static const inline CGSize sizePopoverFonts() {
         }];
         
         UICollectionView *section;
-        NSEnumerator *objectEnumerator = self.view.sectionViews.objectEnumerator;
+        NSEnumerator *objectEnumerator = self.view.scroller.container.sectionViews.objectEnumerator;
         for (section in objectEnumerator) {
             section.contentScaleFactor = scale;
         }
@@ -1131,7 +1131,7 @@ static const inline CGSize sizePopoverFonts() {
     private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     private.parentContext = self.document.managedObjectContext;
     NSDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
-    sectionViews = self.view.sectionViews;
+    sectionViews = self.view.scroller.container.sectionViews;
     [private performBlock:^{
     
         RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -1182,7 +1182,7 @@ static const inline CGSize sizePopoverFonts() {
 
     
     NSNumber *key = @(section.identifier);
-    UICollectionView *collectionView = self.view.sectionViews[key];
+    UICollectionView *collectionView = self.view.scroller.container.sectionViews[key];
     [collectionView.backgroundView setNeedsDisplay];
     [documentSectionView.collectionViewLayout invalidateLayout];
     [section setInterfaceHeight: collectionViewContentSize.height];
@@ -1247,7 +1247,7 @@ static const inline CGSize sizePopoverFonts() {
     section.numberOfRows = numberOfRows;
     
     id sectionKey = section.objectID.copy;
-    UICollectionView *collectionView = self.view.sectionViews[sectionKey];
+    UICollectionView *collectionView = self.view.scroller.container.sectionViews[sectionKey];
     MADDesignerSectionBackground *backgroundView = (MADDesignerSectionBackground *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
     
@@ -1835,7 +1835,7 @@ static const inline CGSize sizePopoverFonts() {
     
     self.objectIdEditDynamicLabel = @(object.identifier);
     
-    UIView *viewToEdit = [self.view.sectionLabels objectForKey:self.objectIdEditDynamicLabel];
+    UIView *viewToEdit = [self.view.scroller.container.sectionLabels objectForKey:self.objectIdEditDynamicLabel];
     
     MADQueryChooseFieldController *chooseFieldViewController;
     chooseFieldViewController = [MADQueryChooseFieldController newQueryBuilderChooseFieldViewController];
@@ -3497,12 +3497,12 @@ END_deselectElementView:;
 
 - (MADDesignerSectionView *)getSectionViewForSectionID:(int64_t)sectionID {
     NSNumber *identifier = @(sectionID);
-    return self.view.sectionViews[identifier];
+    return self.view.scroller.container.sectionViews[identifier];
 }
 
 - (MADDesignerSectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)section {
     NSNumber *identifier = @(section.identifier);
-    return self.view.sectionViews[identifier];
+    return self.view.scroller.container.sectionViews[identifier];
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
@@ -3566,7 +3566,7 @@ END_deselectElementView:;
 
 - (UIView *)detailSectionView {
     NSNumber *identifier = @(_document.activeDocumentModel.hasDetailSection.identifier);
-    return (UIView *)self.view.sectionLabels[identifier];
+    return (UIView *)self.view.scroller.container.sectionLabels[identifier];
 }
 
 - (void)adjustSettingsLocation {
@@ -3798,7 +3798,7 @@ END_deselectElementView:;
 
 - (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)section {
     NSNumber *identifier = @(section.identifier);
-    return self.view.sectionLabels[identifier];
+    return self.view.scroller.container.sectionLabels[identifier];
 }
 
 @end

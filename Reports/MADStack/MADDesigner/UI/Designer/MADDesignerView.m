@@ -39,12 +39,4 @@
     return CGSizeMake(self.bounds.size.width, self.scroller.container.sizeHeight);
 }
 
-- (NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *)sectionViews {
-    return self.scroller.sectionViews;
-}
-
-- (NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *)sectionLabels {
-    return self.scroller.sectionLabels;
-}
-
 @end

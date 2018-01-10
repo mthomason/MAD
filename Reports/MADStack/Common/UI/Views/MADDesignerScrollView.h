@@ -23,9 +23,6 @@
                           containerSize:(CGSize)containerSize
                              adjustment:(CGFloat)adjustment;
 
-    @property (nonatomic, readonly) NSMutableDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews;
-    @property (nonatomic, readonly) NSMutableDictionary <NSNumber *, MADDesignerSectionLabel *> *sectionLabels;
-
 @end
 
 #endif
