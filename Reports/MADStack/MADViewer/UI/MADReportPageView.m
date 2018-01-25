@@ -30,9 +30,6 @@
 
 #import "MADLabelTimer.h"
 
-static NSString * const PageNumber = @"Page %@";
-static NSString * const MADTextNoCache = @"No Cache";
-
 static const CGFloat PageCounterWidth = 99.0000f;
 static const CGFloat PageCounterHeight = 33.0000f;
 static const CGFloat PageCounterBuffer = 10.0000f;

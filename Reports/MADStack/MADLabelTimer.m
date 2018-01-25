@@ -11,6 +11,8 @@
 #import <MADDataStructures/MTPair.h>
 #import "NSDate+Extras.h"
 
+static NSString * const MADTextNoCache = @"No Cache";
+
 @interface MADLabelTimer ()
 
     @property (nonatomic, weak) UILabel *label;
@@ -81,7 +83,7 @@ void invalidateTimer(NSTimer *t) {
         [self displayNoCache];
     } else {
         
-        self.lastCacheDate = lastCacheDate.copy;
+        _lastCacheDate = lastCacheDate.copy;
         NSTimeInterval updateLabelInSeconds = [self displayWithLastCacheDate:lastCacheDate];
         
         invalidateTimer(_timerLabelTimeSinceRefreh);
@@ -89,7 +91,7 @@ void invalidateTimer(NSTimer *t) {
         NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds
                                                       target: self
                                                     selector: @selector(updateWithTimer:)
-                                                    userInfo: lastCacheDate
+                                                    userInfo: _lastCacheDate
                                                      repeats: NO];
         self.timerLabelTimeSinceRefreh = t;
     }
@@ -115,8 +117,7 @@ void invalidateTimer(NSTimer *t) {
 }
 
 - (void)displayNoCache {
-    NSString *noCache = NSLocalizedString(@"No Cache", @"No Cache");
-    self.label.text = noCache;
+    self.label.text = NSLocalizedString(MADTextNoCache, MADTextNoCache);
 }
 
 - (MTDateResolution)displayWithLastCacheDate:(NSDate *)lastCacheDate {

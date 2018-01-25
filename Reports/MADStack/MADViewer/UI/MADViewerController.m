@@ -86,7 +86,6 @@
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
-static NSString * const MADTextNoCache = @"No Cache";
 
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
@@ -263,6 +262,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         _startedRefresh = NO;
         _pageIsAnimating = NO;
         _updatingOfTimerIsPaused = NO;
+        _lastCacheDate = nil;
         
         MADOperationQueue *refreshQueue = [[MADOperationQueue alloc] init];
         self.refreshQueue = refreshQueue;
@@ -945,8 +945,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         }
 
         if (_lastCacheDate == nil) {    // Find last cache date
-            NSString *noCache = NSLocalizedString(MADTextNoCache, MADTextNoCache);
-            [labelStatus updateStatusWithTime:noCache];
+            [labelStatus displayNoCache];
             return;
         }
         
@@ -966,9 +965,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         self.timerLabelTimeSinceRefreh = nil;
     }
     
-    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
-                                                  target: self selector: @selector(updateTimeSinceLastRefresh:)
-                                                userInfo: nil repeats: NO];
+    NSTimer *t;
+    t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
+                                         target: self
+                                       selector: @selector(updateTimeSinceLastRefresh:)
+                                       userInfo: nil repeats: NO];
     self.timerLabelTimeSinceRefreh = t;
 }
 
@@ -998,7 +999,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
     if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
-        
+        _lastCacheDate = nil;
+        if (![NSThread isMainThread]) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self updateTimeSinceLastRefresh:nil];
+            });
+        } else {
+            [self updateTimeSinceLastRefresh:nil];
+        }
     }
 }
 
@@ -1147,10 +1155,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark -
 #pragma mark Operations
-
-- (void)operation:(MADOperation *)operation setLastCacheDate:(NSDate *)date {
-    _lastCacheDate = date.copy;
-}
 
 - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
     if (active) {

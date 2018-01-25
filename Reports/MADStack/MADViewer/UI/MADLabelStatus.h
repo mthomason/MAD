@@ -21,6 +21,7 @@
     - (void)updateStatusWithTime:(NSString *)timeMessage;
     - (void)updateStatusWithRecordsRead:(NSString *)message;
     - (void)updateStatusWithPageNumber:(NSString *)message;
+    - (void)displayNoCache;
 
 @end
 
