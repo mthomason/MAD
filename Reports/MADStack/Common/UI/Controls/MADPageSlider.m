@@ -23,36 +23,14 @@
 
 static const CGFloat MADSliderPaginationWidth = 40.0000f;
 static NSString * const ConstTestStringValue = @"0";
-
 inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight);
-inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight) {
-    return viewSizeHeight / elementSizeHeight;
-}
-
 inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue);
-inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue) {
-    if (numberOfTicksCalc(viewSizeHeight, elementSizeHeight) <= 0) {
-        return 0;
-    } else if (numberOfTicksCalc(viewSizeHeight, elementSizeHeight) > maximumValue) {
-        return (unsigned long)floor(maximumValue);
-    } else {
-        return (unsigned long)numberOfTicksCalc(viewSizeHeight, elementSizeHeight) - 1;
-    }
-}
-
 static inline CGFloat MaxDimension(CGSize size);
-static inline CGFloat MaxDimension(CGSize size) {
-    return MAX(size.width, size.height);
-}
+static inline CGAffineTransform translateForward(CGSize size);
+static inline CGAffineTransform rotate(void);
+static inline CGAffineTransform translateBack(CGSize size);
 
 @interface MADPageSlider ()
-
-    @property (nonatomic, assign) CGFloat stringHeight;
-
-    @property (nonatomic, assign) CGRect lastRect;
-    @property (nonatomic, assign) unsigned long lastNumberOfTicks;
-
-    @property (nonatomic, assign) BOOL enabledColor;
 
     @property (nonatomic, weak, getter=pageSlider) MADSliderPageVertical *slider;
     @property (nonatomic, weak) UIVisualEffectView *vibrancyView;
@@ -60,7 +38,13 @@ static inline CGFloat MaxDimension(CGSize size) {
 
 @end
 
-@implementation MADPageSlider
+@implementation MADPageSlider {
+    NSUInteger _numberOfPages;
+    CGFloat _stringHeight;
+    CGRect _lastRect;
+    unsigned long _lastNumberOfTicks;
+    BOOL _enabledColor;
+}
 
 + (CGSize)BoundsForAttributedString:(NSAttributedString *)string {
     CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0000f, CGFLOAT_MAX)
@@ -131,7 +115,7 @@ static inline CGFloat MaxDimension(CGSize size) {
                                                                          attributes: attributes];
         
         CGSize bounds = [MADPageSlider BoundsForAttributedString:testString];
-        self.stringHeight = bounds.height;
+        _stringHeight = bounds.height;
         
         self.labels = nil;
         
@@ -162,15 +146,15 @@ static inline CGFloat MaxDimension(CGSize size) {
     
     CGRect rect = self.bounds;
     unsigned long numberOfTicks = availableLabelSlots(rect.size.height,
-                                                      self.stringHeight,
+                                                      _stringHeight,
                                                       self.maximumValue);
     
-    if (CGRectEqualToRect(rect, self.lastRect) && numberOfTicks == self.lastNumberOfTicks) {
+    if (CGRectEqualToRect(rect, _lastRect) && numberOfTicks == _lastNumberOfTicks) {
         return;
     }
     
-    self.lastRect = rect;
-    self.lastNumberOfTicks = numberOfTicks;
+    _lastRect = rect;
+    _lastNumberOfTicks = numberOfTicks;
     
     for (UIView *label in self.labels) {
         [label removeFromSuperview];
@@ -188,25 +172,25 @@ static inline CGFloat MaxDimension(CGSize size) {
     typeof(self) __weak weakself = self;
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_sync(dispatch_get_main_queue(), ^{
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //    dispatch_sync(dispatch_get_main_queue(), ^{
                 
                 @autoreleasepool {
                     typeof(self) strongself = weakself;
                     
                     MADLabelPageSlider *label;
                     label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                      rect.size.width, strongself.stringHeight)];
+                                                                      rect.size.width, strongself->_stringHeight)];
                     label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
-                    label.enabled = strongself.enabledColor;
+                    label.enabled = strongself->_enabledColor;
                     [label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
                     [strongself.vibrancyView.contentView addSubview:label];
                     [strongself.labels addObject:label];
                     
                 }
 
-            });
-        });
+        //    });
+        //});
         }
         drawingPoint = CGPointMake(drawingPoint.x,
                                    drawingPoint.y + _stringHeight + distanceBetweenTicks);
@@ -259,10 +243,10 @@ static inline CGFloat MaxDimension(CGSize size) {
         [slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
          forControlEvents: UIControlEventTouchUpInside];
         
-        UITapGestureRecognizer *tapGestureRecognizer;
-        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                       action: @selector(handleGestureTapSlider:)];
-        [slider addGestureRecognizer:tapGestureRecognizer];
+        UITapGestureRecognizer *tap;
+        tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                      action: @selector(handleGestureTapSlider:)];
+        [slider addGestureRecognizer:tap];
         
         slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
         self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
@@ -300,14 +284,27 @@ static inline CGFloat MaxDimension(CGSize size) {
     return self.pageSlider.maximumValue;
 }
 
-- (void)setMaximumValue:(float)maximumValue {
-    if (self.pageSlider.minimumValue != maximumValue || maximumValue == 0.0) {
-        _lastNumberOfTicks = 0;
-    }
+- (void)setNumberOfPages:(NSUInteger)numberOfPages {
+    UISlider *s = self.slider;
+    s.maximumValue = (float)(numberOfPages > 0 ? numberOfPages - 1 : 0);
+    s.minimumValue = (float)0;
+    _numberOfPages = numberOfPages;
+    [self setNeedsLayout];
+}
+
+- (NSMutableArray <UILabel *> *)labels {
     if (_labels == nil) {
         NSMutableArray *labels;
         labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
         _labels = labels;
+    }
+    return _labels;
+}
+
+- (void)setMaximumValue:(float)maximumValue {
+    if ((int)roundf(self.pageSlider.minimumValue) != (int)roundf(maximumValue) &&
+        (int)roundf(self.pageSlider.minimumValue) != (int)roundf(maximumValue) == 0) {
+        _lastNumberOfTicks = 0;
     }
     self.pageSlider.maximumValue = maximumValue;
     [self setNeedsLayout];
@@ -344,10 +341,10 @@ static inline CGFloat MaxDimension(CGSize size) {
     UISlider *slider = (UISlider *)tap.view;
     if (slider.highlighted == NO) {
         CGPoint pt = [tap locationInView: slider];
-        float percentage = (float)(pt.x / slider.bounds.size.width);
-        float delta = percentage * (slider.maximumValue - slider.minimumValue);
-        float value = slider.minimumValue + delta;
-        [slider setValue:value animated:YES];
+        [slider setValue: slider.minimumValue +
+                          ((float)(pt.x / slider.bounds.size.width)         //Percentage
+                           * (slider.maximumValue - slider.minimumValue))   //delta
+                animated: YES];
         [self handleSliderDidFinishDrag:slider];
         [self handleSliderChangedPage:slider];
     }
@@ -357,28 +354,23 @@ static inline CGFloat MaxDimension(CGSize size) {
 #pragma mark Custom
 
 - (void)setDisplayEnabled {
-    self.enabledColor = YES;
+    _enabledColor = YES;
 }
 
 - (void)setDisplayDisabled {
-    self.enabledColor = NO;
+    _enabledColor = NO;
 }
 
 - (NSUInteger)maximumNumberOfLabels {
     return availableLabelSlots(MaxDimension(self.frame.size),
-                               self.stringHeight,
+                               _stringHeight,
                                self.maximumValue) / 2 + 1;
 }
 
-- (void)rotateBoundingSize:(CGSize)boundingSize inContext:(CGContextRef)context {
-    CGAffineTransform translate1 = CGAffineTransformMakeTranslation(boundingSize.width / 2.0000f,
-                                                                    boundingSize.width / 2.0000f);
-    CGAffineTransform rotate = CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
-    CGAffineTransform translateBack = CGAffineTransformMakeTranslation(-boundingSize.width / 2.0000f,
-                                                                       -boundingSize.width / 2.0000f);
-    CGContextConcatCTM(context, translate1);
-    CGContextConcatCTM(context, rotate);
-    CGContextConcatCTM(context, translateBack);
+- (void)rotateBoundingSize:(CGSize)size inContext:(CGContextRef)context {
+    CGContextConcatCTM(context, translateForward(size));
+    CGContextConcatCTM(context, rotate());
+    CGContextConcatCTM(context, translateBack(size));
 }
 
 #pragma mark Drawing
@@ -398,3 +390,36 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 @end
+
+#pragma mark -
+#pragma mark Static functions
+
+inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight) {
+    return viewSizeHeight / elementSizeHeight;
+}
+
+inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue) {
+    if (numberOfTicksCalc(viewSizeHeight, elementSizeHeight) <= 0) {
+        return 0;
+    } else if (numberOfTicksCalc(viewSizeHeight, elementSizeHeight) > maximumValue) {
+        return (unsigned long)floor(maximumValue);
+    } else {
+        return (unsigned long)numberOfTicksCalc(viewSizeHeight, elementSizeHeight) - 1;
+    }
+}
+
+static inline CGFloat MaxDimension(CGSize size) {
+    return MAX(size.width, size.height);
+}
+
+static inline CGAffineTransform translateForward(CGSize size) {
+    return CGAffineTransformMakeTranslation(size.width / 2.0000f, size.width / 2.0000f);
+}
+
+static inline CGAffineTransform rotate() {
+    return CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
+}
+
+static inline CGAffineTransform translateBack(CGSize size) {
+    return CGAffineTransformMakeTranslation(-size.width / 2.0000f, -size.width / 2.0000f);
+}

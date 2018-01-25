@@ -472,11 +472,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
         [self.pageSlider setNeedsLayout];
+
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self.navigationController.toolbar setNeedsLayout];
         [self.navigationItem.titleView sizeToFit];
@@ -540,8 +543,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (BOOL)moveToPageAtIndex:(NSUInteger)index {
-    BOOL result = NO;
-    if ((unsigned long)index != _currentLocation.currentPage && index != NSNotFound) {
+    
+    BOOL success;
+    if ((success = ((unsigned long)index != _currentLocation.currentPage && index != NSNotFound))) {
         
         MADDocumentPageController *visiblePageViewController = [self visiblePageViewController];
         _currentLocation.currentPage = index;
@@ -579,9 +583,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
             }
 
         }];
-        result = YES;
     }
-    return result;
+    return success;
 }
 
 - (MADDocumentPageController *)currentPageviewController {
@@ -998,13 +1001,25 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
+
+    if ([operation isKindOfClass:[MADOperationRefreshReload class]] ||
+        [operation isKindOfClass:[MADRefreshOperationReload class]]) {
+    
         _lastCacheDate = nil;
+        
         if (![NSThread isMainThread]) {
+            
+            __weak typeof(self) wself = self;
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [self updateTimeSinceLastRefresh:nil];
+                typeof(self) sself = wself;
+                if (sself) {
+                    sself.pageSlider.numberOfPages = sself->_currentLocation.totalPages;
+                    [sself updateTimeSinceLastRefresh:nil];
+                }
             });
+            
         } else {
+            self.pageSlider.numberOfPages = _currentLocation.totalPages;
             [self updateTimeSinceLastRefresh:nil];
         }
     }
@@ -1031,9 +1046,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages {
-    MADPageSlider *slider = self.pageSlider;
-    if (round(slider.maximumValue) != round(numberOfPages)) {
-        slider.maximumValue = numberOfPages;
+    if ([operation isKindOfClass:[MADRefreshOperationReload class]]) {
+        self.pageSlider.numberOfPages = numberOfPages;
     }
     _currentLocation.totalPages = numberOfPages;
     [self.labelStatus updatePageStatus: _currentLocation];
