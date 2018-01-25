@@ -17,8 +17,6 @@
 
 #import <UIKit/UILabel.h>
 
-#import <QuartzCore/CALayer.h>
-
 #import <MAD/MADImageThumbnail.h>
 
 #import <MAD/MADPrintPageRenderer.h>
@@ -296,7 +294,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 - (NSString *)accessibilityLabel {
     NSUInteger pageNumberValue;
     NSNumber *pageNumberWrapper;
-    NSString *pageNumberString, *formatString, *pageNumberStringCaps, *result;
+    NSString *pageNumberString, *formatString, *pageNumberStringCaps;
     
     pageNumberValue = [self.delegatePage pageNumber];
     pageNumberWrapper = [[NSNumber alloc] initWithUnsignedInteger:pageNumberValue];
@@ -305,8 +303,7 @@ static const CGFloat PageCounterBuffer = 10.0000f;
                                                             numberStyle: NSNumberFormatterSpellOutStyle];
     formatString = NSLocalizedString(pageNumberString, pageNumberString);
     pageNumberStringCaps = pageNumberString.capitalizedString;
-    result = [[NSString alloc] initWithFormat:formatString, pageNumberStringCaps];
-    return result;
+    return [NSString stringWithFormat:formatString, pageNumberStringCaps];
 }
 
 @end

@@ -691,7 +691,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     
     MADViewerController * __weak weakself = self;
 
-    activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+    activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
+                                                          NSArray *returnedItems, NSError *activityError) {
         
         MADViewerController *sself = weakself;
         
