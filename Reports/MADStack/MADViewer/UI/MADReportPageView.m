@@ -19,7 +19,6 @@
 
 #import <QuartzCore/CALayer.h>
 
-//#import <MADBarcodes/png.h>
 #import <MAD/MADImageThumbnail.h>
 
 #import <MAD/MADPrintPageRenderer.h>
@@ -28,22 +27,17 @@
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
 
-#import "MADLabelTimer.h"
-
 static const CGFloat PageCounterWidth = 99.0000f;
 static const CGFloat PageCounterHeight = 33.0000f;
 static const CGFloat PageCounterBuffer = 10.0000f;
 
 @interface MADReportPageView ()
 
-    @property (nonatomic, weak) MADLabelTimer *timerLabel;
-
 @end
 
 @implementation MADReportPageView {
     BOOL _firstTime;
     BOOL _displaysPageCounter;
-    BOOL _displaysCacheTimer;
 }
 
 - (void)dealloc {
@@ -69,10 +63,6 @@ static const CGFloat PageCounterBuffer = 10.0000f;
     [super layoutSubviews];
     if (_firstTime) {
         _firstTime = NO;
-        if (_displaysCacheTimer) {
-            [self addTimerView];
-            [self updateTimeSinceLastRefresh:self];
-        }
         if (_displaysPageCounter) {
             [self displayPageCounterIndicator];
         }
@@ -109,7 +99,6 @@ static const CGFloat PageCounterBuffer = 10.0000f;
 #pragma mark
 
 - (void)setup {
-    _displaysCacheTimer = YES;
     _displaysPageCounter = NO;
     _drawBlankPage = NO;
     _firstTime = YES;
@@ -152,38 +141,6 @@ static const CGFloat PageCounterBuffer = 10.0000f;
                             }];
     }
 }
-
-#pragma mark -
-#pragma mark Timer
-
-- (void)addTimerView {
-    if (self.timerLabel == nil) {
-        CGRect viewFrame = CGRectMake(self.frame.size.width - 220.0000f,
-                                      self.frame.size.height - 23.0000f,
-                                      220.0000f, 23.0000f);
-        MADLabelTimer *view = [[MADLabelTimer alloc] initWithFrame:viewFrame];
-        [self addSubview:view];
-        
-        UIView * __weak blockView = view;
-        [UIView animateWithDuration:0.3000f
-                              delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
-            blockView.alpha = 1.0000f;
-        } completion:^(BOOL finished) {
-            if (finished) {
-                [UIView animateWithDuration:0.30000f delay:2.0000f
-                                    options:UIViewAnimationOptionCurveEaseOut animations:^{
-                                        blockView.alpha = 0.0000f;
-                                    } completion:nil];
-            }
-        }];
-        self.timerLabel = view;
-    }
-}
-
-- (void)updateTimeSinceLastRefresh:(id)sender {
-    NSDate *date = [self.delegatePage lastCacheDate];
-    [self.timerLabel updateWithDate: date];
- }
 
 #pragma mark - UITextInput
 #pragma mark Required
