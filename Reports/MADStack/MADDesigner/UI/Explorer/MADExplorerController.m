@@ -119,7 +119,7 @@ static NSString * const MADHintBarButtonItemAbout = @"Displays selected document
 static NSString * const MADTextOpenWithViewer = @"The attached document can be opened with MAD Viewer.";
 
 // FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
-//NSString * const MADUtiPublicData                               = @"public.data";
+// NSString * const MADUtiPublicData                               = @"public.data";
 
 @interface MADExplorerController()
     <NSFileManagerDelegate,
@@ -1232,24 +1232,19 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                   object: document];
 
 }
-
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
     NSLog(@"handleDocumentStateChangedNotificationNormal: %@", notification);
 /*    NSNotification *changeNotification;
     MADocument *document;
     SEL selector;
-
     changeNotification = notification.copy;
     document = changeNotification.object;
-    
     selector = @selector(openViewer);
-
     id operation = [[NSInvocationOperation alloc] initWithTarget: self
                                                      selector: selector
                                                        object: nil];
     
     [[NSOperationQueue mainQueue] addOperation:operation];*/
- 
 }
 
 - (void)openViewer {
