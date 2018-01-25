@@ -6,8 +6,16 @@
 //  Copyright © 2018 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADExplorerCellTitle_h
+#define Reports_MADExplorerCellTitle_h
+
 #import <Foundation/Foundation.h>
 
-@interface MADExplorerCellTitle : NSObject
+@class MADMetaData;
 
+@interface MADExplorerCellTitle : NSObject
+    + (NSString *)newExplorerCellTitle:(MADMetaData *)data;
+    + (NSString *)newExplorerCellTitleSubtitle:(MADMetaData *)data;
 @end
+
+#endif

@@ -19,10 +19,6 @@ extern NSString * const MADTextNotDownloaded;
        MADLabelFileExplorerDocumentCellSubtitle, UIActivityIndicatorView,
        UIProgressView;
 
-@interface MADStringFormatted : NSObject
-    + (NSString *)newStringFormattedSubtitle:(NSString *)status fileSize:(unsigned long long)fileSize;
-@end
-
 @interface MADCollectionViewCellDocument : UICollectionViewCell
 
     @property (nonatomic, assign, getter=isWobbling) BOOL wobbling;

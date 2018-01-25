@@ -594,16 +594,20 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark Lazy Load
 
 - (MADExplorerDataSource *)fileExplorerDataSource {
+
     if (!_fileExplorerDataSource) {
+        
         MADExplorerDataSource *datasource;
         typeof(self) __weak weakself = self;
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
                                                         cellConfiguration:^(MADCollectionViewCellDocument *cell) {
-            if (cell.delegate == nil) ((MADCollectionViewCellDocument *)cell).delegate = weakself;
-                                                            ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
+            ((MADCollectionViewCellDocument *)cell).delegate = weakself;
+            ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
         }];
         _fileExplorerDataSource = datasource;
+        
     }
+    
     return _fileExplorerDataSource;
 }
 
@@ -1039,6 +1043,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (void)explorerDidChangeNumberOfItemsSelected:(NSUInteger)numberOfItemsSelected {
+
     switch (numberOfItemsSelected) {
             
         case 0:
@@ -1052,7 +1057,6 @@ typedef NS_ENUM(short, MADExplorerState) {
         default:
             [self defaultBarButtonItemState];
             break;
-            
     }
 }
 
@@ -1078,6 +1082,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
     document.documentDelegate = self;
+    
     SEL documentStateChanged = @selector(handleDocumentStateChangedNotification:);
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: documentStateChanged
@@ -1096,7 +1101,21 @@ typedef NS_ENUM(short, MADExplorerState) {
             [[NSOperationQueue mainQueue] addOperation:operation];
         }
     }];
+}
 
+#pragma mark Helpers
+
+- (void)openViewer {
+    MADocument *document = self.activeDocumentManager.openDocument;
+    NSURL *fileURL = document.fileURL.copy;
+    NSString *title = fileURL.lastPathComponent.copy;
+    
+    MADTabBarController *tabBarController;
+    tabBarController = [MADTabBarController newTabBarController:document prompt:title];
+    tabBarController.document = document;
+    tabBarController.viewControllerDelegate = self;
+    
+    [self.navigationController pushViewController:tabBarController animated:YES];
 }
 
 #pragma mark -
@@ -1141,31 +1160,29 @@ typedef NS_ENUM(short, MADExplorerState) {
     MADocument *openDocument = self.activeDocumentManager.openDocument;
     if (openDocument && !(openDocument.documentState & UIDocumentStateClosed)) {
         
-        void (^handleCloseCompletion)(BOOL, NSURL *, NSURL *);
-        handleCloseCompletion = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
-            
-            if (success) {
-                
-                NSURL *documentURL = fileURL.copy;
-                NSURL *dataURL = cleanupURL.copy;
-                MADOpenDocumentManager *fileManager = self.activeDocumentManager;
-                [fileManager removeDocumentWithUrl:documentURL];
-                [MADFileUtilities removeFileAndArchiveAtURL:dataURL];
-                
-            }
-            
-            [self.navigationController popViewControllerAnimated:YES];
-            
-            id handlerClose;
-            SEL handleReloadAfterClose = @selector(handleReloadAfterClose);
-            handlerClose = [[NSInvocationOperation alloc] initWithTarget: self
-                                                                selector: handleReloadAfterClose
-                                                                  object: nil];
-            [[NSOperationQueue mainQueue] addOperation:handlerClose];
-            
-        };
-        
-        [MADocument close:openDocument completion:handleCloseCompletion];
+        [MADocument close: openDocument
+               completion: ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+                   
+                   if (success) {
+                       
+                       NSURL *documentURL = fileURL.copy;
+                       NSURL *dataURL = cleanupURL.copy;
+                       MADOpenDocumentManager *fileManager = self.activeDocumentManager;
+                       [fileManager removeDocumentWithUrl:documentURL];
+                       [MADFileUtilities removeFileAndArchiveAtURL:dataURL];
+                       
+                   }
+                   
+                   [self.navigationController popViewControllerAnimated:YES];
+                   
+                   id handlerCloseOP;
+                   SEL handleClose = @selector(handleReloadAfterClose);
+                   handlerCloseOP = [[NSInvocationOperation alloc] initWithTarget: self
+                                                                         selector: handleClose
+                                                                           object: nil];
+                   [[NSOperationQueue mainQueue] addOperation:handlerCloseOP];
+                   
+               }];
         
         [self actionDone:sender];
     }
@@ -1197,11 +1214,11 @@ typedef NS_ENUM(short, MADExplorerState) {
                 break;
 
             case UIDocumentStateEditingDisabled:
-                NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+                [self handleDocumentStateChangedNotificationDisabled:notification];
                 break;
 
             case UIDocumentStateInConflict:
-                NSLog(@"\n\n\tDocument state in conflict.\n\n");
+                [self handleDocumentStateChangedNotificationConflict:notification];
                 break;
                 
             case UIDocumentStateNormal:
@@ -1209,10 +1226,7 @@ typedef NS_ENUM(short, MADExplorerState) {
                 break;
 
             case UIDocumentStateSavingError: {
-                [self.fileExplorerViewDelegate collectionView:self.collectionView allowSelection:YES];
-                //UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Open Failure" message:[NSString stringWithFormat: @"Failed to open with message:\n\t%@", notification.userInfo] preferredStyle:UIAlertControllerStyleAlert];
-                //[self presentViewController:alertController animated:YES completion:nil];
-                NSLog(@"\n\n\tDocument state saving error.\n\t%@", notification.userInfo);
+                [self handleDocumentStateChangedNotificationError:notification];
                 break;
             }
 
@@ -1232,6 +1246,15 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                   object: document];
 
 }
+
+- (void)handleDocumentStateChangedNotificationDisabled:(NSNotification *)notification {
+    NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+}
+
+- (void)handleDocumentStateChangedNotificationConflict:(NSNotification *)notification {
+    NSLog(@"\n\n\tDocument state in conflict.\n\n");
+}
+
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
     NSLog(@"handleDocumentStateChangedNotificationNormal: %@", notification);
 /*    NSNotification *changeNotification;
@@ -1247,31 +1270,24 @@ typedef NS_ENUM(short, MADExplorerState) {
     [[NSOperationQueue mainQueue] addOperation:operation];*/
 }
 
-- (void)openViewer {
-    MADocument *document = self.activeDocumentManager.openDocument;
-    NSURL *fileURL = document.fileURL.copy;
-    NSString *title = fileURL.lastPathComponent.copy;
-    
-    MADTabBarController *tabBarController;
-    tabBarController = [MADTabBarController newTabBarController:document prompt:title];
-    tabBarController.document = document;
-    tabBarController.viewControllerDelegate = self;
-    
-    [self.navigationController pushViewController:tabBarController animated:YES];
+- (void)handleDocumentStateChangedNotificationError:(NSNotification *)notification {
+    [self.fileExplorerViewDelegate collectionView:self.collectionView allowSelection:YES];
+    NSString *message = [NSString stringWithFormat: @"Failed to open with message:\n\t%@", notification.userInfo];
+    UIAlertController *alertController;
+    alertController = [UIAlertController alertControllerWithTitle:@"Open Failure"
+                                                          message:message
+                                                   preferredStyle:UIAlertControllerStyleAlert];
+    [self presentViewController:alertController animated:YES completion:nil];
+    NSLog(@"\n\n\tDocument state saving error.\n\t%@", notification.userInfo);
 }
 
 #pragma mark -
 #pragma mark Private events handlers
 
 - (void)handleReloadAfterClose {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        @autoreleasepool {
-            NSArray <NSIndexPath *> *paths = self.collectionView.indexPathsForVisibleItems;
-            self.collectionView.allowsSelection = YES;
-            //[self.collectionView.backgroundView setNeedsDisplay];
-            [self.collectionView reloadItemsAtIndexPaths:paths];
-        }
-    }];
+    NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
+    self.collectionView.allowsSelection = YES;
+    [self.collectionView reloadItemsAtIndexPaths:visibleItems];
 }
 
 #pragma mark - MADDocumentDelegate
@@ -1348,10 +1364,12 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (IBAction)actionAbout:(id)sender {
+    
     if (_infoControllerOnScreen) {
         _infoControllerOnScreen = NO;
         [self dismissViewControllerAnimated:YES completion:^{ }];
     }
+    
     if (_aboutViewControllerOnScreen) {
         _aboutViewControllerOnScreen = NO;
         [self dismissViewControllerAnimated:YES completion:^{ }];

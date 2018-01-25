@@ -31,6 +31,7 @@
 #import "MADCollectionViewCellDocument.h"
 
 #import "MADStandard.h"
+#import "MADExplorerCellTitle.h"
 
 /*char *string_for_n(unsigned long fileSize) {
     char buffer_int[12];
@@ -38,13 +39,9 @@
     double integral, fraction;
     fraction = modf(madSystemFileSizeToMB(fileSize), &integral);
     itoa(integral, buffer_int);
-
-
-
     double i = integral / 10;
     strcat(&buffer_int, <#const char *#>)
     i = integral / one_for_div;
-    
 }*/
 
 typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMutableMapGesturesLongPress;
@@ -398,7 +395,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     BOOL shouldDeselect = NO;
     NSUInteger section = (NSUInteger)indexPath.section;
     if (_editing) {
-        typeof(_delegate) delegate = _delegate;
+        __strong typeof(_delegate) delegate = _delegate;
         if ([_selected[section] containsIndex:(NSUInteger)indexPath.item]) {
             shouldDeselect = YES;
         } else if ([[delegate fileExplorerView].indexPathsForSelectedItems containsObject:indexPath]) {
@@ -482,7 +479,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     filename = [self titleForItemAtIndexPath:indexPath];
     size = [self subtitleForItemAtIndexPath:indexPath];
     
-    attributedString = [MADExplorerCaption newExplorerCaption:filename];
+    attributedString = [MADExplorerCaption newExplorerCaption: filename];
     
     font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     sizeLabel[0] = [self heightForAttributedString: attributedString
@@ -576,20 +573,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *subtitle;
-    unsigned long long fileSize;
-    MADMetaData *metadata;
-    NSString *ubiquitousItemDownloadingStatus;
-    
-    @autoreleasepool {
-        metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-        fileSize = metadata.fileSystemFileSize;
-        ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
-        metadata = nil;
-        subtitle = [MADStringFormatted newStringFormattedSubtitle:ubiquitousItemDownloadingStatus
-                                                         fileSize:fileSize];
-    }
-    
+    id metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+    id subtitle = [MADExplorerCellTitle newExplorerCellTitle:metadata];
     return subtitle;
 }
 

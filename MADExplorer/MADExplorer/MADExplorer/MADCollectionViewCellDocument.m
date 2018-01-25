@@ -36,6 +36,7 @@
 #import "MADBackgroundViewSelected.h"
 #import "MADStandard.h"
 #import "MADThumbnailView.h"
+#import "MADExplorerCellTitle.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 const CGFloat MTAnimationRotateDeg = 1.0000f;
@@ -51,36 +52,13 @@ static const CGFloat Float_0                    =   0.00000000f;
 static const CGFloat Float_100                  = 100.00000000f;
 
 static inline float wobbleFactor(void);
-static inline BOOL isStatusNotDownloading(NSString *);
 
 static inline float wobbleFactor() {
     return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
 }
 
-static inline BOOL isStatusNotDownloading(NSString *status) {
-    BOOL result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded];
-    return result;
-}
-
 @interface MADCollectionViewCellDocument ()
     @property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
-@end
-
-@implementation MADStringFormatted
-
-+ (NSString *)newStringFormattedSubtitle:(NSString *)status
-                                fileSize:(unsigned long long)fileSize {
-    id result;
-    if (isStatusNotDownloading(status)) {
-        NSString *textNotDownloaded;
-        textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
-        result = [[NSString alloc] initWithString:textNotDownloaded];
-    } else {
-        result = [MADStandard newStandardStringForFileSize:fileSize];
-    }
-    return result;
-}
-
 @end
 
 @implementation MADCollectionViewCellDocument {
@@ -400,29 +378,13 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     name = metadata.name;
     labelTitle.text = name.copy;
     
-    
     ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
-    notDownloaded = isStatusNotDownloading(ubiquitousItemDownloadingStatus);
+    notDownloaded = metadata.isUbiquitousItemDownloadingStatusNotDownloaded;
     isDownloading = metadata.ubiquitousItemIsDownloading;
     isUploading = metadata.ubiquitousItemIsUploading;
     isUbiquitous = metadata.isUbiquitous;
     
-    if (isDownloading) {
-
-        subtitle = NSLocalizedString(Downloading, Downloading);
-    
-    } else if (isUploading) {
-    
-        subtitle = NSLocalizedString(Syncing, Syncing);
-    
-    } else {
-        
-        unsigned long long fileSize = metadata.fileSystemFileSize;
-        subtitle = [MADStringFormatted newStringFormattedSubtitle: ubiquitousItemDownloadingStatus
-                                                         fileSize: fileSize];
-        
-    }
-    
+    subtitle = [MADExplorerCellTitle newExplorerCellTitleSubtitle:metadata];
     labelTitleSub.text = subtitle.copy;
     
     percentage = metadata.ubiquitousItemPercentUploaded;
@@ -461,18 +423,6 @@ static inline BOOL isStatusNotDownloading(NSString *status) {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
 
-}
-
-- (NSString *)subtitleForStatus:(NSString *)status
-                       fileSize:(unsigned long long)fileSize {
-    id result;
-    if (isStatusNotDownloading(status)) {
-        NSString *textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
-        result = [[NSString alloc] initWithString:textNotDownloaded];
-    } else {
-        result = [MADStandard newStandardStringForFileSize:fileSize];
-    }
-    return result;
 }
 
 @end

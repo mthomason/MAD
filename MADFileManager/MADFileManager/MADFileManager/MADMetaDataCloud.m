@@ -49,8 +49,8 @@
 
 - (NSString *)ubiquitousItemDownloadingStatus {
     return self.metadataItem ?
-    [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey] :
-    NSMetadataUbiquitousItemDownloadingStatusCurrent;
+        [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey] :
+        NSMetadataUbiquitousItemDownloadingStatusCurrent;
 }
 
 - (NSString *)name {

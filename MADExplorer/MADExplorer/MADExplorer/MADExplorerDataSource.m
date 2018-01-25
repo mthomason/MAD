@@ -17,7 +17,9 @@
 #import <MADFileManager/MADFilesControllerDelegate.h>
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileInfo.h>
+#import <MADFileManager/MADMetadata.h>
 
+#import "MADExplorerCellTitle.h"
 #import "MADDocumentManagerProtocol.h"
 #import "MADFileLocationManager.h"
 
@@ -85,6 +87,10 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 - (NSUInteger)count {
     return _fileLocationManager.filesController.count;
+}
+
+- (MADMetaData *)metadata:(NSIndexPath *)index {
+    return [_fileLocationManager.filesController objectAtIndexedSubscript: (NSUInteger)index.item];
 }
 
 - (MADMetaData *)metadataAtIndex:(NSUInteger)index {
@@ -241,6 +247,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
     
     id cell;
@@ -251,6 +258,27 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
         _handleCellConfiguration(cell);
     
     return cell;
+}
+
+- (NSString *)title:(NSIndexPath *)index {
+    MADMetaData *metadata;
+    NSURL *url;
+    NSString *lastPathComponent, *title, *result;
+    
+    metadata = [self metadata:index];
+    url = metadata.URL.copy;
+    
+    lastPathComponent = url.lastPathComponent;
+    title = lastPathComponent.stringByDeletingPathExtension;
+    
+    result = [[NSString alloc] initWithString: title];
+    return result;
+}
+
+- (NSString *)subtitle:(NSIndexPath *)index {
+    id metadata = [self metadata:index];
+    id subtitle = [MADExplorerCellTitle newExplorerCellTitle:metadata];
+    return subtitle;
 }
 
 @end

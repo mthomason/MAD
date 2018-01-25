@@ -27,6 +27,10 @@
     @property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
 
     - (MADMetaData *)metadataAtIndex:(NSUInteger)index;
+
+    - (NSString *)title:(NSIndexPath *)index;
+    - (NSString *)subtitle:(NSIndexPath *)index;
+
     - (NSUInteger)count;
 
     - (void)updateCloudPreferences;
