@@ -89,8 +89,8 @@ static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStorybo
 
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
-//#pragma mark - Attributes
-//#pragma mark Display Varables
+//#pragma mark -
+//#pragma mark MADOperationRenderOnViewert
 //
 //@interface MADOperationRenderOnViewert : NSOperation
 //    - (instancetype)initWithDocument:(MADocument *)document;
@@ -98,16 +98,16 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 //@end
 
 
-#pragma mark - Attributes
-#pragma mark Display Varables
+#pragma mark -
+#pragma mark MADOperationLoadDocument
 
 @interface MADOperationLoadDocument : NSOperation
     - (instancetype)initWithDocument:(MADocument *)document;
     @property (readonly, nonatomic, weak) MADocument *document;
 @end
 
-#pragma mark - Attributes
-#pragma mark Display Varables
+#pragma mark -
+#pragma mark MADOperationLoadPrintPageRender
 
 @interface MADOperationLoadPrintPageRender : NSOperation
     - (instancetype)initWithDocument:(MADocument *)document;
@@ -155,9 +155,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @end
 
 @implementation UIResponder (MADViewerController)
-- (void)done:(id)someItem {
-    [[self nextResponder] done:nil];
-}
+
+- (void)done:(id)eh { [[self nextResponder] done:nil]; }
+
 @end
 
 
@@ -175,11 +175,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
     BOOL _updatingOfTimerIsPaused;
 }
 
-@dynamic tabBarController;
-@synthesize document = _document;
-@synthesize title = _title;
+    @dynamic tabBarController;
+    @synthesize document = _document, title = _title;
 
-#pragma mark - Static helpers
+#pragma mark -
+#pragma mark Static helpers
 
 + (void)setNavigationBarAppearanceTinted {
     NSArray <Class <UIAppearanceContainer>> *classes;
