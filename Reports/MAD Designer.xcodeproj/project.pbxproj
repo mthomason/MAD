@@ -1971,9 +1971,13 @@
 		4C26B9931BAF123A00456DC8 /* Designer */ = {
 			isa = PBXGroup;
 			children = (
+				4CDFC98A1EDB8EE3008E1AD6 /* MADReportSectionDataSourceProtocol.h */,
+				4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */,
+				4C7E1CAE1F49579E002CBBBE /* MADViewAnimationProtocol.h */,
 				4C00A3901F5B9D5600F6A6C1 /* MADDesignerElementViewProtocol.h */,
 				4C00A3911F5B9D6800F6A6C1 /* MADDesignerElementViewDataSource.h */,
 				4CAEE7331E562B98009A6096 /* MADElementPickerProtocol.h */,
+				4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */,
 				4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */,
 				4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */,
 				4C26B9E41BAF14A500456DC8 /* MADDesignerElementPickerViewController.h */,
@@ -1998,7 +2002,6 @@
 				4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */,
 				4C26B9F61BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.h */,
 				4C26B9F71BAF14A500456DC8 /* MADDesignerSectionLayoutLiquid.m */,
-				4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */,
 				4CDFC9811ED89147008E1AD6 /* MADDesignerView.h */,
 				4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */,
 				4C401F5A1BAE7EB500BAE5FC /* MADDesignerScrollView.h */,
@@ -2011,11 +2014,8 @@
 				4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */,
 				4CDFC9871EDB8EB5008E1AD6 /* MADReportSectionsDataSource.h */,
 				4CDFC9881EDB8EB5008E1AD6 /* MADReportSectionsDataSource.m */,
-				4CDFC98A1EDB8EE3008E1AD6 /* MADReportSectionDataSourceProtocol.h */,
-				4CDFC9991EDBC817008E1AD6 /* MADReportSectionDelegateProtocol.h */,
 				4CDFC99A1EDEFAE7008E1AD6 /* MADElementViewManager.h */,
 				4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */,
-				4C7E1CAE1F49579E002CBBBE /* MADViewAnimationProtocol.h */,
 			);
 			name = Designer;
 			path = MADStack/MADDesigner/UI/Designer;

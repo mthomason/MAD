@@ -400,7 +400,6 @@ static const inline CGSize sizePopoverFonts(void);
         [self displayPrompt];
         [UIView setAnimationsEnabled:YES];
     }
-    
 }
 
 #pragma mark -
@@ -596,7 +595,6 @@ static const inline CGSize sizePopoverFonts(void);
 
 - (CGFloat)widthForCurrentZoom {
     return self.view.safeAreaLayoutGuide.layoutFrame.size.width / self.view.scroller.zoomScale;
-    //return self.view.frame.size.width / self.view.scroller.zoomScale;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -604,7 +602,6 @@ static const inline CGSize sizePopoverFonts(void);
     NSLog(@"Keypath: %@", keyPath);
     NSLog(@"Object: %@", object);
     NSLog(@"Change: %@", change);
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -715,7 +712,6 @@ static const inline CGSize sizePopoverFonts(void);
     
     _shownAndHidden = YES;
     [self removeObservers];
-
 }
 
 - (void)viewWillLayoutSubviews {
@@ -1021,6 +1017,7 @@ static const inline CGSize sizePopoverFonts(void);
 - (void)handledScrollViewDidEndZooming: (UIScrollView *)scrollView
                               withView: (UIView *)view
                                atScale: (CGFloat)scale {
+    
     if ([scrollView isEqual:self.view.scroller]) {
         
         CGFloat scaleWithScreen = scale * scrollView.traitCollection.displayScale;
