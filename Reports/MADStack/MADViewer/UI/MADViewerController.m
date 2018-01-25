@@ -133,8 +133,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - Attributes
 
-#pragma mark Timer (Updates last refresh date on tick)
-
     @property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
 #pragma mark User Interface
@@ -204,7 +202,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 + (instancetype)newViewerController:(MADocument *)document {
     UIStoryboard *storyboard;
     id bundle, controller;
-    
     bundle = [NSBundle mainBundle];
     storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: bundle];
     controller = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
