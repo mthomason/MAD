@@ -601,7 +601,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         typeof(self) __weak weakself = self;
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
                                                         cellConfiguration:^(MADCollectionViewCellDocument *cell) {
-            ((MADCollectionViewCellDocument *)cell).delegate = weakself;
+            //((MADCollectionViewCellDocument *)cell).delegate = weakself;
             ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
         }];
         _fileExplorerDataSource = datasource;

@@ -11,6 +11,10 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MADTextNotDownloaded;
+extern NSString * const Syncing;
+extern NSString * const Downloading;
+
 @class MADMetaData;
 
 @interface MADExplorerCellTitle : NSObject

@@ -10,9 +10,9 @@
 #import <MADFileManager/MADMetaData.h>
 #import "MADStandard.h"
 
-static NSString * const MADTextNotDownloaded = @"Not Downloaded";
-static NSString * const Syncing              = @"Syncing";
-static NSString * const Downloading          = @"Downloading";
+NSString * const MADTextNotDownloaded = @"Not Downloaded";
+NSString * const Syncing              = @"Syncing";
+NSString * const Downloading          = @"Downloading";
 
 @implementation MADExplorerCellTitle
 

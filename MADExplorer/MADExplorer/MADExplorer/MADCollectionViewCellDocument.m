@@ -43,11 +43,6 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 
-
-       NSString * const MADTextNotDownloaded            = @"Not Downloaded";
-static NSString * const Syncing                         = @"Syncing";
-static NSString * const Downloading                     = @"Downloading";
-
 static const CGFloat Float_0                    =   0.00000000f;
 static const CGFloat Float_100                  = 100.00000000f;
 
@@ -374,7 +369,7 @@ static inline float wobbleFactor() {
     
     labelTitle = self.labelTitle;
     labelTitleSub = self.labelTitleSub;
-    
+
     name = metadata.name;
     labelTitle.text = name.copy;
     

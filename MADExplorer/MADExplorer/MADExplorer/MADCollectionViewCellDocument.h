@@ -33,8 +33,6 @@ extern NSString * const MADTextNotDownloaded;
 
     @property (nonatomic, weak, readonly) UIActivityIndicatorView *activityIndicator;
 
-    @property (nonatomic, weak) id <UIGestureRecognizerDelegate> delegate;
-
     - (void)handleContentSizeCategoryDidChangeNotification;
 
     - (void)setUploadingActive:(BOOL)active

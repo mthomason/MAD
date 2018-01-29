@@ -295,7 +295,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     [_longPressGestures removeObjectForKey: hash];
     cell.wobbling = NO;
     cell.working = NO;
-    cell.delegate = nil;
+    //cell.delegate = nil;
 }
 
 - (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action

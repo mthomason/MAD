@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_NSAttributedString__FileExplorer_h
-#define Reports_NSAttributedString__FileExplorer_h
+#ifndef MADExplorer_MADExplorerCaption_h
+#define MADExplorer_MADExplorerCaption_h
 
 #import <Foundation/NSAttributedString.h>
 
