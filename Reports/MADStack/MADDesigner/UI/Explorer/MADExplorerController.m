@@ -240,9 +240,10 @@ typedef NS_ENUM(short, MADExplorerState) {
     NSString *explorerStoryboardIdentifier, *identifier;
     explorerStoryboardIdentifier = @"MADExplorer";
     identifier = @"MADIdentifierFileExplorerViewController";
-    id bundle = [NSBundle mainBundle];
+
     UIStoryboard *storyboard;
-    storyboard = [UIStoryboard storyboardWithName:explorerStoryboardIdentifier bundle:bundle];
+    storyboard = [UIStoryboard storyboardWithName:explorerStoryboardIdentifier
+                                           bundle:[NSBundle mainBundle]];
     controller = [storyboard instantiateViewControllerWithIdentifier:identifier];
     return controller;
 }
@@ -322,7 +323,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark NSObject
 
 - (void)dealloc {
-    
+    self.fileExplorerViewDelegate = nil;
     _barButtonItemAction = nil;
     _subtitleNumberFormatter = nil;
     
@@ -344,10 +345,6 @@ typedef NS_ENUM(short, MADExplorerState) {
                       name: MADNotificationCloudActivityCompleted
                     object: nil];
 
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {

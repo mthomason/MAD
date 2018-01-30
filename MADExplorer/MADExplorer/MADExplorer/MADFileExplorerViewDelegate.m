@@ -71,6 +71,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
 @synthesize showingPopover = _showingPopover;
 
 - (void)dealloc {
+    _delegate = nil;
     _predicateKindOfLongPressGestureRecognizer = nil;
     [_longPressGestures removeAllObjects];
 }
@@ -436,7 +437,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
     return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-                                    UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
+                                    UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f) :
                                     UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
 }
 
@@ -444,14 +445,14 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
                    layout:(UICollectionViewLayout*)collectionViewLayout
                                     minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-                                    30.0000f : 5.0000f;
+                                    5.0000f : 5.0000f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
                    layout:(UICollectionViewLayout*)collectionViewLayout
                                     minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-                                    30.0000f : 5.0000f;
+                                    5.0000f : 5.0000f;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView

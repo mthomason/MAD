@@ -14,8 +14,7 @@
 @protocol MADExplorerProtocol, UIGestureRecognizerDelegate;
 
 @interface MADFileExplorerViewDelegate : NSObject
-    <UICollectionViewDelegate,
-        UICollectionViewDelegateFlowLayout>
+    <UICollectionViewDelegateFlowLayout>
 
     - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;
     

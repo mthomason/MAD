@@ -20,14 +20,27 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 
-    NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
+    NSArray <UICollectionViewLayoutAttributes *> *attributes;
+    attributes = [super layoutAttributesForElementsInRect:rect];
     if (attributes == nil) {
         attributes = [[NSArray alloc] init];
     }
     
     NSMutableArray *elementAttributes = [[NSMutableArray alloc] initWithCapacity:attributes.count];
+
+    CGFloat lastY = attributes.firstObject.frame.origin.y;
+    CGFloat lastHeight = attributes.firstObject.frame.size.height;
     for (UICollectionViewLayoutAttributes *attribute in attributes) {
         if (CGRectIntersectsRect(rect, attribute.frame)) {
+            if (attribute.frame.size.height < lastHeight) {
+                lastHeight = attribute.frame.size.height;
+            }
+            if (attribute.frame.origin.y > lastY + lastHeight) {
+                lastY = attribute.frame.origin.y;
+            }
+            attribute.frame = CGRectMake(attribute.frame.origin.x, lastY,
+                                         attribute.frame.size.width, attribute.frame.size.height);
+            
             [elementAttributes addObject:attribute];
         }
     }
