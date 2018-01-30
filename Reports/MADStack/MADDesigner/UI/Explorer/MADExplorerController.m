@@ -1582,15 +1582,12 @@ typedef NS_ENUM(short, MADExplorerState) {
     self.collectionView.allowsMultipleSelection = NO;
     
     [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
-    UICollectionView *collectionView = self.collectionView;
-    for (NSIndexPath *path in collectionView.indexPathsForSelectedItems) {
-        [collectionView deselectItemAtIndexPath:path animated:YES];
+    for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
+        [self.collectionView deselectItemAtIndexPath:path animated:YES];
     }
     
-    NSArray<__kindof UICollectionViewCell *> *visibleCells;
-    visibleCells = self.collectionView.visibleCells;
     MADCollectionViewCellDocument *cell;
-    for (cell in visibleCells) {
+    for (cell in self.collectionView.visibleCells) {
         cell.wobbling = NO;
     }
 
@@ -1844,34 +1841,32 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (IBAction)actionActivateEditMode:(UILongPressGestureRecognizer *)sender {
-
-    if (sender.state != UIGestureRecognizerStateBegan) return;
-
-    [self actionEdit:nil];
-
-    UICollectionView *collectionView = self.collectionView;
-    NSIndexPath *indexPath;
-    if (sender.view) {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        [self actionEdit:nil];
         if ([sender.view isKindOfClass:[UICollectionViewCell class]]) {
-            indexPath = [collectionView indexPathForCell:(UICollectionViewCell *)sender.view];
+            [self selectCell:(UICollectionViewCell *)sender.view];
         }
     }
-    
-    if (indexPath) {
-        if ([self.fileExplorerViewDelegate collectionView: collectionView
-                            shouldSelectItemAtIndexPath: indexPath]) {
-            
-            [collectionView selectItemAtIndexPath: indexPath
-                                         animated: YES
-                                   scrollPosition: UICollectionViewScrollPositionNone];
-            
-            [self.fileExplorerViewDelegate collectionView: collectionView
-                                 didSelectItemAtIndexPath: indexPath];
+}
+
+- (void)selectCell:(UICollectionViewCell *)cell {
+    UICollectionView *collectionView = self.collectionView;
+    if (collectionView) {
+        NSIndexPath *indexPath;
+        indexPath = [collectionView indexPathForCell:(UICollectionViewCell *)cell];
+        if (indexPath) {
+            if ([self.fileExplorerViewDelegate collectionView: collectionView
+                                  shouldSelectItemAtIndexPath: indexPath]) {
+                
+                [self.collectionView selectItemAtIndexPath: indexPath
+                                                  animated: YES
+                                            scrollPosition: UICollectionViewScrollPositionNone];
+                
+                [self.fileExplorerViewDelegate collectionView: collectionView
+                                     didSelectItemAtIndexPath: indexPath];
+            }
         }
     }
-    NSArray <NSIndexPath *> *selectedPath =
-    [[NSArray alloc] initWithObjects:indexPath, nil];
-    [collectionView reloadItemsAtIndexPaths:selectedPath];
 }
 
 #pragma mark -
