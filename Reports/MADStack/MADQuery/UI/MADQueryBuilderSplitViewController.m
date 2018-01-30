@@ -135,7 +135,6 @@ static NSString * const TextRedraw = @"Redraw";
     NSArray *toolbarItems = [[NSArray alloc] initWithObjects:_barButtonItemSQL, nil];
     [self setToolbarItems:toolbarItems animated:YES];
     [self.detailNavigationController setToolbarItems:toolbarItems animated:animated];
-    //[self.view setNeedsLayout];
 }
 
 + (NSString *)Title {

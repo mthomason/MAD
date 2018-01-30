@@ -28,35 +28,11 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 }
 
 + (NSString *)groupIdentifier {
-    __block NSString *groupIdentifier = nil;
-    if ([NSThread isMainThread]) {
-        id <MADApplicationProtocol> appDelegate;
-        appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
-        groupIdentifier = [appDelegate groupIdentifier];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            id <MADApplicationProtocol> appDelegate;
-            appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
-            groupIdentifier = [appDelegate groupIdentifier];
-        });
-    }
-    return groupIdentifier;
+    return [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"]][@"com.apple.security.application-groups"][0];
 }
 
 + (NSString *)ubiquityIdentifier {
-    __block NSString *ubiquityIdentifier = nil;
-    if ([NSThread isMainThread]) {
-        id <MADApplicationProtocol> appDelegate;
-        appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
-        ubiquityIdentifier = [appDelegate ubiquityIdentifier];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            id <MADApplicationProtocol> appDelegate;
-            appDelegate = (id <MADApplicationProtocol>)[UIApplication sharedApplication].delegate;
-            ubiquityIdentifier = [appDelegate ubiquityIdentifier];
-        });
-    }
-    return ubiquityIdentifier;
+    return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
 }
 
 + (BOOL)isMADDesigner {

@@ -70,10 +70,9 @@
 #import "MADSliderPageVertical.h"
 #import "MADLabelStatus.h"
 
-#import "UIViewController+tabBarItem.h"
-
-#import "MADPageSlider.h"
 #import "MADPageViewAttributes.h"
+
+#import "UIViewController+tabBarItem.h"
 
 #import "MADOperationRefreshReload.h"
 

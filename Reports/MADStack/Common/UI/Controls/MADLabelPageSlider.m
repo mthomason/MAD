@@ -13,13 +13,10 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *clearColor = [UIColor clearColor];
-        self.backgroundColor = clearColor;
+        self.backgroundColor = [UIColor clearColor];
         self.textAlignment = NSTextAlignmentRight;
         self.font = [UIFont boldSystemFontOfSize:9.0000f];
-        UIColor *darkTextColor = [UIColor darkTextColor];
-        UIColor *textColor = [darkTextColor colorWithAlphaComponent:0.80000000f];
-        self.textColor = textColor;
+        self.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.90000000f];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -27,11 +24,10 @@
         self.layer.shadowOpacity = 6.0;
         self.layer.shadowRadius = 0.0;
         self.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
-        UIColor *blueColor = [MADColorEverydayApps newColorBlue];
+        UIColor *blueColor = [MADColorEverydayApps newColorRed];
         CGColorRef color = CGColorRetain(blueColor.CGColor);
         self.layer.shadowColor = color;
         CGColorRelease(color);
-
     }
     return self;
 }
@@ -55,13 +51,5 @@
     self.transform = CGAffineTransformTranslate(self.transform, drawingPoint.x, drawingPoint.y);
 
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

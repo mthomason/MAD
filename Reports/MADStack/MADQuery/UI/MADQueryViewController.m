@@ -322,9 +322,8 @@ BOOL storeEnabled() {
     NSString *sizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
     [self updateInupdateInterfaceForPerferedContentSizeCategory: sizeCategory];
     
-    NSString *MADIdentifierTableViewCellTableName = @"MADIdentifierCellSchemaName";
     [self.tableView registerClass: [MADTableViewCellQueryTableName class]
-           forCellReuseIdentifier: MADIdentifierTableViewCellTableName];
+           forCellReuseIdentifier: @"MADIdentifierCellSchemaName"];
     
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -457,9 +456,7 @@ BOOL storeEnabled() {
             if ([queryLink.hasLeftField.inQueryTable.objectID isEqual:relatedTableObjectID] ||
                 [queryLink.hasRightField.inQueryTable.objectID isEqual:relatedTableObjectID]) {
                 [context deleteObject:queryLink];
-                
                 [cellsToDelete addObject:linkIndexPath];
-                
             }
         }
     }

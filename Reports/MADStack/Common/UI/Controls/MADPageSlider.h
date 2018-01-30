@@ -15,7 +15,7 @@
 
 @class MADSliderPageVertical;
 
-@interface MADPageSlider : UIVisualEffectView
+@interface MADPageSlider : UIView
 
     @property (nonatomic) NSUInteger numberOfPages;
     @property (nonatomic, getter=isEnabled) BOOL enabled;

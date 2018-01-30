@@ -33,7 +33,6 @@ static inline CGAffineTransform translateBack(CGSize size);
 @interface MADPageSlider ()
 
     @property (nonatomic, weak, getter=pageSlider) MADSliderPageVertical *slider;
-    @property (nonatomic, weak) UIVisualEffectView *vibrancyView;
     @property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
 
 @end
@@ -71,40 +70,11 @@ static inline CGAffineTransform translateBack(CGSize size);
 }
 
 - (instancetype)init {
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    if (self = [super initWithEffect:effect]) {
+    //UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    if (self = [super initWithFrame:CGRectZero]) {
         
-        self.contentView.tintColor = [UIColor blueColor];
-        /*
-        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:effect];
-        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
-        vibrancyView.frame = self.frame;
-        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
-        vibrancyView.contentView.tintColor = [UIColor redColor];
-        [self.contentView addSubview:vibrancyView];
-        self.vibrancyView = vibrancyView;
-        
-        MADSliderPageVertical *slider = [[MADSliderPageVertical alloc] init];
-        [slider addTarget: self action: @selector(handleSliderChangedPage:)
-         forControlEvents: UIControlEventValueChanged];
-        
-        [slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
-         forControlEvents: UIControlEventTouchUpInside];
-        
-        UITapGestureRecognizer *tapGestureRecognizer;
-        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                       action: @selector(handleGestureTapSlider:)];
-        [slider addGestureRecognizer:tapGestureRecognizer];
-        
-        slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
-        self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
-        [self.contentView addSubview:slider];
-        
-        UIColor *lightBlue = [MADColorEverydayApps newColorBlueLight];
-        self.backgroundColor = [lightBlue colorWithAlphaComponent:0.3333f];
-        
-        self.slider = slider;
-        */
+        self.tintColor = [MADColorEverydayApps newColorBlue];
+
         UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
         NSNumber *strokeWidth = @-1.0000f;
         NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -129,7 +99,6 @@ static inline CGAffineTransform translateBack(CGSize size);
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.vibrancyView.frame = self.bounds;
     self.pageSlider.frame = self.bounds;
     
     self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth,
@@ -160,37 +129,25 @@ static inline CGAffineTransform translateBack(CGSize size);
         [label removeFromSuperview];
     }
     [self.labels removeAllObjects];
-    static CGFloat offsetTopBottom = 8.0000f;
 
+    static CGFloat offsetTopBottom = 8.0000f;
     CGFloat distanceBetweenTicks = [MADPageSlider distanceBetweenTicks:numberOfTicks height:_stringHeight
                                                                padding:offsetTopBottom rect:rect];;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
-    
     double tickValue = self.maximumValue / (numberOfTicks - 1);
-    
-
-    typeof(self) __weak weakself = self;
     for (NSUInteger i=0; i<numberOfTicks; i++) {
         if (i % 2 == 0) {
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //    dispatch_sync(dispatch_get_main_queue(), ^{
-                
-                @autoreleasepool {
-                    typeof(self) strongself = weakself;
-                    
-                    MADLabelPageSlider *label;
-                    label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                      rect.size.width, strongself->_stringHeight)];
-                    label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
-                    label.enabled = strongself->_enabledColor;
-                    [label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
-                    [strongself.vibrancyView.contentView addSubview:label];
-                    [strongself.labels addObject:label];
-                    
-                }
-
-        //    });
-        //});
+            
+            @autoreleasepool {
+                MADLabelPageSlider *label;
+                label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
+                                                                             rect.size.width, _stringHeight)];
+                label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
+                label.enabled = _enabledColor;
+                [label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
+                [self addSubview:label];
+                [self.labels addObject:label];
+            }
         }
         drawingPoint = CGPointMake(drawingPoint.x,
                                    drawingPoint.y + _stringHeight + distanceBetweenTicks);
@@ -204,33 +161,14 @@ static inline CGAffineTransform translateBack(CGSize size);
             [label removeFromSuperview];
         }
         _lastNumberOfTicks = 0;
-        [self.vibrancyView removeFromSuperview];
         [self.pageSlider removeFromSuperview];
         [self.labels removeAllObjects];
-        _vibrancyView = nil;
         _slider = nil;
     }
 }
 
 #pragma mark -
 #pragma mark Lazy load
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
-- (UIVisualEffectView *)vibrancyView {
-    if (_vibrancyView == nil) {
-        NSAssert([self.effect isKindOfClass:[UIBlurEffect class]], @"We expect a blur effect.");
-        UIVibrancyEffect *vibrancy = [UIVibrancyEffect effectForBlurEffect:(UIBlurEffect *)self.effect];
-        UIVisualEffectView *vibrancyView = [[UIVisualEffectView alloc] initWithEffect:vibrancy];
-        vibrancyView.frame = self.frame;
-        vibrancyView.autoresizingMask = MADViewAutoresizingFlexable();
-        vibrancyView.contentView.tintColor = [UIColor redColor];
-        [self.contentView addSubview:vibrancyView];
-        _vibrancyView = vibrancyView;
-    }
-    return _vibrancyView;
-}
-#pragma GCC diagnostic pop
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
@@ -250,7 +188,7 @@ static inline CGAffineTransform translateBack(CGSize size);
         
         slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
         self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
-        [self.contentView addSubview:slider];
+        [self addSubview:slider];
         _slider = slider;
     }
     return _slider;
