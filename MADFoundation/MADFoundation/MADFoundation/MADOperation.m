@@ -84,6 +84,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (void)setState:(MADOperationState)newState {
     os_log_info(OS_LOG_DEFAULT, "%s is %s", NSStringFromClass(self.class).UTF8String, MADStringOperationState(newState));
 
+    if (_state == newState) return;
     // Manually fire the KVO notifications for state change, since this is "private".
     [self willChangeValueForKey:MADOperatorSelectorState];
     
@@ -92,11 +93,41 @@ static NSString * const MADOperatorSelectorState        = @"state";
         if (_state == MADOperationStateFinished) {
             return;
         }
-        NSAssert([self canTransitionToState:newState], @"Performing invalid state transition.");
+        //NSAssert([self canTransitionToState:newState], @"Performing invalid state transition (%@ to %@).",
+        //         [MADOperation descriptionForState:_state], [MADOperation descriptionForState:newState]);
         _state = newState;
     }
     
     [self didChangeValueForKey:MADOperatorSelectorState];
+}
+
++ (NSString *)descriptionForState:(MADOperationState)state {
+    switch (state) {
+        case MADOperationStateReady:
+            return @"Ready";
+            break;
+        case MADOperationStatePending:
+            return @"Pending";
+            break;
+        case MADOperationStateFinished:
+            return @"Finished";
+            break;
+        case MADOperationStateFinishing:
+            return @"Finishing";
+            break;
+        case MADOperationStateExecuting:
+            return @"Executing";
+            break;
+        case MADOperationStateInitialized:
+            return @"Initalized";
+            break;
+        case MADOperationStateEvaluatingConditions:
+            return @"Evaluating Conditions";
+            break;
+        default:
+            return @"Unknown";
+            break;
+    }
 }
 
 - (BOOL)isReady {

@@ -104,8 +104,13 @@
     BOOL result = NO;
     id connectionSettings = self.databaseConnection;
     NSError * __autoreleasing dberror = nil;
+    MADCredential *c = nil;
+    if ([query conformsToProtocol:@protocol(MADQueryCredentialProtocol)]) {
+        c = ((MADQuery <MADQueryCredentialProtocol> *)query).credential.copy;
+    }
+    
     MysqlConnection *dbconn = [self connectWithConnection: connectionSettings
-                                               credentals: nil
+                                               credentals: c
                                           connectionError: &dberror];
     if (dbconn && dberror == nil) {
         MysqlFetch *myFetch = [[MysqlFetch alloc] init];

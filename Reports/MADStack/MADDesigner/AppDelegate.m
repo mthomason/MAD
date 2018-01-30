@@ -74,9 +74,17 @@ static inline UIUserNotificationType MADUserNotificationType(void);
     return _groupIdentifier;
 }
 
-+ (NSString *)ubiquityIdentifier { return @"iCloud.com.everydayapps.mad.designer"; }
+//@"group.everydayapps.mad"
++ (NSString *)groupIdentifier {
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
+    NSAssert(url != nil, @"We need a URL.");
+    return [NSDictionary dictionaryWithContentsOfURL:url][@"com.apple.security.application-groups"][0];
+}
 
-+ (NSString *)groupIdentifier { return @"group.everydayapps.mad"; }
+//@"iCloud.com.everydayapps.mad.designer"
++ (NSString *)ubiquityIdentifier {
+    return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
+}
 
 - (NSString *)name {
     if (!_name) {

@@ -48,6 +48,7 @@
 
 @implementation MADQuerySampleDataTable
 
+@synthesize credential = _credential;
 @synthesize fields = _fields;
 @synthesize fieldKeys = _fieldKeys;
 @synthesize dataTable = _dataTable;

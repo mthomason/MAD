@@ -20,7 +20,7 @@ extern NSString * const MADQueryKeyPredicateColumn;
 extern NSString * const MADQueryKeyPredicateValue;
 extern NSString * const MADIdentifierROWID;
 
-@class NSMutableArray, NSMutableDictionary, MADDatabase, MADDataTable;
+@class NSMutableArray, NSMutableDictionary, MADCredential, MADDatabase, MADDataTable;
 
 @protocol MADQueryDataBindingProtocol <NSObject>
     @property (nonatomic, strong) NSMutableArray *binaryBindings;
@@ -45,6 +45,10 @@ extern NSString * const MADIdentifierROWID;
 
 @protocol MADQueryDataDelegateProtocol <NSObject>
     @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+@end
+
+@protocol MADQueryCredentialProtocol <NSObject>
+    @property (nonatomic, copy) MADCredential *credential;
 @end
 
 @protocol MADQueryUpdatableProtocol <NSObject>

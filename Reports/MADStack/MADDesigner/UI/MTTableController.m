@@ -67,7 +67,8 @@
     return self.datatable;
 }
 
-- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query database:(MADDatabase *)database
+- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query
+                     database:(MADDatabase *)database
                       tableID:(NSManagedObjectID *)tableID {
     
     NSUInteger rowCount = 0;
@@ -153,6 +154,7 @@
         if ([queryTableFormatter conformsToProtocol:@protocol(MADQueryDataTableProtocol)]) {
             ((MADQuery <MADQueryDataTableProtocol> *)queryTableFormatter).dataTable = strongself.datatable;
         }
+        
         NSError * __autoreleasing errorPerformQuery = NULL;
         BOOL success = [strongself.database executeQuery:queryTableFormatter
                                                withError:&errorPerformQuery];
@@ -354,8 +356,8 @@
     NSArray <NSString *>  *components = [fieldKey componentsSeparatedByString:@"."];
     NSString *fieldName = [components.lastObject stringByReplacingOccurrencesOfString:@"\""
                                                                            withString:@""];
-    
-    MADTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MADTableCellHeader"
+    static NSString *tableKind = @"MADTableCellHeader";
+    MADTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:tableKind
                                                                   withReuseIdentifier:reuseId
                                                                          forIndexPath:indexPath];
     view.label.text = fieldName;

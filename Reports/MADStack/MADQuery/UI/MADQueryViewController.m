@@ -103,6 +103,10 @@
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryViewDatasourceProtocol.h"
 
+#import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADOperationObserver.h>
+#import "MADOperationGetCredentials.h"
+
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
 
@@ -138,6 +142,7 @@ BOOL storeEnabled() {
     <NSFetchedResultsControllerDelegate,
         UIPopoverPresentationControllerDelegate,
         UIViewControllerTransitioningDelegate,
+        MADOperationObserver,
         MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
         MADQueryBuilderAddTableDelegate,
@@ -157,6 +162,10 @@ BOOL storeEnabled() {
     @property (nonatomic, readonly) MADTabBarController *tabBarController;
 
     @property (nonatomic, weak) UIPresentationController *showSQLPresentationController;
+
+    @property (nonatomic, strong) MADOperationQueue *credentailsQueue;
+
+    @property (nonatomic, assign) NSInteger showingTableIndex;
 
 @end
 
@@ -281,6 +290,8 @@ BOOL storeEnabled() {
     self = [super initWithCoder:aDecoder];
     if (!self) return nil;
 
+    _showingTableIndex = -1;
+
     _firstTimeViewWillLayoutSubviews = NO;
 
     MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
@@ -298,6 +309,10 @@ BOOL storeEnabled() {
         
     };
     self.handleConfigureCell = handleConfigureCell;
+    
+    MADOperationQueue *credentailsQueue = [[MADOperationQueue alloc] init];
+    credentailsQueue.delegate = self;
+    self.credentailsQueue = credentailsQueue;
     
     return self;
 }
@@ -1546,20 +1561,16 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 - (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
     NSLog(@"%s: (%ld)", __PRETTY_FUNCTION__, index);
 
-    NSIndexPath *indexPathUpdate;
-    MADTableController *tableController;
-    
-    RptqQueryTable *table, *tableWrapped;
-    MADQuery <MADQueryDatabaseProtocol> *rquery;
-    RptqDatabaseSchemaTable *schemaTable;
-
     NSFetchedResultsController *queryTablesResultsController;
     MADQueryViewDataSource *queryViewDataSource;
-    
-    indexPathUpdate = [NSIndexPath indexPathForRow: index inSection: 0];
     queryViewDataSource = self.queryViewDataSource;
     queryTablesResultsController = queryViewDataSource.queryTablesController;
+    RptqDatabaseSchemaTable *schemaTable;
     
+    NSIndexPath *indexPathUpdate;
+    indexPathUpdate = [NSIndexPath indexPathForRow: index inSection: 0];
+
+    RptqQueryTable *table, *tableWrapped;
     tableWrapped = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
     
     table = tableWrapped;
@@ -1567,19 +1578,92 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     
     MADDatabaseConnection *databaseConnection;
     databaseConnection = [MADDatabaseConnection newDatabaseConnection:schemaTable.inDatabase.ownedByUser];
-    MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
-    rquery = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
-                                                                               object: schemaTable];
-    if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
-        db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
-    }
-    tableController = [[MADTableController alloc] initWithQuery:rquery database:db
-                                                        tableID:schemaTable.objectID];
     
-    [self.navigationController pushViewController: tableController animated: YES];
+    //MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
+    //NSString *key = [databaseConnection connectionString];
+
+    MADOperationGetCredentials *operationGetCredentials;
+    operationGetCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection:databaseConnection
+                                                                              viewController:self];
+    self.credentailsQueue.maxConcurrentOperationCount = 1;
+    [self.credentailsQueue addOperation:operationGetCredentials];
+    
+    _showingTableIndex = index;
+
+    //MADCredential *c = [self.document getCredentialsForKey: key];
     
 }
 
+#pragma mark -
+#pragma mark MADOperationObserver
+
+- (void)operationDidStart:(MADOperation *)operation {
+    
+    if (_showingTableIndex >= 0 && [operation isKindOfClass:[MADOperationGetCredentials class]]) {
+
+
+        
+    }
+}
+
+- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
+    
+    if (_showingTableIndex >= 0 && [operation isKindOfClass:[MADOperationGetCredentials class]]) {
+        
+    }
+}
+
+- (void)operationQueue:(MADOperationQueue *)operationQueue
+    operationDidFinish:(NSOperation *)operation
+            withErrors:(NSArray *)errors {
+    if (_showingTableIndex >= 0 && [operationQueue isKindOfClass:[MADOperationQueue class]] && [operation isKindOfClass:[MADOperationGetCredentials class]]) {
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            NSIndexPath *indexPathUpdate;
+            MADTableController *tableController;
+            
+            RptqQueryTable *table, *tableWrapped;
+            RptqDatabaseSchemaTable *schemaTable;
+            
+            NSFetchedResultsController *queryTablesResultsController;
+            MADQueryViewDataSource *queryViewDataSource;
+            
+            indexPathUpdate = [NSIndexPath indexPathForRow: self.showingTableIndex inSection: 0];
+            self.showingTableIndex = -1;
+            
+            queryViewDataSource = self.queryViewDataSource;
+            queryTablesResultsController = queryViewDataSource.queryTablesController;
+            
+            tableWrapped = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
+            
+            table = tableWrapped;
+            schemaTable = table.databaseSchemaTable;
+            
+            MADDatabaseConnection *databaseConnection;
+            databaseConnection = [MADDatabaseConnection newDatabaseConnection:schemaTable.inDatabase.ownedByUser];
+            
+            MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
+            
+            MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery;
+            rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
+                                                                                                                     object: schemaTable];
+            rquery.credential = ((MADOperationGetCredentials *)operation).credentials.copy;
+            if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+                db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
+            }
+            
+            
+            tableController = [[MADTableController alloc] initWithQuery:rquery
+                                                               database:db
+                                                                tableID:schemaTable.objectID];
+            
+            [self.navigationController pushViewController: tableController animated: YES];
+        }];
+
+    }
+}
 
 #pragma mark -
 #pragma mark CoreData

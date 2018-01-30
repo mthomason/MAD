@@ -13,7 +13,7 @@
 
 @interface MADQuerySampleDataTable : MADQuery
     <MADQueryFieldKeysProtocol, MADQueryDataTableProtocol, MADQueryDatabaseProtocol,
-        MADQueryDatabaseProtocol>
+        MADQueryDatabaseProtocol, MADQueryCredentialProtocol>
 
     - (NSString *)getSql:(NSError * __autoreleasing *)error;
 
