@@ -16,7 +16,7 @@
     - (void)actionEmail:(id)cell;
     - (void)actionRename:(id)sender;
     - (void)actionDuplicate:(id)sender;
-    - (void)actionActivateEditMode:(id)sender;
+    - (void)actionActivateEditMode:(UICollectionViewCell *)sender;
 
 @end
 

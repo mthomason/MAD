@@ -279,6 +279,10 @@ typedef NS_ENUM(short, MADExplorerState) {
             [tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
                                                 forState: UIControlStateNormal];
             
+            UIToolbar *toolbarAppearance;
+            toolbarAppearance = [UIToolbar appearance];
+            [toolbarAppearance setBarTintColor: [MADColorEverydayApps newColorBlue]];
+            
             UIBarButtonItem *barButtonItem;
             barButtonItem = [UIBarButtonItem appearance];
             barButtonItem.tintColor = whiteColor.copy;
@@ -1843,13 +1847,9 @@ typedef NS_ENUM(short, MADExplorerState) {
     
 }
 
-- (IBAction)actionActivateEditMode:(UILongPressGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        [self actionEdit:nil];
-        if ([sender.view isKindOfClass:[UICollectionViewCell class]]) {
-            [self selectCell:(UICollectionViewCell *)sender.view];
-        }
-    }
+- (void)actionActivateEditMode:(UICollectionViewCell *)sender {
+    [self actionEdit:nil];
+    [self selectCell:sender];
 }
 
 - (void)selectCell:(UICollectionViewCell *)cell {

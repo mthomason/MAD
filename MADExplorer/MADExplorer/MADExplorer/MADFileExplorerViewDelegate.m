@@ -536,8 +536,10 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     [_delegate actionEmail:self];
 }
 
-- (void)actionActivateEditMode:(id)sender {
-    [_delegate actionActivateEditMode:sender];
+- (void)actionActivateEditMode:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan && [sender.view isKindOfClass:[UICollectionViewCell class]]) {
+        [_delegate actionActivateEditMode:(UICollectionViewCell *)sender.view];
+    }
 }
 
 - (void)actionRename:(id)sender {

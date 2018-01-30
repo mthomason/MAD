@@ -15,7 +15,7 @@
  
  static const CGFloat selectedAlpha = 0.33333333f;
  
-+ (UIColor *)newColorBlackish                       { id color = newColorWitColors(0.0000f, 0.0000f, 0.0000f); return color; }
+ + (UIColor *)newColorBlackish                       { id color = newColorWitColors(0.0000f, 0.0000f, 0.0000f); return color; }
  + (UIColor *)newColorBlueDark                       { id color = newColorWitColors(2.0000f, 108.0000f, 182.0000f); return color; }
  + (UIColor *)newColorBlueLight                      { id color = newColorWitColors(185.0000f, 224.0000f, 247.0000f); return color; }
  + (UIColor *)newColorBlueDarkSelection              { id color = newColorWithColorsAlpha(2.0000f, 108.0000f, 182.0000f, 0.5000f); return color; }
