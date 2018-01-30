@@ -12,7 +12,7 @@
 #import <UIKit/UITableView.h>
 #import "MADIdentifierQueryViewSections.h"
 
-@class MADQueryViewSectionDelegate;
+@class MADQueryViewDelegate, MADQueryViewSectionDelegate;
 @protocol MADQueryViewControllerLayoutSectionSelectorProtocol;
 
 @protocol MADQueryViewDelegateProtocol <NSObject>
@@ -20,7 +20,7 @@
     - (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex;
     - (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex;
     - (CGFloat)headerHeight;
-    - (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index;
+    - (void)queryViewDelegate:(MADQueryViewDelegate *)delegate handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index;
 
 @end
 

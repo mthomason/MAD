@@ -1558,30 +1558,22 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     return _headerSectionHeight;
 }
 
-- (void)handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
-    NSLog(@"%s: (%ld)", __PRETTY_FUNCTION__, index);
+- (void)queryViewDelegate:(MADQueryViewDelegate *)delegate handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
 
-    NSFetchedResultsController *queryTablesResultsController;
-    MADQueryViewDataSource *queryViewDataSource;
-    queryViewDataSource = self.queryViewDataSource;
-    queryTablesResultsController = queryViewDataSource.queryTablesController;
-    RptqDatabaseSchemaTable *schemaTable;
-    
-    NSIndexPath *indexPathUpdate;
-    indexPathUpdate = [NSIndexPath indexPathForRow: index inSection: 0];
+    NSString *ownedByUser = NSStringFromSelector(@selector(ownedByUser));
+    NSString *entityName = NSStringFromClass([RptqDatabase class]);
+    NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:entityName];
+    fr.fetchLimit = 1;
+    fr.relationshipKeyPathsForPrefetching = @[ownedByUser];
+    fr.resultType = NSManagedObjectResultType;
 
-    RptqQueryTable *table, *tableWrapped;
-    tableWrapped = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
-    
-    table = tableWrapped;
-    schemaTable = table.databaseSchemaTable;
-    
+    NSError *error = nil;
+    NSArray <RptqDatabase *> *results = [self.queryViewDataSource.managedObjectContext executeFetchRequest:fr error:&error];
+    RptqDatabaseCredentals *databaseCredentals = ((RptqDatabase *) results.firstObject).ownedByUser;
+
     MADDatabaseConnection *databaseConnection;
-    databaseConnection = [MADDatabaseConnection newDatabaseConnection:schemaTable.inDatabase.ownedByUser];
+    databaseConnection = [MADDatabaseConnection newDatabaseConnection:databaseCredentals];
     
-    //MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
-    //NSString *key = [databaseConnection connectionString];
-
     MADOperationGetCredentials *operationGetCredentials;
     operationGetCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection:databaseConnection
                                                                               viewController:self];
@@ -1589,43 +1581,29 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     [self.credentailsQueue addOperation:operationGetCredentials];
     
     _showingTableIndex = index;
-
-    //MADCredential *c = [self.document getCredentialsForKey: key];
     
 }
 
 #pragma mark -
 #pragma mark MADOperationObserver
 
-- (void)operationDidStart:(MADOperation *)operation {
-    
-    if (_showingTableIndex >= 0 && [operation isKindOfClass:[MADOperationGetCredentials class]]) {
-
-
-        
-    }
-}
+- (void)operationDidStart:(MADOperation *)operation { }
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-    
-    if (_showingTableIndex >= 0 && [operation isKindOfClass:[MADOperationGetCredentials class]]) {
-        
-    }
-}
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors { }
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue
     operationDidFinish:(NSOperation *)operation
             withErrors:(NSArray *)errors {
-    if (_showingTableIndex >= 0 && [operationQueue isKindOfClass:[MADOperationQueue class]] && [operation isKindOfClass:[MADOperationGetCredentials class]]) {
+    if (_showingTableIndex >= 0 && [operationQueue isKindOfClass:[MADOperationQueue class]] &&
+        [operation isKindOfClass:[MADOperationGetCredentials class]]) {
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSIndexPath *indexPathUpdate;
             MADTableController *tableController;
             
-            RptqQueryTable *table, *tableWrapped;
-            RptqDatabaseSchemaTable *schemaTable;
+            RptqQueryTable *table;
             
             NSFetchedResultsController *queryTablesResultsController;
             MADQueryViewDataSource *queryViewDataSource;
@@ -1636,28 +1614,24 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
             queryViewDataSource = self.queryViewDataSource;
             queryTablesResultsController = queryViewDataSource.queryTablesController;
             
-            tableWrapped = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
-            
-            table = tableWrapped;
-            schemaTable = table.databaseSchemaTable;
+            table = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
             
             MADDatabaseConnection *databaseConnection;
-            databaseConnection = [MADDatabaseConnection newDatabaseConnection:schemaTable.inDatabase.ownedByUser];
+            databaseConnection = [MADDatabaseConnection newDatabaseConnection:table.databaseSchemaTable.inDatabase.ownedByUser];
             
             MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
             
             MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery;
             rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
-                                                                                                                     object: schemaTable];
+                                                                                                                     object: table.databaseSchemaTable];
             rquery.credential = ((MADOperationGetCredentials *)operation).credentials.copy;
             if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
                 db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
             }
             
-            
             tableController = [[MADTableController alloc] initWithQuery:rquery
                                                                database:db
-                                                                tableID:schemaTable.objectID];
+                                                                tableID:table.databaseSchemaTable.objectID];
             
             [self.navigationController pushViewController: tableController animated: YES];
         }];

@@ -71,6 +71,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 
     @property (readwrite, nonatomic, assign) short count;
 
+    @property (readwrite, nonatomic, weak) NSManagedObjectContext *managedObjectContext;
     @property (readwrite, nonatomic, strong) NSArray <MADQueryViewSectionDelegate *> *sections;
 
     @property (readwrite, nonatomic, weak) MADQueryViewCellConfigureHandler handleConfigureCell;
@@ -88,6 +89,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 }
 
 - (void)dealloc {
+    _managedObjectContext = nil;
     //NSLog(@"%s", __PRETTY_FUNCTION__);
     //_sections = nil;
     _handleConfigureCell = nil;
@@ -133,7 +135,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
         _reportingEnabled = reportingEnabled;
         _numberOfTables = (unsigned long)numberOfTables;
         _handleConfigureCell = handleConfigureCell;
-        
+        _managedObjectContext = managedObjectContext;
+
     }
     return self;
 }

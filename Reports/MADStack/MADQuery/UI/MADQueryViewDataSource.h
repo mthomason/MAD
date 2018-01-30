@@ -36,6 +36,7 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 
     @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 
+    @property (readonly, nonatomic, weak) NSManagedObjectContext *managedObjectContext;
     @property (readonly, nonatomic, strong) NSFetchedResultsController *queryTablesController;
     @property (readonly, nonatomic, strong) NSFetchedResultsController *queryLinksController;
     @property (readonly, nonatomic, strong) NSFetchedResultsController *queryGroupsController;

@@ -36,7 +36,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
     id <MADQueryViewDelegateProtocol> delegate = _delegate;
     if ([delegate sectionIdentifierForDisplayIndex:(short)indexPath.section] ==
             MADIdentifierQueryViewSectionsTables) {
-        [delegate handleUserRequestedSampleDataForTableAtIndex: indexPath.row];
+        [delegate queryViewDelegate:self handleUserRequestedSampleDataForTableAtIndex: indexPath.row];
     }
 }
 
