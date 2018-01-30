@@ -16,6 +16,8 @@
 
 #import <QuickLook/QLPreviewController.h>
 
+#import "AppDelegate.h"
+
 #import <MessageUI/MFMailComposeViewController.h>
 
 #import <MADFileManager/MADFileUtilities.h>
@@ -401,8 +403,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     MADOperation *operation;
     NSOperation *resetReceipt;
     
-    MADAppDelegate delegate = [MADApplication AppDelegate];
-    NSString *groupID = [delegate groupIdentifier].copy;
+    NSString *groupID = [AppDelegate groupIdentifier];
     
     operationQueueBackground = [[MADOperationQueue alloc] init];
     operationQueueBackground.maxConcurrentOperationCount = 1;
@@ -596,6 +597,8 @@ typedef NS_ENUM(short, MADExplorerState) {
         
         MADExplorerDataSource *datasource;
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
+                                                                  groupID:[AppDelegate groupIdentifier]
+                                                               ubiquityID:[AppDelegate ubiquityIdentifier]
                                                         cellConfiguration:^(MADCollectionViewCellDocument *cell) {
             ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
         }];

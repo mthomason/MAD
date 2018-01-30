@@ -167,25 +167,23 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
     return url;
 }
 
-+ (instancetype)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
++ (instancetype)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupID
                                             pathComponent:(NSString *)pathComponent
                                       alternativeSelector:(SEL)alternativeSelector {
     
     BOOL success = NO, isDirectory = NO;
-    NSString *groupID, *pathPart, *cachePath;
+    NSString *cachePath;
     NSURL *groupUrl, *cacheURL;
 
-    groupID = groupIdentifier.copy;
-    pathPart = pathComponent.copy;
     
     groupUrl = [[NSFileManager defaultManager]
                        containerURLForSecurityApplicationGroupIdentifier: groupID];
     
     NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil "
                               @"for %@.  Maybe the fucking entitlment file is missing?!?!",
-                              groupIdentifier);
+                              groupID);
     
-    cacheURL = [groupUrl URLByAppendingPathComponent: pathPart
+    cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent
                                          isDirectory: YES];
     cachePath = cacheURL.path.copy;
     success = [[NSFileManager defaultManager] fileExistsAtPath: cachePath

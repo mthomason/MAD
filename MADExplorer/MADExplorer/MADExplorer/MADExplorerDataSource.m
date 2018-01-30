@@ -50,17 +50,19 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
 }
 
 - (instancetype)init {
-    return [self initWithFileExtension:nil cellConfiguration:nil];
+    return [self initWithFileExtension:nil groupID:nil ubiquityID:nil cellConfiguration:nil];
 }
 
 - (instancetype)initWithFileExtension:(NSString *)fileExtension
+                              groupID:(NSString *)groupID ubiquityID:(NSString *)ubiquityID
                     cellConfiguration:(MADBlockConfigureDocumentCell)cellCondiguration {
     if (self = [super init]) {
 
         _extension = fileExtension.copy;
         
         MADFileLocationManager *fileLocationManager;
-        fileLocationManager = [[MADFileLocationManager alloc] init];
+        fileLocationManager = [[MADFileLocationManager alloc] initWithUbiquityID:ubiquityID
+                                                                      andGroupID:groupID];
         fileLocationManager.delegate = self;
         fileLocationManager.filesController.delegate = self;
         self.fileLocationManager = fileLocationManager;

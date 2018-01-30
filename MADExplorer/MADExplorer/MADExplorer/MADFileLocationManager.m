@@ -12,7 +12,6 @@
 #import <UIKit/UIAlertController.h>
 
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
 
@@ -35,16 +34,24 @@ static NSString * const MADFirstLaunch                                  = @"MADF
     @property (nonatomic, readwrite, strong) MADFilesController *filesController;
     @property (nonatomic, readwrite, assign) BOOL getUserCloudPrefsFirstCall;
     @property (nonatomic, readonly)          BOOL isFirstLaunch;
+    @property (nonatomic, copy)              NSString *groupID;
+    @property (nonatomic, copy)              NSString *ubiquityID;
 
 @end
 
 @implementation MADFileLocationManager
 
 - (instancetype)init {
+    @throw NSInternalInconsistencyException;
+}
+
+- (instancetype)initWithUbiquityID:(NSString *)ubiquityID andGroupID:(NSString *)groupID {
 
     if (self = [super init]) {
         //NSLog(@"%s", __PRETTY_FUNCTION__);
-
+        self.groupID = groupID.copy;
+        self.ubiquityID = ubiquityID.copy;
+        
         NSNumber *yes = @YES;
         NSNumber *notSet = [[NSNumber alloc] initWithInteger: MADAppStorageNotSet];
         NSDictionary *defaultValues;
@@ -53,6 +60,9 @@ static NSString * const MADFirstLaunch                                  = @"MADF
                                         notSet, MADAppConfigurationUserDefaultsStorageOption, nil];
         [[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
         self.getUserCloudPrefsFirstCall = YES;
+        
+        
+        
     }
     return self;
 }
@@ -366,26 +376,19 @@ static NSString * const MADFirstLaunch                                  = @"MADF
     
     if (!_filesController) {
         
-        NSString *identifier = [self copyIdentifierForStorageOption];
-        NSString *fileExtention = [delegate fileExtention].copy;
-        MADAppStorage storageOption = [self.class StorageOption];
-
         id filesController;
-        filesController = [MADFilesController newFilesControllerWithPathExtension: fileExtention
-                                                                    storageOption: storageOption
-                                                                       identifier: identifier
+        filesController = [MADFilesController newFilesControllerWithPathExtension: [delegate fileExtention]
+                                                                    storageOption: [self.class StorageOption]
+                                                                       identifier: [self identifierForStorageOption]
                                                                 firstQueryHandler: storageChangedHandler];
         [delegate didConfigureFilesController: filesController];
         [filesController startSearching];
         _filesController = filesController;
         
     } else if (accountChanged) {
-        NSString *identifier = [self copyIdentifierForStorageOption];
-        NSString *fileExtention = [delegate fileExtention].copy;
-        MADAppStorage storageOption = [self.class StorageOption];
-        id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: fileExtention
-                                                          storageOption: storageOption
-                                                             identifier: identifier
+        id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: [delegate fileExtention]
+                                                          storageOption: [self.class StorageOption]
+                                                             identifier: [self identifierForStorageOption]
                                                       firstQueryHandler: storageChangedHandler];
         _filesController.fileCoordinator = fc;
         [delegate didConfigureFilesController: _filesController];
@@ -393,16 +396,8 @@ static NSString * const MADFirstLaunch                                  = @"MADF
 
 }
 
-- (NSString *)copyIdentifierForStorageOption {
-
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    id <MADFileLocationManagerDelegate> delegate = _delegate;
-
-    NSString *groupIdentifer;
-    groupIdentifer = [self.class StorageOption] != MADAppStorageCloud ? [MADApplication groupIdentifier] :
-                                                                        [MADApplication ubiquityIdentifier];
-    return groupIdentifer.copy;
+- (NSString *)identifierForStorageOption {
+    return [self.class StorageOption] != MADAppStorageCloud ? self.groupID : self.ubiquityID;
 }
 
 /*

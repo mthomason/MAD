@@ -21,6 +21,8 @@
     <UICollectionViewDataSource,
         MADFileLocationManagerDelegate>
     - (instancetype)initWithFileExtension:(NSString *)fileExtension
+                                  groupID:(NSString *)groupID
+                               ubiquityID:(NSString *)ubiquityID
                         cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))config
                         NS_DESIGNATED_INITIALIZER;
 

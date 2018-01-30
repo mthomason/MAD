@@ -59,7 +59,6 @@ static NSString * const MADApplicationIdMadViewer                           = @"
     return ubiquityIdentifier;
 }
 
-
 + (BOOL)isMADDesigner {
     MADAppDelegate appDelegate = [self AppDelegate];
     NSString *appIdentifier = [appDelegate applicationIdentifier];
