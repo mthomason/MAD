@@ -175,15 +175,15 @@
 		4C6700ED1BA20633001C9D5A /* MADExplorer */ = {
 			isa = PBXGroup;
 			children = (
-				4C6700EE1BA20633001C9D5A /* MADExplorer.h */,
 				4C341A541E52EE4F00315364 /* Protocols */,
 				4CFC60B21E530FD900EC577E /* Cell */,
+				4C6700EE1BA20633001C9D5A /* MADExplorer.h */,
+				4C7CB4A61E5305E700B461B6 /* MADExplorerView.h */,
+				4C7CB4A71E5305E700B461B6 /* MADExplorerView.m */,
 				4C5989A01DAA320B007A568B /* MADFileExplorerViewDelegate.h */,
 				4C5989A11DAA320B007A568B /* MADFileExplorerViewDelegate.m */,
 				4C7CB4A31E53052A00B461B6 /* MADExplorerDataSource.h */,
 				4C7CB4A21E53052A00B461B6 /* MADExplorerDataSource.m */,
-				4C7CB4A61E5305E700B461B6 /* MADExplorerView.h */,
-				4C7CB4A71E5305E700B461B6 /* MADExplorerView.m */,
 				4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */,
 				4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */,
 				4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */,

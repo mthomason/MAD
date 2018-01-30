@@ -2350,6 +2350,7 @@
 		4C401EB51BAE5E7100BAE5FC /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4CC8EEF31E44F6EE00139089 /* Explorer */,
 				4C6D2F051E6E86F5008EFE5D /* Nibs */,
 				4C1E55071E58295F00E3FAF0 /* Storyboard */,
 				4C1F93CE201A32EB00BDDC70 /* PluginManager */,
@@ -2366,7 +2367,6 @@
 				4CB8EDFF1E19F4AB00193295 /* Navigation */,
 				4C26BA041BAF14F200456DC8 /* About */,
 				4C00818414B738E9003DF437 /* MADFileDefinition */,
-				4CC8EEF31E44F6EE00139089 /* FileExplorer */,
 				4CC8EEF41E44F6F200139089 /* Query */,
 				4C26B9A91BAF123A00456DC8 /* TabBar */,
 				4C26B9AE1BAF123A00456DC8 /* Toolbox */,
@@ -3598,21 +3598,21 @@
 			name = Designer;
 			sourceTree = "<group>";
 		};
-		4CC8EEF31E44F6EE00139089 /* FileExplorer */ = {
+		4CC8EEF31E44F6EE00139089 /* Explorer */ = {
 			isa = PBXGroup;
 			children = (
 				4C26B99C1BAF123A00456DC8 /* MADExplorerController.h */,
 				4C26B99D1BAF123A00456DC8 /* MADExplorerController.m */,
+				4C26BA3E1BAF99F000456DC8 /* MADExplorerViewLayout.h */,
+				4C26BA3F1BAF99F000456DC8 /* MADExplorerViewLayout.m */,
 				4C26B99A1BAF123A00456DC8 /* MADExplorerSectionHeaderView.h */,
 				4C26B99B1BAF123A00456DC8 /* MADExplorerSectionHeaderView.m */,
 				4CB074D21E22006700643F32 /* MADExplorerToolbar.h */,
 				4CB074D31E22006700643F32 /* MADExplorerToolbar.m */,
 				4C97CB8A1E3A263400587B16 /* MADExplorerAnimated.h */,
 				4C97CB8B1E3A263400587B16 /* MADExplorerAnimated.m */,
-				4C26BA3E1BAF99F000456DC8 /* MADExplorerViewLayout.h */,
-				4C26BA3F1BAF99F000456DC8 /* MADExplorerViewLayout.m */,
 			);
-			name = FileExplorer;
+			name = Explorer;
 			sourceTree = "<group>";
 		};
 		4CC8EEF41E44F6F200139089 /* Query */ = {

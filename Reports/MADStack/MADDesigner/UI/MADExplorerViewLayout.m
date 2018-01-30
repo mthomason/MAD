@@ -11,6 +11,13 @@
 
 @implementation MADExplorerViewLayout
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        self.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize;
+    }
+    return self;
+}
+
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 
     NSArray *attributes = [super layoutAttributesForElementsInRect:rect];

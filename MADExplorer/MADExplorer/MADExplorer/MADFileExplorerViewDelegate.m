@@ -56,7 +56,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
 
 @interface MADFileExplorerViewDelegate ()
 
-    @property (nonatomic, readwrite, strong) UILabel *testLabel;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
     @property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
@@ -73,7 +72,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
 
 - (void)dealloc {
     _predicateKindOfLongPressGestureRecognizer = nil;
-    _testLabel = nil;
     [_longPressGestures removeAllObjects];
 }
 
@@ -87,10 +85,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
 
 - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
     if (self = [super init]) {
-        
-        id label = [MADLabel newLabelDocumentCaption: MADCollectionViewLayoutGroupedCellLabelRect()
-                                               width: fLabelWidth];
-        self.testLabel = label;
         
         id array = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
         id indexSet;
@@ -222,8 +216,8 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     forItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     typeof(_delegate) __strong fileExplorerDelegate = _delegate;
-    cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
-    cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
+    //cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
+    //cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
     SEL actionEdit = @selector(actionActivateEditMode:);
     
@@ -464,57 +458,6 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
                   layout:(UICollectionViewLayout *)collectionViewLayout
                                             referenceSizeForHeaderInSection:(NSInteger)section {
     return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-
-    CGFloat sizeLabel[2];
-    UIFont *font;
-    NSString *filename, *size;
-    NSAttributedString *attributedString, *attributedStringSub;
- 
-    filename = [self titleForItemAtIndexPath:indexPath];
-    size = [self subtitleForItemAtIndexPath:indexPath];
-    
-    attributedString = [MADExplorerCaption newExplorerCaption: filename];
-    
-    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    sizeLabel[0] = [self heightForAttributedString: attributedString
-                                contentScaleFactor: collectionView.contentScaleFactor
-                                              font: font];
-    
-    attributedStringSub = [MADExplorerCaption newExplorerCaption: size];
-    
-    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    sizeLabel[1] = [self heightForAttributedString: attributedStringSub
-                                contentScaleFactor: collectionView.contentScaleFactor
-                                              font: font];
-    return CGSizeMake(140.0000f,
-                      (CGFloat)(128.0 + ceil(sizeLabel[0]) + ceil(sizeLabel[1]) + 20.0));
-}
-
-- (CGFloat)heightForAttributedString:(NSAttributedString *)attributedString
-                  contentScaleFactor:(CGFloat)contentScaleFactor
-                                font:(UIFont *)font {
-
-    UILabel *lbl = _testLabel;
-    lbl.frame = MADCollectionViewLayoutGroupedCellLabelRect();
-    lbl.lineBreakMode = NSLineBreakByWordWrapping;
-    lbl.contentScaleFactor = contentScaleFactor;
-    lbl.font = font;
-    lbl.attributedText = attributedString;
-    [lbl sizeToFit];
-
-    CGFloat height = lbl.frame.size.height;
-
-    lbl.font = nil;
-    lbl.attributedText = nil;
-    lbl = nil;
-
-    return height;
 }
 
 - (void)invokeOperationDidChangeNumberOfItemsSelected:(UICollectionView *)collectionView {

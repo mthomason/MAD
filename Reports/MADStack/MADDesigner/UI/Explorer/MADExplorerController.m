@@ -598,10 +598,8 @@ typedef NS_ENUM(short, MADExplorerState) {
     if (!_fileExplorerDataSource) {
         
         MADExplorerDataSource *datasource;
-        typeof(self) __weak weakself = self;
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
                                                         cellConfiguration:^(MADCollectionViewCellDocument *cell) {
-            //((MADCollectionViewCellDocument *)cell).delegate = weakself;
             ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
         }];
         _fileExplorerDataSource = datasource;
@@ -1717,8 +1715,9 @@ typedef NS_ENUM(short, MADExplorerState) {
 
 - (IBAction)actionRename:(id)sender {
     
-    if (self.isEditing) return;
-    
+    if (self.isEditing)
+        return;
+        
     MADCollectionViewCellDocument *cellDocument;
     
     if ([sender isKindOfClass:[MADCollectionViewCellDocument class]]) {

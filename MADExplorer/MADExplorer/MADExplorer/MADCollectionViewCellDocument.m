@@ -92,6 +92,8 @@ static inline float wobbleFactor() {
     UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc]
                                       initWithFrame:self.contentView.frame];
     [self setSelectedBackgroundView: selectedBackgroundView];
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
 #pragma mark -
