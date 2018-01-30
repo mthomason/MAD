@@ -13,56 +13,48 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        self.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize;
+        self.estimatedItemSize = CGSizeMake(140.0000f, 240.0000f);
     }
     return self;
 }
 
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-
-    NSArray <UICollectionViewLayoutAttributes *> *attributes;
-    attributes = [super layoutAttributesForElementsInRect:rect];
-    if (attributes == nil) {
-        attributes = [[NSArray alloc] init];
-    }
-    
-    NSMutableArray *elementAttributes = [[NSMutableArray alloc] initWithCapacity:attributes.count];
-
-    CGFloat lastY = attributes.firstObject.frame.origin.y;
-    CGFloat lastHeight = attributes.firstObject.frame.size.height;
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect; {
+    NSArray <UICollectionViewLayoutAttributes *> *attributes = [super layoutAttributesForElementsInRect:rect];
+    CGFloat baseline = -2;
+    NSMutableArray <UICollectionViewLayoutAttributes *> *sameLineAttributes = [[NSMutableArray alloc] init];
+    NSMutableArray <UICollectionViewLayoutAttributes *> *results = [[NSMutableArray alloc] init];
     for (UICollectionViewLayoutAttributes *attribute in attributes) {
-        if (CGRectIntersectsRect(rect, attribute.frame)) {
-            if (attribute.frame.size.height < lastHeight) {
-                lastHeight = attribute.frame.size.height;
+        if (attribute.representedElementCategory == UICollectionElementCategoryCell) {
+            CGFloat centerY = CGRectGetMidY(attribute.frame);
+            if (ABS(centerY - baseline) > 1) {
+                baseline = centerY;
+                if (sameLineAttributes.count > 0) {
+                    [self alignToTopForSameLineAttributes:sameLineAttributes];
+                    [results addObjectsFromArray:sameLineAttributes];
+                    [sameLineAttributes removeAllObjects];
+                }
             }
-            if (attribute.frame.origin.y > lastY + lastHeight) {
-                lastY = attribute.frame.origin.y;
-            }
-            attribute.frame = CGRectMake(attribute.frame.origin.x, lastY,
-                                         attribute.frame.size.width, attribute.frame.size.height);
-            
-            [elementAttributes addObject:attribute];
+            [sameLineAttributes addObject:attribute];
         }
     }
-
-    return elementAttributes;
+    if (sameLineAttributes.count > 0) {
+        [self alignToTopForSameLineAttributes:sameLineAttributes];
+        [results addObjectsFromArray:sameLineAttributes];
+        [sameLineAttributes removeAllObjects];
+    }
+    return results;
 }
 
-- (void)finalizeCollectionViewUpdates {
-    [super finalizeCollectionViewUpdates];
-    /*typeof(self) __weak weakself = self;
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [weakself.collectionView.visibleCells enumerateObjectsUsingBlock:^(__kindof UICollectionViewCell * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([obj isKindOfClass:[MADCollectionViewCellDocument class]]) {
-                    if (((MADCollectionViewCellDocument *)obj).isWobbling) {
-                        ((MADCollectionViewCellDocument *)obj).wobbling = NO;
-                        ((MADCollectionViewCellDocument *)obj).wobbling = YES;
-                    }
-                }
-            }];
-        });
-    });*/
+- (void)alignToTopForSameLineAttributes:(NSArray *)sameLineAttributes {
+    NSArray *sorted = [sameLineAttributes sortedArrayUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *attributes1,
+                                                                                         UICollectionViewLayoutAttributes *attributes2) {
+        CGFloat delta = attributes1.frame.size.height - attributes2.frame.size.height;
+        return delta == 0. ? NSOrderedSame : ABS(delta)/delta;
+    }];
+    UICollectionViewLayoutAttributes *tallest = [sorted lastObject];
+    [sameLineAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *attribute, NSUInteger idx, BOOL *stop) {
+        attribute.frame = CGRectOffset(attribute.frame, 0, tallest.frame.origin.y - attribute.frame.origin.y);
+    }];
 }
 
 @end

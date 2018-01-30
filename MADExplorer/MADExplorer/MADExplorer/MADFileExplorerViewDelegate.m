@@ -46,14 +46,6 @@
 
 typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMutableMapGesturesLongPress;
 
-static const CGFloat fLabelWidth        = 124.0000f;
-static const CGFloat fLabelMaxHeight    = 300.0000f;
-
-static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void);
-static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, fLabelWidth, fLabelMaxHeight);
-}
-
 @interface MADFileExplorerViewDelegate ()
 
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
@@ -290,6 +282,7 @@ static inline CGRect MADCollectionViewLayoutGroupedCellLabelRect(void) {
     [_longPressGestures removeObjectForKey: hash];
     cell.wobbling = NO;
     cell.working = NO;
+    //[collectionView.collectionViewLayout invalidateLayout];
     //cell.delegate = nil;
 }
 

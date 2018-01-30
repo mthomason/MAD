@@ -23,7 +23,7 @@
     - (instancetype)initWithFileExtension:(NSString *)fileExtension
                                   groupID:(NSString *)groupID
                                ubiquityID:(NSString *)ubiquityID
-                        cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell))config
+                        cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell, NSIndexPath *path))config
                         NS_DESIGNATED_INITIALIZER;
 
     @property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;

@@ -600,11 +600,16 @@ typedef NS_ENUM(short, MADExplorerState) {
     if (!_fileExplorerDataSource) {
         
         MADExplorerDataSource *datasource;
+        
         datasource = [[MADExplorerDataSource alloc] initWithFileExtension:MADFileExtentionMobleApplicationDocument
                                                                   groupID:[AppDelegate groupIdentifier]
                                                                ubiquityID:[AppDelegate ubiquityIdentifier]
-                                                        cellConfiguration:^(MADCollectionViewCellDocument *cell) {
+                                                        cellConfiguration:^(MADCollectionViewCellDocument *cell, NSIndexPath *indexPath) {
             ((MADCollectionViewCellDocument *)cell).wobbling = self.isEditing;
+            MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
+            [cell updateDisplayForMetaData:metadata editing:self.isEditing];
+                                                            [cell invalidateIntrinsicContentSize];
+                                                            //[self.collectionView.collectionViewLayout invalidateLayout];
         }];
         _fileExplorerDataSource = datasource;
         

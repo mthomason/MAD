@@ -374,7 +374,7 @@ static inline float wobbleFactor() {
 
     name = metadata.name;
     labelTitle.text = name.copy;
-    
+
     ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
     notDownloaded = metadata.isUbiquitousItemDownloadingStatusNotDownloaded;
     isDownloading = metadata.ubiquitousItemIsDownloading;
@@ -419,6 +419,7 @@ static inline float wobbleFactor() {
     };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
+
 }
 
 @end

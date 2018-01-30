@@ -23,7 +23,7 @@
 #import "MADDocumentManagerProtocol.h"
 #import "MADFileLocationManager.h"
 
-typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
+typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, NSIndexPath *);
 
 @interface MADExplorerDataSource ()
     <MADFilesControllerDelegate>
@@ -257,7 +257,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *);
                                                      forIndexPath: indexPath];
 
     if (_handleCellConfiguration)
-        _handleCellConfiguration(cell);
+        _handleCellConfiguration(cell, indexPath);
     
     return cell;
 }
