@@ -12,8 +12,8 @@
 		4C401E3F1BAE42DD00BAE5FC /* MADOpenDocumentManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */; };
 		4C4754571CF41A6500BC9E02 /* MADExplorerProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754561CF41A6500BC9E02 /* MADExplorerProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5989A21DAA320B007A568B /* MADFileExplorerViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5989A01DAA320B007A568B /* MADFileExplorerViewDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5989A31DAA320B007A568B /* MADFileExplorerViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5989A11DAA320B007A568B /* MADFileExplorerViewDelegate.m */; };
+		4C5989A21DAA320B007A568B /* MADExplorerViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5989A01DAA320B007A568B /* MADExplorerViewDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5989A31DAA320B007A568B /* MADExplorerViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5989A11DAA320B007A568B /* MADExplorerViewDelegate.m */; };
 		4C6700EF1BA20633001C9D5A /* MADExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6700EE1BA20633001C9D5A /* MADExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6700F61BA20633001C9D5A /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6700EB1BA20633001C9D5A /* MADExplorer.framework */; };
 		4C6700FB1BA20633001C9D5A /* MADExplorerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6700FA1BA20633001C9D5A /* MADExplorerTests.m */; };
@@ -66,8 +66,8 @@
 		4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOpenDocumentManager.h; path = MADExplorer/MADOpenDocumentManager.h; sourceTree = "<group>"; };
 		4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOpenDocumentManager.m; path = MADExplorer/MADOpenDocumentManager.m; sourceTree = "<group>"; };
 		4C4754561CF41A6500BC9E02 /* MADExplorerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerProtocol.h; path = MADExplorer/MADExplorerProtocol.h; sourceTree = "<group>"; };
-		4C5989A01DAA320B007A568B /* MADFileExplorerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileExplorerViewDelegate.h; path = MADExplorer/MADFileExplorerViewDelegate.h; sourceTree = "<group>"; };
-		4C5989A11DAA320B007A568B /* MADFileExplorerViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileExplorerViewDelegate.m; path = MADExplorer/MADFileExplorerViewDelegate.m; sourceTree = "<group>"; };
+		4C5989A01DAA320B007A568B /* MADExplorerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerViewDelegate.h; path = MADExplorer/MADExplorerViewDelegate.h; sourceTree = "<group>"; };
+		4C5989A11DAA320B007A568B /* MADExplorerViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADExplorerViewDelegate.m; path = MADExplorer/MADExplorerViewDelegate.m; sourceTree = "<group>"; };
 		4C6700EB1BA20633001C9D5A /* MADExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6700EE1BA20633001C9D5A /* MADExplorer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADExplorer.h; sourceTree = "<group>"; };
 		4C6700F01BA20633001C9D5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADExplorer/Info.plist; sourceTree = "<group>"; };
@@ -180,8 +180,8 @@
 				4C6700EE1BA20633001C9D5A /* MADExplorer.h */,
 				4C7CB4A61E5305E700B461B6 /* MADExplorerView.h */,
 				4C7CB4A71E5305E700B461B6 /* MADExplorerView.m */,
-				4C5989A01DAA320B007A568B /* MADFileExplorerViewDelegate.h */,
-				4C5989A11DAA320B007A568B /* MADFileExplorerViewDelegate.m */,
+				4C5989A01DAA320B007A568B /* MADExplorerViewDelegate.h */,
+				4C5989A11DAA320B007A568B /* MADExplorerViewDelegate.m */,
 				4C7CB4A31E53052A00B461B6 /* MADExplorerDataSource.h */,
 				4C7CB4A21E53052A00B461B6 /* MADExplorerDataSource.m */,
 				4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */,
@@ -253,7 +253,7 @@
 				4C4754571CF41A6500BC9E02 /* MADExplorerProtocol.h in Headers */,
 				4CC6415D1BA77AEC00F3ECCE /* MADDocumentCellProtocol.h in Headers */,
 				4CFC60AC1E530C0D00EC577E /* MADAlertControllerPromptStorage.h in Headers */,
-				4C5989A21DAA320B007A568B /* MADFileExplorerViewDelegate.h in Headers */,
+				4C5989A21DAA320B007A568B /* MADExplorerViewDelegate.h in Headers */,
 				4CC6415A1BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h in Headers */,
 				4CFC60B01E530D3C00EC577E /* MADExplorerActivityIndicator.h in Headers */,
 				4C8785581D1BCB5600B4D2A1 /* MADThumbnailView.h in Headers */,
@@ -374,7 +374,7 @@
 				4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */,
 				4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */,
 				4C1F93D2201A3E9500BDDC70 /* MADExplorerCellTitle.m in Sources */,
-				4C5989A31DAA320B007A568B /* MADFileExplorerViewDelegate.m in Sources */,
+				4C5989A31DAA320B007A568B /* MADExplorerViewDelegate.m in Sources */,
 				4CA4D62A1D17CCE400A1240C /* MADExplorerCaption.m in Sources */,
 				4C7CB4A91E5305E700B461B6 /* MADExplorerView.m in Sources */,
 				4CCB735B1D1A283000D7AE84 /* MADLabelFileExplorerDocumentCellSubtitle.m in Sources */,

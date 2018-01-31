@@ -49,7 +49,7 @@
 #import <MADExplorer/MADExplorerView.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADCollectionViewCellDocument.h>
-#import <MADExplorer/MADFileExplorerViewDelegate.h>
+#import <MADExplorer/MADExplorerViewDelegate.h>
 #import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
 #import <MADExplorer/MADExplorerDataSource.h>
 
@@ -142,7 +142,7 @@ static NSString * const MADTextOpenWithViewer = @"The attached document can be o
         MADSaveFileProtocol>
 
     @property (readwrite, nonatomic, strong) MADExplorerDataSource *fileExplorerDataSource;
-    @property (readwrite, nonatomic, strong) MADFileExplorerViewDelegate *fileExplorerViewDelegate;
+    @property (readwrite, nonatomic, strong) MADExplorerViewDelegate *fileExplorerViewDelegate;
     @property (readwrite, nonatomic, strong) MADOpenDocumentManager *activeDocumentManager;
 
     // This is the collection view
@@ -382,8 +382,8 @@ typedef NS_ENUM(short, MADExplorerState) {
                                                                       action: selector];
         self.barButtonItemEdit = editButton;
         
-        MADFileExplorerViewDelegate *fileExplorerViewDelegate;
-        fileExplorerViewDelegate = [[MADFileExplorerViewDelegate alloc] init];
+        MADExplorerViewDelegate *fileExplorerViewDelegate;
+        fileExplorerViewDelegate = [[MADExplorerViewDelegate alloc] init];
         fileExplorerViewDelegate.delegate = self;
         self.fileExplorerViewDelegate = fileExplorerViewDelegate;
 
