@@ -187,9 +187,8 @@
                            completion: deleteKey];
             };
             
-            [NSThread isMainThread] ?
-            showError() :
-            dispatch_sync(dispatch_get_main_queue(), showError);
+            [NSThread isMainThread] ? showError() :
+                                      dispatch_sync(dispatch_get_main_queue(), showError);
             
         }
         [strongself performSelectorOnMainThread: @selector(invalidateLayout)

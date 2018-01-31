@@ -93,9 +93,9 @@
 
     if (self.fieldKeys.count <= 0) {
         for (RptqDatabaseSchemaField *field in table.hasFields) {
-            MADDatabaseField *databaseField = [MADDatabaseField newDatabaseFieldWithSchemaField:field];
             NSString *fieldAlias = [self.database fieldAliasForField:field.name
                                                    withSafeTableName:safeTableName];
+            MADDatabaseField *databaseField = [MADDatabaseField newDatabaseFieldWithSchemaField:field];
             self.fields[fieldAlias] = databaseField;
             [self.fieldKeys addObject:fieldAlias];
         }
