@@ -1,19 +1,19 @@
 //
-//  MADFileExplorerViewDelegate.h
+//  MADExplorerViewDelegate.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/30/15.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MADFileExplorerViewDelegate_h
-#define Reports_MADFileExplorerViewDelegate_h
+#ifndef Reports_MADExplorerViewDelegate_h
+#define Reports_MADExplorerViewDelegate_h
 
 #import <UIKit/UICollectionViewFlowLayout.h>
 
 @protocol MADExplorerProtocol, UIGestureRecognizerDelegate;
 
-@interface MADFileExplorerViewDelegate : NSObject
+@interface MADExplorerViewDelegate : NSObject
     <UICollectionViewDelegateFlowLayout>
 
     - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;

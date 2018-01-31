@@ -1,12 +1,12 @@
 //
-//  MADFileExplorerViewDelegate.m
+//  MADExplorerViewDelegate.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/30/15.
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADFileExplorerViewDelegate.h"
+#import "MADExplorerViewDelegate.h"
 
 #import <UIKit/UITableView.h>
 #import <UIKit/UIActivityIndicatorView.h>
@@ -46,7 +46,7 @@
 
 typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMutableMapGesturesLongPress;
 
-@interface MADFileExplorerViewDelegate ()
+@interface MADExplorerViewDelegate ()
 
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
     @property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
@@ -58,7 +58,7 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 
 @end
 
-@implementation MADFileExplorerViewDelegate
+@implementation MADExplorerViewDelegate
 
 @synthesize showingPopover = _showingPopover;
 
