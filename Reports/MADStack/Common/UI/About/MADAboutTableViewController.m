@@ -28,6 +28,8 @@
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 
+#import "AppDelegate.h"
+
 #import "MADTableViewCellBase.h"
 
 #import "MADButtonTwitter.h"
@@ -169,7 +171,8 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
         case 0:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.label.textColor = [MADColorEverydayApps newColorBlueDark];
-            cell.label.text = NSLocalizedString(@"MAD Designer", @"MAD Designer");
+            cell.label.text = NSLocalizedString([AppDelegate bundleDisplayName],
+                                                [AppDelegate bundleDisplayName]);
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;
             cell.marginStyle = MADTableViewCellMarginStyleTop;
@@ -209,8 +212,8 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
             
         case 3:
             cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = NSLocalizedString(@"Copyright EVERYDAY APPS LLC 2017.  All rights reserved.",
-                                                @"Copyright EVERYDAY APPS LLC 2017.  All rights reserved.");
+            cell.label.text = NSLocalizedString([AppDelegate humanReadableCopyright],
+                                                [AppDelegate humanReadableCopyright]);
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.label.textColor = [UIColor darkGrayColor];
             cell.userInteractionEnabled = NO;

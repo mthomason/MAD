@@ -15,6 +15,8 @@
 
     + (NSString *)ubiquityIdentifier;
     + (NSString *)groupIdentifier;
+    + (NSString *)humanReadableCopyright;
+    + (NSString *)bundleDisplayName;
 
     - (NSString *)ubiquityIdentifier;
     - (NSString *)groupIdentifier;

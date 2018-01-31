@@ -86,6 +86,14 @@ static inline UIUserNotificationType MADUserNotificationType(void);
     return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
 }
 
++ (NSString *)humanReadableCopyright {
+    return [[NSBundle mainBundle].infoDictionary objectForKey: @"NSHumanReadableCopyright"];
+}
+
++ (NSString *)bundleDisplayName {
+    return [[NSBundle mainBundle].infoDictionary objectForKey: @"CFBundleDisplayName"];
+}
+
 - (NSString *)name {
     if (!_name) {
         id tm = self.trademark, sx = self.applicationNameSufixPart;
