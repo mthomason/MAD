@@ -399,9 +399,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.scrollView.scrollIndicatorInsets =
-        UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-                         self.bottomLayoutGuide.length, CGSizeZero.height);
+    //self.scrollView.scrollIndicatorInsets =
+    //    UIEdgeInsetsMake(self.view.safeAreaLayoutGuide.length, CGSizeZero.width,
+    //                     self.bottomLayoutGuide.length, CGSizeZero.height);
 }
 
 - (void)viewDidLayoutSubviews {

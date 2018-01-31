@@ -437,7 +437,8 @@
 }
 
 - (NSString *)toStringReverse {
-    return [self.databaseSchemaField.name stringByAppendingKeyPath: self.inQueryTable.alias];
+    return [self inQueryTable] ?
+            [self.databaseSchemaField.name stringByAppendingKeyPath: self.inQueryTable.alias] : @"";
 }
 
 - (NSString *)toString {

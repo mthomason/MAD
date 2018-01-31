@@ -41,6 +41,12 @@
 
 + (instancetype)newAttributedStringQuerySectionGroupWithField:(NSString *)field
                                                       andSort:(NSString *)sort {
+    if (field == nil) {
+        field = @"";
+    }
+    if (sort == nil) {
+        sort = @"";
+    }
     id message;
     UIFont *font =          [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     UIFont *fontCaption =   [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];

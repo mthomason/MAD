@@ -90,7 +90,7 @@
         serv.user = credentals.username.copy;
         serv.password = credentals.password.copy;
         
-        conn = [MysqlConnection connectToServer: serv error:&connError];
+        conn = [MysqlConnection connectToServer: serv error: &connError];
         
         success = (conn && connError == nil);
         if (!success) *error = [connError copy];
