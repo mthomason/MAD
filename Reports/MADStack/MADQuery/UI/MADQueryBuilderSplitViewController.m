@@ -35,6 +35,7 @@
 
 #import "MADQueryVisualizationViewController.h"
 #import "MADNavigationControllerQueryBuilder.h"
+#import "MADNavigationControllerQueryVisualization.h"
 
 static NSString * const TextTitleFormat = @"MAD %@";
 static NSString * const TextTitleQuery = @"Query";
@@ -49,20 +50,24 @@ static NSString * const TextRedraw = @"Redraw";
 
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
     @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
+    @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemDisplayToggle;
 
     @property (nonatomic, assign) BOOL localEditing;
     @property (nonatomic, assign) BOOL setupDetail;
     @property (nonatomic, assign) BOOL setupInitalLayout;
 
+    @property (readonly, nonatomic, strong) MADNavigationControllerQueryVisualization *secondaryNavigationController;
+    @property (readonly, nonatomic, strong) MADNavigationControllerQueryBuilder *primaryNavigationController;
+    @property (readonly, nonatomic, strong) MADQueryVisualizationViewController *secondaryViewController;
+    @property (readonly, nonatomic, strong) MADQueryViewController *primaryViewController;
+
 @end
 
 @implementation MADQueryBuilderSplitViewController
 
-@synthesize document = _document;
-@synthesize title = _title;
-@synthesize queryBuilderController =  _queryBuilderController;
-@synthesize queryBuilderControllerAdvanced =  _queryBuilderControllerAdvanced;
-@synthesize detailNavigationController =  _detailNavigationController;
+@synthesize document = _document, title = _title;
+@dynamic primaryViewController, secondaryViewController,
+         primaryNavigationController, secondaryNavigationController;
 
 + (void)initialize {
     [super initialize];
@@ -96,7 +101,6 @@ static NSString * const TextRedraw = @"Redraw";
     
     if (self = [super initWithCoder:aDecoder]) {
         
-
         _setupDetail = NO;
         _setupInitalLayout = NO;
         _localEditing = NO;
@@ -116,15 +120,13 @@ static NSString * const TextRedraw = @"Redraw";
     
     if (!_setupInitalLayout) {
 
-        UIColor *whiteColor;
         UINavigationController *navigationController;
         UIBarButtonItem *buttonSQL;
 
-        whiteColor = [UIColor whiteColor];
         navigationController = self.navigationController;
         buttonSQL = _barButtonItemSQL;
 
-        buttonSQL.tintColor = whiteColor.copy;
+        buttonSQL.tintColor = [UIColor whiteColor];
 
         _setupInitalLayout = YES;
     }
@@ -133,8 +135,8 @@ static NSString * const TextRedraw = @"Redraw";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     NSArray *toolbarItems = [[NSArray alloc] initWithObjects:_barButtonItemSQL, nil];
-    [self setToolbarItems:toolbarItems animated:YES];
-    [self.detailNavigationController setToolbarItems:toolbarItems animated:animated];
+    [self setToolbarItems:toolbarItems animated:animated];
+    [self.secondaryNavigationController setToolbarItems:toolbarItems animated:animated];
 }
 
 + (NSString *)Title {
@@ -150,37 +152,20 @@ static NSString * const TextRedraw = @"Redraw";
     return _title;
 }
 
-- (UINavigationController *)detailNavigationController {
-    if (_detailNavigationController == nil) {
-        if (self.viewControllers.count > 0) {
-            _detailNavigationController = self.viewControllers[0];
-            if (!_setupDetail) {
-                id traits = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
-                [self setOverrideTraitCollection:traits forChildViewController: _detailNavigationController];
-                _detailNavigationController.navigationBarHidden = NO;
-                _setupDetail = YES;
-            }
-        }
-    }
-    return _detailNavigationController;
+- (MADNavigationControllerQueryBuilder *)primaryNavigationController {
+    return self.viewControllers.firstObject;
 }
 
-- (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
-    if (_queryBuilderControllerAdvanced == nil) {
-        if (self.viewControllers.count > 1) {
-            _queryBuilderControllerAdvanced = self.viewControllers[1];
-        }
-    }
-    return _queryBuilderControllerAdvanced;
+- (MADNavigationControllerQueryVisualization *)secondaryNavigationController {
+    return self.viewControllers.lastObject;
 }
 
-- (MADQueryViewController *)queryBuilderController {
-    if (_queryBuilderController == nil) {
-        MADNavigationControllerQueryBuilder *detailNavigationController;
-        detailNavigationController = self.detailNavigationController;
-        _queryBuilderController = (MADQueryViewController *)detailNavigationController.topViewController;
-    }
-    return _queryBuilderController;
+- (MADQueryViewController *)primaryViewController {
+    return self.viewControllers.firstObject.childViewControllers[0];
+}
+
+- (MADQueryVisualizationViewController *)secondaryViewController {
+    return self.viewControllers.lastObject.childViewControllers[0];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -213,14 +198,10 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.viewControllerDelegate = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    _detailNavigationController = nil;
-    _queryBuilderController = nil;
-    _queryBuilderControllerAdvanced = nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -236,12 +217,12 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 - (IBAction)redrawQueryVisualization:(id)sender {
-    [self.queryBuilderControllerAdvanced redraw: YES];
+    [self.secondaryViewController redraw: YES];
 }
 
 - (IBAction)edit:(id)sender {
     self.localEditing = !self.localEditing;
-    [self.queryBuilderController edit:sender];
+    [self.primaryViewController edit:sender];
     [self setEditing:self.localEditing animated:YES];
 }
 
@@ -314,13 +295,13 @@ static NSString * const TextRedraw = @"Redraw";
     }
     [self.navigationController presentViewController:vc animated:YES completion:^{
         
-    }];//:vc animated:YES];
+    }];
 
     return YES;
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController
-   showDetailViewController:(UIViewController *)vc
+   showsecondaryViewController:(UIViewController *)vc
                      sender:(id)sender {
 
 
@@ -345,12 +326,12 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 
-- (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(UISplitViewController *)splitViewController {
-    return splitViewController.viewControllers[0];
+- (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(MADQueryBuilderSplitViewController *)splitViewController {
+    return splitViewController.primaryNavigationController;
 }
 
-- (UIViewController *)primaryViewControllerForExpandingSplitViewController:(UISplitViewController *)splitViewController {
-    return splitViewController.viewControllers[0];
+- (UIViewController *)primaryViewControllerForExpandingSplitViewController:(MADQueryBuilderSplitViewController *)splitViewController {
+    return splitViewController.primaryNavigationController;
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController
@@ -384,4 +365,6 @@ static NSString * const TextRedraw = @"Redraw";
     }
 }
 
+- (IBAction)barButtonItemDisplayToggle:(id)sender {
+}
 @end

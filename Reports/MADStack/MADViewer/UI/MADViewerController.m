@@ -563,7 +563,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
         pageOne.view.frame = self.view.bounds;
         pageOne.view.backgroundColor = self.view.backgroundColor.copy;
         pageOne.delegate = self;
-    
+
         [self.view bringSubviewToFront: self.pageSlider];
  
         _updatingOfTimerIsPaused = NO;
@@ -573,11 +573,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
                        direction: UIPageViewControllerNavigationDirectionForward
                         animated: NO
                       completion: ^(BOOL finished) {
-        
             if (finished) {
                 [pageOne.view setNeedsDisplay];
             }
-
         }];
     }
     return success;

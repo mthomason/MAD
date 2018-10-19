@@ -93,6 +93,7 @@
 #import "MADViewController.h"
 
 #import "NSLayoutConstraint+Designer.h"
+#import "AppDelegate.h"
 
 typedef void(^MTBlockResultVoid)(void);
 
@@ -617,11 +618,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (NSURL *)localCacheFileURL {
     if (_localCacheFileURL == nil) {
-        MADAppDelegate delegate = [MADApplication AppDelegate];
-        NSString *groupIdentifier = [delegate groupIdentifier].copy;
         NSURL *url;
         NSString *cacheFileName = [self cacheFileName];
-        url = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+        url = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
         url = [url URLByAppendingPathComponent: cacheFileName
                                    isDirectory: NO];
         _localCacheFileURL = url.copy;

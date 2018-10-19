@@ -117,7 +117,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 
 - (NSString *)versionText {
     NSString *versionTextKey = NSLocalizedString(@"v%@", @"v%@");
-    NSString *globalBundleVersion = [[MADApplication AppDelegate] versionNumber];
+    NSString *globalBundleVersion = [AppDelegate bundleVersion];
     NSString *versionText = [[NSString alloc] initWithFormat:versionTextKey, globalBundleVersion];
     return versionText;
 }
@@ -125,6 +125,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 - (NSString *)buildText {
     NSString *buildTextKey = NSLocalizedString(@"r%@", @"r%@");
     NSString *revision = [[MADApplication AppDelegate] revisionNumber];
+    
     NSString *buildText = [[NSString alloc] initWithFormat:buildTextKey, revision];
     return buildText;
 }

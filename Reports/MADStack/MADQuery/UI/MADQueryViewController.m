@@ -32,6 +32,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/UIStoryboard.h>
+#import <UIKit/UISplitViewController.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
@@ -61,6 +62,8 @@
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
 #import <MAD/MADModelQuery.h>
+
+#import <MADFoundation/MADOperationObserver.h>
 
 #import "MADQueryViewSectionDelegate.h"
 #import "MADTabBarController.h"
@@ -142,6 +145,7 @@ BOOL storeEnabled() {
     <NSFetchedResultsControllerDelegate,
         UIPopoverPresentationControllerDelegate,
         UIViewControllerTransitioningDelegate,
+        MADOperationQueueDelegate,
         MADOperationObserver,
         MADQueryViewDelegateProtocol,
         MADQueryViewControllerLayoutSectionSelectorProtocol,
@@ -880,8 +884,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     return indexSetSections;
 }
 
-- (void)viewController: (MADQueryBuilderAddTableViewController *)viewController
- addedQueryTableWithID: (NSManagedObjectID *)objectID {
+- (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
+ addedQueryTableWithID:(NSManagedObjectID *)objectID {
     
     MADocument *document = self.document;
     typeof(self) __weak weakself = self;
@@ -1333,6 +1337,10 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark Actions
 
+- (IBAction)actionToggleDisplay:(id)sender {
+    
+}
+
 - (IBAction)edit:(id)sender {
     self.tableView.editing = !self.tableView.isEditing;
 }
@@ -1581,7 +1589,46 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     [self.credentailsQueue addOperation:operationGetCredentials];
     
     _showingTableIndex = index;
+}
+
+- (void)finishUserRequestForSampleData:(MADCredential *)credentials {
+    NSIndexPath *indexPathUpdate;
+    MADTableController *tableController;
     
+    RptqQueryTable *table;
+    
+    NSFetchedResultsController *queryTablesResultsController;
+    MADQueryViewDataSource *queryViewDataSource;
+    
+    indexPathUpdate = [NSIndexPath indexPathForRow: self.showingTableIndex inSection: 0];
+    self.showingTableIndex = -1;
+    
+    queryViewDataSource = self.queryViewDataSource;
+    queryTablesResultsController = queryViewDataSource.queryTablesController;
+    
+    table = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
+    
+    MADDatabaseConnection *databaseConnection;
+    databaseConnection = [MADDatabaseConnection newDatabaseConnection:table.databaseSchemaTable.inDatabase.ownedByUser];
+    
+    MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
+    
+    MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery;
+    rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
+                                                                                                             object: table.databaseSchemaTable];
+    rquery.credential = credentials.copy;
+    if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+        db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
+    }
+    
+    tableController = [[MADTableController alloc] initWithQuery:rquery
+                                                       database:db
+                                                        tableID:table.databaseSchemaTable.objectID];
+    [[self displayController] showDetailViewController:tableController sender:self];
+}
+
+- (UIViewController *)displayController {
+    return self.parentViewController.parentViewController;
 }
 
 #pragma mark -
@@ -1594,48 +1641,20 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors { }
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue
+      willAddOperation:(NSOperation *)operation { }
+
+- (void)operationQueue:(MADOperationQueue *)operationQueue
     operationDidFinish:(NSOperation *)operation
             withErrors:(NSArray *)errors {
     if (_showingTableIndex >= 0 && [operationQueue isKindOfClass:[MADOperationQueue class]] &&
         [operation isKindOfClass:[MADOperationGetCredentials class]]) {
         
+        MADCredential *credentials = ((MADOperationGetCredentials *)operation).credentials;
+        __weak typeof(self) wself = self;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSIndexPath *indexPathUpdate;
-            MADTableController *tableController;
-            
-            RptqQueryTable *table;
-            
-            NSFetchedResultsController *queryTablesResultsController;
-            MADQueryViewDataSource *queryViewDataSource;
-            
-            indexPathUpdate = [NSIndexPath indexPathForRow: self.showingTableIndex inSection: 0];
-            self.showingTableIndex = -1;
-            
-            queryViewDataSource = self.queryViewDataSource;
-            queryTablesResultsController = queryViewDataSource.queryTablesController;
-            
-            table = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
-            
-            MADDatabaseConnection *databaseConnection;
-            databaseConnection = [MADDatabaseConnection newDatabaseConnection:table.databaseSchemaTable.inDatabase.ownedByUser];
-            
-            MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
-            
-            MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery;
-            rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
-                                                                                                                     object: table.databaseSchemaTable];
-            rquery.credential = ((MADOperationGetCredentials *)operation).credentials.copy;
-            if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
-                db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
-            }
-            
-            tableController = [[MADTableController alloc] initWithQuery:rquery
-                                                               database:db
-                                                                tableID:table.databaseSchemaTable.objectID];
-            
-            [self.navigationController pushViewController: tableController animated: YES];
+            typeof(self) sself = wself;
+            [sself finishUserRequestForSampleData:credentials];
         }];
-
     }
 }
 
@@ -1647,8 +1666,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark NSManagedObjectContext Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
+    
     NSDictionary *userInfo = notification.userInfo;
     NSSet *updatedObjects = userInfo[NSUpdatedObjectsKey];
     

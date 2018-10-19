@@ -277,6 +277,11 @@
                     </tableView>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="wIa-F7-faY"/>
+                        <barButtonItem title="Item" id="WzP-FG-Ecu">
+                            <connections>
+                                <action selector="actionToggleDisplay:" destination="joU-Nk-1nv" id="iQe-FC-s47"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem title="SQL" style="plain" id="jdL-dh-Ii3">
                             <connections>
                                 <action selector="displaySQL:" destination="joU-Nk-1nv" id="gp0-bh-pAG"/>

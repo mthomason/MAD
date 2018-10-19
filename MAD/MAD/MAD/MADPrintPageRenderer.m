@@ -513,9 +513,9 @@ static inline CGRect SectionBounds(CGRect pageRect,
     if (!((sectionRepresentation.visibility =
            documentSection.visibility))) goto END_DrawSection;
     
-    MADDocumentSectionType type = [documentSection getDocumentSectionType];
-    [MADPrintPageRenderer setBackgroundColorForSectionType: type
-                                                    inRect: rect];
+    //MADDocumentSectionType type = [documentSection getDocumentSectionType];
+    //[MADPrintPageRenderer setBackgroundColorForSectionType: type
+    //                                                inRect: rect];
     
     for (RptqDocumentSectionRows *row in rowsEnumerator) {
         

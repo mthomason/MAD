@@ -427,7 +427,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 [datatable removeAllObjects];
 
                 NSNumber *n;
-                DBINT columnCtr, columnOffsetCtr, columnType, columnNumberBytes, columnLength;
+                DBINT columnCtr, columnType, columnNumberBytes, columnLength;
                 NSNumber *columnNumberWrapper, *columnTypeNumber,
                          *columnDataLen, *columTypeKey, *columnIndexOfTypeNumber,
                 *columnLen, *columPercision;
@@ -437,8 +437,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 MADDataColumn *dataColumn;
                 for (columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                     
-                    columnOffsetCtr = columnCtr + 1;
-                    columnType = dbcoltype(dbconn, columnOffsetCtr);
+                    columnType = dbcoltype(dbconn, columnCtr + 1);
                     if (columnType == SYBDECIMAL) {
                         columnType = SYBNUMERIC;
                     } else if (columnType == SYBMONEY4) {
@@ -447,14 +446,20 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     
                     if (columnType >= 0) {
                         
-                        columnNumberBytes = dbdatlen(dbconn, columnOffsetCtr);
-                        columnLength      = dbcollen(dbconn, columnOffsetCtr);
+                        columnNumberBytes = dbdatlen(dbconn, columnCtr + 1);
+                        columnLength      = dbcollen(dbconn, columnCtr + 1);
                     
                         columnNumberWrapper = [[NSNumber alloc] initWithInt: columnCtr];
                         columnTypeNumber = [[NSNumber alloc] initWithInt: columnType];
                         
-                        columnNameString = fieldKeys[(NSUInteger)columnCtr];
-                        columnDataLen = @(columnNumberBytes);
+                        if (![fieldKeys count]) {
+                            char * columnNameCString = dbcolname(dbconn, columnCtr + 1);
+                            columnNameString = [[NSString alloc] initWithCString:columnNameCString encoding:NSUTF8StringEncoding];
+                            columnNameCString = NULL;
+                        } else {
+                            columnNameString = fieldKeys[(NSUInteger)columnCtr];
+                        }
+                        columnDataLen = [[NSNumber alloc] initWithInt:columnNumberBytes];
                         columTypeKey = @(columnType);
                         index = [counters[columTypeKey] intValue];
                         
@@ -462,7 +467,16 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                         columnLen = [[NSNumber alloc] initWithInt: columnLength];
                         columPercision = [[NSNumber alloc] initWithInt: -1];
                         
-                        dictionary = @{
+                        NSMutableDictionary *columnDictionary = [[NSMutableDictionary alloc] initWithCapacity: 7];
+                        [columnDictionary setObject:columnTypeNumber forKey:MTDatabaseColumnTypeId];
+                        [columnDictionary setObject:columnNameString forKey:MTDatabaseColumnNameId];
+                        [columnDictionary setObject:columnNumberWrapper forKey:MTDatabaseColumnNumberId];
+                        [columnDictionary setObject:columnDataLen forKey:MTDatabaseColumnDataLenId];
+                        [columnDictionary setObject:columnIndexOfTypeNumber forKey:MTDatabaseColumnIndexOfType];
+                        [columnDictionary setObject:columnLen forKey:MTDatabaseColumnLenId];
+                        [columnDictionary setObject:columPercision forKey:MTDatabaseColumnPrecision];
+
+                        /*dictionary = @{
                                        MTDatabaseColumnTypeId : columnTypeNumber,             //Type
                                        MTDatabaseColumnNameId : columnNameString,             //Name
                                        MTDatabaseColumnNumberId : columnNumberWrapper,        //Index
@@ -470,7 +484,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                        MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber, //Index of type
                                        MTDatabaseColumnLenId : columnLen,                     //Column lenght
                                        MTDatabaseColumnPrecision : columPercision             //Column percision
-                                       };
+                                       };*/
                         
                         dataColumn = [[MADDataColumn alloc] initWithType: [MADDatabaseSQLServer dataTypeForNativeType:columnType]
                                                                     name: columnNameString
@@ -481,7 +495,7 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                                                                percision: -1
                                                               nativeType: (int16_t)columnType];
                         [datatable addColumn:dataColumn];
-                        [colmunHolder addObject:dictionary];
+                        [colmunHolder addObject:columnDictionary];
 
                         index++;
                         
@@ -1300,7 +1314,10 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             }
             
         }
-        DBSETLSECURE(login);
+        
+        //Call this if using Windows Login Authentation
+        //DBSETLSECURE(login);
+        
         if (*error == nil) {
         
             NSString *IPAddress = [MADDatabaseSQLServer IPAddressForServer:self.databaseConnection.server];
@@ -1336,13 +1353,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     if (credentals == nil) {
         credentals = [self credentalsWithConnection:connection];
     }
-    
+    MADDatabaseProcessSQLServer *dbwrap = nil;
     DBPROCESS *dbconn = NULL;
     if (credentals != nil) {
         
         NSError * __autoreleasing dberror = nil;
         dbconn = [self connect:credentals.username andPassword:credentals.password error:&dberror];
-        MADDatabaseProcessSQLServer *dbwrap = nil;
         error = &dberror;
         if (error && dberror) {
             [self.errors insertObject:dberror atIndex:0];
@@ -1351,8 +1367,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         }
         
     }
-
-    return (__bridge id)(dbconn);
+    
+    return dbwrap; //(__bridge id)(dbconn);
 }
 
 - (NSString *)identifier {

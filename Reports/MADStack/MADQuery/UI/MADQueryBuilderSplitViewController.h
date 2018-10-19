@@ -15,7 +15,7 @@
 #import "MADTabBarItemProtocol.h"
 
 @class MADQueryVisualizationViewController, MADNavigationControllerQueryBuilder,
-       MADQueryViewController, MADocument;
+       MADQueryViewController, MADocument, MADNavigationControllerQueryVisualization;
 
 @interface MADQueryBuilderSplitViewController : UISplitViewController
     <MADViewControllerStandardProtocol,
@@ -27,10 +27,6 @@
     - (IBAction)redrawQueryVisualization:(id)sender;
 
     @property (readwrite, nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
-
-    @property (readonly, nonatomic, strong) MADNavigationControllerQueryBuilder *detailNavigationController;
-    @property (readonly, nonatomic, strong) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
-    @property (readonly, nonatomic, strong) MADQueryViewController *queryBuilderController;
 
 @end
 

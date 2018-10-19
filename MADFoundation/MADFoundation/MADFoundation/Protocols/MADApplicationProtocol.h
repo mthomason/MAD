@@ -17,6 +17,7 @@
     + (NSString *)groupIdentifier;
     + (NSString *)humanReadableCopyright;
     + (NSString *)bundleDisplayName;
+    + (NSString *)bundleVersion;
 
     - (NSString *)ubiquityIdentifier;
     - (NSString *)groupIdentifier;

@@ -106,8 +106,8 @@ NSString * const MADUpgradeInstalledSamplesMusic                = @"MADUpgradeIn
 
 static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled     = @"MADAppConfigurationUserDefaultsSamplesInstalled";
 
-static NSString * const MADNotificationCloudActivityStarted               = @"MADNotificationCloudActivityStarted";
-static NSString * const MADNotificationCloudActivityCompleted             = @"MADNotificationCloudActivityCompleted";
+static NSString * const MADNotificationCloudActivityStarted                 = @"MADNotificationCloudActivityStarted";
+static NSString * const MADNotificationCloudActivityCompleted               = @"MADNotificationCloudActivityCompleted";
 
 static NSString * const MADHintBarButtonItemEdit = @"Enables document list edit mode.";
 static NSString * const MADHintBarButtonItemAddNewDocument = @"Adds a new document.";

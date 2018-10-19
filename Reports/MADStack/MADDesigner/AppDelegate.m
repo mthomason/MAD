@@ -60,20 +60,6 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 
 #pragma mark - MADApplicationProtocol
 
-- (NSString *)ubiquityIdentifier {
-    if (!_ubiquityIdentifier) {
-        _ubiquityIdentifier = [AppDelegate ubiquityIdentifier];
-    }
-    return _ubiquityIdentifier;
-}
-
-- (NSString *)groupIdentifier {
-    if (!_groupIdentifier) {
-        _groupIdentifier = [AppDelegate groupIdentifier];
-    }
-    return _groupIdentifier;
-}
-
 //@"group.everydayapps.mad"
 + (NSString *)groupIdentifier {
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
@@ -86,12 +72,34 @@ static inline UIUserNotificationType MADUserNotificationType(void);
     return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
 }
 
++ (NSString *)bundleVersion {
+    return [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+}
+
++ (NSString *)bundleRevisionNumber {
+    return [[NSBundle mainBundle] infoDictionary][@"MADRevision"];
+}
+
 + (NSString *)humanReadableCopyright {
-    return [[NSBundle mainBundle].infoDictionary objectForKey: @"NSHumanReadableCopyright"];
+    return [[NSBundle mainBundle] infoDictionary][@"NSHumanReadableCopyright"];
 }
 
 + (NSString *)bundleDisplayName {
-    return [[NSBundle mainBundle].infoDictionary objectForKey: @"CFBundleDisplayName"];
+    return [[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"];
+}
+
+- (NSString *)ubiquityIdentifier {
+    if (!_ubiquityIdentifier) {
+        _ubiquityIdentifier = [AppDelegate ubiquityIdentifier];
+    }
+    return _ubiquityIdentifier;
+}
+
+- (NSString *)groupIdentifier {
+    if (!_groupIdentifier) {
+        _groupIdentifier = [AppDelegate groupIdentifier];
+    }
+    return _groupIdentifier;
 }
 
 - (NSString *)name {

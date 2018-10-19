@@ -11,8 +11,9 @@
 @implementation MADStoryboard
 
 + (instancetype)newStoryboardQuery {
-    return [UIStoryboard storyboardWithName: @"MADQuery"
-                                     bundle: [NSBundle mainBundle]];
+    id sb = [UIStoryboard storyboardWithName: @"MADQuery"
+                                      bundle: [NSBundle mainBundle]];
+    return sb;
 }
 
 @end

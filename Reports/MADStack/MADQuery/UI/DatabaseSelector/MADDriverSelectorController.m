@@ -31,7 +31,6 @@
 
 #import "MADVibrantTableView.h"
 
-
 #import "MADDocumentCreationManager.h"
 #import "MADDocumentCreationManagerProtocol.h"
 
