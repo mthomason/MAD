@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_NSThread_Extras_h
-#define Reports_NSThread_Extras_h
+//#ifndef MADReports_NSThread_Extras_h
+//#define MADReports_NSThread_Extras_h
 
 #import <Foundation/NSObject.h>
 
@@ -19,4 +19,4 @@
 
 @end
 
-#endif
+//#endif

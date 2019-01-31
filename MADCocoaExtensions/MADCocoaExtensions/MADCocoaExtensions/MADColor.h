@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADCocoaExtensions_MADColor_h
-#define MADCocoaExtensions_MADColor_h
+//#ifndef MADCocoaExtensions_MADColor_h
+//#define MADCocoaExtensions_MADColor_h
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
@@ -42,4 +42,4 @@ UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a);
 
 @end
 
-#endif
+//#endif

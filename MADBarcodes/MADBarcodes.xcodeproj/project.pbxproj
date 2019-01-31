@@ -196,7 +196,6 @@
 		4C5478EF1E6140A50043682E /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EC1E6140A50043682E /* png.h */; };
 		4C5478F01E6140A50043682E /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478ED1E6140A50043682E /* pngconf.h */; };
 		4C5478F11E6140A50043682E /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EE1E6140A50043682E /* pnglibconf.h */; };
-		4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */; };
 		4C865D891DA525610057678C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C865D881DA525610057678C /* libpng.a */; };
 		4C865D961DA525890057678C /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D901DA525890057678C /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C865D971DA525890057678C /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D911DA525890057678C /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -410,6 +409,7 @@
 		4C5478ED1E6140A50043682E /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
 		4C5478EE1E6140A50043682E /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4C744EED1CE9B5E200243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7AEBAC21CC108700849874 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C865D881DA525610057678C /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../opt/lib/png/libpng.a; sourceTree = "<group>"; };
 		4C865D901DA525890057678C /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4C865D911DA525890057678C /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
@@ -425,7 +425,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C865D891DA525610057678C /* libpng.a in Frameworks */,
-				4C744EEE1CE9B5E200243830 /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
 				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
 				4C130B151BA80D240022665F /* libz.tbd in Frameworks */,
@@ -713,6 +712,7 @@
 		4C865D871DA525610057678C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C7AEBAC21CC108700849874 /* MADCocoaExtensions.framework */,
 				4C865D8A1DA525780057678C /* png */,
 			);
 			name = Frameworks;
@@ -895,6 +895,7 @@
 					4C1309691BA8068B0022665F = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = D3C58YS54A;
+						ProvisioningStyle = Automatic;
 					};
 					4C1309731BA8068B0022665F = {
 						CreatedOnToolsVersion = 7.0;
@@ -1102,7 +1103,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1151,7 +1152,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1174,9 +1175,11 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1186,10 +1189,12 @@
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				INFOPLIST_FILE = MADBarcodes/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = /Users/michael/Desktop/Reports/Compressor/library/libpng;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.barcodes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1207,9 +1212,11 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1219,10 +1226,12 @@
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				INFOPLIST_FILE = MADBarcodes/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = /Users/michael/Desktop/Reports/Compressor/library/libpng;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.barcodes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

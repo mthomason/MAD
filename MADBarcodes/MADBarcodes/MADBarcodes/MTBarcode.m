@@ -73,19 +73,26 @@
 #import "MTBarcodeUniversalProductCodeUpce.h"
 #import "MTBarcodeUspsIntelligentMail.h"
 
-#import <MADCocoaExtensions/MADColor.h>
+//#import <MADCocoaExtensions/MADColor.h>
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIColor.h>
 
-#import "MADBarcodeDataInputType.h"
+//#import "MADBarcodeDataInputType.h"
+
+typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
+    MTBarcodeDataTypeUnicode = UNICODE_MODE,
+    MTBarcodeDataTypeData = DATA_MODE,
+    MTBarcodeDataTypeGs1 = GS1_MODE
+};
+
 
 @interface MTBarcode ()
 
     @property (nonatomic, assign) CGFloat rotate;
 
-    @property (nonatomic, copy, readwrite) MADColor *backgroundColor;
+    //@property (nonatomic, copy, readwrite) MADColor *backgroundColor;
 
     @property (nonatomic, strong, readwrite) NSString *name;
     @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
@@ -116,10 +123,10 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
-        MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
-        _forgroundColor = blackColor;
-        _backgroundColor = whiteColor;
+        //MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
+        //MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
+        //_forgroundColor = blackColor;
+        //_backgroundColor = whiteColor;
         _showErrorMessage = YES;
         _humanReadable = YES;
         _barcodeHeight = 50;
@@ -458,12 +465,12 @@
                     break;
             }
         }
-        NSString *forgroundColor = (self.forgroundColor).hexStringValue;
-        NSString *backgroundColor = (self.backgroundColor).hexStringValue;
-        const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
-        const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
-        strcpy(barcode->fgcolour, fgcolor);
-        strcpy(barcode->bgcolour, bgcolor);
+        //NSString *forgroundColor =  (self.forgroundColor).hexStringValue;
+        //NSString *backgroundColor = (self.backgroundColor).hexStringValue;
+        //const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
+        //const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
+        //strcpy(barcode->fgcolour, fgcolor);
+        //strcpy(barcode->bgcolour, bgcolor);
         
         barcode->height = (int)self.barcodeHeight;
         barcode->border_width = (int)self.barcodeBorderWidth;
@@ -758,5 +765,26 @@
 - (void)loadSampleData {
     
 }
+
+/*+ (NSString *)hexStringValueStatic:(UIColor)c {
+    NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -hexStringValue");
+    NSString *result;
+    
+    switch (self.colorSpaceModel) {
+        case kCGColorSpaceModelRGB:
+            result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
+                      c.redByte, c.greenByte, c.blueByte];
+            break;
+            
+        case kCGColorSpaceModelMonochrome:
+            result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
+                      c.whiteByte, c.whiteByte, c.whiteByte];
+            break;
+            
+        default:
+            result = nil;
+    }
+    return result;
+}*/
 
 @end

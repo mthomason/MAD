@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C00A3541F57D15200F6A6C1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */; };
 		4C2D77E71F569EEB005415F7 /* MADQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77E51F569EEB005415F7 /* MADQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77E61F569EEB005415F7 /* MADQuery.m */; };
 		4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D780A1F56D4EA005415F7 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -23,6 +22,7 @@
 		4C6C0A151F5D360400EDA039 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */; };
 		4C6C0A181F5D374600EDA039 /* MADConnectionSQLGenericViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C0A191F5D374600EDA039 /* MADConnectionSQLGenericViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */; };
+		4C7AEBAF21CC11A600849874 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7AEBAE21CC11A600849874 /* MADFoundation.framework */; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +72,8 @@
 		4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADCreateDocument.storyboard; sourceTree = "<group>"; };
 		4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectionSQLGenericViewController.h; sourceTree = "<group>"; };
 		4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConnectionSQLGenericViewController.m; sourceTree = "<group>"; };
+		4C7AEBAE21CC11A600849874 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C7AEBB021CC130C00849874 /* MADFoundation */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = MADFoundation; path = "../MADFoundation/build/MADFoundation.build/Debug-iphoneos/MADFoundation.build/Objects-normal/armv7/MADFoundation"; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,8 +105,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C7AEBAF21CC11A600849874 /* MADFoundation.framework in Frameworks */,
 				4C6C0A131F5D33AA00EDA039 /* MADCocoaExtensions.framework in Frameworks */,
-				4C00A3541F57D15200F6A6C1 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +192,8 @@
 		4CF6AADB1F5528710061B0C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C7AEBB021CC130C00849874 /* MADFoundation */,
+				4C7AEBAE21CC11A600849874 /* MADFoundation.framework */,
 				4C6C0A121F5D33AA00EDA039 /* MADCocoaExtensions.framework */,
 				4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */,
 				4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */,
@@ -278,7 +282,6 @@
 				TargetAttributes = {
 					4CF6AA9E1F5518BB0061B0C6 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = D3C58YS54A;
 						ProvisioningStyle = Automatic;
 					};
 					4CF6AAA71F5518BB0061B0C6 = {
@@ -409,7 +412,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -461,7 +464,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
