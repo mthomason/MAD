@@ -15,10 +15,12 @@ readonly prod_default_version_minor="6"
 readonly prod_default_version="${prod_default_version_major}.${prod_default_version_minor}" # Default version in
 readonly prod_version=$prod_default_version
 
-readonly archs="i386 x86_64 armv7 armv7s arm64"
+readonly archs="x86_64 armv7 armv7s arm64 arm64e"
 
-VERSION_DARWIN="15.6.0"
+VERSION_DARWIN="18.5.0"
 BUILD="x86_64-apple-darwin${VERSION_DARWIN}"
+SDKVERSION="12.2"
+TARGETSDKVERSION="10.0"
 
 readonly prod_name_compiled="$prod_name_compiled_prefix$prod_name_compiled_root"
 readonly prod_name_library="${prod_name_compiled}.a"
@@ -58,8 +60,6 @@ readonly ROOT_INSTALL_REL="${path_library}/${prod_name}"
 mkdir -p $ROOT_INSTALL_REL
 readonly ROOT_INSTALL_ABSOLUTE=$(cd "${ROOT_INSTALL_REL}"; pwd)
 
-SDKVERSION="10.0"
-TARGETSDKVERSION="9.3"
 LIB=$prod_name
 
 readonly DEVELOPER=`xcode-select -print-path`

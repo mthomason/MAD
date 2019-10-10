@@ -30,7 +30,7 @@
     } else if ([displayObject isKindOfClass: [MTBarcode class]]) {
         [displayObject loadSampleData];
         MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-        ((MTBarcode *)displayObject).forgroundColor = color;
+        //((MTBarcode *)displayObject).forgroundColor = color;
     } else {
         [displayObject drawInRect:rect];
     }

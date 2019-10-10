@@ -21,7 +21,7 @@
     RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
     [self.displayObject loadSampleData];
     MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-    ((MTBarcode *)self.displayObject).forgroundColor = color;
+    //((MTBarcode *)self.displayObject).forgroundColor = color;
     [((MTBarcode *)self.displayObject) drawInRect:[element innerRect]];
 }
 

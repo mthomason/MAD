@@ -11,6 +11,9 @@
 		4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77E61F569EEB005415F7 /* MADQuery.m */; };
 		4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D780A1F56D4EA005415F7 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78641F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78631F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C64C3C5226D6A8F00CE93FE /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */; };
+		4C64C3C6226D6CC100CE93FE /* MADCocoaExtensions.framework in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A121F5D33AA00EDA039 /* MADCocoaExtensions.framework */; };
+		4C64C3C7226D6CC100CE93FE /* MADFoundation.framework in Resources */ = {isa = PBXBuildFile; fileRef = 4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */; };
 		4C6C09C01F5C50A200EDA039 /* MADDatabaseSQLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09BF1F5C50A200EDA039 /* MADDatabaseSQLProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09C21F5C514A00EDA039 /* MADPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09C11F5C510C00EDA039 /* MADPluginProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09F11F5D29D100EDA039 /* MADViewControllerStandardProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -22,7 +25,6 @@
 		4C6C0A151F5D360400EDA039 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */; };
 		4C6C0A181F5D374600EDA039 /* MADConnectionSQLGenericViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C0A191F5D374600EDA039 /* MADConnectionSQLGenericViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */; };
-		4C7AEBAF21CC11A600849874 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7AEBAE21CC11A600849874 /* MADFoundation.framework */; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,7 +58,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../MADFoundation/build/Debug-iphoneos/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C2D77E51F569EEB005415F7 /* MADQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQuery.h; sourceTree = "<group>"; };
 		4C2D77E61F569EEB005415F7 /* MADQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQuery.m; sourceTree = "<group>"; };
 		4C2D780A1F56D4EA005415F7 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryType.h; sourceTree = "<group>"; };
@@ -72,8 +73,6 @@
 		4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADCreateDocument.storyboard; sourceTree = "<group>"; };
 		4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectionSQLGenericViewController.h; sourceTree = "<group>"; };
 		4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConnectionSQLGenericViewController.m; sourceTree = "<group>"; };
-		4C7AEBAE21CC11A600849874 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C7AEBB021CC130C00849874 /* MADFoundation */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = MADFoundation; path = "../MADFoundation/build/MADFoundation.build/Debug-iphoneos/MADFoundation.build/Objects-normal/armv7/MADFoundation"; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -105,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C7AEBAF21CC11A600849874 /* MADFoundation.framework in Frameworks */,
+				4C64C3C5226D6A8F00CE93FE /* MADFoundation.framework in Frameworks */,
 				4C6C0A131F5D33AA00EDA039 /* MADCocoaExtensions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -192,10 +191,7 @@
 		4CF6AADB1F5528710061B0C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C7AEBB021CC130C00849874 /* MADFoundation */,
-				4C7AEBAE21CC11A600849874 /* MADFoundation.framework */,
 				4C6C0A121F5D33AA00EDA039 /* MADCocoaExtensions.framework */,
-				4C00A3531F57D15200F6A6C1 /* MADFoundation.framework */,
 				4CF6AADC1F5528710061B0C6 /* MADFoundation.framework */,
 			);
 			name = Frameworks;
@@ -296,6 +292,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 4CF6AA951F5518BA0061B0C6;
@@ -314,6 +311,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C64C3C6226D6CC100CE93FE /* MADCocoaExtensions.framework in Resources */,
+				4C64C3C7226D6CC100CE93FE /* MADFoundation.framework in Resources */,
 				4C6C0A151F5D360400EDA039 /* MADCreateDocument.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,6 +397,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -412,6 +412,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILD_DIR)",
+					"$(TARGET_TEMP_DIR)/$(PRODUCT_NAME)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -456,6 +461,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -464,6 +470,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILD_DIR)",
+					"$(TARGET_TEMP_DIR)/$(PRODUCT_NAME)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;

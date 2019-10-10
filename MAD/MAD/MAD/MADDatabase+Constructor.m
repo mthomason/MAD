@@ -6,6 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
+#define INCLUDE_MYSQL 1
+
 #import "MADDatabase+Constructor.h"
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
@@ -30,12 +32,12 @@
             result = [[MADDatabaseSQLServer alloc] init];
             
             break;
-            
+#ifdef INCLUDE_MYSLQ
         case MADDatabaseTypeMySQL:
             result = [[MADDatabaseMySQL alloc] init];
             
             break;
-            
+#endif
         default:
             break;
     }

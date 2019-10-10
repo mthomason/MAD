@@ -20,7 +20,7 @@
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UIViewControllerTransitioning.h>
-
+#import <MADFoundation/MADDataType.h>
 #import <MADFoundation/MADProgress.h>
 #import <MADFoundation/MADNotificationProgress.h>
 #import <MADFoundation/MADKeyChain.h>

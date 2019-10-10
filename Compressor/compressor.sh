@@ -55,6 +55,7 @@ build_gettext=$false
 build_attr=$false
 build_gettext=$false
 build_libarchive=$false
+build_libbzip=$false
 show_help=$false
 
 #
@@ -88,6 +89,9 @@ do
         --libffi)
             build_libffi=$true;;
 
+        --libbzip)
+            build_libbzip=$true;;
+
         --autoconf)
             build_autoconf=$true;;
 
@@ -99,9 +103,10 @@ do
 
         --classpath)
             build_classpath=$true;;
+
         --libarchive)
             build_libarchive=$true;;
-      #don't build unixodbc for iOS, lol
+
         --unixodbc)
             build_unixodbc=$false;;
 
@@ -196,12 +201,12 @@ empty_directory() {
 # Globals
 #
 
-readonly version_openssl="1.0.1m"
-readonly version_mysql="6.1.6"
-readonly version_freetds="0.91"
+readonly version_openssl="1.0.2r"
+readonly version_mysql="6.1.11"
+readonly version_freetds="1.1.5"
 readonly version_tds=7.1
 readonly version_zint="2.4.2"
-readonly version_png="1.6.21"
+readonly version_png="1.6.37"
 readonly version_unixodbc="2.3.2"
 readonly version_classpath="0.98"
 readonly version_glib="2.38.2"
@@ -211,12 +216,12 @@ readonly version_gettext="0.18.3.1"
 readonly version_libffi="3.0.14RC0"
 readonly version_acl="2.2.52"
 readonly version_attr="2.4.47"
-readonly version_libarchive="3.2.0"
+readonly version_libarchive="3.3.3"
 readonly version_bzip="1.0.6"
 
 
 readonly version_mysql_6_0="6.0.2"  #do not change
-readonly version_mysql_6_1="6.1.6"
+readonly version_mysql_6_1="6.1.11"
 
 readonly platform_iphoneos="iphoneos"
 readonly platform_simulator="iphonesimulator"
@@ -229,18 +234,18 @@ readonly path_xcode=$( xcode-select -print-path )
 readonly version_macosx=$( version_for_platform $platform_macosx )
 readonly version_ios=$( version_for_platform $platform_iphoneos )
 
-readonly version_ios_min="9.0"
+readonly version_ios_min="10.0"
 
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
 #readonly archs="armv7 arm64 i386 x86_64"
-readonly archs="armv7 arm64 x86_64"
+readonly archs="arm64 arm64e armv7 armv7s x86_64 i386"
 #readonly archs="armv7 armv7s arm64 i386 x86_64"
 #readonly archs="arm64"
 
-readonly archs_macosx="x86_64"
-readonly archs_ios="armv7 armv7s arm64"
+readonly archs_macosx="x86_64 i386"
+readonly archs_ios="arm64 arm64e armv7 armv7s"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
 
 readonly archive_bzip_base_url="http://www.bzip.org/${version_bzip}/"
@@ -248,6 +253,7 @@ readonly archive_name_bzip="bzip2-${version_bzip}"
 readonly archive_bzip="${archive_name_bzip}.tar.gz"
 
 readonly archive_openssl_base_url="http://www.openssl.org/source/"
+#readonly archive_name_openssl="${version_openssl}"
 readonly archive_name_openssl="openssl-${version_openssl}"
 readonly archive_openssl="${archive_name_openssl}.tar.gz"
 
@@ -345,38 +351,52 @@ addtional_work_libsybdb() {
     sed -i '' 's/#define HAVE_ICONV 1/#define HAVE_ICONV 0/g' include/config.h
 }
 
+#config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
 
 config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additional_config $5=path_make
 
+printf "1: ${1}\n"
+printf "2: ${2}\n"
+printf "3: ${3}\n"
+printf "4: ${4}\n"
+printf "5: ${5}\n"
+printf "6: ${6}\n"
+printf "7: ${7}\n"
+
     local version_sdk=$1
     local version_sdk_min=$2
-    local architecture=$3
-    local additional_config=$4
-    local path_make=$5
-    local log=$6
-    local additional_work=$7
+local architecture="${3}"
+local additional_config="${4}"
+local path_make="${5}"
+local log="${6}"
+local additional_work="${7}"
 
-    printf "%s\t\t%s\n" "architecture" $architecture
-    printf "%s\t\t%s\n" "additional_config" $additional_config
-    printf "%s\t\t%s\n" "path_make" $path_make
-    printf "%s\t\t%s\n" "log" $log
-    printf "%s\t\t%s\n" "additional_work" $additional_work
+    printf "%s     %s\n" "architecture" $architecture
+    printf "%s%s\n" "additional_config" "${4}"
+    printf "%s        %s\n" "path_make" $path_make
+    printf "%s              %s\n" "log" $log
+    printf "%s  %s\n" "additional_work" $additional_work
 
-    if [[ "${#additional_config}" > 0 ]];
+if [[ "${4}" > 0 ]];
     then
         s="s/${additional_config_blank}//g"
         additional_config=$(echo $additional_config | sed -e $s)
         printf "Additional config is blank (%s)" $additional_config
     else
         echo "pass additional_config_blank for additional_config"
-        exit 1
+#exit 1
     fi
 
-   local architecture_host_part=$( uname -p )
+   local architecture_host_part="x86_64"
+#$( uname -p )
    local architecture_host="${architecture_host_part}-apple-darwin"
 
    if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
    then
+      if [[ "${architecture}" == "x86_64" ]];
+      then
+            local add_config="-m64 $(additional_config)"
+      fi
       local sdk="iphonesimulator${version_sdk}"
       local architecture_target="${architecture_host_part}-apple-darwin"
    else
@@ -385,14 +405,20 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
       if [[ "${architecture}" == "armv7" ]];
       then
          local architecture_target="${architecture}-apple-darwin"
-      elif [[ "${architecture}" == "arm64" ]];
+      elif [[ "${architecture}" == "arm64" ||  "${architecture}" == "arm64e" ]];
       then
+         local add_config="-m64 $(additional_config)"
          local architecture_target="arm-apple-darwin"
       else
          local architecture_target="${architecture}-apple-darwin"
       fi
 
    fi
+printf "%s     %s\n" "architecture" $architecture
+printf "%s%s\n" "additional_config" "${4}"
+printf "%s        %s\n" "path_make" $path_make
+printf "%s              %s\n" "log" $log
+printf "%s  %s\n" "additional_work" $additional_work
 
    developer_root=$( xcode-select -print-path )
    platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
@@ -412,7 +438,7 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
     printf "Configure with architecture target  %s.\n" "${architecture_target}"
     printf "Configure with prefix               %s.\n" "${path_make}"
     printf "Configure with log file             %s.\n" "${log}"
-    printf "Configure with additional config    %s.\n" "${additional_config}"
+    printf "Configure with additional config    %s.\n" "${add_config}"
     printf "Configure with CFLAGS               %s.\n" "${CFLAGS}"
     printf "Configure with CPPFLAGS             %s.\n" "${CPPFLAGS}"
 
@@ -421,14 +447,14 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
         printf "Performing additional config"
         additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
         pwd
-        ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} >> "${log}.error.log" &
+./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} #>> "${log}.error.log" &
         spinner $!
    else
         printf "Skipping additional config"
       ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" >> "${log}.error.log" &
       spinner $!
 
-   fi
+fi
 
    if [[ "${#additional_work}" > 0 ]];
    then
@@ -442,12 +468,12 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
     spinner $!
 
     printf "\nmake\n"
-    make  >> "${log}.error.log"
+make  #>> "${log}.error.log"
     spinner $!
 
     printf "\nmake install"
 
-    make install >> "${log}.error.log" &
+make install #>> "${log}.error.log" &
     spinner $!
 
    printf "\n"
@@ -534,8 +560,8 @@ build_gettext_static_ios() {
         mkdir -p "${path_build_gettext_arch}"
         tar zxf ${path_media_gettext} -C ${path_build_gettext_arch}
 
-        log_build_gettext="${path_build_gettext_arch}/build-gettext-${version_gettext}-${arch}.log"
-        > "$log_build_gettext"
+#log_build_gettext="${path_build_gettext_arch}/build-gettext-${version_gettext}-${arch}.log"
+#> "$log_build_gettext"
 
         prepp="${path_build_gettext}/$platform_version_arch.sdk/${archive_name_gettext}"
         cd "${prepp}"
@@ -555,7 +581,7 @@ build_gettext_static_ios() {
         export CFLAGS=" -I${path_library}/crt_externs "
         export CPPFLAGS=" -I${path_library}/crt_externs "
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_gettext
+config_make_install "{$version_ios}" "${version_ios_min}" "${arch}" "${additional_config}" "${prepp}" "${log_build_gettext}"
 
         command_lipo_gettext_libintl="$command_lipo_gettext_libintl $prepp/lib/libintl.a";
         command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo $prepp/lib/libgettextpo.a";
@@ -1025,6 +1051,8 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
    command_lipo_libcrypto="${command_lipo_create}"
    command_lipo_libssl="${command_lipo_create}"
 
+   printf "Libcrypto: ${command_lipo_libcrypto}"
+
    for arch in ${archs}
    do
 
@@ -1087,7 +1115,10 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
 
        log_build_openssl="${path_build_openssl_arch}/build-openssl-${version_openssl}.log"
 
+       printf "Building OpenSSL.\n"
+       printf "./Configure --openssldir=${path_build_openssl_arch}"
        > "$log_build_openssl"
+
 
 
        printf "Building OpenSSL.\n"
@@ -1104,7 +1135,7 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
        if [[ "${arch}" == "x86_64" ]]; then
           ./Configure darwin64-x86_64-cc --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
        elif [ "${arch}" == "i386" ]; then
-	  ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+	    ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
        else
           ./Configure iphoneos-cross --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
        fi    
@@ -1643,7 +1674,7 @@ fi
 # bzip2 - build when libarchive is built
 #
 
-if [[ $build_libarchive == $true  && $show_help == $false ]]; then
+if [[ $false && $build_libarchive == $true  && $show_help == $false ]]; then
 
    set -e
 
@@ -1805,14 +1836,15 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
         platform_version_arch="${platform}${version_ios}-${arch}"
         path_build_tds_arch="${path_build_tds}/$platform_version_arch.sdk"
 
-#printf "mkdir %s\n" "${path_build_tds_arch}"
+        printf "mkdir %s\n" "${path_build_tds_arch}"
 
-        mkdir -p "${path_build_tds_arch}"
-        rm -rf -- "${path_build_tds_arch}"
-        mkdir -p "${path_build_tds_arch}"
-        log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
-        > "$log_build_tds"
-
+        sudo mkdir -p "${path_build_tds_arch}"
+        printf "rm-rf" "${path_build_tds_arch}"
+        sudo mkdir -p "${path_build_tds_arch}"
+        sudo mkdir -p "{$path_source}"
+log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
+#> "$log_build_tds"
+printf "cd ${path_base}"
         cd "${path_base}"
 
         extract_source $path_media_tds $path_source &
@@ -1822,10 +1854,11 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
         command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
         command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
-        additional_config=" -with-tdsver=${version_tds} "
+additional_config=" --with-tdsver=${version_tds} " #--with-openssl=/Users/michael/Desktop/Reports/Compressor/library/openssl"
+#"${path_library_openssl}/include/openssl"
         additional_work="addtional_work_libsybdb"
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
+config_make_install "${version_ios}" "${version_ios_min}" "${arch}" "${additional_config}" "${path_build_tds_arch}" "${log_build_tds}" "${additional_work}"
 
    done
 

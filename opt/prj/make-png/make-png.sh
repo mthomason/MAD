@@ -5,7 +5,7 @@
 #set -o xtrace
 set -u
 
-readonly archs="armv7 armv7s arm64 i386 x86_64"
+readonly archs="armv7 armv7s arm64 arm64e x86_64"
 
 platform_for_architecture() {
    local architecture=$1
@@ -40,8 +40,8 @@ readonly prod_name_stylized="png"
 readonly prod_name_compiled_root="png"
 readonly prod_name_compiled_prefix="lib"
 readonly prod_default_version_major="1.6"
-readonly prod_default_version_minor="25"
-readonly version_ios_min="9.3"
+readonly prod_default_version_minor="37"
+readonly version_ios_min="10.0"
 readonly prod_url_host="sourcefordge"
 
 readonly path_media="${path_opt}/media"
@@ -102,7 +102,7 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
       if [[ "${architecture}" == "armv7" ]];
       then
          local architecture_target="arm-apple-darwin7"
-      elif [[ "${architecture}" == "arm64" ]];
+      elif [[ "${architecture}" == "arm64" || "${architecture}" == "arm64e" ]];
       then
          local architecture_target="aarch64-apple-darwin"
       elif [[ "${architecture}" == "armv7s" ]];

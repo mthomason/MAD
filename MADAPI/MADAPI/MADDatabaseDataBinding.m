@@ -13,7 +13,6 @@
 #import "MADDatabaseDataBinding.h"
 #import <Foundation/NSNull.h>
 #import <Foundation/NSString.h>
-
 #import <MADFoundation/MADDataType.h>
 
 static inline MADDataType DataTypeLimited(MADDataType);
