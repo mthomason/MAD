@@ -43,13 +43,12 @@ const CGFloat MTAnimationRotateDeg = 1.0000f;
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
 
-static const CGFloat Float_0                    =   0.00000000f;
-static const CGFloat Float_100                  = 100.00000000f;
+static const CGFloat Float_0                    =   0.0;
+static const CGFloat Float_100                  = 100.0;
 
-static inline float wobbleFactor(void);
-
-static inline float wobbleFactor() {
-    return (arc4random_uniform(500) / 500.0000f) + 0.5000f;
+static inline double wobbleFactor(void);
+static inline double wobbleFactor() {
+    return (arc4random_uniform(500) / 500.0) + 0.5;
 }
 
 @interface MADCollectionViewCellDocument ()
@@ -73,8 +72,7 @@ static inline float wobbleFactor() {
     
     progressView.hidden = NO;
     if (progressView.progress < percent / Float_100) {
-        [progressView setProgress: (float) (percent / Float_100)
-                         animated: YES];
+        [progressView setProgress: (float) (percent / Float_100) animated: YES];
     }
 }
 
@@ -224,7 +222,7 @@ static inline float wobbleFactor() {
 }
 
 - (void)setBounds:(CGRect)bounds {
-    super.bounds = bounds;
+    [super setBounds: bounds];
     self.contentView.frame = bounds;
 }
 

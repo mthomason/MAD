@@ -35,8 +35,7 @@
     
     UIStoryboard *storyboard;
     id controller;
-    storyboard = [UIStoryboard storyboardWithName: @"MADDesigner"
-                                           bundle: [NSBundle mainBundle]];
+    storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: [NSBundle mainBundle]];
     controller = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
     return controller;
 }
@@ -123,6 +122,7 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
+    
     if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
         transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
             [self.view setNeedsDisplay];
@@ -130,6 +130,7 @@
     } else {
         transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
     }
+    
     UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [toView setNeedsDisplay];

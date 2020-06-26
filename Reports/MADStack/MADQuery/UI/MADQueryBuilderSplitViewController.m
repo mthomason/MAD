@@ -319,8 +319,7 @@ static NSString * const TextRedraw = @"Redraw";
     
     // Fade in the dimming view during the transition.
     [self.view setAlpha:0.0];
-    [transitionCoordinator animateAlongsideTransition:
-     ^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    [transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
          [self.view setAlpha:1.0];
      } completion:nil];
 }

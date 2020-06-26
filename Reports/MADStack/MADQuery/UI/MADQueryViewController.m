@@ -1756,8 +1756,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
     
     // Fade in the dimming view during the transition.
     [self.tableView.backgroundView setAlpha:0.0];
-    [transitionCoordinator animateAlongsideTransition:
-     ^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    [transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
          [self.tableView.backgroundView setAlpha:1.0];
      } completion:nil];
 }

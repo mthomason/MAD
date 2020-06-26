@@ -14,7 +14,6 @@
 #include <iterator>
 
 struct MADVectorBoolImpl;
-
 struct MADVectorBoolImpl {
     std::vector<bool> _container;
 };

@@ -839,10 +839,9 @@ static const inline CGSize sizePopoverFonts(void);
     } else {
         transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
     }
-    [coordinator animateAlongsideTransition: transition
-                                 completion: ^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    [coordinator animateAlongsideTransition: transition completion: ^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self adjustContextOffsetForOpenPopover];
-                                     [self.view setNeedsUpdateConstraints];
+        [self.view setNeedsUpdateConstraints];
     }];
 
 }
