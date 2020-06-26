@@ -277,7 +277,6 @@
 		4C6F351F1E40EB0200F4744F /* RptqDatabaseCredentals.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F351B1E40EB0200F4744F /* RptqDatabaseCredentals.m */; };
 		4C7044F61E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7044F41E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.h */; };
 		4C7044F71E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7044F51E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.m */; };
-		4C744EFE1CE9B68C00243830 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EFD1CE9B68C00243830 /* MADFoundation.framework */; };
 		4C7C00D01EE289BA00E7A5B1 /* NSPredicate+Creators.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7C00CE1EE289BA00E7A5B1 /* NSPredicate+Creators.h */; };
 		4C7C00D11EE289BA00E7A5B1 /* NSPredicate+Creators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C00CF1EE289BA00E7A5B1 /* NSPredicate+Creators.m */; };
 		4C7C00D31EE28AFD00E7A5B1 /* MADModelIDProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7C00D21EE28AFD00E7A5B1 /* MADModelIDProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -460,6 +459,8 @@
 		4CC982821F4BB99600E0496A /* MADDesignerLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC982801F4BB99600E0496A /* MADDesignerLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC982831F4BB99600E0496A /* MADDesignerLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982811F4BB99600E0496A /* MADDesignerLayout.m */; };
 		4CC982851F4BBF2800E0496A /* MADocumentDesignerProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC982841F4BBF2800E0496A /* MADocumentDesignerProtocol.h */; };
+		4CD6AC5D24A64BA1009E1B8D /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD6AC5C24A64BA1009E1B8D /* MADFoundation.framework */; };
+		4CD6AC5E24A64BA1009E1B8D /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD6AC5C24A64BA1009E1B8D /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CD79FA71EC862840093B2CE /* RptqAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD79F831EC862840093B2CE /* RptqAlignment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CD79FA81EC862840093B2CE /* RptqAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD79F841EC862840093B2CE /* RptqAlignment.m */; };
 		4CD79FAB1EC862840093B2CE /* RptqBorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD79F871EC862840093B2CE /* RptqBorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -558,6 +559,7 @@
 				4C7E249024A609D0005098F2 /* MADTdsClient.framework in Embed Frameworks */,
 				4C7E249424A609FC005098F2 /* MADSqlite3.framework in Embed Frameworks */,
 				4C7E249D24A60A25005098F2 /* MADCocoaExtensions.framework in Embed Frameworks */,
+				4CD6AC5E24A64BA1009E1B8D /* MADFoundation.framework in Embed Frameworks */,
 				4C7E24A024A60A2D005098F2 /* MADBarcodes.framework in Embed Frameworks */,
 				4C7E24A324A60A38005098F2 /* MADAPI.framework in Embed Frameworks */,
 				4C7E249A24A60A18005098F2 /* MADDataStructures.framework in Embed Frameworks */,
@@ -844,7 +846,6 @@
 		4C6F351B1E40EB0200F4744F /* RptqDatabaseCredentals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqDatabaseCredentals.m; path = MAD/rptq/autogen/RptqDatabaseCredentals.m; sourceTree = "<group>"; };
 		4C7044F41E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryCacheIndexCreateTemplate.h; sourceTree = "<group>"; };
 		4C7044F51E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryCacheIndexCreateTemplate.m; sourceTree = "<group>"; };
-		4C744EFD1CE9B68C00243830 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../Debug-iphonesimulator/MADFoundation.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7C00CE1EE289BA00E7A5B1 /* NSPredicate+Creators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSPredicate+Creators.h"; path = "MAD/Categories/NSPredicate+Creators.h"; sourceTree = "<group>"; };
 		4C7C00CF1EE289BA00E7A5B1 /* NSPredicate+Creators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSPredicate+Creators.m"; path = "MAD/Categories/NSPredicate+Creators.m"; sourceTree = "<group>"; };
 		4C7C00D21EE28AFD00E7A5B1 /* MADModelIDProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADModelIDProtocol.h; path = MAD/MADModelIDProtocol.h; sourceTree = "<group>"; };
@@ -1023,6 +1024,7 @@
 		4CCE18711DA14B0B0093B166 /* libbz2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbz2.a; path = ../opt/lib/bzip2/libbz2.a; sourceTree = "<group>"; };
 		4CCE18731DA14B400093B166 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../opt/lib/freetds/libsybdb.a; sourceTree = "<group>"; };
 		4CCE18741DA14B400093B166 /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = ../opt/lib/freetds/libct.a; sourceTree = "<group>"; };
+		4CD6AC5C24A64BA1009E1B8D /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CD79F831EC862840093B2CE /* RptqAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqAlignment.h; path = MAD/rptq/autogen/RptqAlignment.h; sourceTree = "<group>"; };
 		4CD79F841EC862840093B2CE /* RptqAlignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RptqAlignment.m; path = MAD/rptq/autogen/RptqAlignment.m; sourceTree = "<group>"; };
 		4CD79F871EC862840093B2CE /* RptqBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RptqBorder.h; path = MAD/rptq/autogen/RptqBorder.h; sourceTree = "<group>"; };
@@ -1111,11 +1113,11 @@
 				4C7E248F24A609D0005098F2 /* MADTdsClient.framework in Frameworks */,
 				4C64C432226DB7AB00CE93FE /* libarchive.tbd in Frameworks */,
 				4C7E249324A609FC005098F2 /* MADSqlite3.framework in Frameworks */,
+				4CD6AC5D24A64BA1009E1B8D /* MADFoundation.framework in Frameworks */,
 				4C64C437226DBA0700CE93FE /* libsybdb.a in Frameworks */,
 				4C7E249F24A60A2D005098F2 /* MADBarcodes.framework in Frameworks */,
 				4C00A3651F57DBE800F6A6C1 /* libiconv.2.tbd in Frameworks */,
 				4C7E249624A60A0B005098F2 /* MADMySQL.framework in Frameworks */,
-				4C744EFE1CE9B68C00243830 /* MADFoundation.framework in Frameworks */,
 				4C64C435226DBA0000CE93FE /* libbz2.a in Frameworks */,
 				4C64C436226DBA0300CE93FE /* libct.a in Frameworks */,
 				4C7E24A224A60A38005098F2 /* MADAPI.framework in Frameworks */,
@@ -1831,10 +1833,10 @@
 				4CCE18731DA14B400093B166 /* libsybdb.a */,
 				4CCE18741DA14B400093B166 /* libct.a */,
 				4CCE18711DA14B0B0093B166 /* libbz2.a */,
-				4C744EFD1CE9B68C00243830 /* MADFoundation.framework */,
 				4CC284C31BADEBA500775B72 /* CoreText.framework */,
 				4C5259361D894ACC00FEF1A1 /* libiconv.2.tbd */,
 				4C5259321D894AA200FEF1A1 /* libxml2.tbd */,
+				4CD6AC5C24A64BA1009E1B8D /* MADFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2829,7 +2831,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "";
 			};
 			name = Debug;
 		};
@@ -2891,7 +2892,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "";
 			};
 			name = Release;
 		};
