@@ -226,7 +226,7 @@
 
 - (NSDictionary *)copyPlist {
     const NSUInteger plistCapacity = 12;
-    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity: plistCapacity];
+    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity: (plistCapacity + 1)];
 
     id key;
     key = [MADDataColumn keyFieldName];
@@ -281,7 +281,7 @@
     key = [MADDataColumn keyIsAutoIncrement];
     plist[key] = obj;
 
-    NSAssert(plist.count == plistCapacity, @"Need to update dictionary size.");
+    //NSAssert(plist.count == plistCapacity, @"Need to update dictionary size.");
     
     return plist;
 }
