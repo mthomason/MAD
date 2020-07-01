@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_UIView_Animations_h
-#define Reports_UIView_Animations_h
+//#ifndef Reports_UIView_Animations_h
+//#define Reports_UIView_Animations_h
 
 #import <UIKit/UIView.h>
 
@@ -16,4 +16,4 @@ static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void) {
     return UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
-#endif
+//#endif

@@ -20,20 +20,15 @@
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UILocalNotification.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/MADProgress.h>
 #import <MADFoundation/MADNotificationProgress.h>
 #import <MADFoundation/MADKeyChain.h>
 
-#import <MADCocoaExtensions/MADLabelTitle.h>
-#import <MADCocoaExtensions/MADProgressView.h>
-
-#import <MADCocoaExtensions/MADAlertController.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADErrorContainer.h>
+#import "MADViewControllerStandardProtocol.h"
+#import "MADDatabaseConnection.h"
+#import "MADErrorContainer.h"
 
 //#import <MAD/MADDatabaseConnection+Constructor.h>
 

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDatabaseType_h
-#define MADDatabaseType_h
+#ifndef MadApiMadDatabaseType_h
+#define MadApiMadDatabaseType_h
 
 typedef enum MADDatabaseType : int16_t {
     MADDatabaseTypeNotSet               = -1,
@@ -25,4 +25,4 @@ typedef enum MADDatabaseType : int16_t {
     MADDatabaseTypeSample1              = 11,
 } MADDatabaseType;
 
-#endif /* MADDatabaseType_h */
+#endif /* MadApiMadDatabaseType_h */

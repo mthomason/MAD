@@ -9,7 +9,7 @@
 #import "MADLabelTitle.h"
 #import <UIKit/UILabel.h>
 #import "NSAttributedString+Logo.h"
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import "UIView+Animations.h"
 
 @interface MADLabelTitle ()
 

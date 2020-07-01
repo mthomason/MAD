@@ -17,7 +17,6 @@
 		4C6700EF1BA20633001C9D5A /* MADExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6700EE1BA20633001C9D5A /* MADExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6700F61BA20633001C9D5A /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6700EB1BA20633001C9D5A /* MADExplorer.framework */; };
 		4C6700FB1BA20633001C9D5A /* MADExplorerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6700FA1BA20633001C9D5A /* MADExplorerTests.m */; };
-		4C744EF11CE9B62100243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */; };
 		4C7CB49F1E53041000B461B6 /* MADDocumentManagerProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7CB49E1E53041000B461B6 /* MADDocumentManagerProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7CB4A41E53052A00B461B6 /* MADExplorerDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7CB4A21E53052A00B461B6 /* MADExplorerDataSource.m */; };
 		4C7CB4A51E53052A00B461B6 /* MADExplorerDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7CB4A31E53052A00B461B6 /* MADExplorerDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -35,6 +34,7 @@
 		4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4D62B1D183DD400A1240C /* MADStandard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D62C1D183DD400A1240C /* MADStandard.mm */; };
 		4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA4D62F1D18451200A1240C /* libc++.tbd */; };
+		4CB0DF4E24ACCA01002C7A95 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB0DF4D24ACCA01002C7A95 /* MADCocoaExtensions.framework */; };
 		4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */; };
 		4CC6415A1BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641581BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,7 +91,6 @@
 		4C6700F51BA20633001C9D5A /* MADExplorerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADExplorerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6700FA1BA20633001C9D5A /* MADExplorerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADExplorerTests.m; sourceTree = "<group>"; };
 		4C6700FC1BA20633001C9D5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7CB49E1E53041000B461B6 /* MADDocumentManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentManagerProtocol.h; path = MADExplorer/MADDocumentManagerProtocol.h; sourceTree = "<group>"; };
 		4C7CB4A21E53052A00B461B6 /* MADExplorerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADExplorerDataSource.m; path = MADExplorer/MADExplorerDataSource.m; sourceTree = "<group>"; };
 		4C7CB4A31E53052A00B461B6 /* MADExplorerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerDataSource.h; path = MADExplorer/MADExplorerDataSource.h; sourceTree = "<group>"; };
@@ -107,6 +106,7 @@
 		4CA4D62B1D183DD400A1240C /* MADStandard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStandard.h; sourceTree = "<group>"; };
 		4CA4D62C1D183DD400A1240C /* MADStandard.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MADStandard.mm; sourceTree = "<group>"; };
 		4CA4D62F1D18451200A1240C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		4CB0DF4D24ACCA01002C7A95 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileLocationManager.h; path = MADExplorer/MADFileLocationManager.h; sourceTree = "<group>"; };
 		4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileLocationManager.m; path = MADExplorer/MADFileLocationManager.m; sourceTree = "<group>"; };
 		4CC641581BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCollectionViewCellDocument.h; path = MADExplorer/MADCollectionViewCellDocument.h; sourceTree = "<group>"; };
@@ -129,10 +129,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CB0DF4E24ACCA01002C7A95 /* MADCocoaExtensions.framework in Frameworks */,
 				4C7E24A824A60A72005098F2 /* MADFoundation.framework in Frameworks */,
-				4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */,
 				4C7E24A624A60A72005098F2 /* MADFileManager.framework in Frameworks */,
-				4C744EF11CE9B62100243830 /* MADCocoaExtensions.framework in Frameworks */,
+				4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,10 +161,10 @@
 		4C5205D51BA7E4FE000E6A59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CB0DF4D24ACCA01002C7A95 /* MADCocoaExtensions.framework */,
 				4C7E24A424A60A72005098F2 /* MADFileManager.framework */,
 				4C7E24A524A60A72005098F2 /* MADFoundation.framework */,
 				4CA4D62F1D18451200A1240C /* libc++.tbd */,
-				4C744EEF1CE9B62100243830 /* MADCocoaExtensions.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -329,7 +329,7 @@
 		4C6700E21BA20633001C9D5A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
 					4C6700EA1BA20633001C9D5A = {
@@ -424,6 +424,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -432,12 +433,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -480,6 +483,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -488,12 +492,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -542,7 +548,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -585,7 +591,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

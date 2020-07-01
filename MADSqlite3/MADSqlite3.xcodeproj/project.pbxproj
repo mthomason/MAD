@@ -14,6 +14,12 @@
 		4C11F1631BA9011600EC2C58 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C11F15F1BA9011600EC2C58 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C11F1641BA9011600EC2C58 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1601BA9011600EC2C58 /* sqlite3.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C11F1651BA9011600EC2C58 /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1611BA9011600EC2C58 /* sqlite3ext.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4C29159824AC61D900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159724AC61D900EC794B /* MADFoundation.framework */; };
+		4C29159924AC61D900EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159724AC61D900EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C29159C24AC61E500EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159B24AC61E500EC794B /* MADDataStructures.framework */; };
+		4C29159D24AC61E500EC794B /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159B24AC61E500EC794B /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C29159F24AC61F600EC794B /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159E24AC61F600EC794B /* MADAPI.framework */; };
+		4C2915A024AC61F600EC794B /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159E24AC61F600EC794B /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2D77EB1F56CF20005415F7 /* MADDatabaseSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77E91F56CF20005415F7 /* MADDatabaseSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D77EC1F56CF20005415F7 /* MADDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77EA1F56CF20005415F7 /* MADDatabaseSqlite3.m */; };
 		4C2D77FC1F56D01A005415F7 /* MADQueryCacheBeginTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77F01F56D01A005415F7 /* MADQueryCacheBeginTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,8 +35,6 @@
 		4C2D78061F56D01A005415F7 /* MADQueryCacheSyncOff.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77FA1F56D01A005415F7 /* MADQueryCacheSyncOff.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78071F56D01A005415F7 /* MADQueryCacheSyncOff.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77FB1F56D01A005415F7 /* MADQueryCacheSyncOff.m */; };
 		4C2D78091F56D2AB005415F7 /* MADQueryCacheDeleteAllFromTableParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78081F56D2AB005415F7 /* MADQueryCacheDeleteAllFromTableParameters.h */; };
-		4C2D780F1F56D729005415F7 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2D780E1F56D729005415F7 /* MADFoundation.framework */; };
-		4C2D78101F56D85E005415F7 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2D77EE1F56CF3F005415F7 /* MADAPI.framework */; };
 		4C2D78231F56ED4C005415F7 /* MADQueryCacheAddColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78111F56ED4C005415F7 /* MADQueryCacheAddColumn.h */; };
 		4C2D78241F56ED4C005415F7 /* MADQueryCacheAddColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D78121F56ED4C005415F7 /* MADQueryCacheAddColumn.m */; };
 		4C2D78251F56ED4C005415F7 /* MADQueryCacheAddRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78131F56ED4C005415F7 /* MADQueryCacheAddRow.h */; };
@@ -70,7 +74,6 @@
 		4C2D785E1F56F4F0005415F7 /* MADDataTableObjectEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D785C1F56F4F0005415F7 /* MADDataTableObjectEnumerator.m */; };
 		4C2D78611F56F636005415F7 /* MADDatabaseConnectionSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D785F1F56F636005415F7 /* MADDatabaseConnectionSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78621F56F636005415F7 /* MADDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D78601F56F636005415F7 /* MADDatabaseConnectionSqlite3.m */; };
-		4C2D78661F56F8EB005415F7 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2D78651F56F8EB005415F7 /* MADDataStructures.framework */; };
 		4CB5D9171F57A02000CC2E8E /* MADQueryCacheSelectRowId.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB5D9151F57A02000CC2E8E /* MADQueryCacheSelectRowId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB5D9181F57A02000CC2E8E /* MADQueryCacheSelectRowId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5D9161F57A02000CC2E8E /* MADQueryCacheSelectRowId.m */; };
 /* End PBXBuildFile section */
@@ -85,6 +88,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4C29159A24AC61D900EC794B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C29159924AC61D900EC794B /* MADFoundation.framework in Embed Frameworks */,
+				4C2915A024AC61F600EC794B /* MADAPI.framework in Embed Frameworks */,
+				4C29159D24AC61E500EC794B /* MADDataStructures.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4C00A3801F5955EF00F6A6C1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MADSqlite3/Assets/Media.xcassets; sourceTree = "<group>"; };
 		4C11F1431BA9008D00EC2C58 /* MADSqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADSqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,9 +116,11 @@
 		4C11F15F1BA9011600EC2C58 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = MADSqlite3/sqlite3.c; sourceTree = "<group>"; };
 		4C11F1601BA9011600EC2C58 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = MADSqlite3/sqlite3.h; sourceTree = "<group>"; };
 		4C11F1611BA9011600EC2C58 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = MADSqlite3/sqlite3ext.h; sourceTree = "<group>"; };
+		4C29159724AC61D900EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C29159B24AC61E500EC794B /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C29159E24AC61F600EC794B /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2D77E91F56CF20005415F7 /* MADDatabaseSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseSqlite3.h; path = MADSqlite3/MADDatabaseSqlite3.h; sourceTree = "<group>"; };
 		4C2D77EA1F56CF20005415F7 /* MADDatabaseSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseSqlite3.m; path = MADSqlite3/MADDatabaseSqlite3.m; sourceTree = "<group>"; };
-		4C2D77EE1F56CF3F005415F7 /* MADAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADAPI.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADAPI.framework"; sourceTree = "<group>"; };
 		4C2D77F01F56D01A005415F7 /* MADQueryCacheBeginTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheBeginTransaction.h; path = MADSqlite3/MADQueryCacheBeginTransaction.h; sourceTree = "<group>"; };
 		4C2D77F11F56D01A005415F7 /* MADQueryCacheBeginTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQueryCacheBeginTransaction.m; path = MADSqlite3/MADQueryCacheBeginTransaction.m; sourceTree = "<group>"; };
 		4C2D77F21F56D01A005415F7 /* MADQueryCacheDeleteAllFromTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheDeleteAllFromTable.h; path = MADSqlite3/MADQueryCacheDeleteAllFromTable.h; sourceTree = "<group>"; };
@@ -113,7 +134,6 @@
 		4C2D77FA1F56D01A005415F7 /* MADQueryCacheSyncOff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheSyncOff.h; path = MADSqlite3/MADQueryCacheSyncOff.h; sourceTree = "<group>"; };
 		4C2D77FB1F56D01A005415F7 /* MADQueryCacheSyncOff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQueryCacheSyncOff.m; path = MADSqlite3/MADQueryCacheSyncOff.m; sourceTree = "<group>"; };
 		4C2D78081F56D2AB005415F7 /* MADQueryCacheDeleteAllFromTableParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheDeleteAllFromTableParameters.h; path = MADSqlite3/MADQueryCacheDeleteAllFromTableParameters.h; sourceTree = "<group>"; };
-		4C2D780E1F56D729005415F7 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../DerivedData/Build/Products/Debug-iphonesimulator/MADFoundation.framework"; sourceTree = "<group>"; };
 		4C2D78111F56ED4C005415F7 /* MADQueryCacheAddColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheAddColumn.h; path = MADSqlite3/MADQueryCacheAddColumn.h; sourceTree = "<group>"; };
 		4C2D78121F56ED4C005415F7 /* MADQueryCacheAddColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQueryCacheAddColumn.m; path = MADSqlite3/MADQueryCacheAddColumn.m; sourceTree = "<group>"; };
 		4C2D78131F56ED4C005415F7 /* MADQueryCacheAddRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheAddRow.h; path = MADSqlite3/MADQueryCacheAddRow.h; sourceTree = "<group>"; };
@@ -153,7 +173,6 @@
 		4C2D785C1F56F4F0005415F7 /* MADDataTableObjectEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataTableObjectEnumerator.m; path = MADSqlite3/MADDataTableObjectEnumerator.m; sourceTree = "<group>"; };
 		4C2D785F1F56F636005415F7 /* MADDatabaseConnectionSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDatabaseConnectionSqlite3.h; path = MADSqlite3/MADDatabaseConnectionSqlite3.h; sourceTree = "<group>"; };
 		4C2D78601F56F636005415F7 /* MADDatabaseConnectionSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDatabaseConnectionSqlite3.m; path = MADSqlite3/MADDatabaseConnectionSqlite3.m; sourceTree = "<group>"; };
-		4C2D78651F56F8EB005415F7 /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../MADDataStructures/build/Debug-iphoneos/MADDataStructures.framework"; sourceTree = "<group>"; };
 		4CB5D9151F57A02000CC2E8E /* MADQueryCacheSelectRowId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryCacheSelectRowId.h; path = MADSqlite3/MADQueryCacheSelectRowId.h; sourceTree = "<group>"; };
 		4CB5D9161F57A02000CC2E8E /* MADQueryCacheSelectRowId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQueryCacheSelectRowId.m; path = MADSqlite3/MADQueryCacheSelectRowId.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -163,9 +182,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C2D780F1F56D729005415F7 /* MADFoundation.framework in Frameworks */,
-				4C2D78661F56F8EB005415F7 /* MADDataStructures.framework in Frameworks */,
-				4C2D78101F56D85E005415F7 /* MADAPI.framework in Frameworks */,
+				4C29159824AC61D900EC794B /* MADFoundation.framework in Frameworks */,
+				4C29159F24AC61F600EC794B /* MADAPI.framework in Frameworks */,
+				4C29159C24AC61E500EC794B /* MADDataStructures.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,8 +214,8 @@
 				4C00A37B1F59500800F6A6C1 /* Resources */,
 				4C11F1451BA9008D00EC2C58 /* MADSqlite3 */,
 				4C11F1511BA9008D00EC2C58 /* MADSqlite3Tests */,
-				4C11F1441BA9008D00EC2C58 /* Products */,
 				4C2D77ED1F56CF3F005415F7 /* Frameworks */,
+				4C11F1441BA9008D00EC2C58 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -297,9 +316,9 @@
 		4C2D77ED1F56CF3F005415F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C2D78651F56F8EB005415F7 /* MADDataStructures.framework */,
-				4C2D780E1F56D729005415F7 /* MADFoundation.framework */,
-				4C2D77EE1F56CF3F005415F7 /* MADAPI.framework */,
+				4C29159E24AC61F600EC794B /* MADAPI.framework */,
+				4C29159B24AC61E500EC794B /* MADDataStructures.framework */,
+				4C29159724AC61D900EC794B /* MADFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -359,6 +378,7 @@
 				4C11F13F1BA9008D00EC2C58 /* Frameworks */,
 				4C11F1401BA9008D00EC2C58 /* Headers */,
 				4C11F1411BA9008D00EC2C58 /* Resources */,
+				4C29159A24AC61D900EC794B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -393,7 +413,7 @@
 		4C11F13A1BA9008D00EC2C58 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
 					4C11F1421BA9008D00EC2C58 = {
@@ -500,6 +520,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -517,6 +538,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -563,6 +585,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -580,6 +603,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -623,7 +647,7 @@
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -649,7 +673,7 @@
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

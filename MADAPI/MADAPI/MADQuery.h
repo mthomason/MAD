@@ -10,7 +10,7 @@
 #define MADAPI_Reports_MTQuery_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/MADDataType.h>
+//#import <MADFoundation/MADDataType.h>
 
 #pragma mark Types of specific paramamters accepted for each query
 

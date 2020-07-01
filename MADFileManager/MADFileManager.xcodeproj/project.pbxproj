@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		4C1E54E51E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E41E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h */; };
 		4C21E3FB1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C21E3FA1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h */; };
+		4C2915C724AC6D2000EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C524AC6D2000EC794B /* MADCocoaExtensions.framework */; };
+		4C2915C824AC6D2000EC794B /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C524AC6D2000EC794B /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C2915C924AC6D2000EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C624AC6D2000EC794B /* MADFoundation.framework */; };
+		4C2915CA24AC6D2000EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C624AC6D2000EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C4144181CCDF68A0050BAF6 /* MADFileCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4144171CCDF68A0050BAF6 /* MADFileCoordinator.m */; };
 		4C41DA801BA22C5700FF63EC /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C41DA6B1BA22C5700FF63EC /* MADMetaData.m */; };
 		4C41DA811BA22C5700FF63EC /* MADMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C41DA6C1BA22C5700FF63EC /* MADMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,8 +35,6 @@
 		4C6701131BA20683001C9D5A /* MADFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6701121BA20683001C9D5A /* MADFileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C67011A1BA20684001C9D5A /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C67010F1BA20683001C9D5A /* MADFileManager.framework */; };
 		4C67011F1BA20684001C9D5A /* MADFileManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67011E1BA20684001C9D5A /* MADFileManagerTests.m */; };
-		4C744EF51CE9B65B00243830 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EF31CE9B65B00243830 /* MADCocoaExtensions.framework */; };
-		4C744EF61CE9B65B00243830 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C744EF41CE9B65B00243830 /* MADFoundation.framework */; };
 		4CB2D3D01BA407FB00AA473B /* MADStorageState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB2D3CE1BA407FB00AA473B /* MADStorageState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB2D3D11BA407FB00AA473B /* MADStorageState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */; };
 		4CCB735E1D1ADE6000D7AE84 /* MADMetaDataCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */; };
@@ -52,10 +54,27 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4C2915CB24AC6D2000EC794B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4C2915CA24AC6D2000EC794B /* MADFoundation.framework in Embed Frameworks */,
+				4C2915C824AC6D2000EC794B /* MADCocoaExtensions.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4C1E54E41E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDirectoryMonitorProtocol.h; path = MADFileManager/MADDirectoryMonitorProtocol.h; sourceTree = "<group>"; };
 		4C1E54F91E566AAF00E3FAF0 /* MADCloudManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCloudManagerProtocol.h; path = MADFileManager/MADCloudManagerProtocol.h; sourceTree = "<group>"; };
 		4C21E3FA1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileCoordinatorDelegate.h; path = MADFileManager/MADFileCoordinatorDelegate.h; sourceTree = "<group>"; };
+		4C2915C524AC6D2000EC794B /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C2915C624AC6D2000EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C4144171CCDF68A0050BAF6 /* MADFileCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileCoordinator.m; path = MADFileManager/MADFileCoordinator.m; sourceTree = "<group>"; };
 		4C41DA6B1BA22C5700FF63EC /* MADMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMetaData.m; path = MADFileManager/MADMetaData.m; sourceTree = "<group>"; };
 		4C41DA6C1BA22C5700FF63EC /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetaData.h; path = MADFileManager/MADMetaData.h; sourceTree = "<group>"; };
@@ -81,8 +100,6 @@
 		4C6701191BA20684001C9D5A /* MADFileManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADFileManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C67011E1BA20684001C9D5A /* MADFileManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFileManagerTests.m; sourceTree = "<group>"; };
 		4C6701201BA20684001C9D5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C744EF31CE9B65B00243830 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADCocoaExtensions.framework; path = "../Debug-iphonesimulator/MADCocoaExtensions.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C744EF41CE9B65B00243830 /* MADFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADFoundation.framework; path = "../Debug-iphonesimulator/MADFoundation.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CB2D3CE1BA407FB00AA473B /* MADStorageState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADStorageState.h; path = MADFileManager/MADStorageState.h; sourceTree = "<group>"; };
 		4CB2D3CF1BA407FB00AA473B /* MADStorageState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADStorageState.m; path = MADFileManager/MADStorageState.m; sourceTree = "<group>"; };
 		4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMetaDataCloud.h; path = MADFileManager/MADMetaDataCloud.h; sourceTree = "<group>"; };
@@ -100,8 +117,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C744EF51CE9B65B00243830 /* MADCocoaExtensions.framework in Frameworks */,
-				4C744EF61CE9B65B00243830 /* MADFoundation.framework in Frameworks */,
+				4C2915C924AC6D2000EC794B /* MADFoundation.framework in Frameworks */,
+				4C2915C724AC6D2000EC794B /* MADCocoaExtensions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,11 +133,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C5205D41BA7E340000E6A59 /* Frameworks */ = {
+		4C2915C424AC6D2000EC794B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C744EF31CE9B65B00243830 /* MADCocoaExtensions.framework */,
-				4C744EF41CE9B65B00243830 /* MADFoundation.framework */,
+				4C2915C524AC6D2000EC794B /* MADCocoaExtensions.framework */,
+				4C2915C624AC6D2000EC794B /* MADFoundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -131,6 +148,7 @@
 				4C6701561BA2083E001C9D5A /* Resouces */,
 				4C6701111BA20683001C9D5A /* MADFileManager */,
 				4C67011D1BA20684001C9D5A /* MADFileManagerTests */,
+				4C2915C424AC6D2000EC794B /* Frameworks */,
 				4C6701101BA20683001C9D5A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -187,7 +205,6 @@
 			isa = PBXGroup;
 			children = (
 				4C6701141BA20683001C9D5A /* Info.plist */,
-				4C5205D41BA7E340000E6A59 /* Frameworks */,
 				4C6701571BA2084D001C9D5A /* Libraries */,
 			);
 			name = Resouces;
@@ -289,6 +306,7 @@
 				4C67010B1BA20683001C9D5A /* Frameworks */,
 				4C67010C1BA20683001C9D5A /* Headers */,
 				4C67010D1BA20683001C9D5A /* Resources */,
+				4C2915CB24AC6D2000EC794B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -323,7 +341,7 @@
 		4C6701061BA20683001C9D5A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
 					4C67010E1BA20683001C9D5A = {
@@ -414,6 +432,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -422,12 +441,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -470,6 +491,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -478,12 +500,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -534,7 +558,7 @@
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -578,7 +602,7 @@
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
