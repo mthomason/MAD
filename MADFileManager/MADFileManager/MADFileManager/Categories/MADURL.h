@@ -6,8 +6,8 @@
 //  Copyright © 2017 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MADDesigner_MADURL_h
-#define MADDesigner_MADURL_h
+#ifndef MADDesigner_MADFoundation_MADURL_h
+#define MADDesigner_MADFoundation_MADURL_h
 
 #import <Foundation/NSURL.h>
 

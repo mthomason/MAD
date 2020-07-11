@@ -3,14 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4C2915F624AC743700EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E248724A6093D005098F2 /* MADCocoaExtensions.framework */; };
-		4C2915F724AC743700EC794B /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E248724A6093D005098F2 /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915F924AC743900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24AE24A63872005098F2 /* MADFoundation.framework */; };
-		4C2915FA24AC743900EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24AE24A63872005098F2 /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2D77E71F569EEB005415F7 /* MADQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77E51F569EEB005415F7 /* MADQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77E61F569EEB005415F7 /* MADQuery.m */; };
 		4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D780A1F56D4EA005415F7 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,21 +54,6 @@
 			remoteInfo = MADAPI;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4C2915F824AC743700EC794B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4C2915FA24AC743900EC794B /* MADFoundation.framework in Embed Frameworks */,
-				4C2915F724AC743700EC794B /* MADCocoaExtensions.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C2D77E51F569EEB005415F7 /* MADQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQuery.h; sourceTree = "<group>"; };
@@ -254,7 +237,6 @@
 				4CF6AA9B1F5518BB0061B0C6 /* Frameworks */,
 				4CF6AA9C1F5518BB0061B0C6 /* Headers */,
 				4CF6AA9D1F5518BB0061B0C6 /* Resources */,
-				4C2915F824AC743700EC794B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -294,7 +276,6 @@
 				TargetAttributes = {
 					4CF6AA9E1F5518BB0061B0C6 = {
 						CreatedOnToolsVersion = 8.3.3;
-						ProvisioningStyle = Automatic;
 					};
 					4CF6AAA71F5518BB0061B0C6 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -304,7 +285,7 @@
 				};
 			};
 			buildConfigurationList = 4CF6AA991F5518BA0061B0C6 /* Build configuration list for PBXProject "MADAPI" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -498,40 +479,56 @@
 		4CF6AAB41F5518BB0061B0C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D3C58YS54A;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = MADAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madapi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
 		4CF6AAB51F5518BB0061B0C6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = D3C58YS54A;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = MADAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madapi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -540,7 +537,11 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADAPITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.MADAPITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -551,7 +552,11 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADAPITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.MADAPITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

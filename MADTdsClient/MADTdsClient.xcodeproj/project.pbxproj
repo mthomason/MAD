@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,9 +18,7 @@
 		4C00A3721F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3701F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.m */; };
 		4C00A37D1F59506600F6A6C1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A37C1F59506600F6A6C1 /* Media.xcassets */; };
 		4C29163124AC7BDE00EC794B /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29162F24AC7BDE00EC794B /* MADAPI.framework */; };
-		4C29163224AC7BDE00EC794B /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29162F24AC7BDE00EC794B /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29163324AC7BDE00EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29163024AC7BDE00EC794B /* MADFoundation.framework */; };
-		4C29163424AC7BDE00EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29163024AC7BDE00EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C66C14B1BA887D500663575 /* MADTdsClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C14A1BA887D500663575 /* MADTdsClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; };
 		4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66C1561BA887D500663575 /* MADTdsClientTests.m */; };
@@ -37,8 +35,6 @@
 		4C66C1871BA8882300663575 /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C16F1BA8882300663575 /* tds_sysdep_public.h */; };
 		4C6C0A0C1F5D32AB00EDA039 /* MADTdsConnectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A0A1F5D32AB00EDA039 /* MADTdsConnectionViewController.h */; };
 		4C6C0A0D1F5D32AB00EDA039 /* MADTdsConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A0B1F5D32AB00EDA039 /* MADTdsConnectionViewController.m */; };
-		4CCE18811DA14BE10093B166 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4CCE187F1DA14BE10093B166 /* libsybdb.a */; };
-		4CCE18821DA14BE10093B166 /* libct.a in Resources */ = {isa = PBXBuildFile; fileRef = 4CCE18801DA14BE10093B166 /* libct.a */; };
 		4CE0F5041F5D52A400D828E1 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0F5031F5D52A400D828E1 /* MADCreateDocument.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -51,21 +47,6 @@
 			remoteInfo = MADTdsClient;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4C29163524AC7BDE00EC794B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4C29163424AC7BDE00EC794B /* MADFoundation.framework in Embed Frameworks */,
-				4C29163224AC7BDE00EC794B /* MADAPI.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseProcessSQLServer.h; sourceTree = "<group>"; };
@@ -108,9 +89,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C29163124AC7BDE00EC794B /* MADAPI.framework in Frameworks */,
+				4C29163324AC7BDE00EC794B /* MADFoundation.framework in Frameworks */,
 				4C00A3641F57DAD400F6A6C1 /* libiconv.2.tbd in Frameworks */,
 				4C00A3611F57DA6000F6A6C1 /* libct.a in Frameworks */,
-				4C29163324AC7BDE00EC794B /* MADFoundation.framework in Frameworks */,
 				4C00A3621F57DA6000F6A6C1 /* libsybdb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,7 +240,6 @@
 				4C66C1431BA887D500663575 /* Frameworks */,
 				4C66C1441BA887D500663575 /* Headers */,
 				4C66C1451BA887D500663575 /* Resources */,
-				4C29163524AC7BDE00EC794B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -299,8 +279,6 @@
 				TargetAttributes = {
 					4C66C1461BA887D500663575 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = D3C58YS54A;
-						ProvisioningStyle = Automatic;
 					};
 					4C66C1501BA887D500663575 = {
 						CreatedOnToolsVersion = 7.0;
@@ -308,7 +286,7 @@
 				};
 			};
 			buildConfigurationList = 4C66C1411BA887D500663575 /* Build configuration list for PBXProject "MADTdsClient" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -332,9 +310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CE0F5041F5D52A400D828E1 /* MADCreateDocument.storyboard in Resources */,
-				4CCE18811DA14BE10093B166 /* libsybdb.a in Resources */,
 				4C00A37D1F59506600F6A6C1 /* Media.xcassets in Resources */,
-				4CCE18821DA14BE10093B166 /* libct.a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,7 +382,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -465,7 +442,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -508,8 +486,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -523,12 +501,17 @@
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				INFOPLIST_FILE = MADTdsClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = /Users/michael/Desktop/Reports/opt/lib/freetds;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.tdsclient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SKIP_INSTALL = YES;
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
@@ -553,8 +536,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -568,12 +551,17 @@
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				INFOPLIST_FILE = MADTdsClient/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = /Users/michael/Desktop/Reports/opt/lib/freetds;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.tdsclient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SKIP_INSTALL = YES;
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
@@ -583,8 +571,13 @@
 		4C66C15F1BA887D500663575 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADTdsClientTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTdsClientTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -593,10 +586,20 @@
 		4C66C1601BA887D500663575 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADTdsClientTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTdsClientTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 			};
 			name = Release;
 		};

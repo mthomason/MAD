@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,11 +15,8 @@
 		4C11F1641BA9011600EC2C58 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1601BA9011600EC2C58 /* sqlite3.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C11F1651BA9011600EC2C58 /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1611BA9011600EC2C58 /* sqlite3ext.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C29159824AC61D900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159724AC61D900EC794B /* MADFoundation.framework */; };
-		4C29159924AC61D900EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159724AC61D900EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29159C24AC61E500EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159B24AC61E500EC794B /* MADDataStructures.framework */; };
-		4C29159D24AC61E500EC794B /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159B24AC61E500EC794B /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29159F24AC61F600EC794B /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159E24AC61F600EC794B /* MADAPI.framework */; };
-		4C2915A024AC61F600EC794B /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159E24AC61F600EC794B /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2D77EB1F56CF20005415F7 /* MADDatabaseSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77E91F56CF20005415F7 /* MADDatabaseSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D77EC1F56CF20005415F7 /* MADDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77EA1F56CF20005415F7 /* MADDatabaseSqlite3.m */; };
 		4C2D77FC1F56D01A005415F7 /* MADQueryCacheBeginTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D77F01F56D01A005415F7 /* MADQueryCacheBeginTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -87,22 +84,6 @@
 			remoteInfo = MADSqlite3;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4C29159A24AC61D900EC794B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4C29159924AC61D900EC794B /* MADFoundation.framework in Embed Frameworks */,
-				4C2915A024AC61F600EC794B /* MADAPI.framework in Embed Frameworks */,
-				4C29159D24AC61E500EC794B /* MADDataStructures.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C00A3801F5955EF00F6A6C1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MADSqlite3/Assets/Media.xcassets; sourceTree = "<group>"; };
@@ -378,7 +359,6 @@
 				4C11F13F1BA9008D00EC2C58 /* Frameworks */,
 				4C11F1401BA9008D00EC2C58 /* Headers */,
 				4C11F1411BA9008D00EC2C58 /* Resources */,
-				4C29159A24AC61D900EC794B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -418,16 +398,15 @@
 				TargetAttributes = {
 					4C11F1421BA9008D00EC2C58 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = D3C58YS54A;
-						ProvisioningStyle = Automatic;
 					};
 					4C11F14C1BA9008D00EC2C58 = {
 						CreatedOnToolsVersion = 7.0;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 4C11F13D1BA9008D00EC2C58 /* Build configuration list for PBXProject "MADSqlite3" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -546,7 +525,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -611,7 +589,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -647,8 +625,8 @@
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -657,12 +635,17 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = MADSqlite3/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.sqlite3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = NO;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -673,8 +656,8 @@
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -683,33 +666,58 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = MADSqlite3/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.sqlite3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = NO;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
 		4C11F15B1BA9008D00EC2C58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MADSqlite3Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADSqlite3Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 			};
 			name = Debug;
 		};
 		4C11F15C1BA9008D00EC2C58 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MADSqlite3Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADSqlite3Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 			};
 			name = Release;
 		};

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,9 +23,7 @@
 		4C7CB4A81E5305E700B461B6 /* MADExplorerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7CB4A61E5305E700B461B6 /* MADExplorerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7CB4A91E5305E700B461B6 /* MADExplorerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7CB4A71E5305E700B461B6 /* MADExplorerView.m */; };
 		4C7E24A624A60A72005098F2 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24A424A60A72005098F2 /* MADFileManager.framework */; };
-		4C7E24A724A60A72005098F2 /* MADFileManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24A424A60A72005098F2 /* MADFileManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C7E24A824A60A72005098F2 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24A524A60A72005098F2 /* MADFoundation.framework */; };
-		4C7E24A924A60A72005098F2 /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24A524A60A72005098F2 /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C8785581D1BCB5600B4D2A1 /* MADThumbnailView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8785561D1BCB5600B4D2A1 /* MADThumbnailView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C8785591D1BCB5600B4D2A1 /* MADThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8785571D1BCB5600B4D2A1 /* MADThumbnailView.m */; };
 		4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -61,21 +59,6 @@
 			remoteInfo = MADExplorer;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4C7E24AA24A60A72005098F2 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4C7E24A924A60A72005098F2 /* MADFoundation.framework in Embed Frameworks */,
-				4C7E24A724A60A72005098F2 /* MADFileManager.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C1F93CF201A3E9500BDDC70 /* MADExplorerCellTitle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADExplorerCellTitle.h; path = MADExplorer/MADExplorerCellTitle.h; sourceTree = "<group>"; };
@@ -294,7 +277,6 @@
 				4C6700E71BA20633001C9D5A /* Frameworks */,
 				4C6700E81BA20633001C9D5A /* Headers */,
 				4C6700E91BA20633001C9D5A /* Resources */,
-				4C7E24AA24A60A72005098F2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -334,8 +316,6 @@
 				TargetAttributes = {
 					4C6700EA1BA20633001C9D5A = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = D3C58YS54A;
-						ProvisioningStyle = Automatic;
 					};
 					4C6700F41BA20633001C9D5A = {
 						CreatedOnToolsVersion = 7.0;
@@ -343,7 +323,7 @@
 				};
 			};
 			buildConfigurationList = 4C6700E51BA20633001C9D5A /* Build configuration list for PBXProject "MADExplorer" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -448,7 +428,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -507,7 +486,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -548,8 +527,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -566,11 +545,16 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				INFOPLIST_FILE = MADExplorer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.explorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -591,8 +575,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -609,11 +593,16 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				INFOPLIST_FILE = MADExplorer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.explorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -621,8 +610,13 @@
 		4C6701031BA20633001C9D5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADExplorerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADExplorerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -631,10 +625,20 @@
 		4C6701041BA20633001C9D5A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADExplorerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADExplorerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 			};
 			name = Release;
 		};

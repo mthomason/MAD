@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -38,21 +38,13 @@
 		4C24809C1C8B20E00058E6B4 /* MADFonts.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C24809A1C8B20E00058E6B4 /* MADFonts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C24809B1C8B20E00058E6B4 /* MADFonts.m */; };
 		4C2915E524AC72C000EC794B /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DD24AC72C000EC794B /* MADAPI.framework */; };
-		4C2915E624AC72C000EC794B /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DD24AC72C000EC794B /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915E724AC72C000EC794B /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DE24AC72C000EC794B /* MADBarcodes.framework */; };
-		4C2915E824AC72C000EC794B /* MADBarcodes.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DE24AC72C000EC794B /* MADBarcodes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915E924AC72C000EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DF24AC72C000EC794B /* MADCocoaExtensions.framework */; };
-		4C2915EA24AC72C000EC794B /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DF24AC72C000EC794B /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915EB24AC72C000EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E024AC72C000EC794B /* MADDataStructures.framework */; };
-		4C2915EC24AC72C000EC794B /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E024AC72C000EC794B /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915ED24AC72C000EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E124AC72C000EC794B /* MADFoundation.framework */; };
-		4C2915EE24AC72C000EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E124AC72C000EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915EF24AC72C000EC794B /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E224AC72C000EC794B /* MADMySQL.framework */; };
-		4C2915F024AC72C000EC794B /* MADMySQL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E224AC72C000EC794B /* MADMySQL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E324AC72C000EC794B /* MADSqlite3.framework */; };
-		4C2915F224AC72C000EC794B /* MADSqlite3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E324AC72C000EC794B /* MADSqlite3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2915F324AC72C000EC794B /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E424AC72C000EC794B /* MADTdsClient.framework */; };
-		4C2915F424AC72C000EC794B /* MADTdsClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E424AC72C000EC794B /* MADTdsClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */; };
 		4C3002491E2B8F0000B3E224 /* MADActivityIndicatorLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */; };
 		4C3080E11D053EB800A7D597 /* MADFontDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080DF1D053EB800A7D597 /* MADFontDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -547,27 +539,6 @@
 			remoteInfo = MAD;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4C2915F524AC72C000EC794B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4C2915F224AC72C000EC794B /* MADSqlite3.framework in Embed Frameworks */,
-				4C2915F024AC72C000EC794B /* MADMySQL.framework in Embed Frameworks */,
-				4C2915E824AC72C000EC794B /* MADBarcodes.framework in Embed Frameworks */,
-				4C2915EA24AC72C000EC794B /* MADCocoaExtensions.framework in Embed Frameworks */,
-				4C2915E624AC72C000EC794B /* MADAPI.framework in Embed Frameworks */,
-				4C2915EE24AC72C000EC794B /* MADFoundation.framework in Embed Frameworks */,
-				4C2915F424AC72C000EC794B /* MADTdsClient.framework in Embed Frameworks */,
-				4C2915EC24AC72C000EC794B /* MADDataStructures.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4C00A3851F5A87ED00F6A6C1 /* MADPrintPageElement+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADPrintPageElement+Constructor.h"; path = "MAD/MADPrintPageElement+Constructor.h"; sourceTree = "<group>"; };
@@ -1110,15 +1081,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
+				4C2915E524AC72C000EC794B /* MADAPI.framework in Frameworks */,
+				4C2915E924AC72C000EC794B /* MADCocoaExtensions.framework in Frameworks */,
+				4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */,
 				4C2915F324AC72C000EC794B /* MADTdsClient.framework in Frameworks */,
 				4C2915ED24AC72C000EC794B /* MADFoundation.framework in Frameworks */,
-				4C2915E524AC72C000EC794B /* MADAPI.framework in Frameworks */,
-				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
 				4C64C432226DB7AB00CE93FE /* libarchive.tbd in Frameworks */,
-				4C2915E924AC72C000EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C64C437226DBA0700CE93FE /* libsybdb.a in Frameworks */,
 				4C2915E724AC72C000EC794B /* MADBarcodes.framework in Frameworks */,
-				4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */,
 				4C2915EF24AC72C000EC794B /* MADMySQL.framework in Frameworks */,
 				4C2915EB24AC72C000EC794B /* MADDataStructures.framework in Frameworks */,
 				4C00A3651F57DBE800F6A6C1 /* libiconv.2.tbd in Frameworks */,
@@ -2322,7 +2293,6 @@
 				4CF781401BADE5EA0050A67D /* Frameworks */,
 				4CF781411BADE5EA0050A67D /* Headers */,
 				4CF781421BADE5EA0050A67D /* Resources */,
-				4C2915F524AC72C000EC794B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2362,16 +2332,15 @@
 				TargetAttributes = {
 					4CF781431BADE5EA0050A67D = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = D3C58YS54A;
-						ProvisioningStyle = Automatic;
 					};
 					4CF7814D1BADE5EA0050A67D = {
 						CreatedOnToolsVersion = 7.0;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 4CF7813E1BADE5EA0050A67D /* Build configuration list for PBXProject "MAD" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -2695,7 +2664,6 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2754,7 +2722,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -2797,8 +2765,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -2820,7 +2788,11 @@
 				);
 				INFOPLIST_FILE = MAD/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
@@ -2831,6 +2803,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -2853,8 +2826,8 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -2876,7 +2849,11 @@
 				);
 				INFOPLIST_FILE = MAD/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
@@ -2887,6 +2864,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -2894,20 +2872,40 @@
 		4CF7815C1BADE5EA0050A67D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 			};
 			name = Debug;
 		};
 		4CF7815D1BADE5EA0050A67D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				INFOPLIST_FILE = MADTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 			};
 			name = Release;
 		};
