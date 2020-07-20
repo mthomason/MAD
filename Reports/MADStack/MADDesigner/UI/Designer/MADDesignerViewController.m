@@ -2956,17 +2956,19 @@ END_deselectElementView:;
     NSNumber *sectionIdentifier = [[NSNumber alloc] initWithLongLong:sectionView.identifier];
     layoutManager = document.sectionLayoutManagers[sectionIdentifier];
     itemToRemove = (layoutManager.items)[objectId];
-    
+        
     [sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
     
         MADocument *maDocument = self.document;
         [maDocument removeDocumentObjectWithObjectID: cellIdentifier];
     
-    } animationComplete:^() {
+    } animationComplete:^(bool complete) {
 
-        [self.view.scroller.container invalidateIntrinsicContentSize];
-        [self.view setNeedsUpdateConstraints];
-
+        if (complete) {
+            [self.view.scroller.container invalidateIntrinsicContentSize];
+            [self.view setNeedsUpdateConstraints];
+        }
+        
     } completion:^() {
 
         [self redrawAllElementViewsInCollectionView:sectionView];
@@ -3122,11 +3124,13 @@ END_deselectElementView:;
             
                 [wdocument removeDocumentObjectWithObjectID: pieceID];
                 
-            } animationComplete:^() {
+            } animationComplete:^(BOOL complete) {
 
-                MADDesignerViewController *strongself2 = weakself2;
-                [strongself2.view.scroller.container invalidateIntrinsicContentSize];
-                [strongself2.view setNeedsUpdateConstraints];
+                if (complete) {
+                    MADDesignerViewController *strongself2 = weakself2;
+                    [strongself2.view.scroller.container invalidateIntrinsicContentSize];
+                    [strongself2.view setNeedsUpdateConstraints];
+                }
 
             } completion:^() {
 
@@ -3243,10 +3247,12 @@ END_deselectElementView:;
                                 error.localizedDescription.UTF8String);
                     }
 
-                } animationComplete:^() {
+                } animationComplete:^(BOOL complete) {
                     
-                    [self.view.scroller.container invalidateIntrinsicContentSize];
-                    [self.view setNeedsUpdateConstraints];
+                    if (complete) {
+                        [self.view.scroller.container invalidateIntrinsicContentSize];
+                        [self.view setNeedsUpdateConstraints];
+                    }
                     
                 } completion:^() {
                     

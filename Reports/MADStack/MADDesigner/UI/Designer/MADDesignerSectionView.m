@@ -171,9 +171,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 #pragma mark Accessors
 
 - (void)removeItemAtIndex: (NSIndexPath *)deletePath
-                   update: (void (^)())update
-        animationComplete: (void (^)())animationComplete
-               completion: (void (^)())completion {
+                   update: (void (^)(void))update
+        animationComplete: (void (^)(BOOL))animationComplete
+               completion: (void (^)(void))completion {
 
     void (^updates)(void);
     void (^complets)(BOOL);
@@ -216,9 +216,9 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 }
 
 - (void)insertItemAtIndex: (NSIndexPath *)path
-                   update: (void (^)())update
-        animationComplete: (void (^)())animationComplete
-               completion: (void (^)())completion {
+                   update: (void (^)(void))update
+        animationComplete: (void (^)(BOOL))animationComplete
+               completion: (void (^)(void))completion {
     
     [self performBatchUpdates:^(void) {
         
@@ -229,11 +229,11 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     } completion:^(BOOL finished) {
     
         if (finished) {
-            [UIView animateWithDuration:0.6666f animations:^{
+            [UIView animateWithDuration:(2.0/3.0) animations:^{
                 [self invalidateIntrinsicContentSize];
             } completion:^(BOOL animateFinished) {
                 if (animateFinished) {
-                    if (animationComplete != nil) animationComplete();
+                    if (animationComplete != nil) animationComplete(YES);
                 }
             }];
             
@@ -247,15 +247,15 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
     switch (borderState) {
         case MADBorderStateDisabled:
             self.layer.borderColor = [UIColor blackColor].CGColor;
-            self.layer.borderWidth = 1.0000f;
+            self.layer.borderWidth = 1.0;
             break;
         case MADBorderStateNormal:
             self.layer.borderColor = [UIColor blackColor].CGColor;
-            self.layer.borderWidth = 1.0000f;
+            self.layer.borderWidth = 1.0;
             break;
         case MADBorderStateSelected:
             self.layer.borderColor = [MADColorEverydayApps newColorAnalogous4].CGColor;
-            self.layer.borderWidth = 1.0000f;
+            self.layer.borderWidth = 1.0;
             break;
         default:
             break;
