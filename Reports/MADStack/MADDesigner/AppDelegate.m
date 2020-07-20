@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/2/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -48,7 +48,6 @@ static inline UIUserNotificationType MADUserNotificationType(void);
     NSString *_groupIdentifier;
     NSString *_name;
     NSString *_localizedName;
-    NSString *_trademark;
     NSString *_applicationNameSufixPart;
     NSString *_applicationIdentifier;
     NSString *_applicationBundleIdentifier;
@@ -73,6 +72,7 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 }
 
 + (NSString *)bundleVersion {
+    //kCFBundleVersionKey
     return [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
 }
 
@@ -104,7 +104,7 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 
 - (NSString *)name {
     if (!_name) {
-        id tm = self.trademark, sx = self.applicationNameSufixPart;
+        id tm = [self trademark], sx = self.applicationNameSufixPart;
         _name = [[NSString alloc] initWithFormat:@"%@ %@", tm, sx];
     }
     return _name;
@@ -112,7 +112,7 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 
 - (NSString *)localizedName {
     if (!_localizedName) {
-        id tm = self.trademark, sx = self.localizedApplicationNameSufixPart;
+        id tm = [self trademark], sx = self.localizedApplicationNameSufixPart;
         _localizedName = [[NSString alloc] initWithFormat:@"%@ %@", tm, sx];
     }
     return _localizedName;
@@ -129,8 +129,7 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 }
 
 - (NSString *)trademark {
-    if (!_trademark) _trademark = @"MAD";
-    return _trademark;
+    return @"MAD";
 }
 
 - (NSString *)applicationNameSufixPart {

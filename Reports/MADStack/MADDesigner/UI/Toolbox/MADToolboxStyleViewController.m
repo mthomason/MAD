@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/5/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -29,6 +29,7 @@
 #import <MADCocoaExtensions/MADPadding.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
@@ -229,14 +230,14 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.tableView.contentInset = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
-                                                   self.view.safeAreaInsets.bottom, CGSizeZero.width);
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
-                                                            self.view.safeAreaInsets.bottom, CGSizeZero.width);
+    UIEdgeInsets safeAreaInsets;
+    MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(safeAreaInsets.top, CGSizeZero.width, safeAreaInsets.bottom, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(safeAreaInsets.top, CGSizeZero.width, safeAreaInsets.bottom, CGSizeZero.width);
 
     if (_completedInitalLayout == NO) {
-        [self.tableView setContentOffset: CGPointMake(CGPointZero.x, -self.view.safeAreaInsets.top)
-                                animated: NO];
+        [self.tableView setContentOffset: CGPointMake(CGPointZero.x, -safeAreaInsets.top) animated: NO];
         _completedInitalLayout = YES;
     }
     

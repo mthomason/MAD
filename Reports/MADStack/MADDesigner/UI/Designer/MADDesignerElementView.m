@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/16/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDesignerElementView.h"
@@ -18,7 +18,7 @@
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/UIGraphics.h>
 
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADTextStyle.h>

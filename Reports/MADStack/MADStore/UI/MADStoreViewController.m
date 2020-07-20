@@ -12,7 +12,7 @@
 
 #import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/MADAlertController.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import "MTStoreKitController.h"

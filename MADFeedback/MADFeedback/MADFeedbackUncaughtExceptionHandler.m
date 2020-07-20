@@ -3,7 +3,7 @@
 //  MADFeedback
 //
 //  Created by Michael Thomason on 8/28/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADFeedbackUncaughtExceptionHandler.h"
@@ -28,10 +28,11 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     int frames = backtrace(callstack, 128);
     char **strs = backtrace_symbols(callstack, frames);
     
-    NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
+    NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:(unsigned int)frames];
     for (int i = UncaughtExceptionHandlerSkipAddressCount; i < UncaughtExceptionHandlerSkipAddressCount + UncaughtExceptionHandlerReportAddressCount; i++) {
         [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
     }
+    
     free(strs);
     
     return backtrace;

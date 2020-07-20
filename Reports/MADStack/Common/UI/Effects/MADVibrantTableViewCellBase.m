@@ -7,7 +7,7 @@
 //
 
 #import "MADVibrantTableViewCellBase.h"
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <UIKit/UIVisualEffectView.h>
 #import <UIKit/UINibLoading.h>
 #import <UIKit/UILabel.h>

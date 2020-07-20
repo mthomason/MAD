@@ -7,7 +7,7 @@
 //
 
 #import "MADTableViewCellBase.h"
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <UIKit/UINibLoading.h>
 #import <UIKit/UILabel.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>

@@ -3,13 +3,13 @@
 //  MAD Designer
 //
 //  Created by Michael on 8/26/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADExplorerAnimatedTransitioning.h"
 #import <UIKit/UIVisualEffectView.h>
 #import <UIKit/UIView.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 @implementation MADExplorerAnimatedTransitioningDelegate
 

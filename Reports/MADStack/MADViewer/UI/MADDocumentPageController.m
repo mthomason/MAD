@@ -16,7 +16,7 @@
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UINavigationController.h>
 
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MAD/MTPaper.h>
@@ -178,24 +178,25 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
     [super viewDidLayoutSubviews];
     UIView *documentView = self.documentView;
     MADDocumentScroller *documentScroller = self.documentScroller;
+    
+    UIEdgeInsets safeAreaInsets;
+    MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+    
     [MADDocumentPageController centerDocumentView: documentView
                                  insideScrollView: documentScroller
-                                   topLayoutGuide: self.view.safeAreaInsets.top
-                                bottomLayoutGuide: self.view.safeAreaInsets.bottom
+                                   topLayoutGuide: safeAreaInsets.top
+                                bottomLayoutGuide: safeAreaInsets.bottom
                                            margin: PageEdgeInsetMargin];
     if (_initalLayout) {
         _initalLayout = NO;
         
+        UIEdgeInsets scrollIndicatorInsets = boundsInsets(safeAreaInsets.top, safeAreaInsets.bottom);
         documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: documentScroller
-                                                                                          bounds: boundsInsets(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom)];
+                                                                                          bounds: scrollIndicatorInsets];
         
         MADocument *document = self.document;
-        documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize,
-                                                                     documentScroller.bounds.size,
-                                                                     PageEdgeInsetMargin);
-        documentScroller.minimumZoomScale = MinimumZoomScaleForPaper(document.paper.paperSize,
-                                                                     documentScroller.bounds.size,
-                                                                     PageEdgeInsetMargin);
+        documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
+        documentScroller.minimumZoomScale = MinimumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
         
         [documentScroller setZoomScale: self.pageViewAttributes.zoomScaleInital animated:NO];
         documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
@@ -212,21 +213,21 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
+        UIEdgeInsets safeAreaInsets;
+        MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+        
+        UIEdgeInsets safeBoundsInsets = boundsInsets(safeAreaInsets.top, safeAreaInsets.bottom);
+        
         documentScroller.scrollIndicatorInsets =
-        [MADDocumentPageController ScrollIndicatorInset: self.documentScroller
-                                                 bounds: boundsInsets(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom)];
+        [MADDocumentPageController ScrollIndicatorInset: self.documentScroller bounds: safeBoundsInsets];
         documentScroller.contentOffset = nextContentOffset;
         documentScroller.bounds = MADRectOfSize(size);
         
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         
         MADocument *document = self.document;
-        documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize,
-                                                                     documentScroller.bounds.size,
-                                                                     PageEdgeInsetMargin);
-        documentScroller.minimumZoomScale = MinimumZoomScaleForPaper(document.paper.paperSize,
-                                                                     documentScroller.bounds.size,
-                                                                     PageEdgeInsetMargin);
+        documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
+        documentScroller.minimumZoomScale = MinimumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
         
     }];
 }
@@ -247,19 +248,26 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    UIEdgeInsets safeAreaInsets;
+    MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+
     [MADDocumentPageController centerDocumentView: self.documentView
                                  insideScrollView: scrollView
-                                   topLayoutGuide: self.view.safeAreaInsets.top
-                                bottomLayoutGuide: self.view.safeAreaInsets.bottom
+                                   topLayoutGuide: safeAreaInsets.top
+                                bottomLayoutGuide: safeAreaInsets.bottom
                                            margin: PageEdgeInsetMargin];
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view
                         atScale:(CGFloat)scale {
+    
+    UIEdgeInsets safeAreaInsets;
+    MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+
     [MADDocumentPageController centerDocumentView: view
                                  insideScrollView: scrollView
-                                   topLayoutGuide: self.view.safeAreaInsets.top
-                                bottomLayoutGuide: self.view.safeAreaInsets.bottom
+                                   topLayoutGuide: safeAreaInsets.top
+                                bottomLayoutGuide: safeAreaInsets.bottom
                                            margin: PageEdgeInsetMargin];
     view.contentScaleFactor = scrollView.traitCollection.displayScale * scale;
     [view setNeedsDisplay];

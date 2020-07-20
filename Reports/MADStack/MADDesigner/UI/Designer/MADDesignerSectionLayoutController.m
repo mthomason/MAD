@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/10/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -21,7 +21,7 @@
 #import <UIKit/UINavigationBar.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 static NSString * const MADTextVisible         = @"Visible";
 static NSString * const MADTextVisibleHint     = @"Toggles visibility.";

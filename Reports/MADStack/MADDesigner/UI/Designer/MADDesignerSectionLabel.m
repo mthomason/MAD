@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 7/24/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDesignerSectionLabel.h"
@@ -14,13 +14,13 @@
 #import <MAD/MADReportSection.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <UIKit/UITapGestureRecognizer.h>
 
 #import "UIView+Extras.h"
 
-const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
+const CGFloat MADesignerSectionLabelFontSize = 10.0;
 
 @interface MADDesignerSectionLabel ()
     <UIGestureRecognizerDelegate>
@@ -35,7 +35,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
     if (self = [self initWithFrame:CGRectZero]) {
 
         self.selected = NO;
-        self.scale = 1.0000f;
+        self.scale = 1.0;
 
         UIColor *tintColor = [MADColorEverydayApps newColorBlue];
         self.backgroundColor = [UIColor clearColor];
@@ -49,7 +49,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.backgroundColor = [UIColor clearColor];
         self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.layer.cornerRadius = 0.0000f;
+        self.layer.cornerRadius = 0.0;
         self.clipsToBounds = YES;
         
         [self setContentHuggingPriority: UILayoutPriorityDefaultLow

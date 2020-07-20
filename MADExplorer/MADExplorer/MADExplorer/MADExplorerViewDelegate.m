@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/30/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADExplorerViewDelegate.h"
@@ -18,7 +18,7 @@
 #import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <MADFileManager/MADMetaData.h>
 

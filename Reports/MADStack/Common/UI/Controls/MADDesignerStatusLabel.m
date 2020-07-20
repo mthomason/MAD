@@ -8,7 +8,7 @@
 
 #import "MADDesignerStatusLabel.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <UIKit/UILabel.h>
 #import <QuartzCore/CALayer.h>

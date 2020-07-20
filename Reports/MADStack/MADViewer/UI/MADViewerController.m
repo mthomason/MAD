@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/1/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -40,7 +40,7 @@
 
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MADDataStructures/MTPair.h>

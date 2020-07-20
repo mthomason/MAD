@@ -3,11 +3,11 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 2/23/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDocumentScroller.h"
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 @interface MADDocumentScroller ()
 

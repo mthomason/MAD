@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/16/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADToolboxFormatViewController.h"
@@ -34,6 +34,8 @@
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqNumericFormat.h>
+
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import "MADToolboxControllerProtocol.h"
 
@@ -71,12 +73,14 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.contentInset = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
-                                                   self.view.safeAreaInsets.bottom, CGSizeZero.width);
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
-                                                            self.view.safeAreaInsets.bottom, CGSizeZero.width);
+    
+    UIEdgeInsets safeAreaInsets;
+    MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+
+    self.tableView.contentInset = UIEdgeInsetsMake(safeAreaInsets.top, CGSizeZero.width, safeAreaInsets.bottom, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(safeAreaInsets.top, CGSizeZero.width, safeAreaInsets.bottom, CGSizeZero.width);
     if (self.completedInitalLayout == NO) {
-        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -self.view.safeAreaInsets.top) animated:NO];
+        [self.tableView setContentOffset:CGPointMake(CGPointZero.x, -safeAreaInsets.top) animated:NO];
         self.completedInitalLayout = YES;
     }
 }

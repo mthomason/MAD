@@ -3,13 +3,13 @@
 //  MAD Designer
 //
 //  Created by Michael on 1/5/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADLabelTitle.h"
 #import <UIKit/UILabel.h>
 #import "NSAttributedString+Logo.h"
-#import "UIView+Animations.h"
+#import "MADViewHelpers.h"
 
 @interface MADLabelTitle ()
 

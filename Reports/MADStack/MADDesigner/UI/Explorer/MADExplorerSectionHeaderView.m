@@ -14,7 +14,7 @@
 #import <UIKit/NSAttributedString.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";

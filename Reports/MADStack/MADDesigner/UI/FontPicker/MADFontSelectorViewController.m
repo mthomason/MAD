@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/6/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -16,6 +16,7 @@
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UILabel.h>
 
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MAD/MADFonts.h>
 #import "MADReportDesignerFontSelectorDelegateProtocol.h"
@@ -102,16 +103,17 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f,
-                                                                                     680.0000f);
+    self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f, 680.0000f);
 
-    self.navigationController.navigationBar.frame = frameWithTopGuide(self.navigationController.navigationBar.frame,
-                                                                      self.view.safeAreaInsets.top);
+    UIEdgeInsets safeAreaInsets;
+    MADViewSafeAreaInserts(self.view, &safeAreaInsets);
     
-    self.tableView.contentInset = contentInset(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom);
-    self.tableView.scrollIndicatorInsets = contentInset(self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom);
+    self.navigationController.navigationBar.frame = frameWithTopGuide(self.navigationController.navigationBar.frame, safeAreaInsets.top);
+    
+    self.tableView.contentInset = contentInset(safeAreaInsets.top, safeAreaInsets.bottom);
+    self.tableView.scrollIndicatorInsets = contentInset(safeAreaInsets.top, safeAreaInsets.bottom);
     if (self.firstTimeViewWillLayoutSubviews) {
-        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.view.safeAreaInsets.top);
+        self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - safeAreaInsets.top);
         self.firstTimeViewWillLayoutSubviews = NO;
     }
 

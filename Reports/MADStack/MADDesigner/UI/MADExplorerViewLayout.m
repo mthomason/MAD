@@ -54,8 +54,9 @@
         return delta == 0.0 ? NSOrderedSame : ABS(delta)/delta;
     }];
     UICollectionViewLayoutAttributes *tallest = [sorted lastObject];
+    CGFloat tallestOriginY = tallest.frame.origin.y;
     [sameLineAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *attribute, NSUInteger idx, BOOL *stop) {
-        attribute.frame = CGRectOffset(attribute.frame, 0.0, tallest.frame.origin.y - attribute.frame.origin.y);
+        attribute.frame = CGRectOffset(attribute.frame, 0.0, tallestOriginY - attribute.frame.origin.y);
     }];
 }
 

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/4/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -42,7 +42,7 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <MADFoundation/NSString+Common.h>
 
@@ -594,7 +594,13 @@ static const inline CGSize sizePopoverFonts(void);
 }
 
 - (CGFloat)widthForCurrentZoom {
-    return self.view.safeAreaLayoutGuide.layoutFrame.size.width / self.view.scroller.zoomScale;
+    CGFloat result;
+    if (@available(iOS 11.0, tvOS 11.0, *)) {
+        result = self.view.safeAreaLayoutGuide.layoutFrame.size.width / self.view.scroller.zoomScale;
+    } else {
+        result = self.view.frame.size.width / self.view.scroller.zoomScale;
+    }
+    return result;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -755,9 +761,9 @@ static const inline CGSize sizePopoverFonts(void);
     //self.view.scroller.contentInset = self.view.safeAreaInsets;// insets;
     //self.view.scroller.scrollIndicatorInsets = self.view.scroller.safeAreaInsets;// insets;
 
-    NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
-    NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.scroller.container.safeAreaInsets));
-    NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.scroller.safeAreaInsets));
+    //NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
+    //NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.scroller.container.safeAreaInsets));
+    //NSLog(@"%@", NSStringFromUIEdgeInsets(self.view.scroller.safeAreaInsets));
     
     self.statusLabelZoomScale.frame = [self detailDisplayFrame];
     [self.viewControllerSectionLayoutSettings.view setNeedsLayout];
@@ -3268,8 +3274,7 @@ END_deselectElementView:;
                     
                     NSError * __autoreleasing error = NULL;
                     if (![managedObjectContext save:&error]) {
-                        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-                                error.localizedDescription.UTF8String);
+                        os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.", error.localizedDescription.UTF8String);
                     }
                     
                     [self redrawAllElementViewsInCollectionView:sectionView];

@@ -3,7 +3,7 @@
 //  MADCocoaExtensions
 //
 //  Created by Michael Thomason on 9/15/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/NSObjCRuntime.h>
@@ -11,6 +11,7 @@
 FOUNDATION_EXPORT double MADCocoaExtensionsVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/NSParagraphStyle+CommonStyles.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/MTMath.h>
@@ -18,7 +19,6 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>

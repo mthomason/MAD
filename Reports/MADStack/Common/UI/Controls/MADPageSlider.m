@@ -15,7 +15,7 @@
 #import <UIKit/NSStringDrawing.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/UIView+Animations.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import "MADSliderPageVertical.h"
 #import "MADPageSliderProtocol.h"

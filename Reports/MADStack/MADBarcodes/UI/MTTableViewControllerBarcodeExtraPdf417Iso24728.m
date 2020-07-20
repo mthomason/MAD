@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/11/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -191,18 +191,15 @@
 
 - (void)didSelectTag:(NSInteger)tag {
     
+    id <MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate> delegate = self.delegate;
     if (self.displayingWidth) {
-        
-        [self.delegate barcodePDF417DidSetColumns:tag];
+        [delegate barcodePDF417DidSetColumns:tag];
         
     } else if (self.displayingErrorCorrection) {
-        
-        [self.delegate barcodePDF417DidSetErrorCorrection:tag];
+        [delegate barcodePDF417DidSetErrorCorrection:tag];
         
     } else if (self.displayingFormat) {
-        
-        [self.delegate barcodePDF417DidSetFormat:tag];
-        
+        [delegate barcodePDF417DidSetFormat:tag];
     }
     
     [self updateCells];
