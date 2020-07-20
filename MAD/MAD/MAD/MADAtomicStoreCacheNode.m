@@ -71,8 +71,6 @@
                     attributeValue = [valueTransfer reverseTransformedValue: attributeValue];
                 }
                 
-                attributeValue = (nil == transformerName) ? [[NSValueTransformer valueTransformerForName: NSKeyedUnarchiveFromDataTransformerName] transformedValue: attributeValue] :
-                                                            [[NSValueTransformer valueTransformerForName: transformerName] reverseTransformedValue: attributeValue];
             }
             [newPropertyCache setValue: attributeValue forKey:attributeName];
         }
