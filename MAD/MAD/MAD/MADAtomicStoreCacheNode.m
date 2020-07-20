@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 4/22/19.
-//  Copyright © 2019 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import <CoreData/NSAtomicStore.h>
@@ -59,8 +59,20 @@
         if (nil != attributeValue) {
             NSAttributeDescription *attributeDescription = [attributeDescriptions valueForKey:attributeName];
             if (NSTransformableAttributeType == [attributeDescription attributeType]) {
+
                 NSString *transformerName = [attributeDescription valueTransformerName];
-                attributeValue = (nil == transformerName) ? [[NSValueTransformer valueTransformerForName: NSKeyedUnarchiveFromDataTransformerName] transformedValue: attributeValue] : [[NSValueTransformer valueTransformerForName: transformerName] reverseTransformedValue: attributeValue];
+                
+                NSValueTransformer *valueTransfer = nil;
+                if (transformerName == nil) {
+                    valueTransfer = [NSValueTransformer valueTransformerForName: NSKeyedUnarchiveFromDataTransformerName];
+                    attributeValue = [valueTransfer transformedValue: attributeValue];
+                } else {
+                    valueTransfer = [NSValueTransformer valueTransformerForName: transformerName];
+                    attributeValue = [valueTransfer reverseTransformedValue: attributeValue];
+                }
+                
+                attributeValue = (nil == transformerName) ? [[NSValueTransformer valueTransformerForName: NSKeyedUnarchiveFromDataTransformerName] transformedValue: attributeValue] :
+                                                            [[NSValueTransformer valueTransformerForName: transformerName] reverseTransformedValue: attributeValue];
             }
             [newPropertyCache setValue: attributeValue forKey:attributeName];
         }
@@ -78,16 +90,23 @@
             }
             NSString *destinationEntityName = [tuple objectAtIndex: 0];
             id refdata = [tuple objectAtIndex: 1];
-            NSManagedObjectID *oid = [store objectIDForEntity:[storeEntities valueForKey: destinationEntityName] referenceObject:refdata];
-            NSAtomicStoreCacheNode *destinationNode = [store cacheNodeForObjectID: oid];
-            if (nil == destinationNode) {
-                NSLog(@"Referential integrity error. Can't find node for ID: %@", oid);
-                if (nil != error) {
-                    *error = [NSError errorWithDomain:@"MyAtomicStoreNodes" code:41 userInfo:[NSDictionary dictionaryWithObject:oid forKey:@"badID"]];
+
+            NSEntityDescription * _Nullable storeDestinationEntityDescription = [storeEntities valueForKey: destinationEntityName];
+            if (storeDestinationEntityDescription != nil) {
+                
+                NSManagedObjectID *oid = [store objectIDForEntity: (NSEntityDescription * _Nonnull)storeDestinationEntityDescription
+                                                  referenceObject: refdata];
+                NSAtomicStoreCacheNode *destinationNode = [store cacheNodeForObjectID: oid];
+                if (nil == destinationNode) {
+                    NSLog(@"Referential integrity error. Can't find node for ID: %@", oid);
+                    if (nil != error) {
+                        *error = [NSError errorWithDomain:@"MyAtomicStoreNodes" code:41 userInfo:[NSDictionary dictionaryWithObject:oid forKey:@"badID"]];
+                    }
+                    return;
                 }
-                return;
+                [destinationNodes addObject: destinationNode];
+                
             }
-            [destinationNodes addObject: destinationNode];
         }
         if (![[relationshipDescriptions valueForKey: relationshipName] isToMany]) {
             if (0 < [destinationNodes count]) {
@@ -99,6 +118,7 @@
     }
     
     [self setPropertyCache:newPropertyCache];
+    
     [self setPropertyCacheData:nil];
     
 }
