@@ -98,11 +98,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
     @property (nonatomic, readwrite, strong) NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
 
+    @property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
+    @property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
+
 @end
 
 @implementation MADDataTableFast {
-    BOOL _bulkInsertLoop;
-    BOOL _sortDescriptorsSet;
     sqlite3_stmt *_statementInsert;
 }
 

@@ -64,8 +64,7 @@ BOOL Sqlite3StepResultOK(int result) {
 int compare_string_utf8_localized_asc_collation(void *data, int len1, const void *arg1, int len2, const void *arg2) {
     id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
     id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
-    return str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] :
-                         NSOrderedDescending;
+    return (int)(str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] : NSOrderedDescending);
 }
 
 //#ifdef MAD_MTDatabaseSqlite3_DEBUG
