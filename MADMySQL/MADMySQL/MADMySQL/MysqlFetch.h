@@ -29,7 +29,7 @@
 
     + (int)fetchStatement:(MYSQL_STMT *)statement;
 
-    char *mySQLTypeForType(int type);
+    char *mySQLTypeForType(enum enum_field_types type);
 
 @end
 

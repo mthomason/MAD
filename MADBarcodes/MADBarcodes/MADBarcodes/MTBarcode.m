@@ -756,9 +756,9 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
 }
 
 + (NSString *)newBarcodeNameForType:(MTBarcodeType)type {
-    NSNumber *t = [[NSNumber alloc] initWithUnsignedInteger: type];
+    NSNumber *typeWrapper = [[NSNumber alloc] initWithUnsignedInteger: (NSUInteger)type];
     NSDictionary *names = [MTBarcode newDictionaryNames];
-    NSString *name = names[t];
+    NSString *name = names[typeWrapper];
     return name.copy;
 }
 

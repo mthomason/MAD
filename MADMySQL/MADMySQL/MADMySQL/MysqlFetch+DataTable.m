@@ -41,6 +41,9 @@
 #define BUFFER_SIZE_BLOB_MEDIUM  16777219       //128 MB
 #define BUFFER_SIZE_BLOB_LONG    42949667300    //~1/3 of a TB
 
+enum enum_field_types bufferTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
+char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
+
 @implementation MysqlFetch (DataTable)
 
 + (NSString *)tableForField:(MYSQL_FIELD)field NS_RETURNS_RETAINED {
@@ -425,7 +428,7 @@
                         } break;
                             
                         default: {
-                            NSAssert(NO, @"No binding for key %@ with type %s.", key, mySQLTypeForType(bindings[x].buffer_type));
+                            NSAssert(NO, @"No binding for key %@ with type %s.", key, mySqlTypeForBindingAtPosition(bindings, (int)x));
                         } break;
                     }
                 }
@@ -439,12 +442,22 @@
     [*dataTable endBulkInsert];
 }
 
+enum enum_field_types bufferTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
+    MYSQL_BIND binding = bindings[position];
+    return binding.buffer_type;
+}
+
+char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
+    MYSQL_BIND binding = bindings[position];
+    return mySQLTypeForType(binding.buffer_type);
+}
+
 + (MADDataColumn *)dataColumnForFieldName:(NSString *)fieldName
                                mySqlField:(MYSQL_FIELD)myField NS_RETURNS_RETAINED {
     
     MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
     dataColumn.fieldName = fieldName;
-    dataColumn.nativeType = myField.type;
+    dataColumn.nativeType = (int16_t)myField.type;
     dataColumn.dataLength = (int64_t)myField.length;
     dataColumn.dataPercision = (int32_t)myField.decimals;
     dataColumn.primaryKey = IS_PRI_KEY(myField.flags);

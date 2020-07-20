@@ -285,17 +285,17 @@ static inline double wobbleFactor() {
 - (void)startWobble {
 
     _wobbling = YES;
-    float r = wobbleFactor();
+    double r = wobbleFactor();
     [self.layer removeAllAnimations];
     self.transform = CGAffineTransformIdentity;
     self.layer.anchorPoint = CGPointMake(0.5, 0.5);
 
     typeof(self) __weak weakself = self;
-    [UIView animateWithDuration: 0.2000f animations: ^{
+    [UIView animateWithDuration: 0.2 animations: ^{
         weakself.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
     } completion: ^(BOOL finishedInital) {
                          
-        [UIView animateWithDuration: 0.20000f
+        [UIView animateWithDuration: 0.2
                               delay: 0.0
                             options: UIViewAnimationOptionAllowUserInteraction |
                                         UIViewAnimationOptionRepeat |

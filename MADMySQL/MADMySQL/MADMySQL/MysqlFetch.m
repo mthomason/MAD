@@ -41,7 +41,7 @@
  numberOfColumnsKey : numberOfColumns}];
  */
 
-char *mySQLTypeForType(int type) {
+char *mySQLTypeForType(enum enum_field_types type) {
     switch (type) {
         case MYSQL_TYPE_DECIMAL:
             return "MYSQL_TYPE_DECIMAL";

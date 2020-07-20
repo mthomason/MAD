@@ -190,9 +190,9 @@
 		4C130AEE1BA8075B0022665F /* telepen.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A371BA8075B0022665F /* telepen.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C130AEF1BA8075B0022665F /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A381BA8075B0022665F /* upcean.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130AF41BA807FE0022665F /* MobileCoreServices.framework */; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
+		4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25524C5E23D0027A454 /* CoreServices.framework */; };
 		4C2915FE24AC74AB00EC794B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915FD24AC74AB00EC794B /* libz.tbd */; };
 		4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */; };
 		4C5478EF1E6140A50043682E /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EC1E6140A50043682E /* png.h */; };
@@ -407,6 +407,7 @@
 		4C130AF41BA807FE0022665F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4C1CC25524C5E23D0027A454 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		4C2915FB24AC74AA00EC794B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C2915FC24AC74AB00EC794B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C2915FD24AC74AB00EC794B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -431,8 +432,8 @@
 				4C2915FE24AC74AB00EC794B /* libz.tbd in Frameworks */,
 				4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
-				4C130AF51BA807FE0022665F /* MobileCoreServices.framework in Frameworks */,
 				4C865D891DA525610057678C /* libpng.a in Frameworks */,
+				4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */,
 				4C130B151BA80D240022665F /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -717,6 +718,7 @@
 		4C865D871DA525610057678C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C1CC25524C5E23D0027A454 /* CoreServices.framework */,
 				4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */,
 				4C2915FD24AC74AB00EC794B /* libz.tbd */,
 				4C2915FC24AC74AB00EC794B /* Foundation.framework */,
