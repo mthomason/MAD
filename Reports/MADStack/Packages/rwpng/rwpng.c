@@ -60,6 +60,8 @@ static void rwpng_warning_stderr_handler(png_structp png_ptr, png_const_charp ms
 static void rwpng_warning_silent_handler(png_structp png_ptr, png_const_charp msg);
 int rwpng_read_image24_cocoa(FILE *infile, png24_image *mainprog_ptr);
 
+void rwpng_write_end(png_infopp info_ptr_p, png_structpp png_ptr_p, png_bytepp row_pointers);
+void rwpng_set_gamma(png_infop info_ptr, png_structp png_ptr, double gamma);
 
 void rwpng_version_info(FILE *fp)
 {
@@ -457,9 +459,7 @@ static pngquant_error rwpng_write_image_init(rwpng_png_image *mainprog_ptr, png_
     return SUCCESS;
 }
 
-
-void rwpng_write_end(png_infopp info_ptr_p, png_structpp png_ptr_p, png_bytepp row_pointers)
-{
+void rwpng_write_end(png_infopp info_ptr_p, png_structpp png_ptr_p, png_bytepp row_pointers) {
     png_write_info(*png_ptr_p, *info_ptr_p);
 
     png_set_packing(*png_ptr_p);
@@ -471,8 +471,7 @@ void rwpng_write_end(png_infopp info_ptr_p, png_structpp png_ptr_p, png_bytepp r
     png_destroy_write_struct(png_ptr_p, info_ptr_p);
 }
 
-void rwpng_set_gamma(png_infop info_ptr, png_structp png_ptr, double gamma)
-{
+void rwpng_set_gamma(png_infop info_ptr, png_structp png_ptr, double gamma) {
     /* remap sets gamma to 0.45455 */
     png_set_gAMA(png_ptr, info_ptr, gamma);
     png_set_sRGB(png_ptr, info_ptr, 0); // 0 = Perceptual
