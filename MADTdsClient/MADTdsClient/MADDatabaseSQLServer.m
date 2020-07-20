@@ -426,15 +426,20 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                 
                 [datatable removeAllObjects];
 
-                NSNumber *n;
-                DBINT columnCtr, columnType, columnNumberBytes, columnLength;
-                NSNumber *columnNumberWrapper, *columnTypeNumber,
-                         *columnDataLen, *columTypeKey, *columnIndexOfTypeNumber,
-                *columnLen, *columPercision;
-                NSString *columnNameString;
-                NSDictionary *dictionary;
                 int index;
+                DBINT columnCtr, columnType, columnNumberBytes, columnLength;
+                NSNumber *n;
+                NSNumber *columnNumberWrapper,
+                         *columnTypeNumber,
+                         *columnDataLen,
+                         *columTypeKey,
+                         *columnIndexOfTypeNumber,
+                         *columnLen,
+                         *columPercision;
+                NSString *columnNameString;
                 MADDataColumn *dataColumn;
+                //NSDictionary *dictionary;
+
                 for (columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                     
                     columnType = dbcoltype(dbconn, columnCtr + 1);
