@@ -28,11 +28,17 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 }
 
 + (NSString *)groupIdentifier {
-    return [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"]][@"com.apple.security.application-groups"][0];
+    NSURL *madDesignerEntitlementsUrl = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
+    NSDictionary *madDesignerEntitlementsDictionary = [NSDictionary dictionaryWithContentsOfURL:madDesignerEntitlementsUrl];
+    NSArray *madApplicationGroups = madDesignerEntitlementsDictionary[@"com.apple.security.application-groups"];
+    return [madApplicationGroups firstObject];
 }
 
 + (NSString *)ubiquityIdentifier {
-    return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
+    NSDictionary<NSString *,id> *madInfoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSDictionary *ubiquitousContainers = madInfoDictionary[@"NSUbiquitousContainers"];
+    NSArray<NSString *> *ubiquitousContainersKeys = [ubiquitousContainers allKeys];
+    return [ubiquitousContainersKeys firstObject];
 }
 
 + (BOOL)isMADDesigner {
