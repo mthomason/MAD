@@ -27,45 +27,26 @@
 		4C4F06301F57C20100E09E54 /* MysqlFetch+DataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */; };
 		4C5D022824B8692D006D1A90 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D022724B8692D006D1A90 /* MADAPI.framework */; };
 		4C64C3C8226D743200CE93FE /* MADMySQLConnectionViewController.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A0E1F5D32B900EDA039 /* MADMySQLConnectionViewController.h */; };
-		4C64C3C9226D743200CE93FE /* MADMySQLConnectionViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A0F1F5D32B900EDA039 /* MADMySQLConnectionViewController.m */; };
 		4C64C3CA226D743200CE93FE /* MADMySQL.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C7014971BACDC6800301713 /* MADMySQL.h */; };
 		4C64C3CB226D743200CE93FE /* MADDatabaseMySQL.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */; };
-		4C64C3CC226D743200CE93FE /* MADDatabaseMySQL.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */; };
 		4C64C3CD226D743200CE93FE /* MADDatabaseConnectionMySql.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */; };
-		4C64C3CE226D743200CE93FE /* MADDatabaseConnectionMySql.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */; };
 		4C64C3CF226D743200CE93FE /* MADDataTypeMySQL.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */; };
-		4C64C3D0226D743200CE93FE /* MADDataTypeMySQL.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */; };
 		4C64C3D1226D743200CE93FE /* MADMySQLFetchProtocol.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */; };
 		4C64C3D2226D743200CE93FE /* MysqlConnection.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */; };
-		4C64C3D3226D743200CE93FE /* MysqlConnection.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D31BAD2A8300D6BD62 /* MysqlConnection.m */; };
 		4C64C3D4226D743200CE93FE /* MysqlCommitException.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */; };
-		4C64C3D5226D743200CE93FE /* MysqlCommitException.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E01BAD2A8300D6BD62 /* MysqlCommitException.m */; };
 		4C64C3D6226D743200CE93FE /* MysqlFetch.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373CE1BAD2A8300D6BD62 /* MysqlFetch.h */; };
-		4C64C3D7226D743200CE93FE /* MysqlFetch.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373CF1BAD2A8300D6BD62 /* MysqlFetch.m */; };
 		4C64C3D8226D743200CE93FE /* MysqlFetch+DataTable.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4F062B1F57C20100E09E54 /* MysqlFetch+DataTable.h */; };
-		4C64C3D9226D743200CE93FE /* MysqlFetch+DataTable.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C4F062C1F57C20100E09E54 /* MysqlFetch+DataTable.m */; };
 		4C64C3DA226D743200CE93FE /* MysqlFetchField.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D01BAD2A8300D6BD62 /* MysqlFetchField.h */; };
-		4C64C3DB226D743200CE93FE /* MysqlFetchField.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D11BAD2A8300D6BD62 /* MysqlFetchField.m */; };
 		4C64C3DC226D743200CE93FE /* MysqlInsert.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D51BAD2A8300D6BD62 /* MysqlInsert.h */; };
-		4C64C3DD226D743200CE93FE /* MysqlInsert.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D41BAD2A8300D6BD62 /* MysqlInsert.m */; };
 		4C64C3DE226D743200CE93FE /* MysqlTruncate.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D61BAD2A8300D6BD62 /* MysqlTruncate.h */; };
-		4C64C3DF226D743200CE93FE /* MysqlTruncate.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D71BAD2A8300D6BD62 /* MysqlTruncate.m */; };
 		4C64C3E0226D743200CE93FE /* MysqlException.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D81BAD2A8300D6BD62 /* MysqlException.h */; };
-		4C64C3E1226D743200CE93FE /* MysqlException.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E21BAD2A8300D6BD62 /* MysqlException.m */; };
 		4C64C3E2226D743200CE93FE /* MysqlLiteral.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373DA1BAD2A8300D6BD62 /* MysqlLiteral.h */; };
-		4C64C3E3226D743300CE93FE /* MysqlLiteral.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E41BAD2A8300D6BD62 /* MysqlLiteral.m */; };
 		4C64C3E4226D743300CE93FE /* MysqlServer.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373DC1BAD2A8300D6BD62 /* MysqlServer.h */; };
-		4C64C3E5226D743300CE93FE /* MysqlServer.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */; };
 		4C64C3E6226D743300CE93FE /* MysqlUpdate.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373DD1BAD2A8300D6BD62 /* MysqlUpdate.h */; };
-		4C64C3E7226D743300CE93FE /* MysqlUpdate.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */; };
 		4C64C3E8226D743300CE93FE /* MysqlDelete.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373DE1BAD2A8300D6BD62 /* MysqlDelete.h */; };
-		4C64C3E9226D743300CE93FE /* MysqlDelete.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E11BAD2A8300D6BD62 /* MysqlDelete.m */; };
 		4C64C3EA226D743300CE93FE /* MysqlIndex.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D91BAD2A8300D6BD62 /* MysqlIndex.h */; };
-		4C64C3EB226D743300CE93FE /* MysqlIndex.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E31BAD2A8300D6BD62 /* MysqlIndex.m */; };
 		4C64C3EC226D743300CE93FE /* MysqlRollbackException.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373DB1BAD2A8300D6BD62 /* MysqlRollbackException.h */; };
-		4C64C3ED226D743300CE93FE /* MysqlRollbackException.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */; };
 		4C64C3EE226D743300CE93FE /* NSString+MysqlEscape.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373DF1BAD2A8300D6BD62 /* NSString+MysqlEscape.h */; };
-		4C64C3EF226D743300CE93FE /* NSString+MysqlEscape.m in Resources */ = {isa = PBXBuildFile; fileRef = 4C9373D21BAD2A8300D6BD62 /* NSString+MysqlEscape.m */; };
 		4C64C3F1226D794400CE93FE /* libc.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C64C3F0226D794300CE93FE /* libc.tbd */; };
 		4C6C0A101F5D32B900EDA039 /* MADMySQLConnectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A0E1F5D32B900EDA039 /* MADMySQLConnectionViewController.h */; };
 		4C6C0A111F5D32B900EDA039 /* MADMySQLConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A0F1F5D32B900EDA039 /* MADMySQLConnectionViewController.m */; };
@@ -949,46 +930,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C64C3C8226D743200CE93FE /* MADMySQLConnectionViewController.h in Resources */,
-				4C64C3C9226D743200CE93FE /* MADMySQLConnectionViewController.m in Resources */,
 				4C64C3CA226D743200CE93FE /* MADMySQL.h in Resources */,
+				4C64C3C8226D743200CE93FE /* MADMySQLConnectionViewController.h in Resources */,
 				4C64C3CB226D743200CE93FE /* MADDatabaseMySQL.h in Resources */,
-				4C64C3CC226D743200CE93FE /* MADDatabaseMySQL.m in Resources */,
 				4C64C3CD226D743200CE93FE /* MADDatabaseConnectionMySql.h in Resources */,
-				4C64C3CE226D743200CE93FE /* MADDatabaseConnectionMySql.m in Resources */,
 				4C64C3CF226D743200CE93FE /* MADDataTypeMySQL.h in Resources */,
-				4C64C3D0226D743200CE93FE /* MADDataTypeMySQL.m in Resources */,
 				4C64C3D1226D743200CE93FE /* MADMySQLFetchProtocol.h in Resources */,
 				4C64C3D2226D743200CE93FE /* MysqlConnection.h in Resources */,
-				4C64C3D3226D743200CE93FE /* MysqlConnection.m in Resources */,
 				4C64C3D4226D743200CE93FE /* MysqlCommitException.h in Resources */,
-				4C64C3D5226D743200CE93FE /* MysqlCommitException.m in Resources */,
 				4C64C3D6226D743200CE93FE /* MysqlFetch.h in Resources */,
-				4C64C3D7226D743200CE93FE /* MysqlFetch.m in Resources */,
 				4C64C3D8226D743200CE93FE /* MysqlFetch+DataTable.h in Resources */,
-				4C64C3D9226D743200CE93FE /* MysqlFetch+DataTable.m in Resources */,
 				4C64C3DA226D743200CE93FE /* MysqlFetchField.h in Resources */,
-				4C64C3DB226D743200CE93FE /* MysqlFetchField.m in Resources */,
 				4C64C3DC226D743200CE93FE /* MysqlInsert.h in Resources */,
-				4C64C3DD226D743200CE93FE /* MysqlInsert.m in Resources */,
 				4C64C3DE226D743200CE93FE /* MysqlTruncate.h in Resources */,
-				4C64C3DF226D743200CE93FE /* MysqlTruncate.m in Resources */,
 				4C64C3E0226D743200CE93FE /* MysqlException.h in Resources */,
-				4C64C3E1226D743200CE93FE /* MysqlException.m in Resources */,
 				4C64C3E2226D743200CE93FE /* MysqlLiteral.h in Resources */,
-				4C64C3E3226D743300CE93FE /* MysqlLiteral.m in Resources */,
 				4C64C3E4226D743300CE93FE /* MysqlServer.h in Resources */,
-				4C64C3E5226D743300CE93FE /* MysqlServer.m in Resources */,
 				4C64C3E6226D743300CE93FE /* MysqlUpdate.h in Resources */,
-				4C64C3E7226D743300CE93FE /* MysqlUpdate.m in Resources */,
 				4C64C3E8226D743300CE93FE /* MysqlDelete.h in Resources */,
-				4C64C3E9226D743300CE93FE /* MysqlDelete.m in Resources */,
 				4C64C3EA226D743300CE93FE /* MysqlIndex.h in Resources */,
-				4C64C3EB226D743300CE93FE /* MysqlIndex.m in Resources */,
 				4C64C3EC226D743300CE93FE /* MysqlRollbackException.h in Resources */,
-				4C64C3ED226D743300CE93FE /* MysqlRollbackException.m in Resources */,
 				4C64C3EE226D743300CE93FE /* NSString+MysqlEscape.h in Resources */,
-				4C64C3EF226D743300CE93FE /* NSString+MysqlEscape.m in Resources */,
 				4CE0F5061F5D52AE00D828E1 /* MADCreateDocument.storyboard in Resources */,
 				4C00A37F1F5951E200F6A6C1 /* Media.xcassets in Resources */,
 			);
