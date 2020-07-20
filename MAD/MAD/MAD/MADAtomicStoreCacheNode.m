@@ -46,7 +46,7 @@
 }
 
 // Unpack the propertyDataCache and set the propertyCache
-- (void)resolvePropertyValues:(NSError **)error {
+- (void)resolvePropertyValues:(NSError * __autoreleasing *)error {
     NSMutableDictionary *newPropertyCache = [NSMutableDictionary dictionary];
     
     NSAtomicStore *store = (NSAtomicStore *)[[self objectID] persistentStore];

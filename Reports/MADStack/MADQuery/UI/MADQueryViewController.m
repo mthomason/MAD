@@ -808,7 +808,7 @@ BOOL storeEnabled() {
 }
 
 - (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController
-          willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView  * __nonnull * __nonnull)view {
+          willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView  * __nonnull __autoreleasing * __nonnull)view {
     
 }
 
