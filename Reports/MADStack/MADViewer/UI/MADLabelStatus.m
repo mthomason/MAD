@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 10/28/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADLabelStatus.h"
@@ -15,7 +15,7 @@ static NSString * const MADTextPageXofY         = @"\nPage %1@ of %2@ pages.";
 static NSString * const MADTextNothingToDisplay = @"\nNothing to display.";
 static NSString * const MADTextNoCache          = @"No Cache";
 
-static const CGFloat ToolbarFontPointSize       = 8.0000f;
+static const CGFloat ToolbarFontPointSize       = 8.0;
 
 @interface MADLabelStatus ()
 

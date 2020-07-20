@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 1/2/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -1354,7 +1354,7 @@ typedef NS_ENUM(short, MADExplorerState) {
         UINavigationController *infoViewController;
         infoViewController = [MADNavigationController newNavigationController:MADNavigationControllerTypeInformation];
         infoViewController.modalPresentationStyle = UIModalPresentationPopover;
-        infoViewController.preferredContentSize = CGSizeMake(420.0000f, 480.0000f);
+        infoViewController.preferredContentSize = CGSizeMake(420.0, 480.0);
         
         NSArray *passthoughViews = [self defaultPassthroughViews];
         
@@ -1478,8 +1478,8 @@ typedef NS_ENUM(short, MADExplorerState) {
         
         self.searchBar.hidden = NO;
         self.searchBar.showsCancelButton = NO;
-        self.searchBar.alpha = 0.0000f;
-        self.navigationItem.titleView.alpha = 1.0000f;
+        self.searchBar.alpha = 0.0;
+        self.navigationItem.titleView.alpha = 1.0;
         self.navigationItem.leftBarButtonItem.enabled = NO;
         
         self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
@@ -1501,13 +1501,13 @@ typedef NS_ENUM(short, MADExplorerState) {
             typeof(self) __weak weakSelf = self;
             UIView *titleView = (UIView * _Nonnull)self.navigationItem.titleView;
             [UIView transitionWithView: titleView
-                              duration: 0.2000f
+                              duration: 0.2
                                options: UIViewAnimationOptionCurveEaseOut
                             animations: ^{
                                 typeof(self) strongSelf = weakSelf;
                                 if (strongSelf) {
-                                    strongSelf.searchBar.alpha = 1.0000f;
-                                    strongSelf.navigationItem.titleView.alpha = 0.0000f;
+                                    strongSelf.searchBar.alpha = 1.0;
+                                    strongSelf.navigationItem.titleView.alpha = 0.0;
                                     strongSelf.navigationItem.titleView = searchViewHolder;
                                 }
                             } completion:^(BOOL finished) {
@@ -1527,31 +1527,31 @@ typedef NS_ENUM(short, MADExplorerState) {
             self.searchBar.text = @"";
         }
         self.searchBar.hidden = YES;
-        self.searchBar.alpha = 1.0000f;
+        self.searchBar.alpha = 1.0;
         
-        self.navigationItem.titleView.alpha = 0.0000f;
+        self.navigationItem.titleView.alpha = 0.0;
         self.navigationItem.leftBarButtonItem.enabled = YES;
         
         typeof(self) __weak weakSelf = self;
         UIView *titleView = self.navigationItem.titleView;
-        [UIView transitionWithView: titleView
-                          duration: 0.2000f
-                           options: UIViewAnimationOptionCurveEaseOut animations:^{
-                               typeof(self) strongSelf = weakSelf;
-                               if (strongSelf) {
-                                   strongSelf.searchBar.alpha = 0.0000f;
-                                   strongSelf.navigationItem.titleView.alpha = 1.0000f;
-                                   strongSelf.navigationItem.titleView = titleView;
-                               }
-                           } completion:^(BOOL finished) {
-                               if (finished) {
-                                   typeof(self) strongSelf = weakSelf;
-                                   if (strongSelf) {
-                                       strongSelf.searchBar.hidden = YES;
-                                   }
-                               }
-                           }];
         
+        [UIView transitionWithView: titleView duration: 0.2 options: UIViewAnimationOptionCurveEaseOut animations:^{
+            typeof(self) strongSelf = weakSelf;
+
+            if (strongSelf) {
+                strongSelf.searchBar.alpha = 0.0;
+                strongSelf.navigationItem.titleView.alpha = 1.0;
+                strongSelf.navigationItem.titleView = titleView;
+            }
+        } completion:^(BOOL finished) {
+            if (finished) {
+                typeof(self) strongSelf = weakSelf;
+                if (strongSelf) {
+                    strongSelf.searchBar.hidden = YES;
+                }
+            }
+        }];
+
     }
 }
 
@@ -1611,7 +1611,7 @@ typedef NS_ENUM(short, MADExplorerState) {
     picker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes: documentTypes
                                                                     inMode: UIDocumentPickerModeImport];
     picker.delegate = self;
-    [self presentViewController:picker animated:YES completion:^{}];
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (IBAction)actionCut:(id)sender {

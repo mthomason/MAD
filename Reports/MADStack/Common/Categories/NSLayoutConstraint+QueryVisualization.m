@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 8/31/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "NSLayoutConstraint+QueryVisualization.h"
@@ -17,7 +17,7 @@
                                               relatedBy: NSLayoutRelationEqual
                                                  toItem: nil
                                               attribute: NSLayoutAttributeNotAnAttribute
-                                             multiplier: 1.0000f
+                                             multiplier: 1.0
                                                constant: height];
     constraint.priority = UILayoutPriorityDefaultHigh;
     return constraint;
@@ -30,7 +30,7 @@
                                               relatedBy: NSLayoutRelationEqual
                                                  toItem: nil
                                               attribute: NSLayoutAttributeNotAnAttribute
-                                             multiplier: 1.0000f
+                                             multiplier: 1.0
                                                constant: width];
     constraint.priority = UILayoutPriorityDefaultHigh;
     return constraint;

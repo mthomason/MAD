@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/11/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "NSAttributedString+QueryViewController.h"
@@ -90,7 +90,7 @@
     NSString *messageText = @"%@ %@ %@";
 
     NSMutableParagraphStyle *paragraph = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraph.headIndent = 20.0000f;
+    paragraph.headIndent = 20.0;
     
     messageText = [[NSString alloc] initWithFormat:messageText,
                                                    leftString,

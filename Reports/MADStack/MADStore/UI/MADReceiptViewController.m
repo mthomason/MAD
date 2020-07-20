@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/21/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADReceiptViewController.h"
@@ -177,21 +177,21 @@
     NSDictionary *purchase;
     purchase = [MTVerificationController sharedInstance].receipt.inAppPurchases[index];
     NSString *cancelDate = purchase[@"cancellation-date"];
-    return cancelDate.length > 0 ? 126.0000f : 100.0000f;
+    return cancelDate.length > 0.0 ? 126.0 : 100.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([MTVerificationController sharedInstance].receipt.charterMembership) {
         if (indexPath.item == 0) {
-            return 74.0000f;
+            return 74.0;
         } else if (indexPath.item == 1) {
-            return 34.0000f;
+            return 34.0;
         } else {
             return [self inAppPurchaseCellHeight:(NSUInteger)indexPath.item-2];
         }
     } else {
         if (indexPath.item == 0) {
-            return 74.0000f;
+            return 74.0;
         } else {
             return [self inAppPurchaseCellHeight:(NSUInteger)indexPath.item-1];
         }

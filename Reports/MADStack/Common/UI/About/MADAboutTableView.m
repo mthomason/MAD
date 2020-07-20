@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/23/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADAboutTableView.h"
@@ -14,7 +14,7 @@
 - (void)awakeFromNib {
     self.backgroundColor = [UIColor whiteColor];
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.estimatedRowHeight = 44.0000f;
+    self.estimatedRowHeight = 44.0;
     self.rowHeight = UITableViewAutomaticDimension;
     [super awakeFromNib];
 }

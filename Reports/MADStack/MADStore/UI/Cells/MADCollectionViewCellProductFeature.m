@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/18/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADCollectionViewCellProductFeature.h"
@@ -18,9 +18,7 @@
 #import <UIKit/NSTextContainer.h>
 
 static inline CGRect ImageSize(CGSize size) {
-    return CGRectMake(CGPointZero.x, CGPointZero.y,
-                      size.width + 4.0000f,
-                      size.height + 4.0000f);
+    return CGRectMake(CGPointZero.x, CGPointZero.y, size.width + 4.0, size.height + 4.0);
 }
 
 @interface MADCollectionViewCellProductFeature ()

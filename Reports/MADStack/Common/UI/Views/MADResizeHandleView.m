@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/17/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADResizeHandleView.h"
@@ -16,9 +16,9 @@
 @implementation MADResizeHandleView
 
 static const CGFloat colors[] = {
-    204.0000f / 255.0000f, 224.0000f / 255.0000f, 244.0000f / 255.0000f, 1.00000f,
-    29.0000f / 255.0000f, 156.0000f / 255.0000f, 215.0000f / 255.0000f, 1.00000f,
-    0.0000f / 255.0000f,  50.0000f / 255.0000f, 126.0000f / 255.0000f, 1.00000f,
+    204.0 / 255.0, 224.0 / 255.0, 244.0 / 255.0, 1.0,
+    29.0 / 255.0, 156.0 / 255.0, 215.0 / 255.0, 1.0,
+    0.0 / 255.0,  50.0 / 255.0, 126.0 / 255.0, 1.0,
 };
 
 - (instancetype)initWithFrame:(CGRect)frame andType:(MADCompassDirection)position {
@@ -44,8 +44,8 @@ static const CGFloat colors[] = {
     CGFloat startRadius, endRadius;
     start = end = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
 	CGFloat r = rect.size.width < rect.size.height ? rect.size.width : rect.size.height;
-	startRadius = r * 0.06250f;
-	endRadius = r * 0.2500f;
+	startRadius = r * (0.50 / 8.0);
+	endRadius = r * 0.25;
     
     [[UIColor clearColor] setFill];
     CGContextDrawPath(currentContext, kCGPathFillStroke);

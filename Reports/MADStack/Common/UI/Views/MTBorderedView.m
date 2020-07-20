@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/12/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTBorderedView.h"
@@ -43,11 +43,11 @@
     [[UIColor clearColor] setFill];
     [self.borderColor setStroke];
     CGFloat dashPhase = 0.0;
-    CGFloat dashLengths[] = { 7, 3, 7, 3, 7, 3 };
+    CGFloat dashLengths[] = { 7.0, 3.0, 7.0, 3.0, 7.0, 3.0 };
     CGContextSetLineDash(currentContext,
                          dashPhase, dashLengths,
                          sizeof( dashLengths ) / sizeof( CGFloat ) );
-    CGContextSetLineWidth(currentContext, 1.0000f);
+    CGContextSetLineWidth(currentContext, 1.0);
     CGContextDrawPath(currentContext, kCGPathFillStroke);
     [[UIColor blackColor] set];
     CGPathRelease(path);

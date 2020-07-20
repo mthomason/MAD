@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADTableViewCellQueryTableName.h"
@@ -39,7 +39,7 @@
 }
 
 + (CGFloat)defaultHeight {
-    return 44.0000f;
+    return 44.0;
 }
 
 @end

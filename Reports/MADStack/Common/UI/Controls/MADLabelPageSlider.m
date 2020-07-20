@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael on 8/21/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADLabelPageSlider.h"
@@ -15,15 +15,15 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         self.textAlignment = NSTextAlignmentRight;
-        self.font = [UIFont boldSystemFontOfSize:9.0000f];
-        self.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.90000000f];
+        self.font = [UIFont boldSystemFontOfSize:9.0];
+        self.textColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.9];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.translatesAutoresizingMaskIntoConstraints = YES;
         self.layer.shadowOpacity = 6.0;
         self.layer.shadowRadius = 0.0;
-        self.layer.shadowOffset = CGSizeMake(0.75000f, 0.750000f);
+        self.layer.shadowOffset = CGSizeMake(0.75, 0.75);
         UIColor *blueColor = [MADColorEverydayApps newColorRed];
         CGColorRef color = CGColorRetain(blueColor.CGColor);
         self.layer.shadowColor = color;
@@ -46,8 +46,8 @@
 
 - (void)translateToPoint:(CGPoint)drawingPoint {
     self.transform = CGAffineTransformTranslate(self.transform,
-                                                 self.frame.origin.x > 0 ? -1 * self.frame.origin.x : self.frame.origin.x,
-                                                 self.frame.origin.y > 0 ? -1 * self.frame.origin.y : self.frame.origin.y);
+                                                self.frame.origin.x > 0 ? -1.0 * self.frame.origin.x : self.frame.origin.x,
+                                                self.frame.origin.y > 0 ? -1.0 * self.frame.origin.y : self.frame.origin.y);
     self.transform = CGAffineTransformTranslate(self.transform, drawingPoint.x, drawingPoint.y);
 
 }

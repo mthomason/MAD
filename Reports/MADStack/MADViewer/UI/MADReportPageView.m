@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -25,9 +25,9 @@
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
 
-static const CGFloat PageCounterWidth = 99.0000f;
-static const CGFloat PageCounterHeight = 33.0000f;
-static const CGFloat PageCounterBuffer = 10.0000f;
+static const CGFloat PageCounterWidth = 99.0;
+static const CGFloat PageCounterHeight = 33.0;
+static const CGFloat PageCounterBuffer = 10.0;
 
 @interface MADReportPageView ()
 
@@ -112,31 +112,30 @@ static const CGFloat PageCounterBuffer = 10.0000f;
         
         CGRect frame = CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
                                   CGPointZero.y + PageCounterBuffer,
-                                  PageCounterWidth,
-                                  PageCounterHeight);
+                                  PageCounterWidth, PageCounterHeight);
+        
         MADPageStatusView *numberView = [[MADPageStatusView alloc] initWithFrame: frame];
         [numberView setPage:[delegatePage pageNumber] ofTotal:[delegatePage numberOfPages]];
         [self addSubview:numberView];
         
-        [UIView animateWithDuration:0.3000f delay:0.0000f
-                            options:UIViewAnimationOptionCurveEaseIn animations:^{
-                                
-                                numberView.alpha = 1.0000f;
-                                
-                            } completion:^(BOOL finished) {
-                                
-                                if (finished) {
-                                    [UIView animateWithDuration:0.30000f delay:1.0000f
-                                                        options:UIViewAnimationOptionCurveEaseOut
-                                                     animations:^{
-                                                            numberView.alpha = 0.0000f;
-                                                        } completion:^(BOOL animateFinished) {
-                                                            if (animateFinished) {
-                                                                [numberView removeFromSuperview];
-                                                            }
-                                                        }];
-                                }
-                            }];
+        [UIView animateWithDuration: 0.3 delay: 0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+            
+            numberView.alpha = 1.0;
+        
+        } completion:^(BOOL finished) {
+            
+            if (finished) {
+                
+                [UIView animateWithDuration: 0.3 delay: 1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    numberView.alpha = 0.0;
+                } completion:^(BOOL animateFinished) {
+                    if (animateFinished) {
+                        [numberView removeFromSuperview];
+                    }
+                }];
+            
+            }
+        }];
     }
 }
 

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 5/13/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADSliderPageVertical.h"
@@ -31,9 +31,9 @@
         imageBlank = [UIImage new];
         [self setMaximumTrackImage:imageBlank forState: UIControlStateNormal];
         
-        self.maximumValue = 0.0000f;
-        self.minimumValue = 0.0000f;
-        self.value = 0.0000f;
+        self.maximumValue = 0.0;
+        self.minimumValue = 0.0;
+        self.value = 0.0;
         self.continuous = YES;
         self.tintColor = [MADColorEverydayApps newColorRed];
         self.backgroundColor = [UIColor clearColor];

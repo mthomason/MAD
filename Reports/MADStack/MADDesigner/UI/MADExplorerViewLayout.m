@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/9/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADExplorerViewLayout.h"
@@ -13,7 +13,7 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        self.estimatedItemSize = CGSizeMake(140.0000f, 240.0000f);
+        self.estimatedItemSize = CGSizeMake(140.0, 240.0);
     }
     return self;
 }
@@ -23,6 +23,7 @@
     CGFloat baseline = -2;
     NSMutableArray <UICollectionViewLayoutAttributes *> *sameLineAttributes = [[NSMutableArray alloc] init];
     NSMutableArray <UICollectionViewLayoutAttributes *> *results = [[NSMutableArray alloc] init];
+    
     for (UICollectionViewLayoutAttributes *attribute in attributes) {
         if (attribute.representedElementCategory == UICollectionElementCategoryCell) {
             CGFloat centerY = CGRectGetMidY(attribute.frame);
@@ -37,6 +38,7 @@
             [sameLineAttributes addObject:attribute];
         }
     }
+    
     if (sameLineAttributes.count > 0) {
         [self alignToTopForSameLineAttributes:sameLineAttributes];
         [results addObjectsFromArray:sameLineAttributes];
@@ -49,11 +51,11 @@
     NSArray *sorted = [sameLineAttributes sortedArrayUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *attributes1,
                                                                                          UICollectionViewLayoutAttributes *attributes2) {
         CGFloat delta = attributes1.frame.size.height - attributes2.frame.size.height;
-        return delta == 0. ? NSOrderedSame : ABS(delta)/delta;
+        return delta == 0.0 ? NSOrderedSame : ABS(delta)/delta;
     }];
     UICollectionViewLayoutAttributes *tallest = [sorted lastObject];
     [sameLineAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *attribute, NSUInteger idx, BOOL *stop) {
-        attribute.frame = CGRectOffset(attribute.frame, 0, tallest.frame.origin.y - attribute.frame.origin.y);
+        attribute.frame = CGRectOffset(attribute.frame, 0.0, tallest.frame.origin.y - attribute.frame.origin.y);
     }];
 }
 

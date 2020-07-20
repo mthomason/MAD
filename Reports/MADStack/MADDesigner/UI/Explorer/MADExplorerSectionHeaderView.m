@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/8/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADExplorerSectionHeaderView.h"
@@ -23,8 +23,8 @@ NSString * const MADIdentifierOpenFileSectionHeader = @"MADIdentifierOpenFileSec
 
 static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView);
 static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
-    return CGRectMake(view.width - activityView.width - 10.0000f,
-                      ((view.height - activityView.height) / 2.0000f),
+    return CGRectMake(view.width - activityView.width - 10.0,
+                      ((view.height - activityView.height) / 2.0),
                       activityView.width,
                       activityView.height);;
 }
@@ -79,8 +79,8 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
         self.localizedTextLocal = localizedTextLocal;
         
         // Initialize the section type
-        CGRect labelRect = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y,
-                                      frame.size.width - 10.0000f, frame.size.height);
+        CGRect labelRect = CGRectMake(CGPointZero.x + 10.0, CGPointZero.y,
+                                      frame.size.width - 10.0, frame.size.height);
         
         UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
         label.textAlignment = NSTextAlignmentLeft;
@@ -107,8 +107,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
         
         UIColor *foregroundColor = [MADColorEverydayApps newColorRed];
         NSDictionary *attributes;
-        attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                      foregroundColor, NSForegroundColorAttributeName, nil ];
+        attributes = [[NSDictionary alloc] initWithObjectsAndKeys: foregroundColor, NSForegroundColorAttributeName, nil ];
         
         NSAttributedString *attributedStringLocal;
         attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
@@ -166,9 +165,9 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
         }
     }
     [_label sizeToFit];
-    _label.frame = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y,
-                              _label.frame.size.width + 5.0000f, self.frame.size.height);
-    _activityIndicatorView.frame = CGRectMake(_label.frame.origin.x + _label.frame.size.width + 5.0000f,
+    
+    _label.frame = CGRectMake(CGPointZero.x + 10.0, CGPointZero.y, _label.frame.size.width + 5.0, self.frame.size.height);
+    _activityIndicatorView.frame = CGRectMake(_label.frame.origin.x + _label.frame.size.width + 5.0,
                                               _activityIndicatorView.frame.origin.y,
                                               _activityIndicatorView.frame.size.width,
                                               _activityIndicatorView.frame.size.height);

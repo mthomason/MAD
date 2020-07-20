@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/5/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADClipboardView.h"
@@ -18,7 +18,7 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
 static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef  endColor) {
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat locations[] = { 0.0000f, 1.0000f };
+    CGFloat locations[] = { 0.0, 1.0 };
     NSArray *colors = @[(__bridge id)startColor, (__bridge id)endColor];
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef) colors, locations);
     CGPoint startPoint = CGPointMake(CGRectGetMidX(rect), CGRectGetMinY(rect));
@@ -37,14 +37,14 @@ static void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef sta
 static void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse) {
     
     
-    UIColor *highlightStart = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.3500f];
-    UIColor *highlightEnd = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f];
+    UIColor *highlightStart = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.35];
+    UIColor *highlightEnd = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
     
     if (reverse) {
-        CGRect half = CGRectMake(rect.origin.x, rect.origin.y+rect.size.height/2, rect.size.width, rect.size.height/2);
+        CGRect half = CGRectMake(rect.origin.x, rect.origin.y+rect.size.height/2.0, rect.size.width, rect.size.height/2.0);
         drawLinearGradient(context, half, highlightEnd.CGColor, highlightStart.CGColor);
     } else {
-        CGRect half = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height/2);
+        CGRect half = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height/2.0);
         drawLinearGradient(context, half, highlightStart.CGColor, highlightEnd.CGColor);
     }
     
@@ -52,20 +52,20 @@ static void drawLinearGloss(CGContextRef context, CGRect rect, BOOL reverse) {
 
 static void drawCurvedGloss(CGContextRef context, CGRect rect, CGFloat radius) {
     
-    UIColor *glossStart = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.6000f];
-    UIColor *glossEnd = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.1000f];
+    UIColor *glossStart = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.6];
+    UIColor *glossEnd = [[UIColor alloc] initWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
     
     CGMutablePathRef glossPath = CGPathCreateMutable();
     CGContextSaveGState(context);
     CGPathMoveToPoint(glossPath, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect)-radius+rect.size.height/2);
-    CGPathAddArc(glossPath, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect)-radius+rect.size.height/2, radius, (CGFloat)(0.75*M_PI), (CGFloat)(0.25*M_PI), YES);
+    CGPathAddArc(glossPath, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect)-radius+rect.size.height/2.0, radius, (CGFloat)(0.75*M_PI), (CGFloat)(0.25*M_PI), YES);
     CGPathCloseSubpath(glossPath);
     CGContextAddPath(context, glossPath);
     CGContextClip(context);
-    CGMutablePathRef buttonPath=createRoundedRectForRect(rect, 6.0f);
+    CGMutablePathRef buttonPath=createRoundedRectForRect(rect, 6.0);
     CGContextAddPath(context, buttonPath);
     CGContextClip(context);
-    CGRect half = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height/2);
+    CGRect half = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height/2.0);
     drawLinearGradient(context, half, glossStart.CGColor, glossEnd.CGColor);
     CGContextRestoreGState(context);
     CGPathRelease(buttonPath);
@@ -113,22 +113,22 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius) {
 
 static inline CGRect OuterRect(CGRect bounds);
 static inline CGRect OuterRect(CGRect bounds) {
-    return CGRectInset(bounds, 7.5f, 7.5f);
+    return CGRectInset(bounds, 7.5, 7.5);
 }
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect: rect];
 
-    const CGFloat _brightness = 0.8000f, _hue = 0.5500f, _saturation = 0.8000f;
+    const CGFloat _brightness = 0.8, _hue = 0.55, _saturation = 0.8;
     const CGFloat zStrokeColour1[4]    = {0.0, 0.0, 1.0, 1.0};
     
     UIColor *black =            [[UIColor alloc] initWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
     
     UIColor *outerTopColor =    [[UIColor alloc] initWithHue:_hue saturation:_saturation
-                                           brightness:1.0000f * _brightness alpha:1.0];
+                                           brightness:1.0 * _brightness alpha:1.0];
     
     UIColor *outerBottomColor = [[UIColor alloc] initWithHue:_hue saturation:_saturation
-                                           brightness:0.80000f * _brightness alpha:1.0];
+                                           brightness:0.8 * _brightness alpha:1.0];
 
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGMutablePathRef outerPath = createRoundedRectForRect(OuterRect(self.bounds), 6.0);

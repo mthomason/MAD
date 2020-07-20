@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -61,7 +61,7 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = 44.0000f;
+    self.tableView.estimatedRowHeight = 44.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.allowsSelection = YES;
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -95,7 +95,9 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath { return 104.000f; }
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 104.0;
+}
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
                                          forRowAtIndexPath:(NSIndexPath *)indexPath {

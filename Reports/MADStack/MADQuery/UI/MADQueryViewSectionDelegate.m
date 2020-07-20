@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/24/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADQueryViewSectionDelegate.h"
@@ -191,7 +191,7 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
         case MADIdentifierQueryViewSectionsPredicate:
         case MADIdentifierQueryViewSectionsSql:
         default:
-            return 44.0000f;
+            return 44.0;
             break;
     }
 }

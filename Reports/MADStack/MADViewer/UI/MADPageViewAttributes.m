@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 2/24/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADPageViewAttributes.h"
@@ -31,7 +31,7 @@ static NSString * const keyContentScaleFactor   = @"f";
     if (self = [super init]) {
         _pageNumber = position.currentPage + 1;
         _numberOfPages = position.totalPages;
-        _zoomScaleInital = 1.0000f;
+        _zoomScaleInital = 1.0;
         _contentSizeInital = size;
         _contentOffsetInital = CGPointZero;
         _contentScaleFactor = 0.0;

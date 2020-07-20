@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/18/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADStoreViewController.h"
@@ -76,13 +76,13 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
     self.collectionView.scrollEnabled = YES;
     self.collectionView.scrollsToTop = YES;
     self.collectionView.allowsSelection = YES;
-    //self.collectionView.trans
-    self.collectionView.backgroundColor = [UIColor clearColor];//[[UIColor redColor] colorWithAlphaComponent:.90];
-    self.navigationController.view.backgroundColor = [UIColor clearColor];//[[UIColor greenColor] colorWithAlphaComponent:.70];
-    self.view.backgroundColor = [UIColor clearColor];//[[UIColor purpleColor] colorWithAlphaComponent:.30];
+
+    self.collectionView.backgroundColor = [UIColor clearColor];             //[[UIColor redColor] colorWithAlphaComponent:.90];
+    self.navigationController.view.backgroundColor = [UIColor clearColor];  //[[UIColor greenColor] colorWithAlphaComponent:.70];
+    self.view.backgroundColor = [UIColor clearColor];                       //[[UIColor purpleColor] colorWithAlphaComponent:.30];
     self.collectionView.backgroundView = nil;
     ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset =
-                                        UIEdgeInsetsMake(10.0000f, 10.0000f, 10.0000f, 10.0000f);
+                                        UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     
@@ -223,9 +223,9 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
   
-    return CGSizeMake(collectionView.bounds.size.width >= 480 ?
-                      (collectionView.bounds.size.width / 2.0000f) - (8.0000f * 3) :
-                      collectionView.bounds.size.width - 8.0000f * 2, 220.0000f);
+    return CGSizeMake(collectionView.bounds.size.width >= 480.0 ?
+                      (collectionView.bounds.size.width / 2.0) - (8.0 * 3.0) :
+                      collectionView.bounds.size.width - 8.0 * 2.0, 220.0);
 
 }
 

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/22/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTTitleView.h"
@@ -58,12 +58,12 @@ static inline CGRect LabelRect(CGRect bounds) {
     switch (style) {
         case MADTitleViewQueryTableRoot:
             self.label.textColor = [UIColor whiteColor];
-            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0f
+            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0
                                                                weight: UIFontWeightSemibold];
             break;
         case MADTitleViewQueryTableChild:
             self.label.textColor = [MADColorEverydayApps newColorBlue];
-            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0f
+            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0
                                                                weight: UIFontWeightMedium];
             break;
             
@@ -79,12 +79,9 @@ static inline CGRect LabelRect(CGRect bounds) {
 
     CGMutablePathRef border = CGPathCreateMutable();
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(currentContext,
-                          1.0000f / self.traitCollection.displayScale);
-    CGPathMoveToPoint(border, NULL, rect.origin.x,
-                      rect.origin.y + rect.size.height);
-    CGPathAddLineToPoint(border, NULL, rect.origin.x + rect.size.width,
-                         rect.origin.y + rect.size.height);
+    CGContextSetLineWidth(currentContext, 1.0 / self.traitCollection.displayScale);
+    CGPathMoveToPoint(border, NULL, rect.origin.x, rect.origin.y + rect.size.height);
+    CGPathAddLineToPoint(border, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
     CGContextAddPath(currentContext, border);
     CGContextDrawPath(currentContext, kCGPathStroke);
     CGPathRelease(border);

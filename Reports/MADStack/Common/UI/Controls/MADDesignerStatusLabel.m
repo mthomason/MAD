@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 9/4/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDesignerStatusLabel.h"
@@ -36,7 +36,7 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, frame.size.width, frame.size.height)];
         label.textColor = [UIColor lightTextColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont systemFontOfSize:8.0000f];
+        label.font = [UIFont systemFontOfSize: 8.0];
         label.backgroundColor = [UIColor clearColor];
         label.autoresizingMask = MADViewAutoresizingFlexable();
         label.translatesAutoresizingMaskIntoConstraints = YES;

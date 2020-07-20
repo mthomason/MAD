@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/25/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "NSDictionary+QueryViewControllerTableLayout.h"
@@ -27,31 +27,31 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 @implementation NSDictionary (QueryViewControllerTableLayout)
 
 + (instancetype)newDictionaryQueryLayoutTableZeroReportingEnabled:(BOOL)reportingEnabled {
-    id one =         [[NSNumber alloc] initWithInteger: 1];
-    id unknown =     [[NSNumber alloc] initWithInteger: -1];
-    id datasource =  [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsDatasource];
-    id tables =      [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsTables];
-    id resultCount = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsNumberOfQueryResults];
-    id h2 = NSLocalizedString(MADTextQuerySetupDatasource,   MADTextQuerySetupDatasource);
-    id h3 = NSLocalizedString(MADTextQuerySelectTables,      MADTextQuerySelectTables);
-    id h7 = NSLocalizedString(MADTextQueryReportingMode,     MADTextQueryReportingMode);
+    NSNumber *one =         [[NSNumber alloc] initWithInteger: 1];
+    NSNumber *unknown =     [[NSNumber alloc] initWithInteger: -1];
+    NSNumber *datasource =  [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsDatasource];
+    NSNumber *tables =      [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsTables];
+    NSNumber *resultCount = [[NSNumber alloc] initWithShort: MADIdentifierQueryViewSectionsNumberOfQueryResults];
+    NSString *h2 = NSLocalizedString(MADTextQuerySetupDatasource,   MADTextQuerySetupDatasource);
+    NSString *h3 = NSLocalizedString(MADTextQuerySelectTables,      MADTextQuerySelectTables);
+    NSString *h7 = NSLocalizedString(MADTextQueryReportingMode,     MADTextQueryReportingMode);
     
     NSArray *sections = reportingEnabled ?
         [[NSArray alloc] initWithObjects: datasource, tables, resultCount, nil] :
         [[NSArray alloc] initWithObjects: datasource, tables, nil];
+    
     NSArray *countRowsForSection = reportingEnabled ?
         [[NSArray alloc] initWithObjects: one, unknown, one, nil] :
         [[NSArray alloc] initWithObjects: one, unknown, nil];
-    NSDictionary *countRowsForSectionD;
-    countRowsForSectionD =  [[NSDictionary alloc] initWithObjects: countRowsForSection
-                                                          forKeys: sections];
+    
+    NSDictionary *countRowsForSectionD = [[NSDictionary alloc] initWithObjects: countRowsForSection forKeys: sections];
     
     NSArray *headersSection = reportingEnabled ?
         [[NSArray alloc] initWithObjects: h2, h3, h7, nil] :
         [[NSArray alloc] initWithObjects: h2, h3, nil];
     NSDictionary *headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                                            forKeys: sections];
-    NSNumber *height1 = [[NSNumber alloc] initWithDouble: 50.0000f],
+    NSNumber *height1 = [[NSNumber alloc] initWithDouble: 50.0],
              *height2 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryTableName defaultHeight]];
     NSArray *heightRowsForSectionA = reportingEnabled ?
         [[NSArray alloc] initWithObjects: height1, height2, height1, nil] :
@@ -100,7 +100,7 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
     NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
                                                                          forKeys: sections];
     
-    NSNumber *height1 = [[NSNumber alloc] initWithDouble: 44.0000f];
+    NSNumber *height1 = [[NSNumber alloc] initWithDouble: 44.0];
     NSNumber *height2 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryTableName defaultHeight]];
     NSArray *heightRowsForSection = reportingEnabled ?
         [[NSArray alloc] initWithObjects: height1, height2, height1, height1, height1, nil] :
@@ -156,9 +156,9 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
     NSDictionary <NSNumber *, NSString *> *headersSectionDictionary;
     headersSectionDictionary = [[NSDictionary alloc] initWithObjects: headersSection
                                                              forKeys: sections];
-    NSNumber *height1 = [[NSNumber alloc] initWithDouble: 44.0000f],
+    NSNumber *height1 = [[NSNumber alloc] initWithDouble: 44.0],
              *height2 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryTableName defaultHeight]],
-             *height3 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryLink defaultHeight]];    //50.0000f
+             *height3 = [[NSNumber alloc] initWithDouble: [MADTableViewCellQueryLink defaultHeight]];    //50.0
     NSArray *heightRowsForSection;
         heightRowsForSection = reportingEnabled ?
             [[NSArray alloc] initWithObjects: height1, height2, height3, height1, height1, height1, nil] :

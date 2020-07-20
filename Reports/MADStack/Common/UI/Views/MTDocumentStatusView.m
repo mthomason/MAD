@@ -49,7 +49,7 @@
 
 - (CGRect)statusIndicatorRectForRect:(CGRect)rect {
     rect = CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.height, rect.size.height);
-    return CGRectInset(rect, 3.0000f, 3.0000f);;
+    return CGRectInset(rect, 3.0, 3.0);;
 }
 
 - (void)setActivityState:(BOOL)active {
@@ -85,9 +85,9 @@
     CGMutablePathRef circlePath = CGPathCreateMutable();
     CGFloat centerX = CGRectGetMidX(statusIndicatorBox),
             centerY = CGRectGetMidY(statusIndicatorBox),
-            radius = CGRectGetWidth(statusIndicatorBox) / 2.0000f;
-    CGPathAddArc(circlePath, NULL, centerX, centerY, radius, 0.0000f, M_PI, NO);
-    CGPathAddArc(circlePath, NULL, centerX, centerY, radius, M_PI, 0.0000f, NO);
+            radius = CGRectGetWidth(statusIndicatorBox) / 2.0;
+    CGPathAddArc(circlePath, NULL, centerX, centerY, radius, 0.0, M_PI, NO);
+    CGPathAddArc(circlePath, NULL, centerX, centerY, radius, M_PI, 0.0, NO);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextAddPath(currentContext, circlePath);
@@ -121,7 +121,7 @@
     if ([self active]) {
         [[UIColor clearColor] set];
     }
-    CGFloat lineWidth = 1.0000f;
+    CGFloat lineWidth = 1.0;
     CGContextSetLineWidth(currentContext, lineWidth);
     
     CGContextDrawPath(currentContext, kCGPathEOFillStroke);
@@ -131,21 +131,21 @@
     if ([self active] == NO) {
         [[UIColor lightTextColor] set];
         
-       // CGRect labelBox = CGRectMake(CGPointZero.x + rect.size.height, CGPointZero.y + 9.0000f, rect.size.width - rect.size.height, rect.size.height - 13.0000f);
+       // CGRect labelBox = CGRectMake(CGPointZero.x + rect.size.height, CGPointZero.y + 9.0, rect.size.width - rect.size.height, rect.size.height - 13.0);
         
-        CGFloat actualFontSize = 9.0000f;
-        UIFont *desiredfont = [UIFont boldSystemFontOfSize:9.0000f];
+        CGFloat actualFontSize = 9.0;
+        UIFont *desiredfont = [UIFont boldSystemFontOfSize:9.0];
         
         CGSize constrainedSize = CGSizeMake((rect.size.width - rect.size.height), rect.size.height);
         CGSize actualLabelBoxSize = [[self message] sizeWithFont:desiredfont
                                                constrainedToSize:constrainedSize
                                                    lineBreakMode:NSLineBreakByWordWrapping];
 //        CGSize actualLabelBoxSize = [[self message] sizeWithFont:desiredfont
-//                                                     minFontSize:11.0000f
+//                                                     minFontSize:11.0
 //                                                  actualFontSize:&actualFontSize
 //                                                        forWidth:(rect.size.width - rect.size.height)
 //                                                   lineBreakMode:NSLineBreakByCharWrapping];
-        CGFloat inset = (rect.size.height - actualLabelBoxSize.height) / 2.0000f;
+        CGFloat inset = (rect.size.height - actualLabelBoxSize.height) / 2.0;
         CGRect printbox = CGRectMake(CGPointZero.x + rect.size.height, CGPointZero.y + inset, actualLabelBoxSize.width, actualLabelBoxSize.height);
         [[self message] drawInRect:printbox withFont:[UIFont boldSystemFontOfSize:actualFontSize] lineBreakMode:NSLineBreakByWordWrapping alignment:NSTextAlignmentCenter];
     }

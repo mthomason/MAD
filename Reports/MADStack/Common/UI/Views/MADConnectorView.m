@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/16/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADConnectorView.h"
@@ -49,11 +49,11 @@
 
     if (rect.size.width == CGSizeZero.width && rect.size.height == CGSizeZero.height) return;
         
-    rect = CGRectInset(rect, 10.0000f, 10.0000f);
+    rect = CGRectInset(rect, 10.0, 10.0);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetShadow(currentContext, CGSizeMake(2.0000f, 2.0000f), 5.0000f);
-    CGContextSetLineWidth(currentContext, 3.0000f);
+    CGContextSetShadow(currentContext, CGSizeMake(2.0, 2.0), 5.0);
+    CGContextSetLineWidth(currentContext, 3.0);
     
     CGRect connectorNobRect[2];
     CGPoint origin, destination;
@@ -79,8 +79,8 @@
     };
     
     CGRect (^nobSize)(CGPoint, CGSize) = ^(CGPoint p, CGSize s) {
-        return CGRectMake(p.x - (s.width / 2.0000f) + 1.0000f,
-                          p.y - (s.height / 2.0000f) + 1.0000f,
+        return CGRectMake(p.x - (s.width / 2.0) + 1.0,
+                          p.y - (s.height / 2.0) + 1.0,
                           s.width, s.height);
     };
     CGPoint (^getOriginPoint2)(BOOL, BOOL, CGPoint, CGPoint) =
@@ -102,9 +102,9 @@
         destination = destinationPoint(_topLeftToBottomRight, rect);
         
         connectorNobRect[0] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, origin, destination),
-                                      CGSizeMake(4.0000f, 4.0000f));
+                                      CGSizeMake(4.0, 4.0));
         connectorNobRect[1] = nobSize(getOriginPoint2(_topLeftToBottomRight, _leftViewIsInital, destination, origin),
-                                      CGSizeMake(4.0000f, 4.0000f));
+                                      CGSizeMake(4.0, 4.0));
         
         CGContextAddEllipseInRect(currentContext, connectorNobRect[0]);
         CGContextAddEllipseInRect(currentContext, connectorNobRect[1]);
@@ -118,7 +118,7 @@
                                  destination.x,
                                  destination.y);
         
-        connectorNobRect[1].origin.y += 3.0000f;
+        connectorNobRect[1].origin.y += 3.0;
         
         void(^drawLines)(CGPoint, CGPoint, CGPoint) =
         ^void(CGPoint startingPoint, CGPoint firstEndPoint, CGPoint endPoint) {
@@ -126,12 +126,12 @@
             [path moveToPoint:startingPoint];
             [path addLineToPoint:firstEndPoint];
             [path addLineToPoint:endPoint];
-            path.lineWidth = 3.0000f;
+            path.lineWidth = 3.0;
             [path stroke];
         };
         
         CGFloat (^offsetX)(BOOL, CGFloat) = ^CGFloat(BOOL leftInital, CGFloat radius) {
-            return leftInital ? -5.0000f - radius : 10.0000f + radius;
+            return leftInital ? -5.0 - radius : 10.0 + radius;
         };
         
         CGPoint(^startingPoint)(BOOL, CGFloat, CGPoint) =
@@ -148,9 +148,9 @@
             return CGPointMake(start.x + offsetX(leftInital, radius), start.y + radius);
         };
         
-        drawLines(startingPoint(_leftViewIsInital, 5.0000f, connectorNobRect[1].origin),
+        drawLines(startingPoint(_leftViewIsInital, 5.0, connectorNobRect[1].origin),
                   centerPoint(_leftViewIsInital, connectorNobRect[1].origin),
-                  finalPoint(_leftViewIsInital, 5.0000f, connectorNobRect[1].origin));
+                  finalPoint(_leftViewIsInital, 5.0, connectorNobRect[1].origin));
     }
 }
 

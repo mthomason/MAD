@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael on 3/1/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADPageStatusView.h"
@@ -19,17 +19,17 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *bgColor = [[UIColor alloc] initWithWhite:0.0000f alpha:0.5000f];
+        UIColor *bgColor = [[UIColor alloc] initWithWhite: 0.0 alpha: 0.5];
         self.backgroundColor = bgColor;
         self.userInteractionEnabled = NO;
-        self.alpha = 0.0000f;
-        self.layer.cornerRadius =  6.0000f;
+        self.alpha = 0.0;
+        self.layer.cornerRadius =  6.0;
         
         UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x,
                                                                        CGPointZero.y,
                                                                        frame.size.width,
                                                                        frame.size.height)];
-        labelView.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f];
+        labelView.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0];
         labelView.textColor = [UIColor whiteColor];
         labelView.textAlignment = NSTextAlignmentCenter;
         labelView.userInteractionEnabled = NO;

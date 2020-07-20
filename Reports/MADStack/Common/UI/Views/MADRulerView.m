@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/13/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADRulerView.h"
@@ -19,18 +19,18 @@
 
 #import "UIView+Extras.h"
 
-const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
+const CGFloat MTReportDesignerRulerHeight           = 20.0;
 
 static inline double xPoint(NSInteger i, double offsetInPoints);
 static inline double cmInPoints(void);
 static inline double eigthInchInPoints(void);
 
 static inline double cmInPoints() {
-    return (72.0000f / 1.0000f) / 2.5400f;
+    return (72.0 / 1.0) / 2.54;
 }
 
 static inline double eigthInchInPoints() {
-    return 72.0000f / 8.0000f;
+    return 72.0 / 8.0;
 }
 
 static inline double xPoint(NSInteger i, double offsetInPoints) {
@@ -82,7 +82,7 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
 
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGMutablePathRef pathInchMarks = CGPathCreateMutable();
-    UIFont *font = [UIFont fontWithDescriptor:_fontDescriptor size:5.0000f];
+    UIFont *font = [UIFont fontWithDescriptor:_fontDescriptor size:5.0];
     NSDictionary *attributes;
     attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                             font, NSFontAttributeName,
@@ -91,26 +91,26 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
     NSString *s;
     CGFloat length;
     CGRect locationRect;
-    CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
-    static const CGFloat lineWidth = 1.0000f;
+    CGFloat thinLineWidth = 1.0 / self.traitCollection.displayScale;
+    static const CGFloat lineWidth = 1.0;
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / eigthInchInPoints(); i++) {
         @autoreleasepool {
             if ((i % 8) == 0) {
-                locationRect = CGRectMake((CGFloat)xPoint(i, eigthInchInPoints()) - 5.000f,
-                                                 rect.size.height - 8.0000f,
-                                                 10.0000f, 5.0000f);
-                s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 8];
+                locationRect = CGRectMake((CGFloat)xPoint(i, eigthInchInPoints()) - 5.0,
+                                                 rect.size.height - 8.0,
+                                                 10.0, 5.0);
+                s = [[NSString alloc] initWithFormat:@"%Lf", (long)i / 8.0L];
                 [s drawInRect:locationRect withAttributes:attributes];
-                length = 1.0000f;
-                CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
+                length = 1.0;
+                CGContextSetLineWidth(currentContext, lineWidth * 2.0);
             } else if (i % 2) {
-                length = 4.0000f;
+                length = 4.0;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             } else if (i % 4) {
-                length = 3.0000f;
+                length = 3.0;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             } else {
-                length = 2.0000f;
+                length = 2.0;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             }
             CGPathMoveToPoint(pathInchMarks, NULL, (CGFloat)xPoint(i, eigthInchInPoints()), rect.size.height);
@@ -118,32 +118,30 @@ static inline double xPoint(NSInteger i, double offsetInPoints) {
         }
     }
     
-    font = [font fontWithSize: 4.0000f];
+    font = [font fontWithSize: 4.0];
     attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                             font, NSFontAttributeName,
                                             _paragraphStyle, NSParagraphStyleAttributeName, nil];
-    CGFloat offsetInPoints = (72.0000f / 2.5400f) / 10.0000f;   //One cm
+    CGFloat offsetInPoints = (72.0 / 2.54) / 10.0;   //One cm
     CGMutablePathRef pathCmMarks = CGPathCreateMutable();
     for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
         @autoreleasepool {
             if ((i % 10) == 0) {
-                locationRect = CGRectMake((CGFloat)xPoint(i, cmInPoints() / 10.0000f) - 5.000f,
-                                                          1.0000f, 10.0000f, 5.0000f);
-                s = [[NSString alloc] initWithFormat:@"%ld", (long)i / 10];
+                locationRect = CGRectMake((CGFloat)xPoint(i, cmInPoints() / 10.0) - 5.0,
+                                                          1.0, 10.0, 5.0);
+                s = [[NSString alloc] initWithFormat:@"%Lf", (long)i / 10.0L];
                 [s drawInRect:locationRect withAttributes:attributes];
-                length = 2.0000f;
-                CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
+                length = 2.0;
+                CGContextSetLineWidth(currentContext, lineWidth * 2.0);
             } else if (i % 5) {
-                length = 2.0000f;
+                length = 2.0;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             } else {
-                length = 3.0000f;
+                length = 3.0;
                 CGContextSetLineWidth(currentContext, thinLineWidth);
             }
-            CGPathMoveToPoint(pathCmMarks, NULL,
-                              (CGFloat)xPoint(i, offsetInPoints), CGPointZero.y);
-            CGPathAddLineToPoint(pathCmMarks, NULL,
-                                 (CGFloat)xPoint(i, offsetInPoints), CGPointZero.y + length);
+            CGPathMoveToPoint(pathCmMarks, NULL, (CGFloat)xPoint(i, offsetInPoints), CGPointZero.y);
+            CGPathAddLineToPoint(pathCmMarks, NULL, (CGFloat)xPoint(i, offsetInPoints), CGPointZero.y + length);
         }
     }
     

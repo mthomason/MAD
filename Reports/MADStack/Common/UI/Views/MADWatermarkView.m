@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/22/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADWatermarkView.h"
@@ -30,7 +30,7 @@ static inline CGRect LogoRect2(CGPoint origin, const CGSize size[2]) {
 
 static inline CGFloat LogoPointOriginXOffset(CGFloat marginWidth, CGSize string);
 static inline CGFloat LogoPointOriginXOffset(CGFloat marginWidth, CGSize string) {
-    return (marginWidth / 2.0000f - string.width / 2.0000f) - 66.0000f;
+    return (marginWidth / 2.0 - string.width / 2.0) - 66.0;
 }
 
 static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, BOOL moveLeft);
@@ -44,17 +44,17 @@ static inline CGFloat LogoPointOriginY(NSUInteger rowCounter, CGFloat marginHeig
     return ((rowCounter * 2) + 1) * marginHeight +
             rowCounter * strings[0].height +
             strings[1].height +
-            (marginHeight / 2.0000f - strings[0].height / 2.0000f - 150.0000f);
+            (marginHeight / 2.0 - strings[0].height / 2.0 - 150.0);
 }
 
 static inline CGFloat LogoPointOriginYResolved(NSUInteger columnCounter, CGFloat originY, CGRect rect, CGFloat marginHeight);
 static inline CGFloat LogoPointOriginYResolved(NSUInteger columnCounter, CGFloat originY, CGRect rect, CGFloat marginHeight) {
-    return columnCounter % 2 == 0 ? originY : originY + ((rect.size.height + (marginHeight * 2)) / 2.0000f);
+    return columnCounter % 2 == 0 ? originY : originY + ((rect.size.height + (marginHeight * 2)) / 2.0);
 }
 
 static inline CGFloat LogoPointOriginYt(CGFloat height);
 static inline CGFloat LogoPointOriginYt(CGFloat height) {
-    return height - 24.0000f;
+    return height - 24.0;
 }
 
 static CGFloat FirstT(NSUInteger counter, CGFloat originY, CGRect logoRect, CGFloat marginHeight);
@@ -138,7 +138,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
 - (void)drawBackground {
 
     CGRect rect = self.frame;
-    const CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
+    const CGSize logoMargin = CGSizeMake(45.0, 66.0);
 
     NSAttributedString *displayString = [MADWatermarkString newWaterMarkStringMad];
     NSAttributedString *displayString2 = [MADWatermarkString newWaterMarkStringDesigner];
@@ -189,7 +189,7 @@ static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue
     UIColor *foregroundColor = [UIColor lightTextColor];
 
     UIFont *customFont = [UIFont fontWithName:MADFontNameHelveticaNeueCondensedBlack
-                                         size:[MADApplication isMADDesigner] ? 100.0000f : 78.0000f];
+                                         size:[MADApplication isMADDesigner] ? 100.0 : 78.0];
 
     NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                             foregroundColor, NSForegroundColorAttributeName,
@@ -207,7 +207,7 @@ static NSString * const MADFontNameHelveticaNeueCondensedBlack = @"HelveticaNeue
     UIColor *foregroundColor = [UIColor lightTextColor];
 
     UIFont *customFont = [UIFont fontWithName: MADFontNameHelveticaNeueCondensedBlack
-                                         size: [MADApplication isMADDesigner] ? 44.5000f : 46.0000f];
+                                         size: [MADApplication isMADDesigner] ? 44.5 : 46.0];
 
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.alignment = NSTextAlignmentCenter;

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/30/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -31,7 +31,7 @@
 #import "MADDocumentScroller.h"
 #import "MADPageViewAttributes.h"
 
-static const CGFloat PageEdgeInsetMargin = 3.0000f;
+static const CGFloat PageEdgeInsetMargin = 3.0;
 
 static inline UIEdgeInsets boundsInsets(CGFloat, CGFloat);
 static inline CGFloat zoomScale(CGFloat, CGFloat, CGFloat);
@@ -141,7 +141,7 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
     documentScroller.translatesAutoresizingMaskIntoConstraints = YES;
     documentScroller.delegate = self;
     
-    self.view.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:.80];
+    self.view.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.80];
     
     MADReportPageView *documentView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
     documentView.backgroundColor = [UIColor whiteColor];
@@ -207,7 +207,7 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
     
     MADDocumentScroller *documentScroller = self.documentScroller;
     CGPoint currentContentOffset = documentScroller.contentOffset;
-    CGPoint nextContentOffset = CGPointMake((size.width != documentScroller.contentSize.width)?(size.width - documentScroller.contentSize.width) / 2 : 0.0f,
+    CGPoint nextContentOffset = CGPointMake((size.width != documentScroller.contentSize.width)?(size.width - documentScroller.contentSize.width) / 2.0 : 0.0,
                                             currentContentOffset.y);
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -313,13 +313,13 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 @end
 
 static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
-    return 1.00000000f +  ( l2 - l1 - (m * 2.00000000f) )  / l1;
+    return 1.0 +  ( l2 - l1 - (m * 2.0) )  / l1;
 }
 
 static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
                                                   CGFloat layoutGuideLength, CGFloat margin) {
     return parentViewLength > subViewLength ?
-    ((parentViewLength - subViewLength) / 2.0000f) + margin : layoutGuideLength + margin;
+    ((parentViewLength - subViewLength) / 2.0) + margin : layoutGuideLength + margin;
 }
 
 static inline CGFloat MaximumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
@@ -333,8 +333,8 @@ static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, C
 }
 
 static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
-    return CGPointMake(contentSize.width * 0.5000f + MAX(((scrollerBoundsSize.width - (margin * 2)) - contentSize.width) * 0.5000f, 0.0000f),
-                       contentSize.height * 0.5000f + MAX(((scrollerBoundsSize.height - (margin * 2)) - contentSize.height) * 0.5000f, 0.0000f));
+    return CGPointMake(contentSize.width * 0.5 + MAX(((scrollerBoundsSize.width - (margin * 2.0)) - contentSize.width) * 0.5, 0.0),
+                       contentSize.height * 0.5 + MAX(((scrollerBoundsSize.height - (margin * 2.0)) - contentSize.height) * 0.5, 0.0));
 }
 
 static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLayoutGuide) {

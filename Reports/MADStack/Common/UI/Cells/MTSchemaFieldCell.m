@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/15/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTSchemaFieldCell.h"
@@ -20,7 +20,7 @@
             classes = [[NSArray alloc] initWithObjects: self, nil];
             appearanceProxy = [UILabel appearanceWhenContainedInInstancesOfClasses:classes];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            appearanceProxy.font = [font fontWithSize:8.0000f];
+            appearanceProxy.font = [font fontWithSize:8.0];
             font = nil;
         }
     }

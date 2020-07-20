@@ -3,16 +3,14 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/20/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADVibrantTableViewCell.h"
 #import <UIKit/UIVisualEffectView.h>
-
 #import <UIKit/UINibLoading.h>
 
 @interface MADVibrantTableViewCell ()
-
 
 @end
 
@@ -58,24 +56,24 @@
                                                   relatedBy: NSLayoutRelationGreaterThanOrEqual
                                                      toItem: effectView.contentView
                                                   attribute: NSLayoutAttributeHeight
-                                                 multiplier: 1.0000f
-                                                   constant: 0.0000f];
+                                                 multiplier: 1.0
+                                                   constant: 0.0];
         
         effectsHeight = [NSLayoutConstraint constraintWithItem: effectView.contentView
                                                      attribute: NSLayoutAttributeHeight
                                                      relatedBy: NSLayoutRelationGreaterThanOrEqual
                                                         toItem: label
                                                      attribute: NSLayoutAttributeHeight
-                                                    multiplier: 1.0000f
-                                                      constant: 0.0000f];
+                                                    multiplier: 1.0
+                                                      constant: 0.0];
         
         layoutConstraint0 = [NSLayoutConstraint constraintWithItem: self.contentView
                                                          attribute: NSLayoutAttributeLeading
                                                          relatedBy: NSLayoutRelationEqual
                                                             toItem: effectView.contentView
                                                          attribute: NSLayoutAttributeLeading
-                                                        multiplier: 1.0000f
-                                                          constant: 0.0000f];
+                                                        multiplier: 1.0
+                                                          constant: 0.0];
         layoutConstraint0.priority = UILayoutPriorityRequired;
         
         layoutConstraint2 = [NSLayoutConstraint constraintWithItem: self.contentView
@@ -83,8 +81,8 @@
                                                          relatedBy: NSLayoutRelationEqual
                                                             toItem: effectView.contentView
                                                          attribute: NSLayoutAttributeTrailing
-                                                        multiplier: 1.0000f
-                                                          constant: 0.0000f];
+                                                        multiplier: 1.0
+                                                          constant: 0.0];
         layoutConstraint2.priority = UILayoutPriorityRequired;
         
         layoutConstraint4 = [NSLayoutConstraint constraintWithItem: self.contentView
@@ -92,8 +90,8 @@
                                                          relatedBy: NSLayoutRelationEqual
                                                             toItem: effectView.contentView
                                                          attribute: NSLayoutAttributeTop
-                                                        multiplier: 1.0000f
-                                                          constant: 0.0000f];
+                                                        multiplier: 1.0
+                                                          constant: 0.0];
         layoutConstraint4.priority = UILayoutPriorityRequired;
         
         layoutConstraint6 = [NSLayoutConstraint constraintWithItem: self.contentView
@@ -101,8 +99,8 @@
                                                          relatedBy: NSLayoutRelationEqual
                                                             toItem: effectView.contentView
                                                          attribute: NSLayoutAttributeBottom
-                                                        multiplier: 1.0000f
-                                                          constant: 0.0000f];
+                                                        multiplier: 1.0
+                                                          constant: 0.0];
         layoutConstraint6.priority = UILayoutPriorityRequired;
         
         labelLeadingMargin = [NSLayoutConstraint constraintWithItem: effectView.contentView
@@ -110,8 +108,8 @@
                                                                           relatedBy: NSLayoutRelationEqual
                                                                              toItem: label
                                                                           attribute: NSLayoutAttributeLeading
-                                                                         multiplier: 1.0000f
-                                                                           constant: -4.0000f];
+                                                                         multiplier: 1.0
+                                                                           constant: -4.0];
         labelLeadingMargin.priority = UILayoutPriorityDefaultHigh;
         
         labelTrailingMargin = [NSLayoutConstraint constraintWithItem: effectView.contentView
@@ -119,8 +117,8 @@
                                                                      relatedBy: NSLayoutRelationEqual
                                                                         toItem: label
                                                                      attribute: NSLayoutAttributeTrailing
-                                                                    multiplier: 1.0000f
-                                                                      constant: 4.0000f];
+                                                                    multiplier: 1.0
+                                                                      constant: 4.0];
         labelTrailingMargin.priority = UILayoutPriorityDefaultHigh;
         
         layoutConstraintLabelTop = [NSLayoutConstraint constraintWithItem: effectView.contentView
@@ -130,9 +128,9 @@
                                                                 relatedBy: NSLayoutRelationEqual
                                                                    toItem: label
                                                                 attribute: NSLayoutAttributeTop
-                                                               multiplier: 1.0000f
+                                                               multiplier: 1.0
                                                                  constant: self.marginStyle == MADTableViewCellMarginStyleTop ||
-                                                                           self.marginStyle == MADTableViewCellMarginStyleFat ? -4.0000f : 0.0000f];
+                                                                           self.marginStyle == MADTableViewCellMarginStyleFat ? -4.0 : 0.0];
         layoutConstraintLabelTop.priority = UILayoutPriorityRequired;
         
         layoutConstraintLabelBottom = [NSLayoutConstraint constraintWithItem: effectView.contentView
@@ -142,10 +140,10 @@
                                                                    relatedBy: NSLayoutRelationEqual
                                                                       toItem: label
                                                                    attribute: NSLayoutAttributeBottom
-                                                                  multiplier: 1.0000f
+                                                                  multiplier: 1.0
                                                                     constant: self.marginStyle == MADTableViewCellMarginStyleBottom ||
                                                                               self.marginStyle == MADTableViewCellMarginStyleFat ||
-                                                                              self.marginStyle == MADTableViewCellMarginStyleMiddle ? -4.0000f : 0.000f];
+                                                                              self.marginStyle == MADTableViewCellMarginStyleMiddle ? -4.0 : 0.0];
         layoutConstraintLabelBottom.priority = UILayoutPriorityDefaultHigh;
         
         constraints = [[NSArray alloc] initWithObjects: cellHeight, effectsHeight,

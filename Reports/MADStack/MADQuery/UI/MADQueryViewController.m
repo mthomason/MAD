@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -218,43 +218,43 @@ BOOL storeEnabled() {
 + (CGFloat)SizeCategoryHeight:(NSString *)category {
     
     if ([category isEqualToString: UIContentSizeCategoryExtraSmall]) {
-        return 24.0000f;
+        return 24.0;
         
     } else if ([category isEqualToString: UIContentSizeCategorySmall]) {
-        return 26.0000f;
+        return 26.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryMedium]) {
-        return 29.0000f;
+        return 29.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryLarge]) {
-        return 32.0000f;
+        return 32.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryExtraLarge]) {
-        return 34.0000f;
+        return 34.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraLarge]) {
-        return 36.0000f;
+        return 36.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryExtraExtraExtraLarge]) {
-        return 38.0000f;
+        return 38.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityMedium]) {
-        return 40.0000f;
+        return 40.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityLarge]) {
-        return 42.0000f;
+        return 42.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraLarge]) {
-        return 44.0000f;
+        return 44.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
-        return 46.0000f;
+        return 46.0;
         
     } else if ([category isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
-        return 48.0000f;
+        return 48.0;
         
     } else {
-        return 29.0000f;
+        return 29.0;
     }
 }
 
@@ -344,7 +344,7 @@ BOOL storeEnabled() {
     [self.tableView registerClass: [MADTableViewCellQueryTableName class]
            forCellReuseIdentifier: @"MADIdentifierCellSchemaName"];
     
-    self.tableView.estimatedRowHeight = 44.0000f;
+    self.tableView.estimatedRowHeight = 44.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 
     self.navigationItem.prompt = nil;
@@ -425,7 +425,7 @@ BOOL storeEnabled() {
     [super viewDidLayoutSubviews];
     if (_firstTimeViewWillLayoutSubviews) {
         CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y,
-                              self.tableView.frame.size.width, 1.0000f);
+                              self.tableView.frame.size.width, 1.0);
         [self.tableView scrollRectToVisible: r animated: NO];
         _firstTimeViewWillLayoutSubviews = NO;
     }
@@ -1200,27 +1200,31 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
 }
 
-- (void)controller: (NSFetchedResultsController *)controller
-  didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
-		   atIndex: (NSUInteger)sectionIndex
-     forChangeType: (NSFetchedResultsChangeType)type {
+- (void)controller: (NSFetchedResultsController *)controller didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex: (NSUInteger)sectionIndex forChangeType: (NSFetchedResultsChangeType)type {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     
-    NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
+    NSMutableArray<NSNumber *> *sections = [self sectionsUsedByFetchedResultsController: controller];
     NSNumber *section;
+    
+    if (sections.count <= 0) return;
+    
     for (section in sections) {
+
         if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
-            MADIdentifierQueryViewSections updateSection = section.shortValue;
+
             switch(type) {
                 case NSFetchedResultsChangeInsert: {
-                    NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
+                    NSAssert(section.shortValue >= 0, @"Expect section to be a positive integer.");
+                    NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: (NSUInteger)section.shortValue];
                     [self.tableView insertSections: updatedIndex
                                     withRowAnimation: UITableViewRowAnimationFade];
                     break;
                 }
                     
                 case NSFetchedResultsChangeDelete: {
-                    NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
+                    NSAssert(section.shortValue >= 0, @"Expect section to be a positive integer.");
+                    NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: (NSUInteger)section.shortValue];
                     [self.tableView deleteSections: updatedIndex
                                   withRowAnimation: UITableViewRowAnimationFade];
                     break;
@@ -1228,6 +1232,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
                     
                 case NSFetchedResultsChangeMove:
                     break;
+
                 case NSFetchedResultsChangeUpdate:
                     break;
             }

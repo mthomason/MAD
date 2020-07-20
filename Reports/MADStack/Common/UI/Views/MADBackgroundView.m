@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/19/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADBackgroundView.h"
@@ -14,10 +14,10 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *bgColor = [[MADColorEverydayApps newColorBlackFiftyPercent] colorWithAlphaComponent:0.33333333f];
+        UIColor *bgColor = [[MADColorEverydayApps newColorBlackFiftyPercent] colorWithAlphaComponent: 1.0/3.0];
         self.backgroundColor = bgColor;
         self.clipsToBounds = YES;
-        self.layer.cornerRadius = 5.0000f;
+        self.layer.cornerRadius = 5.0;
     }
     return self;
 }

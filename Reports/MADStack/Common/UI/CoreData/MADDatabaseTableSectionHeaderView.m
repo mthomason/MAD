@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDatabaseTableSectionHeaderView.h"
@@ -19,8 +19,8 @@
 #import "MADSectionHeaderViewDelegate.h"
 
 static NSString * const TextAccessibilityHint = @"Toggles database field visibility.";
-static const CGFloat ButtonSize = 35.00000f;
-static const CGFloat PaddingSize = 5.00000f;
+static const CGFloat ButtonSize = 35.0;
+static const CGFloat PaddingSize = 5.0;
 
 @interface MADDatabaseTableSectionHeaderView ()
 
@@ -54,7 +54,7 @@ static const CGFloat PaddingSize = 5.00000f;
     label.isAccessibilityElement = NO;
     label.text = @"";
     
-    UIFont *font = [UIFont boldSystemFontOfSize:17.0000f];
+    UIFont *font = [UIFont boldSystemFontOfSize:17.0];
     label.font = font;
     
     UIColor *blueColor = [MADColorEverydayApps newColorBlue];
@@ -117,7 +117,9 @@ static const CGFloat PaddingSize = 5.00000f;
     CGRect titleLabelFrame = self.bounds;
     titleLabelFrame.origin.x += ButtonSize;
     titleLabelFrame.size.width -= ButtonSize;
-    CGRectInset(titleLabelFrame, 0.0000f, PaddingSize);
+    
+    //CGRect tableLabelInset = CGRectInset(titleLabelFrame, 0.0, PaddingSize);
+    
     self.titleLabel.frame = titleLabelFrame;
     self.disclosureButton.frame = CGRectMake(self.bounds.origin.x, PaddingSize, ButtonSize, ButtonSize);
 

@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 2/21/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADPageSlider.h"
@@ -21,7 +21,7 @@
 #import "MADPageSliderProtocol.h"
 #import "MADLabelPageSlider.h"
 
-static const CGFloat MADSliderPaginationWidth = 40.0000f;
+static const CGFloat MADSliderPaginationWidth = 40.0;
 static NSString * const ConstTestStringValue = @"0";
 inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight);
 inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue);
@@ -46,7 +46,7 @@ static inline CGAffineTransform translateBack(CGSize size);
 }
 
 + (CGSize)BoundsForAttributedString:(NSAttributedString *)string {
-    CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0000f, CGFLOAT_MAX)
+    CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0, CGFLOAT_MAX)
                                          options: (NSStringDrawingOptions)
                      (NSStringDrawingUsesLineFragmentOrigin |
                       NSStringDrawingUsesFontLeading)
@@ -75,8 +75,8 @@ static inline CGAffineTransform translateBack(CGSize size);
         
         self.tintColor = [MADColorEverydayApps newColorBlue];
 
-        UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];
-        NSNumber *strokeWidth = @-1.0000f;
+        UIFont *font = [UIFont boldSystemFontOfSize:9.0];
+        NSNumber *strokeWidth = @-1.0;
         NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     font, NSFontAttributeName,
                                     strokeWidth, NSStrokeWidthAttributeName, nil];
@@ -130,7 +130,7 @@ static inline CGAffineTransform translateBack(CGSize size);
     }
     [self.labels removeAllObjects];
 
-    static CGFloat offsetTopBottom = 8.0000f;
+    static CGFloat offsetTopBottom = 8.0;
     CGFloat distanceBetweenTicks = [MADPageSlider distanceBetweenTicks:numberOfTicks height:_stringHeight
                                                                padding:offsetTopBottom rect:rect];;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
@@ -186,8 +186,8 @@ static inline CGAffineTransform translateBack(CGSize size);
                                                       action: @selector(handleGestureTapSlider:)];
         [slider addGestureRecognizer:tap];
         
-        slider.transform = CGAffineTransformRotate(slider.transform, 1.0000f / 2.0000f * (CGFloat)M_PI);
-        self.transform = CGAffineTransformRotate(slider.transform, 3.0000f / 2.0000f * (CGFloat)M_PI);
+        slider.transform = CGAffineTransformRotate(slider.transform, 1.0 / 2.0 * (CGFloat)M_PI);
+        self.transform = CGAffineTransformRotate(slider.transform, 3.0 / 2.0 * (CGFloat)M_PI);
         [self addSubview:slider];
         _slider = slider;
     }
@@ -300,9 +300,7 @@ static inline CGAffineTransform translateBack(CGSize size);
 }
 
 - (NSUInteger)maximumNumberOfLabels {
-    return availableLabelSlots(MaxDimension(self.frame.size),
-                               _stringHeight,
-                               self.maximumValue) / 2 + 1;
+    return availableLabelSlots(MaxDimension(self.frame.size), _stringHeight, self.maximumValue) / 2.0 + 1.0;
 }
 
 - (void)rotateBoundingSize:(CGSize)size inContext:(CGContextRef)context {
@@ -351,13 +349,13 @@ static inline CGFloat MaxDimension(CGSize size) {
 }
 
 static inline CGAffineTransform translateForward(CGSize size) {
-    return CGAffineTransformMakeTranslation(size.width / 2.0000f, size.width / 2.0000f);
+    return CGAffineTransformMakeTranslation(size.width / 2.0, size.width / 2.0);
 }
 
 static inline CGAffineTransform rotate() {
-    return CGAffineTransformMakeRotation(3.0000f / 2.0000f * (CGFloat)M_PI);
+    return CGAffineTransformMakeRotation(3.0 / 2.0 * M_PI);
 }
 
 static inline CGAffineTransform translateBack(CGSize size) {
-    return CGAffineTransformMakeTranslation(-size.width / 2.0000f, -size.width / 2.0000f);
+    return CGAffineTransformMakeTranslation(-size.width / 2.0, -size.width / 2.0);
 }

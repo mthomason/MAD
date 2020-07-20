@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/4/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADDimmingView.h"
@@ -14,10 +14,10 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        UIColor *backgroundColor = [[UIColor alloc] initWithWhite: 0.0000f
-                                                     alpha: 0.3333f];
+        UIColor *backgroundColor = [[UIColor alloc] initWithWhite: 0.0
+                                                            alpha: 1.0/3.0];
         self.backgroundColor = backgroundColor;
-        self.alpha = 0.0000f;
+        self.alpha = 0.0;
         
     }
     return self;

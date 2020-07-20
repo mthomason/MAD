@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/4/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "NSLayoutConstraint+Designer.h"
@@ -64,7 +64,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: nil
                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                multiplier: 1.000f
+                                                multiplier: 1.0
                                                   constant: height];
     return constraint;
 }
@@ -75,7 +75,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: nil
                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: width];
     return constraint;
 }
@@ -86,8 +86,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: toItem
                                                  attribute: NSLayoutAttributeTop
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -97,7 +97,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: nil
                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: height];
     return constraint;
 }
@@ -109,7 +109,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: section
                                                  attribute: NSLayoutAttributeBottom
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: -padding];
     return constraint;
 }
@@ -121,7 +121,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: section
                                                  attribute: NSLayoutAttributeRight
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: -padding];
     return constraint;
 }
@@ -133,7 +133,7 @@
                                 relatedBy: NSLayoutRelationGreaterThanOrEqual
                                    toItem: nil
                                 attribute: NSLayoutAttributeNotAnAttribute
-                               multiplier: 1.0000f
+                               multiplier: 1.0
                                  constant: height];
     ((NSLayoutConstraint *)constraint).priority = UILayoutPriorityDefaultHigh;
     return constraint;
@@ -146,7 +146,7 @@
                                 relatedBy: NSLayoutRelationEqual
                                    toItem: view2
                                 attribute: NSLayoutAttributeLeftMargin
-                               multiplier: 1.0000f
+                               multiplier: 1.0
                                  constant: centerX];
     return constraint;
 }
@@ -158,7 +158,7 @@
                                 relatedBy: NSLayoutRelationEqual
                                    toItem: view2
                                 attribute: NSLayoutAttributeTopMargin
-                               multiplier: 1.0000f
+                               multiplier: 1.0
                                  constant: centerY];
     return constraint;
 }
@@ -170,7 +170,7 @@
                                 relatedBy: NSLayoutRelationEqual
                                    toItem: nil
                                 attribute: NSLayoutAttributeNotAnAttribute
-                               multiplier: 1.0000f
+                               multiplier: 1.0
                                  constant: width];
     ((NSLayoutConstraint *)constraint).priority = UILayoutPriorityDefaultHigh;
     return constraint;
@@ -183,7 +183,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: section
                                                  attribute: NSLayoutAttributeTop
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: -padding];
     return constraint;
 }
@@ -196,7 +196,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: content
                                                  attribute: NSLayoutAttributeLeft
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: padding];
     return constraint;
 }
@@ -208,7 +208,7 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: content
                                                  attribute: NSLayoutAttributeRight
-                                                multiplier: 1.0000f
+                                                multiplier: 1.0
                                                   constant: -padding];
     return constraint;
 }
@@ -219,8 +219,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: view
                                                  attribute: NSLayoutAttributeBottom
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -230,8 +230,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: toItem
                                                  attribute: NSLayoutAttributeTop
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -241,8 +241,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: toItem
                                                  attribute: NSLayoutAttributeBottom
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -252,8 +252,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: nil
                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                multiplier: 0.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 0.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -263,8 +263,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: view
                                                  attribute: NSLayoutAttributeLeft
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -274,8 +274,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: view
                                                  attribute: NSLayoutAttributeRight
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -285,8 +285,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: view
                                                  attribute: NSLayoutAttributeTop
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -296,8 +296,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: bottom
                                                  attribute: NSLayoutAttributeBottom
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 
@@ -307,8 +307,8 @@
                                                  relatedBy: NSLayoutRelationEqual
                                                     toItem: nil
                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                multiplier: 1.0000f
-                                                  constant: 0.0000f];
+                                                multiplier: 1.0
+                                                  constant: 0.0];
     return constraint;
 }
 

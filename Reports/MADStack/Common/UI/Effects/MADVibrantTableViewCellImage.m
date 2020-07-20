@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/21/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADVibrantTableViewCellImage.h"
@@ -57,8 +57,8 @@
                                           relatedBy: NSLayoutRelationGreaterThanOrEqual
                                              toItem: effectView.contentView
                                           attribute: NSLayoutAttributeHeight
-                                         multiplier: 1.0000f
-                                           constant: 0.0000f];
+                                         multiplier: 1.0
+                                           constant: 0.0];
         
         NSLayoutConstraint *eh;
         eh = [NSLayoutConstraint constraintWithItem: effectView.contentView
@@ -66,8 +66,8 @@
                                           relatedBy: NSLayoutRelationGreaterThanOrEqual
                                              toItem: label
                                           attribute: NSLayoutAttributeHeight
-                                         multiplier: 1.0000f
-                                           constant: 0.0000f];
+                                         multiplier: 1.0
+                                           constant: 0.0];
 
         
         NSLayoutConstraint *ih;
@@ -76,8 +76,8 @@
                                           relatedBy: NSLayoutRelationGreaterThanOrEqual
                                              toItem: self.imageViewMain
                                           attribute: NSLayoutAttributeHeight
-                                         multiplier: 1.0000f
-                                           constant: 2 * 4.0000f];
+                                         multiplier: 1.0
+                                           constant: 2.0 * 4.0];
         
         NSLayoutConstraint *isw;
         isw = [NSLayoutConstraint constraintWithItem: self.imageViewMain
@@ -85,7 +85,7 @@
                                            relatedBy: NSLayoutRelationEqual
                                               toItem: nil
                                            attribute: NSLayoutAttributeNotAnAttribute
-                                          multiplier: 1.0000f
+                                          multiplier: 1.0
                                             constant: self.imageViewMain.image.size.width];
         
         NSLayoutConstraint *ish;
@@ -94,7 +94,7 @@
                                            relatedBy: NSLayoutRelationEqual
                                               toItem: nil
                                            attribute: NSLayoutAttributeNotAnAttribute
-                                          multiplier: 1.0000f
+                                          multiplier: 1.0
                                             constant: self.imageViewMain.image.size.height];
         
         NSLayoutConstraint *lcli;
@@ -103,8 +103,8 @@
                                             relatedBy: NSLayoutRelationEqual
                                                toItem: self.imageViewMain
                                             attribute: NSLayoutAttributeLeading
-                                           multiplier: 1.0000f
-                                             constant: -4.0000f];
+                                           multiplier: 1.0
+                                             constant: -4.0];
         lcli.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lcmil;
@@ -113,8 +113,8 @@
                                              relatedBy: NSLayoutRelationEqual
                                                 toItem: effectView.contentView
                                              attribute: NSLayoutAttributeLeading
-                                            multiplier: 1.0000f
-                                              constant: 0.0000f];
+                                            multiplier: 1.0
+                                              constant: 0.0];
         lcmil.priority = UILayoutPriorityRequired;
         
         
@@ -124,8 +124,8 @@
                                            relatedBy: NSLayoutRelationEqual
                                               toItem: effectView.contentView
                                            attribute: NSLayoutAttributeTrailing
-                                          multiplier: 1.0000f
-                                            constant: 0.0000f];
+                                          multiplier: 1.0
+                                            constant: 0.0];
         lc2.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lc4;
@@ -134,8 +134,8 @@
                                            relatedBy: NSLayoutRelationEqual
                                               toItem: effectView.contentView
                                            attribute: NSLayoutAttributeTop
-                                          multiplier: 1.0000f
-                                            constant: 0.0000f];
+                                          multiplier: 1.0
+                                            constant: 0.0];
         lc4.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lc6;
@@ -144,8 +144,8 @@
                                            relatedBy: NSLayoutRelationEqual
                                               toItem: effectView.contentView
                                            attribute: NSLayoutAttributeBottom
-                                          multiplier: 1.0000f
-                                            constant: 0.0000f];
+                                          multiplier: 1.0
+                                            constant: 0.0];
         lc6.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lcicy;
@@ -154,8 +154,8 @@
                                              relatedBy: NSLayoutRelationEqual
                                                 toItem: self.contentView
                                              attribute: NSLayoutAttributeCenterY
-                                            multiplier: 1.0000f
-                                              constant: 0.0000f];
+                                            multiplier: 1.0
+                                              constant: 0.0];
         
         
         
@@ -165,8 +165,8 @@
                                              relatedBy: NSLayoutRelationEqual
                                                 toItem: label
                                              attribute: NSLayoutAttributeLeading
-                                            multiplier: 1.0000f
-                                              constant: 0.0000f];
+                                            multiplier: 1.0
+                                              constant: 0.0];
         lcllm.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lcla;
@@ -175,8 +175,8 @@
                                             relatedBy: NSLayoutRelationEqual
                                                toItem: label
                                             attribute: NSLayoutAttributeTrailing
-                                           multiplier: 1.0000f
-                                             constant: 4.0000f];
+                                           multiplier: 1.0
+                                             constant: 4.0];
         lcla.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lclt;
@@ -185,8 +185,8 @@
                                             relatedBy: NSLayoutRelationEqual
                                                toItem: label
                                             attribute: NSLayoutAttributeTop
-                                           multiplier: 1.0000f
-                                             constant: self.marginStyle == MADTableViewCellMarginStyleTop || self.marginStyle == MADTableViewCellMarginStyleFat ? -4.0000f : 0.0000f];
+                                           multiplier: 1.0
+                                             constant: self.marginStyle == MADTableViewCellMarginStyleTop || self.marginStyle == MADTableViewCellMarginStyleFat ? -4.0 : 0.0];
         lclt.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *lclb;
@@ -195,7 +195,7 @@
                                             relatedBy: NSLayoutRelationEqual
                                                toItem: label
                                             attribute: NSLayoutAttributeBottom
-                                           multiplier: 1.0000f
+                                           multiplier: 1.0
                                              constant: lclbConstant(self.marginStyle)];
         lclb.priority = UILayoutPriorityDefaultHigh;
         
@@ -212,7 +212,7 @@
 }
 static inline CGFloat lclbConstant(MADVibrantTableViewCellMarginStyle marginStyle);
 static inline CGFloat lclbConstant(MADVibrantTableViewCellMarginStyle marginStyle) {
-    return marginStyle == MADTableViewCellMarginStyleBottom || marginStyle == MADTableViewCellMarginStyleFat || marginStyle == MADTableViewCellMarginStyleMiddle ? -4.0000f : 0.000f;
+    return marginStyle == MADTableViewCellMarginStyleBottom || marginStyle == MADTableViewCellMarginStyleFat || marginStyle == MADTableViewCellMarginStyleMiddle ? -4.0 : 0.0;
 }
 
 static inline NSLayoutAttribute lclbAttribute1(MADVibrantTableViewCellMarginStyle marginStyle);
@@ -263,13 +263,10 @@ static inline NSLayoutAttribute lclbAttribute1(MADVibrantTableViewCellMarginStyl
             [self.textLabel removeConstraints:constraints];
         }
         
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-                                                                      16.0000f, 16.0000f)];
+        CGRect viewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 16.0, 16.0);
+        UIButton *button = [[UIButton alloc] initWithFrame: viewRect];
         
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGPointZero.x,
-                                                                               CGPointZero.y,
-                                                                               16.0000f,
-                                                                               16.0000f)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame: viewRect];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:imageView];
@@ -280,7 +277,7 @@ static inline NSLayoutAttribute lclbAttribute1(MADVibrantTableViewCellMarginStyl
         UIVisualEffectView *visualEffectView;
         visualEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
         [visualEffectView.contentView addSubview:button];
-        visualEffectView.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 16.0000f, 16.0000f);
+        visualEffectView.frame = viewRect;
         self.accessoryView = visualEffectView;
 
         

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/9/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTGradientView.h"
@@ -26,43 +26,43 @@
     UIColor *startColor = [MADColorEverydayApps newColorGreenLight];
     CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents(startColor.CGColor);
     
-    UIColor *secondColor = [[UIColor alloc] initWithRed: (132.0000f/255.0000f)
-                                                  green: (174.0000f/255.0000f)
-                                                   blue: (98.0000f/255.0000f)
-                                                  alpha: 1.0000f];
+    UIColor *secondColor = [[UIColor alloc] initWithRed: (132.0/255.0)
+                                                  green: (174.0/255.0)
+                                                   blue: (98.0/255.0)
+                                                  alpha: 1.0];
     CGFloat *secondColorComponents = (CGFloat *)CGColorGetComponents(secondColor.CGColor);
     
-    UIColor *thirdColor = [[UIColor alloc] initWithRed: (119.0000f/255.0000f)
-                                                 green: (166.0000f/255.0000f)
-                                                  blue: (82.0000f/255.0000f)
-                                                 alpha: 1.0000f];
+    UIColor *thirdColor = [[UIColor alloc] initWithRed: (119.0/255.0)
+                                                 green: (166.0/255.0)
+                                                  blue: (82.0/255.0)
+                                                 alpha: 1.0];
     CGFloat *thirdColorComponents = (CGFloat *)CGColorGetComponents(thirdColor.CGColor);
     
-    UIColor *fourthColor = [[UIColor alloc] initWithRed: (102.0000f/255.0000f)
-                                                  green: (155.0000f/255.0000f)
-                                                   blue: (61.0000f/255.0000f)
-                                                  alpha: 1.0000f];
+    UIColor *fourthColor = [[UIColor alloc] initWithRed: (102.0/255.0)
+                                                  green: (155.0/255.0)
+                                                   blue: (61.0/255.0)
+                                                  alpha: 1.0];
     CGFloat *fourthColorComponents = (CGFloat *)CGColorGetComponents(fourthColor.CGColor);
     
     UIColor *middleColor = [MADColorEverydayApps newColorGreenDark];
     CGFloat *middleColorComponents = (CGFloat *)CGColorGetComponents(middleColor.CGColor);
 
-    UIColor *sixthColor = [[UIColor alloc] initWithRed: (102.0000f/255.0000f)
-                                                 green: (155.0000f/255.0000f)
-                                                  blue: (61.0000f/255.0000f)
-                                                 alpha: 1.0000f];
+    UIColor *sixthColor = [[UIColor alloc] initWithRed: (102.0/255.0)
+                                                 green: (155.0/255.0)
+                                                  blue: (61.0/255.0)
+                                                 alpha: 1.0];
     CGFloat *sixthColorComponents = (CGFloat *)CGColorGetComponents(sixthColor.CGColor);
 
-    UIColor *seventhColor = [[UIColor alloc] initWithRed: (119.0000f/255.0000f)
-                                                   green: (166.0000f/255.0000f)
-                                                    blue: (82.0000f/255.0000f)
-                                                   alpha: 1.0000f];
+    UIColor *seventhColor = [[UIColor alloc] initWithRed: (119.0/255.0)
+                                                   green: (166.0/255.0)
+                                                    blue: (82.0/255.0)
+                                                   alpha: 1.0];
     CGFloat *seventhColorComponents = (CGFloat *)CGColorGetComponents(seventhColor.CGColor);
     
-    UIColor *eightColor = [[UIColor alloc] initWithRed: (132.0000f/255.0000f)
-                                                 green: (174.0000f/255.0000f)
-                                                  blue: (98.0000f/255.0000f)
-                                                 alpha: 1.0000f];
+    UIColor *eightColor = [[UIColor alloc] initWithRed: (132.0/255.0)
+                                                 green: (174.0/255.0)
+                                                  blue: (98.0/255.0)
+                                                 alpha: 1.0];
     CGFloat *eightColorComponents = (CGFloat *)CGColorGetComponents(eightColor.CGColor);
     
     UIColor *ninthColor = [MADColorEverydayApps newColorGreenLight];
@@ -123,22 +123,22 @@
     };
     
     CGFloat colorIndices[9] = {
-        0.0000f,
-        0.1250f,
-        0.2500f,
-        0.3750f,
-        0.5000f,
-        0.6250f,
-        0.7500f,
-        0.8750f,
-        0.1000f,
+        0.0,
+        0.125,
+        0.25,
+        0.375,
+        0.5,
+        0.625,
+        0.75,
+        0.875,
+        0.1,
     };
     
     CGGradientRef gradient = 
     CGGradientCreateWithColorComponents
     (colorSpace,
      (const CGFloat *)&colorComponents, 
-     (const CGFloat *)&colorIndices, 9);
+     (const CGFloat *)&colorIndices, 9.0);
     
     CGColorSpaceRelease(colorSpace);
     

@@ -3,12 +3,10 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADTableViewCellQueryInstructions.h"
-
-const CGFloat MNSTableViewCellHeightDefault = 44.0000f;
 
 @implementation MADTableViewCellQueryInstructions
 
@@ -37,6 +35,8 @@ const CGFloat MNSTableViewCellHeightDefault = 44.0000f;
     
 }
 
-+ (CGFloat)defaultHeight { return MNSTableViewCellHeightDefault; }
++ (CGFloat)defaultHeight {
+    return 44.0;
+}
 
 @end

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/14/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -270,7 +270,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     
     self.definesPresentationContext = YES;
     
-    self.backgroundContainer.layer.borderWidth = [UIScreen mainScreen].isRetnaDisplay ? 0.5000f : 1.0000f;
+    self.backgroundContainer.layer.borderWidth = [UIScreen mainScreen].isRetnaDisplay ? 0.5 : 1.0;
     self.backgroundContainer.backgroundColor = [UIColor clearColor];
     self.backgroundContainer.opaque = NO;
     self.backgroundContainer.autoresizesSubviews = NO;
@@ -288,32 +288,20 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     constraints = [[NSMutableArray alloc] init];
 
     NSArray <NSLayoutConstraint *> * constraintGroup;
-    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|"
-                                                              options:0
-                                                              metrics:0
-                                                                views:viewDictionary];
+    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary];
     [constraints addObjectsFromArray:constraintGroup];
     
-    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|"
-                                                              options:0
-                                                              metrics:0
-                                                                views:viewDictionary];
+    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|" options:0 metrics:0 views:viewDictionary];
     [constraints addObjectsFromArray:constraintGroup];
     
     [self.view addConstraints:constraints];
 
     [constraints removeAllObjects];
     
-    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|"
-                                                              options:0
-                                                              metrics:0
-                                                                views:viewDictionary];
+    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|" options:0 metrics:0 views:viewDictionary];
     [constraints addObjectsFromArray:constraintGroup];
 
-    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|"
-                                                              options:0
-                                                              metrics:0
-                                                                views:viewDictionary];
+    constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|" options:0 metrics:0 views:viewDictionary];
     [constraints addObjectsFromArray:constraintGroup];
 
     [self.backgroundContainer addConstraints:constraints];
@@ -460,11 +448,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark NSManagedObjectContext Observer
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
+/*
     NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
     NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
     NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
-
-    
+*/
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
@@ -601,10 +589,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                               contentOffset:self.scrollView.contentOffset
                                   zoomScale:self.scrollView.zoomScale
                                      center:^CGPoint(NSNumber *tableID) {
-                                         MADHierarchicalChildController *schemaController;
-                                         schemaController = self.controllersByObjectID[tableID];
-                                  return schemaController.view.center;
-                              }];
+        MADHierarchicalChildController *schemaController = self.controllersByObjectID[tableID];
+        return schemaController.view.center;
+    }];
 }
 
 - (void)archiveCache {
@@ -829,7 +816,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                                 viewController.preferredContentSize.width,
                                                 viewController.preferredContentSize.height);
         viewController.view.center = center;
-        viewController.view.alpha = animated ? 0.00000f : 1.0000f;
+        viewController.view.alpha = animated ? 0.0 : 1.0;
         [self.contentView addSubview: viewController.view];
         [self.contentView addConstraints: constraints.allValues];
 
@@ -842,9 +829,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     if (!animated) return completion();
     
     typeof(self) __weak weakself = self;
-    [UIView animateWithDuration:0.5000f animations: ^{
+    [UIView animateWithDuration:0.5 animations: ^{
         for (MADQueryTableViewController *viewController in viewControllers) {
-            [viewController.view setAlpha:1.0000f];
+            [viewController.view setAlpha:1.0];
         }
     } completion:^(BOOL finished) {
         for (MADQueryTableViewController *viewController in viewControllers) {
@@ -884,13 +871,13 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     [viewController beginAppearanceTransition:YES animated:YES];
     
     viewController.view.center = center;
-    viewController.view.alpha = animated ? 0.00000f : 1.0000f;
+    viewController.view.alpha = animated ? 0.0 : 1.0;
     [self.contentView addSubview: viewController.view];
     [self.contentView addConstraints: constraints.allValues];
     
     if (animated) {
-        [UIView animateWithDuration:0.5000f animations: ^{
-            [viewController.view setAlpha:1.0000f];
+        [UIView animateWithDuration:0.5 animations: ^{
+            [viewController.view setAlpha:1.0];
         } completion:^(BOOL finished) {
             [viewController endAppearanceTransition];
             [viewController didMoveToParentViewController:self];
@@ -1055,7 +1042,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
     connectorView = self.connectionViewsByObjectID[link.objectID];
     
-    static const CGFloat padding = 44.0000f;
+    static const CGFloat padding = 44.0;
 
     CGFloat(^bottomLeftY)(CGRect) = ^CGFloat(CGRect rect) {
         return rect.origin.y + rect.size.height;
@@ -1084,8 +1071,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     ^ CGRect(CGPoint acl, CGPoint acr, CGFloat insete, CGFloat insets, CGFloat insetsY) {
         return CGRectMake(acl.x - insets - insete,
                           acl.y - insets - insetsY,
-                          acr.x - acl.x + (insets * 2) + (insete * 2),
-                          acr.y - acl.y + (insets * 2) + insetsY * 2);
+                          acr.x - acl.x + (insets * 2.0) + (insete * 2.0),
+                          acr.y - acl.y + (insets * 2.0) + insetsY * 2.0);
     };
     
     BOOL(^updateAnchorPoints)(CGPoint *, CGFloat, CGPoint *, CGFloat, CGFloat *extraInset) =
@@ -1094,7 +1081,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
         
         BOOL topLeftToBottomRight;
         if ((*leftPoint).x < (*rightPoint).x) {
-            *extraInset = 0.0000f;
+            *extraInset = 0.0;
             if ((*leftPoint).y < (*rightPoint).y) {
                 topLeftToBottomRight = YES;
             } else {
@@ -1103,7 +1090,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                 (*rightPoint).y -= rightHeight;
             }
         } else {
-            *extraInset = -20.0000f;
+            *extraInset = -20.0;
             if ((*leftPoint).y < (*rightPoint).y) {
                 topLeftToBottomRight = NO;
             } else {
@@ -1152,7 +1139,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     CGRect convertedRect = [self.contentView convertRect: leftCellFrameInTable
                                                 fromView: leftTableViewController.view];
     leftCellAnchorPoint = CGCenterOfRect(convertedRect);
-    translatePoint(&leftCellAnchorPoint, padding, 0.0000f);
+    translatePoint(&leftCellAnchorPoint, padding, 0.0);
     rightTableBottomY = bottomLeftY(rightTableViewController.frame);
 
     CGRect rightTableViewControllerFrame = rightTableViewController.frame;
@@ -1161,11 +1148,11 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
     convertedRect = [self.contentView convertRect: rightCellFrameInTable
                                          fromView: rightTableViewController.view];
     rightCellAnchorPoint = CGCenterOfRect(convertedRect);
-    translatePoint(&rightCellAnchorPoint, -padding, 0.0000f);
+    translatePoint(&rightCellAnchorPoint, -padding, 0.0);
     
     connectorView.leftViewIsInital = directionHorizontal(leftCellAnchorPoint, rightCellAnchorPoint) == MADDirectionLeft;
 
-    CGFloat extraInset = 0.0000f;
+    CGFloat extraInset = 0.0;
     connectorView.topLeftToBottomRight = updateAnchorPoints(&leftCellAnchorPoint,
                                                             leftCellFrameInTable.size.height,
                                                             &rightCellAnchorPoint,
@@ -1173,7 +1160,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
                                                             &extraInset);
     connectorView.frame = mainFrame(leftCellAnchorPoint,
                                     rightCellAnchorPoint,
-                                    extraInset, 0.0000f, 10.0000f);
+                                    extraInset, 0.0, 10.0);
     [connectorView setNeedsDisplay];
 }
 
@@ -1260,9 +1247,9 @@ MADDirection directionHorizontal(CGPoint l, CGPoint r) {
     
     if (animated) {
         
-        CGFloat animationDuration = 0.3000f;
+        CGFloat animationDuration = 0.3;
         [UIView animateWithDuration: animationDuration
-                              delay: 0.0000f
+                              delay: 0.0
                             options: UIViewAnimationOptionCurveEaseInOut
                          animations: animateTwo
                          completion: ^(BOOL finished) { }];

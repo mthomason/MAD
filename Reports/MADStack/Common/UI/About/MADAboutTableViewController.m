@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 8/20/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -79,7 +79,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.allowsSelection = YES;
-    self.preferredContentSize = CGSizeMake(320.0000f, 260.0000f);
+    self.preferredContentSize = CGSizeMake(320.0, 260.0);
     if (!UIAccessibilityIsReduceTransparencyEnabled()) {
         self.tableView.backgroundColor = [UIColor clearColor];
         id blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];

@@ -3,15 +3,15 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 10/10/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADQueryVisualizationScrollView.h"
 #import "MADQueryVisualizationContentView.h"
 #import "NSLayoutConstraint+QueryVisualization.h"
 
-static const CGFloat contentViewWidth = 1024.0000f;
-static const CGFloat contentViewHeight = 1024.0000f;
+static const CGFloat contentViewWidth = 1024.0;
+static const CGFloat contentViewHeight = 1024.0;
 
 @interface MADQueryVisualizationScrollView ()
     <UIScrollViewDelegate>
@@ -40,9 +40,9 @@ static const CGFloat contentViewHeight = 1024.0000f;
     self.showsHorizontalScrollIndicator = YES;
     self.showsVerticalScrollIndicator = YES;
     self.contentOffset = CGPointZero;
-    self.maximumZoomScale = 1.0000f;
-    self.minimumZoomScale = 1.0000f;
-    self.zoomScale = 1.0000f;
+    self.maximumZoomScale = 1.0;
+    self.minimumZoomScale = 1.0;
+    self.zoomScale = 1.0;
     self.scrollEnabled = YES;
     self.bounces = YES;
     self.alwaysBounceHorizontal = YES;
@@ -52,7 +52,7 @@ static const CGFloat contentViewHeight = 1024.0000f;
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.autoresizesSubviews = NO;
     self.delegate = self;
-    self.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent:.02f];
+    self.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent: 0.02];
     self.opaque = NO;
     
     self.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);

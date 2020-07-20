@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 6/26/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -58,7 +58,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        self.preferredContentSize = CGSizeMake(380.0000f, 480.0000f);
+        self.preferredContentSize = CGSizeMake(380.0, 480.0);
     }
 }
 
@@ -204,11 +204,11 @@
     self.standardCompletion = completion;
 
     if ([MADApplication isMADDesigner]) {
-        self.buttonBuyNowDesignerOneYear.layer.cornerRadius = 6.6666f;
-        self.buttonBuyNowDesignerOneMonth.layer.cornerRadius = 6.6666f;
+        self.buttonBuyNowDesignerOneYear.layer.cornerRadius = 20.0/3.0;
+        self.buttonBuyNowDesignerOneMonth.layer.cornerRadius = 20.0/3.0;
     } else if ([MADApplication isMADViewer]) {
-        self.buttonBuyNowViewerOneYear.layer.cornerRadius = 6.6666f;
-        self.buttonBuyNowViewerOneMonth.layer.cornerRadius = 6.6666f;
+        self.buttonBuyNowViewerOneYear.layer.cornerRadius = 20.0/3.0;
+        self.buttonBuyNowViewerOneMonth.layer.cornerRadius = 20.0/3.0;
     }
 }
 

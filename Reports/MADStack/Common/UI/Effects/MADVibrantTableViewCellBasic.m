@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/21/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADVibrantTableViewCellBasic.h"
@@ -17,8 +17,8 @@
                                                                  relatedBy: NSLayoutRelationGreaterThanOrEqual
                                                                     toItem: nil
                                                                  attribute: NSLayoutAttributeNotAnAttribute
-                                                                multiplier: 1.0000f
-                                                                  constant: 44.0000f];
+                                                                multiplier: 1.0
+                                                                  constant: 44.0];
     [self.contentView addConstraint:minHeight];
     
         

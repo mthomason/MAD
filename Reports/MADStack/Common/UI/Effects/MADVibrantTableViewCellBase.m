@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/21/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADVibrantTableViewCellBase.h"
@@ -58,7 +58,7 @@
     if (_initalSetupComplete) return;
     
     _initalSetupComplete = YES;
-    CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, 320.0000f, 320.0000f);
+    CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, 320.0, 320.0);
     
     UIBlurEffect *effect = [vibrantTableViewCellDelegate blurEffectForCell:self];
     UIVibrancyEffect *veffect = [UIVibrancyEffect effectForBlurEffect:effect];

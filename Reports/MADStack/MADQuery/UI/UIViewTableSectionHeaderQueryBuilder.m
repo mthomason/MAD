@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/9/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -28,25 +28,25 @@
     UIColor *startColor = [UIColor edaGreenLight];
     CGFloat *startColorComponents = (CGFloat *)CGColorGetComponents([startColor CGColor]);
     
-    UIColor *secondColor = [UIColor colorWithRed:(132.0000f/255.0000f) green:(174.0000f/255.0000f) blue:(98.0000f/255.0000f) alpha:1.0000f];
+    UIColor *secondColor = [UIColor colorWithRed:(132.0/255.0) green:(174.0/255.0) blue:(98.0/255.0) alpha:1.0];
     CGFloat *secondColorComponents = (CGFloat *)CGColorGetComponents([secondColor CGColor]);
     
-    UIColor *thirdColor = [UIColor colorWithRed:(119.0000f/255.0000f) green:(166.0000f/255.0000f) blue:(82.0000f/255.0000f) alpha:1.0000f];
+    UIColor *thirdColor = [UIColor colorWithRed:(119.0/255.0) green:(166.0/255.0) blue:(82.0/255.0) alpha:1.0];
     CGFloat *thirdColorComponents = (CGFloat *)CGColorGetComponents([thirdColor CGColor]);
     
-    UIColor *fourthColor = [UIColor colorWithRed:(102.0000f/255.0000f) green:(155.0000f/255.0000f) blue:(61.0000f/255.0000f) alpha:1.0000f];
+    UIColor *fourthColor = [UIColor colorWithRed:(102.0/255.0) green:(155.0/255.0) blue:(61.0/255.0) alpha:1.0];
     CGFloat *fourthColorComponents = (CGFloat *)CGColorGetComponents([fourthColor CGColor]);
     
     UIColor *middleColor = [UIColor edaGreenDark];
     CGFloat *middleColorComponents = (CGFloat *)CGColorGetComponents([middleColor CGColor]);
 
-    UIColor *sixthColor = [UIColor colorWithRed:(102.0000f/255.0000f) green:(155.0000f/255.0000f) blue:(61.0000f/255.0000f) alpha:1.0000f];
+    UIColor *sixthColor = [UIColor colorWithRed:(102.0/255.0) green:(155.0/255.0) blue:(61.0/255.0) alpha:1.0];
     CGFloat *sixthColorComponents = (CGFloat *)CGColorGetComponents([sixthColor CGColor]);
 
-    UIColor *seventhColor = [UIColor colorWithRed:(119.0000f/255.0000f) green:(166.0000f/255.0000f) blue:(82.0000f/255.0000f) alpha:1.0000f];
+    UIColor *seventhColor = [UIColor colorWithRed:(119.0/255.0) green:(166.0/255.0) blue:(82.0/255.0) alpha:1.0];
     CGFloat *seventhColorComponents = (CGFloat *)CGColorGetComponents([seventhColor CGColor]);
     
-    UIColor *eightColor = [UIColor colorWithRed:(132.0000f/255.0000f) green:(174.0000f/255.0000f) blue:(98.0000f/255.0000f) alpha:1.0000f];
+    UIColor *eightColor = [UIColor colorWithRed:(132.0/255.0) green:(174.0/255.0) blue:(98.0/255.0) alpha:1.0];
     CGFloat *eightColorComponents = (CGFloat *)CGColorGetComponents([eightColor CGColor]);
     
     UIColor *ninthColor = [UIColor edaGreenLight];

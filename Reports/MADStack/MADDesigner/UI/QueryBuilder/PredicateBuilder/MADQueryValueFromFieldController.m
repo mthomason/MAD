@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 5/16/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -255,7 +255,7 @@
 }
 
 - (CGSize)preferredContentSize {
-    return CGSizeMake(320.0000f, 420.0000f);
+    return CGSizeMake(320.0, 420.0);
 }
 
 #pragma mark - Picker View Data Source
@@ -279,20 +279,26 @@
     if ((NSUInteger)row < _pickerData.count) {
         NSDictionary *pickerData = _pickerData[(NSUInteger)row];
         id resultObject = pickerData.allValues.lastObject;
+
         if ([resultObject isKindOfClass:[NSDateComponents class]]) {
             NSDateComponents *resultDate = resultObject;
             NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
             NSDate *newDate = [localCalendar dateFromComponents:resultDate];
             result = [_longStyleDateFormatter stringFromDate:newDate];
+            
         } else if ([resultObject isKindOfClass:[NSString class]]) {
             result = [NSString stringWithString: resultObject];
+            
         } else if ([resultObject isKindOfClass:[NSNumber class]]) {
             result = ((NSNumber *)resultObject).stringValue;
+            
         } else if (resultObject == nil) {
             result = @"NULL";
+            
         } else {
             result = @"";
         }
+        
     } else {
         result = @"";
     }

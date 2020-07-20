@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/20/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADVibrantTableView.h"
@@ -22,7 +22,7 @@
     self.backgroundView = visualEffectsView;
     self.backgroundColor = [UIColor clearColor];
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.estimatedRowHeight = 44.0000f;
+    self.estimatedRowHeight = 44.0;
     self.rowHeight = UITableViewAutomaticDimension;
     self.visualEffectsView = visualEffectsView;
 }

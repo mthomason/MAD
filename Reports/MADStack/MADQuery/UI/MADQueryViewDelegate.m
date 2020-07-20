@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/25/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MADQueryViewDelegate.h"
@@ -12,7 +12,7 @@
 
 CGRect headerSectionFrame(CGFloat);
 CGRect headerSectionFrame(CGFloat headerSectionHeight) {
-    return CGRectMake(0.0000f, 0.0000f, 320.0000f, headerSectionHeight);
+    return CGRectMake(CGPointZero.x, CGPointZero.y, 320.0, headerSectionHeight);
 }
 
 @implementation MADQueryViewDelegate

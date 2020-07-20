@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/15/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -74,8 +74,8 @@
 @synthesize identifier = _identifier;
 @synthesize root = _root;
 
-const CGFloat MADSchemaViewDefaultWidth = 120.0000f;
-const CGFloat MADSchemaViewDefaultHeight = 140.0000f;
+const CGFloat MADSchemaViewDefaultWidth = 120.0;
+const CGFloat MADSchemaViewDefaultHeight = 140.0;
 static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQueryTableViewController";
 
 + (instancetype)newQueryTableViewController:(int64_t)identifier
@@ -103,7 +103,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
             appearanceProxy = [UILabel appearanceWhenContainedInInstancesOfClasses:classes];
             appearanceProxy.textColor = [UIColor whiteColor];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            appearanceProxy.font = [font fontWithSize:12.0000f];
+            appearanceProxy.font = [font fontWithSize:12.0];
             font = nil;
         }
     }
@@ -136,15 +136,15 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.containerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.containerView.layer.cornerRadius =  3.0000f;
+    self.containerView.layer.cornerRadius =  3.0;
     self.containerView.clipsToBounds = YES;
     
     self.toolbar.backgroundColor = [UIColor darkGrayColor];
     
     self.view.layer.shadowColor = [MADColorEverydayApps newColorBlueDark].CGColor;
-    self.view.layer.shadowOpacity = 1.0000f;
-    self.view.layer.shadowRadius = 1.0000f;
-    self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
+    self.view.layer.shadowOpacity = 1.0;
+    self.view.layer.shadowRadius = 1.0;
+    self.view.layer.shadowOffset = CGSizeMake(5.0, 5.0);
 
 }
 
@@ -246,7 +246,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 16.0000f;
+    return 16.0;
 }
 
 #pragma mark -
