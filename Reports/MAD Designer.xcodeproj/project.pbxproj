@@ -3570,8 +3570,8 @@
 			buildPhases = (
 				4C13394018026433004F61CA /* Run Script */,
 				4C384E2014B29789007B4F48 /* Sources */,
-				4C384E2114B29789007B4F48 /* Frameworks */,
 				4C384E2214B29789007B4F48 /* Resources */,
+				4C384E2114B29789007B4F48 /* Frameworks */,
 				4CF46F4F1AC6411D007C0A82 /* Embed App Extensions */,
 				4C744F181CE9BFCD00243830 /* CopyFiles */,
 				4C29162B24AC75E400EC794B /* Embed Frameworks */,

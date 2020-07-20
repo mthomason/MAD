@@ -93,6 +93,7 @@
 		4C9374011BAD2A8300D6BD62 /* MysqlRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E51BAD2A8300D6BD62 /* MysqlRollbackException.m */; };
 		4C9374021BAD2A8300D6BD62 /* MysqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E61BAD2A8300D6BD62 /* MysqlServer.m */; };
 		4C9374031BAD2A8300D6BD62 /* MysqlUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */; };
+		4CC68B3A24C5CE62009A24AF /* plugin_auth_common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0CC9B91DA6255900B5A190 /* plugin_auth_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CCE187D1DA14B8C0093B166 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE187B1DA14B8C0093B166 /* libssl.a */; };
 		4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF251D8D859A00A5A32E /* libc++.tbd */; };
 		4CE0F5061F5D52AE00D828E1 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */; };
@@ -790,10 +791,10 @@
 		4C7014961BACDC6800301713 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4C7014971BACDC6800301713 /* MADMySQL.h */,
 				4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */,
 				4C6C0A0E1F5D32B900EDA039 /* MADMySQLConnectionViewController.h */,
 				4C6C0A0F1F5D32B900EDA039 /* MADMySQLConnectionViewController.m */,
-				4C7014971BACDC6800301713 /* MADMySQL.h */,
 				4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */,
 				4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */,
 				4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */,
@@ -846,6 +847,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C0CCAD41DA6276700B5A190 /* my_alloc.h in Headers */,
+				4CC68B3A24C5CE62009A24AF /* plugin_auth_common.h in Headers */,
 				4C0CCAD21DA6275300B5A190 /* client_plugin.h in Headers */,
 				4C0CCACE1DA626FF00B5A190 /* mysql_version.h in Headers */,
 				4C0CCAD31DA6276000B5A190 /* typelib.h in Headers */,
@@ -1179,6 +1181,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
@@ -1257,6 +1260,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
