@@ -2968,7 +2968,7 @@ END_deselectElementView:;
         MADocument *maDocument = self.document;
         [maDocument removeDocumentObjectWithObjectID: cellIdentifier];
     
-    } animationComplete:^(bool complete) {
+    } animationComplete:^(BOOL complete) {
 
         if (complete) {
             [self.view.scroller.container invalidateIntrinsicContentSize];

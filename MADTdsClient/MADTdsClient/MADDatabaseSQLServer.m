@@ -66,6 +66,13 @@ static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPreci
 
 static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
+static inline NSUInteger numberOfItemsOfType(int, NSMutableDictionary <NSNumber *, NSNumber *> *);
+static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNumber *, NSNumber *> *counters) {
+    NSNumber *key = @(type);
+    NSNumber *counter = counters[key];
+    return counter ? counters[key].unsignedIntegerValue : 0;
+}
+
 @interface MADDatabaseSQLServer ()
 
     @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
@@ -556,42 +563,42 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
                     double sybMoneyNBind[resultCountForType];
                     DBINT sybMoneyNBindNull[resultCountForType];
                     
-                    NSInteger resultCountForTypeSybNumericBindChar = numberOfItemsOfType(SYBNUMERIC, counters);
+                    NSUInteger resultCountForTypeSybNumericBindChar = numberOfItemsOfType(SYBNUMERIC, counters);
                     char *sybNumericBindChar[resultCountForTypeSybNumericBindChar];
                     DBINT sybNumericBindNull[resultCountForTypeSybNumericBindChar];
                     for (NSInteger i=0; i<resultCountForTypeSybNumericBindChar; i++) {
                         sybNumericBindChar[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybCharBind = numberOfItemsOfType(SYBCHAR, counters);
+                    NSUInteger resultCountForTypeSybCharBind = numberOfItemsOfType(SYBCHAR, counters);
                     char *sybCharBind[resultCountForTypeSybCharBind];
                     DBINT sybCharBindNull[resultCountForTypeSybCharBind];
                     for (NSInteger i=0; i<resultCountForTypeSybCharBind; i++) {
                         sybCharBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybVarCharBind = numberOfItemsOfType(SYBVARCHAR, counters);
+                    NSUInteger resultCountForTypeSybVarCharBind = numberOfItemsOfType(SYBVARCHAR, counters);
                     char *sybVarCharBind[resultCountForTypeSybVarCharBind];
                     DBINT sybVarCharBindNull[resultCountForTypeSybVarCharBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
                         sybVarCharBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybnVarCharBind = numberOfItemsOfType(SYBNVARCHAR, counters);
+                    NSUInteger resultCountForTypeSybnVarCharBind = numberOfItemsOfType(SYBNVARCHAR, counters);
                     char *sybnVarCharBind[resultCountForTypeSybnVarCharBind];
                     DBINT sybnVarCharBindNull[resultCountForTypeSybnVarCharBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
                         sybnVarCharBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybTextBind = numberOfItemsOfType(SYBTEXT, counters);
+                    NSUInteger resultCountForTypeSybTextBind = numberOfItemsOfType(SYBTEXT, counters);
                     char *sybTextBind[resultCountForTypeSybTextBind];
                     DBINT sybTextBindNull[resultCountForTypeSybTextBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
                         sybTextBind[i] = '\0';
                     }
                     
-                    NSInteger resultCountForTypeSybnTextBind = numberOfItemsOfType(SYBNTEXT, counters);
+                    NSUInteger resultCountForTypeSybnTextBind = numberOfItemsOfType(SYBNTEXT, counters);
                     char *sybnTextBind[resultCountForTypeSybnTextBind];
                     DBINT sybnTextBindNull[resultCountForTypeSybnTextBind];
                     for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
@@ -1232,13 +1239,6 @@ static NSString * const MADDomainTDS = @"MTDatabaseTds";
         rsuccess = NO;
     }
     return rsuccess;
-}
-
-static inline NSUInteger numberOfItemsOfType(int, NSMutableDictionary <NSNumber *, NSNumber *> *);
-static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNumber *, NSNumber *> *counters) {
-    NSNumber *key = @(type);
-    NSNumber *counter = counters[key];
-    return counter ? counters[key].unsignedIntegerValue : 0;
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
