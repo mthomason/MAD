@@ -2016,9 +2016,6 @@
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4CFC60B61E55B0AB00EC577E /* Projects */,
 				4C8BE8521BAD457700F6E3F7 /* Resources */,
-				4CD0C1662C50A8EA00CB4233 /* MAD Designer X */,
-				4CD0C17C2C50A8EC00CB4233 /* MAD Designer XTests */,
-				4CD0C1862C50A8ED00CB4233 /* MAD Designer XUITests */,
 				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -3421,7 +3418,7 @@
 			name = Transition;
 			sourceTree = "<group>";
 		};
-		4CD0C1662C50A8EA00CB4233 /* MAD Designer X */ = {
+		4CD0C1662C50A8EA00CB4233 /* MADDesignerX */ = {
 			isa = PBXGroup;
 			children = (
 				4CD0C1672C50A8EA00CB4233 /* AppDelegate.h */,
@@ -3433,24 +3430,24 @@
 				4CD0C1722C50A8EB00CB4233 /* main.m */,
 				4CD0C1742C50A8EB00CB4233 /* MAD_Designer_X.entitlements */,
 			);
-			path = "MAD Designer X";
+			path = MADDesignerX;
 			sourceTree = "<group>";
 		};
-		4CD0C17C2C50A8EC00CB4233 /* MAD Designer XTests */ = {
+		4CD0C17C2C50A8EC00CB4233 /* MADDesignerXTests */ = {
 			isa = PBXGroup;
 			children = (
 				4CD0C17D2C50A8EC00CB4233 /* MAD_Designer_XTests.m */,
 			);
-			path = "MAD Designer XTests";
+			path = MADDesignerXTests;
 			sourceTree = "<group>";
 		};
-		4CD0C1862C50A8ED00CB4233 /* MAD Designer XUITests */ = {
+		4CD0C1862C50A8ED00CB4233 /* MADDesignerXUITests */ = {
 			isa = PBXGroup;
 			children = (
 				4CD0C1872C50A8ED00CB4233 /* MAD_Designer_XUITests.m */,
 				4CD0C1892C50A8ED00CB4233 /* MAD_Designer_XUITestsLaunchTests.m */,
 			);
-			path = "MAD Designer XUITests";
+			path = MADDesignerXUITests;
 			sourceTree = "<group>";
 		};
 		4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */ = {
@@ -3548,6 +3545,7 @@
 		4CFC60B61E55B0AB00EC577E /* Projects */ = {
 			isa = PBXGroup;
 			children = (
+				4CD0C1662C50A8EA00CB4233 /* MADDesignerX */,
 				4C401EE81BAE61F700BAE5FC /* MADDesigner */,
 				4C4020F71BAE98C300BAE5FC /* MADViewer */,
 				4C401F111BAE703200BAE5FC /* MADQuery */,
@@ -3557,6 +3555,8 @@
 				4C8F99BD1ACA97C8006D3996 /* MAD Designer WatchKit App */,
 				4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */,
 				4C5B55F11C98CCD6005C19D9 /* MADDesignerUnitTests */,
+				4CD0C17C2C50A8EC00CB4233 /* MADDesignerXTests */,
+				4CD0C1862C50A8ED00CB4233 /* MADDesignerXUITests */,
 			);
 			name = Projects;
 			sourceTree = "<group>";
@@ -5157,7 +5157,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer X/MAD_Designer_X.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MADDesignerX/MAD_Designer_X.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -5202,7 +5202,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer X/MAD_Designer_X.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MADDesignerX/MAD_Designer_X.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
