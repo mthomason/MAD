@@ -378,6 +378,14 @@
 		4CC9828B1F50E74600E0496A /* MADStoryboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC9828A1F50E74600E0496A /* MADStoryboard.m */; };
 		4CCE186F1DA14AD90093B166 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186D1DA14AD90093B166 /* libssl.a */; };
 		4CCE18701DA14AD90093B166 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE186E1DA14AD90093B166 /* libcrypto.a */; };
+		4CD0C1692C50A8EA00CB4233 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0C1682C50A8EA00CB4233 /* AppDelegate.m */; };
+		4CD0C16C2C50A8EA00CB4233 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0C16B2C50A8EA00CB4233 /* ViewController.m */; };
+		4CD0C16E2C50A8EB00CB4233 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0C16D2C50A8EB00CB4233 /* Assets.xcassets */; };
+		4CD0C1712C50A8EB00CB4233 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0C16F2C50A8EB00CB4233 /* Main.storyboard */; };
+		4CD0C1732C50A8EB00CB4233 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0C1722C50A8EB00CB4233 /* main.m */; };
+		4CD0C17E2C50A8EC00CB4233 /* MAD_Designer_XTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0C17D2C50A8EC00CB4233 /* MAD_Designer_XTests.m */; };
+		4CD0C1882C50A8ED00CB4233 /* MAD_Designer_XUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0C1872C50A8ED00CB4233 /* MAD_Designer_XUITests.m */; };
+		4CD0C18A2C50A8ED00CB4233 /* MAD_Designer_XUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0C1892C50A8ED00CB4233 /* MAD_Designer_XUITestsLaunchTests.m */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
@@ -454,6 +462,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4C384E2314B29789007B4F48;
 			remoteInfo = "MAD Designer";
+		};
+		4CD0C17A2C50A8EC00CB4233 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CD0C1642C50A8EA00CB4233;
+			remoteInfo = "MAD Designer X";
+		};
+		4CD0C1842C50A8ED00CB4233 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CD0C1642C50A8EA00CB4233;
+			remoteInfo = "MAD Designer X";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1330,6 +1352,20 @@
 		4CCE186A1DA14AC70093B166 /* libclientlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclientlib.a; path = opt/lib/mysqlclient/libclientlib.a; sourceTree = "<group>"; };
 		4CCE186D1DA14AD90093B166 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = opt/lib/openssl/libssl.a; sourceTree = "<group>"; };
 		4CCE186E1DA14AD90093B166 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = opt/lib/openssl/libcrypto.a; sourceTree = "<group>"; };
+		4CD0C1652C50A8EA00CB4233 /* MAD Designer X.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer X.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CD0C1672C50A8EA00CB4233 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4CD0C1682C50A8EA00CB4233 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4CD0C16A2C50A8EA00CB4233 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4CD0C16B2C50A8EA00CB4233 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4CD0C16D2C50A8EB00CB4233 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4CD0C1702C50A8EB00CB4233 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4CD0C1722C50A8EB00CB4233 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4CD0C1742C50A8EB00CB4233 /* MAD_Designer_X.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MAD_Designer_X.entitlements; sourceTree = "<group>"; };
+		4CD0C1792C50A8EC00CB4233 /* MAD Designer XTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer XTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CD0C17D2C50A8EC00CB4233 /* MAD_Designer_XTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Designer_XTests.m; sourceTree = "<group>"; };
+		4CD0C1832C50A8EC00CB4233 /* MAD Designer XUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer XUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CD0C1872C50A8ED00CB4233 /* MAD_Designer_XUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Designer_XUITests.m; sourceTree = "<group>"; };
+		4CD0C1892C50A8ED00CB4233 /* MAD_Designer_XUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Designer_XUITestsLaunchTests.m; sourceTree = "<group>"; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
 		4CD2FD9A17F40F740015458B /* asn_application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn_application.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/asn_application.h; sourceTree = "<group>"; };
@@ -1521,6 +1557,27 @@
 				4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */,
 				4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */,
 				4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1622C50A8EA00CB4233 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1762C50A8EC00CB4233 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1802C50A8EC00CB4233 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1959,6 +2016,9 @@
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4CFC60B61E55B0AB00EC577E /* Projects */,
 				4C8BE8521BAD457700F6E3F7 /* Resources */,
+				4CD0C1662C50A8EA00CB4233 /* MAD Designer X */,
+				4CD0C17C2C50A8EC00CB4233 /* MAD Designer XTests */,
+				4CD0C1862C50A8ED00CB4233 /* MAD Designer XUITests */,
 				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
@@ -1973,6 +2033,9 @@
 				4C8F99B91ACA97C8006D3996 /* MAD Designer.app */,
 				4C5B55E21C98CCBE005C19D9 /* MADDesignerUITests.xctest */,
 				4C5B55F01C98CCD6005C19D9 /* MADDesignerUnitTests.xctest */,
+				4CD0C1652C50A8EA00CB4233 /* MAD Designer X.app */,
+				4CD0C1792C50A8EC00CB4233 /* MAD Designer XTests.xctest */,
+				4CD0C1832C50A8EC00CB4233 /* MAD Designer XUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3358,6 +3421,38 @@
 			name = Transition;
 			sourceTree = "<group>";
 		};
+		4CD0C1662C50A8EA00CB4233 /* MAD Designer X */ = {
+			isa = PBXGroup;
+			children = (
+				4CD0C1672C50A8EA00CB4233 /* AppDelegate.h */,
+				4CD0C1682C50A8EA00CB4233 /* AppDelegate.m */,
+				4CD0C16A2C50A8EA00CB4233 /* ViewController.h */,
+				4CD0C16B2C50A8EA00CB4233 /* ViewController.m */,
+				4CD0C16D2C50A8EB00CB4233 /* Assets.xcassets */,
+				4CD0C16F2C50A8EB00CB4233 /* Main.storyboard */,
+				4CD0C1722C50A8EB00CB4233 /* main.m */,
+				4CD0C1742C50A8EB00CB4233 /* MAD_Designer_X.entitlements */,
+			);
+			path = "MAD Designer X";
+			sourceTree = "<group>";
+		};
+		4CD0C17C2C50A8EC00CB4233 /* MAD Designer XTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CD0C17D2C50A8EC00CB4233 /* MAD_Designer_XTests.m */,
+			);
+			path = "MAD Designer XTests";
+			sourceTree = "<group>";
+		};
+		4CD0C1862C50A8ED00CB4233 /* MAD Designer XUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4CD0C1872C50A8ED00CB4233 /* MAD_Designer_XUITests.m */,
+				4CD0C1892C50A8ED00CB4233 /* MAD_Designer_XUITestsLaunchTests.m */,
+			);
+			path = "MAD Designer XUITests";
+			sourceTree = "<group>";
+		};
 		4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */ = {
 			isa = PBXGroup;
 			children = (
@@ -3656,12 +3751,66 @@
 			productReference = 4C8F99B91ACA97C8006D3996 /* MAD Designer.app */;
 			productType = "com.apple.product-type.application.watchapp";
 		};
+		4CD0C1642C50A8EA00CB4233 /* MAD Designer X */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CD0C1912C50A8ED00CB4233 /* Build configuration list for PBXNativeTarget "MAD Designer X" */;
+			buildPhases = (
+				4CD0C1612C50A8EA00CB4233 /* Sources */,
+				4CD0C1622C50A8EA00CB4233 /* Frameworks */,
+				4CD0C1632C50A8EA00CB4233 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MAD Designer X";
+			productName = "MAD Designer X";
+			productReference = 4CD0C1652C50A8EA00CB4233 /* MAD Designer X.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4CD0C1782C50A8EC00CB4233 /* MAD Designer XTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CD0C1922C50A8ED00CB4233 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */;
+			buildPhases = (
+				4CD0C1752C50A8EC00CB4233 /* Sources */,
+				4CD0C1762C50A8EC00CB4233 /* Frameworks */,
+				4CD0C1772C50A8EC00CB4233 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CD0C17B2C50A8EC00CB4233 /* PBXTargetDependency */,
+			);
+			name = "MAD Designer XTests";
+			productName = "MAD Designer XTests";
+			productReference = 4CD0C1792C50A8EC00CB4233 /* MAD Designer XTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4CD0C1822C50A8EC00CB4233 /* MAD Designer XUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CD0C1932C50A8ED00CB4233 /* Build configuration list for PBXNativeTarget "MAD Designer XUITests" */;
+			buildPhases = (
+				4CD0C17F2C50A8EC00CB4233 /* Sources */,
+				4CD0C1802C50A8EC00CB4233 /* Frameworks */,
+				4CD0C1812C50A8EC00CB4233 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CD0C1852C50A8ED00CB4233 /* PBXTargetDependency */,
+			);
+			name = "MAD Designer XUITests";
+			productName = "MAD Designer XUITests";
+			productReference = 4CD0C1832C50A8EC00CB4233 /* MAD Designer XUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		4C384E1B14B29789007B4F48 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastTestingUpgradeCheck = 0600;
 				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
@@ -3719,6 +3868,17 @@
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = D3C58YS54A;
 					};
+					4CD0C1642C50A8EA00CB4233 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					4CD0C1782C50A8EC00CB4233 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 4CD0C1642C50A8EA00CB4233;
+					};
+					4CD0C1822C50A8EC00CB4233 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 4CD0C1642C50A8EA00CB4233;
+					};
 				};
 			};
 			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD Designer" */;
@@ -3768,10 +3928,13 @@
 			targets = (
 				4C384E2314B29789007B4F48 /* MAD Designer */,
 				4C0E771F163B5AEC003B951E /* MAD Viewer */,
+				4CD0C1642C50A8EA00CB4233 /* MAD Designer X */,
 				4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
 				4C8F99B81ACA97C8006D3996 /* MAD Designer WatchKit App */,
 				4C5B55E11C98CCBE005C19D9 /* MADDesignerUITests */,
 				4C5B55EF1C98CCD6005C19D9 /* MADDesignerUnitTests */,
+				4CD0C1782C50A8EC00CB4233 /* MAD Designer XTests */,
+				4CD0C1822C50A8EC00CB4233 /* MAD Designer XUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -3878,6 +4041,29 @@
 			files = (
 				4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */,
 				4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1632C50A8EA00CB4233 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CD0C16E2C50A8EB00CB4233 /* Assets.xcassets in Resources */,
+				4CD0C1712C50A8EB00CB4233 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1772C50A8EC00CB4233 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1812C50A8EC00CB4233 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4264,6 +4450,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CD0C1612C50A8EA00CB4233 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CD0C16C2C50A8EA00CB4233 /* ViewController.m in Sources */,
+				4CD0C1732C50A8EB00CB4233 /* main.m in Sources */,
+				4CD0C1692C50A8EA00CB4233 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C1752C50A8EC00CB4233 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CD0C17E2C50A8EC00CB4233 /* MAD_Designer_XTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CD0C17F2C50A8EC00CB4233 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CD0C1882C50A8ED00CB4233 /* MAD_Designer_XUITests.m in Sources */,
+				4CD0C18A2C50A8ED00CB4233 /* MAD_Designer_XUITestsLaunchTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4277,6 +4490,16 @@
 			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
 			targetProxy = 4C5B55F51C98CCD6005C19D9 /* PBXContainerItemProxy */;
 		};
+		4CD0C17B2C50A8EC00CB4233 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CD0C1642C50A8EA00CB4233 /* MAD Designer X */;
+			targetProxy = 4CD0C17A2C50A8EC00CB4233 /* PBXContainerItemProxy */;
+		};
+		4CD0C1852C50A8ED00CB4233 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CD0C1642C50A8EA00CB4233 /* MAD Designer X */;
+			targetProxy = 4CD0C1842C50A8ED00CB4233 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -4286,6 +4509,14 @@
 				4C8F99C11ACA97C8006D3996 /* Base */,
 			);
 			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+		4CD0C16F2C50A8EB00CB4233 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CD0C1702C50A8EB00CB4233 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -4909,6 +5140,237 @@
 			};
 			name = Release;
 		};
+		4CD0C18B2C50A8ED00CB4233 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "MAD Designer X/MAD_Designer_X.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 25858PHWZ7;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Everyday Apps LLC. All rights reserved.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.everydayapps.MAD-Designer-X";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4CD0C18C2C50A8ED00CB4233 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "MAD Designer X/MAD_Designer_X.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 25858PHWZ7;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Everyday Apps LLC. All rights reserved.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.everydayapps.MAD-Designer-X";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		4CD0C18D2C50A8ED00CB4233 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.everydayapps.MAD-Designer-XTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer X.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MAD Designer X";
+			};
+			name = Debug;
+		};
+		4CD0C18E2C50A8ED00CB4233 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.everydayapps.MAD-Designer-XTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer X.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MAD Designer X";
+			};
+			name = Release;
+		};
+		4CD0C18F2C50A8ED00CB4233 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.everydayapps.MAD-Designer-XUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "MAD Designer X";
+			};
+			name = Debug;
+		};
+		4CD0C1902C50A8ED00CB4233 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.everydayapps.MAD-Designer-XUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = "MAD Designer X";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4971,6 +5433,33 @@
 			buildConfigurations = (
 				4C8F99CC1ACA97C9006D3996 /* Debug */,
 				4C8F99CD1ACA97C9006D3996 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CD0C1912C50A8ED00CB4233 /* Build configuration list for PBXNativeTarget "MAD Designer X" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CD0C18B2C50A8ED00CB4233 /* Debug */,
+				4CD0C18C2C50A8ED00CB4233 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CD0C1922C50A8ED00CB4233 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CD0C18D2C50A8ED00CB4233 /* Debug */,
+				4CD0C18E2C50A8ED00CB4233 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CD0C1932C50A8ED00CB4233 /* Build configuration list for PBXNativeTarget "MAD Designer XUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CD0C18F2C50A8ED00CB4233 /* Debug */,
+				4CD0C1902C50A8ED00CB4233 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
