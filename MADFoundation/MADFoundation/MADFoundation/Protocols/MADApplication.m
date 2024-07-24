@@ -7,7 +7,14 @@
 //
 
 #import "MADApplication.h"
+
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 #import <UIKit/UIApplication.h>
+#elif TARGET_OS_OSX
+#import <AppKit/NSApplication.h>
+#endif
+
+#import <Foundation/NSThread.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 @implementation MADApplication
@@ -15,16 +22,24 @@
 static NSString * const MADApplicationIdMadDesigner                         = @"666001433";
 static NSString * const MADApplicationIdMadViewer                           = @"666003759";
 
-+ (MADAppDelegate)AppDelegate {
-    id appDelegate;
-    if ([NSThread isMainThread]) {
-        appDelegate = [UIApplication sharedApplication].delegate;
-    } else {
-        @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                       reason: @"Only call on main thread."
-                                     userInfo: nil];
-    }
-    return appDelegate;
++ (id)AppDelegate {
+	id appDelegate;
+	if ([NSThread isMainThread]) {
+		#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
+		appDelegate = [UIApplication sharedApplication].delegate;
+		#elif TARGET_OS_OSX
+		appDelegate = [NSApplication sharedApplication].delegate;
+		#else
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException
+									   reason:@"Unsupported platform."
+									 userInfo:nil];
+		#endif
+	} else {
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException
+									   reason:@"Only call on main thread."
+									 userInfo:nil];
+	}
+	return appDelegate;
 }
 
 + (NSString *)groupIdentifier {

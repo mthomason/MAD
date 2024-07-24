@@ -18,8 +18,13 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/NSString+Common.h>
 
-#import <MADFoundation/UIScreen+Properties.h>
 #import "MADFilename.h"
+
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#endif
 
 static NSString * const MADPathComponentData       = @"Data";
 static NSString * const MADPathComponentDocuments  = @"Documents";
@@ -28,6 +33,16 @@ static NSString * const MADPathComponentAppSupport = @"Application Support";
 static NSString * const MADPathComponentTemporary  = @"Temporary";
 
 @implementation MADURL
+
++ (BOOL)isRetinaDisplay {
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
+	return [UIScreen mainScreen].scale > 1.0;
+#elif TARGET_OS_OSX
+	return [NSScreen mainScreen].backingScaleFactor > 1.0;
+#else
+	return NO;
+#endif
+}
 
 + (instancetype)newURLLocalDocumentWithName:(NSString *)name
                                   extention:(NSString *)extention
@@ -55,17 +70,17 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 
 + (instancetype)newURLThumbnailForURL:(NSURL *)madUrl {
     NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
-    return [self newURLThumbnailForHandle: handle andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
+    return [self newURLThumbnailForHandle: handle andRetinaDisplay: [self isRetinaDisplay]];
     
 }
 
 + (instancetype)newURLThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
-    NSString *name = [UIScreen mainScreen].isRetnaDisplay ? [handle stringByAppendingString:@"@2x"] : handle;
-    NSString *filename = [name stringByAppendingPathExtension:@"png"];
-    NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
-    NSURL *cacheDirectory = [MADURL newURLForLocalCacheDirectoryNamed:fileNameId];
-    id cachedPathFull = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-    return cachedPathFull;
+	NSString *name = retinaDisplay ? [handle stringByAppendingString:@"@2x"] : handle;
+	NSString *filename = [name stringByAppendingPathExtension:@"png"];
+	NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
+	NSURL *cacheDirectory = [MADURL newURLForLocalCacheDirectoryNamed:fileNameId];
+	id cachedPathFull = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+	return cachedPathFull;
 }
 
 + (instancetype)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL {
