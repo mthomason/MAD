@@ -675,9 +675,9 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 }
 
 - (void)setProducesFormFeed:(BOOL)producesFormFeed {
-    self.wrappingStyle = producesFormFeed ?
-                                RptqDocumentSectionWrappingStyleNewPageAfter :
-                                RptqDocumentSectionWrappingStyleStandard;
+	self.wrappingStyle = producesFormFeed ?
+								RptqDocumentSectionWrappingStyleNewPageAfter :
+								RptqDocumentSectionWrappingStyleStandard;
 }
 
 + (NSNumber *)defaultHeight {

@@ -15,7 +15,7 @@
 #import <UIKit/UITableView.h>
 #import <Foundation/NSIndexPath.h>
 
-static NSString * const MADTableCellHederKey = @"MTTableCellHeader";
+static NSString * const MADTableCellHederKey = @"MADTableCellHeader";
 
 @interface MADTableLayout ()
     <UICollectionViewDelegate>
