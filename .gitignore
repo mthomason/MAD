@@ -1,6 +1,7 @@
 # Scripts
 3rdPartyProjects/ColorPicker/
 opt/bld/
+StaticLibraries/
 
 #CodeSigningRequest
 MADRequest.certSigningRequest
