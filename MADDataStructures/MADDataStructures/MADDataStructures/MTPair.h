@@ -13,20 +13,20 @@
 #import "MTProtocolLog.h"
 
 @interface MTPair : NSObject
-    <NSCopying, MTProtocolLog>
+<NSCopying, MTProtocolLog>
 
-    @property (nonatomic, strong) id former;
-    @property (nonatomic, strong) id latter;
+@property (nonatomic, strong) id former;
+@property (nonatomic, strong) id latter;
 
-    - (instancetype)init;
-    - (instancetype)initWithFormer:(id)former andLatter:(id)latter;
-    - (instancetype)initWithLeft:(id)left andRight:(id)right;
+	- (instancetype)init;
+	- (instancetype)initWithFormer:(id)former andLatter:(id)latter;
+	- (instancetype)initWithLeft:(id)left andRight:(id)right;
 
-    + (instancetype)newPairWithFormer:(id)former andLatter:(id)latter;
-    + (instancetype)newPairWithLeft:(id)left andRight:(id)right;
+	+ (instancetype)newPairWithFormer:(id)former andLatter:(id)latter;
+	+ (instancetype)newPairWithLeft:(id)left andRight:(id)right;
 
-    - (id)left;
-    - (id)right;
+	- (id)left;
+	- (id)right;
 
 @end
 

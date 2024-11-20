@@ -12,16 +12,16 @@
 @protocol MTProtocolLog <NSObject>
 @required
 
-    - (NSString *)toString;
-    - (NSString *)toStringDebug;
-    - (NSString *)toStringHumanReadable;
+	- (NSString *)toString;
+	- (NSString *)toStringDebug;
+	- (NSString *)toStringHumanReadable;
 
 @optional
 
-    - (NSString *)toStringExpressive;
-    - (NSString *)toStringSymbolic;
-    - (NSString *)toStringName;
-    - (NSAttributedString *)toAttributedString;
+	- (NSString *)toStringExpressive;
+	- (NSString *)toStringSymbolic;
+	- (NSString *)toStringName;
+	- (NSAttributedString *)toAttributedString;
 
 @end
 
