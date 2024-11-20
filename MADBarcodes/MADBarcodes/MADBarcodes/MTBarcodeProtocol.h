@@ -3,7 +3,7 @@
 //  Barcodes
 //
 //  Created by Michael Thomason on 2/15/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef Barcodes_MTBarcodeProtocol_h

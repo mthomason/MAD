@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael on 9/2/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MADElementView_Constructor_h

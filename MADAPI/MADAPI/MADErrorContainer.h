@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 8/16/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_MADErrorContainer_h

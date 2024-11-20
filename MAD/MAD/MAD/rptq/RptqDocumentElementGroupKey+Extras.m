@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 1/30/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #import "RptqDocumentElementGroupKey+Extras.h"

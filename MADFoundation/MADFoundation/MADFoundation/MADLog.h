@@ -3,7 +3,7 @@
 //  MADFoundation
 //
 //  Created by Michael on 10/19/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MADFoundation_MADLog_h

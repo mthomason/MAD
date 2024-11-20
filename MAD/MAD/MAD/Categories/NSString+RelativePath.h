@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 5/21/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_Reports_NSString_RelativePath_h

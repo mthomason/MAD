@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael on 1/26/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #import "MADQueryVisualizationSchemaView.h"

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 11/9/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 // This class is built for subclassing.

@@ -3,7 +3,7 @@
 //  MADMySQL
 //
 //  Created by Michael on 2/16/17.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MADMySQL_MADMySQLFetchProtocol_h

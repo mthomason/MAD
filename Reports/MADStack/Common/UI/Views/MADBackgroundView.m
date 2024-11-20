@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/19/15.
-//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Michael Thomason. All rights reserved.
 //
 
 #import "MADBackgroundView.h"

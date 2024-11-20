@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 12/11/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2024 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -27,10 +27,6 @@
 
 - (instancetype)init {
     return [self initWithObject:nil];
-    //if (self = [super init]) {
-    //    _object = nil;
-    //}
-    //return self;
 }
 
 - (instancetype)initWithObject:(id <NSCopying>)object {

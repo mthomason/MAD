@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/22/13.
-//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Michael Thomason. All rights reserved.
 //
 
 #import "MADWatermarkView.h"

@@ -3,7 +3,7 @@
 //  wordPuzzle
 //
 //  Created by Michael Thomason on 7/13/10.
-//  Copyright 2010 Everyday Apps LLC. All rights reserved.
+//  Copyright 2010 Michael Thomason. All rights reserved.
 //
 
 #import "CGGeometry+Extras.h"

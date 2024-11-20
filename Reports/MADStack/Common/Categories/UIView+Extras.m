@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 8/25/14.
-//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Michael Thomason. All rights reserved.
 //
 
 #import "UIView+Extras.h"

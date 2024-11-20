@@ -3,7 +3,7 @@
 //  MADCocoaExtensions
 //
 //  Created by Michael on 7/20/20.
-//  Copyright © 2020 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2020 Michael Thomason. All rights reserved.
 //
 
 #ifndef MADViewHelpers_h

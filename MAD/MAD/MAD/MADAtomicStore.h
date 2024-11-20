@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 4/22/19.
-//  Copyright © 2019 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2019 Michael Thomason. All rights reserved.
 //
 
 #import <CoreData/CoreData.h>

@@ -4,7 +4,7 @@
 #  MAD
 #
 #  Created by Michael Thomason on 3/4/14.
-#  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+#  Copyright © 2017 Michael Thomason. All rights reserved.
 
 # Tag major versions like "v3.0"
 echo "Updating version/build number from git..."

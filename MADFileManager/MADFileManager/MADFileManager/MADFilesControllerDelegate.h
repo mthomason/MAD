@@ -3,7 +3,7 @@
 //  MADFileManager
 //
 //  Created by Michael Thomason on 5/24/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MADFilesControllerDelegate_h

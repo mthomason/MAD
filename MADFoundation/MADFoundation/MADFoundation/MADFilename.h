@@ -3,7 +3,7 @@
 //  CocoaExtensions
 //
 //  Created by Michael Thomason on 9/14/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_CocoaExtensions_MADFilename_h

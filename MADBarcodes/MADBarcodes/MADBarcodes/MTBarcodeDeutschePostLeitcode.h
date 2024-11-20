@@ -3,7 +3,7 @@
 //  Barcodes
 //
 //  Created by Michael Thomason on 11/10/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef Barcodes_MTBarcodeDeutschePostLeitcode_h

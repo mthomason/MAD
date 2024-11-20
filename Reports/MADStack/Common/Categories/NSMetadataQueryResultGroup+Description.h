@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 3/23/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_NSMetadataQueryResultGroup_Description_h

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 9/20/13.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_UIApplication_Extras_h

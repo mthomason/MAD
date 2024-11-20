@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/13/12.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)

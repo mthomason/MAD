@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/23/15.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #import "MADAttributedStringCommon.h"
@@ -69,7 +69,7 @@
     
     id tm = [[NSMutableAttributedString alloc] initWithAttributedString: mad];
     [((NSMutableAttributedString *)tm) appendAttributedString:r];
-    NSString *loc = NSLocalizedString(@" is a registered trademark of Everyday Apps LLC.",
+    NSString *loc = NSLocalizedString(@" is a registered trademark of Michael Thomason.",
                                       @"Trademark statement.");
     NSAttributedString *statement = [[NSAttributedString alloc] initWithString: loc
                                                                     attributes: nil];
