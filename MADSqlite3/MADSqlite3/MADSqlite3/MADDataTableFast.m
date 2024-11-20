@@ -1118,35 +1118,35 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (NSEnumerator *)enumeratorForKeyObjectsSorted {
-    [self setupGroupKeyIndexes];
-    
-    NSEnumerator *enumerator;
-    NSArray *columnKeys = [self columnKeysForSortDescriptors];
-    if (columnKeys.count == 0) {
-    
-        enumerator = [self enumeratorForAllObjectsSortedRowIdOnly];
-        
-    } else {
-    
-        MADQuery *query;
-        query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
-                                                                tableName:[self tableName]
-                                                          sortDescriptors:self.sortDescriptors
-                                                                    limit:NSNotFound
-                                                                   offset:NSNotFound
-                                                                dropRowID:NO
-                                                                  columns:nil];
-        
-        MADDatabaseConnection *dbConnection;
-        dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
-        enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
-                                                                              columns: self.columns
-                                                                           columnKeys: columnKeys
-                                                                                query: query];
-        [(MADDataTableObjectEnumerator *)enumerator setAddRowId:YES];
-        [(MADDataTableObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
-    }
-    return enumerator;
+	[self setupGroupKeyIndexes];
+	
+	NSEnumerator *enumerator;
+	NSArray *columnKeys = [self columnKeysForSortDescriptors];
+	if (columnKeys.count == 0) {
+	
+		enumerator = [self enumeratorForAllObjectsSortedRowIdOnly];
+		
+	} else {
+	
+		MADQuery *query;
+		query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
+																tableName:[self tableName]
+														  sortDescriptors:self.sortDescriptors
+																	limit:NSNotFound
+																   offset:NSNotFound
+																dropRowID:NO
+																  columns:nil];
+		
+		MADDatabaseConnection *dbConnection;
+		dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+		enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
+																			  columns: self.columns
+																		   columnKeys: columnKeys
+																				query: query];
+		[(MADDataTableObjectEnumerator *)enumerator setAddRowId:YES];
+		[(MADDataTableObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
+	}
+	return enumerator;
 }
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {

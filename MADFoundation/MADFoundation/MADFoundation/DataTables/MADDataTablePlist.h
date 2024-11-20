@@ -9,8 +9,7 @@
 #ifndef MAD_MADDataTablePlist_h
 #define MAD_MADDataTablePlist_h
 
-#import <Foundation/NSObject.h>
-#import <Foundation/NSEnumerator.h>
+#import <Foundation/Foundation.h>
 
 @class MADDataColumn, NSMutableArray<ObjectType>,
 	NSDictionary<__covariant KeyType, __covariant ObjectType>,
