@@ -393,8 +393,6 @@
 		4CDFC99C1EDEFAE7008E1AD6 /* MADElementViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */; };
 		4CE0F5081F5D600D00D828E1 /* Patterns.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0F5071F5D600D00D828E1 /* Patterns.xcassets */; };
 		4CE1CA511CFC0343001BD2D5 /* MADPreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */; };
-		4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */; };
-		4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */; };
 		4CE4EFB01CD08C58006CA2B0 /* MADCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE4EFAF1CD08C58006CA2B0 /* MADCacheManager.m */; };
 		4CE84D8B1B396F3200BB3A0A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8A1B396F3200BB3A0A /* Social.framework */; };
 		4CE84D8D1B396F3800BB3A0A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE84D8C1B396F3800BB3A0A /* Accounts.framework */; };
@@ -3976,7 +3974,6 @@
 				4C26B9C91BAF123A00456DC8 /* MADTabBarController.m in Sources */,
 				4C4020471BAE92F200BAE5FC /* NSMetadataItem+Description.m in Sources */,
 				4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */,
-				4CE1CA551CFC5115001BD2D5 /* MADVector.cpp in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */,
 				4C401F7F1BAE7EB500BAE5FC /* MADRulerView.m in Sources */,
@@ -4154,7 +4151,6 @@
 				4C26B9C21BAF123A00456DC8 /* MADExplorerSectionHeaderView.m in Sources */,
 				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
 				4C6D2F011E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m in Sources */,
-				4CE1CA581CFC5E6C001BD2D5 /* MADVector.mm in Sources */,
 				4CC982721F4AC32000E0496A /* MADLabelPageSlider.m in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,
 				4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */,

@@ -13,7 +13,7 @@
 
 @interface MADStoryboard : UIStoryboard
 
-+ (instancetype)newStoryboardQuery;
+	+ (instancetype)newStoryboardQuery;
 
 @end
 

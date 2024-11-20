@@ -16,9 +16,9 @@
 @implementation MADViewController
 
 + (instancetype)newViewControllerQueryVisulization {
-    UIStoryboard *storyboard = [MADStoryboard newStoryboardQuery];
-    id controller = [storyboard instantiateViewControllerWithIdentifier: @"MADStoryboardIDQueryVisulization"];
-    return controller;
+	UIStoryboard *storyboard = [MADStoryboard newStoryboardQuery];
+	id controller = [storyboard instantiateViewControllerWithIdentifier: @"MADStoryboardIDQueryVisulization"];
+	return controller;
 }
 
 @end

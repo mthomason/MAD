@@ -13,13 +13,13 @@
 @class MADDatabaseConnection, UIViewController;
 
 @protocol MADDocumentCreationManagerInterface <NSObject>
-    - (instancetype)initWithFilename: (NSString *)filename
-                            delegate: (NSObject <MADDocumentCreationManagerProtocol> *)delegate
-                  documentsDirectory: (NSURL *)documentsDirectory
-                  databaseConnection: (MADDatabaseConnection *)databaseConnection
-                      viewController: (UIViewController *)viewController;
+	- (instancetype)initWithFilename: (NSString *)filename
+							delegate: (NSObject <MADDocumentCreationManagerProtocol> *)delegate
+				  documentsDirectory: (NSURL *)documentsDirectory
+				  databaseConnection: (MADDatabaseConnection *)databaseConnection
+					  viewController: (UIViewController *)viewController;
 
-    - (void)start;
+	- (void)start;
 @end
 
 #endif /* MADDocumentCreationManagerInterface_h */
