@@ -474,21 +474,23 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (NSURL *)thumbnailURL {
-    NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
-    NSURL *url = [MADURL newURLThumbnailForHandle: name
-                                 andRetinaDisplay: [UIScreen mainScreen].isRetnaDisplay];
-    return url;
+	NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+#warning Assuming retna display... not sure if correct, but needed to build.
+	BOOL isRetnaDisplay = YES;
+	NSURL *url = [MADURL newURLThumbnailForHandle: name
+								 andRetinaDisplay: isRetnaDisplay];
+	return url;
 }
 
 - (NSURL *)urlDataTableCache {
-    NSString *cacheName = [self.dataTable newFilenameMDCache];
-    return [self newUrlCacheForFilename:cacheName];
+	NSString *cacheName = [self.dataTable newFilenameMDCache];
+	return [self newUrlCacheForFilename:cacheName];
 }
 
 - (NSURL *)newUrlCacheForFilename:(NSString *)filename {
-    NSURL *cacheUrl = [self.cachedFilesDirectory URLByAppendingPathComponent: filename
-                                                                 isDirectory: NO];
-    return cacheUrl;
+	NSURL *cacheUrl = [self.cachedFilesDirectory URLByAppendingPathComponent: filename
+																 isDirectory: NO];
+	return cacheUrl;
 }
 
 #pragma mark -
@@ -670,21 +672,18 @@ void madwarn(char *err,  const char*err2) { }
         }
     }
     
-    if (imageData != nil) {
-        UIImage *image = [UIImage imageWithData: imageData];
-        
-        if (image != nil) {
-
-            UIImage *extraImage = [UIImage imageWithData:imageData];
-            NSString *key = [UIScreen mainScreen].isRetnaDisplay ?
-                                    MADDocumentInfoKeyThumbnailRetna :
-                                    MADDocumentInfoKeyThumbnailStandard;
-            self.extraInformation[key] = extraImage;
-            extraImage = nil;
-        }
-        image = nil;
-    }
-    
+	if (imageData != nil) {
+		UIImage *image = [UIImage imageWithData: imageData];
+		if (image != nil) {
+			UIImage *extraImage = [UIImage imageWithData:imageData];
+#warning Assuming retna display... not sure if correct, but needed to build.
+			NSString *key = MADDocumentInfoKeyThumbnailRetna;
+			self.extraInformation[key] = extraImage;
+			extraImage = nil;
+		}
+		image = nil;
+	}
+	
     NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
     NSString *infoKeyGenerator = dicionary[MADDocumentInfoKeyGenerator];
     NSString *lastGenerator = infoKeyGenerator.copy;
