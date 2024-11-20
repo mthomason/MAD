@@ -1,8 +1,11 @@
 # Scripts
 3rdPartyProjects/ColorPicker/
+opt/bld/
 
 #CodeSigningRequest
 MADRequest.certSigningRequest
+
+.graffle
 
 # Xcode
 #
