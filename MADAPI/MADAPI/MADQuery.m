@@ -40,47 +40,47 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 }
 
 - (BOOL)returnsResults {
-    return YES;
+	return YES;
 }
 
 - (BOOL)partOfTransactionSet { return NO; }
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super init]) { }
-    return self;
+	if (self = [super init]) { }
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
-        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
-        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
-    }
-    return @"";
+	if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+		[((MADQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
+		[((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
+	}
+	return @"";
 }
 
 - (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error {
-    if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
-        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
-        [((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
-    }
-    if ([self conformsToProtocol:@protocol(MADQueryDatabaseProtocol)]) {
-        if (((MADQuery <MADQueryDatabaseProtocol> *)self).database == nil) {
-            ((MADQuery <MADQueryDatabaseProtocol> *)self).database = database;
-        }
-    }
-    NSError * __autoreleasing e = nil;
-    NSString *sql = [self getSql:&e];
-    if (e != nil) { *error = e; }
-    return sql;
+	if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+		[((MADQuery <MADQueryFieldKeysProtocol> *)self).fields removeAllObjects];
+		[((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys removeAllObjects];
+	}
+	if ([self conformsToProtocol:@protocol(MADQueryDatabaseProtocol)]) {
+		if (((MADQuery <MADQueryDatabaseProtocol> *)self).database == nil) {
+			((MADQuery <MADQueryDatabaseProtocol> *)self).database = database;
+		}
+	}
+	NSError * __autoreleasing e = nil;
+	NSString *sql = [self getSql:&e];
+	if (e != nil) { *error = e; }
+	return sql;
 }
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
-    NSString *key = nil;
-    if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
-        key = (index < ((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys.count) ?
-                ((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys[index] : nil;
-    }
-    return key;
+	NSString *key = nil;
+	if ([self conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)]) {
+		key = (index < ((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys.count) ?
+				((MADQuery <MADQueryFieldKeysProtocol> *)self).fieldKeys[index] : nil;
+	}
+	return key;
 }
 
 @end

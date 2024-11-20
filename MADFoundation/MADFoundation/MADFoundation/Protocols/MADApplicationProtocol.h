@@ -13,23 +13,23 @@
 
 @protocol MADApplicationProtocol <NSObject>
 
-    + (NSString *)ubiquityIdentifier;
-    + (NSString *)groupIdentifier;
-    + (NSString *)humanReadableCopyright;
-    + (NSString *)bundleDisplayName;
-    + (NSString *)bundleVersion;
+	+ (NSString *)ubiquityIdentifier;
+	+ (NSString *)groupIdentifier;
+	+ (NSString *)humanReadableCopyright;
+	+ (NSString *)bundleDisplayName;
+	+ (NSString *)bundleVersion;
 
-    - (NSString *)ubiquityIdentifier;
-    - (NSString *)groupIdentifier;
+	- (NSString *)ubiquityIdentifier;
+	- (NSString *)groupIdentifier;
 
-    - (NSString *)applicationIdentifier;
-    - (NSString *)applicationBundleIdentifier;
-    - (NSString *)name;
-    - (NSString *)trademark;
-    - (NSString *)applicationNameSufixPart;
-    - (NSString *)localizedApplicationNameSufixPart;
-    - (NSString *)versionNumber;
-    - (NSString *)revisionNumber;
+	- (NSString *)applicationIdentifier;
+	- (NSString *)applicationBundleIdentifier;
+	- (NSString *)name;
+	- (NSString *)trademark;
+	- (NSString *)applicationNameSufixPart;
+	- (NSString *)localizedApplicationNameSufixPart;
+	- (NSString *)versionNumber;
+	- (NSString *)revisionNumber;
 
 @end
 

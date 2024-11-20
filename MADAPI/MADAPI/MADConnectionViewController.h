@@ -25,23 +25,23 @@
 
 @interface MADConnectionViewController : UITableViewController
 
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
-    @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
+	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
+	@property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
-    @property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
+	@property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
-    @property (nonatomic, assign) MADDatabaseType databaseType;
+	@property (nonatomic, assign) MADDatabaseType databaseType;
 
-    @property (nonatomic, readonly) NSString *displayName;
+	@property (nonatomic, readonly) NSString *displayName;
 
-    - (MADDatabaseConnection *)databaseConnection;  // Build your custom database connection
-                                                    //  based on the user input
-    - (void)resetInterface;                         // Call super
-    - (void)enableUserInteraction;                  // Call super
+	- (MADDatabaseConnection *)databaseConnection;  // Build your custom database connection
+													//  based on the user input
+	- (void)resetInterface;                         // Call super
+	- (void)enableUserInteraction;                  // Call super
 
-    - (void)removeKeyboard;
-    - (void)disableTextFields;
-    - (void)enableTextFields;
+	- (void)removeKeyboard;
+	- (void)disableTextFields;
+	- (void)enableTextFields;
 
 @end
 

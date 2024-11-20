@@ -22,7 +22,7 @@ NSString * const MADNotificationDidReadRowsName = @"MADNotificationDidReadRows";
 NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadKey";
 
 @interface MADNotificationDidReadRows ()
-    @property (nonatomic, copy) NSDate *lastUpdate;
+	@property (nonatomic, copy) NSDate *lastUpdate;
 @end
 
 @implementation MADNotificationDidReadRows
@@ -30,44 +30,44 @@ NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadK
 static MADNotificationDidReadRows *_sharedSingleton = nil;
 
 - (void)dealloc {
-    NSAssert(NO, @"Don't dealloc the singleton.");
+	NSAssert(NO, @"Don't dealloc the singleton.");
 }
 
 + (void)initialize {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedSingleton = [[super allocWithZone:NULL] init];
-        NSDate *lastUpdate = [NSDate date].copy;
-        _sharedSingleton.lastUpdate = lastUpdate;
-    });
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedSingleton = [[super allocWithZone:NULL] init];
+		NSDate *lastUpdate = [NSDate date].copy;
+		_sharedSingleton.lastUpdate = lastUpdate;
+	});
 }
 
 + (MADNotificationDidReadRows *)sharedObject {
-    return _sharedSingleton;
+	return _sharedSingleton;
 }
 
 + (instancetype)allocWithZone:(NSZone *)zone {
-    return [self sharedObject];
+	return [self sharedObject];
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    return self;
+	return self;
 }
 
 - (void)database:(id)database readRow:(NSUInteger)row {
-    //if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {
-        NSDate *lastUpdate = [NSDate date].copy;
-        self.lastUpdate = lastUpdate;
-        
-        NSNumber *rowCounterWrapper = [[NSNumber alloc] initWithUnsignedInteger: row];
-        NSDictionary <NSString *, NSNumber *> *parameters;
-        parameters = [[NSDictionary alloc] initWithObjectsAndKeys:rowCounterWrapper, MADDatabaseNumberOfRowsReadKey, nil];
+	//if (fabs(self.lastUpdate.timeIntervalSinceNow) > 1.0/60.0) {
+		NSDate *lastUpdate = [NSDate date].copy;
+		self.lastUpdate = lastUpdate;
+		
+		NSNumber *rowCounterWrapper = [[NSNumber alloc] initWithUnsignedInteger: row];
+		NSDictionary <NSString *, NSNumber *> *parameters;
+		parameters = [[NSDictionary alloc] initWithObjectsAndKeys:rowCounterWrapper, MADDatabaseNumberOfRowsReadKey, nil];
 
-        NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName
-                                                                     object: database
-                                                                   userInfo: parameters];
-        [[NSNotificationCenter defaultCenter] postNotification:notification];
-    //}
+		NSNotification *notification = [NSNotification notificationWithName: MADNotificationDidReadRowsName
+																	 object: database
+																   userInfo: parameters];
+		[[NSNotificationCenter defaultCenter] postNotification:notification];
+	//}
 }
 
 @end

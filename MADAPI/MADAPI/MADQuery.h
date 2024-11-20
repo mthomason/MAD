@@ -23,59 +23,59 @@ extern NSString * const MADIdentifierROWID;
 @class NSMutableArray, NSMutableDictionary, MADCredential, MADDatabase, MADDataTable;
 
 @protocol MADQueryDataBindingProtocol <NSObject>
-    @property (nonatomic, strong) NSMutableArray *binaryBindings;
+	@property (nonatomic, strong) NSMutableArray *binaryBindings;
 @end
 
 @protocol MADQueryFieldKeysProtocol <NSObject>
-    @property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *, id> *fields;
-    @property (nonatomic, strong) NSMutableArray *fieldKeys;
+	@property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *, id> *fields;
+	@property (nonatomic, strong) NSMutableArray *fieldKeys;
 @end
 
 @protocol MADQueryColumnsProtocol <NSObject>
-    @property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
+	@property (nonatomic, strong) NSDictionary *columns;            //MADDataColumns by key
 @end
 
 @protocol MADQueryDataTableProtocol <NSObject>
-    @property (nonatomic, strong) MADDataTable *dataTable;
+	@property (nonatomic, strong) MADDataTable *dataTable;
 @end
 
 @protocol MADQueryDatabaseProtocol <NSObject>
-    @property (nonatomic, strong) MADDatabase *database;
+	@property (nonatomic, strong) MADDatabase *database;
 @end
 
 @protocol MADQueryDataDelegateProtocol <NSObject>
-    @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+	@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 @end
 
 @protocol MADQueryCredentialProtocol <NSObject>
-    @property (nonatomic, copy) MADCredential *credential;
+	@property (nonatomic, copy) MADCredential *credential;
 @end
 
 @protocol MADQueryUpdatableProtocol <NSObject>
-    - (void)update;
+	- (void)update;
 @end
 
 @interface MADQuery : NSObject
 
-    - (instancetype)initWithObject:(id)object;
+	- (instancetype)initWithObject:(id)object;
 
-    - (NSString *)getSql:(NSError * __autoreleasing *)error;
+	- (NSString *)getSql:(NSError * __autoreleasing *)error;
 
-    @property (nonatomic, readonly) BOOL returnsResults;
-    @property (nonatomic, readonly) BOOL partOfTransactionSet;
+	@property (nonatomic, readonly) BOOL returnsResults;
+	@property (nonatomic, readonly) BOOL partOfTransactionSet;
 
 @end
 
 @interface MADQuery (MADQueryFieldKeysProtocol)    //Intended for use by MADQuery subclasses only
 
-    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
+	- (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end
 
 @interface MADQuery (MADQueryDatabaseProtocol)    //Intended for use by MADQuery subclasses only
 
-    - (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error;
-    - (NSString *)fieldKeyForIndex:(NSUInteger)index;
+	- (NSString *)getSql:(MADDatabase *)database error:(NSError * __autoreleasing *)error;
+	- (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end
 

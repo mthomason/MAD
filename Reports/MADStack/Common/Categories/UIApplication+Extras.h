@@ -13,13 +13,13 @@
 
 @interface UIApplication (Extras)
 
-    + (NSString *)version;
+	+ (NSString *)version;
 
-    - (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible;
+	- (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible;
 
-    - (UIBackgroundTaskIdentifier)requestBackgroundTask;
-    - (void)handoffBackground:(NSNumber *)bgTask;
-    - (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask;
+	- (UIBackgroundTaskIdentifier)requestBackgroundTask;
+	- (void)handoffBackground:(NSNumber *)bgTask;
+	- (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask;
 
 @end
 

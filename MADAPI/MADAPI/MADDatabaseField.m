@@ -17,36 +17,36 @@
 
 static inline BOOL isDataTypeNumeric(MADDataType type);
 static inline BOOL isDataTypeNumeric(MADDataType type) {
-    switch (type) {
-        case MADDataTypeBit:
-        case MADDataTypeFloat:
-        case MADDataTypeInteger:
-        case MADDataTypeNumber:
-        case MADDataTypeDecimal:
-        case MADDataTypeDouble:
-        case MADDataTypeEnum:
-        case MADDataTypeInt24:
-        case MADDataTypeLong:
-        case MADDataTypeLongLong:
-        case MADDataTypeShort:
-            return YES;
-            break;
-        case MADDataTypeBlob:
-        case MADDataTypeDate:
-        case MADDataTypeDateTime:
-        case MADDataTypeGeometry:
-        case MADDataTypeImage:
-        case MADDataTypeSet:
-        case MADDataTypeString:
-        case MADDataTypeTime:
-        case MADDataTypeTimeStamp:
-        case MADDataTypeYear:
-        case MADDataTypeUnknown:
-        case MADDataTypeVarChar:
-        default:
-            return NO;
-            break;
-    }
+	switch (type) {
+		case MADDataTypeBit:
+		case MADDataTypeFloat:
+		case MADDataTypeInteger:
+		case MADDataTypeNumber:
+		case MADDataTypeDecimal:
+		case MADDataTypeDouble:
+		case MADDataTypeEnum:
+		case MADDataTypeInt24:
+		case MADDataTypeLong:
+		case MADDataTypeLongLong:
+		case MADDataTypeShort:
+			return YES;
+			break;
+		case MADDataTypeBlob:
+		case MADDataTypeDate:
+		case MADDataTypeDateTime:
+		case MADDataTypeGeometry:
+		case MADDataTypeImage:
+		case MADDataTypeSet:
+		case MADDataTypeString:
+		case MADDataTypeTime:
+		case MADDataTypeTimeStamp:
+		case MADDataTypeYear:
+		case MADDataTypeUnknown:
+		case MADDataTypeVarChar:
+		default:
+			return NO;
+			break;
+	}
 }
 
 @interface MADDatabaseField ()
@@ -56,22 +56,22 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
 @implementation MADDatabaseField
 
 - (instancetype)initWithName:(NSString *)name {
-    if (self = [self init]) {
-        _name = name.copy;
-        _calculatedWidth = 0;
-    }
-    return self;
+	if (self = [self init]) {
+		_name = name.copy;
+		_calculatedWidth = 0;
+	}
+	return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MADDatabaseField *copy = [[[self class] allocWithZone:zone] init];
-    copy.name = _name.copy;
-    copy.fieldType = _fieldType;
-    copy.fieldTypeNative = _fieldTypeNative;
-    copy.width = _width;
-    copy.decimals = _decimals;
-    copy.primaryKey = _primaryKey;
-    return copy;
+	MADDatabaseField *copy = [[[self class] allocWithZone:zone] init];
+	copy.name = _name.copy;
+	copy.fieldType = _fieldType;
+	copy.fieldTypeNative = _fieldTypeNative;
+	copy.width = _width;
+	copy.decimals = _decimals;
+	copy.primaryKey = _primaryKey;
+	return copy;
 }
 
 - (BOOL)isNumeric { return isDataTypeNumeric(_fieldType); }
@@ -79,7 +79,7 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
 + (BOOL)isNumeric:(MADDataType)dataType { return isDataTypeNumeric(dataType); }
 
 - (SEL)selectorForSorting {
-    return MADDataTypeSelectorForSorting(self.fieldType);
+	return MADDataTypeSelectorForSorting(self.fieldType);
 }
 
 @end

@@ -16,19 +16,19 @@
 
 @protocol MADDatabaseConnectionConstructors <NSObject>
   @optional
-    + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
+	+ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 @end
 
 @protocol MADDatabaseConnectionsProperties <NSObject>
-    @property (readonly, nonatomic, assign) MADDatabaseType databaseType;
-    @property (readonly, nonatomic, copy) NSString *connectionString;
-    @property (readonly, nonatomic, assign) BOOL requiresCredientals;
-    @property (readonly, nonatomic, copy) NSString *identifier;
-    @property (readonly, class) NSString *Identifier;
+	@property (readonly, nonatomic, assign) MADDatabaseType databaseType;
+	@property (readonly, nonatomic, copy) NSString *connectionString;
+	@property (readonly, nonatomic, assign) BOOL requiresCredientals;
+	@property (readonly, nonatomic, copy) NSString *identifier;
+	@property (readonly, class) NSString *Identifier;
 @end
 
 @interface MADDatabaseConnection : NSObject
-    <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying>
+	<MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying>
 
 @end
 

@@ -24,37 +24,37 @@ extern NSString * const MADSqlTextFromPart;
 @protocol MADDatabaseResultsProtocol, MADDatabaseConnectionsProperties;
 
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MADDatabase, MADDatabaseTable,
-       MADDataTable, MADQuery, MADDatabaseField;
+	   MADDataTable, MADQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
   @required
-    - (void)displayError:(NSError *)error;
+	- (void)displayError:(NSError *)error;
 @end
 
 @interface MADDatabase : NSObject
-    <MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource,
-        MADDatabaseDBProtocol, MADDatabaseSQLProtocol>
+	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource,
+		MADDatabaseDBProtocol, MADDatabaseSQLProtocol>
 
-    + (NSString *)imageIconName;
-    + (NSString *)driverName;
+	+ (NSString *)imageIconName;
+	+ (NSString *)driverName;
 
-    @property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
-    @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
+	@property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
+	@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
 
-    @property (nonatomic, strong) NSMutableArray *errors;
+	@property (nonatomic, strong) NSMutableArray *errors;
 
-    - (NSString *)identifier;
-    + (NSString *)identifier;
+	- (NSString *)identifier;
+	+ (NSString *)identifier;
 
-    - (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection;
+	- (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection;
 
-    - (void)readRow:(NSUInteger)row;
+	- (void)readRow:(NSUInteger)row;
 
-    - (void)enumerateTablesFromConnection:(id)dbconn
-                               usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
-                               completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
+	- (void)enumerateTablesFromConnection:(id)dbconn
+							   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+							   completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
 
-    @property (nonatomic, assign, readonly) BOOL isLicensedUser;
+	@property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
 @end
 

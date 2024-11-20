@@ -11,7 +11,7 @@
 
 @protocol MADCacheProtocol <NSObject>
   @required
-    - (NSURL *)cachedFilesDirectory;
+	- (NSURL *)cachedFilesDirectory;
   @optional
 @end
 

@@ -11,12 +11,12 @@
 @implementation NSString (Common)
 
 - (NSString *)stringByAppendingPeriod {
-    static NSString *period = @".";
-    return [self stringByAppendingString:period];
+	static NSString *period = @".";
+	return [self stringByAppendingString:period];
 }
 
 - (NSString *)stringByAppendingKeyPath:(NSString *)keyPath {
-    return [[self stringByAppendingPeriod] stringByAppendingString:keyPath];
+	return [[self stringByAppendingPeriod] stringByAppendingString:keyPath];
 }
 
 @end

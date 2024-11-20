@@ -31,69 +31,69 @@ static inline double min_time_interval() {
 }
 
 - (void)dealloc {
-    NSAssert(NO, @"Don't dealloc the singleton.");
+	NSAssert(NO, @"Don't dealloc the singleton.");
 }
 
 + (void)initialize {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedSingleton = [[super allocWithZone:NULL] init];
-        NSDate *lastUpdate = [NSDate date].copy;
-        _sharedSingleton.lastUpdate = lastUpdate;
-        [_sharedSingleton initializeProgressNotification];
-    });
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedSingleton = [[super allocWithZone:NULL] init];
+		NSDate *lastUpdate = [NSDate date].copy;
+		_sharedSingleton.lastUpdate = lastUpdate;
+		[_sharedSingleton initializeProgressNotification];
+	});
 }
 
 + (MADNotificationProgress *)sharedObject {
-    return _sharedSingleton;
+	return _sharedSingleton;
 }
 
 + (instancetype)allocWithZone:(NSZone *)zone {
-    return [self sharedObject];
+	return [self sharedObject];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return self;
+	return self;
 }
 
 - (void)initializeProgressNotification { }
 
 - (void)updateProgressOfObject:(id)object withMessage:(NSString *)message progress:(float)progress {
-    if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
-        self.lastUpdate = [NSDate date];
-        id madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
-        id userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:madProgress, MADNotificationProgressKey, nil];
-        NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
-                                                                     object: object
-                                                                   userInfo: userInfo];
-        [[NSNotificationCenter defaultCenter] postNotification:notification];
-    }
+	if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
+		self.lastUpdate = [NSDate date];
+		id madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
+		id userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:madProgress, MADNotificationProgressKey, nil];
+		NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
+																	 object: object
+																   userInfo: userInfo];
+		[[NSNotificationCenter defaultCenter] postNotification:notification];
+	}
 }
 
 - (void)updateProgressWithMessage:(NSString *)message progress:(float)progress {
-    if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
-        self.lastUpdate = [NSDate date];
-        MADProgress *madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
-        [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
-            NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
-                                                                         object: madProgress
-                                                                       userInfo: nil];
-            [[NSNotificationCenter defaultCenter] postNotification:notification];
-        }];
-    }
+	if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
+		self.lastUpdate = [NSDate date];
+		MADProgress *madProgress = [[MADProgress alloc] initWithMessage:message andProgress:progress];
+		[[NSOperationQueue mainQueue] addOperationWithBlock: ^{
+			NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
+																		 object: madProgress
+																	   userInfo: nil];
+			[[NSNotificationCenter defaultCenter] postNotification:notification];
+		}];
+	}
 }
 
 - (void)updateProgress:(MADProgress *)progress {
-    if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
-        NSDate *lastUpdate = [NSDate date].copy;
-        self.lastUpdate = lastUpdate;
-        [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
-            NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
-                                                                         object: progress
-                                                                       userInfo: nil];
-            [[NSNotificationCenter defaultCenter] postNotification:notification];
-        }];
-    }
+	if (fabs(self.lastUpdate.timeIntervalSinceNow) > min_time_interval()) {
+		NSDate *lastUpdate = [NSDate date].copy;
+		self.lastUpdate = lastUpdate;
+		[[NSOperationQueue mainQueue] addOperationWithBlock: ^{
+			NSNotification *notification = [NSNotification notificationWithName: MADNotificationProgressIdentifier
+																		 object: progress
+																	   userInfo: nil];
+			[[NSNotificationCenter defaultCenter] postNotification:notification];
+		}];
+	}
 }
 
 @end

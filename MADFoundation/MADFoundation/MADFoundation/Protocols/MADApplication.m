@@ -43,29 +43,29 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 }
 
 + (NSString *)groupIdentifier {
-    NSURL *madDesignerEntitlementsUrl = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
-    NSDictionary *madDesignerEntitlementsDictionary = [NSDictionary dictionaryWithContentsOfURL:madDesignerEntitlementsUrl];
-    NSArray *madApplicationGroups = madDesignerEntitlementsDictionary[@"com.apple.security.application-groups"];
-    return [madApplicationGroups firstObject];
+	NSURL *madDesignerEntitlementsUrl = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
+	NSDictionary *madDesignerEntitlementsDictionary = [NSDictionary dictionaryWithContentsOfURL:madDesignerEntitlementsUrl];
+	NSArray *madApplicationGroups = madDesignerEntitlementsDictionary[@"com.apple.security.application-groups"];
+	return [madApplicationGroups firstObject];
 }
 
 + (NSString *)ubiquityIdentifier {
-    NSDictionary<NSString *,id> *madInfoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSDictionary *ubiquitousContainers = madInfoDictionary[@"NSUbiquitousContainers"];
-    NSArray<NSString *> *ubiquitousContainersKeys = [ubiquitousContainers allKeys];
-    return [ubiquitousContainersKeys firstObject];
+	NSDictionary<NSString *,id> *madInfoDictionary = [[NSBundle mainBundle] infoDictionary];
+	NSDictionary *ubiquitousContainers = madInfoDictionary[@"NSUbiquitousContainers"];
+	NSArray<NSString *> *ubiquitousContainersKeys = [ubiquitousContainers allKeys];
+	return [ubiquitousContainersKeys firstObject];
 }
 
 + (BOOL)isMADDesigner {
-    MADAppDelegate appDelegate = [self AppDelegate];
-    NSString *appIdentifier = [appDelegate applicationIdentifier];
-    return [appIdentifier isEqualToString: MADApplicationIdMadDesigner];
+	MADAppDelegate appDelegate = [self AppDelegate];
+	NSString *appIdentifier = [appDelegate applicationIdentifier];
+	return [appIdentifier isEqualToString: MADApplicationIdMadDesigner];
 }
 
 + (BOOL)isMADViewer {
-    MADAppDelegate appDelegate = [self AppDelegate];
-    NSString *appIdentifier = [appDelegate applicationIdentifier];
-    return [appIdentifier isEqualToString: MADApplicationIdMadViewer];
+	MADAppDelegate appDelegate = [self AppDelegate];
+	NSString *appIdentifier = [appDelegate applicationIdentifier];
+	return [appIdentifier isEqualToString: MADApplicationIdMadViewer];
 }
 
 @end

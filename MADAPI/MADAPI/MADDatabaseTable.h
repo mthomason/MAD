@@ -12,12 +12,12 @@
 #import <Foundation/NSObject.h>
 
 @interface MADDatabaseTable : NSObject
-    <NSCopying>
+	<NSCopying>
 
-    @property (nonatomic, copy) NSString *name;
-    @property (nonatomic, assign) BOOL queryable;
+	@property (nonatomic, copy) NSString *name;
+	@property (nonatomic, assign) BOOL queryable;
 
-    - (instancetype)initWithTableName:(NSString *)tableName NS_DESIGNATED_INITIALIZER;
+	- (instancetype)initWithTableName:(NSString *)tableName NS_DESIGNATED_INITIALIZER;
 
 @end
 

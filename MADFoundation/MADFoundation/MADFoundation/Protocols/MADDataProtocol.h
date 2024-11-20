@@ -12,8 +12,8 @@
 @class MADDatabase;
 
 @protocol MADDataProtocol <NSObject>
-    - (NSArray *)sortDescriptors;
-    - (MADDatabase *)database;
+	- (NSArray *)sortDescriptors;
+	- (MADDatabase *)database;
 @end
 
 #endif

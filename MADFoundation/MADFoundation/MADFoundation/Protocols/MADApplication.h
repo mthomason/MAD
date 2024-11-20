@@ -14,13 +14,13 @@
 
 @interface MADApplication : NSObject
 
-    + (MADAppDelegate)AppDelegate;
+	+ (MADAppDelegate)AppDelegate;
 
-    + (NSString *)groupIdentifier;
-    + (NSString *)ubiquityIdentifier;
+	+ (NSString *)groupIdentifier;
+	+ (NSString *)ubiquityIdentifier;
 
-    + (BOOL)isMADDesigner;
-    + (BOOL)isMADViewer;
+	+ (BOOL)isMADDesigner;
+	+ (BOOL)isMADViewer;
 
 @end
 

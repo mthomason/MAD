@@ -13,7 +13,7 @@
 
 @interface NSData (Comparson)
 
-    - (NSComparisonResult)compareData:(NSData *)data;
+	- (NSComparisonResult)compareData:(NSData *)data;
 
 @end
 

@@ -18,13 +18,13 @@
 @dynamic identifier;
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    typeof(self) c = [[self.class alloc] copyWithZone:zone];
-    return c;
+	typeof(self) c = [[self.class alloc] copyWithZone:zone];
+	return c;
 }
 
 + (NSString *)Identifier {
-    NSAssert(NO, @"This is a factory class.  Don't call this.");
-    return nil;
+	NSAssert(NO, @"This is a factory class.  Don't call this.");
+	return nil;
 }
 
 @end

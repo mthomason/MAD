@@ -16,20 +16,20 @@
 @implementation MADDatabaseTable
 
 - (instancetype)init {
-    return self = [self initWithTableName:nil];
+	return self = [self initWithTableName:nil];
 }
 
 - (instancetype)initWithTableName:(NSString *)tableName {
-    if (self = [super init]) {
-        _name = [tableName copyWithZone:nil];
-    }
-    return self;
+	if (self = [super init]) {
+		_name = [tableName copyWithZone:nil];
+	}
+	return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    MADDatabaseTable *copy = [[[self class] allocWithZone:zone] initWithTableName:_name];
-    copy.queryable = _queryable;
-    return copy;
+	MADDatabaseTable *copy = [[[self class] allocWithZone:zone] initWithTableName:_name];
+	copy.queryable = _queryable;
+	return copy;
 }
 
 @end

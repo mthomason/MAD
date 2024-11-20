@@ -27,155 +27,155 @@
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
 static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
-                                                                @"%@ %@ %@ "
-                                                                @"%@ %@ "
-                                                                @"LIMIT 511;";
+																@"%@ %@ %@ "
+																@"%@ %@ "
+																@"LIMIT 511;";
 
 @implementation MADDatabase
 
 /*- (instancetype)init {
-    if (self = [super init]) {
-        NSMutableArray *errors = [[NSMutableArray alloc] init];
-        self.errors = errors;
-    }
-    return self;
+	if (self = [super init]) {
+		NSMutableArray *errors = [[NSMutableArray alloc] init];
+		self.errors = errors;
+	}
+	return self;
 }*/
 
 + (NSString *)imageIconName {
-    return @"";
+	return @"";
 }
 
 + (NSString *)driverName {
-    return @"";
+	return @"";
 }
 
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
-    id database = [[self alloc] init];
-    return database;
+	id database = [[self alloc] init];
+	return database;
 }
 
 - (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection {
-    NSString *key = [connection connectionString];
-    id <MADDatabaseResultsProtocol> delegate = _delegate;
-    BOOL responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
-    MADCredential *results = nil;
-    if (responds) {
-        MADCredential *c = [delegate getCredentialsForKey:key];
-        if (c) {
-            results = c.copy;
-        }
-        
-    }
-    return results;
+	NSString *key = [connection connectionString];
+	id <MADDatabaseResultsProtocol> delegate = _delegate;
+	BOOL responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
+	MADCredential *results = nil;
+	if (responds) {
+		MADCredential *c = [delegate getCredentialsForKey:key];
+		if (c) {
+			results = c.copy;
+		}
+		
+	}
+	return results;
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable
-            andError:(NSError * __autoreleasing *)error {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+			andError:(NSError * __autoreleasing *)error {
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (id)connectWithConnection:(MADDatabaseConnection *)connection
-                 credentals:(MADCredential *)credentals
-            connectionError:(NSError * __autoreleasing *)error {
-    return nil;
+				 credentals:(MADCredential *)credentals
+			connectionError:(NSError * __autoreleasing *)error {
+	return nil;
 }
 
 - (void *)databaseHandle {
-    return NULL;
+	return NULL;
 }
 
 - (MADSafeQueryField *)fieldAliasForField:(NSString *)fieldName
-                             andTableName:(NSString *)tableName {
-    NSString *fieldAlias;
-    fieldAlias = [fieldName stringByAppendingString:tableName];
-    return fieldAlias;
+							 andTableName:(NSString *)tableName {
+	NSString *fieldAlias;
+	fieldAlias = [fieldName stringByAppendingString:tableName];
+	return fieldAlias;
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (NSString *)tableAliasForTable:(NSString *)table {
-    NSString *tableAlias = [self newSafeIdentifier: table];
-    return tableAlias;
+	NSString *tableAlias = [self newSafeIdentifier: table];
+	return tableAlias;
 }
 
 - (NSString *)tableAliasConnector {
-    return @" AS ";
+	return @" AS ";
 }
 
 - (NSString *)identifier {
-    return @"NONE";
+	return @"NONE";
 }
 
 + (NSString *)identifier {
-    return @"NONE";
+	return @"NONE";
 }
 
 - (void)readRow:(NSUInteger)row {
-    [[MADNotificationDidReadRows sharedObject] database:self readRow:row];
+	[[MADNotificationDidReadRows sharedObject] database:self readRow:row];
 }
 
 - (void)closeConnection:(id)process {}
 
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn
-                                                   error:(NSError *__autoreleasing *)error {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+												   error:(NSError *__autoreleasing *)error {
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (void)getTablesFromConnection:(id)process
-                     completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+					 completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (void)enumerateTablesFromConnection:(id)dbconn
-                           usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
-                           completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
-    NSString *reason;
-    NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-    reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: reason
-                                 userInfo: nil];
+						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+						   completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
+	NSString *reason;
+	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
+	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 #pragma mark -

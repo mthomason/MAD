@@ -13,8 +13,8 @@
 
 @protocol MADPluginProtocol <NSObject>
 
-    + (NSString *)imageIconName;
-    + (NSString *)driverName;
+	+ (NSString *)imageIconName;
+	+ (NSString *)driverName;
 
 @end
 
