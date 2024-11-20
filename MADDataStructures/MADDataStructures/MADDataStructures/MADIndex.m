@@ -3,7 +3,7 @@
 //  MADDataStructures
 //
 //  Created by Michael Thomason on 3/12/16.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
 #import "MADIndex.h"
@@ -18,14 +18,13 @@
 @implementation MADIndex
 
 - (instancetype)initWithIndex:(NSUInteger)index andObject:(id)object {
-    if (self = [super init]) {
-        
-        _index = index;
+	if (self = [super init]) {
+		_index = index;
 
-        id __strong obj = object;
-        _object = obj;
-    }
-    return self;
+		id __strong obj = object;
+		_object = obj;
+}
+return self;
 }
 
 @end

@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 6/21/14.
-//  Copyright © 2017 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2024 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_DataStructures_MTTree_h
@@ -21,10 +21,21 @@
 
 @interface MTTree : NSObject
 
-    @property (nonatomic, strong) MTTree *leftNode;
-    @property (nonatomic, strong) MTTree *rightNode;
+@property (nonatomic, strong, nullable) id data;
+@property (nonatomic, strong, nullable) MTTree *leftNode;
+@property (nonatomic, strong, nullable) MTTree *rightNode;
 
-    - (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right;
+- (instancetype)initWithData:(nullable id)data
+				  leftTree:(nullable MTTree *)left
+				 rightTree:(nullable MTTree *)right NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithData:(nullable id)data;
+
+- (void)insertLeft:(id)data;
+- (void)insertRight:(id)data;
+
+- (NSArray *)preOrderTraversal;   // Root -> Left -> Right
+- (NSArray *)inOrderTraversal;    // Left -> Root -> Right
+- (NSArray *)postOrderTraversal;  // Left -> Right -> Root
 
 @end
 
