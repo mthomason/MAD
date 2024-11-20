@@ -20,36 +20,27 @@ typedef NS_ENUM(short, MADMapDataType) {
 };
 
 @protocol MADMapStringsProtocol <NSObject>
-
-    - (instancetype)initWithType:(MADMapDataType)t;
-    - (unsigned long)count;
-
+	- (instancetype)initWithType:(MADMapDataType)t;
+	- (unsigned long)count;
 @end
 
 @interface MADMapStrings : NSObject
-    <MADMapStringsProtocol>
-
+	<MADMapStringsProtocol>
 @end
 
 @interface MADMapStringsUnsignedInteger : MADMapStrings
-
-    - (void)setObject:(NSString *)str toKey:(NSUInteger)key;
-    - (NSString *)objectAtIndex:(NSUInteger)i;
-
+	- (void)setObject:(NSString *)str toKey:(NSUInteger)key;
+	- (NSString *)objectAtIndex:(NSUInteger)i;
 @end
 
 @interface MADMapStringsInteger : MADMapStrings
-
-    - (void)setObject:(NSString *)str toKey:(NSInteger)key;
-    - (NSString *)objectAtIndex:(NSInteger)i;
-
+	- (void)setObject:(NSString *)str toKey:(NSInteger)key;
+	- (NSString *)objectAtIndex:(NSInteger)i;
 @end
 
 @interface MADMapStringsShort : MADMapStrings
-
-    - (void)setObject:(NSString *)str toKey:(short)key;
-    - (NSString *)objectAtIndex:(short)i;
-
+	- (void)setObject:(NSString *)str toKey:(short)key;
+	- (NSString *)objectAtIndex:(short)i;
 @end
 
 #endif

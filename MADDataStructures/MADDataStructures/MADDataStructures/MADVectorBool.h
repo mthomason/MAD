@@ -13,11 +13,11 @@
 
 @interface MADVectorBool : NSObject
 
-    - (void)push:(BOOL)value;
-    - (void)addTrue;
-    - (void)addFalse;
-    - (unsigned long)count;
-    - (void)enumerateBools:(void (^)(NSUInteger idx, BOOL valid, BOOL *stop))valueHandler;
+	- (void)push:(BOOL)value;
+	- (void)addTrue;
+	- (void)addFalse;
+	- (unsigned long)count;
+	- (void)enumerateBools:(void (^)(NSUInteger idx, BOOL valid, BOOL *stop))valueHandler;
 
 @end
 

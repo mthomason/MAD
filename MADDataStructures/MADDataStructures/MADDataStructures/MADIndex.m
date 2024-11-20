@@ -8,23 +8,21 @@
 
 #import "MADIndex.h"
 
-@interface MADIndex ()
-
-    @property (nonatomic, strong, readwrite) id object;
-    @property (nonatomic, assign, readwrite) NSUInteger index;
-
-@end
-
 @implementation MADIndex
 
-- (instancetype)initWithIndex:(NSUInteger)index andObject:(id)object {
+- (instancetype)initWithIndex:(NSUInteger)index andObject:(nullable id)object {
 	if (self = [super init]) {
 		_index = index;
-
-		id __strong obj = object;
-		_object = obj;
+		_object = object;
+	}
+	return self;
 }
-return self;
+
+#pragma mark - Description
+
+- (NSString *)description {
+	NSString *objectDescription = self.object ? [self.object description] : @"nil";
+	return [NSString stringWithFormat:@"<MADIndex: index=%lu, object=%@>", (unsigned long)self.index, objectDescription];
 }
 
 @end

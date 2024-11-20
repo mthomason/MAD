@@ -13,10 +13,10 @@
 #import <MADDataStructures/MADAlgorithmColor.h>
 
 @interface MADAlgorithmElementProperties : NSObject
-    <NSCopying>
+	<NSCopying>
 
-    - (instancetype)initWithColor:(MADAlgorithmColor)algorithmColor NS_DESIGNATED_INITIALIZER;
-    @property (nonatomic, assign) MADAlgorithmColor algorithmColor;
+	- (instancetype)initWithColor:(MADAlgorithmColor)algorithmColor NS_DESIGNATED_INITIALIZER;
+	@property (nonatomic, assign) MADAlgorithmColor algorithmColor;
 
 @end
 

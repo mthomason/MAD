@@ -9,36 +9,36 @@
 #ifndef MAD_MTGraph_MTObject_h
 #define MAD_MTGraph_MTObject_h
 
-#import "MTObject.h"
+#import <MADDataStructures/MTObject.h>
 
 @class MTVertex, MTEdge, MTLinkedList;
 
 @interface MTGraph : MTObject
 
-    - (instancetype)init;
-    - (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;
+	- (instancetype)init;
+	- (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;
 
-    - (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object;
-    - (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination
-                           object:(id <NSCopying>)object andWeight:(NSNumber *)weight;
+	- (MTVertex *)addVertexWithObject:(NSObject <NSCopying> *)object;
+	- (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination
+						   object:(id <NSCopying>)object andWeight:(NSNumber *)weight;
 
-    - (void)removeVertex:(MTVertex *)vertex;
-    - (void)removeEdge:(MTEdge *)edge;
+	- (void)removeVertex:(MTVertex *)vertex;
+	- (void)removeEdge:(MTEdge *)edge;
 
-    - (NSUInteger)numberOfVertices;
-    - (NSUInteger)numberOfEdges;
+	- (NSUInteger)numberOfVertices;
+	- (NSUInteger)numberOfEdges;
 
-    - (NSArray *)allVertices;
-    - (NSSet *)allEdges;
+	- (NSArray *)allVertices;
+	- (NSSet *)allEdges;
 
-    - (MTVertex *)vertexForObject:(id)object;
+	- (MTVertex *)vertexForObject:(id)object;
 
-    - (NSArray *)breadthFirstSearch:(MTVertex *)root;
+	- (NSArray *)breadthFirstSearch:(MTVertex *)root;
 
-    - (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
+	- (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
 
-    - (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError
-                        isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
+	- (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError
+						isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
 
 @end
 

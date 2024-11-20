@@ -19,6 +19,8 @@
   #endif
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MTTree : NSObject
 
 @property (nonatomic, strong, nullable) id data;
@@ -30,13 +32,15 @@
 				 rightTree:(nullable MTTree *)right NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithData:(nullable id)data;
 
-- (void)insertLeft:(id)data;
-- (void)insertRight:(id)data;
+- (void)insertLeft:(nonnull id)data;
+- (void)insertRight:(nonnull id)data;
 
 - (NSArray *)preOrderTraversal;   // Root -> Left -> Right
 - (NSArray *)inOrderTraversal;    // Left -> Root -> Right
 - (NSArray *)postOrderTraversal;  // Left -> Right -> Root
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

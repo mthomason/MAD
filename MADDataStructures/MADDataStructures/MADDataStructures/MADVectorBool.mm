@@ -15,57 +15,57 @@
 
 struct MADVectorBoolImpl;
 struct MADVectorBoolImpl {
-    std::vector<bool> _container;
+	std::vector<bool> _container;
 };
 
 @implementation MADVectorBool {
-    struct MADVectorBoolImpl *impl;
+	struct MADVectorBoolImpl *impl;
 }
 
 - (void)dealloc {
-    impl->_container.clear();
-    delete impl;
+	impl->_container.clear();
+	delete impl;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        impl = new MADVectorBoolImpl;
-    }
-    return self;
+	if (self = [super init]) {
+		impl = new MADVectorBoolImpl;
+	}
+	return self;
 }
 
 - (void)push:(BOOL)value {
-    if (value) impl->_container.push_back(true);
-    else impl->_container.push_back(false);
+	if (value) impl->_container.push_back(true);
+	else impl->_container.push_back(false);
 }
 
 - (void)addTrue {
-    impl->_container.push_back(true);
+	impl->_container.push_back(true);
 }
 - (void)addFalse {
-    impl->_container.push_back(false);
+	impl->_container.push_back(false);
 }
 
 - (unsigned long)count {
-    return impl->_container.size();
+	return impl->_container.size();
 }
 
 - (void)enumerateBools:(void (^)(NSUInteger idx, BOOL valid, BOOL *stop))valueHandler {
-    BOOL stop = NO;
-    NSUInteger counter = 0;
-    for (auto i = impl->_container.begin(); i != impl->_container.end(); ++i) {
-        valueHandler(counter, *i ? YES : NO, &stop);
-        if (stop) break;
-        ++counter;
-    }
+	BOOL stop = NO;
+	NSUInteger counter = 0;
+	for (auto i = impl->_container.begin(); i != impl->_container.end(); ++i) {
+		valueHandler(counter, *i ? YES : NO, &stop);
+		if (stop) break;
+		++counter;
+	}
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *debuggingString = [[NSMutableString alloc] init];
-    for (auto i = impl->_container.begin(); i != impl->_container.end(); ++i) {
-        [debuggingString appendFormat:@"%@\n", (*i ? @"YES" : @"NO")];
-    }
-    return debuggingString;
+	NSMutableString *debuggingString = [[NSMutableString alloc] init];
+	for (auto i = impl->_container.begin(); i != impl->_container.end(); ++i) {
+		[debuggingString appendFormat:@"%@\n", (*i ? @"YES" : @"NO")];
+	}
+	return debuggingString;
 }
 
 @end

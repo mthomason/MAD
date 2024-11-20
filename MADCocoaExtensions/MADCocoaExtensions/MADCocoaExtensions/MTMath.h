@@ -14,23 +14,24 @@
 #import <stdlib.h>
 
 static inline NSUInteger madRandomNumberBetween(NSUInteger from, NSUInteger to);
-static inline NSUInteger madRandomNumberBetween(NSUInteger from, NSUInteger to) {
-    return from + arc4random() % (to - from + 1);
-}
-
 static inline NSUInteger madRandomNumberInRange(NSRange range);
-static inline NSUInteger madRandomNumberInRange(NSRange range) {
-    return range.location + arc4random() % ((range.location + range.length - 1) - range.location + 1);
+static inline double madSystemFileSizeToMB(unsigned long long sfs);
+
+static inline NSUInteger madRandomNumberBetween(NSUInteger from, NSUInteger to) {
+	return from + arc4random() % (to - from + 1);
 }
 
-static inline double madSystemFileSizeToMB(unsigned long long sfs);
+static inline NSUInteger madRandomNumberInRange(NSRange range) {
+	return range.location + arc4random() % ((range.location + range.length - 1) - range.location + 1);
+}
+
 static inline double madSystemFileSizeToMB(unsigned long long sfs) {
-    return sfs / 1000000;
+	return sfs / 1000000;
 }
 
 @interface MTMath : NSObject
 
-    + (NSNumber *)newSystemFileSizeToMB:(unsigned long long)sfs;
+	+ (NSNumber *)newSystemFileSizeToMB:(unsigned long long)sfs;
 
 @end
 

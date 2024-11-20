@@ -11,9 +11,9 @@
 @implementation MADSortProperties
 
 - (id)copyWithZone:(NSZone *)zone {
-    typeof(self) copy = [[self.class allocWithZone:zone] init];
-    copy.algorithmColor = _algorithmColor;
-    return copy;
+	typeof(self) copy = [[self.class allocWithZone:zone] init];
+	copy.algorithmColor = _algorithmColor;
+	return copy;
 }
 
 @end

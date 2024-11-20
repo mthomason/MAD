@@ -12,15 +12,15 @@
 #import <Foundation/NSObject.h>
 
 @interface MADTextStyle : NSObject
-    <NSCoding>
+	<NSCoding>
 
-    - (instancetype)initWithBold:(BOOL)bold italic:(BOOL)italic
-                       underline:(BOOL)underline strikethrough:(BOOL)strikethrough;
+	- (instancetype)initWithBold:(BOOL)bold italic:(BOOL)italic
+					   underline:(BOOL)underline strikethrough:(BOOL)strikethrough;
 
-    @property (nonatomic, assign, readwrite) BOOL bold;
-    @property (nonatomic, assign, readwrite) BOOL italic;
-    @property (nonatomic, assign, readwrite) BOOL underline;
-    @property (nonatomic, assign, readwrite) BOOL strikethrough;
+	@property (nonatomic, assign, readwrite) BOOL bold;
+	@property (nonatomic, assign, readwrite) BOOL italic;
+	@property (nonatomic, assign, readwrite) BOOL underline;
+	@property (nonatomic, assign, readwrite) BOOL strikethrough;
 
 @end
 

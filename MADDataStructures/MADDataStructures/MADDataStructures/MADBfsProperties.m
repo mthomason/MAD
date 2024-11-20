@@ -12,11 +12,11 @@
 @implementation MADBfsProperties
 
 - (id)copyWithZone:(NSZone *)zone {
-    typeof(self) copy = [[self.class allocWithZone:zone] init];
-    copy.bfsDistance = [_bfsDistance copyWithZone:zone];
-    copy.bfsPredecessor = _bfsPredecessor;
-    copy.algorithmColor = _algorithmColor;
-    return copy;
+	typeof(self) copy = [[self.class allocWithZone:zone] init];
+	copy.bfsDistance = [_bfsDistance copyWithZone:zone];
+	copy.bfsPredecessor = _bfsPredecessor;
+	copy.algorithmColor = _algorithmColor;
+	return copy;
 }
 
 @end

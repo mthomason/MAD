@@ -15,11 +15,11 @@
 @class MTVertex;
 
 @interface MADBfsProperties : NSObject
-    <NSCopying>
+	<NSCopying>
 
-    @property (nonatomic, weak)   MTVertex         *bfsPredecessor;
-    @property (nonatomic, strong) NSNumber         *bfsDistance;
-    @property (nonatomic, assign) MADAlgorithmColor algorithmColor;
+	@property (nonatomic, weak)   MTVertex         *bfsPredecessor;
+	@property (nonatomic, strong) NSNumber         *bfsDistance;
+	@property (nonatomic, assign) MADAlgorithmColor algorithmColor;
 
 @end
 

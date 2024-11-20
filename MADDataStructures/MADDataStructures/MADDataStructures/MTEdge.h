@@ -25,31 +25,31 @@ typedef NS_ENUM(short, MTEdgeType) {
 	MTEdgeTypeTreeEdge,
 	MTEdgeTypeBackEdge,
 	MTEdgeTypeForwardEdge,
-    MTEdgeTypeCrossEdge
+	MTEdgeTypeCrossEdge
 };
 
 @class MTVertex;
 
 @interface MTEdge : MTObject
-    <NSCopying, MTProtocolLog, MTProtocolCompare>
+	<NSCopying, MTProtocolLog, MTProtocolCompare>
 
-    @property (nonatomic, weak, readonly) MTVertex *origin;
-    @property (nonatomic, weak, readonly) MTVertex *destination;
+	@property (nonatomic, weak, readonly) MTVertex *origin;
+	@property (nonatomic, weak, readonly) MTVertex *destination;
 
-    @property (readonly, nonatomic, assign, getter=isDirected) BOOL directed;
-    @property (nonatomic, assign) MTEdgeType dfsEdgeType;
+	@property (readonly, nonatomic, assign, getter=isDirected) BOOL directed;
+	@property (nonatomic, assign) MTEdgeType dfsEdgeType;
 
-    - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
-                                                  andDestination:(MTVertex *)vertex2;
+	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
+					  andDestination:(MTVertex *)vertex2;
 
-    - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
-                                                     destination:(MTVertex *)vertex2
-                                                       andObject:(id <NSCopying>)object;
+	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
+						 destination:(MTVertex *)vertex2
+						   andObject:(id <NSCopying>)object;
 
-    - (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
-                                                     destination:(MTVertex *)vertex2
-                                                          object:(id <NSCopying>)object
-                                                       andWeight:(NSNumber *)weight NS_DESIGNATED_INITIALIZER;
+	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
+						 destination:(MTVertex *)vertex2
+							  object:(id <NSCopying>)object
+						   andWeight:(NSNumber *)weight NS_DESIGNATED_INITIALIZER;
 
 @end
 

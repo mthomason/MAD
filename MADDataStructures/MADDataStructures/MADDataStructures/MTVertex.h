@@ -9,41 +9,40 @@
 #ifndef MAD_DataStructures_MTVertex_h
 #define MAD_DataStructures_MTVertex_h
 
-#import "MTObject.h"
-#import "MTProtocolLog.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MTObject.h>
+#import <MADDataStructures/MTProtocolLog.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 
 @class MTEdge, MADAlgorithmElementProperties, MADBfsProperties, MADDfsProperties, MADSortProperties;
 
 typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
-    MADAlgorithmPropertyClassesDfs,
-    MADAlgorithmPropertyClassesBfs,
-    MADAlgorithmPropertyClassesSort
+	MADAlgorithmPropertyClassesDfs,
+	MADAlgorithmPropertyClassesBfs,
+	MADAlgorithmPropertyClassesSort
 };
 
 @interface MTVertex : NSObject
-    <MTProtocolCompare,
-        MTProtocolLog>
+	<MTProtocolCompare, MTProtocolLog>
 
-    @property (readonly, nonatomic, strong) id object;
+	@property (readonly, nonatomic, strong) id object;
 
-    - (instancetype)init;
-    - (instancetype)initWithID:(NSUInteger)idnumber;
-    - (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
+	- (instancetype)init;
+	- (instancetype)initWithID:(NSUInteger)idnumber;
+	- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
 
-    @property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
-    @property (readonly) NSArray <MTEdge *> *incidentEdges;
-    @property (readonly) NSUInteger numberOfIncidentEdges;
+	@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
+	@property (readonly) NSArray <MTEdge *> *incidentEdges;
+	@property (readonly) NSUInteger numberOfIncidentEdges;
 
-    - (void)addEdge:(MTEdge *)edge;
+	- (void)addEdge:(MTEdge *)edge;
 
-    - (void)removeEdge:(MTEdge *)edge;
-    - (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
+	- (void)removeEdge:(MTEdge *)edge;
+	- (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
-    @property (nonatomic, strong, readonly) MADAlgorithmElementProperties *properties;
-    @property (nonatomic, strong, readonly) MADBfsProperties *bfsProperties;
-    @property (nonatomic, strong, readonly) MADDfsProperties *dfsProperties;
-    @property (nonatomic, strong, readonly) MADSortProperties *sortProperties;
+	@property (nonatomic, strong, readonly) MADAlgorithmElementProperties *properties;
+	@property (nonatomic, strong, readonly) MADBfsProperties *bfsProperties;
+	@property (nonatomic, strong, readonly) MADDfsProperties *dfsProperties;
+	@property (nonatomic, strong, readonly) MADSortProperties *sortProperties;
 
 @end
 

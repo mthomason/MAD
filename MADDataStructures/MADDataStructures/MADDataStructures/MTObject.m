@@ -22,50 +22,50 @@
 @implementation MTObject
 
 + (instancetype)newObject:(id <NSCopying>)object {
-    return [[MTObject alloc] initWithObject:object];
+	return [[MTObject alloc] initWithObject:object];
 }
 
 - (instancetype)init {
-    return [self initWithObject:nil];
+	return [self initWithObject:nil];
 }
 
 - (instancetype)initWithObject:(id <NSCopying>)object {
-    if (self = [super init]) {
-        _object = [object copyWithZone:nil];
-    }
-    return self;
+	if (self = [super init]) {
+		_object = [object copyWithZone:nil];
+	}
+	return self;
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] init];
-    ((typeof(self)) copy).object = [self.object copyWithZone:zone];
-    return copy;
+	id copy = [[[self class] allocWithZone:zone] init];
+	((typeof(self)) copy).object = [self.object copyWithZone:zone];
+	return copy;
 }
 
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self.object conformsToProtocol:@protocol(MTProtocolCompare)]) {
-        result = [self.object isEqualTo:sender];
-    } else {
-        result = [self.object isEqual:sender];
-    }
-    return result;
+	BOOL result;
+	if ([self.object conformsToProtocol:@protocol(MTProtocolCompare)]) {
+		result = [self.object isEqualTo:sender];
+	} else {
+		result = [self.object isEqual:sender];
+	}
+	return result;
 }
 
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [(id <MTProtocolLog>)self.object toStringHumanReadable];
+	return [(id <MTProtocolLog>)self.object toStringHumanReadable];
 }
 
 - (NSString *)toString {
-    return [(id <MTProtocolLog>)self.object toString];
+	return [(id <MTProtocolLog>)self.object toString];
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", self.object];
+	return [NSString stringWithFormat:@"%@", self.object];
 }
 
 @end

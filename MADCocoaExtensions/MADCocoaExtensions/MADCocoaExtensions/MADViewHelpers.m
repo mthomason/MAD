@@ -9,10 +9,9 @@
 #include "MADViewHelpers.h"
 
 void MADViewSafeAreaInserts(UIView *view, UIEdgeInsets *safeAreaInsets) {
-    if (@available(iOS 11.0, tvOS 11.0, *)) {
-        *safeAreaInsets = view.safeAreaInsets;
-    } else {
-        *safeAreaInsets = UIEdgeInsetsZero;
-    }
+	if (@available(iOS 11.0, tvOS 11.0, *)) {
+		*safeAreaInsets = view.safeAreaInsets;
+	} else {
+		*safeAreaInsets = UIEdgeInsetsZero;
+	}
 }
-

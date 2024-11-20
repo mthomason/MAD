@@ -10,8 +10,8 @@
 #define MAD_DataStructures_MTObject_h
 
 #import <Foundation/NSObject.h>
-#import "MTProtocolLog.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MTProtocolLog.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
   #if __has_attribute(objc_designated_initializer)
@@ -24,11 +24,11 @@
 @interface MTObject : NSObject
     <NSCopying, MTProtocolCompare, MTProtocolLog>
 
-    + (instancetype)newObject:(id <NSCopying>)object;
-    - (instancetype)init;
-    - (instancetype)initWithObject:(id <NSCopying>)object;
+	+ (instancetype)newObject:(id <NSCopying>)object;
+	- (instancetype)init;
+	- (instancetype)initWithObject:(id <NSCopying>)object;
 
-    @property (readonly, nonatomic, strong) id object;
+	@property (readonly, nonatomic, strong) id object;
 
 @end
 

@@ -10,13 +10,13 @@
 #define MAD_DataStructures_MTPair_h
 
 #import <Foundation/NSObject.h>
-#import "MTProtocolLog.h"
+#import <MADDataStructures/MTProtocolLog.h>
 
 @interface MTPair : NSObject
-<NSCopying, MTProtocolLog>
+	<NSCopying, MTProtocolLog>
 
-@property (nonatomic, strong) id former;
-@property (nonatomic, strong) id latter;
+	@property (nonatomic, strong) id former;
+	@property (nonatomic, strong) id latter;
 
 	- (instancetype)init;
 	- (instancetype)initWithFormer:(id)former andLatter:(id)latter;

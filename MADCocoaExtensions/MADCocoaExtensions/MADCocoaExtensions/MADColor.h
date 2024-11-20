@@ -21,24 +21,24 @@ UIColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b);
 UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a);
 
 @interface MADColor : NSObject
-    <NSCopying>
+	<NSCopying>
 
-    - (instancetype)initWithColor:(UIColor *)color;
+	- (instancetype)initWithColor:(UIColor *)color;
 
-    @property (nonatomic, copy, readonly) UIColor *color;
+	@property (nonatomic, copy, readonly) UIColor *color;
 
-    @property (nonatomic, readonly) NSString *hexStringValue;
+	@property (nonatomic, readonly) NSString *hexStringValue;
 
-    @property (nonatomic, readonly) BOOL canProvideRGBComponents;
-    @property (nonatomic, readonly) BOOL usesMonochromeColorspace;
-    @property (nonatomic, readonly) BOOL usesRGBColorspace;
-    @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
+	@property (nonatomic, readonly) BOOL canProvideRGBComponents;
+	@property (nonatomic, readonly) BOOL usesMonochromeColorspace;
+	@property (nonatomic, readonly) BOOL usesRGBColorspace;
+	@property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
 
-    @property (nonatomic, readonly) Byte redByte;
-    @property (nonatomic, readonly) Byte greenByte;
-    @property (nonatomic, readonly) Byte blueByte;
-    @property (nonatomic, readonly) Byte alphaByte;
-    @property (nonatomic, readonly) Byte whiteByte;
+	@property (nonatomic, readonly) Byte redByte;
+	@property (nonatomic, readonly) Byte greenByte;
+	@property (nonatomic, readonly) Byte blueByte;
+	@property (nonatomic, readonly) Byte alphaByte;
+	@property (nonatomic, readonly) Byte whiteByte;
 
 @end
 

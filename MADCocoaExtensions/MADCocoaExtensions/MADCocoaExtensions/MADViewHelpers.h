@@ -16,7 +16,7 @@ static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void);
 void MADViewSafeAreaInserts(UIView *view, UIEdgeInsets *safeAreaInsets);
 
 static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void) {
-    return UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	return UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 #endif /* MADViewHelpers_h */

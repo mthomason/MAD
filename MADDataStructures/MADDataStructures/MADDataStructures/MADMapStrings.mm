@@ -19,176 +19,173 @@ struct MADMapStringsImpl;
 
 template<typename T>
 struct MADMapStringsImpl {
-    std::map<T, std::string> _container;
+	std::map<T, std::string> _container;
 };
 
 template<typename Type>
 class MADMad {
-    
-    std::map<Type, std::string> _container;
+	
+	std::map<Type, std::string> _container;
   public:
-    std::string::size_type count() {
-        return this->_container.size();
-    }
-    void setObject(NSString *obj, Type key) {
-        if (obj != nil) {
-            std::string cpp_str([obj UTF8String], [obj lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-            _container[key] = cpp_str;
-        } else {
-            _container.erase(key);
-        }
-    }
-    NSString *objectAtIndex(Type index) {
-        std::map<NSInteger, std::string>::const_iterator found = _container.find(index);
-        if (found == _container.end()) return nil;
-        
-        const char *c_str = found->second.c_str();
-        NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
-        return result;
-    }
+	std::string::size_type count() {
+		return this->_container.size();
+	}
+	void setObject(NSString *obj, Type key) {
+		if (obj != nil) {
+			std::string cpp_str([obj UTF8String], [obj lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+			_container[key] = cpp_str;
+		} else {
+			_container.erase(key);
+		}
+	}
+	NSString *objectAtIndex(Type index) {
+		std::map<NSInteger, std::string>::const_iterator found = _container.find(index);
+		if (found == _container.end()) return nil;
+		
+		const char *c_str = found->second.c_str();
+		NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
+		return result;
+	}
 };
 
 @implementation MADMapStrings
 
 - (instancetype)initWithType:(MADMapDataType)t {
-    typeof(self) map;
-    switch (t) {
-    
-        case MADMapDataTypeShort:
-            map = [[MADMapStringsShort alloc] init];
-            break;
-        case MADMapDataTypeInteger:
-            map = [[MADMapStringsInteger alloc] init];
-            break;
-        case MADMapDataTypeUnsignedInteger:
-            map = [[MADMapStringsUnsignedInteger alloc] init];
-            break;
-            
-        default:
-            break;
-    }
-    return map;
+	typeof(self) map;
+	switch (t) {
+	
+		case MADMapDataTypeShort:
+			map = [[MADMapStringsShort alloc] init];
+			break;
+		case MADMapDataTypeInteger:
+			map = [[MADMapStringsInteger alloc] init];
+			break;
+		case MADMapDataTypeUnsignedInteger:
+			map = [[MADMapStringsUnsignedInteger alloc] init];
+			break;
+			
+		default:
+			break;
+	}
+	return map;
 }
 
 - (unsigned long)count {
-    return 0;
+	return 0;
 }
 
 @end
 
 @implementation MADMapStringsInteger {
-    MADMad<NSInteger> *impl;
+	MADMad<NSInteger> *impl;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        impl = new MADMad<NSInteger>();
-    }
-    return self;
+	if (self = [super init]) {
+		impl = new MADMad<NSInteger>();
+	}
+	return self;
 }
 
 - (NSString *)objectAtIndex:(NSInteger)i {
-    return impl->objectAtIndex(i);
+	return impl->objectAtIndex(i);
 }
 
 - (void)setObject:(NSString *)str toKey:(NSInteger)key {
-    impl->setObject(str, key);
+	impl->setObject(str, key);
 }
 
 - (unsigned long)count {
-    return impl->count();
+	return impl->count();
 }
 
 - (void)dealloc {
-    delete impl;
+	delete impl;
 }
 
 @end
 
 @implementation MADMapStringsShort {
-    struct MADMapStringsImpl <short> *impl;
+	struct MADMapStringsImpl <short> *impl;
 }
 
 - (void)dealloc {
-    impl->_container.clear();
-    delete impl;
+	impl->_container.clear();
+	delete impl;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        impl = new MADMapStringsImpl<short>;
-    }
-    return self;
+	if (self = [super init]) {
+		impl = new MADMapStringsImpl<short>;
+	}
+	return self;
 }
 
 - (NSString *)objectAtIndex:(short)i {
-    
-    std::map<short, std::string>::const_iterator found = impl->_container.find(i);
-    if (found == impl->_container.end()) return nil;
-    
-    const char *c_str = found->second.c_str();
-    NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
-    return result;
+	
+	std::map<short, std::string>::const_iterator found = impl->_container.find(i);
+	if (found == impl->_container.end()) return nil;
+	
+	const char *c_str = found->second.c_str();
+	NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
+	return result;
 }
 
 - (void)setObject:(NSString *)str toKey:(short)key {
-    
-    if (str != nil) {
-        std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-        impl->_container[key] = cpp_str;
-        //cpp_str.erase();
-        
-    } else {
-        impl->_container.erase(key);
-        
-    }
+	
+	if (str != nil) {
+		std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+		impl->_container[key] = cpp_str;
+		//cpp_str.erase();
+		
+	} else {
+		impl->_container.erase(key);
+		
+	}
 }
 
 @end
 
 @implementation MADMapStringsUnsignedInteger {
-    struct MADMapStringsImpl <NSUInteger> *impl;
+	struct MADMapStringsImpl <NSUInteger> *impl;
 }
 
 - (void)dealloc {
-    impl->_container.clear();
-    delete impl;
+	impl->_container.clear();
+	delete impl;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        impl = new MADMapStringsImpl<NSUInteger>;
-    }
-    return self;
+	if (self = [super init]) {
+		impl = new MADMapStringsImpl<NSUInteger>;
+	}
+	return self;
 }
 
 - (NSString *)objectAtIndex:(NSUInteger)i {
-    
-    std::map<NSUInteger, std::string>::const_iterator found = impl->_container.find(i);
-    if (found == impl->_container.end()) return nil;
-    
-    const char *c_str = found->second.c_str();
-    NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
-    return result;
+	
+	std::map<NSUInteger, std::string>::const_iterator found = impl->_container.find(i);
+	if (found == impl->_container.end()) return nil;
+	
+	const char *c_str = found->second.c_str();
+	NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
+	return result;
 }
 
 - (void)setObject:(NSString *)str toKey:(NSUInteger)key {
-    
-    if (str != nil) {
-        std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-        impl->_container[key] = cpp_str;
-        //cpp_str.erase();
-        
-    } else {
-        impl->_container.erase(key);
-        
-    }
+	if (str != nil) {
+		std::string cpp_str([str UTF8String], [str lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+		impl->_container[key] = cpp_str;
+		//cpp_str.erase();
+		
+	} else {
+		impl->_container.erase(key);
+		
+	}
 }
 
 - (unsigned long)count {
-    return impl->_container.size();
+	return impl->_container.size();
 }
 
 @end
-
-

@@ -24,63 +24,62 @@
 @implementation MTStack
 
 - (instancetype)init {
-    if (self = [super init]) {
-        NSMutableArray *stack = [[NSMutableArray alloc] init];
-        self.stack = stack;
-    }
-    return self;
+	if (self = [super init]) {
+		NSMutableArray *stack = [[NSMutableArray alloc] init];
+		self.stack = stack;
+	}
+	return self;
 }
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super initWithObject:object]) {
-        NSMutableArray *stack = [[NSMutableArray alloc] init];
-        self.stack = stack;
-    }
-    return self;
+	if (self = [super initWithObject:object]) {
+		NSMutableArray *stack = [[NSMutableArray alloc] init];
+		self.stack = stack;
+	}
+	return self;
 }
 
 - (instancetype)initWithCapacity:(NSUInteger)capacity {
-    if (self = [super init]) {
-        NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];
-        self.stack = stack;
-    }
-    return self;
+	if (self = [super init]) {
+		NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];
+		self.stack = stack;
+	}
+	return self;
 }
 
 - (void)push:(id)object {
-    [self.stack addObject:object];
-    self.counter++;
+	[self.stack addObject:object];
+	self.counter++;
 }
 
 - (id)pop {
-    NSAssert(self.counter > 0, @"Underflow error.  Nothing to pop.");
-    id result = self.stack.lastObject;
-    [self.stack removeLastObject];
-    self.counter--;
-    return result;
+	NSAssert(self.counter > 0, @"Underflow error.  Nothing to pop.");
+	id result = self.stack.lastObject;
+	[self.stack removeLastObject];
+	self.counter--;
+	return result;
 }
 
 - (BOOL)isEmpty {
-    return self.counter <= 0;
+	return self.counter <= 0;
 }
 
-
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-                                  objects:(id __unsafe_unretained [])stackbuf
-                                    count:(NSUInteger)len {
-    return [self.stack countByEnumeratingWithState:state objects:stackbuf count:len];
+								  objects:(id __unsafe_unretained [])stackbuf
+									count:(NSUInteger)len {
+	return [self.stack countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
 - (NSString *)toStringHumanReadable {
-    return nil;
+	return nil;
 }
 
 - (NSString *)toString {
-    return nil;
+	return nil;
 }
 
 - (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", self];
+	return [NSString stringWithFormat:@"%@", self];
 }
 
 @end
