@@ -1,14 +1,6 @@
 # Scripts
-usr/local/share/
-opt/
-libarchive/
-bld/
-bzip2/
-bsdtar/
-bsdcat/
-Compressor/
-Documentation/
-archive/
+StaticLibraries/
+3rdPartyProjects/ColorPicker/
 
 #CodeSigningRequest
 MADRequest.certSigningRequest
