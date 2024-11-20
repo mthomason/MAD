@@ -16,7 +16,6 @@
 #import <stdlib.h>
 #import <math.h>
 
-#import <MADCocoaExtensions/MADNumericConstants.h>
 #import <MADCocoaExtensions/MADCompassDirection.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 
