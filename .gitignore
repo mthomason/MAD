@@ -3,6 +3,12 @@ usr/local/share/
 opt/
 libarchive/
 bld/
+bzip2/
+bsdtar/
+bsdcat/
+Compressor/
+Documentation/
+archive/
 
 #CodeSigningRequest
 MADRequest.certSigningRequest
