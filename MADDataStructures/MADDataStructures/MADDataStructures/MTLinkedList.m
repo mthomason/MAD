@@ -188,46 +188,4 @@
 	return batchCount;
 }
 
-- (NSString *)toString {
-	NSMutableString *result = [[NSMutableString alloc] initWithString:@"MTLinkedList: ["];
-	MTLinkedListNode *node = _headNode;
-	while (node) {
-		[result appendFormat:@"%@, ", node.data];
-		node = node.next;
-	}
-	if (result.length > 15) { // Remove trailing comma if list is not empty
-		[result deleteCharactersInRange:NSMakeRange(result.length - 2, 2)];
-	}
-	[result appendString:@"]"];
-	return result;
-}
-
-- (NSString *)toStringDebug {
-	NSMutableString *result = [[NSMutableString alloc] initWithString:@"MTLinkedList Debug:\n"];
-	MTLinkedListNode *node = _headNode;
-	NSUInteger index = 0;
-	while (node) {
-		[result appendFormat:@"[%lu] Node Address: %p, Data: %@, Next: %p, Prev: %p\n",
-							  (unsigned long)index, node, node.data, node.next, node.prev];
-		node = node.next;
-		index++;
-	}
-	return result;
-}
-
-- (NSString *)toStringHumanReadable {
-	NSMutableString *result = [[NSMutableString alloc] initWithString:@"*<->"];
-	MTLinkedListNode *node = _headNode;
-	while (node) {
-		if ([node.data conformsToProtocol:@protocol(MTProtocolLog)]) {
-			[result appendFormat:@"%@<->", [node.data toStringHumanReadable]];
-		} else {
-			[result appendFormat:@"%@<->", node.data];
-		}
-		node = node.next;
-	}
-	[result appendString:@"*"];
-	return result;
-}
-
 @end
