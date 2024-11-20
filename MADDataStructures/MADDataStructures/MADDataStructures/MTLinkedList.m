@@ -14,124 +14,220 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 
-@interface MTLinkedList()
+@interface MTLinkedListNode : NSObject
 
-    @property (nonatomic, strong) NSMutableArray *list;
+@property (nonatomic, strong) id data;
+@property (nonatomic, strong) MTLinkedListNode *next;
+@property (nonatomic, strong) MTLinkedListNode *prev;
+
+- (instancetype)initWithData:(id)data;
 
 @end
 
-@implementation MTLinkedList {
-    NSUInteger _location;
+@implementation MTLinkedListNode
+
+- (instancetype)initWithData:(id)data {
+	if (self = [super init]) {
+		_data = data;
+		_next = nil;
+		_prev = nil;
+	}
+	return self;
 }
+
+@end
+
+@interface MTLinkedList ()
+
+	@property (nonatomic, strong) MTLinkedListNode *headNode;
+	@property (nonatomic, strong) MTLinkedListNode *tailNode;
+	@property (nonatomic) NSUInteger count;
+	@property (nonatomic, weak) MTLinkedListNode *currentNode;
+
+@end
+
+@implementation MTLinkedList
 
 - (instancetype)init {
-    if (self = [super init]) {
-        _location = 0;
-        _list = [[NSMutableArray alloc] init];
-    }
-    return self;
+	if (self = [super init]) {
+		_headNode = nil;
+		_tailNode = nil;
+		_currentNode = nil;
+		_count = 0;
+	}
+	return self;
 }
 
-- (NSUInteger)count { return _list.count; }
-
-- (BOOL)isNext { return (_location + 1 < self.count); }
-
-- (BOOL)isPrevious { return (_location - 1 < self.count && _location > 0); }
-
 - (void)insert:(id)object {
-    if (object != nil) {
-        [_list insertObject:object atIndex:0];
-    }
+	if (!object) return;
+
+	MTLinkedListNode *newNode = [[MTLinkedListNode alloc] initWithData:object];
+	if (!_headNode) {
+		_headNode = _tailNode = newNode;
+	} else {
+		newNode.next = _headNode;
+		_headNode.prev = newNode;
+		_headNode = newNode;
+	}
+	_count++;
 }
 
 - (void)add:(id)object {
-    if (object != nil) {
-        [_list addObject:object];
-        _location = self.count - 1;
-    }
+	if (!object) return;
+
+	MTLinkedListNode *newNode = [[MTLinkedListNode alloc] initWithData:object];
+	if (!_tailNode) {
+		_headNode = _tailNode = newNode;
+	} else {
+		newNode.prev = _tailNode;
+		_tailNode.next = newNode;
+		_tailNode = newNode;
+	}
+	_count++;
+	_currentNode = _tailNode;
 }
 
 - (id)head {
-    id result;
-    @synchronized(self) {
-        result = (_list)[0];
-    }
-    return result;
+	return _headNode ? _headNode.data : nil;
 }
 
 - (id)getNext {
-    id result;
-    @synchronized(self) {
-        if ([self isNext]) {
-            _location++;
-            result = (_list)[_location];
-        } else {
-            result = nil;
-        }
-    }
-    return result;
+	MTLinkedListNode *strongCurrentNode = _currentNode;
+	if (strongCurrentNode && strongCurrentNode.next) {
+		MTLinkedListNode *strongNextNode = strongCurrentNode.next;
+		_currentNode = strongNextNode;
+		return strongNextNode.data;
+	}
+	return nil;
 }
 
 - (id)getPrevious {
-    id result;
-    @synchronized(self) {
-        if ([self isPrevious]) {
-            _location--;
-            result = (_list)[_location];
-        } else {
-            result = nil;
-        }
-    }
-    return result;
+	MTLinkedListNode *strongCurrentNode = _currentNode;
+	if (strongCurrentNode && strongCurrentNode.prev) {
+		MTLinkedListNode *strongPrevNode = strongCurrentNode.prev;
+		_currentNode = strongPrevNode;
+		return strongPrevNode.data;
+	}
+	return nil;
 }
-
 - (id)getTop {
-    return (self.count > 0) ? (_list).lastObject : nil;
+	return _tailNode ? _tailNode.data : nil;
 }
 
 - (id)getBottom {
-    return (self.count > 0) ? (_list)[0] : nil;
+	return _headNode ? _headNode.data : nil;
+}
+
+- (BOOL)isNext {
+	MTLinkedListNode *strongCurrentNode = _currentNode;
+	return strongCurrentNode && strongCurrentNode.next;
+}
+
+- (BOOL)isPrevious {
+	MTLinkedListNode *strongCurrentNode = _currentNode;
+	return strongCurrentNode && strongCurrentNode.prev;
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    return (_list)[index];
-}
+	if (index >= _count) return nil;
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-                                  objects:(id __unsafe_unretained [])stackbuf
-                                    count:(NSUInteger)len {
-    return [_list countByEnumeratingWithState:state objects:stackbuf count:len];
-}
-
-- (NSString *)toStringHumanReadable {
-    NSMutableString *result = [[NSMutableString alloc] initWithString:@"*<->"];
-    for (id object in _list) {
-        if ([object conformsToProtocol:@protocol(MTProtocolLog)]) {
-            [result appendFormat:@"%@<->", [object toStringHumanReadable]];
-        } else {
-            [result appendFormat:@"%@<->", object];
-        }
-    }
-    [result appendString:@"*"];
-    return result;
-}
-
-- (NSString *)toString {
-    return nil;
-}
-
-- (NSString *)toStringDebug {
-    return [NSString stringWithFormat:@"%@", self];
+	MTLinkedListNode *node = _headNode;
+	for (NSUInteger i = 0; i < index; i++) {
+		node = node.next;
+	}
+	return node.data;
 }
 
 - (void)reverse {
-    NSMutableArray *reverse = _list.reverseObjectEnumerator.allObjects.mutableCopy;
-    _list = reverse;
+	MTLinkedListNode *current = _headNode;
+	MTLinkedListNode *temp = nil;
+
+	while (current) {
+		temp = current.prev;
+		current.prev = current.next;
+		current.next = temp;
+		current = current.prev;
+	}
+
+	if (temp) {
+		_headNode = temp.prev;
+		_tailNode = temp;
+	}
 }
 
 - (NSArray *)toArray {
-    NSArray *result = [[NSArray alloc] initWithArray:_list];
-    return result;
+	NSMutableArray *array = [NSMutableArray arrayWithCapacity:_count];
+	MTLinkedListNode *node = _headNode;
+	while (node) {
+		[array addObject:node.data];
+		node = node.next;
+	}
+	return [array copy];
+}
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+								  objects:(id __unsafe_unretained [])stackbuf
+									count:(NSUInteger)len {
+	if (state->state >= _count) {
+		return 0;
+	}
+
+	NSUInteger batchCount = 0;
+	MTLinkedListNode *node = (state->state == 0) ? _headNode : (__bridge MTLinkedListNode *)(void *)state->extra[0];
+	while (node && batchCount < len) {
+		stackbuf[batchCount] = node.data;
+		node = node.next;
+		batchCount++;
+	}
+
+	state->state += batchCount;
+	state->itemsPtr = stackbuf;
+	state->mutationsPtr = &state->extra[1];
+	state->extra[0] = (unsigned long)(__bridge void *)node;
+
+	return batchCount;
+}
+
+- (NSString *)toString {
+	NSMutableString *result = [[NSMutableString alloc] initWithString:@"MTLinkedList: ["];
+	MTLinkedListNode *node = _headNode;
+	while (node) {
+		[result appendFormat:@"%@, ", node.data];
+		node = node.next;
+	}
+	if (result.length > 15) { // Remove trailing comma if list is not empty
+		[result deleteCharactersInRange:NSMakeRange(result.length - 2, 2)];
+	}
+	[result appendString:@"]"];
+	return result;
+}
+
+- (NSString *)toStringDebug {
+	NSMutableString *result = [[NSMutableString alloc] initWithString:@"MTLinkedList Debug:\n"];
+	MTLinkedListNode *node = _headNode;
+	NSUInteger index = 0;
+	while (node) {
+		[result appendFormat:@"[%lu] Node Address: %p, Data: %@, Next: %p, Prev: %p\n",
+							  (unsigned long)index, node, node.data, node.next, node.prev];
+		node = node.next;
+		index++;
+	}
+	return result;
+}
+
+- (NSString *)toStringHumanReadable {
+	NSMutableString *result = [[NSMutableString alloc] initWithString:@"*<->"];
+	MTLinkedListNode *node = _headNode;
+	while (node) {
+		if ([node.data conformsToProtocol:@protocol(MTProtocolLog)]) {
+			[result appendFormat:@"%@<->", [node.data toStringHumanReadable]];
+		} else {
+			[result appendFormat:@"%@<->", node.data];
+		}
+		node = node.next;
+	}
+	[result appendString:@"*"];
+	return result;
 }
 
 @end
