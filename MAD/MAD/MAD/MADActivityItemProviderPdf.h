@@ -17,9 +17,9 @@
 
 @interface MADActivityItemProviderPdf : UIActivityItemProvider
 
-    @property (nonatomic, weak) id <MADActivityItemProviderDelegate> delegate;
-    @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, weak, readonly) UIActivityViewController *activityViewController;
+@property (nonatomic, weak) id <MADActivityItemProviderDelegate> delegate;
+@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, weak, readonly) UIActivityViewController *activityViewController;
 
 @end
 

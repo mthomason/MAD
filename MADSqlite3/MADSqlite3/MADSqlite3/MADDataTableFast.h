@@ -16,22 +16,22 @@
 @class MADQuery, MADDatabaseSqlite3;
 
 @interface MADDataTableFast : MADDataTable
-    <NSCoding, NSFastEnumeration>
+	<NSCoding, NSFastEnumeration>
 
-    @property (nonatomic, strong, readonly) MADDatabaseSqlite3 *databaseForSelects;
+	@property (nonatomic, strong, readonly) MADDatabaseSqlite3 *databaseForSelects;
 
-    @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
-    @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
+	@property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
+	@property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
-    - (NSString *)tableName;
-    - (NSString *)columnKeyForColumnName:(NSString *)columnName;
-    - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
+	- (NSString *)tableName;
+	- (NSString *)columnKeyForColumnName:(NSString *)columnName;
+	- (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
-    - (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
+	- (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
 
-    - (NSDictionary *)dataForRow:(NSUInteger)cacheId
-                          column:(NSString *)columnIdentifier
-                           error:(NSError * __autoreleasing *)error;
+	- (NSDictionary *)dataForRow:(NSUInteger)cacheId
+						  column:(NSString *)columnIdentifier
+						   error:(NSError * __autoreleasing *)error;
 
 @end
 

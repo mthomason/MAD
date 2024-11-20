@@ -13,10 +13,10 @@
 
 @interface MADProgress : NSObject <NSCopying>
 
-    - (instancetype)initWithMessage:(NSString *)message andProgress:(float)progress;
+	- (instancetype)initWithMessage:(NSString *)message andProgress:(float)progress;
 
-    @property (readonly, nonatomic, copy) NSString *message;
-    @property (readonly, nonatomic, assign) float progress;
+	@property (readonly, nonatomic, copy) NSString *message;
+	@property (readonly, nonatomic, assign) float progress;
 
 @end
 

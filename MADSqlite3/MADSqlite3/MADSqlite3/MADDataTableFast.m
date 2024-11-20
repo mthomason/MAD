@@ -78,77 +78,76 @@
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol,
-                                    MADQueryParametersColumnKeysProtocol,
-                                    MADQueryParametersColumnMetaProtocol,
-                                    MADQueryParametersColumnDataProtocol>
+	MADQueryParametersColumnKeysProtocol, MADQueryParametersColumnMetaProtocol,
+	MADQueryParametersColumnDataProtocol>
 
-    @property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForInserts;
-    @property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForSelects;
+@property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForInserts;
+@property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForSelects;
 
-    @property (nonatomic, readwrite, strong) NSURL *urlFastCache;
-    @property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
+@property (nonatomic, readwrite, strong) NSURL *urlFastCache;
+@property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
 
-    @property (nonatomic, readwrite, strong) MADIndex *lastDataForCacheId;
+@property (nonatomic, readwrite, strong) MADIndex *lastDataForCacheId;
 
-    @property (nonatomic, readwrite, strong) MADQueryCacheAddRow *bulkInsertQuery;
+@property (nonatomic, readwrite, strong) MADQueryCacheAddRow *bulkInsertQuery;
 
-    @property (nonatomic, readwrite, strong) dispatch_queue_t queueBulkAdd;
+@property (nonatomic, readwrite, strong) dispatch_queue_t queueBulkAdd;
 
-    @property (nonatomic, readwrite, strong) id rowDataLastInserted;
+@property (nonatomic, readwrite, strong) id rowDataLastInserted;
 
-    @property (nonatomic, readwrite, strong) NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
+@property (nonatomic, readwrite, strong) NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
 
-    @property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
-    @property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
+@property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
+@property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
 
 @end
 
 @implementation MADDataTableFast {
-    sqlite3_stmt *_statementInsert;
+	sqlite3_stmt *_statementInsert;
 }
 
 + (NSDictionary *)newQueryDefinitionSelect: (NSArray *)columnKeys
-                                 tableName: (NSString *)tableName
-                           sortDescriptors: (NSArray *)sortDescriptors {
+								 tableName: (NSString *)tableName
+						   sortDescriptors: (NSArray *)sortDescriptors {
 
-    NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersColumnKeys];
-    NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersTableNames];
-    NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersSortDesc];
+	NSNumber *keyColumnKeys = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersColumnKeys];
+	NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersTableNames];
+	NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersSortDesc];
 
-    id definition = [[NSDictionary alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
-                                                                tableName, keyTableName,
-                                                                sortDescriptors, keySortDescriptors,
-                                                                nil];
-    return definition;
+	id definition = [[NSDictionary alloc] initWithObjectsAndKeys: columnKeys, keyColumnKeys,
+																tableName, keyTableName,
+																sortDescriptors, keySortDescriptors,
+																nil];
+	return definition;
 }
 
 + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                 withLimit:(NSUInteger)limit
-                                 andOffset:(NSUInteger)offset
-                                 dropRowid:(BOOL)droprowid {
-    
-    NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
-    NSNumber *limitw = [[NSNumber alloc] initWithUnsignedInteger: limit];
-    NSNumber *offsetw = [[NSNumber alloc] initWithUnsignedInteger: offset];
-    NSNumber *keyLimit = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersLimit];
-    NSNumber *keyOffset = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersOffset];
-    queryDefination[keyLimit] = limitw;
-    queryDefination[keyOffset] = offsetw;
-    if (droprowid) {
-        NSNumber *keyDropRow = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersDropRowid];
-        NSNumber *dropRowidObj = @YES;
-        queryDefination[keyDropRow] = dropRowidObj;
-    }
-    return  queryDefination;
+								 withLimit:(NSUInteger)limit
+								 andOffset:(NSUInteger)offset
+								 dropRowid:(BOOL)droprowid {
+	
+	NSMutableDictionary *queryDefination = [[NSMutableDictionary alloc] initWithDictionary:queryDefinationSelect];
+	NSNumber *limitw = [[NSNumber alloc] initWithUnsignedInteger: limit];
+	NSNumber *offsetw = [[NSNumber alloc] initWithUnsignedInteger: offset];
+	NSNumber *keyLimit = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersLimit];
+	NSNumber *keyOffset = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersOffset];
+	queryDefination[keyLimit] = limitw;
+	queryDefination[keyOffset] = offsetw;
+	if (droprowid) {
+		NSNumber *keyDropRow = [[NSNumber alloc] initWithShort: MADQueryCacheSelectLimitOffsetParamatersDropRowid];
+		NSNumber *dropRowidObj = @YES;
+		queryDefination[keyDropRow] = dropRowidObj;
+	}
+	return  queryDefination;
 
 }
 
 + (NSDictionary *)newQueryDefinitionSelect:(NSDictionary *)queryDefinationSelect
-                                 withLimit:(NSUInteger)limit
-                                 andOffset:(NSUInteger)offset {
-    return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
-                                andOffset:offset
-                                dropRowid:NO];
+								 withLimit:(NSUInteger)limit
+								 andOffset:(NSUInteger)offset {
+	return [self newQueryDefinitionSelect:queryDefinationSelect withLimit:limit
+								andOffset:offset
+								dropRowid:NO];
 }
 
 - (void)dealloc {
@@ -156,271 +155,272 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId {
-    return [self initWithId:objectId fromCache:YES];
+	return [self initWithId:objectId fromCache:YES];
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
-    if (self = [super initWithId:objectId fromCache:fromCache]) {
-    
-        dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
-        self.queueBulkAdd = queue;
-    
-        _bulkInsertLoop = NO;
-        self.tag = objectId;
-        _sortDescriptorsSet = NO;
-        
-        NSMutableIndexSet *groupKeyIndexes = [[NSMutableIndexSet alloc] init];
-        self.groupKeyIndexes = groupKeyIndexes;
-    }
-    return self;
+	if (self = [super initWithId:objectId fromCache:fromCache]) {
+	
+		dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
+		self.queueBulkAdd = queue;
+	
+		_bulkInsertLoop = NO;
+		self.tag = objectId;
+		_sortDescriptorsSet = NO;
+		
+		NSMutableIndexSet *groupKeyIndexes = [[NSMutableIndexSet alloc] init];
+		self.groupKeyIndexes = groupKeyIndexes;
+	}
+	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithCoder:decoder]) {
+	if (self = [super initWithCoder:decoder]) {
 
-        dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
-        self.queueBulkAdd = queue;
-        
-        NSString *absoluteString = [decoder decodeObjectForKey: [MADDataTableFast keyUrlFastCache]];
-        NSURL *url = [NSURL URLWithString:absoluteString];
-        self.urlFastCache = url;
-        
-        NSNumber *tag = [decoder decodeObjectForKey: [MADDataTableFast keyTag]];
-        self.tag = tag.unsignedIntegerValue;
-        
-        _bulkInsertLoop = [decoder decodeBoolForKey: [MADDataTableFast keyBulkInsertLoop]];
-        _sortDescriptorsSet = [decoder decodeBoolForKey: [MADDataTableFast keySortDescriptorsSet]];
-        
-        NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MADDataTableFast keyGroupKeys]];
-        NSMutableIndexSet *groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
-        self.groupKeyIndexes = groupKeys;
-    
-    }
-    return self;
+		dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
+		self.queueBulkAdd = queue;
+		
+		NSString *absoluteString = [decoder decodeObjectForKey: [MADDataTableFast keyUrlFastCache]];
+		NSURL *url = [NSURL URLWithString:absoluteString];
+		self.urlFastCache = url;
+		
+		NSNumber *tag = [decoder decodeObjectForKey: [MADDataTableFast keyTag]];
+		self.tag = tag.unsignedIntegerValue;
+		
+		_bulkInsertLoop = [decoder decodeBoolForKey: [MADDataTableFast keyBulkInsertLoop]];
+		_sortDescriptorsSet = [decoder decodeBoolForKey: [MADDataTableFast keySortDescriptorsSet]];
+		
+		NSIndexSet *groupKeysArray = [decoder decodeObjectForKey: [MADDataTableFast keyGroupKeys]];
+		NSMutableIndexSet *groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
+		self.groupKeyIndexes = groupKeys;
+	
+	}
+	return self;
 }
 
 - (NSDictionary *)copyPlist {
-    
-    NSDictionary *superPlist = [super copyPlist];
-    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
-    
-    NSURL *urlFastCache = self.urlFastCache;
-    NSString *absoluteString = urlFastCache.absoluteString;
-    NSAssert(absoluteString != nil, @"We need a path.");
-    NSString *urlFastCacheAbsolute = [[NSString alloc] initWithString: absoluteString];
-    NSString *keyUrlFastCache = [MADDataTableFast keyUrlFastCache];
-    plist[keyUrlFastCache] = urlFastCacheAbsolute;
-    
-    NSNumber *tag = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
-    NSString *keyTag = [MADDataTableFast keyTag];
-    plist[keyTag] = tag;
-    
-    NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:_bulkInsertLoop];
-    NSString *keyBulkInsertLoop = [MADDataTableFast keyBulkInsertLoop];
-    plist[keyBulkInsertLoop] = bulkInsert;
-    
-    if (self.groupKeyIndexes != nil) {
-        NSString *keyGroupKeys = [MADDataTableFast keyGroupKeys];
-        plist[keyGroupKeys] = [NSKeyedArchiver archivedDataWithRootObject: _groupKeyIndexes];
-    }
-    
-    NSNumber *sortSet = [[NSNumber alloc] initWithBool:_sortDescriptorsSet];
-    NSString *keySortDescriptorsSet = [MADDataTableFast keySortDescriptorsSet];
-    plist[keySortDescriptorsSet] = sortSet;
-    
-    return plist;
+	
+	NSDictionary *superPlist = [super copyPlist];
+	NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
+	
+	NSURL *urlFastCache = self.urlFastCache;
+	NSString *absoluteString = urlFastCache.absoluteString;
+	NSAssert(absoluteString != nil, @"We need a path.");
+	NSString *urlFastCacheAbsolute = [[NSString alloc] initWithString: absoluteString];
+	NSString *keyUrlFastCache = [MADDataTableFast keyUrlFastCache];
+	plist[keyUrlFastCache] = urlFastCacheAbsolute;
+	
+	NSNumber *tag = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
+	NSString *keyTag = [MADDataTableFast keyTag];
+	plist[keyTag] = tag;
+	
+	NSNumber *bulkInsert = [[NSNumber alloc] initWithBool:_bulkInsertLoop];
+	NSString *keyBulkInsertLoop = [MADDataTableFast keyBulkInsertLoop];
+	plist[keyBulkInsertLoop] = bulkInsert;
+	
+	if (self.groupKeyIndexes != nil) {
+		NSString *keyGroupKeys = [MADDataTableFast keyGroupKeys];
+		plist[keyGroupKeys] = [NSKeyedArchiver archivedDataWithRootObject: _groupKeyIndexes];
+	}
+	
+	NSNumber *sortSet = [[NSNumber alloc] initWithBool:_sortDescriptorsSet];
+	NSString *keySortDescriptorsSet = [MADDataTableFast keySortDescriptorsSet];
+	plist[keySortDescriptorsSet] = sortSet;
+	
+	return plist;
 }
 
 - (void)loadWithPlist:(NSDictionary *)plist {
-    [super loadWithPlist:plist];
-    
-    dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
-    self.queueBulkAdd = queue;
+	[super loadWithPlist:plist];
+	
+	dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
+	self.queueBulkAdd = queue;
 
-    id keyUrlFastCache = [MADDataTableFast keyUrlFastCache];
-    NSString *absoluteString = plist[keyUrlFastCache];
-    NSURL *url = [[NSURL alloc] initWithString:absoluteString];
-    self.urlFastCache = url;
-    
-    id keyTag = [MADDataTableFast keyTag];
-    NSNumber *tagWrapper = plist[keyTag];
-    self.tag = tagWrapper.unsignedIntegerValue;
-    
-    id keyBuildInsertLoop = [MADDataTableFast keyBulkInsertLoop];
-    NSNumber * __weak bulkInsertLoopWrapper = plist[keyBuildInsertLoop];
-    _bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
-    
-    id keyGroupKeys = [MADDataTableFast keyGroupKeys];
-    NSData *groupKeysData = plist[keyGroupKeys];
-    NSIndexSet *groupKeysArray = [NSKeyedUnarchiver unarchiveObjectWithData:groupKeysData];
-    NSMutableIndexSet *groupKeys;
-    if (groupKeysArray) {
-        groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
-    } else {
-        groupKeys = [[NSMutableIndexSet alloc] init];
-    }
-    self.groupKeyIndexes = groupKeys;
-    
-    [self reopenDbConnection];
-    
+	id keyUrlFastCache = [MADDataTableFast keyUrlFastCache];
+	NSString *absoluteString = plist[keyUrlFastCache];
+	NSURL *url = [[NSURL alloc] initWithString:absoluteString];
+	self.urlFastCache = url;
+	
+	id keyTag = [MADDataTableFast keyTag];
+	NSNumber *tagWrapper = plist[keyTag];
+	self.tag = tagWrapper.unsignedIntegerValue;
+	
+	id keyBuildInsertLoop = [MADDataTableFast keyBulkInsertLoop];
+	NSNumber * __weak bulkInsertLoopWrapper = plist[keyBuildInsertLoop];
+	_bulkInsertLoop = bulkInsertLoopWrapper.boolValue;
+	
+	id keyGroupKeys = [MADDataTableFast keyGroupKeys];
+	NSData *groupKeysData = plist[keyGroupKeys];
+	NSIndexSet *groupKeysArray = [NSKeyedUnarchiver unarchiveObjectWithData:groupKeysData];
+	NSMutableIndexSet *groupKeys;
+	if (groupKeysArray) {
+		groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
+	} else {
+		groupKeys = [[NSMutableIndexSet alloc] init];
+	}
+	self.groupKeyIndexes = groupKeys;
+	
+	[self reopenDbConnection];
+	
 }
 
 + (NSString *)keyUrlFastCache {
-    SEL sel = @selector(urlFastCache);
-    return NSStringFromSelector(sel);
+	SEL sel = @selector(urlFastCache);
+	return NSStringFromSelector(sel);
 }
 
 + (NSString *)keyTag {
-    SEL sel = @selector(tag);
-    return NSStringFromSelector(sel);
+	SEL sel = @selector(tag);
+	return NSStringFromSelector(sel);
 }
 
 + (NSString *)keyBulkInsertLoop {
-    SEL sel = @selector(bulkInsertLoop);
-    return NSStringFromSelector(sel);
+	SEL sel = @selector(bulkInsertLoop);
+	return NSStringFromSelector(sel);
 }
 
 + (NSString *)keySortDescriptorsSet {
-    return NSStringFromSelector(@selector(sortDescriptorsSet));
+	return NSStringFromSelector(@selector(sortDescriptorsSet));
 }
 
 + (NSString *)keyGroupKeys {
-    return NSStringFromSelector(@selector(groupKeyIndexes));
+	return NSStringFromSelector(@selector(groupKeyIndexes));
 }
 
 + (NSString *)keyColumns {
-    SEL selColumns = @selector(columns);
-    return NSStringFromSelector(selColumns);
+	SEL selColumns = @selector(columns);
+	return NSStringFromSelector(selColumns);
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-    [super encodeWithCoder:encoder];
+	[super encodeWithCoder:encoder];
 
-    NSString *absStr = _urlFastCache.absoluteString;
-    [encoder encodeObject: absStr forKey: [MADDataTableFast keyUrlFastCache]];
-    
-    NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
-    [encoder encodeObject: objid forKey: [MADDataTableFast keyTag]];
-    [encoder encodeBool: _bulkInsertLoop forKey: [MADDataTableFast keyBulkInsertLoop]];
-    [encoder encodeBool: _sortDescriptorsSet forKey: [MADDataTableFast keySortDescriptorsSet]];
+	NSString *absStr = _urlFastCache.absoluteString;
+	[encoder encodeObject: absStr forKey: [MADDataTableFast keyUrlFastCache]];
+	
+	NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
+	[encoder encodeObject: objid forKey: [MADDataTableFast keyTag]];
+	[encoder encodeBool: _bulkInsertLoop forKey: [MADDataTableFast keyBulkInsertLoop]];
+	[encoder encodeBool: _sortDescriptorsSet forKey: [MADDataTableFast keySortDescriptorsSet]];
 
 }
 
 - (NSString *)filenameCacheMadDB {
-    NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
-    return [tag stringByAppendingPathExtension:@"maddb"];
+	NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
+	return [tag stringByAppendingPathExtension:@"maddb"];
 }
 
 - (NSURL *)urlFastCache {
-    NSString *filename = [self filenameCacheMadDB];
-    NSURL *cacheDirectory, *urlFastCache;
+	NSString *filename = [self filenameCacheMadDB];
+	NSURL *cacheDirectory, *urlFastCache;
 
-    if (self.cacheDelegate == nil) {
-        MADAppDelegate appDelegate = [MADApplication AppDelegate];
-        id groupIdentifier = [appDelegate groupIdentifier].copy;
-        cacheDirectory = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
-    } else {
-        cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
-    }
-    urlFastCache = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-    return urlFastCache;
+	if (self.cacheDelegate == nil) {
+		MADAppDelegate appDelegate = [MADApplication AppDelegate];
+		id groupIdentifier = [appDelegate groupIdentifier].copy;
+		cacheDirectory = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+	} else {
+		cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
+	}
+	urlFastCache = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+	return urlFastCache;
 }
 
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-    NSAssert(NO, @"Not implemented");
-    return nil;
+	NSAssert(NO, @"Not implemented");
+	return nil;
 }
 
 - (void)setCacheDelegate:(id<MADCacheProtocol>)cacheDelegate {
-    _cacheDelegate = cacheDelegate;
-    [self reopenDbConnection];
+	_cacheDelegate = cacheDelegate;
+	[self reopenDbConnection];
 }
 
 - (void)reopenDbConnection {
 
-    NSURL *urlFastCache = self.urlFastCache;
+	NSURL *urlFastCache = self.urlFastCache;
 
-    
-    id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
-    
-    MADDatabaseSqlite3 *database;
-    MADDatabaseConnection *connection;
+	
+	id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
+	
+	MADDatabaseSqlite3 *database;
+	MADDatabaseConnection *connection;
 
-    @autoreleasepool {
-        database = [[MADDatabaseSqlite3 alloc] init];
-        database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
-        connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
-        database.databaseConnection = connection;
-        
-        [(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
-                                                              SQLITE_OPEN_CREATE |
-                                                              SQLITE_OPEN_FULLMUTEX];
-        self.databaseForInserts = database;
-        database = nil;
-        connection = nil;
-    }
-    
-    @autoreleasepool {
-        
-        connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
-        database = [[MADDatabaseSqlite3 alloc] init];
-        [database setDatabaseConnection:connection];
-        [database openDatabase];
-        database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
-        self.databaseForSelects = database;
-        database = nil;
-        connection = nil;
-    }
+	@autoreleasepool {
+		database = [[MADDatabaseSqlite3 alloc] init];
+		database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
+		connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+		database.databaseConnection = connection;
+		
+		[(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
+															  SQLITE_OPEN_CREATE |
+															  SQLITE_OPEN_FULLMUTEX];
+		self.databaseForInserts = database;
+		database = nil;
+		connection = nil;
+	}
+	
+	@autoreleasepool {
+		
+		connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+		database = [[MADDatabaseSqlite3 alloc] init];
+		[database setDatabaseConnection:connection];
+		[database openDatabase];
+		database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
+		self.databaseForSelects = database;
+		database = nil;
+		connection = nil;
+	}
 }
 
 - (NSString *)tableName {
-    char buf[22];
-    buf[0] = 't';
-    ultoa(self.tag, (buf+1));
-    char *ptr = buf;
-    NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-    return tableName;
+	char buf[22];
+	buf[0] = 't';
+	ultoa(self.tag, (buf+1));
+	char *ptr = buf;
+	NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+	return tableName;
 }
 
 - (NSString *)columnNameForIdentifier:(NSString *)identifier {
-    char buf[22];
-    buf[0] = 'c';
-    ultoa(identifier.hash, (buf+1));
-    char *ptr = buf;
-    NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-    return columnName;
+	char buf[22];
+	buf[0] = 'c';
+	ultoa(identifier.hash, (buf+1));
+	char *ptr = buf;
+	NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+	return columnName;
 }
+
 - (NSString *)queryTableName {
-    return [self tableName];
+	return [self tableName];
 }
 - (NSArray <NSString *> *)queryColumnKeys {
-    return [self columnKeys];
+	return [self columnKeys];
 }
 - (NSDictionary *)queryColumns {
-    return [self columns];
+	return [self columns];
 }
 - (NSArray *)queryRowData {
-    return [self rowDataLastInserted];
+	return [self rowDataLastInserted];
 }
 - (void)addColumn:(MADDataColumn *)column {
 
-    BOOL createTable = self.columnKeys.count == 0;
-    char buf[22];
-    buf[0] = 'c';
-    //ultoa(column.identifier.hash, (buf+1));
-    ultoa(column.fieldName.hash, (buf+1));
-    char *ptr = buf;
-    NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+	BOOL createTable = self.columnKeys.count == 0;
+	char buf[22];
+	buf[0] = 'c';
+	//ultoa(column.identifier.hash, (buf+1));
+	ultoa(column.fieldName.hash, (buf+1));
+	char *ptr = buf;
+	NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 
-    [self.columnKeys addObject:columnName];
+	[self.columnKeys addObject:columnName];
 
-    NSString *tableName = [self tableName];
-    [self addColumn: column
-            toTable: tableName
-         columnName: columnName
-        createTable: createTable
-             unique: NO];
-    self.columns[columnName] = column;
+	NSString *tableName = [self tableName];
+	[self addColumn: column
+			toTable: tableName
+		 columnName: columnName
+		createTable: createTable
+			 unique: NO];
+	self.columns[columnName] = column;
 }
 
 - (void)setupGroupKeyIndexes {
