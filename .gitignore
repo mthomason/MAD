@@ -1,19 +1,5 @@
-#########################
-# .gitignore file for Xcode4 / OS X Source projects
-#
-# Version 2.1
-# For latest version, see: http://stackoverflow.com/questions/49478/git-ignore-file-for-xcode-projects
-#
-# 2013 updates:
-# - fixed the broken "save personal Schemes"
-# - added line-by-line explanations for EVERYTHING (some were missing)
-#
-# NB: if you are storing "built" products, this WILL NOT WORK,
-# and you should use a different .gitignore (or none at all)
-# This file is for SOURCE projects, where there are many extra
-# files that we want to exclude
-#
-#########################
+# Scripts
+usr/local/share/
 
 #CodeSigningRequest
 MADRequest.certSigningRequest
