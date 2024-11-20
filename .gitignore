@@ -1,5 +1,8 @@
 # Scripts
 usr/local/share/
+opt/
+libarchive/
+bld/
 
 #CodeSigningRequest
 MADRequest.certSigningRequest
