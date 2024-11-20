@@ -1349,10 +1349,6 @@
 		4CDFC99A1EDEFAE7008E1AD6 /* MADElementViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementViewManager.h; sourceTree = "<group>"; };
 		4CDFC99B1EDEFAE7008E1AD6 /* MADElementViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementViewManager.m; sourceTree = "<group>"; };
 		4CE0F5071F5D600D00D828E1 /* Patterns.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Patterns.xcassets; sourceTree = "<group>"; };
-		4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MADVector.cpp; path = MADStack/cpp/MADVector.cpp; sourceTree = "<group>"; };
-		4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MADVector.hpp; path = MADStack/cpp/MADVector.hpp; sourceTree = "<group>"; };
-		4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVector.h; path = MADStack/cpp/MADVector.h; sourceTree = "<group>"; };
-		4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVector.mm; path = MADStack/cpp/MADVector.mm; sourceTree = "<group>"; };
 		4CE3194D1E4D2AB900EB5B85 /* MADReportPageViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADReportPageViewProtocol.h; path = ../../../MADReportPageViewProtocol.h; sourceTree = "<group>"; };
 		4CE3194E1E4D2C4B00EB5B85 /* MADCellElementDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCellElementDelegate.h; sourceTree = "<group>"; };
 		4CE4EFAE1CD08C58006CA2B0 /* MADCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCacheManager.h; path = MADStack/Managers/MADCacheManager.h; sourceTree = "<group>"; };
@@ -2036,7 +2032,6 @@
 				4CC9828A1F50E74600E0496A /* MADStoryboard.m */,
 				4C6C09C31F5CEB5100EDA039 /* MADDocumentCreationManager.h */,
 				4C6C09C41F5CEB5200EDA039 /* MADDocumentCreationManager.m */,
-				4CE1CA521CFC50E0001BD2D5 /* cpp */,
 				4C26BA261BAF999800456DC8 /* Protocols */,
 				4CB8EDFF1E19F4AB00193295 /* Navigation */,
 				4C26BA041BAF14F200456DC8 /* About */,
@@ -3392,17 +3387,6 @@
 			children = (
 			);
 			name = InAssetsPackage;
-			sourceTree = "<group>";
-		};
-		4CE1CA521CFC50E0001BD2D5 /* cpp */ = {
-			isa = PBXGroup;
-			children = (
-				4CE1CA541CFC5115001BD2D5 /* MADVector.hpp */,
-				4CE1CA531CFC5115001BD2D5 /* MADVector.cpp */,
-				4CE1CA561CFC5E6C001BD2D5 /* MADVector.h */,
-				4CE1CA571CFC5E6C001BD2D5 /* MADVector.mm */,
-			);
-			name = cpp;
 			sourceTree = "<group>";
 		};
 		4CE4EFAD1CD08C14006CA2B0 /* Managers */ = {
