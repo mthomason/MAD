@@ -10,7 +10,7 @@
 #define MAD_MADFoundation_MADApplication_h
 
 #import <Foundation/NSObject.h>
-#import "MADAppDelegate.h"
+#import <MADFoundation/MADAppDelegate.h>
 
 @interface MADApplication : NSObject
 

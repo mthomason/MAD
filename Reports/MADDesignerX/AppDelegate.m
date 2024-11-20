@@ -30,4 +30,64 @@
 }
 
 
+- (NSString *)applicationBundleIdentifier { 
+	<#code#>
+}
+
+- (NSString *)applicationIdentifier { 
+	<#code#>
+}
+
+- (NSString *)applicationNameSufixPart { 
+	<#code#>
+}
+
++ (NSString *)bundleDisplayName { 
+	<#code#>
+}
+
++ (NSString *)bundleVersion { 
+	<#code#>
+}
+
+- (NSString *)groupIdentifier { 
+	<#code#>
+}
+
++ (NSString *)groupIdentifier { 
+	<#code#>
+}
+
++ (NSString *)humanReadableCopyright { 
+	<#code#>
+}
+
+- (NSString *)localizedApplicationNameSufixPart { 
+	<#code#>
+}
+
+- (NSString *)name { 
+	<#code#>
+}
+
+- (NSString *)revisionNumber { 
+	<#code#>
+}
+
+- (NSString *)trademark { 
+	<#code#>
+}
+
+- (NSString *)ubiquityIdentifier { 
+	<#code#>
+}
+
++ (NSString *)ubiquityIdentifier { 
+	<#code#>
+}
+
+- (NSString *)versionNumber { 
+	<#code#>
+}
+
 @end
