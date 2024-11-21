@@ -13,7 +13,7 @@
 #import "MADManagedObjectViewProtocol.h"
 
 @interface MADManagedObjectCollectionViewCell : UICollectionViewCell
-    <MADManagedObjectViewProtocol>
+	<MADManagedObjectViewProtocol>
 
 @end
 

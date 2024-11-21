@@ -18,10 +18,10 @@ extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 
 @interface MTAggregateFunctionsViewController : UITableViewController
 
-    @property (nonatomic, weak) id <MADAggregateFunctionsViewControllerDelegate> functionDelegate;
-    @property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
+	@property (nonatomic, weak) id <MADAggregateFunctionsViewControllerDelegate> functionDelegate;
+	@property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
 
-    - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
+	- (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
 
 @end
 

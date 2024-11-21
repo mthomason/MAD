@@ -16,13 +16,13 @@
 
 @interface MADTableController : UICollectionViewController
 
-    @property (nonatomic, strong, readonly) MADDataFormatter *tableFormatter;
+	@property (nonatomic, strong, readonly) MADDataFormatter *tableFormatter;
 
-    - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query
-                         database:(MADDatabase *)database
-                          tableID:(NSManagedObjectID *)tableID;
-    - (NSUInteger)rowCount;
-    - (NSUInteger)columnCount;
+	- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query
+						 database:(MADDatabase *)database
+						  tableID:(NSManagedObjectID *)tableID;
+	- (NSUInteger)rowCount;
+	- (NSUInteger)columnCount;
 
 @end
 

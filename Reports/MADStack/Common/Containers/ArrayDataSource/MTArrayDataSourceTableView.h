@@ -12,8 +12,7 @@
 #import "MTArrayDataSource.h"
 
 @interface MTArrayDataSourceTableView : MTArrayDataSource
-    <UITableViewDataSource>
-
+	<UITableViewDataSource>
 
 @end
 

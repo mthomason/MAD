@@ -22,32 +22,32 @@
 
 @protocol MTViewControllerAggregateDelegate
 
-    - (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
-                                    inputType:(MTAggregateFunctionInputType)inputType
-                                  inputObject:(NSManagedObjectID *)objectID
-                                    groupType:(MTAggregateGroupByType)groupType
-                                  groupNumber:(int32_t)groupNumber;
+	- (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
+									inputType:(MTAggregateFunctionInputType)inputType
+								  inputObject:(NSManagedObjectID *)objectID
+									groupType:(MTAggregateGroupByType)groupType
+								  groupNumber:(int32_t)groupNumber;
 
 @end
 
 @interface MTDocumentObjectNewAggregateViewController : UITableViewController
-    <MADUnwindProtocol, UITableViewDelegate>
+	<MADUnwindProtocol, UITableViewDelegate>
 
-    @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> aggregateDelegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MTViewControllerAggregateDelegate> aggregateDelegate;
+	@property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateInput;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateInput;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
 
-    @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
-    @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-    @property (nonatomic, assign) int32_t groupTypeSectionNumber;
-    @property (nonatomic, copy) NSManagedObjectID *fieldObjectID;
+	@property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
+	@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
+	@property (nonatomic, assign) int32_t groupTypeSectionNumber;
+	@property (nonatomic, copy) NSManagedObjectID *fieldObjectID;
 
-    @property (nonatomic, assign) BOOL editmode;
+	@property (nonatomic, assign) BOOL editmode;
 
-    - (void)setAggregateObjectToEdit:(RptqDocumentElementAggregate *)aggregateDocumentObject;
+	- (void)setAggregateObjectToEdit:(RptqDocumentElementAggregate *)aggregateDocumentObject;
 
 @end
 

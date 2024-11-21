@@ -88,7 +88,6 @@
 		4C26BA221BAF150F00456DC8 /* MADQueryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA171BAF150F00456DC8 /* MADQueryTableViewController.m */; };
 		4C26BA231BAF150F00456DC8 /* MADHierarchicalChildViewDefination.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA191BAF150F00456DC8 /* MADHierarchicalChildViewDefination.m */; };
 		4C26BA241BAF150F00456DC8 /* MADQueryVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA1B1BAF150F00456DC8 /* MADQueryVisualizationViewController.m */; };
-		4C26BA311BAF999800456DC8 /* MADUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA301BAF999800456DC8 /* MADUser.m */; };
 		4C26BA371BAF99BE00456DC8 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA331BAF99BE00456DC8 /* Constants.m */; };
 		4C26BA381BAF99BE00456DC8 /* MADPromptManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA361BAF99BE00456DC8 /* MADPromptManager.m */; };
 		4C26BA581BAF99F000456DC8 /* MADResizeHandles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA3B1BAF99F000456DC8 /* MADResizeHandles.m */; };
@@ -291,7 +290,6 @@
 		4C6F34FD1E408D9D00F4744F /* MADElementMigrationPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */; };
 		4C780CE91BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */; };
 		4C84F9B724B87CAF0096FB31 /* MAD Designer.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B91ACA97C8006D3996 /* MAD Designer.app */; };
-		4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */; };
 		4C88A3451E6691ED009F8BFE /* MADPageStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */; };
 		4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
@@ -695,8 +693,6 @@
 		4C26BA6E1BAF9A7300456DC8 /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
 		4C26BA781BAF9AA700456DC8 /* MADDriverSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDriverSelectorController.h; path = MADStack/MADQuery/UI/DatabaseSelector/MADDriverSelectorController.h; sourceTree = "<group>"; };
 		4C26BA791BAF9AA700456DC8 /* MADDriverSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDriverSelectorController.m; path = MADStack/MADQuery/UI/DatabaseSelector/MADDriverSelectorController.m; sourceTree = "<group>"; };
-		4C26BA841BAF9B3000456DC8 /* MADObjectIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADObjectIdentifier.h; sourceTree = "<group>"; };
-		4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADObjectIdentifier.m; sourceTree = "<group>"; };
 		4C26BA871BAF9B3000456DC8 /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = objcmad.c; sourceTree = "<group>"; };
 		4C26BA881BAF9B3000456DC8 /* objcmad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objcmad.h; sourceTree = "<group>"; };
 		4C26BA8B1BAF9B9B00456DC8 /* MADNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationController.h; path = UI/MADNavigationController.h; sourceTree = "<group>"; };
@@ -1862,8 +1858,6 @@
 		4C26BA831BAF9B3000456DC8 /* Items */ = {
 			isa = PBXGroup;
 			children = (
-				4C26BA841BAF9B3000456DC8 /* MADObjectIdentifier.h */,
-				4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */,
 			);
 			path = Items;
 			sourceTree = "<group>";
@@ -3914,7 +3908,6 @@
 				4C401F7C1BAE7EB500BAE5FC /* MTBorderedView.m in Sources */,
 				4C26BA5A1BAF99F000456DC8 /* MADExplorerViewLayout.m in Sources */,
 				4C26B9C91BAF123A00456DC8 /* MADTabBarController.m in Sources */,
-				4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */,
 				4C401F7F1BAE7EB500BAE5FC /* MADRulerView.m in Sources */,
@@ -3981,7 +3974,6 @@
 				4C6D2F041E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m in Sources */,
 				4C26BA621BAF99F000456DC8 /* MTTableController.m in Sources */,
 				4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */,
-				4C26BA311BAF999800456DC8 /* MADUser.m in Sources */,
 				4CF6AFCC1CB108C700D3AD11 /* MADRefreshOperationConnect.m in Sources */,
 				4C4020F51BAE988900BAE5FC /* MADQueryBuilderSortTypeViewController.m in Sources */,
 				4C6D2EFB1E6E7789008EFE5D /* MADPredicateFormatNavigationItem.m in Sources */,

@@ -12,19 +12,19 @@
 @implementation MTArrayDataSourceCollectionView
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+	return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.items.count;
+	return self.items.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier
-                                                                           forIndexPath:indexPath];
-    id item = [self itemAtIndexPath:indexPath];
-    self.configureCellBlock(cell, item);
-    return cell;
+	UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier
+																		   forIndexPath:indexPath];
+	id item = [self itemAtIndexPath:indexPath];
+	self.configureCellBlock(cell, item);
+	return cell;
 }
 
 @end

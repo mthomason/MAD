@@ -13,19 +13,19 @@
 
 @protocol MTTableViewControllerBarcodeExtraAztecDelegate
 
-    - (void)barcodeAztecDidEnableAutomaticResizing;
-    - (void)barcodeAztecDidSetSize:(NSInteger)size;
-    - (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection;
+	- (void)barcodeAztecDidEnableAutomaticResizing;
+	- (void)barcodeAztecDidSetSize:(NSInteger)size;
+	- (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection;
 
-    - (BOOL)barcodeAztecAutomaticResizing;
-    - (NSInteger)barcodeAztecInitalSize;
-    - (NSInteger)barcodeAztecInitalErrorCorrection;
+	- (BOOL)barcodeAztecAutomaticResizing;
+	- (NSInteger)barcodeAztecInitalSize;
+	- (NSInteger)barcodeAztecInitalErrorCorrection;
 
 @end
 
 @interface MTTableViewControllerBarcodeExtraAztec : UITableViewController
 
-    @property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraAztecDelegate> delegate;
+	@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraAztecDelegate> delegate;
 
 @end
 

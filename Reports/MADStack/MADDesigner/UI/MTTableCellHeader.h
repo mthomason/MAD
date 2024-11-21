@@ -15,7 +15,7 @@
 
 @interface MADTableCellHeader : UICollectionReusableView
 
-    @property (nonatomic, strong, readonly) UILabel *label;
+	@property (nonatomic, strong, readonly) UILabel *label;
 
 @end
 

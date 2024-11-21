@@ -13,7 +13,7 @@
 @synthesize identifier = _identifier;
 
 - (id <NSCopying>)key {
-    return @(self.identifier);
+	return @(self.identifier);
 }
 
 @end

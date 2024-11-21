@@ -12,7 +12,7 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 
 @interface MADDesignerAnimatedTransitioning : NSObject
-    <UIViewControllerAnimatedTransitioning>
+	<UIViewControllerAnimatedTransitioning>
 
 @end
 

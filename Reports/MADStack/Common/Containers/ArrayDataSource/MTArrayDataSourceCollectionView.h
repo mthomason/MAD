@@ -12,7 +12,7 @@
 #import "MTArrayDataSource.h"
 
 @interface MTArrayDataSourceCollectionView : MTArrayDataSource
-    <UICollectionViewDataSource>
+	<UICollectionViewDataSource>
 
 @end
 

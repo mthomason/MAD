@@ -17,11 +17,9 @@
 extern NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier;
 
 @interface MTDocumentObjectNewStaticLabelViewController : UITableViewController
-    <UITableViewDelegate,
-        UITextFieldDelegate,
-        MADUnwindProtocol>
+	<UITableViewDelegate, UITextFieldDelegate, MADUnwindProtocol>
 
-    @property (nonatomic, weak) IBOutlet UITextField *textField;
+	@property (nonatomic, weak) IBOutlet UITextField *textField;
 
 @end
 

@@ -21,7 +21,7 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 @interface MTDocumentObjectNewStaticLabelViewController ()
 
-    @property (nonatomic, weak) IBOutlet UILabel *labelTextLabel;
+	@property (nonatomic, weak) IBOutlet UILabel *labelTextLabel;
 
 @end
 
@@ -30,67 +30,67 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 @synthesize unwindViewController;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-    }
-    return self;
+	self = [super initWithCoder:aDecoder];
+	if (self) {
+		
+	}
+	return self;
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+	[super didReceiveMemoryWarning];
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.navigationItem.leftItemsSupplementBackButton = YES;
-    self.navigationItem.hidesBackButton = NO;
-    self.textField.delegate = self;
-    [self.textField becomeFirstResponder];
-    
-    MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Static Label",
-                                       @"Title of button to create a non-changing (static) text-label-document-object.");
-    self.navigationItem.titleView = titleView;
+	[super viewDidLoad];
+	self.navigationItem.leftItemsSupplementBackButton = YES;
+	self.navigationItem.hidesBackButton = NO;
+	self.textField.delegate = self;
+	[self.textField becomeFirstResponder];
+	
+	MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
+	titleView.text = NSLocalizedString(@"Static Label",
+									   @"Title of button to create a non-changing (static) text-label-document-object.");
+	self.navigationItem.titleView = titleView;
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.preferredContentSize = CGSizeMake(320.0000f, 120.0000f);
-    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 120.0000f);
+	[super viewWillAppear:animated];
+	self.preferredContentSize = CGSizeMake(320.0000f, 120.0000f);
+	self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 120.0000f);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+	[super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+	[super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
+	[super viewDidDisappear:animated];
 }
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
-                         withSender:(id)sender {
-    return NO;
+				 fromViewController:(UIViewController *)fromViewController
+						 withSender:(id)sender {
+	return NO;
 }
 
 #pragma mark -
 #pragma mark Text Field Delegate Protocol
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField.text.length > 0) {
-        [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelSaveIdentifer" sender:self];
-    } else {
-        [self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelCancelIdentifer" sender:self];
-    }
-    return YES;
+	if (textField.text.length > 0) {
+		[self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelSaveIdentifer" sender:self];
+	} else {
+		[self performSegueWithIdentifier:@"MTSegueNewDocumentObjectStaticLabelCancelIdentifer" sender:self];
+	}
+	return YES;
 }
 
 #pragma mark -

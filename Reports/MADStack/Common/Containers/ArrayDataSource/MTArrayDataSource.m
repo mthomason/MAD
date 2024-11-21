@@ -14,71 +14,71 @@
 @implementation MTArrayDataSource
 
 - (instancetype)initWithItems:(NSArray *)items
-     cellIdentifier:(NSString *)cellIdentifier
+	 cellIdentifier:(NSString *)cellIdentifier
  configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
-            andType:(MTDataSourceType)type {
-    
-    switch (type) {
-        case MTDataSourceTypeCollectionView: {
-            MTArrayDataSourceCollectionView *dataSource = [[MTArrayDataSourceCollectionView alloc] init];
-            self = dataSource;
-            break;
-        }
-        case MTDataSourceTypeTableView: {
-            MTArrayDataSourceTableView *dataSource = [[MTArrayDataSourceTableView alloc] init];
-            self = dataSource;
-            break;
-        }
-        default:
-            break;
-    }
+			andType:(MTDataSourceType)type {
+	
+	switch (type) {
+		case MTDataSourceTypeCollectionView: {
+			MTArrayDataSourceCollectionView *dataSource = [[MTArrayDataSourceCollectionView alloc] init];
+			self = dataSource;
+			break;
+		}
+		case MTDataSourceTypeTableView: {
+			MTArrayDataSourceTableView *dataSource = [[MTArrayDataSourceTableView alloc] init];
+			self = dataSource;
+			break;
+		}
+		default:
+			break;
+	}
 
-    if (self) {
-        
-        NSMutableArray *itemsm = [NSMutableArray arrayWithArray:items];
-        [self setItems: itemsm];
-        
-        NSString *identifier = [NSString stringWithString:cellIdentifier];
-        [self setCellIdentifier: identifier];
-        
-        MTCellConfigureBlock block = [cellConfigureBlock copy];
-        [self setConfigureCellBlock: block];
-        
-    }
-    return self;
+	if (self) {
+		
+		NSMutableArray *itemsm = [NSMutableArray arrayWithArray:items];
+		[self setItems: itemsm];
+		
+		NSString *identifier = [NSString stringWithString:cellIdentifier];
+		[self setCellIdentifier: identifier];
+		
+		MTCellConfigureBlock block = [cellConfigureBlock copy];
+		[self setConfigureCellBlock: block];
+		
+	}
+	return self;
 }
 
 - (id)itemAtIndex:(NSUInteger)index {
-    return [self.items objectAtIndex:index];
+	return [self.items objectAtIndex:index];
 }
 
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self itemAtIndex:indexPath.row];
+	return [self itemAtIndex:indexPath.row];
 }
 
 - (void)removeObjectsInArray:(NSArray *)array {
-    [self.items removeObjectsInArray:array];
+	[self.items removeObjectsInArray:array];
 }
 
 - (void)updateWithItems:(NSArray *)items {
-    NSMutableArray *itemsm = [NSMutableArray arrayWithArray:items];
-    [self setItems:itemsm];
+	NSMutableArray *itemsm = [NSMutableArray arrayWithArray:items];
+	[self setItems:itemsm];
 }
 
 - (NSInteger)count {
-    return [[self items] count];
+	return [[self items] count];
 }
 
 - (void)removeItemAtIndex:(NSUInteger)index {
-    [[self items] removeObjectAtIndex:index];
+	[[self items] removeObjectAtIndex:index];
 }
 
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes {
-    [[self items] removeObjectsAtIndexes:indexes];
+	[[self items] removeObjectsAtIndexes:indexes];
 }
 
 - (void)removeItemAtIndexPath:(NSIndexPath *)indexPath {
-    [self removeItemAtIndex:(NSUInteger)indexPath.row];
+	[self removeItemAtIndex:(NSUInteger)indexPath.row];
 }
 
 @end

@@ -16,32 +16,32 @@
 @class MADDesignerSectionLabel, MADReportSection;
 
 typedef NS_ENUM(NSUInteger, MADBorderState) {
-    MADBorderStateNormal,
-    MADBorderStateSelected,
-    MADBorderStateDisabled
+	MADBorderStateNormal,
+	MADBorderStateSelected,
+	MADBorderStateDisabled
 };
 
 @interface MADDesignerSectionView : MADManagedObjectCollectionView
 
-    + (instancetype)newDesignerSectionView:(NSInteger)identifier
-                      designViewIdentifier:(NSUInteger)designViewIdentifier
-                                 isVisible:(BOOL)isVisible
-                                  delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate;
+	+ (instancetype)newDesignerSectionView:(NSInteger)identifier
+					  designViewIdentifier:(NSUInteger)designViewIdentifier
+								 isVisible:(BOOL)isVisible
+								  delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate;
 
-    @property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
+	@property (nonatomic, weak) MADDesignerSectionLabel *sectionLabel;
 
-    @property (nonatomic, assign) BOOL visible;
-    @property (nonatomic, assign) BOOL selected;
+	@property (nonatomic, assign) BOOL visible;
+	@property (nonatomic, assign) BOOL selected;
 
-    - (void)removeItemAtIndex:(NSIndexPath *)deletePath
-                       update:(void (^)(void))update
-            animationComplete:(void (^)(BOOL))animationComplete
-                   completion:(void (^)(void))completion;
-                       
-    - (void)insertItemAtIndex:(NSIndexPath *)path
-                       update:(void (^)(void))update
-            animationComplete:(void (^)(BOOL))animationComplete
-                   completion:(void (^)(void))completion;
+	- (void)removeItemAtIndex:(NSIndexPath *)deletePath
+					   update:(void (^)(void))update
+			animationComplete:(void (^)(BOOL))animationComplete
+				   completion:(void (^)(void))completion;
+					   
+	- (void)insertItemAtIndex:(NSIndexPath *)path
+					   update:(void (^)(void))update
+			animationComplete:(void (^)(BOOL))animationComplete
+				   completion:(void (^)(void))completion;
 
 @end
 

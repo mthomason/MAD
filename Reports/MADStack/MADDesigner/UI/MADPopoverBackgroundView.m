@@ -19,51 +19,51 @@
 @implementation MADPopoverBackgroundView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+	if (self = [super initWithFrame:frame]) {
 
-        UIColor *shadowColor = [UIColor clearColor];
-        self.arrowOffsetHolder = 50.0000f;
-        self.arrowDirectionHolder = UIPopoverArrowDirectionAny;
-        self.layer.shadowColor = shadowColor.CGColor;
-        self.layer.shadowOffset = CGSizeZero;
-        self.layer.shadowRadius = CGSizeZero.width;
-        self.opaque = NO;
-        
-    }
-    return self;
+		UIColor *shadowColor = [UIColor clearColor];
+		self.arrowOffsetHolder = 50.0000f;
+		self.arrowDirectionHolder = UIPopoverArrowDirectionAny;
+		self.layer.shadowColor = shadowColor.CGColor;
+		self.layer.shadowOffset = CGSizeZero;
+		self.layer.shadowRadius = CGSizeZero.width;
+		self.opaque = NO;
+		
+	}
+	return self;
 }
 
 
 + (CGFloat)arrowBase {
-    return 32.0000f;
+	return 32.0000f;
 }
 
 + (UIEdgeInsets)contentViewInsets {
-    return UIEdgeInsetsMake(5.0000f, 10.0000f, 5.0000f, 10.0000f);
+	return UIEdgeInsetsMake(5.0000f, 10.0000f, 5.0000f, 10.0000f);
 }
 
 + (CGFloat)arrowHeight {
-    return 5.0000f;
+	return 5.0000f;
 }
 
 + (BOOL)wantsDefaultContentAppearance {
-    return YES;
+	return YES;
 }
 
 - (CGFloat)arrowOffset {
-    return self.arrowDirectionHolder;
+	return self.arrowDirectionHolder;
 }
 
 - (void)setArrowOffset:(CGFloat)arrowOffset {
-    self.arrowOffsetHolder = arrowOffset;
+	self.arrowOffsetHolder = arrowOffset;
 }
 
 - (UIPopoverArrowDirection)arrowDirection {
-    return self.arrowDirectionHolder;
+	return self.arrowDirectionHolder;
 }
 
 - (void)setArrowDirection:(UIPopoverArrowDirection)arrowDirection {
-    self.arrowDirectionHolder = arrowDirection;
+	self.arrowDirectionHolder = arrowDirection;
 }
 
 @end

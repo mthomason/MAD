@@ -17,101 +17,101 @@
 @implementation MADDocumentObjectCollectionViewCell
 
 - (void)awakeFromNib {
-    [super awakeFromNib];
-    self.title.isAccessibilityElement = NO;
-    self.detail.isAccessibilityElement = NO;
+	[super awakeFromNib];
+	self.title.isAccessibilityElement = NO;
+	self.detail.isAccessibilityElement = NO;
 }
 
 - (void)setType:(MADPrintPageElementType)type {
-    if (_type != type) {
-        _type = type;
-        switch (_type) {
-            case MADPrintPageElementTypeLabelDynamic:
-                self.title.text = [MADDocumentObjectCollectionViewCell TitleDynamic];
-                self.detail.text = [MADDocumentObjectCollectionViewCell DetailDynamic];
-                break;
-            case MADPrintPageElementTypeLabelStatic:
-                self.title.text = [MADDocumentObjectCollectionViewCell TitleStatic];
-                self.detail.text = [MADDocumentObjectCollectionViewCell DetailStatic];
-                break;
-            case MADPrintPageElementTypeAggregate:
-                self.title.text = [MADDocumentObjectCollectionViewCell TitleAggregate];
-                self.detail.text = [MADDocumentObjectCollectionViewCell DetailAggregate];
-                break;
-            case MADPrintPageElementTypeImage:
-                self.title.text = [MADDocumentObjectCollectionViewCell TitleImage];
-                self.detail.text = [MADDocumentObjectCollectionViewCell DetailImage];
-                break;
-            case MADPrintPageElementTypeWhtiespace:
-                self.title.text = [MADDocumentObjectCollectionViewCell TitleWhitespace];
-                self.detail.text = [MADDocumentObjectCollectionViewCell DetailWhitespace];
-                break;
-            case MADPrintPageElementTypeBarcode:
-                self.title.text = [MADDocumentObjectCollectionViewCell TitleBarcode];
-                self.detail.text = [MADDocumentObjectCollectionViewCell DetailBarcode];
-                break;
-            default:
-                self.title.text = @"";
-                self.detail.text = @"";
-                break;
-        }
-    }
+	if (_type != type) {
+		_type = type;
+		switch (_type) {
+			case MADPrintPageElementTypeLabelDynamic:
+				self.title.text = [MADDocumentObjectCollectionViewCell TitleDynamic];
+				self.detail.text = [MADDocumentObjectCollectionViewCell DetailDynamic];
+				break;
+			case MADPrintPageElementTypeLabelStatic:
+				self.title.text = [MADDocumentObjectCollectionViewCell TitleStatic];
+				self.detail.text = [MADDocumentObjectCollectionViewCell DetailStatic];
+				break;
+			case MADPrintPageElementTypeAggregate:
+				self.title.text = [MADDocumentObjectCollectionViewCell TitleAggregate];
+				self.detail.text = [MADDocumentObjectCollectionViewCell DetailAggregate];
+				break;
+			case MADPrintPageElementTypeImage:
+				self.title.text = [MADDocumentObjectCollectionViewCell TitleImage];
+				self.detail.text = [MADDocumentObjectCollectionViewCell DetailImage];
+				break;
+			case MADPrintPageElementTypeWhtiespace:
+				self.title.text = [MADDocumentObjectCollectionViewCell TitleWhitespace];
+				self.detail.text = [MADDocumentObjectCollectionViewCell DetailWhitespace];
+				break;
+			case MADPrintPageElementTypeBarcode:
+				self.title.text = [MADDocumentObjectCollectionViewCell TitleBarcode];
+				self.detail.text = [MADDocumentObjectCollectionViewCell DetailBarcode];
+				break;
+			default:
+				self.title.text = @"";
+				self.detail.text = @"";
+				break;
+		}
+	}
 }
 
 - (NSString *)accessibilityHint {
-    switch (self.type) {
-        case MADPrintPageElementTypeLabelDynamic:
-            return [MADDocumentObjectCollectionViewCell DetailDynamic];
-            break;
-        case MADPrintPageElementTypeLabelStatic:
-            return [MADDocumentObjectCollectionViewCell DetailStatic];
-            break;
-        case MADPrintPageElementTypeAggregate:
-            return [MADDocumentObjectCollectionViewCell DetailAggregate];
-            break;
-        case MADPrintPageElementTypeImage:
-            return [MADDocumentObjectCollectionViewCell DetailImage];
-            break;
-        case MADPrintPageElementTypeWhtiespace:
-            return [MADDocumentObjectCollectionViewCell DetailWhitespace];
-            break;
-        case MADPrintPageElementTypeBarcode:
-            return [MADDocumentObjectCollectionViewCell DetailBarcode];
-            break;
-        default:
-            return @"";
-            break;
-    }
+	switch (self.type) {
+		case MADPrintPageElementTypeLabelDynamic:
+			return [MADDocumentObjectCollectionViewCell DetailDynamic];
+			break;
+		case MADPrintPageElementTypeLabelStatic:
+			return [MADDocumentObjectCollectionViewCell DetailStatic];
+			break;
+		case MADPrintPageElementTypeAggregate:
+			return [MADDocumentObjectCollectionViewCell DetailAggregate];
+			break;
+		case MADPrintPageElementTypeImage:
+			return [MADDocumentObjectCollectionViewCell DetailImage];
+			break;
+		case MADPrintPageElementTypeWhtiespace:
+			return [MADDocumentObjectCollectionViewCell DetailWhitespace];
+			break;
+		case MADPrintPageElementTypeBarcode:
+			return [MADDocumentObjectCollectionViewCell DetailBarcode];
+			break;
+		default:
+			return @"";
+			break;
+	}
 }
 
 - (NSString *)accessibilityLabel {
-    switch (self.type) {
-        case MADPrintPageElementTypeLabelDynamic:
-            return [MADDocumentObjectCollectionViewCell TitleDynamic];
-            break;
-        case MADPrintPageElementTypeLabelStatic:
-            return [MADDocumentObjectCollectionViewCell TitleStatic];
-            break;
-        case MADPrintPageElementTypeAggregate:
-            return [MADDocumentObjectCollectionViewCell TitleAggregate];
-            break;
-        case MADPrintPageElementTypeImage:
-            return [MADDocumentObjectCollectionViewCell TitleImage];
-            break;
-        case MADPrintPageElementTypeWhtiespace:
-            return [MADDocumentObjectCollectionViewCell TitleWhitespace];
-            break;
-        case MADPrintPageElementTypeBarcode:
-            return [MADDocumentObjectCollectionViewCell TitleBarcode];
-            break;
-        default:
-            return @"";
-            break;
-    }
+	switch (self.type) {
+		case MADPrintPageElementTypeLabelDynamic:
+			return [MADDocumentObjectCollectionViewCell TitleDynamic];
+			break;
+		case MADPrintPageElementTypeLabelStatic:
+			return [MADDocumentObjectCollectionViewCell TitleStatic];
+			break;
+		case MADPrintPageElementTypeAggregate:
+			return [MADDocumentObjectCollectionViewCell TitleAggregate];
+			break;
+		case MADPrintPageElementTypeImage:
+			return [MADDocumentObjectCollectionViewCell TitleImage];
+			break;
+		case MADPrintPageElementTypeWhtiespace:
+			return [MADDocumentObjectCollectionViewCell TitleWhitespace];
+			break;
+		case MADPrintPageElementTypeBarcode:
+			return [MADDocumentObjectCollectionViewCell TitleBarcode];
+			break;
+		default:
+			return @"";
+			break;
+	}
 }
 
 - (BOOL)isAccessibilityElement {
-    return YES;
+	return YES;
 }
 
 

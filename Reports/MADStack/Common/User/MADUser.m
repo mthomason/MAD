@@ -69,11 +69,10 @@ static NSString * const MADIDUser                                   = @"MADIDUse
     return NO;
 }
 
+// ???: Unfinished
 - (void)uuid {
-    
     NSUserDefaults *defaults;
     defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
-    //self.applicationUserDefaults = defaults;
 }
 
 - (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {

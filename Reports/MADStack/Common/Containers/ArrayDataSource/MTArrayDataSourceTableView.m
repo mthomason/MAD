@@ -12,15 +12,15 @@
 @implementation MTArrayDataSourceTableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.items.count;
+	return self.items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier
-                                                            forIndexPath:indexPath];
-    id item = [self itemAtIndexPath:indexPath];
-    self.configureCellBlock(cell, item);
-    return cell;
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier
+															forIndexPath:indexPath];
+	id item = [self itemAtIndexPath:indexPath];
+	self.configureCellBlock(cell, item);
+	return cell;
 }
 
 @end

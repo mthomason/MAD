@@ -15,7 +15,7 @@
 
 @interface MADTableCell : UICollectionViewCell
 
-    @property (nonatomic, strong, readonly) UILabel *label;
+	@property (nonatomic, strong, readonly) UILabel *label;
 
 @end
 

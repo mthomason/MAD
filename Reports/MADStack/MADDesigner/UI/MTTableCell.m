@@ -16,40 +16,40 @@
 
 @interface MADTableCell ()
 
-    @property (nonatomic, strong, readwrite) UILabel *label;
+	@property (nonatomic, strong, readwrite) UILabel *label;
 
 @end
 
 @implementation MADTableCell
 
 - (void)dealloc {
-    _label = nil;
+	_label = nil;
 }
 
 - (void)removeFromSuperview {
-    [self.label removeFromSuperview];
-    [super removeFromSuperview];
+	[self.label removeFromSuperview];
+	[super removeFromSuperview];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        UIColor *color = [UIColor darkGrayColor];
-        UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
-        
-        lbl.backgroundColor = [UIColor whiteColor];
-        
-        [self.contentView addSubview:lbl];
-        lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
-                                UIViewAutoresizingFlexibleWidth |
-                                UIViewAutoresizingFlexibleTopMargin |
-                                UIViewAutoresizingFlexibleBottomMargin |
-                                UIViewAutoresizingFlexibleRightMargin |
-                                UIViewAutoresizingFlexibleLeftMargin;
-        self.contentView.layer.borderWidth = 1.0000f;
-        self.contentView.layer.borderColor = color.CGColor;
-        self.label = lbl;
-    }
-    return self;
+	if (self = [super initWithFrame:frame]) {
+		UIColor *color = [UIColor darkGrayColor];
+		UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
+		
+		lbl.backgroundColor = [UIColor whiteColor];
+		
+		[self.contentView addSubview:lbl];
+		lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+								UIViewAutoresizingFlexibleWidth |
+								UIViewAutoresizingFlexibleTopMargin |
+								UIViewAutoresizingFlexibleBottomMargin |
+								UIViewAutoresizingFlexibleRightMargin |
+								UIViewAutoresizingFlexibleLeftMargin;
+		self.contentView.layer.borderWidth = 1.0000f;
+		self.contentView.layer.borderColor = color.CGColor;
+		self.label = lbl;
+	}
+	return self;
 }
 
 @end

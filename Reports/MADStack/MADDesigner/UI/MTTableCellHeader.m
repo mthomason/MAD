@@ -24,45 +24,45 @@
 @implementation MADTableCellHeader
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initialize];
-    }
-    return self;
+	self = [super initWithCoder:aDecoder];
+	if (self) {
+		[self initialize];
+	}
+	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self initialize];
-    }
-    return self;
+	self = [super initWithFrame:frame];
+	if (self) {
+		[self initialize];
+	}
+	return self;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        [self initialize];
-    }
-    return self;
+	if (self = [super init]) {
+		[self initialize];
+	}
+	return self;
 }
 
 - (void)initialize {
-    UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
-    UIColor *bgcolor = [MADColorEverydayApps newColorBlue];
-    UIColor *textColor = [MADColorEverydayApps newColorWhite];
-    lbl.backgroundColor = bgcolor;
-    lbl.textColor = textColor;
-    lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
-                           UIViewAutoresizingFlexibleWidth |
-                           UIViewAutoresizingFlexibleTopMargin |
-                           UIViewAutoresizingFlexibleBottomMargin |
-                           UIViewAutoresizingFlexibleRightMargin |
-                           UIViewAutoresizingFlexibleLeftMargin;
+	UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
+	UIColor *bgcolor = [MADColorEverydayApps newColorBlue];
+	UIColor *textColor = [MADColorEverydayApps newColorWhite];
+	lbl.backgroundColor = bgcolor;
+	lbl.textColor = textColor;
+	lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+						   UIViewAutoresizingFlexibleWidth |
+						   UIViewAutoresizingFlexibleTopMargin |
+						   UIViewAutoresizingFlexibleBottomMargin |
+						   UIViewAutoresizingFlexibleRightMargin |
+						   UIViewAutoresizingFlexibleLeftMargin;
 
-    [self addSubview:lbl];
-    self.label = lbl;
-    self.layer.borderWidth = 1.0000f;
-    self.layer.borderColor = bgcolor.CGColor;
+	[self addSubview:lbl];
+	self.label = lbl;
+	self.layer.borderWidth = 1.0000f;
+	self.layer.borderColor = bgcolor.CGColor;
 }
 
 @end
