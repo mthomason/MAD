@@ -14,20 +14,20 @@
 typedef NS_ENUM(short, MTDateResolution) {
 	MTDateResolutionYear = 1,
 	MTDateResolutionMonth,
-    MTDateResolutionWeek,
+	MTDateResolutionWeek,
 	MTDateResolutionDay,
-    MTDateResolutionHour,
-    MTDateResolutionMinute,
-    MTDateResolutionSecond,
-    MTDateResolutionMillisecond
+	MTDateResolutionHour,
+	MTDateResolutionMinute,
+	MTDateResolutionSecond,
+	MTDateResolutionMillisecond
 };
 
 @class MTPair;
 
 @interface MADDateFromTimeFormatter : NSObject
 
-    - (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate;
-    + (double)timeIntervalForResolution:(MTDateResolution)resolution;
+	- (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate;
+	+ (double)timeIntervalForResolution:(MTDateResolution)resolution;
 
 @end
 

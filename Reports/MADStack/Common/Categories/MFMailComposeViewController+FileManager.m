@@ -13,12 +13,12 @@
 @implementation MFMailComposeViewController (FileManager)
 
 + (instancetype)contactUs:(id<MFMailComposeViewControllerDelegate>) mailComposeDelegate {
-    MFMailComposeViewController	*controller = [[MFMailComposeViewController alloc] init];
-    controller.mailComposeDelegate = mailComposeDelegate;
-    controller.toRecipients = @[@"admin@everydayapps.com"];
-    controller.subject = @"MAD Designer";
-    controller.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
-    return controller;
+	MFMailComposeViewController	*controller = [[MFMailComposeViewController alloc] init];
+	controller.mailComposeDelegate = mailComposeDelegate;
+	controller.toRecipients = @[@"admin@everydayapps.com"];
+	controller.subject = @"MAD Designer";
+	controller.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
+	return controller;
 }
 
 @end

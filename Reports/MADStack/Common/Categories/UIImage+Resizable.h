@@ -13,7 +13,7 @@
 
 @interface UIImage (Resizable)
 
-    - (UIImage *)resizableImage;
+- (UIImage *)resizableImage;
 
 @end
 

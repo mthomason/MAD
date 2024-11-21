@@ -11,40 +11,40 @@
 @implementation MADAnimatedTransitionControllerPop
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)context {
-    return 0.35;
+	return 0.35;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)context {
-    
-    UIViewController *toViewController, *fromViewController;
-    toViewController = [context viewControllerForKey: UITransitionContextToViewControllerKey];
-    fromViewController = [context viewControllerForKey: UITransitionContextFromViewControllerKey];
-    CGRect toFrameFinal = [context finalFrameForViewController:toViewController];
-    CGRect fromFrameFinal = [context finalFrameForViewController:fromViewController];
-    CGRect toFrameInital = [context initialFrameForViewController:toViewController];
-    CGRect fromFrameInital = [context initialFrameForViewController:fromViewController];
-    
-    toFrameInital = CGRectMake(toFrameFinal.origin.x - toFrameFinal.size.width,
-                               toFrameFinal.origin.y,
-                               toFrameFinal.size.width, toFrameFinal.size.height);
-    fromFrameFinal = CGRectMake(fromFrameInital.origin.x + fromFrameInital.size.width,
-                                fromFrameInital.origin.y,
-                                fromFrameInital.size.width, fromFrameInital.size.height);
-    
-    [[context containerView] addSubview:toViewController.view];
-    toViewController.view.frame = toFrameInital;
-    
-    [UIView animateWithDuration:[self transitionDuration:context] animations:^{
-        fromViewController.view.frame = fromFrameFinal;
-        toViewController.view.frame = [context containerView].frame;
-    } completion:^(BOOL finished) {
-        
-        BOOL wasCancelled = [context transitionWasCancelled];
-        if (!wasCancelled) {
-            [fromViewController.view removeFromSuperview];
-        }
-        [context completeTransition:!wasCancelled];
-    }];
+	
+	UIViewController *toViewController, *fromViewController;
+	toViewController = [context viewControllerForKey: UITransitionContextToViewControllerKey];
+	fromViewController = [context viewControllerForKey: UITransitionContextFromViewControllerKey];
+	CGRect toFrameFinal = [context finalFrameForViewController:toViewController];
+	CGRect fromFrameFinal = [context finalFrameForViewController:fromViewController];
+	CGRect toFrameInital = [context initialFrameForViewController:toViewController];
+	CGRect fromFrameInital = [context initialFrameForViewController:fromViewController];
+	
+	toFrameInital = CGRectMake(toFrameFinal.origin.x - toFrameFinal.size.width,
+							   toFrameFinal.origin.y,
+							   toFrameFinal.size.width, toFrameFinal.size.height);
+	fromFrameFinal = CGRectMake(fromFrameInital.origin.x + fromFrameInital.size.width,
+								fromFrameInital.origin.y,
+								fromFrameInital.size.width, fromFrameInital.size.height);
+	
+	[[context containerView] addSubview:toViewController.view];
+	toViewController.view.frame = toFrameInital;
+	
+	[UIView animateWithDuration:[self transitionDuration:context] animations:^{
+		fromViewController.view.frame = fromFrameFinal;
+		toViewController.view.frame = [context containerView].frame;
+	} completion:^(BOOL finished) {
+		
+		BOOL wasCancelled = [context transitionWasCancelled];
+		if (!wasCancelled) {
+			[fromViewController.view removeFromSuperview];
+		}
+		[context completeTransition:!wasCancelled];
+	}];
 }
 
 @end

@@ -11,7 +11,7 @@
 @implementation UICollectionReusableView (Reuse)
 
 + (NSString *)reuseIdentifier {
-    return NSStringFromClass([self class]);
+	return NSStringFromClass([self class]);
 }
 
 @end

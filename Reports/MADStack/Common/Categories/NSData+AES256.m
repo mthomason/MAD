@@ -31,16 +31,16 @@
 	
 	size_t numBytesEncrypted = 0;
 	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-                                          keyPtr, kCCKeySizeAES256,
-                                          NULL /* initialization vector (optional) */,
-                                          self.bytes, dataLength, /* input */
-                                          buffer, bufferSize, /* output */
-                                          &numBytesEncrypted);
+										  keyPtr, kCCKeySizeAES256,
+										  NULL /* initialization vector (optional) */,
+										  self.bytes, dataLength, /* input */
+										  buffer, bufferSize, /* output */
+										  &numBytesEncrypted);
 	if (cryptStatus == kCCSuccess) {
 		//the returned NSData takes ownership of the buffer and will free it on deallocation
 		return [NSData dataWithBytesNoCopy:buffer length:numBytesEncrypted];
 	}
-    
+	
 	free(buffer); //free the buffer;
 	return nil;
 }
@@ -63,11 +63,11 @@
 	
 	size_t numBytesDecrypted = 0;
 	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-                                          keyPtr, kCCKeySizeAES256,
-                                          NULL /* initialization vector (optional) */,
-                                          self.bytes, dataLength, /* input */
-                                          buffer, bufferSize, /* output */
-                                          &numBytesDecrypted);
+										  keyPtr, kCCKeySizeAES256,
+										  NULL /* initialization vector (optional) */,
+										  self.bytes, dataLength, /* input */
+										  buffer, bufferSize, /* output */
+										  &numBytesDecrypted);
 	
 	if (cryptStatus == kCCSuccess) {
 		//the returned NSData takes ownership of the buffer and will free it on deallocation

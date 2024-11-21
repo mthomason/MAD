@@ -11,29 +11,29 @@
 @implementation NSLayoutConstraint (QueryVisualization)
 
 + (instancetype)newLayoutConstraintHeightForView:(UIView *)view andHeight:(CGFloat)height {
-    NSLayoutConstraint *constraint;
-    constraint = [NSLayoutConstraint constraintWithItem: view
-                                              attribute: NSLayoutAttributeHeight
-                                              relatedBy: NSLayoutRelationEqual
-                                                 toItem: nil
-                                              attribute: NSLayoutAttributeNotAnAttribute
-                                             multiplier: 1.0
-                                               constant: height];
-    constraint.priority = UILayoutPriorityDefaultHigh;
-    return constraint;
+	NSLayoutConstraint *constraint;
+	constraint = [NSLayoutConstraint constraintWithItem: view
+											  attribute: NSLayoutAttributeHeight
+											  relatedBy: NSLayoutRelationEqual
+												 toItem: nil
+											  attribute: NSLayoutAttributeNotAnAttribute
+											 multiplier: 1.0
+											   constant: height];
+	constraint.priority = UILayoutPriorityDefaultHigh;
+	return constraint;
 }
 
 + (instancetype)newLayoutConstraintWidthForView:(UIView *)view andWidth:(CGFloat)width {
-    NSLayoutConstraint *constraint;
-    constraint = [NSLayoutConstraint constraintWithItem: view
-                                              attribute: NSLayoutAttributeWidth
-                                              relatedBy: NSLayoutRelationEqual
-                                                 toItem: nil
-                                              attribute: NSLayoutAttributeNotAnAttribute
-                                             multiplier: 1.0
-                                               constant: width];
-    constraint.priority = UILayoutPriorityDefaultHigh;
-    return constraint;
+	NSLayoutConstraint *constraint;
+	constraint = [NSLayoutConstraint constraintWithItem: view
+											  attribute: NSLayoutAttributeWidth
+											  relatedBy: NSLayoutRelationEqual
+												 toItem: nil
+											  attribute: NSLayoutAttributeNotAnAttribute
+											 multiplier: 1.0
+											   constant: width];
+	constraint.priority = UILayoutPriorityDefaultHigh;
+	return constraint;
 }
 
 @end

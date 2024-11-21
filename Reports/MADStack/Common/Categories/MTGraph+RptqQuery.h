@@ -15,10 +15,10 @@
 
 @interface MTGraph (RptqQuery)
 
-    - (instancetype)initWithQuery:(RptqQuery *)query;
-    - (instancetype)initWtthQueryID:(MADModelQuery *)query;
-    - (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
-               managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithQuery:(RptqQuery *)query;
+	- (instancetype)initWtthQueryID:(MADModelQuery *)query;
+	- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
+			   managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

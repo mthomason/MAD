@@ -143,24 +143,6 @@
 + (instancetype)newImagePaperTextured {
 	return [UIImage imageNamed:@"UIImagePatternTextured"];
 }
-+ (instancetype)newImagePaperWhiteColumns {
-	return [UIImage imageNamed:@"UIImagePatternWhiteColumns"];
-}
-+ (instancetype)newImagePaperWhiteDiagonal {
-	return [UIImage imageNamed:@"UIImagePatternWhiteDiagonal"];
-}
-+ (instancetype)newImagePaperWhiteStationary {
-	return [UIImage imageNamed:@"UIImagePatternWhiteStationary"];
-}
-+ (instancetype)newImagePaperWhiteTextured {
-	return [UIImage imageNamed:@"UIImagePatternWhiteTextured"];
-}
-+ (instancetype)newImagePaperWhiteWithWoodFibers {
-	return [UIImage imageNamed:@"UIImagePatternWhiteWithWoodFibers"];
-}
-+ (instancetype)newImagePaperYellowLined {
-	return [UIImage imageNamed:@"UIImagePatternYellowLined"];
-}
 
 @end
 
@@ -348,27 +330,27 @@
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 + (instancetype)newColorPaperWhiteColumns {
-	UIImage *image = [UIImage newImagePaperWhiteColumns];
+	UIImage *image = [UIImage imageNamed:@"UIImagePatternWhiteColumns"];
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 + (instancetype)newColorPaperWhiteDiagonal {
-	UIImage *image = [UIImage newImagePaperWhiteDiagonal];
+	UIImage *image = [UIImage imageNamed:@"UIImagePatternWhiteDiagonal"];
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 + (instancetype)newColorPaperWhiteStationary {
-	UIImage *image = [UIImage newImagePaperWhiteStationary];
+	UIImage *image = [UIImage imageNamed:@"UIImagePatternWhiteStationary"];
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 + (instancetype)newColorPaperWhiteTextured {
-	UIImage *image = [UIImage newImagePaperWhiteTextured];
+	UIImage *image = [UIImage imageNamed:@"UIImagePatternWhiteTextured"];
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 + (instancetype)newColorPaperWhiteWithWoodFibers {
-	UIImage *image = [UIImage newImagePaperWhiteWithWoodFibers];
+	UIImage *image = [UIImage imageNamed:@"UIImagePatternWhiteWithWoodFibers"];
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 + (instancetype)newColorPaperYellowLined {
-	UIImage *image = [UIImage newImagePaperYellowLined];
+	UIImage *image = [UIImage imageNamed:@"UIImagePatternYellowLined"];
 	return [[UIColor alloc] initWithPatternImage: image];
 }
 

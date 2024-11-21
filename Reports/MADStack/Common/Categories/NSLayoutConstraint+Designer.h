@@ -15,40 +15,40 @@
 
 @interface MADLayoutConstraint : NSLayoutConstraint
 
-    + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
-                          marginTop:(CGFloat)marginTop heigh:(CGFloat)height scaleFactor:(CGFloat)scaleFactor;
-                          
-    + (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
-                         sideMargin:(CGFloat)sideMargin scaleFactor:(CGFloat)scaleFactor;
+	+ (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
+						  marginTop:(CGFloat)marginTop heigh:(CGFloat)height scaleFactor:(CGFloat)scaleFactor;
+						  
+	+ (NSArray *)constraintForRuler:(MADRulerView *)ruler designer:(UIView *)designer
+						 sideMargin:(CGFloat)sideMargin scaleFactor:(CGFloat)scaleFactor;
 
-    + (instancetype)newLayoutConstraintViewScrollerTop:(id)item view:(id)item;
-    + (instancetype)newLayoutConstraintViewLeft:(UIView *)section content:(UIView *)content
-                                        padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintViewRight:(UIView *)section content:(UIView *)content
-                                         padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintLabel:(UIView *)label toHeight:(CGFloat)height;
-    + (instancetype)newLayoutConstraintLabelBottom:(UIView *)label container:(UIView *)section
-                                           padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintLabelRight:(UIView *)label container:(UIView *)section
-                                          padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintViewTop:(UIView *)item viewBottom:(UIView *)section
-                                       padding:(CGFloat)padding;
-    + (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIView *)scroller;
-    + (instancetype)newLayoutConstraintView:(UIView *)view height:(CGFloat)height;
-    + (instancetype)newLayoutConstraintViewBottom:(id)item container:(id)toItem;
-    + (instancetype)newLayoutConstraintToolBoxBottom:(id)item container:(id)toItem;
-    + (instancetype)newLayoutConstraintToolboxHeightHidden:(id)item;
-    + (instancetype)newLayoutConstraintView:(id)view containerLeft:(id)container;
-    + (instancetype)newLayoutConstraintView:(UIView *)view containerRight:(id)container;
-    + (instancetype)newLayoutConstraintView:(UIView *)view containerTop:(id)container;
-    + (instancetype)newLayoutConstraintScroller:(id)scroller bottom:(id)bottom;
-    + (instancetype)newLayoutConstraintToolbarHeightHidden:(id)toolbar;
-    + (instancetype)newLayoutConstraintContent:(id)container width:(CGFloat)width;
+	+ (instancetype)newLayoutConstraintViewScrollerTop:(id)item view:(id)item;
+	+ (instancetype)newLayoutConstraintViewLeft:(UIView *)section content:(UIView *)content
+										padding:(CGFloat)padding;
+	+ (instancetype)newLayoutConstraintViewRight:(UIView *)section content:(UIView *)content
+										 padding:(CGFloat)padding;
+	+ (instancetype)newLayoutConstraintLabel:(UIView *)label toHeight:(CGFloat)height;
+	+ (instancetype)newLayoutConstraintLabelBottom:(UIView *)label container:(UIView *)section
+										   padding:(CGFloat)padding;
+	+ (instancetype)newLayoutConstraintLabelRight:(UIView *)label container:(UIView *)section
+										  padding:(CGFloat)padding;
+	+ (instancetype)newLayoutConstraintViewTop:(UIView *)item viewBottom:(UIView *)section
+									   padding:(CGFloat)padding;
+	+ (instancetype)newLayoutConstraintView:(UIView *)view containerBottom:(UIView *)scroller;
+	+ (instancetype)newLayoutConstraintView:(UIView *)view height:(CGFloat)height;
+	+ (instancetype)newLayoutConstraintViewBottom:(id)item container:(id)toItem;
+	+ (instancetype)newLayoutConstraintToolBoxBottom:(id)item container:(id)toItem;
+	+ (instancetype)newLayoutConstraintToolboxHeightHidden:(id)item;
+	+ (instancetype)newLayoutConstraintView:(id)view containerLeft:(id)container;
+	+ (instancetype)newLayoutConstraintView:(UIView *)view containerRight:(id)container;
+	+ (instancetype)newLayoutConstraintView:(UIView *)view containerTop:(id)container;
+	+ (instancetype)newLayoutConstraintScroller:(id)scroller bottom:(id)bottom;
+	+ (instancetype)newLayoutConstraintToolbarHeightHidden:(id)toolbar;
+	+ (instancetype)newLayoutConstraintContent:(id)container width:(CGFloat)width;
 
-    + (instancetype)newLayoutConstraint:(id)view height:(CGFloat)height;
-    + (instancetype)newLayoutConstraint:(id)view width:(CGFloat)width;
-    + (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerX:(CGFloat)centerX;
-    + (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerY:(CGFloat)centerY;
+	+ (instancetype)newLayoutConstraint:(id)view height:(CGFloat)height;
+	+ (instancetype)newLayoutConstraint:(id)view width:(CGFloat)width;
+	+ (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerX:(CGFloat)centerX;
+	+ (instancetype)newLayoutConstraint:(id)view toView:(id)view2 centerY:(CGFloat)centerY;
 
 @end
 
