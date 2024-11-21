@@ -11,9 +11,9 @@
 
 @protocol MADDesignerElementViewProtocol <NSObject>
   @required
-    @property (nonatomic, readwrite, assign) BOOL displayWobbling;
-    @property (nonatomic, readwrite, assign) BOOL enableResizing;
-    @property (nonatomic, readwrite, assign) BOOL displayHighlighted;
+	@property (nonatomic, readwrite, assign) BOOL displayWobbling;
+	@property (nonatomic, readwrite, assign) BOOL enableResizing;
+	@property (nonatomic, readwrite, assign) BOOL displayHighlighted;
 
 @end
 

@@ -14,6 +14,10 @@
 @interface UIColor (PaperPatterns)
 
 + (instancetype)newColorPaperHomemade;
+
+/*
+ The below are available, but unused, so I'm commenting them out to remove their symbols.
+
 + (instancetype)newColorPaperAqua;
 + (instancetype)newColorPaperBeigeWithWhiteFlecks;
 + (instancetype)newColorPaperBlackWeave;
@@ -65,6 +69,7 @@
 + (instancetype)newColorPaperWhiteWithWoodFibers;
 + (instancetype)newColorPaperYellowLined;
 
+*/
 
 @end
 

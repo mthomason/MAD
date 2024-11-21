@@ -11,9 +11,9 @@
 
 @protocol MADGroupByViewControllerDelegate
 
-    - (void)didSelectGroupByPage;
-    - (void)didSelectGroupByReport;
-    - (void)didSelectGroupBySectionNumber:(int32_t)groupNumber;
+	- (void)didSelectGroupByPage;
+	- (void)didSelectGroupByReport;
+	- (void)didSelectGroupBySectionNumber:(int32_t)groupNumber;
 
 @end
 

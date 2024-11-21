@@ -30,129 +30,129 @@
 #import "UIView+Extras.h"
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
-    if (!selected && !visible) {
-        return [MADColorEverydayApps newColorDisabledColor];
-    } else if (selected && !visible) {
-        return [MADColorEverydayApps newColorDisabledColor];
-    } else if (selected && visible) {
-        return [UIColor whiteColor];
-    } else {
-        return [UIColor whiteColor];
-    }
+	if (!selected && !visible) {
+		return [MADColorEverydayApps newColorDisabledColor];
+	} else if (selected && !visible) {
+		return [MADColorEverydayApps newColorDisabledColor];
+	} else if (selected && visible) {
+		return [UIColor whiteColor];
+	} else {
+		return [UIColor whiteColor];
+	}
 }
 
 static inline MADBorderState borderState(BOOL selected, BOOL visible) {
-    if (selected) {
-        return MADBorderStateSelected;
-    } else if (visible) {
-        return MADBorderStateNormal;
-    } else {
-        return MADBorderStateDisabled;
-    }
+	if (selected) {
+		return MADBorderStateSelected;
+	} else if (visible) {
+		return MADBorderStateNormal;
+	} else {
+		return MADBorderStateDisabled;
+	}
 }
 
 static NSString * const MADTextAccessSectionElements = @"Access section elements.";
 
 @interface MADDesignerSectionView ()
 
-    @property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
-    @property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
-    @property (nonatomic, assign) BOOL accessibile;
+	@property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
+	@property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
+	@property (nonatomic, assign) BOOL accessibile;
 
 @end
 
 @implementation MADDesignerSectionView
 
 - (void)dealloc {
-    self.delegate = nil;
-    self.dataSource = nil;
+	self.delegate = nil;
+	self.dataSource = nil;
 }
 
 
 + (instancetype)newDesignerSectionView:(NSInteger)identifier
-                  designViewIdentifier:(NSUInteger)designViewIdentifier
-                             isVisible:(BOOL)isVisible
-                              delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate {
-    
-    MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
-    layout.delegate = layoutDelegate;
-    layout.designViewIdentifier = identifier;
-    MADDesignerSectionView *collectionView;
-    collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    collectionView.delegate     = layoutDelegate;
-    collectionView.dataSource   = layoutDelegate;
-    collectionView.identifier   = identifier;
-    collectionView.tag          = identifier;
-    collectionView.visible      = isVisible;
-    return collectionView;
+				  designViewIdentifier:(NSUInteger)designViewIdentifier
+							 isVisible:(BOOL)isVisible
+							  delegate:(id <MADDesignerSectionLayoutLiquidDelegate, UICollectionViewDelegate, UICollectionViewDataSource>)layoutDelegate {
+	
+	MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
+	layout.delegate = layoutDelegate;
+	layout.designViewIdentifier = identifier;
+	MADDesignerSectionView *collectionView;
+	collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+	collectionView.delegate     = layoutDelegate;
+	collectionView.dataSource   = layoutDelegate;
+	collectionView.identifier   = identifier;
+	collectionView.tag          = identifier;
+	collectionView.visible      = isVisible;
+	return collectionView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout {
-    
-    if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
+	
+	if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
 
-        UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
-        UIColor *clearColor = [UIColor clearColor];
-        
-        self.accessibile = YES;
-        
-        MADDesignerSectionBackground *backgroundView;
-        backgroundView = [[MADDesignerSectionBackground alloc] initWithFrame:CGRectZero];
-        [backgroundView setNumberOfRowsInBackground:1];
-        backgroundView.backgroundColor = clearColor;
+		UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
+		UIColor *clearColor = [UIColor clearColor];
+		
+		self.accessibile = YES;
+		
+		MADDesignerSectionBackground *backgroundView;
+		backgroundView = [[MADDesignerSectionBackground alloc] initWithFrame:CGRectZero];
+		[backgroundView setNumberOfRowsInBackground:1];
+		backgroundView.backgroundColor = clearColor;
 
-        NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
-        NSString *documentElementReuseIdentifier = [MADCellElement reuseIdentifier];
-        
-        [self registerClass: [MADCellElement class]
+		NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
+		NSString *documentElementReuseIdentifier = [MADCellElement reuseIdentifier];
+		
+		[self registerClass: [MADCellElement class]
  forCellWithReuseIdentifier: documentElementReuseIdentifier];
-        
-        [self registerClass: [MTCollectionReuseableViewDefault class]
+		
+		[self registerClass: [MTCollectionReuseableViewDefault class]
  forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-        withReuseIdentifier: supplmentaryViewReuseIdHeader];
-        
-        [self registerClass: [MTCollectionReuseableViewDefault class]
+		withReuseIdentifier: supplmentaryViewReuseIdHeader];
+		
+		[self registerClass: [MTCollectionReuseableViewDefault class]
  forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
-        withReuseIdentifier: supplmentaryViewReuseIdHeader];
-        
-        self.clipsToBounds = YES;
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.allowsSelection = YES;
-        self.allowsMultipleSelection = YES;
-        self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.layer.borderColor = borderColor.CGColor;
-        self.backgroundView = nil;
-        self.backgroundColor = clearColor;
-        self.layer.borderWidth = [UIView borderWidthThin];
-        self.showsVerticalScrollIndicator = YES;
+		withReuseIdentifier: supplmentaryViewReuseIdHeader];
+		
+		self.clipsToBounds = YES;
+		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.allowsSelection = YES;
+		self.allowsMultipleSelection = YES;
+		self.translatesAutoresizingMaskIntoConstraints = NO;
+		self.layer.borderColor = borderColor.CGColor;
+		self.backgroundView = nil;
+		self.backgroundColor = clearColor;
+		self.layer.borderWidth = [UIView borderWidthThin];
+		self.showsVerticalScrollIndicator = YES;
 
-        [self setContentHuggingPriority: UILayoutPriorityDefaultLow
-                                forAxis: UILayoutConstraintAxisVertical];
-        [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
-                                              forAxis: UILayoutConstraintAxisVertical];
-        _selected = NO;
-        _visible = NO;
-    }
-    
-    return self;
-    
+		[self setContentHuggingPriority: UILayoutPriorityDefaultLow
+								forAxis: UILayoutConstraintAxisVertical];
+		[self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
+											  forAxis: UILayoutConstraintAxisVertical];
+		_selected = NO;
+		_visible = NO;
+	}
+	
+	return self;
+	
 }
 
 #pragma mark -
 #pragma mark UIView
 
 - (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    CGContextRef context = UIGraphicsGetCurrentContext();
+	[super drawRect:rect];
+	CGContextRef context = UIGraphicsGetCurrentContext();
 
-    UIColor *bgcolor = backgroundColor(self.selected, self.visible);
-    CGContextSetFillColorWithColor(context, bgcolor.CGColor);
-    CGContextFillRect(context, rect);
+	UIColor *bgcolor = backgroundColor(self.selected, self.visible);
+	CGContextSetFillColorWithColor(context, bgcolor.CGColor);
+	CGContextFillRect(context, rect);
 }
 
 - (CGSize)intrinsicContentSize {
-    return CGSizeMake(self.collectionViewLayout.collectionViewContentSize.width,
-                      self.collectionViewLayout.collectionViewContentSize.height + MTDefaultFingerSizeHeight);
+	return CGSizeMake(self.collectionViewLayout.collectionViewContentSize.width,
+					  self.collectionViewLayout.collectionViewContentSize.height + MTDefaultFingerSizeHeight);
 }
 
 #pragma mark -
@@ -161,166 +161,165 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 #pragma mark UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-    shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;
-    //[gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] &&
-    //      [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
+	shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+	return YES;
+	//[gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] &&
+	//      [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]];
 }
 
 #pragma mark -
 #pragma mark Accessors
 
 - (void)removeItemAtIndex: (NSIndexPath *)deletePath
-                   update: (void (^)(void))update
-        animationComplete: (void (^)(BOOL))animationComplete
-               completion: (void (^)(void))completion {
+				   update: (void (^)(void))update
+		animationComplete: (void (^)(BOOL))animationComplete
+			   completion: (void (^)(void))completion {
 
-    void (^updates)(void);
-    void (^complets)(BOOL);
+	void (^updates)(void);
+	void (^complets)(BOOL);
 
-    updates = ^{
-        
-        if (update != nil) update();
-        NSArray *indexPaths = [[NSArray alloc] initWithObjects:deletePath, nil];
-        [self deleteItemsAtIndexPaths: indexPaths];
-        
-    };
+	updates = ^{
+		
+		if (update != nil) update();
+		NSArray *indexPaths = [[NSArray alloc] initWithObjects:deletePath, nil];
+		[self deleteItemsAtIndexPaths: indexPaths];
+		
+	};
 
-    complets = ^(BOOL finished) {
-        
-        if (finished) {
+	complets = ^(BOOL finished) {
+		
+		if (finished) {
 
-            void (^animate)(void);
-            void (^finish)(BOOL);
+			void (^animate)(void);
+			void (^finish)(BOOL);
 
-            animate = ^{
-                [self invalidateIntrinsicContentSize];
-            };
+			animate = ^{
+				[self invalidateIntrinsicContentSize];
+			};
 
-            finish = ^(BOOL animateFinished) {
-                if (animateFinished) {
-                    if (animationComplete != nil) animationComplete(animateFinished);
-                }
-            };
+			finish = ^(BOOL animateFinished) {
+				if (animateFinished) {
+					if (animationComplete != nil) animationComplete(animateFinished);
+				}
+			};
 
-            [UIView animateWithDuration: 0.6666f
-                             animations: animate
-                             completion: finish];
-            if (completion != nil) { completion(); }
-        }
-    
-    };
+			[UIView animateWithDuration: 0.6666f
+							 animations: animate
+							 completion: finish];
+			if (completion != nil) { completion(); }
+		}
+	
+	};
 
-    [self performBatchUpdates:updates
-                   completion:complets];
+	[self performBatchUpdates:updates
+				   completion:complets];
 }
 
 - (void)insertItemAtIndex: (NSIndexPath *)path
-                   update: (void (^)(void))update
-        animationComplete: (void (^)(BOOL))animationComplete
-               completion: (void (^)(void))completion {
-    
-    [self performBatchUpdates:^(void) {
-        
-        if (update != nil) update();
-        NSArray *indexPathsInserted = [[NSArray alloc] initWithObjects:path, nil];
-        [self insertItemsAtIndexPaths: indexPathsInserted];
-        
-    } completion:^(BOOL finished) {
-    
-        if (finished) {
-            [UIView animateWithDuration:(2.0/3.0) animations:^{
-                [self invalidateIntrinsicContentSize];
-            } completion:^(BOOL animateFinished) {
-                if (animateFinished) {
-                    if (animationComplete != nil) animationComplete(YES);
-                }
-            }];
-            
-            if (completion != nil) { completion(); }
-        }
-        
-    }];
+				   update: (void (^)(void))update
+		animationComplete: (void (^)(BOOL))animationComplete
+			   completion: (void (^)(void))completion {
+	
+	[self performBatchUpdates:^(void) {
+		
+		if (update != nil) update();
+		NSArray *indexPathsInserted = [[NSArray alloc] initWithObjects:path, nil];
+		[self insertItemsAtIndexPaths: indexPathsInserted];
+		
+	} completion:^(BOOL finished) {
+	
+		if (finished) {
+			[UIView animateWithDuration:(2.0/3.0) animations:^{
+				[self invalidateIntrinsicContentSize];
+			} completion:^(BOOL animateFinished) {
+				if (animateFinished) {
+					if (animationComplete != nil) animationComplete(YES);
+				}
+			}];
+			
+			if (completion != nil) { completion(); }
+		}
+		
+	}];
 }
 
 - (void)setBorderState:(MADBorderState)borderState {
-    switch (borderState) {
-        case MADBorderStateDisabled:
-            self.layer.borderColor = [UIColor blackColor].CGColor;
-            self.layer.borderWidth = 1.0;
-            break;
-        case MADBorderStateNormal:
-            self.layer.borderColor = [UIColor blackColor].CGColor;
-            self.layer.borderWidth = 1.0;
-            break;
-        case MADBorderStateSelected:
-            self.layer.borderColor = [MADColorEverydayApps newColorAnalogous4].CGColor;
-            self.layer.borderWidth = 1.0;
-            break;
-        default:
-            break;
-    }
+	switch (borderState) {
+		case MADBorderStateDisabled:
+			self.layer.borderColor = [UIColor blackColor].CGColor;
+			self.layer.borderWidth = 1.0;
+			break;
+		case MADBorderStateNormal:
+			self.layer.borderColor = [UIColor blackColor].CGColor;
+			self.layer.borderWidth = 1.0;
+			break;
+		case MADBorderStateSelected:
+			self.layer.borderColor = [MADColorEverydayApps newColorAnalogous4].CGColor;
+			self.layer.borderWidth = 1.0;
+			break;
+		default:
+			break;
+	}
 }
 
 #pragma mark Overrides
 
 - (void)setVisible:(BOOL)visible {
-    if (_visible != visible) {
-        _visible = visible;
-        [self setBorderState:borderState(_selected, _visible)];
-        [self setNeedsDisplay];
-    }
+	if (_visible != visible) {
+		_visible = visible;
+		[self setBorderState:borderState(_selected, _visible)];
+		[self setNeedsDisplay];
+	}
 }
 
 - (void)setSelected:(BOOL)selected {
-    if (_selected != selected) {
-        _selected = selected;
-        [self setBorderState:borderState(_selected, _visible)];
-        [self setNeedsDisplay];
-    }
+	if (_selected != selected) {
+		_selected = selected;
+		[self setBorderState:borderState(_selected, _visible)];
+		[self setNeedsDisplay];
+	}
 }
 
 #pragma mark -
 #pragma mark Accessibility
 
 - (NSArray <__kindof UIAccessibilityCustomAction *> *)accessibilityCustomActions {
-    NSString *toggleAccessibilityName = NSLocalizedString(MADTextAccessSectionElements,
-                                                          MADTextAccessSectionElements);
-    UIAccessibilityCustomAction *toggleAccessibility;
-    SEL toggle = @selector(toggleAccessibility:);
-    toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: toggleAccessibilityName
-                                                                     target: self
-                                                                   selector: toggle];
-    NSArray  <__kindof UIAccessibilityCustomAction *> *customActions;
-    customActions = [[NSArray alloc] initWithObjects:toggleAccessibility, nil];
-    return customActions;
+	NSString *toggleAccessibilityName = NSLocalizedString(MADTextAccessSectionElements,
+														  MADTextAccessSectionElements);
+	UIAccessibilityCustomAction *toggleAccessibility;
+	SEL toggle = @selector(toggleAccessibility:);
+	toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: toggleAccessibilityName
+																	 target: self
+																   selector: toggle];
+	NSArray  <__kindof UIAccessibilityCustomAction *> *customActions;
+	customActions = [[NSArray alloc] initWithObjects:toggleAccessibility, nil];
+	return customActions;
 }
 
 - (BOOL)isAccessibilityElement {
-    return NO;
+	return NO;
 }
 
 - (NSInteger)accessibilityElementCount {
-    return [self.dataSource collectionView:self numberOfItemsInSection:0] + 1;
+	return [self.dataSource collectionView:self numberOfItemsInSection:0] + 1;
 }
 
 - (NSInteger)indexOfAccessibilityElement:(id)element {
-    return [element isKindOfClass:[UICollectionViewCell class]] ?
-                [self indexPathForCell:element].item + 1 : 0;
+	return [element isKindOfClass:[UICollectionViewCell class]] ?
+				[self indexPathForCell:element].item + 1 : 0;
 }
 
 - (id)accessibilityElementAtIndex:(NSInteger)index {
-    if (index == 0) {
-        return self.sectionLabel;
-    } else {
-        NSIndexPath *path = [NSIndexPath indexPathForItem:index + 1 inSection:0];
-        return [self cellForItemAtIndexPath:path];
-    }
+	if (index == 0) {
+		return self.sectionLabel;
+	} else {
+		NSIndexPath *path = [NSIndexPath indexPathForItem:index + 1 inSection:0];
+		return [self cellForItemAtIndexPath:path];
+	}
 }
 
 - (UIAccessibilityTraits)accessibilityTraits {
-    return UIAccessibilityTraitButton;
+	return UIAccessibilityTraitButton;
 }
-
 
 @end

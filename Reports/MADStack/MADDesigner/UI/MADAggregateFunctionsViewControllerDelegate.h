@@ -12,7 +12,7 @@
 #import <MAD/MADAggregateFunctionType.h>
 
 @protocol MADAggregateFunctionsViewControllerDelegate
-    - (void)didSelectFunction:(MTAggregateFunctionType)functionType;
+	- (void)didSelectFunction:(MTAggregateFunctionType)functionType;
 @end
 
 #endif /* MADAggregateFunctionsViewControllerDelegate_h */

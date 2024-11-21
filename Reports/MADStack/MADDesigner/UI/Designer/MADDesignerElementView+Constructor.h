@@ -13,9 +13,9 @@
 
 @interface MADDesignerElementView (Constructor)
 
-    + (instancetype)newDesignerElementView:(RptqDocumentElement *)documentObject
-                        tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
-                               tapSelector:(SEL)selector;
+	+ (instancetype)newDesignerElementView:(RptqDocumentElement *)documentObject
+						tapGestureDelegate:(id <UIGestureRecognizerDelegate>)tapGestureDelegate
+							   tapSelector:(SEL)selector;
 
 @end
 

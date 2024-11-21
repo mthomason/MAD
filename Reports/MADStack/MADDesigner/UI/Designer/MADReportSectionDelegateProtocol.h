@@ -12,10 +12,10 @@
 @protocol MADDesignerDesignViewDelegate <NSObject>
 
   @optional
-    - (void)designView:(MADDesignerLayoutDesignView *)designView
-        handleTapLabel:(UITapGestureRecognizer *)sender;
-    - (void)designView:(MADDesignerLayoutDesignView *)designView
-        handleTapStray:(UITapGestureRecognizer *)sender;
+	- (void)designView:(MADDesignerLayoutDesignView *)designView
+		handleTapLabel:(UITapGestureRecognizer *)sender;
+	- (void)designView:(MADDesignerLayoutDesignView *)designView
+		handleTapStray:(UITapGestureRecognizer *)sender;
 
 @end
 

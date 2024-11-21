@@ -14,21 +14,21 @@
 
 @interface UIColor (Gradients)
 
-    + (CGGradientRef)backgroundGradientWhiteToBlack;
-    + (CGGradientRef)backgroundGradientBlack;
-    + (CGGradientRef)backgroundGradientWhite;
-    + (CGGradientRef)backgroundGradientGray;
-    + (CGGradientRef)backgroundGradientGreen;
-    + (CGGradientRef)backgroundGradientBlue;
-    + (CGGradientRef)backgroundGradientPurple;
-    + (CGGradientRef)backgroundGradientRed;
-    + (CGGradientRef)backgroundGradientBlackShine;
-    + (CGGradientRef)backgroundGradientFadeFromBlack;
-    + (CGGradientRef)backgroundGradientFadeFromRandom;
-    + (CGGradientRef)backgroundGradientFadeFromBlackRadial;
-    + (CGGradientRef)backgroundGradientFadeToBlackRadial;
-    + (CGGradientRef)backgroundGradientFadeToBlackRadialIcon;
-    + (CGGradientRef)backgroundGradientGreenToRedIcon;
+	+ (CGGradientRef)backgroundGradientWhiteToBlack;
+	+ (CGGradientRef)backgroundGradientBlack;
+	+ (CGGradientRef)backgroundGradientWhite;
+	+ (CGGradientRef)backgroundGradientGray;
+	+ (CGGradientRef)backgroundGradientGreen;
+	+ (CGGradientRef)backgroundGradientBlue;
+	+ (CGGradientRef)backgroundGradientPurple;
+	+ (CGGradientRef)backgroundGradientRed;
+	+ (CGGradientRef)backgroundGradientBlackShine;
+	+ (CGGradientRef)backgroundGradientFadeFromBlack;
+	+ (CGGradientRef)backgroundGradientFadeFromRandom;
+	+ (CGGradientRef)backgroundGradientFadeFromBlackRadial;
+	+ (CGGradientRef)backgroundGradientFadeToBlackRadial;
+	+ (CGGradientRef)backgroundGradientFadeToBlackRadialIcon;
+	+ (CGGradientRef)backgroundGradientGreenToRedIcon;
 
 @end
 

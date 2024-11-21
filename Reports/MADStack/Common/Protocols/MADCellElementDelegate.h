@@ -13,10 +13,10 @@
 
 @protocol MADCellElementDelegate
 
-    - (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell;
-    - (MADPrintPageElementType)objectTypeRepresentedByCell:(MADCellElement *)cell;
+	- (void)deleteDocumentObjectRepresentedByCell:(MADCellElement *)cell;
+	- (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell;
+	- (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell;
+	- (MADPrintPageElementType)objectTypeRepresentedByCell:(MADCellElement *)cell;
 
 @end
 

@@ -234,7 +234,6 @@
 		4C40204C1BAE92F200BAE5FC /* MADButtonTwitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020011BAE92F200BAE5FC /* MADButtonTwitter.m */; };
 		4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020031BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m */; };
 		4C40204E1BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020051BAE92F200BAE5FC /* UICollectionViewCell+Reuse.m */; };
-		4C40204F1BAE92F200BAE5FC /* UIColor+Gradients.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020071BAE92F200BAE5FC /* UIColor+Gradients.m */; };
 		4C4020501BAE92F200BAE5FC /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */; };
 		4C4020511BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */; };
 		4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */; };
@@ -4102,7 +4101,6 @@
 				4C2F3B3B1CA26495002CF271 /* MADMutualExclusive.m in Sources */,
 				4C5C0DC21C9CFFC600826BC2 /* MADOperationConditionPolarQuestionAffirmative.m in Sources */,
 				4C26BA231BAF150F00456DC8 /* MADHierarchicalChildViewDefination.m in Sources */,
-				4C40204F1BAE92F200BAE5FC /* UIColor+Gradients.m in Sources */,
 				4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */,
 				4C26BA1E1BAF150F00456DC8 /* MADNavigationControllerQueryBuilder.m in Sources */,
 				4C26BA591BAF99F000456DC8 /* MADElementCanvas.m in Sources */,

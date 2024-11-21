@@ -15,17 +15,17 @@
 @class NSManagedObjectContext;
 
 @protocol UICollectionViewDelegate, UICollectionViewDataSource,
-            MADDesignerSectionLayoutLiquidDelegate;
+			MADDesignerSectionLayoutLiquidDelegate;
 
 @interface MADReportSectionsDataSource : NSObject
-    <MADDesignerDesignViewDataSource>
+	<MADDesignerDesignViewDataSource>
 
-    @property (nonatomic, readwrite, weak) id <MADDesignerSectionLayoutLiquidDelegate,
-                                                UICollectionViewDelegate,
-                                                UICollectionViewDataSource> eventDelegate;
+	@property (nonatomic, readwrite, weak) id <MADDesignerSectionLayoutLiquidDelegate,
+												UICollectionViewDelegate,
+												UICollectionViewDataSource> eventDelegate;
 
-    - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    - (void)refreshData;
+	- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (void)refreshData;
 
 @end
 

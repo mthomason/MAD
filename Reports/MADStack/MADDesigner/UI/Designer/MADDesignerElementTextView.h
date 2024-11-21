@@ -15,23 +15,23 @@
 
 @protocol MADTextElementProtocol <NSObject>
 
-    - (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal;
-    - (void)updateVerticalAlignment:(MADVerticalAlignment)vertical;
-    - (void)updateFontName:(NSString *)fontname
-                  fontSize:(double)fontsize
-                      bold:(BOOL)bold
-                    italic:(BOOL)italic;
-    - (void)updateFontSize:(double)fontsize;
-    - (void)updateFontName:(NSString *)fontname;
-    - (void)updateSetStrikethrough:(BOOL)strikethrough;
-    - (void)updateSetUnderline:(BOOL)underline;
+	- (void)updateHorizontalAlignment:(MADHorizontalAlignment)horizontal;
+	- (void)updateVerticalAlignment:(MADVerticalAlignment)vertical;
+	- (void)updateFontName:(NSString *)fontname
+				  fontSize:(double)fontsize
+					  bold:(BOOL)bold
+					italic:(BOOL)italic;
+	- (void)updateFontSize:(double)fontsize;
+	- (void)updateFontName:(NSString *)fontname;
+	- (void)updateSetStrikethrough:(BOOL)strikethrough;
+	- (void)updateSetUnderline:(BOOL)underline;
 
 @end
 
 @interface MADDesignerElementTextView : MADDesignerElementView
-    <MADTextElementProtocol>
+	<MADTextElementProtocol>
 
-    @property (nonatomic, readwrite, strong) NSMutableAttributedString *displayObject;
+	@property (nonatomic, readwrite, strong) NSMutableAttributedString *displayObject;
 
 @end
 

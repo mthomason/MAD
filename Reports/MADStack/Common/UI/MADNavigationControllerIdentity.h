@@ -10,22 +10,22 @@
 #define MADNavigationControllerIdentity_h
 
 typedef NS_ENUM(short, MADNavigationControllerType) {
-    MADNavigationControllerTypeInformation,
-    MADNavigationControllerTypeLicensing,
-    MADNavigationControllerTypeNewDocument,
-    MADNavigationControllerTypeToolbox,
-    MADNavigationControllerTypeFontPicker,
-    MADNavigationControllerTypeAggregateAdd,
-    MADNavigationControllerTypeElementPicker,
-    MADNavigationControllerTypeViewer,
-    MADNavigationControllerTypeFileExplorer,
-    MADNavigationControllerTypeDesigner,
-    MADNavigationControllerTypeQuery
+	MADNavigationControllerTypeInformation,
+	MADNavigationControllerTypeLicensing,
+	MADNavigationControllerTypeNewDocument,
+	MADNavigationControllerTypeToolbox,
+	MADNavigationControllerTypeFontPicker,
+	MADNavigationControllerTypeAggregateAdd,
+	MADNavigationControllerTypeElementPicker,
+	MADNavigationControllerTypeViewer,
+	MADNavigationControllerTypeFileExplorer,
+	MADNavigationControllerTypeDesigner,
+	MADNavigationControllerTypeQuery
 };
 
 @protocol MADNavigationControllerIdentify <NSObject>
 
-    @property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
+	@property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
 
 @end
 

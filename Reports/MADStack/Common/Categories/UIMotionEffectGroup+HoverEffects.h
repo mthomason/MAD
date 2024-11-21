@@ -13,7 +13,7 @@
 
 @interface UIMotionEffectGroup (HoverEffects)
 
-    + (UIMotionEffectGroup *)HoverEffects;
+	+ (UIMotionEffectGroup *)HoverEffects;
 
 @end
 

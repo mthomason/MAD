@@ -13,22 +13,22 @@
 @implementation MADDesignerView
 
 - (void)setNeedsUpdateConstraints {
-    [super setNeedsUpdateConstraints];
-    [self.scroller setNeedsUpdateConstraints];
+	[super setNeedsUpdateConstraints];
+	[self.scroller setNeedsUpdateConstraints];
 }
 
 - (void)setNeedsLayout {
-    [super setNeedsLayout];
-    [self.scroller setNeedsLayout];
+	[super setNeedsLayout];
+	[self.scroller setNeedsLayout];
 }
 
 - (void)setNeedsDisplay {
-    [super setNeedsDisplay];
-    [self.scroller setNeedsDisplay];
+	[super setNeedsDisplay];
+	[self.scroller setNeedsDisplay];
 }
 
 - (CGSize)contentViewSize {
-    return CGSizeMake(self.bounds.size.width, self.scroller.container.sizeHeight);
+	return CGSizeMake(self.bounds.size.width, self.scroller.container.sizeHeight);
 }
 
 @end

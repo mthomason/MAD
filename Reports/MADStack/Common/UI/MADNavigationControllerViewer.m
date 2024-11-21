@@ -17,48 +17,48 @@
 @synthesize document = _document;
 
 - (void)dealloc {
-    _viewControllerDelegate = nil;
-    _document = nil;
+	_viewControllerDelegate = nil;
+	_document = nil;
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    if (self.viewControllers.count == 0) {
-        id rootViewController = [MADViewerController newViewerController: _document];
-        [self pushViewController:rootViewController animated:animated];
-    }
+	[super viewWillAppear:animated];
+	if (self.viewControllers.count == 0) {
+		id rootViewController = [MADViewerController newViewerController: _document];
+		[self pushViewController:rootViewController animated:animated];
+	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
+	[super viewDidDisappear:animated];
 }
 
 + (UIImage *)newTabBarImage {
-    return [MADViewerController newTabBarImage];
+	return [MADViewerController newTabBarImage];
 }
 
 - (NSString *)title {
-    return self.viewControllers.count > 0 ? self.viewControllers.firstObject.title : [MADViewerController Title];
+	return self.viewControllers.count > 0 ? self.viewControllers.firstObject.title : [MADViewerController Title];
 }
 
 - (void)setDocument:(MADocument *)document {
-    if (_document != document) {
-        _document = document;
-    }
+	if (_document != document) {
+		_document = document;
+	}
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleLightContent;
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)animated completion:(void (^)(void))completion {
-    [super dismissViewControllerAnimated:animated completion:completion];
-    NSArray *viewControllers = [[NSArray alloc] init];
-    [self setViewControllers:viewControllers animated:animated];
+	[super dismissViewControllerAnimated:animated completion:completion];
+	NSArray *viewControllers = [[NSArray alloc] init];
+	[self setViewControllers:viewControllers animated:animated];
 }
 
 @end

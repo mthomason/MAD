@@ -23,66 +23,66 @@
 const CGFloat MADesignerSectionLabelFontSize = 10.0;
 
 @interface MADDesignerSectionLabel ()
-    <UIGestureRecognizerDelegate>
+	<UIGestureRecognizerDelegate>
 
-    @property (nonatomic, assign, readwrite) BOOL selected;
+	@property (nonatomic, assign, readwrite) BOOL selected;
 
 @end
 
 @implementation MADDesignerSectionLabel
 
 - (instancetype)initWithText:(NSString *)text {
-    if (self = [self initWithFrame:CGRectZero]) {
+	if (self = [self initWithFrame:CGRectZero]) {
 
-        self.selected = NO;
-        self.scale = 1.0;
+		self.selected = NO;
+		self.scale = 1.0;
 
-        UIColor *tintColor = [MADColorEverydayApps newColorBlue];
-        self.backgroundColor = [UIColor clearColor];
-        self.textAlignment = NSTextAlignmentRight;
-        self.lineBreakMode = NSLineBreakByClipping;
-        self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        self.textColor = tintColor;
-        
-        self.text = text.copy;
-        self.autoresizingMask = MADViewAutoresizingFlexable();
-        self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.backgroundColor = [UIColor clearColor];
-        self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.layer.cornerRadius = 0.0;
-        self.clipsToBounds = YES;
-        
-        [self setContentHuggingPriority: UILayoutPriorityDefaultLow
-                                forAxis: UILayoutConstraintAxisHorizontal];
-        
-        [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
-                                              forAxis: UILayoutConstraintAxisHorizontal];
-        self.userInteractionEnabled = YES;
-        
-    }
-    return self;
+		UIColor *tintColor = [MADColorEverydayApps newColorBlue];
+		self.backgroundColor = [UIColor clearColor];
+		self.textAlignment = NSTextAlignmentRight;
+		self.lineBreakMode = NSLineBreakByClipping;
+		self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+		self.textColor = tintColor;
+		
+		self.text = text.copy;
+		self.autoresizingMask = MADViewAutoresizingFlexable();
+		self.translatesAutoresizingMaskIntoConstraints = YES;
+		self.backgroundColor = [UIColor clearColor];
+		self.translatesAutoresizingMaskIntoConstraints = NO;
+		self.layer.cornerRadius = 0.0;
+		self.clipsToBounds = YES;
+		
+		[self setContentHuggingPriority: UILayoutPriorityDefaultLow
+								forAxis: UILayoutConstraintAxisHorizontal];
+		
+		[self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
+											  forAxis: UILayoutConstraintAxisHorizontal];
+		self.userInteractionEnabled = YES;
+		
+	}
+	return self;
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
-    UIColor *color = [MADColorEverydayApps newColorBlue];
-    if (self.selected) {
-        self.textColor = [color colorWithAlphaComponent:0.5000f];
-    } else {
-        self.textColor = color;
-    }
+	[super layoutSubviews];
+	UIColor *color = [MADColorEverydayApps newColorBlue];
+	if (self.selected) {
+		self.textColor = [color colorWithAlphaComponent:0.5000f];
+	} else {
+		self.textColor = color;
+	}
 }
 
 - (void)dimView {
-    UIColor *tintColor = [MADColorEverydayApps newColorBlue];
-    self.textColor = [tintColor colorWithAlphaComponent:0.5000f];
-    self.selected = YES;
+	UIColor *tintColor = [MADColorEverydayApps newColorBlue];
+	self.textColor = [tintColor colorWithAlphaComponent:0.5000f];
+	self.selected = YES;
 }
 
 - (void)normalView {
-    UIColor *tintColor = [MADColorEverydayApps newColorBlue];
-    self.textColor = tintColor;
-    self.selected = NO;
+	UIColor *tintColor = [MADColorEverydayApps newColorBlue];
+	self.textColor = tintColor;
+	self.selected = NO;
 }
 
 - (void)tintColorDidChange {
@@ -90,15 +90,15 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0;
 }
 
 - (void)applyBorder {
-    UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
-    self.layer.borderColor = tintColor.CGColor;
-    self.layer.borderWidth = [UIView borderWidthThin];
+	UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
+	self.layer.borderColor = tintColor.CGColor;
+	self.layer.borderWidth = [UIView borderWidthThin];
 }
 
 - (void)removeBorder {
-    UIColor *color = [UIColor blackColor];
-    self.layer.borderColor = color.CGColor;
-    self.layer.borderWidth = 0;
+	UIColor *color = [UIColor blackColor];
+	self.layer.borderColor = color.CGColor;
+	self.layer.borderWidth = 0;
 }
 
 @end

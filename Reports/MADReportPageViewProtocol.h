@@ -11,12 +11,12 @@
 
 @protocol MADReportPageViewProtocol <NSObject>
   @required
-    - (NSUInteger)pageNumber;
-    - (NSDate * _Nullable)lastCacheDate;
-    - (MADPrintPageRenderer * _Nullable)printPageRenderer;
-    - (NSURL * _Nonnull)thumbnailURL;
+	- (NSUInteger)pageNumber;
+	- (NSDate * _Nullable)lastCacheDate;
+	- (MADPrintPageRenderer * _Nullable)printPageRenderer;
+	- (NSURL * _Nonnull)thumbnailURL;
   @optional
-    - (NSUInteger)numberOfPages;
+	- (NSUInteger)numberOfPages;
 @end
 
 #endif /* MADReportPageViewProtocol_h */

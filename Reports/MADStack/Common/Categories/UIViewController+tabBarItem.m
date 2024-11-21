@@ -28,30 +28,30 @@
 @implementation UIViewController (tabBarItem)
 
 + (void)load {
-    static dispatch_once_t onceTokenTabBarItem;
-    SEL originalSelectorTabBarItem = @selector(tabBarItem);
-    SEL swizzledSelectorTabBarItem = @selector(mad_tabBarItem);
-    mad_swizzle_selectors(self, originalSelectorTabBarItem, self, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
+	static dispatch_once_t onceTokenTabBarItem;
+	SEL originalSelectorTabBarItem = @selector(tabBarItem);
+	SEL swizzledSelectorTabBarItem = @selector(mad_tabBarItem);
+	mad_swizzle_selectors(self, originalSelectorTabBarItem, self, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
 }
 
 - (UITabBarItem *)mad_tabBarItem {
-    UITabBarItem *tabBarItem = [self mad_tabBarItem];
-    if (tabBarItem && tabBarItem.image == nil) {
-        UIImage *tabBarImage = [self.class conformsToProtocol:@protocol(MADTabBarImageProtocol)] ?
-                                [self.class newTabBarImage] : nil;
-        if (tabBarImage) {
-            UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            tabBarItem.image = tabBarImageOg;
-            tabBarItem.selectedImage = tabBarImage;
-        }
-        NSString *tabBarTitle = self.title.copy;
-        tabBarItem.title = tabBarTitle;
-    }
-    return tabBarItem;
+	UITabBarItem *tabBarItem = [self mad_tabBarItem];
+	if (tabBarItem && tabBarItem.image == nil) {
+		UIImage *tabBarImage = [self.class conformsToProtocol:@protocol(MADTabBarImageProtocol)] ?
+								[self.class newTabBarImage] : nil;
+		if (tabBarImage) {
+			UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+			tabBarItem.image = tabBarImageOg;
+			tabBarItem.selectedImage = tabBarImage;
+		}
+		NSString *tabBarTitle = self.title.copy;
+		tabBarItem.title = tabBarTitle;
+	}
+	return tabBarItem;
 }
 
 + (UIImage *)newTabBarImage {
-    return nil;
+	return nil;
 }
 
 @end

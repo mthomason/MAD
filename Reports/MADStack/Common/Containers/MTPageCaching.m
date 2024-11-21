@@ -23,51 +23,51 @@
 @implementation MTPageCaching
 
 - (instancetype)init {
-    if (self = [super init]) {
-        NSMutableDictionary *pageCache = [[NSMutableDictionary alloc] init];
-        [self setPageCache:pageCache];
-    }
-    return self;
+	if (self = [super init]) {
+		NSMutableDictionary *pageCache = [[NSMutableDictionary alloc] init];
+		[self setPageCache:pageCache];
+	}
+	return self;
 }
 
 - (NSArray *)objectsForPage:(NSUInteger)index {
-    return [self pageCache][[self keyForPage:index]];
+	return [self pageCache][[self keyForPage:index]];
 }
 
 - (void)cacheObjects:(NSArray *)objects forPage:(NSUInteger)index {
-    [self pageCache][[self keyForPage:index]] = objects;
-    if ([[self pageCache] count] > CACHE_SIZE) {
-        [self trimCache:index];
-    }
+	[self pageCache][[self keyForPage:index]] = objects;
+	if ([[self pageCache] count] > CACHE_SIZE) {
+		[self trimCache:index];
+	}
 }
 
 - (void)dumpCache {
-    [[self pageCache] removeAllObjects];
+	[[self pageCache] removeAllObjects];
 }
 
 - (void)trimCache:(NSUInteger)index {
-    NSUInteger initalStartPage = [self initalCachePage:index];
-    NSMutableArray *keysToRemove = [[NSMutableArray alloc] initWithCapacity:CACHE_SIZE];
-    for (NSNumber *page in [[self pageCache] keyEnumerator]) {
-        NSInteger i = [page integerValue];
-        BOOL includePage = i >= initalStartPage || i < initalStartPage + CACHE_SIZE;
-        if (includePage == NO) {
-            [keysToRemove addObject:[self keyForPage:i]];
-        }
-    }
-    for (id key in keysToRemove) {
-        [[self pageCache] removeObjectForKey:key];
-    }
+	NSUInteger initalStartPage = [self initalCachePage:index];
+	NSMutableArray *keysToRemove = [[NSMutableArray alloc] initWithCapacity:CACHE_SIZE];
+	for (NSNumber *page in [[self pageCache] keyEnumerator]) {
+		NSInteger i = [page integerValue];
+		BOOL includePage = i >= initalStartPage || i < initalStartPage + CACHE_SIZE;
+		if (includePage == NO) {
+			[keysToRemove addObject:[self keyForPage:i]];
+		}
+	}
+	for (id key in keysToRemove) {
+		[[self pageCache] removeObjectForKey:key];
+	}
 }
 
 - (NSUInteger)initalCachePage:(NSUInteger)index {
-    NSUInteger halfCacheSize = CACHE_SIZE / 2;
-    NSInteger desiredStartPage = index - halfCacheSize;
-    return desiredStartPage >= 0 ? desiredStartPage : 0;
+	NSUInteger halfCacheSize = CACHE_SIZE / 2;
+	NSInteger desiredStartPage = index - halfCacheSize;
+	return desiredStartPage >= 0 ? desiredStartPage : 0;
 }
 
 - (id)keyForPage:(NSUInteger)index {
-    return @(index);
+	return @(index);
 }
 
 @end

@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.2098</string>
+	<string>8.0.2101</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.2098</string>
+	<string>8.0.2101</string>
 	<key>MADApplicationNamePrefix</key>
 	<string>MAD</string>
 	<key>MADApplicationNameSuffix</key>
 	<string>Designer</string>
 	<key>MADBuildDate</key>
-	<string>2024-11-21T03:05:25EST</string>
+	<string>2024-11-21T07:02:53EST</string>
 	<key>MADBuildNumber</key>
-	<string>34275</string>
+	<string>34277</string>
 	<key>MADGroupIdentifier</key>
 	<string>group.everydayapps.mad</string>
 	<key>MADRevision</key>
-	<string>4040</string>
+	<string>4043</string>
 	<key>MADTrademark</key>
 	<string>MAD</string>
 	<key>MADUbiquityIdentifier</key>

@@ -10,7 +10,7 @@
 #import "MADDesignerViewController.h"
 
 @interface MADNavigationControllerDesigner ()
-    @property (nonatomic, strong) MADDesignerViewController *designerController;
+	@property (nonatomic, strong) MADDesignerViewController *designerController;
 @end
 
 @implementation MADNavigationControllerDesigner
@@ -19,46 +19,46 @@
 @synthesize document = _document;
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    id rootViewController = [MADDesignerViewController newDesignerViewController: _document];
-    self.designerController = rootViewController;
+	[super viewDidLoad];
+	id rootViewController = [MADDesignerViewController newDesignerViewController: _document];
+	self.designerController = rootViewController;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    if (self.viewControllers.count == 0) {
-        [self pushViewController:self.designerController animated:animated];
-    }
+	[super viewWillAppear:animated];
+	if (self.viewControllers.count == 0) {
+		[self pushViewController:self.designerController animated:animated];
+	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (self.isBeingDismissed) {
-        NSArray *viewControllers = [[NSArray alloc] init];
-        [self setViewControllers:viewControllers animated:animated];
-    }
+	[super viewDidDisappear:animated];
+	if (self.isBeingDismissed) {
+		NSArray *viewControllers = [[NSArray alloc] init];
+		[self setViewControllers:viewControllers animated:animated];
+	}
 }
 
 + (UIImage *)newTabBarImage {
-    return [MADDesignerViewController newTabBarImage];
+	return [MADDesignerViewController newTabBarImage];
 }
 
 - (NSString *)title {
-    if (_title == nil) {
-        _title = self.designerController == nil ?
-                    [MADDesignerViewController Title] : self.designerController.title;
-    }
-    return _title;
+	if (_title == nil) {
+		_title = self.designerController == nil ?
+					[MADDesignerViewController Title] : self.designerController.title;
+	}
+	return _title;
 }
 
 - (void)setDocument:(MADocument *)document {
-    if (_document != document) {
-        _document = document;
-    }
+	if (_document != document) {
+		_document = document;
+	}
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleLightContent;
 }
 
 @end

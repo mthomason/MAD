@@ -12,9 +12,9 @@
 @protocol MADTabBarImageProtocol <NSObject>
 
   @required
-    + (UIImage *)newTabBarImage;
+	+ (UIImage *)newTabBarImage;
   @optional
-    + (NSString *)Title;
+	+ (NSString *)Title;
 
 @end
 

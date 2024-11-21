@@ -17,17 +17,17 @@
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADDesignerViewController : UIViewController
-    <MADViewControllerDocumentProtocol,
-        MADViewControllerProtocol,
-        MADTabBarImageProtocol>
+	<MADViewControllerDocumentProtocol,
+		MADViewControllerProtocol,
+		MADTabBarImageProtocol>
 
-    + (instancetype)newDesignerViewController:(MADocument *)document;
-    
-    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
+	+ (instancetype)newDesignerViewController:(MADocument *)document;
+	
+	@property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
 
-    @property (nonatomic, assign) BOOL hidesStatusBar;
+	@property (nonatomic, assign) BOOL hidesStatusBar;
 
-    - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
+	- (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
 
 @end
 

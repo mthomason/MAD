@@ -15,7 +15,7 @@
 
 @protocol MADPrintingProtocol <NSObject>
 @required
-    - (MADPrintPageRenderer *)printPageRenderer;
+	- (MADPrintPageRenderer *)printPageRenderer;
 @end
 
 #endif

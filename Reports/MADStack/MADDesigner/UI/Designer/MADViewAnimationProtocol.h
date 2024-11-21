@@ -10,7 +10,7 @@
 #define MADViewAnimationProtocol_h
 
 @protocol MADViewAnimationProtocol <NSObject>
-    - (void)flash:(void (^)(BOOL finished))completion;
+	- (void)flash:(void (^)(BOOL finished))completion;
 @end
 
 #endif /* MADViewAnimationProtocol_h */

@@ -18,25 +18,25 @@
 @protocol UIGestureRecognizerDelegate;
 
 @class UIPanGestureRecognizer, NSManagedObjectID, NSManagedObjectContext, MADDesignerElementView,
-       MTBarcode, RptqDocumentElement;
+	   MTBarcode, RptqDocumentElement;
 
 @interface MADDesignerElementView : UIView
-    <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
+	<MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
 
-    @property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
+	@property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
 
-    @property (nonatomic, strong) id displayObject;
-    @property (nonatomic, readonly, copy) NSString *textRepresentation;
+	@property (nonatomic, strong) id displayObject;
+	@property (nonatomic, readonly, copy) NSString *textRepresentation;
 
-    - (void)setWobbleRunning:(BOOL)running;
-    - (void)flash:(void (^)(BOOL finished))completion;
+	- (void)setWobbleRunning:(BOOL)running;
+	- (void)flash:(void (^)(BOOL finished))completion;
 
-    - (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
-    - (void)updateWithElement:(RptqDocumentElement *)element;
-    - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
+	- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+	- (void)updateWithElement:(RptqDocumentElement *)element;
+	- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 
-    - (void)applyBorder;
-    - (void)removeBorder;
+	- (void)applyBorder;
+	- (void)removeBorder;
 
 @end
 

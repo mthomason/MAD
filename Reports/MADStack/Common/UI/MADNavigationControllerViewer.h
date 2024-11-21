@@ -17,10 +17,10 @@
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADNavigationControllerViewer : UINavigationController
-    <MADTabBarImageProtocol,
-        MADViewControllerDocumentProtocol>
+	<MADTabBarImageProtocol,
+		MADViewControllerDocumentProtocol>
 
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
 @end
 

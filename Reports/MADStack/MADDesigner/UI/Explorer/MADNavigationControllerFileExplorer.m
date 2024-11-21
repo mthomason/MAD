@@ -39,137 +39,137 @@
 @implementation MADNavigationControllerFileExplorer
 
 + (void)initialize {
-    [super initialize];
-    
-    if (self == [MADNavigationControllerFileExplorer self]) {
-        @autoreleasepool {
-            
-            NSArray <Class <UIAppearanceContainer>> *classes;
-            classes = [[NSArray alloc] initWithObjects: [MADTransparentPresentationController class], nil];
+	[super initialize];
+	
+	if (self == [MADNavigationControllerFileExplorer self]) {
+		@autoreleasepool {
+			
+			NSArray <Class <UIAppearanceContainer>> *classes;
+			classes = [[NSArray alloc] initWithObjects: [MADTransparentPresentationController class], nil];
 
-            UINavigationBar *appearanceProxyNavigationBar;
-            UIToolbar *appearanceProxyToolbar;
+			UINavigationBar *appearanceProxyNavigationBar;
+			UIToolbar *appearanceProxyToolbar;
 
-            appearanceProxyNavigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
-            appearanceProxyNavigationBar.barTintColor = [UIColor clearColor];
-            appearanceProxyNavigationBar.translucent = YES;
-            
-            appearanceProxyToolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses: classes];
-            appearanceProxyToolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-            appearanceProxyToolbar.tintColor    = [MADColorEverydayApps newColorWhite];
-            appearanceProxyToolbar.barStyle = UIBarStyleBlack;
-            appearanceProxyToolbar.translucent = YES;
-            
-        }
-    }
+			appearanceProxyNavigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
+			appearanceProxyNavigationBar.barTintColor = [UIColor clearColor];
+			appearanceProxyNavigationBar.translucent = YES;
+			
+			appearanceProxyToolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses: classes];
+			appearanceProxyToolbar.barTintColor = [MADColorEverydayApps newColorBlue];
+			appearanceProxyToolbar.tintColor    = [MADColorEverydayApps newColorWhite];
+			appearanceProxyToolbar.barStyle = UIBarStyleBlack;
+			appearanceProxyToolbar.translucent = YES;
+			
+		}
+	}
 }
 
 - (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+	[super viewDidLayoutSubviews];
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.delegate = self;
+	[super viewDidLoad];
+	self.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
+	[super viewWillAppear:animated];
+	
 /*    UIColor *white, *blue;
-    white = [MADColorEverydayApps newColorWhite];
-    blue = [MADColorEverydayApps newColorBlue];
-    self.toolbar.tintColor = white;
-    self.toolbar.barTintColor = blue;
-    self.toolbar.barStyle = UIBarStyleBlack;
-    self.toolbar.translucent = YES;
-    self.navigationBar.translucent = YES;
-    
-    NSMutableDictionary *titleTextAttributes;
-    titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
-    titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];*/
+	white = [MADColorEverydayApps newColorWhite];
+	blue = [MADColorEverydayApps newColorBlue];
+	self.toolbar.tintColor = white;
+	self.toolbar.barTintColor = blue;
+	self.toolbar.barStyle = UIBarStyleBlack;
+	self.toolbar.translucent = YES;
+	self.navigationBar.translucent = YES;
+	
+	NSMutableDictionary *titleTextAttributes;
+	titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
+	titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];*/
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear: animated];
-    if (self.viewControllers.count == 1) {
-        MADExplorerController *fileExplorer;
-        fileExplorer = [MADExplorerController newExplorerController];
-        [self pushViewController:fileExplorer animated:YES];
-    }
+	[super viewDidAppear: animated];
+	if (self.viewControllers.count == 1) {
+		MADExplorerController *fileExplorer;
+		fileExplorer = [MADExplorerController newExplorerController];
+		[self pushViewController:fileExplorer animated:YES];
+	}
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(done:)) {
-        return YES;
-    }
-    return NO;
+	if (action == @selector(done:)) {
+		return YES;
+	}
+	return NO;
 }
 
 - (void)done:(id)sender {
-    [self.viewControllers[1] done:sender];
+	[self.viewControllers[1] done:sender];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleLightContent;
 }
 
 - (MADNavigationControllerType)controllerType {
-    return MADNavigationControllerTypeFileExplorer;
+	return MADNavigationControllerTypeFileExplorer;
 }
 
 #pragma mark -
 #pragma mark UINavigationControllerDelegate
 
 - (void)navigationController:(UINavigationController *)navigationController
-      willShowViewController:(UIViewController *)viewController
-                    animated:(BOOL)animated {
-    if ([viewController isKindOfClass:[MADExplorerController class]]) {
-        [self setToolbarHidden: NO animated: animated];
-    } else {
-        [self setToolbarHidden: YES animated: animated];
-    }
-    
+	  willShowViewController:(UIViewController *)viewController
+					animated:(BOOL)animated {
+	if ([viewController isKindOfClass:[MADExplorerController class]]) {
+		[self setToolbarHidden: NO animated: animated];
+	} else {
+		[self setToolbarHidden: YES animated: animated];
+	}
+	
 }
 
 - (void)navigationController:(UINavigationController *)navigationController
-       didShowViewController:(UIViewController *)viewController
-                    animated:(BOOL)animated { }
+	   didShowViewController:(UIViewController *)viewController
+					animated:(BOOL)animated { }
 
 - (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
-                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
-    return nil;
+								   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
+	return nil;
 }
 
 - (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-                                            animationControllerForOperation:(UINavigationControllerOperation)operation
-                                                         fromViewController:(UIViewController *)fromVC
-                                                           toViewController:(UIViewController *)toVC  {
+											animationControllerForOperation:(UINavigationControllerOperation)operation
+														 fromViewController:(UIViewController *)fromVC
+														   toViewController:(UIViewController *)toVC  {
 
-    id <UIViewControllerAnimatedTransitioning> animationController;
-    BOOL toTabViewController = NO;
-    BOOL toFileExplorferViewController = NO;
-    if ((toFileExplorferViewController = [toVC isKindOfClass:[MADExplorerController class]]) ||
-        (toTabViewController = [toVC isKindOfClass:[UITabBarController class]])) {
-        toVC.modalPresentationStyle = UIModalPresentationCustom;
-        
-        switch (operation) {
-            case UINavigationControllerOperationPush:
-                animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
-                                                                                      pushing:YES];
-                break;
+	id <UIViewControllerAnimatedTransitioning> animationController;
+	BOOL toTabViewController = NO;
+	BOOL toFileExplorferViewController = NO;
+	if ((toFileExplorferViewController = [toVC isKindOfClass:[MADExplorerController class]]) ||
+		(toTabViewController = [toVC isKindOfClass:[UITabBarController class]])) {
+		toVC.modalPresentationStyle = UIModalPresentationCustom;
+		
+		switch (operation) {
+			case UINavigationControllerOperationPush:
+				animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
+																					  pushing:YES];
+				break;
 
-            case UINavigationControllerOperationPop:
-                animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
-                                                                                      pushing:NO];
-                break;
+			case UINavigationControllerOperationPop:
+				animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
+																					  pushing:NO];
+				break;
 
-            case UINavigationControllerOperationNone:
-            default:
-                break;
-        }
-    }
-    return animationController;
+			case UINavigationControllerOperationNone:
+			default:
+				break;
+		}
+	}
+	return animationController;
 }
 
 @end

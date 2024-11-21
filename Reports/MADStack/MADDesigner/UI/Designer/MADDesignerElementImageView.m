@@ -17,14 +17,14 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
-    [(UIImage *)self.displayObject drawInRect:[element innerRect]];
+	[super drawRect:rect];
+	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+	[(UIImage *)self.displayObject drawInRect:[element innerRect]];
 }
 
 - (void)updateWithElement:(RptqDocumentElement *)element {
-    [super updateWithElement:element];
-    self.displayObject = ((RptqDocumentElementImage *)element).image;
+	[super updateWithElement:element];
+	self.displayObject = ((RptqDocumentElementImage *)element).image;
 }
 
 @end

@@ -13,7 +13,7 @@
 
 @interface UIView (Extras)
 
-    + (CGFloat)borderWidthThin;
+	+ (CGFloat)borderWidthThin;
 
 @end
 

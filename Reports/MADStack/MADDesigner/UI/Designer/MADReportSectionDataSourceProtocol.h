@@ -10,31 +10,31 @@
 #define MADReportSectionDataSourceProtocol_h
 
 @class MADDesignerSectionView, MADDesignerSectionLabel, MADDesignerLayoutDesignView,
-        UITapGestureRecognizer, NSNumber;
+		UITapGestureRecognizer, NSNumber;
 
 @protocol MADDesignerDesignViewDataSource <NSObject>
 
-    - (NSUInteger)numberOfSectionsInDesignView:(MADDesignerLayoutDesignView *)designView;
-    - (NSUInteger)numberOfRowsInDesignView:(MADDesignerLayoutDesignView *)designView
-                                sectionView:(MADDesignerSectionView *)sectionView
-                                    section:(NSUInteger)section;
-    - (NSUInteger)numberOfElementsInDesignView:(MADDesignerLayoutDesignView *)designView
-                                   sectionView:(MADDesignerSectionView *)sectionView
-                                       section:(NSUInteger)section
-                                           row:(NSUInteger)row;
+	- (NSUInteger)numberOfSectionsInDesignView:(MADDesignerLayoutDesignView *)designView;
+	- (NSUInteger)numberOfRowsInDesignView:(MADDesignerLayoutDesignView *)designView
+								sectionView:(MADDesignerSectionView *)sectionView
+									section:(NSUInteger)section;
+	- (NSUInteger)numberOfElementsInDesignView:(MADDesignerLayoutDesignView *)designView
+								   sectionView:(MADDesignerSectionView *)sectionView
+									   section:(NSUInteger)section
+										   row:(NSUInteger)row;
 
 
-    - (double)designView:(MADDesignerLayoutDesignView *)designView heightForSectionAtIndex:(NSUInteger)index;
-    - (NSString *)designView:(MADDesignerLayoutDesignView *)designView titleForSectionAtIndex:(NSUInteger)index;
-    - (int64_t)sectionID:(NSUInteger)index;
-    - (NSNumber *)sectionKey:(NSUInteger)sectionIndex;
-    - (NSNumber *)sectionKeyDetail;
+	- (double)designView:(MADDesignerLayoutDesignView *)designView heightForSectionAtIndex:(NSUInteger)index;
+	- (NSString *)designView:(MADDesignerLayoutDesignView *)designView titleForSectionAtIndex:(NSUInteger)index;
+	- (int64_t)sectionID:(NSUInteger)index;
+	- (NSNumber *)sectionKey:(NSUInteger)sectionIndex;
+	- (NSNumber *)sectionKeyDetail;
 
   @optional
-    - (MADDesignerSectionView *)designView:(MADDesignerLayoutDesignView *)designView
-              sectionViewForSectionAtIndex:(NSUInteger)index;
-    - (MADDesignerSectionLabel *)designView:(MADDesignerLayoutDesignView *)designView
-          sectionLabelViewForSectionAtIndex:(NSUInteger)index;
+	- (MADDesignerSectionView *)designView:(MADDesignerLayoutDesignView *)designView
+			  sectionViewForSectionAtIndex:(NSUInteger)index;
+	- (MADDesignerSectionLabel *)designView:(MADDesignerLayoutDesignView *)designView
+		  sectionLabelViewForSectionAtIndex:(NSUInteger)index;
 
 @end
 

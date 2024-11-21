@@ -13,42 +13,42 @@
 #import "MADToolboxViewController.h"
 
 @interface MADNavigationControllerToolbox ()
-    <UINavigationBarDelegate, UIBarPositioningDelegate>
+	<UINavigationBarDelegate, UIBarPositioningDelegate>
 @end
 
 @implementation MADNavigationControllerToolbox
 
 + (void)initialize {
-    [super initialize];
-    if (self == [MADNavigationControllerToolbox self]) {
-        @autoreleasepool {
-            NSArray <Class <UIAppearanceContainer>> *classes;
-            UINavigationBar <UIAppearance> *appearanceProxy;
-            classes = [[NSArray <Class <UIAppearanceContainer>> alloc] initWithObjects: self, nil];
-            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-            appearanceProxy.barTintColor = [UIColor clearColor];
-        }
-    }
+	[super initialize];
+	if (self == [MADNavigationControllerToolbox self]) {
+		@autoreleasepool {
+			NSArray <Class <UIAppearanceContainer>> *classes;
+			UINavigationBar <UIAppearance> *appearanceProxy;
+			classes = [[NSArray <Class <UIAppearanceContainer>> alloc] initWithObjects: self, nil];
+			appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+			appearanceProxy.barTintColor = [UIColor clearColor];
+		}
+	}
 }
 
 - (BOOL)prefersStatusBarHidden {
-    return YES;
+	return YES;
 }
 
 - (MADNavigationControllerType)controllerType {
-    return MADNavigationControllerTypeToolbox;
+	return MADNavigationControllerTypeToolbox;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
+	[super viewDidDisappear:animated];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 }
 
 - (CGSize)preferredContentSize {
-    return self.viewControllers.firstObject.preferredContentSize;
+	return self.viewControllers.firstObject.preferredContentSize;
 }
 
 @end

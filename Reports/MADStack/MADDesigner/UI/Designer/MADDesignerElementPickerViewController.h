@@ -17,8 +17,8 @@
 
 @interface MADDesignerElementPickerViewController : UICollectionViewController
 
-    @property (nonatomic, weak) id <MADElementPickerProtocol> objectSelectorDelegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADElementPickerProtocol> objectSelectorDelegate;
+	@property (nonatomic, weak) MADocument *document;
 
 @end
 

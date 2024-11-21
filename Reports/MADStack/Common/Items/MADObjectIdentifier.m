@@ -11,19 +11,19 @@
 
 @interface MADObjectIdentifier ()
 
-    @property (nonatomic, copy, readwrite) NSString *identifier;
-    @property (nonatomic, assign, readwrite) NSUInteger serial;
+	@property (nonatomic, copy, readwrite) NSString *identifier;
+	@property (nonatomic, assign, readwrite) NSUInteger serial;
 
 @end
 
 @implementation MADObjectIdentifier
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andSerial:(NSUInteger)serial {
-    if (self = [super init]) {
-        _identifier = identifier.copy;
-        _serial = serial;
-    }
-    return self;
+	if (self = [super init]) {
+		_identifier = identifier.copy;
+		_serial = serial;
+	}
+	return self;
 }
 
 @end

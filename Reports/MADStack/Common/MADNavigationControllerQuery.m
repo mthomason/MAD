@@ -10,7 +10,7 @@
 #import "MADQueryBuilderSplitViewController.h"
 
 @interface MADNavigationControllerQuery ()
-    @property (nonatomic, strong) MADQueryBuilderSplitViewController *queryController;
+	@property (nonatomic, strong) MADQueryBuilderSplitViewController *queryController;
 @end
 
 @implementation MADNavigationControllerQuery
@@ -19,52 +19,52 @@
 @synthesize document = _document;
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    id rootViewController = [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController: _document];
-    self.queryController = rootViewController;
+	[super viewDidLoad];
+	id rootViewController = [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController: _document];
+	self.queryController = rootViewController;
 }
 
 - (UIViewController *)topViewController {
-    return self.queryController;
+	return self.queryController;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    //self.root
-    //if (self.viewControllers.count == 0) {
-    //    self setRoot self.queryController animated:animated];
-    //}
+	[super viewWillAppear:animated];
+	
+	//self.root
+	//if (self.viewControllers.count == 0) {
+	//    self setRoot self.queryController animated:animated];
+	//}
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (self.isBeingDismissed) {
-        NSArray *viewControllers = [[NSArray alloc] init];
-        [self setViewControllers:viewControllers animated:animated];
-    }
+	[super viewDidDisappear:animated];
+	if (self.isBeingDismissed) {
+		NSArray *viewControllers = [[NSArray alloc] init];
+		[self setViewControllers:viewControllers animated:animated];
+	}
 }
 
 + (UIImage *)newTabBarImage {
-    return [MADQueryBuilderSplitViewController newTabBarImage];
+	return [MADQueryBuilderSplitViewController newTabBarImage];
 }
 
 - (NSString *)title {
-    if (_title == nil) {
-        _title = self.queryController == nil ?
-                    [MADQueryBuilderSplitViewController Title] : self.queryController.title;
-    }
-    return _title;
+	if (_title == nil) {
+		_title = self.queryController == nil ?
+					[MADQueryBuilderSplitViewController Title] : self.queryController.title;
+	}
+	return _title;
 }
 
 - (void)setDocument:(MADocument *)document {
-    if (_document != document) {
-        _document = document;
-    }
+	if (_document != document) {
+		_document = document;
+	}
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleLightContent;
 }
 
 @end

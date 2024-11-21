@@ -11,9 +11,9 @@
 
 @protocol MADExplorerControllerProtocol <NSObject>
 
-    - (void)openDocumentAtURL:(NSURL *)url;
-    - (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
-    - (NSArray *)supportedUTIs;
+	- (void)openDocumentAtURL:(NSURL *)url;
+	- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
+	- (NSArray *)supportedUTIs;
 
 @end
 

@@ -15,15 +15,15 @@
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 
 @protocol MADElementPickerProtocol
-    <MADViewControllerStandardProtocol>
+	<MADViewControllerStandardProtocol>
 
-    - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
-    - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
-    - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
-                                                   inputType:(MTAggregateFunctionInputType)inputType
-                                                 inputObject:(NSManagedObjectID *)inputObject
-                                                   groupType:(MTAggregateGroupByType)groupType
-                                                 groupNumber:(NSNumber *)groupNumber;
+	- (void)insertDocumentObjectNewLabel:(NSString *)labelText;
+	- (void)insertDocumentObjectDataField:(RptqQueryField *)field;
+	- (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
+												   inputType:(MTAggregateFunctionInputType)inputType
+												 inputObject:(NSManagedObjectID *)inputObject
+												   groupType:(MTAggregateGroupByType)groupType
+												 groupNumber:(NSNumber *)groupNumber;
 
 @end
 

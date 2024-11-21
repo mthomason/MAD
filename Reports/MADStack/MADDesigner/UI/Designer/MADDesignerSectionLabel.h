@@ -19,19 +19,19 @@ extern const CGFloat MADesignerSectionLabelFontSize;
 
 @interface MADDesignerSectionLabel : UILabel
 
-    @property (nonatomic, assign, readonly) BOOL selected;
-    @property (nonatomic, assign, readwrite) NSInteger identifier;
-    @property (nonatomic, assign) BOOL indicatorFormFeed;
-    @property (nonatomic, assign) BOOL indicatorVisible;
-    @property (nonatomic, assign) CGFloat scale;
+	@property (nonatomic, assign, readonly) BOOL selected;
+	@property (nonatomic, assign, readwrite) NSInteger identifier;
+	@property (nonatomic, assign) BOOL indicatorFormFeed;
+	@property (nonatomic, assign) BOOL indicatorVisible;
+	@property (nonatomic, assign) CGFloat scale;
 
-    - (instancetype)initWithText:(NSString *)text;
-    - (void)dimView;
-    - (void)normalView;
-    - (void)applyBorder;
-    - (void)removeBorder;
+	- (instancetype)initWithText:(NSString *)text;
+	- (void)dimView;
+	- (void)normalView;
+	- (void)applyBorder;
+	- (void)removeBorder;
 
-    @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+	@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 
