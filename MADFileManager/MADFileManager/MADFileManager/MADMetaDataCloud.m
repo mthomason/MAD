@@ -14,9 +14,7 @@
 #import <Foundation/NSURL.h>
 
 @interface MADMetaDataCloud ()
-
     @property (nonatomic, strong) NSMetadataItem *metadataItem;
-
 @end
 
 @implementation MADMetaDataCloud
@@ -25,7 +23,6 @@
     
     if (self = [super init]) {
         self.metadataItem = item;
-
     }
     return self;
 }

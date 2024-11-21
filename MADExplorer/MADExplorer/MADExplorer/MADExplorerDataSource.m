@@ -263,18 +263,10 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 }
 
 - (NSString *)title:(NSIndexPath *)index {
-    MADMetaData *metadata;
-    NSURL *url;
-    NSString *lastPathComponent, *title, *result;
-    
-    metadata = [self metadata:index];
-    url = metadata.URL.copy;
-    
-    lastPathComponent = url.lastPathComponent;
-    title = lastPathComponent.stringByDeletingPathExtension;
-    
-    result = [[NSString alloc] initWithString: title];
-    return result;
+	MADMetaData *metadata = [self metadata:index];
+	NSURL *url = [metadata.URL copy];
+	NSString *title = url.lastPathComponent.stringByDeletingPathExtension;
+	return [title copy];
 }
 
 - (NSString *)subtitle:(NSIndexPath *)index {

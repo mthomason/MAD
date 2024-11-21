@@ -497,8 +497,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
-    NSString *filename = self.filename;
-    NSURL *result = [MADURL newURLCacheFilesDirectoryForFilename:filename];
+    NSURL *result = [MADURL newURLCacheFilesDirectoryForFilename:self.filename];
     return result;
 }
 
@@ -690,8 +689,7 @@ void madwarn(char *err,  const char*err2) { }
     NSNumber *lastVersion = ((NSNumber *)dicionary[MADDocumentInfoKeyVersion]).copy;
     
     if (lastGenerator == nil) {
-        NSString *generator = @"MAD Designer";
-        lastGenerator = generator;
+        lastGenerator = @"MAD Designer";
     }
     
     if (lastVersion == nil) {

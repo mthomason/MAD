@@ -29,11 +29,10 @@ static NSString * const StringEmpty = @"";
 
 @implementation MADDataTablePlist
 
+#pragma mark - Initializers
+
 - (instancetype)init {
-	if (self = [super init]) {
-		[self setupWithObjectId:0 fromCache:NO];
-	}
-	return self;
+	return [self initWithId:0 fromCache:NO];
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId {
@@ -50,49 +49,45 @@ static NSString * const StringEmpty = @"";
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
 	if (self = [super init]) {
 		
-		NSString *name = @"";
-		self.name = name;
+		self.name = @"";
 		
-		NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
+		NSMutableArray <NSString *> *columnKeys =
+			[[NSMutableArray <NSString *> alloc] initWithCapacity:numberOfColumns];
 		self.columnKeys = columnKeys;
 		
-		NSMutableDictionary <NSString *, MADDataColumn *> *columns;
-		columns = [[NSMutableDictionary <NSString *, MADDataColumn *> alloc] initWithCapacity:numberOfColumns];
+		NSMutableDictionary <NSString *, MADDataColumn *> *columns =
+			[[NSMutableDictionary <NSString *, MADDataColumn *> alloc] initWithCapacity:numberOfColumns];
 		self.columns = columns;
 		
 		self.rowCounter = 0;
 		
-		NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
+		NSMutableArray <NSSortDescriptor *> *sortDescriptors = [[NSMutableArray alloc] init];
 		self.sortDescriptors = sortDescriptors;
 		
 	}
 	return self;
 }
 
+#pragma mark - NSCoding
+
 - (instancetype)initWithCoder:(NSCoder *)decoder {
 	if (self = [super init]) {
 	
-		id key;
-		key = [MADDataTablePlist keyName];
-		NSString *name = [decoder decodeObjectForKey: key];
+		NSString *name = [decoder decodeObjectForKey: [MADDataTablePlist keyName]];
 		self.name = name;
-	   
-		key = [MADDataTablePlist keyColumnKeys];
-		NSMutableArray *columnKeys =    [decoder decodeObjectForKey: key];
+
+		NSMutableArray <NSString *> *columnKeys =
+			[decoder decodeObjectForKey: [MADDataTablePlist keyColumnKeys]];
 		self.columnKeys = columnKeys;
 		
-		NSMutableDictionary <NSString *, MADDataColumn *> *columns;
-		key = [MADDataTablePlist keyColumns];
-		columns =  [decoder decodeObjectForKey: key];
+		NSMutableDictionary <NSString *, MADDataColumn *> *columns =
+			[decoder decodeObjectForKey: [MADDataTablePlist keyColumns]];
 		self.columns = columns;
 		
-		key = [MADDataTablePlist keyRowCounter];
-		NSNumber *rowCounterObject = [decoder decodeObjectForKey: key];
+		NSNumber *rowCounterObject = [decoder decodeObjectForKey: [MADDataTablePlist keyRowCounter]];
 		self.rowCounter = rowCounterObject.unsignedIntegerValue;
 		
-		NSMutableArray *sortDescriptors;
-		key = [MADDataTablePlist keySortDescriptors];
-		sortDescriptors = [decoder decodeObjectForKey:key];
+		NSMutableArray *sortDescriptors = [decoder decodeObjectForKey:[MADDataTablePlist keySortDescriptors]];
 		self.sortDescriptors = sortDescriptors;
 		
 		NSNumber *objid = [decoder decodeObjectForKey:@"objid"];
@@ -103,43 +98,27 @@ static NSString * const StringEmpty = @"";
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-	
-	id objid;
-	NSString *key;
-
-	objid = [[NSNumber alloc] initWithUnsignedInteger: _tag];
-	[encoder encodeObject:  objid forKey: @"objid"];
-
-	key = [MADDataTablePlist keySortDescriptors];
-	objid = _sortDescriptors;
-	[encoder encodeObject: objid forKey: key];
-
-	key = [MADDataTablePlist keyName];
-	[encoder encodeObject: _name forKey: key];
-	
-	key = [MADDataTablePlist keyColumnKeys];
-	objid = _columnKeys;
-	[encoder encodeObject: objid forKey: key];
-	
-	key = [MADDataTablePlist keyColumns];
-	objid = _columns;
-	[encoder encodeObject: objid forKey: key];
-	
-	key = [MADDataTablePlist keyRowCounter];
-	objid = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
-	[encoder encodeObject: objid forKey: key];
-	
+	NSNumber *tag = [[NSNumber alloc] initWithUnsignedInteger: _tag];
+	NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
+	[encoder encodeObject:  tag forKey: @"objid"];
+	[encoder encodeObject: _sortDescriptors forKey: [MADDataTablePlist keySortDescriptors]];
+	[encoder encodeObject: _name forKey: [MADDataTablePlist keyName]];
+	[encoder encodeObject: _columnKeys forKey: [MADDataTablePlist keyColumnKeys]];
+	[encoder encodeObject: _columns forKey: [MADDataTablePlist keyColumns]];
+	[encoder encodeObject: rowCounter forKey: [MADDataTablePlist keyRowCounter]];
 }
+
+#pragma mark - Setup
 
 - (void)setupWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
 	
 	NSString *name = StringEmpty;
 	self.name = name;
 	
-	NSMutableArray *columnKeys = [[NSMutableArray alloc] init];
+	NSMutableArray <NSString *> *columnKeys = [[NSMutableArray alloc] init];
 	self.columnKeys = columnKeys;
 	
-	NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
+	NSMutableArray <NSSortDescriptor *> *sortDescriptors = [[NSMutableArray alloc] init];
 	self.sortDescriptors = sortDescriptors;
 	
 	self.rowCounter = 0;
@@ -151,38 +130,7 @@ static NSString * const StringEmpty = @"";
 	
 }
 
-- (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
-	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
-	return nil;
-}
-
-- (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
-	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
-	return nil;
-}
-
-- (NSEnumerator *)enumeratorForAllObjectsSorted {
-	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
-	return nil;
-}
-
-- (NSDictionary *)dataForRow:(NSUInteger)cacheId {
-	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
-	return nil;
-}
-
-- (NSEnumerator *)enumeratorForKeyObjectsSorted {
-	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
-	return nil;
-}
-
-+ (NSString *)keyUrl { return @"url"; }
-
-- (NSString *)newFilenameMDCache {
-	NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
-	NSString *result = [tag stringByAppendingPathExtension:@"mdcache"];
-	return result;
-}
+#pragma mark - Caching
 
 - (void)loadFromCacheWithUrl:(NSURL *)url {
 	NSString *path = url.path.copy;
@@ -194,11 +142,10 @@ static NSString * const StringEmpty = @"";
 
 	if (inputStream.streamStatus == NSStreamStatusError) return;
 	
-	//NSPropertyListFormat format;
 	NSError *error = nil;
 	id plist = [NSPropertyListSerialization propertyListWithStream: inputStream
 														   options: NSPropertyListImmutable
-															format: nil //&format
+															format: nil
 															 error: &error];
 	NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
 	if (!plist) return;
@@ -207,53 +154,49 @@ static NSString * const StringEmpty = @"";
 }
 
 - (BOOL)cacheWithUrl:(NSURL *)url {
-	//static const NSUInteger propertyListFormat = NSPropertyListBinaryFormat_v1_0;
-
-	BOOL success = NO;
-	if (url) {
-		NSDictionary *plist = [self copyPlist].copy;
+	if (!url) {
+		NSLog(@"Error: Invalid URL in %s", __PRETTY_FUNCTION__);
+		return NO;
+	}
 	
-		NSError *error = NULL;
-		NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
-																   format: NSPropertyListBinaryFormat_v1_0
-																  options: 0
-																	error: &error];
+	NSDictionary *plist = [self copyPlist];
+	NSError *error = NULL;
+	NSData *cache = [NSPropertyListSerialization dataWithPropertyList: plist
+															   format: NSPropertyListBinaryFormat_v1_0
+															  options: 0
+																error: &error];
 
 	NSAssert(error == NULL, @"%s %@", __PRETTY_FUNCTION__, error);
 
-		NSError *errorWriting = NULL;
-		success = [cache writeToURL: url
-							options: NSDataWritingAtomic |
-									 NSDataWritingFileProtectionCompleteUnlessOpen
-							  error: &errorWriting];
+	NSError *errorWriting = NULL;
 
-		NSAssert(errorWriting == NULL, @"%s %@", __PRETTY_FUNCTION__, errorWriting);
+	BOOL success = [cache writeToURL: url
+						options: NSDataWritingAtomic |
+								 NSDataWritingFileProtectionCompleteUnlessOpen
+						  error: &errorWriting];
 
-	}
-	
+	NSAssert((!success || errorWriting == NULL), @"%s %@", __PRETTY_FUNCTION__, errorWriting);
+
 	return success;
 }
 
+#pragma mark - Data Management
+
 - (NSDictionary *)copyPlist {
-	
-	NSString *keyName = [MADDataTablePlist keyName];
-	NSString *keyColumnKeys = [MADDataTablePlist keyColumnKeys];
-	NSString *keyColumns = [MADDataTablePlist keyColumns];
-	NSString *keyRowCounter = [MADDataTablePlist keyRowCounter];
+
 	NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
+	NSArray *columnKeys = [self.columnKeys copy];
+	NSDictionary *columnsPlist = [self columnsPlist];
+	NSString *name = [self.name copy];
 	
-	NSArray *ck = self.columnKeys;
-	NSArray *columnKeys = [[NSArray alloc] initWithArray:ck];
+	NSDictionary *results = @{
+		[MADDataTablePlist keyName]: name,
+		[MADDataTablePlist keyColumnKeys]: columnKeys,
+		[MADDataTablePlist keyColumns]: columnsPlist,
+		[MADDataTablePlist keyRowCounter]: rowCounter
+	};
 	
-	NSDictionary *cp = [self columnsPlist];
-	NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:cp];
-	
-	id name = self.name.copy;
-	return [[NSDictionary alloc] initWithObjectsAndKeys:
-					name, keyName,
-					columnKeys, keyColumnKeys,
-					columnsPlist, keyColumns,
-					rowCounter, keyRowCounter, nil];
+	return results;
 }
 
 - (void)loadWithPlist:(NSDictionary *)plist {
@@ -297,83 +240,84 @@ static NSString * const StringEmpty = @"";
 }
 
 - (NSDictionary *)columnsPlist {
-	
-	NSMutableDictionary *columnsPlist;
-	columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
+	if (!self.columnKeys || !self.columns) {
+		return @{};
+	}
+	NSMutableDictionary *columnsPlist = [NSMutableDictionary dictionaryWithCapacity:[self numberOfColumns]];
 	for (NSString *key in self.columnKeys) {
 		MADDataColumn *dataColumn = self.columns[key];
-		columnsPlist[key] = [dataColumn copyPlist];
+		if (dataColumn) {
+			columnsPlist[key] = [dataColumn copyPlist];
+		} else {
+			NSLog(@"Warning: Missing column for key %@", key);
+		}
 	}
-	return columnsPlist;
+	return [columnsPlist copy];
+}
+
+- (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
+	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSArray <__kindof NSDictionary *> *)objectsForGroupKeys:(NSArray *)groupKeys {
+	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSEnumerator *)enumeratorForAllObjectsSorted {
+	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSDictionary *)dataForRow:(NSUInteger)cacheId {
+	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSEnumerator *)enumeratorForKeyObjectsSorted {
+	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSString *)newFilenameMDCache {
+	NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
+	NSString *result = [tag stringByAppendingPathExtension:@"mdcache"];
+	return result;
 }
 
 - (void)addColumn:(MADDataColumn *)column {}
 - (void)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {}
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {}
-
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {}
-
 - (void)removeAllObjects {}
-
-- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
-	return nil;
-}
-
-- (id)objectAtRow:(NSUInteger)row {
-	return nil;
-}
-
-- (NSEnumerator *)columnsEnumerator {
-	return nil;
-}
-- (NSEnumerator *)objectEnumerator {
-	return nil;
-}
-
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column { return nil; }
+- (id)objectAtRow:(NSUInteger)row { return nil; }
+- (NSEnumerator *)columnsEnumerator { return nil; }
+- (NSEnumerator *)objectEnumerator { return nil; }
 - (void)beginBulkInsert {}
 - (void)endBulkInsert {}
 
 - (NSArray *)allObjects {
-	id all = [[NSArray alloc] init];
+	NSArray *all = [[NSArray alloc] init];
 	return all;
 }
 
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit { return @[]; }
-
 - (NSUInteger)count { return 0; }
-
 - (NSUInteger)numberOfColumns { return 0; }
-
 - (NSUInteger)numberOfRows { return 0; }
-
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
 								  objects:(__unsafe_unretained id [])buffer
 									count:(NSUInteger)len {
 	return 0;
 }
 
-+ (NSString *)keyName {
-	SEL selName = @selector(name);
-	return NSStringFromSelector(selName);
-}
-
-+ (NSString *)keyColumnKeys {
-	SEL selColumnKeys = @selector(columnKeys);
-	return NSStringFromSelector(selColumnKeys);
-}
-
-+ (NSString *)keyColumns {
-	SEL selColumns = @selector(columns);
-	return NSStringFromSelector(selColumns);
-}
-
-+ (NSString *)keyRowCounter {
-	SEL selRowCounter = @selector(rowCounter);
-	return NSStringFromSelector(selRowCounter);
-}
-+ (NSString *)keySortDescriptors {
-	SEL selSortDescriptors = @selector(sortDescriptors);
-	return NSStringFromSelector(selSortDescriptors);
-}
++ (NSString *)keyUrl { return @"url"; }
++ (NSString *)keyName { return NSStringFromSelector(@selector(name)); }
++ (NSString *)keyColumnKeys { return NSStringFromSelector(@selector(columnKeys)); }
++ (NSString *)keyColumns { return NSStringFromSelector(@selector(columns)); }
++ (NSString *)keyRowCounter { return NSStringFromSelector(@selector(rowCounter)); }
++ (NSString *)keySortDescriptors { return NSStringFromSelector(@selector(sortDescriptors)); }
 
 @end

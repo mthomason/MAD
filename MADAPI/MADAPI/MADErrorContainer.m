@@ -89,7 +89,6 @@ static NSString * const MADErrorContainerDate   = @"d";
 			[self addError:err];
 		}
 	}
-
 }
 
 @end
