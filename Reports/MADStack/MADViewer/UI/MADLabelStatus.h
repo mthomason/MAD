@@ -14,14 +14,14 @@
 
 @interface MADLabelStatus : UILabel
 
-    - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs;
-    - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs;
+	- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs;
+	- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs;
 
-    - (void)updatePageStatus:(MADReportPosition)reportPosition;
-    - (void)updateStatusWithTime:(NSString *)timeMessage;
-    - (void)updateStatusWithRecordsRead:(NSString *)message;
-    - (void)updateStatusWithPageNumber:(NSString *)message;
-    - (void)displayNoCache;
+	- (void)updatePageStatus:(MADReportPosition)reportPosition;
+	- (void)updateStatusWithTime:(NSString *)timeMessage;
+	- (void)updateStatusWithRecordsRead:(NSString *)message;
+	- (void)updateStatusWithPageNumber:(NSString *)message;
+	- (void)displayNoCache;
 
 @end
 

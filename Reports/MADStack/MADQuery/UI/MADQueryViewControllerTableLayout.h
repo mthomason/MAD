@@ -14,10 +14,10 @@
 
 @interface MADQueryViewControllerTableLayout : NSObject
 
-    - (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
-                          reportingEnabled:(BOOL)reportingEnabled;
+	- (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
+						  reportingEnabled:(BOOL)reportingEnabled;
 
-    - (NSArray *)sectionTypes;
+	- (NSArray *)sectionTypes;
 
 @end
 

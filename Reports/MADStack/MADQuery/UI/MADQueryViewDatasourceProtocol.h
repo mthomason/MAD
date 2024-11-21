@@ -11,13 +11,13 @@
 
 @protocol MADQueryViewControllerDatasourceProtocol <NSObject>
 
-    - (void)queryDatasource:(NSObject <MADQueryViewControllerDatasourceProtocol> *)datasource
-                  tableView:(UITableView *)tableView
-                 deleteItem:(NSIndexPath *)item
-                fromSection:(MADIdentifierQueryViewSections)section;
-    - (void)reloadQueryViewData;
+	- (void)queryDatasource:(NSObject <MADQueryViewControllerDatasourceProtocol> *)datasource
+				  tableView:(UITableView *)tableView
+				 deleteItem:(NSIndexPath *)item
+				fromSection:(MADIdentifierQueryViewSections)section;
+	- (void)reloadQueryViewData;
 
-    - (MADocument *)document;
+	- (MADocument *)document;
 
 @end
 

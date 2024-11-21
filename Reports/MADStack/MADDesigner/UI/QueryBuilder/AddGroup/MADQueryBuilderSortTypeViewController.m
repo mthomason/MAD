@@ -18,8 +18,8 @@
 
 @interface MADQueryBuilderSortTypeViewController ()
 
-    @property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
-    @property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
+	@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
+	@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
 
 @end
 
@@ -31,36 +31,36 @@
 #pragma mark View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    if (_initalSortOrder == MADSortOrderAccending) {
-        self.tableViewCellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
-        self.tableViewCellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
+	[super viewDidLoad];
+	if (_initalSortOrder == MADSortOrderAccending) {
+		self.tableViewCellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
+	} else {
+		self.tableViewCellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
+	}
 }
 
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    UITableViewCell *cellAccending = self.tableViewCellAccending;
-    UITableViewCell *cellDecending = self.tableViewCellDecending;
-    
-    UITableViewCell *cellActive = [tableView cellForRowAtIndexPath:indexPath];
-    NSString *reuseID = cellActive.reuseIdentifier;
-    if ([reuseID isEqualToString: @"MTTableViewCellSortOrderAccending"]) {
-        [self.delegate viewController:self didSelectSortType: MADSortOrderAccending];
-        cellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
-        cellDecending.accessoryType = UITableViewCellAccessoryNone;
-        
-    } else if ([reuseID isEqualToString: @"MTTableViewCellSortOrderDecending"]) {
-        [self.delegate viewController:self didSelectSortType: MADSortOrderDecending];
-        cellAccending.accessoryType = UITableViewCellAccessoryNone;
-        cellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
+	UITableViewCell *cellAccending = self.tableViewCellAccending;
+	UITableViewCell *cellDecending = self.tableViewCellDecending;
+	
+	UITableViewCell *cellActive = [tableView cellForRowAtIndexPath:indexPath];
+	NSString *reuseID = cellActive.reuseIdentifier;
+	if ([reuseID isEqualToString: @"MTTableViewCellSortOrderAccending"]) {
+		[self.delegate viewController:self didSelectSortType: MADSortOrderAccending];
+		cellAccending.accessoryType = UITableViewCellAccessoryCheckmark;
+		cellDecending.accessoryType = UITableViewCellAccessoryNone;
+		
+	} else if ([reuseID isEqualToString: @"MTTableViewCellSortOrderDecending"]) {
+		[self.delegate viewController:self didSelectSortType: MADSortOrderDecending];
+		cellAccending.accessoryType = UITableViewCellAccessoryNone;
+		cellDecending.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    }
+	}
 }
 
 @end

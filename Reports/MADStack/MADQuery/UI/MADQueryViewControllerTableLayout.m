@@ -15,47 +15,47 @@
 
 @interface MADQueryViewControllerTableLayout ()
 
-    @property (nonatomic, strong) NSDictionary *datamodel;
+	@property (nonatomic, strong) NSDictionary *datamodel;
 
 @end
 
 @implementation MADQueryViewControllerTableLayout
 
 - (void)dealloc {
-    _datamodel = nil;
+	_datamodel = nil;
 }
 
 - (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
-                      reportingEnabled:(BOOL)enabled {
-    
-    if (self = [super init]) {
-        id result;
-        switch (numberOfTables) {
-                
-            case 0:
-                result = [NSDictionary newDictionaryQueryLayoutTableZeroReportingEnabled: enabled];
-                break;
-                
-            case 1:
-                result = [NSDictionary newDictionaryQueryLayoutTableOneReportingEnabled: enabled];
-                break;
-                
-            default:
-                result = [NSDictionary newDictionaryQueryLayoutTableMoreThanOneReportingEnabled: enabled];
-                break;
-                
-        }
-        self.datamodel = result;
-    }
-    return self;
+					  reportingEnabled:(BOOL)enabled {
+	
+	if (self = [super init]) {
+		id result;
+		switch (numberOfTables) {
+				
+			case 0:
+				result = [NSDictionary newDictionaryQueryLayoutTableZeroReportingEnabled: enabled];
+				break;
+				
+			case 1:
+				result = [NSDictionary newDictionaryQueryLayoutTableOneReportingEnabled: enabled];
+				break;
+				
+			default:
+				result = [NSDictionary newDictionaryQueryLayoutTableMoreThanOneReportingEnabled: enabled];
+				break;
+				
+		}
+		self.datamodel = result;
+	}
+	return self;
 }
 
 - (NSArray *)sectionTypes {
-    id sections = _datamodel[MTTableSectionSectionsKey];
-    NSArray *sectionTypes = sections != nil ?
-                    [[NSArray alloc] initWithArray: sections] :
-                    nil;
-    return sectionTypes;
+	id sections = _datamodel[MTTableSectionSectionsKey];
+	NSArray *sectionTypes = sections != nil ?
+					[[NSArray alloc] initWithArray: sections] :
+					nil;
+	return sectionTypes;
 }
 
 @end

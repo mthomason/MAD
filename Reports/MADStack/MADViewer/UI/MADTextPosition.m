@@ -11,19 +11,19 @@
 @implementation MADTextPosition
 
 - (instancetype)init {
-    if (self = [super init]) {
-        self.page = 0;
-        self.section = 0;
-        self.row = 0;
-        self.element = 0;
-        self.offset = 0;
-    }
-    return self;
+	if (self = [super init]) {
+		self.page = 0;
+		self.section = 0;
+		self.row = 0;
+		self.element = 0;
+		self.offset = 0;
+	}
+	return self;
 }
 
 + (instancetype)BeginningOfDocument {
-    MADTextPosition *beginning = [[MADTextPosition alloc] init];
-    return beginning;
+	MADTextPosition *beginning = [[MADTextPosition alloc] init];
+	return beginning;
 }
 
 @end

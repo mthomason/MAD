@@ -14,21 +14,21 @@
 @class MADSectionLayoutManager, NSArray <__covariant ObjectType>;
 
 @interface MADSectionLayoutAttributes : UICollectionViewLayoutAttributes
-    <NSCopying>
+	<NSCopying>
 
-    @property (nonatomic, assign) int64_t objectID;
+	@property (nonatomic, assign) int64_t objectID;
 
-    + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
-                                               objectID:(int64_t)objectID
-                                                andRect:(CGRect)rect;
+	+ (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
+											   objectID:(int64_t)objectID
+												andRect:(CGRect)rect;
 
-    - (void)placeItemGivenAttributes:(NSArray <MADSectionLayoutAttributes *> *)attributes;
-    - (BOOL)intersectsAnItemInArray:(NSArray <MADSectionLayoutAttributes *> *)items;
-    - (BOOL)validDropPoint:(CGPoint)dropPoint
-          givenPlacedItems:(NSArray <MADSectionLayoutAttributes *> *)placedItems;
-    - (BOOL)moveOnScreen;
-    - (NSArray <NSValue *> *)copyDropPointsHorizontal;
-    - (NSArray <NSValue *> *)copyDropPoints;
+	- (void)placeItemGivenAttributes:(NSArray <MADSectionLayoutAttributes *> *)attributes;
+	- (BOOL)intersectsAnItemInArray:(NSArray <MADSectionLayoutAttributes *> *)items;
+	- (BOOL)validDropPoint:(CGPoint)dropPoint
+		  givenPlacedItems:(NSArray <MADSectionLayoutAttributes *> *)placedItems;
+	- (BOOL)moveOnScreen;
+	- (NSArray <NSValue *> *)copyDropPointsHorizontal;
+	- (NSArray <NSValue *> *)copyDropPoints;
 
 @end
 

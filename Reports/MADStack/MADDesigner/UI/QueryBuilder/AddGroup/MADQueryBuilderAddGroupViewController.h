@@ -18,24 +18,24 @@
 @class MADQueryBuilderAddGroupViewController, MADocument;
 
 @interface MADQueryBuilderAddGroupViewController : UITableViewController
-    <UITableViewDelegate,
-        MADQueryBuilderSortTypeDelegate,
-        MADQueryChooseFieldProtocol>
+	<UITableViewDelegate,
+		MADQueryBuilderSortTypeDelegate,
+		MADQueryChooseFieldProtocol>
 
-    @property (nonatomic, weak) id <MADQueryBuilderAddGroupDelegate> delegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADQueryBuilderAddGroupDelegate> delegate;
+	@property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellSort;
-    @property (nonatomic, weak) IBOutlet UILabel *detailLabelField;
-    @property (nonatomic, weak) IBOutlet UILabel *detailLabelSort;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellSort;
+	@property (nonatomic, weak) IBOutlet UILabel *detailLabelField;
+	@property (nonatomic, weak) IBOutlet UILabel *detailLabelSort;
 
 
-    @property (nonatomic, copy) NSString *fieldName;
-    @property (nonatomic, assign) MADSortOrder sortOrder;
+	@property (nonatomic, copy) NSString *fieldName;
+	@property (nonatomic, assign) MADSortOrder sortOrder;
 
-    - (IBAction)cancel:(id)sender;
-    - (IBAction)save:(id)sender;
+	- (IBAction)cancel:(id)sender;
+	- (IBAction)save:(id)sender;
 
 @end
 

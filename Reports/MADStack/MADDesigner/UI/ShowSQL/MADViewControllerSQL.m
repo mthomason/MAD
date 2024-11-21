@@ -25,42 +25,42 @@
 @implementation MADViewControllerSQL
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    MADocument *doc = self.document;
-    NSError *error = nil;
-    NSString *sqlStatement = [doc.mainQuery SQLOnlyActiveFields: NO
-                                               managedObjectContext: doc.managedObjectContext
-                                                              error: &error];
-    
-    if (error) {
-        sqlStatement = error.localizedDescription;
-    }
+	[super viewWillAppear:animated];
+	
+	MADocument *doc = self.document;
+	NSError *error = nil;
+	NSString *sqlStatement = [doc.mainQuery SQLOnlyActiveFields: NO
+											   managedObjectContext: doc.managedObjectContext
+															  error: &error];
+	
+	if (error) {
+		sqlStatement = error.localizedDescription;
+	}
 
-    if (sqlStatement.length > 0) {
+	if (sqlStatement.length > 0) {
 
-        self.textView.text = sqlStatement.copy;
+		self.textView.text = sqlStatement.copy;
 
-    } else {
+	} else {
 
-        self.textView.text = @"";
-        
-        UIAlertController *alertController;
-        alertController = [MADAlertController newAlertControllerErrorEmptyQuery];
-        [self presentViewController: alertController
-                           animated: YES
-                         completion: nil];
-        
+		self.textView.text = @"";
+		
+		UIAlertController *alertController;
+		alertController = [MADAlertController newAlertControllerErrorEmptyQuery];
+		[self presentViewController: alertController
+						   animated: YES
+						 completion: nil];
+		
 
-    }
+	}
 }
 
 - (IBAction)done:(id)sender {
-    [self.delegate viewControllerDidFinish:self];
+	[self.delegate viewControllerDidFinish:self];
 }
 
 @end

@@ -12,7 +12,7 @@
 @class UIViewController;
 
 @protocol MADActivityProtocol <NSObject>
-    - (UIViewController *)activeViewController;
+	- (UIViewController *)activeViewController;
 @end
 
 #endif

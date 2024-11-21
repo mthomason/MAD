@@ -12,38 +12,38 @@
 
 CGRect headerSectionFrame(CGFloat);
 CGRect headerSectionFrame(CGFloat headerSectionHeight) {
-    return CGRectMake(CGPointZero.x, CGPointZero.y, 320.0, headerSectionHeight);
+	return CGRectMake(CGPointZero.x, CGPointZero.y, 320.0, headerSectionHeight);
 }
 
 @implementation MADQueryViewDelegate
 
 - (void)dealloc {
-    if (_delegate) _delegate = nil;
+	if (_delegate) _delegate = nil;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    id <MADQueryViewDelegateProtocol> delegate = _delegate;
-    MADQueryViewSectionDelegate *layout = [delegate sectionLayoutForDisplayIndex:(short)section];
-    
-    id header = [MADTableViewHeader newTableViewHeaderWithType: layout
-                                                      andFrame: headerSectionFrame([delegate headerHeight])
-                                                        target: self.delegate];
-    return header;
+	id <MADQueryViewDelegateProtocol> delegate = _delegate;
+	MADQueryViewSectionDelegate *layout = [delegate sectionLayoutForDisplayIndex:(short)section];
+	
+	id header = [MADTableViewHeader newTableViewHeaderWithType: layout
+													  andFrame: headerSectionFrame([delegate headerHeight])
+														target: self.delegate];
+	return header;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    id <MADQueryViewDelegateProtocol> delegate = _delegate;
-    if ([delegate sectionIdentifierForDisplayIndex:(short)indexPath.section] ==
-            MADIdentifierQueryViewSectionsTables) {
-        [delegate queryViewDelegate:self handleUserRequestedSampleDataForTableAtIndex: indexPath.row];
-    }
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	id <MADQueryViewDelegateProtocol> delegate = _delegate;
+	if ([delegate sectionIdentifierForDisplayIndex:(short)indexPath.section] ==
+			MADIdentifierQueryViewSectionsTables) {
+		[delegate queryViewDelegate:self handleUserRequestedSampleDataForTableAtIndex: indexPath.row];
+	}
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    
+	
 }
 
 - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
@@ -51,16 +51,16 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return [_delegate headerHeight];
+	return [_delegate headerHeight];
 }
 
 - (NSString *)tableView:(UITableView *)tableView
-                    titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *title = NSLocalizedString(@"Remove", @"Remove button title.");
-    return title;
+					titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSString *title = NSLocalizedString(@"Remove", @"Remove button title.");
+	return title;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
-                                         forRowAtIndexPath:(NSIndexPath *)indexPath { }
+										 forRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 @end

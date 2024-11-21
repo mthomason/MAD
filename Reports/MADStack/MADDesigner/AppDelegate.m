@@ -194,89 +194,14 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 }
 
 - (BOOL)application:(UIApplication *)application
-                            didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[NSBundle mainBundle] load];
-
-    /*
-    MADVectorBool *vectorBool = [[MADVectorBool alloc] init];
-    [vectorBool addTrue];
-    [vectorBool addTrue];
-    [vectorBool addFalse];
-    [vectorBool addTrue];
-    [vectorBool addTrue];
-    [vectorBool addFalse];
-    [vectorBool addTrue];
-    [vectorBool addTrue];
-    [vectorBool addFalse];
-    [vectorBool addTrue];
-    [vectorBool addTrue];
-    [vectorBool addFalse];
-    [vectorBool addTrue];
-    [vectorBool addTrue];
-    [vectorBool addFalse];
-    [vectorBool enumerateBools:^(NSUInteger inx, BOOL valid, BOOL *stop) {
-        //NSLog(@"Valid %@\n", valid ? @"YES" : @"NO");
-    }];*/
-//    [vectorBool enum]
-/*
-    srand((unsigned)time(NULL));
-    char *cr;
-    int i=0, r;
-
-    NSDate *methodStart, *methodFinish;
-    NSTimeInterval executionTime;
-
-    for (i=0; i<9000; i++) {
-        r = abs(rand())%INT32_MAX;
-        cr = tes1(r);
-    }
-    for (i=0; i<9000; i++) {
-        r = abs(rand())%INT32_MAX;
-        cr = tes2(r);
-    }
-
-
-
-    r = abs(rand())%INT32_MAX;
-    methodStart = [NSDate date];
-    
-    for (i=0; i<90000000; i++) {
-        cr = tes2(r);
-    }
-    
-    
-    methodFinish = [NSDate date];
-    executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    //NSLog(@"executionTime = %f", executionTime);
-
-
-    i=0;
-    r = abs(rand())%INT32_MAX;
-    methodStart = [NSDate date];
-    
-    for (i=0; i<90000000; i++) {
-        cr = tes1(r);
-    }
-    
-    
-    methodFinish = [NSDate date];
-    executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    //NSLog(@"executionTime = %f", executionTime);
-
-    //NSUInteger i = UINT64_MAX;
-    //NSLog(@"%llu", UINT64_MAX);
-
-*/
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        
-        id notification = [UIUserNotificationSettings settingsForTypes: MADUserNotificationType()
-                                                            categories: nil];
-        [application registerUserNotificationSettings:notification];
-        
-    }
-    
-   
-    return YES;
+							didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	[[NSBundle mainBundle] load];
+	if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+		id notification = [UIUserNotificationSettings settingsForTypes: MADUserNotificationType()
+															categories: nil];
+		[application registerUserNotificationSettings:notification];
+	}
+	return YES;
 }
 
 
@@ -287,74 +212,73 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 - (void)applicationDidEnterBackground:(UIApplication *)application { }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+	[[NSUbiquitousKeyValueStore defaultStore] synchronize];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 // FIXME: ... close open applications by calling delegate method from openFileViewController.
-    //[self.appConfiguration cleanupBeforeTerminate];
+	//[self.appConfiguration cleanupBeforeTerminate];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-// FIXME: Open a fucking file, YO!!!
-    return NO;
+// FIXME: Open a file, YO!!!
+	return NO;
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application
   supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    
-    return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
-                                                            UIInterfaceOrientationMaskAllButUpsideDown :
-                                                            UIInterfaceOrientationMaskAll;
+	return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
+															UIInterfaceOrientationMaskAllButUpsideDown :
+															UIInterfaceOrientationMaskAll;
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
-    return NO;
+	return NO;
 }
 
 - (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
-    return NO;
+	return NO;
 }
 
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    UIWindow *window = self.window;
-    UIViewController *rootViewController = window.rootViewController;
-    return rootViewController;
+	UIWindow *window = self.window;
+	UIViewController *rootViewController = window.rootViewController;
+	return rootViewController;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
-    NSError *error = nil;
-    NSURL *itemToRemove = controller.URL;
-    if (itemToRemove)
-        [[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
+	NSError *error = nil;
+	NSURL *itemToRemove = controller.URL;
+	if (itemToRemove)
+		[[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
 }
 
 #pragma mark - Convenience
 
 - (NSString *)bundleDisplayName {
-    if (!_bundleDisplayName) {
-        NSString *result;
-        result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-        _bundleDisplayName = result.copy;
-    }
-    return _bundleDisplayName;
+	if (!_bundleDisplayName) {
+		NSString *result;
+		result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+		_bundleDisplayName = result.copy;
+	}
+	return _bundleDisplayName;
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *debug = [[NSMutableString alloc] init];
-    NSString *classname = NSStringFromClass([self class]);
-    id uppercaseClassname = [classname uppercaseString];
-    [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    return debug;
+	NSMutableString *debug = [[NSMutableString alloc] init];
+	NSString *classname = NSStringFromClass([self class]);
+	id uppercaseClassname = [classname uppercaseString];
+	[debug appendFormat:@"--%@--\n", uppercaseClassname];
+	return debug;
 }
 
 @end
 
 static inline UIUserNotificationType MADUserNotificationType() {
-    return (UIUserNotificationType)(UIUserNotificationTypeAlert |
-                                    UIUserNotificationTypeBadge |
-                                    UIUserNotificationTypeSound);
+	return (UIUserNotificationType)(UIUserNotificationTypeAlert |
+									UIUserNotificationTypeBadge |
+									UIUserNotificationTypeSound);
 }

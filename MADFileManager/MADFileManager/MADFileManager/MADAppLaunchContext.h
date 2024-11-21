@@ -15,25 +15,25 @@
 
 @interface MADAppLaunchContext : NSObject
 
-    @property (nonatomic, strong, readonly) NSURL *fileURL;
+	@property (nonatomic, strong, readonly) NSURL *fileURL;
 
-    /*!
-     * Initializes an \c MADAppLaunchContext instance with the color
-     *      and URL designated by the user activity.
-     *
-     * \param userActivity
-     * The userActivity providing the file URL and list color to launch to.
-     */
-    - (instancetype)initWithUserActivity:(NSUserActivity *)userActivity;
+	/*!
+	 * Initializes an \c MADAppLaunchContext instance with the color
+	 *      and URL designated by the user activity.
+	 *
+	 * \param userActivity
+	 * The userActivity providing the file URL and list color to launch to.
+	 */
+	- (instancetype)initWithUserActivity:(NSUserActivity *)userActivity;
 
-    /*!
-     * Initializes an \c MADAppLaunchContext instance with the color and
-     *      URL designated by the lister:// URL.
-     *
-     * \param listerURL
-     * The URL adhering to the lister:// scheme providing the file URL and list color to launch to.
-     */
-    - (instancetype)initWithFileURL:(NSURL *)fileURL;
+	/*!
+	 * Initializes an \c MADAppLaunchContext instance with the color and
+	 *      URL designated by the lister:// URL.
+	 *
+	 * \param listerURL
+	 * The URL adhering to the lister:// scheme providing the file URL and list color to launch to.
+	 */
+	- (instancetype)initWithFileURL:(NSURL *)fileURL;
 
 @end
 

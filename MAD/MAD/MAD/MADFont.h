@@ -13,8 +13,8 @@
 
 @interface MADFont : NSObject
 
-    + (NSString *)defaultFamily;
-    + (float)defaultSize;
++ (NSString *)defaultFamily;
++ (float)defaultSize;
 
 @end
 

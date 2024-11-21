@@ -15,8 +15,8 @@
 
 @interface MADReportPageView : UIView
 
-    @property (nonatomic, weak) id <MADReportPageViewProtocol> _Nullable delegatePage;
-    @property (nonatomic, assign) BOOL drawBlankPage;
+	@property (nonatomic, weak) id <MADReportPageViewProtocol> _Nullable delegatePage;
+	@property (nonatomic, assign) BOOL drawBlankPage;
 
 @end
 

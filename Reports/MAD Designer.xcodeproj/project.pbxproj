@@ -298,7 +298,6 @@
 		4C84F9B724B87CAF0096FB31 /* MAD Designer.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B91ACA97C8006D3996 /* MAD Designer.app */; };
 		4C867F6C1E37828100F1337B /* MADObjectIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA851BAF9B3000456DC8 /* MADObjectIdentifier.m */; };
 		4C88A3451E6691ED009F8BFE /* MADPageStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */; };
-		4C88A3481E680471009F8BFE /* MADLabelTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A3471E680471009F8BFE /* MADLabelTimer.m */; };
 		4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
 		4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
@@ -1069,8 +1068,6 @@
 		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C88A3431E6691ED009F8BFE /* MADPageStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPageStatusView.h; path = MADStack/MADPageStatusView.h; sourceTree = "<group>"; };
 		4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPageStatusView.m; path = MADStack/MADPageStatusView.m; sourceTree = "<group>"; };
-		4C88A3461E680471009F8BFE /* MADLabelTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabelTimer.h; path = MADStack/MADLabelTimer.h; sourceTree = "<group>"; };
-		4C88A3471E680471009F8BFE /* MADLabelTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabelTimer.m; path = MADStack/MADLabelTimer.m; sourceTree = "<group>"; };
 		4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -2667,8 +2664,6 @@
 				4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */,
 				4C88A3431E6691ED009F8BFE /* MADPageStatusView.h */,
 				4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */,
-				4C88A3461E680471009F8BFE /* MADLabelTimer.h */,
-				4C88A3471E680471009F8BFE /* MADLabelTimer.m */,
 				4C994F371BE082730058627A /* MADLabelStatus.h */,
 				4C994F381BE082730058627A /* MADLabelStatus.m */,
 			);
@@ -4182,7 +4177,6 @@
 				4C994F421BE28E790058627A /* MADTextRange.m in Sources */,
 				4C6F34FD1E408D9D00F4744F /* MADElementMigrationPolicy.m in Sources */,
 				4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */,
-				4C88A3481E680471009F8BFE /* MADLabelTimer.m in Sources */,
 				4C5478E31E5D783A0043682E /* MADQueryNavigationBar.m in Sources */,
 				4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */,
 				4C3DCBB01BC793DB00ABE231 /* MADQueryVisualizationPresentationController.m in Sources */,

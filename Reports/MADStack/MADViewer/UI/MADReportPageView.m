@@ -34,72 +34,72 @@ static const CGFloat PageCounterBuffer = 10.0;
 @end
 
 @implementation MADReportPageView {
-    BOOL _firstTime;
-    BOOL _displaysPageCounter;
+	BOOL _firstTime;
+	BOOL _displaysPageCounter;
 }
 
 - (void)dealloc {
-    _delegatePage = nil;
+	_delegatePage = nil;
 }
 
 - (instancetype)init {
-    if (self = [super init]) { [self setup]; }
-    return self;
+	if (self = [super init]) { [self setup]; }
+	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) { [self setup]; }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) { [self setup]; }
+	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) { [self setup]; }
-    return self;
+	if (self = [super initWithFrame:frame]) { [self setup]; }
+	return self;
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
-    if (_firstTime) {
-        _firstTime = NO;
-        if (_displaysPageCounter) {
-            [self displayPageCounterIndicator];
-        }
-    }
+	[super layoutSubviews];
+	if (_firstTime) {
+		_firstTime = NO;
+		if (_displaysPageCounter) {
+			[self displayPageCounterIndicator];
+		}
+	}
 }
 
 - (void)drawRect:(CGRect)rect {
-    [super drawRect: rect];
+	[super drawRect: rect];
 
-    if (self.drawBlankPage) return;
-    
-    @autoreleasepool {
-        // Draw Page
-        id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
-        MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
-        [printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
-        
-        if (delegatePage.pageNumber != 1) return;
-        
-        // Draw Thumbnail
-        NSURL *thumbnailURL;
-        thumbnailURL = [[delegatePage thumbnailURL] copy];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
-            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-            NSError *error = NULL;
-            [pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
-            pngImage = nil;
-        });
-    }
+	if (self.drawBlankPage) return;
+	
+	@autoreleasepool {
+		// Draw Page
+		id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
+		MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
+		[printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
+		
+		if (delegatePage.pageNumber != 1) return;
+		
+		// Draw Thumbnail
+		NSURL *thumbnailURL;
+		thumbnailURL = [[delegatePage thumbnailURL] copy];
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
+			NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+			NSError *error = NULL;
+			[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
+			pngImage = nil;
+		});
+	}
 
 }
 
 #pragma mark
 
 - (void)setup {
-    _displaysPageCounter = NO;
-    _drawBlankPage = NO;
-    _firstTime = YES;
+	_displaysPageCounter = NO;
+	_drawBlankPage = NO;
+	_firstTime = YES;
 }
 
 #pragma mark -
@@ -107,36 +107,36 @@ static const CGFloat PageCounterBuffer = 10.0;
 
 - (void)displayPageCounterIndicator {
 
-    id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
-    if ([delegatePage respondsToSelector:@selector(numberOfPages)]) {
-        
-        CGRect frame = CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
-                                  CGPointZero.y + PageCounterBuffer,
-                                  PageCounterWidth, PageCounterHeight);
-        
-        MADPageStatusView *numberView = [[MADPageStatusView alloc] initWithFrame: frame];
-        [numberView setPage:[delegatePage pageNumber] ofTotal:[delegatePage numberOfPages]];
-        [self addSubview:numberView];
-        
-        [UIView animateWithDuration: 0.3 delay: 0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-            
-            numberView.alpha = 1.0;
-        
-        } completion:^(BOOL finished) {
-            
-            if (finished) {
-                
-                [UIView animateWithDuration: 0.3 delay: 1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                    numberView.alpha = 0.0;
-                } completion:^(BOOL animateFinished) {
-                    if (animateFinished) {
-                        [numberView removeFromSuperview];
-                    }
-                }];
-            
-            }
-        }];
-    }
+	id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
+	if ([delegatePage respondsToSelector:@selector(numberOfPages)]) {
+		
+		CGRect frame = CGRectMake(CGPointZero.x + self.bounds.size.width - PageCounterWidth - PageCounterBuffer,
+								  CGPointZero.y + PageCounterBuffer,
+								  PageCounterWidth, PageCounterHeight);
+		
+		MADPageStatusView *numberView = [[MADPageStatusView alloc] initWithFrame: frame];
+		[numberView setPage:[delegatePage pageNumber] ofTotal:[delegatePage numberOfPages]];
+		[self addSubview:numberView];
+		
+		[UIView animateWithDuration: 0.3 delay: 0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+			
+			numberView.alpha = 1.0;
+		
+		} completion:^(BOOL finished) {
+			
+			if (finished) {
+				
+				[UIView animateWithDuration: 0.3 delay: 1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+					numberView.alpha = 0.0;
+				} completion:^(BOOL animateFinished) {
+					if (animateFinished) {
+						[numberView removeFromSuperview];
+					}
+				}];
+			
+			}
+		}];
+	}
 }
 
 #pragma mark - UITextInput
@@ -170,20 +170,20 @@ static const CGFloat PageCounterBuffer = 10.0;
 //@property (nonatomic, readonly) UITextPosition *beginningOfDocument;
 
 - (UITextPosition *)beginningOfDocument {
-    MADTextPosition *beginningOfDocument = [MADTextPosition BeginningOfDocument];
-    return beginningOfDocument;
+	MADTextPosition *beginningOfDocument = [MADTextPosition BeginningOfDocument];
+	return beginningOfDocument;
 }
 //@property (nonatomic, readonly) UITextPosition *endOfDocument;
 
 - (UITextPosition *)endOfDocument {
-    
+	
 }
 
 /* Methods for creating ranges and positions. */
 - (nullable UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition {
 
-    
-    
+	
+	
 }
 - (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset {}
 - (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset {}
@@ -223,16 +223,16 @@ static const CGFloat PageCounterBuffer = 10.0;
 /* Text styling information can affect, for example, the appearance of a correction rect.
  * Returns a dictionary containing NSAttributedString keys. */
 - (nullable NSDictionary<NSString *,id> *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {
-    
+	
 }
 
 /* To be implemented if there is not a one-to-one correspondence between text positions within range and character offsets into the associated string. */
 - (nullable UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset {
-    
+	
 }
 
 - (NSInteger)characterOffsetOfPosition:(UITextPosition *)position withinRange:(UITextRange *)range {
-    
+	
 }
 
 /* An affiliated view that provides a coordinate system for all geometric values in this protocol.
@@ -249,15 +249,15 @@ static const CGFloat PageCounterBuffer = 10.0;
  * of what was spoken via -insertText:.
  * dictationResult is an array of UIDictationPhrases. */
 - (void)insertDictationResult:(NSArray<UIDictationPhrase *> *)dictationResult {
-    
+	
 }
 
 /* These are optional methods for clients that wish to know when there are pending dictation results. */
 - (void)dictationRecordingDidEnd {
-    
+	
 }
 - (void)dictationRecognitionFailed {
-    
+	
 }
 
 /* The following three optional methods are for clients that wish to support a placeholder for
@@ -265,11 +265,11 @@ static const CGFloat PageCounterBuffer = 10.0;
  * placeholder. This reference will be used to identify the placeholder by the other methods
  * (there may be more than one placeholder). */
 - (id)insertDictationResultPlaceholder {
-    
+	
 }
 
 - (CGRect)frameForDictationResultPlaceholder:(id)placeholder {
-    
+	
 }
 
 /* InsertResult will be NO if the recognition failed. */
@@ -287,22 +287,22 @@ static const CGFloat PageCounterBuffer = 10.0;
 #pragma mark - Accessibility
 
 - (BOOL)isAccessibilityElement {
-    return YES;
+	return YES;
 }
 
 - (NSString *)accessibilityLabel {
-    NSUInteger pageNumberValue;
-    NSNumber *pageNumberWrapper;
-    NSString *pageNumberString, *formatString, *pageNumberStringCaps;
-    
-    pageNumberValue = [self.delegatePage pageNumber];
-    pageNumberWrapper = [[NSNumber alloc] initWithUnsignedInteger:pageNumberValue];
-    
-    pageNumberString = [NSNumberFormatter localizedStringFromNumber: pageNumberWrapper
-                                                            numberStyle: NSNumberFormatterSpellOutStyle];
-    formatString = NSLocalizedString(pageNumberString, pageNumberString);
-    pageNumberStringCaps = pageNumberString.capitalizedString;
-    return [NSString stringWithFormat:formatString, pageNumberStringCaps];
+	NSUInteger pageNumberValue;
+	NSNumber *pageNumberWrapper;
+	NSString *pageNumberString, *formatString, *pageNumberStringCaps;
+	
+	pageNumberValue = [self.delegatePage pageNumber];
+	pageNumberWrapper = [[NSNumber alloc] initWithUnsignedInteger:pageNumberValue];
+	
+	pageNumberString = [NSNumberFormatter localizedStringFromNumber: pageNumberWrapper
+															numberStyle: NSNumberFormatterSpellOutStyle];
+	formatString = NSLocalizedString(pageNumberString, pageNumberString);
+	pageNumberStringCaps = pageNumberString.capitalizedString;
+	return [NSString stringWithFormat:formatString, pageNumberStringCaps];
 }
 
 @end

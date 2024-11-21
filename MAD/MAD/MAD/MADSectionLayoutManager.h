@@ -13,19 +13,19 @@
 #import <CoreGraphics/CGGeometry.h>
 
 @class NSMutableDictionary <KeyType, ObjectType>,
-        MADSectionLayoutAttributes, RptqDocumentSection;
+		MADSectionLayoutAttributes, RptqDocumentSection;
 
 @interface MADSectionLayoutManager : NSObject
 
-    - (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
+	- (instancetype)initWithDocumentSection:(RptqDocumentSection *)section;
 
-    @property (nonatomic, strong, readonly) NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items;
-    @property (readonly) CGSize size;
+	@property (nonatomic, strong, readonly) NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items;
+	@property (readonly) CGSize size;
 
-    - (void)addItem:(MADSectionLayoutAttributes *)item;
-    - (void)removeItemWithID:(NSNumber *)identifier;
-    - (void)layout;
-    - (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
+	- (void)addItem:(MADSectionLayoutAttributes *)item;
+	- (void)removeItemWithID:(NSNumber *)identifier;
+	- (void)layout;
+	- (void)positionItem:(MADSectionLayoutAttributes *)placedItem;
 
 @end
 

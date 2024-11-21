@@ -15,7 +15,7 @@
 
 @interface MADTextInputController : NSObject
 
-    @property (nonatomic, weak) MADReportTextRepresentation *textRepresentation;
+	@property (nonatomic, weak) MADReportTextRepresentation *textRepresentation;
 
 @end
 

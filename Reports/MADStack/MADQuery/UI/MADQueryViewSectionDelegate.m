@@ -20,200 +20,200 @@ static NSString * const TextHeaderPredicate     = @"Having Specified Criteria";
 static NSString * const TextHeaderSettings      = @"Limit Query Result";
 
 @interface MADQueryViewSectionDelegate ()
-    @property (nonatomic, assign, readwrite) MADIdentifierQueryViewSections querySection;
+	@property (nonatomic, assign, readwrite) MADIdentifierQueryViewSections querySection;
 @end
 
 @implementation MADQueryViewSectionDelegate
 
 - (void)dealloc {
-    //NSLog(@"%s", __PRETTY_FUNCTION__);
+	//NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables position:(short)position {
-    if (self = [super init]) {
-    
-        switch (numberOfTables) {
-            case 0:
-                
-                switch (position) {
-                    case 0:
-                        _querySection = MADIdentifierQueryViewSectionsDatasource;
-                        break;
-                    case 1:
-                        _querySection = MADIdentifierQueryViewSectionsTables;
-                        break;
-                    case 2:
-                        _querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
-                        break;
-                    default:
-                        break;
-                }
-                
-                break;
+	if (self = [super init]) {
+	
+		switch (numberOfTables) {
+			case 0:
+				
+				switch (position) {
+					case 0:
+						_querySection = MADIdentifierQueryViewSectionsDatasource;
+						break;
+					case 1:
+						_querySection = MADIdentifierQueryViewSectionsTables;
+						break;
+					case 2:
+						_querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
+						break;
+					default:
+						break;
+				}
+				
+				break;
 
-            case 1:
-                
-                switch (position) {
-                    case 0:
-                        _querySection = MADIdentifierQueryViewSectionsDatasource;
-                        break;
-                    case 1:
-                        _querySection = MADIdentifierQueryViewSectionsTables;
-                        break;
-                    case 2:
-                        _querySection = MADIdentifierQueryViewSectionsGroups;
-                        break;
-                    case 3:
-                        _querySection = MADIdentifierQueryViewSectionsPredicate;
-                        break;
-                    case 4:
-                        _querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
-                        break;
-                    default:
-                        break;
-                }
-                
-                break;
+			case 1:
+				
+				switch (position) {
+					case 0:
+						_querySection = MADIdentifierQueryViewSectionsDatasource;
+						break;
+					case 1:
+						_querySection = MADIdentifierQueryViewSectionsTables;
+						break;
+					case 2:
+						_querySection = MADIdentifierQueryViewSectionsGroups;
+						break;
+					case 3:
+						_querySection = MADIdentifierQueryViewSectionsPredicate;
+						break;
+					case 4:
+						_querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
+						break;
+					default:
+						break;
+				}
+				
+				break;
 
-            default:
-                
-                switch (position) {
-                    case 0:
-                        _querySection = MADIdentifierQueryViewSectionsDatasource;
-                        break;
-                    case 1:
-                        _querySection = MADIdentifierQueryViewSectionsTables;
-                        break;
-                    case 2:
-                        _querySection = MADIdentifierQueryViewSectionsLinks;
-                        break;
-                    case 3:
-                        _querySection = MADIdentifierQueryViewSectionsGroups;
-                        break;
-                    case 4:
-                        _querySection = MADIdentifierQueryViewSectionsPredicate;
-                        break;
-                    case 5:
-                        _querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
-                        break;
-                    default:
-                        break;
-                }
+			default:
+				
+				switch (position) {
+					case 0:
+						_querySection = MADIdentifierQueryViewSectionsDatasource;
+						break;
+					case 1:
+						_querySection = MADIdentifierQueryViewSectionsTables;
+						break;
+					case 2:
+						_querySection = MADIdentifierQueryViewSectionsLinks;
+						break;
+					case 3:
+						_querySection = MADIdentifierQueryViewSectionsGroups;
+						break;
+					case 4:
+						_querySection = MADIdentifierQueryViewSectionsPredicate;
+						break;
+					case 5:
+						_querySection = MADIdentifierQueryViewSectionsNumberOfQueryResults;
+						break;
+					default:
+						break;
+				}
 
-        }
-    
-    }
-    return self;
+		}
+	
+	}
+	return self;
 }
 
 - (NSInteger)numberOfRows {
-    return [MADQueryViewSectionDelegate numberOfRowsForSection:_querySection];
+	return [MADQueryViewSectionDelegate numberOfRowsForSection:_querySection];
 }
 
 - (NSString *)name {
-    return [MADQueryViewSectionDelegate nameForSection:_querySection];
+	return [MADQueryViewSectionDelegate nameForSection:_querySection];
 }
 
 - (CGFloat)height {
-    return [MADQueryViewSectionDelegate heightForSection:_querySection];
+	return [MADQueryViewSectionDelegate heightForSection:_querySection];
 }
 
 - (SEL)selector {
-    return [MADQueryViewSectionDelegate selectorForSection:_querySection];
+	return [MADQueryViewSectionDelegate selectorForSection:_querySection];
 }
 
 + (NSInteger)numberOfRowsForSection:(MADIdentifierQueryViewSections)section {
-    switch (section) {
-            
-        case MADIdentifierQueryViewSectionsDatasource:
-        case MADIdentifierQueryViewSectionsSql:
-        case MADIdentifierQueryViewSectionsNumberOfQueryResults:
-            return 1;
-            break;
-        case MADIdentifierQueryViewSectionsDocumentGroups:
-        case MADIdentifierQueryViewSectionsTables:
-        case MADIdentifierQueryViewSectionsLinks:
-        case MADIdentifierQueryViewSectionsGroups:
-        case MADIdentifierQueryViewSectionsPredicate:
-        default:
-            return NSNotFound;
-            break;
-    }
+	switch (section) {
+			
+		case MADIdentifierQueryViewSectionsDatasource:
+		case MADIdentifierQueryViewSectionsSql:
+		case MADIdentifierQueryViewSectionsNumberOfQueryResults:
+			return 1;
+			break;
+		case MADIdentifierQueryViewSectionsDocumentGroups:
+		case MADIdentifierQueryViewSectionsTables:
+		case MADIdentifierQueryViewSectionsLinks:
+		case MADIdentifierQueryViewSectionsGroups:
+		case MADIdentifierQueryViewSectionsPredicate:
+		default:
+			return NSNotFound;
+			break;
+	}
 }
 
 + (NSString *)nameForSection:(MADIdentifierQueryViewSections)section {
-    switch (section) {
-        case MADIdentifierQueryViewSectionsDocumentGroups:
-            return NSLocalizedString(TextHeaderGroups, TextHeaderGroups);
-            break;
-        case MADIdentifierQueryViewSectionsDatasource:
-            return NSLocalizedString(TextHeaderInformation, TextHeaderInformation);
-            break;
-        case MADIdentifierQueryViewSectionsTables:
-            return NSLocalizedString(TextHeaderTable, TextHeaderTable);
-            break;
-        case MADIdentifierQueryViewSectionsLinks:
-            return NSLocalizedString(TextHeaderLink, TextHeaderLink);
-            break;
-        case MADIdentifierQueryViewSectionsGroups:
-            return NSLocalizedString(TextHeaderGroups, TextHeaderGroups);
-            break;
-        case MADIdentifierQueryViewSectionsPredicate:
-            return NSLocalizedString(TextHeaderPredicate, TextHeaderPredicate);
-            break;
-        case MADIdentifierQueryViewSectionsSql:
-            return NSLocalizedString(TextHeaderInformation, TextHeaderInformation);
-            break;
-        case MADIdentifierQueryViewSectionsNumberOfQueryResults:
-            return NSLocalizedString(TextHeaderSettings, TextHeaderSettings);
-            break;
-        default:
-            return nil;
-            break;
-    }
+	switch (section) {
+		case MADIdentifierQueryViewSectionsDocumentGroups:
+			return NSLocalizedString(TextHeaderGroups, TextHeaderGroups);
+			break;
+		case MADIdentifierQueryViewSectionsDatasource:
+			return NSLocalizedString(TextHeaderInformation, TextHeaderInformation);
+			break;
+		case MADIdentifierQueryViewSectionsTables:
+			return NSLocalizedString(TextHeaderTable, TextHeaderTable);
+			break;
+		case MADIdentifierQueryViewSectionsLinks:
+			return NSLocalizedString(TextHeaderLink, TextHeaderLink);
+			break;
+		case MADIdentifierQueryViewSectionsGroups:
+			return NSLocalizedString(TextHeaderGroups, TextHeaderGroups);
+			break;
+		case MADIdentifierQueryViewSectionsPredicate:
+			return NSLocalizedString(TextHeaderPredicate, TextHeaderPredicate);
+			break;
+		case MADIdentifierQueryViewSectionsSql:
+			return NSLocalizedString(TextHeaderInformation, TextHeaderInformation);
+			break;
+		case MADIdentifierQueryViewSectionsNumberOfQueryResults:
+			return NSLocalizedString(TextHeaderSettings, TextHeaderSettings);
+			break;
+		default:
+			return nil;
+			break;
+	}
 }
 
 + (CGFloat)heightForSection:(MADIdentifierQueryViewSections)section {
-    switch (section) {
-            
-        case MADIdentifierQueryViewSectionsTables:
-            return [MADTableViewCellQueryTableName defaultHeight];
-            break;
-            
-        case MADIdentifierQueryViewSectionsLinks:
-            return [MADTableViewCellQueryLink defaultHeight];
-            break;
-            
-        case MADIdentifierQueryViewSectionsDocumentGroups:
-        case MADIdentifierQueryViewSectionsDatasource:
-        case MADIdentifierQueryViewSectionsGroups:
-        case MADIdentifierQueryViewSectionsNumberOfQueryResults:
-        case MADIdentifierQueryViewSectionsPredicate:
-        case MADIdentifierQueryViewSectionsSql:
-        default:
-            return 44.0;
-            break;
-    }
+	switch (section) {
+			
+		case MADIdentifierQueryViewSectionsTables:
+			return [MADTableViewCellQueryTableName defaultHeight];
+			break;
+			
+		case MADIdentifierQueryViewSectionsLinks:
+			return [MADTableViewCellQueryLink defaultHeight];
+			break;
+			
+		case MADIdentifierQueryViewSectionsDocumentGroups:
+		case MADIdentifierQueryViewSectionsDatasource:
+		case MADIdentifierQueryViewSectionsGroups:
+		case MADIdentifierQueryViewSectionsNumberOfQueryResults:
+		case MADIdentifierQueryViewSectionsPredicate:
+		case MADIdentifierQueryViewSectionsSql:
+		default:
+			return 44.0;
+			break;
+	}
 }
 
 + (SEL)selectorForSection:(MADIdentifierQueryViewSections)section {
-    switch (section) {
-        case MADIdentifierQueryViewSectionsTables:
-            return @selector(addTable:);
-            break;
-        case MADIdentifierQueryViewSectionsLinks:
-            return @selector(addLink:);
-            break;
-        case MADIdentifierQueryViewSectionsGroups:
-            return @selector(addGroup:);
-            break;
-        case MADIdentifierQueryViewSectionsPredicate:
-            return @selector(addPredicate:);
-            break;
-        default:
-            return nil;
-            break;
-    }
+	switch (section) {
+		case MADIdentifierQueryViewSectionsTables:
+			return @selector(addTable:);
+			break;
+		case MADIdentifierQueryViewSectionsLinks:
+			return @selector(addLink:);
+			break;
+		case MADIdentifierQueryViewSectionsGroups:
+			return @selector(addGroup:);
+			break;
+		case MADIdentifierQueryViewSectionsPredicate:
+			return @selector(addPredicate:);
+			break;
+		default:
+			return nil;
+			break;
+	}
 }
 
 @end

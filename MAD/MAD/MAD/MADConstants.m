@@ -11,5 +11,3 @@
 NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
 NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADTrademark                                       = @"MAD";
-
-

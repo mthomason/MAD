@@ -37,7 +37,7 @@ static NSString * const TextDefault = @"Default";
 
 @interface MADQueryBuilderAddGroupViewController ()
 
-    @property (nonatomic, copy) NSManagedObjectID *fieldId;
+	@property (nonatomic, copy) NSManagedObjectID *fieldId;
 
 @end
 
@@ -46,39 +46,39 @@ static NSString * const TextDefault = @"Default";
 - (void)dealloc { }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
-    if (self = [super initWithStyle:style]) { }
-    return self;
+	if (self = [super initWithStyle:style]) { }
+	return self;
 }
 
 #pragma mark -
 #pragma mark View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.sortOrder = MADSortOrderAccending;
-    NSString *accending = NSLocalizedString(TextAccending, TextAccending);
-    self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
-    [self updateSaveButtonState];
+	[super viewDidLoad];
+	self.sortOrder = MADSortOrderAccending;
+	NSString *accending = NSLocalizedString(TextAccending, TextAccending);
+	self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
+	[self updateSaveButtonState];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showGroupSortOrders"]) {
-        if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderSortTypeViewController class]]) {
-            ((MADQueryBuilderSortTypeViewController *)segue.destinationViewController).initalSortOrder = self.sortOrder;
-            ((MADQueryBuilderSortTypeViewController *)segue.destinationViewController).delegate = self;
-        }
-    } else if ([segue.identifier isEqualToString:@"showAddGroupByField"]) {
-        if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {
-            
-            MADQueryChooseFieldController *dvc = segue.destinationViewController;
-            if (dvc != nil) {
-                NSArray *empty = [[NSArray alloc] init];
-                dvc.excludeTables = empty;
-                dvc.delegate = self;
-                dvc.document = self.document;
-            }
-        }
-    }
+	if ([segue.identifier isEqualToString:@"showGroupSortOrders"]) {
+		if ([segue.destinationViewController isKindOfClass: [MADQueryBuilderSortTypeViewController class]]) {
+			((MADQueryBuilderSortTypeViewController *)segue.destinationViewController).initalSortOrder = self.sortOrder;
+			((MADQueryBuilderSortTypeViewController *)segue.destinationViewController).delegate = self;
+		}
+	} else if ([segue.identifier isEqualToString:@"showAddGroupByField"]) {
+		if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {
+			
+			MADQueryChooseFieldController *dvc = segue.destinationViewController;
+			if (dvc != nil) {
+				NSArray *empty = [[NSArray alloc] init];
+				dvc.excludeTables = empty;
+				dvc.delegate = self;
+				dvc.document = self.document;
+			}
+		}
+	}
 }
 
 #pragma mark -
@@ -91,72 +91,72 @@ static NSString * const TextDefault = @"Default";
 #pragma mark MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                    withFieldID: (NSManagedObjectID *)fieldID {
-    if (fieldID == nil) return;
-    
-    NSManagedObjectContext *context = self.document.managedObjectContext;
-    RptqQueryField *queryField = [context objectWithID: fieldID];
-    
-    [self.navigationController popToViewController:self animated:YES];
+									withFieldID: (NSManagedObjectID *)fieldID {
+	if (fieldID == nil) return;
+	
+	NSManagedObjectContext *context = self.document.managedObjectContext;
+	RptqQueryField *queryField = [context objectWithID: fieldID];
+	
+	[self.navigationController popToViewController:self animated:YES];
 
-    NSString *fieldName = [queryField tableFieldKey];
-    self.fieldId = queryField.objectID.copy;
-    self.fieldName = fieldName.copy;
-    self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
+	NSString *fieldName = [queryField tableFieldKey];
+	self.fieldId = queryField.objectID.copy;
+	self.fieldName = fieldName.copy;
+	self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
 
-    [self updateSaveButtonState];
+	[self updateSaveButtonState];
 }
 
 #pragma mark MADQueryBuilderSortTypeDelegate
 
 - (void)viewController:(UIViewController *)viewController
-     didSelectSortType:(MADSortOrder)sortOrderType {
+	 didSelectSortType:(MADSortOrder)sortOrderType {
 
-    self.sortOrder = sortOrderType;
-    NSString *label = nil;
-    switch (sortOrderType) {
+	self.sortOrder = sortOrderType;
+	NSString *label = nil;
+	switch (sortOrderType) {
 
-        case MADSortOrderAccending:
-            label = NSLocalizedString(TextAccending, TextAccending);
-            self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;;
-            self.detailLabelSort.text = label;
-            break;
+		case MADSortOrderAccending:
+			label = NSLocalizedString(TextAccending, TextAccending);
+			self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;;
+			self.detailLabelSort.text = label;
+			break;
 
-        case MADSortOrderDecending:
-            label = NSLocalizedString(TextDecending, TextDecending);
-            self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
-            self.detailLabelSort.text = label;
-            break;
+		case MADSortOrderDecending:
+			label = NSLocalizedString(TextDecending, TextDecending);
+			self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
+			self.detailLabelSort.text = label;
+			break;
 
-        default:
-            label = NSLocalizedString(TextDefault, TextDefault);
-            self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
-            self.detailLabelSort.text = label;
-            break;
-    }
-    [self.navigationController popToViewController:self animated:YES];
+		default:
+			label = NSLocalizedString(TextDefault, TextDefault);
+			self.tableViewCellSort.detailTextLabel.text = label.lowercaseString;
+			self.detailLabelSort.text = label;
+			break;
+	}
+	[self.navigationController popToViewController:self animated:YES];
 }
 
 #pragma mark -
 #pragma mark Actions
 
 - (IBAction)cancel:(id)sender {
-    [self.delegate viewControllerDidCancel: self];
+	[self.delegate viewControllerDidCancel: self];
 }
 
 - (IBAction)save:(id)sender {
-    if (self.fieldId != nil) {
-        [self.delegate viewController: self
-               addedGroupOnQueryField: self.fieldId
-                         andSortOrder: self.sortOrder];
-    }
+	if (self.fieldId != nil) {
+		[self.delegate viewController: self
+			   addedGroupOnQueryField: self.fieldId
+						 andSortOrder: self.sortOrder];
+	}
 }
 
 #pragma mark -
 #pragma mark Helpers
 
 - (void)updateSaveButtonState {
-    self.navigationItem.rightBarButtonItem.enabled = [self fieldId] != nil;
+	self.navigationItem.rightBarButtonItem.enabled = [self fieldId] != nil;
 }
 
 @end

@@ -11,19 +11,19 @@
 @implementation MADActivityIndicatorLabel
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame: frame]) {
+	if (self = [super initWithFrame: frame]) {
 
-        UIFont *font = [UIFont fontWithName: @"Helvetica-Light" size: 11.0000f];
-        UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
-                                           UIViewAutoresizingFlexibleWidth;
+		UIFont *font = [UIFont fontWithName: @"Helvetica-Light" size: 11.0000f];
+		UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
+										   UIViewAutoresizingFlexibleWidth;
 
-        self.font = font;
-        self.textColor = [UIColor lightTextColor];
-        self.text = NSLocalizedString(@"Formatting report.", @"Formatting report.");
-        self.autoresizingMask = maskLabelView;
-        self.textAlignment = NSTextAlignmentCenter;
-    }
-    return self;
+		self.font = font;
+		self.textColor = [UIColor lightTextColor];
+		self.text = NSLocalizedString(@"Formatting report.", @"Formatting report.");
+		self.autoresizingMask = maskLabelView;
+		self.textAlignment = NSTextAlignmentCenter;
+	}
+	return self;
 }
 
 @end

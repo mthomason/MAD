@@ -15,7 +15,7 @@
 
 @interface MADActivityIndicator : UIView
 
-    @property (nonatomic, strong) UILabel *status;
+	@property (nonatomic, strong) UILabel *status;
 
 @end
 

@@ -19,17 +19,17 @@ extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 
 @interface MADQueryViewController : UITableViewController
-    <MADViewControllerDocumentProtocol,
-        MADTabBarImageProtocol,
-        MADQueryNavigationProtocol,
-        UIViewControllerAnimatedTransitioning>
+	<MADViewControllerDocumentProtocol,
+		MADTabBarImageProtocol,
+		MADQueryNavigationProtocol,
+		UIViewControllerAnimatedTransitioning>
 
-    + (instancetype)newQueryViewController:(MADocument *)document;
+	+ (instancetype)newQueryViewController:(MADocument *)document;
 
-    + (void)deleteCoreDataCache;
+	+ (void)deleteCoreDataCache;
 
-    - (void)reloadMainDocumentAnimated:(BOOL)animated;
-    - (IBAction)edit:(id)sender;
+	- (void)reloadMainDocumentAnimated:(BOOL)animated;
+	- (IBAction)edit:(id)sender;
 
 @end
 

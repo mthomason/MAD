@@ -17,11 +17,11 @@
 
 @interface MADViewControllerSQL : UIViewController
 
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
-    @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, weak) IBOutlet UITextView *textView;
+	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
+	@property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) IBOutlet UITextView *textView;
 
-    - (IBAction)done:(id)sender;
+	- (IBAction)done:(id)sender;
 
 @end
 

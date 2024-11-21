@@ -11,23 +11,23 @@
 
 @interface MADFonts ()
 
-    @property (nonatomic, strong, readwrite) NSArray <NSString *> *familyNames;
+@property (nonatomic, strong, readwrite) NSArray <NSString *> *familyNames;
 
 @end
 
 @implementation MADFonts
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        NSArray *unsortedNames = [UIFont familyNames], *sortedNames, *familyNames;
-        sortedNames = [unsortedNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        
-        familyNames = [[NSArray alloc] initWithArray:sortedNames];
-        self.familyNames = familyNames;
+	if (self = [super init]) {
+		
+		NSArray *unsortedNames = [UIFont familyNames], *sortedNames, *familyNames;
+		sortedNames = [unsortedNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+		
+		familyNames = [[NSArray alloc] initWithArray:sortedNames];
+		self.familyNames = familyNames;
 
-    }
-    return self;
+	}
+	return self;
 }
 
 @end

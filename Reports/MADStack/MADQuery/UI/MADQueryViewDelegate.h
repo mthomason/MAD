@@ -17,17 +17,17 @@
 
 @protocol MADQueryViewDelegateProtocol <NSObject>
 
-    - (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex;
-    - (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex;
-    - (CGFloat)headerHeight;
-    - (void)queryViewDelegate:(MADQueryViewDelegate *)delegate handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index;
+	- (MADIdentifierQueryViewSections)sectionIdentifierForDisplayIndex:(short)displayIndex;
+	- (MADQueryViewSectionDelegate *)sectionLayoutForDisplayIndex:(short)displayIndex;
+	- (CGFloat)headerHeight;
+	- (void)queryViewDelegate:(MADQueryViewDelegate *)delegate handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index;
 
 @end
 
 @interface MADQueryViewDelegate : NSObject
-    <UITableViewDelegate>
+	<UITableViewDelegate>
 
-    @property (nonatomic, weak) id <MADQueryViewDelegateProtocol, MADQueryViewControllerLayoutSectionSelectorProtocol> delegate;
+	@property (nonatomic, weak) id <MADQueryViewDelegateProtocol, MADQueryViewControllerLayoutSectionSelectorProtocol> delegate;
 
 @end
 
