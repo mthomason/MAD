@@ -14,5 +14,5 @@ FOUNDATION_EXPORT double madtdsVersionNumber;
 FOUNDATION_EXPORT const unsigned char madtdsVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <madtds/PublicHeader.h>
-
+#import <MADTds/MADTdsDb.h>
 

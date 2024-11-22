@@ -7,14 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4CCABCDE2CF0B75A008EC875 /* madtds.docc in Sources */ = {isa = PBXBuildFile; fileRef = 4CCABCDD2CF0B75A008EC875 /* madtds.docc */; };
-		4CCABCDF2CF0B75A008EC875 /* madtds.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCABCDC2CF0B75A008EC875 /* madtds.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6894EF2CF0F88E00BD38DF /* MADTdsDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */; };
+		4C6894F22CF0F8D400BD38DF /* MADTdsDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C6894F62CF0FCAF00BD38DF /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6894F42CF0FCAF00BD38DF /* libsybdb.a */; };
+		4C6894F72CF0FCAF00BD38DF /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6894F52CF0FCAF00BD38DF /* libct.a */; };
+		4C6895042CF0FCC600BD38DF /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F92CF0FCC600BD38DF /* tds_sysdep_public.h */; };
+		4C6895052CF0FCC600BD38DF /* cstypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FA2CF0FCC600BD38DF /* cstypes.h */; };
+		4C6895062CF0FCC600BD38DF /* sybdb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FB2CF0FCC600BD38DF /* sybdb.h */; };
+		4C6895072CF0FCC600BD38DF /* cspublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FC2CF0FCC600BD38DF /* cspublic.h */; };
+		4C6895082CF0FCC600BD38DF /* sqldb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FD2CF0FCC600BD38DF /* sqldb.h */; };
+		4C6895092CF0FCC600BD38DF /* syberror.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FE2CF0FCC600BD38DF /* syberror.h */; };
+		4C68950A2CF0FCC600BD38DF /* sybfront.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FF2CF0FCC600BD38DF /* sybfront.h */; };
+		4C68950B2CF0FCC600BD38DF /* ctpublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6895002CF0FCC600BD38DF /* ctpublic.h */; };
+		4C68950C2CF0FCC600BD38DF /* sqlfront.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6895012CF0FCC600BD38DF /* sqlfront.h */; };
+		4C68950D2CF0FCC600BD38DF /* bkpublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6895022CF0FCC600BD38DF /* bkpublic.h */; };
+		4C68950E2CF0FCC600BD38DF /* odbcss.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6895032CF0FCC600BD38DF /* odbcss.h */; };
+		4C6895112CF0FCFC00BD38DF /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6895102CF0FCFC00BD38DF /* libiconv.2.tbd */; };
+		4CCABCDE2CF0B75A008EC875 /* MADTds.docc in Sources */ = {isa = PBXBuildFile; fileRef = 4CCABCDD2CF0B75A008EC875 /* MADTds.docc */; };
+		4CCABCDF2CF0B75A008EC875 /* MADTds.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCABCDC2CF0B75A008EC875 /* MADTds.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4CCABCD92CF0B75A008EC875 /* madtds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = madtds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CCABCDC2CF0B75A008EC875 /* madtds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madtds.h; sourceTree = "<group>"; };
-		4CCABCDD2CF0B75A008EC875 /* madtds.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = madtds.docc; sourceTree = "<group>"; };
+		4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsDb.m; sourceTree = "<group>"; };
+		4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTdsDb.h; sourceTree = "<group>"; };
+		4C6894F42CF0FCAF00BD38DF /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = MADTds/freetds/lib/libsybdb.a; sourceTree = "<group>"; };
+		4C6894F52CF0FCAF00BD38DF /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = MADTds/freetds/lib/libct.a; sourceTree = "<group>"; };
+		4C6894F92CF0FCC600BD38DF /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
+		4C6894FA2CF0FCC600BD38DF /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
+		4C6894FB2CF0FCC600BD38DF /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
+		4C6894FC2CF0FCC600BD38DF /* cspublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
+		4C6894FD2CF0FCC600BD38DF /* sqldb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqldb.h; sourceTree = "<group>"; };
+		4C6894FE2CF0FCC600BD38DF /* syberror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
+		4C6894FF2CF0FCC600BD38DF /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
+		4C6895002CF0FCC600BD38DF /* ctpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctpublic.h; sourceTree = "<group>"; };
+		4C6895012CF0FCC600BD38DF /* sqlfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlfront.h; sourceTree = "<group>"; };
+		4C6895022CF0FCC600BD38DF /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
+		4C6895032CF0FCC600BD38DF /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
+		4C6895102CF0FCFC00BD38DF /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/libiconv.2.tbd; sourceTree = DEVELOPER_DIR; };
+		4CCABCD92CF0B75A008EC875 /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CCABCDC2CF0B75A008EC875 /* MADTds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTds.h; sourceTree = "<group>"; };
+		4CCABCDD2CF0B75A008EC875 /* MADTds.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MADTds.docc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -22,35 +54,79 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C6895112CF0FCFC00BD38DF /* libiconv.2.tbd in Frameworks */,
+				4C6894F72CF0FCAF00BD38DF /* libct.a in Frameworks */,
+				4C6894F62CF0FCAF00BD38DF /* libsybdb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C6894F32CF0FC8D00BD38DF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C6894F52CF0FCAF00BD38DF /* libct.a */,
+				4C6894F42CF0FCAF00BD38DF /* libsybdb.a */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4C6894F82CF0FCC600BD38DF /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C6894F92CF0FCC600BD38DF /* tds_sysdep_public.h */,
+				4C6894FA2CF0FCC600BD38DF /* cstypes.h */,
+				4C6894FB2CF0FCC600BD38DF /* sybdb.h */,
+				4C6894FC2CF0FCC600BD38DF /* cspublic.h */,
+				4C6894FD2CF0FCC600BD38DF /* sqldb.h */,
+				4C6894FE2CF0FCC600BD38DF /* syberror.h */,
+				4C6894FF2CF0FCC600BD38DF /* sybfront.h */,
+				4C6895002CF0FCC600BD38DF /* ctpublic.h */,
+				4C6895012CF0FCC600BD38DF /* sqlfront.h */,
+				4C6895022CF0FCC600BD38DF /* bkpublic.h */,
+				4C6895032CF0FCC600BD38DF /* odbcss.h */,
+			);
+			name = include;
+			path = freetds/lib/include;
+			sourceTree = "<group>";
+		};
+		4C68950F2CF0FCFC00BD38DF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C6895102CF0FCFC00BD38DF /* libiconv.2.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4CCABCCF2CF0B75A008EC875 = {
 			isa = PBXGroup;
 			children = (
-				4CCABCDB2CF0B75A008EC875 /* madtds */,
+				4C6894F32CF0FC8D00BD38DF /* Resources */,
+				4CCABCDB2CF0B75A008EC875 /* MADTds */,
 				4CCABCDA2CF0B75A008EC875 /* Products */,
+				4C68950F2CF0FCFC00BD38DF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		4CCABCDA2CF0B75A008EC875 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4CCABCD92CF0B75A008EC875 /* madtds.framework */,
+				4CCABCD92CF0B75A008EC875 /* MADTds.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4CCABCDB2CF0B75A008EC875 /* madtds */ = {
+		4CCABCDB2CF0B75A008EC875 /* MADTds */ = {
 			isa = PBXGroup;
 			children = (
-				4CCABCDC2CF0B75A008EC875 /* madtds.h */,
-				4CCABCDD2CF0B75A008EC875 /* madtds.docc */,
+				4CCABCDD2CF0B75A008EC875 /* MADTds.docc */,
+				4C6894F82CF0FCC600BD38DF /* include */,
+				4CCABCDC2CF0B75A008EC875 /* MADTds.h */,
+				4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */,
+				4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */,
 			);
-			path = madtds;
+			path = MADTds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,16 +136,28 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CCABCDF2CF0B75A008EC875 /* madtds.h in Headers */,
+				4C6894F22CF0F8D400BD38DF /* MADTdsDb.h in Headers */,
+				4C68950C2CF0FCC600BD38DF /* sqlfront.h in Headers */,
+				4C68950E2CF0FCC600BD38DF /* odbcss.h in Headers */,
+				4C68950A2CF0FCC600BD38DF /* sybfront.h in Headers */,
+				4C6895092CF0FCC600BD38DF /* syberror.h in Headers */,
+				4C68950B2CF0FCC600BD38DF /* ctpublic.h in Headers */,
+				4CCABCDF2CF0B75A008EC875 /* MADTds.h in Headers */,
+				4C6895072CF0FCC600BD38DF /* cspublic.h in Headers */,
+				4C6895042CF0FCC600BD38DF /* tds_sysdep_public.h in Headers */,
+				4C6895082CF0FCC600BD38DF /* sqldb.h in Headers */,
+				4C68950D2CF0FCC600BD38DF /* bkpublic.h in Headers */,
+				4C6895062CF0FCC600BD38DF /* sybdb.h in Headers */,
+				4C6895052CF0FCC600BD38DF /* cstypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4CCABCD82CF0B75A008EC875 /* madtds */ = {
+		4CCABCD82CF0B75A008EC875 /* MADTds */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4CCABCE22CF0B75A008EC875 /* Build configuration list for PBXNativeTarget "madtds" */;
+			buildConfigurationList = 4CCABCE22CF0B75A008EC875 /* Build configuration list for PBXNativeTarget "MADTds" */;
 			buildPhases = (
 				4CCABCD42CF0B75A008EC875 /* Headers */,
 				4CCABCD52CF0B75A008EC875 /* Sources */,
@@ -80,9 +168,9 @@
 			);
 			dependencies = (
 			);
-			name = madtds;
+			name = MADTds;
 			productName = madtds;
-			productReference = 4CCABCD92CF0B75A008EC875 /* madtds.framework */;
+			productReference = 4CCABCD92CF0B75A008EC875 /* MADTds.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -100,7 +188,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4CCABCD32CF0B75A008EC875 /* Build configuration list for PBXProject "madtds" */;
+			buildConfigurationList = 4CCABCD32CF0B75A008EC875 /* Build configuration list for PBXProject "MADTds" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -113,7 +201,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4CCABCD82CF0B75A008EC875 /* madtds */,
+				4CCABCD82CF0B75A008EC875 /* MADTds */,
 			);
 		};
 /* End PBXProject section */
@@ -133,7 +221,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CCABCDE2CF0B75A008EC875 /* madtds.docc in Sources */,
+				4C6894EF2CF0F88E00BD38DF /* MADTdsDb.m in Sources */,
+				4CCABCDE2CF0B75A008EC875 /* MADTds.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +362,10 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MADTds/freetds/lib",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madtds;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -299,6 +392,10 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MADTds/freetds/lib",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madtds;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -311,7 +408,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4CCABCD32CF0B75A008EC875 /* Build configuration list for PBXProject "madtds" */ = {
+		4CCABCD32CF0B75A008EC875 /* Build configuration list for PBXProject "MADTds" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4CCABCE02CF0B75A008EC875 /* Debug */,
@@ -320,7 +417,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4CCABCE22CF0B75A008EC875 /* Build configuration list for PBXNativeTarget "madtds" */ = {
+		4CCABCE22CF0B75A008EC875 /* Build configuration list for PBXNativeTarget "MADTds" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4CCABCE32CF0B75A008EC875 /* Debug */,

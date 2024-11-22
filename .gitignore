@@ -3,6 +3,9 @@
 opt/bld/
 StaticLibraries/
 
+MADTds/MADTds/freetds/src/
+MADTds/MADTds/freetds/source/
+
 #CodeSigningRequest
 MADRequest.certSigningRequest
 

@@ -67,10 +67,36 @@ static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPreci
 static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
 static inline NSUInteger numberOfItemsOfType(int, NSMutableDictionary <NSNumber *, NSNumber *> *);
+int err_handler(DBPROCESS *, int, int, int, char *, char *);
+
 static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNumber *, NSNumber *> *counters) {
 	NSNumber *key = @(type);
 	NSNumber *counter = counters[key];
 	return counter ? counters[key].unsignedIntegerValue : 0;
+}
+
+int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
+
+	int result = INT_CANCEL;
+
+	
+		if (severity >= 5 || dberr == SYBEINTF) {
+			NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
+			char *osstr = (oserrstr != NULL ? oserrstr : "");
+			char *dbstr = (dberrstr != NULL ? dberrstr : "");
+			
+			NSString *systemMessage = @(osstr);
+			NSString *dbMessage = @(dbstr);
+			NSString *errorMessage = [[NSString alloc] initWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
+			
+			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
+			NSError *error = [NSError errorWithDomain:MADDomainTDS code:dberr userInfo:errorInfo];
+			[[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationError object:error];
+			
+			result = INT_CANCEL;
+		}
+	
+	return result;
 }
 
 @interface MADDatabaseSQLServer ()
@@ -1247,31 +1273,6 @@ static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNu
 	return counter ? counter.integerValue : 0;
 }
 
-int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr);
-int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
-
-	int result = INT_CANCEL;
-
-	
-		if (severity >= 5 || dberr == SYBEINTF) {
-			NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
-			char *osstr = (oserrstr != NULL ? oserrstr : "");
-			char *dbstr = (dberrstr != NULL ? dberrstr : "");
-			
-			NSString *systemMessage = @(osstr);
-			NSString *dbMessage = @(dbstr);
-			NSString *errorMessage = [[NSString alloc] initWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
-			
-			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
-			NSError *error = [NSError errorWithDomain:MADDomainTDS code:dberr userInfo:errorInfo];
-			[[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationError object:error];
-			
-			result = INT_CANCEL;
-		}
-	
-	return result;
-}
-
 - (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError * __autoreleasing *)error {
 
 	DBPROCESS *dbconn = NULL;
@@ -1443,7 +1444,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)process
 													error:(NSError * __autoreleasing *)outError {
 	id results = nil;
-//    NSError *error = nil;
 	DBPROCESS *dbconn = [process process];
 	if (dbconn) {
 		

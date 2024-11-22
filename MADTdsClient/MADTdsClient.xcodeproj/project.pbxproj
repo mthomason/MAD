@@ -140,10 +140,10 @@
 		4C66C1491BA887D500663575 /* MADTdsClient */ = {
 			isa = PBXGroup;
 			children = (
+				4C66C14A1BA887D500663575 /* MADTdsClient.h */,
 				4CE0F5031F5D52A400D828E1 /* MADCreateDocument.storyboard */,
 				4C6C0A0A1F5D32AB00EDA039 /* MADTdsConnectionViewController.h */,
 				4C6C0A0B1F5D32AB00EDA039 /* MADTdsConnectionViewController.m */,
-				4C66C14A1BA887D500663575 /* MADTdsClient.h */,
 				4C00A3481F57CFA300F6A6C1 /* MADDatabaseSQLServer.h */,
 				4C00A3491F57CFA300F6A6C1 /* MADDatabaseSQLServer.m */,
 				4C00A36F1F59348300F6A6C1 /* MADDatabaseConnectionSQLServer.h */,
