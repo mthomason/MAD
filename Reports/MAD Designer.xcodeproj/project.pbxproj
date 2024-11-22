@@ -542,7 +542,6 @@
 		4C2213AD17D7947800BD36F5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4C235CD11D1F1C1A00D3D77C /* MADQueryViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewDelegate.h; sourceTree = "<group>"; };
 		4C235CD21D1F1C1A00D3D77C /* MADQueryViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryViewDelegate.m; sourceTree = "<group>"; };
-		4C23FC1A18FAEA24009F234F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C26B94E1BAF0D4300456DC8 /* MADSectionHeaderViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionHeaderViewDelegate.h; sourceTree = "<group>"; };
@@ -850,7 +849,6 @@
 		4C401F6F1BAE7EB500BAE5FC /* MTTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTextView.m; sourceTree = "<group>"; };
 		4C401F721BAE7EB500BAE5FC /* MADTableViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewHeader.h; sourceTree = "<group>"; };
 		4C401F731BAE7EB500BAE5FC /* MADTableViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewHeader.m; sourceTree = "<group>"; };
-		4C401F871BAE85C200BAE5FC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		4C401F8A1BAE86AC00BAE5FC /* MADPreference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPreference.h; sourceTree = "<group>"; };
 		4C401F8B1BAE86AC00BAE5FC /* MADPreference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPreference.m; sourceTree = "<group>"; };
 		4C401F8C1BAE86AC00BAE5FC /* MADPreferencesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPreferencesManager.h; sourceTree = "<group>"; };
@@ -1919,8 +1917,6 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C401F871BAE85C200BAE5FC /* README.md */,
-				4C23FC1A18FAEA24009F234F /* TODO.txt */,
 				4C401EB51BAE5E7100BAE5FC /* Source */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4CFC60B61E55B0AB00EC577E /* Projects */,

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <FileRef
+      location = "container:Reports/MAD Designer.xcodeproj">
+   </FileRef>
    <Group
       location = "container:"
       name = "Resources">
@@ -42,6 +45,12 @@
       </FileRef>
    </Group>
    <FileRef
-      location = "container:Reports/MAD Designer.xcodeproj">
+      location = "group:Reports/../README.md">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/michael/Desktop/Reports/Reports/TODO.md">
+   </FileRef>
+   <FileRef
+      location = "group:LICENSE.md">
    </FileRef>
 </Workspace>

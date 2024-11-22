@@ -25,9 +25,7 @@ static NSString * const TextHeaderSettings      = @"Limit Query Result";
 
 @implementation MADQueryViewSectionDelegate
 
-- (void)dealloc {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables position:(short)position {
 	if (self = [super init]) {

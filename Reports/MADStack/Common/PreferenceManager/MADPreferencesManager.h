@@ -14,8 +14,8 @@
 
 @interface MADPreferencesManager : NSObject
 
-    + (instancetype)sharedManager;
-    - (void)addPreference:(MADPreference *)preference;
+	+ (instancetype)sharedManager;
+	- (void)addPreference:(MADPreference *)preference;
 
 @end
 

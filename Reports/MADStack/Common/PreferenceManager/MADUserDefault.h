@@ -13,8 +13,8 @@
 
 @interface MADUserDefault : NSObject
 
-    - (instancetype)initWithIdentifier:(NSString *)identifier;
-    - (instancetype)initWithIdentifier:(NSString *)identifier shared:(BOOL)shared;
+	- (instancetype)initWithIdentifier:(NSString *)identifier;
+	- (instancetype)initWithIdentifier:(NSString *)identifier shared:(BOOL)shared;
 
 @end
 

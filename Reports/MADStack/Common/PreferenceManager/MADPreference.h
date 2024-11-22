@@ -13,8 +13,8 @@
 
 @interface MADPreference : NSObject
 
-    - (instancetype)initWithKey:(NSString *)key;
-    - (instancetype)initWithKey:(NSString *)key allowCloud:(BOOL)allowCloud encrypt:(BOOL)encrypt;
+	- (instancetype)initWithKey:(NSString *)key;
+	- (instancetype)initWithKey:(NSString *)key allowCloud:(BOOL)allowCloud encrypt:(BOOL)encrypt;
 
 @end
 
