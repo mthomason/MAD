@@ -15,12 +15,12 @@
 
 @interface MADTableViewCellQueryGroup : MTAutoLayoutTableViewCell
 
-    @property (nonatomic, copy) NSManagedObjectID *groupID;
+	@property (nonatomic, copy) NSManagedObjectID *groupID;
 
-    @property (nonatomic, weak) IBOutlet UILabel *labelDetail;
-    @property (nonatomic, weak) IBOutlet UILabel *labelMain;
+	@property (nonatomic, weak) IBOutlet UILabel *labelDetail;
+	@property (nonatomic, weak) IBOutlet UILabel *labelMain;
 
-    + (CGFloat)defaultHeight;
+	+ (CGFloat)defaultHeight;
 
 @end
 

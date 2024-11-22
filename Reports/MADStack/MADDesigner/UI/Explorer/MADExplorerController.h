@@ -13,10 +13,10 @@
 #import <MADExplorer/MADDocumentCellProtocol.h>
 
 @interface MADExplorerController : UICollectionViewController
-    <MADDocumentCellProtocol>
+	<MADDocumentCellProtocol>
 
-    + (instancetype)newExplorerController;
-    - (void)done:(id)sender;
+	+ (instancetype)newExplorerController;
+	- (void)done:(id)sender;
 
 @end
 

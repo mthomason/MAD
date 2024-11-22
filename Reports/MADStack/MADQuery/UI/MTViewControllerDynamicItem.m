@@ -19,27 +19,27 @@
 @implementation MTViewControllerDynamicItem
 
 - (void)setCenter:(CGPoint)center {
-    self.view.center = center;
+	self.view.center = center;
 }
 
 - (void)setBounds:(CGRect)bounds {
-    self.view.bounds = bounds;
+	self.view.bounds = bounds;
 }
 
 - (void)setTransform:(CGAffineTransform)transform {
-    self.view.transform = transform;
+	self.view.transform = transform;
 }
 
 - (CGPoint)center {
-    return self.view.center;
+	return self.view.center;
 }
 
 - (CGRect)bounds {
-    return self.view.bounds;
+	return self.view.bounds;
 }
 
 - (CGAffineTransform)transform {
-    return self.view.transform;
+	return self.view.transform;
 }
 
 @end

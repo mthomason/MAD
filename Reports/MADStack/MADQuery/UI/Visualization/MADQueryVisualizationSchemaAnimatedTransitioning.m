@@ -14,28 +14,28 @@
 @implementation MADQueryVisualizationSchemaAnimatedTransitioningDelegate
 
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
-                                                      presentingViewController:(UIViewController *)presenting
-                                                          sourceViewController:(UIViewController *)source {
-    return [[MADQueryVisualizationSchemaPresentationController alloc] initWithPresentedViewController:presented
-                                                                             presentingViewController:presenting];
+													  presentingViewController:(UIViewController *)presenting
+														  sourceViewController:(UIViewController *)source {
+	return [[MADQueryVisualizationSchemaPresentationController alloc] initWithPresentedViewController:presented
+																			 presentingViewController:presenting];
 }
 
 - (MADQueryVisualizationSchemaAnimatedTransitioning *)animationController {
-    MADQueryVisualizationSchemaAnimatedTransitioning *animationController;
-    animationController = [[MADQueryVisualizationSchemaAnimatedTransitioning alloc] init];
-    return animationController;
+	MADQueryVisualizationSchemaAnimatedTransitioning *animationController;
+	animationController = [[MADQueryVisualizationSchemaAnimatedTransitioning alloc] init];
+	return animationController;
 }
 
 - (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                   presentingController:(UIViewController *)presenting
-                                                                       sourceController:(UIViewController *)source {
-    MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
-    return animationController;
+																   presentingController:(UIViewController *)presenting
+																	   sourceController:(UIViewController *)source {
+	MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
+	return animationController;
 }
 
 - (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
-    return animationController;
+	MADQueryVisualizationSchemaAnimatedTransitioning *animationController = [self animationController];
+	return animationController;
 }
 
 @end
@@ -45,22 +45,22 @@
 // This is used for percent driven interactive transitions, as well as for container controllers that have companion animations that might need to
 // synchronize with the main animation.
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.30;
+	return 0.30;
 }
 
 // This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
-    
-    UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    CGPoint center = viewControllerFrom.view.center;
+	
+	UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+	CGPoint center = viewControllerFrom.view.center;
 
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        viewControllerFrom.view.bounds = CGRectZero;
-        viewControllerFrom.view.center = center;
-        viewControllerFrom.view.transform = MADAffineTransformSwing();
-    } completion:^(BOOL finished) {
-        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
-    }];
+	[UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+		viewControllerFrom.view.bounds = CGRectZero;
+		viewControllerFrom.view.center = center;
+		viewControllerFrom.view.transform = MADAffineTransformSwing();
+	} completion:^(BOOL finished) {
+		[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+	}];
 }
 
 @end

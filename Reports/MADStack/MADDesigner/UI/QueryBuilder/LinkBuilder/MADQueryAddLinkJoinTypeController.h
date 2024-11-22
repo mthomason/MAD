@@ -16,10 +16,10 @@
 @class MADocument;
 
 @interface MADQueryAddLinkJoinTypeController : UITableViewController
-    <UITableViewDelegate>
+	<UITableViewDelegate>
 
-    @property (nonatomic, weak) id <MADQueryBuilderAddLinkJoinTypeDelegate> delegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADQueryBuilderAddLinkJoinTypeDelegate> delegate;
+	@property (nonatomic, weak) MADocument *document;
 
 @end
 

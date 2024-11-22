@@ -11,7 +11,7 @@
 @implementation MADTableViewCellQueryLinkName
 
 + (CGFloat)defaultHeight {
-    return 0.0;
+	return 0.0;
 }
 
 @end

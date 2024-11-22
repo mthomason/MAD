@@ -16,10 +16,10 @@
 @class MADTableViewControllerOpperators;
 
 @interface MADTableViewControllerOpperators : UITableViewController
-    <UITableViewDataSource,
-        UITableViewDelegate>
+	<UITableViewDataSource,
+		UITableViewDelegate>
 
-    @property (nonatomic, weak) IBOutlet id <MADTableViewControllerOpperatorsDelegate> delegate;
+	@property (nonatomic, weak) IBOutlet id <MADTableViewControllerOpperatorsDelegate> delegate;
 
 @end
 

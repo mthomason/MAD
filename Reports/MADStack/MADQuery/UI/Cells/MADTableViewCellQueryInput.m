@@ -12,7 +12,7 @@
 @implementation MADTableViewCellQueryInput
 
 + (CGFloat)defaultHeight {
-    return MNSTableViewCellQueryInputHeightDefault;
+	return MNSTableViewCellQueryInputHeightDefault;
 }
 
 @end

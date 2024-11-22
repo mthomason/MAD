@@ -16,10 +16,10 @@
 
 @interface MADQueryVisualizationLinkModel : NSObject
 
-    @property (nonatomic, strong) NSURL *linkID;
-    @property (nonatomic, strong) MTPair *fieldsIDs;
-    @property (nonatomic, strong) MTPair *anchorPoints;
-    @property (nonatomic, assign) CGFloat length;
+	@property (nonatomic, strong) NSURL *linkID;
+	@property (nonatomic, strong) MTPair *fieldsIDs;
+	@property (nonatomic, strong) MTPair *anchorPoints;
+	@property (nonatomic, assign) CGFloat length;
 
 @end
 

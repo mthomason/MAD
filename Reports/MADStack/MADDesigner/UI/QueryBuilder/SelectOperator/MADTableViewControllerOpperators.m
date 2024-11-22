@@ -20,38 +20,38 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *MADIDOperatorEqual                   = @"UITableViewCellPredicateOperatorEqual";
-    static NSString *MADIDOperatorNotEqual                = @"UITableViewCellPredicateOperatorNotEqual";
-    static NSString *MADIDOperatorGreaterThan             = @"UITableViewCellPredicateOperatorGreaterThan";
-    static NSString *MADIDOperatorGreaterThanOrEqualTo    = @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo";
-    static NSString *MADIDOperatorLessThanOrEqualTo       = @"UITableViewCellPredicateOperatorLessThanOrEqualTo";
-    static NSString *MADIDOperatorLessThan                = @"UITableViewCellPredicateOperatorLessThan";
+	
+	static NSString *MADIDOperatorEqual                   = @"UITableViewCellPredicateOperatorEqual";
+	static NSString *MADIDOperatorNotEqual                = @"UITableViewCellPredicateOperatorNotEqual";
+	static NSString *MADIDOperatorGreaterThan             = @"UITableViewCellPredicateOperatorGreaterThan";
+	static NSString *MADIDOperatorGreaterThanOrEqualTo    = @"UITableViewCellPredicateOperatorGreaterThanOrEqualTo";
+	static NSString *MADIDOperatorLessThanOrEqualTo       = @"UITableViewCellPredicateOperatorLessThanOrEqualTo";
+	static NSString *MADIDOperatorLessThan                = @"UITableViewCellPredicateOperatorLessThan";
 
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    UITableViewCell __weak *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    NSString *reuseIdentifier = cell.reuseIdentifier.copy;
-    
-    if ([reuseIdentifier isEqualToString: MADIDOperatorEqual]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorEqual];
-        
-    } else if ([reuseIdentifier isEqualToString:MADIDOperatorNotEqual]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorNotEqual];
-        
-    } else if ([reuseIdentifier isEqualToString:MADIDOperatorGreaterThan]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorGreaterThan];
-        
-    } else if ([reuseIdentifier isEqualToString:MADIDOperatorGreaterThanOrEqualTo]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorGreaterThanOrEqualTo];
-        
-    } else if ([reuseIdentifier isEqualToString:MADIDOperatorLessThan]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorLessThan];
-        
-    } else if ([reuseIdentifier isEqualToString:MADIDOperatorLessThanOrEqualTo]) {
-        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorLessThanOrEqualTo];
-        
-    }
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	UITableViewCell __weak *cell = [tableView cellForRowAtIndexPath:indexPath];
+	
+	NSString *reuseIdentifier = cell.reuseIdentifier.copy;
+	
+	if ([reuseIdentifier isEqualToString: MADIDOperatorEqual]) {
+		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorEqual];
+		
+	} else if ([reuseIdentifier isEqualToString:MADIDOperatorNotEqual]) {
+		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorNotEqual];
+		
+	} else if ([reuseIdentifier isEqualToString:MADIDOperatorGreaterThan]) {
+		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorGreaterThan];
+		
+	} else if ([reuseIdentifier isEqualToString:MADIDOperatorGreaterThanOrEqualTo]) {
+		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorGreaterThanOrEqualTo];
+		
+	} else if ([reuseIdentifier isEqualToString:MADIDOperatorLessThan]) {
+		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorLessThan];
+		
+	} else if ([reuseIdentifier isEqualToString:MADIDOperatorLessThanOrEqualTo]) {
+		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorLessThanOrEqualTo];
+		
+	}
 }
 
 @end

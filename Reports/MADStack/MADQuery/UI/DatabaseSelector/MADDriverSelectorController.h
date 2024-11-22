@@ -15,10 +15,10 @@
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADDriverSelectorController : UITableViewController
-    <MADSaveFileProtocol>
+	<MADSaveFileProtocol>
 
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
-    @property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
+	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
+	@property (nonatomic, weak) id <MADSaveFileProtocol> saveFileDelegate;
 
 @end
 

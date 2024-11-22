@@ -13,19 +13,19 @@
 @synthesize identifier = _identifier;
 
 - (instancetype)init {
-    if (self = [super init]) {
-        [self setAutoresizingMask: UIViewAutoresizingFlexibleTopMargin |
-                                   UIViewAutoresizingFlexibleBottomMargin |
-                                   UIViewAutoresizingFlexibleLeftMargin |
-                                   UIViewAutoresizingFlexibleRightMargin];
-        [self setTranslatesAutoresizingMaskIntoConstraints: YES];
-        [self setAutoresizesSubviews: NO];
-    }
-    return self;
+	if (self = [super init]) {
+		[self setAutoresizingMask: UIViewAutoresizingFlexibleTopMargin |
+								   UIViewAutoresizingFlexibleBottomMargin |
+								   UIViewAutoresizingFlexibleLeftMargin |
+								   UIViewAutoresizingFlexibleRightMargin];
+		[self setTranslatesAutoresizingMaskIntoConstraints: YES];
+		[self setAutoresizesSubviews: NO];
+	}
+	return self;
 }
 
 - (id <NSCopying>)key {
-    return @(self.identifier);
+	return @(self.identifier);
 }
 
 @end

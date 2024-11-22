@@ -19,28 +19,28 @@
 @class MADQueryLinkBuilderController, RptqQueryLinks;
 
 @protocol MADQueryBuilderLinkBuilderDelegate
-    - (void)viewController:(MADQueryLinkBuilderController *)controller
-            addedQueryLink:(NSManagedObjectID *)linkID;
+	- (void)viewController:(MADQueryLinkBuilderController *)controller
+			addedQueryLink:(NSManagedObjectID *)linkID;
 @end
 
 @interface MADQueryLinkBuilderController : UITableViewController
-    <UITableViewDataSource,
-        UITableViewDelegate,
-        MADQueryBuilderAddLinkJoinTypeDelegate,
-        MADQueryChooseFieldProtocol>
+	<UITableViewDataSource,
+		UITableViewDelegate,
+		MADQueryBuilderAddLinkJoinTypeDelegate,
+		MADQueryChooseFieldProtocol>
 
-    @property (nonatomic, weak) id <MADQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol> queryLinkDelegate;
+	@property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellJoinType;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellJoinType;
+	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
 
-    @property (nonatomic, assign) MADLinkPart currentlyEditingPart;
-    @property (nonatomic, assign) MADLinkType linkType;
+	@property (nonatomic, assign) MADLinkPart currentlyEditingPart;
+	@property (nonatomic, assign) MADLinkType linkType;
 
-    - (IBAction)save:(id)sender;
-    - (IBAction)cancel:(id)sender;
+	- (IBAction)save:(id)sender;
+	- (IBAction)cancel:(id)sender;
 
 @end
 

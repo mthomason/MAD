@@ -11,7 +11,7 @@
 @implementation MADTableViewCellQueryOverride
 
 + (CGFloat)defaultHeight {
-    return 44.0;
+	return 44.0;
 }
 
 @end

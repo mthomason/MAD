@@ -12,18 +12,18 @@
 #import <UIKit/UICollectionViewCell.h>
 
 typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
-    MACloudManagerSectionLocal = 0,
-    MACloudManagerSectionCloud = 1,
+	MACloudManagerSectionLocal = 0,
+	MACloudManagerSectionCloud = 1,
 };
 
 extern NSString * const MADIdentifierOpenFileSectionHeader;
 
 @interface MADExplorerSectionHeaderView : UICollectionReusableView
 
-    @property (nonatomic, assign) MACloudManagerSection sectionType;
+	@property (nonatomic, assign) MACloudManagerSection sectionType;
 
-    - (void)startAnimating;
-    - (void)stopAnimating;
+	- (void)startAnimating;
+	- (void)stopAnimating;
 
 @end
 

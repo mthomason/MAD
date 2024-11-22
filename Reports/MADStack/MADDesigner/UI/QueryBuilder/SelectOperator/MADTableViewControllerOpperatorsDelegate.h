@@ -15,9 +15,9 @@
 
 @protocol MADTableViewControllerOpperatorsDelegate
   @required
-    - (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType;
+	- (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType;
   @optional
-    - (void)uITableViewControllerOpperatorsDidFinish:(MADTableViewControllerOpperators *)controller;
+	- (void)uITableViewControllerOpperatorsDidFinish:(MADTableViewControllerOpperators *)controller;
 @end
 
 #endif /* MADTableViewControllerOpperatorsDelegate_h */

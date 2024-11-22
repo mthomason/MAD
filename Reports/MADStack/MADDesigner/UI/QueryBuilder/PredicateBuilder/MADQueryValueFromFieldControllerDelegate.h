@@ -12,7 +12,7 @@
 @class NSString;
 
 @protocol MADQueryValueFromFieldControllerDelegate
-    - (void)enterStringDidFinishWithString:(NSString *)userInput;
+	- (void)enterStringDidFinishWithString:(NSString *)userInput;
 @end
 
 #endif /* MADQueryValueFromFieldControllerDelegate_h */

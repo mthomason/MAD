@@ -12,31 +12,31 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 
-    if (self = [super initWithCoder:aDecoder]) {
-        
-        [self setBackgroundView: nil];
-        [self setSelectedBackgroundView: nil];
-        
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		
+		[self setBackgroundView: nil];
+		[self setSelectedBackgroundView: nil];
+		
+	}
+	return self;
 }
 
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
-              reuseIdentifier:(NSString *)reuseIdentifier {
+			  reuseIdentifier:(NSString *)reuseIdentifier {
 
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
-        [self setBackgroundView: nil];
-        [self setSelectedBackgroundView: nil];
-        
-    }
-    return self;
-    
+	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+		
+		[self setBackgroundView: nil];
+		[self setSelectedBackgroundView: nil];
+		
+	}
+	return self;
+	
 }
 
 + (CGFloat)defaultHeight {
-    return 44.0;
+	return 44.0;
 }
 
 @end

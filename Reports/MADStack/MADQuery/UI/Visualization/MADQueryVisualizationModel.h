@@ -15,14 +15,14 @@
 
 @interface MADQueryVisualizationModel : NSObject
 
-    - (instancetype)initWithQuery:(MADModelQuery *)query;
+	- (instancetype)initWithQuery:(MADModelQuery *)query;
 
-    @property (nonatomic, strong, readonly) MTGraph *graphRepresentation;
-    @property (nonatomic, strong, readonly) MTLinkedList *topologicallySortedTables;
-    @property (nonatomic, strong, readonly) NSArray <NSNumber *> *startingPoints;
-    @property (nonatomic, assign, readonly, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
+	@property (nonatomic, strong, readonly) MTGraph *graphRepresentation;
+	@property (nonatomic, strong, readonly) MTLinkedList *topologicallySortedTables;
+	@property (nonatomic, strong, readonly) NSArray <NSNumber *> *startingPoints;
+	@property (nonatomic, assign, readonly, getter=isDirectedAcyclicGraph) BOOL directedAcyclicGraph;
 
-    - (BOOL)isTopLevel:(NSNumber *)identifier;
+	- (BOOL)isTopLevel:(NSNumber *)identifier;
 
 @end
 

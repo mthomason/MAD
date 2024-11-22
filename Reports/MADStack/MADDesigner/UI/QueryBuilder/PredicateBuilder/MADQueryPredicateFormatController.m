@@ -18,45 +18,45 @@
 #pragma mark - View lifecycle
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	return self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    MADocument *document = _document;
-    if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
-        
-        if ([segue.destinationViewController isKindOfClass: [MADQueryAddPredicateController class]]) {
-            MADQueryAddPredicateController *tvcSC = segue.destinationViewController;
-            tvcSC.document = document;
-            tvcSC.queryPredicateDelegate = self;
-        }
-        
-    } else if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
-    
-        if ([segue.destinationViewController isKindOfClass: [MADQueryAddPredicateController class]]) {
-            MADQueryAddPredicateController *tvcSC = segue.destinationViewController;
-            tvcSC.document = document;
-            tvcSC.queryPredicateDelegate = self;
-        }
-        
-    }
+	MADocument *document = _document;
+	if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
+		
+		if ([segue.destinationViewController isKindOfClass: [MADQueryAddPredicateController class]]) {
+			MADQueryAddPredicateController *tvcSC = segue.destinationViewController;
+			tvcSC.document = document;
+			tvcSC.queryPredicateDelegate = self;
+		}
+		
+	} else if ([segue.identifier isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
+	
+		if ([segue.destinationViewController isKindOfClass: [MADQueryAddPredicateController class]]) {
+			MADQueryAddPredicateController *tvcSC = segue.destinationViewController;
+			tvcSC.document = document;
+			tvcSC.queryPredicateDelegate = self;
+		}
+		
+	}
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self.delegate viewControllerDidFinish:sender];
+	[self.delegate viewControllerDidFinish:sender];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
-    [self.delegate viewControllerDidCancel:sender];
+	[self.delegate viewControllerDidCancel:sender];
 }
 
 - (void)tableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
-    [self.delegate viewController:self addedQueryPredicate: predicate];
+	[self.delegate viewController:self addedQueryPredicate: predicate];
 }
 
 - (IBAction)done:(id)sender {
-    [self.delegate viewControllerDidCancel: self];
+	[self.delegate viewControllerDidCancel: self];
 }
 
 @end

@@ -13,12 +13,12 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 
 @interface MADQueryVisualizationSchemaAnimatedTransitioning : NSObject
-    <UIViewControllerAnimatedTransitioning>
+	<UIViewControllerAnimatedTransitioning>
 
 @end
 
 @interface MADQueryVisualizationSchemaAnimatedTransitioningDelegate : NSObject
-    <UIViewControllerTransitioningDelegate>
+	<UIViewControllerTransitioningDelegate>
 
 @end
 

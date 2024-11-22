@@ -17,16 +17,16 @@
 
 @interface MADQueryVisualizationCacheManager : NSObject
 
-    @property (readonly, nonatomic, strong) MADHierarchicalDisplayModel *cacheData;
+	@property (readonly, nonatomic, strong) MADHierarchicalDisplayModel *cacheData;
 
-    - (instancetype)initWithURL:(NSURL *)url;
+	- (instancetype)initWithURL:(NSURL *)url;
 
-    - (void)updateCacheWithQuery:(MADModelQuery *)query
-                   contentOffset:(CGPoint)contentOffset
-                       zoomScale:(CGFloat)zoomScale
-                          center:(CGPoint (^)(NSNumber *))center;
-    - (void)archiveCache;
-    - (MADHierarchicalDisplayModel *)loadCache;
+	- (void)updateCacheWithQuery:(MADModelQuery *)query
+				   contentOffset:(CGPoint)contentOffset
+					   zoomScale:(CGFloat)zoomScale
+						  center:(CGPoint (^)(NSNumber *))center;
+	- (void)archiveCache;
+	- (MADHierarchicalDisplayModel *)loadCache;
 
 @end
 

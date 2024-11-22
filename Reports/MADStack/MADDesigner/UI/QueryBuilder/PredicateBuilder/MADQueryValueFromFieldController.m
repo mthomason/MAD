@@ -45,304 +45,304 @@
 #import "MADCellTextInput.h"
 
 @interface MADQueryValueFromFieldController ()
-    <UITextFieldDelegate,
-        UITableViewDataSource,
-        UITableViewDelegate,
-        UIPickerViewDataSource,
-        UIPickerViewDelegate>
+	<UITextFieldDelegate,
+		UITableViewDataSource,
+		UITableViewDelegate,
+		UIPickerViewDataSource,
+		UIPickerViewDelegate>
 
-    @property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
-    @property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
-    @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+	@property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
+	@property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
+	@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
-    @property (nonatomic, weak) IBOutlet UITextField *textField;
-    @property (nonatomic, strong) MADCellTextInput *tableViewCellEnterText;
-    @property (nonatomic, strong) NSArray *pickerData;
-    @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
+	@property (nonatomic, weak) IBOutlet UITextField *textField;
+	@property (nonatomic, strong) MADCellTextInput *tableViewCellEnterText;
+	@property (nonatomic, strong) NSArray *pickerData;
+	@property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
-    @property (nonatomic, strong) MADQuery *querySampleDataField;
-    @property (nonatomic, strong) MADDataTable *dataTable;
+	@property (nonatomic, strong) MADQuery *querySampleDataField;
+	@property (nonatomic, strong) MADDataTable *dataTable;
 
 @end
 
 @implementation MADQueryValueFromFieldController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        
-        NSDateFormatter *longStyleDateFormatter = [[NSDateFormatter alloc] init];
-        longStyleDateFormatter.dateStyle = NSDateFormatterFullStyle;
-        longStyleDateFormatter.timeStyle = NSDateFormatterLongStyle;
-        longStyleDateFormatter.locale = [NSLocale currentLocale];
-        self.longStyleDateFormatter = longStyleDateFormatter;
-        
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		
+		NSDateFormatter *longStyleDateFormatter = [[NSDateFormatter alloc] init];
+		longStyleDateFormatter.dateStyle = NSDateFormatterFullStyle;
+		longStyleDateFormatter.timeStyle = NSDateFormatterLongStyle;
+		longStyleDateFormatter.locale = [NSLocale currentLocale];
+		self.longStyleDateFormatter = longStyleDateFormatter;
+		
+	}
+	return self;
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
+	[super viewDidLoad];
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
+	[super viewWillAppear:animated];
+	
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(keyboardDidHide:)
-                                                 name: UIKeyboardDidHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(keyboardDidShow:)
-                                                 name: UIKeyboardDidShowNotification object:nil];
-    
-    [self loadPickerView];
-    
+	[super viewDidAppear:animated];
+	
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(keyboardDidHide:)
+												 name: UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(keyboardDidShow:)
+												 name: UIKeyboardDidShowNotification object:nil];
+	
+	[self loadPickerView];
+	
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver: self];
+	[super viewDidDisappear:animated];
+	[[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [self.enterStringDelegate enterStringDidFinishWithString: self.textField.text];
+	[self.enterStringDelegate enterStringDidFinishWithString: self.textField.text];
 }
 
 - (void)keyboardDidHide:(id)sender {
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self done:sender];
-    }
+	if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+		[self done:sender];
+	}
 }
 
 - (void)keyboardDidShow:(NSNotification *)sender {
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+	if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
 
-        NSDictionary *userInfo = sender.userInfo;
-        //NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
-        NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
-        NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
-        NSTimeInterval duration = keyboardAnimationDurationUserInfoKey.longLongValue;
-        NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
-        //CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
-        CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
-        CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
-        CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
-        MADQueryValueFromFieldController * __weak weakself = self;
-        UIViewAnimationOptions options;
-        switch (keyboardAnimationCurveUserInfoKey.integerValue) {
-            case UIViewAnimationCurveEaseInOut:
-                options = UIViewAnimationOptionCurveEaseInOut;
-                break;
-            case UIViewAnimationCurveEaseIn:
-                options = UIViewAnimationOptionCurveEaseIn;
-                break;
-            case UIViewAnimationCurveEaseOut:
-                options = UIViewAnimationOptionCurveEaseOut;
-                break;
-            case UIViewAnimationCurveLinear:
-                options = UIViewAnimationOptionCurveLinear;
-                break;
-            default:
-                options = UIViewAnimationOptionCurveLinear;
-                break;
-        }
-        [UIView animateWithDuration:duration delay:0.0 options:options animations:^{
-            weakself.pickerView.frame = pickerViewFrameEnd;
-        } completion:^(BOOL finished) {
-            
-        }];
+		NSDictionary *userInfo = sender.userInfo;
+		//NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
+		NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
+		NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
+		NSTimeInterval duration = keyboardAnimationDurationUserInfoKey.longLongValue;
+		NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
+		//CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
+		CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
+		CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
+		CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
+		MADQueryValueFromFieldController * __weak weakself = self;
+		UIViewAnimationOptions options;
+		switch (keyboardAnimationCurveUserInfoKey.integerValue) {
+			case UIViewAnimationCurveEaseInOut:
+				options = UIViewAnimationOptionCurveEaseInOut;
+				break;
+			case UIViewAnimationCurveEaseIn:
+				options = UIViewAnimationOptionCurveEaseIn;
+				break;
+			case UIViewAnimationCurveEaseOut:
+				options = UIViewAnimationOptionCurveEaseOut;
+				break;
+			case UIViewAnimationCurveLinear:
+				options = UIViewAnimationOptionCurveLinear;
+				break;
+			default:
+				options = UIViewAnimationOptionCurveLinear;
+				break;
+		}
+		[UIView animateWithDuration:duration delay:0.0 options:options animations:^{
+			weakself.pickerView.frame = pickerViewFrameEnd;
+		} completion:^(BOOL finished) {
+			
+		}];
 
-        
-    }
+		
+	}
 }
 
 #pragma mark - View lifecycle
 
 - (void)loadPickerView {
 
-    RptqDatabaseSchemaField *schemaField;
-    schemaField = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
+	RptqDatabaseSchemaField *schemaField;
+	schemaField = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
 
-    MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-    querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                                                             object: schemaField];
+	MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
+	querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+																							 object: schemaField];
 
-    self.querySampleDataField = querySampleDataField;
-    
-    MADQueryValueFromFieldController * __weak weakself2 = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        __strong MADQueryValueFromFieldController *strongself2 = weakself2;
-        RptqDatabaseSchemaField *field;
-        field = [strongself2.document.managedObjectContext objectWithID: strongself2.schemaFieldObjectId];
-        RptqDatabaseCredentals *userCredentals;
-        userCredentals = field.inTable.inDatabase.ownedByUser;
-        
-        MADDatabaseConnection *databaseConnection;
-        databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
-        
-        MADDatabase *database;
-        database = [MADDatabase newDatabaseWithConnection:databaseConnection];
-        if ([strongself2.querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
-            database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);
-        }
+	self.querySampleDataField = querySampleDataField;
+	
+	MADQueryValueFromFieldController * __weak weakself2 = self;
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+		__strong MADQueryValueFromFieldController *strongself2 = weakself2;
+		RptqDatabaseSchemaField *field;
+		field = [strongself2.document.managedObjectContext objectWithID: strongself2.schemaFieldObjectId];
+		RptqDatabaseCredentals *userCredentals;
+		userCredentals = field.inTable.inDatabase.ownedByUser;
+		
+		MADDatabaseConnection *databaseConnection;
+		databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
+		
+		MADDatabase *database;
+		database = [MADDatabase newDatabaseWithConnection:databaseConnection];
+		if ([strongself2.querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+			database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);
+		}
 
-        NSError * __autoreleasing error = NULL;
-        BOOL success = [database executeQuery:querySampleDataField withError:&error];
+		NSError * __autoreleasing error = NULL;
+		BOOL success = [database executeQuery:querySampleDataField withError:&error];
 
-        if (success) {
-            MADQueryValueFromFieldController * __weak weakself3 = strongself2;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                MADQueryValueFromFieldController *strongself5 = weakself3;
-                MADDataTable *dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
-                strongself5.dataTable = dt;
-                
-                NSArray *allObjects = [strongself5.dataTable allObjects];
-                strongself5.pickerData = allObjects;
-                [strongself5.pickerView reloadAllComponents];
-                
-                [strongself5.pickerView setNeedsDisplay];
-                
-                [strongself5.pickerView selectRow: 0 inComponent: 0 animated: NO];
-                [strongself5 pickerView: strongself5.pickerView didSelectRow: 0 inComponent: 0];
-            });
-            
-            
-        } else {
-            
-            NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-            // FIXME: Comeon with the fucking blocks.
-        
-            if ([NSThread isMainThread]) {
-                UIViewController * __weak weak1 = strongself2;
-                
-                [NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
-                       UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                                   [MADKeyChain deleteKey:key];
-                       } cancel:nil];
-                       [weak1 presentViewController:alertController animated:YES
-                                         completion:nil];
-                       
-                
-                    
-                }];
-                
-            } else {
-                NSError *serror = error;
-                UIViewController * __weak weak1 = strongself2;
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                
-                    [NSError presentError: serror
-                         onViewController: weak1
-                               completion:^(BOOL presentErrorSuccess) {
-                               
-                                   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
-                                       [MADKeyChain deleteKey:key];
-                                   } cancel:nil];
-                                   [weak1 presentViewController:alertController animated:YES
-                                                     completion:nil];
-                               }];
-                });
-            }
-        }
-    });
+		if (success) {
+			MADQueryValueFromFieldController * __weak weakself3 = strongself2;
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				MADQueryValueFromFieldController *strongself5 = weakself3;
+				MADDataTable *dt = [(querySampleDataField.database).delegate dataTableForQuery:querySampleDataField];
+				strongself5.dataTable = dt;
+				
+				NSArray *allObjects = [strongself5.dataTable allObjects];
+				strongself5.pickerData = allObjects;
+				[strongself5.pickerView reloadAllComponents];
+				
+				[strongself5.pickerView setNeedsDisplay];
+				
+				[strongself5.pickerView selectRow: 0 inComponent: 0 animated: NO];
+				[strongself5 pickerView: strongself5.pickerView didSelectRow: 0 inComponent: 0];
+			});
+			
+			
+		} else {
+			
+			NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+			// FIXME: Comeon with the fucking blocks.
+		
+			if ([NSThread isMainThread]) {
+				UIViewController * __weak weak1 = strongself2;
+				
+				[NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
+					   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+								   [MADKeyChain deleteKey:key];
+					   } cancel:nil];
+					   [weak1 presentViewController:alertController animated:YES
+										 completion:nil];
+					   
+				
+					
+				}];
+				
+			} else {
+				NSError *serror = error;
+				UIViewController * __weak weak1 = strongself2;
+				dispatch_sync(dispatch_get_main_queue(), ^{
+				
+					[NSError presentError: serror
+						 onViewController: weak1
+							   completion:^(BOOL presentErrorSuccess) {
+							   
+								   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+									   [MADKeyChain deleteKey:key];
+								   } cancel:nil];
+								   [weak1 presentViewController:alertController animated:YES
+													 completion:nil];
+							   }];
+				});
+			}
+		}
+	});
 }
 
 - (CGSize)preferredContentSize {
-    return CGSizeMake(320.0, 420.0);
+	return CGSizeMake(320.0, 420.0);
 }
 
 #pragma mark - Picker View Data Source
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
+	return 1;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    NSUInteger result = 0;
-    if (self.pickerData != nil) {
-        result = self.pickerData.count;
-    }
-    return (NSInteger)result;
+	NSUInteger result = 0;
+	if (self.pickerData != nil) {
+		result = self.pickerData.count;
+	}
+	return (NSInteger)result;
 }
 
 #pragma mark - Picker View Delegate
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row
-            forComponent:(NSInteger)component {
-    NSString *result = nil;
-    if ((NSUInteger)row < _pickerData.count) {
-        NSDictionary *pickerData = _pickerData[(NSUInteger)row];
-        id resultObject = pickerData.allValues.lastObject;
+			forComponent:(NSInteger)component {
+	NSString *result = nil;
+	if ((NSUInteger)row < _pickerData.count) {
+		NSDictionary *pickerData = _pickerData[(NSUInteger)row];
+		id resultObject = pickerData.allValues.lastObject;
 
-        if ([resultObject isKindOfClass:[NSDateComponents class]]) {
-            NSDateComponents *resultDate = resultObject;
-            NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
-            NSDate *newDate = [localCalendar dateFromComponents:resultDate];
-            result = [_longStyleDateFormatter stringFromDate:newDate];
-            
-        } else if ([resultObject isKindOfClass:[NSString class]]) {
-            result = [NSString stringWithString: resultObject];
-            
-        } else if ([resultObject isKindOfClass:[NSNumber class]]) {
-            result = ((NSNumber *)resultObject).stringValue;
-            
-        } else if (resultObject == nil) {
-            result = @"NULL";
-            
-        } else {
-            result = @"";
-        }
-        
-    } else {
-        result = @"";
-    }
-    return result;
+		if ([resultObject isKindOfClass:[NSDateComponents class]]) {
+			NSDateComponents *resultDate = resultObject;
+			NSCalendar *localCalendar = [NSCalendar autoupdatingCurrentCalendar];
+			NSDate *newDate = [localCalendar dateFromComponents:resultDate];
+			result = [_longStyleDateFormatter stringFromDate:newDate];
+			
+		} else if ([resultObject isKindOfClass:[NSString class]]) {
+			result = [NSString stringWithString: resultObject];
+			
+		} else if ([resultObject isKindOfClass:[NSNumber class]]) {
+			result = ((NSNumber *)resultObject).stringValue;
+			
+		} else if (resultObject == nil) {
+			result = @"NULL";
+			
+		} else {
+			result = @"";
+		}
+		
+	} else {
+		result = @"";
+	}
+	return result;
 }
 
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    self.textField.text = [self pickerView:pickerView titleForRow:row forComponent:component];
+	self.textField.text = [self pickerView:pickerView titleForRow:row forComponent:component];
 }
 
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+	return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellPredicateEnterValueString";
-    
-    MADCellTextInput *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
-    
-    (result.textField).returnKeyType = UIReturnKeyDone;
-    result.textField.delegate = self;
-    
-    self.textField = result.textField;
-    return result;
+	static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellPredicateEnterValueString";
+	
+	MADCellTextInput *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
+	
+	(result.textField).returnKeyType = UIReturnKeyDone;
+	result.textField.delegate = self;
+	
+	self.textField = result.textField;
+	return result;
 }
 
 #pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return YES;
+	[textField resignFirstResponder];
+	return YES;
 }
 
 @end

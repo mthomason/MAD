@@ -15,34 +15,34 @@
 @end
 
 @implementation MADQueryVisualizationSchemaPresentationController {
-    int64_t _objectID;
+	int64_t _objectID;
 }
 
 
 - (instancetype)initWithObjectID:(int64_t)objectID
-         presentedViewController:(UIViewController *)presentedViewController
-        presentingViewController:(UIViewController *)presentingViewController {
-    if (self = [super initWithPresentedViewController: presentedViewController
-                             presentingViewController: presentingViewController]) {
-        _objectID = objectID;
-    }
-    return self;
+		 presentedViewController:(UIViewController *)presentedViewController
+		presentingViewController:(UIViewController *)presentingViewController {
+	if (self = [super initWithPresentedViewController: presentedViewController
+							 presentingViewController: presentingViewController]) {
+		_objectID = objectID;
+	}
+	return self;
 }
 
 - (CGRect)frameOfPresentedViewInContainerView {
-    return [self.delegatePresentation frameOfItemWithObjectID: _objectID];
+	return [self.delegatePresentation frameOfItemWithObjectID: _objectID];
 }
 
 - (BOOL)shouldPresentInFullscreen {
-    return NO;
+	return NO;
 }
 
 - (BOOL)shouldRemovePresentersView {
-    return NO;
+	return NO;
 }
 
 - (void)presentationTransitionWillBegin {
-    [self.containerView addSubview:self.presentedViewController.view];
+	[self.containerView addSubview:self.presentedViewController.view];
 }
 
 - (void)presentationTransitionDidEnd:(BOOL)completed { }

@@ -15,11 +15,11 @@
 
 @interface MADTableViewCellQueryPredicate : MTAutoLayoutTableViewCell
 
-    @property (nonatomic, copy) NSManagedObjectID *predicateID;
+	@property (nonatomic, copy) NSManagedObjectID *predicateID;
 
-    @property (nonatomic, weak) IBOutlet UILabel *labelDetail;
-    @property (nonatomic, weak) IBOutlet UILabel *labelMain;
-    @property (nonatomic, weak) IBOutlet UILabel *labelOpperator;
+	@property (nonatomic, weak) IBOutlet UILabel *labelDetail;
+	@property (nonatomic, weak) IBOutlet UILabel *labelMain;
+	@property (nonatomic, weak) IBOutlet UILabel *labelOpperator;
 
 @end
 

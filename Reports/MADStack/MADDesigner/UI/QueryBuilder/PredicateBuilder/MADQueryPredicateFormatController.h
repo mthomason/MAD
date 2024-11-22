@@ -16,19 +16,19 @@
 @class MADQueryPredicateFormatController;
 
 @protocol MADQueryBuilderPredicateFormatDelegate <MADViewControllerStandardProtocol>
-    - (void)viewController:(MADQueryPredicateFormatController *)controller
-       addedQueryPredicate:(RptqQueryPredicate *)predicate;
+	- (void)viewController:(MADQueryPredicateFormatController *)controller
+	   addedQueryPredicate:(RptqQueryPredicate *)predicate;
 @end
 
 @interface MADQueryPredicateFormatController : UITableViewController
-    <MADViewControllerStandardProtocol,
-        MADQueryAddPredicateProtocol>
+	<MADViewControllerStandardProtocol,
+		MADQueryAddPredicateProtocol>
 
-    @property (nonatomic, weak) id <MADQueryBuilderPredicateFormatDelegate,
-                                        MADViewControllerStandardProtocol> delegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADQueryBuilderPredicateFormatDelegate,
+										MADViewControllerStandardProtocol> delegate;
+	@property (nonatomic, weak) MADocument *document;
 
-    - (IBAction)done:(id)sender;
+	- (IBAction)done:(id)sender;
 
 @end
 

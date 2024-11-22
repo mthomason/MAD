@@ -12,18 +12,18 @@
 @implementation MADTableViewCellQueryPredicate
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
-              reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.textLabel.numberOfLines = 0;
-    }
-    return self;
+			  reuseIdentifier:(NSString *)reuseIdentifier {
+	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+		self.textLabel.numberOfLines = 0;
+	}
+	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        self.textLabel.numberOfLines = 0;
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		self.textLabel.numberOfLines = 0;
+	}
+	return self;
 }
 
 @end

@@ -18,9 +18,9 @@ extern NSString * const MTTableSectionSectionsKey;
 
 @interface NSDictionary (QueryViewControllerTableLayout)
 
-    + (instancetype)newDictionaryQueryLayoutTableZeroReportingEnabled:(BOOL)reportingEnabled;
-    + (instancetype)newDictionaryQueryLayoutTableOneReportingEnabled:(BOOL)reportingEnabled;
-    + (instancetype)newDictionaryQueryLayoutTableMoreThanOneReportingEnabled:(BOOL)reportingEnabled;
+	+ (instancetype)newDictionaryQueryLayoutTableZeroReportingEnabled:(BOOL)reportingEnabled;
+	+ (instancetype)newDictionaryQueryLayoutTableOneReportingEnabled:(BOOL)reportingEnabled;
+	+ (instancetype)newDictionaryQueryLayoutTableMoreThanOneReportingEnabled:(BOOL)reportingEnabled;
 
 @end
 

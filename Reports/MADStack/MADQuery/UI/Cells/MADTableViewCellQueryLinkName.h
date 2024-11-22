@@ -13,7 +13,7 @@
 
 @interface MADTableViewCellQueryLinkName : MTAutoLayoutTableViewCell
 
-    + (CGFloat)defaultHeight;
+	+ (CGFloat)defaultHeight;
 
 @end
 

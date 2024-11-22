@@ -12,16 +12,16 @@
 #import <UIKit/UIPresentationController.h>
 
 @protocol MADQueryVisualizationSchemaPresentationDelegate <NSObject>
-    - (CGRect)frameOfItemWithObjectID:(int64_t)objectID;
+	- (CGRect)frameOfItemWithObjectID:(int64_t)objectID;
 @end
 
 @interface MADQueryVisualizationSchemaPresentationController : UIPresentationController
 
-    - (instancetype)initWithObjectID:(int64_t)objectID
-             presentedViewController:(UIViewController *)presentedViewController
-            presentingViewController:(UIViewController *)presentingViewController;
+	- (instancetype)initWithObjectID:(int64_t)objectID
+			 presentedViewController:(UIViewController *)presentedViewController
+			presentingViewController:(UIViewController *)presentingViewController;
 
-    @property (nonatomic, weak) id <MADQueryVisualizationSchemaPresentationDelegate> delegatePresentation;
+	@property (nonatomic, weak) id <MADQueryVisualizationSchemaPresentationDelegate> delegatePresentation;
 
 @end
 

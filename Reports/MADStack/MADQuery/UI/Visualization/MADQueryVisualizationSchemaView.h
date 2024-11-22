@@ -13,7 +13,7 @@
 #import "MADManagedObjectViewProtocol.h"
 
 @interface MADQueryVisualizationSchemaView : UIView
-    <MADManagedObjectViewProtocol>
+	<MADManagedObjectViewProtocol>
 
 @end
 

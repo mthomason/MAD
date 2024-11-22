@@ -15,13 +15,13 @@
 
 @interface MADTableViewCellQueryInstructions : MTAutoLayoutTableViewCell
 
-    @property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
-    @property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
+	@property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
+	@property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
 
-    - (instancetype)initWithCoder:(NSCoder *)aDecoder;
-    - (instancetype)initWithStyle:(UITableViewCellStyle)style
-                  reuseIdentifier:(NSString *)reuseIdentifier;
-    + (CGFloat)defaultHeight;
+	- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+	- (instancetype)initWithStyle:(UITableViewCellStyle)style
+				  reuseIdentifier:(NSString *)reuseIdentifier;
+	+ (CGFloat)defaultHeight;
 
 @end
 

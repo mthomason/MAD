@@ -15,7 +15,7 @@
 
 @interface MADQueryVisualizationScrollView : UIScrollView
 
-    @property (nonatomic, strong, readonly) MADQueryVisualizationContentView *contentView;
+	@property (nonatomic, strong, readonly) MADQueryVisualizationContentView *contentView;
 
 @end
 

@@ -18,18 +18,18 @@
 @class NSManagedObjectID, MADQueryChooseFieldController, MADocument;
 
 @interface MADQueryChooseFieldController : UITableViewController
-    <UITableViewDataSource,
-        UITableViewDelegate,
-        MADSectionHeaderViewDelegate,
-        MADUnwindProtocol>
+	<UITableViewDataSource,
+		UITableViewDelegate,
+		MADSectionHeaderViewDelegate,
+		MADUnwindProtocol>
 
-    + (instancetype)newQueryBuilderChooseFieldViewController;
+	+ (instancetype)newQueryBuilderChooseFieldViewController;
 
-    @property (nonatomic, weak) id <MADQueryChooseFieldProtocol> delegate;
-    @property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADQueryChooseFieldProtocol> delegate;
+	@property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, strong) NSManagedObjectID *queryFieldID;
-    @property (nonatomic, strong) NSArray <NSString *> *excludeTables;
+	@property (nonatomic, strong) NSManagedObjectID *queryFieldID;
+	@property (nonatomic, strong) NSArray <NSString *> *excludeTables;
 
 @end
 

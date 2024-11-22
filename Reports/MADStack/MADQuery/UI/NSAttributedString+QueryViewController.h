@@ -13,19 +13,19 @@
 
 @interface MADAttributedStringQueryController : NSAttributedString
 
-    + (instancetype)newAttributedStringQueryPredicate:(NSString *)leftText
-                                               symbol:(NSString *)symbol
-                                            rightText:(NSString *)rightText;
-    + (instancetype)newAttributedStringQuerySectionGroupWithField:(NSString *)field
-                                                          andSort:(NSString *)sort;
+	+ (instancetype)newAttributedStringQueryPredicate:(NSString *)leftText
+											   symbol:(NSString *)symbol
+											rightText:(NSString *)rightText;
+	+ (instancetype)newAttributedStringQuerySectionGroupWithField:(NSString *)field
+														  andSort:(NSString *)sort;
 
-    + (instancetype)newAttributedStringQuerySectionLinks:(NSString *)leftString
-                                             rightString:(NSString *)rightString
-                                        linksDescription:(NSString *)linksDescription;
+	+ (instancetype)newAttributedStringQuerySectionLinks:(NSString *)leftString
+											 rightString:(NSString *)rightString
+										linksDescription:(NSString *)linksDescription;
 
-    + (instancetype)newAttributedStringQuerySectionDatasourceForMessage:(NSString *)localizedMessage
-                                                           databaseType:(NSString *)databaseType
-                                                             schemaName:(NSString *)schemaName;
+	+ (instancetype)newAttributedStringQuerySectionDatasourceForMessage:(NSString *)localizedMessage
+														   databaseType:(NSString *)databaseType
+															 schemaName:(NSString *)schemaName;
 
 @end
 

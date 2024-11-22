@@ -15,8 +15,8 @@
 
 @protocol MADQueryChooseFieldProtocol
 
-    - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                        withFieldID: (NSManagedObjectID *)fieldID;
+	- (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
+										withFieldID: (NSManagedObjectID *)fieldID;
 
 @end
 

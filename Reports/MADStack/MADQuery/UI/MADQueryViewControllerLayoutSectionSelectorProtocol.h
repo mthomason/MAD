@@ -11,10 +11,10 @@
 
 @protocol MADQueryViewControllerLayoutSectionSelectorProtocol <NSObject>
 
-    - (void)addTable:(id)sender;
-    - (void)addLink:(id)sender;
-    - (void)addPredicate:(id)sender;
-    - (void)addGroup:(id)sender;
+	- (void)addTable:(id)sender;
+	- (void)addLink:(id)sender;
+	- (void)addPredicate:(id)sender;
+	- (void)addGroup:(id)sender;
 
 @end
 
