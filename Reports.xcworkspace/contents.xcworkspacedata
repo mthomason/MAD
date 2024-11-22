@@ -8,6 +8,9 @@
       location = "container:"
       name = "Resources">
       <FileRef
+         location = "group:MADTds/madtds/madtds.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MAD/MAD.xcodeproj">
       </FileRef>
       <FileRef
