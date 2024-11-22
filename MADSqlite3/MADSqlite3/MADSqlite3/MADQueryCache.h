@@ -12,7 +12,7 @@
 #import <MADAPI/MADQuery.h>
 
 @interface MADQueryCache : MADQuery
-    <MADQueryDatabaseProtocol>
+	<MADQueryDatabaseProtocol>
 
 @end
 

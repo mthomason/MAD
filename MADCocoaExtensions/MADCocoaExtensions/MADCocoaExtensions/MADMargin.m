@@ -32,7 +32,7 @@ static inline MADMargin_t MADLayoutMarginMakeQuick(Float64 w) {
 }
 
 @implementation MADMargin {
-    MADMargin_t _margin;
+	MADMargin_t _margin;
 }
 
 @dynamic left;
@@ -41,76 +41,76 @@ static inline MADMargin_t MADLayoutMarginMakeQuick(Float64 w) {
 @dynamic bottom;
 
 + (BOOL)supportsSecureCoding {
-    return NO;
+	return NO;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        _margin = MADLayoutMarginMake(0, 0, 0, 0);
-    }
-    return self;
+	if (self = [super init]) {
+		_margin = MADLayoutMarginMake(0, 0, 0, 0);
+	}
+	return self;
 }
 
 - (instancetype)initWithLeft:(Float64)left right:(Float64)right
-                         top:(Float64)top bottom:(Float64)bottom {
-    if (self = [super init]) {
-        _margin = MADLayoutMarginMake(left, right, top, bottom);
-    }
-    return self;
+						 top:(Float64)top bottom:(Float64)bottom {
+	if (self = [super init]) {
+		_margin = MADLayoutMarginMake(left, right, top, bottom);
+	}
+	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super init]) {
-        NSUInteger lenght;
-        memcpy(&_margin,
-               [aDecoder decodeBytesForKey:@"m" returnedLength:&lenght],
-               sizeof(MADMargin_t));
-    }
-    return self;
+	if (self = [super init]) {
+		NSUInteger lenght;
+		memcpy(&_margin,
+			   [aDecoder decodeBytesForKey:@"m" returnedLength:&lenght],
+			   sizeof(MADMargin_t));
+	}
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeBytes:(uint8_t *)&_margin length:sizeof(MADMargin_t) forKey:@"m"];
+	[aCoder encodeBytes:(uint8_t *)&_margin length:sizeof(MADMargin_t) forKey:@"m"];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    id copy = [[MADMargin allocWithZone:zone] initWithLeft: _margin.left
-                                                     right: _margin.right
-                                                       top: _margin.top
-                                                    bottom: _margin.bottom];
-    return copy;
+	id copy = [[MADMargin allocWithZone:zone] initWithLeft: _margin.left
+													 right: _margin.right
+													   top: _margin.top
+													bottom: _margin.bottom];
+	return copy;
 }
 
 - (Float64)left {
-    return _margin.left;
+	return _margin.left;
 }
 
 - (Float64)right {
-    return _margin.right;
+	return _margin.right;
 }
 
 - (Float64)top {
-    return _margin.top;
+	return _margin.top;
 }
 
 - (Float64)bottom {
-    return _margin.bottom;
+	return _margin.bottom;
 }
 
 - (void)setLeft:(Float64)left {
-    _margin.left = left;
+	_margin.left = left;
 }
 
 - (void)setRight:(Float64)right {
-    _margin.right = right;
+	_margin.right = right;
 }
 
 - (void)setTop:(Float64)top {
-    _margin.top = top;
+	_margin.top = top;
 }
 
 - (void)setBottom:(Float64)bottom {
-    _margin.bottom = bottom;
+	_margin.bottom = bottom;
 }
 
 @end

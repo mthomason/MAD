@@ -14,12 +14,12 @@
 @class MysqlConnection;
 
 @interface MysqlIndex : NSObject {
-    MysqlConnection *connection;
+	MysqlConnection *connection;
 }
 
-    @property(nonatomic, readonly) MysqlConnection *connection;
+	@property(nonatomic, readonly) MysqlConnection *connection;
 
-    + (MysqlIndex *)indexWithConnection:(MysqlConnection *)aConnection;
+	+ (MysqlIndex *)indexWithConnection:(MysqlConnection *)aConnection;
 
 @end
 

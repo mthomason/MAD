@@ -16,54 +16,54 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 
 @interface MADOpenDocumentManager ()
 
-    @property (readwrite, nonatomic, strong) MADDocumentHolder *openFiles;   //MADocument stored by their NSURLS
-    @property (readwrite, nonatomic, copy) NSURL *openUrl;
+	@property (readwrite, nonatomic, strong) MADDocumentHolder *openFiles;   //MADocument stored by their NSURLS
+	@property (readwrite, nonatomic, copy) NSURL *openUrl;
 
 @end
 
 @implementation MADOpenDocumentManager
 
 - (void)dealloc {
-    [_openFiles removeAllObjects];
-    _openFiles = nil;
+	[_openFiles removeAllObjects];
+	_openFiles = nil;
 }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        MADDocumentHolder *openFiles = [[MADDocumentHolder alloc] init];
-        self.openFiles = openFiles;
-        self.openUrl = nil;
-    }
-    return self;
+	if (self = [super init]) {
+		MADDocumentHolder *openFiles = [[MADDocumentHolder alloc] init];
+		self.openFiles = openFiles;
+		self.openUrl = nil;
+	}
+	return self;
 }
 
 - (void)setOpenDocument:(__kindof UIManagedDocument *)document {
-    if (document) {
-        self.openUrl = document.fileURL.copy;
-        NSString *path = self.openUrl.absoluteURL.absoluteString;
-        self.openFiles[path] = document;
-    }
+	if (document) {
+		self.openUrl = document.fileURL.copy;
+		NSString *path = self.openUrl.absoluteURL.absoluteString;
+		self.openFiles[path] = document;
+	}
 }
 
 - (__kindof UIManagedDocument *)openDocument {
-    NSURL *absoluteURL = self.openUrl.absoluteURL;
-    NSString *absoluteString = absoluteURL.absoluteString;
-    return absoluteString != nil ? self.openFiles[absoluteString] : nil;
+	NSURL *absoluteURL = self.openUrl.absoluteURL;
+	NSString *absoluteString = absoluteURL.absoluteString;
+	return absoluteString != nil ? self.openFiles[absoluteString] : nil;
 }
 
 - (void)unload {
-    NSURL *openURL = self.openUrl.copy;
-    [self removeDocumentWithUrl: openURL];
+	NSURL *openURL = self.openUrl.copy;
+	[self removeDocumentWithUrl: openURL];
 }
 
 - (void)removeDocumentWithUrl:(NSURL *)url {
-    NSURL *absoluteURL = self.openUrl.absoluteURL;
-    NSString *absoluteString = absoluteURL.absoluteString;
-    [self.openFiles removeObjectForKey:absoluteString];
-    
-    if ([url.absoluteURL isEqual:self.openUrl.absoluteURL]) {
-        self.openUrl = nil;
-    }
+	NSURL *absoluteURL = self.openUrl.absoluteURL;
+	NSString *absoluteString = absoluteURL.absoluteString;
+	[self.openFiles removeObjectForKey:absoluteString];
+	
+	if ([url.absoluteURL isEqual:self.openUrl.absoluteURL]) {
+		self.openUrl = nil;
+	}
 }
 
 @end

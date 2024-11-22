@@ -16,32 +16,32 @@ NSString * const MADNotificationIdentifierFileUpdate = @"MADProgressNotification
 
 @interface MADNotificationFileUpdate ()
   - (instancetype)init  NS_UNAVAILABLE;
-    @property (nonatomic, copy) NSURL *url;
+	@property (nonatomic, copy) NSURL *url;
 @end
 
 @implementation MADNotificationFileUpdate
 
 - (instancetype)init {
-    id name = @"MADNotificationFileUpdateException";
-    NSException *exception = [[NSException alloc] initWithName: name
-                                                        reason: @"Not implemented"
-                                                      userInfo: nil];
-    @throw exception;
+	id name = @"MADNotificationFileUpdateException";
+	NSException *exception = [[NSException alloc] initWithName: name
+														reason: @"Not implemented"
+													  userInfo: nil];
+	@throw exception;
 }
 
 - (instancetype)initWithURL:(NSURL *)url {
-    if (self = [super init]) {
-        self.url = url.copy;
-    }
-    return self;
+	if (self = [super init]) {
+		self.url = url.copy;
+	}
+	return self;
 }
 
 - (void)notify {
-    NSURL *url = self.url.copy;
-    NSNotification *notification = [NSNotification notificationWithName: MADNotificationIdentifierFileUpdate
-                                                                 object: url
-                                                               userInfo: nil];
-    [[NSNotificationCenter defaultCenter] postNotification:notification];
+	NSURL *url = self.url.copy;
+	NSNotification *notification = [NSNotification notificationWithName: MADNotificationIdentifierFileUpdate
+																 object: url
+															   userInfo: nil];
+	[[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 @end

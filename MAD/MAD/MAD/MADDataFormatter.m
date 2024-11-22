@@ -19,16 +19,16 @@
 @implementation MADDataFormatter
 
 + (instancetype)newDataFormatter:(MADQuery <MADQueryDatabaseProtocol> *)query {
-    id result = [[self alloc] initWithQuery:query];
-    return result;
+	id result = [[self alloc] initWithQuery:query];
+	return result;
 }
 
 - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query {
-    if (self = [super init]) {
-        self.query = query;
-        self.didRefresh = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		self.query = query;
+		self.didRefresh = NO;
+	}
+	return self;
 }
 
 #pragma mark - Reading cached data
@@ -36,7 +36,7 @@
 - (BOOL)needsFormat { return YES; }
 
 - (void)setDidRefresh:(BOOL)didRefresh {
-    _didRefresh = didRefresh;
+	_didRefresh = didRefresh;
 }
 
 @end

@@ -11,8 +11,8 @@
 
 @protocol MADOperationHoldsPasswordProtocol <NSObject>
 
-    @property (nonatomic, readonly, copy) NSString *password;
-    @property (nonatomic, readonly, assign) BOOL gotPassword;
+	@property (nonatomic, readonly, copy) NSString *password;
+	@property (nonatomic, readonly, assign) BOOL gotPassword;
 
 @end
 

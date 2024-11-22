@@ -35,143 +35,143 @@
 @implementation MADModelQueryLink
 
 + (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate {
-    NSFetchRequest *fetchRequest;
-    
-    NSUInteger expressionDescCount = 5;
-    NSString *pathIdentifier, *pathHasRightField, *pathHasLeftField, *pathInQueryTable;
-    
-    NSExpressionDescription *expressionDescription[expressionDescCount];
+	NSFetchRequest *fetchRequest;
+	
+	NSUInteger expressionDescCount = 5;
+	NSString *pathIdentifier, *pathHasRightField, *pathHasLeftField, *pathInQueryTable;
+	
+	NSExpressionDescription *expressionDescription[expressionDescCount];
 
-    pathIdentifier = NSStringFromClass([RptqQueryLinks class]);
-    
-    fetchRequest = [NSFetchRequest fetchRequestWithEntityName:pathIdentifier];
+	pathIdentifier = NSStringFromClass([RptqQueryLinks class]);
+	
+	fetchRequest = [NSFetchRequest fetchRequestWithEntityName:pathIdentifier];
 
-    pathHasRightField = NSStringFromSelector(@selector(hasRightField));
-    pathHasLeftField = NSStringFromSelector(@selector(hasLeftField));
-    pathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
+	pathHasRightField = NSStringFromSelector(@selector(hasRightField));
+	pathHasLeftField = NSStringFromSelector(@selector(hasLeftField));
+	pathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
 
-    NSString *pathRTID = [pathHasRightField stringByAppendingPeriod];
-    pathRTID = [pathRTID stringByAppendingString:pathInQueryTable];
+	NSString *pathRTID = [pathHasRightField stringByAppendingPeriod];
+	pathRTID = [pathRTID stringByAppendingString:pathInQueryTable];
 
-    NSString *pathLTID = [pathHasLeftField stringByAppendingPeriod];
-    pathLTID = [pathLTID stringByAppendingString:pathInQueryTable];
+	NSString *pathLTID = [pathHasLeftField stringByAppendingPeriod];
+	pathLTID = [pathLTID stringByAppendingString:pathInQueryTable];
 
-    pathIdentifier = NSStringFromSelector(@selector(identifier));
+	pathIdentifier = NSStringFromSelector(@selector(identifier));
 
-    NSString *pathRFID = [pathHasRightField stringByAppendingPeriod];
-    pathRFID = [pathRFID stringByAppendingString:pathIdentifier];
-    
-    NSString *pathLFID = [pathHasLeftField stringByAppendingPeriod];
-    pathLFID = [pathLFID stringByAppendingString:pathIdentifier];
-    
-    pathRTID = [pathRTID stringByAppendingPeriod];
-    pathRTID = [pathRTID stringByAppendingString:pathIdentifier];
-    
-    pathLTID = [pathLTID stringByAppendingPeriod];
-    pathLTID = [pathLTID stringByAppendingString:pathIdentifier];
-    
-    expressionDescription[0] = [[NSExpressionDescription alloc] init];
-    expressionDescription[0].name = MADKeyQueryLinkRightFieldID;
-    expressionDescription[0].expression = [NSExpression expressionForKeyPath:pathRFID];
-    expressionDescription[0].expressionResultType = NSInteger64AttributeType;
-    
-    expressionDescription[1] = [[NSExpressionDescription alloc] init];
-    expressionDescription[1].name = MADKeyQueryLinkLeftFieldID;
-    expressionDescription[1].expression = [NSExpression expressionForKeyPath:pathLFID];
-    expressionDescription[1].expressionResultType = NSInteger64AttributeType;
+	NSString *pathRFID = [pathHasRightField stringByAppendingPeriod];
+	pathRFID = [pathRFID stringByAppendingString:pathIdentifier];
+	
+	NSString *pathLFID = [pathHasLeftField stringByAppendingPeriod];
+	pathLFID = [pathLFID stringByAppendingString:pathIdentifier];
+	
+	pathRTID = [pathRTID stringByAppendingPeriod];
+	pathRTID = [pathRTID stringByAppendingString:pathIdentifier];
+	
+	pathLTID = [pathLTID stringByAppendingPeriod];
+	pathLTID = [pathLTID stringByAppendingString:pathIdentifier];
+	
+	expressionDescription[0] = [[NSExpressionDescription alloc] init];
+	expressionDescription[0].name = MADKeyQueryLinkRightFieldID;
+	expressionDescription[0].expression = [NSExpression expressionForKeyPath:pathRFID];
+	expressionDescription[0].expressionResultType = NSInteger64AttributeType;
+	
+	expressionDescription[1] = [[NSExpressionDescription alloc] init];
+	expressionDescription[1].name = MADKeyQueryLinkLeftFieldID;
+	expressionDescription[1].expression = [NSExpression expressionForKeyPath:pathLFID];
+	expressionDescription[1].expressionResultType = NSInteger64AttributeType;
 
-    expressionDescription[2] = [[NSExpressionDescription alloc] init];
-    expressionDescription[2].name = MADKeyQueryLinkRightTableID;
-    expressionDescription[2].expression = [NSExpression expressionForKeyPath:pathRTID];
-    expressionDescription[2].expressionResultType = NSInteger64AttributeType;
-    
-    expressionDescription[3] = [[NSExpressionDescription alloc] init];
-    expressionDescription[3].name = MADKeyQueryLinkLeftTableID;
-    expressionDescription[3].expression = [NSExpression expressionForKeyPath:pathLTID];
-    expressionDescription[3].expressionResultType = NSInteger64AttributeType;
+	expressionDescription[2] = [[NSExpressionDescription alloc] init];
+	expressionDescription[2].name = MADKeyQueryLinkRightTableID;
+	expressionDescription[2].expression = [NSExpression expressionForKeyPath:pathRTID];
+	expressionDescription[2].expressionResultType = NSInteger64AttributeType;
+	
+	expressionDescription[3] = [[NSExpressionDescription alloc] init];
+	expressionDescription[3].name = MADKeyQueryLinkLeftTableID;
+	expressionDescription[3].expression = [NSExpression expressionForKeyPath:pathLTID];
+	expressionDescription[3].expressionResultType = NSInteger64AttributeType;
 
-    expressionDescription[4] = [[NSExpressionDescription alloc] init];
-    expressionDescription[4].name = MADKeyQueryLinkID;
-    expressionDescription[4].expression = [NSExpression expressionForKeyPath:pathIdentifier];
-    expressionDescription[4].expressionResultType = NSInteger64AttributeType;
+	expressionDescription[4] = [[NSExpressionDescription alloc] init];
+	expressionDescription[4].name = MADKeyQueryLinkID;
+	expressionDescription[4].expression = [NSExpression expressionForKeyPath:pathIdentifier];
+	expressionDescription[4].expressionResultType = NSInteger64AttributeType;
 
-    
-    NSArray <NSExpressionDescription *> *properties;
-    properties = [[NSArray alloc] initWithObjects: expressionDescription
-                                            count: expressionDescCount];
-    fetchRequest.propertiesToFetch = properties;
-    fetchRequest.resultType = NSDictionaryResultType;
-    fetchRequest.predicate = predicate;
+	
+	NSArray <NSExpressionDescription *> *properties;
+	properties = [[NSArray alloc] initWithObjects: expressionDescription
+											count: expressionDescCount];
+	fetchRequest.propertiesToFetch = properties;
+	fetchRequest.resultType = NSDictionaryResultType;
+	fetchRequest.predicate = predicate;
 
-    for (NSUInteger i=0; i<expressionDescCount; i++) {
-        expressionDescription[i] = nil;
-    }
-    
-    return fetchRequest;
+	for (NSUInteger i=0; i<expressionDescCount; i++) {
+		expressionDescription[i] = nil;
+	}
+	
+	return fetchRequest;
 }
 
 - (void)dealloc {
-    _inQuery = nil;
+	_inQuery = nil;
 }
 
 - (instancetype)initWithObjectID:(NSManagedObjectID *)objectID identifier:(int64_t)identifier {
-    if (self = [super initWithIdentifier:identifier]) {
+	if (self = [super initWithIdentifier:identifier]) {
 
-    }
-    return self;
+	}
+	return self;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
-                       leftFieldID:(int64_t)leftFieldID
-                       leftTableID:(int64_t)leftTableID
-                      rightFieldID:(int64_t)rightFieldID
-                      rightTableID:(int64_t)rightTableID {
-    
-    if (self = [self initWithIdentifier:identifier]) {
-        
-        MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
-        
-        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
-                                                                    andFieldID: leftFieldID];
-        self.leftFieldIdentifier = leftFieldIdentifier;
-        
-        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rightTableID
-                                                                     andFieldID: rightFieldID];
-        self.rightFieldIdentifier = rightFieldIdentifier;
-        
-    }
-    return self;
+					   leftFieldID:(int64_t)leftFieldID
+					   leftTableID:(int64_t)leftTableID
+					  rightFieldID:(int64_t)rightFieldID
+					  rightTableID:(int64_t)rightTableID {
+	
+	if (self = [self initWithIdentifier:identifier]) {
+		
+		MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
+		
+		leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: leftTableID
+																	andFieldID: leftFieldID];
+		self.leftFieldIdentifier = leftFieldIdentifier;
+		
+		rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: rightTableID
+																	 andFieldID: rightFieldID];
+		self.rightFieldIdentifier = rightFieldIdentifier;
+		
+	}
+	return self;
 }
 
 - (instancetype)initWithRptqQueryLink:(RptqQueryLinks *)queryLink {
-    
-    if (self = [self initWithIdentifier:queryLink.identifier]) {
-        
-        MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
-        
-        leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasLeftField.inQueryTable.identifier
-                                                                    andFieldID: queryLink.hasLeftField.identifier];
-        self.leftFieldIdentifier = leftFieldIdentifier;
-        
-        rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasRightField.inQueryTable.identifier
-                                                                     andFieldID: queryLink.hasRightField.identifier];
-        self.rightFieldIdentifier = rightFieldIdentifier;
-        
-    }
-    return self;
+	
+	if (self = [self initWithIdentifier:queryLink.identifier]) {
+		
+		MADTableFieldIdentifier *leftFieldIdentifier, *rightFieldIdentifier;
+		
+		leftFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasLeftField.inQueryTable.identifier
+																	andFieldID: queryLink.hasLeftField.identifier];
+		self.leftFieldIdentifier = leftFieldIdentifier;
+		
+		rightFieldIdentifier = [[MADTableFieldIdentifier alloc] initWithTableID: queryLink.hasRightField.inQueryTable.identifier
+																	 andFieldID: queryLink.hasRightField.identifier];
+		self.rightFieldIdentifier = rightFieldIdentifier;
+		
+	}
+	return self;
 }
 
 - (BOOL)isAdjacentToQueryTable:(int64_t)queryTableID {
-    return _leftFieldIdentifier.tableID == queryTableID ||
-            _rightFieldIdentifier.tableID == queryTableID;
+	return _leftFieldIdentifier.tableID == queryTableID ||
+			_rightFieldIdentifier.tableID == queryTableID;
 }
 
 - (NSSet <NSNumber *> *)tables {
-    NSNumber *tableLeft = @(_leftFieldIdentifier.tableID),
-             *tableRight = @(_rightFieldIdentifier.tableID);
-    NSSet *tables = [[NSSet alloc] initWithObjects: tableLeft,
-                                                    tableRight, nil];
-    return tables;
+	NSNumber *tableLeft = @(_leftFieldIdentifier.tableID),
+			 *tableRight = @(_rightFieldIdentifier.tableID);
+	NSSet *tables = [[NSSet alloc] initWithObjects: tableLeft,
+													tableRight, nil];
+	return tables;
 }
 
 - (NSNumber *)leftTableObjectID { return [self.leftFieldIdentifier tableObjectID]; }
@@ -186,21 +186,21 @@
 
 
 /*- (NSSet <MADTableFieldReference *> *)tableFieldReferences {
-    NSSet *tables = [[NSSet alloc] initWithObjects:_leftFieldReference,
-                                                   _rightFieldReference, nil];
-    return tables;
+	NSSet *tables = [[NSSet alloc] initWithObjects:_leftFieldReference,
+												   _rightFieldReference, nil];
+	return tables;
 }*/
 
 /*- (NSString *)debugDescription {
-    NSString *debugDescription;
-    debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
-    [[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@ JOIN %@]",
-     NSStringFromClass([self class]), self.objectID.URIRepresentation.pathComponents[1],
-                                      self.objectID.URIRepresentation.pathComponents[2],
-                                      _leftFieldReference.debugDescription,
-                                      _rightFieldReference.debugDescription] :
-                                      self.debugDescription;
-    return debugDescription;
+	NSString *debugDescription;
+	debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
+	[[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@ JOIN %@]",
+	 NSStringFromClass([self class]), self.objectID.URIRepresentation.pathComponents[1],
+									  self.objectID.URIRepresentation.pathComponents[2],
+									  _leftFieldReference.debugDescription,
+									  _rightFieldReference.debugDescription] :
+									  self.debugDescription;
+	return debugDescription;
 }*/
 
 @end

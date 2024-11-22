@@ -19,23 +19,21 @@
 #pragma mark Override Points
 
 - (MADDatabaseConnection *)databaseConnection {
-    MADDatabaseConnectionMySql *databaseConnection;
-    databaseConnection = [[MADDatabaseConnectionMySql alloc] initWithHost: self.textFieldHost.text
-                                                                 database: self.textFieldDatabase.text
-                                                                  andPort: self.textFieldPort.text.integerValue];
-    return databaseConnection;
+	MADDatabaseConnectionMySql *databaseConnection;
+	databaseConnection = [[MADDatabaseConnectionMySql alloc] initWithHost: self.textFieldHost.text
+																 database: self.textFieldDatabase.text
+																  andPort: self.textFieldPort.text.integerValue];
+	return databaseConnection;
 }
 
-- (NSString *)displayName {
-    return @"MySQL";
-}
+- (NSString *)displayName { return @"MySQL"; }
 
 - (void)resetInterface {
-    [super resetInterface];
+	[super resetInterface];
 }
 
 - (void)enableUserInteraction {
-    [super enableUserInteraction];
+	[super enableUserInteraction];
 }
 
 @end

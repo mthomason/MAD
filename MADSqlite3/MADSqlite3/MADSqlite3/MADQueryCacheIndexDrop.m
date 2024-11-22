@@ -23,32 +23,32 @@
 @end
 
 @implementation MADQueryCacheIndexDrop {
-    NSString *_sql;
+	NSString *_sql;
 }
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
-        
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"MADQueryCacheIndexDrop expects NSDictionary.");
-        NSNumber *keyIndexName = [[NSNumber alloc] initWithUnsignedInteger: MADQueryCacheIndexDropIndexName];
-        NSString *result = [[NSString alloc] initWithFormat:@"DROP INDEX IF EXISTS main.%@", object[keyIndexName]];
-        _sql = result;
-        
-    }
-    return self;
+	self = [super initWithObject:object];
+	if (self) {
+		
+		NSAssert([object isKindOfClass:[NSDictionary class]], @"MADQueryCacheIndexDrop expects NSDictionary.");
+		NSNumber *keyIndexName = [[NSNumber alloc] initWithUnsignedInteger: MADQueryCacheIndexDropIndexName];
+		NSString *result = [[NSString alloc] initWithFormat:@"DROP INDEX IF EXISTS main.%@", object[keyIndexName]];
+		_sql = result;
+		
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return _sql;
+	return _sql;
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheIndexDropParameters;
+	return MADQueryTypeCacheIndexDropParameters;
 }
 
 @end

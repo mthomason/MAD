@@ -15,7 +15,7 @@
 
 @property (nonatomic, readonly) NSString *string;
 
-    + (MysqlLiteral *)literalWithString:(NSString *)s;
+	+ (MysqlLiteral *)literalWithString:(NSString *)s;
 
 @end
 

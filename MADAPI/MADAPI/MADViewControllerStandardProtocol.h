@@ -11,8 +11,8 @@
 
 @protocol MADViewControllerStandardProtocol
   @optional
-    - (void)viewControllerDidFinish:(id)sender;
-    - (void)viewControllerDidCancel:(id)sender;
+	- (void)viewControllerDidFinish:(id)sender;
+	- (void)viewControllerDidCancel:(id)sender;
 @end
 
 #endif

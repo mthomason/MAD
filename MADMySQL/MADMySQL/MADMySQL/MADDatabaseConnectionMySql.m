@@ -25,59 +25,59 @@
 @dynamic identifier;
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-    
-    id dbConnection;
-    dbConnection = [[self alloc] initWithHost: credentals.host
-                                     database: credentals.database
-                                      andPort: credentals.port];
-    
-    return dbConnection;
-    
+	
+	id dbConnection;
+	dbConnection = [[self alloc] initWithHost: credentals.host
+									 database: credentals.database
+									  andPort: credentals.port];
+	
+	return dbConnection;
+	
 }
 
 - (instancetype)initWithHost:(NSString *)host
-                    database:(NSString *)database
-                     andPort:(NSInteger)port {
-    if (self = [super init]) {
-        NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-        NSString *server = [host stringByTrimmingCharactersInSet: whitespace];
-        _server = server.copy;
-        _host = host.copy;
-        _database = database.copy;
-        _port = port;
-        _databaseType = MADDatabaseTypeMySQL;
-    }
-    return self;
+					database:(NSString *)database
+					 andPort:(NSInteger)port {
+	if (self = [super init]) {
+		NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+		NSString *server = [host stringByTrimmingCharactersInSet: whitespace];
+		_server = server.copy;
+		_host = host.copy;
+		_database = database.copy;
+		_port = port;
+		_databaseType = MADDatabaseTypeMySQL;
+	}
+	return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost: _host
-                                                     database: _database
-                                                      andPort: _port];
-    return copy;
+	id copy = [[[self class] allocWithZone:zone] initWithHost: _host
+													 database: _database
+													  andPort: _port];
+	return copy;
 }
 
 - (NSString *)identifier {
-    return [[self class] Identifier];
+	return [[self class] Identifier];
 }
 
 + (NSString *)Identifier {
-    return @"MySQL";
+	return @"MySQL";
 }
 
 - (NSString *)connectionString {
-    if (!_connectionString) {
-        _connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@",
-                                self.identifier,
-                                self.server,
-                                (long)_port,
-                                _database];
-    }
-    return _connectionString;
+	if (!_connectionString) {
+		_connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@",
+								self.identifier,
+								self.server,
+								(long)_port,
+								_database];
+	}
+	return _connectionString;
 }
 
 - (BOOL)requiresCredientals {
-    return YES;
+	return YES;
 }
 
 @end

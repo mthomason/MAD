@@ -15,13 +15,13 @@
 
 @interface MADDataTableObjectEnumerator : NSEnumerator
 
-    @property (nonatomic, assign) BOOL addRowId;
-    @property (nonatomic, assign) BOOL singleColumnNoWrapper;    //No wrapper on this.
+	@property (nonatomic, assign) BOOL addRowId;
+	@property (nonatomic, assign) BOOL singleColumnNoWrapper;    //No wrapper on this.
 
-    - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
-                                       columns: (NSDictionary *)columns
-                                    columnKeys: (NSArray *)columnKeys
-                                         query: (MADQuery *)query;
+	- (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
+									   columns: (NSDictionary *)columns
+									columnKeys: (NSArray *)columnKeys
+										 query: (MADQuery *)query;
 
 @end
 

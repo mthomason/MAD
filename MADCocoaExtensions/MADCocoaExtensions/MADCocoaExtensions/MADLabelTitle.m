@@ -13,7 +13,7 @@
 
 @interface MADLabelTitle ()
 
-    @property (nonatomic, weak) UILabel *title;
+	@property (nonatomic, weak) UILabel *title;
 
 @end
 
@@ -21,49 +21,49 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 
-    UILabel *title = [[UILabel alloc] initWithFrame:frame];
-    title.autoresizingMask = MADViewAutoresizingFlexable();
-    title.translatesAutoresizingMaskIntoConstraints = YES;
-    title.lineBreakMode = NSLineBreakByTruncatingTail;
-    title.numberOfLines = 1;
-    title.minimumScaleFactor = 0.80000000f;
-    title.adjustsFontSizeToFitWidth = YES;
-    [title sizeToFit];
+	UILabel *title = [[UILabel alloc] initWithFrame:frame];
+	title.autoresizingMask = MADViewAutoresizingFlexable();
+	title.translatesAutoresizingMaskIntoConstraints = YES;
+	title.lineBreakMode = NSLineBreakByTruncatingTail;
+	title.numberOfLines = 1;
+	title.minimumScaleFactor = 0.80000000f;
+	title.adjustsFontSizeToFitWidth = YES;
+	[title sizeToFit];
 
-    if (self = [super initWithFrame:title.frame]) {
-        [self addSubview:title];
-        self.title = title;
-    }
-    return self;
+	if (self = [super initWithFrame:title.frame]) {
+		[self addSubview:title];
+		self.title = title;
+	}
+	return self;
 }
 
 - (void)setText:(NSString *)text {
 
-    NSString *safetext = text.copy;
-    
-    MADAttributedStringLogo *attributedText;
-    attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
-    
-    UILabel *title = self.title;
-    text = safetext;
-    title.attributedText = attributedText;
+	NSString *safetext = text.copy;
+	
+	MADAttributedStringLogo *attributedText;
+	attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
+	
+	UILabel *title = self.title;
+	text = safetext;
+	title.attributedText = attributedText;
 
-    [title sizeToFit];
-    self.bounds = title.bounds;
+	[title sizeToFit];
+	self.bounds = title.bounds;
 }
 
 - (NSString *)text {
-    return self.title.text;
+	return self.title.text;
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
-    self.title.frame = self.bounds;
+	[super layoutSubviews];
+	self.title.frame = self.bounds;
 }
 
 - (CGSize)intrinsicContentSize {
-    [super intrinsicContentSize];
-    return UILayoutFittingExpandedSize;
+	[super intrinsicContentSize];
+	return UILayoutFittingExpandedSize;
 }
 
 @end

@@ -12,7 +12,7 @@
 @class MADDirectoryMonitor;
 
 @protocol MADDirectoryMonitorProtocol <NSObject>
-    - (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor;
+	- (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor;
 @end
 
 #endif /* MADDirectoryMonitorProtocol_h */

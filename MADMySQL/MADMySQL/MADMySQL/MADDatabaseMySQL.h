@@ -14,11 +14,11 @@
 
 @interface MADDatabaseMySQL : MADDatabase
 
-    + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
-    - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
+	+ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+	- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
+	- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
-    - (NSString *)identifier;
+	- (NSString *)identifier;
 
 @end
 

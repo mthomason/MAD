@@ -13,12 +13,11 @@
 
 @protocol MADModelDataProtocol <NSObject>
 
-    - (instancetype)initWithIdentifier:(int64_t)identifier
-                  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+@property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
 
-    @property (nonatomic, readonly, weak)      NSManagedObjectContext *managedObjectContext;
-
-    - (void)update;
+- (instancetype)initWithIdentifier:(int64_t)identifier
+			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)update;
 
 @end
 

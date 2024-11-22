@@ -20,6 +20,17 @@
 #import "MADSectionGroupLayout.h"
 #import "NSPredicate+Creators.h"
 
+static inline NSUInteger groupHeaderIndex(NSUInteger);
+static inline NSUInteger groupFooterIndex(NSUInteger, NSUInteger);
+
+static inline NSUInteger groupHeaderIndex(NSUInteger sectionIndex) {
+	return sectionIndex - 2;
+}
+
+static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger groupCount) {
+	return (groupCount - 1) - (sectionIndex - groupCount - 3);
+}
+
 @interface MADSectionsLayout ()
 
 @property (nonatomic, readwrite, strong) NSArray <NSSortDescriptor *> *groupSortDescriptors;
@@ -27,17 +38,6 @@
 @end
 
 @implementation MADSectionsLayout
-
-static inline NSUInteger groupHeaderIndex(NSUInteger);
-static inline NSUInteger groupFooterIndex(NSUInteger, NSUInteger);
-
-static inline NSUInteger groupHeaderIndex(NSUInteger sectionIndex) {
-    return sectionIndex - 2;
-}
-
-static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger groupCount) {
-    return (groupCount - 1) - (sectionIndex - groupCount - 3);
-}
 
 - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                databaseClass:(Class)databaseClass {

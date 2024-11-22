@@ -16,8 +16,8 @@
 @interface NSError (Constructors)
 
 + (void)presentError:(NSError *)error
-    onViewController:(UIViewController *)viewController
-          completion:(void (^)(BOOL success))completion;
+	onViewController:(UIViewController *)viewController
+		  completion:(void (^)(BOOL success))completion;
 
 
 @end

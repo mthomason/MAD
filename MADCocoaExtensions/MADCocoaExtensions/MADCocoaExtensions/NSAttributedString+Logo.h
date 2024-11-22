@@ -13,7 +13,7 @@
 
 @interface MADAttributedStringLogo : NSAttributedString
 
-    + (instancetype)newLogoStringForTitle:(NSString *)title;
+	+ (instancetype)newLogoStringForTitle:(NSString *)title;
 
 @end
 

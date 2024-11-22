@@ -13,9 +13,9 @@
 
 @interface MADQuery (Sqlite3)
 
-    - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;
-    - (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
-    - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
+	- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;
+	- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
+	- (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
 
 @end
 

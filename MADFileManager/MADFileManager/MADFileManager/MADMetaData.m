@@ -19,40 +19,40 @@
 
 NSException *exceptionNotImplemented(SEL);
 NSException *exceptionNotImplemented(SEL thwoingSelector) {
-    NSString *functionName = NSStringFromSelector(thwoingSelector);
-    NSString *format = @"You must override %@ in a subclass";
-    NSString *message = [[NSString alloc] initWithFormat:format, functionName];
-    return [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:message
-                                 userInfo:nil];
+	NSString *functionName = NSStringFromSelector(thwoingSelector);
+	NSString *format = @"You must override %@ in a subclass";
+	NSString *message = [[NSString alloc] initWithFormat:format, functionName];
+	return [NSException exceptionWithName:NSInternalInconsistencyException
+								   reason:message
+								 userInfo:nil];
 }
 
 @interface MADMetaData ()
 
-    //@property (nonatomic, strong) NSMetadataItem *metadataItem;
-    //@property (nonatomic, strong) NSDictionary *attributes;
+	//@property (nonatomic, strong) NSMetadataItem *metadataItem;
+	//@property (nonatomic, strong) NSDictionary *attributes;
 
 @end
 
 @implementation MADMetaData
 
 - (instancetype)initWithURL:(NSURL *)url {
-    id metadata = [[MADMetaDataLocal alloc] initWithURL:url];
-    return metadata;
+	id metadata = [[MADMetaDataLocal alloc] initWithURL:url];
+	return metadata;
 }
 
 - (instancetype)initWithMetadataItem:(NSMetadataItem *)item {
-    id metadata = [[MADMetaDataCloud alloc] initWithMetadataItem:item];
-    return metadata;
+	id metadata = [[MADMetaDataCloud alloc] initWithMetadataItem:item];
+	return metadata;
 }
 
 + (NSArray <MADMetaData *> *)newMetaDatumForMetadataItems:(NSArray <NSMetadataItem *> *)metadataItems {
-    NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
-    for (NSMetadataItem *metadataItem in metadataItems) {
-        MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
-        [madMetaDataItems addObject:metaData];
-    }
-    return madMetaDataItems;
+	NSMutableArray *madMetaDataItems = [[NSMutableArray alloc] initWithCapacity:metadataItems.count];
+	for (NSMetadataItem *metadataItem in metadataItems) {
+		MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+		[madMetaDataItems addObject:metaData];
+	}
+	return madMetaDataItems;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone { @throw exceptionNotImplemented(_cmd); }
@@ -104,71 +104,71 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 - (BOOL)isDownloaded { @throw exceptionNotImplemented(_cmd); }
 
 - (BOOL)isSyncing {
-    return self.isUbiquitous &&
-            (self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
+	return self.isUbiquitous &&
+			(self.ubiquitousItemIsDownloading || self.ubiquitousItemIsUploading);
 }
 
 - (unsigned long long)fileSystemFileNumber {
-    NSString *path;
-    if ((path = self.URL.path)) {
-        NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-                                                                                    error: &error];
-        NSNumber *fsfn = attributes[NSFileSystemFileNumber];
-        return fsfn.unsignedLongLongValue;
-    } else {
-        return 0;
-    }
+	NSString *path;
+	if ((path = self.URL.path)) {
+		NSError *error = nil;
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+																					error: &error];
+		NSNumber *fsfn = attributes[NSFileSystemFileNumber];
+		return fsfn.unsignedLongLongValue;
+	} else {
+		return 0;
+	}
 }
 
 - (unsigned long long)fileSystemNumber {
-    NSString *path;
-    if ((path = self.URL.path)) {
-        NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-                                                                                    error: &error];
-        NSNumber *fsf = attributes[NSFileSystemNumber];
-        return fsf.unsignedLongLongValue;
-    } else {
-        return 0;
-    }
+	NSString *path;
+	if ((path = self.URL.path)) {
+		NSError *error = nil;
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+																					error: &error];
+		NSNumber *fsf = attributes[NSFileSystemNumber];
+		return fsf.unsignedLongLongValue;
+	} else {
+		return 0;
+	}
 }
 
 - (unsigned long long)st_ino {
-    struct stat sa;
-    if (stat(self.URL.path.UTF8String, &sa) < 0)
-        return 0;
-    return sa.st_ino;
+	struct stat sa;
+	if (stat(self.URL.path.UTF8String, &sa) < 0)
+		return 0;
+	return sa.st_ino;
 }
 
 - (BOOL)sameFile:(MADMetaData *)unknown {
-    return [self fileSystemNumber] == [unknown fileSystemNumber] &&
-           [self fileSystemFileNumber] == [unknown fileSystemFileNumber];
+	return [self fileSystemNumber] == [unknown fileSystemNumber] &&
+		   [self fileSystemFileNumber] == [unknown fileSystemFileNumber];
 }
 
 - (unsigned long long)sameFileHash {
-    return [self fileSystemNumber] * 2 + [self fileSystemFileNumber] * 3;
+	return [self fileSystemNumber] * 2 + [self fileSystemFileNumber] * 3;
 }
 
 - (BOOL)isEqual:(id)object {
-    if ([object isKindOfClass:[MADMetaData class]]) {
-        NSString *fileSystemNameUnknown = ((MADMetaData *)object).fileSystemName;
-        NSString *fileSystemName = self.fileSystemName;
-        return [fileSystemName isEqualToString:fileSystemNameUnknown];
-    }
-    return  NO;
+	if ([object isKindOfClass:[MADMetaData class]]) {
+		NSString *fileSystemNameUnknown = ((MADMetaData *)object).fileSystemName;
+		NSString *fileSystemName = self.fileSystemName;
+		return [fileSystemName isEqualToString:fileSystemNameUnknown];
+	}
+	return  NO;
 }
 
 - (NSUInteger)hash {
-    return self.fileSystemName.hash;
+	return self.fileSystemName.hash;
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *debug = [[NSMutableString alloc] init];
-    NSString *classname = NSStringFromClass([self class]);
-    id uppercaseClassname = [classname uppercaseString];
-    [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    return debug;
+	NSMutableString *debug = [[NSMutableString alloc] init];
+	NSString *classname = NSStringFromClass([self class]);
+	id uppercaseClassname = [classname uppercaseString];
+	[debug appendFormat:@"--%@--\n", uppercaseClassname];
+	return debug;
 }
 
 @end

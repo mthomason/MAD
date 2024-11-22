@@ -10,13 +10,13 @@
 #define MADQueryCacheSelectLimitOffsetParamaters_h
 
 typedef NS_ENUM(short, MADQueryCacheSelectLimitOffsetParamaters) {
-    MADQueryCacheSelectLimitOffsetParamatersLimit,
-    MADQueryCacheSelectLimitOffsetParamatersOffset,
-    MADQueryCacheSelectLimitOffsetParamatersTableNames,
-    MADQueryCacheSelectLimitOffsetParamatersColumnKeys,
-    MADQueryCacheSelectLimitOffsetParamatersColumns,
-    MADQueryCacheSelectLimitOffsetParamatersSortDesc,
-    MADQueryCacheSelectLimitOffsetParamatersDropRowid
+	MADQueryCacheSelectLimitOffsetParamatersLimit,
+	MADQueryCacheSelectLimitOffsetParamatersOffset,
+	MADQueryCacheSelectLimitOffsetParamatersTableNames,
+	MADQueryCacheSelectLimitOffsetParamatersColumnKeys,
+	MADQueryCacheSelectLimitOffsetParamatersColumns,
+	MADQueryCacheSelectLimitOffsetParamatersSortDesc,
+	MADQueryCacheSelectLimitOffsetParamatersDropRowid
 };
 
 #endif /* MADQueryCacheSelectLimitOffsetParamaters_h */

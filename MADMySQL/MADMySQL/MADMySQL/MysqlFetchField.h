@@ -14,13 +14,13 @@
 
 @interface MysqlFetchField : NSObject
 
-    @property(nonatomic, copy) NSString *name;
-    @property(nonatomic, assign) NSInteger fieldType;
-    @property(nonatomic, assign) NSUInteger width;
-    @property(nonatomic, assign) NSUInteger decimals;
-    @property(nonatomic, assign) BOOL primaryKey;
+	@property(nonatomic, copy) NSString *name;
+	@property(nonatomic, assign) NSInteger fieldType;
+	@property(nonatomic, assign) NSUInteger width;
+	@property(nonatomic, assign) NSUInteger decimals;
+	@property(nonatomic, assign) BOOL primaryKey;
 
-    - (instancetype)initWithField:(MYSQL_FIELD)field fieldName:(NSString *)fieldName;
+	- (instancetype)initWithField:(MYSQL_FIELD)field fieldName:(NSString *)fieldName;
 
 @end
 

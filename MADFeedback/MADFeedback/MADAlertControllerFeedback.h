@@ -15,8 +15,8 @@ typedef void(^MADAlertActionHandler)(UIAlertAction *);
 
 @interface MADAlertControllerFeedback : UIAlertController
 
-    + (instancetype)newAlertControllerFeedbackWithHandler:(MADAlertActionHandler)handler
-                                                   cancel:(MADAlertActionHandler)handlerCancel;
+	+ (instancetype)newAlertControllerFeedbackWithHandler:(MADAlertActionHandler)handler
+												   cancel:(MADAlertActionHandler)handlerCancel;
 
 @end
 

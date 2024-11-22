@@ -13,7 +13,7 @@
 
 @interface MADQueryCacheDeleteAllFromTable : MADQuery
 
-    - (instancetype)initWithTableName:(NSString *)tableName;
+	- (instancetype)initWithTableName:(NSString *)tableName;
 
 @end
 

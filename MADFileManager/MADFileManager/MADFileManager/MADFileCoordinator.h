@@ -15,15 +15,15 @@
 
 @interface MADFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 
-    + (instancetype)newFileCoordinatorWithPathExtension: (NSString *)pathExtension
-                                          storageOption: (MADAppStorage)storageOption
-                                             identifier: (NSString *)identifier
-                                      firstQueryHandler: (void (^)(void))firstQueryHandler;
+	+ (instancetype)newFileCoordinatorWithPathExtension: (NSString *)pathExtension
+										  storageOption: (MADAppStorage)storageOption
+											 identifier: (NSString *)identifier
+									  firstQueryHandler: (void (^)(void))firstQueryHandler;
 
-    + (instancetype)newFileCoordinatorWithLastPathComponent: (NSString *)lastPathComponent
-                                              storageOption: (MADAppStorage)storageOption
-                                                 identifier: (NSString *)identifier
-                                          firstQueryHandler: (void (^)(void))firstQueryHandler;
+	+ (instancetype)newFileCoordinatorWithLastPathComponent: (NSString *)lastPathComponent
+											  storageOption: (MADAppStorage)storageOption
+												 identifier: (NSString *)identifier
+										  firstQueryHandler: (void (^)(void))firstQueryHandler;
 @end
 
 #endif

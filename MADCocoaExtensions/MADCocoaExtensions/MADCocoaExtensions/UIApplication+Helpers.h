@@ -13,7 +13,7 @@
 
 @interface MADStackViewController : UIViewController
 
-    + (instancetype)topViewController NS_RETURNS_NOT_RETAINED;
+	+ (instancetype)topViewController NS_RETURNS_NOT_RETAINED;
 
 @end
 

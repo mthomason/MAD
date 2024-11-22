@@ -15,9 +15,9 @@
 extern NSString * const MADNotificationIdentifierFileUpdate;
 
 @interface MADNotificationFileUpdate : NSObject
-    <MADNotificationProtocol>
+	<MADNotificationProtocol>
 
-  - (instancetype)initWithURL:(NSURL *)url NS_DESIGNATED_INITIALIZER;
+	- (instancetype)initWithURL:(NSURL *)url NS_DESIGNATED_INITIALIZER;
 
 @end
 

@@ -18,18 +18,18 @@
 
 @interface MADReportFormatterState : NSObject
 
-    - (instancetype)init;
+	- (instancetype)init;
 
-    - (void)reset;
+	- (void)reset;
 
-    @property (nonatomic, assign) NSUInteger detailRowId;
-    @property (nonatomic, assign) NSUInteger detailRowIdLast;
+	@property (nonatomic, assign) NSUInteger detailRowId;
+	@property (nonatomic, assign) NSUInteger detailRowIdLast;
 
-    @property (nonatomic, assign) NSUInteger groupCounter;
-    @property (nonatomic, assign) NSUInteger pageCounter;
-    @property (nonatomic, assign) NSUInteger rowCounter;
+	@property (nonatomic, assign) NSUInteger groupCounter;
+	@property (nonatomic, assign) NSUInteger pageCounter;
+	@property (nonatomic, assign) NSUInteger rowCounter;
 
-    @property (nonatomic, assign) CGFloat cumulativePageHeight;
+	@property (nonatomic, assign) CGFloat cumulativePageHeight;
 
 @end
 

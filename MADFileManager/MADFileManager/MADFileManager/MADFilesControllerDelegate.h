@@ -15,33 +15,33 @@
 
   @optional
 
-    - (void)filesControllerWillChangeContent:(MADFilesController *)filesController;
+	- (void)filesControllerWillChangeContent:(MADFilesController *)filesController;
 
-    - (void)filesController:(MADFilesController *)filesController
-          didInsertFileInfo:(MADMetaData *)fileInfo atIndex:(NSUInteger)index;
+	- (void)filesController:(MADFilesController *)filesController
+		  didInsertFileInfo:(MADMetaData *)fileInfo atIndex:(NSUInteger)index;
 
-    - (void)filesController:(MADFilesController *)filesController
-          didRemoveFileInfo:(MADMetaData *)fileInfo atIndex:(NSUInteger)index;
+	- (void)filesController:(MADFilesController *)filesController
+		  didRemoveFileInfo:(MADMetaData *)fileInfo atIndex:(NSUInteger)index;
 
-    - (void)filesController:(MADFilesController *)filesController
-          didUpdateFileInfo:(MADMetaData *)fileInfo atIndex:(NSUInteger)index;
+	- (void)filesController:(MADFilesController *)filesController
+		  didUpdateFileInfo:(MADMetaData *)fileInfo atIndex:(NSUInteger)index;
 
-    - (void)filesControllerDidChangeContent:(MADFilesController *)filesController
-                                 completion:(void (^)(BOOL success, NSError *error))completion;
-    - (void)filesController:(MADFilesController *)filesController
-    didFailCreatingFileInfo:(MADMetaData *)fileInfo
-                  withError:(NSError *)error;
-    - (void)filesController:(MADFilesController *)filesController
-    didFailRemovingFileInfo:(MADMetaData *)fileInfo
-                  withError:(NSError *)error;
+	- (void)filesControllerDidChangeContent:(MADFilesController *)filesController
+								 completion:(void (^)(BOOL success, NSError *error))completion;
+	- (void)filesController:(MADFilesController *)filesController
+	didFailCreatingFileInfo:(MADMetaData *)fileInfo
+				  withError:(NSError *)error;
+	- (void)filesController:(MADFilesController *)filesController
+	didFailRemovingFileInfo:(MADMetaData *)fileInfo
+				  withError:(NSError *)error;
 
-    - (void)filesController:(MADFilesController *)filesController
+	- (void)filesController:(MADFilesController *)filesController
  didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
-                  withError:(NSError *)error;
+				  withError:(NSError *)error;
 
-    - (void)filesController:(MADFilesController *)filesController
-    didFailRenamingFileInfo:(MADMetaData *)fileInfo
-                  withError:(NSError *)error;
+	- (void)filesController:(MADFilesController *)filesController
+	didFailRenamingFileInfo:(MADMetaData *)fileInfo
+				  withError:(NSError *)error;
 
 @end
 

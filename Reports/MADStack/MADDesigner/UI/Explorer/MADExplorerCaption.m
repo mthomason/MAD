@@ -14,27 +14,27 @@
 @implementation MADExplorerCaption
 
 + (instancetype)newExplorerCaption:(NSString *)text {
-    
-    id attributes;
-    NSString *caption = text.copy;
-    UIFont *font;
-    NSMutableParagraphStyle *paragraphStyle;
-    id kern = [NSNull null];
-    
-    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    
-    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    
-    attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-                    kern, NSKernAttributeName,
-                    font, NSFontAttributeName,
-                    paragraphStyle, NSParagraphStyleAttributeName, nil];
-    id attributedString = [[NSMutableAttributedString alloc] initWithString: caption
-                                                                 attributes: attributes];
-    return attributedString;
+	
+	id attributes;
+	NSString *caption = text.copy;
+	UIFont *font;
+	NSMutableParagraphStyle *paragraphStyle;
+	id kern = [NSNull null];
+	
+	paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+	paragraphStyle.alignment = NSTextAlignmentCenter;
+	
+	font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+	
+	attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+					kern, NSKernAttributeName,
+					font, NSFontAttributeName,
+					paragraphStyle, NSParagraphStyleAttributeName, nil];
+	id attributedString = [[NSMutableAttributedString alloc] initWithString: caption
+																 attributes: attributes];
+	return attributedString;
 }
 
 @end

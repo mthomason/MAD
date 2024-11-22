@@ -17,7 +17,7 @@
 #import <MADAPI/MADQueryType.h>
 
 @interface MADQueryCacheDropTable ()
-    @property (nonatomic, copy) NSString *tableName;
+	@property (nonatomic, copy) NSString *tableName;
 @end
 
 @implementation MADQueryCacheDropTable
@@ -25,27 +25,27 @@
 // FIXME: This is currently SQLite specific.
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super init]) {
-        
-        NSString *tableName = [[NSString alloc] initWithString: object];
-        self.tableName = tableName;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		NSString *tableName = [[NSString alloc] initWithString: object];
+		self.tableName = tableName;
+		
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    NSString *tablename = self.tableName;
-    NSString * __autoreleasing Sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", tablename];
-    return Sql;
+	NSString *tablename = self.tableName;
+	NSString * __autoreleasing Sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", tablename];
+	return Sql;
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheDropTable;
+	return MADQueryTypeCacheDropTable;
 }
 
 @end

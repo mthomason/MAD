@@ -29,15 +29,15 @@ extern NSString * const MADKeyQueryLinkLeftTableID;
 extern NSString * const MADKeyQueryLinkRightTableID;
 
 @interface MADModel : NSObject
-    <MADModelIDProtocol> {
+	<MADModelIDProtocol> {
   @protected
-    int64_t _uid;
+	int64_t _uid;
 }
 
-    + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext;
-    - (instancetype)initWithIdentifier:(int64_t)identifier NS_DESIGNATED_INITIALIZER;
+	+ (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithIdentifier:(int64_t)identifier NS_DESIGNATED_INITIALIZER;
 
-    - (NSNumber *)objectID;
+	- (NSNumber *)objectID;
 
 @end
 

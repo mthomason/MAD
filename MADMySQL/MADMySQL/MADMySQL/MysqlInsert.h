@@ -14,18 +14,18 @@
 @class MysqlConnection;
 
 @interface MysqlInsert : NSObject {
-    MysqlConnection *connection;
+	MysqlConnection *connection;
 }
 
-    @property(nonatomic, readwrite, assign) BOOL ignoreDuplicateErrors;
+	@property(nonatomic, readwrite, assign) BOOL ignoreDuplicateErrors;
 
-    @property(nonatomic, readwrite, copy) NSString *table;
-    @property(nonatomic, readwrite, copy) NSDictionary  *rowData;
-    @property(nonatomic, readonly, strong) NSNumber *affectedRows;
-    @property(nonatomic, readonly, strong) NSNumber *rowid;
+	@property(nonatomic, readwrite, copy) NSString *table;
+	@property(nonatomic, readwrite, copy) NSDictionary  *rowData;
+	@property(nonatomic, readonly, strong) NSNumber *affectedRows;
+	@property(nonatomic, readonly, strong) NSNumber *rowid;
 
-    + (MysqlInsert *)insertWithConnection:(MysqlConnection *)aConnection;
-    - (void)execute;
+	+ (MysqlInsert *)insertWithConnection:(MysqlConnection *)aConnection;
+	- (void)execute;
 
 @end
 

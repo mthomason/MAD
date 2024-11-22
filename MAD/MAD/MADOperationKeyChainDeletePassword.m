@@ -20,9 +20,7 @@
 
 @implementation MADOperationKeyChainDeletePassword
 
-- (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithKey:(NSString *)key {
     if (self = [super init]) {
@@ -35,20 +33,18 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+	if (self.cancelled) {
+		return [self finish];
+	}
 
-    if (self.cancelled) {
-        return [self finish];
-    }
-
-    NSAssert(_key != nil, @"Need a key.");
-    NSError * __autoreleasing error = nil;
-    [MADKeyChain deleteSavedPasswordForKey: _key error: &error];
-    if (error != nil) {
-        [self finishWithError:error];
-    } else {
-        [self finish];
-    }
+	NSAssert(_key != nil, @"Need a key.");
+	NSError * __autoreleasing error = nil;
+	[MADKeyChain deleteSavedPasswordForKey: _key error: &error];
+	if (error != nil) {
+		[self finishWithError:error];
+	} else {
+		[self finish];
+	}
 }
 
 @end

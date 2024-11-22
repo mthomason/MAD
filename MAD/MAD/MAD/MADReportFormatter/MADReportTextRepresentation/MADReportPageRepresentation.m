@@ -14,7 +14,7 @@ typedef NSMutableArray <__kindof MADReportSectionRepresentation *> MADReportSect
 
 @interface MADReportPageRepresentation ()
 
-    @property (nonatomic, strong, getter=hasSections) MADReportSectionArray *sections;
+	@property (nonatomic, strong, getter=hasSections) MADReportSectionArray *sections;
 
 @end
 
@@ -24,48 +24,48 @@ typedef NSMutableArray <__kindof MADReportSectionRepresentation *> MADReportSect
 @synthesize characterOffset = _characterOffset;
 
 - (void)dealloc {
-    [_sections removeAllObjects];
+	[_sections removeAllObjects];
 }
 
 - (instancetype)init {
-    id r = [self initWithNumberOfSections: 0];
-    return r;
+	id r = [self initWithNumberOfSections: 0];
+	return r;
 }
 
 - (instancetype)initWithNumberOfSections:(NSUInteger)count {
-    if (self = [super init]) {
-        id sections;
-        sections = count > 0 ? [[MADReportSectionArray alloc] initWithCapacity:count] :
-                               [[MADReportSectionArray alloc] init];
-        _sections = sections;
-    }
-    return self;
+	if (self = [super init]) {
+		id sections;
+		sections = count > 0 ? [[MADReportSectionArray alloc] initWithCapacity:count] :
+							   [[MADReportSectionArray alloc] init];
+		_sections = sections;
+	}
+	return self;
 }
 
 - (void)addSection:(nonnull MADReportSectionRepresentation *)section {
-    [self.sections addObject:section];
+	[self.sections addObject:section];
 }
 
 - (NSUInteger)numberOfSections {
-    return self.sections.count;
+	return self.sections.count;
 }
 
 #pragma mark - MADTextRepresentationProtocol
 
 - (NSUInteger)characterCount {
-    NSUInteger characterCount = 0;
-    for (MADReportSectionRepresentation *section in self.sections) {
-        characterCount += [section characterCount];
-    }
-    return characterCount;
+	NSUInteger characterCount = 0;
+	for (MADReportSectionRepresentation *section in self.sections) {
+		characterCount += [section characterCount];
+	}
+	return characterCount;
 }
 
 - (NSUInteger)elementCount {
-    NSUInteger elementCount = 0;
-    for (MADReportSectionRepresentation *section in self.sections) {
-        elementCount += [section elementCount];
-    }
-    return elementCount;
+	NSUInteger elementCount = 0;
+	for (MADReportSectionRepresentation *section in self.sections) {
+		elementCount += [section elementCount];
+	}
+	return elementCount;
 }
 
 @end

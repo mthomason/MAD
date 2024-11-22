@@ -11,14 +11,14 @@
 
 @protocol MADDocumentManagerProtocol <NSObject>
 
-    - (void)documentManagerDidChangeContent:(NSArray *)inserts
-                                    removes:(NSArray *)removes
-                                    updates:(NSArray *)updates
-                                 completion:(void (^)(BOOL, NSError *))completion;
+	- (void)documentManagerDidChangeContent:(NSArray *)inserts
+									removes:(NSArray *)removes
+									updates:(NSArray *)updates
+								 completion:(void (^)(BOOL, NSError *))completion;
 
-    - (void)handleDidDisconnectFromClound:(id)sender;
-    - (void)handleDidStartLongRunningActivity;
-    - (void)handleDidCompletedLongRunningActivity;
+	- (void)handleDidDisconnectFromClound:(id)sender;
+	- (void)handleDidStartLongRunningActivity;
+	- (void)handleDidCompletedLongRunningActivity;
 
 @end
 

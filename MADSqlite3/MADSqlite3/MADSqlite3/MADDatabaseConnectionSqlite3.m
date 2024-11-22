@@ -30,60 +30,60 @@
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
 
-    id dbConnection;
-    //dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
-    
-    NSString *databaseFilename = credentals.database.copy;
-    
-    // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
-    //          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
-    //          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
-    
-    MADURL *appSupportDirectory;
-    id groupIdentifier = [MADApplication groupIdentifier];
-    appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
-    
-    NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
-                                                        isDirectory: NO];
-    NSString *path = dbUrl.path.copy;
-    NSURL *databaseUrl = path != nil ? [[NSURL alloc] initFileURLWithPath: path] : nil;
-    dbConnection = [[self alloc] initWithUrl:databaseUrl];
-    return dbConnection;
-    
+	id dbConnection;
+	//dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+	
+	NSString *databaseFilename = credentals.database.copy;
+	
+	// FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
+	//          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
+	//          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
+	
+	MADURL *appSupportDirectory;
+	id groupIdentifier = [MADApplication groupIdentifier];
+	appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
+	
+	NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
+														isDirectory: NO];
+	NSString *path = dbUrl.path.copy;
+	NSURL *databaseUrl = path != nil ? [[NSURL alloc] initFileURLWithPath: path] : nil;
+	dbConnection = [[self alloc] initWithUrl:databaseUrl];
+	return dbConnection;
+	
 }
 
 - (instancetype)initWithUrl:(NSURL *)url {
-    if (self = [super init]) {
-        _databaseUrl = url.copy;
-        _databaseType = MADDatabaseTypeSqlite3;
-    }
-    return self;
+	if (self = [super init]) {
+		_databaseUrl = url.copy;
+		_databaseType = MADDatabaseTypeSqlite3;
+	}
+	return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithUrl:self.databaseUrl];
-    return copy;
+	id copy = [[[self class] allocWithZone:zone] initWithUrl:self.databaseUrl];
+	return copy;
 }
 
 - (NSString *)connectionString {
-    if (!_connectionString) {
-        _connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]",
-                             self.identifier, self.databaseUrl];
-    }
-    return _connectionString;
+	if (!_connectionString) {
+		_connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]",
+							 self.identifier, self.databaseUrl];
+	}
+	return _connectionString;
 ;
 }
 
 - (NSString *)identifier {
-    return [[self class] Identifier];
+	return [[self class] Identifier];
 }
 
 + (NSString *)Identifier {
-    return @"Sqlite 3";
+	return @"Sqlite 3";
 }
 
 - (BOOL)requiresCredientals {
-    return NO;
+	return NO;
 }
 
 @end

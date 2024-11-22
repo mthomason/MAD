@@ -13,9 +13,9 @@
 
 @protocol MADOperationHoldsCredentialsProtocol <NSObject>
 
-    - (MADCredential *)credentials;
-    - (BOOL)gotCredentials;
-    - (BOOL)manuallyInputtedCredentials;
+	- (MADCredential *)credentials;
+	- (BOOL)gotCredentials;
+	- (BOOL)manuallyInputtedCredentials;
 
 @end
 

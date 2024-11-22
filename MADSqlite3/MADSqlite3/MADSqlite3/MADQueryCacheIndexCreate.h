@@ -12,7 +12,7 @@
 #import <MADAPI/MADQuery.h>
 
 @interface MADQueryCacheIndexCreate : MADQuery
-    <MADQueryDataDelegateProtocol>
+	<MADQueryDataDelegateProtocol>
 
 @end
 

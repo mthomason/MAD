@@ -11,12 +11,12 @@
 @implementation MADocumentState
 
 - (instancetype)init {
-    if (self = [super init]) {
-        self.saveInProgress = NO;
-        self.needsSave = NO;
-        self.contextChagned = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		self.saveInProgress = NO;
+		self.needsSave = NO;
+		self.contextChagned = NO;
+	}
+	return self;
 }
 
 @end

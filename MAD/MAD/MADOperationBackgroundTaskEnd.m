@@ -16,30 +16,25 @@
 
 @implementation MADOperationBackgroundTaskEnd
 
-- (void)dealloc {
-    ////os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
-
-    UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-    NSArray<NSOperation *> *dependencies = self.dependencies;
-    for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADOperationBackgroundTaskProtocol)]) {
-            backgroundTaskIdentifier = [(id <MADOperationBackgroundTaskProtocol>)dependency backgroundTaskIdentifier];
-        }
-    }
-    if (backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
-        [self finish];
-    } else {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:23 userInfo:nil];
-        [self finishWithError:error];
-    }
-
+	UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+	NSArray<NSOperation *> *dependencies = self.dependencies;
+	for (NSOperation *dependency in dependencies) {
+		if ([dependency conformsToProtocol:@protocol(MADOperationBackgroundTaskProtocol)]) {
+			backgroundTaskIdentifier = [(id <MADOperationBackgroundTaskProtocol>)dependency backgroundTaskIdentifier];
+		}
+	}
+	if (backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+		[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
+		[self finish];
+	} else {
+		NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:23 userInfo:nil];
+		[self finishWithError:error];
+	}
 }
 
 @end

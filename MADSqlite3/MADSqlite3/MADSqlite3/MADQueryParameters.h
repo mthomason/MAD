@@ -12,19 +12,19 @@
 #import <Foundation/NSObject.h>
 
 @protocol MADQueryParametersStandardProtocol <NSObject>
-    - (NSString *)queryTableName;
+	- (NSString *)queryTableName;
 @end
 
 @protocol MADQueryParametersColumnKeysProtocol <NSObject>
-    - (NSArray <NSString *> *)queryColumnKeys;
+	- (NSArray <NSString *> *)queryColumnKeys;
 @end
 
 @protocol MADQueryParametersColumnMetaProtocol <NSObject>
-    - (NSDictionary *)queryColumns;
+	- (NSDictionary *)queryColumns;
 @end
 
 @protocol MADQueryParametersColumnDataProtocol <NSObject>
-    - (NSArray *)queryRowData;
+	- (NSArray *)queryRowData;
 @end
 
 @interface MADQueryParameters : NSObject
@@ -32,10 +32,10 @@
 @end
 /*
 @interface MADQueryParametersCacheAddRow : MADQueryParameters
-    <MADQueryParametersStandardProtocol,
-        MADQueryParametersColumnKeysProtocol,
-        MADQueryParametersColumnMetaProtocol,
-        MADQueryParametersColumnDataProtocol>
+	<MADQueryParametersStandardProtocol,
+		MADQueryParametersColumnKeysProtocol,
+		MADQueryParametersColumnMetaProtocol,
+		MADQueryParametersColumnDataProtocol>
 
 @end
 */

@@ -1624,13 +1624,6 @@
 			name = Operations;
 			sourceTree = "<group>";
 		};
-		4CB98DDB1F455A7E0043B583 /* KeyChain */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = KeyChain;
-			sourceTree = "<group>";
-		};
 		4CB98DF51F459B700043B583 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1642,13 +1635,6 @@
 				4CC282091BADE81A00775B72 /* MADActivityIndicator.m */,
 			);
 			name = UI;
-			sourceTree = "<group>";
-		};
-		4CB98DFF1F475F850043B583 /* Data Structures */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Data Structures";
 			sourceTree = "<group>";
 		};
 		4CC283C91BADE90600775B72 /* rptq */ = {
@@ -1930,11 +1916,9 @@
 		4CF781461BADE5EA0050A67D /* MAD */ = {
 			isa = PBXGroup;
 			children = (
-				4CB98DFF1F475F850043B583 /* Data Structures */,
 				4CB98DF51F459B700043B583 /* UI */,
 				4CE3194F1E4D971000EB5B85 /* Types */,
 				4CE319501E4D971500EB5B85 /* Protocols */,
-				4CB98DDB1F455A7E0043B583 /* KeyChain */,
 				4CB98DA61F43F0860043B583 /* Operations */,
 				4CF781471BADE5EA0050A67D /* MAD.h */,
 				4CC281F21BADE80500775B72 /* MADConstants.h */,

@@ -14,15 +14,15 @@
 @class MysqlConnection;
 
 @interface MysqlTruncate : NSObject {
-    NSString *tableName;
-    MysqlConnection *connection;
+	NSString *tableName;
+	MysqlConnection *connection;
 }
 
-    @property(nonatomic, copy) NSString *tableName;
+	@property(nonatomic, copy) NSString *tableName;
 
-    + (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection;
-    + (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection forTable:(NSString *)aTableName;
-    - (void)execute;
+	+ (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection;
+	+ (MysqlTruncate *)truncateWithConnection:(MysqlConnection *)aConnection forTable:(NSString *)aTableName;
+	- (void)execute;
 
 @end
 

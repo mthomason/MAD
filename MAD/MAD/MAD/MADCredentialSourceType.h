@@ -10,11 +10,11 @@
 #define MAD_MADCredentialSourceType_h
 
 typedef NS_ENUM(short, MADCredentialSource) {
-    MADCredentialSourceUnknown,
-    MADCredentialSourceNone,
-    MADCredentialSourceKeychain,
-    MADCredentialSourceCredentialPrompt,
-    MADCredentialSourcePasswordPrompt,
+	MADCredentialSourceUnknown,
+	MADCredentialSourceNone,
+	MADCredentialSourceKeychain,
+	MADCredentialSourceCredentialPrompt,
+	MADCredentialSourcePasswordPrompt,
 };
 
 #endif /* MADCredentialSourceType_h */

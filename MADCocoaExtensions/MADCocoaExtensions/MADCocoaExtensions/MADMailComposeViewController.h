@@ -13,14 +13,14 @@
 
 @interface MADMailComposeViewController : MFMailComposeViewController
 
-    + (instancetype)newMailComposeViewControllerWithTitle: (NSString *)title
-                                                     body: (NSString *)body
-                                       userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom;
+	+ (instancetype)newMailComposeViewControllerWithTitle: (NSString *)title
+													 body: (NSString *)body
+									   userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom;
 
-    + (instancetype)newMailComposeViewControllerWithBody: (NSString *)body
-                                              attachment: (NSURL *)attachmentURL
-                                                mimeType: (NSString *)mimeType
-                                      userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom;
+	+ (instancetype)newMailComposeViewControllerWithBody: (NSString *)body
+											  attachment: (NSURL *)attachmentURL
+												mimeType: (NSString *)mimeType
+									  userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom;
 
 @end
 

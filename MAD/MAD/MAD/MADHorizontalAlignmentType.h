@@ -12,13 +12,13 @@
 #import <sys/types.h>
 
 typedef enum MADHorizontalAlignment : int16_t {
-    MADHorizontalAlignmentUnknown = -1,
-    MADHorizontalAlignmentLeft = 0,
-    MADHorizontalAlignmentCenter = 1,
-    MADHorizontalAlignmentRight = 2,
-    MADHorizontalAlignmentJustified = 3,
-    MADHorizontalAlignmentNatrual = 4,
-    
+	MADHorizontalAlignmentUnknown = -1,
+	MADHorizontalAlignmentLeft = 0,
+	MADHorizontalAlignmentCenter = 1,
+	MADHorizontalAlignmentRight = 2,
+	MADHorizontalAlignmentJustified = 3,
+	MADHorizontalAlignmentNatrual = 4,
+	
 } MADHorizontalAlignment;
 
 #endif /* MADHorizontalAlignmentType_h */

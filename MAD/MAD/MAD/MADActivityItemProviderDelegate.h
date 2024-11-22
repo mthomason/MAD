@@ -10,7 +10,7 @@
 #define MAD_MADActivityItemProviderDelegate_h
 
 @protocol MADActivityItemProviderDelegate <NSObject>
-    - (void)showPrintDialog;
+	- (void)showPrintDialog;
 @end
 
 #endif /* MADActivityItemProviderDelegate_h */

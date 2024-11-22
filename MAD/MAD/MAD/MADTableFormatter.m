@@ -18,13 +18,13 @@
 @dynamic didRefresh;
 
 - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query {
-    if (self = [super initWithQuery:query]) {
+	if (self = [super initWithQuery:query]) {
 
-        self.query = query;
-        self.didRefresh = NO;
-        
-    }
-    return self;
+		self.query = query;
+		self.didRefresh = NO;
+		
+	}
+	return self;
 }
 
 #pragma mark - Reading cached data

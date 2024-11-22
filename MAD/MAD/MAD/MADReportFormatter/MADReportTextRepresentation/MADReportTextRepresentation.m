@@ -15,7 +15,7 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 
 @interface MADReportTextRepresentation ()
 
-    @property (nonatomic, strong, getter=hasPages, readwrite) MADReportPageMap *pages;
+	@property (nonatomic, strong, getter=hasPages, readwrite) MADReportPageMap *pages;
 
 @end
 
@@ -24,36 +24,36 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
 - (void)dealloc {
-    [_pages removeAllObjects];
+	[_pages removeAllObjects];
 }
 
 - (instancetype)init {
-    id r = [self initWithPageCount: 0];
-    return r;
+	id r = [self initWithPageCount: 0];
+	return r;
 }
 
 - (instancetype)initWithPageCount:(NSUInteger)pageCount {
-    if (self = [super init]) {
-        id pages = pageCount > 0 ? [[MADReportPageMap alloc] initWithCapacity:pageCount] :
-                                   [[MADReportPageMap alloc] init];
-        _pages = pages;
-    }
-    return self;
+	if (self = [super init]) {
+		id pages = pageCount > 0 ? [[MADReportPageMap alloc] initWithCapacity:pageCount] :
+								   [[MADReportPageMap alloc] init];
+		_pages = pages;
+	}
+	return self;
 }
 
 - (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex {
-    id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
-    MADReportPageRepresentation *result = self.pages[p];
-    return result;
+	id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
+	MADReportPageRepresentation *result = self.pages[p];
+	return result;
 }
 
 - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex {
-    id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
-    (self.pages)[p] = page;
+	id p = [[NSNumber alloc] initWithUnsignedInteger: pageIndex];
+	(self.pages)[p] = page;
 }
 
 - (void)removeAllPages {
-    [self.pages removeAllObjects];
+	[self.pages removeAllObjects];
 }
 
 - (NSUInteger)numberOfPages { return self.pages.count; }
@@ -61,19 +61,19 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 #pragma mark - MADTextRepresentationProtocol
 
 - (NSUInteger)characterCount {
-    NSUInteger characterCount = 0;
-    for (MADReportPageRepresentation *page in self.pages) {
-        characterCount += [page characterCount];
-    }
-    return characterCount;
+	NSUInteger characterCount = 0;
+	for (MADReportPageRepresentation *page in self.pages) {
+		characterCount += [page characterCount];
+	}
+	return characterCount;
 }
 
 - (NSUInteger)elementCount {
-    NSUInteger elementCount = 0;
-    for (MADReportPageRepresentation *page in self.pages) {
-        elementCount += [page elementCount];
-    }
-    return elementCount;
+	NSUInteger elementCount = 0;
+	for (MADReportPageRepresentation *page in self.pages) {
+		elementCount += [page elementCount];
+	}
+	return elementCount;
 }
 
 @end

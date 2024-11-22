@@ -16,54 +16,50 @@
 
 @interface MADOperationUniqueUrlForFilename ()
 
-    @property (nonatomic, copy) NSString *desiredFilename;
-    @property (nonatomic, copy) NSString *pathExtension;
-    @property (nonatomic, copy) NSURL *documentsDirectory;
-    @property (nonatomic, copy, readwrite) NSURL *uniqueUrl;
+	@property (nonatomic, copy) NSString *desiredFilename;
+	@property (nonatomic, copy) NSString *pathExtension;
+	@property (nonatomic, copy) NSURL *documentsDirectory;
+	@property (nonatomic, copy, readwrite) NSURL *uniqueUrl;
 
 @end
 
 @implementation MADOperationUniqueUrlForFilename
 
-- (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
-                  andDocumentsDirectory:(NSURL *)documentsDirectory {
-    if (self = [super init]) {
-        _desiredFilename = filename.copy;
-        _pathExtension = pathExtension.copy;
-        _documentsDirectory = documentsDirectory.copy;
-    }
-    return self;
+				  andDocumentsDirectory:(NSURL *)documentsDirectory {
+	if (self = [super init]) {
+		_desiredFilename = filename.copy;
+		_pathExtension = pathExtension.copy;
+		_documentsDirectory = documentsDirectory.copy;
+	}
+	return self;
 }
 
 - (BOOL)isAsynchronous {
-    return YES;
+	return YES;
 }
 
 - (void)execute {
-    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
+	if (self.cancelled) {
+		return [self finish];
+	}
 
-    if (self.cancelled) {
-        return [self finish];
-    }
-
-    NSURL *uniqueUrl = [MADURL newURLUniqueUrlInDirectory: self.documentsDirectory
-                                        withDesiredHandle: self.desiredFilename
-                                             andExtension: self.pathExtension];
+	NSURL *uniqueUrl = [MADURL newURLUniqueUrlInDirectory: self.documentsDirectory
+										withDesiredHandle: self.desiredFilename
+											 andExtension: self.pathExtension];
 
 
-    if (uniqueUrl != nil) {
-        self.uniqueUrl = uniqueUrl;
-        [self finish];
-    } else {
-        NSString *domain = NSStringFromClass(self.class);
-        NSError *error = [NSError errorWithDomain:domain code:389 userInfo:nil];
-        [self finishWithError:error];
-    }
-    
+	if (uniqueUrl != nil) {
+		self.uniqueUrl = uniqueUrl;
+		[self finish];
+	} else {
+		NSString *domain = NSStringFromClass(self.class);
+		NSError *error = [NSError errorWithDomain:domain code:389 userInfo:nil];
+		[self finishWithError:error];
+	}
+	
 }
 
 @end

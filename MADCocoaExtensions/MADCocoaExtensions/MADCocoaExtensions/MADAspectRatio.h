@@ -10,9 +10,9 @@
 #define MADAspectRatio_h
 
 typedef NS_ENUM(NSUInteger, MADAspectRatio) {
-    stretch,
-    skew,
-    fixed
+	stretch,
+	skew,
+	fixed
 };
 
 #endif /* MADAspectRatio_h */

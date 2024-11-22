@@ -16,15 +16,15 @@
 @class MADReportSectionRowsRepresentation;
 
 @interface MADReportSectionRepresentation : NSObject
-    <MADTextRepresentationProtocol>
+	<MADTextRepresentationProtocol>
 
-    @property (readonly) NSUInteger numberOfRows;
-    @property (nonatomic, assign, getter=isVisibile) BOOL visibility;
-    @property (nonatomic, assign) MADDocumentSectionType type;
+	@property (readonly) NSUInteger numberOfRows;
+	@property (nonatomic, assign, getter=isVisibile) BOOL visibility;
+	@property (nonatomic, assign) MADDocumentSectionType type;
 
-    - (nonnull instancetype)initWithNumberOfRows:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
-    - (BOOL)addRow:(nonnull MADReportSectionRowsRepresentation *)row
-             error:(NSError * __nullable __autoreleasing * __nullable)error;
+	- (nonnull instancetype)initWithNumberOfRows:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+	- (BOOL)addRow:(nonnull MADReportSectionRowsRepresentation *)row
+			 error:(NSError * __nullable __autoreleasing * __nullable)error;
 
 @end
 

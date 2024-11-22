@@ -12,10 +12,10 @@
 #import <MADAPI/MADQuery.h>
 
 @interface MADQueryCacheSelectRowIds : MADQuery
-    <MADQueryColumnsProtocol>
+	<MADQueryColumnsProtocol>
 
 - (instancetype)initWithRowIDs:(NSArray *)rowIDs tableName:(NSString *)tableName
-               sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns;
+			   sortDescriptors:(NSArray *)sortDescriptors columns:(NSDictionary *)columns;
 
 @end
 

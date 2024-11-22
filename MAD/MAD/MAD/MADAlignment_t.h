@@ -13,8 +13,8 @@
 #import <MAD/MADVerticalAlignmentType.h>
 
 struct MADAlignment_t {
-    MADHorizontalAlignment horizontal;
-    MADVerticalAlignment vertical;
+	MADHorizontalAlignment horizontal;
+	MADVerticalAlignment vertical;
 };
 typedef struct MADAlignment_t MADAlignment_t;
 

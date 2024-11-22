@@ -11,43 +11,43 @@
 @implementation MADAlertControllerFeedback
 
 + (instancetype)newAlertControllerFeedbackWithHandler:(MADAlertActionHandler)handler
-                                               cancel:(MADAlertActionHandler)handlerCancel {
-    
-    id alertController;
-    UIAlertAction *actionYes, *actionCancel;
-    NSString *title, *localizedTitle,
-             *yes, *localizedYes,
-             *cancel, *localizedCancel,
-             *message, *localizedMessage;
+											   cancel:(MADAlertActionHandler)handlerCancel {
+	
+	id alertController;
+	UIAlertAction *actionYes, *actionCancel;
+	NSString *title, *localizedTitle,
+			 *yes, *localizedYes,
+			 *cancel, *localizedCancel,
+			 *message, *localizedMessage;
 
-    title = @"Feedback";
-    localizedTitle = NSLocalizedString(title, title);
-    
-    message = @"We would love to know what you think.  "
-                     @"Do you want to send us feedback?";
-    localizedMessage = NSLocalizedString(message, message);
-    
-    yes = @"Yes";
-    localizedYes = NSLocalizedString(yes, yes);
+	title = @"Feedback";
+	localizedTitle = NSLocalizedString(title, title);
+	
+	message = @"We would love to know what you think.  "
+					 @"Do you want to send us feedback?";
+	localizedMessage = NSLocalizedString(message, message);
+	
+	yes = @"Yes";
+	localizedYes = NSLocalizedString(yes, yes);
 
-    cancel = @"Cancel";
-    localizedCancel = NSLocalizedString(cancel, cancel);
+	cancel = @"Cancel";
+	localizedCancel = NSLocalizedString(cancel, cancel);
 
-    alertController = [UIAlertController alertControllerWithTitle: localizedTitle
-                                                          message: localizedMessage
-                                                   preferredStyle: UIAlertControllerStyleAlert];
+	alertController = [UIAlertController alertControllerWithTitle: localizedTitle
+														  message: localizedMessage
+												   preferredStyle: UIAlertControllerStyleAlert];
 
-    actionYes = [UIAlertAction actionWithTitle: localizedYes
-                                         style: UIAlertActionStyleDefault
-                                       handler: handler];
-    actionCancel = [UIAlertAction actionWithTitle: localizedCancel
-                                            style: UIAlertActionStyleCancel
-                                          handler: handlerCancel];
+	actionYes = [UIAlertAction actionWithTitle: localizedYes
+										 style: UIAlertActionStyleDefault
+									   handler: handler];
+	actionCancel = [UIAlertAction actionWithTitle: localizedCancel
+											style: UIAlertActionStyleCancel
+										  handler: handlerCancel];
 
-    [alertController addAction:actionYes];
-    [alertController addAction:actionCancel];
+	[alertController addAction:actionYes];
+	[alertController addAction:actionCancel];
 
-    return alertController;
+	return alertController;
 }
 
 @end

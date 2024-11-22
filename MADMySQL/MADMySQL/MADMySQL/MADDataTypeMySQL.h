@@ -13,7 +13,7 @@
 
 @interface MADDataTypeMySQL : NSObject
 
-    + (short)dataTypeForNativeType:(NSInteger)nativeType;
+	+ (short)dataTypeForNativeType:(NSInteger)nativeType;
 
 @end
 

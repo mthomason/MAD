@@ -15,13 +15,13 @@
 @class MADReportLineRepresentation;
 
 @interface MADReportSectionRowsRepresentation : NSObject
-    <MADTextRepresentationProtocol>
+	<MADTextRepresentationProtocol>
 
-    @property (nonatomic, readonly) NSUInteger itemCount;
+	@property (nonatomic, readonly) NSUInteger itemCount;
 
-    - (nonnull instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount NS_DESIGNATED_INITIALIZER;
-    - (NSArray <__kindof MADReportLineRepresentation *>  * _Nonnull)allLines;
-    - (void)addLine:(nonnull MADReportLineRepresentation *)line;
+	- (nonnull instancetype)initWithNumberOfSectionRowElements:(NSUInteger)elementCount NS_DESIGNATED_INITIALIZER;
+	- (NSArray <__kindof MADReportLineRepresentation *>  * _Nonnull)allLines;
+	- (void)addLine:(nonnull MADReportLineRepresentation *)line;
 
 @end
 

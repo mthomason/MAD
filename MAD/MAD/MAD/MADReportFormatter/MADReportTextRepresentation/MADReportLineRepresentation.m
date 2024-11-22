@@ -11,50 +11,46 @@
 
 @interface MADReportLineRepresentation ()
 
-    @property (nonatomic, strong) NSObject *object;
+	@property (nonatomic, strong) NSObject *object;
 
 @end
 
 @implementation MADReportLineRepresentation {
-    MADPrintPageElementType _type;
+	MADPrintPageElementType _type;
 }
 
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 @synthesize frame = _frame;
 
 - (void)dealloc {
-    _object = nil;
+	_object = nil;
 }
 
 - (instancetype)init {
-    return [self initWithObject:@"" type:MADPrintPageElementTypeLabelStatic frame:CGRectZero];
+	return [self initWithObject:@"" type:MADPrintPageElementTypeLabelStatic frame:CGRectZero];
 }
 
 - (instancetype)initWithObject:(id)object type:(MADPrintPageElementType)type frame:(CGRect)frame {
-    if (self = [super init]) {
-        self.object = object;
-        _frame = frame;
-        _type = type;
-    }
-    return self;
+	if (self = [super init]) {
+		self.object = object;
+		_frame = frame;
+		_type = type;
+	}
+	return self;
 }
 
 - (NSString *)label {
-    if ([self.object isKindOfClass:[NSString class]]) {
-        return (NSString *)self.object;
-    } else {
-        return [MADDocumentObjectTypeDescriptor localizedStringForType:_type];
-    }
+	if ([self.object isKindOfClass:[NSString class]]) {
+		return (NSString *)self.object;
+	} else {
+		return [MADDocumentObjectTypeDescriptor localizedStringForType:_type];
+	}
 }
 
 #pragma mark - MADTextRepresentationProtocol
 
-- (NSUInteger)characterCount {
-    return self.label.length;
-}
+- (NSUInteger)characterCount { return self.label.length; }
 
-- (NSUInteger)elementCount {
-    return 1;
-}
+- (NSUInteger)elementCount { return 1; }
 
 @end

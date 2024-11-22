@@ -15,12 +15,12 @@
 
 @interface MADDirectoryMonitor : NSObject
 
-    @property (nonatomic, weak) id <MADDirectoryMonitorProtocol> delegate;
+	@property (nonatomic, weak) id <MADDirectoryMonitorProtocol> delegate;
 
-    - (instancetype)initWithURL:(NSURL *)URL;
+	- (instancetype)initWithURL:(NSURL *)URL;
 
-    - (void)startMonitoring;
-    - (void)stopMonitoring;
+	- (void)startMonitoring;
+	- (void)stopMonitoring;
 
 @end
 

@@ -14,9 +14,9 @@
 
 @interface MADDataTable (Constructor)
 
-    + (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
-    + (instancetype)newDataTableForIdentifier:(NSString *)identifier;
-    + (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID;
+	+ (instancetype)newDataTableWithDefinition:(NSDictionary *)definition;
+	+ (instancetype)newDataTableForIdentifier:(NSString *)identifier;
+	+ (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID;
 
 @end
 

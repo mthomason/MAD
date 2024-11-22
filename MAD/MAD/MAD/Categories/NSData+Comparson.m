@@ -11,13 +11,13 @@
 @implementation NSData (Comparson)
 
 - (NSComparisonResult)compareData:(NSData *)data {
-    NSComparisonResult result;
-    if ([self isEqualToData:data]) {
-        result = NSOrderedSame;
-    } else {
-        result = self.length > data.length ? NSOrderedAscending : NSOrderedDescending;
-    }
-    return result;
+	NSComparisonResult result;
+	if ([self isEqualToData:data]) {
+		result = NSOrderedSame;
+	} else {
+		result = self.length > data.length ? NSOrderedAscending : NSOrderedDescending;
+	}
+	return result;
 }
 
 @end

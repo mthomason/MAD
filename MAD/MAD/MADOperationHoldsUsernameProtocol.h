@@ -11,8 +11,8 @@
 
 @protocol MADOperationHoldsUsernameProtocol <NSObject>
 
-    @property (nonatomic, readonly, copy) NSString *username;
-    @property (nonatomic, readonly, assign) BOOL gotUsername;
+	@property (nonatomic, readonly, copy) NSString *username;
+	@property (nonatomic, readonly, assign) BOOL gotUsername;
 
 @end
 

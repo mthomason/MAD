@@ -18,38 +18,38 @@
 
 @interface MADQueryCacheDeleteAllFromTable ()
 
-    @property (nonatomic, copy) NSString *tableName;
+	@property (nonatomic, copy) NSString *tableName;
 
 @end
 
 @implementation MADQueryCacheDeleteAllFromTable
 
 - (instancetype)initWithTableName:(NSString *)tableName {
-    if (self = [super init]) {
-        _tableName = tableName.copy;
-    }
-    return self;
+	if (self = [super init]) {
+		_tableName = tableName.copy;
+	}
+	return self;
 }
 
 - (instancetype)initWithObject:(NSDictionary *)object {
-    if (self = [super init]) {
-        NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MADQueryCacheDeleteAllFromTableTableName);
-        NSString *tableName = object[keyMTQueryCacheDeleteAllFromTableTableName];
-        _tableName = tableName.copy;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MADQueryCacheDeleteAllFromTableTableName);
+		NSString *tableName = object[keyMTQueryCacheDeleteAllFromTableTableName];
+		_tableName = tableName.copy;
+		
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    NSString *sql = [[NSString alloc] initWithFormat:@"DELETE FROM %@", self.tableName];
-    return sql;
+	NSString *sql = [[NSString alloc] initWithFormat:@"DELETE FROM %@", self.tableName];
+	return sql;
 }
 
 - (BOOL)returnsResults { return NO; }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheDeleteAllFromTable;
+	return MADQueryTypeCacheDeleteAllFromTable;
 }
 
 @end

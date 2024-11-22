@@ -15,13 +15,13 @@
 @class MADModelDatabase, MADModelQuery, NSOrderedSet<__covariant ObjectType>;
 
 @interface MADModelDocument : MADModel
-    <MADModelIDProtocol, MADModelDataProtocol>
+	<MADModelIDProtocol, MADModelDataProtocol>
 
-    - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
 
-    @property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
-    @property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;
-    @property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
+	@property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
+	@property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;
+	@property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
 
 @end
 

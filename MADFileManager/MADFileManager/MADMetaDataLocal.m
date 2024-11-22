@@ -14,39 +14,39 @@
 
 @interface MADMetaDataLocal ()
 
-    @property (nonatomic, copy, readwrite) NSURL *origionalURL;
-    @property (nonatomic, strong) NSDictionary *attributes;
+	@property (nonatomic, copy, readwrite) NSURL *origionalURL;
+	@property (nonatomic, strong) NSDictionary *attributes;
 
 @end
 
 @implementation MADMetaDataLocal
 
 - (instancetype)initWithURL:(NSURL *)url {
-    
-    if (self = [super init]) {
-        
-        NSString *path;
-        if ((path = url.path)) {
-            NSDictionary *attributes;
-            NSError *__autoreleasing error = nil;
-            attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-                                                                          error: &error];
-            _attributes = attributes;
-        }
-        
-        _origionalURL = url.copy;
-        
-    }
-    return self;
+	
+	if (self = [super init]) {
+		
+		NSString *path;
+		if ((path = url.path)) {
+			NSDictionary *attributes;
+			NSError *__autoreleasing error = nil;
+			attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
+																		  error: &error];
+			_attributes = attributes;
+		}
+		
+		_origionalURL = url.copy;
+		
+	}
+	return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] alloc] initWithURL: _origionalURL];
-    return copy;
+	id copy = [[[self class] alloc] initWithURL: _origionalURL];
+	return copy;
 }
 
 - (NSURL *)URL {
-    return _origionalURL;
+	return _origionalURL;
 }
 
 - (NSError *)ubiquitousItemUploadingError { return nil; }
@@ -54,59 +54,59 @@
 - (NSError *)ubiquitousItemDownloadingError { return nil; }
 
 - (NSString *)ubiquitousItemDownloadingStatus {
-    return NSMetadataUbiquitousItemDownloadingStatusCurrent;
+	return NSMetadataUbiquitousItemDownloadingStatusCurrent;
 }
 
 - (NSString *)name {
-    NSString *displayName, *path;
-    if ((path = _origionalURL.path)) {
-        displayName = [[NSFileManager defaultManager] displayNameAtPath:path].copy;
-    } else {
-        displayName = @"";
-    }
-    return displayName.stringByDeletingPathExtension.copy;
+	NSString *displayName, *path;
+	if ((path = _origionalURL.path)) {
+		displayName = [[NSFileManager defaultManager] displayNameAtPath:path].copy;
+	} else {
+		displayName = @"";
+	}
+	return displayName.stringByDeletingPathExtension.copy;
 }
 
 - (NSString *)fileSystemName {
-    id name = _origionalURL.path.lastPathComponent.copy;
-    return  name;
+	id name = _origionalURL.path.lastPathComponent.copy;
+	return  name;
 }
 
 - (unsigned long long)fileSystemFileSize {
-    NSNumber *fileSize;
-    fileSize = _attributes[NSFileSize];
-    return fileSize.unsignedLongLongValue;
+	NSNumber *fileSize;
+	fileSize = _attributes[NSFileSize];
+	return fileSize.unsignedLongLongValue;
 }
 
 - (NSString *)contentType {
-    NSString * __nonnull pathExtension = (_origionalURL.pathExtension) ?
-                                         (NSString * __nonnull)_origionalURL.pathExtension :@"";
-    __nullable CFStringRef cfkey;
-    cfkey = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
-                                                  (__bridge CFStringRef)pathExtension,
-                                                  NULL);
-    id key = CFBridgingRelease(cfkey);
-    return key;
+	NSString * __nonnull pathExtension = (_origionalURL.pathExtension) ?
+										 (NSString * __nonnull)_origionalURL.pathExtension :@"";
+	__nullable CFStringRef cfkey;
+	cfkey = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
+												  (__bridge CFStringRef)pathExtension,
+												  NULL);
+	id key = CFBridgingRelease(cfkey);
+	return key;
 }
 
 - (NSString *)ubiquitousItemContainerDisplayName {
-    NSString *path = _origionalURL.path.lastPathComponent.copy;
-    return path;
+	NSString *path = _origionalURL.path.lastPathComponent.copy;
+	return path;
 }
 
 - (NSData *)fileSystemFileCreationDate {
-    id date = [_attributes[NSFileCreationDate] copyWithZone:nil];
-    return date;
+	id date = [_attributes[NSFileCreationDate] copyWithZone:nil];
+	return date;
 }
 
 - (NSData *)fileSystemContentChangeDate {
-    id date = [_attributes[NSFileModificationDate] copyWithZone:nil];
-    return date;
+	id date = [_attributes[NSFileModificationDate] copyWithZone:nil];
+	return date;
 }
 
 - (NSURL *)ubiquitousItemURLInLocalContainer {
-    id url = _origionalURL.copy;
-    return url;
+	id url = _origionalURL.copy;
+	return url;
 }
 
 - (BOOL)downloaded { return YES; }
@@ -126,11 +126,11 @@
 - (double)ubiquitousItemPercentDownloaded { return 100.0; }
 
 - (id)debugQuickLookObject {
-    NSMutableString *debug = [[NSMutableString alloc] init];
-    NSString *classname = NSStringFromClass([self class]);
-    id uppercaseClassname = [classname uppercaseString];
-    [debug appendFormat:@"--%@--\n", uppercaseClassname];
-    return debug;
+	NSMutableString *debug = [[NSMutableString alloc] init];
+	NSString *classname = NSStringFromClass([self class]);
+	id uppercaseClassname = [classname uppercaseString];
+	[debug appendFormat:@"--%@--\n", uppercaseClassname];
+	return debug;
 }
 
 @end

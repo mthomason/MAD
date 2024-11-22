@@ -17,9 +17,9 @@
 
 + (MysqlLiteral *)literalWithString:(NSString *)s {
 
-    MysqlLiteral *newObject = [[self alloc] init];
-    newObject->_string= s.copy;
-    return newObject;
+	MysqlLiteral *newObject = [[self alloc] init];
+	newObject->_string= s.copy;
+	return newObject;
 
 }
 

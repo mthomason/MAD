@@ -13,7 +13,7 @@
 
 @interface MADTableFormatter : MADDataFormatter
 
-    - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query;
+	- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query;
 
 @end
 

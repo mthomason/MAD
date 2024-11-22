@@ -11,7 +11,7 @@
 
 @protocol MADAlertControllerAlertRemovedProtocol <NSObject>
 
-    - (void)alertControllerDidDisappear:(MADAlertController *)alertController;
+	- (void)alertControllerDidDisappear:(MADAlertController *)alertController;
 
 @end
 

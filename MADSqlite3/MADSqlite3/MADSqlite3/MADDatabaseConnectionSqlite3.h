@@ -13,12 +13,12 @@
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 
 @interface MADDatabaseConnectionSqlite3 : MADDatabaseConnection
-    <MADDatabaseConnectionConstructors,
-        MADDatabaseConnectionsProperties,
-        MADDatabaseConnectionsPropertiesURL,
-        NSCopying>
+	<MADDatabaseConnectionConstructors,
+		MADDatabaseConnectionsProperties,
+		MADDatabaseConnectionsPropertiesURL,
+		NSCopying>
 
-    - (instancetype)initWithUrl:(NSURL *)url;
+	- (instancetype)initWithUrl:(NSURL *)url;
 
 @end
 

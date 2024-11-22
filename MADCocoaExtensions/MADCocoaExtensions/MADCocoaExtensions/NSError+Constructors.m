@@ -21,48 +21,48 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 @implementation NSError (Constructors)
 
 + (void)presentError:(NSError *)error onViewController:(UIViewController *)viewController
-          completion:(void (^)(BOOL success))completion {
-    
-    if (error == nil) {
-        completion(YES);
-        return;
-    }
+		  completion:(void (^)(BOOL success))completion {
+	
+	if (error == nil) {
+		completion(YES);
+		return;
+	}
 
-    UIViewController *displayController;
-    UIAlertController *alert;
-    UIAlertAction *ok;
-    NSString *dismissButtonTitle, *localizedDescription, *localizedFailureReason;
-    NSError *underlyingError;
-    
-    displayController = viewController ?:  [MADStackViewController topViewController];
-    displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    
-    dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
-    localizedDescription = error.localizedDescription.copy;
-    localizedFailureReason = error.localizedFailureReason.copy;
-    
-    underlyingError = error.userInfo[NSUnderlyingErrorKey];
-    
-    if (underlyingError.localizedDescription != nil) {
-        localizedDescription = underlyingError.localizedDescription;
-        localizedFailureReason = underlyingError.localizedFailureReason;
-    }
-    
-    alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
-                                                message: localizedDescription
-                                         preferredStyle: UIAlertControllerStyleAlert];
-    
-    ok = [UIAlertAction actionWithTitle: dismissButtonTitle
-                                  style: UIAlertActionStyleDefault
-                                handler: ^(UIAlertAction *action) {
+	UIViewController *displayController;
+	UIAlertController *alert;
+	UIAlertAction *ok;
+	NSString *dismissButtonTitle, *localizedDescription, *localizedFailureReason;
+	NSError *underlyingError;
+	
+	displayController = viewController ?:  [MADStackViewController topViewController];
+	displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+	
+	dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
+	localizedDescription = error.localizedDescription.copy;
+	localizedFailureReason = error.localizedFailureReason.copy;
+	
+	underlyingError = error.userInfo[NSUnderlyingErrorKey];
+	
+	if (underlyingError.localizedDescription != nil) {
+		localizedDescription = underlyingError.localizedDescription;
+		localizedFailureReason = underlyingError.localizedFailureReason;
+	}
+	
+	alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
+												message: localizedDescription
+										 preferredStyle: UIAlertControllerStyleAlert];
+	
+	ok = [UIAlertAction actionWithTitle: dismissButtonTitle
+								  style: UIAlertActionStyleDefault
+								handler: ^(UIAlertAction *action) {
 
-                                    if (completion) completion(YES);
+									if (completion) completion(YES);
 
-                                }];
-    [alert addAction:ok];
-    
-    [displayController presentViewController:alert animated:YES completion:NULL];
-    
+								}];
+	[alert addAction:ok];
+	
+	[displayController presentViewController:alert animated:YES completion:NULL];
+	
 }
 
 @end

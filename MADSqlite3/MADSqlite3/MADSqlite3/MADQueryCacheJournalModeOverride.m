@@ -16,20 +16,20 @@
 @implementation MADQueryCacheJournalModeOverride
 
 - (instancetype)initWithObject:(id)object {
-    self = [super init];
-    return self;
+	self = [super init];
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return @"PRAGMA journal_mode=WAL;";
+	return @"PRAGMA journal_mode=WAL;";
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheJournalModeOverride;
+	return MADQueryTypeCacheJournalModeOverride;
 }
 
 @end

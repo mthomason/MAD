@@ -23,79 +23,74 @@ static NSString * const ErrorDomain = @"MADKCP";
 
 @interface MADOperationKeyChainPut ()
 
-    @property (nonatomic, copy) NSString *key;
-    @property (nonatomic, copy) NSString *keyDescription;
+	@property (nonatomic, copy) NSString *key;
+	@property (nonatomic, copy) NSString *keyDescription;
 
 @end
 
 @implementation MADOperationKeyChainPut
 
-- (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithKey:(NSString *)key description:(NSString *)description {
-    if (self = [super init]) {
-        //NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-        _key = key.copy;
-        _keyDescription = description.copy;
-    }
-    return self;
+	if (self = [super init]) {
+		_key = key.copy;
+		_keyDescription = description.copy;
+	}
+	return self;
 }
 
 - (void)execute {
-    //os_log_info(OS_LOG_DEFAULT, "Begin %s: %s", NSStringFromClass(self.class).UTF8String, self.key.UTF8String);
+	if (self.cancelled) return [self finish];
 
-    if (self.cancelled) return [self finish];
+	NSString *valueToWrite = nil;
+	
+	// Search the operations dependencies for the value to write.
+	//
+	NSArray<__kindof NSOperation *> *dependencies = self.dependencies;
+	for (NSOperation *operation in dependencies) {
+	
+		if ([operation conformsToProtocol:@protocol(MADKeyChainKeyValueProtocol)]) {
+			valueToWrite = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) valueForKey:self.key];
+			if (valueToWrite != nil) {
+				break;
+			}
+		}
+	}
+	
+	if (self.cancelled) return [self finish];
 
-    NSString *valueToWrite = nil;
-    
-    // Search the operations dependencies for the value to write.
-    //
-    NSArray<__kindof NSOperation *> *dependencies = self.dependencies;
-    for (NSOperation *operation in dependencies) {
-    
-        if ([operation conformsToProtocol:@protocol(MADKeyChainKeyValueProtocol)]) {
-            valueToWrite = [((NSObject <MADKeyChainKeyValueProtocol> *)operation) valueForKey:self.key];
-            if (valueToWrite != nil) {
-                break;
-            }
-        }
-    }
-    
-    if (self.cancelled) return [self finish];
+	// Write the value to the keychain.
+	if (valueToWrite != nil) {
+	
+		OSStatus status = [MADKeyChain saveToken: valueToWrite
+										 forKey: self.key
+								withDescription: self.keyDescription];
+		if (status == errSecSuccess) {
+		
+			os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
+			[self finish];
 
-    // Write the value to the keychain.
-    if (valueToWrite != nil) {
-    
-        OSStatus status = [MADKeyChain saveToken: valueToWrite
-                                         forKey: self.key
-                                withDescription: self.keyDescription];
-        if (status == errSecSuccess) {
-        
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
-            [self finish];
-
-        } else {
+		} else {
 
 
-            os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
-            NSError *error = [NSError errorWithDomain: ErrorDomain
-                                                 code: status
-                                             userInfo: nil];
-            [self finishWithError:error];
-            
-        }
-        
-    } else {
+			os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
+			NSError *error = [NSError errorWithDomain: ErrorDomain
+												 code: status
+											 userInfo: nil];
+			[self finishWithError:error];
+			
+		}
+		
+	} else {
 
-        os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
-        NSError *error = [NSError errorWithDomain: ErrorDomain
-                                             code: StatusNotFound
-                                         userInfo: nil];
-        [self finishWithError:error];
-        
-    }
+		os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
+		NSError *error = [NSError errorWithDomain: ErrorDomain
+											 code: StatusNotFound
+										 userInfo: nil];
+		[self finishWithError:error];
+		
+	}
 }
 
 @end

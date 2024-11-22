@@ -16,16 +16,16 @@
 
 @interface MADSectionGroupLayout : MADSectionLayout
 
-    @property (nonatomic, assign) MADSortOrder sort;
-    @property (nonatomic, assign) int16_t weight;
-    @property (nonatomic, assign) int16_t dataType;
-    @property (nonatomic, copy) NSString * (^safeIdentifier)(NSString *);
+	@property (nonatomic, assign) MADSortOrder sort;
+	@property (nonatomic, assign) int16_t weight;
+	@property (nonatomic, assign) int16_t dataType;
+	@property (nonatomic, copy) NSString * (^safeIdentifier)(NSString *);
 
-    - (instancetype)initWithObject:(NSDictionary *)object
-              managedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                    safeIdentifier:(NSString * (^)(NSString *))safeIdentifier;
+	- (instancetype)initWithObject:(NSDictionary *)object
+			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+					safeIdentifier:(NSString * (^)(NSString *))safeIdentifier;
 
-    - (NSSortDescriptor *)sortDescriptor;
+	- (NSSortDescriptor *)sortDescriptor;
 
 @end
 

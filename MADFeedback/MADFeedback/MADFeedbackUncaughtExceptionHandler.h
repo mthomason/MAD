@@ -13,7 +13,7 @@
 
 @interface MADFeedbackUncaughtExceptionHandler : NSObject;
 
-    @property (nonatomic, assign) BOOL dismissed;
+	@property (nonatomic, assign) BOOL dismissed;
 
 @end
 

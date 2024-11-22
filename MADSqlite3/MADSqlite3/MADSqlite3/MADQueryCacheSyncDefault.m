@@ -16,19 +16,19 @@
 @implementation MADQueryCacheSyncDefault
 
 - (instancetype)initWithObject:(id)object {
-    return self = [super initWithObject:object];
+	return self = [super initWithObject:object];
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return @"PRAGMA synchronous=NORMAL;";
+	return @"PRAGMA synchronous=NORMAL;";
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheSyncModeDefault;
+	return MADQueryTypeCacheSyncModeDefault;
 }
 
 @end

@@ -12,10 +12,10 @@
 #import <Foundation/NSObject.h>
 
 @interface MADDataTableLocation : NSObject
-    <NSCoding>
+	<NSCoding>
 
-    @property (nonatomic, assign) NSUInteger column;
-    @property (nonatomic, assign) NSUInteger row;
+	@property (nonatomic, assign) NSUInteger column;
+	@property (nonatomic, assign) NSUInteger row;
 
 @end
 

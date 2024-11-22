@@ -19,52 +19,48 @@
 
 @implementation MADOperationDeleteFile
 
-- (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (BOOL)isAsynchronous {
-    return YES;
+	return YES;
 }
 
 - (void)execute {
-    //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
-    
-    if (self.cancelled) return [self finish];
-    NSURL *fileURL;
-    MADocument *document = nil;
-    NSArray <NSOperation *> *dependencies = self.dependencies;
-    BOOL deleteFile = NO;
-    for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {
-            fileURL = ((id <MADOperationUniqueUrlForFilenameProtocol>)dependency).uniqueUrl.copy;
-        }
-        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
-            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
-            break;
-        }
-        if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)]) {
-            deleteFile = !((NSObject <MADOperationTestResults> *)dependency).success;
-        }
-    }
-    if (!deleteFile) return [self finish];
+	if (self.cancelled) return [self finish];
+	NSURL *fileURL;
+	MADocument *document = nil;
+	NSArray <NSOperation *> *dependencies = self.dependencies;
+	BOOL deleteFile = NO;
+	for (NSOperation *dependency in dependencies) {
+		if ([dependency conformsToProtocol:@protocol(MADOperationUniqueUrlForFilenameProtocol)]) {
+			fileURL = ((id <MADOperationUniqueUrlForFilenameProtocol>)dependency).uniqueUrl.copy;
+		}
+		if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+			document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
+			break;
+		}
+		if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)]) {
+			deleteFile = !((NSObject <MADOperationTestResults> *)dependency).success;
+		}
+	}
+	if (!deleteFile) return [self finish];
 
-    if (document != nil) {
-        [document deleteFromDiskCompletion:^(BOOL success) {
-            if (!success)
-                [self finishWithError:nil];
-            else
-                [self finish];
-        }];
-    } else {
-        os_log_info(OS_LOG_DEFAULT, "Delete file %s", fileURL.relativePath.UTF8String);
-        [MADFileUtilities removeFileAtURL:fileURL completion:^(NSError *error) {
-            if (error != nil)
-                [self finishWithError:error];
-            else
-                [self finish];
-        }];
-    }
+	if (document != nil) {
+		[document deleteFromDiskCompletion:^(BOOL success) {
+			if (!success)
+				[self finishWithError:nil];
+			else
+				[self finish];
+		}];
+	} else {
+		os_log_info(OS_LOG_DEFAULT, "Delete file %s", fileURL.relativePath.UTF8String);
+		[MADFileUtilities removeFileAtURL:fileURL completion:^(NSError *error) {
+			if (error != nil)
+				[self finishWithError:error];
+			else
+				[self finish];
+		}];
+	}
 
 }
 

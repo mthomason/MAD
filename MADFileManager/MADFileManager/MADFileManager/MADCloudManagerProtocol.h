@@ -10,7 +10,7 @@
 #define MADCloudManagerProtocol_h
 
 @protocol MADCloudManagerDelegate <NSObject>
-    - (void)promptUserForCloudPreference:(void (^)(MADAppStorage preference))result;
+	- (void)promptUserForCloudPreference:(void (^)(MADAppStorage preference))result;
 @end
 
 #endif /* MADCloudManagerProtocol_h */

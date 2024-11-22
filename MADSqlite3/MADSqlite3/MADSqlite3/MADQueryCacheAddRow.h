@@ -13,12 +13,12 @@
 #import "MADQueryParameters.h"
 
 @interface MADQueryCacheAddRow : MADQuery
-    <MADQueryDataBindingProtocol, MADQueryUpdatableProtocol>
+	<MADQueryDataBindingProtocol, MADQueryUpdatableProtocol>
 
-    @property (nonatomic, weak) id <MADQueryParametersStandardProtocol,
-                                    MADQueryParametersColumnKeysProtocol,
-                                    MADQueryParametersColumnMetaProtocol,
-                                    MADQueryParametersColumnDataProtocol> delegate;
+	@property (nonatomic, weak) id <MADQueryParametersStandardProtocol,
+									MADQueryParametersColumnKeysProtocol,
+									MADQueryParametersColumnMetaProtocol,
+									MADQueryParametersColumnDataProtocol> delegate;
 
 @end
 

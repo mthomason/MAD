@@ -15,13 +15,13 @@
 
 @interface MADQueryCacheSelectLimitOffset : MADQuery
 
-    - (instancetype)initWithColumnKeys: (NSArray <NSString *> *)columnKeys
-                             tableName: (NSString *)tableName
-                       sortDescriptors: (NSArray <NSSortDescriptor *> *)sortDescriptors
-                                 limit: (NSUInteger)limit
-                                offset: (NSUInteger)offset
-                             dropRowID: (BOOL)dropRowID
-                               columns: (NSDictionary <NSString *, MADDataColumn *> *)columns;
+	- (instancetype)initWithColumnKeys: (NSArray <NSString *> *)columnKeys
+							 tableName: (NSString *)tableName
+					   sortDescriptors: (NSArray <NSSortDescriptor *> *)sortDescriptors
+								 limit: (NSUInteger)limit
+								offset: (NSUInteger)offset
+							 dropRowID: (BOOL)dropRowID
+							   columns: (NSDictionary <NSString *, MADDataColumn *> *)columns;
 
 @end
 

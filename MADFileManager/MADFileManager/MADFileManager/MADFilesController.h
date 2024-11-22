@@ -20,46 +20,46 @@ typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents
 
 @interface MADFilesController : NSObject
 
-    @property (nonatomic, weak) id <MADFilesControllerDelegate> delegate;
-    @property (nonatomic, strong) id <MADFileCoordinatorProtocol> fileCoordinator;
+	@property (nonatomic, weak) id <MADFilesControllerDelegate> delegate;
+	@property (nonatomic, strong) id <MADFileCoordinatorProtocol> fileCoordinator;
 
-    @property (readonly) NSURL *documentDirectory;
+	@property (readonly) NSURL *documentDirectory;
 
-    @property (nonatomic, readonly) NSUInteger count;
+	@property (nonatomic, readonly) NSUInteger count;
 
-    - (instancetype)initWithFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator
-                              delegateQueue:(NSOperationQueue *)delegateQueue
-                             sortComparator:(NSComparisonResult (^)(MADMetaData *lhs,
-                                                                    MADMetaData *rhs))sortComparator;
+	- (instancetype)initWithFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator
+							  delegateQueue:(NSOperationQueue *)delegateQueue
+							 sortComparator:(NSComparisonResult (^)(MADMetaData *lhs,
+																	MADMetaData *rhs))sortComparator;
 
-    + (instancetype)newFilesControllerWithPathExtension: (NSString *)pathExtension
-                                          storageOption: (MADAppStorage)storageOption
-                                             identifier: (NSString *)identifier
-                                      firstQueryHandler: (void (^)(void))firstQueryHandler;
+	+ (instancetype)newFilesControllerWithPathExtension: (NSString *)pathExtension
+										  storageOption: (MADAppStorage)storageOption
+											 identifier: (NSString *)identifier
+									  firstQueryHandler: (void (^)(void))firstQueryHandler;
 
-    + (instancetype)newFilesControllerWithLastPathComponent: (NSString *)lastPathComponent
-                                              storageOption: (MADAppStorage)storageOption
-                                                 identifier: (NSString *)identifier
-                                          firstQueryHandler: (void (^)(void))firstQueryHandler;
+	+ (instancetype)newFilesControllerWithLastPathComponent: (NSString *)lastPathComponent
+											  storageOption: (MADAppStorage)storageOption
+												 identifier: (NSString *)identifier
+										  firstQueryHandler: (void (^)(void))firstQueryHandler;
 
 
-    - (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index;
+	- (MADMetaData *)objectAtIndexedSubscript:(NSUInteger)index;
 
-    - (void)startSearching;
-    - (void)stopSearching;
-    - (void)removeFileInfo:(MADMetaData *)fileInfo;
-    - (void)duplicateFileInfo:(MADMetaData *)fileInfo;
-    - (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name;
-    - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo;
+	- (void)startSearching;
+	- (void)stopSearching;
+	- (void)removeFileInfo:(MADMetaData *)fileInfo;
+	- (void)duplicateFileInfo:(MADMetaData *)fileInfo;
+	- (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name;
+	- (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo;
 
-    + (BOOL)isCloudReadilyAvailable;
-    + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
-                                         groupIdentifier: (NSString *)groupIdentifier
-                                                   delay: (void (^)(void))handleLongRunningCall
-                                              completion: (MADBlockFileStorageLocation)handleCompletion;
+	+ (BOOL)isCloudReadilyAvailable;
+	+ (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
+										 groupIdentifier: (NSString *)groupIdentifier
+												   delay: (void (^)(void))handleLongRunningCall
+											  completion: (MADBlockFileStorageLocation)handleCompletion;
 
-    - (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention
-                            fileGroup:(NSString *)fileGroup;
+	- (BOOL)canCreateFileInfoWithName:(NSString *)name extention:(NSString *)extention
+							fileGroup:(NSString *)fileGroup;
 
 @end
 

@@ -13,21 +13,21 @@
 @implementation MADExplorerView
 
 + (void)initialize {
-    [super initialize];
-    if (self == [MADExplorerView self]) {
-        @autoreleasepool {
-            MADExplorerView *view;
-            view = [MADExplorerView appearance];
-            view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-        }
-    }
+	[super initialize];
+	if (self == [MADExplorerView self]) {
+		@autoreleasepool {
+			MADExplorerView *view;
+			view = [MADExplorerView appearance];
+			view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+		}
+	}
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        self.scrollIndicatorInsets = self.contentInset;
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		self.scrollIndicatorInsets = self.contentInset;
+	}
+	return self;
 }
 
 @end

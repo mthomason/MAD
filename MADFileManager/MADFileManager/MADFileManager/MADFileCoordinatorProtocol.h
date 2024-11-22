@@ -13,16 +13,16 @@
 
 @protocol MADFileCoordinatorProtocol <NSObject>
 
-    @property (nonatomic, readwrite, weak) id <MADFileCoordinatorDelegate> delegate;
-    @property (nonatomic, readwrite, copy) NSURL *documentsDirectory;
+	@property (nonatomic, readwrite, weak) id <MADFileCoordinatorDelegate> delegate;
+	@property (nonatomic, readwrite, copy) NSURL *documentsDirectory;
 
-    - (void)startQuery;
-    - (void)stopQuery;
-    - (void)removeFileAtURL:(NSURL *)URL;
-    - (void)duplicateFileAtURL:(NSURL *)URL;
-    - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
-    - (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
-                        fileGroup:(NSString *)fileGroup;
+	- (void)startQuery;
+	- (void)stopQuery;
+	- (void)removeFileAtURL:(NSURL *)URL;
+	- (void)duplicateFileAtURL:(NSURL *)URL;
+	- (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name;
+	- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+						fileGroup:(NSString *)fileGroup;
 
 @end
 

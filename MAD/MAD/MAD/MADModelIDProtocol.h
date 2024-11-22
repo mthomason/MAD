@@ -11,7 +11,7 @@
 
 @protocol MADModelIDProtocol <NSObject>
 
-    @property (nonatomic, readonly, assign) int64_t identifier;
+	@property (nonatomic, readonly, assign) int64_t identifier;
 
 @end
 

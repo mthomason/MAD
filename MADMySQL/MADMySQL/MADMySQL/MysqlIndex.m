@@ -18,9 +18,9 @@
 @synthesize connection;
 
 + (MysqlIndex *)indexWithConnection:(MysqlConnection *)aConnection {
-    MysqlIndex *t = [[self alloc] init];
-    t->connection = aConnection;
-    return t;
+	MysqlIndex *t = [[self alloc] init];
+	t->connection = aConnection;
+	return t;
 }
 
 @end

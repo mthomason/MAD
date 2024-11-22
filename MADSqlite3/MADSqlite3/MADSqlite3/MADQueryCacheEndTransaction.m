@@ -22,19 +22,19 @@
 @implementation MADQueryCacheEndTransaction
 
 - (instancetype)initWithObject:(id)object {
-    return self = [super init];
+	return self = [super init];
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return @"END TRANSACTION;";
+	return @"END TRANSACTION;";
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheEndTransaction;
+	return MADQueryTypeCacheEndTransaction;
 }
 
 @end

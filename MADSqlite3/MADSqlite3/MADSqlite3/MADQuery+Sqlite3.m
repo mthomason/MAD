@@ -23,86 +23,86 @@
 @implementation MADQuery (Sqlite3)
 
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    if (sortDescriptors.count > 0) {
-        NSUInteger sortCounter = 0;
-        [sql appendString:@" ORDER BY "];
-        
-        NSString *key;
-        for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-            if (sortCounter != 0) [sql appendString:@", "];
-            MADDataColumn *dataColumn = nil;
-            
-            if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
-                if (((MADQuery <MADQueryColumnsProtocol> *)self).columns != nil) {
-                    if ((key = sortDescriptor.key)) {
-                        dataColumn = ((MADQuery <MADQueryColumnsProtocol> *)self).columns[key];
-                    }
-                }
-            }
-            NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            MADSqlite3SortDescription *sortDirection;
-            sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
-                                                                            ascending: sortDescriptor.ascending];
-            [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
-            sortCounter++;
-        }
-    }
-    return sql;
+	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+	if (sortDescriptors.count > 0) {
+		NSUInteger sortCounter = 0;
+		[sql appendString:@" ORDER BY "];
+		
+		NSString *key;
+		for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+			if (sortCounter != 0) [sql appendString:@", "];
+			MADDataColumn *dataColumn = nil;
+			
+			if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
+				if (((MADQuery <MADQueryColumnsProtocol> *)self).columns != nil) {
+					if ((key = sortDescriptor.key)) {
+						dataColumn = ((MADQuery <MADQueryColumnsProtocol> *)self).columns[key];
+					}
+				}
+			}
+			NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+			MADSqlite3SortDescription *sortDirection;
+			sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
+																			ascending: sortDescriptor.ascending];
+			[sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
+			sortCounter++;
+		}
+	}
+	return sql;
 }
 
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    if (whereClause.count > 0) {
-        NSUInteger counter = 0, counterBinings = 0;
-        for (NSDictionary *condition in whereClause) {
-            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
-            NSString *columnHandle = condition[@"c"];
-            NSString *columnValue = condition[@"v"];
-            
-            
-            MADDatabaseDataBinding *databinding;
-            if ([[NSNull null] isEqual: columnValue]) {
-                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
-                                                                    fieldIndex: counterBinings
-                                                                         value: columnValue];
-            } else {
-                databinding = [[MADDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHandle:columnHandle]
-                                                                    fieldIndex: counterBinings
-                                                                         value: columnValue];
-            }
-            if ([self conformsToProtocol:@protocol(MADQueryDataBindingProtocol)]) {
-                [((MADQuery <MADQueryDataBindingProtocol> *)self).binaryBindings addObject:databinding];
-            }
-            [sql appendFormat:@"%@ = ?", columnHandle];
-            counterBinings++;
-            counter++;
-        }
-    }
-    return sql;
+	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+	if (whereClause.count > 0) {
+		NSUInteger counter = 0, counterBinings = 0;
+		for (NSDictionary *condition in whereClause) {
+			[sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
+			NSString *columnHandle = condition[@"c"];
+			NSString *columnValue = condition[@"v"];
+			
+			
+			MADDatabaseDataBinding *databinding;
+			if ([[NSNull null] isEqual: columnValue]) {
+				databinding = [[MADDatabaseDataBinding alloc] initWithDataType: MADDataTypeNull
+																	fieldIndex: counterBinings
+																		 value: columnValue];
+			} else {
+				databinding = [[MADDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHandle:columnHandle]
+																	fieldIndex: counterBinings
+																		 value: columnValue];
+			}
+			if ([self conformsToProtocol:@protocol(MADQueryDataBindingProtocol)]) {
+				[((MADQuery <MADQueryDataBindingProtocol> *)self).binaryBindings addObject:databinding];
+			}
+			[sql appendFormat:@"%@ = ?", columnHandle];
+			counterBinings++;
+			counter++;
+		}
+	}
+	return sql;
 }
 
 - (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    BOOL firstTime = YES;
-    if (rowids.count > 0) {
-        for (NSNumber *rowido in rowids) {
-            [sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
-            [sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];
-            firstTime = NO;
-        }
-    } else {
-        [sql setString:@" WHERE rowid = -1 "];
-    }
-    return sql;
+	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+	BOOL firstTime = YES;
+	if (rowids.count > 0) {
+		for (NSNumber *rowido in rowids) {
+			[sql appendString: firstTime == NO ? @" OR " : @" WHERE "];
+			[sql appendFormat:@"rowid = %lu", (unsigned long)rowido.unsignedIntegerValue];
+			firstTime = NO;
+		}
+	} else {
+		[sql setString:@" WHERE rowid = -1 "];
+	}
+	return sql;
 }
 
 - (MADDataType)columnTypeForColumnHandle:(NSString *)columnHandle {
-    MADDataColumn *column;
-    if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
-        column = ((id <MADQueryColumnsProtocol>)self).columns[columnHandle];
-    }
-    return column != nil ? column.type : 0;
+	MADDataColumn *column;
+	if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
+		column = ((id <MADQueryColumnsProtocol>)self).columns[columnHandle];
+	}
+	return column != nil ? column.type : 0;
 }
 
 @end

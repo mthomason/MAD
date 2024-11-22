@@ -13,8 +13,8 @@
 
 @interface MADErrorDocument : NSError
 
-    + (instancetype)newErrorConnectionProblem;
-    + (instancetype)newErrorFailedToOpenDocument;
+	+ (instancetype)newErrorConnectionProblem;
+	+ (instancetype)newErrorFailedToOpenDocument;
 
 @end
 

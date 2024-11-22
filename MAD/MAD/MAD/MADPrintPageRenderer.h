@@ -17,14 +17,14 @@
 
 @interface MADPrintPageRenderer : UIPrintPageRenderer
 
-    - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
+	- (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 
-    + (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
+	+ (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 
-    @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
+	@property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 
-    - (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
-        withTransparentBackground:(BOOL)transparentBackground;
+	- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
+		withTransparentBackground:(BOOL)transparentBackground;
 
 
 @end

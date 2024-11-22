@@ -16,8 +16,8 @@
 @protocol MADDatabaseResultsProtocol <NSObject>
   @required
   @optional
-    - (MADCredential *)getCredentialsForKey:(NSString *)key;
-    - (MADDataTable *)dataTableForQuery:(MADQuery *)query;
+	- (MADCredential *)getCredentialsForKey:(NSString *)key;
+	- (MADDataTable *)dataTableForQuery:(MADQuery *)query;
 @end
 
 #endif /* MADDatabaseResultsProtocol_h */

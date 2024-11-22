@@ -13,8 +13,8 @@
 
 @interface NSString (RelativePath)
 
-    + (instancetype)newStringWithPath:(NSString *)basePath relativeTo:(NSString *)anchorPath;
-    - (NSString *)stringWithPathRelativeTo:(NSString *)anchorPath;
+	+ (instancetype)newStringWithPath:(NSString *)basePath relativeTo:(NSString *)anchorPath;
+	- (NSString *)stringWithPathRelativeTo:(NSString *)anchorPath;
 
 @end
 

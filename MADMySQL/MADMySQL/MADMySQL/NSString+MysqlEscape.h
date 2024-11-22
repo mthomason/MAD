@@ -15,7 +15,7 @@
 
 @interface NSString(MysqlEscape)
 
-    - (NSString *)mysqlEscapeInConnection:(MysqlConnection *)connection;
+	- (NSString *)mysqlEscapeInConnection:(MysqlConnection *)connection;
 
 @end
 

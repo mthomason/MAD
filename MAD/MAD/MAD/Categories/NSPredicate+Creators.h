@@ -17,12 +17,12 @@
 
 + (instancetype)newPredicateObjectWithIdentifier:(int64_t)identifier;
 + (instancetype)newPredicateObjectWithIdentifier:(int64_t)identifier
-                                       atKeyPath:(NSString *)keyPath;
+									   atKeyPath:(NSString *)keyPath;
 + (instancetype)newPredicateObjectWithNumber:(NSNumber *)identifier
-                               andExpression:(NSExpression *)expression;
+							   andExpression:(NSExpression *)expression;
 + (instancetype)newPredicateObjectWithObjectID:(NSManagedObjectID *)objectID;
 + (instancetype)newPredicateObjectWithObjectID:(NSManagedObjectID *)objectID
-                                     atKeyPath:(NSString *)keyPath;
+									 atKeyPath:(NSString *)keyPath;
 
 + (instancetype)newPredicateProperyNotNull:(NSString *)keyPath;
 

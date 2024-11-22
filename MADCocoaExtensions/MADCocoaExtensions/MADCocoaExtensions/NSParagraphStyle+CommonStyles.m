@@ -11,11 +11,11 @@
 @implementation NSParagraphStyle (CommonStyles)
 
 + (NSParagraphStyle *)newParagraphStyleTitleBar {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    return paragraphStyle;
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+	paragraphStyle.alignment = NSTextAlignmentCenter;
+	return paragraphStyle;
 }
 
 @end

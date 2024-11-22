@@ -15,12 +15,12 @@
 
 @interface MADOpenDocumentManager : NSObject
 
-    @property (nonatomic, copy, readonly) NSURL *openUrl;
+	@property (nonatomic, copy, readonly) NSURL *openUrl;
 
-    - (__kindof UIManagedDocument *)openDocument;
-    - (void)setOpenDocument:(__kindof UIManagedDocument *)document;
-    - (void)unload;
-    - (void)removeDocumentWithUrl:(NSURL *)url;
+	- (__kindof UIManagedDocument *)openDocument;
+	- (void)setOpenDocument:(__kindof UIManagedDocument *)document;
+	- (void)unload;
+	- (void)removeDocumentWithUrl:(NSURL *)url;
 
 @end
 

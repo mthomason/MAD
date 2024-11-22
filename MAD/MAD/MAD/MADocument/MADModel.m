@@ -64,56 +64,56 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 #pragma mark MAD Object ID
 
 @implementation MADModel
-    @dynamic identifier;
+	@dynamic identifier;
 
 + (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext {
-    return [[MADModelDocument alloc] initWithContext:managedObjectContext];
+	return [[MADModelDocument alloc] initWithContext:managedObjectContext];
 }
 
 - (instancetype)init {
-    return self = [self initWithIdentifier:-1];
+	return self = [self initWithIdentifier:-1];
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier {
-    if (self = [super init]) {
-        _uid = identifier;
-    }
-    return self;
+	if (self = [super init]) {
+		_uid = identifier;
+	}
+	return self;
 }
 
 - (int64_t)identifier {
-    return _uid;
+	return _uid;
 }
 
 - (NSUInteger)hash {
-    return 2654435761U * (unsigned long)llabs(_uid)^2;
+	return 2654435761U * (unsigned long)llabs(_uid)^2;
 }
 
 - (BOOL)isEqual:(id)object {
 
-    return (self == object || (object != nil &&
-            [object isKindOfClass:[self class]] &&
-            ((typeof(self))object)->_uid == _uid));
-    
+	return (self == object || (object != nil &&
+			[object isKindOfClass:[self class]] &&
+			((typeof(self))object)->_uid == _uid));
+	
 }
 
 - (NSNumber *)objectID {
-    return @(_uid);
+	return @(_uid);
 }
 
 /*
 - (NSString *)debugDescription {
-    NSString *debugDescription;
-    debugDescription = _objectID.URIRepresentation.pathComponents.count == 3 ?
-                            [[NSString alloc] initWithFormat:@"%@ <%@::%@> %@, %@, $@, %@",
-                             NSStringFromClass([self class]),
-                             _objectID.URIRepresentation.pathComponents[1],
-                             _objectID.URIRepresentation.pathComponents[2],
-                             _objectID.URIRepresentation.absoluteString,
-                             _objectID.URIRepresentation.relativeString,
-                             _objectID.URIRepresentation.dataRepresentation] :
-                            self.debugDescription;
-    return debugDescription;
+	NSString *debugDescription;
+	debugDescription = _objectID.URIRepresentation.pathComponents.count == 3 ?
+							[[NSString alloc] initWithFormat:@"%@ <%@::%@> %@, %@, $@, %@",
+							 NSStringFromClass([self class]),
+							 _objectID.URIRepresentation.pathComponents[1],
+							 _objectID.URIRepresentation.pathComponents[2],
+							 _objectID.URIRepresentation.absoluteString,
+							 _objectID.URIRepresentation.relativeString,
+							 _objectID.URIRepresentation.dataRepresentation] :
+							self.debugDescription;
+	return debugDescription;
 }
 */
 @end

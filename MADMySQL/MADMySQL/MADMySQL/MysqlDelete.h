@@ -14,15 +14,15 @@
 @class MysqlConnection;
 
 @interface MysqlDelete : NSObject {
-    MysqlConnection *connection;
+	MysqlConnection *connection;
 }
 
-    @property(nonatomic, copy) NSString *tableName;
-    @property(nonatomic, copy) NSString *qualifier;
-    @property(nonatomic, readonly) NSNumber *affectedRows;
+	@property(nonatomic, copy) NSString *tableName;
+	@property(nonatomic, copy) NSString *qualifier;
+	@property(nonatomic, readonly) NSNumber *affectedRows;
 
-    + (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection;
-    - (void)execute;
+	+ (MysqlDelete *)deleteWithConnection:(MysqlConnection *)aConnection;
+	- (void)execute;
 
 @end
 

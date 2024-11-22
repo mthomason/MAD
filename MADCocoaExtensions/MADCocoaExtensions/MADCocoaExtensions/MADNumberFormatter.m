@@ -11,14 +11,14 @@
 @implementation MADNumberFormatter
 
 + (instancetype)newNumberFormatterTwoDecimalPlaces {
-    id numberFormatter = [[self alloc] init];
+	id numberFormatter = [[self alloc] init];
 
-    [numberFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
-    [numberFormatter setMaximumFractionDigits: 2];
-    [numberFormatter setDecimalSeparator: @"."];
-    [numberFormatter setGroupingSeparator: @","];
-    
-    return numberFormatter;
+	[numberFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
+	[numberFormatter setMaximumFractionDigits: 2];
+	[numberFormatter setDecimalSeparator: @"."];
+	[numberFormatter setGroupingSeparator: @","];
+	
+	return numberFormatter;
 }
 
 @end

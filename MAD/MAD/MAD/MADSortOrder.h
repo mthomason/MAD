@@ -10,8 +10,8 @@
 #define MAD_MADSortOrder_h
 
 typedef NS_ENUM(int16_t, MADSortOrder) {
-    MADSortOrderAccending = 0,
-    MADSortOrderDecending
+	MADSortOrderAccending = 0,
+	MADSortOrderDecending
 };
 
 #endif

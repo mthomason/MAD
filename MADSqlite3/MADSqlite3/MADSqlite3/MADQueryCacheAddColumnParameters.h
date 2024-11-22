@@ -10,13 +10,13 @@
 #define MAD_MADQueryCacheAddColumnParameters_h
 
 typedef NS_ENUM(short, MADQueryCacheAddColumnParameters) {
-    MADQueryCacheAddColumnDataColumn,
-    MADQueryCacheAddColumnTableName,
-    MADQueryCacheAddColumnUrl,
-    MADQueryCacheAddColumnColumnName,
-    MADQueryCacheAddColumnCreateTable,
-    MADQueryCacheAddColumnUnique,
-    MADQueryCacheAddColumnAffinity
+	MADQueryCacheAddColumnDataColumn,
+	MADQueryCacheAddColumnTableName,
+	MADQueryCacheAddColumnUrl,
+	MADQueryCacheAddColumnColumnName,
+	MADQueryCacheAddColumnCreateTable,
+	MADQueryCacheAddColumnUnique,
+	MADQueryCacheAddColumnAffinity
 };
 
 #endif /* Header_h */

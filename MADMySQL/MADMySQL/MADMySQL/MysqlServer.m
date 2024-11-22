@@ -17,23 +17,23 @@
 @implementation MysqlServer
 
 - (instancetype)init {
-    if (self = [super init]) {
-        self.host = @"localhost";
-        self.user = @"username";
-        self.password = @"password";
-        self.schema = @"test";
-        self.port = 3306;
-        self.flags = CLIENT_FOUND_ROWS;
-        self.connectionTimeout = 30;
-    }
-    return self;
+	if (self = [super init]) {
+		self.host = @"localhost";
+		self.user = @"username";
+		self.password = @"password";
+		self.schema = @"test";
+		self.port = 3306;
+		self.flags = CLIENT_FOUND_ROWS;
+		self.connectionTimeout = 30;
+	}
+	return self;
 }
 
 - (NSString *)description {
-    NSString *description;
-    description = [[NSString alloc] initWithFormat: @"MysqlServer: %@:%d as user %@",
-                                                    _host, _port, _user];
-    return description;
+	NSString *description;
+	description = [[NSString alloc] initWithFormat: @"MysqlServer: %@:%d as user %@",
+													_host, _port, _user];
+	return description;
 }
 
 @end

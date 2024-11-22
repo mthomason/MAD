@@ -50,9 +50,9 @@
  + (UIColor *)newColorBorderColor { id color = [UIColor blackColor]; return color; }
  
  + (UIColor *)newColorDisabledColor {
-     UIColor *color = [self newColorBlackFiftyPercent];
-     color = [color colorWithAlphaComponent:selectedAlpha];
-     return color;
+	 UIColor *color = [self newColorBlackFiftyPercent];
+	 color = [color colorWithAlphaComponent:selectedAlpha];
+	 return color;
  }
  
 @end

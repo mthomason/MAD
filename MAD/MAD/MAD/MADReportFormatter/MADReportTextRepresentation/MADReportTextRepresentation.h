@@ -15,16 +15,16 @@
 @class MADReportPageRepresentation;
 
 @interface MADReportTextRepresentation : NSObject
-    <MADTextRepresentationProtocol>
+	<MADTextRepresentationProtocol>
 
-    @property (readonly) NSUInteger numberOfPages;
+	@property (readonly) NSUInteger numberOfPages;
 
-    - (instancetype)initWithPageCount:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+	- (instancetype)initWithPageCount:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
 
-    - (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex;
-    - (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex;
+	- (MADReportPageRepresentation *)pageIndex:(NSUInteger)pageIndex;
+	- (void)setPage:(MADReportPageRepresentation *)page forPageIndex:(NSUInteger)pageIndex;
 
-    - (void)removeAllPages;
+	- (void)removeAllPages;
 
 @end
 

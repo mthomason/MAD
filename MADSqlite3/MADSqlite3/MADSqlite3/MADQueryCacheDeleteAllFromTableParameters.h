@@ -10,8 +10,8 @@
 #define MAD_MADQueryCacheDeleteAllFromTableParameters_h
 
 typedef NS_ENUM(short, MADQueryCacheDeleteAllFromTableParameters) {
-    MADQueryCacheDeleteAllFromTableConnection,
-    MADQueryCacheDeleteAllFromTableTableName
+	MADQueryCacheDeleteAllFromTableConnection,
+	MADQueryCacheDeleteAllFromTableTableName
 };
 
 #endif /* Header_h */

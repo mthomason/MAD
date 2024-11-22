@@ -15,12 +15,12 @@
 @class MADReportSectionRepresentation;
 
 @interface MADReportPageRepresentation : NSObject
-    <MADTextRepresentationProtocol>
+	<MADTextRepresentationProtocol>
 
-    @property (readonly) NSUInteger numberOfSections;
+	@property (readonly) NSUInteger numberOfSections;
 
-    - (nonnull instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections NS_DESIGNATED_INITIALIZER;
-    - (void)addSection:(nonnull MADReportSectionRepresentation *)section;
+	- (nonnull instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections NS_DESIGNATED_INITIALIZER;
+	- (void)addSection:(nonnull MADReportSectionRepresentation *)section;
 
 @end
 

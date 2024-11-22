@@ -12,43 +12,43 @@
 #import <Foundation/NSValue.h>
 
 @implementation MADTableFieldIdentifier {
-    int64_t _tableID;
-    int64_t _fieldID;
+	int64_t _tableID;
+	int64_t _fieldID;
 }
 
 @dynamic tableID;
 @dynamic fieldID;
 
 - (instancetype)init {
-    if (self = [self initWithTableID:-1 andFieldID:-1]) {
-    }
-    return self;
+	if (self = [self initWithTableID:-1 andFieldID:-1]) {
+	}
+	return self;
 }
 
 - (instancetype)initWithTableID:(int64_t)tableID
-                     andFieldID:(int64_t)fieldID {
-    if (self = [super init]) {
-        _tableID = tableID;
-        _fieldID = fieldID;
-    }
-    return self;
+					 andFieldID:(int64_t)fieldID {
+	if (self = [super init]) {
+		_tableID = tableID;
+		_fieldID = fieldID;
+	}
+	return self;
 }
 
 - (int64_t)tableID {
-    return _tableID;
+	return _tableID;
 }
 
 - (int64_t)fieldID {
-    return _fieldID;
+	return _fieldID;
 }
 
 
 - (NSNumber *)tableObjectID {
-    return @(_tableID);
+	return @(_tableID);
 }
 
 - (NSNumber *)fieldObjectID {
-    return @(_fieldID);
+	return @(_fieldID);
 }
 
 @end
@@ -56,18 +56,18 @@
 @implementation MADTableFieldReference
 
 - (instancetype)init {
-    if (self = [self initWithTableID:nil andFieldID:nil]) {
-    }
-    return self;
+	if (self = [self initWithTableID:nil andFieldID:nil]) {
+	}
+	return self;
 }
 
 - (instancetype)initWithTableID:(NSManagedObjectID *)tableID
-                     andFieldID:(NSManagedObjectID *)fieldID {
-    if (self = [super init]) {
-        _tableID = tableID.copy;
-        _fieldID = fieldID.copy;
-    }
-    return self;
+					 andFieldID:(NSManagedObjectID *)fieldID {
+	if (self = [super init]) {
+		_tableID = tableID.copy;
+		_fieldID = fieldID.copy;
+	}
+	return self;
 }
 
 @end

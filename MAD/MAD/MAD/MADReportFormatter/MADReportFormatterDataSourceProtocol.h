@@ -11,9 +11,9 @@
 
 @protocol MADReportFormatterDataSource <NSObject>
 
-    - (BOOL)cacheExist;
-    - (NSEnumerator <NSDictionary *> *)enumeratorForReportData;
-    - (NSDictionary *)dataForRow:(NSUInteger)cachedID;
+	- (BOOL)cacheExist;
+	- (NSEnumerator <NSDictionary *> *)enumeratorForReportData;
+	- (NSDictionary *)dataForRow:(NSUInteger)cachedID;
 
 @end
 

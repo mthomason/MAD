@@ -13,7 +13,7 @@
 
 @interface MADFeedbackFrustration : UIResponder
 
-    + (instancetype)sharedInstance;
+	+ (instancetype)sharedInstance;
 
 @end
 

@@ -14,37 +14,37 @@
 #import "MAD2dDirection.h"
 
 struct MADResizeAspect {
-    MADAspectRatio aspectRatio;
-    MAD2dDirection direction;
+	MADAspectRatio aspectRatio;
+	MAD2dDirection direction;
 };
 
 static inline struct MADResizeAspect MADResizeTypeForDirection(MADCompassDirection direction);
 static inline struct MADResizeAspect MADResizeTypeForDirection(MADCompassDirection direction) {
-    struct MADResizeAspect resizeAspect;
-    switch (direction) {
-        case south:
-        case north:
-            resizeAspect.aspectRatio = stretch;
-            resizeAspect.direction = vertical;
-            break;
-        case east:
-        case west:
-            resizeAspect.aspectRatio = stretch;
-            resizeAspect.direction = horizontal;
-            break;
-        case northEast:
-        case northWest:
-        case southEast:
-        case southWest:
-            resizeAspect.aspectRatio = fixed;
-            resizeAspect.direction = diagonal;
-            break;
-        default:
-            resizeAspect.aspectRatio = stretch;
-            resizeAspect.direction = horizontal;
-            break;
-    }
-    return resizeAspect;
+	struct MADResizeAspect resizeAspect;
+	switch (direction) {
+		case south:
+		case north:
+			resizeAspect.aspectRatio = stretch;
+			resizeAspect.direction = vertical;
+			break;
+		case east:
+		case west:
+			resizeAspect.aspectRatio = stretch;
+			resizeAspect.direction = horizontal;
+			break;
+		case northEast:
+		case northWest:
+		case southEast:
+		case southWest:
+			resizeAspect.aspectRatio = fixed;
+			resizeAspect.direction = diagonal;
+			break;
+		default:
+			resizeAspect.aspectRatio = stretch;
+			resizeAspect.direction = horizontal;
+			break;
+	}
+	return resizeAspect;
 }
 
 #endif /* MADResizeAspect_h */

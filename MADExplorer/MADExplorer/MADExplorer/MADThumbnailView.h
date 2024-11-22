@@ -13,9 +13,9 @@
 
 @interface MADThumbnailView : UIImageView
 
-    @property (nonatomic, copy) NSURL *thumbnailURL;
+	@property (nonatomic, copy) NSURL *thumbnailURL;
 
-    - (void)prepareForReuse;
+	- (void)prepareForReuse;
 
 @end
 

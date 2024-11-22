@@ -14,23 +14,23 @@
 @protocol MADExplorerProtocol, UIGestureRecognizerDelegate;
 
 @interface MADExplorerViewDelegate : NSObject
-    <UICollectionViewDelegateFlowLayout>
+	<UICollectionViewDelegateFlowLayout>
 
-    - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;
-    
-    @property (nonatomic, weak) id <MADExplorerProtocol,
-                                        UIGestureRecognizerDelegate> delegate;
+	- (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections;
+	
+	@property (nonatomic, weak) id <MADExplorerProtocol,
+										UIGestureRecognizerDelegate> delegate;
 
-    @property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;
-    @property (nonatomic, readwrite, assign, getter=isShowingPopover) BOOL showingPopover;
+	@property (nonatomic, readwrite, assign, getter=isEditing) BOOL editing;
+	@property (nonatomic, readwrite, assign, getter=isShowingPopover) BOOL showingPopover;
 
-    @property (readonly) NSUInteger numberOfItemsSelected;
-    @property (readonly) NSUInteger numberOfItemsHighlighted;
+	@property (readonly) NSUInteger numberOfItemsSelected;
+	@property (readonly) NSUInteger numberOfItemsHighlighted;
 
-    - (NSArray <NSIndexPath *> *)indexPathsForSelectedItems;
-    - (NSArray <NSIndexPath *> *)indexPathsForHighlightedItems;
+	- (NSArray <NSIndexPath *> *)indexPathsForSelectedItems;
+	- (NSArray <NSIndexPath *> *)indexPathsForHighlightedItems;
 
-    - (void)collectionView:(UICollectionView *)collectionView allowSelection:(BOOL)allowSelection;
+	- (void)collectionView:(UICollectionView *)collectionView allowSelection:(BOOL)allowSelection;
 
 @end
 

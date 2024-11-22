@@ -10,11 +10,11 @@
 #define MAD_MADQueryCacheAddRowParameters_h
 
 typedef NS_ENUM(short, MADQueryCacheAddRowParameters) {
-    MADQueryCacheAddRowUrl,
-    MADQueryCacheAddRowData,
-    MADQueryCacheAddRowTableName,
-    MADQueryCacheAddRowColumns,
-    MADQueryCacheAddRowColumnKeys
+	MADQueryCacheAddRowUrl,
+	MADQueryCacheAddRowData,
+	MADQueryCacheAddRowTableName,
+	MADQueryCacheAddRowColumns,
+	MADQueryCacheAddRowColumnKeys
 };
 
 #endif /* Header_h */

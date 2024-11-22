@@ -14,7 +14,7 @@
 
 @interface MADReportSectionRepresentation ()
 
-    @property (nonatomic, strong, getter=hasRows) NSMutableArray <__kindof MADReportSectionRowsRepresentation *> *rows;
+	@property (nonatomic, strong, getter=hasRows) NSMutableArray <__kindof MADReportSectionRowsRepresentation *> *rows;
 
 @end
 
@@ -23,34 +23,34 @@
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
 
 - (void)dealloc {
-    [_rows removeAllObjects];
+	[_rows removeAllObjects];
 }
 
 - (instancetype)init {
-    return [self initWithNumberOfRows:0];
+	return [self initWithNumberOfRows:0];
 }
 
 - (instancetype)initWithNumberOfRows:(NSUInteger)capacity {
-    if (self = [super init]) {
-        NSMutableArray *rows = capacity > 0 ? [[NSMutableArray alloc] initWithCapacity:capacity] :
-                                                [[NSMutableArray alloc] init];
-        self.rows = rows;
-    }
-    return self;
+	if (self = [super init]) {
+		NSMutableArray *rows = capacity > 0 ? [[NSMutableArray alloc] initWithCapacity:capacity] :
+												[[NSMutableArray alloc] init];
+		self.rows = rows;
+	}
+	return self;
 }
 
 - (BOOL)addRow:(nonnull MADReportSectionRowsRepresentation *)row
-         error:(NSError * __nullable __autoreleasing * __nullable)error {
-    BOOL success = YES;
-    @try {
-        [_rows addObject:row];
-    } @catch (NSException *exception) {
-        MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
-                                                                  andMessage:@"Failed to add null value."];
-        *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:49832];
-        success = NO;
-    } @finally { }
-    return success;
+		 error:(NSError * __nullable __autoreleasing * __nullable)error {
+	BOOL success = YES;
+	@try {
+		[_rows addObject:row];
+	} @catch (NSException *exception) {
+		MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
+																  andMessage:@"Failed to add null value."];
+		*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:49832];
+		success = NO;
+	} @finally { }
+	return success;
 }
 
 - (NSUInteger)numberOfRows { return self.rows.count; }
@@ -58,21 +58,21 @@
 #pragma mark - MADTextRepresentationProtocol
 
 - (NSUInteger)characterCount {
-    NSUInteger characterCount = 0;
-    MADReportSectionRowsRepresentation *row;
-    for (row in _rows) {
-        characterCount += [row characterCount];
-    }
-    return characterCount;
+	NSUInteger characterCount = 0;
+	MADReportSectionRowsRepresentation *row;
+	for (row in _rows) {
+		characterCount += [row characterCount];
+	}
+	return characterCount;
 }
 
 - (NSUInteger)elementCount {
-    NSUInteger elementCount = 0;
-    MADReportSectionRowsRepresentation *row;
-    for (row in _rows) {
-        elementCount += [row elementCount];
-    }
-    return elementCount;
+	NSUInteger elementCount = 0;
+	MADReportSectionRowsRepresentation *row;
+	for (row in _rows) {
+		elementCount += [row elementCount];
+	}
+	return elementCount;
 }
 
 @end

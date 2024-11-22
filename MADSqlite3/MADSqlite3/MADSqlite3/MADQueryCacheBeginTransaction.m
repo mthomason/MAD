@@ -16,19 +16,19 @@
 @implementation MADQueryCacheBeginTransaction
 
 - (instancetype)initWithObject:(id)object {
-    return self = [super init];
+	return self = [super init];
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return @"BEGIN TRANSACTION;";
+	return @"BEGIN TRANSACTION;";
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheBeginTransaction;
+	return MADQueryTypeCacheBeginTransaction;
 }
 
 @end

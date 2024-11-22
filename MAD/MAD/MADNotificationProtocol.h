@@ -13,7 +13,7 @@
 
 @protocol MADNotificationProtocol <NSObject>
 
-    - (void)notify;
+- (void)notify;
 
 @end
 

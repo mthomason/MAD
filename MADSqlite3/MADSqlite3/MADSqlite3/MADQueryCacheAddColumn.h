@@ -14,14 +14,14 @@
 @class MADDataColumn;
 
 @interface MADQueryCacheAddColumn : MADQueryCache
-    <MADQueryDatabaseProtocol>
+	<MADQueryDatabaseProtocol>
 
-    - (instancetype)initWithTableName:(NSString *)tableName
-                           columnName:(NSString *)columnName
-                               column:(MADDataColumn *)column
-                          createTable:(BOOL)createTable
-                     uniqueColumnHack:(BOOL)uniqueColumnHack
-                       columnAffinity:(NSString *)columnAffinity;
+	- (instancetype)initWithTableName:(NSString *)tableName
+						   columnName:(NSString *)columnName
+							   column:(MADDataColumn *)column
+						  createTable:(BOOL)createTable
+					 uniqueColumnHack:(BOOL)uniqueColumnHack
+					   columnAffinity:(NSString *)columnAffinity;
 
 @end
 

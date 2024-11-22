@@ -14,15 +14,16 @@
 
 @implementation MADOperationCreateDocumentSaveAndCloseNewDocument
 
-- (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (BOOL)isAsynchronous {
-    return YES;
+	return YES;
 }
 
 - (void)execute {
+#warning This method is not implemented.
+	@throw NSInternalInconsistencyException;
+	
     //os_log_info(OS_LOG_DEFAULT, "Begin %s", NSStringFromClass(self.class).UTF8String);
 
     if (self.cancelled) return [self finish];

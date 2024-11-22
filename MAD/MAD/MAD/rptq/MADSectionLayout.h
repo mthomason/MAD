@@ -17,22 +17,22 @@
 
 @interface MADSectionLayout : NSObject
 
-    @property (nonatomic, assign) int64_t identifier;
-    @property (nonatomic, assign) MADDocumentSectionType type;
-    @property (nonatomic, assign) float height;
-    @property (nonatomic, assign) float displayHeight;
-    @property (nonatomic, assign) NSUInteger groupLevel;
-    @property (nonatomic, assign) NSUInteger numberOfRows;
-    @property (nonatomic, assign, getter=isVisible) BOOL visibility;
-    @property (nonatomic, assign) RptqDocumentSectionWrappingStyle wrappingStyle;
-    @property (nonatomic, assign, readonly) BOOL producesFormFeed;
-    @property (nonatomic, copy) NSManagedObjectID *objectID;
-    @property (nonatomic, copy) NSNumber *identifierObject;
+	@property (nonatomic, assign) int64_t identifier;
+	@property (nonatomic, assign) MADDocumentSectionType type;
+	@property (nonatomic, assign) float height;
+	@property (nonatomic, assign) float displayHeight;
+	@property (nonatomic, assign) NSUInteger groupLevel;
+	@property (nonatomic, assign) NSUInteger numberOfRows;
+	@property (nonatomic, assign, getter=isVisible) BOOL visibility;
+	@property (nonatomic, assign) RptqDocumentSectionWrappingStyle wrappingStyle;
+	@property (nonatomic, assign, readonly) BOOL producesFormFeed;
+	@property (nonatomic, copy) NSManagedObjectID *objectID;
+	@property (nonatomic, copy) NSNumber *identifierObject;
 
-    - (instancetype)initWithObject:(NSDictionary *)object
-              managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithObject:(NSDictionary *)object
+			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSString *)localizedDisplay;
+	- (NSString *)localizedDisplay;
 
 @end
 

@@ -13,7 +13,7 @@
 
 @interface UIViewController (Utilities)
 
-    + (instancetype)copyTopmostViewController;
+	+ (instancetype)copyTopmostViewController;
 
 @end
 

@@ -154,7 +154,6 @@
 				4C4F12911D0FAEE90002294E /* MADFileLocationManagerDelegate.h */,
 				4CC909061D0FD2CD007A1C75 /* FileController */,
 				4CC909051D0FD291007A1C75 /* FileCoordinator */,
-				4CC1C6FB1CFDE920006F1546 /* Categories */,
 				4C1E54E41E56601B00E3FAF0 /* MADDirectoryMonitorProtocol.h */,
 				4C41DA731BA22C5700FF63EC /* MADDirectoryMonitor.h */,
 				4C41DA741BA22C5700FF63EC /* MADDirectoryMonitor.m */,
@@ -206,13 +205,6 @@
 			children = (
 			);
 			name = Headers;
-			sourceTree = "<group>";
-		};
-		4CC1C6FB1CFDE920006F1546 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Categories;
 			sourceTree = "<group>";
 		};
 		4CC909051D0FD291007A1C75 /* FileCoordinator */ = {

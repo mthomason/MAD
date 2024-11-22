@@ -30,54 +30,54 @@
 @end
 
 @implementation MADQueryCacheIndexCreate {
-    NSString *_sql;
+	NSString *_sql;
 }
 
 @synthesize dataDelegate = _dataDelegate;
 
 - (void)dealloc {
-    _dataDelegate = nil;
+	_dataDelegate = nil;
 }
 
 - (instancetype)initWithObject:(MADQueryCacheIndexCreateParameters *)object {
-    if (self = [super initWithObject:object]) {
-        
-        NSMutableString *sql;
-        NSArray *sortDescriptors = object.sortDescriptors;
-        if (sortDescriptors.count == 0) return self;
-        
-        sql = [[NSMutableString alloc] initWithFormat: @"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (",
-                                                       object.groupName, object.tableName];
-        
-        NSDictionary *columns = object.columns;
-        MADSqlite3SortDescription *sortDirection;
-        NSUInteger sortCounter = 0;
-        for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-            
-            NSString *keySortDescriptor = sortDescriptor.key;
-            
-            MADDataColumn *column = columns[keySortDescriptor];
-            
-            NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType
-                                                                            ascending: sortDescriptor.ascending];
-            [sql appendFormat:(sortCounter == 0) ? @"%@ %@" : @", %@ %@", keySortDescriptor, sortDirection];
-            sortCounter++;
-        }
-        [sql appendString:@")"];
-        _sql = sql;
-    }
-    return self;
+	if (self = [super initWithObject:object]) {
+		
+		NSMutableString *sql;
+		NSArray *sortDescriptors = object.sortDescriptors;
+		if (sortDescriptors.count == 0) return self;
+		
+		sql = [[NSMutableString alloc] initWithFormat: @"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (",
+													   object.groupName, object.tableName];
+		
+		NSDictionary *columns = object.columns;
+		MADSqlite3SortDescription *sortDirection;
+		NSUInteger sortCounter = 0;
+		for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+			
+			NSString *keySortDescriptor = sortDescriptor.key;
+			
+			MADDataColumn *column = columns[keySortDescriptor];
+			
+			NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+			sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType
+																			ascending: sortDescriptor.ascending];
+			[sql appendFormat:(sortCounter == 0) ? @"%@ %@" : @", %@ %@", keySortDescriptor, sortDirection];
+			sortCounter++;
+		}
+		[sql appendString:@")"];
+		_sql = sql;
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return _sql;
+	return _sql;
 }
 
 - (BOOL)returnsResults { return NO; }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheIndexCreateParameters;
+	return MADQueryTypeCacheIndexCreateParameters;
 }
 
 @end

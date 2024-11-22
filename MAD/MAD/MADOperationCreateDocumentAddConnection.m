@@ -18,8 +18,8 @@
 
 @interface MADOperationCreateDocumentAddConnection ()
 
-    @property (nonatomic, assign) BOOL success;
-    @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
+	@property (nonatomic, assign) BOOL success;
+	@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
 
 @end
 
@@ -28,38 +28,38 @@
 - (void)dealloc { }
 
 - (instancetype)init {
-    return [self initWithDatabaseConnection:nil];
+	return [self initWithDatabaseConnection:nil];
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
-    if (self = [super init]) {
-        self.databaseConnection = databaseConnection.copy;
-        self.success = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		self.databaseConnection = databaseConnection.copy;
+		self.success = NO;
+	}
+	return self;
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    if (self.cancelled) return [self finish];
+	if (self.cancelled) return [self finish];
 
-    MADocument *document = nil;
-    NSArray <NSOperation *> *dependencies = self.dependencies;
-    for (NSOperation *dependency in dependencies) {
-    
-        if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
-            document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
-            break;
-        }
-        
-    }
+	MADocument *document = nil;
+	NSArray <NSOperation *> *dependencies = self.dependencies;
+	for (NSOperation *dependency in dependencies) {
+	
+		if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
+			document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
+			break;
+		}
+		
+	}
 
-    [document activeDocumentModel];
+	[document activeDocumentModel];
 
-    self.success = YES;
-    
-    [self finish];
+	self.success = YES;
+	
+	[self finish];
 }
 
 @end

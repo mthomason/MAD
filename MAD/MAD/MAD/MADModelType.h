@@ -10,9 +10,9 @@
 #define MADModelType_h
 
 typedef NS_ENUM(short, MADModelType) {
-    MADModelTypeDocument,
-    MADModelTypeDatabase,
-    MADModelTypeQueries,
+	MADModelTypeDocument,
+	MADModelTypeDatabase,
+	MADModelTypeQueries,
 };
 
 #endif /* MADModelType_h */

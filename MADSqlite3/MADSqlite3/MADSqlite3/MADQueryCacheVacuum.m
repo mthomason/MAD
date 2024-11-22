@@ -19,23 +19,23 @@
 
 - (instancetype)initWithObject:(id)object {
 
-    if (self = [super init]) {
-        NSAssert([object isKindOfClass:[NSDictionary class]],
-                        @"MADQueryCacheVacuum expects NSDictionary.");
-    }
-    return self;
+	if (self = [super init]) {
+		NSAssert([object isKindOfClass:[NSDictionary class]],
+						@"MADQueryCacheVacuum expects NSDictionary.");
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return @"VACUUM";
+	return @"VACUUM";
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheVacuum;
+	return MADQueryTypeCacheVacuum;
 }
 
 @end

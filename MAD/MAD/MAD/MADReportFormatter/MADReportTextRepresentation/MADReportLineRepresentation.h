@@ -15,14 +15,14 @@
 #import <MAD/MADReportTextRepresentation.h>
 
 @interface MADReportLineRepresentation : NSObject
-    <MADTextRepresentationProtocol>
+	<MADTextRepresentationProtocol>
 
-    - (instancetype)initWithObject:(id)object type:(MADPrintPageElementType)type
-                             frame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
+	- (instancetype)initWithObject:(id)object type:(MADPrintPageElementType)type
+							 frame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
-    @property (nonatomic, assign, readonly) CGRect frame;
+	@property (nonatomic, assign, readonly) CGRect frame;
 
-    - (NSString *)label;
+	- (NSString *)label;
 
 @end
 

@@ -19,37 +19,37 @@ static NSString * const SqlDelimitorObject = @", %@";
 static NSString * const SqlFormat = @", %@";
 
 @implementation MADQueryCacheSelectRowId {
-    NSString *_sql;
+	NSString *_sql;
 }
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super initWithObject:object]) {
-        
-        NSAssert([object isKindOfClass:[NSDictionary class]],
-                 @"%@ expects NSDictionary.", NSStringFromClass([self class]));
-        
-        NSNumber *key = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
-        NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
-        NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
-        
-        NSArray *columnKeys = object[key];
-        
-        NSString *columnNames = columnKeys.count > 0 ?
-                                    [columnKeys componentsJoinedByString:@", "] : WildCard;
-        
-        NSString *sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld",
-                         columnNames, object[keyTableName], (long)((NSNumber *)object[keyRowId]).integerValue];;
-        _sql = sql;
-    }
-    return self;
+	if (self = [super initWithObject:object]) {
+		
+		NSAssert([object isKindOfClass:[NSDictionary class]],
+				 @"%@ expects NSDictionary.", NSStringFromClass([self class]));
+		
+		NSNumber *key = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
+		NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
+		NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+		
+		NSArray *columnKeys = object[key];
+		
+		NSString *columnNames = columnKeys.count > 0 ?
+									[columnKeys componentsJoinedByString:@", "] : WildCard;
+		
+		NSString *sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ WHERE rowid = %ld",
+						 columnNames, object[keyTableName], (long)((NSNumber *)object[keyRowId]).integerValue];;
+		_sql = sql;
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    return _sql;
+	return _sql;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheSelectRowId;
+	return MADQueryTypeCacheSelectRowId;
 }
 
 @end

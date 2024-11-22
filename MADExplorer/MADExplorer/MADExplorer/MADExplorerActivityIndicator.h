@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MADExplorerActivityIndicator : UIActivityIndicatorView
-    + (instancetype)newExplorerActivityIndicator;
+	+ (instancetype)newExplorerActivityIndicator;
 @end
 
 #endif

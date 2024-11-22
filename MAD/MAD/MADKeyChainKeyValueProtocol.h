@@ -11,7 +11,7 @@
 
 @protocol MADKeyChainKeyValueProtocol <NSObject>
 
-    - (NSString *)valueForKey:(NSString *)key;
+- (NSString *)valueForKey:(NSString *)key;
 
 @end
 

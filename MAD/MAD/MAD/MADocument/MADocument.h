@@ -1,5 +1,5 @@
- 
- 
+
+
 //
 //  MADocument.h
 //  Reports
@@ -25,103 +25,103 @@
 @protocol MADActivityProtocol, MADocumentDelegate;
 
 @class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument,
-        MADDatabaseConnection, MADModelDocument, MADocumentState,
-        MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery;
+	   MADDatabaseConnection, MADModelDocument, MADocumentState,
+	   MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery;
 
 
 extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
 @protocol MADDocumentStatusProtocol <NSObject>
-    - (void)setStatusText:(NSString *)statusText;
+   - (void)setStatusText:(NSString *)statusText;
 @end
 
 @interface MADocument : UIManagedDocument
-    <UIPrintInteractionControllerDelegate,
-        MADDataProtocol,
-        MADCacheProtocol,
-        MADReportFormatterDataSource,
-        MADPrintPageRendererDataSourceProtocol>
+   <UIPrintInteractionControllerDelegate,
+	   MADDataProtocol,
+	   MADCacheProtocol,
+	   MADReportFormatterDataSource,
+	   MADPrintPageRendererDataSourceProtocol>
 
-    @property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
-    @property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;
-    @property (nonatomic, readonly, strong) MADDesignerViewer *designerViewer;
+@property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
+@property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;
+@property (nonatomic, readonly, strong) MADDesignerViewer *designerViewer;
 
-    @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
-    @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
-    @property (readonly, nonatomic, strong)     MTPaper *paper;
-    @property (readonly, nonatomic)             NSUInteger numberOfPages;
-    @property (readonly, nonatomic)             NSUInteger numberOfResults;
-    @property (readonly, nonatomic)             CGSize paperSize;
+@property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
+@property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
+@property (readonly, nonatomic, strong)     MTPaper *paper;
+@property (readonly, nonatomic)             NSUInteger numberOfPages;
+@property (readonly, nonatomic)             NSUInteger numberOfResults;
+@property (readonly, nonatomic)             CGSize paperSize;
 
-    //Layout
+//Layout
 
-    //Query
+//Query
 
-    //Viewer
-    @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
-    @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
-    @property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
+//Viewer
+@property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
+@property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
+@property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;
 
-    @property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
+@property (readwrite, nonatomic, strong)    MADocumentState *documentStatus;
 
-    @property (readonly, nonatomic, strong)     NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
+@property (readonly, nonatomic, strong)     NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
-    @property (readonly, nonatomic, copy)       NSString *filename;
-    @property (readonly, nonatomic, strong)     MADQueryFull *mainQuery;
+@property (readonly, nonatomic, copy)       NSString *filename;
+@property (readonly, nonatomic, strong)     MADQueryFull *mainQuery;
 
-    @property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
+@property (readonly, nonatomic, copy)       NSURL *urlDataTableCache;
 
-    @property (readwrite, nonatomic, assign)    BOOL limitResultsDesignMode;
-    @property (readwrite, nonatomic, assign, getter=isAutosaveEnabled)    BOOL autosaveEnabled;
+@property (readwrite, nonatomic, assign)    BOOL limitResultsDesignMode;
+@property (readwrite, nonatomic, assign, getter=isAutosaveEnabled)    BOOL autosaveEnabled;
 
-    @property (nonatomic, readwrite, getter=didRefresh) BOOL refreshed;
-    @property (nonatomic, readwrite, getter=hasCachedData) BOOL cachedData;
+@property (nonatomic, readwrite, getter=didRefresh) BOOL refreshed;
+@property (nonatomic, readwrite, getter=hasCachedData) BOOL cachedData;
 
-    + (instancetype)newManagedDocumentForURL:(NSURL *)url;
-    - (instancetype)initWithFileURL:(NSURL *)url;
-    - (instancetype)initWithFileURL:(NSURL *)url
-              andDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
++ (instancetype)newManagedDocumentForURL:(NSURL *)url;
+- (instancetype)initWithFileURL:(NSURL *)url;
+- (instancetype)initWithFileURL:(NSURL *)url
+			 andDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
 
-    - (void)format;
-    - (void)formatContentChange;
+- (void)format;
+- (void)formatContentChange;
 
-    - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
+- (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
-    - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
-                           andSortOrder:(MADSortOrder)sortOrder;
+- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
+						  andSortOrder:(MADSortOrder)sortOrder;
 
-    - (void)removeDocumentObjectWithObjectID:(int64_t)objectID;
+- (void)removeDocumentObjectWithObjectID:(int64_t)objectID;
 
-    - (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
-                                 inContent:(NSManagedObjectContext *)context;
+- (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
+								inContent:(NSManagedObjectContext *)context;
 
-    - (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
-                                     inContent:(NSManagedObjectContext *)context;
+- (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
+									inContent:(NSManagedObjectContext *)context;
 
-    - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
-          fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
+		 fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey;
+- (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey;
 
-    + (void)close:(MADocument *)document
-       completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion;
++ (void)close:(MADocument *)document
+	  completion:(void (^)(BOOL success, NSURL *fileURL, NSURL *cleanupURL))completion;
 
-    - (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
+- (void)archiveAndRemoveFileWrapper; //Cleans any cache that may exist.
 
-    - (NSURL *)thumbnailURL;
+- (NSURL *)thumbnailURL;
 
-    - (BOOL)dataTableMakeCache;
-    - (BOOL)dataTableMakeCache:(NSURL *)url;
-    - (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage;
-    - (void)dataTableSort:(RptqQuery *)query;
+- (BOOL)dataTableMakeCache;
+- (BOOL)dataTableMakeCache:(NSURL *)url;
+- (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage;
+- (void)dataTableSort:(RptqQuery *)query;
 
-    - (void)saveContext;
-    - (void)prepareForQuery;
-    - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection;
-    - (void)resetCache;
-    - (void)resetMainQuery;
-    - (void)resetSectionLayoutManagers;
+- (void)saveContext;
+- (void)prepareForQuery;
+- (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection;
+- (void)resetCache;
+- (void)resetMainQuery;
+- (void)resetSectionLayoutManagers;
 
 @end
 

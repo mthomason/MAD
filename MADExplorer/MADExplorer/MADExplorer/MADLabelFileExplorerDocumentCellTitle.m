@@ -13,57 +13,57 @@
 @implementation MADLabelFileExplorerDocumentCellTitle
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self commonInitalization];
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		[self commonInitalization];
+	}
+	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self commonInitalization];
-    }
-    return self;
+	if (self = [super initWithFrame:frame]) {
+		[self commonInitalization];
+	}
+	return self;
 }
 
 - (void)commonInitalization {
-    self.userInteractionEnabled = YES;
-    self.textColor = [MADColorEverydayApps newColorBlue];
-    self.clipsToBounds = NO;
-    self.numberOfLines = 0;
-    self.backgroundColor = [UIColor clearColor];
-    self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    
-    SEL handleTap = @selector(handleTapGestureRecognizer:);
-    UITapGestureRecognizer *tapGesture;
-    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                         action: handleTap];
-    tapGesture.numberOfTapsRequired = 1;
-    tapGesture.numberOfTouchesRequired = 1;
-    [self addGestureRecognizer:tapGesture];
+	self.userInteractionEnabled = YES;
+	self.textColor = [MADColorEverydayApps newColorBlue];
+	self.clipsToBounds = NO;
+	self.numberOfLines = 0;
+	self.backgroundColor = [UIColor clearColor];
+	self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+	
+	SEL handleTap = @selector(handleTapGestureRecognizer:);
+	UITapGestureRecognizer *tapGesture;
+	tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
+														 action: handleTap];
+	tapGesture.numberOfTapsRequired = 1;
+	tapGesture.numberOfTouchesRequired = 1;
+	[self addGestureRecognizer:tapGesture];
 }
 
 - (UIColor *)highlightedTextColor {
-    return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorRed];
+	return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorRed];
 }
 
 - (UIColor *)disabledTextColor {
-    return _selected ? [UIColor whiteColor] : [UIColor lightGrayColor];
+	return _selected ? [UIColor whiteColor] : [UIColor lightGrayColor];
 }
 
 - (UIColor *)enabledTextColor {
-    return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorBlue];
+	return _selected ? [UIColor whiteColor] : [MADColorEverydayApps newColorBlue];
 }
 
 - (void)setSelected:(BOOL)selected {
-    if (_selected != selected) {
-        _selected = selected;
-        [self setNeedsDisplay];
-    }
+	if (_selected != selected) {
+		_selected = selected;
+		[self setNeedsDisplay];
+	}
 }
 
 - (void)handleTapGestureRecognizer:(id)sender {
-    if (_handleTap) _handleTap(self);
+	if (_handleTap) _handleTap(self);
 }
 
 @end

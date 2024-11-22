@@ -11,16 +11,16 @@
 @implementation MADExplorerActivityIndicator
 
 + (instancetype)newExplorerActivityIndicator {
-    id activityIndicatorView;
-    activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-                             UIActivityIndicatorViewStyleGray];
-    [activityIndicatorView stopAnimating];
-    [activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |
-                                                UIViewAutoresizingFlexibleRightMargin |
-                                                UIViewAutoresizingFlexibleTopMargin |
-                                                UIViewAutoresizingFlexibleBottomMargin];
-    [activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints: YES];
-    return activityIndicatorView;
+	id activityIndicatorView;
+	activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+							 UIActivityIndicatorViewStyleGray];
+	[activityIndicatorView stopAnimating];
+	[activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |
+												UIViewAutoresizingFlexibleRightMargin |
+												UIViewAutoresizingFlexibleTopMargin |
+												UIViewAutoresizingFlexibleBottomMargin];
+	[activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints: YES];
+	return activityIndicatorView;
 }
 
 @end

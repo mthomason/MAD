@@ -14,7 +14,7 @@
 @protocol MADocumentDelegate
   @required
   @optional
-    - (MADCredential *)getCredentialsForKey:(NSString *)key;
+	- (MADCredential *)getCredentialsForKey:(NSString *)key;
 @end
 
 #endif /* MADDocumentProtocol_h */

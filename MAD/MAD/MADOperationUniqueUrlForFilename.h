@@ -12,16 +12,16 @@
 #import <MADFoundation/MADOperation.h>
 
 @protocol MADOperationUniqueUrlForFilenameProtocol <NSObject>
-    - (NSURL *)uniqueUrl;
+	- (NSURL *)uniqueUrl;
 @end
 
 @interface MADOperationUniqueUrlForFilename : MADOperation
-    <MADOperationUniqueUrlForFilenameProtocol>
-    
-    - (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
-                      andDocumentsDirectory:(NSURL *)documentsDirectory;
+	<MADOperationUniqueUrlForFilenameProtocol>
 
-    @property (nonatomic, copy, readonly) NSURL *uniqueUrl;
+@property (nonatomic, copy, readonly) NSURL *uniqueUrl;
+
+- (instancetype)initWithDesiredFilename:(NSString *)filename pathExtension:(NSString *)pathExtension
+				  andDocumentsDirectory:(NSURL *)documentsDirectory;
 
 @end
 

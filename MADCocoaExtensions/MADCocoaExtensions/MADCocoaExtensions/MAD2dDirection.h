@@ -10,9 +10,9 @@
 #define MAD2dDirection_h
 
 typedef NS_ENUM(NSUInteger, MAD2dDirection) {
-    horizontal,
-    vertical,
-    diagonal
+	horizontal,
+	vertical,
+	diagonal
 };
 
 #endif /* MAD2dDirection_h */

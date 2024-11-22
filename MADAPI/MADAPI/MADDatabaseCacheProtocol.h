@@ -15,11 +15,11 @@
 
 @protocol MADDatabaseCacheProtocol <NSObject>
 
-    - (id <MADDatabaseResultsProtocol>)delegate;
-    - (BOOL)tableExist:(NSString *)tablename;
+	- (id <MADDatabaseResultsProtocol>)delegate;
+	- (BOOL)tableExist:(NSString *)tablename;
 
-    - (void)beginBulkInsert;
-    - (void)endBulkInsert;
+	- (void)beginBulkInsert;
+	- (void)endBulkInsert;
 
 @end
 

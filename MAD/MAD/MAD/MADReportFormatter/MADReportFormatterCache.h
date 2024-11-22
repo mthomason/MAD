@@ -14,11 +14,11 @@
 
 @interface MADReportFormatterCache : NSObject
 
-    - (instancetype)init;
-    - (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size;
-    - (id)layoutForSize:(CGSize)size;
-    - (id)indexesForSize:(CGSize)size;
-    - (void)dumpCache;
+	- (instancetype)init;
+	- (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size;
+	- (id)layoutForSize:(CGSize)size;
+	- (id)indexesForSize:(CGSize)size;
+	- (void)dumpCache;
 
 @end
 

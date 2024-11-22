@@ -14,16 +14,16 @@
 @class MysqlConnection;
 
 @interface MysqlUpdate : NSObject {
-    MysqlConnection *connection;
+	MysqlConnection *connection;
 }
 
-    @property(nonatomic, strong) NSString *table;
-    @property(nonatomic, strong) NSDictionary *rowData;
-    @property(nonatomic, strong) NSDictionary *qualifier;
-    @property(nonatomic, readonly) NSNumber *affectedRows;
+	@property(nonatomic, strong) NSString *table;
+	@property(nonatomic, strong) NSDictionary *rowData;
+	@property(nonatomic, strong) NSDictionary *qualifier;
+	@property(nonatomic, readonly) NSNumber *affectedRows;
 
-    + (MysqlUpdate *)updateWithConnection:(MysqlConnection *)aConnection;
-    - (void)execute;
+	+ (MysqlUpdate *)updateWithConnection:(MysqlConnection *)aConnection;
+	- (void)execute;
 
 @end
 

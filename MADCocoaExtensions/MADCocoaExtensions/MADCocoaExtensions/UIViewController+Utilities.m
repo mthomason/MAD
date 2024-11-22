@@ -16,45 +16,45 @@
 @implementation UIViewController (Utilities)
 
 + (instancetype)copyTopmostViewController:(UIViewController *)vc {
-    
-    if (vc.presentedViewController) {
-        
-        return [UIViewController copyTopmostViewController:vc.presentedViewController];
-        
-    } else if ([vc isKindOfClass:[UISplitViewController class]]) {
-        
-        UISplitViewController* svc = (UISplitViewController *) vc;
-        
-        if (svc.viewControllers.count > 0)
-            return [UIViewController copyTopmostViewController:svc.viewControllers.lastObject];
-        else
-            return vc;
-        
-    } else if ([vc isKindOfClass:[UINavigationController class]]) {
-        
-        UINavigationController* svc = (UINavigationController *) vc;
-        if (svc.viewControllers.count > 0)
-            return [UIViewController copyTopmostViewController:svc.topViewController];
-        else
-            return vc;
-        
-    } else if ([vc isKindOfClass:[UITabBarController class]]) {
-        
-        UITabBarController* svc = (UITabBarController *) vc;
-        if (svc.viewControllers.count > 0)
-            return [UIViewController copyTopmostViewController:svc.selectedViewController];
-        else
-            return vc;
-        
-    } else {
-        return vc;
-    }
+	
+	if (vc.presentedViewController) {
+		
+		return [UIViewController copyTopmostViewController:vc.presentedViewController];
+		
+	} else if ([vc isKindOfClass:[UISplitViewController class]]) {
+		
+		UISplitViewController* svc = (UISplitViewController *) vc;
+		
+		if (svc.viewControllers.count > 0)
+			return [UIViewController copyTopmostViewController:svc.viewControllers.lastObject];
+		else
+			return vc;
+		
+	} else if ([vc isKindOfClass:[UINavigationController class]]) {
+		
+		UINavigationController* svc = (UINavigationController *) vc;
+		if (svc.viewControllers.count > 0)
+			return [UIViewController copyTopmostViewController:svc.topViewController];
+		else
+			return vc;
+		
+	} else if ([vc isKindOfClass:[UITabBarController class]]) {
+		
+		UITabBarController* svc = (UITabBarController *) vc;
+		if (svc.viewControllers.count > 0)
+			return [UIViewController copyTopmostViewController:svc.selectedViewController];
+		else
+			return vc;
+		
+	} else {
+		return vc;
+	}
 }
 
 + (instancetype)copyTopmostViewController {
-    UIViewController *viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return [UIViewController copyTopmostViewController:viewController];
-    
+	UIViewController *viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+	return [UIViewController copyTopmostViewController:viewController];
+	
 }
 
 @end

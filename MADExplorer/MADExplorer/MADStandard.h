@@ -13,9 +13,9 @@
 
 @interface MADStandard : NSObject
 
-    + (instancetype)newStandardStringForDouble:(double)d;
-    + (instancetype)newStandardStringForUnsignedLong:(unsigned long)ul;
-    + (instancetype)newStandardStringForFileSize:(unsigned long long)filesize;
+	+ (instancetype)newStandardStringForDouble:(double)d;
+	+ (instancetype)newStandardStringForUnsignedLong:(unsigned long)ul;
+	+ (instancetype)newStandardStringForFileSize:(unsigned long long)filesize;
 
 @end
 

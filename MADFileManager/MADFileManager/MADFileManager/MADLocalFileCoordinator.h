@@ -13,13 +13,13 @@
 
 @interface MADLocalFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 
-    - (instancetype)initWithPathExtension: (NSString *)pathExtension
-                               identifier: (NSString *)fileGroup
-                  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
+	- (instancetype)initWithPathExtension: (NSString *)pathExtension
+							   identifier: (NSString *)fileGroup
+				  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
 
-    - (instancetype)initWithLastPathComponent: (NSString *)lastPathComponent
-                                   identifier: (NSString *)fileGroup
-                      firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
+	- (instancetype)initWithLastPathComponent: (NSString *)lastPathComponent
+								   identifier: (NSString *)fileGroup
+					  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler;
 
 @end
 

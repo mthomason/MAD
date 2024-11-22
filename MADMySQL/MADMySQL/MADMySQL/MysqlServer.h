@@ -13,13 +13,13 @@
 
 @interface MysqlServer : NSObject
 
-    @property(nonatomic, copy) NSString *host;
-    @property(nonatomic, copy) NSString *user;
-    @property(nonatomic, copy) NSString *password;
-    @property(nonatomic, copy) NSString *schema;
-    @property(nonatomic, assign) unsigned int port;
-    @property(nonatomic, assign) unsigned long flags;
-    @property(nonatomic, assign) unsigned int connectionTimeout;
+	@property(nonatomic, copy) NSString *host;
+	@property(nonatomic, copy) NSString *user;
+	@property(nonatomic, copy) NSString *password;
+	@property(nonatomic, copy) NSString *schema;
+	@property(nonatomic, assign) unsigned int port;
+	@property(nonatomic, assign) unsigned long flags;
+	@property(nonatomic, assign) unsigned int connectionTimeout;
 
 @end
 

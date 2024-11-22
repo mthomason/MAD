@@ -13,19 +13,19 @@
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 
-    @required
-        - (void)didConfigureFilesController:(MADFilesController *)filesController;
-        - (void)didDisconnectFromCloud:(id)sender;
+	@required
+		- (void)didConfigureFilesController:(MADFilesController *)filesController;
+		- (void)didDisconnectFromCloud:(id)sender;
 
-        + (NSString *)groupIdentifier;
-        + (NSString *)ubiquityIdentifier;
-        - (NSString *)fileExtention;
+		+ (NSString *)groupIdentifier;
+		+ (NSString *)ubiquityIdentifier;
+		- (NSString *)fileExtention;
 
-        @property (nonatomic, weak, readonly) UIViewController *presentingController;
+		@property (nonatomic, weak, readonly) UIViewController *presentingController;
 
-    @optional
-        - (void)startLongRunningActivity;
-        - (void)completedLongRunningActivity;
+	@optional
+		- (void)startLongRunningActivity;
+		- (void)completedLongRunningActivity;
 
 @end
 
