@@ -13,15 +13,15 @@
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 @interface MADDatabaseConnectionSQLServer : MADDatabaseConnection
-    <MADDatabaseConnectionConstructors,
-        MADDatabaseConnectionsProperties,
-        MADConnectionsPropertiesProtocol,
-        NSCopying>
-    
-    - (instancetype)initWithHost:(NSString *)host
-                          server:(NSString *)server
-                        database:(NSString *)database
-                         andPort:(NSInteger)port;
+	<MADDatabaseConnectionConstructors,
+		MADDatabaseConnectionsProperties,
+		MADConnectionsPropertiesProtocol,
+		NSCopying>
+	
+	- (instancetype)initWithHost:(NSString *)host
+						  server:(NSString *)server
+						database:(NSString *)database
+						 andPort:(NSInteger)port;
 
 @end
 

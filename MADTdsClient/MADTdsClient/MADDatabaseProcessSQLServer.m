@@ -10,14 +10,14 @@
 #import "sybdb.h"
 
 @implementation MADDatabaseProcessSQLServer {
-    DBPROCESS *dbconn;
+	DBPROCESS *dbconn;
 }
 
 - (instancetype)initWithProcess:(void *)process {
-    if (self = [self init]) {
-        dbconn = (DBPROCESS *)process;
-    }
-    return self;
+	if (self = [self init]) {
+		dbconn = (DBPROCESS *)process;
+	}
+	return self;
 }
 
 - (void *)process { return dbconn; }

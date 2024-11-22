@@ -21,11 +21,11 @@ extern NSString * const MTDatabaseConnectionAppName;
 
 @interface MADDatabaseSQLServer : MADDatabase
 
-    - (NSString *)identifier;
+	- (NSString *)identifier;
 
-    + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
-    - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
-    - (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
+	+ (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName;
+	- (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName;
+	- (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName;
 
 @end
 

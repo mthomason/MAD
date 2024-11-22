@@ -15,8 +15,8 @@
 
 @interface MADDatabaseProcessSQLServer : NSObject
 
-    - (instancetype)initWithProcess:(void /* DBPROCESS */ *)process;
-    - (void /* DBPROCESS */ *)process NS_RETURNS_INNER_POINTER;
+	- (instancetype)initWithProcess:(void /* DBPROCESS */ *)process;
+	- (void /* DBPROCESS */ *)process NS_RETURNS_INNER_POINTER;
 
 @end
 

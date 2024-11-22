@@ -27,60 +27,60 @@
 @dynamic identifier;
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-    
-    id dbConnection = nil;
-    
-    dbConnection = [[self alloc] initWithHost: credentals.host
-                                       server: credentals.server
-                                     database: credentals.database
-                                      andPort: credentals.port];
-    
-    return dbConnection;
-    
+	
+	id dbConnection = nil;
+	
+	dbConnection = [[self alloc] initWithHost: credentals.host
+									   server: credentals.server
+									 database: credentals.database
+									  andPort: credentals.port];
+	
+	return dbConnection;
+	
 }
 
 - (instancetype)initWithHost:(NSString *)host
-                      server:(NSString *)server
-                    database:(NSString *)database
-                     andPort:(NSInteger)port {
-    
-    if (self = [super init]) {
-        _host = host.copy;
-        NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-        NSString *internalServer = [server stringByTrimmingCharactersInSet: whitespace];
-        _server = internalServer.copy;
-        _database = database.copy;
-        _port = port;
-        _databaseType = MADDatabaseTypeTDS;
-    }
-    return self;
+					  server:(NSString *)server
+					database:(NSString *)database
+					 andPort:(NSInteger)port {
+	
+	if (self = [super init]) {
+		_host = host.copy;
+		NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+		NSString *internalServer = [server stringByTrimmingCharactersInSet: whitespace];
+		_server = internalServer.copy;
+		_database = database.copy;
+		_port = port;
+		_databaseType = MADDatabaseTypeTDS;
+	}
+	return self;
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-    id copy = [[[self class] allocWithZone:zone] initWithHost:self.host server:self.server
-                                                     database:self.database andPort:self.port];
-    return copy;
+	id copy = [[[self class] allocWithZone:zone] initWithHost:self.host server:self.server
+													 database:self.database andPort:self.port];
+	return copy;
 }
 
 - (NSString *)connectionString {
-    if (!_connectionString) {
-        _connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%@:%ld]%@",
-                             self.identifier, self.host,
-                             self.server, (long)self.port, self.database];
-    }
-    return _connectionString;
+	if (!_connectionString) {
+		_connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%@:%ld]%@",
+							 self.identifier, self.host,
+							 self.server, (long)self.port, self.database];
+	}
+	return _connectionString;
 }
 
 - (NSString *)identifier {
-    return [self.class Identifier];
+	return [self.class Identifier];
 }
 
 + (NSString *)Identifier {
-    return @"TDS";
+	return @"TDS";
 }
 
 - (BOOL)requiresCredientals {
-    return YES;
+	return YES;
 }
 
 @end

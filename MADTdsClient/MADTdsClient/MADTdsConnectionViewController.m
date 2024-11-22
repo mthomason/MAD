@@ -19,24 +19,24 @@
 #pragma mark Override Points
 
 - (MADDatabaseConnection *)databaseConnection {
-    MADDatabaseConnectionSQLServer *connection;
-    connection = [[MADDatabaseConnectionSQLServer alloc] initWithHost: self.textFieldHost.text
-                                                               server: self.textFieldHost.text
-                                                             database: self.textFieldDatabase.text
-                                                              andPort: self.textFieldPort.text.integerValue];
-    return connection;
+	MADDatabaseConnectionSQLServer *connection;
+	connection = [[MADDatabaseConnectionSQLServer alloc] initWithHost: self.textFieldHost.text
+															   server: self.textFieldHost.text
+															 database: self.textFieldDatabase.text
+															  andPort: self.textFieldPort.text.integerValue];
+	return connection;
 }
 
 - (NSString *)displayName {
-    return @"SQL Server / TDS";
+	return @"SQL Server / TDS";
 }
 
 - (void)resetInterface {
-    [super resetInterface];
+	[super resetInterface];
 }
 
 - (void)enableUserInteraction {
-    [super enableUserInteraction];
+	[super enableUserInteraction];
 }
 
 @end
