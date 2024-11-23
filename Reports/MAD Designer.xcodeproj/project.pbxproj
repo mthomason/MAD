@@ -274,6 +274,7 @@
 		4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9AB1BAF123A00456DC8 /* MADTabBar.m */; };
 		4C64C434226DB87F00CE93FE /* libarchive.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C64C433226DB87E00CE93FE /* libarchive.tbd */; };
+		4C6895152CF1DCE300BD38DF /* MADTds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6895142CF1DCE300BD38DF /* MADTds.framework */; };
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
 		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
 		4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */; };
@@ -1005,6 +1006,7 @@
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
 		4C60C5B51BB0A1CC004D9758 /* MADExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADExplorer.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADExplorer.storyboard; sourceTree = "<group>"; };
 		4C64C433226DB87E00CE93FE /* libarchive.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libarchive.tbd; path = usr/lib/libarchive.tbd; sourceTree = SDKROOT; };
+		4C6895142CF1DCE300BD38DF /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C692B351E1D0A1400DC2CB0 /* MADNavigationControllerViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerViewer.h; path = UI/MADNavigationControllerViewer.h; sourceTree = "<group>"; };
 		4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationControllerViewer.m; path = UI/MADNavigationControllerViewer.m; sourceTree = "<group>"; };
 		4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerIdentity.h; path = UI/MADNavigationControllerIdentity.h; sourceTree = "<group>"; };
@@ -1442,6 +1444,7 @@
 				4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
 				4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */,
+				4C6895152CF1DCE300BD38DF /* MADTds.framework in Frameworks */,
 				4C29162324AC75E400EC794B /* MADFoundation.framework in Frameworks */,
 				4C29161524AC75E300EC794B /* MADAPI.framework in Frameworks */,
 				4C29162724AC75E400EC794B /* MADSqlite3.framework in Frameworks */,
@@ -2749,6 +2752,7 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C6895142CF1DCE300BD38DF /* MADTds.framework */,
 				4CF70E022CEDA03C00A4A377 /* Cocoa.framework */,
 				4CD0C1942C50AD3700CB4233 /* MADFoundation.framework */,
 				4C1CC25724C5ED300027A454 /* CoreServices.framework */,

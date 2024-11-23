@@ -8,9 +8,6 @@
       location = "container:"
       name = "Resources">
       <FileRef
-         location = "group:/Users/michael/Desktop/Reports/MADTds/MADTds.xcodeproj">
-      </FileRef>
-      <FileRef
          location = "group:MAD/MAD.xcodeproj">
       </FileRef>
       <FileRef
@@ -42,6 +39,9 @@
       </FileRef>
       <FileRef
          location = "group:MADSqlite3/MADSqlite3.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/michael/Desktop/Reports/MADTds/MADTds.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:MADTdsClient/MADTdsClient.xcodeproj">

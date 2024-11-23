@@ -42,7 +42,9 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-#import "sybdb.h"
+//#import "sybdb.h"
+#import <MADTds/tds_sysdep_public.h>
+#import <MADTds/sybdb.h>
 
 #import "MADDatabaseProcessSQLServer.h"
 
@@ -54,15 +56,6 @@ NSString * const MTDatabaseConnectionHost       = @"MTDatabaseConnectionHost";
 NSString * const MTDatabaseConnectionServer     = @"MTDatabaseConnectionServer";
 NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName";
 NSString * const MADNotificationError           = @"MADNotificationError";
-
-
-static NSString * const MTDatabaseColumnTypeId         = @"MTDatabaseColumnTypeId";
-static NSString * const MTDatabaseColumnNameId         = @"MTDatabaseColumnNameId";
-static NSString * const MTDatabaseColumnNumberId       = @"MTDatabaseColumnNumberId";
-static NSString * const MTDatabaseColumnDataLenId      = @"MTDatabaseColumnDataLenId";
-static NSString * const MTDatabaseColumnLenId          = @"MTDatabaseColumnLenId";
-static NSString * const MTDatabaseColumnIndexOfType    = @"MTDatabaseColumnIndexOfType";
-static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPrecision";
 
 static NSString * const MADDomainTDS = @"MTDatabaseTds";
 
@@ -109,12 +102,104 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 @dynamic databaseConnection;
 
-+ (NSString *)imageIconName {
-	return @"UIImageExportTypeSqlServer";
++ (NSString *)imageIconName { return @"UIImageExportTypeSqlServer"; }
++ (NSString *)driverName { return @"SQL Server / TDS"; }
+
++ (NSString *)IPAddressForServer:(NSString *)server {
+	NSString *address = [BDHost addressForHostname:server];
+	return address == nil ? server : [NSString stringWithString:address];
 }
 
-+ (NSString *)driverName {
-	return @"SQL Server / TDS";
+/*
+// Add this to MADTdsDb.m
++ (MADDataType)dataTypeForNativeTypeInternal:(NSInteger)nativeType {
+	// Map nativeType values to MADDataType.
+	switch (nativeType) {
+		case 111: // SYBDATETIMN
+		case 61:  // SYBDATETIME
+		case 58:  // SYBDATETIME4
+			return MADDataTypeDateTime;
+		case 47:  // SYBCHAR
+		case 39:  // SYBVARCHAR
+		case 35:  // SYBTEXT
+		case 99:  // SYBNTEXT
+		case 103: // SYBNVARCHAR
+			return MADDataTypeString;
+		case 50:  // SYBBIT
+		case 104: // SYBBITN
+			return MADDataTypeBit;
+		case 48:  // SYBINT1
+		case 52:  // SYBINT2
+		case 56:  // SYBINT4
+		case 127: // SYBINT8
+		case 38:  // SYBINTN
+			return MADDataTypeInteger;
+		case 60:  // SYBMONEY
+		case 110: // SYBMONEYN
+		case 59:  // SYBREAL
+		case 62:  // SYBFLT8
+		case 109: // SYBFLTN
+			return MADDataTypeFloat;
+		case 108: // SYBNUMERIC
+			return MADDataTypeDecimal;
+		case 34:  // SYBIMAGE
+		case 45:  // SYBBINARY
+		case 31:  // SYBVOID
+		case 37:  // SYBVARBINARY
+			return MADDataTypeBlob;
+		default:
+			return MADDataTypeUnknown; // Use Unknown as a fallback.
+	}
+}
+*/
+
++ (MADDataType)dataTypeForNativeType:(NSInteger)nativeType {
+	MADDataType result;
+	switch (nativeType) {
+		case SYBDATETIMN:
+		case SYBDATETIME:
+		case SYBDATETIME4:
+			result = MADDataTypeDateTime;
+			break;
+		case SYBCHAR:
+		case SYBVARCHAR:
+		case SYBTEXT:
+		case SYBNTEXT:
+		case SYBNVARCHAR:
+			result = MADDataTypeString;
+			break;
+		case SYBBIT:
+		case SYBBITN:
+			result = MADDataTypeBit;
+			break;
+		case SYBINT1:
+		case SYBINT2:
+		case SYBINT4:
+		case SYBINT8:
+		case SYBINTN:
+			result = MADDataTypeInteger;
+			break;
+		case SYBMONEY:
+		case SYBMONEYN:
+		case SYBREAL:
+		case SYBFLT8:
+		case SYBFLTN:
+			result = MADDataTypeFloat;
+			break;
+		case SYBNUMERIC:
+			result = MADDataTypeDecimal;
+			break;
+		case SYBIMAGE:
+		case SYBBINARY:
+		case SYBVOID:
+		case SYBVARBINARY:
+			result = MADDataTypeBlob;
+			break;
+		default:
+			result = MADDataTypeString;
+			break;
+	}
+	return result;
 }
 
 - (void)dealloc {
@@ -123,7 +208,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (instancetype)init {
 	if (self = [super init]) {
-		
 		[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(handleError:)
 													 name: MADNotificationError object: nil];
 	}
@@ -223,91 +307,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	});
 }
 
-+ (MADDataType)dataTypeForNativeType:(NSInteger)nativeType {
-	MADDataType result;
-	switch (nativeType) {
-		case SYBDATETIMN:
-			result = MADDataTypeDateTime;
-			break;
-		case SYBDATETIME:
-			result = MADDataTypeDateTime;
-			break;
-		case SYBDATETIME4:
-			result = MADDataTypeDateTime;
-			break;
-		case SYBCHAR:
-			result = MADDataTypeString;
-			break;
-		case SYBVARCHAR:
-			result = MADDataTypeString;
-			break;
-		case SYBTEXT:
-			result = MADDataTypeString;
-			break;
-		case SYBNTEXT:
-			result = MADDataTypeString;
-			break;
-		case SYBNVARCHAR:
-			result = MADDataTypeString;
-			break;
-		case SYBBIT:
-			result = MADDataTypeBit;
-			break;
-		case SYBBITN:
-			result = MADDataTypeBit;
-			break;
-		case SYBINT1:
-			result = MADDataTypeInteger;
-			break;
-		case SYBINT2:
-			result = MADDataTypeInteger;
-			break;
-		case SYBINT4:
-			result = MADDataTypeInteger;
-			break;
-		case SYBINT8:
-			result = MADDataTypeInteger;
-			break;
-		case SYBINTN:
-			result = MADDataTypeInteger;
-			break;
-		case SYBMONEY:
-			result = MADDataTypeFloat;
-			break;
-		case SYBMONEYN:
-			result = MADDataTypeFloat;
-			break;
-		case SYBREAL:
-			result = MADDataTypeFloat;
-			break;
-		case SYBFLT8:
-			result = MADDataTypeFloat;
-			break;
-		case SYBFLTN:
-			result = MADDataTypeFloat;
-			break;
-		case SYBNUMERIC:
-			result = MADDataTypeDecimal;
-			break;
-		case SYBIMAGE:
-			result = MADDataTypeBlob;
-			break;
-		case SYBBINARY:
-			result = MADDataTypeBlob;
-			break;
-		case SYBVOID:
-			result = MADDataTypeBlob;
-			break;
-		case SYBVARBINARY:
-			result = MADDataTypeBlob;
-			break;
-		default:
-			result = MADDataTypeString;
-			break;
-	}
-	return result;
-}
-
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
 	MADDataTable *dataTable;
 	if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
@@ -357,9 +356,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	NSError *error = nil;
 	if (sql.length > 0) {
 		
-		NSCalendar *gregorian;
-		gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-		
+		NSCalendar *gregorian = [[NSCalendar alloc]
+								 initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+
 		NSDateComponents *janFirst1990Components = [[NSDateComponents alloc] init];
 		janFirst1990Components.year =    1900;
 		janFirst1990Components.month =   1;
@@ -377,85 +376,41 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			
 			dbcmd(dbconn, [sql cStringUsingEncoding:NSUTF8StringEncoding]);
 			success = dbsqlexec(dbconn);
-			
+
 			if (success == SUCCEED) {
-				
+
+				static NSString * const MTDatabaseColumnTypeId         = @"MTDatabaseColumnTypeId";
+				static NSString * const MTDatabaseColumnNameId         = @"MTDatabaseColumnNameId";
+				static NSString * const MTDatabaseColumnNumberId       = @"MTDatabaseColumnNumberId";
+				static NSString * const MTDatabaseColumnDataLenId      = @"MTDatabaseColumnDataLenId";
+				static NSString * const MTDatabaseColumnLenId          = @"MTDatabaseColumnLenId";
+				static NSString * const MTDatabaseColumnIndexOfType    = @"MTDatabaseColumnIndexOfType";
+				static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPrecision";
+
 				NSString *decimalSeperator = [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator];
-				
+
 				BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperator = NO;
 				BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
 				
 				int numberOfColumns = dbnumcols(dbconn);
-				NSMutableArray <NSDictionary *> *colmunHolder;
-				colmunHolder = [[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
+				NSMutableArray <NSDictionary *> *colmunHolder =
+					[[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
 				static int disregardedBind = -1023;
 				
-				NSNumber *keySYBDATETIMN = [[NSNumber alloc] initWithInt: SYBDATETIMN];
-				NSNumber *keySYBDATETIME = [[NSNumber alloc] initWithInt: SYBDATETIME];
-				NSNumber *keySYBDATETIME4 = [[NSNumber alloc] initWithInt: SYBDATETIME4];
-				NSNumber *keySYBCHAR = [[NSNumber alloc] initWithInt: SYBCHAR];
-				NSNumber *keySYBVARCHAR = [[NSNumber alloc] initWithInt: SYBVARCHAR];
-				NSNumber *keySYBTEXT = [[NSNumber alloc] initWithInt: SYBTEXT];
-				NSNumber *keySYBNTEXT = [[NSNumber alloc] initWithInt: SYBNTEXT];
-				NSNumber *keySYBNVARCHAR = [[NSNumber alloc] initWithInt: SYBNVARCHAR];
-				NSNumber *keySYBBIT = [[NSNumber alloc] initWithInt: SYBBIT];
-				NSNumber *keySYBBITN = [[NSNumber alloc] initWithInt: SYBBITN];
-				NSNumber *keySYBINT1 = [[NSNumber alloc] initWithInt: SYBINT1];
-				NSNumber *keySYBINT2 = [[NSNumber alloc] initWithInt: SYBINT2];
-				NSNumber *keySYBINT4 = [[NSNumber alloc] initWithInt: SYBINT4];
-				NSNumber *keySYBINT8 = [[NSNumber alloc] initWithInt: SYBINT8];
-				NSNumber *keySYBINTN = [[NSNumber alloc] initWithInt: SYBINTN];
-				NSNumber *keySYBMONEY = [[NSNumber alloc] initWithInt: SYBMONEY];
-				NSNumber *keySYBMONEYN = [[NSNumber alloc] initWithInt: SYBMONEYN];
-				NSNumber *keySYBREAL = [[NSNumber alloc] initWithInt: SYBREAL];
-				NSNumber *keySYBFLT8 = [[NSNumber alloc] initWithInt: SYBFLT8];
-				NSNumber *keySYBFLTN = [[NSNumber alloc] initWithInt: SYBFLTN];
-				NSNumber *keySYBNUMERIC = [[NSNumber alloc] initWithInt: SYBNUMERIC];
-				NSNumber *keySYBIMAGE = [[NSNumber alloc] initWithInt: SYBIMAGE];
-				NSNumber *keySYBBINARY = [[NSNumber alloc] initWithInt: SYBBINARY];
-				NSNumber *keySYBVOID = [[NSNumber alloc] initWithInt: SYBVOID];
-				NSNumber *keySYBVARBINARY = [[NSNumber alloc] initWithInt: SYBVARBINARY];
-				NSNumber *keyDisregardedBind = [[NSNumber alloc] initWithInt: disregardedBind];
+				NSArray <NSNumber *> *keys = @[
+					@(SYBDATETIMN), @(SYBDATETIME), @(SYBDATETIME4),
+					@(SYBCHAR), @(SYBVARCHAR), @(SYBTEXT), @(SYBNTEXT), @(SYBNVARCHAR),
+					@(SYBBIT), @(SYBBITN), @(SYBINT1), @(SYBINT2), @(SYBINT4), @(SYBINT8),
+					@(SYBINTN), @(SYBMONEY), @(SYBMONEYN), @(SYBREAL), @(SYBFLT8), @(SYBFLTN),
+					@(SYBNUMERIC), @(SYBIMAGE), @(SYBBINARY), @(SYBVOID), @(SYBVARBINARY),
+					@(disregardedBind)
+				];
 				
-				NSDictionary *countersStart = @{
-												keySYBDATETIMN         : @0,     //Assumed good
-												keySYBDATETIME         : @0,     //Good
-												keySYBDATETIME4        : @0,     //Good
-												
-												keySYBCHAR             : @0,     //Good
-												keySYBVARCHAR          : @0,     //Good
-												keySYBTEXT             : @0,     //Good
-												keySYBNTEXT            : @0,     //Good
-												keySYBNVARCHAR         : @0,     //Good
-												
-												keySYBBIT              : @0,     //Good
-												keySYBBITN             : @0,     //Assumed good
-												keySYBINT1             : @0,     //Good
-												keySYBINT2             : @0,     //Good
-												keySYBINT4             : @0,     //Good
-												keySYBINT8             : @0,     //Good
-												keySYBINTN             : @0,     //Assumed good
-												
-												keySYBMONEY            : @0,     //Good, also handles SYBMONEY4
-												keySYBMONEYN           : @0,     //Assumed good
-												
-												keySYBREAL             : @0,     //Good
-												keySYBFLT8             : @0,     //Good
-												keySYBFLTN             : @0,     //Assumed good, but may overflow
-												
-												keySYBNUMERIC          : @0,     //Converts to NSDecimalNumber...
-																				 //  Also handles SYBDECIMAL
-												
-												keySYBIMAGE            : @0,     //Currently not used
-												keySYBBINARY           : @0,     //Currently not used
-												keySYBVOID             : @0,     //Currently not used
-												keySYBVARBINARY        : @0,     //Currently not used
-												
-												keyDisregardedBind     : @0
-												
-												};
-				NSMutableDictionary <NSNumber *, NSNumber *> *counters;
-				counters = [[NSMutableDictionary alloc] initWithDictionary:countersStart];
+				NSMutableDictionary<NSNumber *, NSNumber *> *counters =
+					[[NSMutableDictionary alloc] initWithCapacity:keys.count];
+				for (NSNumber *key in keys) {
+					counters[key] = @0;
+				}
 				
 				[datatable removeAllObjects];
 
@@ -471,7 +426,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 						 *columPercision;
 				NSString *columnNameString;
 				MADDataColumn *dataColumn;
-				//NSDictionary *dictionary;
 
 				for (columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
 					
@@ -483,16 +437,17 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					}
 					
 					if (columnType >= 0) {
-						
 						columnNumberBytes = dbdatlen(dbconn, columnCtr + 1);
 						columnLength      = dbcollen(dbconn, columnCtr + 1);
 					
+						columnNameString = nil;
 						columnNumberWrapper = [[NSNumber alloc] initWithInt: columnCtr];
 						columnTypeNumber = [[NSNumber alloc] initWithInt: columnType];
 						
 						if (![fieldKeys count]) {
 							char * columnNameCString = dbcolname(dbconn, columnCtr + 1);
-							columnNameString = [[NSString alloc] initWithCString:columnNameCString encoding:NSUTF8StringEncoding];
+							columnNameString = [[NSString alloc] initWithCString:columnNameCString
+																		encoding:NSUTF8StringEncoding];
 							columnNameCString = NULL;
 						} else {
 							columnNameString = fieldKeys[(NSUInteger)columnCtr];
@@ -839,7 +794,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 							default:
 								break;
 						}
-						
 					}
 					
 					/* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
@@ -1118,8 +1072,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										comps.minute = dateinfo.dateminute;
 										comps.second = dateinfo.datesecond;
 										comps.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)];
-										NSCalendar *gregorian = [[NSCalendar alloc]
-																 initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 										NSDate *date = [gregorian dateFromComponents:comps];
 										resultsForRow[fieldName] = date;
 									} else {
@@ -1236,9 +1188,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					}
 					
 				}
-				
 				[datatable endBulkInsert];
-				
 				rsuccess = YES;
 				
 			} else {
@@ -1253,7 +1203,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			NSString *title = NSLocalizedString(@"Bad Process", @"Bad Process");
 			NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
 			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
-			NSError *error = [NSError errorWithDomain:MADDomainTDS code:4379 userInfo:errorInfo];
+			NSError *error1 = [NSError errorWithDomain:MADDomainTDS code:4379 userInfo:errorInfo];
 			rsuccess = NO;
 		}
 		
@@ -1261,7 +1211,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		NSString *title = NSLocalizedString(@"Bad Query", @"Bad Query");
 		NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
 		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
-		NSError *error = [NSError errorWithDomain:MADDomainTDS code:4378 userInfo:errorInfo];
+		NSError *error2 = [NSError errorWithDomain:MADDomainTDS code:4378 userInfo:errorInfo];
 		rsuccess = NO;
 	}
 	return rsuccess;
@@ -1348,11 +1298,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	return dbconn;
 }
 
-+ (NSString *)IPAddressForServer:(NSString *)server {
-	NSString *address = [BDHost addressForHostname:server];
-	return address == nil ? server : [NSString stringWithString:address];
-}
-
 - (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals
 			connectionError:(NSError *__autoreleasing *)error {
 	
@@ -1377,13 +1322,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	return dbwrap; //(__bridge id)(dbconn);
 }
 
-- (NSString *)identifier {
-	return self.databaseConnection.identifier;
-}
+- (NSString *)identifier { return self.databaseConnection.identifier; }
 
-- (id)connectionSettings {
-	return self.databaseConnection;
-}
+- (id)connectionSettings { return self.databaseConnection; }
 
 + (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
 	MADSafeQueryField *safeQueryField = [[MADSafeQueryField alloc] initWithFormat:@"[%@].[%@]", tableName, fieldName];
@@ -1403,9 +1344,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	return result;
 }
 
-- (NSString *)sqlAggregateFunctionLength {
-	return @"DATALENGTH";
-}
+- (NSString *)sqlAggregateFunctionLength { return @"DATALENGTH"; }
 
 - (NSString *)selectPart {
 	return [self selectPartWithLimitedResults:NSUIntegerMax];  // No limit by default
@@ -1417,13 +1356,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 				[selectPart stringByAppendingFormat:@"TOP %ld\n", (long)limit] : selectPart;
 }
 
-- (NSString *)sqlLimitClause {
-	return @"";
-}
+- (NSString *)sqlLimitClause { return @""; }
 
-- (NSString *)sqlLimitClause:(NSUInteger)limit {
-	return @"";
-}
+- (NSString *)sqlLimitClause:(NSUInteger)limit { return @""; }
 
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
 	

@@ -11,9 +11,9 @@
 		4C6894F22CF0F8D400BD38DF /* MADTdsDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6894F62CF0FCAF00BD38DF /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6894F42CF0FCAF00BD38DF /* libsybdb.a */; };
 		4C6894F72CF0FCAF00BD38DF /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6894F52CF0FCAF00BD38DF /* libct.a */; };
-		4C6895042CF0FCC600BD38DF /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F92CF0FCC600BD38DF /* tds_sysdep_public.h */; };
+		4C6895042CF0FCC600BD38DF /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F92CF0FCC600BD38DF /* tds_sysdep_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6895052CF0FCC600BD38DF /* cstypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FA2CF0FCC600BD38DF /* cstypes.h */; };
-		4C6895062CF0FCC600BD38DF /* sybdb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FB2CF0FCC600BD38DF /* sybdb.h */; };
+		4C6895062CF0FCC600BD38DF /* sybdb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FB2CF0FCC600BD38DF /* sybdb.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6895072CF0FCC600BD38DF /* cspublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FC2CF0FCC600BD38DF /* cspublic.h */; };
 		4C6895082CF0FCC600BD38DF /* sqldb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FD2CF0FCC600BD38DF /* sqldb.h */; };
 		4C6895092CF0FCC600BD38DF /* syberror.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894FE2CF0FCC600BD38DF /* syberror.h */; };
@@ -136,6 +136,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C6895062CF0FCC600BD38DF /* sybdb.h in Headers */,
+				4C6895042CF0FCC600BD38DF /* tds_sysdep_public.h in Headers */,
 				4C6894F22CF0F8D400BD38DF /* MADTdsDb.h in Headers */,
 				4C68950C2CF0FCC600BD38DF /* sqlfront.h in Headers */,
 				4C68950E2CF0FCC600BD38DF /* odbcss.h in Headers */,
@@ -144,10 +146,8 @@
 				4C68950B2CF0FCC600BD38DF /* ctpublic.h in Headers */,
 				4CCABCDF2CF0B75A008EC875 /* MADTds.h in Headers */,
 				4C6895072CF0FCC600BD38DF /* cspublic.h in Headers */,
-				4C6895042CF0FCC600BD38DF /* tds_sysdep_public.h in Headers */,
 				4C6895082CF0FCC600BD38DF /* sqldb.h in Headers */,
 				4C68950D2CF0FCC600BD38DF /* bkpublic.h in Headers */,
-				4C6895062CF0FCC600BD38DF /* sybdb.h in Headers */,
 				4C6895052CF0FCC600BD38DF /* cstypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

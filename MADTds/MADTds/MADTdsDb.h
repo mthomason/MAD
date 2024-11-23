@@ -2,7 +2,7 @@
 //  MADTdsDb.h
 //  MADTds
 //
-//  Created by Michael on 11/22/24.
+//  Created by Michael Thomason on 11/22/24.
 //
 
 #ifndef MADTdsDb_h

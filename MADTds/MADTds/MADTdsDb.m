@@ -2,11 +2,11 @@
 //  MADTdsDb.m
 //  MADTds
 //
-//  Created by Michael on 11/22/24.
+//  Created by Michael Thomason on 11/22/24.
 //
 
 #import "MADTdsDb.h"
-#import <sybdb.h>
+#import "sybdb.h"
 
 int err_handler(DBPROCESS *, int, int, int, char *, char *);
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {

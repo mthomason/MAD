@@ -7,19 +7,20 @@
 //
 
 #import "MADDatabaseProcessSQLServer.h"
-#import "sybdb.h"
+#import <MADTds/sybdb.h>
+#import <MADTds/MADTdsDb.h>
 
 @implementation MADDatabaseProcessSQLServer {
-	DBPROCESS *dbconn;
+	DBPROCESS *_dbconn;
 }
 
 - (instancetype)initWithProcess:(void *)process {
 	if (self = [self init]) {
-		dbconn = (DBPROCESS *)process;
+		_dbconn = (DBPROCESS *)process;
 	}
 	return self;
 }
 
-- (void *)process { return dbconn; }
+- (void *)process { return _dbconn; }
 
 @end
