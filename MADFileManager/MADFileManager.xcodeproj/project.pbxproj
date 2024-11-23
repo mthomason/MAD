@@ -89,7 +89,7 @@
 		4CCB735D1D1ADE6000D7AE84 /* MADMetaDataCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMetaDataCloud.m; path = MADFileManager/MADMetaDataCloud.m; sourceTree = "<group>"; };
 		4CCB73601D1ADE6A00D7AE84 /* MADMetaDataLocal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaDataLocal.h; sourceTree = "<group>"; };
 		4CCB73611D1ADE6A00D7AE84 /* MADMetaDataLocal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaDataLocal.m; sourceTree = "<group>"; };
-		4CE1CA451CF87323001BD2D5 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
+		4CE1CA451CF87323001BD2D5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4CE1CA491CFAF74A001BD2D5 /* MADCloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCloudManager.h; path = MADFileManager/MADCloudManager.h; sourceTree = "<group>"; };
 		4CE1CA4A1CFAF74A001BD2D5 /* MADCloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCloudManager.m; path = MADFileManager/MADCloudManager.m; sourceTree = "<group>"; };
 		4CE1CA4D1CFB70BA001BD2D5 /* MADAppStorageOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAppStorageOption.h; path = MADFileManager/MADAppStorageOption.h; sourceTree = "<group>"; };
@@ -128,6 +128,7 @@
 		4C6701051BA20683001C9D5A = {
 			isa = PBXGroup;
 			children = (
+				4CE1CA451CF87323001BD2D5 /* README.md */,
 				4C6701561BA2083E001C9D5A /* Resouces */,
 				4C6701111BA20683001C9D5A /* MADFileManager */,
 				4C67011D1BA20684001C9D5A /* MADFileManagerTests */,
@@ -148,7 +149,6 @@
 		4C6701111BA20683001C9D5A /* MADFileManager */ = {
 			isa = PBXGroup;
 			children = (
-				4CE1CA451CF87323001BD2D5 /* Notes */,
 				4CC909071D0FD326007A1C75 /* Unused */,
 				4C6701121BA20683001C9D5A /* MADFileManager.h */,
 				4C4F12911D0FAEE90002294E /* MADFileLocationManagerDelegate.h */,

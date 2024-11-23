@@ -31,12 +31,13 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 @implementation MADKeyChain
 
 + (NSString *)newKeyForUsernameWithMainKey:(NSString *)key {
-	id result = [[NSString alloc] initWithFormat:@"u:%@", key];
+	NSString *result = [[NSString alloc] initWithFormat:@"u:%@", key];
 	return result;
 }
 
 + (NSString *)newKeyForPasswordWithMainKey:(NSString *)key {
-	return [NSString stringWithFormat:@"p:%@", key];
+	NSString *result = [[NSString alloc] initWithFormat:@"p:%@", key];
+	return result;
 }
 
 + (NSDictionary *)newDictionaryQueryGeneric:(NSString *)key {
