@@ -13,16 +13,16 @@
 #import "MTStack.h"
 #import <Foundation/NSException.h>
 
-@interface Node : NSObject
+@interface MTStackNode : NSObject
 
 @property (nonatomic, strong) id data;
-@property (nonatomic, strong, nullable) Node *next;
+@property (nonatomic, strong, nullable) MTStackNode *next;
 
 - (instancetype)initWithData:(id)data;
 
 @end
 
-@implementation Node
+@implementation MTStackNode
 
 - (instancetype)initWithData:(id)data {
 	if (self = [super init]) {
@@ -36,7 +36,7 @@
 
 @interface MTStack ()
 
-@property (nonatomic, strong, nullable) Node *top;
+@property (nonatomic, strong, nullable) MTStackNode *top;
 @property (nonatomic, assign) NSUInteger counter;
 
 @end
@@ -53,7 +53,7 @@
 
 - (instancetype)initWithObject:(id)object {
 	if (self = [super init]) {
-		Node *node = [[Node alloc] initWithData:object];
+		MTStackNode *node = [[MTStackNode alloc] initWithData:object];
 		_top = node;
 		_counter = 1;
 	}
@@ -61,7 +61,7 @@
 }
 
 - (void)push:(id)object {
-	Node *newNode = [[Node alloc] initWithData:object];
+	MTStackNode *newNode = [[MTStackNode alloc] initWithData:object];
 	newNode.next = self.top;
 	self.top = newNode;
 	self.counter++;
@@ -89,7 +89,7 @@
 	}
 
 	// Get the current node (using state->extra[0] to track position)
-	Node *currentNode = (__bridge Node *)(void *)state->extra[0];
+	MTStackNode *currentNode = (__bridge MTStackNode *)(void *)state->extra[0];
 	if (!currentNode) {
 		currentNode = self.top; // Start at the top of the stack
 	}
