@@ -304,7 +304,6 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 	
 	[resultVertices reverse];
 	return resultVertices;
-	
 }
 
 - (void)depthFirstSearchVisitWithCurrentVertex:(MTVertex *)vertex

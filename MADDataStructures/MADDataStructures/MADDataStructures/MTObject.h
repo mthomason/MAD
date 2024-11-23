@@ -21,14 +21,13 @@
   #endif
 #endif
 
-@interface MTObject : NSObject
-    <NSCopying, MTProtocolCompare, MTProtocolLog>
+@interface MTObject : NSObject <NSCopying, MTProtocolCompare, MTProtocolLog>
+
+	@property (readonly, nonatomic, strong) id object;
 
 	+ (instancetype)newObject:(id <NSCopying>)object;
 	- (instancetype)init;
 	- (instancetype)initWithObject:(id <NSCopying>)object;
-
-	@property (readonly, nonatomic, strong) id object;
 
 @end
 

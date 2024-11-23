@@ -11,21 +11,13 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN // Assume non-null by default unless marked otherwise
+NS_ASSUME_NONNULL_BEGIN
 
-/// Represents an immutable pairing of an object with an index.
 @interface MADIndex : NSObject
 
-/// The object associated with the index. Can be nil.
 @property (nonatomic, strong, readonly, nullable) id object;
-
-/// The associated index (non-negative integer).
 @property (nonatomic, assign, readonly) NSUInteger index;
 
-/// Initializes a MADIndex instance with an index and an object.
-/// @param index The index value (must be non-negative).
-/// @param object The associated object. Can be nil.
-/// @return An initialized MADIndex instance.
 - (instancetype)initWithIndex:(NSUInteger)index
 					andObject:(nullable id)object NS_DESIGNATED_INITIALIZER;
 

@@ -16,11 +16,11 @@
 
 @interface MTLinkedListNode : NSObject
 
-@property (nonatomic, strong) id data;
-@property (nonatomic, strong) MTLinkedListNode *next;
-@property (nonatomic, strong) MTLinkedListNode *prev;
+	@property (nonatomic, strong) id data;
+	@property (nonatomic, strong) MTLinkedListNode *next;
+	@property (nonatomic, strong) MTLinkedListNode *prev;
 
-- (instancetype)initWithData:(id)data;
+	- (instancetype)initWithData:(id)data;
 
 @end
 

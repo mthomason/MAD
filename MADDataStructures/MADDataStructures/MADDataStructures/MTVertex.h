@@ -26,23 +26,23 @@ typedef NS_ENUM(short, MADAlgorithmPropertyClass) {
 
 	@property (readonly, nonatomic, strong) id object;
 
-	- (instancetype)init;
-	- (instancetype)initWithID:(NSUInteger)idnumber;
-	- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
-
 	@property (nonatomic, assign, readonly) NSUInteger uniqueIdForStructure;
 	@property (readonly) NSArray <MTEdge *> *incidentEdges;
 	@property (readonly) NSUInteger numberOfIncidentEdges;
-
-	- (void)addEdge:(MTEdge *)edge;
-
-	- (void)removeEdge:(MTEdge *)edge;
-	- (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
 	@property (nonatomic, strong, readonly) MADAlgorithmElementProperties *properties;
 	@property (nonatomic, strong, readonly) MADBfsProperties *bfsProperties;
 	@property (nonatomic, strong, readonly) MADDfsProperties *dfsProperties;
 	@property (nonatomic, strong, readonly) MADSortProperties *sortProperties;
+
+	- (instancetype)init;
+	- (instancetype)initWithID:(NSUInteger)idnumber;
+	- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id <NSCopying>)object NS_DESIGNATED_INITIALIZER;
+
+	- (void)addEdge:(MTEdge *)edge;
+
+	- (void)removeEdge:(MTEdge *)edge;
+	- (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
 @end
 
