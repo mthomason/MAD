@@ -35,6 +35,8 @@
 		4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2C7B741BA92A8700C9CC5E /* MTVertex.m */; };
 		4C3080F91D05C3B700A7D597 /* MADVectorBool.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080F71D05C3B700A7D597 /* MADVectorBool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3080FA1D05C3B700A7D597 /* MADVectorBool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */; };
+		4C6895192CF223B900BD38DF /* MTLinkedListNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6895172CF223B900BD38DF /* MTLinkedListNode.h */; };
+		4C68951A2CF223B900BD38DF /* MTLinkedListNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6895182CF223B900BD38DF /* MTLinkedListNode.m */; };
 		4CB8EDFD1E1938EC00193295 /* MADMapStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB8EDFE1E1938EC00193295 /* MADMapStrings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */; };
 		4CB8EE071E1A93D300193295 /* MADAlgorithmColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -90,6 +92,8 @@
 		4C2C7B741BA92A8700C9CC5E /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVertex.m; path = MADDataStructures/MTVertex.m; sourceTree = "<group>"; };
 		4C3080F71D05C3B700A7D597 /* MADVectorBool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVectorBool.h; path = MADDataStructures/MADVectorBool.h; sourceTree = "<group>"; };
 		4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVectorBool.mm; path = MADDataStructures/MADVectorBool.mm; sourceTree = "<group>"; };
+		4C6895172CF223B900BD38DF /* MTLinkedListNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MTLinkedListNode.h; path = MADDataStructures/MTLinkedListNode.h; sourceTree = "<group>"; };
+		4C6895182CF223B900BD38DF /* MTLinkedListNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MTLinkedListNode.m; path = MADDataStructures/MTLinkedListNode.m; sourceTree = "<group>"; };
 		4CA1AD6F1E29CDDB005081E1 /* madmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = madmap.cpp; sourceTree = "<group>"; };
 		4CA1AD701E29CDDB005081E1 /* madmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = madmap.hpp; sourceTree = "<group>"; };
 		4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMapStrings.h; path = MADDataStructures/MADMapStrings.h; sourceTree = "<group>"; };
@@ -173,6 +177,8 @@
 				4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */,
 				4C2C7B601BA92A8700C9CC5E /* MTGraph.h */,
 				4C2C7B611BA92A8700C9CC5E /* MTGraph.m */,
+				4C6895172CF223B900BD38DF /* MTLinkedListNode.h */,
+				4C6895182CF223B900BD38DF /* MTLinkedListNode.m */,
 				4C2C7B621BA92A8700C9CC5E /* MTLinkedList.h */,
 				4C2C7B631BA92A8700C9CC5E /* MTLinkedList.m */,
 				4C2C7B641BA92A8700C9CC5E /* MTObject.h */,
@@ -227,6 +233,7 @@
 				4C2C7B831BA92A8700C9CC5E /* MTProtocolLog.h in Headers */,
 				4C2C7B7D1BA92A8700C9CC5E /* MTObject.h in Headers */,
 				4CBC23E21C9559C40006C0A6 /* MADDfsProperties.h in Headers */,
+				4C6895192CF223B900BD38DF /* MTLinkedListNode.h in Headers */,
 				4C2C7B771BA92A8700C9CC5E /* MTEdge.h in Headers */,
 				4CBC23E51C9559C40006C0A6 /* MADBfsProperties.h in Headers */,
 				4C2C7B821BA92A8700C9CC5E /* MTProtocolEnumerator.h in Headers */,
@@ -359,6 +366,7 @@
 				4C2C7B7E1BA92A8700C9CC5E /* MTObject.m in Sources */,
 				4C2C7B8D1BA92A8700C9CC5E /* MTVertex.m in Sources */,
 				4CBC23E01C9559C40006C0A6 /* MADSortProperties.m in Sources */,
+				4C68951A2CF223B900BD38DF /* MTLinkedListNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,10 +12,12 @@
 
 #import "MTQueue.h"
 #import <Foundation/NSArray.h>
+#import "MTLinkedListNode.h"
 
 @interface MTQueue ()
 
-@property (nonatomic, strong) NSMutableArray *queue;
+@property (nonatomic, strong) MTLinkedListNode *head;
+@property (nonatomic, strong) MTLinkedListNode *tail;
 @property (nonatomic, assign) NSUInteger counter;
 
 @end
@@ -24,15 +26,8 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
-		_queue = [[NSMutableArray alloc] init];
-		_counter = 0;
-	}
-	return self;
-}
-
-- (instancetype)initWithCapacity:(NSUInteger)capacity {
-	if (self = [super init]) {
-		_queue = [[NSMutableArray alloc] initWithCapacity:capacity];
+		_head = nil;
+		_tail = nil;
 		_counter = 0;
 	}
 	return self;
@@ -40,34 +35,66 @@
 
 - (void)enqueue:(id)object {
 	@synchronized(self) {
-		[self.queue addObject:object];
+		MTLinkedListNode *newNode = [[MTLinkedListNode alloc] initWithData:object];
+		if (self.tail) {
+			self.tail.next = newNode;
+			newNode.prev = self.tail;
+		} else {
+			// Queue is empty; the new node becomes both head and tail.
+			self.head = newNode;
+		}
+		self.tail = newNode;
 		self.counter++;
 	}
 }
 
-- (void)enqueueObjectsFromArray:(NSArray *)objects {
-	[self.queue addObjectsFromArray:objects];
-	self.counter = self.counter + objects.count;
-}
-
 - (id)dequeue {
-	id result;
 	@synchronized(self) {
-		self.counter = self.counter - 1;
-		result = (self.queue)[self.counter];
-		[self.queue removeObjectAtIndex:self.counter];
+		if (!self.head) {
+			return nil; // Queue is empty.
+		}
+		
+		id dequeuedValue = self.head.data;
+		self.head = self.head.next;
+		if (self.head) {
+			self.head.prev = nil;
+		} else {
+			// Queue becomes empty; tail also needs to be nil.
+			self.tail = nil;
+		}
+		self.counter--;
+		return dequeuedValue;
 	}
-	return result;
 }
 
 - (NSUInteger)count {
-	return self.counter;
+	@synchronized(self) {
+		return self.counter;
+	}
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
 								  objects:(id __unsafe_unretained [])stackbuf
 									count:(NSUInteger)len {
-	return [self.queue countByEnumeratingWithState:state objects:stackbuf count:len];
+	@synchronized(self) {
+		if (state->state == 0) {
+			state->mutationsPtr = &state->extra[0];
+			state->state = 1;
+			MTLinkedListNode *currentNode = self.head;
+			NSUInteger index = 0;
+
+			while (currentNode && index < len) {
+				stackbuf[index] = currentNode.data;
+				currentNode = currentNode.next;
+				index++;
+			}
+
+			state->itemsPtr = stackbuf;
+			return index;
+		} else {
+			return 0; // No more items to enumerate.
+		}
+	}
 }
 
 - (NSString *)toStringHumanReadable {

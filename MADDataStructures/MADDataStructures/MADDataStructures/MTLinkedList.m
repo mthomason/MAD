@@ -13,29 +13,7 @@
 #import "MTLinkedList.h"
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
-
-@interface MTLinkedListNode : NSObject
-
-	@property (nonatomic, strong) id data;
-	@property (nonatomic, strong) MTLinkedListNode *next;
-	@property (nonatomic, strong) MTLinkedListNode *prev;
-
-	- (instancetype)initWithData:(id)data;
-
-@end
-
-@implementation MTLinkedListNode
-
-- (instancetype)initWithData:(id)data {
-	if (self = [super init]) {
-		_data = data;
-		_next = nil;
-		_prev = nil;
-	}
-	return self;
-}
-
-@end
+#import "MTLinkedListNode.h"
 
 @interface MTLinkedList ()
 
