@@ -30,8 +30,8 @@
 /* Begin PBXFileReference section */
 		4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsDb.m; sourceTree = "<group>"; };
 		4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTdsDb.h; sourceTree = "<group>"; };
-		4C6894F42CF0FCAF00BD38DF /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = MADTds/freetds/lib/libsybdb.a; sourceTree = "<group>"; };
-		4C6894F52CF0FCAF00BD38DF /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = MADTds/freetds/lib/libct.a; sourceTree = "<group>"; };
+		4C6894F42CF0FCAF00BD38DF /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsybdb.a; sourceTree = "<group>"; };
+		4C6894F52CF0FCAF00BD38DF /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libct.a; sourceTree = "<group>"; };
 		4C6894F92CF0FCC600BD38DF /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
 		4C6894FA2CF0FCC600BD38DF /* cstypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
 		4C6894FB2CF0FCC600BD38DF /* sybdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybdb.h; sourceTree = "<group>"; };
@@ -44,6 +44,7 @@
 		4C6895022CF0FCC600BD38DF /* bkpublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
 		4C6895032CF0FCC600BD38DF /* odbcss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = odbcss.h; sourceTree = "<group>"; };
 		4C6895102CF0FCFC00BD38DF /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/libiconv.2.tbd; sourceTree = DEVELOPER_DIR; };
+		4C6895162CF1F95000BD38DF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4CCABCD92CF0B75A008EC875 /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CCABCDC2CF0B75A008EC875 /* MADTds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTds.h; sourceTree = "<group>"; };
 		4CCABCDD2CF0B75A008EC875 /* MADTds.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MADTds.docc; sourceTree = "<group>"; };
@@ -63,15 +64,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C6894F32CF0FC8D00BD38DF /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				4C6894F52CF0FCAF00BD38DF /* libct.a */,
-				4C6894F42CF0FCAF00BD38DF /* libsybdb.a */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 		4C6894F82CF0FCC600BD38DF /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -102,7 +94,7 @@
 		4CCABCCF2CF0B75A008EC875 = {
 			isa = PBXGroup;
 			children = (
-				4C6894F32CF0FC8D00BD38DF /* Resources */,
+				4C6895162CF1F95000BD38DF /* README.md */,
 				4CCABCDB2CF0B75A008EC875 /* MADTds */,
 				4CCABCDA2CF0B75A008EC875 /* Products */,
 				4C68950F2CF0FCFC00BD38DF /* Frameworks */,
@@ -121,10 +113,12 @@
 			isa = PBXGroup;
 			children = (
 				4CCABCDD2CF0B75A008EC875 /* MADTds.docc */,
-				4C6894F82CF0FCC600BD38DF /* include */,
+				4C6894F52CF0FCAF00BD38DF /* libct.a */,
+				4C6894F42CF0FCAF00BD38DF /* libsybdb.a */,
 				4CCABCDC2CF0B75A008EC875 /* MADTds.h */,
 				4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */,
 				4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */,
+				4C6894F82CF0FCC600BD38DF /* include */,
 			);
 			path = MADTds;
 			sourceTree = "<group>";

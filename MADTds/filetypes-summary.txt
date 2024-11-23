@@ -1,0 +1,20 @@
+1269  text/plain
+ 696  image/svg+xml
+ 639  text/html
+ 360  text/x-c
+  32  text/x-makefile
+  32  image/png
+  22  text/x-m4
+  17  text/x-shellscript
+  15  image/gif
+  10  application/octet-stream
+  10 	application/x-archive
+   9  text/troff
+   4  text/x-perl
+   3  text/x-objective-c
+   2  text/xml
+   2  application/x-mach-binary
+   1  text/x-tex
+   1  text/x-msdos-batch
+   1  text/x-java
+   1  application/x-object

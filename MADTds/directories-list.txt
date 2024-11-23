@@ -1,0 +1,13 @@
+.
+./MADTds
+./MADTds/freetds
+./MADTds/freetds/lib
+./MADTds/freetds/lib/include
+./MADTds/freetds/src
+./MADTds/MADTds.docc
+./MADTds.xcodeproj
+./MADTds.xcodeproj/xcuserdata
+./MADTds.xcodeproj/xcuserdata/michael.xcuserdatad
+./MADTds.xcodeproj/xcuserdata/michael.xcuserdatad/xcschemes
+./MADTds.xcodeproj/xcshareddata
+./MADTds.xcodeproj/xcshareddata/xcschemes
