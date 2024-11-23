@@ -16,8 +16,8 @@
 
 @interface BDHost : NSObject
 
-    + (NSString *)addressForHostname:(NSString *)hostname;
-    + (NSArray *)addressesForHostname:(NSString *)hostname;
+	+ (NSString *)addressForHostname:(NSString *)hostname;
+	+ (NSArray *)addressesForHostname:(NSString *)hostname;
 
 @end
 

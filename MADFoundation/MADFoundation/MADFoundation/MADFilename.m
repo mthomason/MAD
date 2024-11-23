@@ -14,8 +14,8 @@
 @implementation MADFilename
 
 + (NSString *)newFilenameId:(NSUInteger)tag {
-    id filenameId = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)tag];
-    return filenameId;
+	id filenameId = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)tag];
+	return filenameId;
 }
 
 @end
