@@ -34,24 +34,24 @@
 #pragma mark - RptqDocumentElementFactory
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
-                    fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectWithID:objectId];
-    return (RptqDocumentElementLabelDataField *)result;
+					fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
+	return (RptqDocumentElementLabelDataField *)result;
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
-    [description appendFormat:@"Text:                   %@\n", self.text];
-    [description appendFormat:@"Table:                  %@\n", self.tableID];
-    [description appendFormat:@"Field:                  %@\n", self.fieldID];
-    [description appendFormat:@"*********"];
-    return description;
+	NSMutableString *description = [[NSMutableString alloc] init];
+	[description appendFormat:@"*********\n"];
+	[description appendFormat:@"Identifier:             %lld\n", self.identifier];
+	[description appendFormat:@"Text:                   %@\n", self.text];
+	[description appendFormat:@"Table:                  %@\n", self.tableID];
+	[description appendFormat:@"Field:                  %@\n", self.fieldID];
+	[description appendFormat:@"*********"];
+	return description;
 }
 
 - (NSString *)designerRepresentationText {
-    return [self referencesQueryField].toStringReverse;
+	return [self referencesQueryField].toStringReverse;
 }
 
 

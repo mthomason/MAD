@@ -15,24 +15,24 @@
 
 @interface RptqDocumentSectionTypeEnumerator : NSEnumerator
 
-    @property (nonatomic, assign) NSUInteger current;
+	@property (nonatomic, assign) NSUInteger current;
 
-    - (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
-               managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    - (NSArray *)allObjects;
-    - (id)nextObject;
-    - (NSUInteger)count;
+	- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
+			   managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (NSArray *)allObjects;
+	- (id)nextObject;
+	- (NSUInteger)count;
 
 @end
 
 @interface RptqDocumentSectionEnumerator : NSEnumerator
 
-    @property (nonatomic, assign) NSUInteger current;
+	@property (nonatomic, assign) NSUInteger current;
 
-    - (instancetype)initWithDocument:(RptqDocument *)document;
-    - (NSArray *)allObjects;
-    - (id)nextObject;
-    - (NSUInteger)count;
+	- (instancetype)initWithDocument:(RptqDocument *)document;
+	- (NSArray *)allObjects;
+	- (id)nextObject;
+	- (NSUInteger)count;
 
 @end
 

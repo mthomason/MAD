@@ -27,20 +27,20 @@
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {
-    [super awakeFromInsert];
-    if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-        self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                            managedObjectContext:self.managedObjectContext];
-    }
+	[super awakeFromInsert];
+	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
+		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+											managedObjectContext:self.managedObjectContext];
+	}
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"***********   RptqQuerySort   ***********\n"];
-    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
-    [description appendFormat:@"ASC:                    %@\n", self.ascending ? @"YES" : @"NO"];
-    [description appendFormat:@"***********   RptqQuerySort   ***********"];
-    return description;
+	NSMutableString *description = [[NSMutableString alloc] init];
+	[description appendFormat:@"***********   RptqQuerySort   ***********\n"];
+	[description appendFormat:@"Identifier:             %lld\n", self.identifier];
+	[description appendFormat:@"ASC:                    %@\n", self.ascending ? @"YES" : @"NO"];
+	[description appendFormat:@"***********   RptqQuerySort   ***********"];
+	return description;
 }
 
 @end

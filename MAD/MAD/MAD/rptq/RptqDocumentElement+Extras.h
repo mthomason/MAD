@@ -34,76 +34,76 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @class MADSectionLayoutManager, UIFontDescriptor, RptqDocumentSection;
 
 @interface RptqDocumentElement (Extras)
-    <MTProtocolLog, RptqDocumentElementFactory>
+	<MTProtocolLog, RptqDocumentElementFactory>
 
-    @property (readonly) MADPrintPageElementType documentObjectType;
-    @property (readonly) CGRect frame;
+	@property (readonly) MADPrintPageElementType documentObjectType;
+	@property (readonly) CGRect frame;
 
-    + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
-                                   fromObjectContext:(NSManagedObjectContext *)context;
+	+ (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
+								   fromObjectContext:(NSManagedObjectContext *)context;
 
-    + (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
-    + (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID;
-    + (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID;
+	+ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
+	+ (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID;
+	+ (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID;
 
-    + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
-               fromParentSection:(RptqDocumentSection *)section
-               withLayoutManager:(MADSectionLayoutManager *)layoutManager;
+	+ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
+			   fromParentSection:(RptqDocumentSection *)section
+			   withLayoutManager:(MADSectionLayoutManager *)layoutManager;
 
-    + (NSString *)keyBorderWidthTop;
-    + (NSString *)keyBorderWidthBottom;
-    + (NSString *)keyPaddingTop;
-    + (NSString *)keyPaddingBottom;
-    + (NSString *)keyMarginTop;
-    + (NSString *)keyMarginBottom;
-    + (NSString *)keyRectOriginY;
-    + (NSString *)keyRectSizeHeight;
-    + (NSString *)keyCalculatedHeight;
+	+ (NSString *)keyBorderWidthTop;
+	+ (NSString *)keyBorderWidthBottom;
+	+ (NSString *)keyPaddingTop;
+	+ (NSString *)keyPaddingBottom;
+	+ (NSString *)keyMarginTop;
+	+ (NSString *)keyMarginBottom;
+	+ (NSString *)keyRectOriginY;
+	+ (NSString *)keyRectSizeHeight;
+	+ (NSString *)keyCalculatedHeight;
 
-    - (CGSize)sizeCalculated;
-    - (CGSize)sizeContentView;
-    - (CGRect)boundsCalculated;
-    - (CGRect)paddingViewFrame;
-    - (CGRect)boundsContentView;
-    - (CGRect)elementViewFrame;
-    - (CGRect)elementViewFrameDesigner;
-    - (CGRect)elementViewFrameDesignerFrameCalculated;
-    - (CGRect)borderRect;
-    - (CGRect)paddingRect;
-    - (CGRect)innerRect;
+	- (CGSize)sizeCalculated;
+	- (CGSize)sizeContentView;
+	- (CGRect)boundsCalculated;
+	- (CGRect)paddingViewFrame;
+	- (CGRect)boundsContentView;
+	- (CGRect)elementViewFrame;
+	- (CGRect)elementViewFrameDesigner;
+	- (CGRect)elementViewFrameDesignerFrameCalculated;
+	- (CGRect)borderRect;
+	- (CGRect)paddingRect;
+	- (CGRect)innerRect;
 
-    - (void)setOriginPoint:(CGPoint)origin;
-    - (void)setSizeValue:(CGSize)size;
-    - (void)setSizeWidth:(float)w height:(float)h;
+	- (void)setOriginPoint:(CGPoint)origin;
+	- (void)setSizeValue:(CGSize)size;
+	- (void)setSizeWidth:(float)w height:(float)h;
 
-    - (double)spacingLeft;
-    - (double)spacingTop;
-    - (double)spacingBottom;
-    - (double)spacingRight;
+	- (double)spacingLeft;
+	- (double)spacingTop;
+	- (double)spacingBottom;
+	- (double)spacingRight;
 
-    - (NSString *)designerRepresentationText;
+	- (NSString *)designerRepresentationText;
 
-    - (CGFloat)borderLineTopAX;
-    - (CGFloat)borderLineTopAY;
-    - (CGFloat)borderLineTopBX;
-    - (CGFloat)borderLineTopBY;
-    - (CGFloat)borderLineBottomAX;
-    - (CGFloat)borderLineBottomAY;
-    - (CGFloat)borderLineBottomBX;
-    - (CGFloat)borderLineBottomBY;
-    - (CGFloat)borderLineLeftAX;
-    - (CGFloat)borderLineLeftAY;
-    - (CGFloat)borderLineLeftBX;
-    - (CGFloat)borderLineLeftBY;
-    - (CGFloat)borderLineRightAX;
-    - (CGFloat)borderLineRightAY;
-    - (CGFloat)borderLineRightBX;
-    - (CGFloat)borderLineRightBY;
+	- (CGFloat)borderLineTopAX;
+	- (CGFloat)borderLineTopAY;
+	- (CGFloat)borderLineTopBX;
+	- (CGFloat)borderLineTopBY;
+	- (CGFloat)borderLineBottomAX;
+	- (CGFloat)borderLineBottomAY;
+	- (CGFloat)borderLineBottomBX;
+	- (CGFloat)borderLineBottomBY;
+	- (CGFloat)borderLineLeftAX;
+	- (CGFloat)borderLineLeftAY;
+	- (CGFloat)borderLineLeftBX;
+	- (CGFloat)borderLineLeftBY;
+	- (CGFloat)borderLineRightAX;
+	- (CGFloat)borderLineRightAY;
+	- (CGFloat)borderLineRightBX;
+	- (CGFloat)borderLineRightBY;
 
-    - (void)setSizeWidth:(float)width;
-    - (void)setSizeHeight:(float)height;
+	- (void)setSizeWidth:(float)width;
+	- (void)setSizeHeight:(float)height;
 
-    - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
+	- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
 @end
 

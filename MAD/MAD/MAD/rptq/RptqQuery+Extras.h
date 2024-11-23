@@ -9,18 +9,18 @@
 #ifndef Reports_RptqQuery_Extras_h
 #define Reports_RptqQuery_Extras_h
 
-#import "RptqQuery.h"
+#import <MAD/RptqQuery.h>
 
 @class RptqDocument, MADDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 
 @interface RptqQuery (Extras)
 
-    - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
-    - (NSArray <RptqQueryGroup *> *)sortedQueryGroups;
-    - (NSArray *)sortDescriptorsForDatabase:(MADDatabase *)database;
-    - (NSUInteger)sectionCount;
-    + (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
-                managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
+	- (NSArray <RptqQueryGroup *> *)sortedQueryGroups;
+	- (NSArray *)sortDescriptorsForDatabase:(MADDatabase *)database;
+	- (NSUInteger)sectionCount;
+	+ (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
+				managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

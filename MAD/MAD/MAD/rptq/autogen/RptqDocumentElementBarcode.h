@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementBarcode_RptqDocumentElement_h
 #define MAD_RptqDocumentElementBarcode_RptqDocumentElement_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 #import <CoreData/NSFetchRequest.h>
 
 @class RptqQueryField;

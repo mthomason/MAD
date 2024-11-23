@@ -14,20 +14,20 @@
 
 - (MADDatabaseType)databaseType {
 
-    MADDatabaseType category;
-    if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
-        category = MADDatabaseTypeMySQL;
-        
-    } else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
-        category = MADDatabaseTypeTDS;
-        
-    } else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
-        category = MADDatabaseTypeSqlite3;
-    
-    } else {
-        category = MADDatabaseTypeSqlite3;
-    }
-    return category;
+	MADDatabaseType category;
+	if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeMySQL]]) {
+		category = MADDatabaseTypeMySQL;
+		
+	} else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
+		category = MADDatabaseTypeTDS;
+		
+	} else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
+		category = MADDatabaseTypeSqlite3;
+	
+	} else {
+		category = MADDatabaseTypeSqlite3;
+	}
+	return category;
 }
 
 @end

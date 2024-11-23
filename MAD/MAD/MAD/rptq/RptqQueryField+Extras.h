@@ -9,33 +9,33 @@
 #ifndef Reports_RptqQueryField_Extras_h
 #define Reports_RptqQueryField_Extras_h
 
-#import "RptqQueryField.h"
+#import <MAD/RptqQueryField.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 @interface RptqQueryField (Extras) <MTProtocolLog>
 
-    + (instancetype)newQueryField:(NSManagedObjectContext *)managedObjectContext;
-    + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID
-                     managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)newQueryField:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID
+					 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    + (NSFetchRequest<NSDictionary *> *)fetchRequestFieldKeys:(int64_t)identifier;
-    + (NSFetchRequest *)fetchRequestFields:(int64_t)identifier;
+	+ (NSFetchRequest<NSDictionary *> *)fetchRequestFieldKeys:(int64_t)identifier;
+	+ (NSFetchRequest *)fetchRequestFields:(int64_t)identifier;
 
-    - (NSString *)display;
-    - (NSString *)tableFieldKey;
-    - (NSString *)toStringReverse;
+	- (NSString *)display;
+	- (NSString *)tableFieldKey;
+	- (NSString *)toStringReverse;
 
-    + (NSString *)keyFieldName;
-    + (NSString *)keyTableName;
-    + (NSString *)keySchemaTable;
-    + (NSString *)keyQueryTableID;
-    + (NSString *)keyQueryFieldID;
-    + (NSString *)keySchemaTableID;
-    + (NSString *)keySchemaFieldID;
-    + (NSString *)keyInQueryTable;
-    + (NSString *)keyInQueryTableAlias;
-    + (NSString *)keySchemaFieldName;
-    + (NSString *)keySchemaFieldDataType;
+	+ (NSString *)keyFieldName;
+	+ (NSString *)keyTableName;
+	+ (NSString *)keySchemaTable;
+	+ (NSString *)keyQueryTableID;
+	+ (NSString *)keyQueryFieldID;
+	+ (NSString *)keySchemaTableID;
+	+ (NSString *)keySchemaFieldID;
+	+ (NSString *)keyInQueryTable;
+	+ (NSString *)keyInQueryTableAlias;
+	+ (NSString *)keySchemaFieldName;
+	+ (NSString *)keySchemaFieldDataType;
 
 @end
 

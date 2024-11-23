@@ -15,13 +15,13 @@
 @implementation RptqDocumentElementGroupKey (Extras)
 
 - (NSString *)designerRepresentationText {
-    NSString *result = nil;
-    NSNumber *groupNumber = [NSNumber numberWithLongLong:self.groupNumber];
-    NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
-                                                                 numberStyle: NSNumberFormatterSpellOutStyle];
-    NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
-    result = [[NSString alloc] initWithFormat:gorupFormatString, groupNumberText.uppercaseString];
-    return result;
+	NSString *result = nil;
+	NSNumber *groupNumber = [NSNumber numberWithLongLong:self.groupNumber];
+	NSString *groupNumberText = [NSNumberFormatter localizedStringFromNumber: groupNumber
+																 numberStyle: NSNumberFormatterSpellOutStyle];
+	NSString *gorupFormatString = NSLocalizedString(@"Group %@", @"Like 'Group Three.'");
+	result = [[NSString alloc] initWithFormat:gorupFormatString, groupNumberText.uppercaseString];
+	return result;
 }
 
 @end

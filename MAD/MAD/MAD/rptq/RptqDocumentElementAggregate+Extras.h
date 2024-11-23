@@ -23,15 +23,15 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
 
 @interface RptqDocumentElementAggregate (Extras)
 
-    + (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType;
-    + (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType;
+	+ (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType;
+	+ (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType;
 
-    - (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
-                                          inputType:(MTAggregateFunctionInputType)inputType
-                                          groupType:(MTAggregateGroupByType)groupType
-                                  aggregateObjectID:(NSManagedObjectID *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
-                                        groupNumber:(int32_t)groupNumber;
-    - (NSString *)designerRepresentationText;
+	- (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
+										  inputType:(MTAggregateFunctionInputType)inputType
+										  groupType:(MTAggregateGroupByType)groupType
+								  aggregateObjectID:(NSManagedObjectID *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
+										groupNumber:(int32_t)groupNumber;
+	- (NSString *)designerRepresentationText;
 
 @end
 

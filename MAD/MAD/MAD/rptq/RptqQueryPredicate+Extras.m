@@ -35,198 +35,198 @@
 @implementation RptqQueryPredicate (Extras)
 
 + (NSString *)domain {
-    return @"mad.everydayapps.com.mad.rptq.predicate";
+	return @"mad.everydayapps.com.mad.rptq.predicate";
 }
 
 #pragma mark - Overrides
 
 - (void)awakeFromInsert {
-    [super awakeFromInsert];
-    if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-        self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-                                            managedObjectContext:self.managedObjectContext];
-    }
+	[super awakeFromInsert];
+	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
+		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
+											managedObjectContext:self.managedObjectContext];
+	}
 }
 
 #pragma mark - Static
 
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
-                                      comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                        andRightFieldID:(NSManagedObjectID *)rightFieldID
-                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                                  error:(NSError * __autoreleasing *)error {
-    if (leftFieldID == nil || rightFieldID == nil) {
-        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field."];
-        *error = [e errorWithDomain:[self domain] code:2340];
-        return nil;
-    }
-    RptqQueryField *leftField, *rightField;
-    leftField = [managedObjectContext objectWithID:leftFieldID];
-    rightField = [managedObjectContext objectWithID:rightFieldID];
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class])
-                                          inManagedObjectContext: managedObjectContext];
-    RptqQueryPredicate *queryPredicate;
-    queryPredicate = [[RptqQueryPredicate alloc] initWithEntity: ed
-                                 insertIntoManagedObjectContext: managedObjectContext];
-    queryPredicate.hasRightField    = rightField;
-    queryPredicate.hasLeftField     = leftField;
-    queryPredicate.rightFieldID     = nil;
-    queryPredicate.leftFieldID      = nil;
-    queryPredicate.comparson        = comparsonOperator;
-    return queryPredicate;
+									  comparsonOperator:(MADPredicateOperator)comparsonOperator
+										andRightFieldID:(NSManagedObjectID *)rightFieldID
+								forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+												  error:(NSError * __autoreleasing *)error {
+	if (leftFieldID == nil || rightFieldID == nil) {
+		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field."];
+		*error = [e errorWithDomain:[self domain] code:2340];
+		return nil;
+	}
+	RptqQueryField *leftField, *rightField;
+	leftField = [managedObjectContext objectWithID:leftFieldID];
+	rightField = [managedObjectContext objectWithID:rightFieldID];
+	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class])
+										  inManagedObjectContext: managedObjectContext];
+	RptqQueryPredicate *queryPredicate;
+	queryPredicate = [[RptqQueryPredicate alloc] initWithEntity: ed
+								 insertIntoManagedObjectContext: managedObjectContext];
+	queryPredicate.hasRightField    = rightField;
+	queryPredicate.hasLeftField     = leftField;
+	queryPredicate.rightFieldID     = nil;
+	queryPredicate.leftFieldID      = nil;
+	queryPredicate.comparson        = comparsonOperator;
+	return queryPredicate;
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
-                                      comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                          andRightValue:(NSString *)rightUserValue
-                                forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                                  error:(NSError * __autoreleasing *)error {
-    if (leftFieldID == nil || rightUserValue == nil) {
-        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field or value."];
-        *error = [e errorWithDomain:[self domain] code:2341];
-        return nil;
-    }
-    RptqQueryField *leftField;
-    leftField = [managedObjectContext objectWithID:leftFieldID];
-    NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-    NSEntityDescription *ed = [NSEntityDescription entityForName: entityName
-                                          inManagedObjectContext: managedObjectContext];
-    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    queryPredicate.hasRightField    = nil;
-    queryPredicate.hasLeftField     = leftField;
-    queryPredicate.rightFieldID     = rightUserValue.copy;
-    queryPredicate.leftFieldID      = nil;
-    queryPredicate.comparson        = comparsonOperator;
-    return queryPredicate;
+									  comparsonOperator:(MADPredicateOperator)comparsonOperator
+										  andRightValue:(NSString *)rightUserValue
+								forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+												  error:(NSError * __autoreleasing *)error {
+	if (leftFieldID == nil || rightUserValue == nil) {
+		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field or value."];
+		*error = [e errorWithDomain:[self domain] code:2341];
+		return nil;
+	}
+	RptqQueryField *leftField;
+	leftField = [managedObjectContext objectWithID:leftFieldID];
+	NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
+	NSEntityDescription *ed = [NSEntityDescription entityForName: entityName
+										  inManagedObjectContext: managedObjectContext];
+	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+	queryPredicate.hasRightField    = nil;
+	queryPredicate.hasLeftField     = leftField;
+	queryPredicate.rightFieldID     = rightUserValue.copy;
+	queryPredicate.leftFieldID      = nil;
+	queryPredicate.comparson        = comparsonOperator;
+	return queryPredicate;
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
-                                    comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                        andRightValue:(NSString *)rightUserValue
-                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                                error:(NSError * __autoreleasing *)error {
-    if (leftUserValue == nil || rightUserValue == nil) {
-        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value."];
-        *error = [e errorWithDomain:[self domain] code:2342];
-        return nil;
-    }
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
-    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    queryPredicate.hasRightField    = nil;
-    queryPredicate.hasLeftField     = nil;
-    queryPredicate.rightFieldID     = rightUserValue.copy;
-    queryPredicate.leftFieldID      = leftUserValue.copy;
-    queryPredicate.comparson        = comparsonOperator;
-    return queryPredicate;
+									comparsonOperator:(MADPredicateOperator)comparsonOperator
+										andRightValue:(NSString *)rightUserValue
+							  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+												error:(NSError * __autoreleasing *)error {
+	if (leftUserValue == nil || rightUserValue == nil) {
+		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value."];
+		*error = [e errorWithDomain:[self domain] code:2342];
+		return nil;
+	}
+	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+	queryPredicate.hasRightField    = nil;
+	queryPredicate.hasLeftField     = nil;
+	queryPredicate.rightFieldID     = rightUserValue.copy;
+	queryPredicate.leftFieldID      = leftUserValue.copy;
+	queryPredicate.comparson        = comparsonOperator;
+	return queryPredicate;
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
-                                    comparsonOperator:(MADPredicateOperator)comparsonOperator
-                                      andRightFieldID:(NSManagedObjectID /* RptqQueryField */ *)rightFieldID
-                              forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                                error:(NSError * __autoreleasing *)error {
-    if (leftUserValue == nil || rightFieldID == nil) {
-        MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value or field."];
-        *error = [e errorWithDomain:[self domain] code:2343];
-        return nil;
-    }
-    RptqQueryField *rightField;
-    rightField = [managedObjectContext objectWithID:rightFieldID];
-    
-    NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
-    RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    queryPredicate.hasRightField    = rightField;
-    queryPredicate.hasLeftField     = nil;
-    queryPredicate.rightFieldID     = nil;
-    queryPredicate.leftFieldID      = leftUserValue.copy;
-    queryPredicate.comparson        = comparsonOperator;
-    return queryPredicate;
+									comparsonOperator:(MADPredicateOperator)comparsonOperator
+									  andRightFieldID:(NSManagedObjectID /* RptqQueryField */ *)rightFieldID
+							  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+												error:(NSError * __autoreleasing *)error {
+	if (leftUserValue == nil || rightFieldID == nil) {
+		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value or field."];
+		*error = [e errorWithDomain:[self domain] code:2343];
+		return nil;
+	}
+	RptqQueryField *rightField;
+	rightField = [managedObjectContext objectWithID:rightFieldID];
+	
+	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
+	queryPredicate.hasRightField    = rightField;
+	queryPredicate.hasLeftField     = nil;
+	queryPredicate.rightFieldID     = nil;
+	queryPredicate.leftFieldID      = leftUserValue.copy;
+	queryPredicate.comparson        = comparsonOperator;
+	return queryPredicate;
 }
 
 + (void)deletePredicate:(RptqQueryPredicate *)predicate {
-    if (predicate) {
-        NSManagedObjectContext *objectContext = predicate.managedObjectContext;
-        if (objectContext) {
-            [objectContext deleteObject:predicate];
-        }
-    }
+	if (predicate) {
+		NSManagedObjectContext *objectContext = predicate.managedObjectContext;
+		if (objectContext) {
+			[objectContext deleteObject:predicate];
+		}
+	}
 }
 
 #pragma mark -
 #pragma mark Public
 
 - (NSString *)symbolForDisplay {
-    switch (self.comparson) {
-        case 0:
-            return @"==";
-            break;
-        case 1:
-            return @"!=";
-            break;
-        case 2:
-            return @">";
-            break;
-        case 3:
-            return @">=";
-            break;
-        case 4:
-            return @"<";
-            break;
-        case 5:
-            return @"<=";
-            break;
-        default:
-            return @"==";
-            break;
-    }
+	switch (self.comparson) {
+		case 0:
+			return @"==";
+			break;
+		case 1:
+			return @"!=";
+			break;
+		case 2:
+			return @">";
+			break;
+		case 3:
+			return @">=";
+			break;
+		case 4:
+			return @"<";
+			break;
+		case 5:
+			return @"<=";
+			break;
+		default:
+			return @"==";
+			break;
+	}
 }
 
 - (NSString *)symbolForComparson {
-    switch (self.comparson) {
-        case 0:
-            return @"=";
-            break;
-        case 1:
-            return @"<>";
-            break;
-        case 2:
-            return @">";
-            break;
-        case 3:
-            return @">=";
-            break;
-        case 4:
-            return @"<";
-            break;
-        case 5:
-            return @"<=";
-            break;
-        default:
-            return @"==";
-            break;
-    }
+	switch (self.comparson) {
+		case 0:
+			return @"=";
+			break;
+		case 1:
+			return @"<>";
+			break;
+		case 2:
+			return @">";
+			break;
+		case 3:
+			return @">=";
+			break;
+		case 4:
+			return @"<";
+			break;
+		case 5:
+			return @"<=";
+			break;
+		default:
+			return @"==";
+			break;
+	}
 }
 
 - (NSString *)rightFieldID {
-    return self.rigthFieldID;
+	return self.rigthFieldID;
 }
 
 - (void)setRightFieldID:(NSString *)rightFieldID {
-    self.rigthFieldID = rightFieldID;
+	self.rigthFieldID = rightFieldID;
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:         %lld\n", self.identifier];
-    [description appendFormat:@"Sort:               %hd\n", self.comparson];
-    [description appendFormat:@"Right field:        %@\n", self.hasRightField];
-    [description appendFormat:@"Right pred:         %@\n", self.rightFieldID];
-    [description appendFormat:@"Left field:         %@\n", self.hasLeftField];
-    [description appendFormat:@"Left pred:          %@\n", self.leftFieldID];
-    [description appendFormat:@"Query:              %@\n", self.inQuery];
-    [description appendFormat:@"*********"];
-    return description;
+	NSMutableString *description = [[NSMutableString alloc] init];
+	[description appendFormat:@"*********\n"];
+	[description appendFormat:@"Identifier:         %lld\n", self.identifier];
+	[description appendFormat:@"Sort:               %hd\n", self.comparson];
+	[description appendFormat:@"Right field:        %@\n", self.hasRightField];
+	[description appendFormat:@"Right pred:         %@\n", self.rightFieldID];
+	[description appendFormat:@"Left field:         %@\n", self.hasLeftField];
+	[description appendFormat:@"Left pred:          %@\n", self.leftFieldID];
+	[description appendFormat:@"Query:              %@\n", self.inQuery];
+	[description appendFormat:@"*********"];
+	return description;
 }
 
 @end

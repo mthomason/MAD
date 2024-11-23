@@ -9,9 +9,9 @@
 #ifndef Reports_RptqQueryLinks_Extras_h
 #define Reports_RptqQueryLinks_Extras_h
 
-#import "RptqQueryLinks.h"
+#import <MAD/RptqQueryLinks.h>
 #import <MADDataStructures/MTProtocolLog.h>
-#import "MADQueryLinkType.h"
+#import <MAD/MADQueryLinkType.h>
 
 extern NSString * const MTLinkTypeNameInnerJoin;
 extern NSString * const MTLinkTypeNameEquiJoin;
@@ -33,17 +33,17 @@ extern NSString * const MTLinkSqlFullOuterJoin;
 
 @interface RptqQueryLinks (Extras) <MTProtocolLog>
 
-    + (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
-                                    rightField:(RptqQueryField *)fieldRight
-                                      joinType:(MADLinkType)joinType
-                          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
+									rightField:(RptqQueryField *)fieldRight
+									  joinType:(MADLinkType)joinType
+						  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    - (NSString *)linkDescription;
+	- (NSString *)linkDescription;
 
-    + (NSString *)ReuseIdForLinkType:(MADLinkType)type;
-    + (NSString *)newLocalizedNameForLinkType:(MADLinkType)type;
-    + (NSString *)SqlForLinkType:(MADLinkType)type;
-    - (BOOL)isConnectedToTable:(RptqQueryTable *)table;
+	+ (NSString *)ReuseIdForLinkType:(MADLinkType)type;
+	+ (NSString *)newLocalizedNameForLinkType:(MADLinkType)type;
+	+ (NSString *)SqlForLinkType:(MADLinkType)type;
+	- (BOOL)isConnectedToTable:(RptqQueryTable *)table;
 
 @end
 

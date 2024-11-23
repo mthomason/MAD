@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementAggregate_RptqDocumentElement_h
 #define MAD_RptqDocumentElementAggregate_RptqDocumentElement_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 
 @class RptqDocumentElementFormula, RptqQueryField, NSFetchRequest;
 

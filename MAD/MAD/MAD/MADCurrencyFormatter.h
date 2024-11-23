@@ -12,13 +12,13 @@
 #import <Foundation/NSObject.h>
 
 @interface MADCurrencyFormatter : NSObject
-    <NSSecureCoding>
+	<NSSecureCoding>
 
-    @property (nonatomic, assign) BOOL enabled;
-    @property (nonatomic, assign) NSInteger decimalCount;
-    @property (nonatomic, strong) NSLocale *locale;
+	@property (nonatomic, assign) BOOL enabled;
+	@property (nonatomic, assign) NSInteger decimalCount;
+	@property (nonatomic, strong) NSLocale *locale;
 
-    + (BOOL)supportsSecureCoding;
+	+ (BOOL)supportsSecureCoding;
 
 @end
 

@@ -30,19 +30,19 @@
 #pragma mark - Overrides
 
 - (NSString *)designerRepresentationText {
-    return @"image";
+	return @"image";
 }
 
 #pragma mark - RptqDocumentElementFactory
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
-                    fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectWithID:objectId];
-    return (RptqDocumentElementImage *)result;
+					fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
+	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
+	return (RptqDocumentElementImage *)result;
 }
 
 - (id)debugQuickLookObject {
-    return self.image;
+	return self.image;
 }
 
 @end

@@ -9,25 +9,25 @@
 #ifndef Reports_RptqDatabaseSchemaField_Extras_h
 #define Reports_RptqDatabaseSchemaField_Extras_h
 
-#import "RptqDatabaseSchemaField.h"
+#import <MAD/RptqDatabaseSchemaField.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 @class MADDatabaseField;
 
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolLog>
 
-    + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                                andField:(MADDatabaseField *)field;
+	+ (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+																andField:(MADDatabaseField *)field;
 
-    + (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
-                     andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
+					 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    + (NSString *)dataTypeDisplay:(int16_t)dataType;
+	+ (NSString *)dataTypeDisplay:(int16_t)dataType;
 
-    - (NSString *)display;
-    - (NSString *)fieldTypeDisplay;
+	- (NSString *)display;
+	- (NSString *)fieldTypeDisplay;
 
-    - (SEL)selectorForSorting;
+	- (SEL)selectorForSorting;
 
 @end
 

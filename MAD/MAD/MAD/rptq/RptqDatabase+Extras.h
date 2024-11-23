@@ -11,7 +11,7 @@
 
 #import <MADAPI/MADDatabaseType.h>
 
-#import "RptqDatabase.h"
+#import <MAD/RptqDatabase.h>
 
 #define MADDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MADDatabaseTypeSalesforceCom", @"MADDatabaseTypeDatabaseCom", @"MADDatabaseTypeMySQL", @"MADDatabaseTypeMicrosoftSqlAzure", @"MADDatabaseTypeAmazonSimpleDb", @"MADDatabaseTypeMicrosoftSqlServer", @"MADDatabaseTypeOracle", @"MADDatabaseTypeODBC", @"MADDatabaseTypeGooleAppEngine", @"MADDatabaseTypeNone", nil]
 
@@ -19,24 +19,24 @@
 
 @interface RptqDatabase (Extras)
 
-    + (NSString *)keyOwnedByUserDriverID;
-    + (NSString *)keyOwnedByUserDatabaseName;
-    + (NSString *)keyDatabaseDriverType;
-    + (NSFetchRequest *)fetchRequestDatabaseDriverID:(int64_t)identifier;
-    + (NSFetchRequest *)fetchRequestDatabaseName:(int64_t)identifier;
-    + (NSFetchRequest *)fetchRequestDriverName:(int64_t)identifier;
-    + (NSFetchRequest *)fetchRequestDriverType:(int64_t)identifier;
-    + (RptqDatabase *)databaseForDocument:(RptqDocument *)document
-                          andConnecitonId:(int64_t)connectionId;
+	+ (NSString *)keyOwnedByUserDriverID;
+	+ (NSString *)keyOwnedByUserDatabaseName;
+	+ (NSString *)keyDatabaseDriverType;
+	+ (NSFetchRequest *)fetchRequestDatabaseDriverID:(int64_t)identifier;
+	+ (NSFetchRequest *)fetchRequestDatabaseName:(int64_t)identifier;
+	+ (NSFetchRequest *)fetchRequestDriverName:(int64_t)identifier;
+	+ (NSFetchRequest *)fetchRequestDriverType:(int64_t)identifier;
+	+ (RptqDatabase *)databaseForDocument:(RptqDocument *)document
+						  andConnecitonId:(int64_t)connectionId;
 
-    + (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                   driverType:(NSString *)driverIdentifier
-                                                 connectionId:(int64_t)connectionId;
+	+ (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+												   driverType:(NSString *)driverIdentifier
+												 connectionId:(int64_t)connectionId;
 
-    @property (readonly) RptqQuery *defaultQuery;
+	@property (readonly) RptqQuery *defaultQuery;
 
-    - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
-    - (MADDatabaseType)databaseType;
+	- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
+	- (MADDatabaseType)databaseType;
 
 @end
 

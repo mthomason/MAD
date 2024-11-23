@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementLabelDataField_h
 #define MAD_RptqDocumentElementLabelDataField_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 #import <CoreData/NSFetchRequest.h>
 
 @class RptqQueryField;

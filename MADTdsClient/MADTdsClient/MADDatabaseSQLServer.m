@@ -829,7 +829,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										NSString *objectStr = [[NSString alloc] initWithCString: sybNumericBindChar[indexOfType]
 																					   encoding: NSStringEncodingConversionAllowLossy];
 										
-										NSInteger cp = [columnPercision[columnCounter] integerValue];;
+										NSInteger cp = [columnPercision[columnCounter] integerValue];
 										
 										NSString *decimalSeperatorSqlServer2 = nil;
 										if (cp == -1 && tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved == NO) {

@@ -14,40 +14,40 @@
 #import <MAD/MTPaper.h>
 
 @class NSManagedObjectContext, MADDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
-       RptqQueryPredicate, RptqQueryLinks;
+	   RptqQueryPredicate, RptqQueryLinks;
 
 @interface RptqDocument (Extras)
 
-    @property (readonly)RptqDatabase *defaultDatabase;
+	@property (readonly)RptqDatabase *defaultDatabase;
 
-    @property (readonly)RptqQuery *mainQuery;
+	@property (readonly)RptqQuery *mainQuery;
 
-    + (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
-    + (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
+	+ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+	+ (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-    - (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
-                                           andLevel:(NSUInteger)level;
-    - (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
-                                          withNumberOfGroups:(NSUInteger)numberOfGroups;
-                                          
-    - (void)storeDatabaseConnectionDefination:(MADDatabase *)database
-                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
-                                           fieldsByTable:(NSDictionary *)fieldsByTable
-                                 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    
-    - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)setNumberOfRows:(int32_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)setHeight:(double)height forSectionAtRow:(NSUInteger)sectionRow;
-    - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
+	- (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
+										   andLevel:(NSUInteger)level;
+	- (RptqDocumentSection *)documentSectionForSelectedIndex:(NSUInteger)selectedIndex
+										  withNumberOfGroups:(NSUInteger)numberOfGroups;
+										  
+	- (void)storeDatabaseConnectionDefination:(MADDatabase *)database
+					  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
+										   fieldsByTable:(NSDictionary *)fieldsByTable
+								 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	
+	- (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow;
+	- (void)setNumberOfRows:(int32_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
+	- (void)setHeight:(double)height forSectionAtRow:(NSUInteger)sectionRow;
+	- (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
 
-    - (void)addQueryLink:(RptqQueryLinks *)queryLink;
-    - (void)addPredicate:(RptqQueryPredicate *)predicate;
-    - (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination
-                          managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    - (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
+	- (void)addQueryLink:(RptqQueryLinks *)queryLink;
+	- (void)addPredicate:(RptqQueryPredicate *)predicate;
+	- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination
+						  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
 
-    - (MTPaperType)paperType;
+	- (MTPaperType)paperType;
 
 @end
 

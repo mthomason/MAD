@@ -14,14 +14,14 @@
 #import <MAD/RptqDatabaseCredentals.h>
 
 @interface RptqDatabaseCredentals (Extras)
-    <MADConnectionsPropertiesProtocol>
+	<MADConnectionsPropertiesProtocol>
 
-    + (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext;
-    + (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext;
+	+ (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext;
+	+ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext;
 
-    + (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest;
+	+ (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest;
 
-    - (NSString *)databaseSchemaName;
+	- (NSString *)databaseSchemaName;
 
 @end
 

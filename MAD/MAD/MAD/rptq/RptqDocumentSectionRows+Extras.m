@@ -27,71 +27,71 @@
 
 + (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 
-    NSEntityDescription *entityDescription;
-    entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                   inManagedObjectContext: managedObjectContext];
-    id sectionRow = [[self alloc] initWithEntity: entityDescription
-                  insertIntoManagedObjectContext: managedObjectContext];
-    return sectionRow;
+	NSEntityDescription *entityDescription;
+	entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentSectionRows class])
+												   inManagedObjectContext: managedObjectContext];
+	id sectionRow = [[self alloc] initWithEntity: entityDescription
+				  insertIntoManagedObjectContext: managedObjectContext];
+	return sectionRow;
 }
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-    [super awakeFromSnapshotEvents:flag];
-    switch (flag) {
-        case NSSnapshotEventMergePolicy:
-            break;
-        case NSSnapshotEventRefresh:
-            break;
-        case NSSnapshotEventRollback:
-            break;
-        case NSSnapshotEventUndoDeletion:
-            break;
-        case NSSnapshotEventUndoInsertion:
-            break;
-        case NSSnapshotEventUndoUpdate:
-            break;
-        default:
-            break;
-    }
+	[super awakeFromSnapshotEvents:flag];
+	switch (flag) {
+		case NSSnapshotEventMergePolicy:
+			break;
+		case NSSnapshotEventRefresh:
+			break;
+		case NSSnapshotEventRollback:
+			break;
+		case NSSnapshotEventUndoDeletion:
+			break;
+		case NSSnapshotEventUndoInsertion:
+			break;
+		case NSSnapshotEventUndoUpdate:
+			break;
+		default:
+			break;
+	}
 }
 
 - (void)addHasObjectsObjectFixed:(RptqDocumentElement *)value {
 
-    if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
+	if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
 
-        [(NSMutableOrderedSet *)self.hasObjects addObject:value];
+		[(NSMutableOrderedSet *)self.hasObjects addObject:value];
 
-    } else {
+	} else {
 
-        NSMutableOrderedSet *tempSet = self.hasObjects.mutableCopy;
-        [tempSet addObject:value];
-        self.hasObjects = tempSet;
+		NSMutableOrderedSet *tempSet = self.hasObjects.mutableCopy;
+		[tempSet addObject:value];
+		self.hasObjects = tempSet;
 
-    }
+	}
 }
 
 - (void)removeHasObjectsObjectFixed:(RptqDocumentElement *)value {
 
-    if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
-        
-        [(NSMutableOrderedSet *)self.hasObjects removeObject:value];
-        
-    } else {
-    
-        NSMutableOrderedSet *tempSet = self.hasObjects.mutableCopy;
-        [tempSet removeObject:value];
-        self.hasObjects = tempSet;
-        
-    }
+	if ([self.hasObjects isKindOfClass:[NSMutableOrderedSet class]]) {
+		
+		[(NSMutableOrderedSet *)self.hasObjects removeObject:value];
+		
+	} else {
+	
+		NSMutableOrderedSet *tempSet = self.hasObjects.mutableCopy;
+		[tempSet removeObject:value];
+		self.hasObjects = tempSet;
+		
+	}
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"********* RptqDocumentSectionRows *********\n"];
-    [description appendFormat:@"Row:                    %i\n", self.rowNumber];
-    [description appendFormat:@"Height:                 %f\n", self.layoutHeight];
-    [description appendFormat:@"********* RptqDocumentSectionRows *********"];
-    return description;
+	NSMutableString *description = [[NSMutableString alloc] init];
+	[description appendFormat:@"********* RptqDocumentSectionRows *********\n"];
+	[description appendFormat:@"Row:                    %i\n", self.rowNumber];
+	[description appendFormat:@"Height:                 %f\n", self.layoutHeight];
+	[description appendFormat:@"********* RptqDocumentSectionRows *********"];
+	return description;
 }
 
 @end

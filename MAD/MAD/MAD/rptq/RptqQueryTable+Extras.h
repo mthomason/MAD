@@ -9,27 +9,27 @@
 #ifndef Reports_RptqQueryTable_Extras_h
 #define Reports_RptqQueryTable_Extras_h
 
-#import "RptqQueryTable.h"
+#import <MAD/RptqQueryTable.h>
 #import <MADDataStructures/MTProtocolCompare.h>
 
 @class NSManagedObjectID, RptqDocument, RptqDatabase, RptqDatabaseSchemaTable;
 
 @interface RptqQueryTable (Extras)
-    <MTProtocolCompare>
+	<MTProtocolCompare>
 
-    + (instancetype)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
-                                       database:(RptqDatabase *)database
-                        forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+									   database:(RptqDatabase *)database
+						forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    + (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
-                      managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
+					  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
-    + (NSString *)keyPathAlias;
-    + (NSString *)keyPathDropIndex;
+	+ (NSString *)keyPathAlias;
+	+ (NSString *)keyPathDropIndex;
 
-    - (NSString *)queryAlias;
-    + (NSString *)queryAliasForSchemaTableName:(NSString *)schemaTableName
-                                     dropIndex:(int64_t)dropIndex;
+	- (NSString *)queryAlias;
+	+ (NSString *)queryAliasForSchemaTableName:(NSString *)schemaTableName
+									 dropIndex:(int64_t)dropIndex;
 @end
 
 #endif

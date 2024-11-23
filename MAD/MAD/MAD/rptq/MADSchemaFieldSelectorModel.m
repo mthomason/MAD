@@ -15,10 +15,10 @@
 @implementation MADSchemaFieldSelectorModel
 
 - (instancetype)init {
-    if (self = [super init]) {
-        _open = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		_open = NO;
+	}
+	return self;
 }
 
 @end

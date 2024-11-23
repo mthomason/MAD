@@ -13,9 +13,9 @@
 
 @class RptqQueryTable, NSMutableArray, NSIndexSet, MADDatabaseTableSectionHeaderView;
 
-@interface MADSchemaFieldSelectorModel : NSObject 
+@interface MADSchemaFieldSelectorModel : NSObject
 
-    @property (nonatomic, assign) BOOL open;
+	@property (nonatomic, assign) BOOL open;
 
 @end
 

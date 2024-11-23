@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementLabel_RptqDocumentElement_h
 #define MAD_RptqDocumentElementLabel_RptqDocumentElement_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

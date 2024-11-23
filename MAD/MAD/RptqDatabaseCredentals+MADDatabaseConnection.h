@@ -15,7 +15,7 @@
 
 @interface RptqDatabaseCredentals (MADDatabaseConnection)
 
-    - (MADDatabaseType)databaseType;
+- (MADDatabaseType)databaseType;
 
 @end
 

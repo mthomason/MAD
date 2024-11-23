@@ -28,23 +28,23 @@
 #pragma mark - Overrides
 
 - (NSString *)designerRepresentationText {
-    return self.text;
+	return self.text;
 }
 
 #pragma mark - RptqDocumentElementFactory
 
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectWithID:objectId];
-    return (RptqDocumentElementLabel *)result;
+	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
+	return (RptqDocumentElementLabel *)result;
 }
 
 - (id)debugQuickLookObject {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %lldld\n", self.identifier];
-    [description appendFormat:@"Text:                   %@\n", self.text];
-    [description appendFormat:@"*********"];
-    return description;
+	NSMutableString *description = [[NSMutableString alloc] init];
+	[description appendFormat:@"*********\n"];
+	[description appendFormat:@"Identifier:             %lldld\n", self.identifier];
+	[description appendFormat:@"Text:                   %@\n", self.text];
+	[description appendFormat:@"*********"];
+	return description;
 }
 
 @end

@@ -32,17 +32,17 @@
 #pragma mark Overrides
 
 - (id)debugQuickLookObject {
-    NSMutableString *description = [[NSMutableString alloc] init];
-    [description appendFormat:@"*********\n"];
-    [description appendFormat:@"Identifier:             %lld\n", self.identifier];
-    [description appendFormat:@"Text:                   %@\n", self.text];
-    [description appendFormat:@"URL:                    %@\n", self.url];
-    [description appendFormat:@"*********"];
-    return description;
+	NSMutableString *description = [[NSMutableString alloc] init];
+	[description appendFormat:@"*********\n"];
+	[description appendFormat:@"Identifier:             %lld\n", self.identifier];
+	[description appendFormat:@"Text:                   %@\n", self.text];
+	[description appendFormat:@"URL:                    %@\n", self.url];
+	[description appendFormat:@"*********"];
+	return description;
 }
 
 - (NSString *)designerRepresentationText {
-    return @"";
+	return @"";
 }
 
 @end

@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementImage_h
 #define MAD_RptqDocumentElementImage_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 
 @class UIImage;
 

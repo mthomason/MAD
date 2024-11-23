@@ -33,93 +33,93 @@ NSString * const MADDocumentObjectTypeAddDetailBarcode     = @"Add a barcode ele
 @implementation NSString (MADocumentObjectType)
 
 + (NSString *)humanReadableStringForType:(MADPrintPageElementType)type {
-    switch (type) {
-        case MADPrintPageElementTypeLabelDynamic:
-            return MADDocumentObjectTypeTitleDynamic;
-            break;
-        case MADPrintPageElementTypeLabelStatic:
-            return MADDocumentObjectTypeTitleStatic;
-            break;
-        case MADPrintPageElementTypeAggregate:
-            return MADDocumentObjectTypeTitleAggregate;
-            break;
-        case MADPrintPageElementTypeImage:
-            return MADDocumentObjectTypeTitleImage;
-            break;
-        case MADPrintPageElementTypeWhtiespace:
-            return MADDocumentObjectTypeTitleWhitespace;
-            break;
-        case MADPrintPageElementTypeBarcode:
-            return MADDocumentObjectTypeTitleBarcode;
-            break;
-        default:
-            return @"";
-            break;
-    }
+	switch (type) {
+		case MADPrintPageElementTypeLabelDynamic:
+			return MADDocumentObjectTypeTitleDynamic;
+			break;
+		case MADPrintPageElementTypeLabelStatic:
+			return MADDocumentObjectTypeTitleStatic;
+			break;
+		case MADPrintPageElementTypeAggregate:
+			return MADDocumentObjectTypeTitleAggregate;
+			break;
+		case MADPrintPageElementTypeImage:
+			return MADDocumentObjectTypeTitleImage;
+			break;
+		case MADPrintPageElementTypeWhtiespace:
+			return MADDocumentObjectTypeTitleWhitespace;
+			break;
+		case MADPrintPageElementTypeBarcode:
+			return MADDocumentObjectTypeTitleBarcode;
+			break;
+		default:
+			return @"";
+			break;
+	}
 }
 
 + (NSString *)humanReadableDetailStringForType:(MADPrintPageElementType)type {
-    switch (type) {
-        case MADPrintPageElementTypeLabelDynamic:
-            return MADDocumentObjectTypeDetailDynamic;
-            break;
-        case MADPrintPageElementTypeLabelStatic:
-            return MADDocumentObjectTypeDetailStatic;
-            break;
-        case MADPrintPageElementTypeAggregate:
-            return MADDocumentObjectTypeDetailAggregate;
-            break;
-        case MADPrintPageElementTypeImage:
-            return MADDocumentObjectTypeDetailImage;
-            break;
-        case MADPrintPageElementTypeWhtiespace:
-            return MADDocumentObjectTypeDetailWhitespace;
-            break;
-        case MADPrintPageElementTypeBarcode:
-            return MADDocumentObjectTypeDetailBarcode;
-            break;
-        default:
-            return @"";
-            break;
-    }
+	switch (type) {
+		case MADPrintPageElementTypeLabelDynamic:
+			return MADDocumentObjectTypeDetailDynamic;
+			break;
+		case MADPrintPageElementTypeLabelStatic:
+			return MADDocumentObjectTypeDetailStatic;
+			break;
+		case MADPrintPageElementTypeAggregate:
+			return MADDocumentObjectTypeDetailAggregate;
+			break;
+		case MADPrintPageElementTypeImage:
+			return MADDocumentObjectTypeDetailImage;
+			break;
+		case MADPrintPageElementTypeWhtiespace:
+			return MADDocumentObjectTypeDetailWhitespace;
+			break;
+		case MADPrintPageElementTypeBarcode:
+			return MADDocumentObjectTypeDetailBarcode;
+			break;
+		default:
+			return @"";
+			break;
+	}
 }
 
 + (NSString *)humanReadableAddDetailStringForType:(MADPrintPageElementType)type {
-    switch (type) {
-        case MADPrintPageElementTypeLabelDynamic:
-            return MADDocumentObjectTypeAddDetailDynamic;
-            break;
-        case MADPrintPageElementTypeLabelStatic:
-            return MADDocumentObjectTypeAddDetailStatic;
-            break;
-        case MADPrintPageElementTypeAggregate:
-            return MADDocumentObjectTypeAddDetailAggregate;
-            break;
-        case MADPrintPageElementTypeImage:
-            return MADDocumentObjectTypeAddDetailImage;
-            break;
-        case MADPrintPageElementTypeWhtiespace:
-            return MADDocumentObjectTypeAddDetailWhitespace;
-            break;
-        case MADPrintPageElementTypeBarcode:
-            return MADDocumentObjectTypeAddDetailBarcode;
-            break;
-        default:
-            return @"";
-            break;
-    }
+	switch (type) {
+		case MADPrintPageElementTypeLabelDynamic:
+			return MADDocumentObjectTypeAddDetailDynamic;
+			break;
+		case MADPrintPageElementTypeLabelStatic:
+			return MADDocumentObjectTypeAddDetailStatic;
+			break;
+		case MADPrintPageElementTypeAggregate:
+			return MADDocumentObjectTypeAddDetailAggregate;
+			break;
+		case MADPrintPageElementTypeImage:
+			return MADDocumentObjectTypeAddDetailImage;
+			break;
+		case MADPrintPageElementTypeWhtiespace:
+			return MADDocumentObjectTypeAddDetailWhitespace;
+			break;
+		case MADPrintPageElementTypeBarcode:
+			return MADDocumentObjectTypeAddDetailBarcode;
+			break;
+		default:
+			return @"";
+			break;
+	}
 }
 
 + (NSString *)localizedStringForType:(MADPrintPageElementType)type {
-    return NSLocalizedString([self humanReadableStringForType:type], [self humanReadableStringForType:type]);
+	return NSLocalizedString([self humanReadableStringForType:type], [self humanReadableStringForType:type]);
 }
 
 + (NSString *)localizedDetailStringForType:(MADPrintPageElementType)type {
-    return NSLocalizedString([self humanReadableDetailStringForType:type], [self humanReadableDetailStringForType:type]);
+	return NSLocalizedString([self humanReadableDetailStringForType:type], [self humanReadableDetailStringForType:type]);
 }
 
 + (NSString *)localizedAddDetailStringForType:(MADPrintPageElementType)type {
-    return NSLocalizedString([self humanReadableAddDetailStringForType:type], [self humanReadableAddDetailStringForType:type]);
+	return NSLocalizedString([self humanReadableAddDetailStringForType:type], [self humanReadableAddDetailStringForType:type]);
 }
 
 @end

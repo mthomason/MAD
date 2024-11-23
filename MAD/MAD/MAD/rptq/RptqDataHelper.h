@@ -15,9 +15,9 @@
 
 @interface RptqDataHelper : NSObject
 
-    + (int64_t)nextIdentifierForClass:(Class)class
-        managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-    + (void)cleanup;
+	+ (int64_t)nextIdentifierForClass:(Class)class
+		managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (void)cleanup;
 
 @end
 
