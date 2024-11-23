@@ -11,12 +11,32 @@
 #endif
 
 #import "MTStack.h"
-#import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
+
+@interface Node : NSObject
+
+@property (nonatomic, strong) id data;
+@property (nonatomic, strong, nullable) Node *next;
+
+- (instancetype)initWithData:(id)data;
+
+@end
+
+@implementation Node
+
+- (instancetype)initWithData:(id)data {
+	if (self = [super init]) {
+		_data = data;
+		_next = nil;
+	}
+	return self;
+}
+
+@end
 
 @interface MTStack ()
 
-@property (nonatomic, strong) NSMutableArray *stack;
+@property (nonatomic, strong, nullable) Node *top;
 @property (nonatomic, assign) NSUInteger counter;
 
 @end
@@ -25,49 +45,68 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
-		NSMutableArray *stack = [[NSMutableArray alloc] init];
-		self.stack = stack;
+		_top = nil;
+		_counter = 0;
 	}
 	return self;
 }
 
 - (instancetype)initWithObject:(id)object {
-	if (self = [super initWithObject:object]) {
-		NSMutableArray *stack = [[NSMutableArray alloc] init];
-		self.stack = stack;
-	}
-	return self;
-}
-
-- (instancetype)initWithCapacity:(NSUInteger)capacity {
 	if (self = [super init]) {
-		NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];
-		self.stack = stack;
+		Node *node = [[Node alloc] initWithData:object];
+		_top = node;
+		_counter = 1;
 	}
 	return self;
 }
 
 - (void)push:(id)object {
-	[self.stack addObject:object];
+	Node *newNode = [[Node alloc] initWithData:object];
+	newNode.next = self.top;
+	self.top = newNode;
 	self.counter++;
 }
 
 - (id)pop {
-	NSAssert(self.counter > 0, @"Underflow error.  Nothing to pop.");
-	id result = self.stack.lastObject;
-	[self.stack removeLastObject];
+	NSAssert(self.counter > 0, @"Underflow error. Nothing to pop.");
+	id result = self.top.data;
+	self.top = self.top.next; // Move the top pointer to the next node
 	self.counter--;
 	return result;
 }
 
 - (BOOL)isEmpty {
-	return self.counter <= 0;
+	return self.counter == 0;
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
 								  objects:(id __unsafe_unretained [])stackbuf
 									count:(NSUInteger)len {
-	return [self.stack countByEnumeratingWithState:state objects:stackbuf count:len];
+	// Handle initial state
+	if (state->state == 0) {
+		state->mutationsPtr = &state->extra[1];
+		state->state = 1; // Indicate that enumeration has started
+	}
+
+	// Get the current node (using state->extra[0] to track position)
+	Node *currentNode = (__bridge Node *)(void *)state->extra[0];
+	if (!currentNode) {
+		currentNode = self.top; // Start at the top of the stack
+	}
+
+	// Fill the buffer with elements
+	NSUInteger count = 0;
+	while (currentNode && count < len) {
+		stackbuf[count] = currentNode.data;
+		currentNode = currentNode.next;
+		count++;
+	}
+
+	// Save the next node for subsequent calls
+	state->extra[0] = (unsigned long)(__bridge void *)currentNode;
+
+	// Return the number of objects filled in this call
+	return count;
 }
 
 - (NSString *)toStringHumanReadable {
