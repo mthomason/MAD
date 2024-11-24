@@ -6,6 +6,9 @@
 #  Created by Michael Thomason on 1/24/14.
 #  Copyright © 2017 Michael Thomason. All rights reserved.
 
+# This is a bit of a mess.  It might work, or you might start building Unix from scratch.  Probably
+#	use some judgement, and read it, before you start to use this script.
+
 set -e
 
 readonly path_base=$( pwd )
@@ -14,29 +17,25 @@ readonly true=0
 readonly false=1
 
 case $path_base in # Check if current path contains whitespace.
-   *\ * )
-   printf "ABORT: Current path has whitespace.\n"
-   exit 1
-   ;;
-   esac
+	*\ * )
+	printf "ABORT: Current path has whitespace.\n"
+	exit 1
+	;;
+	esac
 
 print_help() {
-   printf "  %s\n"  "Usage: compressor [options] ..."
-   printf "  %s\n" "--libffi                 Build Libffi.\n"
-   printf "  %s\n" "--glib                   Build Glib.\n"
-   printf "  %s\n" "--gettext                Build Gettext.\n"
-   printf "  %s\n" "--acl                    Build Gettext.\n"
-#printf "  %s\n" "--attr                   Build Gettext.\n"
-   printf "  %s\n" "--libarchive             Build Archive.\n"
-   printf "  %s\n" "--classpath              Build Classpath.\n"
-   printf "  %s\n" "--openssl                Build OpenSSL.\n"
-   printf "  %s\n" "--freetds                Build FreeTds.\n"
-   printf "  %s\n" "--libpng                 Build libpng.\n"
-   printf "  %s\n" "--mysql                  Build MySQL Connector.\n"
-   printf "  %s\n" "-h,--help                Show help.\n"
-#  printf "  %s\n" "--autoconf               Build Autoconf.\n" #Only needed on local machine
-#  printf "  %s\n" "--automake               Build Automake.\n" #Only needed on local machine
-#  printf "  %s\n" "--unixodbc               Build UnixODBC.\n" #Not useful on iOS, becuase dynamic loading
+	printf "  %s\n"  "Usage: compressor [options] ..."
+	printf "  %s\n" "--libffi                 Build Libffi.\n"
+	printf "  %s\n" "--glib                   Build Glib.\n"
+	printf "  %s\n" "--gettext                Build Gettext.\n"
+	printf "  %s\n" "--acl                    Build Gettext.\n"
+	printf "  %s\n" "--libarchive             Build Archive.\n"
+	printf "  %s\n" "--classpath              Build Classpath.\n"
+	printf "  %s\n" "--openssl                Build OpenSSL.\n"
+	printf "  %s\n" "--freetds                Build FreeTds.\n"
+	printf "  %s\n" "--libpng                 Build libpng.\n"
+	printf "  %s\n" "--mysql                  Build MySQL Connector.\n"
+	printf "  %s\n" "-h,--help                Show help.\n"
 }
 
 build_openssl=$false
@@ -65,142 +64,139 @@ show_help=$false
 
 if [[ $# == 0 ]];
 then
-   show_help=$true
+	show_help=$true
 else
-   show_help=$false
+	show_help=$false
 fi
 
 while [[ $# > 0 ]]
 do
-    key="$1"
-    shift
+	key="$1"
+	shift
 
-    case $key in
+	case $key in
 
-        --acl)
-            build_acl=$true;;
+		--acl)
+			build_acl=$true;;
 
-        --attr)
-            build_attr=$true;;
+		--attr)
+			build_attr=$true;;
 
-        --gettext)
-            build_gettext=$true;;
+		--gettext)
+			build_gettext=$true;;
 
-        --libffi)
-            build_libffi=$true;;
+		--libffi)
+			build_libffi=$true;;
 
-        --libbzip)
-            build_libbzip=$true;;
+		--libbzip)
+			build_libbzip=$true;;
 
-        --autoconf)
-            build_autoconf=$true;;
+		--autoconf)
+			build_autoconf=$true;;
 
-        --automake)
-            build_automake=$true;;
+		--automake)
+			build_automake=$true;;
 
-        --glib)
-            build_glib=$true;;
+		--glib)
+			build_glib=$true;;
 
-        --classpath)
-            build_classpath=$true;;
+		--classpath)
+			build_classpath=$true;;
 
-        --libarchive)
-            build_libarchive=$true;;
+		--libarchive)
+			build_libarchive=$true;;
 
-        --unixodbc)
-            build_unixodbc=$false;;
+		--unixodbc)
+			build_unixodbc=$false;;
 
-        --openssl)
-            build_openssl=$true;;
+		--openssl)
+			build_openssl=$true;;
 
-        --libpng)
-            build_png=$true;;
+		--libpng)
+			build_png=$true;;
 
-        --mysqlold)
-            build_mysql=$true;;
+		--mysqlold)
+			build_mysql=$true;;
 
-        --mysql)
-            build_mysql_ios7=$true;;
+		--mysql)
+			build_mysql_ios7=$true;;
 
-        --freetds)
-            build_tds=$true;;
+		--freetds)
+			build_tds=$true;;
 
-        --zint)
-            build_zint=$true;;
+		--zint)
+			build_zint=$true;;
 
-        --help | -h)
-            show_help=$true;;
+		--help | -h)
+			show_help=$true;;
 
-        esac
+		esac
 done
 
 if [ $show_help == $true ];
 then
-    print_help
-    exit 0
+	print_help
+	exit 0
 fi
 
 version_for_platform() {
-    local version=$( xcodebuild -version -sdk "${1}" SDKVersion 2>/dev/null )
-    printf "%s" "${version}"
+	local version=$( xcodebuild -version -sdk "${1}" SDKVersion 2>/dev/null )
+	printf "%s" "${version}"
 }
 
 spinner() {
-   local pid=$1
-   local delay=0.66
-   local spinstr='|/-\'
-   while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-      local temp=${spinstr#?}
-      local s=$(printf " [%c]  " "$spinstr")
-      printf "%s" "$s"
-      local spinstr=$temp${spinstr%"$temp"}
-      sleep $delay
-      printf "\b\b\b\b\b\b"
-   done
-   printf "    \b\b\b\b"
+	local pid=$1
+	local delay=0.66
+	local spinstr='|/-\'
+	while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+		local temp=${spinstr#?}
+		local s=$(printf " [%c]  " "$spinstr")
+		printf "%s" "$s"
+		local spinstr=$temp${spinstr%"$temp"}
+		sleep $delay
+		printf "\b\b\b\b\b\b"
+	done
+	printf "    \b\b\b\b"
 }
 
 print_building() {
-   printf "Building %s version %s for architecture %s.\n" "$1" "$2" "$3"
+	printf "Building %s version %s for architecture %s.\n" "$1" "$2" "$3"
 }
 
 platform_for_architecture() {
-   local architecture=$1
-   local result="iPhoneOS"
-   if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
-   then
-      result="iPhoneSimulator"
-   fi
-   echo $result
+	local architecture=$1
+	local result="iPhoneOS"
+	if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
+	then
+		result="iPhoneSimulator"
+	fi
+	echo $result
 }
 
 download_archive() { # $1=archive name; $2=archive url
-   if [ ! -e media/${1} ]; then
-      printf "\n\nDownloading %s from %s.\n" "${1}" "${2}"
-      cd media && { curl -L -O ${2}${1} ; cd - ; }
-   fi
+	if [ ! -e media/${1} ]; then
+		printf "\n\nDownloading %s from %s.\n" "${1}" "${2}"
+		cd media && { curl -L -O ${2}${1} ; cd - ; }
+	fi
 }
 
 extract_source() {
-    local archive=$1
-    local destination=$2
-    printf "Extracting %s\n\t\tto %s.\n" $archive $destination
-    rm -rf -- "${destination}"
-    mkdir -p "${destination}"
-    tar zxf ${archive} -C ${destination}
+	local archive=$1
+	local destination=$2
+	printf "Extracting %s\n\t\tto %s.\n" $archive $destination
+	rm -rf -- "${destination}"
+	mkdir -p "${destination}"
+	tar zxf ${archive} -C ${destination}
 }
 
 empty_directory() {
-    local directory=$1
-    mkdir -p "${directory}"
-    rm -rf -- "${directory}"
-    mkdir -p "${directory}"
+	local directory=$1
+	mkdir -p "${directory}"
+	rm -rf -- "${directory}"
+	mkdir -p "${directory}"
 }
 
-#
 # Globals
-#
-
 readonly version_openssl="1.0.2r"
 readonly version_mysql="6.1.11"
 readonly version_freetds="1.1.5"
@@ -218,7 +214,6 @@ readonly version_acl="2.2.52"
 readonly version_attr="2.4.47"
 readonly version_libarchive="3.3.3"
 readonly version_bzip="1.0.6"
-
 
 readonly version_mysql_6_0="6.0.2"  #do not change
 readonly version_mysql_6_1="6.1.11"
@@ -239,10 +234,7 @@ readonly version_ios_min="10.0"
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
-#readonly archs="armv7 arm64 i386 x86_64"
 readonly archs="arm64 arm64e armv7 armv7s x86_64 i386"
-#readonly archs="armv7 armv7s arm64 i386 x86_64"
-#readonly archs="arm64"
 
 readonly archs_macosx="x86_64 i386"
 readonly archs_ios="arm64 arm64e armv7 armv7s"
@@ -253,7 +245,6 @@ readonly archive_name_bzip="bzip2-${version_bzip}"
 readonly archive_bzip="${archive_name_bzip}.tar.gz"
 
 readonly archive_openssl_base_url="http://www.openssl.org/source/"
-#readonly archive_name_openssl="${version_openssl}"
 readonly archive_name_openssl="openssl-${version_openssl}"
 readonly archive_openssl="${archive_name_openssl}.tar.gz"
 
@@ -276,9 +267,9 @@ readonly archive_glib="${archive_name_glib}.tar.gz"
 readonly archive_mysql_base_url="http://dev.mysql.com/get/Downloads/Connector-C/"
 if [[ "${version_mysql}" == "${version_mysql_6_0}" ]]
 then
-   readonly archive_name_mysql="mysql-connector-c-${version_mysql}"
+	readonly archive_name_mysql="mysql-connector-c-${version_mysql}"
 else
-   readonly archive_name_mysql="mysql-connector-c-${version_mysql}-src"
+	readonly archive_name_mysql="mysql-connector-c-${version_mysql}-src"
 fi
 readonly archive_mysql="${archive_name_mysql}.tar.gz"
 
@@ -346,139 +337,138 @@ path_sdk_root_iPhoneSimulator=$( xcodebuild -version -sdk iphonesimulator Path 2
 path_sdk_root_MacOSX=$( xcodebuild -version -sdk macosx Path 2>/dev/null )
 
 addtional_work_libsybdb() {
-    local path_make=$1
-    printf "Additional work for libsybdb. $path_make"
-    sed -i '' 's/#define HAVE_ICONV 1/#define HAVE_ICONV 0/g' include/config.h
+	local path_make=$1
+	printf "Additional work for libsybdb. $path_make"
+	sed -i '' 's/#define HAVE_ICONV 1/#define HAVE_ICONV 0/g' include/config.h
 }
 
 #config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
 
 config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additional_config $5=path_make
 
-printf "1: ${1}\n"
-printf "2: ${2}\n"
-printf "3: ${3}\n"
-printf "4: ${4}\n"
-printf "5: ${5}\n"
-printf "6: ${6}\n"
-printf "7: ${7}\n"
+	printf "1: ${1}\n"
+	printf "2: ${2}\n"
+	printf "3: ${3}\n"
+	printf "4: ${4}\n"
+	printf "5: ${5}\n"
+	printf "6: ${6}\n"
+	printf "7: ${7}\n"
 
-    local version_sdk=$1
-    local version_sdk_min=$2
-local architecture="${3}"
-local additional_config="${4}"
-local path_make="${5}"
-local log="${6}"
-local additional_work="${7}"
+	local version_sdk=$1
+	local version_sdk_min=$2
+	local architecture="${3}"
+	local additional_config="${4}"
+	local path_make="${5}"
+	local log="${6}"
+	local additional_work="${7}"
 
-    printf "%s     %s\n" "architecture" $architecture
-    printf "%s%s\n" "additional_config" "${4}"
-    printf "%s        %s\n" "path_make" $path_make
-    printf "%s              %s\n" "log" $log
-    printf "%s  %s\n" "additional_work" $additional_work
+	printf "%s     %s\n" "architecture" $architecture
+	printf "%s%s\n" "additional_config" "${4}"
+	printf "%s        %s\n" "path_make" $path_make
+	printf "%s              %s\n" "log" $log
+	printf "%s  %s\n" "additional_work" $additional_work
 
-if [[ "${4}" > 0 ]];
-    then
-        s="s/${additional_config_blank}//g"
-        additional_config=$(echo $additional_config | sed -e $s)
-        printf "Additional config is blank (%s)" $additional_config
-    else
-        echo "pass additional_config_blank for additional_config"
-#exit 1
-    fi
+	if [[ "${4}" > 0 ]];
+	then
+		s="s/${additional_config_blank}//g"
+		additional_config=$(echo $additional_config | sed -e $s)
+		printf "Additional config is blank (%s)" $additional_config
+	else
+		echo "pass additional_config_blank for additional_config"
+		#exit 1
+	fi
 
-   local architecture_host_part="x86_64"
-#$( uname -p )
-   local architecture_host="${architecture_host_part}-apple-darwin"
+	local architecture_host_part="x86_64"
+	#$( uname -p )
+	local architecture_host="${architecture_host_part}-apple-darwin"
 
-   if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
-   then
-      if [[ "${architecture}" == "x86_64" ]];
-      then
-            local add_config="-m64 $(additional_config)"
-      fi
-      local sdk="iphonesimulator${version_sdk}"
-      local architecture_target="${architecture_host_part}-apple-darwin"
-   else
-      local sdk="iphoneos${version_sdk}"
+	if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
+	then
+		if [[ "${architecture}" == "x86_64" ]];
+		then
+			local add_config="-m64 $(additional_config)"
+		fi
+		local sdk="iphonesimulator${version_sdk}"
+		local architecture_target="${architecture_host_part}-apple-darwin"
+	else
+		local sdk="iphoneos${version_sdk}"
 
-      if [[ "${architecture}" == "armv7" ]];
-      then
-         local architecture_target="${architecture}-apple-darwin"
-      elif [[ "${architecture}" == "arm64" ||  "${architecture}" == "arm64e" ]];
-      then
-         local add_config="-m64 $(additional_config)"
-         local architecture_target="arm-apple-darwin"
-      else
-         local architecture_target="${architecture}-apple-darwin"
-      fi
+		if [[ "${architecture}" == "armv7" ]];
+		then
+			local architecture_target="${architecture}-apple-darwin"
+		elif [[ "${architecture}" == "arm64" ||  "${architecture}" == "arm64e" ]];
+		then
+			local add_config="-m64 $(additional_config)"
+			local architecture_target="arm-apple-darwin"
+		else
+			local architecture_target="${architecture}-apple-darwin"
+		fi
+	fi
 
-   fi
-printf "%s     %s\n" "architecture" $architecture
-printf "%s%s\n" "additional_config" "${4}"
-printf "%s        %s\n" "path_make" $path_make
-printf "%s              %s\n" "log" $log
-printf "%s  %s\n" "additional_work" $additional_work
+	printf "%s     %s\n" "architecture" $architecture
+	printf "%s%s\n" "additional_config" "${4}"
+	printf "%s        %s\n" "path_make" $path_make
+	printf "%s              %s\n" "log" $log
+	printf "%s  %s\n" "additional_work" $additional_work
 
-   developer_root=$( xcode-select -print-path )
-   platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
+	developer_root=$( xcode-select -print-path )
+	platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
 
-   export DEVROOT="${platform_root}/Developer"
-   export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
-   export CC=$( xcrun -find gcc )
-   export CFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min} ${CFLAGS} "
-   export CPPFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include ${CPPFLAGS} "
-   export LD=$( xcrun -find ld )
-   export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min} "
+	export DEVROOT="${platform_root}/Developer"
+	export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
+	export CC=$( xcrun -find gcc )
+	export CFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min} ${CFLAGS} "
+	export CPPFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include ${CPPFLAGS} "
+	export LD=$( xcrun -find ld )
+	export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min} "
 
-    printf "Configure with sdk version          %s.\n" "${version_sdk}"
-    printf "Configure with sdk min version      %s.\n" "${version_sdk_min}"
-    printf "Configure with architecture         %s.\n" "${architecture}"
-    printf "Configure with architecture host    %s.\n" "${architecture_host}"
-    printf "Configure with architecture target  %s.\n" "${architecture_target}"
-    printf "Configure with prefix               %s.\n" "${path_make}"
-    printf "Configure with log file             %s.\n" "${log}"
-    printf "Configure with additional config    %s.\n" "${add_config}"
-    printf "Configure with CFLAGS               %s.\n" "${CFLAGS}"
-    printf "Configure with CPPFLAGS             %s.\n" "${CPPFLAGS}"
+	printf "Configure with sdk version          %s.\n" "${version_sdk}"
+	printf "Configure with sdk min version      %s.\n" "${version_sdk_min}"
+	printf "Configure with architecture         %s.\n" "${architecture}"
+	printf "Configure with architecture host    %s.\n" "${architecture_host}"
+	printf "Configure with architecture target  %s.\n" "${architecture_target}"
+	printf "Configure with prefix               %s.\n" "${path_make}"
+	printf "Configure with log file             %s.\n" "${log}"
+	printf "Configure with additional config    %s.\n" "${add_config}"
+	printf "Configure with CFLAGS               %s.\n" "${CFLAGS}"
+	printf "Configure with CPPFLAGS             %s.\n" "${CPPFLAGS}"
 
-   if [[ "${#additional_config}" > 0 ]];
-   then
-        printf "Performing additional config"
-        additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
-        pwd
-./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} #>> "${log}.error.log" &
-        spinner $!
-   else
-        printf "Skipping additional config"
-      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" >> "${log}.error.log" &
-      spinner $!
+	if [[ "${#additional_config}" > 0 ]];
+	then
+		printf "Performing additional config"
+		additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
+		pwd
+		./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} #>> "${log}.error.log" &
+		spinner $!
+	else
+		printf "Skipping additional config"
+		./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" >> "${log}.error.log" &
+		spinner $!
+	fi
 
-fi
+	if [[ "${#additional_work}" > 0 ]];
+	then
+		printf "Doing Extra Work"
+		printf "%s %s" ${additional_work} "${path_make}"
+		${additional_work} "${path_make}"
+	fi
 
-   if [[ "${#additional_work}" > 0 ]];
-   then
-        printf "Doing Extra Work"
-        printf "%s %s" ${additional_work} "${path_make}"
-        ${additional_work} "${path_make}"
-   fi
+	printf "make clean"
+	make clean >> "${log}.error.log" &
+	spinner $!
 
-    printf "make clean"
-    make clean >> "${log}.error.log" &
-    spinner $!
+	printf "\nmake\n"
+	make  #>> "${log}.error.log"
+	spinner $!
 
-    printf "\nmake\n"
-make  #>> "${log}.error.log"
-    spinner $!
+	printf "\nmake install"
 
-    printf "\nmake install"
+	make install #>> "${log}.error.log" &
+	spinner $!
 
-make install #>> "${log}.error.log" &
-    spinner $!
+	printf "\n"
 
-   printf "\n"
-
-}
+} #end config_make_install()
 
 path_source_openssl="$path_source/$archive_name_openssl"
 path_source_libarchive="$path_source/$archive_name_libarchive"
@@ -497,10 +487,7 @@ path_source_automake="$path_source/$archive_name_attr"
 
 mkdir -p media;
 
-#
 # Download source if it doesn’t exist
-#
-
 download_archive $archive_glib          $archive_glib_base_url
 download_archive $archive_classpath     $archive_classpath_base_url
 download_archive $archive_openssl       $archive_openssl_base_url
@@ -525,943 +512,817 @@ readonly config_debug="Debug"
 readonly config_release="Release"
 readonly command_lipo_create="lipo -create "
 
-#
 # Gettext - Required by Glib
 #   Unused way to (maybe) cross compile gettext.  Why?  Becuse, fuck it.
-#
-
 build_gettext_static_ios() {
 
-    readonly archive_gettext_base_url="http://ftp.gnu.org/pub/gnu/gettext/"
-    readonly archive_name_gettext="gettext-${version_gettext}"
-    readonly archive_gettext="${archive_name_gettext}.tar.gz"
-    readonly path_source_gettext="$path_source/$archive_name_gettext"
-    readonly path_media_gettext="$path_media/$archive_gettext"
-    readonly path_build_gettext="${path_build}/gettext"
+	readonly archive_gettext_base_url="http://ftp.gnu.org/pub/gnu/gettext/"
+	readonly archive_name_gettext="gettext-${version_gettext}"
+	readonly archive_gettext="${archive_name_gettext}.tar.gz"
+	readonly path_source_gettext="$path_source/$archive_name_gettext"
+	readonly path_media_gettext="$path_media/$archive_gettext"
+	readonly path_build_gettext="${path_build}/gettext"
 
-    download_archive $archive_gettext $archive_gettext_base_url
+	download_archive $archive_gettext $archive_gettext_base_url
 
-    echo "Building gettext."
+	echo "Building gettext."
 
-    local command_lipo_gettext_libintl="${command_lipo_create}"
-    local command_lipo_gettext_libgettextpo="${command_lipo_create}"
-    local command_lipo_gettext_libasprintf="${command_lipo_create}"
+	local command_lipo_gettext_libintl="${command_lipo_create}"
+	local command_lipo_gettext_libgettextpo="${command_lipo_create}"
+	local command_lipo_gettext_libasprintf="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
 
-        platform=$( platform_for_architecture arch )
+		platform=$( platform_for_architecture arch )
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_gettext_arch="${path_build_gettext}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_gettext_arch="${path_build_gettext}/$platform_version_arch.sdk"
 
-        mkdir -p "${path_build_gettext_arch}"
-        rm -rf -- "${path_build_gettext_arch}"
-        mkdir -p "${path_build_gettext_arch}"
-        tar zxf ${path_media_gettext} -C ${path_build_gettext_arch}
+		mkdir -p "${path_build_gettext_arch}"
+		rm -rf -- "${path_build_gettext_arch}"
+		mkdir -p "${path_build_gettext_arch}"
+		tar zxf ${path_media_gettext} -C ${path_build_gettext_arch}
 
-#log_build_gettext="${path_build_gettext_arch}/build-gettext-${version_gettext}-${arch}.log"
-#> "$log_build_gettext"
+		#log_build_gettext="${path_build_gettext_arch}/build-gettext-${version_gettext}-${arch}.log"
+		#> "$log_build_gettext"
 
-        prepp="${path_build_gettext}/$platform_version_arch.sdk/${archive_name_gettext}"
-        cd "${prepp}"
+		prepp="${path_build_gettext}/$platform_version_arch.sdk/${archive_name_gettext}"
+		cd "${prepp}"
 
-        extract_source $path_media_gettext $path_build_gettext_arch &
-        spinner $!
+		extract_source $path_media_gettext $path_build_gettext_arch &
+		spinner $!
 
-        cd "${prepp}"
+		cd "${prepp}"
 
-        additional_config="--enable-gui=no "
+		additional_config="--enable-gui=no "
 
-        printf "Build path %s.\n" "$path_build_gettext_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_gettext"
+		printf "Build path %s.\n" "$path_build_gettext_arch"
+		printf "Build conf %s.\n" "$additional_config"
+		printf "Build arch %s.\n" "$arch"
+		printf "Build log  %s.\n" "$log_build_gettext"
 
-        export CFLAGS=" -I${path_library}/crt_externs "
-        export CPPFLAGS=" -I${path_library}/crt_externs "
+		export CFLAGS=" -I${path_library}/crt_externs "
+		export CPPFLAGS=" -I${path_library}/crt_externs "
 
-config_make_install "{$version_ios}" "${version_ios_min}" "${arch}" "${additional_config}" "${prepp}" "${log_build_gettext}"
+		config_make_install "{$version_ios}" "${version_ios_min}" "${arch}" "${additional_config}" "${prepp}" "${log_build_gettext}"
 
-        command_lipo_gettext_libintl="$command_lipo_gettext_libintl $prepp/lib/libintl.a";
-        command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo $prepp/lib/libgettextpo.a";
-        command_lipo_gettext_libasprintf="$command_lipo_gettext_libasprintf $prepp/lib/libasprintf.a";
-    done
+		command_lipo_gettext_libintl="$command_lipo_gettext_libintl $prepp/lib/libintl.a";
+		command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo $prepp/lib/libgettextpo.a";
+		command_lipo_gettext_libasprintf="$command_lipo_gettext_libasprintf $prepp/lib/libasprintf.a";
+	done
 
-    local path_library_gettext="${path_library}/gettext"
+	local path_library_gettext="${path_library}/gettext"
 
-    empty_directory $path_library_gettext
-    empty_directory "$path_library_gettext/include"
+	empty_directory $path_library_gettext
+	empty_directory "$path_library_gettext/include"
 
-    cp -R "$path_build_gettext/$platform_version_arch.sdk/$archive_name_gettext/include/." "$path_library_gettext/include/."
+	cp -R "$path_build_gettext/$platform_version_arch.sdk/$archive_name_gettext/include/." "$path_library_gettext/include/."
 
-    command_lipo_gettext_libintl="$command_lipo_gettext_libintl -output $path_library_gettext/libintl.a";
-    command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo -output $path_library_gettext/libgettextpo.a";
-    command_lipo_gettext_libasprintf="$command_lipo_gettext_libasprintf -output $path_library_gettext/libasprintf.a";
+	command_lipo_gettext_libintl="$command_lipo_gettext_libintl -output $path_library_gettext/libintl.a";
+	command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo -output $path_library_gettext/libgettextpo.a";
+	command_lipo_gettext_libasprintf="$command_lipo_gettext_libasprintf -output $path_library_gettext/libasprintf.a";
 
-    echo $command_lipo_gettext_libintl
-    echo $command_lipo_gettext_libgettextpo
-    echo $command_lipo_gettext_libasprintf
+	echo $command_lipo_gettext_libintl
+	echo $command_lipo_gettext_libgettextpo
+	echo $command_lipo_gettext_libasprintf
 
-    $command_lipo_gettext_libintl
-    $command_lipo_gettext_libgettextpo
-    $command_lipo_gettext_libasprintf
+	$command_lipo_gettext_libintl
+	$command_lipo_gettext_libgettextpo
+	$command_lipo_gettext_libasprintf
 
 }
 
 if [[ $build_gettext == $true && $show_help == $false ]]; then
-    build_gettext_static_ios
+	build_gettext_static_ios
 fi
 
 
-#
 # Libffi - Required by Glib
-#
-
 build_libffi_static_ios() {
 
-    printf "Building Libffi.\n"
-    printf "Requries automake, autoconf, and libtool to be installed locally.\n"
+	printf "Building Libffi.\n"
+	printf "Requries automake, autoconf, and libtool to be installed locally.\n"
 
-    local readonly archive_libffi_base_url="ftp://sourceware.org/pub/libffi/"
-    local readonly archive_name_libffi="libffi-${version_libffi}"
-    local readonly archive_libffi="${archive_name_libffi}.tar.gz"
-    local readonly path_media_libffi="$path_media/$archive_libffi"
-    local readonly path_source_libffi="$path_source/$archive_name_libffi"
-    local readonly path_library_libffi="${path_library}/libffi"
-    local readonly path_build_libffi="${path_build}/libffi"
+	local readonly archive_libffi_base_url="ftp://sourceware.org/pub/libffi/"
+	local readonly archive_name_libffi="libffi-${version_libffi}"
+	local readonly archive_libffi="${archive_name_libffi}.tar.gz"
+	local readonly path_media_libffi="$path_media/$archive_libffi"
+	local readonly path_source_libffi="$path_source/$archive_name_libffi"
+	local readonly path_library_libffi="${path_library}/libffi"
+	local readonly path_build_libffi="${path_build}/libffi"
 
-    download_archive $archive_libffi $archive_libffi_base_url
+	download_archive $archive_libffi $archive_libffi_base_url
 
-    #instead of empty, move to tmp...
-    empty_directory $path_library_libffi
+	#instead of empty, move to tmp...
+	empty_directory $path_library_libffi
 
-    local command_lipo_libffi="${command_lipo_create}"
+	local command_lipo_libffi="${command_lipo_create}"
 
-    empty_directory $path_build_libffi
+	empty_directory $path_build_libffi
 
-    for platform in $platform_iphoneos $platform_simulator
-    do
+	for platform in $platform_iphoneos $platform_simulator
+	do
 
-        if [ "${platform}" == "${platform_iphoneos}" ]
-        then
-            local readonly config=$config_release
-            local readonly sdk_build=${sdk_iphoneos}
-            local readonly archs_to_build=$archs_ios
-        else
-            local readonly config=$config_debug
-            local readonly sdk_build=${sdk_simulator}
-            local readonly archs_to_build=$archs_macosx
-        fi
+		if [ "${platform}" == "${platform_iphoneos}" ]
+		then
+			local readonly config=$config_release
+			local readonly sdk_build=${sdk_iphoneos}
+			local readonly archs_to_build=$archs_ios
+		else
+			local readonly config=$config_debug
+			local readonly sdk_build=${sdk_simulator}
+			local readonly archs_to_build=$archs_macosx
+		fi
 
-        local readonly platform_version_arch="${platform}${version_ios}"
+		local readonly platform_version_arch="${platform}${version_ios}"
 
-        empty_directory $path_source_libffi
+		empty_directory $path_source_libffi
 
-        extract_source $path_media_libffi $path_source &
-        spinner $!
+		extract_source $path_media_libffi $path_source &
+		spinner $!
 
-        local log_build_libffi="${path_build_libffi}/build-libffi-${version_libffi}.log"
-        > "$log_build_libffi"
-        pushd "${path_source_libffi}" > /dev/null
+		local log_build_libffi="${path_build_libffi}/build-libffi-${version_libffi}.log"
+		> "$log_build_libffi"
+		pushd "${path_source_libffi}" > /dev/null
 
-        xcodebuild -project libffi.xcodeproj -target libffi-iOS -configuration $config -sdk $sdk_build ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> "${log_build_libffi}" &
-        spinner $!
+		xcodebuild -project libffi.xcodeproj -target libffi-iOS -configuration $config -sdk $sdk_build ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> "${log_build_libffi}" &
+		spinner $!
 
-        popd > /dev/null
-        local readonly archive="${path_build_libffi}/${platform_version_arch}.sdk"
-        empty_directory $archive
-        mv "$path_source_libffi/build/$config-$platform" $archive
-        command_lipo_libffi="$command_lipo_libffi $archive/$config-$platform/libffi.a "
+		popd > /dev/null
+		local readonly archive="${path_build_libffi}/${platform_version_arch}.sdk"
+		empty_directory $archive
+		mv "$path_source_libffi/build/$config-$platform" $archive
+		command_lipo_libffi="$command_lipo_libffi $archive/$config-$platform/libffi.a "
 
-    done
+	done
 
-    path_library_libffi_include="$path_library_libffi"
-    empty_directory $path_library_libffi_include
-    mv "$path_source_libffi/darwin_ios/include" "${path_library_libffi_include}/."
-    cp -R "${path_source_libffi}/darwin_common/include/." "${path_library_libffi_include}/include/"
+	path_library_libffi_include="$path_library_libffi"
+	empty_directory $path_library_libffi_include
+	mv "$path_source_libffi/darwin_ios/include" "${path_library_libffi_include}/."
+	cp -R "${path_source_libffi}/darwin_common/include/." "${path_library_libffi_include}/include/"
 
-    command_lipo_libffi="$command_lipo_libffi -output $path_library_libffi/libffi.a"
-    $command_lipo_libffi
+	command_lipo_libffi="$command_lipo_libffi -output $path_library_libffi/libffi.a"
+	$command_lipo_libffi
 
 }
 
 if [[ $build_libffi == $true && $show_help == $false ]]; then
-    build_libffi_static_ios
+	build_libffi_static_ios
 fi
 
-#
 # Automake - Required by Glib
-#   Unused way to (maybe) cross compile automake.  Why?  Becuse, fuck it.
-#
-
 path_library_automake="${path_library}/automake"
 
 if [[ $build_automake == $true && $show_help == $false ]]; then
 
-    download_archive $archive_automake  $archive_automake_base_url
+	download_archive $archive_automake  $archive_automake_base_url
 
 
-    echo "Building Automake."
+	echo "Building Automake."
 
-    command_lipo_automake="${command_lipo_create}"
+	command_lipo_automake="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
 
-        platform=$( platform_for_architecture arch )
+		platform=$( platform_for_architecture arch )
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_automake_arch="${path_library_automake}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_automake_arch="${path_library_automake}/$platform_version_arch.sdk"
 
-        mkdir -p "${path_build_automake_arch}"
-        rm -rf -- "${path_build_automake_arch}"
-        mkdir -p "${path_build_automake_arch}"
-        tar zxf ${path_media_automake} -C ${path_build_automake_arch}
+		mkdir -p "${path_build_automake_arch}"
+		rm -rf -- "${path_build_automake_arch}"
+		mkdir -p "${path_build_automake_arch}"
+		tar zxf ${path_media_automake} -C ${path_build_automake_arch}
 
-        log_build_automake="${path_build_automake_arch}/build-automake-${version_automake}-${arch}.log"
-        > "$log_build_automake"
+		log_build_automake="${path_build_automake_arch}/build-automake-${version_automake}-${arch}.log"
+		> "$log_build_automake"
 
-        prepp="${path_library}/automake/$platform_version_arch.sdk/${archive_name_automake}"
-        cd "${prepp}"
+		prepp="${path_library}/automake/$platform_version_arch.sdk/${archive_name_automake}"
+		cd "${prepp}"
 
-        extract_source $path_media_automake $path_build_automake_arch &
-        spinner $!
+		extract_source $path_media_automake $path_build_automake_arch &
+		spinner $!
 
-        cd "${prepp}"
+		cd "${prepp}"
 
-        additional_config="--enable-gui=no "
+		additional_config="--enable-gui=no "
 
-        printf "Build path %s.\n" "$path_build_automake_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_automake"
+		printf "Build path %s.\n" "$path_build_automake_arch"
+		printf "Build conf %s.\n" "$additional_config"
+		printf "Build arch %s.\n" "$arch"
+		printf "Build log  %s.\n" "$log_build_automake"
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_automake
+		config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_automake
 
-    done
+	done
 fi
 
-#
 # Autoconf - Required by Glib
-#   Unused way to (maybe) cross compile automake.  Why?  Becuse, fuck it.
-#
-
 path_library_autoconf="${path_library}/autoconf"
 
 if [[ $build_autoconf == $true && $show_help == $false ]]; then
 
-    download_archive $archive_autoconf  $archive_autoconf_base_url
-    echo "Building Automake."
+	download_archive $archive_autoconf  $archive_autoconf_base_url
+	echo "Building Automake."
 
-    command_lipo_autoconf="${command_lipo_create}"
+	command_lipo_autoconf="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
 
-        platform=$( platform_for_architecture arch )
+		platform=$( platform_for_architecture arch )
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_autoconf_arch="${path_library_autoconf}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_autoconf_arch="${path_library_autoconf}/$platform_version_arch.sdk"
 
-        mkdir -p "${path_build_autoconf_arch}"
-        rm -rf -- "${path_build_autoconf_arch}"
-        mkdir -p "${path_build_autoconf_arch}"
-        tar zxf ${path_media_autoconf} -C ${path_build_autoconf_arch}
+		mkdir -p "${path_build_autoconf_arch}"
+		rm -rf -- "${path_build_autoconf_arch}"
+		mkdir -p "${path_build_autoconf_arch}"
+		tar zxf ${path_media_autoconf} -C ${path_build_autoconf_arch}
 
-        log_build_autoconf="${path_build_autoconf_arch}/build-autoconf-${version_autoconf}-${arch}.log"
-        > "$log_build_autoconf"
+		log_build_autoconf="${path_build_autoconf_arch}/build-autoconf-${version_autoconf}-${arch}.log"
+		> "$log_build_autoconf"
 
-        prepp="${path_library}/autoconf/$platform_version_arch.sdk/${archive_name_autoconf}"
-        cd "${prepp}"
+		prepp="${path_library}/autoconf/$platform_version_arch.sdk/${archive_name_autoconf}"
+		cd "${prepp}"
 
-        extract_source $path_media_autoconf $path_build_autoconf_arch &
-        spinner $!
+		extract_source $path_media_autoconf $path_build_autoconf_arch &
+		spinner $!
 
-        cd "${prepp}"
+		cd "${prepp}"
 
-        additional_config="--enable-gui=no "
+		additional_config="--enable-gui=no "
 
-        printf "Build path %s.\n" "$path_build_autoconf_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_autoconf"
+		printf "Build path %s.\n" "$path_build_autoconf_arch"
+		printf "Build conf %s.\n" "$additional_config"
+		printf "Build arch %s.\n" "$arch"
+		printf "Build log  %s.\n" "$log_build_autoconf"
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_autoconf
+		config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_autoconf
 
-    done
+	done
 fi
 
-#
 # Glib - Required by Classpath
-#
-
 path_library_glib="${path_library}/glib"
 
 if [[ $build_glib == $true && $show_help == $false ]]; then
 
-    echo "Building Glib."
+	echo "Building Glib."
 
-    command_lipo_glib="${command_lipo_create}"
+	command_lipo_glib="${command_lipo_create}"
 
-    path_pre_glib=$PATH
+	path_pre_glib=$PATH
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
+		platform=$( platform_for_architecture arch )
+		platform_version_arch="${platform}${version_ios}-${arch}"
 
-#        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-#        then
-#            platform="iPhoneSimulator"
-#        else
-#            platform="iPhoneOS"
-#        fi
+		parent=$( dirname $path_base )
+		path_pkg_config="${parent}/3rdPartyProjects/pkg-config-0.28"
 
-        platform=$( platform_for_architecture arch )
-        platform_version_arch="${platform}${version_ios}-${arch}"
+		printf "Extracting Glib source code.\n"
+		rm -rf -- "${path_source_glib}"
+		mkdir -p "${path_source_glib}"
+		tar zxf ${path_media_glib} -C ${path_source}
 
+		path_build_glib_arch="${path_build_glib}/$platform_version_arch.sdk"
 
-        parent=$( dirname $path_base )
-        path_pkg_config="${parent}/3rdPartyProjects/pkg-config-0.28"
+		mkdir -p "${path_build_glib_arch}"
+		rm -rf -- "${path_build_glib_arch}"
+		mkdir -p "${path_build_glib_arch}"
+		log_build_glib="${path_build_glib}/build-glib-${version_glib}-${arch}.log"
+		> "$log_build_glib"
 
-#        path_autoconf="${path_library}/autoconf/$platform_version_arch.sdk/${archive_name_autoconf}"
-#        path_automake="${path_library}/automake/$platform_version_arch.sdk/${archive_name_automake}"
-#        path_autoconf="/Users/maddeveloper/Desktop/Reports/Compressor/library/autoconf/iPhoneOS7.1-i386.sdk/${archive_name_autoconf}"
-#        path_automake="/Users/maddeveloper/Desktop/Reports/Compressor/library/automake/iPhoneOS7.1-i386.sdk/${archive_name_automake}"
+		cd "${path_base}"
 
-#        path_autoconf_bin="${path_autoconf}/bin"
-#        path_autoconf_lib="${path_autoconf}/lib"
+		extract_source $path_media_glib $path_source &
+		spinner $!
 
-#        if [ -e "$path_autoconf" ]
-#        then
-#            printf "\nFound autoconf"
-#        else
-#            printf "\nMissing %s\n" $path_autoconf
-#            printf "Starting build of autoconf.\n\n"
-#            exit 1
-#            sh ./compressor.sh --autoconf
-#        fi
+		cd "${path_source_glib}"
+		pwd
 
-#        path_automake_bin="${path_automake}/bin"
-#        path_automake_lib="${path_automake}/lib"
+		export LIBFFI_CFLAGS="-I${path_library}/libffi/include"
+		export LIBFFI_LIBS="-L${path_library}/libffi -lffi"
 
-#        if [ -e "$path_automake" ]
-#        then
-#            printf "\nFound automake"
-#        else
-#            printf "\nMissing %s\n" $path_automake
-#            printf "\nStarting build of automake.\n\n"
-#            exit 1
-#            sh ./compressor.sh --automake
-#        fi
+		sh ./autogen.sh
 
-#        echo ""
-#        echo "path_pkg_config"
-#        echo "${path_pkg_config}"
-#        echo ""
+		echo "Autoget success"
+		echo exit 0
 
-#        PATH="${path_autoconf_bin}:${path_pkg_config}:${path_pkg_config}/pkg-config:${path_pkg_config}/glib:${path_automake_bin}:${path_autoconf_lib}:${path_automake_lib}:${path_pre_glib}"
-#        export PATH
+		additional_config="--enable-gui=no "
 
-        printf "Extracting Glib source code.\n"
-        rm -rf -- "${path_source_glib}"
-        mkdir -p "${path_source_glib}"
-        tar zxf ${path_media_glib} -C ${path_source}
-
-        path_build_glib_arch="${path_build_glib}/$platform_version_arch.sdk"
-
-        mkdir -p "${path_build_glib_arch}"
-        rm -rf -- "${path_build_glib_arch}"
-        mkdir -p "${path_build_glib_arch}"
-        log_build_glib="${path_build_glib}/build-glib-${version_glib}-${arch}.log"
-        > "$log_build_glib"
-
-        cd "${path_base}"
-
-        extract_source $path_media_glib $path_source &
-        spinner $!
-
-        cd "${path_source_glib}"
-        pwd
-
-        export LIBFFI_CFLAGS="-I${path_library}/libffi/include"
-        export LIBFFI_LIBS="-L${path_library}/libffi -lffi"
-
-        sh ./autogen.sh
-
-        echo "Autoget success"
-        echo exit 0
-
-        additional_config="--enable-gui=no "
-
-
-#SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
-#echo $SKDROOT
-#command_lipo_unixodbc="${command_lipo_classpath} ${path_build_classpath}/libjvm.a"
-#       additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-#additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--cache-file=Library/Caches/odbc--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-
-
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_glib_arch $log_build_glib
-
-
-    done
-
+		config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_glib_arch $log_build_glib
+	done
 fi
 
-#
 # Classpath
-#
-# This is not useful on iOS, because its only purpose is to load
-#   dynamic libraries.
-#
-
 path_library_classpath="${path_library}/classpath"
 
 if [[ $build_classpath == $true && $show_help == $false ]]; then
 
-    echo "Building Classpath."
+	echo "Building Classpath."
 
-    command_lipo_classpath="${command_lipo_create}"
+	command_lipo_classpath="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
+		if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+		then
+			platform="iPhoneSimulator"
+		else
+			platform="iPhoneOS"
+		fi
 
-    if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-    then
-        platform="iPhoneSimulator"
-    else
-        platform="iPhoneOS"
-    fi
+		platform=$( platform_for_architecture arch )
 
+		printf "Extracting Classpath source code.\n"
+		rm -rf -- "${path_source_classpath}"
+		mkdir -p "${path_source_classpath}"
+		tar zxf ${path_media_classpath} -C ${path_source}
 
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_classpath_arch="${path_build_classpath}/$platform_version_arch.sdk"
 
-    platform=$( platform_for_architecture arch )
+		mkdir -p "${path_build_classpath_arch}"
+		rm -rf -- "${path_build_classpath_arch}"
+		mkdir -p "${path_build_classpath_arch}"
+		log_build_classpath="${path_build_classpath}/build-classpath-${version_classpath}-${arch}.log"
+		> "$log_build_classpath"
 
-    printf "Extracting Classpath source code.\n"
-    rm -rf -- "${path_source_classpath}"
-    mkdir -p "${path_source_classpath}"
-    tar zxf ${path_media_classpath} -C ${path_source}
+		cd "${path_base}"
 
-    platform_version_arch="${platform}${version_ios}-${arch}"
-    path_build_classpath_arch="${path_build_classpath}/$platform_version_arch.sdk"
+		extract_source $path_media_classpath $path_source &
+		spinner $!
 
-    mkdir -p "${path_build_classpath_arch}"
-    rm -rf -- "${path_build_classpath_arch}"
-    mkdir -p "${path_build_classpath_arch}"
-    log_build_classpath="${path_build_classpath}/build-classpath-${version_classpath}-${arch}.log"
-    > "$log_build_classpath"
+		cd "${path_source_classpath}"
+		additional_config="--with-internal-glib--with-pkg-config=../3rdPartyProjects/pkg-config-0.28/pkg-config"
 
-    cd "${path_base}"
+		printf "Build path %s.\n" "$path_build_classpath_arch"
 
-    extract_source $path_media_classpath $path_source &
-    spinner $!
-
-    cd "${path_source_classpath}"
-    additional_config="--with-internal-glib--with-pkg-config=../3rdPartyProjects/pkg-config-0.28/pkg-config"
-
-#SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
-#echo $SKDROOT
-#command_lipo_unixodbc="${command_lipo_classpath} ${path_build_classpath}/libjvm.a"
-#       additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-#additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--cache-file=Library/Caches/odbc--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-
-    printf "Build path %s.\n" "$path_build_classpath_arch"
-
-    config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_classpath_arch $log_build_classpath
-
-
-    done
-
+		config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_classpath_arch $log_build_classpath
+	done
 fi
 
-#
 # UnixODBC
-#
-# This is not useful on iOS, because its only purpose is to load
-#   dynamic libraries.  Dynamic libs are not used on iOS.  Mostly
-#   untested.
-#
-
 path_library_unixodbc="${path_library}/UnixODBC"
 
 if [[ $build_unixodbc == $true && $show_help == $false ]]; then
-    echo "Building Unixodbc."
-    download_archive $archive_unixodbc  $archive_unixodbc_base_url
+	echo "Building Unixodbc."
+	download_archive $archive_unixodbc  $archive_unixodbc_base_url
 
 
-    command_lipo_unixodbc="${command_lipo_create}"
+	command_lipo_unixodbc="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
 
-        print_building "UnixODBC" $version_unixodbc $arch
+		print_building "UnixODBC" $version_unixodbc $arch
 
-        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-        then
-            platform="iPhoneSimulator"
-        else
-            platform="iPhoneOS"
-        fi
+		if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+		then
+			platform="iPhoneSimulator"
+		else
+			platform="iPhoneOS"
+		fi
 
-        platform=$( platform_for_architecture arch )
+		platform=$( platform_for_architecture arch )
 
-        printf "Extracting UnixODBC source code.\n"
-        rm -rf -- "${path_source_unixodbc}"
-        mkdir -p "${path_source_unixodbc}"
-        tar zxf ${path_media_unixodbc} -C ${path_source}
+		printf "Extracting UnixODBC source code.\n"
+		rm -rf -- "${path_source_unixodbc}"
+		mkdir -p "${path_source_unixodbc}"
+		tar zxf ${path_media_unixodbc} -C ${path_source}
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_unixodbc_arch="${path_build_unixodbc}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_unixodbc_arch="${path_build_unixodbc}/$platform_version_arch.sdk"
 
-        mkdir -p "${path_build_unixodbc_arch}"
-        rm -rf -- "${path_build_unixodbc_arch}"
-        mkdir -p "${path_build_unixodbc_arch}"
-        log_build_unixodbc="${path_build_unixodbc}/build-unixodbc-${version_unixodbc}-${arch}.log"
-        > "$log_build_unixodbc"
+		mkdir -p "${path_build_unixodbc_arch}"
+		rm -rf -- "${path_build_unixodbc_arch}"
+		mkdir -p "${path_build_unixodbc_arch}"
+		log_build_unixodbc="${path_build_unixodbc}/build-unixodbc-${version_unixodbc}-${arch}.log"
+		> "$log_build_unixodbc"
 
-        cd "${path_base}"
+		cd "${path_base}"
 
-        extract_source $path_media_unixodbc $path_source &
-        spinner $!
+		extract_source $path_media_unixodbc $path_source &
+		spinner $!
 
-        cd "${path_source_unixodbc}"
+		cd "${path_source_unixodbc}"
 
-        command_lipo_unixodbc="${command_lipo_unixodbc} ${path_build_unixodbc}/libodbc.a"
-        additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-        printf "Build path %s.\n" "$path_build_unixodbc_arch"
+		command_lipo_unixodbc="${command_lipo_unixodbc} ${path_build_unixodbc}/libodbc.a"
+		additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
+		printf "Build path %s.\n" "$path_build_unixodbc_arch"
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_unixodbc_arch $log_build_unixodbc
+		config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_unixodbc_arch $log_build_unixodbc
 
-    done
+	done
 
 
-    rm -rf "${path_library_unixodbc}"
-    mkdir -p "${path_library_unixodbc}"
+	rm -rf "${path_library_unixodbc}"
+	mkdir -p "${path_library_unixodbc}"
 
 fi
 
-#
 # OpenSSL
-#
-
 path_library_openssl="${path_library}/openssl"
-
 if [[ $build_openssl == $true && $show_help == $false ]]; then
 
-   command_lipo_libcrypto="${command_lipo_create}"
-   command_lipo_libssl="${command_lipo_create}"
-
-   printf "Libcrypto: ${command_lipo_libcrypto}"
-
-   for arch in ${archs}
-   do
-
-      print_building "OpenSSL" $version_openssl $arch
-
-      if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-         then
-            platform="iPhoneSimulator"
-         else
-            platform="iPhoneOS"
-      fi
-      
-      env_cross_top="${path_xcode}/Platforms/${platform}.platform/Developer"
-      env_cross_sdk="${platform}${version_ios}.sdk"
-      env_build_tools="${path_xcode}"
-      env_cc="${env_build_tools}/usr/bin/gcc -arch ${arch}"
-
-      export CROSS_TOP="${env_cross_top}"
-      export CROSS_SDK="${env_cross_sdk}"
-      export BUILD_TOOLS="${env_build_tools}"
-      export CC="${env_cc}"
-
-      printf "%s:\t\t%s\n" "CROSS_TOP" "${env_cross_top}"
-      printf "%s:\t\t%s\n" "CROSS_SDK" "${env_cross_sdk}"
-      printf "%s:\t\t%s\n" "BUILD_TOOLS" "${env_build_tools}"
-      printf "%s:\t\t%s\n" "CC" "${env_cc}"
-
-      printf "%s\n\t%s\n\t%s\n" "Extracting source" $path_media_ssl $path_source
-      extract_source $path_media_ssl $path_source
-
-       #
-       # Compiling OpenSSL
-       #
-       cd "${path_source_openssl}"
-
-       if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-          then
-             printf ""
-           else
-             sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c"
-       fi
-      
-       platform_version_arch="${platform}${version_ios}-${arch}"
-       path_build_openssl_arch="${path_build}/openssl/${platform_version_arch}.sdk"
-       
-       path_to_libcrypto="${path_build_openssl_arch}/lib/libcrypto.a"
-       path_to_libssl="${path_build_openssl_arch}/lib/libssl.a"
-
-       slibs_libcrypto[counter_arch]="${path_to_libcrypto}"
-       slibs_libssl[counter_arch]="${path_to_libssl}"
-
-       command_lipo_libcrypto="${command_lipo_libcrypto} ${path_to_libcrypto}"
-       command_lipo_libssl="${command_lipo_libssl} ${path_to_libssl}"
-
-       mkdir -p "${path_build}"
-       mkdir -p "${path_build_openssl}"
-       mkdir -p "${path_build_openssl_arch}"
-       rm -rf -- "${path_build_openssl_arch}"
-       mkdir -p "${path_build_openssl_arch}"
-
-       log_build_openssl="${path_build_openssl_arch}/build-openssl-${version_openssl}.log"
-
-       printf "Building OpenSSL.\n"
-       printf "./Configure --openssldir=${path_build_openssl_arch}"
-       > "$log_build_openssl"
-
-
-
-       printf "Building OpenSSL.\n"
-
-       set +e
-       #if [[ "$version_openssl" =~ 1.0.0. ]]; then
-       #   ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       #elif [ "${arch}" == "x86_64" ]; then
-       #   ./Configure darwin64-x86_64-cc --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       #else
-       #   ./Configure iphoneos-cross --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       #fi
-       
-       if [[ "${arch}" == "x86_64" ]]; then
-          ./Configure darwin64-x86_64-cc --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       elif [ "${arch}" == "i386" ]; then
-	    ./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       else
-          ./Configure iphoneos-cross --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
-       fi    
-
-       if [ $? != 0 ];
-       then 
-          echo "Problem while configure - Please check ${log_build_openssl}"
-          exit 1
-       fi
-
-       # add -isysroot to CC=
-       sed -ie "s!^CFLAG=!CFLAG=-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} -miphoneos-version-min=${version_ios_min} !" "Makefile"
+	command_lipo_libcrypto="${command_lipo_create}"
+	command_lipo_libssl="${command_lipo_create}"
+
+	printf "Libcrypto: ${command_lipo_libcrypto}"
 
-       make >> "${log_build_openssl}" 2>&1
+	for arch in ${archs}
+	do
+		print_building "OpenSSL" $version_openssl $arch
 
-       if [ $? != 0 ];
-       then 
-          echo "Problem while make - Please check ${log_build_openssl}"
-          exit 1
-       fi
-     
-       set -e
-       make install >> "${log_build_openssl}" 2>&1
-       make clean >> "${log_build_openssl}" 2>&1
+		if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+		then
+			platform="iPhoneSimulator"
+		else
+			platform="iPhoneOS"
+		fi
 
-    done
+		env_cross_top="${path_xcode}/Platforms/${platform}.platform/Developer"
+		env_cross_sdk="${platform}${version_ios}.sdk"
+		env_build_tools="${path_xcode}"
+		env_cc="${env_build_tools}/usr/bin/gcc -arch ${arch}"
 
-    rm -rf "${path_library_openssl}"
-    mkdir -p "${path_library_openssl}"
+		export CROSS_TOP="${env_cross_top}"
+		export CROSS_SDK="${env_cross_sdk}"
+		export BUILD_TOOLS="${env_build_tools}"
+		export CC="${env_cc}"
 
-    command_lipo_libcrypto="${command_lipo_libcrypto} -output ${path_library_openssl}/libcrypto.a"
-    $command_lipo_libcrypto
+		printf "%s:\t\t%s\n" "CROSS_TOP" "${env_cross_top}"
+		printf "%s:\t\t%s\n" "CROSS_SDK" "${env_cross_sdk}"
+		printf "%s:\t\t%s\n" "BUILD_TOOLS" "${env_build_tools}"
+		printf "%s:\t\t%s\n" "CC" "${env_cc}"
 
-    command_lipo_libssl="${command_lipo_libssl} -output ${path_library_openssl}/libssl.a"
-    $command_lipo_libssl
+		printf "%s\n\t%s\n\t%s\n" "Extracting source" $path_media_ssl $path_source
+		extract_source $path_media_ssl $path_source
 
-    path_build_openssl_arch_include=${path_build_openssl_arch}/include
-    path_library_openssl_include=${path_library_openssl}
-    mkdir -p ${path_library_openssl_include}
+		# Compiling OpenSSL
+		cd "${path_source_openssl}"
 
-    cp -R $path_build_openssl_arch_include $path_library_openssl
+		if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+		then
+			printf ""
+		else
+			sed -ie "s!static volatile sig_atomic_t intr_signal;!static volatile intr_signal;!" "crypto/ui/ui_openssl.c"
+		fi
 
-    path_library_openssl="${path_library_openssl}/include"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_openssl_arch="${path_build}/openssl/${platform_version_arch}.sdk"
 
-    sed -ie "s/# include <openssl\/opensslconf.h>/# include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/evp.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/evp.h"
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/evp.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/evp.h"
+		path_to_libcrypto="${path_build_openssl_arch}/lib/libcrypto.a"
+		path_to_libssl="${path_build_openssl_arch}/lib/libssl.a"
 
-    sed -ie "s/#include <openssl\/objects.h>/#include \"objects.h\"/g" "${path_library_openssl}/openssl/evp.h"
+		slibs_libcrypto[counter_arch]="${path_to_libcrypto}"
+		slibs_libssl[counter_arch]="${path_to_libssl}"
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/bn.h"
+		command_lipo_libcrypto="${command_lipo_libcrypto} ${path_to_libcrypto}"
+		command_lipo_libssl="${command_lipo_libssl} ${path_to_libssl}"
 
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/bn.h"
-    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/bn.h"
+		mkdir -p "${path_build}"
+		mkdir -p "${path_build_openssl}"
+		mkdir -p "${path_build_openssl_arch}"
+		rm -rf -- "${path_build_openssl_arch}"
+		mkdir -p "${path_build_openssl_arch}"
 
-    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+		log_build_openssl="${path_build_openssl_arch}/build-openssl-${version_openssl}.log"
 
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+		printf "Building OpenSSL.\n"
+		printf "./Configure --openssldir=${path_build_openssl_arch}"
+		> "$log_build_openssl"
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/asn1.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+		printf "Building OpenSSL.\n"
 
-    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/asn1.h"
-    sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/asn1.h"
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/asn1.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+		set +e
 
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+		if [[ "${arch}" == "x86_64" ]]; then
+			./Configure darwin64-x86_64-cc --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+		elif [ "${arch}" == "i386" ]; then
+			./Configure BSD-generic32 --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+		else
+			./Configure iphoneos-cross --openssldir="${path_build_openssl_arch}" > "${log_build_openssl}" 2>&1
+		fi
 
-    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/e_os2.h"
+		if [ $? != 0 ];
+		then
+			echo "Problem while configure - Please check ${log_build_openssl}"
+			exit 1
+		fi
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/bio.h"
-    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/bio.h"
+		# add -isysroot to CC=
+		sed -ie "s!^CFLAG=!CFLAG=-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} -miphoneos-version-min=${version_ios_min} !" "Makefile"
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/crypto.h"
-    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/crypto.h"
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+		make >> "${log_build_openssl}" 2>&1
 
-    sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/crypto.h"
-    sed -ie "s/#include <openssl\/opensslv.h>/#include \"opensslv.h\"/g" "${path_library_openssl}/openssl/crypto.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+		if [ $? != 0 ];
+		then
+			echo "Problem while make - Please check ${log_build_openssl}"
+			exit 1
+		fi
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/ossl_typ.h"
+		set -e
+		make install >> "${log_build_openssl}" 2>&1
+		make clean >> "${log_build_openssl}" 2>&1
 
-    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/safestack.h"
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/symhacks.h"
+	done
 
-    sed -ie "s/#include <openssl\/obj_mac.h>/#include \"obj_mac.h\"/g" "${path_library_openssl}/openssl/objects.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/objects.h"
-    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/objects.h"
+	rm -rf "${path_library_openssl}"
+	mkdir -p "${path_library_openssl}"
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/sha.h"
+	command_lipo_libcrypto="${command_lipo_libcrypto} -output ${path_library_openssl}/libcrypto.a"
+	$command_lipo_libcrypto
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/buffer.h>/#include \"buffer.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/evp.h>/#include \"evp.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	command_lipo_libssl="${command_lipo_libssl} -output ${path_library_openssl}/libssl.a"
+	$command_lipo_libssl
 
-    sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	path_build_openssl_arch_include=${path_build_openssl_arch}/include
+	path_library_openssl_include=${path_library_openssl}
+	mkdir -p ${path_library_openssl_include}
 
-    sed -ie "s/#include <openssl\/ecdsa.h>/#include \"ecdsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/ecdh.h>/#include \"ecdh.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	cp -R $path_build_openssl_arch_include $path_library_openssl
 
-    sed -ie "s/#include <openssl\/rsa.h>/#include \"rsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/dsa.h>/#include \"dsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	path_library_openssl="${path_library_openssl}/include"
 
-    sed -ie "s/#include <openssl\/dh.h>/#include \"dh.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/# include <openssl\/opensslconf.h>/# include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/evp.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/evp.h"
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/evp.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/evp.h"
 
-    sed -ie "s/#include <openssl\/sha.h>/#include \"sha.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/objects.h>/#include \"objects.h\"/g" "${path_library_openssl}/openssl/evp.h"
 
-    sed -ie "s/#include <openssl\/x509_vfy.h>/#include \"x509_vfy.h\"/g" "${path_library_openssl}/openssl/x509.h"
-    sed -ie "s/#include <openssl\/pkcs7.h>/#include \"pkcs7.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/bn.h"
 
-    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
-    sed -ie "s/#include <openssl\/lhash.h>/#include \"lhash.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
-    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/bn.h"
+	sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/bn.h"
 
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+	sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
 
-    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ec.h"
-    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/ec.h"
-    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/ec.h"
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ec.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
 
-    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
-    sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/asn1.h"
 
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+	sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+	sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/asn1.h"
 
-    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
-    sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/asn1.h"
 
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/buffer.h"
+	sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/e_os2.h"
 
-    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/rsa.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/rsa.h"
-    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/rsa.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/rsa.h"
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/bio.h"
+	sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/bio.h"
 
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/dsa.h"
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/dsa.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/bio.h"
-    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/dsa.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/dsa.h"
-    sed -ie "s/# include <openssl\/dh.h>/# include \"dh.h\"/g" "${path_library_openssl}/openssl/dsa.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+	sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/crypto.h"
 
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/dh.h"
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/dh.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/dh.h"
-    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/dh.h"
+	sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+	sed -ie "s/#include <openssl\/opensslv.h>/#include \"opensslv.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/crypto.h"
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/lhash.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/lhash.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/ossl_typ.h"
 
-    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/err.h"
-    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/err.h"
-    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/err.h"
-    sed -ie "s/#include <openssl\/lhash.h>/#include \"lhash.h\"/g" "${path_library_openssl}/openssl/err.h"
+	sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/safestack.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/symhacks.h"
+
+	sed -ie "s/#include <openssl\/obj_mac.h>/#include \"obj_mac.h\"/g" "${path_library_openssl}/openssl/objects.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/objects.h"
+	sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/objects.h"
+
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/sha.h"
+
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/buffer.h>/#include \"buffer.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/evp.h>/#include \"evp.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/ecdsa.h>/#include \"ecdsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/ecdh.h>/#include \"ecdh.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/rsa.h>/#include \"rsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/dsa.h>/#include \"dsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/dh.h>/#include \"dh.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/sha.h>/#include \"sha.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/x509_vfy.h>/#include \"x509_vfy.h\"/g" "${path_library_openssl}/openssl/x509.h"
+	sed -ie "s/#include <openssl\/pkcs7.h>/#include \"pkcs7.h\"/g" "${path_library_openssl}/openssl/x509.h"
+
+	sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+	sed -ie "s/#include <openssl\/lhash.h>/#include \"lhash.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+	sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+
+	sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ec.h"
+	sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/ec.h"
+	sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/ec.h"
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ec.h"
+
+	sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+	sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+
+	sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+	sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/buffer.h"
+
+	sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+	sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/bio.h"
+	sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+	sed -ie "s/# include <openssl\/dh.h>/# include \"dh.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/dh.h"
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/dh.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/dh.h"
+	sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/dh.h"
+
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/lhash.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/lhash.h"
+
+	sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/err.h"
+	sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/err.h"
+	sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/err.h"
+	sed -ie "s/#include <openssl\/lhash.h>/#include \"lhash.h\"/g" "${path_library_openssl}/openssl/err.h"
 
 fi
 
-#
 # MySQL Connector - Comp_err OS X swizzle - Correct way to do it.
-#
-
 mysql_custom_openssl=$true
-
 if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 
-    echo "Building libmysqlclient"
+	echo "Building libmysqlclient"
 
-   # Build for native platform, so we can get the comp_err program.
-   #  The comp_error must run for error messages to be generated for
-   #  the libs, but since the libs are armv, we need to do a native
-   #  generation of this helper application.
+	# Build for native platform, so we can get the comp_err program.
+	#  The comp_error must run for error messages to be generated for
+	#  the libs, but since the libs are armv, we need to do a native
+	#  generation of this helper application.
 
-   command_lipo_mysql="${command_lipo_create}"
-   path_library_mysql="${path_library}/libmysqlclient"
+	command_lipo_mysql="${command_lipo_create}"
+	path_library_mysql="${path_library}/libmysqlclient"
 
-   path_source_mysql_native="${path_source}/native"
+	path_source_mysql_native="${path_source}/native"
 
-   mkdir -p "${path_source_mysql_native}"
-   rm -rf -- "${path_source_mysql_native}"
-   mkdir -p "${path_source_mysql_native}"
-   tar zxf ${path_media_mysql} -C ${path_source_mysql_native}
+	mkdir -p "${path_source_mysql_native}"
+	rm -rf -- "${path_source_mysql_native}"
+	mkdir -p "${path_source_mysql_native}"
+	tar zxf ${path_media_mysql} -C ${path_source_mysql_native}
 
-   pushd ${path_source_mysql_native}/${archive_name_mysql}
-   mkdir -p "${path_build_mysql}"
-   rm -rf -- "${path_build_mysql}"
-   mkdir -p "${path_build_mysql}"
-   log_build_mysql="${path_build_mysql}/build-mysql-native-release.log"
+	pushd ${path_source_mysql_native}/${archive_name_mysql}
+	mkdir -p "${path_build_mysql}"
+	rm -rf -- "${path_build_mysql}"
+	mkdir -p "${path_build_mysql}"
+	log_build_mysql="${path_build_mysql}/build-mysql-native-release.log"
 
-   cmake -Wno-dev -GXcode >> $log_build_mysql &
-   spinner $!
+	cmake -Wno-dev -GXcode >> $log_build_mysql &
+	spinner $!
 
-   #sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
+	xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk macosx${version_macosx}  >> $log_build_mysql &
+	spinner $!
 
-   xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk macosx${version_macosx}  >> $log_build_mysql &
-   spinner $!
+	popd
 
-   popd
+	for platform in $platform_iphoneos $platform_simulator
+	do
 
-    for platform in $platform_iphoneos $platform_simulator
-    do
+		if [ "${platform}" == "${platform_iphoneos}" ]
+		then
+			sdk_build=${sdk_iphoneos}
+			archs_to_build=$archs_ios
+		else
+			sdk_build=${sdk_simulator}
+			archs_to_build=$archs_macosx
+		fi
 
-        if [ "${platform}" == "${platform_iphoneos}" ]
-        then
-            sdk_build=${sdk_iphoneos}
-            archs_to_build=$archs_ios
-        else
-            sdk_build=${sdk_simulator}
-            archs_to_build=$archs_macosx
-        fi
+		platform_version_arch="${platform}${version_ios}"
+		path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
 
-        platform_version_arch="${platform}${version_ios}"
-        path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
+		mkdir -p "${path_build_mysql_arch}"
+		log_build_mysql="${path_build_mysql}/build-mysql-${version_mysql}-${platform}.log"
+		> "$log_build_mysql"
 
-        mkdir -p "${path_build_mysql_arch}"
-        log_build_mysql="${path_build_mysql}/build-mysql-${version_mysql}-${platform}.log"
-        > "$log_build_mysql"
+		cd "${path_base}"
 
-        cd "${path_base}"
+		printf "\n%s\n" "$formatting_divider"
+		printf "Extracting MySQL source code.\n"
+		rm -rf -- "${path_source_mysql}"
+		mkdir -p "${path_source_mysql}"
+		tar zxf ${path_media_mysql} -C ${path_source}
 
-        printf "\n%s\n" "$formatting_divider"
-        printf "Extracting MySQL source code.\n"
-        rm -rf -- "${path_source_mysql}"
-        mkdir -p "${path_source_mysql}"
-        tar zxf ${path_media_mysql} -C ${path_source}
+		printf "CD %s\n" "${path_source_mysql}"
+		cd "${path_source_mysql}"
 
-        printf "CD %s\n" "${path_source_mysql}"
-        cd "${path_source_mysql}"
+		archs_cmake=$(echo $archs | sed -e "s/ /\\;/g")
 
-        archs_cmake=$(echo $archs | sed -e "s/ /\\;/g")
+		if [ $mysql_custom_openssl == $true ]
+		then
+			cmake -DOPENSSL_ROOT_DIR=$path_library_openssl -Wno-dev -GXcode # >> $log_build_mysql &
+			spinner $!
+		else
+			cmake -Wno-dev -GXcode >> $log_build_mysql &
+			spinner $!
+		fi
 
-        if [ $mysql_custom_openssl == $true ]
-        then
-            cmake -DOPENSSL_ROOT_DIR=$path_library_openssl -Wno-dev -GXcode # >> $log_build_mysql &
-            spinner $!
-        else
-            cmake -Wno-dev -GXcode >> $log_build_mysql &
-            spinner $!
-        fi
+		sed -ie "s/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\$(EFFECTIVE_PLATFORM_NAME)\\\"'\"/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\\\"'\"/g" "LibMySQL.xcodeproj/project.pbxproj"
+		sed -ie "s/\"-Wl,-search_paths_first\",//g" "LibMySQL.xcodeproj/project.pbxproj"
+		sed -ie "s/\"-Wl,-headerpad_max_install_names\",//g" "LibMySQL.xcodeproj/project.pbxproj"
+		sed -ie "s/\"-dynamiclib\",//g" "LibMySQL.xcodeproj/project.pbxproj"
+		sed -ie "s/com.apple.product-type.library.dynamic/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
+		sed -ie "s/com.apple.product-type.tool/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
+		sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
+		sed -ie 's/\/* #undef WORDS_BIGENDIAN *\\/define WORDS_BIGENDIAN 1/g' 'include/my_config.h'
+		sed -ie 's/-Wl,-search_paths_first//g' 'LibMySQL.xcodeproj/project.pbxproj'
+		sed -ie 's/-Wl,-headerpad_max_install_names//g' 'LibMySQL.xcodeproj/project.pbxproj'
 
-        sed -ie "s/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\$(EFFECTIVE_PLATFORM_NAME)\\\"'\"/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\\\"'\"/g" "LibMySQL.xcodeproj/project.pbxproj"
-        sed -ie "s/\"-Wl,-search_paths_first\",//g" "LibMySQL.xcodeproj/project.pbxproj"
-        sed -ie "s/\"-Wl,-headerpad_max_install_names\",//g" "LibMySQL.xcodeproj/project.pbxproj"
-        sed -ie "s/\"-dynamiclib\",//g" "LibMySQL.xcodeproj/project.pbxproj"
-        sed -ie "s/com.apple.product-type.library.dynamic/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
-        sed -ie "s/com.apple.product-type.tool/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
-        sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
-        sed -ie 's/\/* #undef WORDS_BIGENDIAN *\\/define WORDS_BIGENDIAN 1/g' 'include/my_config.h'
-        sed -ie 's/-Wl,-search_paths_first//g' 'LibMySQL.xcodeproj/project.pbxproj'
-        sed -ie 's/-Wl,-headerpad_max_install_names//g' 'LibMySQL.xcodeproj/project.pbxproj'
+		product_name_mysql="mysqlclient"
 
-        product_name_mysql="mysqlclient"
+		if xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
+		then
+			echo "Fuck, is unexpected success really success?"
+			exit 6
+		else
+			echo "First build failed as expected."
+			cp -r mysys/Release-$platform mysys/Release
+			cp -r mysys/Release-$platform mysys/Release
+			cp -r mysys_ssl/Release-$platform mysys_ssl/Release
+			cp -r dbug/Release-$platform dbug/Release
+			cp -r strings/Release-$platform strings/Release
+			cp -r zlib/Release-$platform zlib/Release
+			if [ $mysql_custom_openssl != $true ]
+			then
+				cp -r extra/yassl/Release-$platform extra/yassl/Release
+				cp -r extra/yassl/taocrypt/Release-$platform extra/yassl/taocrypt/Release
+			fi
+			cp -r ../native/${archive_name_mysql}/extra/Release extra/Release
 
-        if xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
-        then
-            echo "Fuck, is unexpected success really success?"
-            exit 6
-        else
-            echo "First build failed as expected."
-            cp -r mysys/Release-$platform mysys/Release
-            cp -r mysys/Release-$platform mysys/Release
-            cp -r mysys_ssl/Release-$platform mysys_ssl/Release
-            cp -r dbug/Release-$platform dbug/Release
-            cp -r strings/Release-$platform strings/Release
-            cp -r zlib/Release-$platform zlib/Release
-            if [ $mysql_custom_openssl != $true ]
-            then
-                cp -r extra/yassl/Release-$platform extra/yassl/Release
-                cp -r extra/yassl/taocrypt/Release-$platform extra/yassl/taocrypt/Release
-            fi
-            cp -r ../native/${archive_name_mysql}/extra/Release extra/Release
+			if xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
+			then
+				echo "All Good"
+				build_result="${path_source_mysql}/libmysql/Release-${platform}/lib${product_name_mysql}.a"
+				if [ -e "$build_result" ]
+				then
+					path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
+					command_lipo_mysql="${command_lipo_mysql} ${path_to_libmysql}"
+					cp "${build_result}" "${path_to_libmysql}"
+				else
+					echo "Can't find build result: %s" "${build_result}"
+					exit 4
+				fi
 
-            if xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
-            then
-                echo "All Good"
-                build_result="${path_source_mysql}/libmysql/Release-${platform}/lib${product_name_mysql}.a"
-                if [ -e "$build_result" ]
-                then
-                    path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
-                    command_lipo_mysql="${command_lipo_mysql} ${path_to_libmysql}"
-                    cp "${build_result}" "${path_to_libmysql}"
-                else
-                    echo "Can't find build result: %s" "${build_result}"
-                    exit 4
-                fi
+			else
+				echo "Build two failed.  This one should work."
+				exit 5
+			fi
+		fi
+	done
 
-            else
-                echo "Build two failed.  This one should work."
-                exit 5
-            fi
-        fi
-    done
+	printf "%s\n" "${path_library_mysql}"
 
-    printf "%s\n" "${path_library_mysql}"
+	mkdir -p "${path_library_mysql}"
 
-    mkdir -p "${path_library_mysql}"
+	printf "%s\n" "${path_source_mysql}/include\" \"${path_library_mysql}"
 
-    printf "%s\n" "${path_source_mysql}/include\" \"${path_library_mysql}"
+	cp -R "${path_source_mysql}/include" "${path_library_mysql}"
 
-    cp -R "${path_source_mysql}/include" "${path_library_mysql}"
+	path_library_mysql="${path_library_mysql}/libmysqlclient.a"
+	command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
 
-    #sed -ie 's/#include <mysql\/plugin_auth_common.h>/#include "plugin_auth_common.h"/g' '${path_source_mysql}/include/mysql/client_plugin.h'
-    #sed -ie 's/#include <mysql/psi/psi_memory.h>/#include "mysql/psi/psi_memory.h"/g' '${path_source_mysql}/include/mysql/psi/psi_memory.h'
-
-    path_library_mysql="${path_library_mysql}/libmysqlclient.a"
-    command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
-
-    $command_lipo_mysql
+	$command_lipo_mysql
 
 fi
 
@@ -1470,420 +1331,309 @@ fi
 #
 
 if [[ $build_mysql == $true  && $show_help == $false ]]; then
+	command_lipo_mysql="${command_lipo_create}"
+	path_library_mysql="${path_library}/libmysqlclient"
 
-   command_lipo_mysql="${command_lipo_create}"
-   path_library_mysql="${path_library}/libmysqlclient"
+	mkdir -p "${path_build_mysql}"
 
-   mkdir -p "${path_build_mysql}"
-   for arch in ${archs}
-   do
+	for arch in ${archs}
+	do
 
-       if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-       then
-          platform="iphonesimulator"
-          sdk_build=${sdk_simulator}
-       else
-          platform="iphoneos"
-          sdk_build=${sdk_iphoneos}
-       fi
+		if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+		then
+			platform="iphonesimulator"
+			sdk_build=${sdk_simulator}
+		else
+			platform="iphoneos"
+			sdk_build=${sdk_iphoneos}
+		fi
 
-       platform_version_arch="${platform}${version_ios}-${arch}"
-       path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
 
-       mkdir -p "${path_build_mysql_arch}"
-       log_build_mysql="${path_build_mysql}/build-mysql-${version_mysql}-${arch}.log"
-       > "$log_build_mysql"
+		mkdir -p "${path_build_mysql_arch}"
+		log_build_mysql="${path_build_mysql}/build-mysql-${version_mysql}-${arch}.log"
+		> "$log_build_mysql"
 
-       cd "${path_base}"
+		cd "${path_base}"
 
-       printf "\n%s\n" "$formatting_divider"
-       printf "Extracting MySQL source code.\n"
-       rm -rf -- "${path_source_mysql}"
-       mkdir -p "${path_source_mysql}"
-       tar zxf ${path_media_mysql} -C ${path_source}
+		printf "\n%s\n" "$formatting_divider"
+		printf "Extracting MySQL source code.\n"
+		rm -rf -- "${path_source_mysql}"
+		mkdir -p "${path_source_mysql}"
+		tar zxf ${path_media_mysql} -C ${path_source}
 
-       cd "${path_source_mysql}"
+		cd "${path_source_mysql}"
 
-       archs_cmake=$(echo $archs | sed -e "s/ /\\;/g")
+		archs_cmake=$(echo $archs | sed -e "s/ /\\;/g")
 
-       sysroot="${path_xcode}/Platforms/${platform}.platform/Developer/SDKs/iPhoneOS${version_ios}.sdk"
+		sysroot="${path_xcode}/Platforms/${platform}.platform/Developer/SDKs/iPhoneOS${version_ios}.sdk"
 
-       printf "Configuring MySQL\n"
+		printf "Configuring MySQL\n"
 
-       cmake -GXcode >> $log_build_mysql &
-       spinner $!
+		cmake -GXcode >> $log_build_mysql &
+		spinner $!
 
-       if [ "$version_mysql" == "$version_mysql_6_0" ]
-       then
-          sed -ie 's/#include <netinet\/in_systm.h>/\/\/#include <netinet\/in_systm.h>/' 'include/my_net.h'
-          sed -ie 's/#include <netinet\/ip.h>/\/\/#include <netinet\/ip.h>/' 'include/my_net.h'
-          sed -ie 's/#  if defined(__i386__) || defined(__ppc__)/#if defined(__i386__) || defined(__ppc__) || defined(__arm__)/' 'include/my_global.h'
-          sed -ie 's/#define HAVE_FDATASYNC/\/\/#define HAVE_FDATASYNC/' 'include/my_config.h'
-          sed -ie 's/#define THREAD 1/\/\/#define THREAD 1/' 'include/my_config.h'
-          sed -ie 's/pthread_yield();/\/\/pthread_yield();/' 'mysys/lf_alloc-pin.c'
-          sed -ie 's/safe_mutex_assert_owner(&keycache->cache_lock);/\/\/safe_mutex_assert_owner(&keycache->cache_lock);/' 'mysys/mf_keycache.c'
-          sed -ie 's/pthread_mutex_init(\&rc->lock.mutex, MY_MUTEX_INIT_FAST);/\/\/pthread_mutex_init(\&rc->lock.mutex, MY_MUTEX_INIT_FAST);/' 'mysys/waiting_threads.c'
-          sed -ie 's/set_timespec_time_nsec/\/\/set_timespec_time_nsec/g' 'mysys/waiting_threads.c'
-          sed -ie '1784i\
+		if [ "$version_mysql" == "$version_mysql_6_0" ]
+		then
+			sed -ie 's/#include <netinet\/in_systm.h>/\/\/#include <netinet\/in_systm.h>/' 'include/my_net.h'
+			sed -ie 's/#include <netinet\/ip.h>/\/\/#include <netinet\/ip.h>/' 'include/my_net.h'
+			sed -ie 's/#  if defined(__i386__) || defined(__ppc__)/#if defined(__i386__) || defined(__ppc__) || defined(__arm__)/' 'include/my_global.h'
+			sed -ie 's/#define HAVE_FDATASYNC/\/\/#define HAVE_FDATASYNC/' 'include/my_config.h'
+			sed -ie 's/#define THREAD 1/\/\/#define THREAD 1/' 'include/my_config.h'
+			sed -ie 's/pthread_yield();/\/\/pthread_yield();/' 'mysys/lf_alloc-pin.c'
+			sed -ie 's/safe_mutex_assert_owner(&keycache->cache_lock);/\/\/safe_mutex_assert_owner(&keycache->cache_lock);/' 'mysys/mf_keycache.c'
+			sed -ie 's/pthread_mutex_init(\&rc->lock.mutex, MY_MUTEX_INIT_FAST);/\/\/pthread_mutex_init(\&rc->lock.mutex, MY_MUTEX_INIT_FAST);/' 'mysys/waiting_threads.c'
+			sed -ie 's/set_timespec_time_nsec/\/\/set_timespec_time_nsec/g' 'mysys/waiting_threads.c'
+			sed -ie '1784i\
 #ifdef THREAD' 'mysys/mf_keycache.c'
-          sed -ie '1814i\
+			sed -ie '1814i\
 #endif
 ' 'mysys/mf_keycache.c'
-          sed -ie 's/el->stack_ends_here= & my_thread_var->stack_ends_here;/\/\/el->stack_ends_here= & my_thread_var->stack_ends_here;/g' 'mysys/lf_alloc-pin.c'
-       fi
+			sed -ie 's/el->stack_ends_here= & my_thread_var->stack_ends_here;/\/\/el->stack_ends_here= & my_thread_var->stack_ends_here;/g' 'mysys/lf_alloc-pin.c'
+		fi
 
-       if [ "$version_mysql" == "$version_mysql_6_1" ]
-       then
-          printf "Fixing MySQL source to work for iOS.\n"
-       fi
+		if [ "$version_mysql" == "$version_mysql_6_1" ]
+		then
+			printf "Fixing MySQL source to work for iOS.\n"
+		fi
 
-      product_name_mysql="mysqlclient_device"
+		product_name_mysql="mysqlclient_device"
 
-      print_building "MySQL" $version_mysql $arch
+		print_building "MySQL" $version_mysql $arch
 
-      xcodebuild -project libmysql.xcodeproj -target mysqlclient -configuration Release -sdk "${sdk_build}" ONLY_ACTIVE_ARCH=NO ARCHS="$arch" VALID_ARCHS="${archs_valid}" PRODUCT_NAME=${product_name_mysql} >> $log_build_mysql &
-      spinner $!
+		xcodebuild -project libmysql.xcodeproj -target mysqlclient -configuration Release -sdk "${sdk_build}" ONLY_ACTIVE_ARCH=NO ARCHS="$arch" VALID_ARCHS="${archs_valid}" PRODUCT_NAME=${product_name_mysql} >> $log_build_mysql &
+		spinner $!
 
-      path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
-      build_result="${path_source_mysql}/libmysql/Release-${platform}/lib${product_name_mysql}.a"
-      if [ -e "$build_result" ]
-      then
-         command_lipo_mysql="${command_lipo_mysql} ${path_to_libmysql}"
-         cp "${build_result}" "${path_to_libmysql}"
-      else
-         printf "Build failed.\n"
-      fi
+		path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
+		build_result="${path_source_mysql}/libmysql/Release-${platform}/lib${product_name_mysql}.a"
+		if [ -e "$build_result" ]
+		then
+			command_lipo_mysql="${command_lipo_mysql} ${path_to_libmysql}"
+			cp "${build_result}" "${path_to_libmysql}"
+		else
+			printf "Build failed.\n"
+		fi
 
-    done
+	done
 
-    mkdir -p "${path_library_mysql}"
-    cp -R "${path_source_mysql}/include" "${path_library_mysql}"
+	mkdir -p "${path_library_mysql}"
+	cp -R "${path_source_mysql}/include" "${path_library_mysql}"
 
-    path_library_mysql="${path_library_mysql}/libmysqlclient.a"
-    command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
+	path_library_mysql="${path_library_mysql}/libmysqlclient.a"
+	command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
 
-    $command_lipo_mysql
+	$command_lipo_mysql
 
 fi
 
-#
 # PNG
-#
-
 if [[ $build_png == $true  && $show_help == $false ]]; then
 
-   set -e
-   printf "Starting PNG\n"
-   printf "\-\-\-\-\-\-\-\-\-\-\-\-\n\n"
+	set -e
+	printf "Starting PNG\n"
+	printf "\-\-\-\-\-\-\-\-\-\-\-\-\n\n"
 
-   command_lipo_png="${command_lipo_create}"
-   path_library_png="${path_library}/libpng"
+	command_lipo_png="${command_lipo_create}"
+	path_library_png="${path_library}/libpng"
 
-   additional_config=""
+	additional_config=""
 
-    for arch in ${archs}
-    do
-      
-        #printf "Starting arch: %s\n" "${arch}"
-        platform=$( platform_for_architecture arch )
+	for arch in ${archs}
+	do
+		platform=$( platform_for_architecture arch )
+		printf "\n\nBuilding libpng for %s %s." "${arch}" "${platform}"
 
-        printf "\n\nBuilding libpng for %s %s." "${arch}" "${platform}"
+		if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+		then
+			platform="iPhoneSimulator"
+			additional_config="--enable-arm-neon=no "
+		else
+			platform="iPhoneOS"
+			additional_config="--enable-arm-neon=yes "
+		fi
 
-        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-        then
-            platform="iPhoneSimulator"
-            additional_config="--enable-arm-neon=no "
-        else
-            platform="iPhoneOS"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_png_arch="${path_build_png}/$platform_version_arch.sdk"
 
-            #additional_config="--enable-arm-neon=no "
-            #if [[ "${architecture}" == "armv7" ]];
-            #then
-                #additional_config="--enable-arm-neon=no "
-            #elif [[ "${architecture}" == "arm64" ]];
-            #then
-                additional_config="--enable-arm-neon=yes "
-            #else
-                #additional_config="--enable-arm-neon=yes "
-            #fi
-        fi
+		printf "Extracting libpng source code.\n"
+		rm -rf -- "${path_source_png}"
+		mkdir -p "${path_source_png}"
+		tar zxf ${path_media_png} -C ${path_source}
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_png_arch="${path_build_png}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_unixodbc_arch="${path_build_png}/$platform_version_arch.sdk"
 
-        printf "Extracting libpng source code.\n"
-        rm -rf -- "${path_source_png}"
-        mkdir -p "${path_source_png}"
-        tar zxf ${path_media_png} -C ${path_source}
+		printf "Make directory build_png_arch\n";
+		mkdir -p "${path_build_png_arch}"
+		rm -rf -- "${path_build_png_arch}"
+		printf "Make directory build_png_arch again\n";
+		mkdir -p "${path_build_png_arch}"
+		log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
+		> "$log_build_png"
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_unixodbc_arch="${path_build_png}/$platform_version_arch.sdk"
+		cd "${path_base}"
 
-        printf "Make directory build_png_arch\n";
-        mkdir -p "${path_build_png_arch}"
-        rm -rf -- "${path_build_png_arch}"
-        printf "Make directory build_png_arch again\n";
-        mkdir -p "${path_build_png_arch}"
-        log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
-        > "$log_build_png"
+		printf "Extract source.\n"
+		extract_source $path_media_png $path_source &
+		spinner $!
 
-        cd "${path_base}"
+		printf "Changing to source directory.\n"
 
-        printf "Extract source.\n"
-        extract_source $path_media_png $path_source &
-        spinner $!
+		cd "${path_source_png}"
+		export CFLAGS=""
+		export CPPFLAGS=""
 
+		printf "lipo\n"
+		command_lipo_png="${command_lipo_png} ${path_build_png_arch}/lib/libpng.a"
 
+		printf "config_make_install\n\t" "${arch}" "${path_build_png_arch}" "${log_build_png}"
 
-        #mkdir -p "${path_build_png_arch}"
-        #rm -rf -- "${path_build_png_arch}"
-        #log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
-        #> "$log_build_png"
+		config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_png_arch $log_build_png # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
 
-        #cd "${path_base}"
+	done
 
-        #extract_source $path_media_png $path_source &
-        #spinner $!
-        printf "Changing to source directory.\n"
+	printf "mkdir -p" "${path_library_png}"
+	mkdir -p "${path_library_png}"
+	rm -rf -- "${path_library_png}"
+	mkdir -p "${path_library_png}"
 
-        cd "${path_source_png}"
-        export CFLAGS=""
-        export CPPFLAGS=""
-
-        printf "lipo\n"
-        command_lipo_png="${command_lipo_png} ${path_build_png_arch}/lib/libpng.a"
-
-        printf "config_make_install\n\t" "${arch}" "${path_build_png_arch}" "${log_build_png}"
-
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_png_arch $log_build_png # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
-
-    done
-
-    printf "mkdir -p" "${path_library_png}"
-    mkdir -p "${path_library_png}"
-    rm -rf -- "${path_library_png}"
-    mkdir -p "${path_library_png}"
-
-    cp -R "${path_build_png_arch}/include" "${path_library_png}"
-    command_lipo_png="${command_lipo_png} -output ${path_library_png}/libpng16.a"
-    ln -s "${path_library_png}/libpng16.a" "${path_library_png}/libpng.a"
-    $command_lipo_png
+	cp -R "${path_build_png_arch}/include" "${path_library_png}"
+	command_lipo_png="${command_lipo_png} -output ${path_library_png}/libpng16.a"
+	ln -s "${path_library_png}/libpng16.a" "${path_library_png}/libpng.a"
+	$command_lipo_png
 fi
 
-#
 # bzip2 - build when libarchive is built
-#
-
 if [[ $false && $build_libarchive == $true  && $show_help == $false ]]; then
 
-   set -e
+	set -e
 
-    command_lipo_bzip="${command_lipo_create}"
-    command_lipo_ct="${command_lipo_create}"
-    path_library_bzip="${path_library}/bzip"
+	command_lipo_bzip="${command_lipo_create}"
+	command_lipo_ct="${command_lipo_create}"
+	path_library_bzip="${path_library}/bzip"
 
-    for arch in ${archs}
-    do
-        platform=$( platform_for_architecture arch )
+	for arch in ${archs}
+	do
+		platform=$( platform_for_architecture arch )
 
-        printf "\n\nBuilding bzip for %s %s." "${arch}" "${platform}"
+		printf "\n\nBuilding bzip for %s %s." "${arch}" "${platform}"
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_bzip_arch="${path_build_bzip}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_bzip_arch="${path_build_bzip}/$platform_version_arch.sdk"
 
-        printf "mkdir %s\n" "${path_build_bzip_arch}"
+		printf "mkdir %s\n" "${path_build_bzip_arch}"
 
-        mkdir -p "${path_build_bzip_arch}"
-        rm -rf -- "${path_build_bzip_arch}"
-        mkdir -p "${path_build_bzip_arch}"
-        log_build_bzip="${path_build_bzip}/build-bzip-${version_bzip}-${arch}.log"
-        > "$log_build_bzip"
+		mkdir -p "${path_build_bzip_arch}"
+		rm -rf -- "${path_build_bzip_arch}"
+		mkdir -p "${path_build_bzip_arch}"
+		log_build_bzip="${path_build_bzip}/build-bzip-${version_bzip}-${arch}.log"
+		> "$log_build_bzip"
 
-        cd "${path_base}"
+		cd "${path_base}"
 
-        extract_source $path_media_bzip $path_source &
-        spinner $!
+		extract_source $path_media_bzip $path_source &
+		spinner $!
 
-        cd "${path_source_bzip}"
-        export CFLAGS=""
-        export CPPFLAGS=""
+		cd "${path_source_bzip}"
+		export CFLAGS=""
+		export CPPFLAGS=""
 
-        command_lipo_bzip="${command_lipo_bzip} ${path_build_bzip_arch}/lib/bzip.a"
-        command_lipo_ct="${command_lipo_ct} ${path_build_bzip_arch}/lib/libct.a"
-        additional_config="${additional_config_blank}"
-        additional_work=""
+		command_lipo_bzip="${command_lipo_bzip} ${path_build_bzip_arch}/lib/bzip.a"
+		command_lipo_ct="${command_lipo_ct} ${path_build_bzip_arch}/lib/libct.a"
+		additional_config="${additional_config_blank}"
+		additional_work=""
 
-    printf "config_make_install %s\n\t\t%s\n\t\t%s\n\t\t%s" "${version_ios}" "${version_ios_min}" "${additional_config}" "${path_build_bzip_arch}"
+		printf "config_make_install %s\n\t\t%s\n\t\t%s\n\t\t%s" "${version_ios}" "${version_ios_min}" "${additional_config}" "${path_build_bzip_arch}"
 
+		config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_bzip_arch $log_build_bzip $additional_work
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_bzip_arch $log_build_bzip $additional_work
-
-   done
-
-   #printf "mkdir %s\n" "${path_library_bzip}"
-
-   #mkdir -p "${path_library_bzip}"
-   #rm -rf -- "${path_library_bzip}"
-   #mkdir -p "${path_library_bzip}"
-
-   #printf "cp -R %s\n" "${path_build_bzip_arch}/include\" \"${path_library_bzip}"
-
-   #cp -R $path_build_bzip_arch/include $path_library_bzip
-
-   #command_lipo_bzip="${command_lipo_bzip} -output ${path_library_bzip}/bzip.a"
-   #command_lipo_ct="${command_lipo_ct} -output ${path_library_bzip}/libct.a"
-
-   #echo ""
-   #echo "${command_lipo_bzip}"
-   #echo ""
-   #echo "${command_lipo_ct}"
-   #echo ""
-
-   #$command_lipo_bzip
-   #$command_lipo_ct
-
+	done
 fi
 
-#
 # libarchive
-#
-
 if [[ $build_libarchive == $true  && $show_help == $false ]]; then
 
-   set -e
+	set -e
 
-    command_lipo_libarchive="${command_lipo_create}"
-    command_lipo_ct="${command_lipo_create}"
-    path_library_libarchive="${path_library}/libarchive"
+	command_lipo_libarchive="${command_lipo_create}"
+	command_lipo_ct="${command_lipo_create}"
+	path_library_libarchive="${path_library}/libarchive"
 
-    for arch in ${archs}
-    do
-        platform=$( platform_for_architecture arch )
+	for arch in ${archs}
+	do
+		platform=$( platform_for_architecture arch )
 
-        printf "\n\nBuilding Libarchive for %s %s." "${arch}" "${platform}"
+		printf "\n\nBuilding Libarchive for %s %s." "${arch}" "${platform}"
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_libarchive_arch="${path_build_libarchive}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_libarchive_arch="${path_build_libarchive}/$platform_version_arch.sdk"
 
-        #printf "mkdir %s\n" "${path_build_libarchive_arch}"
+		mkdir -p "${path_build_libarchive_arch}"
+		rm -rf -- "${path_build_libarchive_arch}"
+		mkdir -p "${path_build_libarchive_arch}"
+		log_build_libarchive="${path_build_libarchive}/build-libarchive-${version_libarchive}-${arch}.log"
+		> "$log_build_libarchive"
 
-        mkdir -p "${path_build_libarchive_arch}"
-        rm -rf -- "${path_build_libarchive_arch}"
-        mkdir -p "${path_build_libarchive_arch}"
-        log_build_libarchive="${path_build_libarchive}/build-libarchive-${version_libarchive}-${arch}.log"
-        > "$log_build_libarchive"
+		cd "${path_base}"
 
-        cd "${path_base}"
+		extract_source $path_media_libarchive $path_source &
+		spinner $!
 
-        extract_source $path_media_libarchive $path_source &
-        spinner $!
+		cd "${path_source_libarchive}"
+		export CFLAGS=""
+		export CPPFLAGS=""
 
-        cd "${path_source_libarchive}"
-        export CFLAGS=""
-        export CPPFLAGS=""
+		command_lipo_libarchive="${command_lipo_libarchive} ${path_build_libarchive_arch}/lib/libarchive.a"
+		additional_config="${additional_config_blank}"
+		additional_work=""
 
-        command_lipo_libarchive="${command_lipo_libarchive} ${path_build_libarchive_arch}/lib/libarchive.a"
-        additional_config="${additional_config_blank}"
-        additional_work=""
+		config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_libarchive_arch $log_build_libarchive $additional_work
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_libarchive_arch $log_build_libarchive $additional_work
-
-   done
-
-   #printf "mkdir %s\n" "${path_library_libarchive}"
-
-   #mkdir -p "${path_library_libarchive}"
-   #rm -rf -- "${path_library_libarchive}"
-   #mkdir -p "${path_library_libarchive}"
-
-   #printf "cp -R %s\n" "${path_build_libarchive_arch}/include\" \"${path_library_libarchive}"
-
-   #cp -R $path_build_libarchive_arch/include $path_library_libarchive
-
-   #command_lipo_libarchive="${command_lipo_libarchive} -output ${path_library_libarchive}/libarchive.a"
-   #command_lipo_ct="${command_lipo_ct} -output ${path_library_libarchive}/libct.a"
-
-   #echo ""
-   #echo "${command_lipo_libarchive}"
-   #echo ""
-   #echo "${command_lipo_ct}"
-   #echo ""
-
-   #$command_lipo_libarchive
-   #$command_lipo_ct
-
+	done
 fi
 
-
-#
 # TDS
-#
-
 if [[ $build_tds == $true  && $show_help == $false ]]; then
 
-   set -e
+	set -e
 
-    command_lipo_tds="${command_lipo_create}"
-    command_lipo_ct="${command_lipo_create}"
-    path_library_tds="${path_library}/libsybdb"
+	command_lipo_tds="${command_lipo_create}"
+	command_lipo_ct="${command_lipo_create}"
+	path_library_tds="${path_library}/libsybdb"
 
-    for arch in ${archs}
-    do
-        platform=$( platform_for_architecture arch )
+	for arch in ${archs}
+	do
+		platform=$( platform_for_architecture arch )
 
-        printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
+		printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_tds_arch="${path_build_tds}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_tds_arch="${path_build_tds}/$platform_version_arch.sdk"
 
-        printf "mkdir %s\n" "${path_build_tds_arch}"
+		printf "mkdir %s\n" "${path_build_tds_arch}"
 
-        sudo mkdir -p "${path_build_tds_arch}"
-        printf "rm-rf" "${path_build_tds_arch}"
-        sudo mkdir -p "${path_build_tds_arch}"
-        sudo mkdir -p "{$path_source}"
-log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
-#> "$log_build_tds"
-printf "cd ${path_base}"
-        cd "${path_base}"
+		sudo mkdir -p "${path_build_tds_arch}"
+		printf "rm-rf" "${path_build_tds_arch}"
+		sudo mkdir -p "${path_build_tds_arch}"
+		sudo mkdir -p "{$path_source}"
+		log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
+		printf "cd ${path_base}"
+		cd "${path_base}"
 
-        extract_source $path_media_tds $path_source &
-        spinner $!
+		extract_source $path_media_tds $path_source &
+		spinner $!
 
-        cd "${path_source_tds}"
+		cd "${path_source_tds}"
 
-        command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
-        command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
-additional_config=" --with-tdsver=${version_tds} " #--with-openssl=/Users/michael/Desktop/Reports/Compressor/library/openssl"
-#"${path_library_openssl}/include/openssl"
-        additional_work="addtional_work_libsybdb"
+		command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
+		command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
+		additional_config=" --with-tdsver=${version_tds} " #--with-openssl=/Users/michael/Desktop/Reports/Compressor/library/openssl"
+		additional_work="addtional_work_libsybdb"
 
-config_make_install "${version_ios}" "${version_ios_min}" "${arch}" "${additional_config}" "${path_build_tds_arch}" "${log_build_tds}" "${additional_work}"
+		config_make_install "${version_ios}" "${version_ios_min}" "${arch}" "${additional_config}" "${path_build_tds_arch}" "${log_build_tds}" "${additional_work}"
 
-   done
-
-   #printf "mkdir %s\n" "${path_library_tds}"
-
-   #mkdir -p "${path_library_tds}"
-   #rm -rf -- "${path_library_tds}"
-   #mkdir -p "${path_library_tds}"
-
-   #printf "cp -R %s\n" "${path_build_tds_arch}/include\" \"${path_library_tds}"
-
-   #cp -R $path_build_tds_arch/include $path_library_tds
-
-   #command_lipo_tds="${command_lipo_tds} -output ${path_library_tds}/libsybdb.a"
-   #command_lipo_ct="${command_lipo_ct} -output ${path_library_tds}/libct.a"
-
-   #echo ""
-   #echo "${command_lipo_tds}"
-   #echo ""
-   #echo "${command_lipo_ct}"
-   #echo ""
-
-   #$command_lipo_tds
-   #$command_lipo_ct
-
+	done
 fi
 
 #
@@ -1933,134 +1683,122 @@ fi
 
 build_attr_static_ios() {
 
-    readonly archive_attr_base_url="http://download.savannah.gnu.org/releases/attr/"
-    readonly archive_name_attr="attr-${version_attr}"
-    readonly archive_attr="${archive_name_attr}.src.tar.gz"
-    readonly path_source_attr="$path_source/$archive_name_attr"
-    readonly path_media_attr="$path_media/$archive_attr"
-    readonly path_build_attr="${path_build}/attr"
+	readonly archive_attr_base_url="http://download.savannah.gnu.org/releases/attr/"
+	readonly archive_name_attr="attr-${version_attr}"
+	readonly archive_attr="${archive_name_attr}.src.tar.gz"
+	readonly path_source_attr="$path_source/$archive_name_attr"
+	readonly path_media_attr="$path_media/$archive_attr"
+	readonly path_build_attr="${path_build}/attr"
 
-    download_archive $archive_attr $archive_attr_base_url
+	download_archive $archive_attr $archive_attr_base_url
 
-    echo "Building attr."
+	echo "Building attr."
 
-    command_lipo_attr="${command_lipo_create}"
+	command_lipo_attr="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
 
-        platform=$( platform_for_architecture arch )
+		platform=$( platform_for_architecture arch )
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_attr_arch="${path_build_attr}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_attr_arch="${path_build_attr}/$platform_version_arch.sdk"
 
-        mkdir -p "${path_build_attr_arch}"
-        rm -rf -- "${path_build_attr_arch}"
-        mkdir -p "${path_build_attr_arch}"
-        tar zxf ${path_media_attr} -C ${path_build_attr_arch}
+		mkdir -p "${path_build_attr_arch}"
+		rm -rf -- "${path_build_attr_arch}"
+		mkdir -p "${path_build_attr_arch}"
+		tar zxf ${path_media_attr} -C ${path_build_attr_arch}
 
-        log_build_attr="${path_build_attr_arch}/build-attr-${version_attr}-${arch}.log"
-        > "$log_build_attr"
+		log_build_attr="${path_build_attr_arch}/build-attr-${version_attr}-${arch}.log"
+		> "$log_build_attr"
 
-        prepp="${path_build_attr}/$platform_version_arch.sdk/${archive_name_attr}"
-        cd "${prepp}"
+		prepp="${path_build_attr}/$platform_version_arch.sdk/${archive_name_attr}"
+		cd "${prepp}"
 
-        extract_source $path_media_attr $path_build_attr_arch &
-        spinner $!
+		extract_source $path_media_attr $path_build_attr_arch &
+		spinner $!
 
-        cd "${prepp}"
+		cd "${prepp}"
 
-        additional_config="--enable-gui=no "
+		additional_config="--enable-gui=no "
 
-        printf "Build path %s.\n" "$path_build_attr_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_attr"
+		printf "Build path %s.\n" "$path_build_attr_arch"
+		printf "Build conf %s.\n" "$additional_config"
+		printf "Build arch %s.\n" "$arch"
+		printf "Build log  %s.\n" "$log_build_attr"
 
-#export CFLAGS=" -I${path_library}/crt_externs "
-#export CPPFLAGS=" -I${path_library}/crt_externs "
+		config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_attr
+		exit 0
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_attr
-exit 0
-    done
+	done
 }
 
 path_library_attr="${path_library}/attr"
-
 if [[ $build_attr == $true && $show_help == $false ]]; then
-
-    build_attr_static_ios
+	build_attr_static_ios
 fi
 
-#
 # Acl - Required by Glib
-#   Unused way to (maybe) cross compile acl.  Why?  Becuse, fuck it.
-#
-
 build_acl_static_ios() {
 
-    build_attr_static_ios
+	build_attr_static_ios
 
-    readonly archive_acl_base_url="http://download.savannah.gnu.org/releases/acl/"
-    readonly archive_name_acl="acl-${version_acl}"
-    readonly archive_acl="${archive_name_acl}.src.tar.gz"
-    readonly path_source_acl="$path_source/$archive_name_acl"
-    readonly path_media_acl="$path_media/$archive_acl"
-    readonly path_build_acl="${path_build}/acl"
+	readonly archive_acl_base_url="http://download.savannah.gnu.org/releases/acl/"
+	readonly archive_name_acl="acl-${version_acl}"
+	readonly archive_acl="${archive_name_acl}.src.tar.gz"
+	readonly path_source_acl="$path_source/$archive_name_acl"
+	readonly path_media_acl="$path_media/$archive_acl"
+	readonly path_build_acl="${path_build}/acl"
 
-    download_archive $archive_acl $archive_acl_base_url
+	download_archive $archive_acl $archive_acl_base_url
 
-    echo "Building acl."
+	echo "Building acl."
 
-    command_lipo_acl="${command_lipo_create}"
+	command_lipo_acl="${command_lipo_create}"
 
-    for arch in ${archs}
-    do
+	for arch in ${archs}
+	do
 
-        platform=$( platform_for_architecture arch )
+		platform=$( platform_for_architecture arch )
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_acl_arch="${path_build_acl}/$platform_version_arch.sdk"
+		platform_version_arch="${platform}${version_ios}-${arch}"
+		path_build_acl_arch="${path_build_acl}/$platform_version_arch.sdk"
 
-        mkdir -p "${path_build_acl_arch}"
-        rm -rf -- "${path_build_acl_arch}"
-        mkdir -p "${path_build_acl_arch}"
-        tar zxf ${path_media_acl} -C ${path_build_acl_arch}
+		mkdir -p "${path_build_acl_arch}"
+		rm -rf -- "${path_build_acl_arch}"
+		mkdir -p "${path_build_acl_arch}"
+		tar zxf ${path_media_acl} -C ${path_build_acl_arch}
 
-        log_build_acl="${path_build_acl_arch}/build-acl-${version_acl}-${arch}.log"
-        > "$log_build_acl"
+		log_build_acl="${path_build_acl_arch}/build-acl-${version_acl}-${arch}.log"
+		> "$log_build_acl"
 
-        prepp="${path_build_acl}/$platform_version_arch.sdk/${archive_name_acl}"
-        cd "${prepp}"
+		prepp="${path_build_acl}/$platform_version_arch.sdk/${archive_name_acl}"
+		cd "${prepp}"
 
-        extract_source $path_media_acl $path_build_acl_arch &
-        spinner $!
+		extract_source $path_media_acl $path_build_acl_arch &
+		spinner $!
 
-        cd "${prepp}"
+		cd "${prepp}"
 
-        additional_config="--enable-gui=no "
+		additional_config="--enable-gui=no "
 
-        printf "Build path %s.\n" "$path_build_acl_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_acl"
+		printf "Build path %s.\n" "$path_build_acl_arch"
+		printf "Build conf %s.\n" "$additional_config"
+		printf "Build arch %s.\n" "$arch"
+		printf "Build log  %s.\n" "$log_build_acl"
 
-        export CFLAGS=" -I${path_library}/crt_externs "
-        export CPPFLAGS=" -I${path_library}/crt_externs "
+		export CFLAGS=" -I${path_library}/crt_externs "
+		export CPPFLAGS=" -I${path_library}/crt_externs "
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_acl
-exit 0
-    done
+		config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_acl
+		exit 0
+	done
 }
 
 path_library_acl="${path_library}/acl"
 
 if [[ $build_acl == $true && $show_help == $false ]]; then
-
-    build_acl_static_ios
+	build_acl_static_ios
 fi
-
-#empty_directory $path_build
-#empty_directory $path_source
 
 printf "Compressor is done.\n"
