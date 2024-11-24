@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #  buildcounter.sh
 #  MAD
@@ -16,12 +16,10 @@ readonly path_base=$( pwd )
 readonly true=0
 readonly false=1
 
-case $path_base in # Check if current path contains whitespace.
-	*\ * )
+if [[ "$path_base" =~ \  ]]; then
 	printf "ABORT: Current path has whitespace.\n"
 	exit 1
-	;;
-	esac
+fi
 
 print_help() {
 	printf "  %s\n"  "Usage: compressor [options] ..."
@@ -51,14 +49,11 @@ show_help=$false
 #
 
 
-if [[ $# == 0 ]];
-then
+if [[ $# == 0 ]]; then
 	show_help=$true
-else
-	show_help=$false
 fi
 
-while [[ $# > 0 ]]
+while [[ $# -gt 0 ]]
 do
 	key="$1"
 	shift
@@ -72,7 +67,7 @@ do
 			build_libarchive=$true;;
 
 		--unixodbc)
-			build_unixodbc=$false;;
+			build_unixodbc=$true;;
 
 		--openssl)
 			build_openssl=$true;;
@@ -98,13 +93,13 @@ do
 		esac
 done
 
-if [ $show_help == $true ];
-then
+if [ $show_help == $true ]; then
 	print_help
 	exit 0
 fi
 
 version_for_platform() {
+	local version
 	local version=$( xcodebuild -version -sdk "${1}" SDKVersion 2>/dev/null )
 	printf "%s" "${version}"
 }
@@ -118,6 +113,22 @@ spinner() {
 		local s=$(printf " [%c]  " "$spinstr")
 		printf "%s" "$s"
 		local spinstr=$temp${spinstr%"$temp"}
+		sleep $delay
+		printf "\b\b\b\b\b\b"
+	done
+	printf "    \b\b\b\b"
+}
+
+spinner_safe() {
+	local pid=$1
+	local delay=0.66
+	local spinstr='|/-\'
+	# Rewritten to use kill -0 for a safer check.
+	while kill -0 $pid 2>/dev/null; do
+		local temp=${spinstr#?}
+		local s=$(printf " [%c]  " "$spinstr")
+		printf "%s" "$s"
+		spinstr=$temp${spinstr%"$temp"}
 		sleep $delay
 		printf "\b\b\b\b\b\b"
 	done
@@ -139,23 +150,25 @@ platform_for_architecture() {
 }
 
 download_archive() { # $1=archive name; $2=archive url
-	if [ ! -e media/${1} ]; then
-		printf "\n\nDownloading %s from %s.\n" "${1}" "${2}"
-		cd media && { curl -L -O ${2}${1} ; cd - ; }
+	local archive_name="$1"
+	local archive_url="$2"
+	if [ ! -e "media/${archive_name}" ]; then
+		printf "\n\nDownloading %s from %s.\n" "$archive_name" "$archive_url"
+		cd media && { curl -L -O "${archive_url}${archive_name}" ; cd - ; }
 	fi
 }
 
 extract_source() {
-	local archive=$1
-	local destination=$2
-	printf "Extracting %s\n\t\tto %s.\n" $archive $destination
+	local archive="$1"
+	local destination="$2"
+	printf "Extracting %s\n\t\tto %s.\n" "$archive" "$destination"
 	rm -rf -- "${destination}"
 	mkdir -p "${destination}"
-	tar zxf ${archive} -C ${destination}
+	tar zxf "${archive}" -C "${destination}"
 }
 
 empty_directory() {
-	local directory=$1
+	local directory="$1"
 	mkdir -p "${directory}"
 	rm -rf -- "${directory}"
 	mkdir -p "${directory}"
