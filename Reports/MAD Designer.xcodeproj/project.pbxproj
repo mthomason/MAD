@@ -3083,7 +3083,6 @@
 			isa = PBXGroup;
 			children = (
 				4CC3D6371BCB6D9400BDA5D3 /* icons */,
-				4CC3D6711BCB6D9400BDA5D3 /* launch */,
 				4CC3D6811BCB6D9400BDA5D3 /* MADImageIconDuplicate.ai */,
 				4CC3D6931BCB6D9400BDA5D3 /* masters */,
 				4CC3D69B1BCB6D9400BDA5D3 /* patterns */,
@@ -3116,13 +3115,6 @@
 				4CC3D63E1BCB6D9400BDA5D3 /* MADIcon64x64.png */,
 			);
 			path = document;
-			sourceTree = "<group>";
-		};
-		4CC3D6711BCB6D9400BDA5D3 /* launch */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = launch;
 			sourceTree = "<group>";
 		};
 		4CC3D6931BCB6D9400BDA5D3 /* masters */ = {
