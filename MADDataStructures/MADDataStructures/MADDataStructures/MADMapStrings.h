@@ -14,9 +14,9 @@
 @class NSString;
 
 typedef NS_ENUM(short, MADMapDataType) {
-    MADMapDataTypeShort,
-    MADMapDataTypeInteger,
-    MADMapDataTypeUnsignedInteger,
+	MADMapDataTypeShort,
+	MADMapDataTypeInteger,
+	MADMapDataTypeUnsignedInteger,
 };
 
 @protocol MADMapStringsProtocol <NSObject>

@@ -79,36 +79,6 @@
 	return self.counter == 0;
 }
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-								  objects:(id __unsafe_unretained [])stackbuf
-									count:(NSUInteger)len {
-	// Handle initial state
-	if (state->state == 0) {
-		state->mutationsPtr = &state->extra[1];
-		state->state = 1; // Indicate that enumeration has started
-	}
-
-	// Get the current node (using state->extra[0] to track position)
-	MTStackNode *currentNode = (__bridge MTStackNode *)(void *)state->extra[0];
-	if (!currentNode) {
-		currentNode = self.top; // Start at the top of the stack
-	}
-
-	// Fill the buffer with elements
-	NSUInteger count = 0;
-	while (currentNode && count < len) {
-		stackbuf[count] = currentNode.data;
-		currentNode = currentNode.next;
-		count++;
-	}
-
-	// Save the next node for subsequent calls
-	state->extra[0] = (unsigned long)(__bridge void *)currentNode;
-
-	// Return the number of objects filled in this call
-	return count;
-}
-
 - (NSString *)toStringHumanReadable {
 	return nil;
 }

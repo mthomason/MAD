@@ -14,7 +14,7 @@
 #import "MTProtocolLog.h"
 
 @interface MTStack : NSObject
-	<NSFastEnumeration,  MTProtocolLog>
+	<MTProtocolLog>
 
 	- (instancetype)init NS_DESIGNATED_INITIALIZER;
 	- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
