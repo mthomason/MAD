@@ -62,7 +62,10 @@
 		_tailNode = newNode;
 	}
 	_count++;
-	_currentNode = _tailNode;
+
+	if (!_currentNode) {
+		_currentNode = _headNode;
+	}
 }
 
 - (id)head {
@@ -71,10 +74,14 @@
 
 - (id)getNext {
 	MTLinkedListNode *strongCurrentNode = _currentNode;
+	if (!strongCurrentNode) {
+		_currentNode = _headNode;
+		strongCurrentNode = _headNode;
+	}
 	if (strongCurrentNode && strongCurrentNode.next) {
-		MTLinkedListNode *strongNextNode = strongCurrentNode.next;
-		_currentNode = strongNextNode;
-		return strongNextNode.data;
+		_currentNode = strongCurrentNode.next;
+		MTLinkedListNode *resultNode = _currentNode;
+		return resultNode.data;
 	}
 	return nil;
 }
@@ -88,17 +95,17 @@
 	}
 	return nil;
 }
-- (id)getTop {
-	return _tailNode ? _tailNode.data : nil;
-}
 
-- (id)getBottom {
-	return _headNode ? _headNode.data : nil;
-}
+- (id)getTop { return _headNode ? _headNode.data : nil; }
+
+- (id)getBottom { return _tailNode ? _tailNode.data : nil; }
 
 - (BOOL)isNext {
 	MTLinkedListNode *strongCurrentNode = _currentNode;
-	return strongCurrentNode && strongCurrentNode.next;
+	if (!strongCurrentNode) {
+		return _headNode != nil;
+	}
+	return strongCurrentNode.next != nil;
 }
 
 - (BOOL)isPrevious {
@@ -120,6 +127,7 @@
 	MTLinkedListNode *current = _headNode;
 	MTLinkedListNode *temp = nil;
 
+	// Reverse the direction of all nodes
 	while (current) {
 		temp = current.prev;
 		current.prev = current.next;
@@ -127,9 +135,10 @@
 		current = current.prev;
 	}
 
+	// Swap head and tail
 	if (temp) {
+		_tailNode = _headNode;
 		_headNode = temp.prev;
-		_tailNode = temp;
 	}
 }
 

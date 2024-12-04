@@ -40,6 +40,8 @@
 		4C8984C12CFEA51F002AC52A /* MADMapStringsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8984C02CFEA51F002AC52A /* MADMapStringsTests.m */; };
 		4C8984C32CFEA5F0002AC52A /* MADVectorBoolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8984C22CFEA5F0002AC52A /* MADVectorBoolTests.m */; };
 		4C8984C52CFEA802002AC52A /* MTStackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8984C42CFEA802002AC52A /* MTStackTests.m */; };
+		4C8984C72CFEFA17002AC52A /* MTQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8984C62CFEFA17002AC52A /* MTQueueTests.m */; };
+		4CA14C5E2D00C4FE009AE442 /* MTLinkedListTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14C5D2D00C4FE009AE442 /* MTLinkedListTests.m */; };
 		4CB8EDFD1E1938EC00193295 /* MADMapStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB8EDFE1E1938EC00193295 /* MADMapStrings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */; };
 		4CB8EE071E1A93D300193295 /* MADAlgorithmColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,6 +102,8 @@
 		4C8984C02CFEA51F002AC52A /* MADMapStringsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMapStringsTests.m; sourceTree = "<group>"; };
 		4C8984C22CFEA5F0002AC52A /* MADVectorBoolTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADVectorBoolTests.m; sourceTree = "<group>"; };
 		4C8984C42CFEA802002AC52A /* MTStackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTStackTests.m; sourceTree = "<group>"; };
+		4C8984C62CFEFA17002AC52A /* MTQueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTQueueTests.m; sourceTree = "<group>"; };
+		4CA14C5D2D00C4FE009AE442 /* MTLinkedListTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTLinkedListTests.m; sourceTree = "<group>"; };
 		4CA1AD6F1E29CDDB005081E1 /* madmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = madmap.cpp; sourceTree = "<group>"; };
 		4CA1AD701E29CDDB005081E1 /* madmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = madmap.hpp; sourceTree = "<group>"; };
 		4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMapStrings.h; path = MADDataStructures/MADMapStrings.h; sourceTree = "<group>"; };
@@ -167,6 +171,8 @@
 			children = (
 				4C8984C02CFEA51F002AC52A /* MADMapStringsTests.m */,
 				4C8984C22CFEA5F0002AC52A /* MADVectorBoolTests.m */,
+				4CA14C5D2D00C4FE009AE442 /* MTLinkedListTests.m */,
+				4C8984C62CFEFA17002AC52A /* MTQueueTests.m */,
 				4C8984C42CFEA802002AC52A /* MTStackTests.m */,
 				4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */,
 				4C2C7B521BA929EF00C9CC5E /* Info.plist */,
@@ -383,6 +389,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8984C72CFEFA17002AC52A /* MTQueueTests.m in Sources */,
+				4CA14C5E2D00C4FE009AE442 /* MTLinkedListTests.m in Sources */,
 				4C8984C12CFEA51F002AC52A /* MADMapStringsTests.m in Sources */,
 				4C2C7B511BA929EF00C9CC5E /* MADDataStructuresTests.m in Sources */,
 				4C8984C32CFEA5F0002AC52A /* MADVectorBoolTests.m in Sources */,
