@@ -127,7 +127,6 @@
 	MTLinkedListNode *current = _headNode;
 	MTLinkedListNode *temp = nil;
 
-	// Reverse the direction of all nodes
 	while (current) {
 		temp = current.prev;
 		current.prev = current.next;
@@ -135,7 +134,6 @@
 		current = current.prev;
 	}
 
-	// Swap head and tail
 	if (temp) {
 		_tailNode = _headNode;
 		_headNode = temp.prev;
