@@ -9,21 +9,77 @@
 #import <XCTest/XCTest.h>
 #import "MTGraph.h"
 #import "MTVertex.h"
+#import "MTEdge.h"
+#import "MTLinkedList.h"
 
 @interface MADDataStructuresTests : XCTestCase
-
+	@property (nonatomic, strong) MTGraph *graph;
 @end
 
 @implementation MADDataStructuresTests
 
 - (void)setUp {
 	[super setUp];
-	// Put setup code here. This method is called before the invocation of each test method in the class.
+	self.graph = [[MTGraph alloc] init];
 }
 
 - (void)tearDown {
-	// Put teardown code here. This method is called after the invocation of each test method in the class.
+	self.graph = nil;
 	[super tearDown];
+}
+
+- (void)testGraphInitialization {
+	XCTAssertNotNil(self.graph, "Graph should not be nil after initialization.");
+	XCTAssertEqual([self.graph numberOfVertices], 0, "Graph should have no vertices upon initialization.");
+	XCTAssertEqual([self.graph numberOfEdges], 0, "Graph should have no edges upon initialization.");
+}
+
+- (void)testAddVertex {
+	MTVertex *vertex = [self.graph addVertexWithObject:@"TestVertex"];
+	XCTAssertNotNil(vertex, "Added vertex should not be nil.");
+	XCTAssertEqual([self.graph numberOfVertices], 1, "Graph should have one vertex after adding.");
+	XCTAssertEqualObjects(vertex.object, @"TestVertex", "Vertex object should match the input object.");
+}
+
+- (void)testAddEdge {
+	MTVertex *vertexA = [self.graph addVertexWithObject:@"A"];
+	MTVertex *vertexB = [self.graph addVertexWithObject:@"B"];
+
+	MTEdge *edge = [self.graph addEdgeWithOrigin:vertexA destination:vertexB object:@"A->B" andWeight:@(10)];
+	XCTAssertNotNil(edge, "Added edge should not be nil.");
+	XCTAssertEqualObjects(edge.origin, vertexA, "Edge origin should match the source vertex.");
+	XCTAssertEqualObjects(edge.destination, vertexB, "Edge destination should match the target vertex.");
+	XCTAssertEqual([self.graph numberOfEdges], 1, "Graph should have one edge after adding.");
+}
+
+- (void)testRemoveVertex {
+	MTVertex *vertex = [self.graph addVertexWithObject:@"ToRemove"];
+	[self.graph removeVertex:vertex];
+
+	XCTAssertEqual([self.graph numberOfVertices], 0, "Graph should have no vertices after removal.");
+}
+
+- (void)testRemoveEdge {
+	MTVertex *vertexA = [self.graph addVertexWithObject:@"A"];
+	MTVertex *vertexB = [self.graph addVertexWithObject:@"B"];
+	MTEdge *edge = [self.graph addEdgeWithOrigin:vertexA destination:vertexB object:@"A->B" andWeight:@(10)];
+
+	[self.graph removeEdge:edge];
+	XCTAssertEqual([self.graph numberOfEdges], 0, "Graph should have no edges after removal.");
+}
+
+- (void)testBreadthFirstSearch {
+	MTVertex *vertexA = [self.graph addVertexWithObject:@"A"];
+	MTVertex *vertexB = [self.graph addVertexWithObject:@"B"];
+	MTVertex *vertexC = [self.graph addVertexWithObject:@"C"];
+	[self.graph addEdgeWithOrigin:vertexA destination:vertexB object:@"A->B" andWeight:@(1)];
+	[self.graph addEdgeWithOrigin:vertexB destination:vertexC object:@"B->C" andWeight:@(1)];
+
+	NSArray *bfsResult = [self.graph breadthFirstSearch:vertexA];
+	XCTAssertEqual(bfsResult.count, 3, "BFS should visit all vertices in the graph.");
+	XCTAssertEqualObjects(bfsResult[0], vertexA, "First vertex should be the root.");
+	XCTAssertEqualObjects(bfsResult[1], vertexB, "Second vertex should follow BFS order.");
+	XCTAssertEqualObjects(bfsResult[2], vertexC, "Third vertex should follow BFS order.");
 }
 
 - (void)testDepthFirstSearch {
@@ -74,13 +130,11 @@
 	[graph addEdgeWithOrigin:vertexShirt destination:vertexTie object:@"Shirt->Tie" andWeight:@(1)];
 	[graph addEdgeWithOrigin:vertexSocks destination:vertexShoes object:@"Socks->Shoes" andWeight:@(1)];
 	
-	//NSLog(@"%@", [graph toStringHumanReadable]);
-	
 	NSError *error = nil;
 	BOOL isDirectedAcyclicGraph;
-	MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
+	MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error
+											 isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
 	
-	//NSLog(@"%@", [topologicalSort toStringHumanReadable]);
 	XCTAssertNotNil(topologicalSort, @"Topological sort results are nil. Error returned is \"%@\"", [error localizedDescription]);
 	XCTAssertNil(error, @"Topological sort showed error: %@", [error localizedDescription]);
 }
