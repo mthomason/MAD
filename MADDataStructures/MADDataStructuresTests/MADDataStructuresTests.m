@@ -109,6 +109,7 @@
 	[graph addEdgeWithOrigin:vertexU destination:vertexX object:@"U->X" andWeight:@(1)];
 	
 	MTLinkedList *dfsResultsU = [graph depthFirstSearch:vertexU];
+	NSLog(@"%@", [dfsResultsU toArray]);
 	
 }
 
