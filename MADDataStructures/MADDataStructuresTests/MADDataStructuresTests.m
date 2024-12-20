@@ -82,6 +82,12 @@
 	XCTAssertEqualObjects(bfsResult[2], vertexC, "Third vertex should follow BFS order.");
 }
 
+/*
+	DFS isn't used in the program, so DFS results may be unexpected. It's currently returning
+		MTPair values of the edges.  This may be unexpected, so it's not tested.  The MTPair
+		contains metadata, and it's not stripped out of the results.  Consider it a speed hack
+		for now.
+*/
 - (void)testDepthFirstSearch {
 	
 	MTGraph *graph = [[MTGraph alloc] init];
@@ -105,6 +111,17 @@
 	MTLinkedList *dfsResultsU = [graph depthFirstSearch:vertexU];
 	
 }
+
+/*
+	The `topologicalSortWithError: isDirectedAcyclicGraph:` returns an MTLinkedList of MTPair's.
+		This extra metadata may be unexpected.  This function works well in the program, because
+		its use accounts for this.  If this class is going to be used in other projects, the
+		function may need to be rewritten to return results that would be expected by more
+		generic use cases.  If you search this workspace for `isDirectedAcyclicGraph`, you will
+		find how it's used.  These implementation details, though not perfectly orthogonal, work
+		well for this program.  That's because the MTPar is used internally, and so that internal
+		structure, and it's metadata is simply returned as a speed hack.
+ */
 
 - (void)testTopologicalSort {
 	
