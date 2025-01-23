@@ -11,7 +11,7 @@
 
 @interface MTLinkedListTests : XCTestCase
 
-	@property (nonatomic, strong) MTLinkedList *linkedList;
+@property (nonatomic, strong) MTLinkedList *linkedList;
 
 @end
 
@@ -29,35 +29,42 @@
 
 #pragma mark - Initialization Tests
 
-- (void)testInit {
-	XCTAssertNotNil(self.linkedList, @"LinkedList instance should not be nil after initialization.");
-	XCTAssertEqual([self.linkedList count], 0, @"LinkedList should initially have a count of 0.");
+- (void)testInitialization {
+	XCTAssertNotNil(self.linkedList, @"LinkedList should be initialized.");
+	XCTAssertEqual(self.linkedList.count, 0, @"Initial count should be 0.");
+	XCTAssertNil(self.linkedList.head, @"Head should be nil for an empty list.");
 }
 
-#pragma mark - Insertion and Count Tests
+#pragma mark - Insertion Tests
 
-- (void)testInsert {
+- (void)testInsertWithValidObjects {
 	[self.linkedList insert:@1];
-	XCTAssertEqual([self.linkedList count], 1, @"LinkedList count should be 1 after inserting one object.");
-	
 	[self.linkedList insert:@2];
-	XCTAssertEqual([self.linkedList count], 2, @"LinkedList count should be 2 after inserting another object.");
+	XCTAssertEqual(self.linkedList.count, 2, @"Count should reflect inserted objects.");
+	XCTAssertEqualObjects(self.linkedList.head, @2, @"Insert should place objects at the head.");
 }
 
-- (void)testAdd {
+- (void)testInsertWithNil {
+	[self.linkedList insert:nil];
+	XCTAssertEqual(self.linkedList.count, 0, @"Inserting nil should not affect count.");
+}
+
+- (void)testAddWithValidObjects {
 	[self.linkedList add:@1];
-	XCTAssertEqual([self.linkedList count], 1, @"LinkedList count should be 1 after adding one object.");
-	
 	[self.linkedList add:@2];
-	XCTAssertEqual([self.linkedList count], 2, @"LinkedList count should be 2 after adding another object.");
+	XCTAssertEqual(self.linkedList.count, 2, @"Count should reflect added objects.");
+	XCTAssertEqualObjects(self.linkedList.head, @1, @"Add should maintain insertion order at head.");
+}
+
+- (void)testAddWithNil {
+	[self.linkedList add:nil];
+	XCTAssertEqual(self.linkedList.count, 0, @"Adding nil should not affect count.");
 }
 
 #pragma mark - Element Access Tests
 
-- (void)testHead {
-	[self.linkedList add:@1];
-	[self.linkedList add:@2];
-	XCTAssertEqualObjects([self.linkedList head], @1, @"Head should return the first object added.");
+- (void)testHeadForEmptyList {
+	XCTAssertNil(self.linkedList.head, @"Head should be nil for an empty list.");
 }
 
 - (void)testGetTopAndBottom {
@@ -65,8 +72,8 @@
 	[self.linkedList add:@2];
 	[self.linkedList add:@3];
 	
-	XCTAssertEqualObjects([self.linkedList getTop], @1, @"getTop should return the first object added.");
-	XCTAssertEqualObjects([self.linkedList getBottom], @3, @"getBottom should return the last object added.");
+	XCTAssertEqualObjects([self.linkedList getTop], @1, @"getTop should return the first object.");
+	XCTAssertEqualObjects([self.linkedList getBottom], @3, @"getBottom should return the last object.");
 }
 
 - (void)testObjectAtIndex {
@@ -74,8 +81,13 @@
 	[self.linkedList add:@2];
 	[self.linkedList add:@3];
 	
-	XCTAssertEqualObjects([self.linkedList objectAtIndex:0], @1, @"Object at index 0 should be the first added object.");
-	XCTAssertEqualObjects([self.linkedList objectAtIndex:2], @3, @"Object at index 2 should be the last added object.");
+	// Valid indices
+	XCTAssertEqualObjects([self.linkedList objectAtIndex:0], @1, @"Index 0 should return first object.");
+	XCTAssertEqualObjects([self.linkedList objectAtIndex:2], @3, @"Index 2 should return last object.");
+	
+	// Out-of-bounds indices
+	XCTAssertNil([self.linkedList objectAtIndex:3], @"Out-of-bounds index should return nil.");
+	XCTAssertNil([self.linkedList objectAtIndex:-1], @"Negative index should return nil.");
 }
 
 #pragma mark - Navigation Tests
@@ -85,11 +97,12 @@
 	[self.linkedList add:@2];
 	[self.linkedList add:@3];
 	
-	XCTAssertTrue([self.linkedList isNext], @"isNext should return true when there is a next element.");
-	XCTAssertEqualObjects([self.linkedList getNext], @2, @"getNext should return the second element.");
+	XCTAssertTrue([self.linkedList isNext], @"isNext should be true initially.");
+	XCTAssertEqualObjects([self.linkedList getNext], @2, @"getNext should return the second object.");
 	
-	[self.linkedList getNext]; // Move to the next node.
-	XCTAssertFalse([self.linkedList isNext], @"isNext should return false when there is no next element.");
+	[self.linkedList getNext]; // Move to third object
+	XCTAssertFalse([self.linkedList isNext], @"isNext should be false at the end.");
+	XCTAssertNil([self.linkedList getNext], @"getNext at end should return nil.");
 }
 
 - (void)testGetPreviousAndIsPrevious {
@@ -97,111 +110,95 @@
 	[self.linkedList add:@2];
 	[self.linkedList add:@3];
 	
-	[self.linkedList getNext]; // Move to the second node.
-	XCTAssertTrue([self.linkedList isPrevious], @"isPrevious should return true when there is a previous element.");
-	XCTAssertEqualObjects([self.linkedList getPrevious], @1, @"getPrevious should return the first element.");
+	[self.linkedList getNext]; // Move to second object
+	[self.linkedList getNext]; // Move to third object
 	
-	XCTAssertFalse([self.linkedList isPrevious], @"isPrevious should return false when there is no previous element.");
+	XCTAssertTrue([self.linkedList isPrevious], @"isPrevious should be true.");
+	XCTAssertEqualObjects([self.linkedList getPrevious], @2, @"getPrevious should return the second object.");
+	XCTAssertEqualObjects([self.linkedList getPrevious], @1, @"getPrevious should return the first object.");
+	XCTAssertFalse([self.linkedList isPrevious], @"isPrevious should be false at the start.");
+	XCTAssertNil([self.linkedList getPrevious], @"getPrevious at start should return nil.");
 }
 
 #pragma mark - Reverse Tests
 
-- (void)testReverse {
-	[self.linkedList add:@1];
-	[self.linkedList add:@2];
-	[self.linkedList add:@3];
-	
-	[self.linkedList reverse];
-	XCTAssertEqualObjects([self.linkedList head], @3, @"After reversal, head should be the last added object.");
-	XCTAssertEqualObjects([self.linkedList getTop], @3, @"After reversal, getTop should return the last added object.");
-	XCTAssertEqualObjects([self.linkedList getBottom], @1, @"After reversal, getBottom should return the first added object.");
-}
-
 - (void)testReverseEmptyList {
 	[self.linkedList reverse];
-	XCTAssertNil([self.linkedList head], @"Reversing an empty list should not cause any changes.");
-	XCTAssertNil([self.linkedList getTop], @"Reversing an empty list should not cause any changes.");
-	XCTAssertNil([self.linkedList getBottom], @"Reversing an empty list should not cause any changes.");
+	XCTAssertEqual(self.linkedList.count, 0, @"Reversing empty list should not change count.");
+	XCTAssertNil([self.linkedList head], @"Head should remain nil.");
 }
 
 - (void)testReverseSingleItemList {
 	[self.linkedList add:@1];
 	[self.linkedList reverse];
-	XCTAssertEqualObjects([self.linkedList head], @1, @"Reversing a single-item list should keep the head the same.");
-	XCTAssertEqualObjects([self.linkedList getTop], @1, @"Reversing a single-item list should keep getTop the same.");
-	XCTAssertEqualObjects([self.linkedList getBottom], @1, @"Reversing a single-item list should keep getBottom the same.");
+	XCTAssertEqualObjects([self.linkedList toArray], @[@1], @"Reversing single item should have no effect.");
 }
 
-- (void)testReverseTwoItemList {
-	[self.linkedList add:@1];
-	[self.linkedList add:@2];
-	[self.linkedList reverse];
-	XCTAssertEqualObjects([self.linkedList head], @2, @"After reversal, head should be the last added object.");
-	XCTAssertEqualObjects([self.linkedList getTop], @2, @"After reversal, getTop should return the last added object.");
-	XCTAssertEqualObjects([self.linkedList getBottom], @1, @"After reversal, getBottom should return the first added object.");
-}
-
-- (void)testReverseMultipleItemList {
+- (void)testReverseMultipleItems {
 	[self.linkedList add:@1];
 	[self.linkedList add:@2];
 	[self.linkedList add:@3];
 	[self.linkedList reverse];
-	XCTAssertEqualObjects([self.linkedList head], @3, @"After reversal, head should be the last added object.");
-	XCTAssertEqualObjects([self.linkedList getTop], @3, @"After reversal, getTop should return the last added object.");
-	XCTAssertEqualObjects([self.linkedList getBottom], @1, @"After reversal, getBottom should return the first added object.");
+	
+	NSArray *expected = @[@3, @2, @1];
+	XCTAssertEqualObjects([self.linkedList toArray], expected, @"Reversed list should match expected order.");
+	XCTAssertEqualObjects([self.linkedList getTop], @3, @"getTop should return new head after reversal.");
+	XCTAssertEqualObjects([self.linkedList getBottom], @1, @"getBottom should return new tail after reversal.");
 }
 
 #pragma mark - Conversion Tests
 
-- (void)testToArray {
+- (void)testToArrayEmptyList {
+	XCTAssertEqualObjects([self.linkedList toArray], @[], @"Empty list should return empty array.");
+}
+
+- (void)testToArrayWithItems {
 	[self.linkedList add:@1];
 	[self.linkedList add:@2];
 	[self.linkedList add:@3];
-	
-	NSArray *array = [self.linkedList toArray];
-	NSArray *expected = @[@1, @2, @3];
-	XCTAssertEqualObjects(array, expected, @"toArray should return an array containing all the elements in insertion order.");
+	XCTAssertEqualObjects([self.linkedList toArray], (@[@1, @2, @3]), @"toArray should preserve insertion order.");
 }
 
-#pragma mark - Test Fast Enumeration
+#pragma mark - Fast Enumeration Tests
 
 - (void)testFastEnumerationEmptyList {
 	NSUInteger count = 0;
-	for (id object in self.linkedList) {
-		count++;
-	}
-	XCTAssertEqual(count, 0, @"Fast enumeration on an empty list should iterate zero times.");
+	for (__unused id obj in self.linkedList) { count++; }
+	XCTAssertEqual(count, 0, @"No iterations should occur for empty list.");
 }
 
-- (void)testFastEnumerationFewItems {
-	[self.linkedList add:@1];
-	[self.linkedList add:@2];
-	[self.linkedList add:@3];
-	
-	NSArray *expected = @[@1, @2, @3];
-	NSMutableArray *result = [NSMutableArray array];
-	
-	for (id object in self.linkedList) {
-		[result addObject:object];
-	}
-	
-	XCTAssertEqualObjects(result, expected, @"Fast enumeration should iterate over all items in order.");
-}
-
-- (void)testFastEnumerationManyItems {
+- (void)testFastEnumerationOrderAndCompleteness {
+	// Test with 34 items to exceed typical fast enumeration buffer size (16/32)
 	const NSUInteger itemCount = 34;
-	NSMutableArray *expected = [NSMutableArray arrayWithCapacity:itemCount];
+	NSMutableArray *expected = [NSMutableArray array];
 	for (NSUInteger i = 1; i <= itemCount; i++) {
 		[expected addObject:@(i)];
 		[self.linkedList add:@(i)];
 	}
 	
-	NSMutableArray *result = [NSMutableArray array];
-	for (id object in self.linkedList) {
-		[result addObject:object];
+	NSMutableArray *enumerated = [NSMutableArray array];
+	for (id obj in self.linkedList) {
+		[enumerated addObject:obj];
 	}
 	
-	XCTAssertEqualObjects(result, expected, @"Fast enumeration should iterate over all 34 items in order.");
+	XCTAssertEqualObjects(enumerated, expected, @"Enumeration should capture all items in order.");
+}
+
+- (void)testFastEnumerationMutation {
+	[self.linkedList add:@1];
+	[self.linkedList add:@2];
+
+	// Define the mutation block
+	void (^mutationBlock)(void) = ^{
+		NSMutableArray *collected = [NSMutableArray array];
+		for (id obj in self.linkedList) {
+			[collected addObject:obj];
+			[self.linkedList add:@99]; // Modify during enumeration
+		}
+	};
+
+	// Test for exception
+	XCTAssertThrows(mutationBlock(), @"Mutating during enumeration should throw exception.");
 }
 
 @end

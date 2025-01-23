@@ -153,9 +153,11 @@
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
 								  objects:(id __unsafe_unretained [])stackbuf
 									count:(NSUInteger)len {
-	if (state->state >= _count) {
+	if (state->state >= self.count) {
 		return 0;
 	}
+
+	state->mutationsPtr = &_count;
 
 	NSUInteger batchCount = 0;
 	MTLinkedListNode *node = (state->state == 0) ? _headNode : (__bridge MTLinkedListNode *)(void *)state->extra[0];
@@ -167,7 +169,6 @@
 
 	state->state += batchCount;
 	state->itemsPtr = stackbuf;
-	state->mutationsPtr = &state->extra[1];
 	state->extra[0] = (unsigned long)(__bridge void *)node;
 
 	return batchCount;
