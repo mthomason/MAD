@@ -77,36 +77,38 @@
 								  objects:(id __unsafe_unretained [])stackbuf
 									count:(NSUInteger)len {
 	@synchronized(self) {
+		MTLinkedListNode *currentNode = nil;
+		
+		// First call: Initialize mutationsPtr and start from head
 		if (state->state == 0) {
-			state->mutationsPtr = &state->extra[0];
-			state->state = 1;
-			MTLinkedListNode *currentNode = self.head;
-			NSUInteger index = 0;
-
-			while (currentNode && index < len) {
-				stackbuf[index] = currentNode.data;
-				currentNode = currentNode.next;
-				index++;
-			}
-
-			state->itemsPtr = stackbuf;
-			return index;
+			state->mutationsPtr = &_counter; // Track mutations via queue's counter
+			state->state = 1; // Signal that enumeration has started
+			currentNode = self.head;
 		} else {
-			return 0; // No more items to enumerate.
+			// Subsequent calls: Resume from the last saved node
+			currentNode = (__bridge MTLinkedListNode *)(void *)state->extra[0];
 		}
+		
+		NSUInteger index = 0;
+		// Fill the buffer with up to 'len' items from the current node
+		while (currentNode && index < len) {
+			stackbuf[index] = currentNode.data;
+			currentNode = currentNode.next;
+			index++;
+		}
+		
+		// Save the current node for the next iteration (even if nil)
+		state->extra[0] = (unsigned long)(__bridge void *)currentNode;
+		state->itemsPtr = stackbuf;
+		
+		return index; // Return the number of items added to the buffer
 	}
 }
 
-- (NSString *)toStringHumanReadable {
-	return nil;
-}
+- (NSString *)toStringHumanReadable { return nil; }
 
-- (NSString *)toString {
-	return nil;
-}
+- (NSString *)toString { return nil; }
 
-- (NSString *)toStringDebug {
-	return nil;
-}
+- (NSString *)toStringDebug { return nil; }
 
 @end
