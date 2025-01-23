@@ -68,15 +68,50 @@
 }
 
 - (id)pop {
-	NSAssert(self.counter > 0, @"Underflow error. Nothing to pop.");
-	id result = self.top.data;
-	self.top = self.top.next; // Move the top pointer to the next node
-	self.counter--;
+	id result = nil;
+	if (!self.isEmpty) {
+		result = self.top.data;
+		self.top = self.top.next;
+		self.counter--;
+	}
 	return result;
 }
 
 - (BOOL)isEmpty {
 	return self.counter == 0;
+}
+
+// MTStack.m
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+								 objects:(id __unsafe_unretained [])stackbuf
+								   count:(NSUInteger)len {
+	@synchronized(self) {
+		MTStackNode *currentNode = nil;
+		
+		// First call: Initialize mutationsPtr and start from top
+		if (state->state == 0) {
+			state->mutationsPtr = &_counter; // Track mutations via the stack's counter
+			state->state = 1; // Signal enumeration has started
+			currentNode = self.top;
+		} else {
+			// Subsequent calls: Resume from the last saved node
+			currentNode = (__bridge MTStackNode *)(void *)state->extra[0];
+		}
+		
+		NSUInteger index = 0;
+		// Fill the buffer with up to 'len' items from the current node
+		while (currentNode && index < len) {
+			stackbuf[index] = currentNode.data;
+			currentNode = currentNode.next;
+			index++;
+		}
+		
+		// Save the current node for the next iteration (even if nil)
+		state->extra[0] = (unsigned long)(__bridge void *)currentNode;
+		state->itemsPtr = stackbuf;
+		
+		return index; // Number of items added to the buffer
+	}
 }
 
 - (NSString *)toStringHumanReadable {
