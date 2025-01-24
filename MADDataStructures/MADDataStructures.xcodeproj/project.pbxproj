@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C0BC9682D438787003BE83E /* MTGraphTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0BC9672D438787003BE83E /* MTGraphTests.m */; };
 		4C0FA9F41C94F462005E8B33 /* MADIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FA9F21C94F462005E8B33 /* MADIndex.m */; };
 		4C0FA9F51C94F462005E8B33 /* MADIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0FA9F31C94F462005E8B33 /* MADIndex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2C7B451BA929EF00C9CC5E /* MADDataStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -66,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C0BC9672D438787003BE83E /* MTGraphTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTGraphTests.m; sourceTree = "<group>"; };
 		4C0FA9F21C94F462005E8B33 /* MADIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADIndex.m; path = MADDataStructures/MADIndex.m; sourceTree = "<group>"; };
 		4C0FA9F31C94F462005E8B33 /* MADIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADIndex.h; path = MADDataStructures/MADIndex.h; sourceTree = "<group>"; };
 		4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +176,7 @@
 				4CA14C5D2D00C4FE009AE442 /* MTLinkedListTests.m */,
 				4C8984C62CFEFA17002AC52A /* MTQueueTests.m */,
 				4C8984C42CFEA802002AC52A /* MTStackTests.m */,
+				4C0BC9672D438787003BE83E /* MTGraphTests.m */,
 				4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */,
 				4C2C7B521BA929EF00C9CC5E /* Info.plist */,
 			);
@@ -393,6 +396,7 @@
 				4CA14C5E2D00C4FE009AE442 /* MTLinkedListTests.m in Sources */,
 				4C8984C12CFEA51F002AC52A /* MADMapStringsTests.m in Sources */,
 				4C2C7B511BA929EF00C9CC5E /* MADDataStructuresTests.m in Sources */,
+				4C0BC9682D438787003BE83E /* MTGraphTests.m in Sources */,
 				4C8984C32CFEA5F0002AC52A /* MADVectorBoolTests.m in Sources */,
 				4C8984C52CFEA802002AC52A /* MTStackTests.m in Sources */,
 			);

@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 12/10/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_MTGraph_MTObject_h
@@ -37,8 +37,12 @@
 
 	- (MTLinkedList *)depthFirstSearch:(MTVertex *)root;
 
+	- (NSArray<MTVertex *> *)standardTopologicalSortWithError:(NSError * __autoreleasing *)error;
+
+	// This version is optimized for use inside MADDesigner, but may not return expected results.
 	- (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError
 						isDirectedAcyclicGraph:(BOOL *)isDirectedAcyclicGraph;
+
 
 @end
 

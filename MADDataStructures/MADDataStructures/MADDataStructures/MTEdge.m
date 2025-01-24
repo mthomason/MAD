@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 12/10/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -18,12 +18,11 @@
 
 @interface MTEdge ()
 
-    @property (nonatomic, weak, readwrite) MTVertex *origin;
-    @property (nonatomic, weak, readwrite) MTVertex *destination;
+	@property (nonatomic, weak, readwrite) MTVertex *origin;
+	@property (nonatomic, weak, readwrite) MTVertex *destination;
 
-    @property (nonatomic, strong) NSNumber *weight;
-    @property (nonatomic, readwrite, assign, getter=isDirected) BOOL directed;
-    @property (nonatomic, strong) NSNumber *uniqueIdForStructure;
+	@property (nonatomic, readwrite, assign, getter=isDirected) BOOL directed;
+	@property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 @end
 

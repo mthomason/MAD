@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 12/10/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_DataStructures_MTEdge_h
@@ -38,6 +38,7 @@ typedef NS_ENUM(short, MTEdgeType) {
 
 	@property (readonly, nonatomic, assign, getter=isDirected) BOOL directed;
 	@property (nonatomic, assign) MTEdgeType dfsEdgeType;
+	@property (nonatomic, strong) NSNumber *weight;
 
 	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
 					  andDestination:(MTVertex *)vertex2;

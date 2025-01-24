@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 12/10/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -86,55 +86,48 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 // MARK: Add new edge to the graph.
 - (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin
 				  destination:(MTVertex *)destination
-					   object:(id <NSCopying>)object
+					   object:(id<NSCopying>)object
 					andWeight:(NSNumber *)weight {
 	
-	BOOL result = NO;
+	// 1. Validate vertices exist in graph
+	if (![self.vertices containsObject:origin] || ![self.vertices containsObject:destination]) {
+		return nil;
+	}
 	
-	// MARK: Create new edge.
-	NSNumber *uniqueId = [[NSNumber alloc] initWithUnsignedInteger:_idUniqueEdges];
-	MTEdge *edge = [[MTEdge alloc] initWithUniqueID: uniqueId
-											 origin: origin
-										destination: destination
-											 object: object
-										  andWeight: weight];
-	_idUniqueEdges++;
-
-	// MARK: Make sure edge does not exist.
-	BOOL edgeExist = NO;
-	NSSet *allEdges = [self allEdges];
-	MTEdge *existingEdge;
-	for (existingEdge in allEdges) {
-		if ([edge isEqualTo:existingEdge]) {
-			edgeExist = YES;
-			break;
+	// 2. Check for duplicate edges with nil-safe comparison
+	for (MTEdge *existingEdge in self.allEdges) {
+		BOOL sameOrigin = [existingEdge.origin isEqual:origin];
+		BOOL sameDest = [existingEdge.destination isEqual:destination];
+		BOOL sameObject = (existingEdge.object == object) || [existingEdge.object isEqual:object];
+		BOOL sameWeight = (existingEdge.weight == weight) || [existingEdge.weight isEqual:weight];
+		
+		if (sameOrigin && sameDest && sameObject && sameWeight) {
+			return nil; // Duplicate found
 		}
 	}
 	
-	// MARK: Insert edge.
-	if (!edgeExist) {
-		NSArray *vertices = self.vertices;
-		MTVertex *vertex, *edgeOrigin;
-		for (vertex in vertices) {
-			edgeOrigin = edge.origin;
-			if ([vertex isEqualTo: edgeOrigin]) {
-				[vertex addEdge:edge];
-				result = YES;
-				break;
-			}
-		}
-	}
-	return result ? edge : nil;
+	// 3. Create and add new edge
+	MTEdge *edge = [[MTEdge alloc] initWithUniqueID:@(self.idUniqueEdges++)
+											 origin:origin
+										destination:destination
+											 object:[object copyWithZone:nil]
+										  andWeight:weight];
+	[origin addEdge:edge];
+	return edge;
 }
 
 - (void)removeVertex:(MTVertex *)vertex {
 	[self.vertices removeObject: vertex];
 }
 
-- (void)removeEdge:(MTEdge *)edge {
+- (void)removeEdgeOld:(MTEdge *)edge {
 	for (MTVertex *vertex in self.vertices) {
 		[vertex removeEdge:edge];
 	}
+}
+
+- (void)removeEdge:(MTEdge *)edge {
+	[edge.origin removeEdge:edge];
 }
 
 - (NSUInteger)numberOfVertices {
@@ -306,6 +299,57 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 	
 	[resultVertices reverse];
 	return resultVertices;
+}
+
+- (NSArray<MTVertex *> *)standardTopologicalSortWithError:(NSError * __autoreleasing *)error {
+	NSMutableArray<MTVertex *> *sorted = [NSMutableArray array];
+	NSMutableSet<MTVertex *> *visited = [NSMutableSet set];
+	NSMutableSet<MTVertex *> *onStack = [NSMutableSet set];
+	__block BOOL hasCycle = NO;
+	
+	for (MTVertex *vertex in self.vertices) {
+		if (![visited containsObject:vertex]) {
+			[self detectCycleWithVertex:vertex visited:visited onStack:onStack sorted:sorted hasCycle:&hasCycle];
+			if (hasCycle) break;
+		}
+	}
+	
+	if (hasCycle) {
+		if (error) {
+			NSString *desc = NSLocalizedString(TextCycleEncountered, @"Cycle detected error");
+			*error = [NSError errorWithDomain:@"MTGraphErrorDomain"
+										 code:100
+									 userInfo:@{NSLocalizedDescriptionKey: desc}];
+		}
+		return nil;
+	}
+	
+	return [[sorted reverseObjectEnumerator] allObjects];
+}
+
+- (void)detectCycleWithVertex:(MTVertex *)vertex
+					 visited:(NSMutableSet<MTVertex *> *)visited
+					 onStack:(NSMutableSet<MTVertex *> *)onStack
+					 sorted:(NSMutableArray<MTVertex *> *)sorted
+				  hasCycle:(BOOL *)hasCycle {
+	if (*hasCycle) return;
+	
+	[visited addObject:vertex];
+	[onStack addObject:vertex];
+	
+	for (MTEdge *edge in vertex.incidentEdges) {
+		MTVertex *neighbor = edge.destination;
+		if ([onStack containsObject:neighbor]) {
+			*hasCycle = YES;
+			return;
+		}
+		if (![visited containsObject:neighbor]) {
+			[self detectCycleWithVertex:neighbor visited:visited onStack:onStack sorted:sorted hasCycle:hasCycle];
+		}
+	}
+	
+	[onStack removeObject:vertex];
+	[sorted addObject:vertex];
 }
 
 - (void)depthFirstSearchVisitWithCurrentVertex:(MTVertex *)vertex
