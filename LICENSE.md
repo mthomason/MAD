@@ -1,3 +1,5 @@
 # License
 
-Copyright Michael Thomason 2024.  All rights reserved.
+_Unless otherwise noted, all code is_
+
+Copyright © Michael Thomason 2025.  All rights reserved.
