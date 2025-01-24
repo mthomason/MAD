@@ -234,26 +234,28 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 }
 
 - (MTLinkedList *)depthFirstSearch:(MTVertex *)root {
+	NSMutableArray<MTVertex *> *result = [NSMutableArray array];
+	NSMutableSet<MTVertex *> *visited = [NSMutableSet set];
 	
-	NSNumber *counter = [[NSNumber alloc] initWithInteger:0];
+	[self dfsHelper:root visited:visited result:result];
 	
-	for (MTVertex *vertex in self.vertices) {
-		vertex.properties.algorithmColor = MTColorWhite;
+	MTLinkedList *list = [[MTLinkedList alloc] init];
+	for (MTVertex *v in [result reverseObjectEnumerator]) {
+		[list add:v];
 	}
+	return list;
+}
+
+- (void)dfsHelper:(MTVertex *)vertex
+		  visited:(NSMutableSet<MTVertex *> *)visited
+		   result:(NSMutableArray<MTVertex *> *)result {
+	if (!vertex || [visited containsObject:vertex]) return;
 	
-	MTLinkedList *resultEdges = [[MTLinkedList alloc] init];
-	MTLinkedList *resultVertices = [[MTLinkedList alloc] init];
-	
-	[self depthFirstSearchVisitWithCurrentVertex:root counter:&counter
-									 listOfEdges:&resultEdges listOfVertices:&resultVertices];
-	for (MTVertex *vertex in self.vertices) {
-		if (vertex.properties.algorithmColor == MTColorWhite) {
-			[self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter
-											 listOfEdges:&resultEdges
-										  listOfVertices:&resultVertices];
-		}
+	[visited addObject:vertex];
+	for (MTEdge *edge in vertex.incidentEdges) {
+		[self dfsHelper:edge.destination visited:visited result:result];
 	}
-	return resultEdges;
+	[result addObject:vertex];
 }
 
 - (MTLinkedList *)topologicalSortWithError:(NSError * __autoreleasing *)anError
