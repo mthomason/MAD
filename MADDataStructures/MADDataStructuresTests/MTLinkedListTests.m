@@ -40,8 +40,9 @@
 - (void)testInsertWithValidObjects {
 	[self.linkedList insert:@1];
 	[self.linkedList insert:@2];
-	XCTAssertEqual(self.linkedList.count, 2, @"Count should reflect inserted objects.");
-	XCTAssertEqualObjects(self.linkedList.head, @2, @"Insert should place objects at the head.");
+	[self.linkedList insert:@3];
+	XCTAssertEqual(self.linkedList.count, 3, @"Count should reflect inserted objects.");
+	XCTAssertEqualObjects(self.linkedList.head, @3, @"Insert should place objects at the head.");
 }
 
 - (void)testInsertWithNil {

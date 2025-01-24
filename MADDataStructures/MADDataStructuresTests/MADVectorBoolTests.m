@@ -92,4 +92,54 @@
 	}
 }
 
+- (void)testEmptyVector {
+	MADVectorBool *vector = [[MADVectorBool alloc] init];
+	XCTAssertEqual([vector count], 0, @"Initial count should be 0");
+	
+	__block NSUInteger callCount = 0;
+	[vector enumerateBools:^(NSUInteger idx, BOOL valid, BOOL *stop) {
+		callCount++;
+	}];
+	XCTAssertEqual(callCount, 0, @"No elements should enumerate");
+	
+	NSString *debugString = [vector debugQuickLookObject];
+	XCTAssertEqualObjects(debugString, @"", @"Debug string for empty vector should be empty");
+}
+
+- (void)testDebugQuickLook {
+	MADVectorBool *vector = [[MADVectorBool alloc] init];
+	[vector addTrue];
+	[vector addFalse];
+	[vector addTrue];
+	
+	NSString *expected = @"YES\nNO\nYES\n";
+	NSString *debugString = [vector debugQuickLookObject];
+	XCTAssertEqualObjects(debugString, expected, @"Debug string should match elements");
+}
+
+- (void)testPushNonStandardBOOL {
+	MADVectorBool *vector = [[MADVectorBool alloc] init];
+	BOOL nonStandardValue = 2; // Non-zero, treated as YES
+	[vector push:nonStandardValue];
+	
+	XCTAssertEqual([vector count], 1, @"Count should be 1");
+	[vector enumerateBools:^(NSUInteger idx, BOOL valid, BOOL *stop) {
+		XCTAssertEqual(valid, YES, @"Non-zero BOOL should be treated as YES");
+	}];
+}
+
+- (void)testSingleElement {
+	MADVectorBool *vector = [[MADVectorBool alloc] init];
+	[vector addFalse];
+	
+	XCTAssertEqual([vector count], 1, @"Count should be 1");
+	
+	__block BOOL receivedValue = NO;
+	[vector enumerateBools:^(NSUInteger idx, BOOL valid, BOOL *stop) {
+		receivedValue = valid;
+	}];
+	XCTAssertEqual(receivedValue, NO, @"Single element should be NO");
+}
+
+
 @end

@@ -9,6 +9,10 @@
 #import "MADVectorBool.h"
 #import <Foundation/NSString.h>
 
+#if __has_feature(objc_arc)
+#error This file must be compiled without ARC. Use the -fno-objc-arc compiler flag.
+#endif
+
 #include <vector>
 #include <iostream>
 #include <iterator>
@@ -25,6 +29,7 @@ struct MADVectorBoolImpl {
 - (void)dealloc {
 	impl->_container.clear();
 	delete impl;
+	[super dealloc];
 }
 
 - (instancetype)init {

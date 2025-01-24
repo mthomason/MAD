@@ -89,4 +89,90 @@
 	}
 }
 
+// MARK: - Factory Method Tests
+- (void)testFactoryMethodCreatesCorrectSubclass {
+	MADMapStrings *shortMap = [[MADMapStrings alloc] initWithType:MADMapDataTypeShort];
+	XCTAssertTrue([shortMap isKindOfClass:[MADMapStringsShort class]]);
+	
+	MADMapStrings *intMap = [[MADMapStrings alloc] initWithType:MADMapDataTypeInteger];
+	XCTAssertTrue([intMap isKindOfClass:[MADMapStringsInteger class]]);
+	
+	MADMapStrings *uintMap = [[MADMapStrings alloc] initWithType:MADMapDataTypeUnsignedInteger];
+	XCTAssertTrue([uintMap isKindOfClass:[MADMapStringsUnsignedInteger class]]);
+}
+
+// MARK: - Integer Map Tests
+- (void)testIntegerMap {
+	MADMapStringsInteger *map = [[MADMapStringsInteger alloc] init];
+	
+	[map setObject:@"Value1" toKey:1];
+	[map setObject:@"Value2" toKey:2];
+	
+	XCTAssertEqual([map count], 2);
+	XCTAssertEqualObjects([map objectAtIndex:1], @"Value1");
+	XCTAssertEqualObjects([map objectAtIndex:2], @"Value2");
+	
+	[map setObject:nil toKey:1];
+	XCTAssertEqual([map count], 1);
+	XCTAssertNil([map objectAtIndex:1]);
+	
+	XCTAssertNil([map objectAtIndex:999]);
+}
+
+// MARK: - Short Map Tests
+- (void)testShortMap {
+	MADMapStringsShort *map = [[MADMapStringsShort alloc] init];
+	short key1 = 1;
+	short key2 = 2;
+	
+	[map setObject:@"Value1" toKey:key1];
+	[map setObject:@"Value2" toKey:key2];
+	
+	XCTAssertEqual([map count], 2);
+	XCTAssertEqualObjects([map objectAtIndex:key1], @"Value1");
+	XCTAssertEqualObjects([map objectAtIndex:key2], @"Value2");
+	
+	[map setObject:nil toKey:key1];
+	XCTAssertEqual([map count], 1);
+}
+
+// MARK: - Unsigned Integer Map Tests
+- (void)testUnsignedIntegerMap {
+	MADMapStringsUnsignedInteger *map = [[MADMapStringsUnsignedInteger alloc] init];
+	NSUInteger key1 = 1;
+	NSUInteger key2 = 2;
+	
+	[map setObject:@"Value1" toKey:key1];
+	[map setObject:@"Value2" toKey:key2];
+	
+	XCTAssertEqual([map count], 2);
+	XCTAssertEqualObjects([map objectAtIndex:key1], @"Value1");
+	XCTAssertEqualObjects([map objectAtIndex:key2], @"Value2");
+	
+	[map setObject:nil toKey:key1];
+	XCTAssertEqual([map count], 1);
+}
+
+// MARK: - Edge Cases
+- (void)testStringWithEmbeddedNull {
+	MADMapStringsInteger *map = [[MADMapStringsInteger alloc] init];
+	const char bytes[] = "Hello\0World";
+	NSString *testString = [[NSString alloc] initWithBytes:bytes length:11 encoding:NSUTF8StringEncoding];
+	[map setObject:testString toKey:1];
+	XCTAssertEqualObjects([map objectAtIndex:1], testString);
+}
+
+- (void)testEmptyString {
+	MADMapStringsShort *map = [[MADMapStringsShort alloc] init];
+	[map setObject:@"" toKey:1];
+	XCTAssertEqualObjects([map objectAtIndex:1], @"");
+}
+
+- (void)testLargeKey {
+	MADMapStringsUnsignedInteger *map = [[MADMapStringsUnsignedInteger alloc] init];
+	NSUInteger largeKey = NSUIntegerMax;
+	[map setObject:@"Large" toKey:largeKey];
+	XCTAssertEqualObjects([map objectAtIndex:largeKey], @"Large");
+}
+
 @end

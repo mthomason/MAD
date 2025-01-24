@@ -9,6 +9,7 @@
 #import "MADMapStrings.h"
 
 #import <Foundation/NSString.h>
+#import <Foundation/NSException.h>
 
 #include <cstddef>
 #include <string>
@@ -39,11 +40,11 @@ class MADMad {
 		}
 	}
 	NSString *objectAtIndex(Type index) {
-		std::map<NSInteger, std::string>::const_iterator found = _container.find(index);
+		typename std::map<Type, std::string>::const_iterator found = _container.find(index);
 		if (found == _container.end()) return nil;
-		
-		const char *c_str = found->second.c_str();
-		NSString *result = [[NSString alloc] initWithCString:c_str encoding:NSUTF8StringEncoding];
+		NSString *result = [[NSString alloc] initWithBytes:found->second.data()
+													length:found->second.size()
+												  encoding:NSUTF8StringEncoding];
 		return result;
 	}
 };
@@ -65,6 +66,8 @@ class MADMad {
 			break;
 			
 		default:
+			NSAssert(NO, @"Invalid MADMapDataType");
+			map = nil;
 			break;
 	}
 	return map;
@@ -110,7 +113,6 @@ class MADMad {
 }
 
 - (void)dealloc {
-	impl->_container.clear();
 	delete impl;
 }
 
@@ -144,6 +146,10 @@ class MADMad {
 	}
 }
 
+- (unsigned long)count {
+	return impl->_container.size();
+}
+
 @end
 
 @implementation MADMapStringsUnsignedInteger {
@@ -151,7 +157,6 @@ class MADMad {
 }
 
 - (void)dealloc {
-	impl->_container.clear();
 	delete impl;
 }
 
