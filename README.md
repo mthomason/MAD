@@ -1,3 +1,3 @@
 # MAD Designer
 
-Copyright Michael Thomason 2024.  All rights reserved.
+Copyright © Michael Thomason 2025.  All rights reserved.

@@ -6,8 +6,13 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-//This code containes one function that will log all the names of the fonts.
-//		It is used for design and debugging.
+/*
+ 
+This code containes one function that will log all the names of the fonts.
+	It is used for design and debugging.  Sometimes you need a list of
+	fonts available on the device.
+
+*/
 
 #ifndef MAD_Designer_UIFont_Helpers_h
 #define MAD_Designer_UIFont_Helpers_h
@@ -16,7 +21,7 @@
 
 @interface UIFont (Helpers)
 
-//+ (void)LogFonts;
++ (void)LogFonts;
 
 @end
 

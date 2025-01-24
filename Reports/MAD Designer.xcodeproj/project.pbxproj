@@ -176,7 +176,6 @@
 		4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED51BAE5E9000BAE5FC /* MADStoreViewController.m */; };
 		4C401EE71BAE5E9000BAE5FC /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ED71BAE5E9000BAE5FC /* MTLicensingViewController.m */; };
 		4C401EED1BAE61F700BAE5FC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */; };
-		4C401F021BAE64AF00BAE5FC /* UIFont+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F011BAE64AF00BAE5FC /* UIFont+Helpers.m */; };
 		4C401F0C1BAE6DF100BAE5FC /* MADAboutTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F061BAE6DF100BAE5FC /* MADAboutTableView.m */; };
 		4C401F0D1BAE6DF100BAE5FC /* MADAboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401F081BAE6DF100BAE5FC /* MADAboutTableViewController.m */; };
 		4C401F0E1BAE6DF100BAE5FC /* MADAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401F091BAE6DF100BAE5FC /* MADAbout.storyboard */; };
@@ -3914,7 +3913,6 @@
 				4CF304101D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m in Sources */,
 				4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */,
 				4C5C0DBC1C9CED3C00826BC2 /* MADOperationGetCredentials.m in Sources */,
-				4C401F021BAE64AF00BAE5FC /* UIFont+Helpers.m in Sources */,
 				4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */,
 				4CFEE8201BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m in Sources */,
 				4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */,

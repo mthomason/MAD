@@ -43,8 +43,6 @@ const short errUserCancel = 1;
 
 
 - (void)execute {
-    //NSLog(@"%@: %s", NSStringFromClass([self class]), __PRETTY_FUNCTION__);
-    
     if (self.cancelled) return [self finish];
 
     MADCredentialSource source = none;
