@@ -16,12 +16,12 @@
 
 @interface MADOperationRefreshReload : MADGroupOperation
 
-    @property (readonly) BOOL completedSuccessfully;
-    @property (nonatomic, readonly, weak) MADocument *document;
+	@property (readonly) BOOL completedSuccessfully;
+	@property (nonatomic, readonly, weak) MADocument *document;
 
-    - (instancetype)initWithDocument: (MADocument *)document
-                      viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
-                  databaseConnection: (MADDatabaseConnection *)databaseConnection;
+	- (instancetype)initWithDocument: (MADocument *)document
+					  viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
+				  databaseConnection: (MADDatabaseConnection *)databaseConnection;
 
 @end
 
