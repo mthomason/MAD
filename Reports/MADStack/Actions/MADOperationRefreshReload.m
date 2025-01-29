@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/2/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADOperationRefreshReload.h"
@@ -65,7 +65,7 @@
 		_viewController = viewController;
 		_document = document;
 		_completedSuccessfully = NO;
-		_updateQueue = dispatch_queue_create("com.yourapp.updateQueue", DISPATCH_QUEUE_SERIAL);
+		_updateQueue = dispatch_queue_create("com.mad.designer.updateQueue", DISPATCH_QUEUE_SERIAL);
 	}
 	return self;
 }

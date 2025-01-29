@@ -158,7 +158,7 @@
 	switch (indexPath.row) {
 			
 		case 0:
-			cell.label.text = @"MAD Designer is software by Everyday Apps LLC";
+			cell.label.text = @"MAD Designer is software by Michael Thomason";
 			cell.accessoryType = UITableViewCellAccessoryNone;
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 			cell.userInteractionEnabled = NO;

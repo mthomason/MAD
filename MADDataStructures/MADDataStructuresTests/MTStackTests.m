@@ -3,7 +3,7 @@
 //  MADDataStructuresTests
 //
 //  Created by Michael on 12/2/24.
-//  Copyright © 2024 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
