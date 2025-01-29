@@ -14,7 +14,6 @@ static NSString * const MADTextFormattingPage   = @"\nFormatting page %@.";
 static NSString * const MADTextPageXofY         = @"\nPage %1@ of %2@ pages.";
 static NSString * const MADTextNothingToDisplay = @"\nNothing to display.";
 static NSString * const MADTextNoCache          = @"No Cache";
-
 static const CGFloat ToolbarFontPointSize       = 8.0;
 
 @interface MADLabelStatus ()
@@ -23,148 +22,158 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	@property (nonatomic, strong) NSMutableAttributedString *statusMessage2;
 	@property (nonatomic, strong) NSMutableAttributedString *statusMessage3;
 	@property (nonatomic, strong) NSMutableAttributedString *display;
+	@property (nonatomic, strong) NSDictionary *boldAttributes;
+	@property (nonatomic, strong) NSDictionary *lightAttributes;
+	@property (nonatomic, strong) NSDictionary *paragraphAttributes;
 
 @end
 
 @implementation MADLabelStatus
 
-+ (NSDictionary *)attributesStatusLabelCentered {
-	NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
-	paragraphStyleCentered.alignment = NSTextAlignmentLeft;
-	NSDictionary *result;
-	result = [[NSDictionary alloc] initWithObjectsAndKeys: paragraphStyleCentered,
-														   NSParagraphStyleAttributeName, nil];
-	return result;
-}
-
-+ (NSDictionary *)attributesStatusLabelBold {
-	UIColor *textColor = [UIColor whiteColor];
-	UIFont *fontBold = [UIFont boldSystemFontOfSize:ToolbarFontPointSize];
-	NSDictionary *result;
-	result = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
-														  fontBold, NSFontAttributeName, nil];
-	return result;
-}
-
-+ (NSDictionary *)attributesStatusLabelLight {
-	UIColor *textColor = [UIColor whiteColor];
-	UIFont *font = [UIFont systemFontOfSize:ToolbarFontPointSize];
-	NSDictionary *result;
-	result = [[NSDictionary alloc] initWithObjectsAndKeys:textColor, NSForegroundColorAttributeName,
-														  font, NSFontAttributeName, nil];
-	return result;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		self.numberOfLines = 3;
-		self.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-								UIViewAutoresizingFlexibleLeftMargin |
-								UIViewAutoresizingFlexibleRightMargin;
-		
-		NSDictionary *attributes = [MADLabelStatus attributesStatusLabelBold];
-
-		NSMutableAttributedString *statusMessage;
-		statusMessage = [[NSMutableAttributedString alloc] initWithString: @" "
-															   attributes: attributes];
-		self.statusMessage1 = statusMessage;
-
-		attributes = [MADLabelStatus attributesStatusLabelLight];
-		
-		statusMessage = [[NSMutableAttributedString alloc] initWithString: @" "
-															   attributes: attributes];
-		self.statusMessage2 = statusMessage;
-		
-		statusMessage = [[NSMutableAttributedString alloc] initWithString: @" "
-															   attributes: attributes];
-		self.statusMessage3 = statusMessage;
-		
-		attributes = [MADLabelStatus attributesStatusLabelCentered];
-		statusMessage = [[NSMutableAttributedString alloc] initWithString: @" "
-															   attributes: attributes];
-
-		self.display = statusMessage;
-		
+		[self configureInitialState];
 	}
 	return self;
 }
 
-- (void)updatePageStatus:(MADReportPosition)reportPosition {
+- (void)configureInitialState {
+	self.numberOfLines = 3;
+	self.autoresizingMask = UIViewAutoresizingFlexibleWidth |
+							UIViewAutoresizingFlexibleLeftMargin |
+							UIViewAutoresizingFlexibleRightMargin;
 	
+	// Pre-allocate attributes
+	_boldAttributes = @{
+		NSForegroundColorAttributeName: [UIColor whiteColor],
+		NSFontAttributeName: [UIFont boldSystemFontOfSize:ToolbarFontPointSize]
+	};
+	
+	_lightAttributes = @{
+		NSForegroundColorAttributeName: [UIColor whiteColor],
+		NSFontAttributeName: [UIFont systemFontOfSize:ToolbarFontPointSize]
+	};
+	
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	paragraphStyle.alignment = NSTextAlignmentLeft;
+	_paragraphAttributes = @{NSParagraphStyleAttributeName: paragraphStyle};
+	
+	// Initialize with empty strings
+	_statusMessage1 = [[NSMutableAttributedString alloc] initWithString:@" "
+															 attributes:_boldAttributes];
+	_statusMessage2 = [[NSMutableAttributedString alloc] initWithString:@" "
+															 attributes:_lightAttributes];
+	_statusMessage3 = [[NSMutableAttributedString alloc] initWithString:@" "
+															 attributes:_lightAttributes];
+	_display = [[NSMutableAttributedString alloc] initWithString:@" "
+													  attributes:_paragraphAttributes];
+}
+
+- (void)updatePageStatus:(MADReportPosition)reportPosition {
+	// Perform string formatting off main thread
 	NSString *localizedPageOfPages;
 	if (reportPosition.totalPages == 0) {
-		localizedPageOfPages = NSLocalizedString(MADTextNothingToDisplay, MADTextNothingToDisplay);
+		localizedPageOfPages = NSLocalizedString(MADTextNothingToDisplay, nil);
 	} else {
-		NSString *start, *end;
-		NSString *localizedPageOfPagesFormat = NSLocalizedString(MADTextPageXofY,
-																 MADTextPageXofY);
-		NSNumber *page = @(reportPosition.currentPage + 1), *ofPages = @(reportPosition.totalPages);
-		start = [NSNumberFormatter localizedStringFromNumber: page
-												 numberStyle: NSNumberFormatterDecimalStyle];
-		end = [NSNumberFormatter localizedStringFromNumber: ofPages
-											   numberStyle: NSNumberFormatterDecimalStyle];
-		localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, start, end];
+		NSString *start = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.currentPage + 1)
+															numberStyle:NSNumberFormatterDecimalStyle];
+		NSString *end = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.totalPages)
+														  numberStyle:NSNumberFormatterDecimalStyle];
+		localizedPageOfPages = [NSString stringWithFormat:NSLocalizedString(MADTextPageXofY, nil), start, end];
 	}
 	
-	[self updateStatusWithPageNumber:localizedPageOfPages];
+	__weak typeof(self) weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf updateStatusWithPageNumber:localizedPageOfPages];
+	});
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
-	NSString *decimalString;
-	decimalString = [NSNumberFormatter localizedStringFromNumber: numberOfRecs
-													 numberStyle: NSNumberFormatterDecimalStyle];
-	NSString *formatString = NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage);
-	NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-	[self updateStatusWithRecordsRead:readRecords];
+	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs
+																numberStyle:NSNumberFormatterDecimalStyle];
+	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextFormattingPage, nil), decimalString];
+	
+	__weak typeof(self) weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf updateStatusWithRecordsRead:readRecords];
+	});
 }
 
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
-	NSString *decimalString;
-	decimalString = [NSNumberFormatter localizedStringFromNumber: numberOfRecs
-													 numberStyle: NSNumberFormatterDecimalStyle];
-	NSString *formatString = NSLocalizedString(MADTextReadRecords, MADTextReadRecords);
-	NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-	[self updateStatusWithRecordsRead:readRecords];
+	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs
+																numberStyle:NSNumberFormatterDecimalStyle];
+	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextReadRecords, nil), decimalString];
+	
+	__weak typeof(self) weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf updateStatusWithRecordsRead:readRecords];
+	});
 }
 
 - (void)displayNoCache {
-	[self updateStatusWithTime: NSLocalizedString(MADTextNoCache, MADTextNoCache)];
+	__weak typeof(self) weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf updateStatusWithTime:NSLocalizedString(MADTextNoCache, nil)];
+	});
 }
 
 - (void)updateStatusWithTime:(NSString *)message {
-	[self.statusMessage1 replaceCharactersInRange: NSMakeRange(0, self.statusMessage1.length)
-									   withString: message];
-	[self updateDisplay];
+	[self safelyUpdateAttributedString:self.statusMessage1
+						  withNewString:message
+							attributes:self.boldAttributes];
 }
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
-	[self.statusMessage2 replaceCharactersInRange: NSMakeRange(0, self.statusMessage2.length)
-									   withString: message];
-	[self updateDisplay];
+	[self safelyUpdateAttributedString:self.statusMessage2
+						  withNewString:message
+							attributes:self.lightAttributes];
 }
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
-	[self.statusMessage3 replaceCharactersInRange: NSMakeRange(0, self.statusMessage3.length)
-									   withString: message];
+	[self safelyUpdateAttributedString:self.statusMessage3
+						  withNewString:message
+							attributes:self.lightAttributes];
+}
+
+- (void)safelyUpdateAttributedString:(NSMutableAttributedString *)target
+					   withNewString:(NSString *)newString
+						 attributes:(NSDictionary *)attributes {
+	// Ensure we're on main thread for all mutations
+	if (![NSThread isMainThread]) {
+		__weak typeof(self) weakSelf = self;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[weakSelf safelyUpdateAttributedString:target
+									 withNewString:newString
+									   attributes:attributes];
+		});
+		return;
+	}
+	
+	[target replaceCharactersInRange:NSMakeRange(0, target.length)
+						  withString:newString ?: @""];
+	[target setAttributes:attributes range:NSMakeRange(0, target.length)];
+	
 	[self updateDisplay];
 }
 
 - (void)updateDisplay {
-
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-		[self.display replaceCharactersInRange: NSMakeRange(0, self.display.length)
-						  withAttributedString: self.statusMessage1];
-		if (self.statusMessage2.length > 0) {
-			[self.display appendAttributedString:self.statusMessage2];
-		}
-		
-		if (self.statusMessage3.length > 0) {
-			[self.display appendAttributedString:self.statusMessage3];
-		}
-		
-		NSAttributedString *display = self.display.copy;
-		self.attributedText = display;
-	}];
+	// Reuse existing display string
+	[self.display replaceCharactersInRange:NSMakeRange(0, self.display.length)
+					  withAttributedString:self.statusMessage1];
+	
+	if (self.statusMessage2.length > 0) {
+		[self.display appendAttributedString:self.statusMessage2];
+	}
+	
+	if (self.statusMessage3.length > 0) {
+		[self.display appendAttributedString:self.statusMessage3];
+	}
+	
+	// Apply paragraph style once to the entire string
+	[self.display addAttributes:self.paragraphAttributes
+						  range:NSMakeRange(0, self.display.length)];
+	
+	self.attributedText = self.display;
 }
 
 @end
