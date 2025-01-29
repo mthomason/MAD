@@ -32,8 +32,9 @@
 	@property (nonatomic, readwrite, assign) BOOL completedSuccessfully;
 	@property (nonatomic, readwrite, strong) id /* UIViewController * */ <MADOperationRefreshReloadProtocol> viewController;
 	@property (nonatomic, readwrite, strong) MADDatabaseConnection *databaseConnection;
-
-	@property (nonatomic, strong) NSOperationQueue *messageQueue;
+	@property (atomic) NSUInteger latestRecordCount;
+	@property (nonatomic, assign) BOOL updatePending;
+	@property (nonatomic, strong) dispatch_queue_t updateQueue;
 
 @end
 
@@ -41,7 +42,9 @@
 	NSUInteger _skipCount, _displayCount;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+	_updateQueue = NULL;
+}
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
 	MADOperationGetCredentials *getCredentials = self.getCredentials;
@@ -62,9 +65,7 @@
 		_viewController = viewController;
 		_document = document;
 		_completedSuccessfully = NO;
-		NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-		queue.maxConcurrentOperationCount = 1;
-		self.messageQueue = queue;
+		_updateQueue = dispatch_queue_create("com.yourapp.updateQueue", DISPATCH_QUEUE_SERIAL);
 	}
 	return self;
 }
@@ -115,8 +116,6 @@
 		sself.viewController = nil;
 		sself.databaseConnection = nil;
 		sself.completedSuccessfully = YES;
-		[sself.messageQueue cancelAllOperations];
-		sself.messageQueue = nil;
 		[sself finish];
 	}];
 	
@@ -135,19 +134,42 @@
 }
 
 - (void)updateNumberOfRecords:(NSUInteger)numberOfRecords {
-	if (self.messageQueue.operationCount < 2) {
-		typeof(self) __weak weakself = self;
-		[self.messageQueue addOperationWithBlock:^{
-			NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
-				typeof(self) sself = weakself;
-				[sself.viewController operation:sself updateRecordsRead:numberOfRecords];
-			}];
-			NSArray *ops = @[op];
-			[[NSOperationQueue mainQueue] addOperations:ops waitUntilFinished:YES];
-			usleep((useconds_t)floor((1/11)*1000)); //delay updates... 1/11th of a second
-		}];
-	}
+	// Store latest value atomically
+	self.latestRecordCount = numberOfRecords;
 	
+	// Use serial queue for update management
+	dispatch_async(self.updateQueue, ^{
+		if (!self.updatePending) {
+			self.updatePending = YES;
+			
+			// Immediate first update
+			[self performUpdate];
+			
+			// Schedule deferred final update
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)),
+						 dispatch_get_main_queue(), ^{
+				if (self.updatePending) {
+					[self performFinalUpdate];
+				}
+			});
+		}
+	});
+}
+
+- (void)performUpdate {
+	self.updatePending = NO;
+	NSUInteger currentCount = self.latestRecordCount;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.viewController operation:self updateRecordsRead:currentCount];
+	});
+}
+
+- (void)performFinalUpdate {
+	self.updatePending = NO;
+	NSUInteger currentCount = self.latestRecordCount;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.viewController operation:self updateRecordsRead:currentCount];
+	});
 }
 
 - (void)watchDatabase:(MADDatabase *)database {
