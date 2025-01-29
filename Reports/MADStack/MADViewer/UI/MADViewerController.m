@@ -114,27 +114,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 @end
 
 @interface MADViewerController ()
-	<UIPopoverPresentationControllerDelegate,
-		UIStateRestoring,
-		UIPageViewControllerDelegate,
-		UIPageViewControllerDataSource,
-		UIDocumentInteractionControllerDelegate,
-		UIViewControllerTransitioningDelegate,
-		UIViewControllerAnimatedTransitioning,
-		MADOperationObserver,
-		MADPageSliderProtocol,
-		MADPrintingProtocol,
-		MADActivityReportPrintPreviewDelegate,
-		MADActivityItemProviderDelegate>
+	<UIPopoverPresentationControllerDelegate, UIStateRestoring, UIPageViewControllerDelegate,
+		UIPageViewControllerDataSource, UIDocumentInteractionControllerDelegate,
+		UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning,
+		MADOperationObserver, MADPageSliderProtocol, MADPrintingProtocol,
+		MADActivityReportPrintPreviewDelegate, MADActivityItemProviderDelegate>
 
 	@property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
-
-#pragma mark - Attributes
-
 	@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
-
-#pragma mark User Interface
-
 	@property (nonatomic, strong)   MADPageSlider *pageSlider;
 	@property (nonatomic, weak)     MADLabelStatus *labelStatus;
 	@property (nonatomic, readonly) MADTabBarController *tabBarController;
@@ -143,8 +130,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 	@property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
 	@property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
-
-#pragma mark
 
 	@property (nonatomic, strong) MADOperationQueue *refreshQueue;
 
