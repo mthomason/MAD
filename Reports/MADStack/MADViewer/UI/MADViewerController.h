@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 7/20/13.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MADViewerController_h
@@ -20,17 +20,17 @@
 @protocol MADViewControllerStandardProtocol;
 
 @interface MADViewerController : UIPageViewController
-    <MADViewControllerDocumentProtocol, MADActivityProtocol,
-        MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
+	<MADViewControllerDocumentProtocol, MADActivityProtocol,
+		MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
 
-    @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-    + (instancetype)newViewerController:(MADocument *)document;
+	+ (instancetype)newViewerController:(MADocument *)document;
 
-    - (IBAction)refresh:(id)sender;
-    - (IBAction)zoomToActualSize:(id)sender;
-    - (IBAction)zoomToFit:(id)sender;
-    - (IBAction)zoomToFullScreen:(id)sender;
+	- (IBAction)refresh:(id)sender;
+	- (IBAction)zoomToActualSize:(id)sender;
+	- (IBAction)zoomToFit:(id)sender;
+	- (IBAction)zoomToFullScreen:(id)sender;
 
 @end
 

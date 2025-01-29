@@ -52,16 +52,6 @@ extern NSString * const APPLICATIONDATA_FILENAME;
 extern NSString * const MYSQLDATABASEDATA_FILENAME;
 extern NSString * const MTPersistentStoreAliasUserPreferences;
 
-extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
-extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
-
-extern NSString * const NSDATABASE_SF_OAUTH_KEY;
-extern NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL;
-
-extern NSString * const PDF_PATH_EXTENSION;
-
-extern NSString * const KEY_DB_TYPE_SF;
-extern NSString * const KEY_DB_TYPE_DB;
 
 #endif
