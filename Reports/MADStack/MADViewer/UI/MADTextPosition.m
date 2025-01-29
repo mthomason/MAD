@@ -21,9 +21,4 @@
 	return self;
 }
 
-+ (instancetype)BeginningOfDocument {
-	MADTextPosition *beginning = [[MADTextPosition alloc] init];
-	return beginning;
-}
-
 @end

@@ -19,8 +19,6 @@
 	@property (nonatomic, assign) NSUInteger element;
 	@property (nonatomic, assign) NSUInteger offset;
 
-	+ (instancetype)BeginningOfDocument;
-
 @end
 
 #endif

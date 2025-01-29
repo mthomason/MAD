@@ -170,8 +170,8 @@ static const CGFloat PageCounterBuffer = 10.0;
 //@property (nonatomic, readonly) UITextPosition *beginningOfDocument;
 
 - (UITextPosition *)beginningOfDocument {
-	MADTextPosition *beginningOfDocument = [MADTextPosition BeginningOfDocument];
-	return beginningOfDocument;
+	MADTextPosition *beginning = [[MADTextPosition alloc] init];
+	return beginning;
 }
 //@property (nonatomic, readonly) UITextPosition *endOfDocument;
 
