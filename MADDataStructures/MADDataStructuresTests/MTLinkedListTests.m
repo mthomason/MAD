@@ -170,7 +170,7 @@
 
 - (void)testFastEnumerationOrderAndCompleteness {
 	// Test with 34 items to exceed typical fast enumeration buffer size (16/32)
-	const NSUInteger itemCount = 34;
+	const NSUInteger itemCount = 320;
 	NSMutableArray *expected = [NSMutableArray array];
 	for (NSUInteger i = 1; i <= itemCount; i++) {
 		[expected addObject:@(i)];
