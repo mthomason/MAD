@@ -160,7 +160,10 @@
 	state->mutationsPtr = &_count;
 
 	NSUInteger batchCount = 0;
-	MTLinkedListNode *node = (state->state == 0) ? _headNode : (__bridge MTLinkedListNode *)(void *)state->extra[0];
+	MTLinkedListNode *node = (state->state == 0) ?
+		_headNode :
+		(__bridge MTLinkedListNode *)(void *)state->extra[0];
+
 	while (node && batchCount < len) {
 		stackbuf[batchCount] = node.data;
 		node = node.next;
