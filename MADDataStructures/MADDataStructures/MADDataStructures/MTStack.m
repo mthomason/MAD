@@ -81,7 +81,6 @@
 	return self.counter == 0;
 }
 
-// MTStack.m
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
 								 objects:(id __unsafe_unretained [])stackbuf
 								   count:(NSUInteger)len {
