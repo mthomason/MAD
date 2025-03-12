@@ -16,7 +16,8 @@
 @implementation MADQueryCacheBeginTransaction
 
 - (instancetype)initWithObject:(id)object {
-	return self = [super init];
+	self = [super init];
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {

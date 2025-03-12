@@ -327,7 +327,6 @@
 		4C994F3C1BE28CF50058627A /* MADTextPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F3B1BE28CF50058627A /* MADTextPosition.m */; };
 		4C994F421BE28E790058627A /* MADTextRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F411BE28E790058627A /* MADTextRange.m */; };
 		4C994F4E1BE47EC10058627A /* MADTextInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F4D1BE47EC10058627A /* MADTextInputController.m */; };
-		4CA0C6B01CA3A48900222B8D /* MADDefer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6AF1CA3A48900222B8D /* MADDefer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4CA0C6B31CA51F7800222B8D /* MADOperationPromptError.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6B21CA51F7800222B8D /* MADOperationPromptError.m */; };
 		4CA0C6B71CA5401000222B8D /* MADOperationCreateDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C6B61CA5401000222B8D /* MADOperationCreateDocument.m */; };
 		4CA1AAAE1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */; };
@@ -3882,7 +3881,6 @@
 				4C26B9F91BAF14A500456DC8 /* MADDesignerElementView.m in Sources */,
 				4C1E550D1E58363B00E3FAF0 /* MADNavigationControllerQuery.m in Sources */,
 				4CEBD0301E319535009FE2DC /* MADAnimatedTransitionControllerPush.m in Sources */,
-				4CA0C6B01CA3A48900222B8D /* MADDefer.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m in Sources */,
 				4CA0C6B71CA5401000222B8D /* MADOperationCreateDocument.m in Sources */,

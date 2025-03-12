@@ -137,12 +137,15 @@ void MADSignalHandler(int signal) {
 					  waitUntilDone: YES];
 }
 
+/*
 void MADUncaughtExceptionHandlerInstaller() {
-	/*NSSetUncaughtExceptionHandler(&MADUncaughtExceptionHandler);
+	NSSetUncaughtExceptionHandler(&MADUncaughtExceptionHandler);
 	signal(SIGABRT, MADSignalHandler);
 	signal(SIGILL, MADSignalHandler);
 	signal(SIGSEGV, MADSignalHandler);
 	signal(SIGFPE, MADSignalHandler);
 	signal(SIGBUS, MADSignalHandler);
-	signal(SIGPIPE, MADSignalHandler);*/
+	signal(SIGPIPE, MADSignalHandler);
 }
+*/
+

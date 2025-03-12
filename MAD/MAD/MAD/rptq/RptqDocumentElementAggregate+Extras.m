@@ -182,9 +182,8 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 			break;
 	}
 	
-	BOOL success = NO;
 	NSError * __autoreleasing saveError = nil;
-	if (!(success = [self.managedObjectContext save:&saveError])) {
+	if (![self.managedObjectContext save:&saveError]) {
 		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 	}
 	
