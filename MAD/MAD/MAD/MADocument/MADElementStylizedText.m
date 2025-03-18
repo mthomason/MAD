@@ -30,7 +30,8 @@
 @implementation MADElementStylizedText
 
 - (instancetype)init {
-    return (self = [super init]);
+	self = [super init];
+    return self;
 }
 
 - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname

@@ -20,7 +20,8 @@
 @implementation MADQueryCacheJournalModeDefault
 
 - (instancetype)initWithObject:(id)object {
-    return self = [super initWithObject:object];
+	self = [super initWithObject:object];
+    return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {

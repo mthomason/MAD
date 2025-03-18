@@ -50,11 +50,13 @@
 @implementation MADQueryLinkBuilderController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-	return self = [super initWithCoder:aDecoder];
+	self = [super initWithCoder:aDecoder];
+	return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	return self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	return self;
 }
 
 #pragma mark -

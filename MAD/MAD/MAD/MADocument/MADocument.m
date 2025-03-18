@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 11/9/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -554,7 +554,9 @@ void madwarn(char *err,  const char*err2) { }
 	/// 2. Read the unarchived file.  It's currently a Core Data file.
 	NSError *error = NULL;
 	success = success ? [super readFromURL:_urlGuts error:&error] : NO;
-	if (error) *outError = error;
+	if (error && outError != NULL) { // Check if outError is not NULL before dereferencing
+		*outError = error;
+	}
 	return success;
 	
 }
@@ -586,24 +588,22 @@ void madwarn(char *err,  const char*err2) { }
 	 forSaveOperation:(UIDocumentSaveOperation)saveOperation
 				error:(NSError * __autoreleasing *)outError {
 	
-	BOOL success;
 	NSError * __autoreleasing error = nil;
-	if (!(success = [super writeContents: contents
-						   andAttributes: additionalFileAttributes
-							 safelyToURL: self.urlGuts
-						forSaveOperation: saveOperation
-								   error: &error])) {
-		if (*outError != nil) {
-			*outError = error.copy;
+	if (![super writeContents:contents
+				andAttributes:additionalFileAttributes
+				  safelyToURL:self.urlGuts
+			 forSaveOperation:saveOperation
+						error:&error]) {
+		if (outError != NULL) { // Check if outError is not NULL before dereferencing
+			*outError = error.copy; // Copy the error to outError
 		}
-		return NO;
+		return NO; // Return NO if the write operation fails
 	}
 
 	MADArchiveManager *archiveManager;
-	archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
-															archiveURL: self.fileURL];
-	return [archiveManager archive:YES];
-
+	archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
+															archiveURL:self.fileURL];
+	return [archiveManager archive:YES]; // Archive the contents and return the result
 }
 
 - (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
@@ -715,38 +715,36 @@ void madwarn(char *err,  const char*err2) { }
 	return self.extraInformation;
 }
 
-- (BOOL)writeAdditionalContent: (id)content
-						 toURL: (NSURL *)absoluteURL
-		   originalContentsURL: (NSURL *)absoluteOriginalContentsURL
-						 error: (NSError * __autoreleasing *)error {
+- (BOOL)writeAdditionalContent:(id)content
+						 toURL:(NSURL *)absoluteURL
+		   originalContentsURL:(NSURL *)absoluteOriginalContentsURL
+						 error:(NSError * __autoreleasing *)error {
 	
-	BOOL writeAdditionalContent = [super writeAdditionalContent: content
-														  toURL: absoluteURL
-											originalContentsURL: absoluteOriginalContentsURL
-														  error: error];
+	BOOL writeAdditionalContent = NO; // Initialize to NO by default
 
 	if (content == [NSNull null] || self.documentStatus.isSuspended) {
-		
-		writeAdditionalContent  = NO;
-		
+		// If content is NSNull or the document is suspended, do not write additional content
+		writeAdditionalContent = NO;
 	} else if (content != nil) {
-		
-		writeAdditionalContent  = YES;
-		
-		NSDictionary *additionalContent;
+		// If content is not nil, write additional content
+		writeAdditionalContent = YES;
+
+		// Safely retrieve version and generator from the content dictionary
 		id version = content[MADDocumentInfoKeyVersion];
 		id generator = content[MADDocumentInfoKeyGenerator];
-		
-		additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
-										   version, MADDocumentInfoKeyVersion,
-										   generator, MADDocumentInfoKeyGenerator, nil];
-		if (![additionalContent writeToURL:_urlMetaPlaylist atomically:NO])
+
+		// Create a dictionary with version and generator information
+		NSDictionary<NSString *, id> *additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
+			version, MADDocumentInfoKeyVersion,
+			generator, MADDocumentInfoKeyGenerator,
+			nil]; // Sentinel to mark the end of the key-value pairs
+
+		// Write the additional content to the specified URL
+		if (![additionalContent writeToURL:_urlMetaPlaylist atomically:NO]) {
 			NSLog(@"Write to %@ failed", _urlMetaPlaylist);
-	} else {
-		
-		writeAdditionalContent = NO;
-		
+		}
 	}
+
 	return writeAdditionalContent;
 }
 
@@ -995,7 +993,7 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	NSDictionary *result = [self.dataTable dataForRow:rowID
 											   column:columnKey
 												error:&errorQ];
-	if (errorQ != nil) {
+	if (errorQ != nil && error != NULL) {
 		*error = errorQ;
 	}
 	return result;
@@ -1284,7 +1282,7 @@ END_rowIDLastOfReport_Loop:;
 	
 	keyInQueryTableRel = NSStringFromSelector(@selector(inQueryTable));
 	
-	keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(aggregateField))];
+	keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(aggregateField))];
 	keyInQueryTable = [keyInQueryTable stringByAppendingString:keyInQueryTableRel];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
@@ -1313,7 +1311,7 @@ END_rowIDLastOfReport_Loop:;
 	NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
 	NSFetchRequest *fetchReqest;
 	fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-	NSString *keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(referencesQueryField))];
+	NSString *keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(referencesQueryField))];
 	keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID

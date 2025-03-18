@@ -71,7 +71,8 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 }
 
 - (instancetype)init {
-	return self = [self initWithIdentifier:-1];
+	self = [self initWithIdentifier:-1];
+	return self;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier {

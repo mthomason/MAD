@@ -13,7 +13,7 @@
 
 #import "MADExplorerController.h"
 
-static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing);
+static inline CGRect CGRectTabBar(CGRect, BOOL) __attribute__((unused));
 static inline CGRect CGRectTabBarOffscreen(CGRect rect);
 static inline CGRect CGRectTabBarOnscreen(CGRect rect);
 

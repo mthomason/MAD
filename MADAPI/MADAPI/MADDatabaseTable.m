@@ -16,7 +16,8 @@
 @implementation MADDatabaseTable
 
 - (instancetype)init {
-	return self = [self initWithTableName:nil];
+	self = [self initWithTableName:nil];
+	return self;
 }
 
 - (instancetype)initWithTableName:(NSString *)tableName {

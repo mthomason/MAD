@@ -19,7 +19,7 @@ struct MADLayoutPadding_t {
 typedef struct MADLayoutPadding_t MADLayoutPadding_t;
 
 static inline MADLayoutPadding_t MADLayoutPaddingMake(Float64, Float64, Float64, Float64);
-static inline MADLayoutPadding_t MADLayoutPaddingMakeQuick(Float64);
+static inline MADLayoutPadding_t MADLayoutPaddingMakeQuick(Float64) __attribute__((unused));
 
 static inline MADLayoutPadding_t MADLayoutPaddingMake(Float64 l, Float64 r, Float64 t, Float64 b) {
 	MADLayoutPadding_t p; p.left = l; p.right = r; p.top = t; p.bottom = b; return p;

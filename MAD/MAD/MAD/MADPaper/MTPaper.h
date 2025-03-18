@@ -15,7 +15,7 @@
 #import <MAD/MADPaperType.h>
 
 static inline CGRect CGRectBoundsForSize(CGSize size);
-static inline CGRect CGRectPaperLetter(void);
+static inline CGRect CGRectPaperLetter(void) __attribute__((unused));
 
 static inline CGSize CGSizePaperLetter(void);
 static inline CGSize CGSizePaperGovernmentLetter(void);

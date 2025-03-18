@@ -53,7 +53,7 @@ static inline NSString *newStringLocalizedFormatMonths(NSInteger i) {
 					NSLocalizedString(FormatMonths, FormatMonths);
 }
 
-static inline NSString *newStringLocalizedFormatSeconds(NSInteger);
+static inline NSString *newStringLocalizedFormatSeconds(NSInteger) __attribute__((unused));
 static inline NSString *newStringLocalizedFormatSeconds(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatSecond, FormatSecond) :
 					NSLocalizedString(FormatSeconds, FormatSeconds);
@@ -65,7 +65,7 @@ static inline NSString *newStringLocalizedFormatMilliseconds(NSInteger i) {
 					NSLocalizedString(FormatMilliseconds, FormatMilliseconds);
 }
 
-static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger);
+static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger) __attribute__((unused));
 static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) :
 					NSLocalizedString(FormatMinutes, FormatMinutes);

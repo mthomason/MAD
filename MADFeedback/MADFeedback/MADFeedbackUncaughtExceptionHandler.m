@@ -39,9 +39,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 }
 
 - (void)alertView:(UIAlertView *)anAlertView clickedButtonAtIndex:(NSInteger)anIndex {
-	if (anIndex == 0) {
-		self.dismissed = YES;
-	}
+	if (anIndex == 0) { self.dismissed = YES; }
 }
 
 - (void)validateAndSaveCriticalApplicationData {
@@ -90,7 +88,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 
 @end
 
-static void MADUncaughtExceptionHandler(NSException *exception);
+static void MADUncaughtExceptionHandler(NSException *exception) __attribute__((unused));
 static void MADUncaughtExceptionHandler(NSException *exception) {
 	int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
 	if (exceptionCount > UncaughtExceptionMaximum) {

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/22/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -165,7 +165,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRowNumber {
 	NSString *result = [self keyInSectionRow];
 	NSString *keyRowNumber = NSStringFromSelector(@selector(rowNumber));
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriodToString: result];
 	result = [result stringByAppendingString:keyRowNumber];
 	return result;
 }
@@ -173,7 +173,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyInSection {
 	NSString *result = [self keyInSectionRow];
 	NSString *keyInSection = NSStringFromSelector(@selector(inSection));
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriodToString: result];
 	result = [result stringByAppendingString: keyInSection];
 	return result;
 }
@@ -209,9 +209,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyBorder];
 		NSString *keyWidth = [RptqBorder keyWidth];
 		NSString *keyTop = [RptqDirectionalAsymmetry keyTop];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keyWidth];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyTop];
 	}
 	return key;
@@ -223,9 +223,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyBorder];
 		NSString *keyWidth = [RptqBorder keyWidth];
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keyWidth];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
 	return key;
@@ -237,9 +237,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyBorder];
 		NSString *keyWidth = [RptqBorder keyWidth];
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keyWidth];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
 	return key;
@@ -251,9 +251,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyBorder];
 		NSString *keyWidth = [RptqBorder keyWidth];
 		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keyWidth];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyRight];
 	}
 	return key;
@@ -264,7 +264,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyTop = [RptqDirectionalAsymmetry keyTop];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyTop];
 	}
 	return key;
@@ -275,7 +275,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
 	return key;
@@ -286,7 +286,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
 	return key;
@@ -297,7 +297,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyRight];
 	}
 	return key;
@@ -308,7 +308,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyTop = [RptqDirectionalAsymmetry keyTop];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyTop];
 	}
 	return key;
@@ -319,7 +319,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
 	return key;
@@ -330,7 +330,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
 	return key;
@@ -341,7 +341,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyRight];
 	}
 	return key;
@@ -358,9 +358,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyRect];
 		NSString *keyOrigin = [RptqRect keyOrigin];
 		NSString *keyY = [RptqPoint keyY];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keyOrigin];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyY];
 	}
 	return key;
@@ -372,9 +372,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyRect];
 		NSString *keyOrigin = [RptqRect keyOrigin];
 		NSString *keyX = [RptqPoint keyX];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keyOrigin];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyX];
 	}
 	return key;
@@ -386,9 +386,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyRect];
 		NSString *keySize = [RptqRect keySize];
 		NSString *keyHeight = [RptqSize keyHeight];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keySize];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyHeight];
 	}
 	return key;
@@ -400,9 +400,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSString *result = [self keyRect];
 		NSString *keySize = [RptqRect keySize];
 		NSString *keyWidth = [RptqSize keyWidth];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		result = [result stringByAppendingString:keySize];
-		result = [MADStringUtilities stringByAppendingPeriodToString:result];
+		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyWidth];
 	}
 	return key;
@@ -811,7 +811,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	BOOL success;
 	NSError * __autoreleasing errorValidation = nil;
 	if (!(success = [super validateForInsert:&errorValidation])) {
-		*error = errorValidation.copy;
+		if (error != NULL) { // Check if error is not NULL before dereferencing
+			*error = errorValidation.copy; // Copy the error to outError
+		}
 		os_log_error(OS_LOG_DEFAULT, "Error: %s", errorValidation.localizedDescription.UTF8String);
 	}
 	return success;

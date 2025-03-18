@@ -684,8 +684,8 @@ BOOL storeEnabled() {
 		numberOfTables--;
 		
 		NSError * __autoreleasing error = NULL;
-		BOOL success = [private save:&error];
-		if (!success) {
+		BOOL success = NO;
+		if (!(success = [private save:&error])) {
 			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		} else {
 			[strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
@@ -716,8 +716,8 @@ BOOL storeEnabled() {
 		}
 	}];
 	NSError * __autoreleasing error = NULL;
-	BOOL success = [document.managedObjectContext save:&error];
-	if (!success) {
+	BOOL success = NO;
+	if (!(success = [document.managedObjectContext save:&error])) {
 		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
 	[self observeManagedObjectContextChanges:document.managedObjectContext];
@@ -1869,12 +1869,12 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
 	
-	UIViewController *leftViewController = [transitionContext viewControllerForKey: UITransitionContextToViewControllerKey];
-	UIViewController *rightViewController = [transitionContext viewControllerForKey: UITransitionContextFromViewControllerKey];
-	CGRect leftFrameFinal = [transitionContext finalFrameForViewController:leftViewController];
-	CGRect rightFrameFinal = [transitionContext finalFrameForViewController:rightViewController];
-	CGRect leftFrameInital = [transitionContext initialFrameForViewController:leftViewController];
-	CGRect rightFrameInital = [transitionContext initialFrameForViewController:rightViewController];
+	//UIViewController *leftViewController = [transitionContext viewControllerForKey: UITransitionContextToViewControllerKey];
+	//UIViewController *rightViewController = [transitionContext viewControllerForKey: UITransitionContextFromViewControllerKey];
+	//CGRect leftFrameFinal = [transitionContext finalFrameForViewController:leftViewController];
+	//CGRect rightFrameFinal = [transitionContext finalFrameForViewController:rightViewController];
+	//CGRect leftFrameInital = [transitionContext initialFrameForViewController:leftViewController];
+	//CGRect rightFrameInital = [transitionContext initialFrameForViewController:rightViewController];
 
 	/*
 	UIViewController *rightViewController;

@@ -30,10 +30,19 @@
 + (NSArray *)addressesForHostname:(NSString *)hostname {
 	// Get the addresses for the given hostname.
 	CFHostRef hostRef = CFHostCreateWithName(kCFAllocatorDefault, (__bridge CFStringRef)hostname);
+	if (!hostRef) return nil;
+
 	Boolean isSuccess = CFHostStartInfoResolution(hostRef, kCFHostAddresses, nil);
-	if (!isSuccess) return nil;
+	if (!isSuccess) {
+		CFRelease(hostRef);
+		return nil;
+	}
+
 	CFArrayRef addressesRef = CFHostGetAddressing(hostRef, nil);
-	if (addressesRef == nil) return nil;
+	if (addressesRef == nil){
+		CFRelease(hostRef);
+		return nil;
+	}
 	
 	// Convert these addresses into strings.
 	char ipAddress[INET6_ADDRSTRLEN];
@@ -41,7 +50,10 @@
 	CFIndex numAddresses = CFArrayGetCount(addressesRef);
 	for (CFIndex currentIndex = 0; currentIndex < numAddresses; currentIndex++) {
 		struct sockaddr *address = (struct sockaddr *)CFDataGetBytePtr(CFArrayGetValueAtIndex(addressesRef, currentIndex));
-		if (address == nil) return nil;
+		if (address == nil) {
+			CFRelease(hostRef);
+			return nil;
+		}
 		getnameinfo(address, address->sa_len, ipAddress, INET6_ADDRSTRLEN, nil, 0, NI_NUMERICHOST);
 		//if (ipAddress == nil) return nil;
 		
@@ -52,7 +64,7 @@
 			[addresses addObject:string];
 		}
 	}
-	
+	CFRelease(hostRef);
 	return addresses;
 }
 
@@ -66,32 +78,39 @@
 
 + (NSArray *)hostnamesForAddress:(NSString *)address {
 	// Get the host reference for the given address.
-	struct addrinfo      hints;
-	struct addrinfo      *result = NULL;
+	struct addrinfo hints;
+	struct addrinfo *result = NULL;
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_flags    = AI_NUMERICHOST;
 	hints.ai_family   = PF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = 0;
 	int errorStatus = getaddrinfo([address cStringUsingEncoding:NSASCIIStringEncoding], NULL, &hints, &result);
-	if (errorStatus != 0) return nil;
+	if (errorStatus != 0) return nil; // Early return if getaddrinfo fails
+
 	CFDataRef addressRef = CFDataCreate(NULL, (UInt8 *)result->ai_addr, (CFIndex)result->ai_addrlen);
-	if (addressRef == nil) return nil;
-	freeaddrinfo(result);
+	freeaddrinfo(result); // Free the result immediately after use
+	if (addressRef == nil) return nil; // Early return if addressRef creation fails
+
 	CFHostRef hostRef = CFHostCreateWithAddress(kCFAllocatorDefault, addressRef);
-	if (hostRef == nil) return nil;
-	CFRelease(addressRef);
+	CFRelease(addressRef); // Release addressRef immediately after use
+	if (hostRef == nil) return nil; // Early return if hostRef creation fails
+
 	Boolean isSuccess = CFHostStartInfoResolution(hostRef, kCFHostNames, NULL);
-	if (!isSuccess) return nil;
+	if (!isSuccess) {
+		CFRelease(hostRef); // Release hostRef before returning nil
+		return nil;
+	}
 	
 	// Get the hostnames for the host reference.
-	NSArray* hostnamesRef = CFBridgingRelease(CFHostGetNames(hostRef, NULL));
+	NSArray *hostnamesRef = CFBridgingRelease(CFHostGetNames(hostRef, NULL));
 	NSMutableArray *hostnames = [NSMutableArray array];
-	for (NSUInteger currentIndex = 0; currentIndex < ((NSArray *)hostnamesRef).count; currentIndex++) {
-		id obj = [(NSArray *)hostnamesRef objectAtIndex:currentIndex];
+	for (NSUInteger currentIndex = 0; currentIndex < hostnamesRef.count; currentIndex++) {
+		id obj = hostnamesRef[currentIndex];
 		[hostnames addObject:obj];
 	}
 	
+	CFRelease(hostRef); // Release hostRef before returning the hostnames
 	return hostnames;
 }
 

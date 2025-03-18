@@ -70,7 +70,7 @@ NSString * const MADIdentifierROWID         = @"ROWID";
 	}
 	NSError * __autoreleasing e = nil;
 	NSString *sql = [self getSql:&e];
-	if (e != nil) { *error = e; }
+	if (e != nil  && error != NULL) { *error = e; }
 	return sql;
 }
 
