@@ -39,7 +39,7 @@
 #import <MAD/MADModelDatabase.h>
 #import <MAD/MADModelQuery.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
@@ -588,7 +588,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 		NSString *keyAlias = NSStringFromSelector(@selector(alias));
 		NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
 		NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
-		keyInQuery = [keyInQuery stringByAppendingPeriod];
+		keyInQuery = [MADStringUtilities stringByAppendingPeriodToString: keyInQuery];
 		keyInQuery = [keyInQuery stringByAppendingString:keyIdentifier];
 
 		id predicate;

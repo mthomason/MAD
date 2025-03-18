@@ -22,7 +22,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADDatabase.h>
@@ -141,7 +141,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 			nameTablePart = [database newSafeIdentifier: valueInQueryTableAlias];
 			nameFieldPart = [database newSafeIdentifier: groupField.databaseSchemaField.name];
 			
-			keyForSort = [nameTablePart stringByAppendingPeriod];
+			keyForSort = [MADStringUtilities stringByAppendingPeriodToString:nameTablePart];
 			keyForSort = [keyForSort stringByAppendingString: nameFieldPart];
 			
 			SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType);

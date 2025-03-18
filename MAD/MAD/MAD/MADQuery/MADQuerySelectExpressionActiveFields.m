@@ -12,7 +12,7 @@
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "MADQueryActiveQueryFields.h"
 #import "RptqDatabaseSchemaField.h"
@@ -55,7 +55,7 @@
             NSString *tableName = [queryField.inQueryTable queryAlias];
             MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
             
-            NSString *tableAlias = [safeTableName stringByAppendingPeriod];
+			NSString *tableAlias = [MADStringUtilities stringByAppendingPeriodToString:safeTableName];
             MADSafeQueryField *fieldName = [database newSafeIdentifier: field.name];
             
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];

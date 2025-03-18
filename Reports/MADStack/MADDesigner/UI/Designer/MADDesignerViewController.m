@@ -44,7 +44,7 @@
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import <MAD/madmath.h>
 
@@ -294,9 +294,9 @@ static const inline CGSize sizePopoverFonts() {
 		NSString *keyPathDocument = [self keyPathDocument];
 		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
 		NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
-		key = [keyPathDocument stringByAppendingPeriod];
+		key = [MADStringUtilities stringByAppendingPeriodToString:keyPathDocument];
 		key = [key stringByAppendingString:keyPathUndoManager];
-		key = [key stringByAppendingPeriod];
+		key = [MADStringUtilities stringByAppendingPeriodToString:key];
 		key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
 	}
 	return key;
@@ -308,9 +308,9 @@ static const inline CGSize sizePopoverFonts() {
 		NSString *keyPathDocument = [self keyPathDocument];
 		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
 		NSString *keyPathUndoMenuItemTitle = NSStringFromSelector(@selector(undoMenuItemTitle));
-		key = [keyPathDocument stringByAppendingPeriod];
+		key = [MADStringUtilities stringByAppendingPeriodToString:keyPathDocument];
 		key = [key stringByAppendingString:keyPathUndoManager];
-		key = [key stringByAppendingPeriod];
+		key = [MADStringUtilities stringByAppendingPeriodToString:key];
 		key = [key stringByAppendingString:keyPathUndoMenuItemTitle];
 	}
 	return key;

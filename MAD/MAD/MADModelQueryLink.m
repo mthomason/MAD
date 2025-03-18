@@ -16,7 +16,7 @@
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSURL.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "MADTableFieldIdentifier.h"
 
@@ -50,24 +50,24 @@
 	pathHasLeftField = NSStringFromSelector(@selector(hasLeftField));
 	pathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
 
-	NSString *pathRTID = [pathHasRightField stringByAppendingPeriod];
+	NSString *pathRTID = [MADStringUtilities stringByAppendingPeriodToString:pathHasRightField];
 	pathRTID = [pathRTID stringByAppendingString:pathInQueryTable];
 
-	NSString *pathLTID = [pathHasLeftField stringByAppendingPeriod];
+	NSString *pathLTID = [MADStringUtilities stringByAppendingPeriodToString:pathHasLeftField];
 	pathLTID = [pathLTID stringByAppendingString:pathInQueryTable];
 
 	pathIdentifier = NSStringFromSelector(@selector(identifier));
 
-	NSString *pathRFID = [pathHasRightField stringByAppendingPeriod];
+	NSString *pathRFID = [MADStringUtilities stringByAppendingPeriodToString:pathHasRightField];
 	pathRFID = [pathRFID stringByAppendingString:pathIdentifier];
 	
-	NSString *pathLFID = [pathHasLeftField stringByAppendingPeriod];
+	NSString *pathLFID = [MADStringUtilities stringByAppendingPeriodToString:pathHasLeftField];
 	pathLFID = [pathLFID stringByAppendingString:pathIdentifier];
 	
-	pathRTID = [pathRTID stringByAppendingPeriod];
+	pathRTID = [MADStringUtilities stringByAppendingPeriodToString:pathRTID];
 	pathRTID = [pathRTID stringByAppendingString:pathIdentifier];
 	
-	pathLTID = [pathLTID stringByAppendingPeriod];
+	pathLTID = [MADStringUtilities stringByAppendingPeriodToString:pathLTID];
 	pathLTID = [pathLTID stringByAppendingString:pathIdentifier];
 	
 	expressionDescription[0] = [[NSExpressionDescription alloc] init];

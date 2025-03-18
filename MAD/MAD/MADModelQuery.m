@@ -26,7 +26,7 @@
 #import <CoreData/NSExpressionDescription.h>
 #import <CoreData/NSFetchRequest.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "MADModelDatabase.h"
 #import "MADModelQueryTable.h"
@@ -233,7 +233,7 @@
 	NSOrderedSet <NSManagedObjectID *> *tableObjectIDs;
 	tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
 	
-	NSString *dropIndex = [NSStringFromSelector(@selector(inQueryTable)) stringByAppendingPeriod];
+	NSString *dropIndex = [MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(inQueryTable))];
 	dropIndex = [dropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
 	
 	NSString *keySchemaTableID = [RptqQueryField keySchemaTableID];
@@ -350,7 +350,7 @@
 
 	NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
 	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
-	NSString *inQueryTableID = [keyInQuery stringByAppendingPeriod];
+	NSString *inQueryTableID = [MADStringUtilities stringByAppendingPeriodToString:keyInQuery];
 	inQueryTableID = [inQueryTableID stringByAppendingString: keyIdentifier];
 
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier

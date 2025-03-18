@@ -20,7 +20,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSExpressionDescription.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "MADModelField.h"
 
@@ -149,7 +149,7 @@
 	keyWidth = NSStringFromSelector(@selector(width));
 	keyIdentifier = NSStringFromSelector(@selector(identifier));
 	keyInTableIdentifier = NSStringFromSelector(@selector(inTable));
-	keyInTableIdentifier = [keyInTableIdentifier stringByAppendingPeriod];
+	keyInTableIdentifier = [MADStringUtilities stringByAppendingPeriodToString:keyInTableIdentifier];
 	keyInTableIdentifier = [keyInTableIdentifier stringByAppendingString:keyIdentifier];
 
 	

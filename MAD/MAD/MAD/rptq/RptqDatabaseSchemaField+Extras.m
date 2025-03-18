@@ -18,7 +18,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import <MADAPI/MADDatabaseField.h>
 #import "RptqDatabaseSchemaTable.h"
@@ -90,7 +90,7 @@
 }
 
 - (NSString *)display {
-	return [self.inTable.name stringByAppendingKeyPath:self.name].lowercaseString;
+	return [MADStringUtilities stringByAppendingKeyPath: self.inTable.name toString:self.name].lowercaseString;
 }
 
 - (SEL)selectorForSorting {
@@ -100,7 +100,7 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-	return [self.inTable.name stringByAppendingKeyPath:self.name];
+	return [MADStringUtilities stringByAppendingKeyPath: self.inTable.name toString:self.name];
 }
 
 - (NSString *)toString {

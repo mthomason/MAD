@@ -55,7 +55,7 @@
 #import "MADNotificationDidFormatPage.h"
 #import "MADPageOptions.h"
 
-#import "NSData+Comparson.h"
+#import <MADFoundation/NSData+Comparison.h>
 
 #import "MADSectionRepresentation.h"
 #import "MADSectionsLayout.h"

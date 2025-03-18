@@ -13,7 +13,7 @@
 #import <Foundation/NSBundle.h>
 
 #import <MADFoundation/MADDataType.h>
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
@@ -72,7 +72,7 @@
 	NSString *queryTableAlias = [RptqQueryTable queryAliasForSchemaTableName:_tableAlias dropIndex:_dropIndex];
 	NSString *safeTableAlias = self.safeIdentifier(queryTableAlias);
 	NSString *safeFieldName = self.safeIdentifier(_fieldName);
-	NSString *sortKey = [safeTableAlias stringByAppendingPeriod];
+	NSString *sortKey = [MADStringUtilities stringByAppendingPeriodToString:safeTableAlias];
 	return [sortKey stringByAppendingString:safeFieldName];
 }
 

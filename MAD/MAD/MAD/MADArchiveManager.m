@@ -30,7 +30,7 @@
 
 #import "madtar.h"
 
-#import "NSString+RelativePath.h"
+#import "MADPathUtilities.h"
 
 size_t m_malloc(char **str, size_t len);
 int backup_file(char *, char *);
@@ -126,8 +126,8 @@ int write_archive(char *outname, NSURL *filewrapper) {
 			baseUrl = baseUrl.URLByDeletingLastPathComponent;
 		}
 		
-		source_path_relative = [NSString newStringWithPath: source_filepath.path
-												relativeTo: baseUrl.path];
+		source_path_relative = [MADPathUtilities stringWithPath:source_filepath.path
+													 relativeTo: baseUrl.path];
 		
 		char *source_filepath_fsr = strdup(source_filepath.fileSystemRepresentation);
 		char *source_path_relative_fsr = strdup(source_path_relative.fileSystemRepresentation);

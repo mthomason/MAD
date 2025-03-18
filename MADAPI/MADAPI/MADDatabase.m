@@ -18,7 +18,7 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADErrorUserInfo.h>
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
@@ -182,7 +182,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 #pragma mark MADDatabaseSQLProtocol
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-	NSString *result = [tableName stringByAppendingPeriod];
+	NSString *result = [MADStringUtilities stringByAppendingPeriodToString:tableName];
 	return [result stringByAppendingString:fieldName];
 }
 
@@ -222,7 +222,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (NSString *)fieldAliasForField:(NSString *)field
 			   withSafeTableName:(NSString *)safeTableName {
-	NSString *tableAlias = [safeTableName stringByAppendingPeriod];
+	NSString *tableAlias = [MADStringUtilities stringByAppendingPeriodToString:safeTableName];
 	MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
 	NSString *alias = [tableAlias stringByAppendingString:fieldName];
 	return alias;

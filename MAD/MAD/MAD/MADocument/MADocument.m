@@ -41,7 +41,7 @@
 #import <MADFoundation/MADURL.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/UIScreen+Properties.h>
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 #import <MADFoundation/MADThread.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
@@ -140,7 +140,7 @@
 
 #import "MADPrintPageRenderer.h"
 
-#import "NSString+RelativePath.h"
+#import "MADPathUtilities.h"
 
 #import "MADImageThumbnail.h"
 
@@ -1284,7 +1284,7 @@ END_rowIDLastOfReport_Loop:;
 	
 	keyInQueryTableRel = NSStringFromSelector(@selector(inQueryTable));
 	
-	keyInQueryTable = [NSStringFromSelector(@selector(aggregateField)) stringByAppendingPeriod];
+	keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(aggregateField))];
 	keyInQueryTable = [keyInQueryTable stringByAppendingString:keyInQueryTableRel];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
@@ -1313,7 +1313,7 @@ END_rowIDLastOfReport_Loop:;
 	NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
 	NSFetchRequest *fetchReqest;
 	fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-	NSString *keyInQueryTable = [NSStringFromSelector(@selector(referencesQueryField)) stringByAppendingPeriod];
+	NSString *keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(referencesQueryField))];
 	keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID

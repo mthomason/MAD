@@ -23,7 +23,7 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSExpressionDescription.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -52,7 +52,7 @@
 + (NSString *)keyOwnedByUserDriverID {
 	NSString *keyOwnedByUser = [self keyOwnedByUser];
 	NSString *keyDriverID = [self keyDriverID];
-	NSString *keyOwndByUserDriverID = [keyOwnedByUser stringByAppendingPeriod];
+	NSString *keyOwndByUserDriverID = [MADStringUtilities stringByAppendingPeriodToString:keyOwnedByUser];
 	keyOwndByUserDriverID = [keyOwndByUserDriverID stringByAppendingString:keyDriverID];
 	return keyOwndByUserDriverID;
 }
@@ -60,7 +60,7 @@
 + (NSString *)keyOwnedByUserDatabaseName {
 	NSString *keyOwnedByUser = [self keyOwnedByUser];
 	NSString *keyDatabaseName = NSStringFromSelector(@selector(dbname));
-	NSString *keyOwndByUserDBName = [keyOwnedByUser stringByAppendingPeriod];
+	NSString *keyOwndByUserDBName = [MADStringUtilities stringByAppendingPeriodToString:keyOwnedByUser];
 	keyOwndByUserDBName = [keyOwndByUserDBName stringByAppendingString:keyDatabaseName];
 	return keyOwndByUserDBName;
 }

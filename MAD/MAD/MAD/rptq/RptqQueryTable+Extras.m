@@ -26,7 +26,7 @@
 
 #import <stdio.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import <MADFoundation/madlib.h>
 
@@ -77,15 +77,14 @@
 	NSString *keyPathDatabaseSchemaTable = NSStringFromSelector(@selector(databaseSchemaTable));
 	NSString *keyPathDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
 	NSString *keyPathName = NSStringFromSelector(@selector(name));
-	NSString *keyPathFieldName = [keyPathDatabaseSchemaField stringByAppendingPeriod];
+	NSString *keyPathFieldName = [MADStringUtilities stringByAppendingPeriodToString:keyPathDatabaseSchemaField];
 	keyPathFieldName = [keyPathFieldName stringByAppendingString:keyPathName];
-	
-	NSString *keyPathTableName = [keyPathInQueryTable stringByAppendingPeriod];
+	NSString *keyPathTableName = [MADStringUtilities stringByAppendingPeriodToString:keyPathInQueryTable];
 	keyPathTableName = [keyPathTableName stringByAppendingString: keyPathDatabaseSchemaTable];
-	keyPathTableName = [keyPathTableName stringByAppendingPeriod];
+	keyPathTableName = [MADStringUtilities stringByAppendingPeriodToString:keyPathTableName];
 	keyPathTableName = [keyPathTableName stringByAppendingString: keyPathName];
 	
-	NSString *keyPathSchemaTable = [keyPathInQueryTable stringByAppendingPeriod];
+	NSString *keyPathSchemaTable = [MADStringUtilities stringByAppendingPeriodToString:keyPathInQueryTable];
 	keyPathSchemaTable = [keyPathSchemaTable stringByAppendingString: keyPathDatabaseSchemaTable];
 	
 	NSUInteger expressionCount = 10;
@@ -98,15 +97,15 @@
 	NSString *keyQueryTableID, *keyQueryFieldID, *keySchemaTableID, *keySchemaFieldID;
 	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
 	
-	keyQueryTableID = [keyPathInQueryTable stringByAppendingPeriod];
+	keyQueryTableID = [MADStringUtilities stringByAppendingPeriodToString:keyPathInQueryTable];
 	keyQueryTableID = [keyQueryTableID stringByAppendingString:keyIdentifier];
 	
 	keyQueryFieldID = keyIdentifier.copy;
 	
-	keySchemaTableID = [keyPathSchemaTable stringByAppendingPeriod];
+	keySchemaTableID = [MADStringUtilities stringByAppendingPeriodToString:keyPathSchemaTable];
 	keySchemaTableID = [keySchemaTableID stringByAppendingString:keyIdentifier];
 	
-	keySchemaFieldID = [keyPathDatabaseSchemaField stringByAppendingPeriod];
+	keySchemaFieldID = [MADStringUtilities stringByAppendingPeriodToString:keyPathDatabaseSchemaField];
 	keySchemaFieldID = [keySchemaFieldID stringByAppendingString:keyIdentifier];
 	
 	NSExpression *expressions[] = {

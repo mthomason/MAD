@@ -190,8 +190,6 @@
 		4C401E4B1BAE4D8C00BAE5FC /* MADocumentState.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */; };
 		4C401E591BAE4E9400BAE5FC /* MADDataTableLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E511BAE4E9400BAE5FC /* MADDataTableLocation.h */; };
 		4C401E5A1BAE4E9400BAE5FC /* MADDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E521BAE4E9400BAE5FC /* MADDataTableLocation.m */; };
-		4C401E6C1BAE4F4000BAE5FC /* NSData+Comparson.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E601BAE4F4000BAE5FC /* NSData+Comparson.h */; };
-		4C401E6D1BAE4F4000BAE5FC /* NSData+Comparson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E611BAE4F4000BAE5FC /* NSData+Comparson.m */; };
 		4C41238D1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C41238B1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.h */; };
 		4C41238E1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C41238C1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.m */; };
 		4C47543B1CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -290,8 +288,8 @@
 		4C8278BC1DB76BFD005313F5 /* MADNotificationFileUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278BA1DB76BFD005313F5 /* MADNotificationFileUpdate.h */; };
 		4C8278BD1DB76BFD005313F5 /* MADNotificationFileUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8278BB1DB76BFD005313F5 /* MADNotificationFileUpdate.m */; };
 		4C8278C01DB76E19005313F5 /* MADNotificationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278BE1DB76E19005313F5 /* MADNotificationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C82C9801CF0B08A00F244F6 /* NSString+RelativePath.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */; };
-		4C82C9811CF0B08A00F244F6 /* NSString+RelativePath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */; };
+		4C82C9801CF0B08A00F244F6 /* MADPathUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C82C97E1CF0B08A00F244F6 /* MADPathUtilities.h */; };
+		4C82C9811CF0B08A00F244F6 /* MADPathUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82C97F1CF0B08A00F244F6 /* MADPathUtilities.m */; };
 		4C82C98A1CF21A3E00F244F6 /* madpng.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C82C9881CF21A3E00F244F6 /* madpng.c */; };
 		4C82C98B1CF21A3E00F244F6 /* madpng.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C82C9891CF21A3E00F244F6 /* madpng.h */; };
 		4C85A1281E3F322600545E94 /* RptqDocumentElementGroupKey+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C85A1261E3F322600545E94 /* RptqDocumentElementGroupKey+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -722,8 +720,6 @@
 		4C401E471BAE4D8C00BAE5FC /* MADocumentState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADocumentState.m; path = MAD/MADocument/MADocumentState.m; sourceTree = "<group>"; };
 		4C401E511BAE4E9400BAE5FC /* MADDataTableLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataTableLocation.h; path = MAD/MADDataTable/MADDataTableLocation.h; sourceTree = "<group>"; };
 		4C401E521BAE4E9400BAE5FC /* MADDataTableLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataTableLocation.m; path = MAD/MADDataTable/MADDataTableLocation.m; sourceTree = "<group>"; };
-		4C401E601BAE4F4000BAE5FC /* NSData+Comparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Comparson.h"; path = "MAD/Categories/NSData+Comparson.h"; sourceTree = "<group>"; };
-		4C401E611BAE4F4000BAE5FC /* NSData+Comparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Comparson.m"; path = "MAD/Categories/NSData+Comparson.m"; sourceTree = "<group>"; };
 		4C41238B1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabaseCredentals+MADDatabaseConnection.h"; sourceTree = "<group>"; };
 		4C41238C1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabaseCredentals+MADDatabaseConnection.m"; sourceTree = "<group>"; };
 		4C4754391CF35C8200BC9E02 /* MADDocumentObjectTypeDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentObjectTypeDescriptor.h; path = MAD/MADDocumentObjectTypeDescriptor.h; sourceTree = "<group>"; };
@@ -824,8 +820,8 @@
 		4C8278BA1DB76BFD005313F5 /* MADNotificationFileUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNotificationFileUpdate.h; path = MAD/MADNotificationFileUpdate.h; sourceTree = "<group>"; };
 		4C8278BB1DB76BFD005313F5 /* MADNotificationFileUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNotificationFileUpdate.m; path = MAD/MADNotificationFileUpdate.m; sourceTree = "<group>"; };
 		4C8278BE1DB76E19005313F5 /* MADNotificationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNotificationProtocol.h; sourceTree = "<group>"; };
-		4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+RelativePath.h"; path = "MAD/Categories/NSString+RelativePath.h"; sourceTree = "<group>"; };
-		4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+RelativePath.m"; path = "MAD/Categories/NSString+RelativePath.m"; sourceTree = "<group>"; };
+		4C82C97E1CF0B08A00F244F6 /* MADPathUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPathUtilities.h; path = MAD/Categories/MADPathUtilities.h; sourceTree = "<group>"; };
+		4C82C97F1CF0B08A00F244F6 /* MADPathUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPathUtilities.m; path = MAD/Categories/MADPathUtilities.m; sourceTree = "<group>"; };
 		4C82C9881CF21A3E00F244F6 /* madpng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = madpng.c; sourceTree = "<group>"; };
 		4C82C9891CF21A3E00F244F6 /* madpng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = madpng.h; sourceTree = "<group>"; };
 		4C85A1261E3F322600545E94 /* RptqDocumentElementGroupKey+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RptqDocumentElementGroupKey+Extras.h"; path = "MAD/rptq/RptqDocumentElementGroupKey+Extras.h"; sourceTree = "<group>"; };
@@ -1396,10 +1392,8 @@
 		4C401E5D1BAE4F2F00BAE5FC /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				4C401E601BAE4F4000BAE5FC /* NSData+Comparson.h */,
-				4C401E611BAE4F4000BAE5FC /* NSData+Comparson.m */,
-				4C82C97E1CF0B08A00F244F6 /* NSString+RelativePath.h */,
-				4C82C97F1CF0B08A00F244F6 /* NSString+RelativePath.m */,
+				4C82C97E1CF0B08A00F244F6 /* MADPathUtilities.h */,
+				4C82C97F1CF0B08A00F244F6 /* MADPathUtilities.m */,
 				4C7C00CE1EE289BA00E7A5B1 /* NSPredicate+Creators.h */,
 				4C7C00CF1EE289BA00E7A5B1 /* NSPredicate+Creators.m */,
 			);
@@ -2016,7 +2010,6 @@
 				4C1CFF101D0531A4009DBA4F /* MADocumentObjectAttributes.h in Headers */,
 				4CFA87471E446E78002903B7 /* MADTableFieldIdentifier.h in Headers */,
 				4CC2849D1BADE9F000775B72 /* RptqQueryTable+Extras.h in Headers */,
-				4C401E6C1BAE4F4000BAE5FC /* NSData+Comparson.h in Headers */,
 				4CC284871BADE9C500775B72 /* RptqDocumentElementLabelLink+Extras.h in Headers */,
 				4CC284991BADE9E800775B72 /* RptqQueryPredicate+Extras.h in Headers */,
 				4CC284831BADE9BD00775B72 /* RptqDocumentElementLabel+Extras.h in Headers */,
@@ -2207,7 +2200,7 @@
 				4C235CD71D1F81E900D3D77C /* MADReportSectionsEnumerator.h in Headers */,
 				4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */,
 				4C401D6A1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.h in Headers */,
-				4C82C9801CF0B08A00F244F6 /* NSString+RelativePath.h in Headers */,
+				4C82C9801CF0B08A00F244F6 /* MADPathUtilities.h in Headers */,
 				4C5939831E3EF7E400582271 /* RptqDocumentElementImage.h in Headers */,
 				4CB98DB91F43F0A00043B583 /* MADOperationCreateDocumentCreateDocument.h in Headers */,
 				4C47544D1CF3672500BC9E02 /* MADAggregateFunctionInputType.h in Headers */,
@@ -2436,10 +2429,9 @@
 				4C401DF21BAE3BD900BAE5FC /* MADQuerySampleDataField.m in Sources */,
 				4C4F12531D0917B20002294E /* MADErrorDocument.m in Sources */,
 				4C24809D1C8B20E00058E6B4 /* MADFonts.m in Sources */,
-				4C401E6D1BAE4F4000BAE5FC /* NSData+Comparson.m in Sources */,
 				4CC9827F1F4BB98300E0496A /* MADDesignerViewer.m in Sources */,
 				4C4F12891D0B948D0002294E /* MADQueryFullTableEnumerator.m in Sources */,
-				4C82C9811CF0B08A00F244F6 /* NSString+RelativePath.m in Sources */,
+				4C82C9811CF0B08A00F244F6 /* MADPathUtilities.m in Sources */,
 				4C994F471BE2B1320058627A /* MADReportSectionRepresentation.m in Sources */,
 				4C5939841E3EF7E400582271 /* RptqDocumentElementImage.m in Sources */,
 				4C401D571BAE3AF800BAE5FC /* MTPaperC2.m in Sources */,

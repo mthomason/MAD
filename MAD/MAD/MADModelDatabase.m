@@ -19,7 +19,7 @@
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSExpressionDescription.h>
 
-#import <MADFoundation/NSString+Common.h>
+#import <MADFoundation/MADStringUtilities.h>
 
 #import "MADModel.h"
 #import "MADModelTable.h"
@@ -279,12 +279,12 @@
 	inTable = NSStringFromSelector(@selector(inTable));
 	inDatabase = NSStringFromSelector(@selector(inDatabase));
 	name = NSStringFromSelector(@selector(name));
-	inTableInDB = [inTable stringByAppendingKeyPath:inDatabase];
-	inTableName = [inTable stringByAppendingKeyPath:name];
+	inTableInDB = [MADStringUtilities stringByAppendingKeyPath:inTable toString:inDatabase];
+	inTableName = [MADStringUtilities stringByAppendingKeyPath:inTable toString:name];
 	
-	NSString *inTableInDBIdentifier = [inTableInDB stringByAppendingPeriod];
+	NSString *inTableInDBIdentifier = [MADStringUtilities stringByAppendingPeriodToString:inTableInDB];
 	inTableInDBIdentifier = [inTableInDBIdentifier stringByAppendingString:keyIdentifier];
-	NSString *inDatabaseIdentifier = [inDatabase stringByAppendingPeriod];
+	NSString *inDatabaseIdentifier = [MADStringUtilities stringByAppendingPeriodToString:inDatabase];
 	inDatabaseIdentifier = [inDatabaseIdentifier stringByAppendingString:keyIdentifier];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
@@ -375,7 +375,7 @@
 	expressionDescription.expression = [NSExpression expressionForKeyPath:keyPathIdentifier];
 	expressionDescription.expressionResultType = NSInteger64AttributeType;
 	NSString *keyPath = NSStringFromSelector(@selector(inDatabase));
-	keyPath = [keyPath stringByAppendingPeriod];
+	keyPath = [MADStringUtilities stringByAppendingPeriodToString:keyPath];
 	keyPath = [keyPath stringByAppendingString:keyPathIdentifier];
 
 	NSString *entityName = NSStringFromClass([RptqQuery class]);
