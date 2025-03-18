@@ -285,6 +285,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
             r = mad_copy_data(source_archive, dest_archive);
             if (r < ARCHIVE_WARN) {
                 os_log_debug(OS_LOG_DEFAULT, "Error (%d): mad_copy_data", r);
+                free(path); free(location);
                 goto EXTRACT_MAD_FAIL;
             }
         } else {
