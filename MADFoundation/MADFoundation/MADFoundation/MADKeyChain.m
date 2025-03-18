@@ -238,7 +238,7 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	return status;
 }
 
-+ (void)deleteKey:(NSString *)key {
++ (OSStatus)deleteKey:(NSString *)key {
 	
 	NSDictionary *query = [MADKeyChain newDictionaryQueryGeneric:key];
 	CFDataRef queryData = NULL;
@@ -247,9 +247,10 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	if (deleteStatus == errSecSuccess) {
 		deleteStatus = SecItemDelete((__bridge CFDictionaryRef)query);
 	}
+	return deleteStatus;
 }
 
-+ (void)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error {
++ (bool)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error {
 	
 	NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:key];
 	NSDictionary *queryPassword = [MADKeyChain queryPasswordDefination:key];
@@ -274,9 +275,12 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 			deleteError = [NSError errorWithDomain:@"MADKeyChain" code:deleteStatus userInfo:nil];
 		}
 	}
+	bool success = true;
 	if (deleteError != nil && *error != nil) {
 		*error = deleteError;
+		success = false;
 	}
+	return success;
 }
 
 @end
