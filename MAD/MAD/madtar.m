@@ -375,10 +375,10 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
         if ((fd = open(filename, O_RDONLY)) == -1) {
             os_log_debug(OS_LOG_DEFAULT, "Failed to open file %s.\n", filename);
         } else {
-            status = 0;
             la_ssize_t w_size;
             while ((len = read(fd, buff, buff_size)) > 0) {
                 w_size = archive_write_data(archive, buff, (size_t)len);
+                os_log_debug(OS_LOG_DEFAULT, "Archive size (%zd).", w_size);
             }
             
             if ((status = close(fd)) == -1) {
