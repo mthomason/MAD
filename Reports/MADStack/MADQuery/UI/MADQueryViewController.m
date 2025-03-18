@@ -684,8 +684,8 @@ BOOL storeEnabled() {
 		numberOfTables--;
 		
 		NSError * __autoreleasing error = NULL;
-		BOOL success = NO;
-		if (!(success = [private save:&error])) {
+		BOOL success = [private save:&error];
+		if (!success) {
 			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		} else {
 			[strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
@@ -716,8 +716,8 @@ BOOL storeEnabled() {
 		}
 	}];
 	NSError * __autoreleasing error = NULL;
-	BOOL success = NO;
-	if (!(success = [document.managedObjectContext save:&error])) {
+	BOOL success = [document.managedObjectContext save:&error];
+	if (!success) {
 		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
 	[self observeManagedObjectContextChanges:document.managedObjectContext];
