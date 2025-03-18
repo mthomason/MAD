@@ -393,7 +393,6 @@
 		4CEA05AB1ED3E6100062624F /* MADDesignerElementImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA05AA1ED3E6100062624F /* MADDesignerElementImageView.m */; };
 		4CEBD0301E319535009FE2DC /* MADAnimatedTransitionControllerPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBD02F1E319535009FE2DC /* MADAnimatedTransitionControllerPush.m */; };
 		4CEBD0331E319546009FE2DC /* MADAnimatedTransitionControllerPop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBD0321E319546009FE2DC /* MADAnimatedTransitionControllerPop.m */; };
-		4CEFDD1A1CF782C70092C148 /* NSUserDefaults+MADDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */; };
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF3040D1D1E175700466560 /* MADQueryViewSectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3040C1D1E175700466560 /* MADQueryViewSectionDelegate.m */; };
@@ -1337,8 +1336,6 @@
 		4CEBD02F1E319535009FE2DC /* MADAnimatedTransitionControllerPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitionControllerPush.m; path = MADStack/MADQuery/UI/MADAnimatedTransitionControllerPush.m; sourceTree = "<group>"; };
 		4CEBD0311E319546009FE2DC /* MADAnimatedTransitionControllerPop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAnimatedTransitionControllerPop.h; path = MADStack/MADQuery/UI/MADAnimatedTransitionControllerPop.h; sourceTree = "<group>"; };
 		4CEBD0321E319546009FE2DC /* MADAnimatedTransitionControllerPop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitionControllerPop.m; path = MADStack/MADQuery/UI/MADAnimatedTransitionControllerPop.m; sourceTree = "<group>"; };
-		4CEFDD181CF782C70092C148 /* NSUserDefaults+MADDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+MADDesigner.h"; sourceTree = "<group>"; };
-		4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+MADDesigner.m"; sourceTree = "<group>"; };
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF304081D1E160000466560 /* MADQueryViewControllerLayoutSectionSelectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerLayoutSectionSelectorProtocol.h; sourceTree = "<group>"; };
 		4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADIdentifierQueryViewSections.h; sourceTree = "<group>"; };
@@ -2471,8 +2468,6 @@
 		4C59BDC31C9AAA4E0031BC6C /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				4CEFDD181CF782C70092C148 /* NSUserDefaults+MADDesigner.h */,
-				4CEFDD191CF782C70092C148 /* NSUserDefaults+MADDesigner.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -4103,7 +4098,6 @@
 				4CFEE8121BB7A22800AFAA0A /* MADQueryAddLinkJoinTypeController.m in Sources */,
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4CDFC99C1EDEFAE7008E1AD6 /* MADElementViewManager.m in Sources */,
-				4CEFDD1A1CF782C70092C148 /* NSUserDefaults+MADDesigner.m in Sources */,
 				4C40204C1BAE92F200BAE5FC /* MADButtonTwitter.m in Sources */,
 				4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */,
 				4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */,

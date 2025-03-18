@@ -70,7 +70,7 @@ struct MADVectorBoolImpl {
 	for (auto i = impl->_container.begin(); i != impl->_container.end(); ++i) {
 		[debuggingString appendFormat:@"%@\n", (*i ? @"YES" : @"NO")];
 	}
-	return debuggingString;
+	return [debuggingString autorelease];
 }
 
 @end

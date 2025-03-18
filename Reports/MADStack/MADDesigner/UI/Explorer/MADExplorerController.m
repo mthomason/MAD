@@ -85,8 +85,6 @@
 #import "MADOperationInstallSampleDocument.h"
 #import "MTVerificationController.h"
 
-#import "NSUserDefaults+MADDesigner.h"
-
 #import "MTStoreKitController+Features.h"
 
 #import "MADSearchBar.h"
@@ -260,7 +258,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 			NSUserDefaults *defaults;
 			NSDictionary *defaultsToRegister;
 			
-			defaults = [MADUserDefaults newUserDefaults];
+			defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.everydayapps.mad.primary"];
 			defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
 								  @NO, MADUpgradeInstalledChinook,
 								  @NO, MADUpgradeInstalledSamples,
