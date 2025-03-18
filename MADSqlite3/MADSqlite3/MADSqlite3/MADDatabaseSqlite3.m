@@ -481,14 +481,14 @@ void sqliteLog(void *foo, const char* statement) {
 	return result;
 }
 
-- (BOOL)executeSQL: (NSString *)sql
-		 fieldKeys: (NSArray *)fieldKeys
-	  onConnection: (id)dbconn
-   intoResultTable: (MADDataTable *)dataTable
-	transactionSet: (BOOL)partOfTransactionSet
-	returnsResults: (BOOL)returnsResults
-	binaryBindings: (NSArray *)binaryBindings
-		 withError: (NSError * __autoreleasing *)resultError {
+- (BOOL)executeSQL:(NSString *)sql
+		 fieldKeys:(NSArray *)fieldKeys
+	  onConnection:(id)dbconn
+   intoResultTable:(MADDataTable *)dataTable
+   transactionSet:(BOOL)partOfTransactionSet
+   returnsResults:(BOOL)returnsResults
+   binaryBindings:(NSArray *)binaryBindings
+		withError:(NSError * __autoreleasing *)resultError {
    
 	sqlite3_stmt *statement = NULL;
 	statement = partOfTransactionSet ? _bulkStatement : statement;
@@ -497,11 +497,9 @@ void sqliteLog(void *foo, const char* statement) {
 	char *errorMessage = NULL;
 	char *csql = sqlite3_mprintf(sql.UTF8String);
 	
-	
 	if (statement == NULL) {
 		if (sqlite3_prepare_v2(_database, csql, -1, &statement, NULL) != SQLITE_OK) {
-			os_log_debug(OS_LOG_DEFAULT, "%s at %s", sqlite3_errmsg(_database),
-					 __PRETTY_FUNCTION__);
+			os_log_debug(OS_LOG_DEFAULT, "%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
 			success = NO;
 		} else {
 			success = YES;
@@ -520,25 +518,17 @@ void sqliteLog(void *foo, const char* statement) {
 	}
 	
 	if (returnsResults && success) {
-		
-		
 		int numberOfColumns = sqlite3_column_count(statement);
 		numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
 		[dataTable removeAllObjects];
 		
 		NSUInteger rowCounter = 0;
-		int sqlite3_step_result;
-		while (SQLITE_ROW == (sqlite3_step_result = sqlite3_step(statement))) {
-			
-			if (rowCounter == 0) {  //If first time around, calculate column information.
+		while (sqlite3_step(statement) == SQLITE_ROW) { // Directly use sqlite3_step result
+			if (rowCounter == 0) {  // If first time around, calculate column information.
 				for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
-					
-					//@autoreleasepool {
-					
 					NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
 					
-					MADDataColumn *dataColumn;
-					dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
+					MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
 					
 					int affentyType = sqlite3_column_type(statement, (int)columnCounter);
 					
@@ -555,34 +545,8 @@ void sqliteLog(void *foo, const char* statement) {
 					int pAutoinc = 0;
 					
 					if (tableName != NULL) {
-						
-						/*
-						 
-						 int sqlite3_table_column_metadata(
-						 sqlite3 *db,                // Connection handle
-						 const char *zDbName,        // Database name or NULL
-						 const char *zTableName,     // Table name
-						 const char *zColumnName,    // Column name
-						 char const **pzDataType,    // OUTPUT: Declared data type
-						 char const **pzCollSeq,      OUTPUT: Collation sequence name
-						 int *pNotNull,               OUTPUT: True if NOT NULL constraint exists
-						 int *pPrimaryKey,            OUTPUT: True if column part of PK
-						 int *pAutoinc                OUTPUT: True if column is auto-increment
-						 );
-						 */
-						
-						int metadata_result;
-						metadata_result = sqlite3_table_column_metadata(_database,
-																		databaseName,
-																		tableName,
-																		columnName,
-																		&pzDataType,
-																		&pzCollSeq,
-																		&pNotNull,
-																		&pPrimaryKey,
-																		&pAutoinc);
-						//NSAssert(metadata_result == SQLITE_OK, @"%s at %s",
-						//         sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+						sqlite3_table_column_metadata(_database, databaseName, tableName, columnName,
+													  &pzDataType, &pzCollSeq, &pNotNull, &pPrimaryKey, &pAutoinc);
 					}
 					
 					dataColumn.fieldName = fieldName;
@@ -590,13 +554,11 @@ void sqliteLog(void *foo, const char* statement) {
 					MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
 					dataColumn.type = columnType;
 					
-					dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
-					dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
-					dataColumn.notNull = pNotNull ? NO : pNotNull;
+					dataColumn.primaryKey = pPrimaryKey ? YES : NO;
+					dataColumn.autoIncrement = pAutoinc ? YES : NO;
+					dataColumn.notNull = pNotNull ? YES : NO;
 					[dataTable addColumn:dataColumn];
-					//}
 				}
-				
 				[dataTable beginBulkInsert];
 			}
 			[self readRow:rowCounter];
@@ -604,14 +566,14 @@ void sqliteLog(void *foo, const char* statement) {
 			NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
 			
 			for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
-				
-				resultsForRow[fieldKeys[(NSUInteger)colCtr]] = [MADDatabaseResultValue newDatabaseResultValue:statement
-																								 columnNumber:colCtr];
-				
+				NSString *fieldKey = fieldKeys[(NSUInteger)colCtr];
+				if (fieldKey != nil) { // Ensure the key is not nil
+					resultsForRow[fieldKey] = [MADDatabaseResultValue newDatabaseResultValue:statement
+																			   columnNumber:colCtr];
+				}
 			}
 			
 			[dataTable addRowWithDataForFieldKeys:resultsForRow];
-			//resultsForRow = nil;
 			rowCounter++;
 		}
 		
@@ -620,8 +582,7 @@ void sqliteLog(void *foo, const char* statement) {
 	
 	if (!returnsResults) {
 		if (!Sqlite3StepResultOK(sqlite3_step(statement))) {
-			os_log_debug(OS_LOG_DEFAULT, "%s",
-						 (char *)sqlite3_errmsg(_database));
+			os_log_debug(OS_LOG_DEFAULT, "%s", (char *)sqlite3_errmsg(_database));
 		}
 	}
 	
@@ -656,7 +617,6 @@ void sqliteLog(void *foo, const char* statement) {
 		NSString *domain = @"MTSqlite3";
 		MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
 		error = [errorUserInfo errorWithDomain:domain code:4784];
-		//NSLog(@"%@", error);
 	}
 	if (resultError != NULL) *resultError = error;
 

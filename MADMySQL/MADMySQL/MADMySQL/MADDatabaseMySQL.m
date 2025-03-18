@@ -63,7 +63,6 @@
 	[self readRow:row];
 }
 
-// FIXME: Return error.
 - (id)connectWithConnection:(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)connection
 				 credentals:(MADCredential *)credentals
 			connectionError:(NSError * __autoreleasing *)error {
@@ -77,7 +76,6 @@
 	
 	NSError * __autoreleasing connError = nil;
 	if (connection && credentals) {
-		
 		MysqlServer *serv = [[MysqlServer alloc] init];
 		
 		NSString *server = [connection server];
@@ -90,11 +88,21 @@
 		serv.user = credentals.username.copy;
 		serv.password = credentals.password.copy;
 		
-		conn = [MysqlConnection connectToServer: serv error: &connError];
+		conn = [MysqlConnection connectToServer:serv error:&connError];
 		
 		success = (conn && connError == nil);
-		if (!success) *error = [connError copy];
+		if (!success && error != NULL) {
+			*error = [connError copy];
+		}
+	} else {
+		if (error != NULL) {
+			NSString *errorMessage = @"Missing connection or credentials.";
+			MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
+																		   andMessage:errorMessage];
+			*error = [errorUserInfo errorWithDomain:NSStringFromClass(self.class) code:1001];
+		}
 	}
+	
 	return success ? conn : nil;
 }
 
@@ -109,20 +117,20 @@
 		c = ((MADQuery <MADQueryCredentialProtocol> *)query).credential.copy;
 	}
 	
-	MysqlConnection *dbconn = [self connectWithConnection: connectionSettings
-											   credentals: c
-										  connectionError: &dberror];
+	MysqlConnection *dbconn = [self connectWithConnection:connectionSettings
+											   credentals:c
+										  connectionError:&dberror];
 	if (dbconn && dberror == nil) {
 		MysqlFetch *myFetch = [[MysqlFetch alloc] init];
 		myFetch.delegate = self;
 		
 		NSError * __autoreleasing sqlError = nil;
 		NSString *queryString = [query getSql:self error:&sqlError];
-		if (queryString.length > 0 && sqlError == nil) {
-			[myFetch fetchWithCommand: queryString
-							dataTable: &dataTable
-						 onConnection: dbconn
-								error: &sqlError];
+		if (queryString != nil && queryString.length > 0 && sqlError == nil) {
+			[myFetch fetchWithCommand:queryString
+							 dataTable:&dataTable
+						  onConnection:dbconn
+								 error:&sqlError];
 		}
 		if (sqlError) {
 			MADErrorUserInfo *errorUserInfo;
@@ -136,7 +144,7 @@
 			result = YES;
 		}
 	} else {
-		if (dberror != nil) {
+		if (dberror != nil && error != NULL) {
 			*error = [dberror copy];
 		}
 	}
@@ -153,8 +161,7 @@
 	}
 	NSError * __autoreleasing executeError = nil;
 	BOOL result = [self executeQuery:query withDataTable:dataTable andError:&executeError];
-	if (executeError != nil) {
-		//NSError * __autoreleasing errorResult = [executeError copy];
+	if (executeError != nil && error != NULL) {
 		*error = [executeError copy];
 	}
 	return result;
@@ -352,12 +359,11 @@
 
 #pragma mark - Reading Fields
 
-- (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
-									  connection: (id)dbconn
-										   error: (NSError * __autoreleasing *)error {
-	
+- (NSArray<MADDatabaseField *> *)fieldsForTable:(NSString *)tableName
+									 connection:(id)dbconn
+										  error:(NSError * __autoreleasing *)error {
 	MysqlConnection *conn = dbconn;
-	NSMutableDictionary *resultsDictionary = nil;
+	NSMutableDictionary *resultsDictionary = [NSMutableDictionary dictionary]; // Initialize the dictionary
 	
 	MADSafeQueryField *safeTableName = [self newSafeIdentifier:tableName];
 	NSString *formatShowColumns = @"SHOW COLUMNS FROM %@;";
@@ -369,10 +375,10 @@
 	NSError * __autoreleasing errorShowColumns = nil;
 	NSError * __autoreleasing errorColumnMetaData = nil;
 	
-	MADDataTable *dataTable = [myFetch fetchWithCommand: command
-											  dataTable: &dataTableVirtual1
-										   onConnection: conn
-												  error: &errorShowColumns];
+	MADDataTable *dataTable = [myFetch fetchWithCommand:command
+											  dataTable:&dataTableVirtual1
+										   onConnection:conn
+												  error:&errorShowColumns];
 	if (errorShowColumns == nil) {
 		NSUInteger resultsCount = [dataTable count];
 		resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
@@ -392,30 +398,33 @@
 		NSString *formatSelectAll = @"SELECT * FROM %@ LIMIT 0;";
 		NSString *command2 = [[NSString alloc] initWithFormat:formatSelectAll, safeTableName];
 		MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
-		MADDataTable *dataTable2 = [myFetch2 fetchWithCommand: command2
-													dataTable: &dataTableVirtual2
-												 onConnection: conn
-														error: &errorColumnMetaData];
+		MADDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2
+													dataTable:&dataTableVirtual2
+												 onConnection:conn
+														error:&errorColumnMetaData];
 		if (errorColumnMetaData == nil) {
 			NSEnumerator *columnsEnumerator = [dataTable2 columnsEnumerator];
 			
 			MADDatabaseField *databaseField;
 			for (MADDataColumn *dataColumn in columnsEnumerator) {
 				databaseField = resultsDictionary[dataColumn.fieldName];
-				databaseField.fieldTypeNative = dataColumn.nativeType;
-				databaseField.fieldType = [MADDataTypeMySQL dataTypeForNativeType: dataColumn.nativeType];;
-				databaseField.width = dataColumn.dataLength;
-				databaseField.decimals = (int16_t)dataColumn.dataPercision;
-				databaseField.primaryKey = dataColumn.isPrimaryKey;
+				if (databaseField) { // Ensure the field exists in the dictionary
+					databaseField.fieldTypeNative = dataColumn.nativeType;
+					databaseField.fieldType = [MADDataTypeMySQL dataTypeForNativeType:dataColumn.nativeType];
+					databaseField.width = dataColumn.dataLength;
+					databaseField.decimals = (int16_t)dataColumn.dataPercision;
+					databaseField.primaryKey = dataColumn.isPrimaryKey;
+				}
 			}
 		}
 	}
+	
 	NSError *errorResult = errorShowColumns == nil ? errorColumnMetaData : errorShowColumns;
-	if (error == NULL && errorResult != nil) {
-		*error = errorResult;
+	if (errorResult != nil && error != NULL) { // Check if error is not NULL before dereferencing
+		*error = [errorResult copy]; // Use copy to ensure immutability
 	}
 	
-	NSArray * __autoreleasing resultValues = resultsDictionary.allValues;
+	NSArray *resultValues = resultsDictionary.allValues;
 	return resultValues;
 }
 

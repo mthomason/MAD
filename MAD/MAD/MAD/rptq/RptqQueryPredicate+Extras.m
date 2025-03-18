@@ -57,17 +57,19 @@
 												  error:(NSError * __autoreleasing *)error {
 	if (leftFieldID == nil || rightFieldID == nil) {
 		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field."];
-		*error = [e errorWithDomain:[self domain] code:2340];
+		if (error != NULL) { // Check if error is not NULL before dereferencing
+			*error = [e errorWithDomain:[self domain] code:2340];
+		}
 		return nil;
 	}
 	RptqQueryField *leftField, *rightField;
 	leftField = [managedObjectContext objectWithID:leftFieldID];
 	rightField = [managedObjectContext objectWithID:rightFieldID];
-	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class])
-										  inManagedObjectContext: managedObjectContext];
+	NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryPredicate class])
+										  inManagedObjectContext:managedObjectContext];
 	RptqQueryPredicate *queryPredicate;
-	queryPredicate = [[RptqQueryPredicate alloc] initWithEntity: ed
-								 insertIntoManagedObjectContext: managedObjectContext];
+	queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed
+									 insertIntoManagedObjectContext:managedObjectContext];
 	queryPredicate.hasRightField    = rightField;
 	queryPredicate.hasLeftField     = leftField;
 	queryPredicate.rightFieldID     = nil;
@@ -83,14 +85,16 @@
 												  error:(NSError * __autoreleasing *)error {
 	if (leftFieldID == nil || rightUserValue == nil) {
 		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field or value."];
-		*error = [e errorWithDomain:[self domain] code:2341];
+		if (error != NULL) { // Check if error is not NULL before dereferencing
+			*error = [e errorWithDomain:[self domain] code:2341];
+		}
 		return nil;
 	}
 	RptqQueryField *leftField;
 	leftField = [managedObjectContext objectWithID:leftFieldID];
 	NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-	NSEntityDescription *ed = [NSEntityDescription entityForName: entityName
-										  inManagedObjectContext: managedObjectContext];
+	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName
+										  inManagedObjectContext:managedObjectContext];
 	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
 	queryPredicate.hasRightField    = nil;
 	queryPredicate.hasLeftField     = leftField;
@@ -107,10 +111,12 @@
 												error:(NSError * __autoreleasing *)error {
 	if (leftUserValue == nil || rightUserValue == nil) {
 		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value."];
-		*error = [e errorWithDomain:[self domain] code:2342];
+		if (error != NULL) { // Check if error is not NULL before dereferencing
+			*error = [e errorWithDomain:[self domain] code:2342];
+		}
 		return nil;
 	}
-	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+	NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
 	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
 	queryPredicate.hasRightField    = nil;
 	queryPredicate.hasLeftField     = nil;
@@ -122,18 +128,20 @@
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
 									comparsonOperator:(MADPredicateOperator)comparsonOperator
-									  andRightFieldID:(NSManagedObjectID /* RptqQueryField */ *)rightFieldID
+									  andRightFieldID:(NSManagedObjectID *)rightFieldID
 							  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 												error:(NSError * __autoreleasing *)error {
 	if (leftUserValue == nil || rightFieldID == nil) {
 		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value or field."];
-		*error = [e errorWithDomain:[self domain] code:2343];
+		if (error != NULL) { // Check if error is not NULL before dereferencing
+			*error = [e errorWithDomain:[self domain] code:2343];
+		}
 		return nil;
 	}
 	RptqQueryField *rightField;
 	rightField = [managedObjectContext objectWithID:rightFieldID];
 	
-	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
+	NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
 	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
 	queryPredicate.hasRightField    = rightField;
 	queryPredicate.hasLeftField     = nil;

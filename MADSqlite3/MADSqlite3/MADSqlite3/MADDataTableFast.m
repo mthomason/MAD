@@ -468,7 +468,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 											uniqueColumnHack: unique
 											  columnAffinity: columnAffinity];
 	query.database = _databaseForInserts;
-	if (!(success = [_databaseForInserts executeQuery:query withError:&errorQuery])) {
+	if (!([_databaseForInserts executeQuery:query withError:&errorQuery])) {
 		os_log_debug(OS_LOG_DEFAULT,
 					 "%s at %s",
 					 sqlite3_errmsg(_databaseForInserts->_database),
@@ -485,27 +485,25 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	return _binaryBindings;
 }
 
-- (void)addRow:(NSArray <id> *)row error:(NSError * __autoreleasing *)error {
-
+- (bool)addRow:(NSArray<id> *)row error:(NSError * __autoreleasing *)error {
+	bool result = true;
 	_rowDataLastInserted = row;
-	
 	self.rowCounter++;
 
 	if (self.groupKeyIndexes == nil) {
 		[self setupGroupKeyIndexes];
 	}
-	
+
 	sqlite3 *sqlite_database = _databaseForInserts->_database;
 
 	if (_bulkInsertLoop) {
-		
 		[self.bulkInsertQuery update];
-		
+
 		BOOL success = YES;
-		
+
 		if (_statementInsert == NULL) {
-			NSString *sql = [[NSString alloc] initWithString: [_bulkInsertQuery getSql:nil]];
-			char *csql = sqlite3_mprintf("%s", sql.UTF8String);
+			NSString *sql = [[NSString alloc] initWithString:[_bulkInsertQuery getSql:nil]];
+			char *csql = sqlite3_mprintf("%s", sql.UTF8String); // Use %s for safer formatting
 			int prepare_result = sqlite3_prepare_v2(sqlite_database, csql, -1, &_statementInsert, NULL);
 			NSAssert(prepare_result == SQLITE_OK, @"ExecuteQueryWithSql failed (%s).",
 					 (char *)sqlite3_errmsg(sqlite_database));
@@ -513,33 +511,36 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 			sqlite3_free(csql);
 			csql = NULL;
 		}
-		
+
 		NSUInteger columnCounter = 0;
 		for (id docObject in row) {
 			@autoreleasepool {
 				NSString *fieldName = self.columnKeys[columnCounter];
 				MADDataColumn *column = self.queryColumns[fieldName];
-				
-				id databinding = [[MADDatabaseDataBinding alloc] initWithDataType: column.type
-																	  fieldIndex: columnCounter
-																		   value: docObject];
+
+				id databinding = [[MADDatabaseDataBinding alloc] initWithDataType:column.type
+																	   fieldIndex:columnCounter
+																			value:docObject];
 				[_databaseForInserts bindStatement:(void **)&_statementInsert withBindings:databinding];
 			}
 			columnCounter++;
 		}
-		
+
 		NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(sqlite_database));
-		
-		//int step_result = sqlite3_step(_statementInsert);
-		
+
+		// Execute the statement
 		if (sqlite3_step(_statementInsert) != SQLITE_DONE) {
 			NSString *e = [NSString stringWithFormat:@"sqlite3_step failed (%s).",
 						   (char *)sqlite3_errmsg(sqlite_database)];
 			MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
 																	  andMessage:e];
-			*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:328943];
+			if (error != NULL) {
+				*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:328943];
+				result = false;
+			}
 		}
-	
+
+		// Clear bindings and reset the statement
 		if (sqlite3_clear_bindings(_statementInsert) != SQLITE_OK) {
 			NSString *e = [NSString stringWithFormat:@"sqlite3_clear_bindings failed (%s).",
 						   (char *)sqlite3_errmsg(sqlite_database)];
@@ -547,6 +548,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 																	  andMessage:e];
 			if (error != NULL) {
 				*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:328943];
+				result = false;
 			}
 		}
 
@@ -557,21 +559,25 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 																	  andMessage:e];
 			if (error != NULL) {
 				*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:328943];
+				result = false;
 			}
 		}
 	} else {
-
-		MADQuery *query = [[MADQueryCacheAddRow alloc] initWithObject: self];
+		MADQuery *query = [[MADQueryCacheAddRow alloc] initWithObject:self];
 		NSError * __autoreleasing errorQuery = NULL;
-		
+
 		__unused BOOL success = [_databaseForInserts executeQuery:query withError:&errorQuery];
 		NSAssert(success, @"%s at %s", sqlite3_errmsg(sqlite_database),
 				 __PRETTY_FUNCTION__);
-	
 	}
+	return result;
 }
 
+// FIXME: Maybe wrap in autorelease block.
 - (void)addRowWithDataForFieldKeys:(NSDictionary <NSString *, id> *)row {
+
+	//@autoreleasepool {
+		
 	NSArray <NSString *> *columnKeys = self.columnKeys;
 	NSMutableArray *rowData = [[NSMutableArray alloc] initWithCapacity:columnKeys.count];
 	for (id columnDefKey in columnKeys) {
@@ -584,6 +590,9 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	}
 	NSError * __autoreleasing error = nil;
 	[self addRow:rowData error:&error];
+	
+	//}
+	
 }
 
 - (void)sortUsingDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors {
@@ -811,13 +820,13 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 					  column:(NSString *)columnKey
 					   error:(NSError * __autoreleasing *)error {
 	NSString *columnName = [self columnNameForIdentifier:columnKey];
-	NSArray <NSString *> *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
+	NSArray<NSString *> *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
 	if (![self.columnKeys containsObject:columnName]) {
 		NSString *title = NSLocalizedString(@"Error", @"Error");
 		NSString *message = NSLocalizedString(@"Missing results", @"Missing results");
 		MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title
 																	   andMessage:message];
-		if (error != NULL) {
+		if (error != NULL) { // Check if error is not NULL before dereferencing
 			*error = [errorUserInfo errorWithDomain:NSStringFromClass(self.class)
 											  code:8927];
 		}
@@ -827,29 +836,30 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	NSDictionary *result = nil;
 	NSString *tableName = [[self tableName] copy];
 	
-	NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
-	NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
-	NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+	NSNumber *keyRowId = [[NSNumber alloc] initWithShort:MADQuerySelectRowId];
+	NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort:MADQuerySelectFieldKeys];
+	NSNumber *keyTableName = [[NSNumber alloc] initWithShort:MADQuerySelectTableName];
 	
 	NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:rowID];
-	NSDictionary <NSNumber *, id> *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-											  cacheID,       keyRowId,
-											  columnKeys,    keyFieldKey,
-											  tableName,     keyTableName, nil];
+	NSDictionary<NSNumber *, id> *options = [[NSDictionary alloc] initWithObjectsAndKeys:
+											 cacheID, keyRowId,
+											 columnKeys, keyFieldKey,
+											 tableName, keyTableName,
+											 nil]; // Sentinel to mark the end of the key-value pairs
 	
-	MADQuery *query = [[MADQueryCacheSelectRowId alloc] initWithObject: options];
+	MADQuery *query = [[MADQueryCacheSelectRowId alloc] initWithObject:options];
 	sqlite3_stmt *statement = NULL;
 	NSError * __autoreleasing errorSQL = nil;
 	NSString *sql = [query getSql:&errorSQL];
 	
-	const char *sqlUTF8String = sql.UTF8String;
-	char *queryString = sqlite3_mprintf((char *) sqlUTF8String);
+	const char *sqlUTF8String = [sql UTF8String];
+	char *queryString = sqlite3_mprintf("%s", sqlUTF8String);
 	
 	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 	BOOL success = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1,
 									  &statement, NULL) == SQLITE_OK;
 	
-	if (success) {
+	if (success) {  // Expect success to == NO in normal working conditions.
 		int stepResult = sqlite3_step(statement);
 		if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
 			result = [self newCurrentObject:statement fieldKey:columnName];
@@ -859,7 +869,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 			NSString *message = [NSString stringWithFormat:@"%s", sqlite3message];
 			MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title
 																		   andMessage:message];
-			if (error != NULL) {
+			if (error != NULL) { // Check if error is not NULL before dereferencing
 				*error = [errorUserInfo errorWithDomain:NSStringFromClass(self.class)
 												   code:stepResult];
 			}

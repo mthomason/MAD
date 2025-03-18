@@ -123,7 +123,6 @@
 	NSError * __autoreleasing error = NULL;
 	NSArray <NSDictionary *> *results;
 	NSFetchRequest *fetchQueryTable;
-	NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
 	NSUInteger expressionCount;
 	
 	void (^setupExpressionWithType)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
@@ -132,9 +131,7 @@
 		expressionDescription.expression = expression;
 		expressionDescription.expressionResultType = type;
 	};
-	
-	entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
-	
+		
 	expressionCount = 7;
 	NSExpressionDescription *expressionDescription[expressionCount];
 	
@@ -149,7 +146,7 @@
 	keyWidth = NSStringFromSelector(@selector(width));
 	keyIdentifier = NSStringFromSelector(@selector(identifier));
 	keyInTableIdentifier = NSStringFromSelector(@selector(inTable));
-	keyInTableIdentifier = [MADStringUtilities stringByAppendingPeriodToString:keyInTableIdentifier];
+	keyInTableIdentifier = [MADStringUtilities stringByAppendingPeriodToString: keyInTableIdentifier];
 	keyInTableIdentifier = [keyInTableIdentifier stringByAppendingString:keyIdentifier];
 
 	
@@ -157,7 +154,7 @@
 		expressionDescription[i] = [[NSExpressionDescription alloc] init];
 	}
 	
-	fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabaseSchemaField class])];
 	
 	NSExpression *expressionForName =           [NSExpression expressionForKeyPath:keyName],
 				 *expressionForPrimaryKey =     [NSExpression expressionForKeyPath:keyPrimaryKey],

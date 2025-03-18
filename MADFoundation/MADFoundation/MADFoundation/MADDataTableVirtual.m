@@ -202,7 +202,7 @@
 	return data;
 }
 
-- (void)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
+- (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
 	NSUInteger index = 0;
 	NSUInteger numberOfColumns = [self numberOfColumns];
 	NSMutableDictionary *indexedRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
@@ -219,6 +219,7 @@
 	[self.sortIndex addObject:indexedRow];
 	numberOfRows++;
 	self.rowCounter = numberOfRows;
+	return true;
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
