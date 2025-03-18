@@ -30,7 +30,7 @@
 
 #import "madtar.h"
 
-#import "MADPathUtilities.h"
+#import "NSString+RelativePath.h"
 
 size_t m_malloc(char **str, size_t len);
 int backup_file(char *, char *);
@@ -69,19 +69,19 @@ int backup_file(char *path_origin, char *path_destination) {
 				r, errno, strerror(errno));
 	} else {
 		// 1. Does a previous backup exist exist?
-		if ((r = access(path_destination, F_OK)) < 0)
+		if (access(path_destination, F_OK) < 0)
 			os_log_debug(OS_LOG_DEFAULT, "No backup file to delete (%d): %s\n\t%s)",
 					errno, strerror(errno), path_destination);
 		else
 			// 2. If a previous backup exist, delete it.
-			if ((r = remove(path_destination)) < 0)
+			if (remove(path_destination) < 0)
 				os_log_debug(OS_LOG_DEFAULT, "Error removing file: %s\n\t%d: %s)",
 						path_destination, errno, strerror(errno));
 		
 		// 3. Copy file to backup location... that is, create the backup.
-		if ((r = copyfile(path_origin_basename, path_destination, NULL,
+		if (copyfile(path_origin_basename, path_destination, NULL,
 						  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
-						  COPYFILE_COPY_XATTR)) < 0)
+						  COPYFILE_COPY_XATTR) < 0)
 			os_log_debug(OS_LOG_DEFAULT, "Error: Copyfile %s.\n\tGot %d: %s.\n\t\n\tStore is migration directory?",
 				  path_origin, errno, strerror(errno));
 	}
@@ -94,11 +94,11 @@ int write_archive(char *outname, NSURL *filewrapper) {
 	NSString *directoryToArchiveFileName = filewrapper.lastPathComponent;
 	struct archive *archive = archive_write_new();
 	
-	if ((r = archive_write_set_format_pax_restricted(archive)) != ARCHIVE_OK) {
+	if (archive_write_set_format_pax_restricted(archive) != ARCHIVE_OK) {
 		os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
 
-	if ((r = archive_write_add_filter_bzip2(archive)) != ARCHIVE_OK) {
+	if (archive_write_add_filter_bzip2(archive) != ARCHIVE_OK) {
 		os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
 	
@@ -126,8 +126,8 @@ int write_archive(char *outname, NSURL *filewrapper) {
 			baseUrl = baseUrl.URLByDeletingLastPathComponent;
 		}
 		
-		source_path_relative = [MADPathUtilities stringWithPath:source_filepath.path
-													 relativeTo: baseUrl.path];
+		source_path_relative = [NSString newStringWithPath: source_filepath.path
+												relativeTo: baseUrl.path];
 		
 		char *source_filepath_fsr = strdup(source_filepath.fileSystemRepresentation);
 		char *source_path_relative_fsr = strdup(source_path_relative.fileSystemRepresentation);
@@ -216,7 +216,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 
 	// 3. Restore backup on failure.
 	if (!success && access(backup_path, F_OK)) {
-		if ((r = restore_backup(origin_path, backup_path, archive_path)) < 0) {
+		if (restore_backup(origin_path, backup_path, archive_path) < 0) {
 			os_log_debug(OS_LOG_DEFAULT, "Error in restore_backup.");
 		}
 	}
