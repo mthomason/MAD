@@ -287,7 +287,7 @@ static NSString * const StringEmpty = @"";
 }
 
 - (void)addColumn:(MADDataColumn *)column {}
-- (void)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {}
+- (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error { return true; }
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {}
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {}
 - (void)removeAllObjects {}

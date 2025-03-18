@@ -82,7 +82,7 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 /// Adds a row to the table.
 /// @param row The data for the row to add.
 /// @param error An optional error pointer for failure reporting.
-- (void)addRow:(nonnull NSArray *)row error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (bool)addRow:(nonnull NSArray *)row error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 /// Adds a row with data mapped to specific field keys.
 /// @param row A dictionary mapping field keys to data values.
