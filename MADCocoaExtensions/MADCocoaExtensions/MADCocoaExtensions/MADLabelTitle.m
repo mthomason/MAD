@@ -8,7 +8,7 @@
 
 #import "MADLabelTitle.h"
 #import <UIKit/UILabel.h>
-#import "NSAttributedString+Logo.h"
+#import "MADAttributedStringLogo.h"
 #import "MADViewHelpers.h"
 
 @interface MADLabelTitle ()

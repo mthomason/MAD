@@ -6,7 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import "NSAttributedString+Logo.h"
+#import "MADAttributedStringLogo.h"
 
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIFont.h>

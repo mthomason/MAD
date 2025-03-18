@@ -1,9 +1,9 @@
 //
-//  NSData+Comparson.h
+//  NSData+Comparison.h
 //  MAD
 //
 //  Created by Michael Thomason on 6/12/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_NSData_Comparison_h
