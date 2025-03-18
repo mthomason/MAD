@@ -11,15 +11,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MADAtomicStoreCacheNode : NSAtomicStoreCacheNode {
-    NSEntityDescription *entityDescription; // cached for convenience
-    NSDictionary *propertyDataCache;
+	NSEntityDescription *entityDescription; // cached for convenience
+	NSDictionary *propertyDataCache;
 }
 
 - (NSEntityDescription *)entity;
 
 - (void)setPropertyCacheData:(NSDictionary *)dictionary;
 
-- (void)resolvePropertyValues:(NSError **)error;
+- (bool)resolvePropertyValues:(NSError **)error;
 
 @end
 

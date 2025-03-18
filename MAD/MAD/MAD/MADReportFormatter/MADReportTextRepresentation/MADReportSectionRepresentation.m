@@ -39,16 +39,16 @@
 	return self;
 }
 
-- (BOOL)addRow:(nonnull MADReportSectionRowsRepresentation *)row
+- (bool)addRow:(nonnull MADReportSectionRowsRepresentation *)row
 		 error:(NSError * __nullable __autoreleasing * __nullable)error {
-	BOOL success = YES;
+	bool success = true;
 	@try {
 		[_rows addObject:row];
 	} @catch (NSException *exception) {
 		MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
 																  andMessage:@"Failed to add null value."];
 		*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:49832];
-		success = NO;
+		success = false;
 	} @finally { }
 	return success;
 }

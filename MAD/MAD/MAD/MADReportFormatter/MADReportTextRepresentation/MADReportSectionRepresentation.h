@@ -23,7 +23,7 @@
 	@property (nonatomic, assign) MADDocumentSectionType type;
 
 	- (nonnull instancetype)initWithNumberOfRows:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
-	- (BOOL)addRow:(nonnull MADReportSectionRowsRepresentation *)row
+	- (bool)addRow:(nonnull MADReportSectionRowsRepresentation *)row
 			 error:(NSError * __nullable __autoreleasing * __nullable)error;
 
 @end
