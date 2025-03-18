@@ -267,8 +267,8 @@ CGCenterOfRect(CGRect rect) {
 CG_INLINE CGPoint CGRandomPointInRect(CGRect rect);
 CG_INLINE
 CGPoint CGRandomPointInRect(CGRect rect) {
-	return CGPointMake((random() % (int)fabs(rect.origin.x + rect.size.width + 1.0000f)) + (int)rect.origin.x,
-					   (random() % (int)fabs(rect.origin.y + rect.size.height + 1.0000f)) + (int)rect.origin.y);
+	return CGPointMake((arc4random() % (uint32_t)fabs(rect.origin.x + rect.size.width + 1.0000f)) + (uint32_t)rect.origin.x,
+					   (arc4random() % (uint32_t)fabs(rect.origin.y + rect.size.height + 1.0000f)) + (uint32_t)rect.origin.y);
 }
 
 CG_INLINE CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds);
@@ -302,8 +302,13 @@ CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds) {
 CG_INLINE CGPoint CGPointMakeRandomOffscreen(CGFloat offSetSize);
 CG_INLINE CGPoint
 CGPointMakeRandomOffscreen(CGFloat offSetSize) {
-		return rand()%2 == 0 ? (rand()%2 == 0 ? CGPointMake(rand() % (int)MADFloat_1024, 0.0000f - offSetSize) : CGPointMake(0.0000f - offSetSize, rand() % (int)MADFloat_1024)) :
-								rand()%2 == 0 ? CGPointMake(rand() % (int)MADFloat_1024, MADFloat_1024 + offSetSize) : CGPointMake(MADFloat_1024 + offSetSize, rand() % (int)MADFloat_1024);
+	return arc4random_uniform(2) == 0 ?
+		   (arc4random_uniform(2) == 0 ?
+			CGPointMake(arc4random_uniform((uint32_t)MADFloat_1024), 0.0000f - offSetSize) :
+			CGPointMake(0.0000f - offSetSize, arc4random_uniform((uint32_t)MADFloat_1024))) :
+		   (arc4random_uniform(2) == 0 ?
+			CGPointMake(arc4random_uniform((uint32_t)MADFloat_1024), MADFloat_1024 + offSetSize) :
+			CGPointMake(MADFloat_1024 + offSetSize, arc4random_uniform((uint32_t)MADFloat_1024)));
 }
 
 CG_INLINE CGRect CGRectFrameAtRandomOffscreenLocation(CGSize size);
