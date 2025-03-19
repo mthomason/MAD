@@ -16,21 +16,6 @@
 #import <dispatch/dispatch.h>
 #import <stdio.h>
 
-#import <Foundation/NSKeyedArchiver.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSPathUtilities.h>
-#import <Foundation/NSCoder.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSKeyValueCoding.h>
-#import <Foundation/NSNull.h>
-#import <Foundation/NSIndexSet.h>
-#import <Foundation/NSOperation.h>
-
 #import <MADFoundation/madlib.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
@@ -263,33 +248,17 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	
 }
 
-+ (NSString *)keyUrlFastCache {
-	SEL sel = @selector(urlFastCache);
-	return NSStringFromSelector(sel);
-}
++ (NSString *)keyUrlFastCache { return NSStringFromSelector(@selector(urlFastCache)); }
 
-+ (NSString *)keyTag {
-	SEL sel = @selector(tag);
-	return NSStringFromSelector(sel);
-}
++ (NSString *)keyTag { return NSStringFromSelector(@selector(tag)); }
 
-+ (NSString *)keyBulkInsertLoop {
-	SEL sel = @selector(bulkInsertLoop);
-	return NSStringFromSelector(sel);
-}
++ (NSString *)keyBulkInsertLoop { return NSStringFromSelector(@selector(bulkInsertLoop)); }
 
-+ (NSString *)keySortDescriptorsSet {
-	return NSStringFromSelector(@selector(sortDescriptorsSet));
-}
++ (NSString *)keySortDescriptorsSet { return NSStringFromSelector(@selector(sortDescriptorsSet)); }
 
-+ (NSString *)keyGroupKeys {
-	return NSStringFromSelector(@selector(groupKeyIndexes));
-}
++ (NSString *)keyGroupKeys { return NSStringFromSelector(@selector(groupKeyIndexes)); }
 
-+ (NSString *)keyColumns {
-	SEL selColumns = @selector(columns);
-	return NSStringFromSelector(selColumns);
-}
++ (NSString *)keyColumns { return NSStringFromSelector(@selector(columns)); }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
 	[super encodeWithCoder:encoder];
@@ -1202,7 +1171,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (NSUInteger)numberOfRows { return self.rowCounter; }
 
-- (NSString *)columnKeyForColumnName:(NSString *)columnName {
+- (nullable NSString *)columnKeyForColumnName:(NSString *)columnName {
 	NSString *key;
 	for (NSString *columnKey in self.columnKeys) {
 		MADDataColumn *column = self.columns[columnKey];

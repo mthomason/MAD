@@ -9,11 +9,14 @@
 #ifndef Reports_MADDataTableFast_h
 #define Reports_MADDataTableFast_h
 
+#import <Foundation/Foundation.h>
 #import <MADFoundation/MADDataTable.h>
 
 @protocol MADCacheProtocol, MADDataProtocol, MADQueryDataBindingProtocol;
 
 @class MADQuery, MADDatabaseSqlite3;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MADDataTableFast : MADDataTable
 	<NSCoding, NSFastEnumeration>
@@ -24,7 +27,7 @@
 	@property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
 	- (NSString *)tableName;
-	- (NSString *)columnKeyForColumnName:(NSString *)columnName;
+	- (nullable NSString *)columnKeyForColumnName:(NSString *)columnName;
 	- (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
 	- (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
@@ -34,5 +37,7 @@
 						   error:(NSError * __autoreleasing *)error;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

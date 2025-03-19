@@ -25,8 +25,6 @@
 
 #import <MADFoundation/MADDataColumn.h>
 
-static NSString * const StringEmpty = @"";
-
 @implementation MADDataTable
 
 #pragma mark - Initializers
@@ -112,7 +110,7 @@ static NSString * const StringEmpty = @"";
 
 - (void)setupWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
 	
-	NSString *name = StringEmpty;
+	NSString *name = @"";
 	self.name = name;
 	
 	NSMutableArray <NSString *> *columnKeys = [[NSMutableArray alloc] init];
