@@ -32,7 +32,6 @@
 #import <Foundation/NSOperation.h>
 
 #import <MADFoundation/madlib.h>
-#import <MADFoundation/MADDataTablePlist.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>

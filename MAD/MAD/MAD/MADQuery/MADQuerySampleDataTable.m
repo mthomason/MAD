@@ -19,7 +19,6 @@
 #import <Foundation/NSError.h>
 
 #import <MADFoundation/MADDataTable.h>
-#import <MADFoundation/MADDataTablePlist.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>

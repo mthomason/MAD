@@ -144,13 +144,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 	return @" AS ";
 }
 
-- (NSString *)identifier {
-	return @"NONE";
-}
+- (NSString *)identifier { return @"NONE"; }
 
-+ (NSString *)identifier {
-	return @"NONE";
-}
++ (NSString *)identifier { return @"NONE"; }
 
 - (void)readRow:(NSUInteger)row {
 	[[MADNotificationDidReadRows sharedObject] database:self readRow:row];

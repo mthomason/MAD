@@ -15,9 +15,9 @@
 
 @protocol MADOperationPromptErrorProtocol <NSObject>
 
-    - (NSError *)error;
-    - (BOOL)displayError;
-    - (NSUInteger)tag;
+	- (NSError *)error;
+	- (BOOL)displayError;
+	- (NSUInteger)tag;
 
 @end
 
