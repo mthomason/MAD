@@ -554,9 +554,9 @@ void sqliteLog(void *foo, const char* statement) {
 					MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
 					dataColumn.type = columnType;
 					
-					dataColumn.primaryKey = pPrimaryKey ? YES : NO;
-					dataColumn.autoIncrement = pAutoinc ? YES : NO;
-					dataColumn.notNull = pNotNull ? YES : NO;
+					dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
+					dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
+					dataColumn.notNull = pNotNull ? NO : pNotNull;
 					[dataTable addColumn:dataColumn];
 				}
 				[dataTable beginBulkInsert];
