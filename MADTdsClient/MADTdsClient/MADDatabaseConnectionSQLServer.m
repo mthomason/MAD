@@ -27,16 +27,11 @@
 @dynamic identifier;
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-	
-	id dbConnection = nil;
-	
-	dbConnection = [[self alloc] initWithHost: credentals.host
-									   server: credentals.server
-									 database: credentals.database
-									  andPort: credentals.port];
-	
+	id dbConnection = [[self alloc] initWithHost: credentals.host
+										  server: credentals.server
+										database: credentals.database
+										 andPort: credentals.port];
 	return dbConnection;
-	
 }
 
 - (instancetype)initWithHost:(NSString *)host

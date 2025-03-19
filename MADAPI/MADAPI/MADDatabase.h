@@ -11,7 +11,7 @@
 #ifndef Reports_MTDatabase_h
 #define Reports_MTDatabase_h
 
-#import <Foundation/NSObject.h>
+#import <Foundation/Foundation.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseProtocol.h>
 #import <MADAPI/MADDatabaseSQLProtocol.h>
@@ -33,7 +33,7 @@ extern NSString * const MADSqlTextFromPart;
 
 @interface MADDatabase : NSObject
 	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource,
-		MADDatabaseDBProtocol, MADDatabaseSQLProtocol>
+		MADDatabaseDBProtocol, MADDatabaseSQLProtocol, NSCoding, NSCopying>
 
 	+ (NSString *)imageIconName;
 	+ (NSString *)driverName;

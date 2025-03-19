@@ -7,7 +7,6 @@
 //
 
 #import <MADFoundation/MADDataType.h>
-#import <Foundation/NSString.h>
 #import <MADFoundation/NSData+Comparison.h>
 
 SEL MADDataTypeSelectorForSorting(MADDataType dataType) {

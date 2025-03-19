@@ -11,15 +11,10 @@
 #endif
 
 #import "MADDatabase.h"
-#import <Foundation/NSString.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSArray.h>
-
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADStringUtilities.h>
-
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -33,25 +28,51 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 @implementation MADDatabase
 
-/*- (instancetype)init {
-	if (self = [super init]) {
-		NSMutableArray *errors = [[NSMutableArray alloc] init];
-		self.errors = errors;
-	}
-	return self;
-}*/
++ (NSString *)imageIconName { return @""; }
 
-+ (NSString *)imageIconName {
-	return @"";
-}
-
-+ (NSString *)driverName {
-	return @"";
-}
++ (NSString *)driverName { return @""; }
 
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
 	id database = [[self alloc] init];
 	return database;
+}
+
+#pragma mark - Initialization
+
+- (instancetype) init {
+	if (self = [super init]) {
+		_errors = [[NSMutableArray alloc] init];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeObject:self.databaseConnection forKey:@"databaseConnection"];
+	[coder encodeObject:self.errors forKey:@"errors"];
+	[coder encodeBool:self.isLicensedUser forKey:@"isLicensedUser"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+	if (self = [super init]) {
+		_databaseConnection = [decoder decodeObjectForKey:@"databaseConnection"];
+		_errors = [[decoder decodeObjectForKey:@"errors"] mutableCopy];
+		_isLicensedUser = [decoder decodeBoolForKey:@"isLicensedUser"];
+	}
+	return self;
+}
+
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+	MADDatabase *copy = [[[self class] allocWithZone:zone] init];
+	if (copy) {
+		copy.databaseConnection = [self.databaseConnection copy];
+		copy.errors = [self.errors mutableCopy];
+		copy->_isLicensedUser = self.isLicensedUser;
+	}
+	return copy;
 }
 
 - (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection {
@@ -205,13 +226,9 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 	return @"SELECT\n";
 }
 
-- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit {   //Generally limited resuls are in a LIMIT part, but
-	return @"SELECT\n";                                          //  SQL Server uses the TOP part (not default here).
-}
+- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit { return @"SELECT\n"; }
 
-- (NSString *)sqlLimitClause {
-	return [self sqlLimitClause:  NSUIntegerMax];                    //No limit by default
-}
+- (NSString *)sqlLimitClause { return [self sqlLimitClause:  NSUIntegerMax]; }
 
 - (NSString *)sqlLimitClause:(NSUInteger)limit {
 	NSString *sqlLimitClause = (limit > 0 && limit != NSUIntegerMax) ?
@@ -247,18 +264,12 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 	NSString *selectPart = [self selectPart];
 	NSString *tableAliasConnector = [self tableAliasConnector];
-	NSString *result = [[NSString alloc] initWithFormat:MADTextSqlSelectSampleDataForField,
-														selectPart, safeField, tableAliasConnector,
-														safeFieldAlias, @"\nFROM\n", safeTable];
-	return result;
+	return [NSString stringWithFormat:MADTextSqlSelectSampleDataForField, selectPart, safeField,
+			tableAliasConnector, safeFieldAlias, @"\nFROM\n", safeTable];
 }
 
-- (NSString *)sqlAggregateFunctionLength {
-	return @"LENGTH";
-}
+- (NSString *)sqlAggregateFunctionLength { return @"LENGTH"; }
 
-- (NSString *)sqlAggregateFunctionMax {
-	return @"MAX";
-}
+- (NSString *)sqlAggregateFunctionMax { return @"MAX"; }
 
 @end

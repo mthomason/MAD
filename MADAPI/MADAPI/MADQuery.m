@@ -12,13 +12,6 @@
 
 #import <MADAPI/MADQuery.h>
 
-#import <Foundation/NSNull.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSArray.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSDictionary.h>
-
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 

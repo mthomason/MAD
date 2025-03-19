@@ -13,7 +13,7 @@
 #import <MADFoundation/MADDataType.h>
 
 @interface MADDatabaseField : NSObject
-	<NSCopying>
+	<NSCopying, NSCoding>
 	
 	- (instancetype)initWithName:(NSString *)name;
 
