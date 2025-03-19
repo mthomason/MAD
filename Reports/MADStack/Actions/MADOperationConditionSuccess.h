@@ -13,9 +13,9 @@
 #import <MADFoundation/MADOperationCondition.h>
 
 @interface MADOperationConditionSuccess : NSObject
-    <MADOperationCondition>
-    - (instancetype)initWithKey:(NSString *)key;
-    @property (nonatomic, assign) BOOL reverseCondition;
+	<MADOperationCondition>
+	- (instancetype)initWithKey:(NSString *)key;
+	@property (nonatomic, assign) BOOL reverseCondition;
 @end
 
 #endif

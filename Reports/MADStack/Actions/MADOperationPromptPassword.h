@@ -21,25 +21,25 @@
 
 
 @interface MADOperationPromptPassword : MADOperation
-    <MADOperationResultStringProtocol,
-        MADKeyChainKeyValueProtocol,
-        MADOperationHoldsPasswordProtocol,
-        MADOperationConditionPolarQuestionResultProtocol,
-        MADOperationConditionDisplayedAlertProtocol>
+	<MADOperationResultStringProtocol,
+		MADKeyChainKeyValueProtocol,
+		MADOperationHoldsPasswordProtocol,
+		MADOperationConditionPolarQuestionResultProtocol,
+		MADOperationConditionDisplayedAlertProtocol>
 
-    - (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController;
-    - (NSString *)valueForKey:(NSString *)key;
+	- (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController;
+	- (NSString *)valueForKey:(NSString *)key;
 
-    @property (nonatomic, readonly, assign) BOOL alertDisplayed;
-    @property (nonatomic, readonly, assign) BOOL alertDisplayedAffirmed;
-    @property (nonatomic, readonly, assign) BOOL gotPassword;
-    @property (nonatomic, readonly, assign) BOOL bypass;
-    @property (nonatomic, readonly, assign) BOOL userContinue;
-    @property (nonatomic, assign) BOOL result;
+	@property (nonatomic, readonly, assign) BOOL alertDisplayed;
+	@property (nonatomic, readonly, assign) BOOL alertDisplayedAffirmed;
+	@property (nonatomic, readonly, assign) BOOL gotPassword;
+	@property (nonatomic, readonly, assign) BOOL bypass;
+	@property (nonatomic, readonly, assign) BOOL userContinue;
+	@property (nonatomic, assign) BOOL result;
 
-    @property (nonatomic, readonly, assign) MADCredentialSource source;
+	@property (nonatomic, readonly, assign) MADCredentialSource source;
 
-    @property (nonatomic, readonly, copy) NSString *password;
+	@property (nonatomic, readonly, copy) NSString *password;
 
 @end
 

@@ -13,8 +13,8 @@
 
 @interface MADOperationKeyChainDeletePassword ()
 
-    @property (nonatomic, readwrite, copy) NSString *key;
-    @property (atomic, readwrite, assign) BOOL success;
+	@property (nonatomic, readwrite, copy) NSString *key;
+	@property (atomic, readwrite, assign) BOOL success;
 
 @end
 
@@ -23,11 +23,11 @@
 - (void)dealloc { }
 
 - (instancetype)initWithKey:(NSString *)key {
-    if (self = [super init]) {
-        _key = key.copy;
-        _success = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		_key = key.copy;
+		_success = NO;
+	}
+	return self;
 }
 
 - (BOOL)isAsynchronous { return YES; }

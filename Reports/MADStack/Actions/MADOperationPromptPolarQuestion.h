@@ -16,13 +16,13 @@
 @class UIViewController;
 
 @interface MADOperationPromptPolarQuestion : MADOperation
-    <MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
-    
-    - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
-                   viewController:(UIViewController * __weak)viewController;
+	<MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
+	
+	- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message
+				   viewController:(UIViewController * __weak)viewController;
 
-    @property (nonatomic, readonly, assign) BOOL alertDisplayed;
-    @property (nonatomic, readonly, assign) BOOL result;
+	@property (nonatomic, readonly, assign) BOOL alertDisplayed;
+	@property (nonatomic, readonly, assign) BOOL result;
 
 @end
 

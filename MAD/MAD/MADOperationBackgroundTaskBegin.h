@@ -13,7 +13,7 @@
 #import <MADFoundation/MADOperation.h>
 
 @protocol MADOperationBackgroundTaskProtocol <NSObject>
-    - (UIBackgroundTaskIdentifier)backgroundTaskIdentifier;
+	- (UIBackgroundTaskIdentifier)backgroundTaskIdentifier;
 @end
 
 @interface MADOperationBackgroundTaskBegin : MADOperation

@@ -11,31 +11,31 @@
 
 @interface MADOperationRefreshInitializeMainDataTable ()
 
-    @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, assign) BOOL success;
+	@property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, assign) BOOL success;
 
 @end
 
 @implementation MADOperationRefreshInitializeMainDataTable
 
 - (instancetype)initWithDocument:(MADocument *)document {
-    if (self = [super init]) {
-        _document = document;
-        _success = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		_document = document;
+		_success = NO;
+	}
+	return self;
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-    if (self.cancelled) {
-        return [self finish];
-    }
+	if (self.cancelled) {
+		return [self finish];
+	}
 
-    [self.document resetCache];
-    
-    [self finish];
+	[self.document resetCache];
+	
+	[self finish];
 }
 
 @end

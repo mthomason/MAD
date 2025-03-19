@@ -76,7 +76,7 @@
 	return _connectionString;
 }
 
-- (BOOL)requiresCredientals {
+- (BOOL)requiresCredentials {
 	return YES;
 }
 

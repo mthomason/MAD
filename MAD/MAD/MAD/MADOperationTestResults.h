@@ -13,8 +13,8 @@
 
 @protocol MADOperationTestResults <NSObject>
 
-    @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign, getter=isSuccess) BOOL success;
+	@property (nonatomic, readonly, strong) NSError *error;
+	@property (nonatomic, readonly, assign, getter=isSuccess) BOOL success;
 
 @end
 

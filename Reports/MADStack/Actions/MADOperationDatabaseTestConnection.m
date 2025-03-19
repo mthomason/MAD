@@ -29,142 +29,142 @@
 #import <MAD/MADDatabase+Constructor.h>
 
 @interface MADOperationDatabaseTestConnection ()
-    <MADDatabaseResultsProtocol>
+	<MADDatabaseResultsProtocol>
 
-    //Parameters
-    @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
-    @property (nonatomic, copy) MADCredential *credentials;
+	//Parameters
+	@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
+	@property (nonatomic, copy) MADCredential *credentials;
 
-    //Store
-    @property (nonatomic, strong) MADDatabase *database;
-    @property (nonatomic, strong) MADDataTable *datatable;
+	//Store
+	@property (nonatomic, strong) MADDatabase *database;
+	@property (nonatomic, strong) MADDataTable *datatable;
 
-    //Results
-    @property (nonatomic, readwrite, strong) NSError *error;
-    @property (nonatomic, readwrite, assign) BOOL success;
+	//Results
+	@property (nonatomic, readwrite, strong) NSError *error;
+	@property (nonatomic, readwrite, assign) BOOL success;
 
 @end
 
 @implementation MADOperationDatabaseTestConnection
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection {
-    if (self = [super init]) {
-        _databaseConnection = connection.copy;
-        _credentials = nil;
-        _success = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		_databaseConnection = connection.copy;
+		_credentials = nil;
+		_success = NO;
+	}
+	return self;
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
-                               credentials:(MADCredential *)credentials {
-    if (self = [super init]) {
-        _databaseConnection = connection.copy;
-        _credentials = credentials.copy;
-        _success = NO;
-    }
-    return self;
+							   credentials:(MADCredential *)credentials {
+	if (self = [super init]) {
+		_databaseConnection = connection.copy;
+		_credentials = credentials.copy;
+		_success = NO;
+	}
+	return self;
 }
 
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
 
-    // Find credentials from dependencies.
-    if (self.credentials == nil) {
-        
-        NSString *username = nil;
-        NSString *password = nil;
-        
-        NSArray <NSOperation *> *dependencies = self.dependencies;
-        for (NSOperation *operation in dependencies) {
+	// Find credentials from dependencies.
+	if (self.credentials == nil) {
+		
+		NSString *username = nil;
+		NSString *password = nil;
+		
+		NSArray <NSOperation *> *dependencies = self.dependencies;
+		for (NSOperation *operation in dependencies) {
 
-            if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+			if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
  
-                if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
-                    MADCredential *credentials;
-                    credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials.copy;
-                    self.credentials = credentials;
-                    break;
-                }
-                
-            } else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
-                if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
-                    NSString *value;
-                    value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
-                    switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
-                        case MADKeyChainReadOperationTypeUsername:
-                            username = value;
-                            break;
-                        case MADKeyChainReadOperationTypePassword:
-                            password = value;
-                            break;
-                            
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-        
-        if (self.credentials == nil) {
-            if (username != nil && password != nil) {
-                MADCredential *credentials;
-                credentials = [[MADCredential alloc] initWithUsername: username
-                                                          andPassword: password];
-                self.credentials = credentials;
-            }
-        }
-    }
-    
-    // If we still don't have credentials, then fail.
-    if (self.credentials == nil) {
-        NSString *testFailed = NSLocalizedString(@"Test Failed", @"Test Failed");
-        NSString *credentialsNotFound = NSLocalizedString(@"Credentials not found.", @"Credentials not found.");
-        MADErrorUserInfo *errorInfo = [[MADErrorUserInfo alloc] initWithTitle: testFailed
-                                                                   andMessage: credentialsNotFound];
-        NSError *error = [errorInfo errorWithDomain:NSStringFromClass([self class]) code:-1];
-        self.error = error;
-        [self finishWithError:error];
-        return;
-    }
-    
-    MADDatabaseConnection *databaseConnection = self.databaseConnection;
-    MADQueryTest *queryTest = [[MADQueryTest alloc] initWithObject: databaseConnection];
-    __kindof MADDataTable *datatable = [[MADDataTableVirtual alloc] initWithId: databaseConnection.hash];
-    
-    self.datatable = datatable;
-    
-    MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
-    db.delegate = self;
-    queryTest.database = db;
-    self.database = db;
-    
-    NSError * __autoreleasing error = NULL;
-    self.success = [queryTest.database executeQuery:queryTest withError:&error];
-    
-    _databaseConnection = nil;
-    
-    if (self.success) {
-        [self finish];
-    } else {
-        if (error == NULL) {
-            self.error = nil;
-            [self finishWithError:nil];
-        } else {
-            NSError *err = error;
-            self.error = error;
-            [self finishWithError:err];
-        }
-    }
+				if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
+					MADCredential *credentials;
+					credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials.copy;
+					self.credentials = credentials;
+					break;
+				}
+				
+			} else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+				if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
+					NSString *value;
+					value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
+					switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
+						case MADKeyChainReadOperationTypeUsername:
+							username = value;
+							break;
+						case MADKeyChainReadOperationTypePassword:
+							password = value;
+							break;
+							
+						default:
+							break;
+					}
+				}
+			}
+		}
+		
+		if (self.credentials == nil) {
+			if (username != nil && password != nil) {
+				MADCredential *credentials;
+				credentials = [[MADCredential alloc] initWithUsername: username
+														  andPassword: password];
+				self.credentials = credentials;
+			}
+		}
+	}
+	
+	// If we still don't have credentials, then fail.
+	if (self.credentials == nil) {
+		NSString *testFailed = NSLocalizedString(@"Test Failed", @"Test Failed");
+		NSString *credentialsNotFound = NSLocalizedString(@"Credentials not found.", @"Credentials not found.");
+		MADErrorUserInfo *errorInfo = [[MADErrorUserInfo alloc] initWithTitle: testFailed
+																   andMessage: credentialsNotFound];
+		NSError *error = [errorInfo errorWithDomain:NSStringFromClass([self class]) code:-1];
+		self.error = error;
+		[self finishWithError:error];
+		return;
+	}
+	
+	MADDatabaseConnection *databaseConnection = self.databaseConnection;
+	MADQueryTest *queryTest = [[MADQueryTest alloc] initWithObject: databaseConnection];
+	__kindof MADDataTable *datatable = [[MADDataTableVirtual alloc] initWithId: databaseConnection.hash];
+	
+	self.datatable = datatable;
+	
+	MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
+	db.delegate = self;
+	queryTest.database = db;
+	self.database = db;
+	
+	NSError * __autoreleasing error = NULL;
+	self.success = [queryTest.database executeQuery:queryTest withError:&error];
+	
+	_databaseConnection = nil;
+	
+	if (self.success) {
+		[self finish];
+	} else {
+		if (error == NULL) {
+			self.error = nil;
+			[self finishWithError:nil];
+		} else {
+			NSError *err = error;
+			self.error = error;
+			[self finishWithError:err];
+		}
+	}
 }
 
 - (void)cleanup {
-    [super cleanup];
-    _credentials = nil;
-    _database = nil;
-    _datatable = nil;
-    _databaseConnection = nil;
+	[super cleanup];
+	_credentials = nil;
+	_database = nil;
+	_datatable = nil;
+	_databaseConnection = nil;
 }
 
 - (BOOL)isSuccess { return _success; }
@@ -174,11 +174,11 @@
 - (NSUInteger)tag { return self.hash; }
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-    return self.credentials;
+	return self.credentials;
 }
 
 - (MADDataTable *)dataTableForQuery:(MADQuery *)query {
-    return self.datatable;
+	return self.datatable;
 }
 
 @end

@@ -17,10 +17,10 @@
 @class UIViewController, MADDatabaseConnection, MADCredential;
 
 @interface MADOperationGetCredentials : MADGroupOperation
-    <MADOperationHoldsCredentialsProtocol, MADKeyChainKeyValueProtocol>
+	<MADOperationHoldsCredentialsProtocol, MADKeyChainKeyValueProtocol>
 
-    - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
-                                viewController: (UIViewController *)viewController;
+	- (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
+								viewController: (UIViewController *)viewController;
 
 @end
 

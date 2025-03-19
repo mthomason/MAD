@@ -36,54 +36,54 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 - (void)execute {
 
-    if (self.cancelled) return [self finish];
+	if (self.cancelled) return [self finish];
 
-    NSURL *fileURL, *databaseURL;
-    NSError *error = nil;
-    NSDataAsset *sampleDB;
+	NSURL *fileURL, *databaseURL;
+	NSError *error = nil;
+	NSDataAsset *sampleDB;
 
-    BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
+	BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
 
-    if (installed) goto FINISH;
+	if (installed) goto FINISH;
 
-    
-    fileURL = [MADOperationInstallSampleDatabase newApplicationBundleSampleDatabaseChinook];
-    databaseURL = [MADOperationInstallSampleDatabase newApplicationSupportSampleDatabaseChinook];
-    
-    if (databaseURL == nil) goto FINISH;
-    
-    sampleDB = [[NSDataAsset alloc] initWithName:MTSampleDatabaseChinook];
-    installed = [sampleDB.data writeToURL:databaseURL options:NSDataWritingAtomic error:&error];
-    
-    if (installed) {
-        NSString *filepath = databaseURL.path;
-        
-        if (self.cancelled) return [self finish];
+	
+	fileURL = [MADOperationInstallSampleDatabase newApplicationBundleSampleDatabaseChinook];
+	databaseURL = [MADOperationInstallSampleDatabase newApplicationSupportSampleDatabaseChinook];
+	
+	if (databaseURL == nil) goto FINISH;
+	
+	sampleDB = [[NSDataAsset alloc] initWithName:MTSampleDatabaseChinook];
+	installed = [sampleDB.data writeToURL:databaseURL options:NSDataWritingAtomic error:&error];
+	
+	if (installed) {
+		NSString *filepath = databaseURL.path;
+		
+		if (self.cancelled) return [self finish];
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filepath]) {
-            
-            if (self.cancelled) return [self finish];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:filepath]) {
+			
+			if (self.cancelled) return [self finish];
 
-            [[NSUserDefaults standardUserDefaults] setBool: YES
-                                                    forKey: MADUpgradeInstalledChinook];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
+			[[NSUserDefaults standardUserDefaults] setBool: YES
+													forKey: MADUpgradeInstalledChinook];
+			[[NSUserDefaults standardUserDefaults] synchronize];
+		}
+	}
 
-    FINISH:;
-    [self finish];
+	FINISH:;
+	[self finish];
 
 }
 
 + (NSURL *)newApplicationBundleSampleDatabaseChinook {
-    return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook
-                                   withExtension: MTDocumentExtentionSqlite3];
+	return [[NSBundle mainBundle] URLForResource: MTSampleDatabaseChinook
+								   withExtension: MTDocumentExtentionSqlite3];
 }
 
 + (NSURL *)newApplicationSupportSampleDatabaseChinook {
-    id appSupportDirectory = [MADURL newURLApplicationSupportFile: MTSampleDatabaseChinook
-                                                        extension: MTDocumentExtentionSqlite3];
-    return appSupportDirectory;
+	id appSupportDirectory = [MADURL newURLApplicationSupportFile: MTSampleDatabaseChinook
+														extension: MTDocumentExtentionSqlite3];
+	return appSupportDirectory;
 }
 
 @end

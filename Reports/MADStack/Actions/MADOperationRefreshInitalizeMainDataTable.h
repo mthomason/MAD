@@ -14,13 +14,13 @@
 @class MADocument;
 
 @protocol MADOperationRefreshInitializeMainDataTableProtocol <NSObject>
-    @property (readonly, nonatomic, weak) MADocument *document;
+	@property (readonly, nonatomic, weak) MADocument *document;
 @end
 
 @interface MADOperationRefreshInitializeMainDataTable : MADOperation
-    <MADOperationRefreshInitializeMainDataTableProtocol>
+	<MADOperationRefreshInitializeMainDataTableProtocol>
 
-    - (instancetype)initWithDocument:(MADocument *)document;
+	- (instancetype)initWithDocument:(MADocument *)document;
 
 @end
 

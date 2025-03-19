@@ -14,14 +14,14 @@
 @class MADocument, MADDatabaseConnection;
 
 @protocol MADOperationCreateDocumentProtocol <NSObject>
-    @property (readonly) MADocument *document;
+	@property (readonly) MADocument *document;
 @end
 
 @interface MADOperationCreateDocumentCreateDocument : MADOperation
-    <MADOperationCreateDocumentProtocol>
+	<MADOperationCreateDocumentProtocol>
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
-    
+	
 @end
 
 #endif

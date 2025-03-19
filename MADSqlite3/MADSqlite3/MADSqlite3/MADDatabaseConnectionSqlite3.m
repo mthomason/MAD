@@ -82,7 +82,7 @@
 	return @"Sqlite 3";
 }
 
-- (BOOL)requiresCredientals {
+- (BOOL)requiresCredentials {
 	return NO;
 }
 

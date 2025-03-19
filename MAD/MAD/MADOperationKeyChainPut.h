@@ -14,7 +14,7 @@
 
 @interface MADOperationKeyChainPut : MADOperation
 
-    - (instancetype)initWithKey:(NSString *)key description:(NSString *)description;
+	- (instancetype)initWithKey:(NSString *)key description:(NSString *)description;
 
 @end
 

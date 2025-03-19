@@ -18,21 +18,21 @@
 
 @interface MADOperationConditionPolarQuestionNegative ()
 
-    @property (nonatomic, readwrite) NSUInteger tag;
+	@property (nonatomic, readwrite) NSUInteger tag;
 
 @end
 
 @implementation MADOperationConditionPolarQuestionNegative
 
 - (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
-    if (self = [super init]) {
-        _tag = tag;
-    }
-    return self;
+	if (self = [super init]) {
+		_tag = tag;
+	}
+	return self;
 }
 
 #pragma mark -
@@ -45,39 +45,39 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation
-                  completion:(void (^)(MADOperationConditionResult *))completion {
-    MADOperationConditionResult *result;
-    result = [self evaluateForOperation:operation];
-    completion(result);
+				  completion:(void (^)(MADOperationConditionResult *))completion {
+	MADOperationConditionResult *result;
+	result = [self evaluateForOperation:operation];
+	completion(result);
 }
 
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    os_log_info(OS_LOG_DEFAULT, "Evaluate\t%s", operation.description.UTF8String);
+	os_log_info(OS_LOG_DEFAULT, "Evaluate\t%s", operation.description.UTF8String);
 
-    NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
-    MADOperationConditionResult *result = nil;
-    
-    if (dependencies.count == 0) {
-        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
-        return result;
-    }
+	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
+	MADOperationConditionResult *result = nil;
+	
+	if (dependencies.count == 0) {
+		result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
+		return result;
+	}
 
-    for (MADOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
-            dependency.identifier == self.tag) {
-            result = [MADOperationConditionPolarQuestionNegativeResult newOperationCondition: (NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency
-                                                                                        name: self.name];
-            break;
-        }
-    }
-    if (result != nil) {
-        return result;
-    } else {
-        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
-        return  result;
-    }
-    
+	for (MADOperation *dependency in dependencies) {
+		if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
+			dependency.identifier == self.tag) {
+			result = [MADOperationConditionPolarQuestionNegativeResult newOperationCondition: (NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency
+																						name: self.name];
+			break;
+		}
+	}
+	if (result != nil) {
+		return result;
+	} else {
+		result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
+		return  result;
+	}
+	
 }
 
 @end

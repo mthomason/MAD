@@ -15,13 +15,13 @@
 
 @interface MADOperationCreateDocument : MADGroupOperation
 
-    - (instancetype)initWithFilename: (NSString *)filename
-                  documentsDirectory: (NSURL *)documentsDirectory
-                  databaseConnection: (MADDatabaseConnection *)databaseConnection
-                      viewController: (UIViewController *)viewController;
+	- (instancetype)initWithFilename: (NSString *)filename
+				  documentsDirectory: (NSURL *)documentsDirectory
+				  databaseConnection: (MADDatabaseConnection *)databaseConnection
+					  viewController: (UIViewController *)viewController;
 
-    @property (nonatomic, assign, readonly, getter=isSuccessConnection) BOOL connectionSuccess;
-    @property (nonatomic, assign, readonly, getter=isSuccessCreate) BOOL successCreate;
+	@property (nonatomic, assign, readonly, getter=isSuccessConnection) BOOL connectionSuccess;
+	@property (nonatomic, assign, readonly, getter=isSuccessCreate) BOOL successCreate;
 
 @end
 

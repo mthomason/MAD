@@ -11,8 +11,8 @@
 
 @protocol MADOperationDatabaseTestConnectionProtocol <NSObject>
 
-    @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign) BOOL success;
+	@property (nonatomic, readonly, strong) NSError *error;
+	@property (nonatomic, readonly, assign) BOOL success;
 
 @end
 

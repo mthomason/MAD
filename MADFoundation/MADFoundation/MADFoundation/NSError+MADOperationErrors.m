@@ -12,11 +12,11 @@
 @implementation NSError (MADOperationErrors)
 
 + (instancetype)errorWithCode:(NSInteger)code {
-    return [self errorWithCode:code userInfo:nil];
+	return [self errorWithCode:code userInfo:nil];
 }
 
 + (instancetype)errorWithCode:(NSInteger)code userInfo:(NSDictionary *)info {
-    return [NSError errorWithDomain:@"OperationErrors" code:code userInfo:info];
+	return [NSError errorWithDomain:@"OperationErrors" code:code userInfo:info];
 }
 
 @end

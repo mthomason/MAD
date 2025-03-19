@@ -11,12 +11,12 @@
 
 @protocol MADOperationRefreshReloadProtocol <NSObject>
 
-    - (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages;
-    - (void)operation:(MADOperation *)operation updateRecordsRead:(NSUInteger)records;
-    - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active;
-    - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document;
-    - (void)operation:(MADOperation *)operation didReadRows:(NSNotification *)sender;
-    - (void)operation:(MADOperation *)operation didFormatPage:(NSNotification *)sender;
+	- (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages;
+	- (void)operation:(MADOperation *)operation updateRecordsRead:(NSUInteger)records;
+	- (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active;
+	- (void)operation:(MADOperation *)operation finishReload:(MADocument *)document;
+	- (void)operation:(MADOperation *)operation didReadRows:(NSNotification *)sender;
+	- (void)operation:(MADOperation *)operation didFormatPage:(NSNotification *)sender;
 
 @end
 

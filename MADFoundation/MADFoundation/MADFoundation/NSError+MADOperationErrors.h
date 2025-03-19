@@ -12,14 +12,14 @@
 #import <Foundation/NSError.h>
 
 typedef NS_ENUM(NSUInteger, MADOperationErrorCode) {
-    MADConditionFailed = 1,
-    MADExecutionFailed = 2
+	MADConditionFailed = 1,
+	MADExecutionFailed = 2
 };
 
 @interface NSError (MADOperationErrors)
 
-    + (instancetype)errorWithCode:(NSInteger)code;
-    + (instancetype)errorWithCode:(NSInteger)code userInfo:(NSDictionary *)info;
+	+ (instancetype)errorWithCode:(NSInteger)code;
+	+ (instancetype)errorWithCode:(NSInteger)code userInfo:(NSDictionary *)info;
 
 @end
 

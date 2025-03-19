@@ -13,10 +13,10 @@
 
 @interface MADOperationKeyChainDeletePassword : MADOperation
 
-    - (instancetype)initWithKey:(NSString *)key;
+	- (instancetype)initWithKey:(NSString *)key;
 
-    @property (nonatomic, readonly, copy) NSString *key;
-    @property (atomic, readonly, assign) BOOL success;
+	@property (nonatomic, readonly, copy) NSString *key;
+	@property (atomic, readonly, assign) BOOL success;
 
 @end
 

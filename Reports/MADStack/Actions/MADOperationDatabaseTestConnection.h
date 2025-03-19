@@ -17,14 +17,14 @@
 @class MADDatabaseConnection, MADCredential;
 
 @interface MADOperationDatabaseTestConnection : MADOperation
-    <MADOperationPromptErrorProtocol, MADOperationTestResults>
+	<MADOperationPromptErrorProtocol, MADOperationTestResults>
 
-    - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection;
-    - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
-                                   credentials:(MADCredential *)credentials;
+	- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection;
+	- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
+								   credentials:(MADCredential *)credentials;
 
-    @property (nonatomic, readonly, strong) NSError *error;
-    @property (nonatomic, readonly, assign, getter=isSuccess) BOOL success;
+	@property (nonatomic, readonly, strong) NSError *error;
+	@property (nonatomic, readonly, assign, getter=isSuccess) BOOL success;
 
 @end
 

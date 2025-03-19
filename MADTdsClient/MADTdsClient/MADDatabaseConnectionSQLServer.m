@@ -74,7 +74,7 @@
 	return @"TDS";
 }
 
-- (BOOL)requiresCredientals {
+- (BOOL)requiresCredentials {
 	return YES;
 }
 

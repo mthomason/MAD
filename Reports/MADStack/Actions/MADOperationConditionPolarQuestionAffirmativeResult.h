@@ -12,22 +12,22 @@
 #import <MADFoundation/MADOperationConditionResult.h>
 
 @protocol MADOperationConditionPolarQuestionResultProtocol <NSObject>
-    - (BOOL)result;
+	- (BOOL)result;
 @end
 
 
 @interface MADOperationConditionPolarQuestionAffirmativeResult : MADOperationConditionResult
-    <MADOperationConditionPolarQuestionResultProtocol>
-    @property (nonatomic, assign) BOOL result;
+	<MADOperationConditionPolarQuestionResultProtocol>
+	@property (nonatomic, assign) BOOL result;
 
 @end
 
 @interface MADOperationConditionPolarQuestionNegativeResult : MADOperationConditionResult
-    <MADOperationConditionPolarQuestionResultProtocol>
-    @property (nonatomic, assign) BOOL result;
+	<MADOperationConditionPolarQuestionResultProtocol>
+	@property (nonatomic, assign) BOOL result;
 
-    + (instancetype)newOperationCondition:(NSObject <MADOperationConditionPolarQuestionResultProtocol> *)delegate
-                                     name:(NSString *)name;
+	+ (instancetype)newOperationCondition:(NSObject <MADOperationConditionPolarQuestionResultProtocol> *)delegate
+									 name:(NSString *)name;
 
 @end
 

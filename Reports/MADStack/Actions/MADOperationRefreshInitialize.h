@@ -14,12 +14,12 @@
 @class MADocument;
 
 @protocol MADRefreshOperationInitializeProtocol <NSObject>
-    @property (readonly) MADocument *document;
+	@property (readonly) MADocument *document;
 @end
 
 @interface MADOperationRefreshInitialize : MADOperation
 
-    - (instancetype)initWithDocument:(MADocument *)document;
+	- (instancetype)initWithDocument:(MADocument *)document;
 
 @end
 

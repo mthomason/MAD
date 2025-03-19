@@ -20,7 +20,7 @@
 
 @interface MADOperationConditionDisplayedAlert ()
 
-    @property (nonatomic, assign, readwrite) NSUInteger tag;
+	@property (nonatomic, assign, readwrite) NSUInteger tag;
 
 @end
 
@@ -29,23 +29,23 @@
 @synthesize reverseCondition = _reverseCondition;
 
 - (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
-    if (self = [super init]) {
-        _tag = tag;
-        _reverseCondition = NO;
-    }
-    return self;
+	if (self = [super init]) {
+		_tag = tag;
+		_reverseCondition = NO;
+	}
+	return self;
 }
 
 #pragma mark -
 #pragma mark Condition
 
 - (NSString *)name {
-    NSString *name = NSStringFromClass(self.class);
-    return name;
+	NSString *name = NSStringFromClass(self.class);
+	return name;
 }
 
 - (BOOL)isMutuallyExclusive { return NO; }
@@ -53,39 +53,39 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-    MADOperationConditionResult *result;
-    result = [self evaluateForOperation:operation];
-    completion(result);
+	MADOperationConditionResult *result;
+	result = [self evaluateForOperation:operation];
+	completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    //os_log_info(OS_LOG_DEFAULT, "Evaluate %s", NSStringFromClass(self.class).UTF8String);
+	//os_log_info(OS_LOG_DEFAULT, "Evaluate %s", NSStringFromClass(self.class).UTF8String);
 
-    NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
-    MADOperationConditionResult *result = nil;
-    NSString *domain = self.name.copy;
-    if (dependencies.count == 0) {
-        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:domain];
-        return result;
-    }
+	NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
+	MADOperationConditionResult *result = nil;
+	NSString *domain = self.name.copy;
+	if (dependencies.count == 0) {
+		result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:domain];
+		return result;
+	}
 
-    for (MADOperation *dependency in dependencies) {
-        
-        if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] &&
-            dependency.identifier == self.tag) {
-            
-            BOOL condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
-            result = [MADOperationConditionResult newOperationConditionResult: _reverseCondition ? !condition : condition
-                                                                         name: domain];
-            
-            break;
-        }
-    }
-    
-    if (result == nil) {
-        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:domain];
-    }
-    return result;
+	for (MADOperation *dependency in dependencies) {
+		
+		if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)] &&
+			dependency.identifier == self.tag) {
+			
+			BOOL condition = [((NSObject <MADOperationConditionDisplayedAlertProtocol> *)dependency) alertDisplayed];
+			result = [MADOperationConditionResult newOperationConditionResult: _reverseCondition ? !condition : condition
+																		 name: domain];
+			
+			break;
+		}
+	}
+	
+	if (result == nil) {
+		result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:domain];
+	}
+	return result;
 }
 
 @end

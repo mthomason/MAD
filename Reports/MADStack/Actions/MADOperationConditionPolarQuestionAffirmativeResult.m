@@ -13,15 +13,15 @@
 @implementation MADOperationConditionPolarQuestionAffirmativeResult
 
 + (instancetype)newOperationCondition:(NSObject <MADOperationConditionPolarQuestionResultProtocol> *)delegate
-                                 name:(NSString *)name {
-    id operationCondition;
-    if (delegate.result) {
-        operationCondition = [self newOperationConditionResultSatisfied];
-        ((MADOperationConditionPolarQuestionAffirmativeResult *)operationCondition).result = YES;
-    } else {
-        operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
-    }
-    return operationCondition;
+								 name:(NSString *)name {
+	id operationCondition;
+	if (delegate.result) {
+		operationCondition = [self newOperationConditionResultSatisfied];
+		((MADOperationConditionPolarQuestionAffirmativeResult *)operationCondition).result = YES;
+	} else {
+		operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
+	}
+	return operationCondition;
 }
 
 @end
@@ -29,15 +29,15 @@
 @implementation MADOperationConditionPolarQuestionNegativeResult
 
 + (instancetype)newOperationCondition:(NSObject <MADOperationConditionPolarQuestionResultProtocol> *)delegate
-                                 name:(NSString *)name {
-    id operationCondition;
-    if (!delegate.result) {
-        operationCondition = [self newOperationConditionResultSatisfied];
-        ((MADOperationConditionPolarQuestionNegativeResult *)operationCondition).result = YES;
-    } else {
-        operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
-    }
-    return operationCondition;
+								 name:(NSString *)name {
+	id operationCondition;
+	if (!delegate.result) {
+		operationCondition = [self newOperationConditionResultSatisfied];
+		((MADOperationConditionPolarQuestionNegativeResult *)operationCondition).result = YES;
+	} else {
+		operationCondition = [self newOperationConditionResultFailedNotSatisfied:name];
+	}
+	return operationCondition;
 }
 
 @end

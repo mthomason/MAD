@@ -57,7 +57,7 @@ static const short errCache = 2;
         document.database.delegate = (id <MADDatabaseResultsProtocol>)document;
     }
     
-    if ([document.database.databaseConnection requiresCredientals]) {
+    if ([document.database.databaseConnection requiresCredentials]) {
 
         for (NSOperation *dependency in self.dependencies) {
             if ([dependency conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)] &&

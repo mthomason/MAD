@@ -13,9 +13,9 @@
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
 
 @interface MADOperationConditionPolarQuestionAffirmative : NSObject
-    <MADOperationCondition>
+	<MADOperationCondition>
 
-    - (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
+	- (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
 
 @end
 

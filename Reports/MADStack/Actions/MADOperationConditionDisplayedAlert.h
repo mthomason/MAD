@@ -13,14 +13,14 @@
 #import <MADFoundation/MADOperationCondition.h>
 
 @protocol MADOperationConditionDisplayedAlertProtocol <NSObject>
-    - (BOOL)alertDisplayed;
-    - (BOOL)alertDisplayedAffirmed;
+	- (BOOL)alertDisplayed;
+	- (BOOL)alertDisplayedAffirmed;
 @end
 
 @interface MADOperationConditionDisplayedAlert : NSObject
-    <MADOperationCondition>
+	<MADOperationCondition>
 
-    - (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
+	- (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
 
 @end
 

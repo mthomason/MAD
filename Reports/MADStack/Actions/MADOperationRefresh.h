@@ -15,7 +15,7 @@
 
 @interface MADOperationRefresh : MADOperation
 
-    - (instancetype)initWithDocument:(MADocument *)document;
+	- (instancetype)initWithDocument:(MADocument *)document;
 
 @end
 
