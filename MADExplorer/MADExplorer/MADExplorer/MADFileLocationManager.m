@@ -23,11 +23,40 @@
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADAppStorageOption.h>
 
-#import "MADAlertControllerPromptStorage.h"
-
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken    = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption    = @"MADAppConfigurationUserDefaultsStorageOption";
 static NSString * const MADFirstLaunch                                  = @"MADFirstLaunch";
+
+#import <UIKit/UIKit.h>
+
+static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void));
+static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void)) {
+	NSString *messageKey = @"Do you want to store documents in iCloud or only on this device?";
+	NSString *title = NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option");
+	NSString *message = NSLocalizedString(messageKey, messageKey);
+	NSString *localOnlyActionTitle = NSLocalizedString(@"Local Only", @"Local Only");
+	NSString *cloudActionTitle = NSLocalizedString(@"iCloud", @"iCloud");
+	
+	UIAlertController *storageController = [UIAlertController alertControllerWithTitle:title
+																			  message:message
+																	   preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle
+														  style:UIAlertActionStyleDefault
+														handler:^(UIAlertAction * _Nonnull action) {
+		if (handlerLocal) handlerLocal();
+	}];
+	[storageController addAction:localOption];
+	
+	UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:cloudActionTitle
+														  style:UIAlertActionStyleDefault
+														handler:^(UIAlertAction * _Nonnull action) {
+		if (handlerCloud) handlerCloud();
+	}];
+	[storageController addAction:cloudOption];
+	
+	return storageController;
+}
 
 @interface MADFileLocationManager ()
 
@@ -265,9 +294,7 @@ static NSString * const MADFirstLaunch                                  = @"MADF
 				 storageOptionChangeHandler: handleStorageOptionChanged];
 		};
 		
-		id prompt = [MADAlertControllerPromptStorage newAlertControllerPromptStorage: handlerLocal
-																			   cloud: handlerCloud];
-		
+		UIAlertController *prompt = MADCreateAlertControllerPromptStorage(handlerLocal, handlerCloud);
 		UIViewController *presentingController = delegate.presentingController;
 		[presentingController presentViewController:prompt animated:YES completion:nil];
 		

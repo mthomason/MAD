@@ -17,7 +17,6 @@
 static NSString * const MADTitleSaveCredentials        = @"Save Credentials";
 static NSString * const MADMessageSaveCredentials      = @"Would you like to save the credentials to your key chain?";
 static NSString * const MADButtonContinue              = @"Continue";
-static NSString * const MADButtonCancel                = @"Cancel";
 
 const short errUserCancel = 1;
 
@@ -104,7 +103,7 @@ const short errUserCancel = 1;
 	NSString *title = NSLocalizedString(MADTitleSaveCredentials, MADTitleSaveCredentials);
 	NSString *message = NSLocalizedString(MADMessageSaveCredentials, MADMessageSaveCredentials);
 	NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-	NSString *cancel = NSLocalizedString(MADButtonCancel, MADButtonCancel);
+	NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
 	
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
 																			 message: message

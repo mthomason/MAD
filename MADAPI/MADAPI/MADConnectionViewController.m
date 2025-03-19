@@ -35,9 +35,6 @@
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
 
-static NSString * const MADConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
-static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Settings";
-
 @interface MADConnectionViewController ()
 	<UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
 
@@ -112,16 +109,6 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 	[viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)showLocalNotificationCreatedReportWithName:(NSString *)name {
-	NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'",
-												@"Created report '%@.'");
-	NSString *body = [[NSString alloc] initWithFormat:reportIsReady, name];
-
-	UILocalNotification *notification = [[UILocalNotification alloc] init];
-	notification.alertBody = body;
-	[[UIApplication sharedApplication] presentLocalNotificationNow: notification];
-}
-
 - (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -142,14 +129,11 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 	self.actionSave = self.navigationItem.rightBarButtonItem.action;
 	self.actionSaveTarget = self.navigationItem.rightBarButtonItem.target;
 	
-	NSString *prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
-										 MADConnectionViewControllerDefaultPrompt);
-	self.navigationItem.prompt = prompt;
-	
-	NSString *title = NSLocalizedString(MADConnectionViewControllerDefaultTitle,
-										MADConnectionViewControllerDefaultTitle);
-	self.title = title;
-	
+	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.",
+												   @"Each report requires a database connection.");
+	self.title = NSLocalizedString(@"Database Settings",
+								   @"Database Settings");
+
 	self.clearsSelectionOnViewWillAppear = YES;
 	
 	self.navigationItem.hidesBackButton = NO;
@@ -159,8 +143,7 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 	self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
 	
 	MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-	NSString *databaseSettings = @"Database Settings";
-	titleView.text = NSLocalizedString(databaseSettings, databaseSettings);
+	titleView.text = NSLocalizedString(@"Database Settings", @"Database Settings");
 	self.navigationItem.titleView = titleView;
 }
 
@@ -287,12 +270,17 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 	if (errorContainer && [errorContainer count] > 0) {
 		NSString *errorText = [errorContainer errorLogCompact];
 		
+		NSString *alertTitle = NSLocalizedString(@"Issues Encounterd",
+												 @"Alert Title 'Issues Encounterd'.");
+		NSString *alertButton = NSLocalizedString(@"Continue",
+												  @"Button 'Continue'");
+		
 		UIAlertController *alert;
-		alert = [UIAlertController alertControllerWithTitle: @"Issues Encounterd"
+		alert = [UIAlertController alertControllerWithTitle: alertTitle
 													message: errorText
 											 preferredStyle: UIAlertControllerStyleAlert];
 		
-		UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue"
+		UIAlertAction *ok = [UIAlertAction actionWithTitle: alertButton
 													 style: UIAlertActionStyleDefault
 												   handler: nil];
 		[alert addAction:ok];
@@ -341,8 +329,8 @@ static NSString * const MADConnectionViewControllerDefaultTitle = @"Database Set
 
 - (void)resetInterface {
 	[self removeObserverFromObjectForProgress];
-	self.navigationItem.prompt = NSLocalizedString(MADConnectionViewControllerDefaultPrompt,
-												   MADConnectionViewControllerDefaultPrompt);
+	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.",
+												   @"Each report requires a database connection.");
 }
 
 #pragma mark Helpers

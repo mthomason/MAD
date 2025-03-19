@@ -17,10 +17,10 @@
 
 @interface MADKeyChainGetCredentials : MADOperation
 
-    - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
+	- (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController;
 
-    @property (nonatomic, copy, readonly) MADCredential *credential;
-    @property (nonatomic, assign) MADCredentialSource source;
+	@property (nonatomic, copy, readonly) MADCredential *credential;
+	@property (nonatomic, assign) MADCredentialSource source;
 
 @end
 

@@ -38,9 +38,9 @@ NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Sele
 NSString * const MADDriverSelectorControllerDefaultTitle                = @"New Report";
 
 @interface MADDriverSelectorController ()
-    <MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
-    @property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
-    @property (nonatomic, weak) __kindof MADConnectionViewController *connectionViewController;
+	<MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
+	@property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
+	@property (nonatomic, weak) __kindof MADConnectionViewController *connectionViewController;
 
 @end
 
@@ -79,12 +79,14 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 	switch (indexPath.row) {
 		case 0:
 			cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
-			cell.textLabel.text = @"MySQL Native Driver";
+			cell.textLabel.text = NSLocalizedString(@"MySQL Native Driver",
+													@"Selection Label 'MySQL Native Driver'");
 			break;
 
 		case 1:
 			cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
-			cell.textLabel.text = @"Sql Server / TDS Driver";
+			cell.textLabel.text = NSLocalizedString(@"Sql Server / TDS Driver",
+													@"Selection Label 'Sql Server / TDS Driver'");
 			break;
 			
 		default:

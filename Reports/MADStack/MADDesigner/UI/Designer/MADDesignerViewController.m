@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/4/12.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -294,9 +294,9 @@ static const inline CGSize sizePopoverFonts() {
 		NSString *keyPathDocument = [self keyPathDocument];
 		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
 		NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriodToString:keyPathDocument];
+		key = [MADStringUtilities stringByAppendingPeriodToString: keyPathDocument];
 		key = [key stringByAppendingString:keyPathUndoManager];
-		key = [MADStringUtilities stringByAppendingPeriodToString:key];
+		key = [MADStringUtilities stringByAppendingPeriodToString: key];
 		key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
 	}
 	return key;
@@ -308,9 +308,9 @@ static const inline CGSize sizePopoverFonts() {
 		NSString *keyPathDocument = [self keyPathDocument];
 		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
 		NSString *keyPathUndoMenuItemTitle = NSStringFromSelector(@selector(undoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriodToString:keyPathDocument];
+		key = [MADStringUtilities stringByAppendingPeriodToString: keyPathDocument];
 		key = [key stringByAppendingString:keyPathUndoManager];
-		key = [MADStringUtilities stringByAppendingPeriodToString:key];
+		key = [MADStringUtilities stringByAppendingPeriodToString: key];
 		key = [key stringByAppendingString:keyPathUndoMenuItemTitle];
 	}
 	return key;
@@ -683,7 +683,8 @@ static const inline CGSize sizePopoverFonts() {
 	[self.view.scroller setNeedsLayout];
 	[self.view.scroller.container setNeedsLayout];
 	
-	UIBarButtonItem *toolbarItem = [[UIBarButtonItem alloc] initWithTitle: @"Undo"
+	NSString *undo = NSLocalizedString(@"Undo", @"Undo Button Title");
+	UIBarButtonItem *toolbarItem = [[UIBarButtonItem alloc] initWithTitle: undo
 																	style: UIBarButtonItemStylePlain
 																   target: self
 																   action: @selector(undo)];
@@ -1135,8 +1136,8 @@ static const inline CGSize sizePopoverFonts() {
 		[section setProducesFormFeed: newPageAfter];
 		
 		NSError * __autoreleasing error = NULL;
-		BOOL success = [private save:&error];
-		if (!success) {
+		BOOL success = NO;
+		if (!(success = [private save:&error])) {
 			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 
