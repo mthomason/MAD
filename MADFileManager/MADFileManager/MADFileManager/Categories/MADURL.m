@@ -18,8 +18,6 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADStringUtilities.h>
 
-#import "MADFilename.h"
-
 #if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 #import <UIKit/UIKit.h>
 #elif TARGET_OS_OSX
@@ -44,6 +42,11 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 #endif
 }
 
++ (NSString *)filenameID:(NSUInteger)tag {
+	id filenameId = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)tag];
+	return filenameId;
+}
+
 + (instancetype)newURLLocalDocumentWithName:(NSString *)name
 								  extention:(NSString *)extention
 								  fileGroup:(NSString *)fileGroup {
@@ -54,7 +57,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (instancetype)newURLCacheFilesDirectoryForFilename:(NSString *)filename {
-	NSString *filenameId = [MADFilename newFilenameId:filename.hash];
+	NSString *filenameId = [MADURL filenameID:filename.hash];
 	return [MADURL newURLForLocalCacheDirectoryNamed:filenameId];
 }
 
@@ -77,7 +80,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (instancetype)newURLThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
 	NSString *name = retinaDisplay ? [handle stringByAppendingString:@"@2x"] : handle;
 	NSString *filename = [name stringByAppendingPathExtension:@"png"];
-	NSString *fileNameId = [MADFilename newFilenameId:handle.hash];
+	NSString *fileNameId = [MADURL filenameID:handle.hash];
 	NSURL *cacheDirectory = [MADURL newURLForLocalCacheDirectoryNamed:fileNameId];
 	id cachedPathFull = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 	return cachedPathFull;

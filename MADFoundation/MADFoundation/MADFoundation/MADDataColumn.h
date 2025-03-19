@@ -15,7 +15,7 @@
 @class NSMutableDictionary;
 
 @interface MADDataColumn : NSObject
-	<NSCoding>
+	<NSCoding, NSCopying>
 
 @property (nonatomic, readonly, copy) NSString *identifier;
 

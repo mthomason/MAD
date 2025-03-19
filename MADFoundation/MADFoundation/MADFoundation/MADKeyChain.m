@@ -22,7 +22,6 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 
-#import <MADFoundation/MADThread.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 
 NSString * const MADKeyChainUsernameAccountDesc = @"Client Database Username";

@@ -185,8 +185,7 @@
 - (id)objectAtIndex:(NSUInteger)index {
 	NSUInteger sortedIndex = [self sortedIndexForIndex:index];
 	
-	NSMutableDictionary *data;
-	data = [[NSMutableDictionary alloc] initWithCapacity:(self.columnKeys).count];
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:(self.columnKeys).count];
 	NSArray *dataInColumn;
 	NSString *fieldKey, *key;
 	for (fieldKey in self.columnKeys) {

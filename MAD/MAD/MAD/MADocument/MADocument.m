@@ -42,7 +42,6 @@
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADStringUtilities.h>
-#import <MADFoundation/MADThread.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>

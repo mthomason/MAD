@@ -28,9 +28,32 @@
 
 @implementation MADDataColumn
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+	MADDataColumn *copy = [[[self class] allocWithZone:zone] init];
+
+	if (copy) {
+		copy.identifier = [self.identifier copy];
+		copy.defaultValue = [self.defaultValue copy];
+		copy.type = self.type;
+		copy.nativeType = self.nativeType;
+		copy.dataLength = self.dataLength;
+		copy.dataPercision = self.dataPercision;
+		copy.caption = [self.caption copy];
+		copy.fieldName = [self.fieldName copy];
+		copy.primaryKey = self.primaryKey;
+		copy.notNull = self.notNull;
+		copy.autoIncrement = self.autoIncrement;
+		copy.column = [self.column mutableCopy];
+	}
+
+	return copy;
+}
+
+#pragma mark - NSCoding
+
 - (void)encodeWithCoder:(NSCoder *)encoder {
-	
-	
 	[encoder encodeObject:  self.fieldName      forKey: [MADDataColumn keyFieldName]];
 	[encoder encodeObject:  self.identifier     forKey: [MADDataColumn keyIdentifier]];
 	[encoder encodeObject:  self.column         forKey: [MADDataColumn keyColumn]];
@@ -40,18 +63,13 @@
 	[encoder encodeInt:     self.nativeType     forKey: [MADDataColumn keyNativeColumnType]];
 	[encoder encodeInt64:   self.dataLength     forKey: [MADDataColumn keyDataLength]];
 	[encoder encodeInteger: self.dataPercision  forKey: [MADDataColumn keyDataPercision]];
-	
-	
 	[encoder encodeBool: _primaryKey       forKey: [MADDataColumn keyIsPrimaryKey]];
 	[encoder encodeBool: _notNull          forKey: [MADDataColumn keyIsNotNull]];
 	[encoder encodeBool: _autoIncrement    forKey: [MADDataColumn keyIsAutoIncrement]];
-
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-
 	if (self = [super init]) {
-
 		self.fieldName =            [decoder decodeObjectForKey: [MADDataColumn keyFieldName]];
 		self.identifier =           [decoder decodeObjectForKey: [MADDataColumn keyIdentifier]];
 		self.column =               [decoder decodeObjectForKey: [MADDataColumn keyColumn]];
@@ -62,7 +80,6 @@
 		self.dataLength =           [decoder decodeIntegerForKey: [MADDataColumn keyDataLength]];
 		self.dataPercision =        [decoder decodeIntForKey: [MADDataColumn keyDataPercision]];
 		self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]];
-
 	}
 	return self;
 }
@@ -113,7 +130,6 @@
 				   percision:(int32_t)percision
 				  nativeType:(int16_t)nativeType {
 	if (self = [super init]) {
-
 		NSMutableArray *column = [[NSMutableArray alloc] init];
 		self.column = column;
 		self.type = columnType;
@@ -123,7 +139,6 @@
 		self.nativeType = nativeType;
 		self.dataLength = length;
 		self.dataPercision = percision;
-
 	}
 	return self;
 }
