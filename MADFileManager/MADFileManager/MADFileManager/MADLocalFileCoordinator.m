@@ -28,9 +28,9 @@
 
 	@property (nonatomic, copy)     NSArray *currentLocalContents;
 	@property (nonatomic, copy)     NSPredicate *predicate;
-	@property (nonatomic, strong)   void (^firstQueryUpdateHandler)(void);
-	@property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
+	@property (nonatomic, copy)   void (^firstQueryUpdateHandler)(void);
 	@property (nonatomic, copy)     NSString *fileGroup;
+	@property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
 
 @end
 
@@ -53,14 +53,10 @@
 		self.firstQueryUpdateHandler = firstQueryUpdateHandler;
 		
 		NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
-		
 		MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
 		self.directoryMonitor = directoryMonitor;
 		self.directoryMonitor.delegate = self;
-		
-		NSArray *currentLocalContents = [[NSArray alloc] init];
-		self.currentLocalContents = currentLocalContents;
-
+		self.currentLocalContents = @[];
 	}
 	
 	return self;
@@ -69,33 +65,20 @@
 - (instancetype)initWithPathExtension: (NSString *)pathExtension
 						   identifier: (NSString *)fileGroup
 			  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
-
-	NSString * const MADPredicateFormatComparsonPathExtension = @"(pathExtension = %@)";
-	NSPredicate *predicate;
-	predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonPathExtension,
-												 pathExtension];
-	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(pathExtension = %@)", pathExtension];
 	if (self = [self initWithPredicate: predicate
 							identifier: fileGroup
 			   firstQueryUpdateHandler: firstQueryUpdateHandler]) {
 		
-		self.fileGroup = fileGroup;
-		
 	}
-	
 	return self;
 }
 
 - (instancetype)initWithLastPathComponent: (NSString *)lastPathComponent
 							   identifier: (NSString *)fileGroup
 				  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
-	
-	NSString *MADPredicateFormatComparsonLastPathComponent = @"(lastPathComponent = %@)";
-	NSPredicate *predicate;
-	predicate = [NSPredicate predicateWithFormat:MADPredicateFormatComparsonLastPathComponent,
-												 lastPathComponent];
-	
-	if (self = [self initWithPredicate: predicate
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(lastPathComponent = %@)", lastPathComponent];
+	if (self = [self initWithPredicate: [NSPredicate predicateWithFormat:@"(lastPathComponent = %@)", lastPathComponent]
 							identifier: fileGroup
 			   firstQueryUpdateHandler: firstQueryUpdateHandler]) {
 		
@@ -127,9 +110,9 @@
 			[delegate fileCoordinatorDidFailRemovingFileAtURL: URL
 													withError: error];
 		} else {
-			NSArray *inserts = [[NSArray alloc] init],
-					*removes = [[NSArray alloc] initWithObjects:URL, nil],
-					*updates = [[NSArray alloc] init];
+			NSArray *inserts = @[],
+					*removes = @[URL],
+					*updates = @[];
 			[delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
 														   removedURLs: updates
 														   updatedURLs: removes];
@@ -146,9 +129,9 @@
 		if (error) {
 			[delegate fileCoordinatorDidFailDuplicatingFileAtURL:URL withError:error];
 		} else {
-			NSArray *inserts = [[NSArray alloc] initWithObjects:newURL, nil],
-					*removes = [[NSArray alloc] init],
-					*updates = [[NSArray alloc] init];
+			NSArray *inserts = @[newURL],
+					*removes = @[],
+					*updates = @[];
 			[delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
 														   removedURLs: removes
 														   updatedURLs: updates];
@@ -166,9 +149,9 @@
 		if (error) {
 			[delegate fileCoordinatorDidFailRenamingFileAtURL:URL withError:error];
 		} else {
-			NSArray *inserts = [[NSArray alloc] initWithObjects:newURL, nil],
-					*removes = [[NSArray alloc] initWithObjects:sourceURL, nil],
-					*updates = [[NSArray alloc] init];
+			NSArray *inserts = @[newURL],
+					*removes = @[sourceURL],
+					*updates = @[];
 		   [delegate fileCoordinatorDidUpdateContentsWithInsertedURLs:inserts
 														  removedURLs:removes
 														  updatedURLs:updates];
@@ -191,9 +174,9 @@
 			[delegate fileCoordinatorDidFailCreatingFileAtURL:documentURL withError:error];
 		}
 		else {
-			NSArray *inserts = [[NSArray alloc] initWithObjects:documentURL, nil],
-					*removes = [[NSArray alloc] init],
-					*updates = [[NSArray alloc] init];
+			NSArray *inserts = @[documentURL],
+					*removes = @[],
+					*updates = @[];
 			[delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: inserts
 														   removedURLs: removes
 														   updatedURLs: updates];
@@ -201,7 +184,8 @@
 	}];
 }
 
-- (BOOL)canCreateFileWithName:(NSString *)name extention:(NSString *)extention
+- (BOOL)canCreateFileWithName:(NSString *)name
+					extention:(NSString *)extention
 					fileGroup:(NSString *)fileGroup {
 	if (name.length <= 0) {
 		return NO;
@@ -211,7 +195,14 @@
 												   fileGroup: fileGroup];
 	NSString *path = documentURL.path;
 	if (path == nil) return NO;
-	return ![[NSFileManager defaultManager] fileExistsAtPath:path];
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSString *directoryPath = [path stringByDeletingLastPathComponent];
+	BOOL isDirectory = NO;
+	if (![fileManager fileExistsAtPath:directoryPath isDirectory:&isDirectory] || !isDirectory) {
+		return NO;
+	}
+	return ![fileManager fileExistsAtPath:path];
 
 }
 
@@ -245,44 +236,40 @@
 		
 		NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
 		
-		NSArray <NSURL *> *urls;
-		urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
-											 includingPropertiesForKeys: nil
-																options: NSDirectoryEnumerationSkipsPackageDescendants
-																  error: nil];
+		NSError *error = nil;
+		NSArray <NSURL *> *urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
+																includingPropertiesForKeys: nil
+																				   options: NSDirectoryEnumerationSkipsPackageDescendants
+																					 error: nil];
+		if (!urls) {
+			NSLog(@"Failed to read directory contents: %@", error.localizedDescription);
+			return; // Exit early if the directory cannot be read
+		}
 		
 		NSArray <NSURL *> *localListURLs = [urls filteredArrayUsingPredicate:predicate];
-		
 		if (localListURLs.count > 0) {
 			
 			NSString *MADPredicateFormatSelfInObject = @"self in %@";
-			NSPredicate *containPredicate, *doesntContainPredicate;
-			
-			NSArray <NSURL *> *insertedURLs;
-			NSArray <NSURL *> *removedURLs;
-			NSArray <NSURL *> *emptyArray;
-			
-			containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject,
-								sself.currentLocalContents];
-			doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
-			insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
-			
+			NSPredicate *containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, sself.currentLocalContents];
+			NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
+			NSArray <NSURL *> *insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
 			containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, localListURLs];
 			doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
 			
-			removedURLs = [sself.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
-			
-			emptyArray = [[NSArray alloc] init];
+			NSArray <NSURL *> *removedURLs = [sself.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
+			NSArray <NSURL *> *emptyArray = @[];
 			[sself.delegate fileCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
 																 removedURLs: removedURLs
 																 updatedURLs: emptyArray];
 			
-			sself.currentLocalContents = localListURLs;
+			@synchronized (sself) {
+				sself.currentLocalContents = localListURLs;
+			}
 		}
 		
 		if (sself.firstQueryUpdateHandler) {
 			sself.firstQueryUpdateHandler();
-			sself.firstQueryUpdateHandler = nil;
+			//sself.firstQueryUpdateHandler = nil;
 		}
 	};
 	dispatch_async(defaultQueue, updateContent);

@@ -10,11 +10,8 @@
 
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
-
 #import <MADFoundation/MADApplication.h>
-
 #import <MADCocoaExtensions/MADAlertController.h>
-
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADStorageState.h>
 #import <MADFileManager/MADFilesController.h>
@@ -31,30 +28,36 @@ static NSString * const MADFirstLaunch                                  = @"MADF
 
 static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void));
 static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void)) {
+	if (!handlerLocal && !handlerCloud) {
+		return nil;
+	}
 	NSString *messageKey = @"Do you want to store documents in iCloud or only on this device?";
 	NSString *title = NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option");
 	NSString *message = NSLocalizedString(messageKey, messageKey);
 	NSString *localOnlyActionTitle = NSLocalizedString(@"Local Only", @"Local Only");
 	NSString *cloudActionTitle = NSLocalizedString(@"iCloud", @"iCloud");
-	
+
 	UIAlertController *storageController = [UIAlertController alertControllerWithTitle:title
-																			  message:message
-																	   preferredStyle:UIAlertControllerStyleAlert];
+																			   message:message
+																		preferredStyle:UIAlertControllerStyleAlert];
+	if (handlerLocal) {
+		
+		UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle
+															  style:UIAlertActionStyleDefault
+															handler:^(UIAlertAction * _Nonnull action) {
+			if (handlerLocal) handlerLocal();
+		}];
+		[storageController addAction:localOption];
+	}
 	
-	UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle
-														  style:UIAlertActionStyleDefault
-														handler:^(UIAlertAction * _Nonnull action) {
-		if (handlerLocal) handlerLocal();
-	}];
-	[storageController addAction:localOption];
-	
-	UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:cloudActionTitle
-														  style:UIAlertActionStyleDefault
-														handler:^(UIAlertAction * _Nonnull action) {
-		if (handlerCloud) handlerCloud();
-	}];
-	[storageController addAction:cloudOption];
-	
+	if (handlerCloud) {
+		UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:cloudActionTitle
+															  style:UIAlertActionStyleDefault
+															handler:^(UIAlertAction * _Nonnull action) {
+			if (handlerCloud) handlerCloud();
+		}];
+		[storageController addAction:cloudOption];
+	}
 	return storageController;
 }
 
@@ -62,9 +65,10 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 
 	@property (nonatomic, readwrite, strong) MADFilesController *filesController;
 	@property (nonatomic, readwrite, assign) BOOL getUserCloudPrefsFirstCall;
-	@property (nonatomic, readonly)          BOOL isFirstLaunch;
-	@property (nonatomic, copy)              NSString *groupID;
-	@property (nonatomic, copy)              NSString *ubiquityID;
+	@property (nonatomic, readonly) BOOL isFirstLaunch;
+	@property (nonatomic, copy) NSString *groupID;
+	@property (nonatomic, copy) NSString *ubiquityID;
+	@property (nonatomic, strong) dispatch_queue_t synchronizationQueue;
 
 @end
 
@@ -75,18 +79,17 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (instancetype)initWithUbiquityID:(NSString *)ubiquityID andGroupID:(NSString *)groupID {
-
+	if (!ubiquityID || !groupID) {
+		return nil;
+	}
 	if (self = [super init]) {
-		//NSLog(@"%s", __PRETTY_FUNCTION__);
+		_synchronizationQueue = dispatch_queue_create("com.madfilelocationmanager.sync", DISPATCH_QUEUE_SERIAL);
 		self.groupID = groupID.copy;
 		self.ubiquityID = ubiquityID.copy;
-		
-		NSNumber *yes = @YES;
-		NSNumber *notSet = [[NSNumber alloc] initWithInteger: MADAppStorageNotSet];
-		NSDictionary *defaultValues;
-		defaultValues = [[NSDictionary alloc] initWithObjectsAndKeys:
-										yes,    MADFirstLaunch,
-										notSet, MADAppConfigurationUserDefaultsStorageOption, nil];
+		NSDictionary *defaultValues = @{
+			MADFirstLaunch: @YES,
+			MADAppConfigurationUserDefaultsStorageOption: @(MADAppStorageNotSet)
+		};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
 		self.getUserCloudPrefsFirstCall = YES;
 		
@@ -99,8 +102,6 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 #pragma mark - Ubiquity Identity Token Handling (Account Change)
 
 - (BOOL)hasUbiquityIdentityChanged {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	BOOL hasChanged = NO;
 	
 	id <NSObject, NSCopying, NSCoding> currentToken,
@@ -122,8 +123,6 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	id <NSObject, NSCopying, NSCoding> storedToken = nil;
 	
 	// Determine if the iCloud account associated with this device has changed since the last
@@ -183,8 +182,6 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 #pragma mark - Convenience
 
 - (BOOL)isFirstLaunch {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
 																					YES : NO;
 	if (isFirstLaunch) {
@@ -195,8 +192,6 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (void)setupFileStorageLocationsForCloud {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	NSString *ubiquityIdentifier = [MADApplication ubiquityIdentifier];
 	NSString *groupIdentifier = [MADApplication groupIdentifier];
 	

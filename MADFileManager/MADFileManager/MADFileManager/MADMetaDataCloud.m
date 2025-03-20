@@ -152,24 +152,18 @@
 }
 
 - (double)ubiquitousItemPercentUploaded {
-	NSNumber *result;
-	result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey];
+	NSNumber *result = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentUploadedKey];
 	return result.doubleValue;
 }
 
 - (double)ubiquitousItemPercentDownloaded {
-	double result;
 	NSNumber *status = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemPercentDownloadedKey];
-	result = status.doubleValue;
-	return result;
+	return status.doubleValue;
 }
 
 - (BOOL)ubiquitousItemIsExternalDocument {
-	BOOL result;
-	NSNumber *status;
-	status = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
-	result = status.boolValue;
-	return result;
+	NSNumber *status = [self.metadataItem valueForAttribute:NSMetadataUbiquitousItemIsExternalDocumentKey];
+	return status.boolValue;
 }
 
 - (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded {
@@ -180,17 +174,13 @@
 }
 
 - (BOOL)isUbiquitousItemDownloadingStatusDownloaded {
-	BOOL result;
 	NSString *status = [self ubiquitousItemDownloadingStatus ];
-	result = [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ? YES : NO;
-	return result;
+	return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusDownloaded] ? YES : NO;
 }
 
 - (BOOL)isUbiquitousItemDownloadingStatusCurrent {
-	BOOL result;
 	NSString *status = [self ubiquitousItemDownloadingStatus];
-	result = [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ? YES : NO;
-	return result;
+	return [status isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent] ? YES : NO;
 }
 
 - (BOOL)downloaded {

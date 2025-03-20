@@ -177,8 +177,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (instancetype)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl {
-	NSString *fileNameId;
-	fileNameId = [[NSString alloc] initWithFormat:
+	NSString *fileNameId = [[NSString alloc] initWithFormat:
 				  @"%lu", (unsigned long)fileUrl.lastPathComponent
 												.stringByDeletingPathExtension.hash];
 	id url = [self newURLForLocalCacheDirectoryNamed:fileNameId];

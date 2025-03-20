@@ -7,17 +7,6 @@
 //
 
 #import "MADFileUtilities.h"
-
-#import <Foundation/NSFileManager.h>
-#import <Foundation/NSFileCoordinator.h>
-#import <Foundation/NSKeyedArchiver.h>
-#import <Foundation/NSData.h>
-#import <Foundation/NSOperation.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSFileWrapper.h>
-
 #import <MADFoundation/MADURL.h>
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
@@ -410,15 +399,10 @@ static NSString * const MADPathComponentData       = @"Data";
 			if (completion) completion(accessError);
 			return;
 		}
-		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
-		
 		NSError *error;
-		
 		BOOL successfulDelete = [fileManager removeItemAtURL:writing.URL error:&error];
-		
 		if (successfulSecurityScopedResourceAccess) [url stopAccessingSecurityScopedResource];
-		
 		if (completion) completion(successfulDelete ? nil : error);
 	}];
 }

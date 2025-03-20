@@ -3,13 +3,13 @@
 //  MAD Explorer
 //
 //  Created by Michael Thomason on 9/12/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MADExplorer_MADFileLocationManager_h
 #define MADExplorer_MADFileLocationManager_h
 
-#import <Foundation/NSObject.h>
+#import <Foundation/Foundation.h>
 
 @protocol MADFileLocationManagerDelegate;
 
