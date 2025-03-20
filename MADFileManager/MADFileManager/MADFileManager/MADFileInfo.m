@@ -25,11 +25,9 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 #pragma mark - Initialization
 
 - (instancetype)initWithURL:(NSURL *)URL {
-	
 	if (self = [super init]) {
 		_URL = URL.copy;
 	}
-	
 	return self;
 }
 

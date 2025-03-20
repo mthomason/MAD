@@ -28,6 +28,10 @@ static NSString * const MADPathComponentData       = @"Data";
 
 @implementation MADFileUtilities
 
++ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
+	[self deleteCoreDataFilesAtDirectory:destinationUrl withCoordinator:YES];
+}
+
 + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl
 					   withCoordinator:(BOOL)coordinator {
 	BOOL isDirectory;
@@ -57,10 +61,6 @@ static NSString * const MADPathComponentData       = @"Data";
 			[MADFileUtilities removeFileAtURL:file withCoordinator:coordinator];
 		}
 	}
-}
-
-+ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
-	[self deleteCoreDataFilesAtDirectory:destinationUrl withCoordinator:YES];
 }
 
 + (void)coordinateCreateDirectoryIfDoesNotExist:(NSURL *)url {

@@ -1957,7 +1957,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation
-					errors:(NSArray *)errors {
+					errors:(NSArray<NSError *> *)errors {
 	os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 }
 

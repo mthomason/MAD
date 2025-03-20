@@ -330,7 +330,7 @@
 	[super execute];
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors {
 	if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
 		//[((MADOperation *)operation) cleanup];
 		

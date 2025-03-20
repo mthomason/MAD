@@ -256,8 +256,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 			NSUInteger ips[2];
 			ips[MADIndexPathOffsetSection] = [obj.indexPath indexAtPosition:MADIndexPathOffsetSection];
 			ips[MADIndexPathOffsetItem] = [obj.indexPath indexAtPosition:MADIndexPathOffsetItem] - 1;
-			NSIndexPath *path =
-			path = [[NSIndexPath alloc] initWithIndexes:ips length:2];
+			NSIndexPath *path = [[NSIndexPath alloc] initWithIndexes:ips length:2];
 			obj.indexPath = path;
 		}
 	}];

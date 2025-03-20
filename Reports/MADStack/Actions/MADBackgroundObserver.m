@@ -83,6 +83,6 @@
 
 - (void)operationDidStart:(MADOperation *)op { }
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors { }
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors { }
 
 @end

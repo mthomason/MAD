@@ -154,7 +154,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 								[MysqlFetch fieldNameForField:myStatement->fields[x]];
 				[fieldNameCollector addObject:fieldName];
 				
-				NSLog(@"Fiend name: %@", fieldName);
+				NSLog(@"Field name: %@", fieldName);
 				
 				MysqlFetchField *field = [[MysqlFetchField alloc] initWithField: myStatement->fields[x]
 																	  fieldName: fieldName];

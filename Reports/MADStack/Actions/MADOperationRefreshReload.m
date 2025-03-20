@@ -185,6 +185,6 @@
 												  object: database];
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors { }
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors { }
 
 @end

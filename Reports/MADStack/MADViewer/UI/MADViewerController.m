@@ -989,27 +989,25 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors {
-
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors {
+	// Check if the operation is of a specific type
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]] ||
 		[operation isKindOfClass:[MADRefreshOperationReload class]]) {
-	
-		_lastCacheDate = nil;
 		
-		if (![NSThread isMainThread]) {
-			
-			__weak typeof(self) wself = self;
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				typeof(self) sself = wself;
-				if (sself) {
-					sself.pageSlider.numberOfPages = sself->_currentLocation.totalPages;
-					[sself updateTimeSinceLastRefresh:nil];
-				}
-			});
-			
-		} else {
-			self.pageSlider.numberOfPages = _currentLocation.totalPages;
+		// Reset the last cache date
+		_lastCacheDate = nil;
+
+		// Define a block to update the UI
+		void (^updateUIBlock)(void) = ^{
+			self.pageSlider.numberOfPages = self->_currentLocation.totalPages;
 			[self updateTimeSinceLastRefresh:nil];
+		};
+
+		// Ensure UI updates are performed on the main thread
+		if ([NSThread isMainThread]) {
+			updateUIBlock();
+		} else {
+			dispatch_async(dispatch_get_main_queue(), updateUIBlock);
 		}
 	}
 }

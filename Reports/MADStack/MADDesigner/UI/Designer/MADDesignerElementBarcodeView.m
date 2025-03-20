@@ -17,21 +17,21 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
-    [self.displayObject loadSampleData];
-    MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-    //((MTBarcode *)self.displayObject).forgroundColor = color;
-    [((MTBarcode *)self.displayObject) drawInRect:[element innerRect]];
+	[super drawRect:rect];
+	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+	[self.displayObject loadSampleData];
+	//MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
+	//((MTBarcode *)self.displayObject).forgroundColor = color;
+	[((MTBarcode *)self.displayObject) drawInRect:[element innerRect]];
 }
 
 - (void)updateWithElement:(RptqDocumentElement *)element {
-    [super updateWithElement:element];
-    
-    MTBarcode *barcode;
-    barcode = [MTBarcode newBarcode:(id <MTBarcodeProtocol>)element];
-    self.displayObject = barcode;
-    
+	[super updateWithElement:element];
+	
+	MTBarcode *barcode;
+	barcode = [MTBarcode newBarcode:(id <MTBarcodeProtocol>)element];
+	self.displayObject = barcode;
+	
 }
 
 @end

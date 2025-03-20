@@ -127,75 +127,53 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	//[self.navigationController setNavigationBarHidden:NO animated:animated];
-	//[self.view setNeedsLayout];
-	//[self.view layoutIfNeeded];
 	
-	UIActivityIndicatorView *activityIndicator;
-	activityIndicator = [[UIActivityIndicatorView alloc]
-						 initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+	// Create and show activity indicator
+	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc]
+		initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
 	[activityIndicator startAnimating];
-	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = YES;
 	
-	UIBarButtonItem *barButtonItemActive;
-	barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+	// Set activity indicator as right bar button
+	UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc]
+		initWithCustomView:activityIndicator];
+	[self.navigationItem setRightBarButtonItem:barButtonItemActive animated:NO];
 	
-	[self.navigationItem setRightBarButtonItem: barButtonItemActive animated: NO];
-	
-	MADTableController * __weak weakSelf = self;
-
-	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-	dispatch_async(queue, ^{
+	__weak typeof(self) weakSelf = self;
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		// Background work
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) return;
 		
-		MADTableController *strongself = weakSelf;
-		
-		MADQuery *queryTableFormatter = strongself.tableFormatter.query;
+		// Configure query
+		MADQuery *queryTableFormatter = strongSelf.tableFormatter.query;
 		if ([queryTableFormatter conformsToProtocol:@protocol(MADQueryDataTableProtocol)]) {
-			((MADQuery <MADQueryDataTableProtocol> *)queryTableFormatter).dataTable = strongself.datatable;
+			((MADQuery <MADQueryDataTableProtocol> *)queryTableFormatter).dataTable = strongSelf.datatable;
 		}
 		
-		NSError * __autoreleasing errorPerformQuery = NULL;
-		BOOL success = [strongself.database executeQuery:queryTableFormatter
-											   withError:&errorPerformQuery];
-		//MADTableController *strongself2 = weakSelf2;
-		UIBarButtonItem *rightBarButtonItem = strongself.navigationItem.rightBarButtonItem;
-		SEL selector = @selector(setRightBarButtonItem:);
-		[strongself.navigationItem performSelectorOnMainThread: selector
-													withObject: rightBarButtonItem
-												waitUntilDone: NO];
+		// Execute query
+		NSError *errorPerformQuery = nil;
+		BOOL success = [strongSelf.database executeQuery:queryTableFormatter
+											  withError:&errorPerformQuery];
 		
-		selector = @selector(stopAnimating);
-		[activityIndicator performSelectorOnMainThread: selector
-											withObject: nil
-										 waitUntilDone: NO];
-		
-		if (!success && errorPerformQuery) {
+		// Update UI on main thread
+		dispatch_async(dispatch_get_main_queue(), ^{
+			// Stop activity indicator
+			[activityIndicator stopAnimating];
 			
-			NSString *key = strongself.query.database.databaseConnection.connectionString.copy;
-			void (^deleteKey)(BOOL);
-			deleteKey = ^(BOOL displayErrorSuccess) {
-				[MADKeyChain deleteKey:key];
-			};
+			// Handle query result
+			if (!success && errorPerformQuery) {
+				NSString *key = strongSelf.query.database.databaseConnection.connectionString.copy;
+				[NSError presentError:errorPerformQuery
+					  onViewController:strongSelf
+							completion:^(BOOL s){
+								[MADKeyChain deleteKey:key];
+							}];
+			}
 			
-			NSError *serror = [errorPerformQuery copyWithZone:nil];
-			MADTableController * __weak weakself4 = strongself;
-			dispatch_block_t showError = ^{
-				MADTableController *sself = weakself4;
-				[NSError presentError: serror
-					 onViewController: sself
-						   completion: deleteKey];
-			};
-			
-			[NSThread isMainThread] ? showError() :
-									  dispatch_sync(dispatch_get_main_queue(), showError);
-			
-		}
-		[strongself performSelectorOnMainThread: @selector(invalidateLayout)
-									 withObject: strongself
-								  waitUntilDone: NO];
-		
-		
+			// Refresh table view
+			[strongSelf invalidateLayout];
+		});
 	});
 }
 
@@ -218,34 +196,6 @@
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
 }
-
-/*- (void)viewWillLayoutSubviews {
-	[super viewWillLayoutSubviews];
-	
-	UIViewController *parentViewController = self.navigationController.parentViewController;
-	self.navigationController.navigationBar.frame = CGRectMake(self.navigationController.navigationBar.frame.origin.x,
-															   (parentViewController.navigationController.navigationBar.frame.origin.y +
-																parentViewController.navigationController.navigationBar.frame.size.height),
-															   self.navigationController.navigationBar.frame.size.width,
-															   self.navigationController.navigationBar.frame.size.height);
-	
-	self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-																 self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
-	
-	self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-														self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
-	[self.navigationItem.titleView setNeedsLayout];
-}*/
-
-/*- (void)viewDidLayoutSubviews {
-	self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-																 self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
-	
-	self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
-														self.navigationController.bottomLayoutGuide.length, CGSizeZero.width);
-	[super viewDidLayoutSubviews];
-}*/
-
 
 #pragma mark - Helpers
 

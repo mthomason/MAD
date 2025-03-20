@@ -9,7 +9,7 @@
 #ifndef MAD_MTSliderPageVertical_h
 #define MAD_MTSliderPageVertical_h
 
-#import <UIKit/UISlider.h>
+#import <UIKit/UIKit.h>
 
 @interface MADSliderPageVertical : UISlider
 

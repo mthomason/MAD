@@ -1613,14 +1613,14 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray *)errors { }
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors { }
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue
 	  willAddOperation:(NSOperation *)operation { }
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue
 	operationDidFinish:(NSOperation *)operation
-			withErrors:(NSArray *)errors {
+			withErrors:(NSArray<NSError *> *)errors {
 	if (_showingTableIndex >= 0 && [operationQueue isKindOfClass:[MADOperationQueue class]] &&
 		[operation isKindOfClass:[MADOperationGetCredentials class]]) {
 		
@@ -1657,8 +1657,8 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 			changes = [query changedValues];
 			
 			NSString *selectorHasQueryTables = NSStringFromSelector(@selector(hasQueryTables));
-			BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
-			NSUInteger numberOfTables = query.hasQueryTables.count;
+			//BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
+			//NSUInteger numberOfTables = query.hasQueryTables.count;
 			for (id change in changes) {
 				if ([change isEqualToString: selectorHasQueryTables]) {
 					

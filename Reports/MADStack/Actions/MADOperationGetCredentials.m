@@ -178,7 +178,7 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 	[super execute];
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors {
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors {
 	// Operation 1 & 3: Credentials in keychain.
 	//  If results are read from keychain, then MADOperationResultStringProtocol.
 	//---
