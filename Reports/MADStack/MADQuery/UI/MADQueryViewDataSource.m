@@ -90,7 +90,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 
 - (void)dealloc {
 	_managedObjectContext = nil;
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
 	//_sections = nil;
 	_handleConfigureCell = nil;
 	//_datasoruce = nil;
@@ -157,7 +156,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 }
 
 - (void)numberOfTablesChanged:(NSUInteger)numberOfTables {
-	NSLog(@"%s: (%ld)", __PRETTY_FUNCTION__, numberOfTables);
 	_count = numberOfSectionsForQueryTableCount(numberOfTables, _reportingEnabled);
 	_numberOfTables = numberOfTables;
 	_sections = nil;
@@ -289,7 +287,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 	MADQueryViewSectionDelegate *layoutSection = [self layoutAtIndex:(short)section];
 	NSInteger numberOfRows = layoutSection.numberOfRows == NSNotFound ?
 					[self numberOfRowsInSection:layoutSection.querySection] : 1;
-	//NSLog(@"%s %ld: %ld", __PRETTY_FUNCTION__, (long)section, numberOfRows);
 	return numberOfRows;
 }
 
@@ -303,9 +300,6 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)style
 											forRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	//NSLog(@"Commit editing style for index path: (%ld, %ld)",
-	//      (long)indexPath.section, indexPath.row);
 	id <MADQueryViewControllerDatasourceProtocol> datasoruce = self.datasoruce;
 	switch (style) {
 			

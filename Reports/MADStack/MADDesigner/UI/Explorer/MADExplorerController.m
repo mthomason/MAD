@@ -1208,8 +1208,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark MADExplorerControllerProtocol
 
 - (void)handleDocumentStateChangedNotification:(NSNotification *)notification {
-	NSLog(@"handleDocumentStateChangedNotification: %@", notification);
-
 	if ([notification.name isEqualToString:UIDocumentStateChangedNotification]) {
 		
 		switch (((MADocument *)notification.object).documentState) {
@@ -1243,8 +1241,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 }
 
 - (void)handleDocumentStateChangedNotificationClosed:(NSNotification *)notification {
-	NSLog(@"handleDocumentStateChangedNotificationClosed: %@", notification);
-
 	MADocument *document = notification.object;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: UIDocumentStateChangedNotification
@@ -1252,17 +1248,13 @@ typedef NS_ENUM(short, MADExplorerState) {
 
 }
 
-- (void)handleDocumentStateChangedNotificationDisabled:(NSNotification *)notification {
-	NSLog(@"\n\n\tDocument state editing disabled.\n\n");
-}
+- (void)handleDocumentStateChangedNotificationDisabled:(NSNotification *)notification { }
 
-- (void)handleDocumentStateChangedNotificationConflict:(NSNotification *)notification {
-	NSLog(@"\n\n\tDocument state in conflict.\n\n");
-}
+- (void)handleDocumentStateChangedNotificationConflict:(NSNotification *)notification { }
 
 - (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
-	NSLog(@"handleDocumentStateChangedNotificationNormal: %@", notification);
-/*    NSNotification *changeNotification;
+/*
+	NSNotification *changeNotification;
 	MADocument *document;
 	SEL selector;
 	changeNotification = notification.copy;
@@ -1283,7 +1275,6 @@ typedef NS_ENUM(short, MADExplorerState) {
 														  message:message
 												   preferredStyle:UIAlertControllerStyleAlert];
 	[self presentViewController:alertController animated:YES completion:nil];
-	NSLog(@"\n\n\tDocument state saving error.\n\t%@", notification.userInfo);
 }
 
 #pragma mark -

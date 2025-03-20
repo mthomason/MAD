@@ -45,9 +45,11 @@
 }
 
 - (UIBackgroundTaskIdentifier)requestBackgroundTask {
-	__block UIBackgroundTaskIdentifier bgTask = [self beginBackgroundTaskWithExpirationHandler:^{
+	__block UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+	bgTask = [self beginBackgroundTaskWithExpirationHandler:^{
+		// Use the current value of bgTask
 		[self endBackgroundTask:bgTask];
-		bgTask = UIBackgroundTaskInvalid;
+		bgTask = UIBackgroundTaskInvalid; // Reset the task identifier
 	}];
 	return bgTask;
 }

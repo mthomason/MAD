@@ -9,8 +9,9 @@
 #ifndef Reports_MADQueryViewController_h
 #define Reports_MADQueryViewController_h
 
-#import <UIKit/UITableViewController.h>
-#import <UIKit/UIViewControllerTransitioning.h>
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryNavigationProtocol.h"

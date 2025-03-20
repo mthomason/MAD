@@ -15,44 +15,44 @@
 @class NSMutableArray<ObjectType>;
 
 typedef NS_ENUM(NSInteger, MADOperationState) {
-    MADOperationStateInitialized,
-    MADOperationStatePending,
-    MADOperationStateEvaluatingConditions,
-    MADOperationStateReady,
-    MADOperationStateExecuting,
-    MADOperationStateFinishing,
-    MADOperationStateFinished,
+	MADOperationStateInitialized,
+	MADOperationStatePending,
+	MADOperationStateEvaluatingConditions,
+	MADOperationStateReady,
+	MADOperationStateExecuting,
+	MADOperationStateFinishing,
+	MADOperationStateFinished,
 };
 
 static inline const char *MADStringOperationState(MADOperationState);
 static inline const char *MADStringOperationState(MADOperationState state) {
-    switch (state) {
-        case MADOperationStateInitialized:
-            return "Initalized";
-            break;
-        case MADOperationStatePending:
-            return "Pending";
-            break;
-        case MADOperationStateEvaluatingConditions:
-            return "Eonditions";
-            break;
-        case MADOperationStateReady:
-            return "Ready";
-            break;
-        case MADOperationStateExecuting:
-            return "Executing";
-            break;
-        case MADOperationStateFinishing:
-            return "Finishing";
-            break;
-        case MADOperationStateFinished:
-            return "Finished";
-            break;
-            
-        default:
-            return nil;
-            break;
-    }
+	switch (state) {
+		case MADOperationStateInitialized:
+			return "Initalized";
+			break;
+		case MADOperationStatePending:
+			return "Pending";
+			break;
+		case MADOperationStateEvaluatingConditions:
+			return "Eonditions";
+			break;
+		case MADOperationStateReady:
+			return "Ready";
+			break;
+		case MADOperationStateExecuting:
+			return "Executing";
+			break;
+		case MADOperationStateFinishing:
+			return "Finishing";
+			break;
+		case MADOperationStateFinished:
+			return "Finished";
+			break;
+			
+		default:
+			return nil;
+			break;
+	}
 };
 
 @protocol MADOperationCondition;
@@ -63,23 +63,23 @@ typedef NSMutableArray <__kindof NSObject <MADOperationObserver> *> MADMutableOp
 
 @interface MADOperation : NSOperation
 
-    @property (atomic, assign, readwrite) NSUInteger identifier;
-    @property (atomic, assign, readonly) MADOperationState state;
+	@property (atomic, assign, readwrite) NSUInteger identifier;
+	@property (atomic, assign, readonly) MADOperationState state;
 
-    @property (nonatomic, strong) MADMutableOperationConditions *conditions;
-    @property (nonatomic, strong) MADMutableOperationObservers *observers;
+	@property (nonatomic, strong) MADMutableOperationConditions *conditions;
+	@property (nonatomic, strong) MADMutableOperationObservers *observers;
 
-    - (void)addObserver:(NSObject <MADOperationObserver> *)observer;
-    - (void)addCondition:(NSObject <MADOperationCondition> *)condition;
-    - (void)willEnqueue;
+	- (void)addObserver:(NSObject <MADOperationObserver> *)observer;
+	- (void)addCondition:(NSObject <MADOperationCondition> *)condition;
+	- (void)willEnqueue;
 
-    - (void)finish;
-    - (void)finish:(NSArray *)errors;
-    - (void)finishWithError:(NSError *)error;
-    - (void)finished:(NSArray *)errors;
-    - (void)execute;
-    - (void)produceOperation:(NSOperation *)operation;
-    - (void)cleanup;
+	- (void)finish;
+	- (void)finish:(NSArray *)errors;
+	- (void)finishWithError:(NSError *)error;
+	- (void)finished:(NSArray *)errors;
+	- (void)execute;
+	- (void)produceOperation:(NSOperation *)operation;
+	- (void)cleanup;
 
 @end
 

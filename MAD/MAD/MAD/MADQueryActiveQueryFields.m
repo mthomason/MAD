@@ -103,8 +103,7 @@
 	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
 	fetchRequest.predicate = predicate;
 	NSError *error = nil;
-	NSArray *objects = [context executeFetchRequest:fetchRequest
-											  error:&error];
+	NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
 	return objects;
 }
 

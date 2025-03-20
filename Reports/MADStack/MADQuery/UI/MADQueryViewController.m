@@ -12,27 +12,6 @@
 
 #import "MADQueryViewController.h"
 #import <os/log.h>
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSOrderedSet.h>
-
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSFetchRequestExpression.h>
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSPersistentStoreResult.h>
-
-#import <UIKit/UIStoryboardSegue.h>
-#import <UIKit/UIPresentationController.h>
-#import <UIKit/UIPopoverPresentationController.h>
-#import <UIKit/NSAttributedString.h>
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UISwitch.h>
-#import <UIKit/UILabel.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/UIStoryboard.h>
-#import <UIKit/UISplitViewController.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
@@ -1170,8 +1149,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark NSFetchedResultsControllerDelegate
 
 - (NSMutableArray *)sectionsUsedByFetchedResultsController:(NSFetchedResultsController *)controller {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: 3];
 
 	NSNumber *sectionNumber;
@@ -1202,8 +1179,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
 - (void)controller: (NSFetchedResultsController *)controller didChangeSection: (id <NSFetchedResultsSectionInfo>)sectionInfo
 		   atIndex: (NSUInteger)sectionIndex forChangeType: (NSFetchedResultsChangeType)type {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
-	
 	NSMutableArray<NSNumber *> *sections = [self sectionsUsedByFetchedResultsController: controller];
 	NSNumber *section;
 	
@@ -1248,8 +1223,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 	   atIndexPath: (NSIndexPath *)indexPath
 	 forChangeType: (NSFetchedResultsChangeType)type
 	  newIndexPath: (NSIndexPath *)newIndexPath {
-	NSLog(@"%s (%ld, %ld)", __PRETTY_FUNCTION__, indexPath.section, indexPath.row);
-
 	if (_suspendAutomaticTrackingOfChangesInManagedObjectContext) return;
 	
 	NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
@@ -1298,7 +1271,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	if (!_suspendAutomaticTrackingOfChangesInManagedObjectContext) {
 		[self.tableView beginUpdates];
 		_beganUpdates = YES;
@@ -1306,7 +1278,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	if (_beganUpdates) {
 		[self.tableView endUpdates];
 	}
@@ -1523,7 +1494,6 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark MADQueryViewControllerDatasourceProtocol
 
 - (void)reloadQueryViewData {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	[self.tableView reloadData];
 }
 
@@ -1708,14 +1678,12 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 }
 
 - (void)ingnoreManagedObjectContextChanges:(NSManagedObjectContext *)context {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: NSManagedObjectContextObjectsDidChangeNotification
 												  object: context];
 }
 
 - (void)observeManagedObjectContextChanges:(NSManagedObjectContext *)context {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidChange:)
 												 name: NSManagedObjectContextObjectsDidChangeNotification

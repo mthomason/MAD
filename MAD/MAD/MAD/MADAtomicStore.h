@@ -9,9 +9,9 @@
 #import <CoreData/CoreData.h>
 
 @interface MADAtomicStore : NSAtomicStore {
-    NSString *store_identifier;
-    NSSet *temp_objects;
-    BOOL removeStub;
+	NSString *store_identifier;
+	NSSet *temp_objects;
+	BOOL removeStub;
 }
 
 - (id)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)coordinator configurationName:(NSString *)configurationName URL:(NSURL*)url options:(NSDictionary *)options;

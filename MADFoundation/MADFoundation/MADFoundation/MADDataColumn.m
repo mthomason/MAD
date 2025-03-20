@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 4/6/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -12,12 +12,6 @@
 
 #import "MADDataColumn.h"
 #import <CoreFoundation/CFNumber.h>
-#import <Foundation/NSArray.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSNull.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSCoder.h>
 
 @interface MADDataColumn ()
 
@@ -84,43 +78,6 @@
 	return self;
 }
 
-/*
-- (instancetype)initWithIdentifier:(NSString *)identifier {
-    
-    if (self = [super init]) {
-        
-        NSString *identifierW = [[NSString alloc] initWithString:identifier];
-        self.identifier = identifierW;
-        
-        NSString *caption = [[NSString alloc] initWithString:identifier];
-        self.caption = caption;
-        
-        NSMutableArray *column = [[NSMutableArray alloc] init];
-        self.column = column;
-        
-        _defaultValue = [NSNull null];
-        
-        NSNumber *columnType = [[NSNumber alloc] initWithInteger:0];
-        self.columnType = columnType;
-        
-        NSNumber *nativeType = [[NSNumber alloc] initWithInteger:0];
-        self.nativeType = nativeType;
-        
-        NSNumber *dataLength = [[NSNumber alloc] initWithInteger:0];
-        self.dataLength = dataLength;
-        
-        NSNumber *dataPercision = [[NSNumber alloc] initWithInteger:0];
-        self.dataPercision = dataPercision;
-        
-        _primaryKey = NO;
-        _notNull = NO;
-        _autoIncrement = NO;
-        
-    }
-    return self;
-}
-*/
-
 - (instancetype)initWithType:(MADDataType)columnType
 						name:(NSString *)name
 					  number:(int)columnNumber
@@ -130,8 +87,7 @@
 				   percision:(int32_t)percision
 				  nativeType:(int16_t)nativeType {
 	if (self = [super init]) {
-		NSMutableArray *column = [[NSMutableArray alloc] init];
-		self.column = column;
+		self.column = [[NSMutableArray alloc] init];
 		self.type = columnType;
 		self.identifier = name.copy;
 		self.caption = name.copy;
@@ -144,73 +100,40 @@
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier {
-
 	if (self = [super init]) {
-
-		self.identifier = identifier.copy;
-		
-		NSString *caption = [[NSString alloc] initWithString:identifier];
-		self.caption = caption;
-		
-		NSMutableArray *column = [[NSMutableArray alloc] init];
-		self.column = column;
-
-		_defaultValue = [NSNull null];
-		_type = 0;
-		_nativeType = 0;
-		_dataLength = 0;
-		_dataPercision = 0;
-
-		_primaryKey = NO;
-		_notNull = NO;
-		_autoIncrement = NO;
-		
+		self.identifier = [identifier copy];
+		self.caption = [identifier copy];
+		self.fieldName = [identifier copy];
+		self.column = [[NSMutableArray alloc] init];
+		self.defaultValue = [NSNull null];
+		self.type = 0;
+		self.nativeType = 0;
+		self.dataLength = 0;
+		self.dataPercision = 0;
+		self.primaryKey = NO;
+		self.notNull = NO;
+		self.autoIncrement = NO;
 	}
 	return self;
 }
 
 - (instancetype)initWithPlist:(NSDictionary *)plist {
-
 	if (self = [super init]) {
-		
-		NSString *fieldName = plist[[MADDataColumn keyFieldName]];
-		_fieldName = fieldName.copy;
-
-		NSString *identifier = plist[[MADDataColumn keyIdentifier]];
-		_identifier = identifier.copy;
-		
+		self.fieldName = [plist[[MADDataColumn keyFieldName]] copy];
+		self.identifier = [plist[[MADDataColumn keyIdentifier]] copy];
 		NSArray *columnImmutable = plist[[MADDataColumn keyColumn]];
-		NSMutableArray *column = [[NSMutableArray alloc] initWithArray: columnImmutable];
-		_column = column;
-		
-		NSObject <NSCopying> *defaultValue;
-		defaultValue = plist[[MADDataColumn keyDefaultValue]];
-		_defaultValue = defaultValue.copy;
-
-		NSString *caption = plist[[MADDataColumn keyCaption]];
-		_caption = caption.copy;
-
-		NSNumber *columnType = plist[[MADDataColumn keyColumnType]];
-		_type = columnType.shortValue;
-
-		CFNumberRef nativeType = (__bridge CFNumberRef)(plist[[MADDataColumn keyNativeColumnType]]);
-		CFNumberGetValue(nativeType, kCFNumberSInt16Type, &_nativeType);
-
-		NSNumber *dataLength = plist[[MADDataColumn keyDataLength]];
-		_dataLength = dataLength.integerValue;
-
-		CFNumberRef dataPercision = (__bridge CFNumberRef)(plist[[MADDataColumn keyDataPercision]]);
-		CFNumberGetValue(dataPercision, kCFNumberSInt32Type, &_dataPercision);
-		
-		NSNumber *isPrimaryKey = plist[[MADDataColumn keyIsPrimaryKey]];
-		_primaryKey = isPrimaryKey.boolValue;
-
-		NSNumber *isNotNull = plist[[MADDataColumn keyIsNotNull]];
-		_notNull = isNotNull.boolValue;
-
-		NSNumber *isAutoIncrement = plist[[MADDataColumn keyIsAutoIncrement]];
-		_autoIncrement = isAutoIncrement.boolValue;
-		
+		if (plist[[MADDataColumn keyColumn]] != nil) {
+			self.column = [[NSMutableArray alloc] initWithArray:columnImmutable];
+		}
+		self.defaultValue = [plist[[MADDataColumn keyDefaultValue]] copy];
+		self.caption = [plist[[MADDataColumn keyCaption]] copy];
+		self.type = ((NSNumber *)plist[[MADDataColumn keyColumnType]]).shortValue;
+		self.nativeType = ((NSNumber *)plist[[MADDataColumn keyNativeColumnType]]).shortValue;
+		self.dataLength = ((NSNumber *)plist[[MADDataColumn keyDataLength]]).integerValue;
+		self.dataPercision = ((NSNumber *)plist[[MADDataColumn keyDataPercision]]).intValue;
+		self.primaryKey = ((NSNumber *)plist[[MADDataColumn keyIsPrimaryKey]]).boolValue;
+		self.notNull = ((NSNumber *)plist[[MADDataColumn keyIsNotNull]]).boolValue;
+		self.autoIncrement = ((NSNumber *)plist[[MADDataColumn keyIsAutoIncrement]]).boolValue;
 	}
 	return self;
 }
@@ -305,64 +228,17 @@
 	[self.column removeAllObjects];
 }
 
-+ (NSString *)keyDefaultValue {
-	SEL sel = @selector(defaultValue);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyCaption {
-	SEL sel = @selector(caption);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyColumnType {
-	SEL sel = @selector(type);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyNativeColumnType {
-	SEL sel = @selector(nativeType);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyDataLength {
-	SEL sel = @selector(dataLength);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyDataPercision {
-	SEL sel = @selector(dataPercision);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyIdentifier {
-	SEL sel = @selector(identifier);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyColumn {
-	SEL sel = @selector(column);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyIsPrimaryKey {
-	SEL sel = @selector(isPrimaryKey);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyIsNotNull {
-	SEL sel = @selector(isNotNull);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyIsAutoIncrement {
-	SEL sel = @selector(isAutoIncrement);
-	return NSStringFromSelector(sel);
-}
-
-+ (NSString *)keyFieldName {
-	SEL sel = @selector(fieldName);
-	return NSStringFromSelector(sel);
-}
++ (NSString *)keyDefaultValue { return NSStringFromSelector(@selector(defaultValue)); }
++ (NSString *)keyCaption { return NSStringFromSelector(@selector(caption)); }
++ (NSString *)keyColumnType { return NSStringFromSelector(@selector(type)); }
++ (NSString *)keyNativeColumnType { return NSStringFromSelector(@selector(nativeType)); }
++ (NSString *)keyDataLength { return NSStringFromSelector(@selector(dataLength)); }
++ (NSString *)keyDataPercision { return NSStringFromSelector(@selector(dataPercision)); }
++ (NSString *)keyIdentifier { return NSStringFromSelector(@selector(identifier)); }
++ (NSString *)keyColumn { return NSStringFromSelector(@selector(column)); }
++ (NSString *)keyIsPrimaryKey { return NSStringFromSelector(@selector(isPrimaryKey)); }
++ (NSString *)keyIsNotNull { return NSStringFromSelector(@selector(isNotNull)); }
++ (NSString *)keyIsAutoIncrement { return NSStringFromSelector(@selector(isAutoIncrement)); }
++ (NSString *)keyFieldName { return NSStringFromSelector(@selector(fieldName)); }
 
 @end

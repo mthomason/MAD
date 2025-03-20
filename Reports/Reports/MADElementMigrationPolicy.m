@@ -35,7 +35,6 @@
 																   sourceInstances:(NSArray<__kindof NSManagedObject *> *)sourceInstances {
 	NSArray <__kindof NSManagedObject *> *results = [super destinationInstancesForEntityMappingNamed: mappingName
 																					 sourceInstances: sourceInstances];
-	NSLog(@"Results (%@): %@", mappingName, results);
 	return results;
 }
 
@@ -333,7 +332,6 @@
 		NSArray <__kindof NSManagedObject *> *sInstances = [manager sourceInstancesForEntityMappingNamed:mapping.name
 																					destinationInstances:dInstances];
 		NSAssert(dInstances.count == 1, @"We expect one and only one result.");
-		NSLog(@"%@", sInstances);
 		NSManagedObject *element = sInstances[0];
 		//NSString *key = NSStringFromClass([RptqBorder class]);
 		NSManagedObjectContext *destinationContext = manager.destinationContext;
@@ -355,13 +353,11 @@
 }
 
 - (BOOL)endRelationshipCreationForEntityMapping:(NSEntityMapping *)mapping manager:(NSMigrationManager *)manager error:(NSError * _Nullable __autoreleasing *)error {
-	BOOL result = [super endRelationshipCreationForEntityMapping:mapping manager:manager error:error];
-	return result;
+	return [super endRelationshipCreationForEntityMapping:mapping manager:manager error:error];
 }
 
 - (NSValue *)migrateValueFromPointX:(NSNumber *)x pointY:(NSNumber *)y {
-	CGPoint origin = CGPointMake(x.floatValue, y.floatValue);
-	return [NSValue valueWithCGPoint:origin];
+	return [NSValue valueWithCGPoint:CGPointMake(x.floatValue, y.floatValue)];
 }
 
 - (MADAlignment *)migrateValueFromAlignmentHorizontal:(NSNumber *)horizontal
@@ -369,8 +365,7 @@
 	int16_t h, v;
 	CFNumberGetValue((__bridge CFNumberRef _Nonnull)horizontal, kCFNumberSInt16Type, &h);
 	CFNumberGetValue((__bridge CFNumberRef _Nonnull)vertical, kCFNumberSInt16Type, &v);
-	MADAlignment *a = [[MADAlignment alloc] initWithHorizontal:h
-													  vertical:v];
+	MADAlignment *a = [[MADAlignment alloc] initWithHorizontal:h vertical:v];
 	return a;
 }
 

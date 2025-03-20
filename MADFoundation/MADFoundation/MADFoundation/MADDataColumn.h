@@ -3,13 +3,13 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 4/6/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MADDataColumn_h
 #define Reports_MADDataColumn_h
 
-#import <Foundation/NSObject.h>
+#import <Foundation/Foundation.h>
 #import <MADFoundation/MADDataType.h>
 
 @class NSMutableDictionary;

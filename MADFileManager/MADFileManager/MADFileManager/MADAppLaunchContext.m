@@ -46,9 +46,7 @@ static NSString * const MADAppConfigurationUserInfoKey = @"MADUserInfoKeyFileURL
 }
 
 - (instancetype)initWithFileURL:(NSURL *)fileURL {
-	self = [super init];
-	
-	if (self) {
+	if (self = [super init]) {
 		NSParameterAssert(fileURL.scheme != nil && [fileURL.scheme isEqualToString:@"lister"]);
 		
 		NSParameterAssert(fileURL.path != nil);

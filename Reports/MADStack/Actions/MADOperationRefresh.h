@@ -9,6 +9,7 @@
 #ifndef Reports_MADRefreshOperation_h
 #define Reports_MADRefreshOperation_h
 
+#import <Foundation/Foundation.h>
 #import <MADFoundation/MADOperation.h>
 
 @class MADocument;

@@ -20,16 +20,6 @@
 #import <CoreFoundation/CFString.h>
 #import <CoreFoundation/CFData.h>
 
-#import <Foundation/NSException.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSNULL.h>
-#import <Foundation/NSData.h>
-#import <Foundation/NSCalendar.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSString.h>
-
 #import <MADSqlite3/sqlite3.h>
 
 #import <MADFoundation/MADDataColumn.h>
@@ -439,19 +429,13 @@ void sqliteLog(void *foo, const char* statement) {
 			int prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
 			NSAssert(prepare_result == SQLITE_OK, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
 			success = prepare_result == SQLITE_OK;
-			
-			if (queryBinaryBindings.count > 0) {
-				for (MADDatabaseDataBinding *databinding in queryBinaryBindings) {
-					[self bindStatement:(void **)&statement withBindings:databinding];
-				}
-			}
-		} else if (queryPartOfTransactionSet) {
-			if (queryBinaryBindings.count > 0) {
-				for (MADDatabaseDataBinding *databinding in queryBinaryBindings) {
-					[self bindStatement:(void **)&statement withBindings:databinding];
-				}
+		}
+		if (queryBinaryBindings.count > 0) {
+			for (MADDatabaseDataBinding *databinding in queryBinaryBindings) {
+				[self bindStatement:(void **)&statement withBindings:databinding];
 			}
 		}
+
 		NSAssert(success, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
 		
 		int step_result = sqlite3_step(statement);
@@ -490,12 +474,10 @@ void sqliteLog(void *foo, const char* statement) {
    binaryBindings:(NSArray *)binaryBindings
 		withError:(NSError * __autoreleasing *)resultError {
    
-	sqlite3_stmt *statement = NULL;
-	statement = partOfTransactionSet ? _bulkStatement : statement;
-
 	BOOL success = NO;
+	sqlite3_stmt *statement = partOfTransactionSet ? _bulkStatement : NULL;
 	char *errorMessage = NULL;
-	char *csql = sqlite3_mprintf(sql.UTF8String);
+	char *csql = sqlite3_mprintf("%s", sql.UTF8String);
 	
 	if (statement == NULL) {
 		if (sqlite3_prepare_v2(_database, csql, -1, &statement, NULL) != SQLITE_OK) {
@@ -504,34 +486,27 @@ void sqliteLog(void *foo, const char* statement) {
 		} else {
 			success = YES;
 		}
-		if (binaryBindings.count > 0) {
-			for (MADDatabaseDataBinding *databinding in binaryBindings) {
-				[self bindStatement:(void **)&statement withBindings:databinding];
-			}
-		}
-	} else if (partOfTransactionSet) {
-		if (binaryBindings.count > 0) {
-			for (MADDatabaseDataBinding *databinding in binaryBindings) {
-				[self bindStatement:(void **)&statement withBindings:databinding];
-			}
+	}
+	if (binaryBindings.count > 0) {
+		for (MADDatabaseDataBinding *databinding in binaryBindings) {
+			[self bindStatement:(void **)&statement withBindings:databinding];
 		}
 	}
 	
 	if (returnsResults && success) {
+		[dataTable removeAllObjects];
+
 		int numberOfColumns = sqlite3_column_count(statement);
 		numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
-		[dataTable removeAllObjects];
-		
+
 		NSUInteger rowCounter = 0;
 		while (sqlite3_step(statement) == SQLITE_ROW) { // Directly use sqlite3_step result
 			if (rowCounter == 0) {  // If first time around, calculate column information.
 				for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
 					NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
-					
 					MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
 					
 					int affentyType = sqlite3_column_type(statement, (int)columnCounter);
-					
 					const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
 					NSAssert(columnName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
 					
@@ -549,11 +524,10 @@ void sqliteLog(void *foo, const char* statement) {
 													  &pzDataType, &pzCollSeq, &pNotNull, &pPrimaryKey, &pAutoinc);
 					}
 					
+					MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
 					dataColumn.fieldName = fieldName;
 					dataColumn.nativeType = (int16_t)affentyType;
-					MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
 					dataColumn.type = columnType;
-					
 					dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
 					dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
 					dataColumn.notNull = pNotNull ? NO : pNotNull;

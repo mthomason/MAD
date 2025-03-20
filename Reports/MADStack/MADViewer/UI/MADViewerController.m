@@ -738,6 +738,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (IBAction)refresh:(id)sender {
 	_didRefreshBeforeReaload = YES;
+	
+	// Request a background task
 	_backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
 	
 	if (_refreshing == NO) {
@@ -745,16 +747,24 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 		_refreshing = YES;
 		
 		[self setDisplayInactive];
-
+		
 		MADocument *document = self.document;
 		
-		MADOperationRefreshReload *refresh;
-		refresh = [[MADOperationRefreshReload alloc] initWithDocument: document
-													   viewController: self
-												   databaseConnection: document.database.databaseConnection];
+		__weak typeof(self) weakSelf = self;
+		MADOperationRefreshReload *refresh = [[MADOperationRefreshReload alloc] initWithDocument:document
+																				  viewController:self
+																			  databaseConnection:document.database.databaseConnection];
 		[refresh addObserver:self];
+		refresh.completionBlock = ^{
+			typeof(self) strongSelf = weakSelf;
+			if (strongSelf) {
+				// End the background task when the operation completes
+				[[UIApplication sharedApplication] endBackgroundTask:strongSelf->_backgroundTaskIdRefresh];
+				strongSelf->_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+				strongSelf->_refreshing = NO; // Reset refreshing flag
+			}
+		};
 		[self.refreshQueue addOperation:refresh];
-
 	}
 }
 
@@ -1140,7 +1150,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark MADViewControllerDocumentProtocol
 
 - (void)setDocument:(MADocument *)document {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
 	if (_document != document) {
 		_document = document;
 	}

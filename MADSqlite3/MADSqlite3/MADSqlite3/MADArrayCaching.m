@@ -476,12 +476,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 						 MTArrayCachedColumnValue,
 						 MTArrayCachedTableName,
 						 MTArrayCachedColumnKey];
-		
-		MADDatabaseConnection *databaseConnection;
-		MADDatabaseSqlite3 *database;
-		databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-		
-		database = [[MADDatabaseSqlite3 alloc] init];
+		MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+		MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
 		[database setDatabaseConnection:databaseConnection];
 		[database openDatabase];
 		int prepare_result = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1,

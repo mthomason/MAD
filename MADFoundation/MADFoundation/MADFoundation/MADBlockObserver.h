@@ -9,16 +9,22 @@
 #ifndef MAD_Designer_MADBlockObserver_h
 #define MAD_Designer_MADBlockObserver_h
 
-#import <Foundation/NSObject.h>
-#import "MADOperationObserver.h"
+#import <Foundation/Foundation.h>
+#import <MADFoundation/MADOperationObserver.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MADBlockObserver : NSObject
-                        <MADOperationObserver>
+						<MADOperationObserver>
 
-    - (instancetype)initWithStartHandler:(void(^)(MADOperation *))startHandler
-                          produceHandler:(void(^)(MADOperation *, NSOperation *))produceHandler
-                           finishHandler:(void(^)(MADOperation *, NSArray *))finishHandler;
+	- (instancetype)initWithStartHandler:(nullable void(^)(MADOperation *))startHandler
+						  produceHandler:(nullable void(^)(MADOperation *, NSOperation *))produceHandler
+						   finishHandler:(nullable void(^)(MADOperation *, NSArray <NSError *> *))finishHandler;
+
+	- (instancetype)initWithFinishHandler:(nullable void(^)(MADOperation *, NSArray<NSError *> *))finishHandler;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

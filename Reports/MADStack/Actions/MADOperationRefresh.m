@@ -9,12 +9,8 @@
 #import "MADOperationRefresh.h"
 
 #import <os/log.h>
-
 #import <CoreData/NSManagedObjectContext.h>
-
-#import <Foundation/NSError.h>
-#import <Foundation/NSURL.h>
-
+#import <Foundation/Foundation.h>
 #import <MADFoundation/MADCredential.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
@@ -94,27 +90,27 @@ static const short errCache = 2;
     }];
     [document dataTableSetDataDelegate:document];
     NSError *executeError = NULL;
-    BOOL success = [document.database executeSQL: queryString
-                                       fieldKeys: query.fieldKeys
-                                    onConnection: dbconn
-                                 intoResultTable: (MADDataTable *)document.dataTable
-                                       withError: &executeError];
 
-    if (!success) {
-        NSError *error = eerror;
-        [self finishWithError:error];
-        return;
-    }
-    success = [document dataTableMakeCache];
-    document.refreshed = YES;
-    
-    if (!success) {
-        NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil];
-        [self finishWithError:error];
-        return;
-    }
+	BOOL success = [document.database executeSQL: queryString
+									   fieldKeys: query.fieldKeys
+									onConnection: dbconn
+								 intoResultTable: (MADDataTable *)document.dataTable
+									   withError: &executeError];
+	
+	if (!success) {
+		NSError *error = eerror;
+		[self finishWithError:error];
+		return;
+	}
+	success = [document dataTableMakeCache];
+	document.refreshed = YES;
+	if (!success) {
+		NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil];
+		[self finishWithError:error];
+		return;
+	}
 
-    [self finish];
+	[self finish];
 }
 
 @end

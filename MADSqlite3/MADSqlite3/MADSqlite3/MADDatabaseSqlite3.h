@@ -9,8 +9,7 @@
 #ifndef Reports_MADDatabaseSqlite3_h
 #define Reports_MADDatabaseSqlite3_h
 
-#import <Foundation/NSString.h>
-
+#import <Foundation/Foundation.h>
 #import <MADFoundation/MADDataType.h>
 
 #import <MADAPI/MADDatabase.h>
