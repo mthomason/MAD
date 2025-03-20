@@ -3,13 +3,15 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/17/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADBlockOperation_h
 #define MAD_Designer_MADBlockOperation_h
 
 #import <MADFoundation/MADOperation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^OperationCompletionBlock)(void);
 typedef void(^OperationBlock)(OperationCompletionBlock completionBlock);
@@ -26,7 +28,7 @@ typedef void(^OperationBlock)(OperationCompletionBlock completionBlock);
 		will never finish executing. If this parameter is `nil`, the operation
 		will immediately finish.
 	 */
-	- (instancetype)initWithBlock:(OperationBlock)block;
+	- (instancetype)initWithBlock:(nullable OperationBlock)block;
 
 	/**
 	 A convenience initializer to execute a block on the main queue.
@@ -36,8 +38,10 @@ typedef void(^OperationBlock)(OperationCompletionBlock completionBlock);
 		the designated initializer). The operation will be automatically ended
 		after the `mainQueueBlock` is executed.
 	 */
-	- (instancetype)initWithMainQueueBlock:(dispatch_block_t)block;
+	- (instancetype)initWithMainQueueBlock:(nullable dispatch_block_t)block;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

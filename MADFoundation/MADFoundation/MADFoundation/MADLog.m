@@ -17,18 +17,18 @@ MADLogLevel MADCurrentLogLevel = MADLogLevelInfo;
 
 #if TARGET_OS_IPHONE
   #if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_6_1 && __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_1
-    #define MADLogAlsModern 1
+	#define MADLogAlsModern 1
   #endif
 #else
   #if __MAC_OS_X_VERSION_MIN_REQUIRED > __MAC_10_9
-    #define MADLogAlsModern 1
+	#define MADLogAlsModern 1
   #endif
 #endif
 
 #if DEBUG
 
   MADLogBlock MADLogHandler = ^(NSUInteger logLevel, NSString *fileName, NSUInteger lineNumber,
-                                NSString *methodName, NSString *format, ...) {
+								NSString *methodName, NSString *format, ...) {
 	va_list args;
 	va_start(args, format);
 	MADLogMessagev(logLevel, format, args);
@@ -64,7 +64,7 @@ void MADLogMessage(MADLogLevel logLevel, NSString *format, ...) {
 
 NSArray *MADLogGetMessages(void) {
 
-    aslmsg query, message;
+	aslmsg query, message;
 	
 	const char *key, *val;
 	
@@ -78,8 +78,8 @@ NSArray *MADLogGetMessages(void) {
 	
 	NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
 	
-    while ((message = mad_log_next(response))) {
-        
+	while ((message = mad_log_next(response))) {
+		
 		NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
 		
 		for (unsigned int i = 0; ((key = asl_key(message, i))); i++) {
@@ -95,27 +95,27 @@ NSArray *MADLogGetMessages(void) {
 	}
 	
 	asl_free(query);
-    mad_log_free(response);
+	mad_log_free(response);
 	
-	if (tmpArray.count) return [tmpArray copy];	
+	if (tmpArray.count) return [tmpArray copy];
 	
 	return nil;
 }
 
 void mad_log_free(aslresponse response) {
-    #if MADLogAlsModern
-      asl_release(response);
-    #else
-      aslresponse_free(response);
-    #endif
+	#if MADLogAlsModern
+	  asl_release(response);
+	#else
+	  aslresponse_free(response);
+	#endif
 }
 
 aslmsg mad_log_next(aslresponse response) {
-    aslmsg msg;
-    #if MADLogAlsModern
-      msg = asl_next(response);
-    #else
-      msg = aslresponse_next(response);
-    #endif
-    return msg;
+	aslmsg msg;
+	#if MADLogAlsModern
+	  msg = asl_next(response);
+	#else
+	  msg = aslresponse_next(response);
+	#endif
+	return msg;
 }

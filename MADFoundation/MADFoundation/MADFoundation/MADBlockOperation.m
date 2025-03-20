@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/17/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADBlockOperation.h"
@@ -11,7 +11,7 @@
 
 @interface MADBlockOperation ()
 
-	@property (nonatomic, copy) OperationBlock block;
+	@property (nonatomic, copy, nullable) OperationBlock block;
 
 @end
 
@@ -31,32 +31,37 @@
 		will immediately finish.
  */
 
-- (instancetype)initWithBlock:(OperationBlock)block {
+- (instancetype)initWithBlock:(nullable OperationBlock)block {
 	if (self = [super init]) {
-		_block = block;
+		_block = [block copy];
 	}
 	return self;
 }
 
-- (instancetype)initWithMainQueueBlock:(dispatch_block_t)block {
-	self = [self initWithBlock:^(void(^operationCompletionBlock)(void)) {
-		block();
-		if (operationCompletionBlock) {
+- (instancetype)initWithMainQueueBlock:(nullable dispatch_block_t)block {
+	return [self initWithBlock:^(OperationCompletionBlock operationCompletionBlock) {
+		if (block) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				block();
+				if (operationCompletionBlock) {
+					operationCompletionBlock();
+				}
+			});
+		} else if (operationCompletionBlock) {
 			operationCompletionBlock();
 		}
 	}];
-	return self;
 }
 
 - (void)execute {
 	OperationCompletionBlock completion = ^{
 		[self finish];
 	};
-	if (self.block){
+
+	if (self.block) {
 		self.block(completion);
 	} else {
 		completion();
-		return;
 	}
 }
 

@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/11/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADOperation_h
@@ -13,6 +13,8 @@
 
 
 @class NSMutableArray<ObjectType>;
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, MADOperationState) {
 	MADOperationStateInitialized,
@@ -27,31 +29,14 @@ typedef NS_ENUM(NSInteger, MADOperationState) {
 static inline const char *MADStringOperationState(MADOperationState);
 static inline const char *MADStringOperationState(MADOperationState state) {
 	switch (state) {
-		case MADOperationStateInitialized:
-			return "Initalized";
-			break;
-		case MADOperationStatePending:
-			return "Pending";
-			break;
-		case MADOperationStateEvaluatingConditions:
-			return "Eonditions";
-			break;
-		case MADOperationStateReady:
-			return "Ready";
-			break;
-		case MADOperationStateExecuting:
-			return "Executing";
-			break;
-		case MADOperationStateFinishing:
-			return "Finishing";
-			break;
-		case MADOperationStateFinished:
-			return "Finished";
-			break;
-			
-		default:
-			return nil;
-			break;
+		case MADOperationStateInitialized: return "Initialized";
+		case MADOperationStatePending: return "Pending";
+		case MADOperationStateEvaluatingConditions: return "EvaluatingConditions";
+		case MADOperationStateReady: return "Ready";
+		case MADOperationStateExecuting: return "Executing";
+		case MADOperationStateFinishing: return "Finishing";
+		case MADOperationStateFinished: return "Finished";
+		default: return "Unknown";
 	}
 };
 
@@ -69,18 +54,22 @@ typedef NSMutableArray <__kindof NSObject <MADOperationObserver> *> MADMutableOp
 	@property (nonatomic, strong) MADMutableOperationConditions *conditions;
 	@property (nonatomic, strong) MADMutableOperationObservers *observers;
 
-	- (void)addObserver:(NSObject <MADOperationObserver> *)observer;
-	- (void)addCondition:(NSObject <MADOperationCondition> *)condition;
+	- (void)addObserver:(nonnull NSObject <MADOperationObserver> *)observer;
+	- (void)addObservers:(nonnull NSArray<NSObject<MADOperationObserver> *> *)observers;
+	- (void)addCondition:(nonnull NSObject <MADOperationCondition> *)condition;
+	- (void)addConditions:(nonnull NSArray<NSObject<MADOperationCondition> *> *)conditions;
 	- (void)willEnqueue;
 
 	- (void)finish;
-	- (void)finish:(NSArray *)errors;
-	- (void)finishWithError:(NSError *)error;
-	- (void)finished:(NSArray *)errors;
+	- (void)finish:(nullable NSArray<NSError *> *)errors;
+	- (void)finishWithError:(nullable NSError *)error;
+	- (void)finished:(nullable NSArray<NSError *> *)errors;
 	- (void)execute;
-	- (void)produceOperation:(NSOperation *)operation;
+	- (void)produceOperation:(nonnull NSOperation *)operation;
 	- (void)cleanup;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

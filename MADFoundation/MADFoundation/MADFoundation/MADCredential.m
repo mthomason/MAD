@@ -12,21 +12,21 @@
 @implementation MADCredential
 
 - (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password {
-    if (self = [super init]) {
+	if (self = [super init]) {
 
-        _username = username.copy;
-        _password = password.copy;
-        
-    }
-    return self;
-    
+		_username = username.copy;
+		_password = password.copy;
+		
+	}
+	return self;
+	
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    id username = [_username copyWithZone:zone];
-    id password = [_password copyWithZone:zone];
-    id copy = [[[self class] alloc] initWithUsername:username andPassword:password];
-    return copy;
+	id username = [_username copyWithZone:zone];
+	id password = [_password copyWithZone:zone];
+	id copy = [[[self class] alloc] initWithUsername:username andPassword:password];
+	return copy;
 }
 
 @end

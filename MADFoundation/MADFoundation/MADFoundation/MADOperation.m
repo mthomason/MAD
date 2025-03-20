@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/11/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import <MADFoundation/MADOperation.h>
@@ -219,9 +219,13 @@ static NSString * const MADOperatorSelectorState        = @"state";
 #pragma mark -
 #pragma mark Conditions
 
-- (void)addCondition:(NSObject <MADOperationCondition> *)condition {
+- (void)addCondition:(nonnull NSObject<MADOperationCondition> *)condition {
 	NSAssert(self.state < MADOperationStateEvaluatingConditions, @"Cannot modify observers after execution has begun.");
 	[self.conditions addObject:condition];
+}
+
+- (void)addConditions:(nonnull NSArray<NSObject<MADOperationCondition> *> *)conditions {
+	[self.conditions addObjectsFromArray:conditions];
 }
 
 - (void)addDependency:(NSOperation *)op {
@@ -232,9 +236,13 @@ static NSString * const MADOperatorSelectorState        = @"state";
 #pragma mark -
 #pragma mark Observers
 
-- (void)addObserver:(NSObject <MADOperationObserver> *)observer {
+- (void)addObserver:(nonnull NSObject<MADOperationObserver> *)observer {
 	NSAssert(self.state < MADOperationStateExecuting, @"Cannot modify observers after execution has begun.");
 	[self.observers addObject:observer];
+}
+
+- (void)addObservers:(nonnull NSArray<NSObject<MADOperationObserver> *> *)observers {
+	[self.observers addObjectsFromArray:observers];
 }
 
 #pragma mark -

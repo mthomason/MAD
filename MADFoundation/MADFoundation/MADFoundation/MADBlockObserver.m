@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/17/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADBlockObserver.h"
@@ -37,7 +37,6 @@
 
 - (void)operationDidStart:(nonnull MADOperation *)operation {
 	if (self.startHandler) {
-		__weak typeof(self) weakSelf = self;
 		self.startHandler(operation);
 	}
 }
@@ -45,7 +44,6 @@
 -(void)operation:(nonnull MADOperation *)operation
 	didProduceOperation:(nonnull NSOperation *)newOperation {
 	if (self.produceHandler) {
-		__weak typeof(self) weakSelf = self;
 		self.produceHandler(operation, newOperation);
 	}
 }
@@ -53,7 +51,6 @@
 -(void)operationDidFinish:(nonnull MADOperation *)operation
 				   errors:(nullable NSArray <NSError *> *)errors {
 	if (self.finishHandler) {
-		__weak typeof(self) weakSelf = self;
 		self.finishHandler(operation, errors);
 	}
 }

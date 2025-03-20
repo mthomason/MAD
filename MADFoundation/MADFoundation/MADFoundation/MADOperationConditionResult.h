@@ -3,31 +3,33 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/16/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADOperationConditionResult_h
 #define MAD_Designer_MADOperationConditionResult_h
 
-#import <Foundation/NSObject.h>
+#import <Foundation/Foundation.h>
+#import <MADFoundation/MADOperationCondition.h>
 
-@class MADOperation;
+@class MADOperation, MADOperationCondition;
 
-extern NSString * MADOperationConditionKey;
+extern NSString * _Nonnull const MADOperationConditionKey;
 
 @interface MADOperationConditionResult : NSObject
 
-    @property (nonatomic, readonly) BOOL isSucceed;
-    @property (nonatomic, readonly) NSError * error;
+	@property (nonatomic, readonly) BOOL isSucceed;
+	@property (nonatomic, readonly, nullable) NSError *error;
 
-    + (instancetype)newOperationConditionResultSatisfied;
-    + (instancetype)newOperationConditionResult:(BOOL)satisfied;
-    + (instancetype)newOperationConditionResult:(BOOL)satisfied name:(NSString *)name;
-    + (instancetype)newOperationConditionResultFailedNotSatisfied:(NSString *)name;
-    + (instancetype)newOperationConditionResultFailed:(NSError *)error;
-    + (void)evaluateConditions:(NSArray *)conditions
-                     operation:(MADOperation *)operation
-                    completion:(void(^)(NSArray * errors))completion;
+	+ (nonnull instancetype)newOperationConditionResultSatisfied;
+	+ (nonnull instancetype)newOperationConditionResult:(BOOL)satisfied;
+	+ (nonnull instancetype)newOperationConditionResult:(BOOL)satisfied
+												   name:(nonnull NSString *)name;
+	+ (nonnull instancetype)newOperationConditionResultFailedNotSatisfied:(nonnull NSString *)name;
+	+ (nonnull instancetype)newOperationConditionResultFailed:(nonnull NSError *)error;
+	+ (void)evaluateConditions:(nonnull NSArray<id<MADOperationCondition>> *)conditions
+					 operation:(nonnull MADOperation *)operation
+					completion:(nonnull void(^)(NSArray<NSError *> * _Nonnull errors))completion;
 
 @end
 

@@ -3,13 +3,13 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/17/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADOperationQueue_h
 #define MAD_Designer_MADOperationQueue_h
 
-#import <Foundation/NSOperation.h>
+#import <Foundation/Foundation.h>
 
 @class MADOperation, MADOperationQueue;
 
@@ -21,8 +21,11 @@
 
 @protocol MADOperationQueueDelegate <NSObject>
 @optional
-    - (void)operationQueue:(MADOperationQueue *)operationQueue willAddOperation:(NSOperation *)operation;
-    - (void)operationQueue:(MADOperationQueue *)operationQueue operationDidFinish:(NSOperation *)operation withErrors:(NSArray *)errors;
+	- (void)operationQueue:(nonnull MADOperationQueue *)operationQueue
+		  willAddOperation:(nonnull NSOperation *)operation;
+	- (void)operationQueue:(nonnull MADOperationQueue *)operationQueue
+		operationDidFinish:(nonnull NSOperation *)operation
+				withErrors:(nullable NSArray <NSError *> *)errors;
 @end
 
 // `OperationQueue` is an `NSOperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class:
@@ -32,7 +35,7 @@
 //      - Setting up dependencies to enforce mutual exclusivity
 
 @interface MADOperationQueue : NSOperationQueue
-    @property (nonatomic, weak) id <MADOperationQueueDelegate> delegate;
+	@property (nonatomic, weak, nullable) id <MADOperationQueueDelegate> delegate;
 @end
 
 #endif
