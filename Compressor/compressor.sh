@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#  buildcounter.sh
+#  compressor.sh
 #  MAD
 #
 #  Created by Michael Thomason on 1/24/14.
-#  Copyright © 2017 Michael Thomason. All rights reserved.
+#  Copyright © 2025 Michael Thomason. All rights reserved.
 
 # This is a bit of a mess.  It might work, or you might start building Unix from scratch.  Probably
 #	use some judgement, and read it, before you start to use this script.

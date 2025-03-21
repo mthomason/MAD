@@ -4426,8 +4426,10 @@
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = D3C58YS54A;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D3C58YS54A;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -4449,7 +4451,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4468,6 +4470,7 @@
 				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "MAD Designer Development";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MAD Designer Development";
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 			};
 			name = Debug;
@@ -4514,7 +4517,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../opt/lib/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
