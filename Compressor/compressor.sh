@@ -175,8 +175,8 @@ empty_directory() {
 }
 
 # Globals
-readonly version_openssl="1.0.2r"
-readonly version_mysql="6.1.11"
+readonly version_openssl="3.4.1"
+readonly version_mysql="8.0.4.1"
 readonly version_freetds="1.1.5"
 readonly version_tds=7.1
 readonly version_zint="2.4.2"
@@ -204,15 +204,17 @@ readonly path_xcode=$( xcode-select -print-path )
 readonly version_macosx=$( version_for_platform $platform_macosx )
 readonly version_ios=$( version_for_platform $platform_iphoneos )
 
-readonly version_ios_min="10.0"
+readonly version_ios_min="12.0"
 
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
 readonly archs="arm64 arm64e armv7 armv7s x86_64 i386"
 
-readonly archs_macosx="x86_64 i386"
-readonly archs_ios="arm64 arm64e armv7 armv7s"
+readonly archs_macosx="arm64 x86_64"
+readonly archs_ios="arm64 arm64e"
+readonly archs_ios_simulator="arm64 x86_64"
+
 readonly archs_valid="${archs_macosx} ${archs_ios}"
 
 readonly archive_bzip_base_url="http://www.bzip.org/${version_bzip}/"
