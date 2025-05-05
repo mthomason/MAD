@@ -82,7 +82,7 @@
 
 		} else if ([object isKindOfClass:[NSNull class]]) {
 
-			my_bool *aBool = calloc(1,sizeof(my_bool));
+			bool *aBool = calloc(1,sizeof(bool));
 			*aBool=1;
 			binding[x].is_null= aBool;
 

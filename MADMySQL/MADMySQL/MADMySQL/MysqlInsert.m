@@ -115,9 +115,9 @@
 				binding[x].buffer = (void *)ch;
 				binding[x].buffer_length= strlen(ch);
 			} else if ([object isKindOfClass:[NSNull class]]) {
-				my_bool *aBool = calloc(1,sizeof(my_bool));
+				bool *aBool = calloc(1,sizeof(bool));
 				*aBool=1;
-				binding[x].is_null= aBool;
+				binding[x].is_null = aBool;
 			} else {
 				NSString *s = (NSString *)object.description;
 				const char *ch = s.UTF8String;

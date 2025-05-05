@@ -1,5 +1,7 @@
 # Scripts
 .DS_Store
+.graffle
+
 Compressor/src/
 Compressor/build_temp/
 Compressor/library/openssl/
@@ -9,6 +11,8 @@ Compressor/src/libpng-1.6.37/
 Compressor/freetds-1.4.26/
 Compressor/library/freetds/
 Compressor/library/libmysqlclient-old
+Compressor/source
+
 3rdPartyProjects/ColorPicker/
 opt/bld/
 StaticLibraries/
@@ -19,7 +23,6 @@ MADTds/MADTds/freetds/source/
 #CodeSigningRequest
 MADRequest.certSigningRequest
 
-.graffle
 
 # Xcode
 #
@@ -277,7 +280,6 @@ xcuserdata
 .DS_Store
 
 StaticLibraries/.DS_Store
-Compressor/source
 
 *.tar.gz
 *.tgz
@@ -391,5 +393,3 @@ opt/bld/mysqlconnector/zlib/Release-iphoneos/libzlib.a
 opt/bld/mysqlconnector/zlib/Release-iphonesimulator/libzlib.a
 opt/bld/mysqlconnector/zlib/Release/iphonesimulator/libzlib.a
 opt/bld/mysqlconnector/zlib/Release/libzlib.a
-
-

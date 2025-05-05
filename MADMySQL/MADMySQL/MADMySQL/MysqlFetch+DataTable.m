@@ -474,24 +474,24 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=sizeof(long long);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_LONG:
 			binding.buffer_type = myStatement->fields[x].type;
 			binding.buffer_length=sizeof(long);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_SHORT:
 			binding.buffer_type = myStatement->fields[x].type;
 			binding.buffer_length=sizeof(short);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_STRING:
 		case MYSQL_TYPE_VARCHAR:
@@ -504,16 +504,16 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=myStatement->fields[x].length;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_TINY_BLOB:
 			binding.buffer_type = myStatement->fields[x].type;
 			binding.buffer_length=BUFFER_SIZE_BLOB_TINY;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 			
 		case MYSQL_TYPE_BLOB:
@@ -521,8 +521,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=BUFFER_SIZE_BLOB;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 			
 		case MYSQL_TYPE_MEDIUM_BLOB:
@@ -531,24 +531,24 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=BUFFER_SIZE_BLOB * 2;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_TINY:
 			binding.buffer_type = myStatement->fields[x].type;
 			binding.buffer_length=1;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_NEWDECIMAL:
 			binding.buffer_type = MYSQL_TYPE_STRING;
 			binding.buffer_length=myStatement->fields[x].length;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 			
 		case MYSQL_TYPE_INT24:
@@ -556,8 +556,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=sizeof(int);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_TIMESTAMP2:
 		case MYSQL_TYPE_TIMESTAMP:
@@ -565,16 +565,16 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=myStatement->fields[x].length;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_FLOAT:
 			binding.buffer_type = MYSQL_TYPE_FLOAT;
 			binding.buffer_length=myStatement->fields[x].length;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_DECIMAL:
 		case MYSQL_TYPE_DOUBLE:
@@ -582,8 +582,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=myStatement->fields[x].length;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_DATETIME:
 		case MYSQL_TYPE_DATETIME2:
@@ -592,8 +592,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=sizeof(MYSQL_TIME);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 			
 		case MYSQL_TYPE_DATE:
@@ -601,8 +601,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=sizeof(MYSQL_TIME);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 			
 		case MYSQL_TYPE_TIME:
@@ -611,16 +611,16 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.buffer_length=sizeof(MYSQL_TIME);
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_BIT:
 			binding.buffer_type = MYSQL_TYPE_BIT;
 			binding.buffer_length=1;
 			binding.buffer = calloc(1,binding.buffer_length);
 			binding.length= calloc(1,sizeof(unsigned long));
-			binding.error= calloc(1,sizeof(my_bool));
-			binding.is_null= calloc(1,sizeof(my_bool));
+			binding.error= calloc(1,sizeof(bool));
+			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_NULL:
 			binding.buffer_type = MYSQL_TYPE_NULL;
