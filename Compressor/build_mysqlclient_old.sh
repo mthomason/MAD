@@ -160,7 +160,7 @@ for entry in "${ARCHS[@]}"; do
     BUILD_DIR="${WORK_DIR}/build_${ARCH}"
     mkdir -p "${BUILD_DIR}"
 
-    # Absolute path to SDK
+    # Absolute path to SD
     SDK_PATH="$(xcrun --sdk ${SDK} --show-sdk-path)"
 
     cd "${BUILD_DIR}"
@@ -176,7 +176,7 @@ echo "cmake \"${MYSQL_SRC}\" \
     -DBUILD_SHARED_LIBS=OFF \
     -DWITH_SSL=system \
     -DCURSES_INCLUDE_PATH=\"/opt/homebrew/opt/ncurses/include\" \
-    -DCURSES_LIBRARY=\"/opt/homebrew/opt/ncurses/lib/libncurses.dylib\" \
+    -DCURSES_LIBRARY=\"/opt/homebrew/opt/ncurses/lib/libncurses.\" \
     -DOPENSSL_INCLUDE_DIR=\"${OPENSSL_INCLUDE}\" \
     -DOPENSSL_SSL_LIBRARY=\"${SSL_LIB}\" \
     -DOPENSSL_CRYPTO_LIBRARY=\"${SSL_LIB}\" \
