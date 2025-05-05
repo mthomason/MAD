@@ -1237,6 +1237,7 @@
 		4CB56EC61AC683CC00756775 /* typelib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = typelib.h; sourceTree = "<group>"; };
 		4CB56EC71AC683CC00756775 /* violite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = violite.h; sourceTree = "<group>"; };
 		4CB56EC81AC683CC00756775 /* welcome_copyright_notice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = welcome_copyright_notice.h; sourceTree = "<group>"; };
+		4CB671892D90F6D600C8378D /* buildmysql.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = buildmysql.sh; path = ../Compressor/buildmysql.sh; sourceTree = SOURCE_ROOT; };
 		4CB94ADA1AD0EEBB002130B2 /* MADInterfaceControllerKPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInterfaceControllerKPI.h; sourceTree = "<group>"; };
 		4CB94ADB1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInterfaceControllerKPI.m; sourceTree = "<group>"; };
 		4CB98D721F42BAC10043B583 /* MADOperationConditionDisplayedAlertConfirm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationConditionDisplayedAlertConfirm.h; sourceTree = "<group>"; };
@@ -1301,6 +1302,11 @@
 		4CD90DB91CE6B76600B56B90 /* rwpng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rwpng.c; sourceTree = "<group>"; };
 		4CD90DBA1CE6B76600B56B90 /* rwpng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rwpng.h; sourceTree = "<group>"; };
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4CDB09982D8F4E04002FC40E /* buildpng.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = buildpng.sh; path = ../Compressor/buildpng.sh; sourceTree = SOURCE_ROOT; };
+		4CDB09992D8F72FA002FC40E /* buildzlib.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = buildzlib.sh; path = ../Compressor/buildzlib.sh; sourceTree = SOURCE_ROOT; };
+		4CDBC3342D8E1D02002FC40E /* buildlibmysql.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = buildlibmysql.sh; path = ../Compressor/buildlibmysql.sh; sourceTree = "<group>"; };
+		4CDBC3362D8E1FC8002FC40E /* buildopenssl.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = buildopenssl.sh; path = ../Compressor/buildopenssl.sh; sourceTree = "<group>"; };
+		4CDBC3372D8E46F3002FC40E /* buildtds.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = buildtds.sh; path = ../Compressor/buildtds.sh; sourceTree = "<group>"; };
 		4CDFC9811ED89147008E1AD6 /* MADDesignerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerView.h; sourceTree = "<group>"; };
 		4CDFC9821ED89147008E1AD6 /* MADDesignerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerView.m; sourceTree = "<group>"; };
 		4CDFC9841ED8FA0D008E1AD6 /* MADDesignerLayoutDesignView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerLayoutDesignView.h; sourceTree = "<group>"; };
@@ -1945,6 +1951,12 @@
 		4C3A969A189F7CB6007AF476 /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
+				4CB671892D90F6D600C8378D /* buildmysql.sh */,
+				4CDB09992D8F72FA002FC40E /* buildzlib.sh */,
+				4CDB09982D8F4E04002FC40E /* buildpng.sh */,
+				4CDBC3362D8E1FC8002FC40E /* buildopenssl.sh */,
+				4CDBC3372D8E46F3002FC40E /* buildtds.sh */,
+				4CDBC3342D8E1D02002FC40E /* buildlibmysql.sh */,
 				4C5CB712189C4F5D00BB5AF8 /* compressor.sh */,
 				4CBE1CC718C5A6E6009675CE /* buildcounter.sh */,
 			);

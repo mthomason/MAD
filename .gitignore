@@ -1,4 +1,14 @@
 # Scripts
+.DS_Store
+Compressor/src/
+Compressor/build_temp/
+Compressor/library/openssl/
+Compressor/bin/iPhoneSimulator-i386.sdk/
+Compressor/library/libpng-old/
+Compressor/src/libpng-1.6.37/
+Compressor/freetds-1.4.26/
+Compressor/library/freetds/
+Compressor/library/libmysqlclient-old
 3rdPartyProjects/ColorPicker/
 opt/bld/
 StaticLibraries/
@@ -76,7 +86,6 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-
 
 #These files can be recreated
 opt/src/

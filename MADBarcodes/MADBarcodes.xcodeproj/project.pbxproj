@@ -191,18 +191,17 @@
 		4C130AEF1BA8075B0022665F /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A381BA8075B0022665F /* upcean.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
-		4C130B151BA80D240022665F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B141BA80D240022665F /* libz.tbd */; };
 		4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25524C5E23D0027A454 /* CoreServices.framework */; };
 		4C2915FE24AC74AB00EC794B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915FD24AC74AB00EC794B /* libz.tbd */; };
 		4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */; };
 		4C5478EF1E6140A50043682E /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EC1E6140A50043682E /* png.h */; };
 		4C5478F01E6140A50043682E /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478ED1E6140A50043682E /* pngconf.h */; };
 		4C5478F11E6140A50043682E /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5478EE1E6140A50043682E /* pnglibconf.h */; };
-		4C865D891DA525610057678C /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C865D881DA525610057678C /* libpng.a */; };
 		4C865D961DA525890057678C /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D901DA525890057678C /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C865D971DA525890057678C /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D911DA525890057678C /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C865D981DA525890057678C /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C865D921DA525890057678C /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC909011D0FC4FC007A1C75 /* MADBarcodeSizingMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CDB099A2D8F8CB2002FC40E /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C865D881DA525610057678C /* libpng.a */; };
 		4CF46DD51CF3184600D93406 /* MADBarcodeBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -429,12 +428,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDB099A2D8F8CB2002FC40E /* libpng.a in Frameworks */,
 				4C2915FE24AC74AB00EC794B /* libz.tbd in Frameworks */,
 				4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
-				4C865D891DA525610057678C /* libpng.a in Frameworks */,
 				4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */,
-				4C130B151BA80D240022665F /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1038,7 +1038,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 									
 								case SYBDATETIME: {
 									if (sybDateTimeBindNull[indexOfType] != -1) {
-										DBDATEREC dateinfo;
+										struct tds_sybase_dbdaterec dateinfo;
 										memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
 										dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimeBind[indexOfType]);
 										
@@ -1060,7 +1060,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 									
 								case SYBDATETIMN: {
 									if (sybDateTimnBindNull[indexOfType] != -1) {
-										DBDATEREC dateinfo;
+										struct tds_sybase_dbdaterec dateinfo;
 										memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
 										dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimnBind[indexOfType]);
 										

@@ -29,73 +29,72 @@ curl -OL "${archive_url}"
 # Extract libpng
 echo "Extracting libpng..."
 if [[ -f "${archive_path}" ]]; then
-    tar -xzf "${archive_path}" -C "${path_source}" --strip-components=1
+	tar -xzf "${archive_path}" -C "${path_source}" --strip-components=1
 else
-    echo "Error: Archive not found at ${archive_path}"
-    exit 1
+	echo "Error: Archive not found at ${archive_path}"
+	exit 1
 fi
 
 # Verify extraction
 if [[ ! -f "${path_source}/configure" ]]; then
-    echo "Error: configure script not found in ${path_source}. Extraction may have failed."
-    exit 1
+	echo "Error: configure script not found in ${path_source}. Extraction may have failed."
+	exit 1
 fi
 
 # Build function
 build_platform() {
-    local PLATFORM=$1
-    local ARCH=$2
-    local SDK=$3
-    local HOST=$4
-    local MIN_VERSION=$5
+	local PLATFORM=$1
+	local ARCH=$2
+	local SDK=$3
+	local HOST=$4
+	local MIN_VERSION=$5
 
-    echo "Building ${PLATFORM} ${ARCH}..."
+	echo "Building ${PLATFORM} ${ARCH}..."
 
-    # SDK paths
-    local sdk_path="$(xcrun --sdk ${SDK} --show-sdk-path)"
-    local clang="$(xcrun --sdk ${SDK} --find clang)"
+	# SDK paths
+	local sdk_path="$(xcrun --sdk ${SDK} --show-sdk-path)"
+	local clang="$(xcrun --sdk ${SDK} --find clang)"
 
-    # Use system libz.dylib if available
-    local zlib_include="-I\"${zlib_dir}/include\""
-    local zlib_lib="-L\"${zlib_dir}/lib\""
+	# Use system libz.dylib if available
+	local zlib_include="-I\"${zlib_dir}/include\""
+	local zlib_lib="-L\"${zlib_dir}/lib\""
 
-    # Check if system libz.dylib is compatible
-    #if [[ "${ARCH}" == "armv7" || "${ARCH}" == "armv7s" ]]; then
-    #    echo "System libz.dylib may not be compatible with ${ARCH}. Building zlib from source..."
-    #    local zlib_arch_path="${path_base}/build/zlib/${PLATFORM}/${ARCH}"
-    #    zlib_include="-I${zlib_arch_path}/include"
-    #    zlib_lib="-L${zlib_arch_path}/lib"
-    #fi
+	# Check if system libz.dylib is compatible
+	#if [[ "${ARCH}" == "armv7" || "${ARCH}" == "armv7s" ]]; then
+	#	echo "System libz.dylib may not be compatible with ${ARCH}. Building zlib from source..."
+	#	local zlib_arch_path="${path_base}/build/zlib/${PLATFORM}/${ARCH}"
+	#	zlib_include="-I${zlib_arch_path}/include"
+	#	zlib_lib="-L${zlib_arch_path}/lib"
+	#fi
 
-#    export CC="${clang} -arch ${ARCH}"
-#    export LDFLAGS="${zlib_lib}"
+#	export CC="${clang} -arch ${ARCH}"
+#	export LDFLAGS="${zlib_lib}"
 #	export CFLAGS="-isysroot ${sdk_path} -m${PLATFORM}-version-min=${MIN_VERSION} -I${sdk_path}/usr/include ${zlib_include}"
 #	export CPPFLAGS="-I${sdk_path}/usr/include ${zlib_include}"
 
-    export CC="${clang} -arch ${ARCH}"
-    export LDFLAGS=""  # Removed custom zlib lib
-    export CFLAGS="-isysroot ${sdk_path} -m${PLATFORM}-version-min=${MIN_VERSION}"
-    export CPPFLAGS="-I${sdk_path}/usr/include"
+	export CC="${clang} -arch ${ARCH}"
+	export LDFLAGS=""  # Removed custom zlib lib
+	export CFLAGS="-isysroot ${sdk_path} -m${PLATFORM}-version-min=${MIN_VERSION}"
+	export CPPFLAGS="-I${sdk_path}/usr/include"
 
-    # Create output directories
-    local build_dir="${path_build}/${PLATFORM}/${ARCH}"
-    mkdir -p "${build_dir}"
+	# Create output directories
+	local build_dir="${path_build}/${PLATFORM}/${ARCH}"
+	mkdir -p "${build_dir}"
 
-    # Configure
-    cd "${path_source}"
-    ./configure \
+	# Configure
+	cd "${path_source}"
+	./configure \
 		--host=${HOST} \
 		--prefix="${build_dir}" \
 		--enable-shared=no \
 		--enable-static=yes \
 		--disable-dependency-tracking
-#		--with-zlib-prefix="${zlib_dir}" \
 
-    # Clean, build, and install
-    make clean
-    make -j$(sysctl -n hw.ncpu)
-    make install
-    make distclean
+	# Clean, build, and install
+	make clean
+	make -j$(sysctl -n hw.ncpu)
+	make install
+	make distclean
 }
 
 # iOS Architectures
@@ -115,17 +114,29 @@ build_platform "macosx" "arm64" "macosx" "aarch64-apple-darwin" $MIN_MACOS
 
 # Create universal libraries
 lipo -create \
-    "${path_build}/iphoneos/armv7/lib/libpng.a" \
-    "${path_build}/iphoneos/armv7s/lib/libpng.a" \
-    "${path_build}/iphoneos/arm64/lib/libpng.a" \
-    "${path_build}/iphoneos/arm64e/lib/libpng.a" \
-    -output "${path_library}/libpng_device.a"
+	"${path_build}/iphoneos/armv7/lib/libpng.a" \
+	"${path_build}/iphoneos/armv7s/lib/libpng.a" \
+	"${path_build}/iphoneos/arm64/lib/libpng.a" \
+	"${path_build}/iphoneos/arm64e/lib/libpng.a" \
+	-output "${path_library}/libpng_device.a"
 
 lipo -create \
-    "${path_build}/iphonesimulator/i386/lib/libpng.a" \
-    "${path_build}/iphonesimulator/x86_64/lib/libpng.a" \
-    "${path_build}/iphonesimulator/arm64/lib/libpng.a" \
-    -output "${path_library}/libpng_simulator.a"
+	"${path_build}/iphonesimulator/i386/lib/libpng.a" \
+	"${path_build}/iphonesimulator/x86_64/lib/libpng.a" \
+	"${path_build}/iphonesimulator/arm64/lib/libpng.a" \
+	-output "${path_library}/libpng_simulator.a"
+
+# Replace the existing lipo commands with:
+lipo -create \
+	"${path_build}/iphoneos/armv7/lib/libpng.a" \
+	"${path_build}/iphoneos/armv7s/lib/libpng.a" \
+	"${path_build}/iphoneos/arm64e/lib/libpng.a" \
+	"${path_build}/iphonesimulator/i386/lib/libpng.a" \
+	"${path_build}/iphonesimulator/arm64/lib/libpng.a" \
+	"${path_build}/iphonesimulator/x86_64/lib/libpng.a" \
+	-output "${path_library}/libpng.a"  # Standard name
+
+#	"${path_build}/iphoneos/arm64/lib/libpng.a" \
 
 echo "Build complete. Libraries:"
 echo "- Device: ${path_library}/libpng_device.a"
