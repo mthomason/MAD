@@ -12,6 +12,7 @@
 #include <openssl/objects.h>
 #include <openssl/sha.h>
 #include <openssl/x509.h>
+#include <openssl/crypto.h>
 #include <err.h>
 
 #import <Security/Security.h>
@@ -455,8 +456,6 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath);
 NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
     NSData *rootCertData = [MADSalesReceipt appleRootCert];
     
-    ERR_load_PKCS7_strings();
-    ERR_load_X509_strings();
     OpenSSL_add_all_digests();
     
     // Expected input is a PKCS7 container with signed data containing

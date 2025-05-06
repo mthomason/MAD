@@ -9,6 +9,8 @@
 #ifndef madtar_h
 #define madtar_h
 
+#import <libxml2/libxml/list.h>
+
 #import "archive.h"
 
 int mad_copy_data(struct archive *, struct archive *);
