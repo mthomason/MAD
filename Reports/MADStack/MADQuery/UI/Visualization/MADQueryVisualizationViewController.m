@@ -35,7 +35,7 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/UIScreen+Properties.h>
@@ -607,9 +607,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (NSURL *)localCacheFileURL {
 	if (_localCacheFileURL == nil) {
-		NSURL *url;
 		NSString *cacheFileName = [self cacheFileName];
-		url = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
+		NSString *groupID = [AppDelegate groupIdentifier];
+		NSURL *url = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupID];
 		url = [url URLByAppendingPathComponent: cacheFileName
 								   isDirectory: NO];
 		_localCacheFileURL = url.copy;

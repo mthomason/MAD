@@ -23,7 +23,7 @@
 #import <dispatch/dispatch.h>
 
 #import "MADFileUtilities.h"
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 NSInteger finderSortWithLocale(id string1, id string2, void *locale);
 NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
@@ -159,8 +159,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 		
 	} else {
 	
-		NSURL *documents = [MADURL newURLForLocalDataDirectoryForGroupIdentifier:groupIdentifier];
-		NSURL *data = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
+		NSURL *documents = [MADURLFactory newURLForLocalDataDirectoryForGroupIdentifier:groupIdentifier];
+		NSURL *data = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
 		if (handleCompletion) handleCompletion(NO, documents, data);
 	
 	}

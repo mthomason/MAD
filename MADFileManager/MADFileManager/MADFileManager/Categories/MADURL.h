@@ -11,51 +11,51 @@
 
 #import <Foundation/NSURL.h>
 
-@interface MADURL : NSURL
+@interface MADURLFactory : NSObject
 
-	+ (instancetype)newURLLocalDocumentWithName:(NSString *)name
+	+ (NSURL *)newURLLocalDocumentWithName:(NSString *)name
 									  extention:(NSString *)extention
 									  fileGroup:(NSString *)fileGroup;
-	+ (instancetype)newURLCacheFilesDirectoryForFilename:(NSString *)filename;
-	+ (instancetype)newURLDocumentArchiveForFileURL:(NSURL *)madUrl
+	+ (NSURL *)newURLCacheFilesDirectoryForFilename:(NSString *)filename;
+	+ (NSURL *)newURLDocumentArchiveForFileURL:(NSURL *)madUrl
 										  extension:(NSString *)extension;
 
-	+ (instancetype)newURLThumbnailForURL:(NSURL *)madUrl;
+	+ (NSURL *)newURLThumbnailForURL:(NSURL *)madUrl;
 
-	+ (instancetype)newURLThumbnailForHandle:(NSString *)handle
+	+ (NSURL *)newURLThumbnailForHandle:(NSString *)handle
 							andRetinaDisplay:(BOOL)retinaDisplay;
 
-	+ (instancetype)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL;
+	+ (NSURL *)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL;
 
-	+ (instancetype)newURLUniqueUrlInDirectory:(NSURL *)directory
+	+ (NSURL *)newURLUniqueUrlInDirectory:(NSURL *)directory
 							 withDesiredHandle:(NSString *)desiredFileHandle
 								  andExtension:(NSString *)extension;
 
-	+ (instancetype)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+	+ (NSURL *)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
 												pathComponent:(NSString *)pathComponent
 										  alternativeSelector:(SEL)alternativeSelector;
 									  
-	+ (instancetype)newURLForURLSelector:(SEL)selector;
-	+ (instancetype)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+	+ (NSURL *)newURLForURLSelector:(SEL)selector;
+	+ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
 														   fileURL:(NSURL *)fileURL;
-	+ (instancetype)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+	+ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
 															handle:(NSString *)handle;
-	+ (instancetype)newURLForLocalDocumentsDirectory;
-	+ (instancetype)newURLLocalTemporaryDirectory;
-	+ (instancetype)newURLForLocalCacheDirectory;
-	+ (instancetype)newURLForLocalDataDirectory;
-	+ (instancetype)newURLForLocalApplicationSupportDirectory;
+	+ (NSURL *)newURLForLocalDocumentsDirectory;
+	+ (NSURL *)newURLLocalTemporaryDirectory;
+	+ (NSURL *)newURLForLocalCacheDirectory;
+	+ (NSURL *)newURLForLocalDataDirectory;
+	+ (NSURL *)newURLForLocalApplicationSupportDirectory;
 
-	+ (instancetype)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
-	+ (instancetype)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+	+ (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
+	+ (NSURL *)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 
-	+ (instancetype)newURLForLocalDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-	+ (instancetype)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-	+ (instancetype)newURLLocalApplicationSupportDirectoryForGroupID:(NSString *)groupIdentifier;
-	+ (instancetype)newURLForLocalCacheDirectoryNamed:(NSString *)handle;
-	+ (instancetype)newURLUniqueURLForURL:(NSURL *)url;
-	+ (instancetype)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl;
-	+ (instancetype)newURLApplicationSupportFile:(NSString *)filename
+	+ (NSURL *)newURLForLocalDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+	+ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+	+ (NSURL *)newURLLocalApplicationSupportDirectoryForGroupID:(NSString *)groupIdentifier;
+	+ (NSURL *)newURLForLocalCacheDirectoryNamed:(NSString *)handle;
+	+ (NSURL *)newURLUniqueURLForURL:(NSURL *)url;
+	+ (NSURL *)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl;
+	+ (NSURL *)newURLApplicationSupportFile:(NSString *)filename
 									   extension:(NSString *)extension;
 
 @end

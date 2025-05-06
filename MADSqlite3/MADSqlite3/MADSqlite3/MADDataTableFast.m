@@ -20,7 +20,7 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -280,17 +280,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 
 - (NSURL *)urlFastCache {
 	NSString *filename = [self filenameCacheMadDB];
-	NSURL *cacheDirectory, *urlFastCache;
+	NSURL *cacheDirectory;
 
 	if (self.cacheDelegate == nil) {
 		MADAppDelegate appDelegate = [MADApplication AppDelegate];
 		id groupIdentifier = [appDelegate groupIdentifier].copy;
-		cacheDirectory = [MADURL newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+		cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
 	} else {
 		cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
 	}
-	urlFastCache = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-	return urlFastCache;
+	return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
@@ -320,8 +319,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 		database.databaseConnection = connection;
 		
 		[(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
-															  SQLITE_OPEN_CREATE |
-															  SQLITE_OPEN_FULLMUTEX];
+															   SQLITE_OPEN_CREATE |
+															   SQLITE_OPEN_FULLMUTEX];
 		self.databaseForInserts = database;
 		database = nil;
 		connection = nil;
@@ -422,19 +421,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	  createTable:(BOOL)create
 		   unique:(BOOL)unique {
 	
-	BOOL success = NO;
 	NSError * __autoreleasing errorQuery = NULL;
-
-	NSString *columnAffinity;
-	columnAffinity = [MADSqlite3NativeType newSqlite3NativeType: column.type];
-
-	MADQueryCache *query;
-	query = [[MADQueryCacheAddColumn alloc] initWithTableName: table
-												  columnName: columnName
-													  column: column
-												 createTable: create
-											uniqueColumnHack: unique
-											  columnAffinity: columnAffinity];
+	NSString *columnAffinity = [MADSqlite3NativeType newSqlite3NativeType: column.type];
+	MADQueryCache *query = [[MADQueryCacheAddColumn alloc] initWithTableName: table
+																  columnName: columnName
+																	  column: column
+																 createTable: create
+															uniqueColumnHack: unique
+															  columnAffinity: columnAffinity];
 	query.database = _databaseForInserts;
 	if (!([_databaseForInserts executeQuery:query withError:&errorQuery])) {
 		os_log_debug(OS_LOG_DEFAULT,

@@ -12,7 +12,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSPathUtilities.h>
 #import "MADOperationUniqueUrlForFilename.h"
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 @interface MADOperationUniqueUrlForFilename ()
 
@@ -46,7 +46,7 @@
 		return [self finish];
 	}
 
-	NSURL *uniqueUrl = [MADURL newURLUniqueUrlInDirectory: self.documentsDirectory
+	NSURL *uniqueUrl = [MADURLFactory newURLUniqueUrlInDirectory: self.documentsDirectory
 										withDesiredHandle: self.desiredFilename
 											 andExtension: self.pathExtension];
 

@@ -13,7 +13,7 @@
 #import "MADDatabaseConnectionSqlite3.h"
 #import <Foundation/NSURL.h>
 
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -39,9 +39,8 @@
 	//          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
 	//          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
 	
-	MADURL *appSupportDirectory;
-	id groupIdentifier = [MADApplication groupIdentifier];
-	appSupportDirectory = [MADURL newURLLocalApplicationSupportDirectoryForGroupID: groupIdentifier];
+	NSString *groupID = [MADApplication groupIdentifier];
+	NSURL *appSupportDirectory = [MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID: groupID];
 	
 	NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
 														isDirectory: NO];

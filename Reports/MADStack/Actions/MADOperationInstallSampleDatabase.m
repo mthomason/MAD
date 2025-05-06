@@ -17,7 +17,7 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import <os/log.h>
 
@@ -57,13 +57,9 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 	
 	if (installed) {
 		NSString *filepath = databaseURL.path;
-		
 		if (self.cancelled) return [self finish];
-
 		if ([[NSFileManager defaultManager] fileExistsAtPath:filepath]) {
-			
 			if (self.cancelled) return [self finish];
-
 			[[NSUserDefaults standardUserDefaults] setBool: YES
 													forKey: MADUpgradeInstalledChinook];
 			[[NSUserDefaults standardUserDefaults] synchronize];
@@ -81,9 +77,8 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 }
 
 + (NSURL *)newApplicationSupportSampleDatabaseChinook {
-	id appSupportDirectory = [MADURL newURLApplicationSupportFile: MTSampleDatabaseChinook
-														extension: MTDocumentExtentionSqlite3];
-	return appSupportDirectory;
+	return [MADURLFactory newURLApplicationSupportFile: MTSampleDatabaseChinook
+									  extension: MTDocumentExtentionSqlite3];
 }
 
 @end

@@ -24,7 +24,7 @@
 #import "MADFileUtilities.h"
 #import "MADMetaData.h"
 
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
 NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
@@ -74,7 +74,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 		dispatch_barrier_async(self.documentsDirectoryQueue, ^{
 			MADCloudFileCoordinator *sself = wself;
 			sself->_documentsDirectory =
-				[MADURL newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
+				[MADURLFactory newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
 		});
 	}
 	

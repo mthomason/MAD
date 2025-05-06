@@ -38,7 +38,7 @@
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 #import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADStringUtilities.h>
@@ -378,7 +378,7 @@ void madwarn(char *err,  const char*err2) { }
 		
 		
 		_autosaveEnabled = YES;
-		_urlGuts = [MADURL newURLDocumentArchiveForFileURL: url
+		_urlGuts = [MADURLFactory newURLDocumentArchiveForFileURL: url
 												 extension: MADFileExtentionMobleApplicationDocumentArchive];
 		_urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
 		
@@ -476,7 +476,7 @@ void madwarn(char *err,  const char*err2) { }
 	NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
 #warning Assuming retna display... not sure if correct, but needed to build.
 	BOOL isRetnaDisplay = YES;
-	NSURL *url = [MADURL newURLThumbnailForHandle: name
+	NSURL *url = [MADURLFactory newURLThumbnailForHandle: name
 								 andRetinaDisplay: isRetnaDisplay];
 	return url;
 }
@@ -496,7 +496,7 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
-	NSURL *result = [MADURL newURLCacheFilesDirectoryForFilename:self.filename];
+	NSURL *result = [MADURLFactory newURLCacheFilesDirectoryForFilename:self.filename];
 	return result;
 }
 

@@ -17,7 +17,7 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSFileManager.h>
 
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
@@ -52,7 +52,7 @@
 		
 		self.firstQueryUpdateHandler = firstQueryUpdateHandler;
 		
-		NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
+		NSURL *url = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:fileGroup];
 		MADDirectoryMonitor *directoryMonitor = [[MADDirectoryMonitor alloc] initWithURL:url];
 		self.directoryMonitor = directoryMonitor;
 		self.directoryMonitor.delegate = self;
@@ -163,7 +163,7 @@
 				extention:(NSString *)extention
 				fileGroup:(NSString *)fileGroup {
 
-	NSURL *documentURL = [MADURL newURLLocalDocumentWithName:name extention:extention
+	NSURL *documentURL = [MADURLFactory newURLLocalDocumentWithName:name extention:extention
 												   fileGroup:fileGroup];
 	
 	id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
@@ -190,7 +190,7 @@
 	if (name.length <= 0) {
 		return NO;
 	}
-	NSURL *documentURL = [MADURL newURLLocalDocumentWithName: name
+	NSURL *documentURL = [MADURLFactory newURLLocalDocumentWithName: name
 												   extention: extention
 												   fileGroup: fileGroup];
 	NSString *path = documentURL.path;
@@ -213,7 +213,7 @@
 }
 
 - (NSURL *)documentsDirectory {
-	NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
+	NSURL *url = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:self.fileGroup];
 	return url;
 }
 
@@ -234,7 +234,7 @@
 		MADLocalFileCoordinator *sself = wself;
 		if (sself == nil) return;
 		
-		NSURL *url = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
+		NSURL *url = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
 		
 		NSError *error = nil;
 		NSArray <NSURL *> *urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url

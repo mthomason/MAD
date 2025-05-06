@@ -35,7 +35,7 @@
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationObserver.h>
@@ -1614,7 +1614,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (IBAction)actionPaste:(id)sender {
 	id url = [UIPasteboard generalPasteboard].URL;
 	id data = [[NSData alloc] initWithContentsOfURL:url];
-	id destinationUrl = [MADURL newURLWithUniqueFilenameForURL: url];
+	NSURL *destinationUrl = [MADURLFactory newURLWithUniqueFilenameForURL: url];
 
 	NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
 	

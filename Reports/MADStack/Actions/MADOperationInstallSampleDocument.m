@@ -13,7 +13,7 @@
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import <os/log.h>
 
@@ -60,8 +60,7 @@
 	if (!installed) {
 		
 	
-		NSURL *localDocumentsDirectory;
-		localDocumentsDirectory = [MADURL newURLLocalDocumentsDirectoryForGroupIdentifier:_groupIdentifier];
+		NSURL *localDocumentsDirectory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:_groupIdentifier];
 		NSURL *destination = [localDocumentsDirectory URLByAppendingPathComponent: _filename
 																	  isDirectory: NO];
 		

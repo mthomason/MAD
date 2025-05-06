@@ -8,14 +8,22 @@
 
 #import "MADStringUtilities.h"
 
+static NSString * const kMADPeriodString = @".";
+
 @implementation MADStringUtilities
 
 + (NSString *)stringByAppendingPeriodToString:(NSString *)string {
-	static NSString *period = @".";
-	return [string stringByAppendingString:period];
+	if (string.length == 0) {
+		return kMADPeriodString;
+	}
+	return [string hasSuffix:kMADPeriodString] ?
+				string : [string stringByAppendingString:kMADPeriodString];
 }
 
 + (NSString *)stringByAppendingKeyPath:(NSString *)keyPath toString:(NSString *)string {
+	if (keyPath.length == 0) {
+		return string;
+	}
 	NSString *stringWithPeriod = [self stringByAppendingPeriodToString:string];
 	return [stringWithPeriod stringByAppendingString:keyPath];
 }

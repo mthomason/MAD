@@ -25,7 +25,7 @@
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADFileManager/MADMetaData.h>
-#import <MADFoundation/MADURL.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import "MADExplorerCaption.h"
 #import "MADExplorerActivityIndicator.h"
@@ -409,7 +409,7 @@ static inline double wobbleFactor() {
 					[activityIndicatorView performSelector:@selector(stopAnimating)];
 				}
 				metadataURL = metadata.URL.copy;
-				thumbnailUrl = [MADURL newURLThumbnailForURL:metadataURL];
+				thumbnailUrl = [MADURLFactory newURLThumbnailForURL:metadataURL];
 				self.imagePreview.thumbnailURL = thumbnailUrl;
 			}];
 			
