@@ -63,32 +63,33 @@
 #import "MADSectionGroupLayout.h"
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch(void);
-static inline UIEdgeInsets MADEdgeInsetsQuarterInch() {
+static inline UIEdgeInsets MADEdgeInsetsEmpty(void);
+static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect, CGSize);
+static inline CGFloat PrintableHeightForPage(MADPageOptions *);
+static inline CGFloat HeightWithNextItem(CGFloat, CGFloat, CGFloat);
+
+static inline UIEdgeInsets MADEdgeInsetsQuarterInch(void) {
 	return UIEdgeInsetsMake(fCGPointsForInches(1.0/4.0),
 							fCGPointsForInches(1.0/4.0),
 							fCGPointsForInches(1.0/4.0),
 							fCGPointsForInches(1.0/4.0));
 }
 
-static inline UIEdgeInsets MADEdgeInsetsEmpty(void);
-static inline UIEdgeInsets MADEdgeInsetsEmpty() {
+static inline UIEdgeInsets MADEdgeInsetsEmpty(void) {
 	return UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height,
 							CGSizeZero.height, CGSizeZero.height);
 }
 
-static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect, CGSize);
 static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize layoutSize) {
 	return UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x,
 							layoutSize.height - printableRect.size.height - printableRect.origin.y,
 							layoutSize.width - printableRect.size.width - printableRect.origin.x);
 }
 
-static inline CGFloat PrintableHeightForPage(MADPageOptions *);
 static inline CGFloat PrintableHeightForPage(MADPageOptions *page) {
 	return page.layoutSize.height - page.margins.top - page.margins.bottom;
 }
 
-static inline CGFloat HeightWithNextItem(CGFloat, CGFloat, CGFloat);
 static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 										 nextItemHeight, CGFloat pageFooterHeight) {
 	return heightUsedCurrentPage + nextItemHeight + pageFooterHeight;
@@ -155,8 +156,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 		MADReportFormatterState *machineState = [[MADReportFormatterState alloc] init];
 		self.machineState = machineState;
 		
-		NSMutableArray <__kindof MADSectionRepresentation *> *temporaryLayoutForPage;
-		temporaryLayoutForPage = [[NSMutableArray alloc] init];
+		NSMutableArray <__kindof MADSectionRepresentation *> *temporaryLayoutForPage = [[NSMutableArray alloc] init];
 		self.pageLayoutTemporary = temporaryLayoutForPage;
 		
 		NSArray *temporaryDataForPage = [[NSArray alloc] init];
@@ -360,19 +360,20 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat
 	nixarray = [self newStringNameCurrentReportIndexes: _page.layoutSize
 											   andHash: (unsigned long)[self layoutIdentifier]];
 
-	MADArrayCaching *ixarray;
-	ixarray = [[MADArrayCaching alloc] initWithIdentifier: nixarray
-										   cachedDelegate: cachedDelegate];
+	NSSet <Class> *ixClasses = [[NSSet alloc] initWithObjects: [NSArray class], [NSNumber class], nil];
+	MADArrayCaching <NSArray <NSNumber *> *> *ixarray = [[MADArrayCaching alloc] initWithIdentifier: nixarray
+																					 cachedDelegate: cachedDelegate
+																							  types: ixClasses];
 	[ixarray initializeDatabase];
 	
 	self.reportIndexes = ixarray;
-	
-	NSString *nlyarray;
-	nlyarray = [self newStringNameCurrentReportLayout: _page.layoutSize
-											  andHash: (unsigned long)[self layoutIdentifier]];
-	
+
+	NSSet <Class> *nlClasses = [[NSSet alloc] initWithObjects:[NSArray class], [MADSectionRepresentation class], nil];
+	NSString *nlyarray = [self newStringNameCurrentReportLayout: _page.layoutSize
+														andHash: (unsigned long)[self layoutIdentifier]];
 	MADArrayCaching *lyarray = [[MADArrayCaching alloc] initWithIdentifier: nlyarray
-															cachedDelegate: cachedDelegate];
+															cachedDelegate: cachedDelegate
+																	 types:nlClasses];
 	[lyarray initializeDatabase];
 	self.reportLayout = lyarray;
 	

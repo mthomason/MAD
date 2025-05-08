@@ -18,17 +18,18 @@
 NSString * const MADNotificationProgressIdentifier = @"MADProgressNotification";
 NSString * const MADNotificationProgressKey = @"p";
 
+static inline double min_time_interval(void);
+static inline double min_time_interval(void) {
+	return 1.0 / 60.0;
+}
+
 @interface MADNotificationProgress ()
-    @property (nonatomic, copy) NSDate *lastUpdate;
+	@property (nonatomic, copy) NSDate *lastUpdate;
 @end
 
 @implementation MADNotificationProgress
 
 static MADNotificationProgress *_sharedSingleton = nil;
-
-static inline double min_time_interval() {
-    return 1.0 / 60.0;
-}
 
 - (void)dealloc {
 	NSAssert(NO, @"Don't dealloc the singleton.");

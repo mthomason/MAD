@@ -113,7 +113,7 @@ static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushi
 					 UITransitionContextFromViewControllerKey;
 }
 
-BOOL storeEnabled() {
+BOOL storeEnabled(void) {
 	return [MTStoreKitController sharedObject].reportingEnabled;
 }
 

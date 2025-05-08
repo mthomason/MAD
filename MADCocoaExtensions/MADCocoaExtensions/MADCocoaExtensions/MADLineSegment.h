@@ -16,8 +16,7 @@ struct MADLineSegment {
 typedef struct MADLineSegment MADLineSegment;
 
 CG_INLINE MADLineSegment MADLineSegmentMake(CGPoint p1, CGPoint p2);
-CG_INLINE MADLineSegment
-MADLineSegmentMake(CGPoint p1, CGPoint p2) {
+CG_INLINE MADLineSegment MADLineSegmentMake(CGPoint p1, CGPoint p2) {
 	MADLineSegment lineSegment;
 	lineSegment.start = p1;
 	lineSegment.end = p2;

@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MADTdsDb : NSObject
 
 @property (nonatomic, assign) int port;
-@property (nonatomic, strong) NSString *hostname;
-@property (nonatomic, strong) NSString *username;
-@property (nonatomic, strong) NSString *password;
-@property (nonatomic, strong) NSString *database;
+@property (nonatomic, copy, nullable) NSString *hostname;
+@property (nonatomic, copy, nullable) NSString *username;
+@property (nonatomic, copy, nullable) NSString *password;
+@property (nonatomic, copy, nullable) NSString *database;
 
 - (instancetype)initWithHost:(NSString *)hostname
 						port:(int)port

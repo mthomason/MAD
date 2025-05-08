@@ -4188,7 +4188,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4270,7 +4270,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

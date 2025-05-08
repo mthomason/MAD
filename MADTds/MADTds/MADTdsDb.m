@@ -7,6 +7,7 @@
 
 #import "MADTdsDb.h"
 #import "sybdb.h"
+#import <os/log.h>
 
 int err_handler(DBPROCESS *, int, int, int, char *, char *);
 int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
@@ -39,20 +40,28 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 @end
 
+static os_log_t db_log;
+
 @implementation MADTdsDb
+
++ (void)initialize {
+	if (self == [MADTdsDb class]) {
+		NSString *className = NSStringFromClass([MADTdsDb class]);
+		db_log = os_log_create("com.eda.madtds", className.UTF8String);
+	}
+}
 
 - (instancetype)initWithHost:(NSString *)hostname
 						port:(int)port
 					username:(NSString *)username
 					password:(NSString *)password
 					database:(NSString *)database {
-	self = [super init];
-	if (self) {
-		_hostname = hostname;
+	if (self = [super init]) {
+		_hostname = [hostname copy];
 		_port = port;
-		_username = username;
-		_password = password;
-		_database = database;
+		_username = [username copy];
+		_password = [password copy];
+		_database = [database copy];
 		_dbProcess = NULL;
 	}
 	return self;
@@ -61,9 +70,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 - (BOOL)connect {
 	LOGINREC *login;
 
-	// Initialize DB-Library
 	if (dbinit() == FAIL) {
-		NSLog(@"Failed to initialize FreeTDS.");
+		os_log(db_log, "Failed to initialize TDS.");
 		return NO;
 	}
 
@@ -72,7 +80,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	// Set up login record
 	login = dblogin();
 	if (!login) {
-		NSLog(@"Failed to create login record.");
+		os_log(db_log, "Failed to create login record.");
 		return NO;
 	}
 
@@ -84,22 +92,21 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	DBSETLPWD(login, p);
 	DBSETLDBNAME(login, c);
 
-	// Connect to the server
 	NSString *serverSpec = [NSString stringWithFormat:@"%@:%d", self.hostname, self.port];
 	self.dbProcess = dbopen(login, [serverSpec UTF8String]);
 	if (!self.dbProcess) {
-		NSLog(@"Failed to connect to the database server.");
+		os_log(db_log, "Failed to connect to the database server.");
 		return NO;
 	}
 
 	// Select the database
 	if (dbuse(self.dbProcess, [self.database UTF8String]) == FAIL) {
-		NSLog(@"Failed to select the database: %@", self.database);
+		os_log(db_log, "Failed to select the database: %@", self.database);
 		[self disconnect];
 		return NO;
 	}
 
-	NSLog(@"Connected successfully to %@.", self.hostname);
+	os_log(db_log, "Connected successfully to %@.", self.hostname);
 	return YES;
 }
 
@@ -107,12 +114,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	NSMutableArray<NSDictionary *> *results = [NSMutableArray array];
 
 	if (dbcmd(self.dbProcess, [query UTF8String]) == FAIL) {
-		NSLog(@"Failed to set query: %@", query);
+		os_log(db_log, "Failed to set query: %s", query.UTF8String);
 		return results;
 	}
 
 	if (dbsqlexec(self.dbProcess) == FAIL) {
-		NSLog(@"Failed to execute query: %@", query);
+		os_log(db_log, "Failed to execute query: %s", query.UTF8String);
 		return results;
 	}
 
@@ -146,7 +153,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		self.dbProcess = NULL;
 	}
 	dbexit();
-	NSLog(@"Disconnected from the database.");
+	os_log(db_log, "Disconnected from the database.");
 }
 
 @end

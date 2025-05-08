@@ -78,8 +78,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			char *osstr = (oserrstr != NULL ? oserrstr : "");
 			char *dbstr = (dberrstr != NULL ? dberrstr : "");
 			
-			NSString *systemMessage = @(osstr);
-			NSString *dbMessage = @(dbstr);
+			NSString *systemMessage = [[NSString alloc] initWithCString: osstr encoding:NSUTF8StringEncoding];
+			NSString *dbMessage = [[NSString alloc] initWithCString: dbstr encoding:NSUTF8StringEncoding];
 			NSString *errorMessage = [[NSString alloc] initWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
 			
 			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
@@ -392,7 +392,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 				BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperator = NO;
 				BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
 				
-				int numberOfColumns = dbnumcols(dbconn);
+				NSUInteger numberOfColumns = (NSUInteger)dbnumcols(dbconn);
 				NSMutableArray <NSDictionary *> *colmunHolder =
 					[[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
 				static int disregardedBind = -1023;
@@ -548,42 +548,42 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					char *sybNumericBindChar[resultCountForTypeSybNumericBindChar];
 					DBINT sybNumericBindNull[resultCountForTypeSybNumericBindChar];
 					for (NSInteger i=0; i<resultCountForTypeSybNumericBindChar; i++) {
-						sybNumericBindChar[i] = '\0';
+						sybNumericBindChar[i] = "\0";
 					}
 					
 					NSUInteger resultCountForTypeSybCharBind = numberOfItemsOfType(SYBCHAR, counters);
 					char *sybCharBind[resultCountForTypeSybCharBind];
 					DBINT sybCharBindNull[resultCountForTypeSybCharBind];
 					for (NSInteger i=0; i<resultCountForTypeSybCharBind; i++) {
-						sybCharBind[i] = '\0';
+						sybCharBind[i] = "\0";
 					}
 					
 					NSUInteger resultCountForTypeSybVarCharBind = numberOfItemsOfType(SYBVARCHAR, counters);
 					char *sybVarCharBind[resultCountForTypeSybVarCharBind];
 					DBINT sybVarCharBindNull[resultCountForTypeSybVarCharBind];
 					for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
-						sybVarCharBind[i] = '\0';
+						sybVarCharBind[i] = "\0";
 					}
 					
 					NSUInteger resultCountForTypeSybnVarCharBind = numberOfItemsOfType(SYBNVARCHAR, counters);
 					char *sybnVarCharBind[resultCountForTypeSybnVarCharBind];
 					DBINT sybnVarCharBindNull[resultCountForTypeSybnVarCharBind];
 					for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
-						sybnVarCharBind[i] = '\0';
+						sybnVarCharBind[i] = "\0";
 					}
 					
 					NSUInteger resultCountForTypeSybTextBind = numberOfItemsOfType(SYBTEXT, counters);
 					char *sybTextBind[resultCountForTypeSybTextBind];
 					DBINT sybTextBindNull[resultCountForTypeSybTextBind];
 					for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
-						sybTextBind[i] = '\0';
+						sybTextBind[i] = "\0";
 					}
 					
 					NSUInteger resultCountForTypeSybnTextBind = numberOfItemsOfType(SYBNTEXT, counters);
 					char *sybnTextBind[resultCountForTypeSybnTextBind];
 					DBINT sybnTextBindNull[resultCountForTypeSybnTextBind];
 					for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
-						sybnTextBind[i] = '\0';
+						sybnTextBind[i] = "\0";
 					}
 					
 					resultCountForType = numberOfItemsOfType(SYBDATETIME, counters);
@@ -625,7 +625,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					for (NSDictionary *columnMetaData in colmunHolder) {
 						
 						int columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue];
-						unsigned long columnLength = [columnMetaData[MTDatabaseColumnLenId] unsignedLongValue];
+						unsigned long columnLengthMeta = [columnMetaData[MTDatabaseColumnLenId] unsignedLongValue];
 						//int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
 						int columnIndexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
 						int columnOffsetNumber = columnNumber + 1;
@@ -633,35 +633,35 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 						switch ([columnMetaData[MTDatabaseColumnTypeId] integerValue]) {
 								
 							case SYBCHAR: {
-								size_t size = sizeof(char) * ( columnLength + 1 );
+								size_t size = sizeof(char) * ( columnLengthMeta + 1 );
 								sybCharBind[columnIndexOfType] = malloc( size );
 								dbbind(dbconn,
 									   columnOffsetNumber,
 									   NTBSTRINGBIND,
-									   (DBINT)columnLength + 1,
+									   (DBINT)columnLengthMeta + 1,
 									   (BYTE *)sybCharBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybCharBindNull[columnIndexOfType]);
 								break;
 							}
 							case SYBVARCHAR: {
-								sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength + 1, (BYTE *)sybVarCharBind[columnIndexOfType]);
+								sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
+								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta + 1, (BYTE *)sybVarCharBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybVarCharBindNull[columnIndexOfType]);
 								break;
 							}
 							case SYBTEXT: {
-								sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength + 1, (BYTE *)sybTextBind[columnIndexOfType]);
+								sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
+								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta + 1, (BYTE *)sybTextBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybTextBindNull[columnIndexOfType]);
 								break;
 							}
 							case SYBNTEXT: {
-								size_t size = sizeof(char) * ( columnLength + 1 );
+								size_t size = sizeof(char) * ( columnLengthMeta + 1 );
 								sybnTextBind[columnIndexOfType] = malloc( size );
 								dbbind(dbconn,
 									   columnOffsetNumber,
 									   NTBSTRINGBIND,
-									   (DBINT)columnLength + 1,
+									   (DBINT)columnLengthMeta + 1,
 									   (BYTE *)sybnTextBind[columnIndexOfType]);
 								dbnullbind(dbconn,
 										   columnOffsetNumber,
@@ -669,9 +669,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 								break;
 							}
 							case SYBNVARCHAR: {
-								size_t size = sizeof(char) * ( columnLength + 1 );
+								size_t size = sizeof(char) * ( columnLengthMeta + 1 );
 								sybnVarCharBind[columnIndexOfType] = malloc( size );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength + 1, (BYTE *)sybnVarCharBind[columnIndexOfType]);
+								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta + 1, (BYTE *)sybnVarCharBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybnVarCharBindNull[columnIndexOfType]);
 								break;
 							}
@@ -711,18 +711,18 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 								break;
 								
 							case SYBFLTN:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybFltNBind[columnIndexOfType]);
+								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybFltNBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybFltNBindNull[columnIndexOfType]);
 								break;
 							case SYBFLT8:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
+								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybFlt8BindNull[columnIndexOfType]);
 								break;
 							case SYBREAL:
 								dbbind(dbconn,
 									   columnOffsetNumber,
 									   FLT8BIND,
-									   (DBINT)columnLength,
+									   (DBINT)columnLengthMeta,
 									   (BYTE *)&sybRealBind[columnIndexOfType]);
 								dbnullbind(dbconn,
 										   columnOffsetNumber,
@@ -741,17 +741,17 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 								 dbbind(dbconn, columnOffsetNumber, NUMERICBIND, s, (BYTE *)sybNumericBind[columnIndexOfType]);
 								 */
 								
-								sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * ( columnLength + 1 ) );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLength, (BYTE *)sybNumericBindChar[columnIndexOfType]);
+								sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
+								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta, (BYTE *)sybNumericBindChar[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybNumericBindNull[columnIndexOfType]);
 								break;
 							}
 							case SYBMONEYN:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
+								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybMoneyNBindNull[columnIndexOfType]);
 								break;
 							case SYBMONEY:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLength, (BYTE *)&sybMoneyBind[columnIndexOfType]);
+								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybMoneyBind[columnIndexOfType]);
 								dbnullbind(dbconn, columnOffsetNumber, &sybMoneyBindNull[columnIndexOfType]);
 								break;
 								
@@ -797,20 +797,20 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					}
 					
 					/* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
-					NSMutableArray *columnPercision = [[NSMutableArray alloc] initWithCapacity:colmunHolder.count];
+					NSMutableArray <NSNumber *> *columnPercision = [[NSMutableArray alloc] initWithCapacity:colmunHolder.count];
 					for (NSUInteger i = 0; i<colmunHolder.count; i++) {
-						NSNumber *negOne = @-1;
+						NSNumber *negOne = [NSNumber numberWithInteger: -1];
 						[columnPercision addObject: negOne];
 					}
 					
 					
-					NSInteger rowCounter = 0;
+					NSUInteger rowCounter = 0;
 					while (dbnextrow(dbconn) != NO_MORE_ROWS) {
 						/* do RowByAgonizingRow processing */
 						
 						NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
 						
-						NSInteger columnCounter = 0;
+						NSUInteger columnCounter = 0;
 						for (NSDictionary *columnMetaData in colmunHolder) {
 							
 							int indexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
@@ -879,7 +879,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										} else {
 											resultsForRow[fieldName] = @"Error";
 										}
-										
 										
 										objectStr = nil; objectStr2 = nil;
 										
@@ -1041,7 +1040,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										struct tds_sybase_dbdaterec dateinfo;
 										memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
 										dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimeBind[indexOfType]);
-										
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										comps.month = dateinfo.datemonth + 1;
@@ -1063,7 +1061,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										struct tds_sybase_dbdaterec dateinfo;
 										memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
 										dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimnBind[indexOfType]);
-										
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										comps.month = dateinfo.datemonth + 1;

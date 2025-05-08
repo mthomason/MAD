@@ -63,12 +63,7 @@ static inline MADBorderStyle_t MADLayoutBorderStyleMake(float l, float r,
 
 - (instancetype)init {
 	if (self = [super init]) {
-		MADBorderStyle_t borderStyle;
-		borderStyle = MADLayoutBorderStyleMake(0, 0, 0, 0,
-											   MADBorderStyleNone,
-											   MADBorderStyleNone,
-											   MADBorderStyleNone,
-											   MADBorderStyleNone);
+		_style = MADLayoutBorderStyleMake(0, 0, 0, 0, MADBorderStyleNone, MADBorderStyleNone, MADBorderStyleNone, MADBorderStyleNone);
 	}
 	return self;
 }
@@ -78,9 +73,7 @@ static inline MADBorderStyle_t MADLayoutBorderStyleMake(float l, float r,
 				   leftStyle:(MADBorderType)leftStyle rightStyle:(MADBorderType)rightStyle
 					topStyle:(MADBorderType)topStyle bottomStyle:(MADBorderType)bottomStyle {
 	if (self = [super init]) {
-		MADBorderStyle_t borderStyle;
-		borderStyle = MADLayoutBorderStyleMake(left, right, top, bottom,
-											   leftStyle, rightStyle, topStyle, bottomStyle);
+		_style = MADLayoutBorderStyleMake(left, right, top, bottom, leftStyle, rightStyle, topStyle, bottomStyle);
 	}
 	return self;
 }

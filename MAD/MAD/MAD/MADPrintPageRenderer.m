@@ -20,9 +20,9 @@
 #import <UIKit/NSParagraphStyle.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseField.h>
 
 #import "MADocument.h"
-#import <MADAPI/MADDatabaseField.h>
 
 #import "RptqDocument+Extras.h"
 #import "RptqDocument+Extras.h"

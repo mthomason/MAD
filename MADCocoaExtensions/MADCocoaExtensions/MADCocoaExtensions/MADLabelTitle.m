@@ -41,8 +41,7 @@
 
 	NSString *safetext = text.copy;
 	
-	MADAttributedStringLogo *attributedText;
-	attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
+	MADAttributedStringLogo *attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
 	
 	UILabel *title = self.title;
 	text = safetext;

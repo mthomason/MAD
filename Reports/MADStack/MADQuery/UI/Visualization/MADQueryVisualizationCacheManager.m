@@ -85,48 +85,35 @@
 }
 
 - (void)archiveCache {
-	MADOperationArchiveData *operation;
-	operation = [[MADOperationArchiveData alloc] initWithURL: self.url
-												   andObject: self.cacheData];
+	MADOperationArchiveData *operation = [[MADOperationArchiveData alloc] initWithURL: self.url
+																			andObject: self.cacheData];
 	[[MADCacheManager sharedManager] addOperation:operation];
 }
 
 - (MADHierarchicalDisplayModel *)loadCache {
-	
 	MADHierarchicalDisplayModel *result;
 	NSError * _Nullable __autoreleasing error = nil;
-	NSData *data;
-	data = [[NSData alloc] initWithContentsOfURL: self.url
-										 options: NSDataReadingUncached
-										   error: &error];
+	NSData *data = [[NSData alloc] initWithContentsOfURL: self.url
+												 options: NSDataReadingUncached
+												   error: &error];
 	if (error != nil) {
-	
 		[[NSFileManager defaultManager] removeItemAtURL: self.url
 												  error: &error];
 		result = nil;
-
 	} else {
-		
-		id resultFromTryBlock = nil;
 		@try {
-		
-			resultFromTryBlock = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-		
+			result = [NSKeyedUnarchiver unarchivedObjectOfClass: [MADHierarchicalDisplayModel class]
+													   fromData: data
+														  error: nil];
 		} @catch (NSException *exception) {
-
 			NSError *cleanup = nil;
 			[[NSFileManager defaultManager] removeItemAtURL: self.url
 													  error: &cleanup];
-		
 		} @finally {
-			
-			if ([resultFromTryBlock isKindOfClass:[MADHierarchicalDisplayModel class]]) {
-				result = resultFromTryBlock;
-			} else {
+			if (![result isKindOfClass:[MADHierarchicalDisplayModel class]] || result == nil) {
 				[[NSFileManager defaultManager] removeItemAtURL:self.url error:&error];
 				result = nil;
 			}
-			
 		}
 	}
 	return result;

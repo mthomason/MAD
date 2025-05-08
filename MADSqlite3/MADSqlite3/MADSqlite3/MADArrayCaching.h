@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 7/4/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_MTArrayCached_h
@@ -28,7 +28,8 @@ typedef NS_ENUM(int16_t, MADArrayCachingState) {
 	@property (nonatomic, readonly, assign) MADArrayCachingState state;
 
 	- (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
-								 cachedDelegate:(id <MADCacheProtocol> _Nullable)cachedDelegate;
+								 cachedDelegate:(nonnull id <MADCacheProtocol>)cachedDelegate
+										  types:(nonnull NSSet<Class> *)classes;
 
 	- (void)initializeDatabase;
 	- (void)finalizeDatabase;

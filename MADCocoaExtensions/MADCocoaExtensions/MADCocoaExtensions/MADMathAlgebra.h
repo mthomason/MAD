@@ -11,23 +11,27 @@
 
 #import "MADLineSegment.h"
 
-static inline double CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2);
+static inline double CGAngleBetweenTwoPoints(CGPoint, CGPoint);
+static inline double MADDistance(CGPoint, CGPoint);
+static inline CGFloat CGSlope(CGPoint, CGPoint);
+static inline CGFloat CGIntercept(CGFloat, CGPoint, CGPoint);
+static inline CGFloat MADLineSegmentSlope(MADLineSegment);
+static inline double CGInterceptBySlope(CGPoint, double);
+static inline CGPoint CGYInversePlusDistance(CGPoint, CGPoint, CGFloat);
+
 static inline double CGAngleBetweenTwoPoints(CGPoint p1, CGPoint p2) {
 	return atan2(p2.y - p1.y, p2.x - p1.x) * (180.0000 / M_PI);
 }
 
-static inline double MADDistance(CGPoint p1, CGPoint p2);
 static inline double MADDistance(CGPoint p1, CGPoint p2) {
 	return sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
 }
 
-static inline CGFloat CGSlope(CGPoint p1, CGPoint p2);
 static inline CGFloat CGSlope(CGPoint p1, CGPoint p2) {
 	CGFloat d = (p2.x - p1.x);
 	return d > FLT_EPSILON ? ((p2.y - p1.y) / d) : 0.0000f;
 }
 
-static inline CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2);
 static inline CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
 	//y = m x + b;
 	CGFloat m = ((p2.y - p1.y) / (p2.x - p1.x));
@@ -35,17 +39,14 @@ static inline CGFloat CGIntercept(CGFloat y, CGPoint p1, CGPoint p2) {
 	return (y - b) / m;
 }
 
-static inline CGFloat MADLineSegmentSlope(MADLineSegment lineSegment);
 static inline CGFloat MADLineSegmentSlope(MADLineSegment lineSegment) {
 	return CGSlope(lineSegment.start, lineSegment.end);
 }
 
-static inline double CGInterceptBySlope(CGPoint p2, double m);
 static inline double CGInterceptBySlope(CGPoint p2, double m) {
 	return (p2.y - (m * p2.x));
 }
 
-static inline CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d);
 static inline CGPoint CGYInversePlusDistance(CGPoint p1, CGPoint p2, CGFloat d) {
 	CGPoint returnVal = CGPointZero;
 	double m = -1 * MADDistance(p1, p2);

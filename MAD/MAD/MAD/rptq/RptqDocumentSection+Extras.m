@@ -851,18 +851,6 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 
 #pragma mark - Handling Rows
 
-/*
- typedef NS_ENUM(int64_t, MADDocumentSectionType) {
- MADDocumentSectionTypeReportHeader = 1,
- MADDocumentSectionTypeReportFooter = 2,
- MADDocumentSectionTypePageHeader = 3,
- MADDocumentSectionTypePageFooter = 4,
- MADDocumentSectionTypeBody = 5,
- MADDocumentSectionTypeGroupHeader = 6,
- MADDocumentSectionTypeGroupFooter = 7,
- };
- */
-
 - (id)debugQuickLookObject {
 	NSMutableString *description = [[NSMutableString alloc] init];
 	[description appendFormat:@"********** RptqDocumentSection **********\n"];

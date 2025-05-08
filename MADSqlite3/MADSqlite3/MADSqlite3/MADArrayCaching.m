@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 7/4/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADArrayCaching.h"
@@ -15,6 +15,7 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSKeyedArchiver.h>
+#import <os/log.h>
 
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
@@ -25,13 +26,12 @@
 
 #import <MADDataStructures/MADIndex.h>
 
-#import <MADAPI/MADDatabaseConnection.h>
-
 #import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
 
 #import "MADDatabaseConnectionSqlite3.h"
 #import "MADQueryCacheAddColumn.h"
 
+static os_log_t caching_log;
 static NSString * const MTArrayCachedTableName = @"ac";
 static NSString * const MTArrayCachedColumnKey = @"ci";
 static NSString * const MTArrayCachedColumnValue = @"ck";
@@ -53,6 +53,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 @interface MADArrayCaching ()
 
 	@property (nonatomic, strong, readwrite) MADDatabaseSqlite3 *database;
+	@property (nonatomic, retain) NSSet <Class> *types;
 
 	@property (nonatomic, copy, readwrite) NSString *identifier;
 	@property (nonatomic, copy, readwrite) dispatch_queue_t archivingQueue;
@@ -62,14 +63,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 	@property (nonatomic, copy, readonly) NSURL *url;
 	@property (nonatomic, readwrite, assign) MADArrayCachingState state;
-
-@end
-
-@interface MADArrayCachingEnumerator : NSEnumerator
-	<NSFastEnumeration>
-
-	- (instancetype)initWithURL:(NSURL *)url;
-	@property (nonatomic, retain) NSURL *url;
 
 @end
 
@@ -83,6 +76,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 @dynamic url;
+
++ (void)initialize {
+	if (self == [MADArrayCaching class]) {
+		NSString *name = NSStringFromClass([MADArrayCaching class]);
+		caching_log = os_log_create("com.mad", name.UTF8String);
+	}
+}
 
 - (void)dealloc {
 	_lastObjectSelected = nil;
@@ -107,16 +107,20 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	//sqlite3_close_v2(_database.databaseHandle);
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier
-					cachedDelegate:(id <MADCacheProtocol>)cachedDelegate {
+- (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
+							 cachedDelegate:(nonnull id <MADCacheProtocol>)cachedDelegate
+									  types:(nonnull NSSet<Class> *)classes {
 	if (self = [super init]) {
+		
+		NSSet <Class> *types = [[NSSet alloc] initWithSet:classes];
+		self.types = types;
 		
 		_state = MADArrayCachingStateInital;
 		_hasNumberOfRows = MADObjectInitalizedNotSets;
 		_numberOfRows = 0;
 		
 		NSAssert(cachedDelegate != nil, @"We need delegate to get cache location.");
-
+		
 		_archivingQueue = dispatch_queue_create("MADArrayCachingQueue", DISPATCH_QUEUE_SERIAL);
 		_unarchiveQueue = dispatch_queue_create("MADArrayCachingQueueReader", DISPATCH_QUEUE_SERIAL);
 		_statementCount = NULL;
@@ -302,18 +306,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 			 __PRETTY_FUNCTION__);
 }
 
-+ (id)newObjectForData:(NSData *)data {
-	NSError * __autoreleasing error = NULL;
-	id plist;
-	if (data) {
-		plist = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-		NSAssert(error == NULL, @"Error %@ in %s.", error, __PRETTY_FUNCTION__);
-		return plist;
-	} else {
-		return nil;
-	}
-}
-
 - (void)addObject:(id _Nonnull)object {
 	_lastObjectSelected = nil;
 	NSAssert(object != nil, @"Need an object.");
@@ -321,10 +313,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	sqlite3_stmt *statementInsert = _statementInsert;
 	id objectToAdd = object;
 	dispatch_sync(self.archivingQueue, ^{
-		NSData *data;
-		data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd];
-		int bind_result;
-		bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
+		//NSData *data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd];
+		NSError *error = nil;
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd requiringSecureCoding:YES error:&error];
+		if (error != nil) {
+			os_log_error(caching_log, "NSKeyedArchiver Error: %@", error.localizedDescription);
+		}
+		int bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
 		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
 		bind_result = sqlite3_bind_blob(statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
 		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
@@ -346,8 +341,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	NSData *dataToWrite = data;
 	dispatch_async(self.archivingQueue, ^{
 		@autoreleasepool {
-			int bind_result;
-			bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
+			int bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
 			NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
 			bind_result = sqlite3_bind_blob(statementInsert, 2, dataToWrite.bytes, (int)dataToWrite.length, SQLITE_STATIC);
 			NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
@@ -409,7 +403,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 				int bytes = sqlite3_column_bytes(statementSelect, 0);
 				NSData *queryResult = [[NSData alloc] initWithBytes: blob
 															 length: (NSUInteger)bytes];
-				result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+				NSError *error = nil;
+				result = [NSKeyedUnarchiver unarchivedObjectOfClasses:self.types fromData:queryResult error:&error];
+				if (error != nil) {
+					os_log_error(caching_log, "NSKeyedArchiver Error: %@", error.localizedDescription);
+				}
+				//result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
 				//id result2 = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
 				//NSLog(@"%@-%@", NSStringFromClass([result class]), result);
 				//NSLog(@"%@-%@", NSStringFromClass([result2 class]), result2);
@@ -458,117 +457,5 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (BOOL)isEmpty { return _numberOfRows > 0; }
-
-@end
-
-@implementation MADArrayCachingEnumerator {
-	sqlite3_stmt *_statementEnumer;
-}
-
-- (void)dealloc {
-	sqlite3_finalize(_statementEnumer);
-	_statementEnumer = NULL;
-}
-
-- (id)initWithURL:(NSURL *)url {
-	if (self = [super init]) {
-		NSString *sql = [[NSString alloc] initWithFormat: @"SELECT %@ FROM %@ ORDER BY %@;",
-						 MTArrayCachedColumnValue,
-						 MTArrayCachedTableName,
-						 MTArrayCachedColumnKey];
-		MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-		MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
-		[database setDatabaseConnection:databaseConnection];
-		[database openDatabase];
-		int prepare_result = sqlite3_prepare_v2(database->_database, sql.UTF8String, -1,
-												&_statementEnumer, NULL);
-		NSAssert(prepare_result == SQLITE_OK,
-				 @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
-	}
-	return self;
-}
-
-- (NSArray *)allObjects {
-	
-	NSMutableArray *results = [[NSMutableArray alloc] init];
-	sqlite3_stmt *stmt_enum = _statementEnumer;
-	NSData *queryResult;
-	
-	while (sqlite3_step(stmt_enum) == SQLITE_ROW) {
-		
-		const void *blob = sqlite3_column_blob(stmt_enum, 0);
-		int bytes = sqlite3_column_bytes(stmt_enum, 0);
-		
-		queryResult = [[NSData alloc] initWithBytes: blob
-											 length: (NSUInteger)bytes];
-		id result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-		[results addObject:result];
-	}
-	return results;
-}
-
-- (id)nextObject {
-	__block id result = nil;
-	sqlite3_stmt *stmt_enum = _statementEnumer;
-	int stepResult;
-	stepResult = sqlite3_step(stmt_enum);
-	if (stepResult == SQLITE_ROW) {
-		NSData *queryResult;
-		queryResult = [[NSData alloc] initWithBytes: sqlite3_column_blob(stmt_enum, 0)
-											 length: (NSUInteger)sqlite3_column_bytes(stmt_enum, 0)];
-		result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-	}
-	sqlite3_reset(stmt_enum);
-	return result;
-}
-
-
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-								  objects:(id __unsafe_unretained *)stackbuf
-									count:(NSUInteger)len {
-	
-	NSUInteger i = 0;
-	int stepResult;
-	
-	if(state->state == 0) {
-		state->state = 1;
-		state->mutationsPtr = &state->extra[0];
-		sqlite3_reset(_statementEnumer);
-	}
-	
-	if (state->state != 2) {
-		state->itemsPtr = stackbuf;
-		
-		NSData *queryResult;
-		
-		for (i = 0; i<len; i++) {
-
-			stepResult = sqlite3_step(_statementEnumer);
-			if (stepResult == SQLITE_ROW) {
-				const void *blob = sqlite3_column_blob(_statementEnumer, 0);
-				int bytes = sqlite3_column_bytes(_statementEnumer, 0);
-
-				queryResult = [[NSData alloc] initWithBytes: blob
-													 length: (NSUInteger)bytes];
-				id obj = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-				stackbuf[i] = obj;
-				
-			} else if (stepResult == SQLITE_DONE) {
-				sqlite3_reset(_statementEnumer);
-				stackbuf[i] = nil;
-				state->state = 2;
-				break;
-				
-			} else {
-				sqlite3_reset(_statementEnumer);
-				stackbuf[i] = nil;
-				state->state = 2;
-				break;
-				
-			}
-		}
-	}
-	return i;
-}
 
 @end
