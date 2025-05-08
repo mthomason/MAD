@@ -32,49 +32,47 @@ static NSString * const FormatSecond        = @"%@ second ";
 static NSString * const FormatSeconds       = @"%@ seconds ";
 static NSString * const FormatMillisecond   = @"%@ millisecond ";
 static NSString * const FormatMilliseconds  = @"%@ milliseconds ";
-
 static NSString * const TextAgo = @"ago.";
 
 static inline NSCalendarUnit calUnitsAll(void);
-static inline NSCalendarUnit calUnitsAll() {
+static inline NSString *newStringLocalizedFormatYears(NSInteger);
+static inline NSString *newStringLocalizedFormatMonths(NSInteger);
+static inline NSString *newStringLocalizedFormatSeconds(NSInteger) __attribute__((unused));
+static inline NSString *newStringLocalizedFormatMilliseconds(NSInteger);
+static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger) __attribute__((unused));
+
+static inline NSCalendarUnit calUnitsAll(void) {
 	return NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfMonth |
 			NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
 }
 
-static inline NSString *newStringLocalizedFormatYears(NSInteger);
 static inline NSString *newStringLocalizedFormatYears(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatYear, FormatYear) :
 					NSLocalizedString(FormatYears, FormatYears);
 }
 
-static inline NSString *newStringLocalizedFormatMonths(NSInteger);
 static inline NSString *newStringLocalizedFormatMonths(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatMonth, FormatMonth) :
 					NSLocalizedString(FormatMonths, FormatMonths);
 }
 
-static inline NSString *newStringLocalizedFormatSeconds(NSInteger) __attribute__((unused));
 static inline NSString *newStringLocalizedFormatSeconds(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatSecond, FormatSecond) :
 					NSLocalizedString(FormatSeconds, FormatSeconds);
 }
 
-static inline NSString *newStringLocalizedFormatMilliseconds(NSInteger);
 static inline NSString *newStringLocalizedFormatMilliseconds(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatMillisecond, FormatMillisecond) :
 					NSLocalizedString(FormatMilliseconds, FormatMilliseconds);
 }
 
-static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger) __attribute__((unused));
 static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 	return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) :
 					NSLocalizedString(FormatMinutes, FormatMinutes);
 }
 
 @interface MADDateFromTimeFormatter()
-
 	@property (nonatomic, strong) NSNumberFormatter *formatter;
-
 @end
 
 @implementation MADDateFromTimeFormatter

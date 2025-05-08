@@ -15,9 +15,8 @@
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0000f * M_PI)
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.00000f / M_PI))
 
-CG_INLINE CGAffineTransform MADAffineTransformSwing(void);
-CG_INLINE CGAffineTransform
-MADAffineTransformSwing() {
+static inline CGAffineTransform MADAffineTransformSwing(void);
+static inline CGAffineTransform MADAffineTransformSwing(void) {
 	return CGAffineTransformRotate(CGAffineTransformIdentity, DEGREES_TO_RADIANS(180.0000f));
 }
 

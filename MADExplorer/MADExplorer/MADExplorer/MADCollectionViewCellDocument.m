@@ -47,7 +47,7 @@ static const CGFloat Float_0                    =   0.0;
 static const CGFloat Float_100                  = 100.0;
 
 static inline double wobbleFactor(void);
-static inline double wobbleFactor() {
+static inline double wobbleFactor(void) {
 	return (arc4random_uniform(500) / 500.0) + 0.5;
 }
 

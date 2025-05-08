@@ -29,7 +29,6 @@ extern const double MAD_360;
 
 extern const double MADDefaultHeight;
 extern const double MADHeaderHeight;
-
 extern const CGFloat MADFloatHeaderHeight;
 extern const CGFloat MADFloatZero;
 extern const CGFloat MADFloat_64;
@@ -37,24 +36,12 @@ extern const CGFloat MADFloat_320;
 extern const CGFloat MADFloat_1024;
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
-static inline double square (double x);
-static inline double square (double x) {
-	return ( (x) * (x) );
-}
 
 struct MADReportPosition {
 	NSUInteger currentPage;
 	NSUInteger totalPages;
 };
 typedef struct MADReportPosition MADReportPosition;
-
-static inline MADReportPosition MADReportPositionMake(NSUInteger currentPage, NSUInteger totalPages);
-static inline MADReportPosition MADReportPositionMake(NSUInteger currentPage, NSUInteger totalPages) {
-	MADReportPosition position; position.currentPage = currentPage; position.totalPages = totalPages; return position;
-}
-
-
-/* Lines. */
 
 struct MADLine {
 	CGFloat m;
@@ -78,249 +65,219 @@ typedef NS_ENUM(short, MADDirection) {
 	MADDirectionNoDirection,
 };
 
-static inline CGSize MADSizeSquare(CGFloat length);
-static inline CGSize MADSizeSquare(CGFloat length) {
-	CGSize s; s.width = length; s.height = length; return s;
+static inline BOOL MADLineSegmentIntercept(MADLineSegment, MADLineSegment);
+static inline MADReportPosition MADReportPositionMake(NSUInteger, NSUInteger);
+static inline double square (double);
+static inline CGSize MADSizeSquare(CGFloat);
+static inline CGRect MADRectOfSize(CGSize);
+static inline CGPoint CGRectTopLeft(CGRect);
+static inline CGPoint CGRectBottomLeft(CGRect);
+static inline CGPoint CGRectBottomRight(CGRect);
+static inline CGPoint CGRectTopRight(CGRect);
+static inline BOOL CGRectIsOffScreenWest(CGRect);
+static inline BOOL CGRectIsOffScreenNorth(CGRect);
+static inline CGRect CGRectFlushLeft(CGRect);
+static inline CGRect CGRectFlushTop(CGRect);
+static inline BOOL CGFloatCompare(CGFloat x, CGFloat y);
+static inline MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2);
+static inline MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2);
+static inline BOOL MADDirectionIsHorizontal(MADDirection d);
+static inline BOOL MADDirectionIsVertical(MADDirection d);
+static inline MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees);
+static inline CGSize CGSizeFingerDefault(void);
+static inline MADLine CGLineMake(CGFloat, CGFloat);
+static inline CGPoint CGPointContentOffsetTopOfRect(CGRect);
+static inline CGPoint CGPointContentOffsetBottomOfRect(CGRect, CGRect);
+static inline BOOL CGRectAboveRect(CGRect, CGRect);
+static inline BOOL CGRectBelowRect(CGRect, CGRect);
+static inline CGPoint CGCenterOfRect(CGRect);
+static inline CGPoint CGRandomPointInRect(CGRect);
+static inline CGRect CGRectForDesiredRect(CGRect, CGRect);
+static inline CGPoint CGPointMakeRandomOffscreen(CGFloat);
+static inline CGRect CGRectFrameAtRandomOffscreenLocation(CGSize);
+static inline CGPoint CGPointCenterOfTileInsideRect(CGRect, CGRect, NSInteger, NSInteger, NSInteger, NSInteger, CGFloat, CGFloat);
+static inline CGPoint CGPointRoundPointToGrid(CGPoint);
+static inline CGPoint CGCornerTopLeftPointInRect(CGRect);
+static inline CGPoint CGCornerTopRightPointInRect(CGRect);
+static inline CGPoint CGCornerBottomLeftPointInRect(CGRect);
+static inline CGPoint CGCenterRect(CGRect);
+static inline CGPoint CGCornerBottomRightPointInRect(CGRect);
+static inline CGPoint CGEdgeTopPointInRect(CGRect);
+static inline CGPoint CGEdgeRightPointInRect(CGRect);
+static inline CGPoint CGEdgeBottomPointInRect(CGRect);
+static inline CGPoint CGEdgeLeftPointInRect(CGRect);
+static inline double MGPointsForInches(double);
+static inline CGFloat fCGPointsForInches(CGFloat);
+static inline CGFloat CGFloatPointsForMillimeters(CGFloat);
+static inline CGFloat CGFloatInchesForPoints(CGFloat);
+static inline CGFloat CGFloatInchesForCentmeters(CGFloat);
+static inline CGFloat CGFloatCentemetersForInches(CGFloat);
+static inline double CGRateOfChange(CGPoint, CGPoint, NSTimeInterval, NSTimeInterval);
+static inline CGPoint CGSlide(CGFloat, CGPoint, CGPoint);
+static inline CGPoint CGLineIntercept(CGPoint, CGPoint, CGPoint, CGPoint);
+static inline CGFloat CGFloatMax(CGFloat, CGFloat);
+static inline CGFloat CGFloatMin(CGFloat, CGFloat);
+static inline BOOL CGSegmentIntercept(CGPoint, CGPoint, CGPoint, CGPoint);
+
+static inline double square (double x) { return ( (x) * (x) ); }
+static inline MADReportPosition MADReportPositionMake(NSUInteger c, NSUInteger t) { MADReportPosition p; p.currentPage = c; p.totalPages = t; return p; }
+static inline CGSize MADSizeSquare(CGFloat l) { CGSize s; s.width = l; s.height = l; return s; }
+static inline CGRect MADRectOfSize(CGSize s) { CGRect r; r.origin = CGPointZero; r.size = s; return r; }
+static inline CGPoint CGRectTopLeft(CGRect r) { return r.origin; }
+static inline CGPoint CGRectBottomLeft(CGRect r) { return CGPointMake(r.origin.y + r.size.height, r.origin.x); }
+static inline CGPoint CGRectBottomRight(CGRect r) { return CGPointMake(r.origin.y + r.size.height, r.origin.x + r.size.width); }
+static inline CGPoint CGRectTopRight(CGRect r) { return CGPointMake(r.origin.y, r.origin.x + r.size.width); }
+static inline BOOL CGRectIsOffScreenWest(CGRect r) { return r.origin.x < CGPointZero.x; }
+static inline BOOL CGRectIsOffScreenNorth(CGRect r) { return r.origin.y < CGPointZero.y; }
+static inline CGRect CGRectFlushLeft(CGRect r) { return CGRectMake(CGPointZero.x, r.origin.y, r.size.width, r.size.height); }
+static inline CGRect CGRectFlushTop(CGRect r) { return CGRectMake(r.origin.x, CGPointZero.y, r.size.width, r.size.height); }
+static inline BOOL MADDirectionIsHorizontal(MADDirection d) { return d == MADDirectionLeft || d == MADDirectionRight; }
+static inline BOOL MADDirectionIsVertical(MADDirection d) { return d == MADDirectionUp || d == MADDirectionDown; }
+
+static inline MADCorners MTCornersMake(CGRect r) {
+	MADCorners c;
+	c.topLeft = r.origin;
+	c.topRight = CGPointMake(r.origin.x + r.size.width, r.origin.y);
+	c.bottomLeft = CGPointMake(r.origin.x, r.origin.y + r.size.height);
+	c.bottomRight = CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height);
+	return c;
 }
 
-static inline CGRect MADRectOfSize(CGSize size);
-static inline CGRect MADRectOfSize(CGSize size) {
-	CGRect r; r.origin = CGPointZero; r.size = size; return r;
-}
+static inline BOOL CGFloatCompare(CGFloat x, CGFloat y) { return (fabs(x-y) < .0001 * FLT_EPSILON * fabs(x+y) || fabs(x-y) < FLT_MIN); }
 
-static inline CGPoint CGRectTopLeft(CGRect rect);
-static inline CGPoint CGRectTopLeft(CGRect rect) {
-	return rect.origin;
-}
-
-static inline CGPoint CGRectBottomLeft(CGRect rect);
-static inline CGPoint CGRectBottomLeft(CGRect rect) {
-	return CGPointMake(rect.origin.y + rect.size.height, rect.origin.x);
-}
-
-static inline CGPoint CGRectBottomRight(CGRect rect);
-static inline CGPoint CGRectBottomRight(CGRect rect) {
-	return CGPointMake(rect.origin.y + rect.size.height, rect.origin.x + rect.size.width);
-}
-
-static inline CGPoint CGRectTopRight(CGRect rect);
-static inline CGPoint CGRectTopRight(CGRect rect) {
-	return CGPointMake(rect.origin.y, rect.origin.x + rect.size.width);
-}
-
-static inline BOOL CGRectIsOffScreenWest(CGRect rect);
-static inline BOOL CGRectIsOffScreenWest(CGRect rect) {
-	return rect.origin.x < CGPointZero.x;
-}
-static inline BOOL CGRectIsOffScreenNorth(CGRect rect);
-static inline BOOL CGRectIsOffScreenNorth(CGRect rect) {
-	return rect.origin.y < CGPointZero.y;
-}
-static inline CGRect CGRectFlushLeft(CGRect rect);
-static inline CGRect CGRectFlushLeft(CGRect rect) {
-	return CGRectMake(CGPointZero.x, rect.origin.y, rect.size.width, rect.size.height);
-}
-static inline CGRect CGRectFlushTop(CGRect rect);
-static inline CGRect CGRectFlushTop(CGRect rect) {
-	return CGRectMake(rect.origin.x, CGPointZero.y, rect.size.width, rect.size.height);
-}
-
-CG_INLINE MADCorners
-MTCornersMake(CGRect rect) {
-	MADCorners corners;
-	corners.topLeft = rect.origin;
-	corners.topRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
-	corners.bottomLeft = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
-	corners.bottomRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
-	return corners;
-}
-
-CG_INLINE BOOL CGFloatCompare(CGFloat x, CGFloat y);
-CG_INLINE BOOL
-CGFloatCompare(CGFloat x, CGFloat y) {
-	return (fabs(x-y) < .0001 * FLT_EPSILON * fabs(x+y) || fabs(x-y) < FLT_MIN);
-}
-
-CG_INLINE MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2);
-CG_INLINE MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2) {
+static inline MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2) {
 	return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.x > p1.x ? MADDirectionLeft : MADDirectionRight;
 }
 
-CG_INLINE MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2);
-CG_INLINE MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2) {
+static inline MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2) {
 	return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.y > p1.y ? MADDirectionDown : MADDirectionUp;
 }
 
-CG_INLINE BOOL MADDirectionIsHorizontal(MADDirection d);
-CG_INLINE BOOL MADDirectionIsHorizontal(MADDirection d) {
-	return d == MADDirectionLeft || d == MADDirectionRight;
-}
-
-CG_INLINE BOOL MADDirectionIsVertical(MADDirection d);
-CG_INLINE BOOL MADDirectionIsVertical(MADDirection d) {
-	return d == MADDirectionUp || d == MADDirectionDown;
-}
-
-CG_INLINE MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees);
-CG_INLINE MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
-	while (degrees < 0.0000f) {
-		degrees += 360.0000f;
+static inline MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
+	while (degrees < 0.0) {
+		degrees += 360.0;
 	}
-	while (degrees > 360.0000f) {
-		degrees -= 360.0000f;
+	while (degrees > 360.0) {
+		degrees -= 360.0;
 	}
-	if (degrees > 60.0000f && degrees < 120.0000f) {
+	if (degrees > 60.0 && degrees < 120.0) {
 		return north;
-	} else if (degrees > 30.0000f && degrees < 60.0000f) {
+	} else if (degrees > 30.0 && degrees < 60.0) {
 		return northEast;
-	} else if ( degrees > 120.0000f && degrees < 150.0000f ) {
+	} else if ( degrees > 120.0 && degrees < 150.0 ) {
 		return northWest;
-	} else if ( degrees > 240.0000f && degrees < 300.0000f ) {
+	} else if ( degrees > 240.0 && degrees < 300.0 ) {
 		return south;
-	} else if ( degrees > 300.0000f && degrees < 330.0000f ) {
+	} else if ( degrees > 300.0 && degrees < 330.0 ) {
 		return southEast;
-	} else if ( degrees > 210.0000f && degrees < 240.0000f ) {
+	} else if ( degrees > 210.0 && degrees < 240.0 ) {
 		return southWest;
-	} else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
+	} else if ((degrees > 330.0 && degrees < 360.0) || (degrees > 0.0 && degrees < 30.0)) {
 		return east;
-	} else if ( degrees > 150.0000f && degrees < 210.0000f) {
+	} else if ( degrees > 150.0 && degrees < 210.0) {
 		return west;
 	} else {
 		return north;
 	}
 }
 
-CG_INLINE CGSize CGSizeFingerDefault(void);
-CG_INLINE CGSize
-CGSizeFingerDefault(void) {
+static inline CGSize CGSizeFingerDefault(void) {
 	return CGSizeMake(MTDefaultFingerSizeWidth, MTDefaultFingerSizeHeight);
 }
 
-CG_INLINE MADLine CGLineMake(CGFloat m, CGFloat b);
-CG_INLINE MADLine
-CGLineMake(CGFloat m, CGFloat b) {
-	MADLine line;
-	line.m = m;
-	line.b = b;
-	return line;
+static inline MADLine CGLineMake(CGFloat m, CGFloat b) {
+	MADLine line; line.m = m; line.b = b; return line;
 }
 
-CG_INLINE CGPoint CGPointContentOffsetTopOfRect(CGRect rect);
-CG_INLINE
-CGPoint CGPointContentOffsetTopOfRect(CGRect rect) {
+static inline CGPoint CGPointContentOffsetTopOfRect(CGRect rect) {
 	CGFloat yOffset = rect.origin.y;
 	return CGPointMake(CGPointZero.x, yOffset);
 }
 
-CG_INLINE CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect);
-CG_INLINE
-CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect) {
+static inline CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect) {
 	CGFloat yOffset = rect.origin.y - containerRect.size.height + rect.size.height;
 	return CGPointMake(CGPointZero.x, yOffset);
 }
 
-CG_INLINE CGFloat CGDelta(CGFloat f1, CGFloat f2) {
-	return f2 - f1;
-}
-
-CG_INLINE double CGDirectionInDegreesFromVelocity(CGPoint velocity);
-CG_INLINE double CGDirectionInDegreesFromVelocity(CGPoint velocity) {
-	return atan2(velocity.y, velocity.x);
-}
-
-CG_INLINE CGRect CGRectAdjustForScale(CGRect rect, CGFloat zoomScale);
-CG_INLINE CGRect
-CGRectAdjustForScale(CGRect rect, CGFloat zoomScale) {
-	CGFloat scale = 1.0000f / zoomScale;
-	if ( isless(scale, 1.0000f) ) {
-		rect.origin.x *= scale;
-		rect.origin.y *= scale;
-		rect.size.width *= scale;
-		rect.size.height *= scale;
+static inline CGFloat CGDelta(CGFloat f1, CGFloat f2) { return f2 - f1; }
+static inline double CGDirectionInDegreesFromVelocity(CGPoint);
+static inline CGRect CGRectAdjustForScale(CGRect, CGFloat);
+static inline double CGDirectionInDegreesFromVelocity(CGPoint velocity) { return atan2(velocity.y, velocity.x); }
+static inline CGRect CGRectAdjustForScale(CGRect r, CGFloat zoomScale) {
+	CGFloat scale = 1.0 / zoomScale;
+	if ( isless(scale, 1.0) ) {
+		r.origin.x *= scale;
+		r.origin.y *= scale;
+		r.size.width *= scale;
+		r.size.height *= scale;
 	} else {
-		rect.origin.x *= zoomScale;
-		rect.origin.y *= zoomScale;
-		rect.size.width *= zoomScale;
-		rect.size.height *= zoomScale;
+		r.origin.x *= zoomScale;
+		r.origin.y *= zoomScale;
+		r.size.width *= zoomScale;
+		r.size.height *= zoomScale;
 	}
-	return rect;
+	return r;
 }
 
-CG_INLINE BOOL CGRectAboveRect(CGRect rect1, CGRect rect2);
-CG_INLINE BOOL
-CGRectAboveRect(CGRect rect1, CGRect rect2) {
-	return rect1.origin.y + rect1.size.height < rect2.origin.y;
+static inline BOOL CGRectAboveRect(CGRect r1, CGRect r2) {
+	return r1.origin.y + r1.size.height < r2.origin.y;
 }
 
-CG_INLINE BOOL CGRectBelowRect(CGRect rect1, CGRect rect2);
-CG_INLINE BOOL
-CGRectBelowRect(CGRect rect1, CGRect rect2) {
-	return rect1.origin.y > rect2.origin.y + rect2.size.height;
+static inline BOOL CGRectBelowRect(CGRect r1, CGRect r2) {
+	return r1.origin.y > r2.origin.y + r2.size.height;
 }
 
-CG_INLINE CGPoint CGCenterOfRect(CGRect rect);
-CG_INLINE CGPoint
-CGCenterOfRect(CGRect rect) {
-	return CGPointMake(rect.origin.x + (rect.size.width / 2.0000f), rect.origin.y + (rect.size.height / 2.0000f));
+static inline CGPoint CGCenterOfRect(CGRect r) {
+	return CGPointMake(r.origin.x + (r.size.width / 2.0), r.origin.y + (r.size.height / 2.0));
 }
 
-CG_INLINE CGPoint CGRandomPointInRect(CGRect rect);
-CG_INLINE
-CGPoint CGRandomPointInRect(CGRect rect) {
-	return CGPointMake((arc4random() % (uint32_t)fabs(rect.origin.x + rect.size.width + 1.0000f)) + (uint32_t)rect.origin.x,
-					   (arc4random() % (uint32_t)fabs(rect.origin.y + rect.size.height + 1.0000f)) + (uint32_t)rect.origin.y);
+static inline CGPoint CGRandomPointInRect(CGRect r) {
+	return CGPointMake((arc4random() % (uint32_t)fabs(r.origin.x + r.size.width + 1.0)) + (uint32_t)r.origin.x,
+					   (arc4random() % (uint32_t)fabs(r.origin.y + r.size.height + 1.0)) + (uint32_t)r.origin.y);
 }
 
-CG_INLINE CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds);
-CG_INLINE
-CGRect CGRectForDesiredRect(CGRect desiredFrame, CGRect viewControllerBounds) {
-	if (CGRectContainsRect(viewControllerBounds, desiredFrame) == NO) {
+static inline CGRect CGRectForDesiredRect(CGRect f, CGRect b) {
+	if (CGRectContainsRect(b, f) == NO) {
 		
 		//Is it to the left?
-		if (desiredFrame.origin.x < viewControllerBounds.origin.x) {
-			desiredFrame.origin.x = viewControllerBounds.origin.x + 20.0000f;
+		if (f.origin.x < b.origin.x) {
+			f.origin.x = b.origin.x + 20.0;
 		}
 		
 		//Is it to the right?
-		if (desiredFrame.origin.x + desiredFrame.size.width > viewControllerBounds.origin.x + viewControllerBounds.size.width) {
-			desiredFrame.origin.x = viewControllerBounds.origin.x + viewControllerBounds.size.width - desiredFrame.size.width - 20.0000f;
+		if (f.origin.x + f.size.width > b.origin.x + b.size.width) {
+			f.origin.x = b.origin.x + b.size.width - f.size.width - 20.0;
 		}
 		
 		//Are you too high?
-		if (desiredFrame.origin.y < viewControllerBounds.origin.y) {
-			desiredFrame.origin.y = viewControllerBounds.origin.y + 20.0000f;
+		if (f.origin.y < b.origin.y) {
+			f.origin.y = b.origin.y + 20.0;
 		}
 		
 		//Is it too low?
-		if (desiredFrame.origin.y + desiredFrame.size.height > viewControllerBounds.origin.y + viewControllerBounds.size.height) {
-			desiredFrame.origin.y = viewControllerBounds.origin.y + viewControllerBounds.size.height - desiredFrame.size.height - 20.0000f;
+		if (f.origin.y + f.size.height > b.origin.y + b.size.height) {
+			f.origin.y = b.origin.y + b.size.height - f.size.height - 20.0;
 		}
 	}
-	return desiredFrame;
+	return f;
 }
 
-CG_INLINE CGPoint CGPointMakeRandomOffscreen(CGFloat offSetSize);
-CG_INLINE CGPoint
-CGPointMakeRandomOffscreen(CGFloat offSetSize) {
+static inline CGPoint CGPointMakeRandomOffscreen(CGFloat offSetSize) {
 	return arc4random_uniform(2) == 0 ?
 		   (arc4random_uniform(2) == 0 ?
-			CGPointMake(arc4random_uniform((uint32_t)MADFloat_1024), 0.0000f - offSetSize) :
-			CGPointMake(0.0000f - offSetSize, arc4random_uniform((uint32_t)MADFloat_1024))) :
+			CGPointMake(arc4random_uniform((uint32_t)MADFloat_1024), 0.0 - offSetSize) :
+			CGPointMake(0.0 - offSetSize, arc4random_uniform((uint32_t)MADFloat_1024))) :
 		   (arc4random_uniform(2) == 0 ?
 			CGPointMake(arc4random_uniform((uint32_t)MADFloat_1024), MADFloat_1024 + offSetSize) :
 			CGPointMake(MADFloat_1024 + offSetSize, arc4random_uniform((uint32_t)MADFloat_1024)));
 }
 
-CG_INLINE CGRect CGRectFrameAtRandomOffscreenLocation(CGSize size);
-CG_INLINE CGRect
-CGRectFrameAtRandomOffscreenLocation(CGSize size) {
-	CGPoint offScreen = CGPointMakeRandomOffscreen(400.0000f);
-	return CGRectMake(offScreen.x, offScreen.y, size.width, size.height);
+static inline CGRect CGRectFrameAtRandomOffscreenLocation(CGSize s) {
+	CGPoint offScreen = CGPointMakeRandomOffscreen(400.0);
+	return CGRectMake(offScreen.x, offScreen.y, s.width, s.height);
 }
 
-CG_INLINE CGPoint CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom);
-CG_INLINE CGPoint
-CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom) {
+static inline CGPoint CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom) {
 	containerRect = CGRectMake(containerRect.origin.x, containerRect.origin.y, containerRect.size.width, containerRect.size.height - withPaddingTop - andPaddingBottom);
 	CGFloat moveDistanceX = (containerRect.size.width - (tileRect.size.width * ofCols)) / (((ofCols - 1) * 2) + 2);
 	CGFloat moveDistanceY = (containerRect.size.height - (tileRect.size.height * ofRows)) / (((ofRows - 1) * 2) + 2);
@@ -328,147 +285,56 @@ CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger o
 					   (tileRect.size.width * onRow) + (moveDistanceY * onRow * 2) + moveDistanceY + withPaddingTop);
 }
 
-CG_INLINE CGPoint CGPointRoundPointToGrid(CGPoint point);
-CG_INLINE CGPoint
-CGPointRoundPointToGrid(CGPoint point) {
-	return CGPointMake((CGFloat)round(point.x / 10.0000f) * 10.0000f, (CGFloat)round(point.y / 10.0000f) * 10.0000f);
+static inline CGPoint CGPointRoundPointToGrid(CGPoint p) {
+	return CGPointMake((CGFloat)round(p.x / 10.0) * 10.0, (CGFloat)round(p.y / 10.0) * 10.0);
 }
 
-CG_INLINE CGPoint CGCornerTopLeftPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGCornerTopLeftPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x,
-					   frame.origin.y);
-}
+static inline CGPoint CGCornerTopLeftPointInRect(CGRect frame) { return CGPointMake(frame.origin.x, frame.origin.y); }
+static inline CGPoint CGCornerTopRightPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y); }
+static inline CGPoint CGCornerBottomLeftPointInRect(CGRect frame) { return CGPointMake(frame.origin.x, frame.origin.y + frame.size.height); }
+static inline CGPoint CGCenterRect(CGRect rect) { return CGPointMake((rect.origin.x + rect.size.width) / 2.0, (rect.origin.y + rect.size.height) / 2.0); }
+static inline CGPoint CGCornerBottomRightPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height); }
+static inline CGPoint CGEdgeTopPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + (frame.size.width / 2.0), frame.origin.y); }
+static inline CGPoint CGEdgeRightPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y + (frame.size.height / 2.0)); }
 
-CG_INLINE CGPoint CGCornerTopRightPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGCornerTopRightPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x + frame.size.width,
-					   frame.origin.y);
-}
+static inline CGPoint CGEdgeBottomPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + (frame.size.width / 2.0), frame.origin.y + frame.size.height); }
 
-CG_INLINE CGPoint CGCornerBottomLeftPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGCornerBottomLeftPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x, frame.origin.y + frame.size.height);
-}
+static inline CGPoint CGEdgeLeftPointInRect(CGRect frame) { return CGPointMake(frame.origin.x, frame.origin.y + (frame.size.height / 2.0)); }
 
-CG_INLINE CGPoint CGCenterRect(CGRect rect);
-CG_INLINE CGPoint CGCenterRect(CGRect rect) {
-	return CGPointMake((rect.origin.x + rect.size.width) / 2.0000f,
-					   (rect.origin.y + rect.size.height) / 2.0000f);
-}
+static inline double MGPointsForInches(double inches) { return inches * 72.0; }
 
-CG_INLINE CGPoint CGCornerBottomRightPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGCornerBottomRightPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height);
-}
+static inline CGFloat fCGPointsForInches(CGFloat inches) { return inches * 72.00000f; }
 
-CG_INLINE CGPoint CGEdgeTopPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGEdgeTopPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x + (frame.size.width / 2.0000f),
-					   frame.origin.y);
-}
+static inline CGFloat CGFloatPointsForMillimeters(CGFloat millimeters) { return millimeters * 0.0393701f * 72.0; }
 
-CG_INLINE CGPoint CGEdgeRightPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGEdgeRightPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x + frame.size.width,
-					   frame.origin.y + (frame.size.height / 2.0000f));
-}
+static inline CGFloat CGFloatInchesForPoints(CGFloat points) { return points / 72.0; }
 
-CG_INLINE CGPoint CGEdgeBottomPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGEdgeBottomPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x + (frame.size.width / 2.0000f), frame.origin.y + frame.size.height);
-}
+static inline CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) { return centemeters / 2.54; }
 
-CG_INLINE CGPoint CGEdgeLeftPointInRect(CGRect frame);
-CG_INLINE CGPoint
-CGEdgeLeftPointInRect(CGRect frame) {
-	return CGPointMake(frame.origin.x, frame.origin.y + (frame.size.height / 2.0000f));
-}
+static inline CGFloat CGFloatCentemetersForInches(CGFloat inches) { return inches * 2.54; }
 
-CG_INLINE double MGPointsForInches(double inches);
-CG_INLINE double MGPointsForInches(double inches) {
-	return inches * 72.0;
-}
-
-CG_INLINE CGFloat fCGPointsForInches(CGFloat inches);
-CG_INLINE CGFloat fCGPointsForInches(CGFloat inches) {
-	return inches * 72.00000f;
-}
-
-CG_INLINE CGFloat CGFloatPointsForMillimeters(CGFloat millimeters);
-
-CG_INLINE CGFloat
-CGFloatPointsForMillimeters(CGFloat millimeters) {
-	return millimeters * 0.0393701f * 72.0000f;
-}
-
-CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points);
-CG_INLINE CGFloat CGFloatInchesForPoints(CGFloat points) {
-	return points / 72.0000f;
-}
-
-CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters);
-CG_INLINE CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) {
-	return centemeters / 2.5400f;
-}
-
-CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches);
-CG_INLINE CGFloat CGFloatCentemetersForInches(CGFloat inches) {
-	return inches * 2.5400f;
-}
-
-CG_INLINE double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2);
-CG_INLINE double
-CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
+static inline double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
 	if (t2 - t1 != 0) return (MADDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
 	else return 0;
 }
 
-CG_INLINE CGPoint CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2);
-CG_INLINE CGPoint
-CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2) {
-
-	rateOfChange = rateOfChange;
-	if (rateOfChange <= 0) {
-		rateOfChange = 1;
-	}
+static inline CGPoint CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2) {
+	if (rateOfChange <= 0) { rateOfChange = 1; }
 	CGPoint c = CGYInversePlusDistance(p1, p2, rateOfChange);
-	if (!isnan(c.x) && !isnan(c.y)) {
-		c.y = (-1) * (c.y);
-	}
+	if (!isnan(c.x) && !isnan(c.y)) { c.y = (-1) * (c.y); }
 	return c;
 }
 
-CG_INLINE CGPoint CGLineIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
-CG_INLINE CGPoint
-CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
-	
+static inline CGPoint CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
 	return CGPointMake(
 						( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.x - p2b.x) - ((  p1a.x  -    p1b.x) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ),
 					   -( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.y - p2b.y) - (((-p1a.y) - (-p1b.y)) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ) );
 	
 }
 
-CG_INLINE CGFloat CGFloatMax(CGFloat n1, CGFloat n2);
-CG_INLINE CGFloat
-CGFloatMax(CGFloat n1, CGFloat n2) {
-	return n1 > n2 ? n1 : n2;
-}
+static inline CGFloat CGFloatMax(CGFloat n1, CGFloat n2) { return n1 > n2 ? n1 : n2; }
+static inline CGFloat CGFloatMin(CGFloat n1, CGFloat n2) { return n1 < n2 ? n1 : n2; }
 
-CG_INLINE CGFloat CGFloatMin(CGFloat n1, CGFloat n2);
-CG_INLINE CGFloat
-CGFloatMin(CGFloat n1, CGFloat n2) {
-	return n1 < n2 ? n1 : n2;
-}
-
-static inline BOOL CGSegmentIntercept(CGPoint point1a, CGPoint point1b, CGPoint point2a, CGPoint point2b);
 static inline BOOL CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
 	
 	BOOL result = NO;
@@ -521,9 +387,7 @@ static inline BOOL CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGP
 	
 }
 
-static inline BOOL MADLineSegmentIntercept(MADLineSegment lineSegment1, MADLineSegment lineSegment2);
-static inline BOOL
-MADLineSegmentIntercept(MADLineSegment lineSegment1, MADLineSegment lineSegment2) {
+static inline BOOL MADLineSegmentIntercept(MADLineSegment lineSegment1, MADLineSegment lineSegment2) {
 	
 	BOOL result =  NO;
 	

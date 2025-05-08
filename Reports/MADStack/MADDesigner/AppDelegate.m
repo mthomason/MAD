@@ -35,6 +35,9 @@ const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 static inline UIUserNotificationType MADUserNotificationType(void);
+static inline UIUserNotificationType MADUserNotificationType(void) {
+	return (UIUserNotificationType)(UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+}
 
 @interface AppDelegate()
     <UIDocumentInteractionControllerDelegate>
@@ -276,9 +279,3 @@ static inline UIUserNotificationType MADUserNotificationType(void);
 }
 
 @end
-
-static inline UIUserNotificationType MADUserNotificationType() {
-	return (UIUserNotificationType)(UIUserNotificationTypeAlert |
-									UIUserNotificationTypeBadge |
-									UIUserNotificationTypeSound);
-}

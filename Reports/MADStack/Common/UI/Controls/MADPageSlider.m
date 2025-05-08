@@ -30,6 +30,26 @@ static inline CGAffineTransform translateForward(CGSize size);
 static inline CGAffineTransform rotate(void);
 static inline CGAffineTransform translateBack(CGSize size);
 
+#pragma mark -
+#pragma mark Static functions
+
+static inline double numberOfTicksCalc(CGFloat viewHeight, CGFloat elementHeight) { return viewHeight / elementHeight; }
+static inline CGFloat MaxDimension(CGSize size) { return MAX(size.width, size.height); }
+static inline CGAffineTransform translateForward(CGSize size) { return CGAffineTransformMakeTranslation(size.width / 2.0, size.width / 2.0); }
+static inline CGAffineTransform rotate(void) { return CGAffineTransformMakeRotation(3.0 / 2.0 * M_PI); }
+static inline CGAffineTransform translateBack(CGSize size) { return CGAffineTransformMakeTranslation(-size.width / 2.0, -size.width / 2.0); }
+
+static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue) {
+	double tickCount = numberOfTicksCalc(viewSizeHeight, elementSizeHeight);
+	if (tickCount <= 0) {
+		return 0;
+	} else if (tickCount > maximumValue) {
+		return (unsigned long)floor(maximumValue);
+	} else {
+		return (unsigned long)MAX(1, tickCount) - 1;
+	}
+}
+
 @interface MADPageSlider ()
 
 	@property (nonatomic, weak, getter=pageSlider) MADSliderPageVertical *slider;
@@ -342,37 +362,3 @@ static inline CGAffineTransform translateBack(CGSize size);
 }
 
 @end
-
-#pragma mark -
-#pragma mark Static functions
-
-inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight) {
-	return viewSizeHeight / elementSizeHeight;
-}
-
-inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue) {
-	double tickCount = numberOfTicksCalc(viewSizeHeight, elementSizeHeight);
-	if (tickCount <= 0) {
-		return 0;
-	} else if (tickCount > maximumValue) {
-		return (unsigned long)floor(maximumValue);
-	} else {
-		return (unsigned long)MAX(1, tickCount) - 1;
-	}
-}
-
-static inline CGFloat MaxDimension(CGSize size) {
-	return MAX(size.width, size.height);
-}
-
-static inline CGAffineTransform translateForward(CGSize size) {
-	return CGAffineTransformMakeTranslation(size.width / 2.0, size.width / 2.0);
-}
-
-static inline CGAffineTransform rotate() {
-	return CGAffineTransformMakeRotation(3.0 / 2.0 * M_PI);
-}
-
-static inline CGAffineTransform translateBack(CGSize size) {
-	return CGAffineTransformMakeTranslation(-size.width / 2.0, -size.width / 2.0);
-}

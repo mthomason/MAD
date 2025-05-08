@@ -55,64 +55,64 @@ static inline CGRect CGRectBoundsForSize(CGSize size) {
     return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
 }
 
-static inline CGRect CGRectPaperLetter() {
+static inline CGRect CGRectPaperLetter(void) {
     return CGRectBoundsForSize(CGSizePaperLetter());
 }
 
-static inline CGSize CGSizePaperLetter() {
+static inline CGSize CGSizePaperLetter(void) {
     return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(11.0000f));
 }
 
 
-static inline CGSize CGSizePaperGovernmentLetter() {
+static inline CGSize CGSizePaperGovernmentLetter(void) {
     return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(10.5000f));
 }
 
-static inline CGSize CGSizePaperLegal() {
+static inline CGSize CGSizePaperLegal(void) {
     return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(14.0000f));
 }
 
-static inline CGSize CGSizePaperA0() {
+static inline CGSize CGSizePaperA0(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(841.0000f), CGFloatPointsForMillimeters(1189.0000f));
 }
 
-static inline CGSize CGSizePaperA1() {
+static inline CGSize CGSizePaperA1(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(594.0000f), CGFloatPointsForMillimeters(841.0000f));
 }
 
-static inline CGSize CGSizePaperA2() {
+static inline CGSize CGSizePaperA2(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(420.0000f), CGFloatPointsForMillimeters(594.0000f));
 }
 
-static inline CGSize CGSizePaperA3() {
+static inline CGSize CGSizePaperA3(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(297.0000f), CGFloatPointsForMillimeters(420.0000f));
 }
 
-static inline CGSize CGSizePaperA4() {
+static inline CGSize CGSizePaperA4(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(210.0000f), CGFloatPointsForMillimeters(297.0000f));
 }
 
-static inline CGSize CGSizePaperA5() {
+static inline CGSize CGSizePaperA5(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(148.0000f), CGFloatPointsForMillimeters(210.0000f));
 }
 
-static inline CGSize CGSizePaperA6() {
+static inline CGSize CGSizePaperA6(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(105.0000f), CGFloatPointsForMillimeters(148.0000f));
 }
 
-static inline CGSize CGSizePaperA7() {
+static inline CGSize CGSizePaperA7(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(74.0000f), CGFloatPointsForMillimeters(105.0000f));
 }
 
-static inline CGSize CGSizePaperA8() {
+static inline CGSize CGSizePaperA8(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(52.0000f), CGFloatPointsForMillimeters(74.0000f));
 }
 
-static inline CGSize CGSizePaperA9() {
+static inline CGSize CGSizePaperA9(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(37.0000f), CGFloatPointsForMillimeters(52.0000f));
 }
 
-static inline CGSize CGSizePaperA10() {
+static inline CGSize CGSizePaperA10(void) {
     return CGSizeMake(CGFloatPointsForMillimeters(26.0000f), CGFloatPointsForMillimeters(37.0000f));
 }
 

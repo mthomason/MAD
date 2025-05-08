@@ -32,21 +32,22 @@
 #import "MADNotificationDidFormatPage.h"
 
 static inline CGFloat halfinch(void);
-static inline CGFloat halfinch() {
+static inline CGRect CellDefaultBounds(void);
+static inline UIEdgeInsets PdfBorder(void);
+static inline CGRect PdfTrimBox(CGRect);
+
+static inline CGFloat halfinch(void) {
 	return 72.0000 / 72.0000;
 }
 
-static inline CGRect CellDefaultBounds(void);
-static inline CGRect CellDefaultBounds() {
+static inline CGRect CellDefaultBounds(void) {
 	return MADRectOfSize(CGSizeMake(230.0000f, 200.0000f));
 }
 
-static inline UIEdgeInsets PdfBorder(void);
-static inline UIEdgeInsets PdfBorder() {
+static inline UIEdgeInsets PdfBorder(void) {
 	return UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch());
 }
 
-static inline CGRect PdfTrimBox(CGRect rect);
 static inline CGRect PdfTrimBox(CGRect rect) {
 	return UIEdgeInsetsInsetRect(rect, PdfBorder());
 }
