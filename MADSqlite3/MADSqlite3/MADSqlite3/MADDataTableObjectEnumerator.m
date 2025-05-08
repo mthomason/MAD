@@ -164,13 +164,11 @@
 		
 		@autoreleasepool {
 			
-			
-			
 			int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
 			if (sqlite3DataType == SQLITE_NULL) {
 				columnValue = [NSNull null];
 			} else {
-				columnValue = [MADDatabaseResultValue newDatabaseResultValue:_statement
+				columnValue = [MADDatabaseSqlite3 databaseResultValue:_statement
 														 columnNumber:columnCounter];
 			}
 			

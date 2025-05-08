@@ -290,7 +290,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	  createTable:(BOOL)create
 		   unique:(BOOL)unique {
 	
-	NSString *columnAffinity = [MADSqlite3NativeType newSqlite3NativeType:column.type];
+	NSString *columnAffinity = [MADDatabaseSqlite3 sqlite3NativeType:column.type];
 	MADQueryCacheAddColumn *queryCacheAddColumn;
 	queryCacheAddColumn =
 		[[MADQueryCacheAddColumn alloc] initWithTableName: table

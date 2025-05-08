@@ -62,20 +62,12 @@ typedef NSString MADSqlite3SortDescription;
 
 	void mad_sqlite3Err(int rc, const char **errName, const char **errMsg);
 
-@end
-
-@interface MADSqlite3NativeType : NSString
-
-	+ (instancetype)newSqlite3NativeType:(MADDataType)dataType;
-
-@end
-
-@interface MADDatabaseResultValue : NSObject <NSCopying>
-
-	+ (instancetype)newDatabaseResultValue:(void *)statement columnNumber:(int)columnNumber;
-	+ (instancetype)newDatabaseResultValueCast: (void * /* sqlite3_stmt * */)statement
+	+ (NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber;
+	+ (NSObject <NSCopying, NSSecureCoding> *)databaseResultValueCast: (void * /* sqlite3_stmt * */)statement
 							   forColumnNumber: (int)columnCounter
 									  withType: (MADDataType)type;
+
+	+ (NSString *)sqlite3NativeType:(MADDataType)dataType;
 
 @end
 

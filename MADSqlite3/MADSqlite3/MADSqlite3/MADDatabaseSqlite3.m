@@ -153,7 +153,7 @@ void sqliteLog(void *foo, const char* statement) {
 + (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
 															ascending:(BOOL)ascending {
 	NSString *sortDescription = nil;
-	NSString *nativeTypeDescription = [MADSqlite3NativeType newSqlite3NativeType:columnType];
+	NSString *nativeTypeDescription = [MADDatabaseSqlite3 sqlite3NativeType:columnType];
 	if ([nativeTypeDescription isEqualToString:@"TEXT"]) {
 		sortDescription = ascending ? @"COLLATE LSASC ASC" : @"COLLATE LSASC DESC";
 	} else {
@@ -542,8 +542,8 @@ void sqliteLog(void *foo, const char* statement) {
 			for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
 				NSString *fieldKey = fieldKeys[(NSUInteger)colCtr];
 				if (fieldKey != nil) { // Ensure the key is not nil
-					resultsForRow[fieldKey] = [MADDatabaseResultValue newDatabaseResultValue:statement
-																			   columnNumber:colCtr];
+					resultsForRow[fieldKey] = [MADDatabaseSqlite3 databaseResultValue:statement
+																			columnNumber:colCtr];
 				}
 			}
 			
@@ -1233,17 +1233,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 	
 }
 
-@end
-
-@implementation MADDatabaseResultValue
-
-- (id)copyWithZone:(NSZone *)zone {
-	@throw [NSException exceptionWithName: NSInternalInconsistencyException
-								   reason: @""
-								 userInfo: nil];
-}
-
-+ (instancetype)newDatabaseResultValue:(void *)statement columnNumber:(int)columnNumber {
++ (__kindof NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber {
 	id value = nil;
 	switch (sqlite3_column_type(statement, columnNumber)) { //http://www.sqlite.org/c3ref/c_blob.html
 		case SQLITE_INTEGER: {
@@ -1281,10 +1271,10 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 	return value;
 }
 
-+ (instancetype)newDatabaseResultValueCast: (void * /* sqlite3_stmt * */)statement
-						   forColumnNumber: (int)columnCounter
-								  withType: (MADDataType)type {
-	
++ (NSObject <NSCopying, NSSecureCoding> *)databaseResultValueCast: (void * /* sqlite3_stmt * */)statement
+													 forColumnNumber: (int)columnCounter
+															withType: (MADDataType)type {
+
 	id columnValue;
 	switch (type) {
 			
@@ -1367,11 +1357,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 	return columnValue;
 }
 
-@end
-
-@implementation MADSqlite3NativeType
-
-+ (instancetype)newSqlite3NativeType:(MADDataType)dataType {
++ (NSString *)sqlite3NativeType:(MADDataType)dataType {
 	id columnAffinity;
 	switch (dataType) {
 		case MADDataTypeBit:

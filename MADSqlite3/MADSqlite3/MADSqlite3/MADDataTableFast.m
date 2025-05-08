@@ -422,7 +422,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 		   unique:(BOOL)unique {
 	
 	NSError * __autoreleasing errorQuery = NULL;
-	NSString *columnAffinity = [MADSqlite3NativeType newSqlite3NativeType: column.type];
+	NSString *columnAffinity = [MADDatabaseSqlite3 sqlite3NativeType: column.type];
 	MADQueryCache *query = [[MADQueryCacheAddColumn alloc] initWithTableName: table
 																  columnName: columnName
 																	  column: column
@@ -1177,8 +1177,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	return key;
 }
 
-- (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
-	id result = nil;
+- (__kindof NSObject <NSCopying, NSSecureCoding> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
+	__kindof NSObject <NSCopying, NSSecureCoding> *result = nil;
 	sqlite3_stmt *statement = NULL;
 	NSError *error = nil;
 	NSString *sql = [query getSql:&error];
@@ -1211,16 +1211,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	return [self.columnKeys indexOfObject:key];
 }
 
-- (NSObject <NSCopying> *)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
-	MADDatabaseResultValue *result =  [MADDatabaseResultValue newDatabaseResultValue: statement
-																		columnNumber: columnIndex];
+- (__kindof NSObject <NSCopying, NSSecureCoding> *)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
+	__kindof NSObject <NSCopying, NSSecureCoding> *result =  [MADDatabaseSqlite3 databaseResultValue: statement
+																						  columnNumber: columnIndex];
 	return result;
 }
 
-- (id)newCurrentObject:(sqlite3_stmt *)statement fieldKey:(NSString *)fieldKey {
+- (__kindof NSObject <NSCopying, NSSecureCoding> *)newCurrentObject:(sqlite3_stmt *)statement fieldKey:(NSString *)fieldKey {
 	NSDictionary *currentObject;
 	currentObject = [[NSMutableDictionary alloc] initWithCapacity:2];
-	id <NSCopying> columnValue = [MADDatabaseResultValue newDatabaseResultValue: statement
+	__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue: statement
 																   columnNumber: 0];
 	if (columnValue != nil) {
 		MADDataColumn *dataColumn = self.columns[fieldKey];
@@ -1233,14 +1233,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	return currentObject;
 }
 
-- (id)newCurrentObject:(sqlite3_stmt *)statement {
+- (__kindof NSObject <NSCopying, NSSecureCoding> *)newCurrentObject:(sqlite3_stmt *)statement {
 	NSDictionary *currentObject;
 	currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count + 1];
 	int columnCounter = 0;
 	for (NSString *key in self.columnKeys) {
 		@autoreleasepool {
-			id <NSCopying> columnValue = [MADDatabaseResultValue newDatabaseResultValue: statement
-																		   columnNumber: columnCounter];
+			__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue: statement
+																									columnNumber: columnCounter];
 			if (columnValue != nil) {
 				MADDataColumn *dataColumn = self.columns[key];
 				[currentObject setValue: columnValue

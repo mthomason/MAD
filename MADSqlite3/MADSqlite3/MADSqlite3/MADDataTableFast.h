@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 	- (nullable NSString *)columnKeyForColumnName:(NSString *)columnName;
 	- (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys;
 
-	- (NSObject <NSCopying> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
+	- (__kindof NSObject <NSCopying, NSSecureCoding> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query;
 
 	- (NSDictionary *)dataForRow:(NSUInteger)cacheId
 						  column:(NSString *)columnIdentifier
