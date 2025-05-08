@@ -1038,13 +1038,13 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	return dataForGroup;
 }
 
-- (__kindof NSObject <NSCopying> *)dataForRows:(NSArray *)rowIDs
-										column:(NSString *)columnKey
-										groups:(NSArray *)groupKeys
-									  function:(MTAggregateFunctionType)function
-									   groupBy:(MTAggregateGroupByType)groupBy {
-	
-	__kindof NSObject <NSCopying> *result = nil;
+- (__kindof NSObject <NSCopying, NSSecureCoding> *)dataForRows:(NSArray *)rowIDs
+														column:(NSString *)columnKey
+														groups:(NSArray *)groupKeys
+													  function:(MTAggregateFunctionType)function
+													   groupBy:(MTAggregateGroupByType)groupBy {
+
+	__kindof NSObject <NSCopying, NSSecureCoding> *result = nil;
 	MADParameters *parameters = [MADParameters newParametersAggregateByType:groupBy
 																   function:function
 																	 rowids:rowIDs

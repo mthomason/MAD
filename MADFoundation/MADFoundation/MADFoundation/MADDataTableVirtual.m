@@ -120,17 +120,6 @@
 	return self.sortIndex;
 }
 
-- (void)addColumnWithIdentifier:(NSString *)identifier  {
-	[self addColumnWithIdentifier:identifier andDefaultValue:[NSNull null]];
-}
-
-- (void)addColumnWithIdentifier:(NSString *)identifier andDefaultValue:(id)defaultValue {
-	NSUInteger length = [self numberOfRows];
-	MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:identifier];
-	[dataColumn addRows:length];
-	[self addColumn:dataColumn];
-}
-
 - (NSUInteger)numberOfRows {
 	return self.rowCounter;
 }

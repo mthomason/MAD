@@ -49,12 +49,10 @@
 		
 		self.name = @"";
 		
-		NSMutableArray <NSString *> *columnKeys =
-			[[NSMutableArray <NSString *> alloc] initWithCapacity:numberOfColumns];
+		NSMutableArray <NSString *> *columnKeys = [[NSMutableArray <NSString *> alloc] initWithCapacity:numberOfColumns];
 		self.columnKeys = columnKeys;
 		
-		NSMutableDictionary <NSString *, MADDataColumn *> *columns =
-			[[NSMutableDictionary <NSString *, MADDataColumn *> alloc] initWithCapacity:numberOfColumns];
+		NSMutableDictionary <NSString *, MADDataColumn *> *columns = [[NSMutableDictionary <NSString *, MADDataColumn *> alloc] initWithCapacity:numberOfColumns];
 		self.columns = columns;
 		
 		self.rowCounter = 0;
@@ -169,9 +167,8 @@
 	NSError *errorWriting = NULL;
 
 	BOOL success = [cache writeToURL: url
-						options: NSDataWritingAtomic |
-								 NSDataWritingFileProtectionCompleteUnlessOpen
-						  error: &errorWriting];
+							 options: (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen)
+							   error: &errorWriting];
 
 	NSAssert((!success || errorWriting == NULL), @"%s %@", __PRETTY_FUNCTION__, errorWriting);
 
@@ -183,7 +180,7 @@
 - (NSDictionary *)copyPlist {
 
 	NSNumber *rowCounter = [[NSNumber alloc] initWithUnsignedInteger: _rowCounter];
-	NSArray *columnKeys = [self.columnKeys copy];
+	NSArray <NSString *> *columnKeys = [self.columnKeys copy];
 	NSDictionary *columnsPlist = [self columnsPlist];
 	NSString *name = [self.name copy];
 	
@@ -219,13 +216,12 @@
 																  copyItems: YES];
 	self.sortDescriptors = sortDescriptors;
 	
-	NSString *keyColumns = [MADDataTable keyColumns];
-	NSDictionary * __weak plistDataColumn = plist[keyColumns];
+	NSDictionary *plistDataColumn = [plist objectForKey:NSStringFromSelector(@selector(columns))];
 	NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary: plistDataColumn
 																copyItems: YES];
 
 	for (NSString *key in columnKeys) {
-			NSDictionary * __weak columnPlist = columnsPlist[key];
+			NSDictionary *columnPlist = columnsPlist[key];
 			MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
 			self.columns[key] = column;
 	}

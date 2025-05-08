@@ -1398,21 +1398,19 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (IBAction)actionDocumentInformation:(id)sender {
 	
 	MADMetaData *metadata = nil;
-	NSArray *selectedItems, *passthoughViews;
+	NSArray *passthoughViews;
 	NSIndexPath *indexPath;
-	NSMutableArray *metadataItems;
 	UIPopoverPresentationController *ppc;
-	MADDocumentInformationTableViewController *documentInformation;
 	
-	selectedItems = [self.fileExplorerViewDelegate indexPathsForSelectedItems];
-	metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
+	NSArray <NSIndexPath *> *selectedItems = [self.fileExplorerViewDelegate indexPathsForSelectedItems];
+	NSMutableArray <MADMetaData *> *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
 	
 	for (indexPath in selectedItems) {
 		metadata = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
 		[metadataItems addObject:metadata];
 	}
 	
-	documentInformation = [MADDocumentInformationTableViewController newDocumentInformationTableViewController];
+	MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController newDocumentInformationTableViewController];
 	documentInformation.modalPresentationStyle = UIModalPresentationPopover;
 	
 	passthoughViews = [self defaultPassthroughViews];

@@ -60,6 +60,7 @@
 #import "MADDataTableObjectEnumerator.h"
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
+static os_log_t mlog;
 
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol,
 	MADQueryParametersColumnKeysProtocol, MADQueryParametersColumnMetaProtocol,
@@ -89,6 +90,14 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 @implementation MADDataTableFast {
 	sqlite3_stmt *_statementInsert;
 }
+
++ (void)initialize {
+	if (self == [MADDataTableFast class]) {
+		NSString *name = NSStringFromClass([MADDataTableFast class]);
+		mlog = os_log_create("com.mad", name.UTF8String);
+	}
+}
+
 
 + (NSDictionary *)newQueryDefinitionSelect: (NSArray *)columnKeys
 								 tableName: (NSString *)tableName
@@ -203,8 +212,12 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	plist[keyBulkInsertLoop] = bulkInsert;
 	
 	if (self.groupKeyIndexes != nil) {
-		NSString *keyGroupKeys = [MADDataTableFast keyGroupKeys];
-		plist[keyGroupKeys] = [NSKeyedArchiver archivedDataWithRootObject: _groupKeyIndexes];
+		NSError *error = nil;
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_groupKeyIndexes requiringSecureCoding:YES error:&error];
+		if (error != nil) {
+			os_log_error(mlog, "NSKeyedArchiver Error: %@", error.localizedDescription);
+		}
+		[plist setObject:data forKey:[MADDataTableFast keyGroupKeys]];
 	}
 	
 	NSNumber *sortSet = [[NSNumber alloc] initWithBool:_sortDescriptorsSet];
@@ -235,13 +248,16 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	
 	id keyGroupKeys = [MADDataTableFast keyGroupKeys];
 	NSData *groupKeysData = plist[keyGroupKeys];
-	NSIndexSet *groupKeysArray = [NSKeyedUnarchiver unarchiveObjectWithData:groupKeysData];
-	NSMutableIndexSet *groupKeys;
-	if (groupKeysArray) {
-		groupKeys = [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray];
-	} else {
-		groupKeys = [[NSMutableIndexSet alloc] init];
+	NSError *error = nil;
+	NSIndexSet * __nullable groupKeysArray = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSIndexSet class]
+																			   fromData:groupKeysData
+																				  error:&error];
+	if (error != nil) {
+		os_log_error(mlog, "NSKeyedArchiver Error: %@", error.localizedDescription);
 	}
+	NSMutableIndexSet *groupKeys = (groupKeysArray != nil) ?
+		[[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray] :
+		[[NSMutableIndexSet alloc] init];
 	self.groupKeyIndexes = groupKeys;
 	
 	[self reopenDbConnection];
@@ -249,22 +265,17 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 }
 
 + (NSString *)keyUrlFastCache { return NSStringFromSelector(@selector(urlFastCache)); }
-
 + (NSString *)keyTag { return NSStringFromSelector(@selector(tag)); }
-
 + (NSString *)keyBulkInsertLoop { return NSStringFromSelector(@selector(bulkInsertLoop)); }
-
 + (NSString *)keySortDescriptorsSet { return NSStringFromSelector(@selector(sortDescriptorsSet)); }
-
 + (NSString *)keyGroupKeys { return NSStringFromSelector(@selector(groupKeyIndexes)); }
-
 + (NSString *)keyColumns { return NSStringFromSelector(@selector(columns)); }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
 	[super encodeWithCoder:encoder];
 
-	NSString *absStr = _urlFastCache.absoluteString;
-	[encoder encodeObject: absStr forKey: [MADDataTableFast keyUrlFastCache]];
+	[encoder encodeObject: _urlFastCache.absoluteString
+				   forKey: [MADDataTableFast keyUrlFastCache]];
 	
 	NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
 	[encoder encodeObject: objid forKey: [MADDataTableFast keyTag]];
@@ -305,10 +316,7 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 - (void)reopenDbConnection {
 
 	NSURL *urlFastCache = self.urlFastCache;
-
-	
 	id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
-	
 	MADDatabaseSqlite3 *database;
 	MADDatabaseConnection *connection;
 
@@ -1177,8 +1185,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	return key;
 }
 
-- (__kindof NSObject <NSCopying, NSSecureCoding> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
-	__kindof NSObject <NSCopying, NSSecureCoding> *result = nil;
+- (NSObject <NSCopying, NSSecureCoding> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
+	NSObject <NSCopying, NSSecureCoding> *result = nil;
 	sqlite3_stmt *statement = NULL;
 	NSError *error = nil;
 	NSString *sql = [query getSql:&error];
@@ -1197,7 +1205,8 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	}
 	
 	if (success && sqlite3_step(statement) == SQLITE_ROW) {
-		result = [self objectOfUnknownType:statement forColumnNumber:0];
+		result = [MADDatabaseSqlite3 databaseResultValue: statement
+											 columnNumber: 0];
 	}
 	NSAssert(success, @"%s", sqlite3_errmsg(databaseForSelects->_database));
 
@@ -1211,43 +1220,34 @@ static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 	return [self.columnKeys indexOfObject:key];
 }
 
-- (__kindof NSObject <NSCopying, NSSecureCoding> *)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
-	__kindof NSObject <NSCopying, NSSecureCoding> *result =  [MADDatabaseSqlite3 databaseResultValue: statement
-																						  columnNumber: columnIndex];
-	return result;
-}
-
-- (__kindof NSObject <NSCopying, NSSecureCoding> *)newCurrentObject:(sqlite3_stmt *)statement fieldKey:(NSString *)fieldKey {
-	NSDictionary *currentObject;
-	currentObject = [[NSMutableDictionary alloc] initWithCapacity:2];
-	__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue: statement
-																   columnNumber: 0];
+- (id)newCurrentObject:(sqlite3_stmt *)statement fieldKey:(NSString *)fieldKey {
+	NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:2];
+	NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue: statement
+																					columnNumber: 0];
 	if (columnValue != nil) {
 		MADDataColumn *dataColumn = self.columns[fieldKey];
 		[currentObject setValue: columnValue
 						 forKey: dataColumn.identifier];
 	}
-	NSNumber *rowid;
-	rowid = [[NSNumber alloc] initWithInt:sqlite3_column_int(statement, 1)];
+	NSNumber *rowid = [[NSNumber alloc] initWithInt:sqlite3_column_int(statement, 1)];
 	[currentObject setValue:rowid forKey:MADIdentifierROWID];
 	return currentObject;
 }
 
-- (__kindof NSObject <NSCopying, NSSecureCoding> *)newCurrentObject:(sqlite3_stmt *)statement {
-	NSDictionary *currentObject;
-	currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count + 1];
+- (id)newCurrentObject:(sqlite3_stmt *)statement {
+	NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:self.columns.count + 1];
 	int columnCounter = 0;
 	for (NSString *key in self.columnKeys) {
-		@autoreleasepool {
-			__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue: statement
-																									columnNumber: columnCounter];
+		//@autoreleasepool {
+			NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue: statement
+																							columnNumber: columnCounter];
 			if (columnValue != nil) {
 				MADDataColumn *dataColumn = self.columns[key];
 				[currentObject setValue: columnValue
 								 forKey: dataColumn.identifier];
 			}
 			columnCounter++;
-		}
+		//}
 	}
 	if (sqlite3_column_count(statement) >= columnCounter) {
 		NSNumber *rowid;
