@@ -57,7 +57,8 @@
 #import <MADSqlite3/MADQueryCacheIndexCreateParameters.h>
 #import <MADSqlite3/MADQueryParameters.h>
 
-#import "MADDataTableObjectEnumerator.h"
+#import <MADSqlite3/MADDataTableObjectEnumerator.h>
+#import <MADSqlite3/MADDataTableSingleColumnEnumerator.h>
 
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 static os_log_t mlog;
@@ -1037,59 +1038,43 @@ static os_log_t mlog;
 }
 
 - (NSEnumerator *)objectEnumerator {
-
 	if (self.columns.count <= 0) return nil;
-	
-	NSEnumerator *objectEnumerator = nil;
 	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
-																	 tableName:[self tableName]
-															   sortDescriptors:self.sortDescriptors
-																		 limit:NSNotFound
-																		offset:NSNotFound
-																	 dropRowID:NO
-																	   columns:nil];
-	NSURL *urlFastCache = self.urlFastCache;
-	MADDatabaseConnection *databaseConnection;
-	databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
-	objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-																				columns: self.columns
-																			 columnKeys: self.columnKeys
-																				  query: query];
+																	   tableName:[self tableName]
+																 sortDescriptors:self.sortDescriptors
+																		   limit:NSNotFound
+																		  offset:NSNotFound
+																	   dropRowID:NO
+																		 columns:nil];
+	MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+	NSEnumerator *objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+																							  columns: self.columns
+																						   columnKeys: self.columnKeys
+																								query: query];
 	return objectEnumerator;
 }
 
-- (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
+- (NSEnumerator<__kindof NSObject <NSCopying, NSSecureCoding> *> *)enumeratorForAllObjectsSortedRowIdOnly {
 	
-	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[]
-																	 tableName:[self tableName]
-															   sortDescriptors:self.sortDescriptors
-																		 limit:NSNotFound
-																		offset:NSNotFound
-																	 dropRowID:NO
-																	   columns:nil];
+	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys: @[]
+																	   tableName: [self tableName]
+																 sortDescriptors: self.sortDescriptors
+																		   limit: NSNotFound
+																		  offset: NSNotFound
+																	   dropRowID: NO
+																		 columns: nil];
 
+	MADDatabaseConnection *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 
-	MADDatabaseConnection *connection;
-	MADDataColumn *rowid;
-	connection= [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
-
-	rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
+	MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
 	rowid.type = MADDataTypeInteger;
 	
-	NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns;
-	columns = [[NSDictionary alloc] initWithObjectsAndKeys: rowid, MADIdentifierROWID, nil];
-
-	NSArray <__kindof NSString *> *columnKeys;
-	columnKeys = [[NSArray alloc] initWithObjects: MADIdentifierROWID, nil];
-	
-	MADDataTableObjectEnumerator *enumerator;
-	enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: connection
-																		  columns: columns
-																	   columnKeys: columnKeys
-																			query: query];
-	enumerator.addRowId = NO;
-	enumerator.singleColumnNoWrapper = YES;
-	
+	NSDictionary <__kindof NSString *, __kindof MADDataColumn *> *columns = [[NSDictionary alloc] initWithObjectsAndKeys: rowid, MADIdentifierROWID, nil];
+	NSArray <__kindof NSString *> *columnKeys = [[NSArray alloc] initWithObjects: MADIdentifierROWID, nil];
+	NSEnumerator<__kindof NSObject <NSCopying, NSSecureCoding> *> *enumerator = [[MADDataTableSingleColumnEnumerator alloc] initWithDatabaseConnection: connection
+																																			   columns: columns
+																																			columnKeys: columnKeys
+																																				 query: query];
 	return enumerator;
 }
 
@@ -1111,37 +1096,27 @@ static os_log_t mlog;
 	NSEnumerator *enumerator;
 	NSArray *columnKeys = [self columnKeysForSortDescriptors];
 	if (columnKeys.count == 0) {
-	
 		enumerator = [self enumeratorForAllObjectsSortedRowIdOnly];
-		
 	} else {
 	
-		MADQuery *query;
-		query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
-																tableName:[self tableName]
-														  sortDescriptors:self.sortDescriptors
-																	limit:NSNotFound
-																   offset:NSNotFound
-																dropRowID:NO
-																  columns:nil];
-		
-		MADDatabaseConnection *dbConnection;
-		dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+		MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
+																		   tableName:[self tableName]
+																	 sortDescriptors:self.sortDescriptors
+																			   limit:NSNotFound
+																			  offset:NSNotFound
+																		   dropRowID:NO
+																			 columns:nil];
+
+		MADDatabaseConnection *dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 		enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
 																			  columns: self.columns
 																		   columnKeys: columnKeys
 																				query: query];
-		[(MADDataTableObjectEnumerator *)enumerator setAddRowId:YES];
-		[(MADDataTableObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
 	}
 	return enumerator;
 }
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
-	
-	MADDatabaseConnection *dbConnection;
-	MADDataTableObjectEnumerator *enumerator;
-	
 	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:self.columnKeys
 																	 tableName:[self tableName]
 															   sortDescriptors:self.sortDescriptors
@@ -1150,13 +1125,11 @@ static os_log_t mlog;
 																	 dropRowID:NO
 																	   columns:nil];
 	
-	dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
-	enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
-																		  columns: self.columns
-																	   columnKeys: self.columnKeys
-																			query: query];
-	enumerator.addRowId = YES;
-	enumerator.singleColumnNoWrapper = NO;
+	MADDatabaseConnection *dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
+	NSEnumerator *enumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
+																						columns: self.columns
+																					 columnKeys: self.columnKeys
+																						  query: query];
 	return enumerator;
 }
 

@@ -74,10 +74,6 @@
 		
 		NSDictionary *retainedColumns = [[NSDictionary alloc] initWithDictionary:columns];
 		self.columns = retainedColumns;
-		
-		self.addRowId = YES;
-		self.singleColumnNoWrapper = NO;
-
 	}
 	return self;
 }
@@ -151,32 +147,24 @@
 
 - (__kindof NSObject <NSCopying, NSSecureCoding> *)currentObject {
 	
-	if (_singleColumnNoWrapper) {
-		return [MADDatabaseSqlite3 databaseResultValue:_statement columnNumber:0];
-		
-	} else {
-		NSMutableDictionary *currentObject = _singleColumnNoWrapper ?
-		nil :
-		[[NSMutableDictionary alloc] initWithCapacity:_columns.count];
-		
-		int columnCounter = 0;
-		
-		for (NSString *key in _columnKeys) {
-			@autoreleasepool {
-				__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue:_statement
-																										columnNumber:columnCounter];
-				MADDataColumn *dataColumn = [_columns objectForKey:key];
-				[currentObject setValue:columnValue forKey:dataColumn.identifier];
-				columnCounter++;
-			}
+	NSMutableDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:_columns.count];
+	int columnCounter = 0;
+	for (NSString *key in _columnKeys) {
+		@autoreleasepool {
+			__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue:_statement
+																									columnNumber:columnCounter];
+			MADDataColumn *dataColumn = [_columns objectForKey:key];
+			[currentObject setValue:columnValue forKey:dataColumn.identifier];
+			columnCounter++;
 		}
-		if (_addRowId && sqlite3_column_count(_statement) >= columnCounter) {
-			NSNumber *rowid = [[NSNumber alloc] initWithInt: sqlite3_column_int(_statement, columnCounter)];
-			[currentObject setValue:rowid forKey:MADIdentifierROWID];
-			rowid = nil;
-		}
-		return currentObject;
 	}
+	if (sqlite3_column_count(_statement) >= columnCounter) {
+		NSNumber *rowid = [[NSNumber alloc] initWithInt: sqlite3_column_int(_statement, columnCounter)];
+		[currentObject setValue:rowid forKey:MADIdentifierROWID];
+		rowid = nil;
+	}
+	return currentObject;
 }
 
 @end
+
