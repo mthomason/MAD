@@ -17,40 +17,31 @@
 #import <UIKit/UIImage.h>
 
 #import "objcmad.h"
-
-#import "MADQueryBuilderSplitViewController.h"
-#import "MADQueryViewController.h"
-#import "MADViewerController.h"
-#import "MADDesignerViewController.h"
-
 #import "MADTabBarItemProtocol.h"
 
 @implementation UIViewController (tabBarItem)
 
 + (void)load {
 	static dispatch_once_t onceTokenTabBarItem;
-	SEL originalSelectorTabBarItem = @selector(tabBarItem);
-	SEL swizzledSelectorTabBarItem = @selector(mad_tabBarItem);
-	mad_swizzle_selectors(self, originalSelectorTabBarItem, self, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
+	mad_swizzle_selectors(self, @selector(tabBarItem), self, @selector(mad_tabBarItem), &onceTokenTabBarItem);
 }
 
 - (UITabBarItem *)mad_tabBarItem {
 	UITabBarItem *tabBarItem = [self mad_tabBarItem];
 	if (tabBarItem && tabBarItem.image == nil) {
-		UIImage *tabBarImage = [self.class conformsToProtocol:@protocol(MADTabBarImageProtocol)] ?
-								[self.class newTabBarImage] : nil;
-		if (tabBarImage) {
-			UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-			tabBarItem.image = tabBarImageOg;
-			tabBarItem.selectedImage = tabBarImage;
+		if ([self.class conformsToProtocol:@protocol(MADTabBarImageProtocol)]) {
+			UIImage *image = [self.class TabBarImage];
+			if (image) {
+				tabBarItem.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+				tabBarItem.selectedImage = image;
+			}
 		}
-		NSString *tabBarTitle = self.title.copy;
-		tabBarItem.title = tabBarTitle;
+		tabBarItem.title = self.title;
 	}
 	return tabBarItem;
 }
 
-+ (UIImage *)newTabBarImage {
++ (UIImage *)TabBarImage {
 	return nil;
 }
 

@@ -10,52 +10,166 @@
 #import "MADTableViewCellQueryTableName.h"
 #import "MADTableViewCellQueryLink.h"
 #import "MADIdentifierQueryViewSections.h"
-#import "NSDictionary+QueryViewControllerTableLayout.h"
 #import "MADQueryViewDataSource.h"
+
+#import <UIKit/UITableView.h>
+
+static NSString * const MADTextQuerySetupDatasource = @"Setup Data Source";
+static NSString * const MADTextQuerySelectTables    = @"Select Tables to Use";
+static NSString * const MADTextQueryReportingMode   = @"Reporting Mode";
+static NSString * const MADTextQueryGroups          = @"Groups";
+static NSString * const MADTextQueryPredicate       = @"Predicate";
+static NSString * const MADTextQueryLinks           = @"Link the Tables";
 
 @interface MADQueryViewControllerTableLayout ()
 
-	@property (nonatomic, strong) NSDictionary *datamodel;
+@property (nonatomic, copy) NSArray<NSNumber *> *sections;
+@property (nonatomic, copy) NSDictionary<NSNumber *, NSString *> *headersBySection;
+@property (nonatomic, copy) NSDictionary<NSNumber *, NSArray <NSNumber *> *> *rowCountsBySection;
+@property (nonatomic, copy) NSDictionary<NSNumber *, NSArray <NSNumber *> *> *rowHeightsBySection;
 
 @end
 
 @implementation MADQueryViewControllerTableLayout
 
-- (void)dealloc {
-	_datamodel = nil;
-}
-
 - (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
 					  reportingEnabled:(BOOL)enabled {
 	
-	if (self = [super init]) {
-		id result;
-		switch (numberOfTables) {
-				
-			case 0:
-				result = [NSDictionary newDictionaryQueryLayoutTableZeroReportingEnabled: enabled];
-				break;
-				
-			case 1:
-				result = [NSDictionary newDictionaryQueryLayoutTableOneReportingEnabled: enabled];
-				break;
-				
-			default:
-				result = [NSDictionary newDictionaryQueryLayoutTableMoreThanOneReportingEnabled: enabled];
-				break;
-				
-		}
-		self.datamodel = result;
+	self = [super init];
+	if (!self) return nil;
+	
+	switch (numberOfTables) {
+		case 0:
+			[self setupLayoutForZeroTablesWithReporting:enabled];
+			break;
+		case 1:
+			[self setupLayoutForOneTableWithReporting:enabled];
+			break;
+		default:
+			[self setupLayoutForMultipleTablesWithReporting:enabled];
+			break;
 	}
+	
 	return self;
 }
 
+#pragma mark - Public Methods
+
 - (NSArray *)sectionTypes {
-	id sections = _datamodel[MTTableSectionSectionsKey];
-	NSArray *sectionTypes = sections != nil ?
-					[[NSArray alloc] initWithArray: sections] :
-					nil;
-	return sectionTypes;
+	return [self.sections copy];
+}
+
+#pragma mark - Layout Configurations
+
+- (void)setupLayoutForZeroTablesWithReporting:(BOOL)reportingEnabled {
+	NSNumber *one = @1;
+	NSNumber *unknown = @-1;
+	
+	NSNumber *datasource = @(MADIdentifierQueryViewSectionsDatasource);
+	NSNumber *tables = @(MADIdentifierQueryViewSectionsTables);
+	NSNumber *resultCount = @(MADIdentifierQueryViewSectionsNumberOfQueryResults);
+	
+	NSArray *sections = reportingEnabled ? @[datasource, tables, resultCount] : @[datasource, tables];
+	NSArray *rowCounts = reportingEnabled ? @[one, unknown, one] : @[one, unknown];
+	NSArray *headers = reportingEnabled ?
+	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
+	  NSLocalizedString(MADTextQuerySelectTables, nil),
+	  NSLocalizedString(MADTextQueryReportingMode, nil)] :
+	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
+	  NSLocalizedString(MADTextQuerySelectTables, nil)];
+	
+	NSNumber *height1 = @50.0;
+	NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
+	NSArray *heights = reportingEnabled ? @[height1, height2, height1] : @[height1, height2];
+	
+	self.sections = sections;
+	self.rowCountsBySection = [NSDictionary dictionaryWithObjects:rowCounts forKeys:sections];
+	self.headersBySection = [NSDictionary dictionaryWithObjects:headers forKeys:sections];
+	self.rowHeightsBySection = [NSDictionary dictionaryWithObjects:heights forKeys:sections];
+}
+
+- (void)setupLayoutForOneTableWithReporting:(BOOL)reportingEnabled {
+	NSNumber *one = @1;
+	NSNumber *unknown = @-1;
+	
+	NSNumber *datasource = @(MADIdentifierQueryViewSectionsDatasource);
+	NSNumber *tables = @(MADIdentifierQueryViewSectionsTables);
+	NSNumber *groups = @(MADIdentifierQueryViewSectionsGroups);
+	NSNumber *predicate = @(MADIdentifierQueryViewSectionsPredicate);
+	NSNumber *resultCount = @(MADIdentifierQueryViewSectionsNumberOfQueryResults);
+	
+	NSArray *sections = reportingEnabled ?
+	@[datasource, tables, groups, predicate, resultCount] :
+	@[datasource, tables, groups, predicate];
+	NSArray *rowCounts = reportingEnabled ?
+	@[one, unknown, unknown, unknown, one] :
+	@[one, unknown, unknown, unknown];
+	
+	NSArray *headers = reportingEnabled ?
+	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
+	  NSLocalizedString(MADTextQuerySelectTables, nil),
+	  NSLocalizedString(MADTextQueryGroups, nil),
+	  NSLocalizedString(MADTextQueryPredicate, nil),
+	  NSLocalizedString(MADTextQueryReportingMode, nil)] :
+	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
+	  NSLocalizedString(MADTextQuerySelectTables, nil),
+	  NSLocalizedString(MADTextQueryGroups, nil),
+	  NSLocalizedString(MADTextQueryPredicate, nil)];
+	
+	NSNumber *height1 = @44.0;
+	NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
+	NSArray *heights = reportingEnabled ?
+	@[height1, height2, height1, height1, height1] :
+	@[height1, height2, height1, height1];
+	
+	self.sections = sections;
+	self.rowCountsBySection = [NSDictionary dictionaryWithObjects:rowCounts forKeys:sections];
+	self.headersBySection = [NSDictionary dictionaryWithObjects:headers forKeys:sections];
+	self.rowHeightsBySection = [NSDictionary dictionaryWithObjects:heights forKeys:sections];
+}
+
+- (void)setupLayoutForMultipleTablesWithReporting:(BOOL)reportingEnabled {
+	NSNumber *one = @1;
+	NSNumber *unknown = @-1;
+	
+	NSNumber *datasource = @(MADIdentifierQueryViewSectionsDatasource);
+	NSNumber *tables = @(MADIdentifierQueryViewSectionsTables);
+	NSNumber *links = @(MADIdentifierQueryViewSectionsLinks);
+	NSNumber *groups = @(MADIdentifierQueryViewSectionsGroups);
+	NSNumber *predicate = @(MADIdentifierQueryViewSectionsPredicate);
+	NSNumber *resultCount = @(MADIdentifierQueryViewSectionsNumberOfQueryResults);
+	
+	NSArray *sections = reportingEnabled ?
+	@[datasource, tables, links, groups, predicate, resultCount] :
+	@[datasource, tables, links, groups, predicate];
+	NSArray *rowCounts = reportingEnabled ?
+	@[one, unknown, unknown, unknown, unknown, one] :
+	@[one, unknown, unknown, unknown, unknown];
+	
+	NSArray *headers = reportingEnabled ?
+	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
+	  NSLocalizedString(MADTextQuerySelectTables, nil),
+	  NSLocalizedString(MADTextQueryLinks, nil),
+	  NSLocalizedString(MADTextQueryGroups, nil),
+	  NSLocalizedString(MADTextQueryPredicate, nil),
+	  NSLocalizedString(MADTextQueryReportingMode, nil)] :
+	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
+	  NSLocalizedString(MADTextQuerySelectTables, nil),
+	  NSLocalizedString(MADTextQueryLinks, nil),
+	  NSLocalizedString(MADTextQueryGroups, nil),
+	  NSLocalizedString(MADTextQueryPredicate, nil)];
+	
+	NSNumber *height1 = @44.0;
+	NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
+	NSNumber *height3 = @([MADTableViewCellQueryLink defaultHeight]);
+	NSArray *heights = reportingEnabled ?
+	@[height1, height2, height3, height1, height1, height1] :
+	@[height1, height2, height3, height1, height1];
+	
+	self.sections = sections;
+	self.rowCountsBySection = [NSDictionary dictionaryWithObjects:rowCounts forKeys:sections];
+	self.headersBySection = [NSDictionary dictionaryWithObjects:headers forKeys:sections];
+	self.rowHeightsBySection = [NSDictionary dictionaryWithObjects:heights forKeys:sections];
 }
 
 @end

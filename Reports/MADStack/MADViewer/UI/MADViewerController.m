@@ -513,7 +513,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 #pragma mark - MTTabBarImageProtocol
 
-+ (UIImage *)newTabBarImage {
++ (UIImage *)TabBarImage {
 	return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
 }
 

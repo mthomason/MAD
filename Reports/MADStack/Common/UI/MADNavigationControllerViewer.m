@@ -37,8 +37,8 @@
 	[super viewDidDisappear:animated];
 }
 
-+ (UIImage *)newTabBarImage {
-	return [MADViewerController newTabBarImage];
++ (UIImage *)TabBarImage {
+	return [MADViewerController TabBarImage];
 }
 
 - (NSString *)title {

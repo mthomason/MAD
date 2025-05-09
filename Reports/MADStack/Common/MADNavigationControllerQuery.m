@@ -45,8 +45,8 @@
 	}
 }
 
-+ (UIImage *)newTabBarImage {
-	return [MADQueryBuilderSplitViewController newTabBarImage];
++ (UIImage *)TabBarImage {
+	return [MADQueryBuilderSplitViewController TabBarImage];
 }
 
 - (NSString *)title {

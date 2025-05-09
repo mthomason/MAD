@@ -240,7 +240,7 @@ static NSString * const TextRedraw = @"Redraw";
 
 #pragma mark - MTTabBarImageProtocol
 
-+ (UIImage *)newTabBarImage {
++ (UIImage *)TabBarImage {
 	return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 

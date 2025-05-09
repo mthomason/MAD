@@ -309,7 +309,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark -
 #pragma mark MTTabBarImageProtocol
 
-+ (UIImage *)newTabBarImage {
++ (UIImage *)TabBarImage {
 	return [UIImage imageNamed:@"UIBarButtonItemMadDesigner8"];
 }
 

@@ -1287,7 +1287,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 #pragma mark -
 #pragma mark MTTabBarImageProtocol
 
-+ (UIImage *)newTabBarImage {
++ (UIImage *)TabBarImage {
 	return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 
@@ -1451,14 +1451,12 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 - (MADIdentifierQueryViewSections)sectionIndexForSectionType:(MADIdentifierQueryViewSections)sec {
 	MADIdentifierQueryViewSections result = 0;
 	NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
-	MADQueryViewControllerTableLayout *tableLayout;
-	tableLayout = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
-																   reportingEnabled:storeEnabled()];
-	NSArray *sectionTypes = [tableLayout sectionTypes].copy;
+	MADQueryViewControllerTableLayout *tableLayout  = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
+																									   reportingEnabled:storeEnabled()];
 	NSInteger secPos = 0;
 	
-	for (NSNumber *num in sectionTypes) {
-		if (num.unsignedIntegerValue == sec) {
+	for (NSNumber *num in [tableLayout sectionTypes]) {
+		if (num.shortValue == sec) {
 			result = (MADIdentifierQueryViewSections)secPos;
 			break;
 		}

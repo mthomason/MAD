@@ -385,7 +385,6 @@
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF2F27A17564CA900DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
 		4CF3040D1D1E175700466560 /* MADQueryViewSectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3040C1D1E175700466560 /* MADQueryViewSectionDelegate.m */; };
-		4CF304101D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */; };
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
 		4CF46DCB1CF2ED3E00D93406 /* MADManagedObjectCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */; };
 		4CF46DCE1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DCD1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.m */; };
@@ -1222,8 +1221,6 @@
 		4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADIdentifierQueryViewSections.h; sourceTree = "<group>"; };
 		4CF3040B1D1E175700466560 /* MADQueryViewSectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewSectionDelegate.h; sourceTree = "<group>"; };
 		4CF3040C1D1E175700466560 /* MADQueryViewSectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryViewSectionDelegate.m; sourceTree = "<group>"; };
-		4CF3040E1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+QueryViewControllerTableLayout.h"; sourceTree = "<group>"; };
-		4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+QueryViewControllerTableLayout.m"; sourceTree = "<group>"; };
 		4CF46DC91CF2ED3E00D93406 /* MADManagedObjectCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADManagedObjectCollectionView.m; path = MADStack/MADDesigner/UI/MADManagedObjectCollectionView.m; sourceTree = "<group>"; };
 		4CF46DCA1CF2ED3E00D93406 /* MADManagedObjectCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADManagedObjectCollectionView.h; path = MADStack/MADDesigner/UI/MADManagedObjectCollectionView.h; sourceTree = "<group>"; };
 		4CF46DCC1CF2ED7B00D93406 /* MADManagedObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADManagedObjectCollectionViewCell.h; path = MADStack/MADDesigner/UI/MADManagedObjectCollectionViewCell.h; sourceTree = "<group>"; };
@@ -2594,8 +2591,6 @@
 				4C8DE2701BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.h */,
 				4C8DE2711BAFA9D800AD1111 /* UIViewTableSectionHeaderQueryBuilder.m */,
 				4CF304081D1E160000466560 /* MADQueryViewControllerLayoutSectionSelectorProtocol.h */,
-				4CF3040E1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.h */,
-				4CF3040F1D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m */,
 				4C4F128A1D0C777D0002294E /* NSAttributedString+QueryViewController.h */,
 				4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */,
 			);
@@ -3608,7 +3603,6 @@
 				4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */,
 				4C6D2EF51E6DE4F6008EFE5D /* MADSortOrderNavigationItem.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
-				4CF304101D1E491900466560 /* NSDictionary+QueryViewControllerTableLayout.m in Sources */,
 				4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */,
 				4C5C0DBC1C9CED3C00826BC2 /* MADOperationGetCredentials.m in Sources */,
 				4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */,

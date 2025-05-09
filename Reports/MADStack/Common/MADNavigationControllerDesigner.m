@@ -39,8 +39,8 @@
 	}
 }
 
-+ (UIImage *)newTabBarImage {
-	return [MADDesignerViewController newTabBarImage];
++ (UIImage *)TabBarImage {
+	return [MADDesignerViewController TabBarImage];
 }
 
 - (NSString *)title {

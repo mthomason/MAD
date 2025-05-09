@@ -9,16 +9,26 @@
 #ifndef MADDesigner_MADQueryViewControllerTableLayout_h
 #define MADDesigner_MADQueryViewControllerTableLayout_h
 
-#import <Foundation/NSObject.h>
-#import <UIKit/UITableView.h>
+#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MADQueryViewControllerTableLayout : NSObject
 
-	- (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
-						  reportingEnabled:(BOOL)reportingEnabled;
+@property (nonatomic, readonly, copy) NSArray<NSNumber *> *sections;
+@property (nonatomic, readonly, copy) NSDictionary<NSNumber *, NSString *> *headersBySection;
+@property (nonatomic, readonly, copy) NSDictionary<NSNumber *, NSArray <NSNumber *> *> *rowCountsBySection;
+@property (nonatomic, readonly, copy) NSDictionary<NSNumber *, NSArray <NSNumber *> *> *rowHeightsBySection;
 
-	- (NSArray *)sectionTypes;
+- (instancetype)initWithNumberOfTables:(NSInteger)numberOfTables
+					  reportingEnabled:(BOOL)reportingEnabled NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)new NS_UNAVAILABLE;
+
+- (NSArray <NSNumber *> *)sectionTypes;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif
