@@ -1299,8 +1299,7 @@ static os_log_t mlog;
 - (NSEnumerator *)enumeratorForRowIds:(NSArray *)cacheIds { //Note, software currently usues
 															//  NSArray for row ids
 	
-	NSDictionary <NSString *, MADDataColumn *> *columns;
-	columns = [NSDictionary dictionaryWithDictionary:self.columns];
+	NSDictionary <NSString *, MADDataColumn *> *columns = [NSDictionary dictionaryWithDictionary:self.columns];
 	
 	MADQuery *query = [[MADQueryCacheSelectRowIds alloc] initWithRowIDs:cacheIds
 															tableName:[self tableName]
@@ -1309,10 +1308,8 @@ static os_log_t mlog;
 	
 	NSArray *columnKeys = self.columnKeys;
 	NSURL *urlFastCache = self.urlFastCache;
-	MADDatabaseConnection *databaseConnection;
-	NSEnumerator *data;
-	databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
-	data = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+	MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
+	NSEnumerator *data = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
 																	columns: columns
 																 columnKeys: columnKeys
 																	  query: query];

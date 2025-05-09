@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 4/21/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -27,8 +27,8 @@
 
 @interface MADDataTableObjectEnumerator ()
 
-	@property (nonatomic, strong) NSDictionary *columns;
-	@property (nonatomic, strong) NSArray *columnKeys;
+	@property (nonatomic, strong) NSDictionary <NSString *, MADDataColumn *> *columns;
+	@property (nonatomic, strong) NSArray <NSString *> *columnKeys;
 
 	@property (nonatomic, strong) MADDatabaseSqlite3 *databaseForQuery;
 	@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
@@ -47,8 +47,8 @@
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection
-								   columns:(NSDictionary *)columns
-								columnKeys:(NSArray *)columnKeys
+								   columns:(NSDictionary <NSString *, MADDataColumn *> *)columns
+								columnKeys:(NSArray <NSString *> *)columnKeys
 									 query:(MADQuery *)query {
 	if (self = [super init]) {
 		
@@ -69,11 +69,12 @@
 			sqlite3_free(queryString);
 		}
 		
-		NSArray *retainedColumKeys = [NSArray arrayWithArray:columnKeys];
+		NSArray <NSString *> *retainedColumKeys = [[NSArray alloc] initWithArray:columnKeys];
 		self.columnKeys = retainedColumKeys;
 		
-		NSDictionary *retainedColumns = [NSDictionary dictionaryWithDictionary:columns];
+		NSDictionary *retainedColumns = [[NSDictionary alloc] initWithDictionary:columns];
 		self.columns = retainedColumns;
+		
 		self.addRowId = YES;
 		self.singleColumnNoWrapper = NO;
 
@@ -148,50 +149,34 @@
 	return i;
 }
 
-- (id <NSCopying>)currentObject {
-
-	NSMutableDictionary *currentObject;
-	currentObject = _singleColumnNoWrapper ?
-					nil :
-					[[NSMutableDictionary alloc] initWithCapacity:_columns.count];
+- (__kindof NSObject <NSCopying, NSSecureCoding> *)currentObject {
 	
-	int columnCounter = 0;
-
-	id <NSCopying> columnValue;
-	id key;
-
-	for (key in _columnKeys) {
+	if (_singleColumnNoWrapper) {
+		return [MADDatabaseSqlite3 databaseResultValue:_statement columnNumber:0];
 		
-		@autoreleasepool {
-			
-			int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);
-			if (sqlite3DataType == SQLITE_NULL) {
-				columnValue = [NSNull null];
-			} else {
-				columnValue = [MADDatabaseSqlite3 databaseResultValue:_statement
-														 columnNumber:columnCounter];
-			}
-			
-			if (columnValue == nil) {
-				columnValue = [NSNull null];
-			}
-			if (columnValue != nil && _singleColumnNoWrapper == NO) {
-				MADDataColumn *dataColumn = _columns[key];
+	} else {
+		NSMutableDictionary *currentObject = _singleColumnNoWrapper ?
+		nil :
+		[[NSMutableDictionary alloc] initWithCapacity:_columns.count];
+		
+		int columnCounter = 0;
+		
+		for (NSString *key in _columnKeys) {
+			@autoreleasepool {
+				__kindof NSObject <NSCopying, NSSecureCoding> *columnValue = [MADDatabaseSqlite3 databaseResultValue:_statement
+																										columnNumber:columnCounter];
+				MADDataColumn *dataColumn = [_columns objectForKey:key];
 				[currentObject setValue:columnValue forKey:dataColumn.identifier];
-				columnValue = nil;
-				dataColumn = nil;
+				columnCounter++;
 			}
-			columnCounter++;
 		}
+		if (_addRowId && sqlite3_column_count(_statement) >= columnCounter) {
+			NSNumber *rowid = [[NSNumber alloc] initWithInt: sqlite3_column_int(_statement, columnCounter)];
+			[currentObject setValue:rowid forKey:MADIdentifierROWID];
+			rowid = nil;
+		}
+		return currentObject;
 	}
-	if (_addRowId && _singleColumnNoWrapper == NO &&
-		sqlite3_column_count(_statement) >= columnCounter) {
-		NSNumber *rowid;
-		rowid = [[NSNumber alloc] initWithInt: sqlite3_column_int(_statement, columnCounter)];
-		[currentObject setValue:rowid forKey:MADIdentifierROWID];
-		rowid = nil;
-	}
-	return _singleColumnNoWrapper ? columnValue : currentObject;
 }
 
 @end
