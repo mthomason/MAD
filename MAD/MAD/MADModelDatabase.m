@@ -206,15 +206,12 @@
 
 	if (!_driverName) {
 		NSArray <NSDictionary *> *results;
-		
 		NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverName:self.identifier];
-		
 		NSError * __autoreleasing error = NULL;
 		results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
 		if (results.count > 0) {
 			NSDictionary *resultSet = results[0];
-			NSString *key = [RptqDatabase keyOwnedByUserDatabaseName];
-			NSString *driverName = resultSet[key];
+			NSString *driverName = [resultSet objectForKey:[RptqDatabase keyOwnedByUserDatabaseName]];
 			_driverName = driverName.copy;
 		}
 	}

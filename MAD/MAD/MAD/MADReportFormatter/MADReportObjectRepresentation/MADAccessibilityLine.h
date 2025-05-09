@@ -15,12 +15,12 @@
 
 @interface MADAccessibilityLine : NSObject
 
-    - (instancetype)initWithValue:(id)value type:(MADPrintPageElementType)type
-                         andFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithValue:(id)value type:(MADPrintPageElementType)type
+					 andFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
-    @property (readonly) NSString *label;
-    @property (readonly) CGRect frame;
-    @property (nonatomic, assign, readonly) MADPrintPageElementType type;
+@property (readonly) NSString *label;
+@property (readonly) CGRect frame;
+@property (nonatomic, assign, readonly) MADPrintPageElementType type;
 
 @end
 

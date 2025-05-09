@@ -9,7 +9,7 @@
 #ifndef MADMathAlgebra_h
 #define MADMathAlgebra_h
 
-#import "MADLineSegment.h"
+#import <MADCocoaExtensions/MADLineSegment.h>
 
 static inline double CGAngleBetweenTwoPoints(CGPoint, CGPoint);
 static inline double MADDistance(CGPoint, CGPoint);

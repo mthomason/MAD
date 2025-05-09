@@ -10,7 +10,7 @@
 #import <CoreData/NSManagedObjectContext.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/NSParagraphStyle.h>
-#import <MAD/MADFontDescriptor.h>
+#import <MAD/UIFontDescriptor+MADAdditions.h>
 #import <MAD/MADElementStylizedText.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
@@ -72,12 +72,11 @@
 				  bold:(BOOL)bold
 				italic:(BOOL)italic {
 	if (_bold != bold || _italic != italic || _fontsize != fontsize || ![_fontname isEqualToString:fontname]) {
-		UIFontDescriptor *fontDescriptor;
-		fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
-																fontSize: fontsize
-																	bold: bold
-																  italic: italic];
-		
+		UIFontDescriptor *fontDescriptor = [UIFontDescriptor newFontDescriptorForFontName: fontname
+																				 fontSize: fontsize
+																					 bold: bold
+																				   italic: italic];
+
 		UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
 		NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
 		[self.displayObject addAttributes:newAttributes
@@ -127,12 +126,11 @@
 
 - (void)updateFontSize:(double)fontsize {
 	if (_fontsize != fontsize) {
-		UIFontDescriptor *fontDescriptor;
-		fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: _fontname
-																fontSize: fontsize
-																	bold: _bold
-																  italic: _italic];
-		
+		UIFontDescriptor *fontDescriptor = [UIFontDescriptor newFontDescriptorForFontName: _fontname
+																				 fontSize: fontsize
+																					 bold: _bold
+																				   italic: _italic];
+
 		UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
 		NSDictionary *newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
 		[self.displayObject addAttributes:newAttributes
@@ -143,12 +141,10 @@
 
 - (void)updateFontName:(NSString *)fontname {
 	if (![_fontname isEqualToString:fontname]) {
-		UIFontDescriptor *fontDescriptor;
-		fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
-																fontSize: _fontsize
-																	bold: _bold
-																  italic: _italic];
-		
+		UIFontDescriptor *fontDescriptor = [UIFontDescriptor newFontDescriptorForFontName: fontname
+																				 fontSize: _fontsize
+																					 bold: _bold
+																				   italic: _italic];
 		UIFont *font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
 		NSDictionary *newAttributes;
 		newAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
@@ -160,8 +156,7 @@
 
 - (void)updateSetStrikethrough:(BOOL)strikethrough {
 	if (_strikethrough != strikethrough) {
-		NSNumber *strikethroughStyle;
-		strikethroughStyle = [[NSNumber alloc] initWithInteger: strikethrough ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
+		NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger: strikethrough ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
 		[self.displayObject addAttribute:NSStrikethroughStyleAttributeName
 								   value:strikethroughStyle
 								   range:NSMakeRange(0, self.displayObject.length)];

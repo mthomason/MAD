@@ -13,7 +13,7 @@
 
 @interface MADPrintPageElement (Constructor)
 
-    + (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition;
++ (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition;
 
 @end
 

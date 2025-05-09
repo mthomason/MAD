@@ -12,7 +12,7 @@
 #import <MADAPI/MADQuery.h>
 
 @interface MADQueryCacheAggregateFunction : MADQuery
-    <MADQueryDataBindingProtocol, MADQueryColumnsProtocol>
+	<MADQueryDataBindingProtocol, MADQueryColumnsProtocol>
 @end
 
 #endif

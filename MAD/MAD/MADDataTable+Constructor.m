@@ -50,7 +50,7 @@
 
 + (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID {
 	
-	id result = nil;
+	__kindof MADDataTable *result = nil;
 	switch (type) {
 		case MADDataTableTypeVirtual: {
 			result = [[MADDataTableVirtual alloc] initWithId:objectID];

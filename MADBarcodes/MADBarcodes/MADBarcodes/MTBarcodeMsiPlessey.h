@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeMsiPlessey_h
 #define Barcodes_MTBarcodeMsiPlessey_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeMsiPlessey : MTBarcode
 

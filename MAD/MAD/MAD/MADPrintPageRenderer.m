@@ -56,18 +56,17 @@
 #import "RptqDocumentElementLabelDataField+Extras.h"
 #import "RptqDocumentElementImage.h"
 
-#import "MTPaper.h"
+#import <MAD/MTPaper.h>
+#import <MAD/MADReportFormatter.h>
+//#import <MAD/MADAccessibilityLine.h>
 
-#import "MADReportFormatter.h"
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADDatabase.h>
 
-#import "MADReportFormatter.h"
 #import <MADSqlite3/MADArrayCaching.h>
 
 #import "MADSectionRepresentation.h"
 
-#import "MADAccessibilityLine.h"
 #import "MADReportTextRepresentation.h"
 #import "MADReportPageRepresentation.h"
 #import "MADReportSectionRepresentation.h"
@@ -102,20 +101,16 @@ static inline CGRect SectionBounds(CGRect, CGFloat, BOOL, MADDocumentSectionType
 static inline CGRect ElementBounds(CGRect documentObjectFrame, CGPoint sectionBoundsOrigin) {
 	return CGRectMake(documentObjectFrame.origin.x + sectionBoundsOrigin.x,
 					  documentObjectFrame.origin.y + sectionBoundsOrigin.y,
-					  documentObjectFrame.size.width,
-					  documentObjectFrame.size.height);
+					  documentObjectFrame.size.width, documentObjectFrame.size.height);
 }
 
 static inline CGFloat HeightWithVisibility(CGFloat height, BOOL visibility) {
 	return visibility ? height : CGSizeZero.height;
 }
 
-static inline CGRect SectionBounds(CGRect pageRect,
-								   CGFloat sectionHeight,
-								   BOOL visility,
-								   MADDocumentSectionType sectionType,
-								   NSUInteger numberOfPages,
-								   NSUInteger pageIndex,
+static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
+								   BOOL visility, MADDocumentSectionType sectionType,
+								   NSUInteger numberOfPages, NSUInteger pageIndex,
 								   CGFloat originY) {
 
 	switch (sectionType) {
@@ -133,26 +128,18 @@ static inline CGRect SectionBounds(CGRect pageRect,
 		default:
 			break;
 	}
-	return CGRectMake(pageRect.origin.x,
-					  originY,
-					  pageRect.size.width,
-					  HeightWithVisibility(sectionHeight, visility));
-	
+	return CGRectMake(pageRect.origin.x, originY, pageRect.size.width, HeightWithVisibility(sectionHeight, visility));
 }
 
 
 @interface MADPrintPageRenderer ()
 	<MADDocumentObjectDataReferenceProtocol>
 
+	//@property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
 	@property (nonatomic, assign) NSUInteger accessibilityCurrentPageIndex;
 	@property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
-
-	@property (nonatomic, strong) NSArray <__kindof MADAccessibilityLine *> *accessibilityItems;
-
 	@property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
-
 	@property (nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-
 	@property (readwrite, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
 
 @end
@@ -165,9 +152,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
 
 + (void)initialize {
 	[super initialize];
-
 	if (self == [MADPrintPageRenderer self]) {
-
 		NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
 		if ([standardUserDefaults valueForKey:MTCachedSizeHorizontal] == nil) {
 			
@@ -184,12 +169,8 @@ static inline CGRect SectionBounds(CGRect pageRect,
 }
 
 + (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
-	
 	[datasource updatePrintingReportFormatter];
-	
-	id printPageRenderer;
-	printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:datasource];
-	return printPageRenderer;
+	return [[MADPrintPageRenderer alloc] initWithDataSource:datasource];
 }
 
 #pragma -
@@ -219,12 +200,13 @@ static inline CGRect SectionBounds(CGRect pageRect,
 													  green:85.0000f/256.0000f
 													   blue:85.0000f/256.0000f alpha:0.8000f];
 	NSNumber *strokeWidth = @3.0000f;
-	NSDictionary *results = @{NSFontAttributeName : customFont,
-							  NSStrokeWidthAttributeName : strokeWidth,
-							  NSStrokeColorAttributeName : strokeColor,
-							  NSForegroundColorAttributeName : foregroundColor,
-							  NSParagraphStyleAttributeName: paragraphStyle
-							  };
+	NSDictionary *results = @{
+		NSFontAttributeName : customFont,
+		NSStrokeWidthAttributeName : strokeWidth,
+		NSStrokeColorAttributeName : strokeColor,
+		NSForegroundColorAttributeName : foregroundColor,
+		NSParagraphStyleAttributeName: paragraphStyle
+	};
 	NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
 	NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS
 																 attributes: results];
@@ -249,8 +231,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
 									  y :
 									  y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
 				CGContextRotateCTM(ctx, angle315Degrees);
-				[getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y,
-											  logoRect.size.width, logoRect.size.height)];
+				[getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y, logoRect.size.width, logoRect.size.height)];
 			}
 			CGContextRestoreGState(ctx);
 			columnCounter++;
@@ -287,9 +268,7 @@ static inline CGRect SectionBounds(CGRect pageRect,
 
 - (MADReportTextRepresentation *)textRepresentation {
 	if (_textRepresentation == nil) {
-		_textRepresentation =
-			[[MADReportTextRepresentation alloc] initWithPageCount:
-											(NSUInteger)self.datasource.reportFormatter.reportLayout.count];
+		_textRepresentation = [[MADReportTextRepresentation alloc] initWithPageCount: (NSUInteger)self.datasource.reportFormatter.reportLayout.count];
 	}
 	return _textRepresentation;
 }
@@ -420,38 +399,23 @@ static inline CGRect SectionBounds(CGRect pageRect,
 		return;
 	}
 
-	RptqDocument *document;
 	CGFloat originY = pageRect.origin.y;
 	NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
 	NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
-	CGRect rect;
 	
 	[self.textRepresentation removeAllPages];
-	document = (reportFormatter.layout).activeDocumentModel;
 	
+	RptqDocument *document = (reportFormatter.layout).activeDocumentModel;
 	NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumerator:pageIndex];
-	
-	MADReportPageRepresentation *pageRepresentation =
-			[[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
-	
-	RptqDocumentSection *documentSection;
-	MADReportSectionRepresentation *sectionRepresentation;
-	
-	NSNumber *sectionIdentifier;
+	MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
+
 	for (MADSectionRepresentation *pageSection in layoutEnumerator) {
 		
-		documentSection = [document documentSectionForType: pageSection.sectionType
-												  andLevel: pageSection.groupLevel];
-		
-		sectionIdentifier = @(documentSection.identifier);
-		rect = SectionBounds(pageRect,
-							 HeightWithVisibility([reportFormatter heightSection:sectionIdentifier],
-												  documentSection.visibility),
-							 documentSection.visibility,
-							 pageSection.sectionType,
-							 reportFormatter.numberOfPages,
-							 pageIndex,
-							 originY);
+		RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
+																	   andLevel: pageSection.groupLevel];
+
+		NSNumber *sectionIdentifier = @(documentSection.identifier);
+		CGRect rect = SectionBounds(pageRect, HeightWithVisibility([reportFormatter heightSection:sectionIdentifier], documentSection.visibility), documentSection.visibility, pageSection.sectionType, reportFormatter.numberOfPages, pageIndex, originY);
 
 		
 		if (pageSection.sectionType == MADDocumentSectionTypeGroupFooter &&
@@ -459,17 +423,17 @@ static inline CGRect SectionBounds(CGRect pageRect,
 			readGroupCounter++;
 		}
 		
-		sectionRepresentation = [self drawSection: documentSection
-										   inRect: rect
-										 pageRect: pageRect
-									  pageSection: pageSection
-										 document: document
-										pageIndex: pageIndex
-										  ofPages: reportFormatter.numberOfPages
-										   offset: originY
-									offsetElement: offsetElement
-								  offsetCharacter: offsetCharacter];
-		
+		MADReportSectionRepresentation *sectionRepresentation = [self drawSection: documentSection
+																		   inRect: rect
+																		 pageRect: pageRect
+																	  pageSection: pageSection
+																		 document: document
+																		pageIndex: pageIndex
+																		  ofPages: reportFormatter.numberOfPages
+																		   offset: originY
+																	offsetElement: offsetElement
+																  offsetCharacter: offsetCharacter];
+
 		[pageRepresentation addSection:sectionRepresentation];
 		
 		if (pageSection.sectionType == MADDocumentSectionTypeBody) {
@@ -495,59 +459,41 @@ static inline CGRect SectionBounds(CGRect pageRect,
 										 offset: (CGFloat)originY
 								  offsetElement: (NSUInteger)offsetElement
 								offsetCharacter: (NSUInteger)offsetCharacter {
-	
-	MADReportSectionRepresentation * _Nonnull sectionRepresentation;
-	MADReportSectionRowsRepresentation * _Nonnull rowRepresentation;
 
-	MADReportLineRepresentation * _Nonnull line;
-
-	id drawingObject;
-
-	NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
-	
-	sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:1];
+	MADReportSectionRepresentation * _Nonnull sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:1];
 	sectionRepresentation.type = pageSection.sectionType;
 	sectionRepresentation.elementOffset = offsetElement;
+	sectionRepresentation.visibility = documentSection.visibility;
 	
-	NSEnumerator *documentObjectEnumerator;
-	if (!((sectionRepresentation.visibility =
-		   documentSection.visibility))) goto END_DrawSection;
-	
-	//MADDocumentSectionType type = [documentSection getDocumentSectionType];
-	//[MADPrintPageRenderer setBackgroundColorForSectionType: type
-	//                                                inRect: rect];
-	
-	for (RptqDocumentSectionRows *row in rowsEnumerator) {
-		
-		documentObjectEnumerator = row.hasObjects.objectEnumerator;
-		rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
-		
-		for (RptqDocumentElement *item in documentObjectEnumerator) {
-
-			MADDocumentObjectDataReference *dataReference;
-			dataReference = [MADDocumentObjectDataReference newDocumentObjectDataReference: self.datasource
-																				  delegate: self
-																					  page: pageIndex
-																					  item: item
-																					itemID: pageSection.detailRowId];
-			drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
-			[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
-			line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
-																  type: item.documentObjectType
-																 frame: item.frame];
-			line.elementOffset = offsetElement;
-			offsetElement++;
+	if (sectionRepresentation.visibility) {
+		NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
+		for (RptqDocumentSectionRows *row in rowsEnumerator) {
+			NSEnumerator *documentObjectEnumerator = row.hasObjects.objectEnumerator;
+			MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
 			
-			[rowRepresentation addLine:line];
-		}
-		NSError * __autoreleasing error = nil;
-		if (![sectionRepresentation addRow:rowRepresentation error:&error]) {
-			os_log_error(OS_LOG_DEFAULT, "%s", error.localizedDescription.UTF8String);
+			for (RptqDocumentElement *item in documentObjectEnumerator) {
+				
+				MADDocumentObjectDataReference *dataReference = [MADDocumentObjectDataReference newDocumentObjectDataReference: self.datasource
+																													  delegate: self
+																														  page: pageIndex
+																														  item: item
+																														itemID: pageSection.detailRowId];
+				__kindof MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
+				[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
+				MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
+																											 type: item.documentObjectType
+																											frame: item.frame];
+				line.elementOffset = offsetElement;
+				offsetElement++;
+				
+				[rowRepresentation addLine:line];
+			}
+			NSError *error = nil;
+			if (![sectionRepresentation addRow:rowRepresentation error:&error]) {
+				os_log_error(OS_LOG_DEFAULT, "%s", error.localizedDescription.UTF8String);
+			}
 		}
 	}
-	
-END_DrawSection:;
-
 	return sectionRepresentation;
 }
 

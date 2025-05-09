@@ -19,9 +19,9 @@
 
 	- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
 
-	@property (nonatomic, readonly, strong)     NSOrderedSet <MADModelDatabase *> *databases;
-	@property (nonatomic, readonly, weak)       MADModelDatabase *firstDatabase;
-	@property (nonatomic, readonly, weak)       MADModelQuery *firstQuery;
+	@property (nonatomic, readonly, strong) NSOrderedSet <MADModelDatabase *> *databases;
+	@property (nonatomic, readonly, weak) MADModelDatabase *firstDatabase;
+	@property (nonatomic, readonly, weak) MADModelQuery *firstQuery;
 
 @end
 

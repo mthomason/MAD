@@ -36,7 +36,7 @@
 @dynamic type;
 
 - (instancetype)initWithQueryType:(MADQueryType)type object:(id)parameters {
-    id query;
+    __kindof MADQuery *query;
     
     switch (type) {
             

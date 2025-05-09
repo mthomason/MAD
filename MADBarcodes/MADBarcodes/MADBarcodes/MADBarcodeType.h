@@ -9,7 +9,7 @@
 #ifndef MAD_MADBarcodeType_h
 #define MAD_MADBarcodeType_h
 
-#import "zint.h"
+#import <MADBarcodes/zint.h>
 
 typedef NS_ENUM(int16_t, MTBarcodeType) {
     MTBarcodeTypeCode11         = BARCODE_CODE11,

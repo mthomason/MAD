@@ -24,19 +24,6 @@
 
 @implementation MADDataTableLocation
 
-static NSString *_keyRow;
-static NSString *_keyColumn;
-
-+ (NSString *)keyRow {
-	if (_keyRow == nil) _keyRow = NSStringFromSelector(@selector(row));
-	return _keyRow;
-}
-
-+ (NSString *)keyColumn {
-	if (_keyColumn == nil) _keyColumn = NSStringFromSelector(@selector(column));
-	return _keyColumn;
-}
-
 + (instancetype)newDataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
 	id result = [[self alloc] initWithRow:row inColumn:column];
 	return result;
@@ -50,17 +37,6 @@ static NSString *_keyColumn;
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)decoder {
-	if (self = [super init]) {
-		NSNumber *row = [decoder decodeObjectForKey: [self.class keyRow]];
-		NSNumber *column = [decoder decodeObjectForKey: [self.class keyColumn]];
-		self.row = row.unsignedIntegerValue;
-		self.column = column.unsignedIntegerValue;
-	}
-	
-	return self;
-}
-
 - (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column {
 	if (self = [super init]) {
 		self.row = row;
@@ -69,14 +45,23 @@ static NSString *_keyColumn;
 	return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+	if (self = [super init]) {
+		NSNumber *row = [decoder decodeObjectForKey: NSStringFromSelector(@selector(row))];
+		self.row = row.unsignedIntegerValue;
+
+		NSNumber *column = [decoder decodeObjectForKey: NSStringFromSelector(@selector(column))];
+		self.column = column.unsignedIntegerValue;
+	}
+	
+	return self;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder {
-	
 	NSNumber *row = [[NSNumber alloc] initWithUnsignedInteger: self.row];
+	[encoder encodeObject: row forKey: NSStringFromSelector(@selector(row))];
 	NSNumber *column = [[NSNumber alloc] initWithUnsignedInteger: self.column];
-	
-	[encoder encodeObject: row forKey: [self.class keyRow]];
-	[encoder encodeObject: column forKey: [self.class keyColumn]];
-	
+	[encoder encodeObject: column forKey: NSStringFromSelector(@selector(column))];
 }
 
 @end

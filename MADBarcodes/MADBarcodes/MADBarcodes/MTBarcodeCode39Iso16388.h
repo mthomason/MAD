@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeCode39Iso16388_h
 #define Barcodes_MTBarcodeCode39Iso16388_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeCode39Iso16388 : MTBarcode
 

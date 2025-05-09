@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeMicroQrCode_h
 #define Barcodes_MTBarcodeMicroQrCode_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeMicroQrCode : MTBarcode
 

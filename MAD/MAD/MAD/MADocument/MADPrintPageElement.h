@@ -16,8 +16,8 @@
 
 @interface MADPrintPageElement : NSObject
 
-    - (instancetype)initWithDefinition:(__kindof MADDocumentObjectDataReference *)definition;
-    - (void)drawInRect:(CGRect)rect;
+- (instancetype)initWithDefinition:(__kindof MADDocumentObjectDataReference *)definition;
+- (void)drawInRect:(CGRect)rect;
 
 @end
 

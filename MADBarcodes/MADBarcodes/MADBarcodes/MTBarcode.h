@@ -12,9 +12,8 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-#import "MTBarcodeProtocol.h"
-
-#import "MADBarcodeSizingMode.h"
+#import <MADBarcodes/MTBarcodeProtocol.h>
+#import <MADBarcodes/MADBarcodeSizingMode.h>
 
 @class MADColor;
 

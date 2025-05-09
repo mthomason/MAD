@@ -162,8 +162,7 @@
 }
 
 - (BOOL)isAdjacentToQueryTable:(int64_t)queryTableID {
-	return _leftFieldIdentifier.tableID == queryTableID ||
-			_rightFieldIdentifier.tableID == queryTableID;
+	return _leftFieldIdentifier.tableID == queryTableID || _rightFieldIdentifier.tableID == queryTableID;
 }
 
 - (NSSet <NSNumber *> *)tables {

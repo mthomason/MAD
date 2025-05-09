@@ -10,16 +10,10 @@
 
 #import <CoreFoundation/CFNumber.h>
 
-#import <Foundation/NSDictionary.h>
 #import <Foundation/NSExpression.h>
-#import <Foundation/NSNotificationQueue.h>
-#import <Foundation/NSOrderedSet.h>
 #import <Foundation/NSOperation.h>
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSExpressionDescription.h>
-
+#import <CoreData/CoreData.h>
 #import <MADFoundation/MADStringUtilities.h>
 
 #import "MADModelDatabase.h"
@@ -61,24 +55,21 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 }
 
 - (instancetype)init {
-	if (self = [self initWithIdentifier: -1
-				 managedObjectContext: nil]) {
+	if (self = [self initWithIdentifier: -1 managedObjectContext: nil]) {
 		
 	}
 	return self;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier {
-	if (self = [self initWithIdentifier:identifier
-				   managedObjectContext:nil]) {
+	if (self = [self initWithIdentifier:identifier managedObjectContext:nil]) {
 		
 	}
 	return self;
 }
 
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext {
-	if (self = [self initWithIdentifier: -1
-				   managedObjectContext:managedObjectContext]) {
+	if (self = [self initWithIdentifier: -1 managedObjectContext:managedObjectContext]) {
 		
 	}
 	return self;
@@ -266,10 +257,10 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 	NSExpression *dbIDExpression = [NSExpression expressionForKeyPath:inDBID];
 	NSExpression *queryIDExpression = [NSExpression expressionForKeyPath:identifier];
 	NSExpression *docIDExpression = [NSExpression expressionForKeyPath:inDocID];
+
 	initExpression(description[0], keyDatabase, dbExpression, NSObjectIDAttributeType);
 	initExpression(description[1], keyDocument, dbInDocExpression, NSObjectIDAttributeType);
 	initExpression(description[2], keyQuery, selfExpresssion, NSObjectIDAttributeType);
-	
 	initExpression(description[3], keyIDDatabase, dbIDExpression, NSInteger64AttributeType);
 	initExpression(description[4], keyIDQuery, queryIDExpression, NSInteger64AttributeType);
 	initExpression(description[5], keyIDDocument, docIDExpression, NSInteger64AttributeType);

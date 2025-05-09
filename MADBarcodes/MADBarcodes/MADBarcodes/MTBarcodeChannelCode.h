@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeChannelCode_h
 #define Barcodes_MTBarcodeChannelCode_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeChannelCode : MTBarcode
 

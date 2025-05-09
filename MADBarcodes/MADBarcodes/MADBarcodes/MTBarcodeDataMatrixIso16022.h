@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeDataMatrixIso16022_h
 #define Barcodes_MTBarcodeDataMatrixIso16022_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeDataMatrixIso16022 : MTBarcode
 

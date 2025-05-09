@@ -10,8 +10,8 @@
 #define MAD_MADSectionLayout_h
 
 #import <objc/NSObject.h>
-#import "MADocumentSectionType.h"
-#import "RptqDocumentSectionWrappingStyle.h"
+#import <MAD/MADocumentSectionType.h>
+#import <MAD/RptqDocumentSectionWrappingStyle.h>
 
 @class NSManagedObjectID, NSManagedObjectContext, NSNumber, NSDictionary;
 

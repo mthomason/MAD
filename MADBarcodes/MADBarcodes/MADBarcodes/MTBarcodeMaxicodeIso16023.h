@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeMaxicodeIso16023_h
 #define Barcodes_MTBarcodeMaxicodeIso16023_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeMaxicodeIso16023 : MTBarcode
 

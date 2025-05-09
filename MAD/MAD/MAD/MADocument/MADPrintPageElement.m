@@ -11,10 +11,11 @@
 @implementation MADPrintPageElement
 
 - (instancetype)initWithDefinition:(__kindof MADDocumentObjectDataReference *)definition {
-    if (self = [super init]) { }
-    return self;
+	if (self = [super init]) { }
+	return self;
 }
 
 - (void)drawInRect:(CGRect)rect { }
 
 @end
+

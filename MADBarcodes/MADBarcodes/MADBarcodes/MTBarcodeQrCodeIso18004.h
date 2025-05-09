@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeQrCodeIso18004_h
 #define Barcodes_MTBarcodeQrCodeIso18004_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeQrCodeIso18004 : MTBarcode
 

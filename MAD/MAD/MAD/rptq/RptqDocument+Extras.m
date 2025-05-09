@@ -196,8 +196,7 @@
 	NSError *error = nil;
 	NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
 	NSAssert(error == nil, @"Got error on new document fetch: %@", error);
-	id document = documents.lastObject;
-	return document;
+	return documents.lastObject;
 }
 
 #pragma mark - Overrides
@@ -331,7 +330,7 @@
 													  query: self.defaultDatabase.defaultQuery];
 			break;
 		default:
-			NSAssert(NO, @"Unknown type: %lld at level %ld", type, level);
+			NSAssert(NO, @"Unknown type: %hd at level %ld", type, level);
 			return nil;
 			break;
 	}
@@ -604,8 +603,9 @@
 																 inManagedObjectContext: managedObjectContext];
 			
 			NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
+			// Gives "CoreData: warning: Sort descriptor key "identifier" may refer to a modelled property or an expression; the modelled property will be used."
 			reportObject = [[RptqDocumentElementAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-																			 insertIntoManagedObjectContext: self.managedObjectContext];
+												 insertIntoManagedObjectContext: self.managedObjectContext];
 			
 			NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
 			((RptqDocumentElementAggregate *)reportObject).groupNumber = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber] intValue];

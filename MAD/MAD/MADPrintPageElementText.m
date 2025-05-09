@@ -18,8 +18,8 @@
 #import "RptqAlignment.h"
 
 #import "MADDocumentObjectReference.h"
-#import "MADElementStylizedText.h"
 #import "MADAlignment.h"
+#import "MADElementStylizedText.h"
 
 @interface MADPrintPageElementText()
     @property (readwrite, nonatomic, weak) MADDocumentObjectDataReference *definition;

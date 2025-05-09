@@ -9,7 +9,7 @@
 #ifndef MAD_MADModelQueryLink_h
 #define MAD_MADModelQueryLink_h
 
-#import "MADModel.h"
+#import <MAD/MADModel.h>
 
 @class MADModelQuery, MADTableFieldReference, MADTableFieldIdentifier, NSPredicate, NSFetchRequest,
 		RptqQueryLinks;

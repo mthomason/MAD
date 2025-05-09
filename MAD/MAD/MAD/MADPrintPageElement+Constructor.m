@@ -19,39 +19,37 @@
 @implementation MADPrintPageElement (Constructor)
 
 + (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition {
-    
-    id documentObject;
-    switch (definition.type) {
-            
-        case MADPrintPageElementTypeAggregate:
-            documentObject = [[MADPrintPageElementAggregate alloc] initWithDefinition:definition];
-            break;
-            
-        case MADPrintPageElementTypeImage:
-            documentObject = [[MADPrintPageElementImage alloc] initWithDefinition:definition];
-            break;
-            
-        case MADPrintPageElementTypeBarcode:
-            documentObject = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
-            break;
-            
-        case MADPrintPageElementTypeLabelDynamic:
-            documentObject = [[MADPrintPageElementTextDynamic alloc] initWithDefinition:definition];
-            break;
-            
-        case MADPrintPageElementTypeLabelStatic:
-            documentObject = [[MADPrintPageElementTextStatic alloc] initWithDefinition:definition];
-            break;
-            //case MADPrintPageElementTypeWhtiespace:
-            //case MADPrintPageElementTypeGroupKey:
-            //case MADPrintPageElementTypeChart:
-            //case MADPrintPageElementTypeFormula:
-            //case MADPrintPageElementTypeAggregateFunctionList:
-        default:
-            documentObject = nil;
-            break;
-    }
-    return documentObject;
+	
+	switch (definition.type) {
+		case MADPrintPageElementTypeAggregate:
+			return [[MADPrintPageElementAggregate alloc] initWithDefinition:definition];
+			break;
+			
+		case MADPrintPageElementTypeImage:
+			return [[MADPrintPageElementImage alloc] initWithDefinition:definition];
+			break;
+			
+		case MADPrintPageElementTypeBarcode:
+			return [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
+			break;
+			
+		case MADPrintPageElementTypeLabelDynamic:
+			return [[MADPrintPageElementTextDynamic alloc] initWithDefinition:definition];
+			break;
+			
+		case MADPrintPageElementTypeLabelStatic:
+			return [[MADPrintPageElementTextStatic alloc] initWithDefinition:definition];
+			break;
+			//case MADPrintPageElementTypeWhtiespace:
+			//case MADPrintPageElementTypeGroupKey:
+			//case MADPrintPageElementTypeChart:
+			//case MADPrintPageElementTypeFormula:
+			//case MADPrintPageElementTypeAggregateFunctionList:
+		default:
+			return nil;
+			break;
+	}
+	return nil;
 }
 
 @end

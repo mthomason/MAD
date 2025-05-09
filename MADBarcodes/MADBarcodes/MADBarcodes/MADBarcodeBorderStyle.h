@@ -9,7 +9,7 @@
 #ifndef MADBarcodeBorderStyle_h
 #define MADBarcodeBorderStyle_h
 
-#import "zint.h"
+#import <MADBarcodes/zint.h>
 
 typedef NS_ENUM(int16_t, MTBarcodeBorderStyle) {
     MTBarcodeBorderStyleNone    = 0,

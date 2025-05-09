@@ -17,22 +17,26 @@
 
 - (instancetype)initWithTableID:(NSManagedObjectID *)tableID
 					 andFieldID:(NSManagedObjectID *)fieldID NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
-	@property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
-	@property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
+@property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
+@property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
 
 @end
 
 @interface MADTableFieldIdentifier : NSObject
 
-	- (instancetype)initWithTableID:(int64_t)tableID
-						 andFieldID:(int64_t)fieldID NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTableID:(int64_t)tableID
+					 andFieldID:(int64_t)fieldID NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
-	@property (readonly, nonatomic, assign) int64_t tableID;
-	@property (readonly, nonatomic, assign) int64_t fieldID;
+@property (readonly, nonatomic, assign) int64_t tableID;
+@property (readonly, nonatomic, assign) int64_t fieldID;
 
-	- (NSNumber *)tableObjectID;
-	- (NSNumber *)fieldObjectID;
+- (NSNumber *)tableObjectID;
+- (NSNumber *)fieldObjectID;
 
 @end
 

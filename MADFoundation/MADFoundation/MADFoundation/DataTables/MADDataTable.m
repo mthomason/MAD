@@ -108,8 +108,7 @@
 
 - (void)setupWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
 	
-	NSString *name = @"";
-	self.name = name;
+	self.name = @"";
 	
 	NSMutableArray <NSString *> *columnKeys = [[NSMutableArray alloc] init];
 	self.columnKeys = columnKeys;

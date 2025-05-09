@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
-#import "MADocumentSectionType.h"
+#import <MAD/MADocumentSectionType.h>
 
 @class MADReportRows, MADSectionLayoutManager, NSManagedObjectID, NSManagedObjectContext,
        RptqDocumentSection;

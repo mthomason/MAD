@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeGridMatrix_h
 #define Barcodes_MTBarcodeGridMatrix_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeGridMatrix : MTBarcode
 

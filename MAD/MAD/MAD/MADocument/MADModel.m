@@ -10,41 +10,7 @@
 #import <CoreFoundation/CFTree.h>
 
 #import <Foundation/NSCompoundPredicate.h>
-#import <Foundation/NSPredicate.h>
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSOrderedSet.h>
-#import <Foundation/NSSet.h>
-#import <Foundation/NSArray.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSKeyValueCoding.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSMapTable.h>
-#import <Foundation/NSOperation.h>
-
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSFetchedPropertyDescription.h>
-#import <CoreData/NSPropertyDescription.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSAttributeDescription.h>
-
-#import <MAD/RptqDocument.h>
-#import <MAD/RptqDatabase.h>
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryLinks.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
-#import <MAD/RptqDatabaseSchemaField.h>
-
 #import "MADModelDocument.h"
-#import "MADModelDatabase.h"
-
-#import <stdlib.h>
 
 NSString * const MADNotificationQueryTableInsert = @"MADNotificationQueryTableInsert";
 NSString * const MADNotificationQueryTableDelete = @"MADNotificationQueryTableDelete";
@@ -82,16 +48,11 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 	return self;
 }
 
-- (int64_t)identifier {
-	return _uid;
-}
+- (int64_t)identifier { return _uid; }
 
-- (NSUInteger)hash {
-	return 2654435761U * (unsigned long)llabs(_uid)^2;
-}
+- (NSUInteger)hash { return 2654435761U * (unsigned long)llabs(_uid)^2; }
 
 - (BOOL)isEqual:(id)object {
-
 	return (self == object || (object != nil &&
 			[object isKindOfClass:[self class]] &&
 			((typeof(self))object)->_uid == _uid));

@@ -15,7 +15,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
-#import "MADFontDescriptor.h"
+#import "UIFontDescriptor+MADAdditions.h"
 #import "RptqDocumentElement.h"
 #import "RptqTextStyle.h"
 #import "MADAlignment.h"
@@ -41,12 +41,11 @@
     
     if (self = [super init]) {
     
-        UIFontDescriptor *fontDescriptor;
-        fontDescriptor = [MADFontDescriptor newFontDescriptorForFontName: fontname
-                                                                fontSize: fontsize
-                                                                    bold: textStyle.bold
-                                                                  italic: textStyle.italic];
-    
+		UIFontDescriptor *fontDescriptor = [UIFontDescriptor newFontDescriptorForFontName: fontname
+																				 fontSize: fontsize
+																					 bold: textStyle.bold
+																				   italic: textStyle.italic];
+
         
         UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
                                                    size: 0.0];

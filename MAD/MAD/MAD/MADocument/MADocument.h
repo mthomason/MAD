@@ -19,8 +19,7 @@
 
 #import <MAD/MADPrintPageRendererDataSource.h>
 #import <MAD/MADSortOrder.h>
-
-#import "MADReportFormatterDataSourceProtocol.h"
+#import <MAD/MADReportFormatterDataSourceProtocol.h>
 
 @protocol MADActivityProtocol, MADocumentDelegate;
 

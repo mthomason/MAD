@@ -61,26 +61,20 @@
 }
 
 + (NSString *)keyInQueryTable {
-	NSString *keyPathInQueryTable = NSStringFromSelector(@selector(inQueryTable));
-	return keyPathInQueryTable;
+	return NSStringFromSelector(@selector(inQueryTable));
 }
 
 + (NSString *)keyName {
-	NSString *keyName = NSStringFromSelector(@selector(name));
-	return keyName;
+	return NSStringFromSelector(@selector(name));
 }
 
 + (NSString *)dropIndex {
-	NSString *key = NSStringFromSelector(@selector(dropIndex));
-	return key;
+	return NSStringFromSelector(@selector(dropIndex));
 }
 
 + (NSString *)keyInQueryTableDropIndex {
-	NSString *keyPathInQueryTable = [self keyInQueryTable];
-	NSString *keyPathDropIndex = NSStringFromSelector(@selector(dropIndex));
-	NSString *keyPathInQueryTableDropIndex = [MADStringUtilities stringByAppendingPeriodToString: keyPathInQueryTable];
-	keyPathInQueryTableDropIndex = [keyPathInQueryTableDropIndex stringByAppendingString:keyPathDropIndex];
-	return keyPathInQueryTableDropIndex;
+	NSString *keyPathInQueryTableDropIndex = [MADStringUtilities stringByAppendingPeriodToString: [self keyInQueryTable]];
+	return [keyPathInQueryTableDropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
 }
 
 + (NSString *)keyDatabaseSchemaTable {
@@ -89,13 +83,10 @@
 }
 
 + (NSString *)keyTableName {
-	NSString *keyPathName = [self keyName];
-	NSString *keyPathInQueryTable = [self keyInQueryTable];
-	NSString *keyPathTableName = [MADStringUtilities stringByAppendingPeriodToString: keyPathInQueryTable];
-	NSString *keyPathDatabaseSchemaTable = [self keyDatabaseSchemaTable];
-	keyPathTableName = [keyPathTableName stringByAppendingString: keyPathDatabaseSchemaTable];
+	NSString *keyPathTableName = [MADStringUtilities stringByAppendingPeriodToString: [self keyInQueryTable]];
+	keyPathTableName = [keyPathTableName stringByAppendingString: [self keyDatabaseSchemaTable]];
 	keyPathTableName = [MADStringUtilities stringByAppendingPeriodToString: keyPathTableName];
-	keyPathTableName = [keyPathTableName stringByAppendingString: keyPathName];
+	keyPathTableName = [keyPathTableName stringByAppendingString: [self keyName]];
 	return keyPathTableName;
 }
 
@@ -108,11 +99,8 @@
 }
 
 + (NSString *)keySchemaTable {
-	NSString *keyPathInQueryTable = [self keyInQueryTable];
-	NSString *keyPathDatabaseSchemaTable = [self keyDatabaseSchemaTable];
-	NSString *keyPathSchemaTable = [MADStringUtilities stringByAppendingPeriodToString: keyPathInQueryTable];
-	keyPathSchemaTable = [keyPathSchemaTable stringByAppendingString: keyPathDatabaseSchemaTable];
-	return keyPathSchemaTable;
+	NSString *keyPathSchemaTable = [MADStringUtilities stringByAppendingPeriodToString: [self keyInQueryTable]];
+	return [keyPathSchemaTable stringByAppendingString: [self keyDatabaseSchemaTable]];
 }
 
 + (NSString *)keyQueryTableID {
@@ -125,48 +113,34 @@
 }
 
 + (NSString *)keyQueryFieldID {
-	NSString *key = NSStringFromSelector(@selector(identifier));
-	return key;
+	return NSStringFromSelector(@selector(identifier));
 }
 
 + (NSString *)keySchemaTableID {
 	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
 	NSString *keySchemaTable = [self keySchemaTable];
 	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: keySchemaTable];
-	key = [key stringByAppendingString:keyIdentifier];
-	return key;
+	return [key stringByAppendingString:keyIdentifier];
 }
 
 + (NSString *)keySchemaFieldID {
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
-	NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: keyDatabaseSchemaField];
-	key = [key stringByAppendingString:keyIdentifier];
-	return key;
+	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(databaseSchemaField))];
+	return [key stringByAppendingString:NSStringFromSelector(@selector(identifier))];
 }
 
 + (NSString *)keySchemaFieldName {
-	NSString *keyName = NSStringFromSelector(@selector(name));
-	NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: keyDatabaseSchemaField];
-	key = [key stringByAppendingString:keyName];
-	return key;
+	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(databaseSchemaField))];
+	return [key stringByAppendingString:NSStringFromSelector(@selector(name))];
 }
 
 + (NSString *)keySchemaFieldDataType {
-	NSString *keyDataType = NSStringFromSelector(@selector(dataType));
-	NSString *keyDatabaseSchemaField = NSStringFromSelector(@selector(databaseSchemaField));
-	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: keyDatabaseSchemaField];
-	key = [key stringByAppendingString:keyDataType];
-	return key;
+	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(databaseSchemaField))];
+	return [key stringByAppendingString:NSStringFromSelector(@selector(dataType))];
 }
 
 + (NSString *)keyInQueryTableAlias {
-	NSString *keyAlias = NSStringFromSelector(@selector(alias));
-	NSString *key = [self keyInQueryTable];
-	key = [MADStringUtilities stringByAppendingPeriodToString: key];
-	key = [key stringByAppendingString:keyAlias];
-	return key;
+	NSString *key = [MADStringUtilities stringByAppendingPeriodToString: [self keyInQueryTable]];
+	return [key stringByAppendingString:NSStringFromSelector(@selector(alias))];
 }
 
 + (NSFetchRequest *)fetchRequestFields:(int64_t)identifier {

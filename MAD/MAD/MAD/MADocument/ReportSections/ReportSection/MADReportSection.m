@@ -102,20 +102,9 @@
     return _documentSection;
 }
 
-- (MADDocumentSectionType)type {
-    return self.documentSection.type;
-}
-
-- (CGFloat)height {
-    return self.documentSection.height;
-}
-
-- (BOOL)isVisible {
-    return self.documentSection.visibility;
-}
-
-- (NSInteger)identifier {
-    return self.documentSection.identifier;
-}
+- (MADDocumentSectionType)type { return self.documentSection.type; }
+- (CGFloat)height { return self.documentSection.height; }
+- (BOOL)isVisible { return self.documentSection.visibility; }
+- (NSInteger)identifier { return self.documentSection.identifier; }
 
 @end

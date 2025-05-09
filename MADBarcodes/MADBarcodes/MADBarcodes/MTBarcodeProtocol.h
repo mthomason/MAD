@@ -10,8 +10,8 @@
 #define Barcodes_MTBarcodeProtocol_h
 
 #import <Foundation/NSObject.h>
-#import "MADBarcodeType.h"
-#import "MADBarcodeBorderStyle.h"
+#import <MADBarcodes/MADBarcodeType.h>
+#import <MADBarcodes/MADBarcodeBorderStyle.h>
 
 @protocol MTBarcodeProtocol <NSObject>
 

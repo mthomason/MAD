@@ -41,8 +41,7 @@
 	}
 }
 
--(void)operation:(nonnull MADOperation *)operation
-	didProduceOperation:(nonnull NSOperation *)newOperation {
+-(void)operation:(nonnull MADOperation *)operation didProduceOperation:(nonnull NSOperation *)newOperation {
 	if (self.produceHandler) {
 		self.produceHandler(operation, newOperation);
 	}

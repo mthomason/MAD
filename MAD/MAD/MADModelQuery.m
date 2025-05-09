@@ -84,8 +84,7 @@
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
 						  database:(MADModelDatabase *)database {
-	if (self = [self initWithIdentifier: identifier
-				 managedObjectContext: database.managedObjectContext]) {
+	if (self = [self initWithIdentifier: identifier managedObjectContext: database.managedObjectContext]) {
 		_inDatabase = database;
 	}
 	return self;
@@ -96,13 +95,11 @@
 		@autoreleasepool {
 
 			if (_tables == nil) {
-				NSMutableDictionary <NSNumber *, MADModelQueryTable *> *tables;
-				tables = [[NSMutableDictionary alloc] init];
+				NSMutableDictionary <NSNumber *, MADModelQueryTable *> *tables = [[NSMutableDictionary alloc] init];
 				_tables = tables;
 			}
 			
-			NSMutableOrderedSet <NSNumber *> *tableIDs;
-			tableIDs = [[NSMutableOrderedSet alloc] init];
+			NSMutableOrderedSet <NSNumber *> *tableIDs = [[NSMutableOrderedSet alloc] init];
 			_queryTableIDs = tableIDs;
 			
 			[self updateTables];
@@ -485,31 +482,32 @@
 /// FIXME: Predicate is broken... maybe more... unused, but I think it's needed.
 - (void)insertQueryLinkID:(NSNumber *)queryLinkID
 	 managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	MADModelQueryLink *link;
-	if ((link = [_links objectForKey:queryLinkID])) return;
+
+	MADModelQueryLink *link = [_links objectForKey:queryLinkID];
+	
+	if (link != nil) return;
 	
 	NSExpression *expressionInQuery[2];
-	NSArray <NSDictionary *> *results;
 	expressionInQuery[0] = [NSExpression expressionForEvaluatedObject];
 	expressionInQuery[1] = [NSExpression expressionForConstantValue: queryLinkID];
 	
-	NSPredicate *isQueryLink;
-	isQueryLink = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
-													 rightExpression: expressionInQuery[1]
-															modifier: NSDirectPredicateModifier
-																type: NSEqualToPredicateOperatorType
-															 options: 0];
-	NSError * __autoreleasing error = NULL;
+	NSPredicate *isQueryLink = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
+																  rightExpression: expressionInQuery[1]
+																		 modifier: NSDirectPredicateModifier
+																			 type: NSEqualToPredicateOperatorType
+																		  options: 0];
+
 	NSFetchRequest *fetchRequest = [MADModelQueryLink fetchRequest:isQueryLink];
-	results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	NSError * __autoreleasing error = NULL;
+	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
 	NSAssert(results != nil && error == nil, @"What? %@", error);
+
 	[self insertLinksFromFetchRequestResults:results];
 	
 	expressionInQuery[0] = nil;
 	expressionInQuery[1] = nil;
 	
-	NSDictionary *userInfo;
-	userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:link, queryLinkID, nil];
+	NSDictionary *userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:link, queryLinkID, nil];
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 		[[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationQueryLinkInsert
 															object: self

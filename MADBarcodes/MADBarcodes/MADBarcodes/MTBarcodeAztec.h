@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeAztec_h
 #define Barcodes_MTBarcodeAztec_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 typedef NS_ENUM(NSUInteger, MTBarcodeAztecSizingMode) {
     MTBarcodeAztecSizingModeAutomaticResizing     = 1,

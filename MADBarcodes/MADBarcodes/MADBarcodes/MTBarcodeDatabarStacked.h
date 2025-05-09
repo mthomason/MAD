@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodeDatabarStacked_h
 #define Barcodes_MTBarcodeDatabarStacked_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodeDatabarStacked : MTBarcode
 

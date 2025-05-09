@@ -9,9 +9,9 @@
 #ifndef MADResizeAspect_h
 #define MADResizeAspect_h
 
-#import "MADAspectRatio.h"
-#import "MADCompassDirection.h"
-#import "MAD2dDirection.h"
+#import <MADCocoaExtensions/MADAspectRatio.h>
+#import <MADCocoaExtensions/MADCompassDirection.h>
+#import <MADCocoaExtensions/MAD2dDirection.h>
 
 struct MADResizeAspect {
 	MADAspectRatio aspectRatio;

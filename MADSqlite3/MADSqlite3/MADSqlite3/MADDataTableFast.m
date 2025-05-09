@@ -315,37 +315,23 @@ static os_log_t mlog;
 }
 
 - (void)reopenDbConnection {
-
 	NSURL *urlFastCache = self.urlFastCache;
 	id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
-	MADDatabaseSqlite3 *database;
-	MADDatabaseConnection *connection;
-
-	@autoreleasepool {
-		database = [[MADDatabaseSqlite3 alloc] init];
-		database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
-		connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
-		database.databaseConnection = connection;
-		
-		[(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE |
-															   SQLITE_OPEN_CREATE |
-															   SQLITE_OPEN_FULLMUTEX];
-		self.databaseForInserts = database;
-		database = nil;
-		connection = nil;
-	}
 	
-	@autoreleasepool {
-		
-		connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
-		database = [[MADDatabaseSqlite3 alloc] init];
-		[database setDatabaseConnection:connection];
-		[database openDatabase];
-		database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
-		self.databaseForSelects = database;
-		database = nil;
-		connection = nil;
-	}
+	MADDatabaseConnection *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
+	database.databaseConnection = connection;
+	[(MADDatabaseSqlite3 *)database openDatabaseWithFlags: SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX];
+	self.databaseForInserts = database;
+	
+	MADDatabaseConnection *connectionSelect = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
+	MADDatabaseSqlite3 *databaseSelect = [[MADDatabaseSqlite3 alloc] init];
+	[databaseSelect setDatabaseConnection:connectionSelect];
+	[databaseSelect openDatabase];
+	databaseSelect.delegate = (id <MADDatabaseResultsProtocol>)cacheDelegate;
+	self.databaseForSelects = databaseSelect;
+	
 }
 
 - (NSString *)tableName {
@@ -404,22 +390,13 @@ static os_log_t mlog;
 	NSArray *columnKeys = self.columnKeys;
 	
 	[_groupKeyIndexes removeAllIndexes];
-	
-	NSMutableArray *groupKeys;
-	groupKeys = [[NSMutableArray alloc] initWithCapacity: sortDescriptors.count];
-	NSSortDescriptor *sortDescriptor;
-	NSNumber *columnIndex;
-	NSString *key;
+	NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity: sortDescriptors.count];
 	NSUInteger index = NSNotFound;
-	for (sortDescriptor in sortDescriptors) {
-		@autoreleasepool {
-			key = sortDescriptor.key;
-			if ((index = [columnKeys indexOfObject: key]) != NSNotFound) {
-				columnIndex = [[NSNumber alloc] initWithUnsignedInteger: index];
-
-				[_groupKeyIndexes addIndex:index];
-				[groupKeys addObject:columnIndex];
-			}
+	for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+		if ((index = [columnKeys indexOfObject: sortDescriptor.key]) != NSNotFound) {
+			NSNumber *columnIndex = [[NSNumber alloc] initWithUnsignedInteger: index];
+			[_groupKeyIndexes addIndex:index];
+			[groupKeys addObject:columnIndex];
 		}
 	}
 }
@@ -572,49 +549,39 @@ static os_log_t mlog;
 	
 	if (self.columnKeys.count > 0 && self.columns.count > 0 && sortDescriptors.count > 0) {
 			
-		NSMutableArray <__kindof NSSortDescriptor *> *newSortDescriptors;
-		newSortDescriptors = [[NSMutableArray <__kindof NSSortDescriptor *> alloc] initWithCapacity:sortDescriptors.count];
+		NSMutableArray <__kindof NSSortDescriptor *> *newSortDescriptors = [[NSMutableArray <__kindof NSSortDescriptor *> alloc] initWithCapacity:sortDescriptors.count];
 
-		NSUInteger groupKeyCounter;
-		NSArray *columnKeys;
-		
 		for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-				groupKeyCounter = 0;
+			NSUInteger groupKeyCounter = 0;
 
-				columnKeys = self.columnKeys;
-				for (NSString *columnKey in columnKeys) {
+			for (NSString *columnKey in self.columnKeys) {
+				MADDataColumn *column = self.columns[columnKey];
+				NSString *key = sortDescriptor.key;
+				if (key.length > 0 && [column.fieldName isEqualToString: key]) {
 					
-					@autoreleasepool {
-						MADDataColumn *column = self.columns[columnKey];
-						NSString *key = sortDescriptor.key;
-						if (key.length > 0 && [column.fieldName isEqualToString: key]) {
-						
-							SEL sortAlgo = MADDataTypeSelectorForSorting(column.type);
-							NSSortDescriptor *newSortDescriptor;
-							newSortDescriptor = [[NSSortDescriptor alloc] initWithKey: columnKey
-																			ascending: sortDescriptor.ascending
-																			 selector: sortAlgo];
-							[newSortDescriptors addObject:newSortDescriptor];
-							
-							[_groupKeyIndexes addIndex:groupKeyCounter];
-							
-							break;
-						}
-					}
-					groupKeyCounter++;
+					SEL sortAlgo = MADDataTypeSelectorForSorting(column.type);
+					NSSortDescriptor *newSortDescriptor;
+					newSortDescriptor = [[NSSortDescriptor alloc] initWithKey: columnKey
+																	ascending: sortDescriptor.ascending
+																	 selector: sortAlgo];
+					[newSortDescriptors addObject:newSortDescriptor];
+					
+					[_groupKeyIndexes addIndex:groupKeyCounter];
+					
+					break;
 				}
-				if (newSortDescriptors.count == sortDescriptors.count) {
-					_sortDescriptorsSet = YES;
-					self.sortDescriptors = newSortDescriptors;
-				}
+				groupKeyCounter++;
 			}
+			if (newSortDescriptors.count == sortDescriptors.count) {
+				_sortDescriptorsSet = YES;
+				self.sortDescriptors = newSortDescriptors;
+			}
+		}
 		
 	} else {
 		NSMutableArray *sd = [[NSMutableArray alloc] initWithArray:sortDescriptors];
 		self.sortDescriptors = sd;
 	}
-	
-	// FIXME: reset cache after setting the sort descriptors
 }
 
 - (void)removeAllObjects {
@@ -632,7 +599,6 @@ static os_log_t mlog;
 }
 
 - (NSArray *)sortDescriptorIndexGroupsForSortDescriptors:(NSArray *)sortDescriptors {
-
 	NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count + 1];
 	[results addObject:sortDescriptors];
 	for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
@@ -913,20 +879,15 @@ static os_log_t mlog;
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
 	[self setupGroupKeyIndexes];
 	NSMutableArray * whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
-	NSUInteger groupLevel = 0,
-			   groupIndex = [_groupKeyIndexes firstIndex];
-	NSDictionary *whereStatement;
-	NSString *columnLevel, *gk;
+	NSUInteger groupLevel = 0, groupIndex = [_groupKeyIndexes firstIndex];
 	while(groupIndex != NSNotFound && groupLevel < groupKeys.count) {
-		@autoreleasepool {
-			columnLevel = ((NSString *)self.columnKeys[groupIndex]).copy;
-			gk = ((NSString *)groupKeys[groupLevel]).copy;
-			whereStatement = [[NSDictionary alloc] initWithObjectsAndKeys:
-							  columnLevel, MADQueryKeyPredicateColumn,
-							  gk, MADQueryKeyPredicateValue, nil];
-			[whereClause addObject:whereStatement];
-			groupLevel++;
-		}
+		NSString *columnLevel = ((NSString *)self.columnKeys[groupIndex]).copy;
+		NSString *gk = ((NSString *)groupKeys[groupLevel]).copy;
+		NSDictionary *whereStatement = [[NSDictionary alloc] initWithObjectsAndKeys:
+										columnLevel, MADQueryKeyPredicateColumn,
+										gk, MADQueryKeyPredicateValue, nil];
+		[whereClause addObject:whereStatement];
+		groupLevel++;
 		groupIndex = [_groupKeyIndexes indexGreaterThanIndex: groupIndex];
 	}
 	return whereClause;
@@ -955,35 +916,29 @@ static os_log_t mlog;
 														columns,            selectFieldDescriptors,
 														nil];
 	
-	MADQuery <MADQueryDataBindingProtocol> *query;
-	query = [[MADQuerySelectItemsForGroup alloc] initWithObject:querySelect];
+	MADQuery <MADQueryDataBindingProtocol> *query = [[MADQuerySelectItemsForGroup alloc] initWithObject:querySelect];
 	sqlite3_stmt *statement = NULL;
 	NSError *error = nil;
 	NSString *sql = [query getSql:&error];
-	
 	char *queryString = sqlite3_mprintf(sql.UTF8String);
-	
 	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
-	
 	BOOL success = sqlite3_prepare_v2(databaseForSelects->_database,
 									  queryString, -1, &statement, NULL) == SQLITE_OK;
 	
-	NSArray *queryBinaryBindings = query.binaryBindings;
-	for (MADDatabaseDataBinding *dataBinding in queryBinaryBindings) {
+	for (MADDatabaseDataBinding *dataBinding in query.binaryBindings) {
 		[databaseForSelects bindStatement: (void **)&statement withBindings: dataBinding];
 	}
 
 	NSMutableArray <__kindof NSDictionary *> *results = [[NSMutableArray alloc] init];
 	if (success) {
 		while (sqlite3_step(statement) == SQLITE_ROW) {
-			@autoreleasepool {
+			//@autoreleasepool {
 				NSDictionary *result = [self newCurrentObject:statement];
 				[results addObject:result];
-			}
+			//}
 		}
 	}
-	NSAssert(success, @"%s at %s", sqlite3_errmsg(databaseForSelects->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg(databaseForSelects->_database), __PRETTY_FUNCTION__);
 	sqlite3_clear_bindings(statement);
 	sqlite3_finalize(statement);
 	sqlite3_free(queryString);
@@ -1019,10 +974,10 @@ static os_log_t mlog;
 		if (success) {
 		
 			while (sqlite3_step(statement) == SQLITE_ROW) {
-				@autoreleasepool {
-					NSDictionary *currentObject = [self newCurrentObject:statement];
-					[results addObject:currentObject];
-				}
+				//@autoreleasepool {
+				NSDictionary *currentObject = [self newCurrentObject:statement];
+				[results addObject:currentObject];
+				//}
 			}
 		}
 		
@@ -1082,10 +1037,8 @@ static os_log_t mlog;
 	NSArray *sortDescriptors = self.sortDescriptors;
 	NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count];
 	for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-		@autoreleasepool {
-			NSString *key = sortDescriptor.key.copy;
-			[columnKeys addObject:key];
-		}
+		NSString *key = sortDescriptor.key.copy;
+		[columnKeys addObject:key];
 	}
 	return columnKeys;
 }
@@ -1147,15 +1100,15 @@ static os_log_t mlog;
 - (NSUInteger)numberOfRows { return self.rowCounter; }
 
 - (nullable NSString *)columnKeyForColumnName:(NSString *)columnName {
-	NSString *key;
 	for (NSString *columnKey in self.columnKeys) {
 		MADDataColumn *column = self.columns[columnKey];
 		if ([column.fieldName isEqualToString:columnName]) {
-			key = [NSString stringWithString: columnKey];
+			return [NSString stringWithString: columnKey];
 			break;
 		}
 	}
-	return key;
+	//NSAssert(false, @"Should not get here.");
+	return nil;
 }
 
 - (NSObject <NSCopying, NSSecureCoding> *)runSelectQuery:(MADQuery <MADQueryDataBindingProtocol> *)query {
@@ -1234,12 +1187,9 @@ static os_log_t mlog;
 
 - (void)beginBulkInsert {
 	_bulkInsertLoop = YES;
-	
 	[self reopenDbConnection];
-	
 	_sortDescriptorsSet = NO;
 	[self createIndex];
-	
 	[self.databaseForInserts beginBulkInsert];
 	
 	MADQueryCacheAddRow *bulkInsertQuery;
@@ -1278,13 +1228,10 @@ static os_log_t mlog;
 															tableName:[self tableName]
 													  sortDescriptors:self.sortDescriptors
 															  columns:self.columns];
-	
-	NSArray *columnKeys = self.columnKeys;
-	NSURL *urlFastCache = self.urlFastCache;
-	MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: urlFastCache];
+	MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 	NSEnumerator *data = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
 																	columns: columns
-																 columnKeys: columnKeys
+																 columnKeys: self.columnKeys
 																	  query: query];
 	return data;
 }

@@ -10,6 +10,7 @@
 #define Reports_MADModel_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSValue.h>
 #import <MAD/MADModelIDProtocol.h>
 
 @class NSManagedObjectContext;

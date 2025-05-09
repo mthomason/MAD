@@ -9,7 +9,7 @@
 #ifndef Barcodes_MTBarcodePdf417Iso15438_h
 #define Barcodes_MTBarcodePdf417Iso15438_h
 
-#import "MTBarcode.h"
+#import <MADBarcodes/MTBarcode.h>
 
 @interface MTBarcodePdf417Iso15438 : MTBarcode
 

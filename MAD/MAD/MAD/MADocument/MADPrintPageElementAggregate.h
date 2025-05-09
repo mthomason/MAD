@@ -15,7 +15,7 @@
 
 @interface MADPrintPageElementAggregate : MADPrintPageElementText
 
-    - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition;
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition;
 
 @end
 
