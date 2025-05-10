@@ -31,8 +31,18 @@
 #import "RptqQueryField.h"
 
 #import "RptqDataHelper.h"
+#import <os/log.h>
+
+static os_log_t rptq_log;
 
 @implementation RptqQueryPredicate (Extras)
+
++ (void)load {
+	if (self == [RptqQueryPredicate class]) {
+		NSString *c = NSStringFromClass([RptqQueryPredicate class]);
+		rptq_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
 
 + (NSString *)domain {
 	return @"mad.everydayapps.com.mad.rptq.predicate";
@@ -56,26 +66,36 @@
 								forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 												  error:(NSError * __autoreleasing *)error {
 	if (leftFieldID == nil || rightFieldID == nil) {
-		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field."];
-		if (error != NULL) { // Check if error is not NULL before dereferencing
-			*error = [e errorWithDomain:[self domain] code:2340];
+		NSString *message = @"Missing field.";
+		os_log_error(rptq_log, "%{public}@", message);
+		if (error != NULL) {
+			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
+					  errorWithDomain:[self domain] code:2340];
 		}
 		return nil;
 	}
-	RptqQueryField *leftField, *rightField;
-	leftField = [managedObjectContext objectWithID:leftFieldID];
-	rightField = [managedObjectContext objectWithID:rightFieldID];
-	NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryPredicate class])
-										  inManagedObjectContext:managedObjectContext];
-	RptqQueryPredicate *queryPredicate;
-	queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed
-									 insertIntoManagedObjectContext:managedObjectContext];
-	queryPredicate.hasRightField    = rightField;
-	queryPredicate.hasLeftField     = leftField;
-	queryPredicate.rightFieldID     = nil;
-	queryPredicate.leftFieldID      = nil;
-	queryPredicate.comparson        = comparsonOperator;
-	return queryPredicate;
+	
+	NSError *fetchError = nil;
+	RptqQueryField *leftField = [managedObjectContext existingObjectWithID:leftFieldID error:&fetchError];
+	if (fetchError) {
+		os_log_error(rptq_log, "Failed to fetch left field: %{public}@", fetchError);
+		if (error != NULL) *error = fetchError;
+		return nil;
+	}
+	
+	RptqQueryField *rightField = [managedObjectContext existingObjectWithID:rightFieldID error:&fetchError];
+	if (fetchError) {
+		os_log_error(rptq_log, "Failed to fetch right field: %{public}@", fetchError);
+		if (error != NULL) *error = fetchError;
+		return nil;
+	}
+	
+	return [self createPredicateInContext:managedObjectContext
+							withLeftField:leftField
+							   rightField:rightField
+								leftValue:nil
+							   rightValue:nil
+								 operator:comparsonOperator];
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftFieldID:(NSManagedObjectID *)leftFieldID
@@ -84,24 +104,29 @@
 								forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 												  error:(NSError * __autoreleasing *)error {
 	if (leftFieldID == nil || rightUserValue == nil) {
-		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing field or value."];
-		if (error != NULL) { // Check if error is not NULL before dereferencing
-			*error = [e errorWithDomain:[self domain] code:2341];
+		NSString *message = @"Missing field or value.";
+		os_log_error(rptq_log, "%{public}@", message);
+		if (error != NULL) {
+			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
+					  errorWithDomain:[self domain] code:2341];
 		}
 		return nil;
 	}
-	RptqQueryField *leftField;
-	leftField = [managedObjectContext objectWithID:leftFieldID];
-	NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName
-										  inManagedObjectContext:managedObjectContext];
-	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-	queryPredicate.hasRightField    = nil;
-	queryPredicate.hasLeftField     = leftField;
-	queryPredicate.rightFieldID     = rightUserValue.copy;
-	queryPredicate.leftFieldID      = nil;
-	queryPredicate.comparson        = comparsonOperator;
-	return queryPredicate;
+	
+	NSError *fetchError = nil;
+	RptqQueryField *leftField = [managedObjectContext existingObjectWithID:leftFieldID error:&fetchError];
+	if (fetchError) {
+		os_log_error(rptq_log, "Failed to fetch left field: %{public}@", fetchError);
+		if (error != NULL) *error = fetchError;
+		return nil;
+	}
+	
+	return [self createPredicateInContext:managedObjectContext
+							withLeftField:leftField
+							   rightField:nil
+								leftValue:nil
+							   rightValue:rightUserValue
+								 operator:comparsonOperator];
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
@@ -110,20 +135,21 @@
 							  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 												error:(NSError * __autoreleasing *)error {
 	if (leftUserValue == nil || rightUserValue == nil) {
-		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value."];
-		if (error != NULL) { // Check if error is not NULL before dereferencing
-			*error = [e errorWithDomain:[self domain] code:2342];
+		NSString *message = @"Missing value.";
+		os_log_error(rptq_log, "%{public}@", message);
+		if (error != NULL) {
+			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
+					  errorWithDomain:[self domain] code:2342];
 		}
 		return nil;
 	}
-	NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
-	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-	queryPredicate.hasRightField    = nil;
-	queryPredicate.hasLeftField     = nil;
-	queryPredicate.rightFieldID     = rightUserValue.copy;
-	queryPredicate.leftFieldID      = leftUserValue.copy;
-	queryPredicate.comparson        = comparsonOperator;
-	return queryPredicate;
+	
+	return [self createPredicateInContext:managedObjectContext
+							withLeftField:nil
+							   rightField:nil
+								leftValue:leftUserValue
+							   rightValue:rightUserValue
+								 operator:comparsonOperator];
 }
 
 + (instancetype)newQueryPredicateFactoryWithLeftValue:(NSString *)leftUserValue
@@ -132,32 +158,67 @@
 							  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 												error:(NSError * __autoreleasing *)error {
 	if (leftUserValue == nil || rightFieldID == nil) {
-		MADErrorUserInfo *e = [[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:@"Missing value or field."];
-		if (error != NULL) { // Check if error is not NULL before dereferencing
-			*error = [e errorWithDomain:[self domain] code:2343];
+		NSString *message = @"Missing value or field.";
+		os_log_error(rptq_log, "%{public}@", message);
+		if (error != NULL) {
+			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
+					  errorWithDomain:[self domain] code:2343];
 		}
 		return nil;
 	}
-	RptqQueryField *rightField;
-	rightField = [managedObjectContext objectWithID:rightFieldID];
 	
-	NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
-	RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-	queryPredicate.hasRightField    = rightField;
-	queryPredicate.hasLeftField     = nil;
-	queryPredicate.rightFieldID     = nil;
-	queryPredicate.leftFieldID      = leftUserValue.copy;
-	queryPredicate.comparson        = comparsonOperator;
-	return queryPredicate;
+	NSError *fetchError = nil;
+	RptqQueryField *rightField = [managedObjectContext existingObjectWithID:rightFieldID error:&fetchError];
+	if (fetchError) {
+		os_log_error(rptq_log, "Failed to fetch right field: %{public}@", fetchError);
+		if (error != NULL) *error = fetchError;
+		return nil;
+	}
+	
+	return [self createPredicateInContext:managedObjectContext
+							withLeftField:nil
+							   rightField:rightField
+								leftValue:leftUserValue
+							   rightValue:nil
+								 operator:comparsonOperator];
 }
 
+#pragma mark -
+#pragma mark Helper Methods
+
++ (instancetype)createPredicateInContext:(NSManagedObjectContext *)context
+						   withLeftField:(RptqQueryField *)leftField
+							  rightField:(RptqQueryField *)rightField
+							   leftValue:(NSString *)leftValue
+							  rightValue:(NSString *)rightValue
+								operator:(MADPredicateOperator)operator {
+	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([self class])
+											  inManagedObjectContext:context];
+	RptqQueryPredicate *predicate = [[RptqQueryPredicate alloc] initWithEntity:entity
+												insertIntoManagedObjectContext:context];
+	predicate.hasLeftField = leftField;
+	predicate.hasRightField = rightField;
+	predicate.leftFieldID = leftValue ? leftValue.copy : nil;
+	predicate.rightFieldID = rightValue ? rightValue.copy : nil;
+	predicate.comparson = operator;
+	return predicate;
+}
+
+#pragma mark - Public Methods
+
 + (void)deletePredicate:(RptqQueryPredicate *)predicate {
-	if (predicate) {
-		NSManagedObjectContext *objectContext = predicate.managedObjectContext;
-		if (objectContext) {
-			[objectContext deleteObject:predicate];
-		}
+	if (predicate == nil) {
+		os_log_debug(rptq_log, "Attempted to delete nil predicate");
+		return;
 	}
+	
+	NSManagedObjectContext *context = predicate.managedObjectContext;
+	if (context == nil) {
+		os_log_error(rptq_log, "Predicate has no managed object context");
+		return;
+	}
+	
+	[context deleteObject:predicate];
 }
 
 #pragma mark -

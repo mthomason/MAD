@@ -127,38 +127,28 @@
 }
 
 + (instancetype)newParamatersAggregateByGroupKeys:(NSArray *)groupKeys
-                                      andFieldKey:(NSString *)fieldKey
-                                  andFunctionType:(MTAggregateFunctionType)functionType
-                                     andDataTable:(MADDataTableFast *)dataTable {
-    
-    NSArray *predicateParamters = [dataTable whereClauseForGroupKeys:groupKeys].copy;
-    
-    id parameters;
-    parameters = [self newParamatersAggregateWithFieldKey: fieldKey
-                                          andFunctionType: functionType
-                                             andDataTable: dataTable
-                                              groupByType: MTAggregateGroupByTypeSection
-                                                   rowIDs: nil
-                                       predicateParamters: predicateParamters];
-    
-    return parameters;
-
+									  andFieldKey:(NSString *)fieldKey
+								  andFunctionType:(MTAggregateFunctionType)functionType
+									 andDataTable:(MADDataTableFast *)dataTable {
+	
+	NSArray *predicateParamters = [dataTable whereClauseForGroupKeys:groupKeys].copy;
+	return [self newParamatersAggregateWithFieldKey: fieldKey
+									andFunctionType: functionType
+									   andDataTable: dataTable
+										groupByType: MTAggregateGroupByTypeSection
+											 rowIDs: nil
+								 predicateParamters: predicateParamters];
 }
 
 + (instancetype)newParametersAggregateByReportWithFieldKey:(NSString *)fieldKey
-                                           andFunctionType:(MTAggregateFunctionType)functionType
-                                              andDataTable:(MADDataTableFast *)dataTable {
-    
-    id paramaters;
-    paramaters = [self newParamatersAggregateWithFieldKey: fieldKey
-                                          andFunctionType: functionType
-                                             andDataTable: dataTable
-                                              groupByType: MTAggregateGroupByTypeReport
-                                                   rowIDs: nil
-                                       predicateParamters: nil];
-
-    return paramaters;
-
+										   andFunctionType:(MTAggregateFunctionType)functionType
+											  andDataTable:(MADDataTableFast *)dataTable {
+	return [self newParamatersAggregateWithFieldKey: fieldKey
+									andFunctionType: functionType
+									   andDataTable: dataTable
+										groupByType: MTAggregateGroupByTypeReport
+											 rowIDs: nil
+								 predicateParamters: nil];
 }
 
 @end

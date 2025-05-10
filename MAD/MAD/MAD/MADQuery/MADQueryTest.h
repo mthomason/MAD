@@ -13,11 +13,8 @@
 
 @class MADDatabaseConnection;
 
-@interface MADQueryTest : MADQuery
-    <MADQueryDatabaseProtocol>
-
-    - (instancetype)initWithObject:(MADDatabaseConnection *)object;
-
+@interface MADQueryTest : MADQuery <MADQueryDatabaseProtocol>
+	- (instancetype)initWithObject:(MADDatabaseConnection *)object;
 @end
 
 #endif

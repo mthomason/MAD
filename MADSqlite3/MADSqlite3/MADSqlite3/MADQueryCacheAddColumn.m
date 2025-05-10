@@ -47,7 +47,7 @@
 		MADDataColumn *column = object[keyDataColumn];
 		
 		id keyTableName = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnTableName];
-		self.tableName = object[keyTableName];
+		self.tableName = [object[keyTableName] copy];
 		
 		id keyColumnName = [[NSNumber alloc] initWithShort: MADQueryCacheAddColumnColumnName];
 		NSString *columnName = object[keyColumnName];

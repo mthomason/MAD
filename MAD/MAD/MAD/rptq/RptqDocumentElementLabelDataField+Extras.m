@@ -36,6 +36,7 @@
 + (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
 					fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
 	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
+	NSAssert(result != nil, @"Could not get managed object.");
 	return (RptqDocumentElementLabelDataField *)result;
 }
 

@@ -33,11 +33,21 @@
 #import "RptqDataHelper.h"
 
 #import "NSPredicate+Creators.h"
+#import <os/log.h>
+
+static os_log_t rptq_log;
 
 @implementation RptqDatabase (Extras)
 
 #pragma mark -
 #pragma mark Static
+
++ (void)load {
+	if (self == [RptqDatabase class]) {
+		NSString *c = NSStringFromClass([RptqDatabase class]);
+		rptq_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
 
 + (NSString *)keyDriverID {
 	NSString *keyDriverID = NSStringFromSelector(@selector(driverID));

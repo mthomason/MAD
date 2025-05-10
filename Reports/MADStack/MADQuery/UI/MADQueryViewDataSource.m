@@ -253,27 +253,27 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 }
 
 - (void)performFetchTables {
-	NSError * __autoreleasing error = NULL;
+	NSError *error = nil;
 	[self.queryTablesController performFetch:&error];
-	NSAssert(error == NULL, @"Error: %@", error);
+	NSAssert(error == nil, @"Error: %@", error);
 }
 
 - (void)performFetchLinks {
-	NSError * __autoreleasing error = NULL;
+	NSError *error = nil;
 	[self.queryLinksController performFetch:&error];
-	NSAssert(error == NULL, @"Error: %@", error);
+	NSAssert(error == nil, @"Error: %@", error);
 }
 
 - (void)performFetchGroups {
-	NSError * __autoreleasing error = NULL;
+	NSError *error = nil;
 	[self.queryGroupsController performFetch:&error];
-	NSAssert(error == NULL, @"Error: %@", error);
+	NSAssert(error == nil, @"Error: %@", error);
 }
 
 - (void)performFetchPredicate {
-	NSError * __autoreleasing error = NULL;
+	NSError *error = nil;
 	[self.queryPredicatesController performFetch:&error];
-	NSAssert(error == NULL, @"Error: %@", error);
+	NSAssert(error == nil, @"Error: %@", error);
 }
 
 #pragma mark -

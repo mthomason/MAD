@@ -114,6 +114,7 @@
 	request.sortDescriptors = sortDescriptors;
 	NSError *error = nil;
 	NSArray *fetchResults = [context executeFetchRequest:request error:&error];
+	
 	NSArray <RptqDatabaseCredentals *> *results;
 	results = [[NSArray <RptqDatabaseCredentals *> alloc] initWithArray:fetchResults];
 	return results;

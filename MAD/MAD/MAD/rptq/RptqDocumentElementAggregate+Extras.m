@@ -29,6 +29,9 @@
 #import "RptqQueryField+Extras.h"
 
 #import "RptqDataHelper.h"
+#import <os/log.h>
+
+static os_log_t rptq_log;
 
 NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
 NSString * const MTAggregateTypeKeyFunctionType = @"MTAggregateTypeKeyFunctionType";
@@ -36,28 +39,35 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 @implementation RptqDocumentElementAggregate (Extras)
 
+#pragma mark -
+#pragma mark Static
+
++ (void)load {
+	if (self == [RptqDocumentElementAggregate class]) {
+		NSString *c = NSStringFromClass([RptqDocumentElementAggregate class]);
+		rptq_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
+
 #pragma mark - Overrides
 
 + (instancetype)getElementForObjectID: (NSManagedObjectID *)objectId
 					fromObjectContext: (NSManagedObjectContext *)managedObjectContext {
 	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
+	if (!result) {
+		os_log_error(rptq_log, "Error loading object with ID: %@", objectId);
+	}
 	return (RptqDocumentElementAggregate *)result;
 }
 
 - (NSString *)designerRepresentationText {
 	NSString *toStringHumanReadable = [self.aggregateField toStringHumanReadable];
-	NSString *functionNameShort = [self functionNameShort];
-	id result = [[NSString alloc] initWithFormat:@"%@(%@)",
-												 functionNameShort, toStringHumanReadable];
-	return result;
+	NSString *functionNameShort = [RptqDocumentElementAggregate shortDisplayStringForType: self.functionType];
+	return [[NSString alloc] initWithFormat:@"%@(%@)", functionNameShort, toStringHumanReadable];
 }
 
 - (NSString *)functionName {
 	return [RptqDocumentElementAggregate newStringDisplayForType: self.functionType];
-}
-
-- (NSString *)functionNameShort {
-	return [RptqDocumentElementAggregate shortDisplayStringForType: self.functionType];
 }
 
 + (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
@@ -167,6 +177,9 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 	self.groupType = groupType;
 	
 	NSManagedObject *aggregateObject = [self.managedObjectContext objectWithID:aggregateObjectID];
+	if (!aggregateObject) {
+		os_log_error(rptq_log, "Error loading aggregate object with ID: %@", aggregateObjectID);
+	}
 	switch (inputType) {
 		case MTAggregateFunctionInputTypeField: {
 			self.aggregateField = (RptqQueryField *)aggregateObject;
@@ -184,7 +197,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 	
 	NSError * __autoreleasing saveError = nil;
 	if (![self.managedObjectContext save:&saveError]) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+		os_log_error(rptq_log, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 	}
 	
 }

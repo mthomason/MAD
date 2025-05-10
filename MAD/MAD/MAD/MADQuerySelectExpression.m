@@ -24,23 +24,14 @@
 @implementation MADQuerySelectExpression
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
-                          tables:(NSArray <MTPair *> *)tables
-           usingOnlyActiveFields:(BOOL)onlyActiveFields
-         forManagedObjectContext:(NSManagedObjectContext *)context {
+						  tables:(NSArray <MTPair *> *)tables
+		   usingOnlyActiveFields:(BOOL)onlyActiveFields
+		 forManagedObjectContext:(NSManagedObjectContext *)context {
 
-    id result;
-    if (onlyActiveFields) {
-        
-        result = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase:database
-                                                        forManagedObjectContext:context];
-        
-    } else {
-        
-        result = [[MADQuerySelectExpressionAllFields alloc] initWithDatabase:database
-                                                                      tables:tables
-                                                     forManagedObjectContext:context];
-    }
-    return result;
+	__kindof MADQuerySelectExpression *result = onlyActiveFields ?
+		[[MADQuerySelectExpressionActiveFields alloc] initWithDatabase:database forManagedObjectContext:context]:
+		[[MADQuerySelectExpressionAllFields alloc] initWithDatabase:database tables:tables forManagedObjectContext:context];
+	return result;
 }
 
 @end

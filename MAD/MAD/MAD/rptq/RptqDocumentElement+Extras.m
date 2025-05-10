@@ -12,7 +12,6 @@
 
 #import "RptqDocumentElement+Extras.h"
 
-#import <os/log.h>
 #import <asl.h>
 
 #import <UIKit/UIFontDescriptor.h>
@@ -70,6 +69,9 @@
 #import "MADCurrencyFormatter.h"
 
 #import <math.h>
+#import <os/log.h>
+
+static os_log_t rptq_log;
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
@@ -104,51 +106,30 @@ static NSNumberFormatter *currencyNumberFormatter;
 //
 //
 
-static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat,
-												   CGFloat, CGFloat, CGFloat);
-static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat,
-													CGFloat, CGFloat, CGFloat);
-static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat,
-											  CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
+static inline CGRect MADDocObjFrameCalculated(CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat);
 static inline double paddingViewBoundsSizeHeight(double, double, double);
 static inline double paddingViewBoundsSizeWidth(double, double, double);
 
-static inline double paddingViewBoundsSizeHeight(double paddingTop,
-												 double paddingBottom,
-												 double sizeHeight) {
+static inline double paddingViewBoundsSizeHeight(double paddingTop, double paddingBottom, double sizeHeight) {
 	return paddingTop + paddingBottom + sizeHeight;
 }
 
-static inline double paddingViewBoundsSizeWidth(double paddingLeft,
-												double paddingRight,
-												double sizeWidth) {
+static inline double paddingViewBoundsSizeWidth(double paddingLeft, double paddingRight, double sizeWidth) {
 	return paddingLeft + paddingRight + sizeWidth;
 }
 
-static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft,
-												   CGFloat borderWidthLeft,
-												   CGFloat marginLeft,
-												   CGFloat sizewidth,
-												   CGFloat marginRight,
-												   CGFloat borderWidthRight,
-												   CGFloat paddingRight) {
+static inline CGFloat MADDocObjSizeWidthCalculated(CGFloat paddingLeft, CGFloat borderWidthLeft, CGFloat marginLeft, CGFloat sizewidth, CGFloat marginRight, CGFloat borderWidthRight, CGFloat paddingRight) {
 	return paddingLeft + borderWidthLeft + marginLeft + sizewidth + marginRight + borderWidthRight +
 							paddingRight;
 }
 
-static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop,
-													CGFloat borderHeightTop,
-													CGFloat marginTop,
-													CGFloat sizeheight,
-													CGFloat marginBottom,
-													CGFloat borderHeightBottom,
-													CGFloat paddingBottom) {
-	return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom +
-							borderHeightBottom + paddingBottom;
+static inline CGFloat MADDocObjSizeHeightCalculated(CGFloat paddingTop, CGFloat borderHeightTop, CGFloat marginTop, CGFloat sizeheight, CGFloat marginBottom, CGFloat borderHeightBottom, CGFloat paddingBottom) {
+	return paddingTop + borderHeightTop + marginTop + sizeheight + marginBottom + borderHeightBottom + paddingBottom;
 }
 
-static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy,
-											  CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
+static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, CGFloat sy, CGFloat w, CGFloat sw, CGFloat h, CGFloat wh) {
 	return CGRectMake(x + sx, y + sy, w + sw, h + wh);
 }
 
@@ -157,30 +138,76 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (NSString *)keyInSectionRow {
-	NSString *result = NSStringFromSelector(@selector(inSectionRow));
-	return result;
++ (void)load {
+	if (self == [RptqDocumentElement class]) {
+		NSString *c = NSStringFromClass([RptqDocumentElement class]);
+		rptq_log = os_log_create("com.mad", c.UTF8String);
+	}
 }
+
++ (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
+							   fromObjectContext:(NSManagedObjectContext *)context {
+	NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet = [self fetchRequestElement: identifier];
+	NSError *error = nil;
+	NSArray <RptqDocumentElement *> *elements  = [context executeFetchRequest: fetchRequet error: &error];
+	if (error != nil) {
+		os_log_error(rptq_log, "Failed to fetch element with ID %lld: %{public}@", identifier, error.localizedDescription);
+	}
+	if (!elements.count) {
+		os_log_debug(rptq_log, "No element found with ID %lld", identifier);
+	}
+	return elements.firstObject;
+}
+
++ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
+		   fromParentSection:(RptqDocumentSection *)section
+		   withLayoutManager:(MADSectionLayoutManager *)layoutManager {
+	if (!documentObject || !section || !layoutManager) {
+		os_log_error(rptq_log, "Invalid parameters in removeDocumentObject");
+		return;
+	}
+	
+	@try {
+		RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+		NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
+		NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
+		if (deleteIndex == NSNotFound) {
+			os_log_error(rptq_log, "Document object not found in section row");
+			return;
+		}
+		
+		NSMutableOrderedSet *hasObjects = documentObject.inSectionRow.hasObjects.mutableCopy;
+		[hasObjects removeObjectAtIndex:deleteIndex];
+		
+		NSNumber *identifier = @(documentObject.identifier);
+		[layoutManager removeItemWithID:identifier];
+		[layoutManager layout];
+		
+		sectionRow.hasObjects = hasObjects;
+		documentObject.inSectionRow = nil;
+		section.height = (float)layoutManager.size.height;
+	} @catch (NSException *exception) {
+		os_log_error(rptq_log, "Exception in removeDocumentObject: %{public}@", exception.reason);
+	}
+}
+
+#pragma mark -
+#pragma mark Keys
+
++ (NSString *)keyCalculatedHeight { return @"calculatedHeight"; }
+
++ (NSString *)keyInSectionRow { return NSStringFromSelector(@selector(inSectionRow)); }
 
 + (NSString *)keyRowNumber {
 	NSString *result = [self keyInSectionRow];
-	NSString *keyRowNumber = NSStringFromSelector(@selector(rowNumber));
 	result = [MADStringUtilities stringByAppendingPeriodToString: result];
-	result = [result stringByAppendingString:keyRowNumber];
+	result = [result stringByAppendingString:NSStringFromSelector(@selector(rowNumber))];
 	return result;
 }
 
 + (NSString *)keyInSection {
-	NSString *result = [self keyInSectionRow];
-	NSString *keyInSection = NSStringFromSelector(@selector(inSection));
-	result = [MADStringUtilities stringByAppendingPeriodToString: result];
-	result = [result stringByAppendingString: keyInSection];
-	return result;
-}
-
-+ (NSString *)keyOrigin {
-	NSString *result = NSStringFromSelector(@selector(origin));
-	return result;
+	NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(inSectionRow))];
+	return [result stringByAppendingString: NSStringFromSelector(@selector(inSection))];
 }
 
 + (NSString *)keySize {
@@ -193,11 +220,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	return result;
 }
 
-+ (NSString *)keyBorder {
-	NSString *result = NSStringFromSelector(@selector(border));
-	return result;
-}
-
 + (NSString *)keyPadding {
 	NSString *result = NSStringFromSelector(@selector(padding));
 	return result;
@@ -206,13 +228,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyBorderWidthTop {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyBorder];
-		NSString *keyWidth = [RptqBorder keyWidth];
-		NSString *keyTop = [RptqDirectionalAsymmetry keyTop];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(border))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keyWidth];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:keyTop];
+		key = [result stringByAppendingString:NSStringFromSelector(@selector(top))];
 	}
 	return key;
 }
@@ -220,11 +239,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyBorderWidthBottom {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyBorder];
-		NSString *keyWidth = [RptqBorder keyWidth];
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keyWidth];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(border))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
@@ -234,11 +251,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyBorderWidthLeft {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyBorder];
-		NSString *keyWidth = [RptqBorder keyWidth];
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keyWidth];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(border))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
@@ -248,11 +263,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyBorderWidthRight {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyBorder];
-		NSString *keyWidth = [RptqBorder keyWidth];
+		NSString *result = NSStringFromSelector(@selector(border));
 		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keyWidth];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
 		key = [result stringByAppendingString:keyRight];
 	}
@@ -347,21 +361,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	return key;
 }
 
-+ (NSString *)keyRect {
-	NSString *key = NSStringFromSelector(@selector(rect));
-	return key;
-}
-
 + (NSString *)keyRectOriginY {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyRect];
-		NSString *keyOrigin = [RptqRect keyOrigin];
-		NSString *keyY = [RptqPoint keyY];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(origin))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keyOrigin];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:keyY];
+		key = [result stringByAppendingString:NSStringFromSelector(@selector(y))];
 	}
 	return key;
 }
@@ -369,13 +375,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectOriginX {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyRect];
-		NSString *keyOrigin = [RptqRect keyOrigin];
-		NSString *keyX = [RptqPoint keyX];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(origin))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keyOrigin];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:keyX];
+		key = [result stringByAppendingString:NSStringFromSelector(@selector(x))];
 	}
 	return key;
 }
@@ -383,13 +386,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectSizeHeight {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyRect];
-		NSString *keySize = [RptqRect keySize];
-		NSString *keyHeight = [RptqSize keyHeight];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(size))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keySize];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:keyHeight];
+		key = [result stringByAppendingString: NSStringFromSelector(@selector(height))];
 	}
 	return key;
 }
@@ -397,36 +397,24 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectSizeWidth {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyRect];
-		NSString *keySize = [RptqRect keySize];
-		NSString *keyWidth = [RptqSize keyWidth];
+		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		result = [result stringByAppendingString:NSStringFromSelector(@selector(size))];
 		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		result = [result stringByAppendingString:keySize];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:keyWidth];
+		key = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
 	}
 	return key;
 }
 
-+ (NSString *)keyCalculatedHeight {
-	static NSString *key = @"calculatedHeight";
-	return key;
-}
-
 + (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier {
-	NSFetchRequest *request;
-	NSPredicate *predicate;
-	NSExpression *left, *right;
-	left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-	right = [NSExpression expressionForConstantValue:@(identifier)];
-	predicate = [NSComparisonPredicate predicateWithLeftExpression: left
+	NSExpression *left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
+	NSExpression *right = [NSExpression expressionForConstantValue:@(identifier)];
+	NSPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression: left
 												   rightExpression: right
 														  modifier: NSDirectPredicateModifier
 															  type: NSEqualToPredicateOperatorType
 														   options: 0];
-	request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
+	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
 	request.predicate = predicate;
-	
 	request.fetchLimit = 1;
 	request.resultType = NSManagedObjectResultType;
 	request.includesSubentities = YES;
@@ -558,20 +546,16 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 + (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID {
 
-	NSFetchRequest *request;
 	NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
-	
-	NSString *keySelf = NSStringFromSelector(@selector(self));
-	
+
 	NSExpressionDescription *expressionSelf = [[NSExpressionDescription alloc] init];
-	expressionSelf.name = keySelf;
+	expressionSelf.name = NSStringFromSelector(@selector(self));
 	expressionSelf.expression = [NSExpression expressionForEvaluatedObject];
 	expressionSelf.expressionResultType = NSObjectIDAttributeType;
 
 	predicate = [self comparisonPredicateInSection:sectionID];
 	
-	NSString *entityName = NSStringFromClass([self class]);
-	request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
 	request.predicate = predicate;
 	request.resultType = NSDictionaryResultType;
 	
@@ -655,42 +639,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 													  options: 0];
 }
 
-+ (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
-							   fromObjectContext:(NSManagedObjectContext *)context {
-	NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet;
-	fetchRequet = [self fetchRequestElement: identifier];
-	NSError *error = NULL;
-	NSArray <RptqDocumentElement *> *elements;
-	elements = [context executeFetchRequest: fetchRequet
-									  error: &error];
-	if (error != nil) {
-		os_log_error(OS_LOG_DEFAULT, "Error: %s.  %s.",
-				error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
-	}
-	return elements.firstObject;
-}
-
-+ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
-		   fromParentSection:(RptqDocumentSection *)section
-		   withLayoutManager:(MADSectionLayoutManager *)layoutManager {
-	
-	RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
-	
-	NSOrderedSet *sectionRowHasObjects =  documentObject.inSectionRow.hasObjects;
-	NSUInteger deleteIndex = [sectionRowHasObjects indexOfObject:documentObject];
-	
-	NSMutableOrderedSet *hasObjects = documentObject.inSectionRow.hasObjects.mutableCopy;
-	[hasObjects removeObjectAtIndex:deleteIndex];
-	
-	NSNumber *identifier = @(documentObject.identifier);
-	[layoutManager removeItemWithID:identifier];
-	[layoutManager layout];
-	
-	sectionRow.hasObjects = hasObjects;
-	documentObject.inSectionRow = nil;
-	section.height = (float)layoutManager.size.height;
-}
-
 #pragma mark -
 #pragma mark Overrides
 
@@ -726,9 +674,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 	request.propertiesToFetch = @[edIdentifier, edLastObject];
 	request.resultType = NSDictionaryResultType;
+
 	NSError *error = nil;
-	NSArray <NSDictionary *> *fetchResults;
-	fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+	NSArray <NSDictionary *> *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+	
+	if (error != nil) {
+		os_log_error(rptq_log, "Error: %@", error);
+	}
 	
 	if (self.alignment == nil) {
 		NSString *name = NSStringFromClass([RptqAlignment class]);
@@ -789,12 +741,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		NSDictionary <NSString *, NSNumber *> *lastObject = fetchResults.lastObject;
 
 		
-		CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyIdentifier]),
-						 kCFNumberSInt64Type,
-						 &idNumber);
-		CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyDropIndex]),
-						 kCFNumberSInt64Type,
-						 &lastDropIndex);
+		CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyIdentifier]), kCFNumberSInt64Type, &idNumber);
+		CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyDropIndex]), kCFNumberSInt64Type, &lastDropIndex);
 
 		idNumber++;
 		lastDropIndex++;
@@ -814,7 +762,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		if (error != NULL) { // Check if error is not NULL before dereferencing
 			*error = errorValidation.copy; // Copy the error to outError
 		}
-		os_log_error(OS_LOG_DEFAULT, "Error: %s", errorValidation.localizedDescription.UTF8String);
+		os_log_error(rptq_log, "Error: %s", errorValidation.localizedDescription.UTF8String);
 	}
 	return success;
 }
@@ -896,11 +844,39 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (CGSize)sizeCalculated {
-	return CGSizeMake([self sizeWidthCalculated], [self sizeHeightCalculated]);
+	CGFloat width = MADDocObjSizeWidthCalculated(self.padding.left,
+												 self.border.width.left,
+												 self.margin.left,
+												 self.rect.size.width,
+												 self.margin.right,
+												 self.border.width.right,
+												 self.padding.right);
+	CGFloat height = MADDocObjSizeHeightCalculated(self.padding.top,
+												   self.border.width.top,
+												   self.margin.top,
+												   self.rect.size.height,
+												   self.margin.bottom,
+												   self.border.width.bottom,
+												   self.padding.bottom);
+	return CGSizeMake(width, height);
 }
 
 - (CGRect)boundsCalculated {
-	return CGRectMake(CGPointZero.x, CGPointZero.y, [self sizeWidthCalculated], [self sizeHeightCalculated]);
+	CGFloat width = MADDocObjSizeWidthCalculated(self.padding.left,
+												 self.border.width.left,
+												 self.margin.left,
+												 self.rect.size.width,
+												 self.margin.right,
+												 self.border.width.right,
+												 self.padding.right);
+	CGFloat height = MADDocObjSizeHeightCalculated(self.padding.top,
+												   self.border.width.top,
+												   self.margin.top,
+												   self.rect.size.height,
+												   self.margin.bottom,
+												   self.border.width.bottom,
+												   self.padding.bottom);
+	return CGRectMake(CGPointZero.x, CGPointZero.y, width, height);
 }
 
 - (CGSize)sizeContentView {
@@ -912,13 +888,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (CGRect)paddingViewBounds {
-	return CGRectMake(CGPointZero.x, CGPointZero.y,
-					  paddingViewBoundsSizeWidth(self.padding.left,
-												 self.padding.right,
-												 self.rect.size.width),
-					  paddingViewBoundsSizeHeight(self.padding.top,
-												  self.padding.bottom,
-												  self.rect.size.height));
+	double w = paddingViewBoundsSizeWidth(self.padding.left,
+										  self.padding.right,
+										  self.rect.size.width);
+	double h = paddingViewBoundsSizeHeight(self.padding.top,
+										   self.padding.bottom,
+										   self.rect.size.height);
+	return CGRectMake(CGPointZero.x, CGPointZero.y, w, h);
 }
 
 - (CGRect)paddingViewFrame {
@@ -1023,10 +999,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (CGRect)borderRect {
 	return CGRectMake(CGPointZero.x + self.margin.left,
 					  CGPointZero.y + self.margin.top,
-					  self.rect.size.width + self.border.width.left + self.border.width.right +
-						self.padding.left + self.padding.right,
-					  self.rect.size.height + self.border.width.top + self.border.width.bottom +
-						self.padding.top + self.padding.bottom);
+					  self.rect.size.width + self.border.width.left + self.border.width.right + self.padding.left + self.padding.right,
+					  self.rect.size.height + self.border.width.top + self.border.width.bottom + self.padding.top + self.padding.bottom);
 }
 
 - (CGRect)paddingRect {
@@ -1054,8 +1028,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-	
-	NSString *result;
+	if (!value) {
+		os_log_debug(rptq_log, "Nil value passed to formattedString");
+		return @"";
+	}
+
+	NSString *result = nil;
+
 	switch (dataType) {
 	
 		case MADDataTypeYear:
@@ -1198,8 +1177,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (NSString *)toStringDebug {
-	return [[NSString alloc] initWithFormat: @"%@-%@", self,
-									[self designerRepresentationText]];
+	return [[NSString alloc] initWithFormat: @"%@-%@", self, [self designerRepresentationText]];
 }
 
 - (NSString *)toStringHumanReadable {
@@ -1255,30 +1233,17 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (UIFontDescriptor *)fontDescriptor {
-	
-	NSString *fontname;
-	
 	UIFontDescriptorSymbolicTraits traits = 0;
 	if (self.textStyle.italic) traits     |= UIFontDescriptorTraitItalic;
 	if (self.textStyle.bold)   traits     |= UIFontDescriptorTraitBold;
 	
-	NSNumber *traitsWrapper = [[NSNumber alloc] initWithUnsignedInt: traits];
+	NSDictionary *fontAttributes = @{
+		UIFontDescriptorFamilyAttribute: self.fontname ?: [MADFont defaultFamily],
+		UIFontDescriptorSizeAttribute: @(self.fontsize),
+		UIFontDescriptorTraitsAttribute: @{UIFontSymbolicTrait: @(traits)}
+	};
 	
-	NSDictionary *symbolicTraits = [[NSDictionary alloc] initWithObjectsAndKeys:
-									traitsWrapper, UIFontSymbolicTrait, nil];
-	
-	fontname = self.fontname;
-
-	NSDictionary *fontAttributes;
-	fontAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-					  fontname,         UIFontDescriptorFamilyAttribute,
-					  @(self.fontsize), UIFontDescriptorSizeAttribute,
-					  symbolicTraits,   UIFontDescriptorTraitsAttribute, nil];
-	
-	UIFontDescriptor *fontDescriptor;
-	fontDescriptor = [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
-	fontAttributes = nil;
-	return fontDescriptor;
+	return [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
 }
 
 

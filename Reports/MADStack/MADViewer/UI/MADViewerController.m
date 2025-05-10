@@ -82,11 +82,12 @@
 #import "NSDate+Extras.h"
 #import "MTStoreKitController+Features.h"
 #import "UIApplication+Extras.h"
+#import <os/log.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
-
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
+static os_log_t mad_log;
 
 //#pragma mark -
 //#pragma mark MADOperationRenderOnViewert
@@ -162,6 +163,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark -
 #pragma mark Static helpers
 
++ (void)initialize {
+	if (self == [MADViewerController class]) {
+		NSString *c = NSStringFromClass([MADViewerController class]);
+		mad_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
+
 + (void)setNavigationBarAppearanceTinted {
 	NSArray <Class <UIAppearanceContainer>> *classes;
 	Class thisClass = self;
@@ -190,15 +198,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	controller = [storyboard instantiateViewControllerWithIdentifier: MADStoryboardIDViewerController];
 	[((typeof(self))controller) setDocument: document];
 	return controller;
-}
-
-+ (void)initialize {
-	[super initialize];
-	if (self == [MADViewerController self]) {
-		@autoreleasepool {
-			
-		}
-	}
 }
 
 #pragma mark -
@@ -589,6 +588,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
 	NSError *error = nil;
 	BOOL success = [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+	if (error != nil) {
+		os_log_error(mad_log, "Error: %@", error);
+	}
 	NSAssert(success, @"Failed to delete file.");
 }
 
@@ -930,9 +932,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	if (_lastCacheDate == nil) {    // No Cache exist, so return quickly.
 		NSError *error = nil;
 		NSString *path = self.document.urlDataTableCache.path;
-		NSDictionary *attributes =
-			[[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error];
-		if (error == nil) {
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error];
+		if (error != nil) {
+			os_log_error(mad_log, "Error: %@", error);
+		} else {
 			_lastCacheDate = attributes.fileModificationDate.copy;
 		}
 
@@ -1345,19 +1348,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	MADocument *document;
 
 	if (!self.isCancelled) {
-	
 		document = self.document;
-		printPageRenderer =
-		[[MADPrintPageRenderer alloc] initWithDataSource:document];
-	
+		printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
 		self.printPageRenderer = printPageRenderer;
 	}
 	
 	if (!self.isCancelled && printPageRenderer == nil) {
-
 		[document activeDocumentModel];
-		printPageRenderer =
-		[[MADPrintPageRenderer alloc] initWithDataSource:document];
+		printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
 		self.printPageRenderer = printPageRenderer;
 	}
 	

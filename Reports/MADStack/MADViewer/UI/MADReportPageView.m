@@ -24,10 +24,12 @@
 #import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
+#import <os/log.h>
 
 static const CGFloat PageCounterWidth = 99.0;
 static const CGFloat PageCounterHeight = 33.0;
 static const CGFloat PageCounterBuffer = 10.0;
+static os_log_t mad_log;
 
 @interface MADReportPageView ()
 
@@ -38,22 +40,35 @@ static const CGFloat PageCounterBuffer = 10.0;
 	BOOL _displaysPageCounter;
 }
 
++ (void)initialize {
+	if (self == [MADReportPageView class]) {
+		NSString *c = NSStringFromClass([MADReportPageView class]);
+		mad_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
+
 - (void)dealloc {
 	_delegatePage = nil;
 }
 
 - (instancetype)init {
-	if (self = [super init]) { [self setup]; }
+	if (self = [super init]) {
+		[self setup];
+	}
 	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) { [self setup]; }
+	if (self = [super initWithCoder:aDecoder]) {
+		[self setup];
+	}
 	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) { [self setup]; }
+	if (self = [super initWithFrame:frame]) {
+		[self setup];
+	}
 	return self;
 }
 
@@ -86,8 +101,11 @@ static const CGFloat PageCounterBuffer = 10.0;
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
 			NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-			NSError *error = NULL;
+			NSError *error = nil;
 			[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
+			if (error != nil) {
+				os_log_error(mad_log, "Error: %@", error);
+			}
 			pngImage = nil;
 		});
 	}

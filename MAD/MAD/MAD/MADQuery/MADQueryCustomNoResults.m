@@ -15,29 +15,28 @@
 #import <MADAPI/MADQueryType.h>
 
 @interface MADQueryCustomNoResults ()
-    @property (nonatomic, strong) id queryObject;
+@property (nonatomic, strong) id queryObject;
 @end
 
 @implementation MADQueryCustomNoResults
 
 - (instancetype)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
-        
-        NSAssert([object isKindOfClass:[NSString class]], @"MADQueryCustomSql expects NSString.");
-        NSString *queryString = [[NSString alloc] initWithString:object];
-        self.queryObject = queryString;
-        
-    }
-    return self;
+	if (self = [super initWithObject:object]) {
+		
+		NSAssert([object isKindOfClass:[NSString class]], @"MADQueryCustomSql expects NSString.");
+		NSString *queryString = [[NSString alloc] initWithString:object];
+		self.queryObject = queryString;
+		
+	}
+	return self;
 }
 
 - (BOOL)returnsResults {
-    return NO;
+	return NO;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCustomSql;
+	return MADQueryTypeCustomSql;
 }
 
 @end

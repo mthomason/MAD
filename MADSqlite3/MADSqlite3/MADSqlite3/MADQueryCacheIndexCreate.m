@@ -42,13 +42,12 @@
 - (instancetype)initWithObject:(MADQueryCacheIndexCreateParameters *)object {
 	if (self = [super initWithObject:object]) {
 		
-		NSMutableString *sql;
 		NSArray *sortDescriptors = object.sortDescriptors;
 		if (sortDescriptors.count == 0) return self;
 		
-		sql = [[NSMutableString alloc] initWithFormat: @"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (",
-													   object.groupName, object.tableName];
-		
+		NSMutableString *sql = [[NSMutableString alloc] initWithFormat: @"CREATE INDEX IF NOT EXISTS main.%@ ON %@ (",
+								object.groupName, object.tableName];
+
 		NSDictionary *columns = object.columns;
 		MADSqlite3SortDescription *sortDirection;
 		NSUInteger sortCounter = 0;

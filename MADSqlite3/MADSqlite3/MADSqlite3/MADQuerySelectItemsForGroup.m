@@ -43,28 +43,27 @@
 		NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.",
 				 NSStringFromClass([self class]));
 		
+		NSDictionary *obj = object;
+		
 		NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
-		NSString *tableName = object[keyTableName];
+		NSString *tableName = obj[keyTableName];
 		self.tableName = tableName.copy;
 		
 		NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
-		NSArray *sortDescriptors = object[keySortDescriptors];
-		self.sortDescriptors = sortDescriptors.copy;
+		NSArray *sortDescriptors = [[obj objectForKey:keySortDescriptors] copy];
+		self.sortDescriptors = sortDescriptors;
 		
 		NSNumber *keyFieldKeys = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
-		NSArray *columnKeys = object[keyFieldKeys];
-		NSMutableArray *mutableColumnKeys = columnKeys.mutableCopy;
-		[mutableColumnKeys addObject:MADIdentifierROWID];
-		self.columnKeys = mutableColumnKeys;
+		NSMutableArray *columnKeys = [[obj objectForKey:keyFieldKeys] mutableCopy];
+		[columnKeys addObject:MADIdentifierROWID];
+		self.columnKeys = columnKeys;
 		
 		NSNumber *keyPredicates = [[NSNumber alloc] initWithShort: MADQuerySelectPredicates];
-		NSArray *whereClause = object[keyPredicates];
+		NSArray *whereClause = [[obj objectForKey: keyPredicates] copy];
 		self.whereClause = whereClause;
 		
 		NSNumber *keyFieldDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectFieldDescriptors];
-		NSDictionary *columns = object[keyFieldDescriptors];
-		NSMutableDictionary *mutableColumns = columns.mutableCopy;
-		
+		NSMutableDictionary *mutableColumns = [[obj objectForKey: keyFieldDescriptors] mutableCopy];
 		MADDataColumn *rowid = [[MADDataColumn alloc] initWithIdentifier:MADIdentifierROWID];
 		rowid.type = MADDataTypeInteger;
 		mutableColumns[MADIdentifierROWID] = rowid;

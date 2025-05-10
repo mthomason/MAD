@@ -72,11 +72,11 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 	NSArray *sections = reportingEnabled ? @[datasource, tables, resultCount] : @[datasource, tables];
 	NSArray *rowCounts = reportingEnabled ? @[one, unknown, one] : @[one, unknown];
 	NSArray *headers = reportingEnabled ?
-	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
-	  NSLocalizedString(MADTextQuerySelectTables, nil),
-	  NSLocalizedString(MADTextQueryReportingMode, nil)] :
-	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
-	  NSLocalizedString(MADTextQuerySelectTables, nil)];
+	@[NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource),
+	  NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables),
+	  NSLocalizedString(MADTextQueryReportingMode, MADTextQueryReportingMode)] :
+	@[NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource),
+	  NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables)];
 	
 	NSNumber *height1 = @50.0;
 	NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
@@ -106,15 +106,15 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 	@[one, unknown, unknown, unknown];
 	
 	NSArray *headers = reportingEnabled ?
-	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
-	  NSLocalizedString(MADTextQuerySelectTables, nil),
-	  NSLocalizedString(MADTextQueryGroups, nil),
-	  NSLocalizedString(MADTextQueryPredicate, nil),
-	  NSLocalizedString(MADTextQueryReportingMode, nil)] :
-	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
-	  NSLocalizedString(MADTextQuerySelectTables, nil),
-	  NSLocalizedString(MADTextQueryGroups, nil),
-	  NSLocalizedString(MADTextQueryPredicate, nil)];
+	@[NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource),
+	  NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables),
+	  NSLocalizedString(MADTextQueryGroups, MADTextQueryGroups),
+	  NSLocalizedString(MADTextQueryPredicate, MADTextQueryPredicate),
+	  NSLocalizedString(MADTextQueryReportingMode, MADTextQueryReportingMode)] :
+	@[NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource),
+	  NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables),
+	  NSLocalizedString(MADTextQueryGroups, MADTextQueryGroups),
+	  NSLocalizedString(MADTextQueryPredicate, MADTextQueryPredicate)];
 	
 	NSNumber *height1 = @44.0;
 	NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);
@@ -147,17 +147,17 @@ static NSString * const MADTextQueryLinks           = @"Link the Tables";
 	@[one, unknown, unknown, unknown, unknown];
 	
 	NSArray *headers = reportingEnabled ?
-	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
-	  NSLocalizedString(MADTextQuerySelectTables, nil),
-	  NSLocalizedString(MADTextQueryLinks, nil),
-	  NSLocalizedString(MADTextQueryGroups, nil),
-	  NSLocalizedString(MADTextQueryPredicate, nil),
-	  NSLocalizedString(MADTextQueryReportingMode, nil)] :
-	@[NSLocalizedString(MADTextQuerySetupDatasource, nil),
-	  NSLocalizedString(MADTextQuerySelectTables, nil),
-	  NSLocalizedString(MADTextQueryLinks, nil),
-	  NSLocalizedString(MADTextQueryGroups, nil),
-	  NSLocalizedString(MADTextQueryPredicate, nil)];
+	@[NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource),
+	  NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables),
+	  NSLocalizedString(MADTextQueryLinks, MADTextQueryLinks),
+	  NSLocalizedString(MADTextQueryGroups, MADTextQueryGroups),
+	  NSLocalizedString(MADTextQueryPredicate, MADTextQueryPredicate),
+	  NSLocalizedString(MADTextQueryReportingMode, MADTextQueryReportingMode)] :
+	@[NSLocalizedString(MADTextQuerySetupDatasource, MADTextQuerySetupDatasource),
+	  NSLocalizedString(MADTextQuerySelectTables, MADTextQuerySelectTables),
+	  NSLocalizedString(MADTextQueryLinks, MADTextQueryLinks),
+	  NSLocalizedString(MADTextQueryGroups, MADTextQueryGroups),
+	  NSLocalizedString(MADTextQueryPredicate, MADTextQueryPredicate)];
 	
 	NSNumber *height1 = @44.0;
 	NSNumber *height2 = @([MADTableViewCellQueryTableName defaultHeight]);

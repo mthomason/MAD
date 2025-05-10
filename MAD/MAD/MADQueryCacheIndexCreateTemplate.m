@@ -14,7 +14,6 @@
 #import <MADAPI/MADQueryType.h>
 
 @interface MADQueryCacheIndexCreateTemplate ()
-    @property (nonatomic, strong) id queryObject;
 @end
 
 @implementation MADQueryCacheIndexCreateTemplate {
@@ -25,13 +24,12 @@
 	if (self = [super initWithObject:object]) {
 		
 		NSAssert([object isKindOfClass:[NSDictionary class]], @"MADQueryCacheIndexDrop expects NSDictionary.");
-		
+
+		NSDictionary *obj = object;
 		NSNumber *keyGroupCount = [[NSNumber alloc] initWithShort:MADCacheIndexTypeGroupCount];
-		NSNumber *groupCount = object[keyGroupCount];
+		NSNumber *groupCount = [[obj objectForKey: keyGroupCount] copy];
 		_groupCount = groupCount.unsignedIntegerValue;
-		
-		self.queryObject = object;
-		
+
 	}
 	return self;
 }

@@ -300,8 +300,7 @@ void madwarn(char *err,  const char*err2) { }
 	NSNumber *type = [[NSNumber alloc] initWithShort: MADDataTableTypePhysical];
 	NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
 	NSNumber *objectIdV = [[NSNumber alloc] initWithUnsignedInteger: self.filename.hash];
-	NSDictionary *parameters;
-	parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
+	NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
 	
 	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
 	datatable.cacheDelegate = self;
@@ -311,8 +310,7 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection {
-	MADDatabase *database;
-	database = [MADDatabase newDatabaseWithConnection:databaseConnection];
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection:databaseConnection];
 	self.database = database;
 }
 
@@ -376,16 +374,12 @@ void madwarn(char *err,  const char*err2) { }
 - (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
 	if (self = [super initWithFileURL:url]) {
 		
-		
 		_autosaveEnabled = YES;
 		_urlGuts = [MADURLFactory newURLDocumentArchiveForFileURL: url
 												 extension: MADFileExtentionMobleApplicationDocumentArchive];
 		_urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
 		
-		//Initialize the main data table.
-		NSString *filename = self.filename;
-
-		MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:filename.hash];
+		MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.fileURL.lastPathComponent.stringByDeletingPathExtension.hash];
 		datatable.cacheDelegate = self;
 		
 		NSString *cacheName = [datatable newFilenameMDCache];
@@ -394,39 +388,35 @@ void madwarn(char *err,  const char*err2) { }
 		[datatable loadFromCacheWithUrl:cacheUrl];
 		self.dataTable = datatable;
 		
-		//Initzlize the main document state
 		id documentState = [[MADocumentState alloc] init];
 		self.documentStatus = documentState;
 		
-		//Initzlize the extra info output container
 		id extraInfo = [[NSMutableDictionary alloc] initWithCapacity: 3];
 		self.extraInformation = extraInfo;
 		
 		if (databaseConnection != nil) {
-			MADDatabase *database = [MADDatabase newDatabaseWithConnection: databaseConnection];
-			self.database = database;
+			_database = [MADDatabase newDatabaseWithConnection: databaseConnection];
 		}
 		
-		NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-		[defaultCenter addObserver: self
-						  selector: @selector(handleManagedObjectContextDidChange:)
-							  name: NSManagedObjectContextObjectsDidChangeNotification
-							object: self.managedObjectContext];
+		[[NSNotificationCenter defaultCenter] addObserver: self
+												 selector: @selector(handleManagedObjectContextDidChange:)
+													 name: NSManagedObjectContextObjectsDidChangeNotification
+												   object: self.managedObjectContext];
 		
-		[defaultCenter addObserver: self
-						  selector: @selector(handleManagedObjectContextDidSave:)
-							  name: NSManagedObjectContextDidSaveNotification
-							object: self.managedObjectContext];
+		[[NSNotificationCenter defaultCenter] addObserver: self
+												 selector: @selector(handleManagedObjectContextDidSave:)
+													 name: NSManagedObjectContextDidSaveNotification
+												   object: self.managedObjectContext];
 		
-		[defaultCenter addObserver: self
-						  selector: @selector(handleManagedObjectContextWillSave:)
-							  name: NSManagedObjectContextWillSaveNotification
-							object: self];
+		[[NSNotificationCenter defaultCenter] addObserver: self
+												 selector: @selector(handleManagedObjectContextWillSave:)
+													 name: NSManagedObjectContextWillSaveNotification
+												   object: self];
 		
-		[defaultCenter addObserver: self
-						  selector: @selector(handleDocumentStateChanged:)
-							  name: UIDocumentStateChangedNotification
-							object: self];
+		[[NSNotificationCenter defaultCenter] addObserver: self
+												 selector: @selector(handleDocumentStateChanged:)
+													 name: UIDocumentStateChangedNotification
+												   object: self];
 	}
 	return self;
 }
@@ -504,27 +494,22 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark UIDocument
 
 - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey {
-	NSMutableDictionary *dictionary;
-	dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
+	NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
 
-	[self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:^(NSNumber *key,
-																	MADSectionLayoutManager *sectionLayoutManager,
-																	BOOL *stop) {
-		
-		NSNumber *height = [[NSNumber alloc] initWithDouble:sectionLayoutManager.size.height];
-		dictionary[key] = height;
+	[self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:
+	 ^(NSNumber *key, MADSectionLayoutManager *manager, BOOL *stop) {
+		dictionary[key] = @(manager.size.height);
 		
 	}];
 	return dictionary;
 }
 
 - (NSDictionary *)persistentStoreOptions {
-	if (_madPersistentStoreOptions == nil) {
-		NSDictionary *persistentStoreOptions;
-		persistentStoreOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
-									  @YES, NSInferMappingModelAutomaticallyOption,
-									  @YES, NSMigratePersistentStoresAutomaticallyOption, nil];
-		_madPersistentStoreOptions = persistentStoreOptions;
+	if (!_madPersistentStoreOptions) {
+		_madPersistentStoreOptions = @{
+			NSInferMappingModelAutomaticallyOption: @YES,
+			NSMigratePersistentStoresAutomaticallyOption: @YES
+		};
 	}
 	return _madPersistentStoreOptions;
 }

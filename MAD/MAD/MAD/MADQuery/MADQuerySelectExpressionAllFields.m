@@ -26,47 +26,43 @@
 @implementation MADQuerySelectExpressionAllFields
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
-                          tables:(NSArray <MTPair *> *)tables
-         forManagedObjectContext:(NSManagedObjectContext *)context {
-    
-    if (self = [super init]) {
-        
-        NSMutableString *result = [[NSMutableString alloc] init];
-
-        NSUInteger tableCounter = 0;
-        for (MTPair *pair in tables) {
-            MTVertex *queryTable = pair.former;
-            NSManagedObjectID *objectID = queryTable.object;
-            
-            RptqQueryTable *table = [context objectWithID:objectID];
-            if (table != nil) {
-                if (tableCounter != 0) [result appendString:@",\n"];
-                
-                NSString *tableName = [table queryAlias];
-                MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
+						  tables:(NSArray <MTPair *> *)tables
+		 forManagedObjectContext:(NSManagedObjectContext *)context {
+	
+	if (self = [super init]) {
+		
+		NSMutableString *result = [[NSMutableString alloc] init];
+		
+		NSUInteger tableCounter = 0;
+		for (MTPair *pair in tables) {
+			MTVertex *queryTable = pair.former;
+			NSManagedObjectID *objectID = queryTable.object;
+			
+			RptqQueryTable *table = [context objectWithID:objectID];
+			NSAssert(table != nil, @"Expect a table.");
+			if (table != nil) {
+				if (tableCounter != 0) [result appendString:@",\n"];
+				
+				NSString *tableName = [table queryAlias];
+				MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
 				NSString *tableAlias = [MADStringUtilities stringByAppendingPeriodToString:safeTableName];
-                
-                NSUInteger fieldCounter = 0;
-                
-                RptqQueryField *queryField;
-                NSEnumerator <RptqQueryField *> *hasQueryFields;
-                hasQueryFields = table.hasQueryFields.objectEnumerator;
-                MADSafeQueryField *safeFieldName;
-                NSString *fieldAlias;
-                for (queryField in hasQueryFields) {
-                    if (fieldCounter != 0)  [result appendString:@",\n"];
-                    safeFieldName = [database newSafeIdentifier:queryField.databaseSchemaField.name];
-                    fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
-                    [result appendString: @"\t"];
-                    [result appendString: fieldAlias];
-                    fieldCounter++;
-                }
-                tableCounter++;
-            }
-        }
-        self.sql = result;
-    }
-    return self;
+
+				NSUInteger fieldCounter = 0;
+				NSEnumerator <RptqQueryField *> *hasQueryFields = table.hasQueryFields.objectEnumerator;
+				for (RptqQueryField *queryField in hasQueryFields) {
+					if (fieldCounter != 0)  [result appendString:@",\n"];
+					MADSafeQueryField *safeFieldName = [database newSafeIdentifier:queryField.databaseSchemaField.name];
+					NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
+					[result appendString: @"\t"];
+					[result appendString: fieldAlias];
+					fieldCounter++;
+				}
+				tableCounter++;
+			}
+		}
+		self.sql = result;
+	}
+	return self;
 }
 
 @end

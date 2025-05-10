@@ -13,20 +13,20 @@
 
 @interface MADQueryFullTableEnumerator ()
 
-    @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-    @property (nonatomic, assign) int64_t documentObjectIdentifier;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, assign) int64_t documentObjectIdentifier;
 
 @end
 
 @implementation MADQueryFullTableEnumerator
 
 - (instancetype)initWithDocument:(RptqDocument *)document {
-    if (self = [super init]) {
-        _documentObjectIdentifier = document.identifier;
-        self.managedObjectContext = document.managedObjectContext;
-
-    }
-    return self;
+	if (self = [super init]) {
+		_documentObjectIdentifier = document.identifier;
+		self.managedObjectContext = document.managedObjectContext;
+		
+	}
+	return self;
 }
 
 @end

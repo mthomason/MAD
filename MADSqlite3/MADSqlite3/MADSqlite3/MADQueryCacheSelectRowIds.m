@@ -44,28 +44,26 @@
 	self = [super initWithObject:object];
 	if (self = [super initWithObject:object]) {
 		NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
-		
-		id key;
+		NSDictionary *obj = object;
 
-		key = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
-		NSArray *rowIDs = [object objectForKey:key];
+		NSNumber *keyRowIDs = [[NSNumber alloc] initWithShort: MADQuerySelectRowIds];
+		NSArray *rowIDs = [[obj objectForKey:keyRowIDs] copy];
 		
 		if (rowIDs == nil) {
-			key = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
-			NSNumber *rowID = [object objectForKey: key];
+			NSNumber *keyRowID = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
+			NSNumber *rowID = [[obj objectForKey: keyRowID] copy];
 			rowIDs = [[NSArray alloc] initWithObjects:rowID, nil];
 		}
 		
 		NSNumber *keyColumns = @(MADQuerySelectColumns);
-		NSDictionary *columns = object[keyColumns];
-		self.columns = columns.copy;
+		NSDictionary *columns = [[obj objectForKey: keyColumns] copy];
+		self.columns = columns;
 		
-		key = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
-		NSString *tableName = object[key];
+		NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
+		NSString *tableName = [[obj objectForKey:keyTableName] copy];
 
-		key = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
-		NSArray *array = object[key];
-		NSArray *sortDescriptors = [NSArray arrayWithArray:array];
+		NSNumber *keySortDesc = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
+		NSArray *sortDescriptors = [[obj objectForKey:keySortDesc] copy];
 		
 		NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ ", tableName];
 		[sql appendString:[self whereClauseWithRowIds:rowIDs]];

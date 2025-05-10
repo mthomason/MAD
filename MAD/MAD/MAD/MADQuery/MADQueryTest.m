@@ -21,21 +21,21 @@
 @synthesize database = _database;
 
 - (instancetype)initWithObject:(id)object {
-    if (self = [super init]) { }
-    return self;
+	if (self = [super init]) { }
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    [super getSql:error];
-    MADDatabase *database = self.database;
-    MADSafeQueryField *key = [database newSafeIdentifier:@"f1"];
-    NSString *selectPart = [database selectPart];
-    NSString *sql = [[NSString alloc] initWithFormat:@"%@ 255 AS %@", selectPart, key];
-    return sql;
+	[super getSql:error];
+	MADDatabase *database = self.database;
+	MADSafeQueryField *key = [database newSafeIdentifier:@"f1"];
+	NSString *selectPart = [database selectPart];
+	NSString *sql = [[NSString alloc] initWithFormat:@"%@ 255 AS %@", selectPart, key];
+	return sql;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeConnectionTest;
+	return MADQueryTypeConnectionTest;
 }
 
 @end

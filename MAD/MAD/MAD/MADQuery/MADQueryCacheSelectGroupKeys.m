@@ -20,78 +20,78 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
 
 @interface MADQueryCacheSelectGroupKeys ()
 
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSString *columnName;
-@property (nonatomic, assign) BOOL accending;
+@property (nonatomic, copy) NSString *tableName;
+@property (nonatomic, copy) NSString *columnName;
+@property (nonatomic, copy) NSString *sqlSpeedSorting;
+@property (nonatomic, copy) NSString *sqlSpeedPredicate;
 
-@property (nonatomic, strong) NSString *sqlSpeedSorting;
-@property (nonatomic, strong) NSString *sqlSpeedPredicate;
+@property (nonatomic, assign) BOOL accending;
 
 @end
 
 @implementation MADQueryCacheSelectGroupKeys
 
 - (instancetype)initWithObject:(id)object {
-
-    if (self = [super initWithObject:object]) {
-        
-        NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
-        
-        NSNumber *keySelectTableName = @(MADQuerySelectTableName);
-        NSString *selectTableName = object[keySelectTableName];
-        NSString *tableName = [NSString stringWithString:selectTableName];
-        self.tableName = tableName;
-        
-        NSNumber *keySelectPredicates = @(MADQuerySelectPredicates);
-        
-        NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:JoinPredicateWhere];
-        int i = 0;
-        NSArray * __weak selectPredicates = object[keySelectPredicates];
-        for (NSDictionary *predicate in selectPredicates) {
-            
-            NSString *left = predicate[MADQueryKeyPredicateColumn];
-            NSString *right = predicate[MADQueryKeyPredicateValue];
-            if (i > 0) {
-                [sqlPredicate appendString:@" AND "];
-            }
-            [sqlPredicate appendFormat:@"%@ = \"%@\"", left, right];
-            i++;
-        }
-        self.sqlSpeedPredicate = sqlPredicate;
-        
-        NSNumber *keySelectFieldNames = @(MADQuerySelectFieldKeys);
-        NSArray *fieldNames = object[keySelectFieldNames];
-        NSString *columnName = fieldNames.firstObject;
-        self.columnName = columnName;
-        
-        NSNumber *keySelectSortAccending = @(MADQuerySelectSortAccending);
-        NSNumber *sortValue = object[keySelectSortAccending];
-        self.accending = sortValue.boolValue;
-        
-        NSNumber *keyColumns = @(MADQuerySelectColumns);
-        NSDictionary * __weak columns = object[keyColumns];
-        MADDataColumn *dataColumn = columns[columnName];
-
-        NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-
-        MADSqlite3SortDescription *sqlSpeedSortingDescription = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType:dataColumn.nativeType
-                                                                                                                ascending:self.accending];
-        NSString *sqlSpeedSort = [NSString stringWithString:sqlSpeedSortingDescription];
-        self.sqlSpeedSorting = sqlSpeedSort;
-        
-    }
-    return self;
+	
+	if (self = [super initWithObject:object]) {
+		
+		NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
+		NSDictionary *obj = object;
+		
+		NSNumber *keySelectTableName = @(MADQuerySelectTableName);
+		NSString *selectTableName = [obj objectForKey:keySelectTableName];
+		NSString *tableName = [[NSString alloc] initWithString:selectTableName];
+		self.tableName = tableName;
+		
+		NSNumber *keySelectPredicates = @(MADQuerySelectPredicates);
+		NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:JoinPredicateWhere];
+		NSArray *selectPredicates = [obj objectForKey:keySelectPredicates];
+		int i = 0;
+		for (NSDictionary *predicate in selectPredicates) {
+			
+			NSString *left = predicate[MADQueryKeyPredicateColumn];
+			NSString *right = predicate[MADQueryKeyPredicateValue];
+			if (i > 0) {
+				[sqlPredicate appendString:@" AND "];
+			}
+			[sqlPredicate appendFormat:@"%@ = \"%@\"", left, right];
+			i++;
+		}
+		self.sqlSpeedPredicate = sqlPredicate;
+		
+		NSNumber *keySelectFieldNames = @(MADQuerySelectFieldKeys);
+		NSArray <NSString *> *fieldNames = [obj objectForKey:keySelectFieldNames];
+		NSString *columnName = [fieldNames.firstObject copy];
+		self.columnName = columnName;
+		
+		NSNumber *keySelectSortAccending = @(MADQuerySelectSortAccending);
+		NSNumber *sortValue = [[obj objectForKey: keySelectSortAccending] copy];
+		self.accending = sortValue.boolValue;
+		
+		NSNumber *keyColumns = @(MADQuerySelectColumns);
+		NSDictionary *columns = [obj objectForKey: keyColumns];
+		MADDataColumn *dataColumn = [columns objectForKey: columnName];
+		
+		NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+		
+		MADSqlite3SortDescription *sqlSpeedSortingDescription = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType:dataColumn.nativeType
+																												 ascending:self.accending];
+		NSString *sqlSpeedSort = [[NSString alloc] initWithString:sqlSpeedSortingDescription];
+		self.sqlSpeedSorting = sqlSpeedSort;
+		
+	}
+	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-    NSString *result = [[NSString alloc] initWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@",
-                        self.columnName, self.tableName,
-                        self.sqlSpeedPredicate, self.columnName, self.sqlSpeedSorting];
-    return result;
+	NSString *result = [[NSString alloc] initWithFormat:@"SELECT DISTINCT %@ FROM %@ %@ ORDER BY %@ %@",
+						self.columnName, self.tableName,
+						self.sqlSpeedPredicate, self.columnName, self.sqlSpeedSorting];
+	return result;
 }
 
 - (MADQueryType)type {
-    return MADQueryTypeCacheSelectGroupKeys;
+	return MADQueryTypeCacheSelectGroupKeys;
 }
 
 @end

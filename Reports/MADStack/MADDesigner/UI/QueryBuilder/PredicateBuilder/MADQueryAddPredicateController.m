@@ -36,8 +36,18 @@
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import "MADTableViewControllerOpperators.h"
+#import <os/log.h>
+
+static os_log_t mad_log;
 
 @implementation MADQueryAddPredicateController
+
++ (void)initialize {
+	if (self == [MADQueryAddPredicateController class]) {
+		NSString *c = NSStringFromClass([MADQueryAddPredicateController class]);
+		mad_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
@@ -130,7 +140,7 @@
 	MADocument *document = self.document;
 	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
 	
-	NSError * __autoreleasing error = nil;
+	NSError *error = nil;
 	if (self.leftValue == nil) {
 		if (self.rightValue == nil) {
 			queryPredicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: self.fieldLeftID
@@ -159,6 +169,10 @@
 															   forManagedObjectContext: managedObjectContext
 																				 error: &error];
 		}
+	}
+	
+	if (error != nil) {
+		os_log_error(mad_log, "Error: %@", error);
 	}
 
 	if (queryPredicate != nil && error == nil) {

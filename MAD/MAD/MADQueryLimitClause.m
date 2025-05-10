@@ -19,12 +19,12 @@
 @implementation MADQueryLimitClause
 
 - (instancetype)initWithLimit:(NSUInteger)limit
-                  andDatabase:(MADDatabase *)database {
-    if (self = [super init]) {
-        NSString *limitClause = [database sqlLimitClause: limit];
-        self.sql = [[NSString alloc] initWithString: limitClause];
-    }
-    return self;
+				  andDatabase:(MADDatabase *)database {
+	if (self = [super init]) {
+		NSString *limitClause = [[database sqlLimitClause: limit] copy];
+		self.sql = limitClause;
+	}
+	return self;
 }
 
 @end

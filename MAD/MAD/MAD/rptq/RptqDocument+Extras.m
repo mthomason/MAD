@@ -62,20 +62,17 @@
 #import <os/log.h>
 
 static os_log_t rptq_log;
-static os_log_t get_log(void) {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSString *c = NSStringFromClass([RptqDocument class]);
-		rptq_log = os_log_create("com.mad", c.UTF8String);
-	});
-	return rptq_log;
-}
 
 @implementation RptqDocument (Extras)
 
++ (void)load {
+	if (self == [RptqDocument class]) {
+		NSString *c = NSStringFromClass([RptqDocument class]);
+		rptq_log = os_log_create("com.mad", c.UTF8String);
+	}
+}
+
 #pragma mark - Static
-
-
 
 + (void)deleteExistingDocuments:(NSManagedObjectContext *)context {
 	NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
@@ -84,13 +81,13 @@ static os_log_t get_log(void) {
 	NSError *error = nil;
 	NSArray *documents = [context executeFetchRequest:request error:&error];
 	if (error) {
-		os_log_error(get_log(), "Failed to fetch existing documents: %{public}@", error);
+		os_log_error(rptq_log, "Failed to fetch existing documents: %{public}@", error);
 	} else if (documents.count > 0) {
 		for (RptqDocument *document in documents) {
 			[context deleteObject:document];
 		}
 		if (![context save:&error]) {
-			os_log_error(get_log(), "Failed to save after document deletion: %{public}@", error);
+			os_log_error(rptq_log, "Failed to save after document deletion: %{public}@", error);
 		}
 	}
 	
@@ -107,10 +104,6 @@ static os_log_t get_log(void) {
 	NSAssert(context != nil, @"Context must not be nil");
 	
 	[self deleteExistingDocuments:context];
-	
-	
-	
-	
 	
 	NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
 	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
@@ -193,17 +186,17 @@ static os_log_t get_log(void) {
 
 	NSError *error1 = nil;
 	if (![document.hasReportHeaderSection validateForUpdate: &error1]) {
-		os_log_error(get_log(), "Error: %s", error1.localizedDescription.UTF8String);
+		os_log_error(rptq_log, "Error: %s", error1.localizedDescription.UTF8String);
 	}
 	
 	NSError *error2 = nil;
 	if (![document.hasDetailSection validateForUpdate: &error2]) {
-		os_log_error(get_log(), "Error: %s", error2.localizedDescription.UTF8String);
+		os_log_error(rptq_log, "Error: %s", error2.localizedDescription.UTF8String);
 	}
 	
 	NSError *error3 = nil;
 	if (![document validateForUpdate: &error3]) {
-		os_log_error(get_log(), "Error: %s", error3.localizedDescription.UTF8String);
+		os_log_error(rptq_log, "Error: %s", error3.localizedDescription.UTF8String);
 	}
 	
 	return document;
@@ -218,7 +211,7 @@ static os_log_t get_log(void) {
 	NSError *error = nil;
 	NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
 	if (error) {
-		os_log_error(get_log(), "Failed to fetch document: %{public}@", error);
+		os_log_error(rptq_log, "Failed to fetch document: %{public}@", error);
 		NSAssert(NO, @"Failed to fetch document: %@", error);
 	}
 	NSAssert(documents.count > 0, @"No documents found");
@@ -379,18 +372,13 @@ static os_log_t get_log(void) {
 		
 	} else if (numberOfRows > section.numberOfRows) {
 		
-		//Add row
 		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		NSString *entityNameSectionRows;
-		RptqDocumentSectionRows *newRowToAppend;
-
-		entityNameSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
-		newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: entityNameSectionRows
-													   inManagedObjectContext: managedObjectContext];
+		NSString *entityNameSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
+		RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: entityNameSectionRows
+																				inManagedObjectContext: managedObjectContext];
 		NSArray *hasRowsArray = section.hasRows.array;
-		NSMutableOrderedSet *hasRows;
-		hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
-										[[NSMutableOrderedSet alloc] init];
+		NSMutableOrderedSet *hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+															 [[NSMutableOrderedSet alloc] init];
 		newRowToAppend.inSection = section;
 		[hasRows addObject:newRowToAppend];
 		section.hasRows = hasRows;
