@@ -87,7 +87,7 @@
 			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: doc.managedObjectContext];
 		}
 		
-		RptqDatabase *rptqDatabase;;
+		RptqDatabase *rptqDatabase;
 		RptqQuery *rptqQuery;
 		
 		//Initialize main database

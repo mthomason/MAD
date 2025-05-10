@@ -12,7 +12,6 @@
 
 #import "MADPrintPageRenderer.h"
 
-#import <os/log.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
@@ -87,7 +86,9 @@
 #import "MADPrintPageElement.h"
 #import "MADPrintPageElement+Constructor.h"
 
-//#import <MAD/MADAccessibilityLine.h>
+#import <os/log.h>
+
+static os_log_t log_print;
 
 @class MTBarcode;
 
@@ -153,16 +154,18 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 + (void)initialize {
 	[super initialize];
 	if (self == [MADPrintPageRenderer self]) {
-		NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-		if ([standardUserDefaults valueForKey:MTCachedSizeHorizontal] == nil) {
+		NSString *c = NSStringFromClass([MADPrintPageRenderer class]);
+		log_print = os_log_create("com.mad", c.UTF8String);
+
+		if ([[NSUserDefaults standardUserDefaults] valueForKey:MTCachedSizeHorizontal] == nil) {
 			
-			[standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
-									 forKey: MTCachedSizeHorizontal];
+			[[NSUserDefaults standardUserDefaults] setObject: NSStringFromCGSize(CGSizeZero)
+													  forKey: MTCachedSizeHorizontal];
 			
-			[standardUserDefaults setObject: NSStringFromCGSize(CGSizeZero)
-									 forKey: MTCachedSizeVertical];
+			[[NSUserDefaults standardUserDefaults] setObject: NSStringFromCGSize(CGSizeZero)
+													  forKey: MTCachedSizeVertical];
 			
-			[standardUserDefaults synchronize];
+			[[NSUserDefaults standardUserDefaults] synchronize];
 			
 		}
 	}
@@ -187,19 +190,19 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 + (void)drawWatermarkWithContext:(CGContextRef)ctx
 					  inPageRect:(CGRect)pageRect {
 	
-	UIFont *customFont = [UIFont boldSystemFontOfSize:12.0000f];
+	UIFont *customFont = [UIFont boldSystemFontOfSize:12.0];
 	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
 	paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
 	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
 	paragraphStyle.alignment = NSTextAlignmentCenter;
 	
-	UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0000f/256.0000f
-												  green:170.0000f/256.0000f
-												   blue:170.0000f/256.0000f alpha:0.8000f];
-	UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0000f/256.0000f
-													  green:85.0000f/256.0000f
-													   blue:85.0000f/256.0000f alpha:0.8000f];
-	NSNumber *strokeWidth = @3.0000f;
+	UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0/256.0
+												  green:170.0/256.0
+												   blue:170.0/256.0 alpha:0.8000f];
+	UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0/256.0
+													  green:85.0/256.0
+													   blue:85.0/256.0 alpha:0.8];
+	NSNumber *strokeWidth = @3.0;
 	NSDictionary *results = @{
 		NSFontAttributeName : customFont,
 		NSStrokeWidthAttributeName : strokeWidth,
@@ -212,8 +215,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 																 attributes: results];
 	
 	NSInteger rowCounter = 0, columnCounter = 0;
-	CGSize logoSize = CGSizeMake(150.0000f, 50.0000f);
-	CGSize logoMargin = CGSizeMake(25.0000f, 25.0000f);
+	CGSize logoSize = CGSizeMake(150.0, 50.0);
+	CGSize logoMargin = CGSizeMake(25.0, 25.0);
 	CGRect logoRect;
 	
 	do {
@@ -226,16 +229,17 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 			
 			CGContextSaveGState(ctx);
 			{
-				static CGFloat angle315Degrees = 7.0000f * (CGFloat)M_PI / 4.0000f;
+				static CGFloat angle315Degrees = 7.0 * (CGFloat)M_PI / 4.0;
 				CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ?
 									  y :
-									  y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f));
+									  y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0));
 				CGContextRotateCTM(ctx, angle315Degrees);
 				[getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y, logoRect.size.width, logoRect.size.height)];
 			}
 			CGContextRestoreGState(ctx);
 			columnCounter++;
 		} while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
+		
 		rowCounter++;
 	} while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
 }
@@ -410,6 +414,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
 
 	for (MADSectionRepresentation *pageSection in layoutEnumerator) {
+		os_log_debug(log_print, "%s %@", __PRETTY_FUNCTION__, NSStringFromMADDocumentSectionType(pageSection.sectionType));
 		
 		RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
 																	   andLevel: pageSection.groupLevel];
@@ -417,7 +422,6 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 		NSNumber *sectionIdentifier = @(documentSection.identifier);
 		CGRect rect = SectionBounds(pageRect, HeightWithVisibility([reportFormatter heightSection:sectionIdentifier], documentSection.visibility), documentSection.visibility, pageSection.sectionType, reportFormatter.numberOfPages, pageIndex, originY);
 
-		
 		if (pageSection.sectionType == MADDocumentSectionTypeGroupFooter &&
 			pageSection.groupLevel == reportFormatter.numberOfGroups - 1) {
 			readGroupCounter++;
@@ -467,6 +471,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	
 	if (sectionRepresentation.visibility) {
 		NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
+
 		for (RptqDocumentSectionRows *row in rowsEnumerator) {
 			NSEnumerator *documentObjectEnumerator = row.hasObjects.objectEnumerator;
 			MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
@@ -479,7 +484,9 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 																														  item: item
 																														itemID: pageSection.detailRowId];
 				__kindof MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
+
 				[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
+				
 				MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
 																											 type: item.documentObjectType
 																											frame: item.frame];
@@ -489,8 +496,9 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 				[rowRepresentation addLine:line];
 			}
 			NSError *error = nil;
-			if (![sectionRepresentation addRow:rowRepresentation error:&error]) {
-				os_log_error(OS_LOG_DEFAULT, "%s", error.localizedDescription.UTF8String);
+			bool addedRow = [sectionRepresentation addRow:rowRepresentation error:&error];
+			if (!addedRow && error != nil) {
+				os_log_error(log_print, "%s", error.localizedDescription.UTF8String);
 			}
 		}
 	}
@@ -514,9 +522,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-	CGRect rect = pageRect;
-	[self drawPageAtIndex: (unsigned long)labs(index)
-				   inRect: rect withTransparentBackground: NO];
+	[self drawPageAtIndex: (unsigned long)labs(index) inRect: pageRect withTransparentBackground: NO];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {

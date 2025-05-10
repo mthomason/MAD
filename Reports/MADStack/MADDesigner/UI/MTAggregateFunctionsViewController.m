@@ -13,6 +13,7 @@
 #import "MTAggregateFunctionsViewController.h"
 #import "MADAggregateFunctionsViewControllerDelegate.h"
 
+#import <Foundation/NSObject.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -122,8 +123,11 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 	UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
 	tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
 	[self setSelectedFunctionType: (MTAggregateFunctionType)tableViewCell.tag];
-	
-	[self.functionDelegate didSelectFunction: self.selectedFunctionType];
+
+	__strong NSObject <MADAggregateFunctionsViewControllerDelegate> *delegate = self.functionDelegate;
+	if (delegate != nil && [delegate respondsToSelector:@selector(didSelectFunction:)]) {
+		[delegate didSelectFunction: self.selectedFunctionType];
+	}
 
 }
 

@@ -12,7 +12,6 @@
 
 #import "RptqDocument+Extras.h"
 
-#import <os/log.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>

@@ -30,6 +30,7 @@
 #import "MADReportPageView.h"
 #import "MADDocumentScroller.h"
 #import "MADPageViewAttributes.h"
+#import <os/log.h>
 
 static const CGFloat PageEdgeInsetMargin = 3.0;
 
@@ -306,6 +307,8 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 		if (error == nil) {
 			NSDate *lastD = [attributes fileModificationDate];
 			self.pageViewAttributes.reportLastCacheDate = lastD.copy;
+		} else {
+			os_log_error(OS_LOG_DEFAULT, "Error: %@", error);
 		}
 	}
 	return self.pageViewAttributes.reportLastCacheDate;

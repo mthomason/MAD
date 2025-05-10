@@ -12,6 +12,7 @@
 #import <Foundation/NSObjCRuntime.h>
 
 typedef NS_ENUM(int16_t, MADDocumentSectionType) {
+	MADDocumentSectionTypeUnknown = 0,
 	MADDocumentSectionTypeReportHeader = 1,
 	MADDocumentSectionTypeReportFooter = 2,
 	MADDocumentSectionTypePageHeader = 3,
@@ -20,6 +21,20 @@ typedef NS_ENUM(int16_t, MADDocumentSectionType) {
 	MADDocumentSectionTypeGroupHeader = 6,
 	MADDocumentSectionTypeGroupFooter = 7,
 };
+
+static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionType);
+static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionType value) {
+	switch (value) {
+		case MADDocumentSectionTypeReportHeader: return @"MADDocumentSectionTypeReportHeader";
+		case MADDocumentSectionTypeReportFooter: return @"MADDocumentSectionTypeReportFooter";
+		case MADDocumentSectionTypePageHeader: return @"MADDocumentSectionTypePageHeader";
+		case MADDocumentSectionTypePageFooter: return @"MADDocumentSectionTypePageFooter";
+		case MADDocumentSectionTypeBody: return @"MADDocumentSectionTypeBody";
+		case MADDocumentSectionTypeGroupHeader: return @"MADDocumentSectionTypeGroupHeader";
+		case MADDocumentSectionTypeGroupFooter: return @"MADDocumentSectionTypeGroupFooter";
+		case MADDocumentSectionTypeUnknown: default: return @"MADDocumentSectionTypeUnknown";
+	}
+}
 
 extern const NSUInteger MADDocumentSectionIndexDocumentHeader;
 extern const NSUInteger MADDocumentSectionIndexPageHeader;

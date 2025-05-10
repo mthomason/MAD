@@ -300,8 +300,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 										uniqueColumnHack: unique
 										  columnAffinity: columnAffinity];
 	BOOL success = NO;
-	NSError * __autoreleasing error = NULL;
+	NSError *error = NULL;
 	success = [self.database executeQuery:queryCacheAddColumn withError:&error];
+	if (error != nil) {
+		os_log_error(caching_log, "Error: %@", error);
+	}
 	NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database),
 			 __PRETTY_FUNCTION__);
 }
@@ -434,10 +437,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	_lastObjectSelected = nil;
 	_numberOfRows = 0;
 	_hasNumberOfRows = MADObjectInitalizedNotSets;
-	MADQuery *query;
-	query = [[MADQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
-	NSError * __autoreleasing error = NULL;
-	return [self.database executeQuery:query withError:&error];
+	MADQuery *query = [[MADQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
+	NSError *error = nil;
+	BOOL result = [self.database executeQuery:query withError:&error];
+	if (error != nil) {
+		os_log_error(caching_log, "Error: %@", error);
+	}
+	return result;
 }
 
 - (NSUInteger)count {

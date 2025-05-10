@@ -19,6 +19,7 @@
 @implementation MADPrintPageElement (Constructor)
 
 + (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition {
+	NSLog(@"%s %@", __PRETTY_FUNCTION__, NSStringFromMADPrintPageElementType(definition.type));
 	
 	switch (definition.type) {
 		case MADPrintPageElementTypeAggregate:

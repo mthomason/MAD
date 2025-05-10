@@ -90,14 +90,13 @@ static os_log_t mad_log;
 	@autoreleasepool {
 		// Draw Page
 		id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
-		MADPrintPageRenderer *printPageRenderer = [delegatePage printPageRenderer];
+		MADPrintPageRenderer * _Nullable printPageRenderer = [delegatePage printPageRenderer];
+		if (printPageRenderer == nil) return;
 		[printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
 		
 		if (delegatePage.pageNumber != 1) return;
 		
-		// Draw Thumbnail
-		NSURL *thumbnailURL;
-		thumbnailURL = [[delegatePage thumbnailURL] copy];
+		NSURL *thumbnailURL = [[delegatePage thumbnailURL] copy];
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
 			NSData *pngImage = UIImagePNGRepresentation(thumbnail);

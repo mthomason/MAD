@@ -1270,10 +1270,9 @@ typedef NS_ENUM(short, MADExplorerState) {
 - (void)handleDocumentStateChangedNotificationError:(NSNotification *)notification {
 	[self.fileExplorerViewDelegate collectionView:self.collectionView allowSelection:YES];
 	NSString *message = [NSString stringWithFormat: @"Failed to open with message:\n\t%@", notification.userInfo];
-	UIAlertController *alertController;
-	alertController = [UIAlertController alertControllerWithTitle:@"Open Failure"
-														  message:message
-												   preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Open Failure"
+																			 message:message
+																	  preferredStyle:UIAlertControllerStyleAlert];
 	[self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -1618,14 +1617,20 @@ typedef NS_ENUM(short, MADExplorerState) {
 	
 	NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic |
 												 NSFileWrapperWritingWithNameUpdating;
-	NSError* fileWrittingError = nil;
+	NSError *fileWrittingError = nil;
 	[fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url
 					  error:&fileWrittingError];
+	if (fileWrittingError != nil) {
+		os_log_error(OS_LOG_DEFAULT, "Error: %@", fileWrittingError);
+	}
 	
 	if (fileWrittingError) {
-		fileWrittingError = nil;
+		NSError *error = nil;
 		[fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url
-						  error:&fileWrittingError];
+						  error:&error];
+		if (error != nil) {
+			os_log_error(OS_LOG_DEFAULT, "Error: %@", error);
+		}
 	}
 	[self.collectionView reloadData];
 }

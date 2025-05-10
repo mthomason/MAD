@@ -20,8 +20,7 @@
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition {
     if (self = [super initWithDefinition:definition]) {
         
-        NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-        datasource = definition.datasource;
+        NSObject <MADPrintPageRendererDataSourceProtocol> *datasource = definition.datasource;
         
         NSString *fieldKey = [definition fieldKey];
         NSArray *groupKeys = [datasource groupKeys:(int64_t)definition.detailRowId
@@ -32,8 +31,7 @@
         
         if (![definition calculateInMemory]) {
             
-            NSArray <NSNumber *> *rowIDsForPage;
-            rowIDsForPage = [datasource rowIDsForPage:definition.pageIndex];
+            NSArray <NSNumber *> *rowIDsForPage  = [datasource rowIDsForPage:definition.pageIndex];
             aggregateResult = [datasource dataForRows: rowIDsForPage
                                                column: fieldKey
                                                groups: groupKeys

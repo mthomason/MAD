@@ -25,4 +25,22 @@ typedef CF_ENUM(int64_t, MADPrintPageElementType) {
 	MADPrintPageElementTypeLabelLink = 10
 };
 
+static inline NSString *NSStringFromMADPrintPageElementType(MADPrintPageElementType);
+static inline NSString *NSStringFromMADPrintPageElementType(MADPrintPageElementType value) {
+	switch (value) {
+		case MADPrintPageElementTypeLabelDynamic: return @"MADPrintPageElementTypeLabelDynamic";
+		case MADPrintPageElementTypeLabelStatic: return @"MADPrintPageElementTypeLabelStatic";
+		case MADPrintPageElementTypeImage: return @"MADPrintPageElementTypeImage";
+		case MADPrintPageElementTypeChart: return @"MADPrintPageElementTypeChart";
+		case MADPrintPageElementTypeFormula: return @"MADPrintPageElementTypeFormula";
+		case MADPrintPageElementTypeAggregate: return @"MADPrintPageElementTypeAggregate";
+		case MADPrintPageElementTypeGroupKey: return @"MADPrintPageElementTypeGroupKey";
+		case MADPrintPageElementTypeAggregateFunctionList: return @"MADPrintPageElementTypeAggregateFunctionList";
+		case MADPrintPageElementTypeWhtiespace: return @"MADPrintPageElementTypeWhtiespace";
+		case MADPrintPageElementTypeBarcode: return @"MADPrintPageElementTypeBarcode";
+		case MADPrintPageElementTypeLabelLink: return @"MADPrintPageElementTypeLabelLink";
+		default: return @"Unknown";
+	}
+}
+
 #endif
