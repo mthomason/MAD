@@ -59,113 +59,131 @@
 #import "MADReportSectionsEnumerator.h"
 
 #import "RptqDataHelper.h"
+#import <os/log.h>
+
+static os_log_t rptq_log;
+static os_log_t get_log(void) {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSString *c = NSStringFromClass([RptqDocument class]);
+		rptq_log = os_log_create("com.mad", c.UTF8String);
+	});
+	return rptq_log;
+}
 
 @implementation RptqDocument (Extras)
 
 #pragma mark - Static
 
-+ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)context {
-	
+
+
++ (void)deleteExistingDocuments:(NSManagedObjectContext *)context {
 	NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
 	
-	NSError * __autoreleasing error = nil;
+	NSError *error = nil;
 	NSArray *documents = [context executeFetchRequest:request error:&error];
+	if (error) {
+		os_log_error(get_log(), "Failed to fetch existing documents: %{public}@", error);
+	} else if (documents.count > 0) {
+		for (RptqDocument *document in documents) {
+			[context deleteObject:document];
+		}
+		if (![context save:&error]) {
+			os_log_error(get_log(), "Failed to save after document deletion: %{public}@", error);
+		}
+	}
 	
 	if (!error) {
-		//Delete any contents of the existing object modal.
 		if (documents && documents.count > 0) {
 			for (RptqDocument *document in documents) {
 				[context deleteObject:document];
 			}
 		}
 	}
+}
+
++ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)context {
+	NSAssert(context != nil, @"Context must not be nil");
 	
+	[self deleteExistingDocuments:context];
+	
+	
+	
+	
+	
+	NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
 	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
 														 inManagedObjectContext: context];
+	NSAssert(entityDescription != nil, @"Failed to get entity description for %@", rptqDocumentName);
 	
-	RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription
-								   insertIntoManagedObjectContext: context];
+	RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription insertIntoManagedObjectContext: context];
+	NSAssert(document != nil, @"Failed to create new document");
 	
+	RptqDocumentSection*(^createSection)(NSManagedObjectContext *, int64_t, NSString *) =
+	^RptqDocumentSection*(NSManagedObjectContext *ctx, int64_t identifier, NSString *sectionClass) {
+		RptqDocumentSection *section = [NSEntityDescription insertNewObjectForEntityForName:sectionClass
+																	 inManagedObjectContext:ctx];
+		NSAssert(section != nil, @"Failed to create section");
+		section.identifier = identifier;
+		return section;
+	};
+
 	NSString *docSection = NSStringFromClass([RptqDocumentSection class]);
 	NSString *rptqDocumentSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
+	
+	document.hasReportHeaderSection = createSection(context, 1, docSection);
+	document.hasReportFooterSection = createSection(context, 2, docSection);
+	document.hasPageHeaderSection = createSection(context, 3, docSection);
+	document.hasPageFooterSection = createSection(context, 4, docSection);
+	document.hasDetailSection = createSection(context, 5, docSection);
 
-	RptqDocumentSection *hasReportHeaderSection;
-	hasReportHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
-														   inManagedObjectContext: context];
-	hasReportHeaderSection.identifier = 1;
-	document.hasReportHeaderSection = hasReportHeaderSection;
-	
-	RptqDocumentSection *hasReportFooterSection;
-	hasReportFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
-														   inManagedObjectContext: context];
-	hasReportFooterSection.identifier = 2;
-	document.hasReportFooterSection = hasReportFooterSection;
-	
-	RptqDocumentSection *hasPageHeaderSection;
-	hasPageHeaderSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
-														 inManagedObjectContext: context];
-	hasPageHeaderSection.identifier = 3;
-	document.hasPageHeaderSection = hasPageHeaderSection;
-	
-	RptqDocumentSection *hasPageFooterSection;
-	hasPageFooterSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
-														 inManagedObjectContext: context];
-	hasPageFooterSection.identifier = 4;
-	document.hasPageFooterSection = hasPageFooterSection;
-	
-	RptqDocumentSection *hasDetailSection;
-	hasDetailSection = [NSEntityDescription insertNewObjectForEntityForName: docSection
-													 inManagedObjectContext: context];
-	hasDetailSection.identifier = 5;
-	document.hasDetailSection = hasDetailSection;
-	
-	RptqDocumentSectionRows *headerRow;
-	headerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-											  inManagedObjectContext: context];
-	NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];
+	RptqDocumentSectionRows *headerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+																	   inManagedObjectContext: context];
+	NSAssert(headerRow != nil, @"Failed to create section row.");
+	NSOrderedSet <RptqDocumentSectionRows *> *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];
 	document.hasReportHeaderSection.hasRows = hasRows1;
 	headerRow.inSection = document.hasReportHeaderSection;
 
-	RptqDocumentSectionRows *footerRow;
-	footerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-											  inManagedObjectContext: context];
-	NSOrderedSet *hasRows2 = [[NSOrderedSet alloc] initWithObject: footerRow];
+	RptqDocumentSectionRows *footerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+																	   inManagedObjectContext: context];
+	NSAssert(footerRow != nil, @"Failed to create section row.");
+	NSOrderedSet <RptqDocumentSectionRows *> *hasRows2 = [[NSOrderedSet alloc] initWithObject: footerRow];
 	document.hasReportFooterSection.hasRows = hasRows2;
 	footerRow.inSection = document.hasReportFooterSection;
 
-	RptqDocumentSectionRows *pageHeaderRow;
-	pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-												  inManagedObjectContext: context];
-	NSOrderedSet *hasRows3 = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
+	RptqDocumentSectionRows *pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+																		   inManagedObjectContext: context];
+	NSAssert(pageHeaderRow != nil, @"Failed to create section row.");
+	NSOrderedSet <RptqDocumentSectionRows *> *hasRows3 = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
 	document.hasPageHeaderSection.hasRows = hasRows3;
 	pageHeaderRow.inSection = document.hasPageHeaderSection;
-	
-	RptqDocumentSectionRows *pageFooterRow;
-	pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-												  inManagedObjectContext: context];
-	NSOrderedSet *hasRows4 = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
+
+	RptqDocumentSectionRows *pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+																		   inManagedObjectContext: context];
+	NSAssert(pageFooterRow != nil, @"Failed to create section row.");
+	NSOrderedSet <RptqDocumentSectionRows *> *hasRows4 = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
 	document.hasPageFooterSection.hasRows = hasRows4;
 	pageFooterRow.inSection = document.hasPageFooterSection;
-	
-	RptqDocumentSectionRows *detailSectionRow;
-	detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-													 inManagedObjectContext: context];
-	NSOrderedSet *hasRows5 = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
+
+	RptqDocumentSectionRows *detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
+																			  inManagedObjectContext: context];
+	NSAssert(detailSectionRow != nil, @"Failed to create section row.");
+	NSOrderedSet <RptqDocumentSectionRows *> *hasRows5 = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
 	document.hasDetailSection.hasRows = hasRows5;
 	detailSectionRow.inSection = document.hasDetailSection;
-	
+
 	document.hasReportHeaderSection.type = MADDocumentSectionTypeReportHeader;
 	document.hasReportFooterSection.type = MADDocumentSectionTypeReportFooter;
 	document.hasPageHeaderSection.type = MADDocumentSectionTypePageHeader;
 	document.hasPageFooterSection.type = MADDocumentSectionTypePageFooter;
 	document.hasDetailSection.type = MADDocumentSectionTypeBody;
 
-	[document.hasReportHeaderSection    setInterfaceHeight: 44.0000f];
-	[document.hasReportFooterSection    setInterfaceHeight: 44.0000f];
-	[document.hasPageHeaderSection      setInterfaceHeight: 44.0000f];
-	[document.hasPageFooterSection      setInterfaceHeight: 44.0000f];
-	[document.hasDetailSection          setInterfaceHeight: 88.0000f];
+	[document.hasReportHeaderSection    setInterfaceHeight: 44.0];
+	[document.hasReportFooterSection    setInterfaceHeight: 44.0];
+	[document.hasPageHeaderSection      setInterfaceHeight: 44.0];
+	[document.hasPageFooterSection      setInterfaceHeight: 44.0];
+	[document.hasDetailSection          setInterfaceHeight: 88.0];
 
 	document.hasReportHeaderSection.visibility = YES;
 	document.hasReportFooterSection.visibility = YES;
@@ -173,29 +191,37 @@
 	document.hasPageFooterSection.visibility = YES;
 	document.hasDetailSection.visibility = YES;
 
-	if (![hasReportHeaderSection validateForUpdate: &error]) {
-		os_log_error(OS_LOG_DEFAULT, "Error: %s", error.localizedDescription.UTF8String);
+	NSError *error1 = nil;
+	if (![document.hasReportHeaderSection validateForUpdate: &error1]) {
+		os_log_error(get_log(), "Error: %s", error1.localizedDescription.UTF8String);
 	}
 	
-	if (![hasDetailSection validateForUpdate: &error]) {
-		os_log_error(OS_LOG_DEFAULT, "Error: %s", error.localizedDescription.UTF8String);
+	NSError *error2 = nil;
+	if (![document.hasDetailSection validateForUpdate: &error2]) {
+		os_log_error(get_log(), "Error: %s", error2.localizedDescription.UTF8String);
 	}
 	
-	error = nil;
-	if (![document validateForUpdate: &error]) {
-		os_log_error(OS_LOG_DEFAULT, "Error: %s", error.localizedDescription.UTF8String);
+	NSError *error3 = nil;
+	if (![document validateForUpdate: &error3]) {
+		os_log_error(get_log(), "Error: %s", error3.localizedDescription.UTF8String);
 	}
 	
 	return document;
 }
 
 + (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext {
-	NSString *entityName = NSStringFromClass([RptqDocument class]);
-	NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
+	NSAssert(objectContext != nil, @"Context must not be nil");
+
+	NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
 	docFetchRequest.fetchLimit = 1;
+
 	NSError *error = nil;
 	NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-	NSAssert(error == nil, @"Got error on new document fetch: %@", error);
+	if (error) {
+		os_log_error(get_log(), "Failed to fetch document: %{public}@", error);
+		NSAssert(NO, @"Failed to fetch document: %@", error);
+	}
+	NSAssert(documents.count > 0, @"No documents found");
 	return documents.lastObject;
 }
 
@@ -229,9 +255,8 @@
 }
 
 - (RptqQuery *)mainQuery {
-	RptqDatabase *defaultDatabase = [self defaultDatabase];
-	RptqQuery *mainQuery = [defaultDatabase defaultQuery];
-	return mainQuery;
+	RptqDatabase *defaultDatabase = self.hasDatabaseSchemas.anyObject;
+	return defaultDatabase.hasQueries.anyObject;
 }
 
 - (RptqDatabase *)defaultDatabase {
@@ -398,8 +423,7 @@
 	RptqQuery *query = self.defaultDatabase.defaultQuery;
 	RptqDocumentSection *section = [self documentSectionForSelectedIndex: sectionRow
 													  withNumberOfGroups: query.hasQueryGroups.count];
-	NSNumber *visibility = [[NSNumber alloc] initWithBool:isVisible];
-	section.visibility = visibility;
+	section.visibility = isVisible;
 }
 
 - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow {
@@ -427,7 +451,7 @@
 	RptqDatabaseCredentals *credentals;
 	credentals = [RptqDatabaseCredentals newDatabaseCredental: managedObjectContext];
 	
-	NSString *databaseIdentifier = [[NSString alloc] initWithString:database.identifier];
+	NSString *databaseIdentifier = [database.identifier copy];;
 	credentals.driverID = databaseIdentifier;
 
 	if (database.databaseConnection != nil) {

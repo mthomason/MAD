@@ -58,8 +58,6 @@
 
 #import <MAD/MTPaper.h>
 #import <MAD/MADReportFormatter.h>
-//#import <MAD/MADAccessibilityLine.h>
-
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADDatabase.h>
 
@@ -88,6 +86,8 @@
 #import "MADDocumentObjectReference.h"
 #import "MADPrintPageElement.h"
 #import "MADPrintPageElement+Constructor.h"
+
+//#import <MAD/MADAccessibilityLine.h>
 
 @class MTBarcode;
 

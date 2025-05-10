@@ -12,20 +12,14 @@
 #import <UIKit/UIPrintPageRenderer.h>
 
 @class UIImage, MADReportTextRepresentation, MADReportFormatter, MADDataTableFast, MADocument;
-
 @protocol MADPrintPageRendererDataSourceProtocol;
 
 @interface MADPrintPageRenderer : UIPrintPageRenderer
 
-	- (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
-
-	+ (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
-
-	@property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
-
-	- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
-		withTransparentBackground:(BOOL)transparentBackground;
-
+@property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
+- (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
++ (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
+- (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground;
 
 @end
 

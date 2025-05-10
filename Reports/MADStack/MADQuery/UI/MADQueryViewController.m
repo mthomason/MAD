@@ -248,6 +248,7 @@ BOOL storeEnabled(void) {
 #pragma mark -
 #pragma mark NSObject
 
+/*
 + (instancetype)newQueryViewController:(MADocument *)document {
 	id bundle = [NSBundle mainBundle];
 	id storybard = [UIStoryboard storyboardWithName: @"MADQuery" bundle: bundle];
@@ -255,6 +256,7 @@ BOOL storeEnabled(void) {
 	[((typeof(self))controller) setDocument: document];
 	return controller;
 }
+*/
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver: self];

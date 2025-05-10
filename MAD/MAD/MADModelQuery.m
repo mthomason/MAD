@@ -301,20 +301,18 @@
 - (void)insertLinksFromFetchRequestResults:(NSArray <NSDictionary *> *)results {
 	if (!results.count) return;
 
-	NSArray <NSNumber *> *queryLinkIDsFiltered;
-	queryLinkIDsFiltered = [results valueForKey:MADKeyQueryLinkID];
+	NSArray <NSNumber *> *queryLinkIDsFiltered = [results valueForKey:MADKeyQueryLinkID];
 	[_queryLinkIDs addObjectsFromArray:queryLinkIDsFiltered];
 	
 	NSNumber *queryLinkID;
 	MADModelQueryLink *queryLink;
-	NSPredicate *predicate;
 	NSExpression *expressionKeyPath = [NSExpression expressionForKeyPath:MADKeyQueryLinkID];
 	
 	for (queryLinkID in _queryLinkIDs) {
 		
-		predicate = [NSPredicate newPredicateObjectWithNumber:queryLinkID
-												andExpression:expressionKeyPath];
-		
+		NSPredicate *predicate = [NSPredicate newPredicateObjectWithNumber:queryLinkID
+															 andExpression:expressionKeyPath];
+
 		NSArray *fresults = [results filteredArrayUsingPredicate:predicate];
 		
 		int64_t qlid = -1, ltid = -1, lfid = -1, rtid = -1, rfid = -1;
@@ -449,18 +447,18 @@
    managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 	MADModelQueryLink *link;
 	if ((link = [_links objectForKey:queryLinkID])) return;
-	
-	NSExpression *expressionInQuery[2];
+
 	NSArray <NSDictionary *> *results;
+
+	NSExpression *expressionInQuery[2];
 	expressionInQuery[0] = [NSExpression expressionForEvaluatedObject];
 	expressionInQuery[1] = [NSExpression expressionForConstantValue: queryLinkID];
 	
-	NSPredicate *isQueryLink;
-	isQueryLink = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
-													 rightExpression: expressionInQuery[1]
-															modifier: NSDirectPredicateModifier
-																type: NSEqualToPredicateOperatorType
-															 options: 0];
+	NSPredicate *isQueryLink = [NSComparisonPredicate predicateWithLeftExpression: expressionInQuery[0]
+																  rightExpression: expressionInQuery[1]
+																		 modifier: NSDirectPredicateModifier
+																			 type: NSEqualToPredicateOperatorType
+																		  options: 0];
 	NSError * __autoreleasing error = NULL;
 	NSFetchRequest *fetchRequest = [MADModelQueryLink fetchRequest:isQueryLink];
 	results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];

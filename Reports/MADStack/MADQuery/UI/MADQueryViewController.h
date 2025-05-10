@@ -25,7 +25,7 @@ extern NSString * const MADImageBarButtonItemDatabase8;
 		MADQueryNavigationProtocol,
 		UIViewControllerAnimatedTransitioning>
 
-	+ (instancetype)newQueryViewController:(MADocument *)document;
+	//+ (instancetype)newQueryViewController:(MADocument *)document;
 
 	+ (void)deleteCoreDataCache;
 
