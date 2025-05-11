@@ -4,12 +4,10 @@
 
 Compressor/src/
 Compressor/build_temp/
-Compressor/library/openssl/
 Compressor/bin/iPhoneSimulator-i386.sdk/
 Compressor/library/libpng-old/
 Compressor/src/libpng-1.6.37/
 Compressor/freetds-1.4.26/
-Compressor/library/freetds/
 Compressor/library/libmysqlclient-old
 Compressor/source
 

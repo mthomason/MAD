@@ -1,81 +1,243 @@
 #!/bin/bash
-set -e
+
+# Strict error handling and cleanup
+set -eo pipefail
+trap 'echo "Error at line $LINENO"; cleanup; exit 1' ERR
 
 # Configuration
-ROOT_DIR=$(pwd)
-OPENSSL_TAR="openssl-3.4.1.tar.gz"
-OPENSSL_SRC_DIR="${ROOT_DIR}/openssl-3.4.1"
-BUILD_DIR="${ROOT_DIR}/openssl-build"
-OUTPUT_DIR="${ROOT_DIR}/openssl-universal"
+SCRIPT_DIR="/Users/michael/Desktop/Reports/Compressor"
+MEDIA_DIR="${SCRIPT_DIR}/media"
+SRC_DIR="${SCRIPT_DIR}/src"
+BUILD_DIR="${SCRIPT_DIR}/build/openssl"
+LIBRARY_DIR="${SCRIPT_DIR}/library/openssl"
+OPENSSL_VERSION="3.4.1"
+OPENSSL_ARCHIVE="${MEDIA_DIR}/openssl-${OPENSSL_VERSION}.tar.gz"
+OPENSSL_SOURCE_DIR="${SRC_DIR}/openssl-${OPENSSL_VERSION}"
 
-# Platforms to build
-PLATFORMS=(
-  "iPhoneOS arm64 ios64-cross"
-  "iPhoneOS arm64e ios64-cross"
-  "iPhoneSimulator x86_64 iossimulator-xcrun"
-  "iPhoneSimulator arm64 iossimulator-xcrun"
-  "macosx arm64 darwin64-arm64-cc"
-  "macosx x86_64 darwin64-x86_64-cc"
-)
+# Cleanup function
+cleanup() {
+    echo "Cleaning up..."
+    # Add any temporary file cleanup here if needed
+}
 
-# Clean previous builds
-rm -rf "${BUILD_DIR}" "${OUTPUT_DIR}"
-mkdir -p "${BUILD_DIR}" "${OUTPUT_DIR}"
+# Verify Xcode tools
+verify_xcode() {
+    if ! xcrun --sdk iphoneos --find clang > /dev/null; then
+        echo "ERROR: Xcode command line tools not found."
+        exit 1
+    fi
+}
 
-# Download OpenSSL source
-if [ ! -d "${OPENSSL_SRC_DIR}" ]; then
-  curl -L https://github.com/openssl/openssl/releases/download/openssl-3.4.1/openssl-3.4.1.tar.gz -o "${OPENSSL_TAR}"
-  tar xzf "${OPENSSL_TAR}"
+# Create required directories
+mkdir -p "${MEDIA_DIR}" "${SRC_DIR}" "${BUILD_DIR}" "${LIBRARY_DIR}"
+
+# Download and extract source if needed
+if [[ ! -d "${OPENSSL_SOURCE_DIR}" ]]; then
+    if [[ ! -f "${OPENSSL_ARCHIVE}" ]]; then
+        echo "Downloading OpenSSL ${OPENSSL_VERSION}..."
+        curl -L https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz -o "${OPENSSL_ARCHIVE}"
+    fi
+    echo "Extracting OpenSSL source..."
+    tar -xzf "${OPENSSL_ARCHIVE}" -C "${SRC_DIR}"
 fi
 
-# Build OpenSSL for each platform
-declare -a CRYPTO_PATHS
-declare -a SSL_PATHS
-for PLATFORM_INFO in "${PLATFORMS[@]}"; do
-  IFS=' ' read -r PLATFORM ARCH TARGET <<< "${PLATFORM_INFO}"
-  echo "Building OpenSSL for ${PLATFORM} (${ARCH})..."
+# Platform definitions (name,sdk,archs,min_version,target)
+PLATFORMS=(
+    # iOS
+    "iOS,iphoneos,arm64,12.0,ios64-cross"
+    "iOS-arm64e,iphoneos,arm64e,12.0,ios64-cross"
+    
+    # iOS Simulator
+    "iOS-simulator,iphonesimulator,x86_64,12.0,iossimulator-xcrun"
+    "iOS-simulator-arm64,iphonesimulator,arm64,12.0,iossimulator-xcrun"
+    
+    # macOS
+    "macOS,macosx,x86_64,10.15,darwin64-x86_64-cc"
+    "macOS-arm64,macosx,arm64,10.15,darwin64-arm64-cc"
+    
+    # Mac Catalyst
+    #"macCatalyst,macosx,x86_64,13.0,darwin64-x86_64-cc"
+    #"macCatalyst-arm64,macosx,arm64,13.0,darwin64-arm64-cc"
+    
+    # Uncomment these if you need to build for other platforms:
+    # watchOS - Using custom targets
+    #"watchOS-arm64_32,watchos,arm64_32,8.5,iphoneos-cross"  # Custom target for arm64_32
+    #"watchOS-armv7k,watchos,armv7k,8.5,iphoneos-cross"      # Custom target for armv7k
+    
+    # watchOS Simulator
+    #"watchOS-simulator,watchsimulator,arm64,8.5,iossimulator-xcrun"
+    
+    # tvOS
+    #"tvOS,appletvos,arm64,13.0,tvos-cross"
+    
+    # tvOS Simulator
+    #"tvOS-simulator,appletvsimulator,x86_64,13.0,tvossimulator-xcrun"
+)
 
-  BUILD_PATH="${BUILD_DIR}/${PLATFORM}-${ARCH}"
-  mkdir -p "${BUILD_PATH}" && cd "${BUILD_PATH}"
+build_for_platform() {
+    local name=$1
+    local sdk=$2
+    local archs=$3
+    local min_version=$4
+    local target=$5
 
-  # Configure environment for iOS
-  if [[ "${PLATFORM}" == "iPhoneOS" || "${PLATFORM}" == "iPhoneSimulator" ]]; then
-    export CROSS_TOP=$(xcode-select -p)/Platforms/${PLATFORM}.platform/Developer
-    export CROSS_SDK=${PLATFORM}.sdk
-    export PATH="${CROSS_TOP}/../usr/bin:${PATH}"
-  fi
+    echo "Building ${name}..."
 
-  # Configure OpenSSL
-  "${OPENSSL_SRC_DIR}/Configure" \
-    ${TARGET} \
-    no-shared \
-    no-asm \
-    no-deprecated \
-    --prefix="${BUILD_PATH}/install" \
-    --openssldir="${BUILD_PATH}/install" \
-    -arch "${ARCH}"
+    local sdk_path=$(xcrun --sdk "${sdk}" --show-sdk-path)
+    local platform_build_dir="${BUILD_DIR}/${name}"
+    local output_dir="${LIBRARY_DIR}/${name}"
+    local output_lib_dir="${output_dir}/lib"
+    local output_include_dir="${output_dir}/include"
 
-  # Build and install
-  make -j$(sysctl -n hw.ncpu)
-  make install_sw
+    # Clean previous build
+    rm -rf "${platform_build_dir}" "${output_dir}"
+    mkdir -p "${output_dir}"
 
-  # Collect libraries
-  CRYPTO_PATH="${BUILD_PATH}/install/lib/libcrypto.a"
-  SSL_PATH="${BUILD_PATH}/install/lib/libssl.a"
+    declare -a crypto_paths
+    declare -a ssl_paths
+    declare -a pkgconfig_paths
 
-  if [ -f "${CRYPTO_PATH}" ] && [ -f "${SSL_PATH}" ]; then
-    CRYPTO_PATHS+=("${CRYPTO_PATH}")
-    SSL_PATHS+=("${SSL_PATH}")
-  else
-    echo "Error: OpenSSL libraries not found for ${PLATFORM} ${ARCH}"
-    exit 1
-  fi
+    for arch in ${archs}; do
+        echo "  Building ${arch}..."
+        local arch_build_dir="${platform_build_dir}/${arch}"
+        mkdir -p "${arch_build_dir}"
+
+        pushd "${arch_build_dir}" > /dev/null
+
+        # Set environment variables for cross-compilation
+        if [[ "${sdk}" == "iphoneos" || "${sdk}" == "iphonesimulator" ]]; then
+            local platform_name="iPhoneOS"
+            [[ "${sdk}" == "iphonesimulator" ]] && platform_name="iPhoneSimulator"
+            
+            export CROSS_TOP="$(xcode-select -p)/Platforms/${platform_name}.platform/Developer"
+            export CROSS_SDK="${platform_name}.sdk"
+            export PATH="${CROSS_TOP}/../usr/bin:${PATH}"
+        fi
+
+        # Compiler settings
+        local cc=$(xcrun --sdk "${sdk}" --find clang)
+        local cflags="-arch ${arch} -isysroot ${sdk_path} -O3"
+        local ldflags="${cflags}"
+
+        # Special handling for arm64e
+        if [[ "${arch}" == "arm64e" ]]; then
+            cflags+=" -arch arm64e"
+        fi
+
+        # Minimum OS version flags
+        case "${name}" in
+            iOS*)              cflags+=" -miphoneos-version-min=${min_version}" ;;
+            iOS-simulator*)    cflags+=" -miphonesimulator-version-min=${min_version}" ;;
+            macOS*)            cflags+=" -mmacosx-version-min=${min_version}" ;;
+            macCatalyst*)      cflags+=" -target ${arch}-apple-ios${min_version}-macabi" ;;
+        esac
+
+        # Configure OpenSSL
+        echo "Configuring for ${target} (${arch})..."
+        "${OPENSSL_SOURCE_DIR}/Configure" \
+            ${target} \
+            no-shared \
+            no-asm \
+            no-deprecated \
+            --prefix="${arch_build_dir}/install" \
+            --openssldir="${arch_build_dir}/install" \
+            CC="${cc}" \
+            CFLAGS="${cflags}" \
+            LDFLAGS="${ldflags}"
+
+        # Build and install
+        make -j$(sysctl -n hw.ncpu) > /dev/null 2>&1
+        make install_sw > /dev/null 2>&1
+
+        # Verify and collect libraries
+        local crypto_path="${arch_build_dir}/install/lib/libcrypto.a"
+        local ssl_path="${arch_build_dir}/install/lib/libssl.a"
+        local pkgconfig_path="${arch_build_dir}/install/lib/pkgconfig"
+        if [[ -f "${crypto_path}" && -f "${ssl_path}" ]]; then
+            crypto_paths+=("${crypto_path}")
+            ssl_paths+=("${ssl_path}")
+            pkgconfig_path+=("${pkgconfig_path}")
+        else
+            echo "ERROR: Failed to build ${arch} for ${name}"
+            exit 1
+        fi
+
+        popd > /dev/null
+    done
+
+    # Create universal libraries if we have multiple architectures
+    if [ ${#crypto_paths[@]} -gt 1 ]; then
+        echo " Creating universal libraries for ${name}..."
+        mkdir -p "${output_lib_dir}"
+        lipo -create "${crypto_paths[@]}" -output "${output_lib_dir}/libcrypto.a"
+        lipo -create "${ssl_paths[@]}" -output "${output_lib_dir}/libssl.a"
+    else
+        echo " Copying single-architecture libraries for ${name}..."
+        mkdir -p "${output_lib_dir}"
+        cp "${crypto_paths[0]}" "${output_lib_dir}/libcrypto.a"
+        cp "${ssl_paths[0]}" "${output_lib_dir}/libssl.a"
+        cp "${pkgconfig_path[0]}" "${output_lib_dir}"
+    fi
+    
+    lipo -info "${output_lib_dir}/libcrypto.a"
+    lipo -info "${output_lib_dir}/libssl.a"
+    
+    # Copy headers (same for all architectures)
+    mkdir -p "${output_include_dir}"
+    cp -R "${platform_build_dir}/${arch}/install/include/"* "${output_include_dir}/" || true
+}
+
+# Main execution
+verify_xcode
+
+for platform in "${PLATFORMS[@]}"; do
+    IFS=',' read -r name sdk archs min_version target <<< "${platform}"
+    build_for_platform "${name}" "${sdk}" "${archs}" "${min_version}" "${target}"
 done
 
-# Create universal libraries
-lipo -create "${CRYPTO_PATHS[@]}" -output "${OUTPUT_DIR}/libcrypto-universal.a"
-lipo -create "${SSL_PATHS[@]}" -output "${OUTPUT_DIR}/libssl-universal.a"
+# Create additional fat libraries combining platforms where needed
+#echo "Creating combined iOS libraries..."
+#mkdir -p "${LIBRARY_DIR}/iOS-fat"
+#lipo -create \
+#    "${LIBRARY_DIR}/iOS/libcrypto.a" \
+#    "${LIBRARY_DIR}/iOS-arm64e/libcrypto.a" \
+#    -output "${LIBRARY_DIR}/iOS-fat/libcrypto.a"
+#lipo -create \
+#    "${LIBRARY_DIR}/iOS/libssl.a" \
+#    "${LIBRARY_DIR}/iOS-arm64e/libssl.a" \
+#    -output "${LIBRARY_DIR}/iOS-fat/libssl.a"
 
-echo "Universal OpenSSL libraries built:"
-echo "- ${OUTPUT_DIR}/libcrypto-universal.a"
-echo "- ${OUTPUT_DIR}/libssl-universal.a"
+echo "Creating combined iOS Simulator libraries..."
+mkdir -p "${LIBRARY_DIR}/iOS-simulator-fat/lib"
+lipo -create \
+    "${LIBRARY_DIR}/iOS-simulator/lib/libcrypto.a" \
+    "${LIBRARY_DIR}/iOS-simulator-arm64/lib/libcrypto.a" \
+    -output "${LIBRARY_DIR}/iOS-simulator-fat/lib/libcrypto.a"
+lipo -create \
+    "${LIBRARY_DIR}/iOS-simulator/lib/libssl.a" \
+    "${LIBRARY_DIR}/iOS-simulator-arm64/lib/libssl.a" \
+    -output "${LIBRARY_DIR}/iOS-simulator-fat/lib/libssl.a"
+
+echo "Creating combined macOS libraries..."
+mkdir -p "${LIBRARY_DIR}/macOS-fat/lib"
+lipo -create \
+    "${LIBRARY_DIR}/macOS/lib/libcrypto.a" \
+    "${LIBRARY_DIR}/macOS-arm64/lib/libcrypto.a" \
+    -output "${LIBRARY_DIR}/macOS-fat/lib/libcrypto.a"
+lipo -create \
+    "${LIBRARY_DIR}/macOS/lib/libssl.a" \
+    "${LIBRARY_DIR}/macOS-arm64/lib/libssl.a" \
+    -output "${LIBRARY_DIR}/macOS-fat/lib/libssl.a"
+
+#echo "Creating combined Mac Catalyst libraries..."
+#mkdir -p "${LIBRARY_DIR}/macCatalyst-fat"
+#lipo -create \
+#    "${LIBRARY_DIR}/macCatalyst/libcrypto.a" \
+#    "${LIBRARY_DIR}/macCatalyst-arm64/libcrypto.a" \
+#    -output "${LIBRARY_DIR}/macCatalyst-fat/libcrypto.a"
+#lipo -create \
+#    "${LIBRARY_DIR}/macCatalyst/libssl.a" \
+#    "${LIBRARY_DIR}/macCatalyst-arm64/libssl.a" \
+#    -output "${LIBRARY_DIR}/macCatalyst-fat/libssl.a"
+
+echo "Build complete! Libraries in: ${LIBRARY_DIR}"
