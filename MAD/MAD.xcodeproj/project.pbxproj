@@ -2921,7 +2921,7 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Compressor/library/freetds/iOS/lib",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
 				);
 				OTHER_CFLAGS = "";
@@ -2980,7 +2980,7 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Compressor/library/libsybdb",
+					"$(PROJECT_DIR)/../Compressor/library/freetds/iOS/lib",
 					"$(PROJECT_DIR)/../Compressor/library/libpng",
 				);
 				OTHER_CFLAGS = "";
