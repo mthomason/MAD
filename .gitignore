@@ -10,6 +10,7 @@ Compressor/src/libpng-1.6.37/
 Compressor/freetds-1.4.26/
 Compressor/library/libmysqlclient-old
 Compressor/source
+Compressor/build/freetds/
 
 3rdPartyProjects/ColorPicker/
 opt/bld/
