@@ -5,6 +5,7 @@ set -eo pipefail
 trap 'echo "Error at line $LINENO"; cleanup; exit 1' ERR
 
 # Configuration
+BUILD_MACHINE=`uname -m`
 SCRIPT_DIR="/Users/michael/Desktop/Reports/Compressor"
 MEDIA_DIR="${SCRIPT_DIR}/media"
 SRC_DIR="${SCRIPT_DIR}/src"
@@ -44,34 +45,33 @@ fi
 # Platform definitions (name,sdk,archs,min_version,target)
 PLATFORMS=(
     # iOS
-    "iOS,iphoneos,arm64,12.0,ios64-cross"
-    "iOS-arm64e,iphoneos,arm64e,12.0,ios64-cross"
+    #"iOS,iphoneos,arm64,12.0,ios64-cross"
+    #"iOS-arm64e,iphoneos,arm64e,12.0,ios64-cross"
     
     # iOS Simulator
-    "iOS-simulator,iphonesimulator,x86_64,12.0,iossimulator-xcrun"
-    "iOS-simulator-arm64,iphonesimulator,arm64,12.0,iossimulator-xcrun"
+    #"iOS-simulator,iphonesimulator,x86_64,12.0,iossimulator-x86_64-xcrun"
+    "iOS-simulator-arm64,iphonesimulator,arm64,12.0,iossimulator-arm64-xcrun"
     
     # macOS
-    "macOS,macosx,x86_64,10.15,darwin64-x86_64-cc"
-    "macOS-arm64,macosx,arm64,10.15,darwin64-arm64-cc"
+    #"macOS,macosx,x86_64,11.0,darwin64-x86_64-cc"
+    #"macOS-arm64,macosx,arm64,11.0,darwin64-arm64-cc"
     
     # Mac Catalyst
-    #"macCatalyst,macosx,x86_64,13.0,darwin64-x86_64-cc"
-    #"macCatalyst-arm64,macosx,arm64,13.0,darwin64-arm64-cc"
+    #"macCatalyst,macosx,x86_64,13.0,mac-catalyst-x86_64"
+    #"macCatalyst-arm64,macosx,arm64,13.0,mac-catalyst-arm64"
     
-    # Uncomment these if you need to build for other platforms:
-    # watchOS - Using custom targets
-    #"watchOS-arm64_32,watchos,arm64_32,8.5,iphoneos-cross"  # Custom target for arm64_32
-    #"watchOS-armv7k,watchos,armv7k,8.5,iphoneos-cross"      # Custom target for armv7k
+    # watchOS
+    #"watchOS-arm64_32,watchos,arm64_32,8.5,watchos-cross-arm64_32"
+    #"watchOS-armv7k,watchos,armv7k,8.5,watchos-cross-armv7k"
     
     # watchOS Simulator
-    #"watchOS-simulator,watchsimulator,arm64,8.5,iossimulator-xcrun"
+    #"watchOS-simulator,watchsimulator,arm64,8.5,watchos-sim-cross-arm64"
     
     # tvOS
-    #"tvOS,appletvos,arm64,13.0,tvos-cross"
+    #"tvOS,appletvos,arm64,13.0,tvos-cross-arm64"
     
     # tvOS Simulator
-    #"tvOS-simulator,appletvsimulator,x86_64,13.0,tvossimulator-xcrun"
+    #"tvOS-simulator,appletvsimulator,x86_64,13.0,tvos-sim-cross-x86_64"
 )
 
 build_for_platform() {
@@ -104,18 +104,47 @@ build_for_platform() {
 
         pushd "${arch_build_dir}" > /dev/null
 
-        # Set environment variables for cross-compilation
-        if [[ "${sdk}" == "iphoneos" || "${sdk}" == "iphonesimulator" ]]; then
-            local platform_name="iPhoneOS"
-            [[ "${sdk}" == "iphonesimulator" ]] && platform_name="iPhoneSimulator"
+        #local TARGET=""
+        #local RUNTARGET=""
+		
+
+        # Determine platform name for cross-compilation
+        local platform_version="$(xcrun -sdk iphoneos --show-sdk-version)"
+        local platform_name="iPhoneOS"
+        if [[ "${sdk}" == "iphonesimulator" ]]; then
+            platform_name="iPhoneSimulator"
+            platform_version="$(xcrun -sdk iphonesimulator --show-sdk-version)"
             
-            export CROSS_TOP="$(xcode-select -p)/Platforms/${platform_name}.platform/Developer"
-            export CROSS_SDK="${platform_name}.sdk"
-            export PATH="${CROSS_TOP}/../usr/bin:${PATH}"
+            #TARGET="darwin-i386-cc"
+            #RUNTARGET=""
+            #if [[ $ARCH != "i386" ]]; then
+            #    TARGET="darwin64-${ARCH}-cc"
+            #    RUNTARGET="-target ${ARCH}-apple-ios${IOS_MIN_SDK_VERSION}-simulator"
+            #fi
+            
+        elif [[ "${sdk}" == "watchos" ]]; then
+            platform_name="WatchOS"
+            platform_version="$(xcrun -sdk watchos --show-sdk-version)"
+        elif [[ "${sdk}" == "watchsimulator" ]]; then
+            platform_name="WatchSimulator"
+            platform_version="$(xcrun -sdk watchos --show-sdk-version)"
+        elif [[ "${sdk}" == "appletvos" ]]; then
+            platform_name="AppleTVOS"
+            platform_version="$(xcrun -sdk appletvos --show-sdk-version)"
+        elif [[ "${sdk}" == "appletvsimulator" ]]; then
+            platform_name="AppleTVSimulator"
+            platform_version="$(xcrun -sdk appletvos --show-sdk-version)"
         fi
 
-        # Compiler settings
-        local cc=$(xcrun --sdk "${sdk}" --find clang)
+        echo "  Building platform ${platform_name}${platform_version}.sdk..."
+        # Set cross-compilation environment
+        #export CROSS_COMPILE="$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+        export CROSS_TOP="$(xcode-select -p)/Platforms/${platform_name}.platform/Developer"
+        export CROSS_SDK="${platform_name}${platform_version}.sdk"
+        export PATH="${CROSS_TOP}/../usr/bin:${PATH}"
+
+        # Compiler settings - use the full path to clang
+        local cc="$(xcrun --sdk "${sdk}" --find clang)"
         local cflags="-arch ${arch} -isysroot ${sdk_path} -O3"
         local ldflags="${cflags}"
 
@@ -127,18 +156,28 @@ build_for_platform() {
         # Minimum OS version flags
         case "${name}" in
             iOS*)              cflags+=" -miphoneos-version-min=${min_version}" ;;
-            iOS-simulator*)    cflags+=" -miphonesimulator-version-min=${min_version}" ;;
+            iOS-simulator*)
+                cflags+=" -miphonesimulator-version-min=${min_version}"
+                # Critical fix: Add explicit simulator target flag
+                cflags+=" -target ${arch}-apple-ios${min_version}-simulator"
+                ;;
             macOS*)            cflags+=" -mmacosx-version-min=${min_version}" ;;
             macCatalyst*)      cflags+=" -target ${arch}-apple-ios${min_version}-macabi" ;;
+            watchOS*)          cflags+=" -mwatchos-version-min=${min_version}" ;;
+            watchOS-simulator*) cflags+=" -mwatchsimulator-version-min=${min_version}" ;;
+            tvOS*)            cflags+=" -mtvos-version-min=${min_version}" ;;
+            tvOS-simulator*)  cflags+=" -mtvsimulator-version-min=${min_version}" ;;
         esac
 
-        # Configure OpenSSL
+        # Configure OpenSSL with no-async to prevent problematic symbols
         echo "Configuring for ${target} (${arch})..."
         "${OPENSSL_SOURCE_DIR}/Configure" \
             ${target} \
             no-shared \
             no-asm \
             no-deprecated \
+            no-async \
+            -arch ${arch} \
             --prefix="${arch_build_dir}/install" \
             --openssldir="${arch_build_dir}/install" \
             CC="${cc}" \
@@ -146,8 +185,19 @@ build_for_platform() {
             LDFLAGS="${ldflags}"
 
         # Build and install
-        make -j$(sysctl -n hw.ncpu) > /dev/null 2>&1
-        make install_sw > /dev/null 2>&1
+        echo "Building (logs in ${arch_build_dir}/make.log)..."
+        if ! make -j$(sysctl -n hw.ncpu) > "${arch_build_dir}/make.log" 2>&1; then
+            echo "Build failed. Output:"
+            cat "${arch_build_dir}/make.log"
+            exit 1
+        fi
+
+        echo "Installing (logs in ${arch_build_dir}/install.log)..."
+        if ! make install_sw > "${arch_build_dir}/install.log" 2>&1; then
+            echo "Install failed. Output:"
+            cat "${arch_build_dir}/install.log"
+            exit 1
+        fi
 
         # Verify and collect libraries
         local crypto_path="${arch_build_dir}/install/lib/libcrypto.a"
@@ -176,7 +226,7 @@ build_for_platform() {
         mkdir -p "${output_lib_dir}"
         cp "${crypto_paths[0]}" "${output_lib_dir}/libcrypto.a"
         cp "${ssl_paths[0]}" "${output_lib_dir}/libssl.a"
-        cp "${pkgconfig_path[0]}" "${output_lib_dir}"
+        cp -R "${pkgconfig_path[0]}" "${output_lib_dir}"
     fi
     
     lipo -info "${output_lib_dir}/libcrypto.a"

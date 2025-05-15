@@ -248,8 +248,6 @@
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
-		4C4EC7332DC9A6DA001DBEBE /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC7312DC9A6DA001DBEBE /* libssl.a */; };
-		4C4EC7342DC9A6DA001DBEBE /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC7322DC9A6DA001DBEBE /* libcrypto.a */; };
 		4C4F128C1D0C777D0002294E /* NSAttributedString+QueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */; };
 		4C4F128F1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */; };
 		4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */; };
@@ -331,6 +329,8 @@
 		4CA4D6201D1714BD00A1240C /* MADNavigationControllerFileExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
+		4CA8B2EA2DD5DCE0001E27B3 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */; };
+		4CA8B2EB2DD5DCE0001E27B3 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E92DD5DCE0001E27B3 /* libssl.a */; };
 		4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* MADStringEncryption.m */; };
 		4CAEE7241E55CBB4009A6096 /* MADExplorerNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */; };
 		4CAEE7281E55D26E009A6096 /* MADFieldSelectorNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7271E55D26E009A6096 /* MADFieldSelectorNavigationItem.m */; };
@@ -1107,6 +1107,9 @@
 		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
 		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
 		4CA54D3D18938801006B301A /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
+		4CA8B2E32DD5DA5A001E27B3 /* build_openssl_thridparty.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_openssl_thridparty.sh; path = ../Compressor/build_openssl_thridparty.sh; sourceTree = SOURCE_ROOT; };
+		4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = Compressor/library/openssl/iOS/lib/libcrypto.a; sourceTree = "<group>"; };
+		4CA8B2E92DD5DCE0001E27B3 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = Compressor/library/openssl/iOS/lib/libssl.a; sourceTree = "<group>"; };
 		4CAEE7221E55CBB4009A6096 /* MADExplorerNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerNavigationItem.h; sourceTree = "<group>"; };
 		4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExplorerNavigationItem.m; sourceTree = "<group>"; };
 		4CAEE7261E55D26E009A6096 /* MADFieldSelectorNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFieldSelectorNavigationItem.h; sourceTree = "<group>"; };
@@ -1301,8 +1304,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C4EC7332DC9A6DA001DBEBE /* libssl.a in Frameworks */,
-				4C4EC7342DC9A6DA001DBEBE /* libcrypto.a in Frameworks */,
+				4CA8B2EA2DD5DCE0001E27B3 /* libcrypto.a in Frameworks */,
+				4CA8B2EB2DD5DCE0001E27B3 /* libssl.a in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
 				4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */,
@@ -1826,6 +1829,7 @@
 		4C3A969A189F7CB6007AF476 /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
+				4CA8B2E32DD5DA5A001E27B3 /* build_openssl_thridparty.sh */,
 				4C4EC6D32DC97D7A001DBEBE /* build_archive.sh */,
 				4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */,
 				4CB671892D90F6D600C8378D /* build_mysqlclient.sh */,
@@ -2603,6 +2607,8 @@
 			children = (
 				4C4EC7322DC9A6DA001DBEBE /* libcrypto.a */,
 				4C4EC7312DC9A6DA001DBEBE /* libssl.a */,
+				4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */,
+				4CA8B2E92DD5DCE0001E27B3 /* libssl.a */,
 				4C4EC6D62DC98EED001DBEBE /* liblzma.tbd */,
 				4C6895142CF1DCE300BD38DF /* MADTds.framework */,
 				4CD0C1942C50AD3700CB4233 /* MADFoundation.framework */,
@@ -4061,6 +4067,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/include\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
@@ -4119,6 +4126,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/include\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -4173,7 +4181,6 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -4181,30 +4188,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../opt/lib/freetds\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
-					"\"$(SRCROOT)/../Compressor/library/openssl/lib/iOS-fat\"",
-					"\"$(SRCROOT)/../opt/lib/png\"",
-					"\"$(SRCROOT)/../opt/lib/archive\"",
-					"\"$(SRCROOT)/../opt/lib/bzip2\"",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"\"$(SRCROOT)/../opt/lib/freetds\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
-					"\"$(SRCROOT)/../Compressor/library/openssl/lib/iOS-fat\"",
-					"\"$(SRCROOT)/../opt/lib/png\"",
-					"\"$(SRCROOT)/../opt/lib/archive\"",
-					"\"$(SRCROOT)/../opt/lib/bzip2\"",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"\"$(SRCROOT)/../opt/lib/freetds\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
-					"\"$(SRCROOT)/../Compressor/library/openssl/lib/iOS-simulator\"",
-					"\"$(SRCROOT)/../opt/lib/png\"",
-					"\"$(SRCROOT)/../opt/lib/archive\"",
-					"\"$(SRCROOT)/../opt/lib/bzip2\"",
-				);
+				LIBRARY_SEARCH_PATHS = "";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/lib\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../Compressor/library/openssl/iOS-simulator/lib\"";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
@@ -4255,7 +4241,6 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/include\"";
 				INFOPLIST_FILE = MADStack/MADDesigner/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = XML;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -4263,30 +4248,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../opt/lib/freetds\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
-					"\"$(SRCROOT)/../Compressor/library/openssl/lib/iOS-fat\"",
-					"\"$(SRCROOT)/../opt/lib/png\"",
-					"\"$(SRCROOT)/../opt/lib/archive\"",
-					"\"$(SRCROOT)/../opt/lib/bzip2\"",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"\"$(SRCROOT)/../opt/lib/freetds\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
-					"\"$(SRCROOT)/../Compressor/library/openssl/lib/iOS-fat\"",
-					"\"$(SRCROOT)/../opt/lib/png\"",
-					"\"$(SRCROOT)/../opt/lib/archive\"",
-					"\"$(SRCROOT)/../opt/lib/bzip2\"",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"\"$(SRCROOT)/../opt/lib/freetds\"",
-					"\"$(SRCROOT)/../opt/lib/mysqlclient\"",
-					"\"$(SRCROOT)/../Compressor/library/openssl/lib/iOS-simulator\"",
-					"\"$(SRCROOT)/../opt/lib/png\"",
-					"\"$(SRCROOT)/../opt/lib/archive\"",
-					"\"$(SRCROOT)/../opt/lib/bzip2\"",
-				);
+				LIBRARY_SEARCH_PATHS = "";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/lib\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../Compressor/library/openssl/iOS-simulator/lib\"";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
 				PRODUCT_NAME = "MAD Designer";

@@ -98,13 +98,13 @@ build_platform() {
 }
 
 # iOS Architectures
-build_platform "iphoneos" "armv7" "iphoneos" "armv7-apple-darwin" $MIN_IOS_ARM32
-build_platform "iphoneos" "armv7s" "iphoneos" "armv7s-apple-darwin" $MIN_IOS_ARM32
+#build_platform "iphoneos" "armv7" "iphoneos" "armv7-apple-darwin" $MIN_IOS_ARM32
+#build_platform "iphoneos" "armv7s" "iphoneos" "armv7s-apple-darwin" $MIN_IOS_ARM32
 build_platform "iphoneos" "arm64" "iphoneos" "aarch64-apple-darwin" $MIN_IOS_ARM64
 build_platform "iphoneos" "arm64e" "iphoneos" "aarch64-apple-darwin" $MIN_IOS_ARM64
 
 # iOS Simulator Architectures
-build_platform "iphonesimulator" "i386" "iphonesimulator" "i386-apple-darwin" $MIN_IOS_ARM32
+#build_platform "iphonesimulator" "i386" "iphonesimulator" "i386-apple-darwin" $MIN_IOS_ARM32
 build_platform "iphonesimulator" "x86_64" "iphonesimulator" "x86_64-apple-darwin" $MIN_IOS_ARM64
 build_platform "iphonesimulator" "arm64" "iphonesimulator" "aarch64-apple-darwin" $MIN_IOS_ARM64
 
@@ -114,29 +114,32 @@ build_platform "macosx" "arm64" "macosx" "aarch64-apple-darwin" $MIN_MACOS
 
 # Create universal libraries
 lipo -create \
-	"${path_build}/iphoneos/armv7/lib/libpng.a" \
-	"${path_build}/iphoneos/armv7s/lib/libpng.a" \
 	"${path_build}/iphoneos/arm64/lib/libpng.a" \
 	"${path_build}/iphoneos/arm64e/lib/libpng.a" \
 	-output "${path_library}/libpng_device.a"
 
+#	"${path_build}/iphoneos/armv7/lib/libpng.a" \
+#	"${path_build}/iphoneos/armv7s/lib/libpng.a" \
+
 lipo -create \
-	"${path_build}/iphonesimulator/i386/lib/libpng.a" \
 	"${path_build}/iphonesimulator/x86_64/lib/libpng.a" \
 	"${path_build}/iphonesimulator/arm64/lib/libpng.a" \
 	-output "${path_library}/libpng_simulator.a"
 
+#	"${path_build}/iphonesimulator/i386/lib/libpng.a" \
+
 # Replace the existing lipo commands with:
 lipo -create \
-	"${path_build}/iphoneos/armv7/lib/libpng.a" \
-	"${path_build}/iphoneos/armv7s/lib/libpng.a" \
+	"${path_build}/iphoneos/arm64/lib/libpng.a" \
 	"${path_build}/iphoneos/arm64e/lib/libpng.a" \
-	"${path_build}/iphonesimulator/i386/lib/libpng.a" \
-	"${path_build}/iphonesimulator/arm64/lib/libpng.a" \
 	"${path_build}/iphonesimulator/x86_64/lib/libpng.a" \
 	-output "${path_library}/libpng.a"  # Standard name
 
-#	"${path_build}/iphoneos/arm64/lib/libpng.a" \
+	#"${path_build}/iphonesimulator/arm64/lib/libpng.a" \
+	#"${path_build}/iphoneos/armv7/lib/libpng.a" \
+	#"${path_build}/iphoneos/armv7s/lib/libpng.a" \
+	#"${path_build}/iphonesimulator/i386/lib/libpng.a" \
+
 
 echo "Build complete. Libraries:"
 echo "- Device: ${path_library}/libpng_device.a"

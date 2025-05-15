@@ -16,9 +16,9 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <MADBarcodes/PublicHeader.h>
 
-#import <MADBarcodes/png.h>
-#import <MADBarcodes/pnglibconf.h>
-#import <MADBarcodes/pngconf.h>
+//#import <MADBarcodes/png.h>
+//#import <MADBarcodes/pnglibconf.h>
+//#import <MADBarcodes/pngconf.h>
 
 #import <MADBarcodes/zint.h>
 
