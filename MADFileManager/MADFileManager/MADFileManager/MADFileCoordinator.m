@@ -10,8 +10,8 @@
 #import "MADCloudFileCoordinator.h"
 #import <MADFileManager/MADAppStorageOption.h>
 
-#import <MADFoundation/MADAssert.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
 
 @implementation MADFileCoordinator
 

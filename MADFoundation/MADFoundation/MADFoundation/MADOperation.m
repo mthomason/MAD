@@ -16,6 +16,7 @@
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <MADFoundation/MADOperationObserver.h>
 #import "MADBlockObserver.h"
+#import "madlog.h"
 
 static NSString * const MADOperatorSelectorIsReady      = @"isReady";
 static NSString * const MADOperatorSelectorIsExecuting  = @"isExecuting";
@@ -110,7 +111,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 		return;
 	}
 	
-	os_log_info(OS_LOG_DEFAULT, "%s is %s", NSStringFromClass(self.class).UTF8String, MADStringOperationState(newState));
+	os_log_info(OS_LOG_DEFAULT, "[OP:%lu (%@)] State changing from %s to %s", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(_state), MADStringOperationState(newState));
 	
 	[self willChangeValueForKey:MADOperatorSelectorState];
 	_state = newState;
@@ -150,27 +151,34 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (BOOL)isReady {
-	// Store the state in a local variable to avoid recursive locking
-	MADOperationState currentState = self.state;
-
+	MADOperationState currentState = self.state; // Avoid recursive lock
+	os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] Checking isReady. Current state: %s, isCancelled: %{BOOL}d, super.isReady: %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(currentState), self.cancelled, super.ready);
+	
 	switch (currentState) {
 		case MADOperationStateInitialized:
+			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Initialized. Returning based on self.cancelled: %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), self.cancelled);
 			return self.cancelled;
-
+			
 		case MADOperationStatePending:
 			if (self.cancelled) {
+				os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Pending & Cancelled. Returning YES.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class));
 				return YES;
 			}
 			if (super.ready) {
-				[self evaluateConditions];
-				return self.state == MADOperationStateReady;
+				os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Pending & super.isReady. Evaluating conditions.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class));
+				[self evaluateConditions]; // This will change state
+				os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Conditions evaluated. New state: %s. Returning %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(self.state), self.state == MADOperationStateReady);
+				return self.state == MADOperationStateReady; // Check the new state
 			}
+			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Pending & NOT super.isReady. Returning NO.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class));
 			return NO;
-
+			
 		case MADOperationStateReady:
+			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Already in Ready state or Cancelled. Returning %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), super.ready || self.cancelled);
 			return super.ready || self.cancelled;
-
+			
 		default:
+			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Default case (state: %s). Returning NO.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(currentState));
 			return NO;
 	}
 }

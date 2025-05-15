@@ -985,6 +985,8 @@ static os_log_t mad_log;
 #pragma mark MADOperationObserver
 
 - (void)operationDidStart:(MADOperation *)operation {
+	// log operation start
+	os_log_info(mad_log, "Operation started: %@ type: %@", operation, NSStringFromClass([operation class]));
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
 		
 	}
@@ -993,6 +995,11 @@ static os_log_t mad_log;
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors {
+	if (errors != nil && errors.count > 0) {
+		for (NSError *error in errors) {
+			os_log_error(mad_log, "Error: %@", error);
+		}
+	}
 	// Check if the operation is of a specific type
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]] ||
 		[operation isKindOfClass:[MADRefreshOperationReload class]]) {
@@ -1160,6 +1167,8 @@ static os_log_t mad_log;
 #pragma mark Operations
 
 - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
+	// log operation setDisplayActive
+	os_log_info(mad_log, "Operation setDisplayActive: %@ type: %@", operation, NSStringFromClass([operation class]));
 	if (active) {
 		[self setDisplayActive];
 	} else {
@@ -1168,10 +1177,14 @@ static os_log_t mad_log;
 }
 
 - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
+	// log operation finishReload
+	os_log_info(mad_log, "Operation finishReload: %@ type: %@", operation, NSStringFromClass([operation class]));
 	[self finishReload:document];
 }
 
 - (void)finishReload:(MADocument *)document {
+	// log operation finishReload
+	os_log_info(mad_log, "Operation finishReload: %@ type: %@", document, NSStringFromClass([document class]));
 	MADPrintPageRenderer *printPageRenderer;
 	printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
 	self.printPageRendererReport = printPageRenderer;

@@ -1613,7 +1613,9 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
-- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors { }
+- (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors {
+
+}
 
 - (void)operationQueue:(MADOperationQueue *)operationQueue
 	  willAddOperation:(NSOperation *)operation { }

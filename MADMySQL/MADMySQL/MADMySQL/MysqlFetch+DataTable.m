@@ -634,7 +634,6 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			break;
 	}
 	return binding;
-	
 }
 
 @end

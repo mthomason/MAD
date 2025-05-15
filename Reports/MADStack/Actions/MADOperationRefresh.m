@@ -109,7 +109,6 @@ static const short errCache = 2;
 	success = [document dataTableMakeCache];
 	document.refreshed = YES;
 	if (!success) {
-		
 		NSError *error = [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil];
 		[self finishWithError:error];
 		return;

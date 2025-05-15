@@ -31,7 +31,8 @@
 
 @implementation MADInformationTableViewController
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+		  didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
 
 	if (error != nil) {
 		MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];

@@ -17,9 +17,7 @@
 	- (BOOL)alertDisplayedAffirmed;
 @end
 
-@interface MADOperationConditionDisplayedAlert : NSObject
-	<MADOperationCondition>
-
+@interface MADOperationConditionDisplayedAlert : NSObject <MADOperationCondition>
 	- (instancetype)initWithOperationIdentifier:(NSUInteger)tag;
 
 @end

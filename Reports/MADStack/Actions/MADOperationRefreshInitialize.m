@@ -65,22 +65,20 @@
 	}
 
 	MADocument *doc = _document;
-	/*
 		for (NSOperation *dependency in self.dependencies) {
 			if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitializeMainDataTableProtocol)]) {
 				doc = ((id <MADOperationRefreshInitializeMainDataTableProtocol>)dependency).document;
 				break;
 			}
 		}
-	*/
    
-	//NSManagedObjectContext *private;
-	//private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	//private.parentContext = doc.managedObjectContext;
+	NSManagedObjectContext *private;
+	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	private.parentContext = doc.managedObjectContext;
 
-	//MADocument * __weak wdocument = doc;
-	//[private performBlockAndWait:^{
-		//MADocument *document = wdocument;
+	MADocument * __weak wdocument = doc;
+	[private performBlockAndWait:^{
+		MADocument *document = wdocument;
 
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: doc.managedObjectContext];
 		if (rptqDocument == nil) {
@@ -120,7 +118,7 @@
 
 		doc.reportFormatter = formatter;
 		
-	//}];
+	}];
 	[self finish];
 	
 }
