@@ -752,11 +752,12 @@ static os_log_t mad_log;
 		
 		MADocument *document = self.document;
 		
-		__weak typeof(self) weakSelf = self;
 		MADOperationRefreshReload *refresh = [[MADOperationRefreshReload alloc] initWithDocument:document
 																				  viewController:self
 																			  databaseConnection:document.database.databaseConnection];
 		[refresh addObserver:self];
+
+		__weak typeof(self) weakSelf = self;
 		refresh.completionBlock = ^{
 			typeof(self) strongSelf = weakSelf;
 			if (strongSelf) {

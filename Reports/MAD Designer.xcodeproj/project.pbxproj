@@ -528,8 +528,6 @@
 		4C2213AD17D7947800BD36F5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4C235CD11D1F1C1A00D3D77C /* MADQueryViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewDelegate.h; sourceTree = "<group>"; };
 		4C235CD21D1F1C1A00D3D77C /* MADQueryViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryViewDelegate.m; sourceTree = "<group>"; };
-		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
-		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C26B94E1BAF0D4300456DC8 /* MADSectionHeaderViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSectionHeaderViewDelegate.h; sourceTree = "<group>"; };
 		4C26B94F1BAF0D4300456DC8 /* MADTableViewControllerCoreDataResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewControllerCoreDataResults.h; sourceTree = "<group>"; };
 		4C26B9501BAF0D4300456DC8 /* MADTableViewControllerCoreDataResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewControllerCoreDataResults.m; sourceTree = "<group>"; };
@@ -1431,16 +1429,6 @@
 			path = PluginManager;
 			sourceTree = "<group>";
 		};
-		4C25A83D18BC2208002DA271 /* UAAppReviewManager */ = {
-			isa = PBXGroup;
-			children = (
-				4C25A86718BC2209002DA271 /* UAAppReviewManager.h */,
-				4C25A86818BC2209002DA271 /* UAAppReviewManager.m */,
-			);
-			name = UAAppReviewManager;
-			path = ../3rdPartyProjects/UAAppReviewManager;
-			sourceTree = "<group>";
-		};
 		4C26B94D1BAF0D4300456DC8 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -1802,7 +1790,6 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
 				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
 				4CE84D8C1B396F3800BB3A0A /* Accounts.framework */,
 				4CE84D8A1B396F3200BB3A0A /* Social.framework */,
