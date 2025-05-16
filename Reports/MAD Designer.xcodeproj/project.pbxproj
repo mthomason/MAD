@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */; };
-		4C00A3841F5964FB00F6A6C1 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3831F5964FB00F6A6C1 /* MADPluginManager.m */; };
 		4C00A3941F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3931F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.m */; };
 		4C0153D91C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153D81C9F632100FCD3C1 /* MADOperationConditionPolarQuestionNegative.m */; };
 		4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0153DB1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m */; };
@@ -27,8 +26,6 @@
 		4C0E77AA163B5AEC003B951E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
-		4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
-		4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
 		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
 		4C1CC25824C5ED300027A454 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25724C5ED300027A454 /* CoreServices.framework */; };
@@ -142,7 +139,6 @@
 		4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */; };
 		4C32A4C31BB07FF300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; };
 		4C3500121E7051E8009423B0 /* MADTableViewCellQueryCountID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3500111E7051E8009423B0 /* MADTableViewCellQueryCountID.m */; };
-		4C37E0F81ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37E0F51ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m */; };
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
@@ -246,8 +242,7 @@
 		4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
-		4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
-		4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
+		4C4C287D2DD6AFE600DB8538 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C287C2DD6AFE600DB8538 /* MADPluginManager.m */; };
 		4C4F128C1D0C777D0002294E /* NSAttributedString+QueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */; };
 		4C4F128F1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */; };
 		4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */; };
@@ -285,13 +280,11 @@
 		4C6D2F041E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2F031E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m */; };
 		4C6F34FD1E408D9D00F4744F /* MADElementMigrationPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */; };
 		4C780CE91BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */; };
-		4C84F9B724B87CAF0096FB31 /* MAD Designer.app in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B91ACA97C8006D3996 /* MAD Designer.app */; };
 		4C88A3451E6691ED009F8BFE /* MADPageStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */; };
 		4C8C97AF14C5C4B1007FB629 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
 		4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
 		4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
-		4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2461BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2481BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m */; };
 		4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */; };
@@ -310,12 +303,6 @@
 		4C8DE2871BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */; };
 		4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */; };
 		4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */; };
-		4C8F99AE1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99AD1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m */; };
-		4C8F99B11ACA97C8006D3996 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99B01ACA97C8006D3996 /* NotificationController.m */; };
-		4C8F99B41ACA97C8006D3996 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F99B31ACA97C8006D3996 /* GlanceController.m */; };
-		4C8F99B61ACA97C8006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99B51ACA97C8006D3996 /* Images.xcassets */; };
-		4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C01ACA97C8006D3996 /* Interface.storyboard */; };
-		4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C8F99C31ACA97C9006D3996 /* Images.xcassets */; };
 		4C97CB8C1E3A263400587B16 /* MADExplorerAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97CB8B1E3A263400587B16 /* MADExplorerAnimated.m */; };
 		4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */; };
 		4C994F111BDCA3A90058627A /* MADDesignerSectionLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MADDesignerSectionLayoutController.m */; };
@@ -339,7 +326,6 @@
 		4CAEE7321E55F201009A6096 /* MADStoreNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7311E55F201009A6096 /* MADStoreNavigationItem.m */; };
 		4CB074D41E22006700643F32 /* MADExplorerToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D31E22006700643F32 /* MADExplorerToolbar.m */; };
 		4CB074D71E22010900643F32 /* MADExplorerNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB074D61E22010900643F32 /* MADExplorerNavigationBar.m */; };
-		4CB94ADC1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB94ADB1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m */; };
 		4CB98D741F42BAC10043B583 /* MADOperationConditionDisplayedAlertConfirm.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D731F42BAC10043B583 /* MADOperationConditionDisplayedAlertConfirm.m */; };
 		4CB98DF81F45AB610043B583 /* MADOperationConditionSuccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DF71F45AB610043B583 /* MADOperationConditionSuccess.m */; };
 		4CBC501D1E1B508800B067AD /* MADMeta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CBC501C1E1B508800B067AD /* MADMeta.plist */; };
@@ -395,8 +381,6 @@
 		4CF6AFC91CB1088B00D3AD11 /* MADRefreshOperationReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC81CB1088B00D3AD11 /* MADRefreshOperationReload.m */; };
 		4CF6AFCC1CB108C700D3AD11 /* MADRefreshOperationConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCB1CB108C700D3AD11 /* MADRefreshOperationConnect.m */; };
 		4CF6AFCF1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */; };
-		4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
-		4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9D08D1AD0EF6500525A50 /* MADRowTypeKeyValue.m */; };
 		4CFC60B51E559C0700EC577E /* MADImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC60B41E559C0700EC577E /* MADImageTransformer.m */; };
 		4CFEE7F61BB773D800AFAA0A /* MADQueryAddGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7F51BB773D800AFAA0A /* MADQueryAddGroup.storyboard */; };
 		4CFEE7FB1BB77BD600AFAA0A /* MADQueryChooseFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FA1BB77BD600AFAA0A /* MADQueryChooseFieldController.m */; };
@@ -489,8 +473,6 @@
 
 /* Begin PBXFileReference section */
 		4C00A36D1F58078C00F6A6C1 /* Samples.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Samples.xcassets; sourceTree = "<group>"; };
-		4C00A3821F5964FB00F6A6C1 /* MADPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPluginManager.h; sourceTree = "<group>"; };
-		4C00A3831F5964FB00F6A6C1 /* MADPluginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPluginManager.m; sourceTree = "<group>"; };
 		4C00A3901F5B9D5600F6A6C1 /* MADDesignerElementViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementViewProtocol.h; sourceTree = "<group>"; };
 		4C00A3911F5B9D6800F6A6C1 /* MADDesignerElementViewDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDesignerElementViewDataSource.h; sourceTree = "<group>"; };
 		4C00A3921F5B9E6400F6A6C1 /* MADDesignerElementView+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADDesignerElementView+Constructor.h"; sourceTree = "<group>"; };
@@ -945,6 +927,8 @@
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
+		4C4C287B2DD6AFE600DB8538 /* MADPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADPluginManager.h; path = Source/MADPluginManager.h; sourceTree = SOURCE_ROOT; };
+		4C4C287C2DD6AFE600DB8538 /* MADPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADPluginManager.m; path = Source/MADPluginManager.m; sourceTree = SOURCE_ROOT; };
 		4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_bzip2.sh; path = ../Compressor/build_bzip2.sh; sourceTree = SOURCE_ROOT; };
 		4C4EC6D32DC97D7A001DBEBE /* build_archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_archive.sh; path = ../Compressor/build_archive.sh; sourceTree = SOURCE_ROOT; };
 		4C4EC6D62DC98EED001DBEBE /* liblzma.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.tbd; path = usr/lib/liblzma.tbd; sourceTree = SDKROOT; };
@@ -1069,7 +1053,6 @@
 		4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADDesignerObjectSelector.storyboard; path = MADStack/MADDesigner/UI/MADDesignerObjectSelector.storyboard; sourceTree = "<group>"; };
 		4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MAD Designer.entitlements"; sourceTree = "<group>"; };
 		4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADBarcodeDesigner.storyboard; path = MADStack/MADBarcodes/UI/MADBarcodeDesigner.storyboard; sourceTree = "<group>"; };
-		4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MAD Designer.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8F99AA1ACA97C8006D3996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C8F99AB1ACA97C8006D3996 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		4C8F99AC1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADInterfaceControllerDocumentsLocal.h; sourceTree = "<group>"; };
@@ -1079,7 +1062,6 @@
 		4C8F99B21ACA97C8006D3996 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
 		4C8F99B31ACA97C8006D3996 /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
 		4C8F99B51ACA97C8006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4C8F99B91ACA97C8006D3996 /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8F99BF1ACA97C8006D3996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C8F99C11ACA97C8006D3996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		4C8F99C31ACA97C9006D3996 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -1350,18 +1332,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C8F99A41ACA97C8006D3996 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C17D0E31AD1B05500DD19FF /* Foundation.framework in Frameworks */,
-				4C17D0D71AD1B04900DD19FF /* CoreData.framework in Frameworks */,
-				4C4AC1C11AD110CC00D4C461 /* UIKit.framework in Frameworks */,
-				4C4AC26A1AD11E5C00D4C461 /* libc++.dylib in Frameworks */,
-				4C8CDC9A1AD2730E00B7B9EA /* libz.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1423,8 +1393,8 @@
 		4C1F93CE201A32EB00BDDC70 /* PluginManager */ = {
 			isa = PBXGroup;
 			children = (
-				4C00A3821F5964FB00F6A6C1 /* MADPluginManager.h */,
-				4C00A3831F5964FB00F6A6C1 /* MADPluginManager.m */,
+				4C4C287B2DD6AFE600DB8538 /* MADPluginManager.h */,
+				4C4C287C2DD6AFE600DB8538 /* MADPluginManager.m */,
 			);
 			path = PluginManager;
 			sourceTree = "<group>";
@@ -1779,8 +1749,6 @@
 			children = (
 				4C384E2414B29789007B4F48 /* MAD Designer.app */,
 				4C0E785B163B5AEC003B951E /* MAD Viewer.app */,
-				4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */,
-				4C8F99B91ACA97C8006D3996 /* MAD Designer.app */,
 				4C5B55E21C98CCBE005C19D9 /* MADDesignerUITests.xctest */,
 				4C5B55F01C98CCD6005C19D9 /* MADDesignerUnitTests.xctest */,
 			);
@@ -3242,39 +3210,6 @@
 			productReference = 4C5B55F01C98CCD6005C19D9 /* MADDesignerUnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4C8F99CB1ACA97C9006D3996 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */;
-			buildPhases = (
-				4C1E897A1B33B88900B26B5E /* ShellScript */,
-				4C8F99A31ACA97C8006D3996 /* Sources */,
-				4C8F99A41ACA97C8006D3996 /* Frameworks */,
-				4C8F99A51ACA97C8006D3996 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "MAD Designer WatchKit Extension";
-			productName = "MAD Designer WatchKit Extension";
-			productReference = 4C8F99A71ACA97C8006D3996 /* MAD Designer.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
-		};
-		4C8F99B81ACA97C8006D3996 /* MAD Designer WatchKit App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4C8F99C81ACA97C9006D3996 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit App" */;
-			buildPhases = (
-				4C8F99B71ACA97C8006D3996 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "MAD Designer WatchKit App";
-			productName = "MAD Designer WatchKit App";
-			productReference = 4C8F99B91ACA97C8006D3996 /* MAD Designer.app */;
-			productType = "com.apple.product-type.application.watchapp";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3326,19 +3261,6 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 4C384E2314B29789007B4F48;
 					};
-					4C8F99A61ACA97C8006D3996 = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = D3C58YS54A;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
-							};
-						};
-					};
-					4C8F99B81ACA97C8006D3996 = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = D3C58YS54A;
-					};
 				};
 			};
 			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD Designer" */;
@@ -3388,8 +3310,6 @@
 			targets = (
 				4C384E2314B29789007B4F48 /* MAD Designer */,
 				4C0E771F163B5AEC003B951E /* MAD Viewer */,
-				4C8F99A61ACA97C8006D3996 /* MAD Designer WatchKit Extension */,
-				4C8F99B81ACA97C8006D3996 /* MAD Designer WatchKit App */,
 				4C5B55E11C98CCBE005C19D9 /* MADDesignerUITests */,
 				4C5B55EF1C98CCD6005C19D9 /* MADDesignerUnitTests */,
 			);
@@ -3476,24 +3396,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C8F99A51ACA97C8006D3996 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C84F9B724B87CAF0096FB31 /* MAD Designer.app in Resources */,
-				4C8F99B61ACA97C8006D3996 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4C8F99B71ACA97C8006D3996 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C8F99C21ACA97C8006D3996 /* Interface.storyboard in Resources */,
-				4C8F99C41ACA97C9006D3996 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -3510,19 +3412,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Define project directory and plist paths\necho \"Initializing script...\"\nPROJECT_DIR=\"${PROJECT_DIR:-/Users/michael/Desktop/Reports/Reports}\"\ncd \"$PROJECT_DIR\" || { echo \"Error: Could not change to project directory $PROJECT_DIR\"; exit 1; }\n\nPLIST_PATHS=(\n\t\"${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist\"\n\t\"${PROJECT_DIR}/MADStack/MADDesigner/Info.plist\"\n)\n\n# Validate plist files exist\nfor plist in \"${PLIST_PATHS[@]}\"; do\n\tif [ ! -f \"$plist\" ]; then\n\t\techo \"Error: Plist file not found at $plist\"\n\t\texit 1\n\tfi\ndone\n\n# Get version and build numbers from git\necho \"Fetching version and build numbers from git...\"\ngit_tag=$(git describe --abbrev=1 --tags 2>/dev/null)\nif [ -z \"$git_tag\" ]; then\n\techo \"Error: No git tags found. Ensure your repository is tagged.\"\n\texit 1\nfi\n\n# Extract major/minor version\nversion=$(echo \"$git_tag\" | awk -F- '{print $1}' | sed 's/^v//')\nminor=$(echo \"$git_tag\" | awk -F- '{print $2}')\nminor=${minor:-0} # Default to 0 if no minor version\ncurrent_version=\"${version}.${minor}\"\n\n# Build number\nbuild_number=$(git rev-list HEAD --count 2>/dev/null)\nif [ -z \"$build_number\" ]; then\n\techo \"Error: Unable to fetch build number from git.\"\n\texit 1\nfi\n\n# Increment local build counter (stored in plist)\necho \"Updating build counter...\"\nbuild_counter=$(/usr/libexec/PlistBuddy -c \"Print :MADBuildNumber\" \"${PLIST_PATHS[0]}\" 2>/dev/null || echo \"0\")\nbuild_counter=$((build_counter + 1))\n\n# Set build metadata in plist files\necho \"Updating plist files...\"\nbuild_date=$(date +%FT%T%Z)\n\nfor plist in \"${PLIST_PATHS[@]}\"; do\n\t/usr/libexec/PlistBuddy -c \"Set :MADBuildDate $build_date\" \"$plist\"\n\t/usr/libexec/PlistBuddy -c \"Set :MADBuildNumber $build_counter\" \"$plist\"\n\t/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $current_version\" \"$plist\"\n\t/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $current_version\" \"$plist\"\n\t/usr/libexec/PlistBuddy -c \"Set :MADRevision $build_number\" \"$plist\"\ndone\n\necho \"Build metadata updated successfully:\"\necho \"  Version: $current_version\"\necho \"  Build Number: $build_number\"\necho \"  Build Counter: $build_counter\"\necho \"  Build Date: $build_date\"\n";
-		};
-		4C1E897A1B33B88900B26B5E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\n        \n";
 		};
 		4CF3B6EC18046614004BE0AC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3612,7 +3501,7 @@
 				4CD7A02C1EC888F90093B2CE /* MADMappingModel2-3c.xcmappingmodel in Sources */,
 				4C401F261BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m in Sources */,
 				4C26BA5B1BAF99F000456DC8 /* MADPopoverBackgroundView.m in Sources */,
-				4C00A3841F5964FB00F6A6C1 /* MADPluginManager.m in Sources */,
+				4C4C287D2DD6AFE600DB8538 /* MADPluginManager.m in Sources */,
 				4C401EE01BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m in Sources */,
 				4C4020411BAE92F200BAE5FC /* NSData+AES256.m in Sources */,
 				4CAEE72E1E55F089009A6096 /* MADNavigationBar.m in Sources */,
@@ -3844,20 +3733,6 @@
 			files = (
 				4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */,
 				4C5B55FB1C98CE6D005C19D9 /* MADDesignerTestConnection.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4C8F99A31ACA97C8006D3996 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CB94ADC1AD0EEBB002130B2 /* MADInterfaceControllerKPI.m in Sources */,
-				4CF889101AD1B6F200ED21FC /* MAD.xcdatamodeld in Sources */,
-				4C37E0F81ACBAD9000B4BC0D /* MADRowTypeDocumentsLocal.m in Sources */,
-				4CF9D08E1AD0EF6500525A50 /* MADRowTypeKeyValue.m in Sources */,
-				4C8F99B11ACA97C8006D3996 /* NotificationController.m in Sources */,
-				4C8F99AE1ACA97C8006D3996 /* MADInterfaceControllerDocumentsLocal.m in Sources */,
-				4C8F99B41ACA97C8006D3996 /* GlanceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4367,140 +4242,6 @@
 			};
 			name = Release;
 		};
-		4C8F99C91ACA97C9006D3996 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = MAD_Designer_WatchKit_Extension;
-				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer.watchkitapp;
-				PRODUCT_NAME = "MAD Designer";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Debug;
-		};
-		4C8F99CA1ACA97C9006D3996 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = MAD_Designer_WatchKit_Extension;
-				INFOPLIST_FILE = "MAD Designer WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer.watchkitapp;
-				PRODUCT_NAME = "MAD Designer";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Release;
-		};
-		4C8F99CC1ACA97C9006D3996 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer WatchKit Extension/MAD Designer WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-					"MADWATCHKIT=1",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MAD Designer WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos",
-					"$(PROJECT_DIR)/../Compressor/library/openssl",
-				);
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer.watchkitextension;
-				PRODUCT_NAME = "MAD Designer";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		4C8F99CD1ACA97C9006D3996 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_ENTITLEMENTS = "MAD Designer WatchKit Extension/MAD Designer WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = "MADWATCHKIT=1";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "MAD Designer WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos",
-					"$(PROJECT_DIR)/../Compressor/library/openssl",
-				);
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer.watchkitextension;
-				PRODUCT_NAME = "MAD Designer";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4545,24 +4286,6 @@
 			buildConfigurations = (
 				4C5B55F81C98CCD6005C19D9 /* Debug */,
 				4C5B55F91C98CCD6005C19D9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4C8F99C81ACA97C9006D3996 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4C8F99C91ACA97C9006D3996 /* Debug */,
-				4C8F99CA1ACA97C9006D3996 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4C8F99CB1ACA97C9006D3996 /* Build configuration list for PBXNativeTarget "MAD Designer WatchKit Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4C8F99CC1ACA97C9006D3996 /* Debug */,
-				4C8F99CD1ACA97C9006D3996 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
