@@ -168,7 +168,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 	// Position the labels
 	CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
-	double tickValue = self.maximumValue / (numberOfTicks - 1);
+	double tickValue = numberOfTicks > 0 ? self.maximumValue / (numberOfTicks - 1) : 1;
 	for (NSUInteger i = 0; i < numberOfTicks; i++) {
 		if (i % 2 == 0) {
 			@autoreleasepool {

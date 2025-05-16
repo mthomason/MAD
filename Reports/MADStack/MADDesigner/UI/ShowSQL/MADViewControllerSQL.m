@@ -34,9 +34,9 @@
 	MADocument *doc = self.document;
 	NSError *error = nil;
 	NSString *sqlStatement = [doc.mainQuery SQLOnlyActiveFields: NO
-											   managedObjectContext: doc.managedObjectContext
-															  error: &error];
-	
+										   managedObjectContext: doc.managedObjectContext
+														  error: &error];
+
 	if (error) {
 		sqlStatement = error.localizedDescription;
 	}

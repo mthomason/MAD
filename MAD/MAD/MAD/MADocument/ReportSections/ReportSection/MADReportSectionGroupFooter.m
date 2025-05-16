@@ -18,8 +18,7 @@ static NSString * const Format = @"Group Footer - (%@)";
 - (NSString *)localizedDisplayName {
     id format = NSLocalizedString(Format, Format);
     id fieldName =  [self.documentSection.inGroup fieldNameQuery];
-    id name = [[NSString alloc] initWithFormat:format, fieldName];
-    return name;
+    return [[NSString alloc] initWithFormat:format, fieldName];
 }
 
 @end

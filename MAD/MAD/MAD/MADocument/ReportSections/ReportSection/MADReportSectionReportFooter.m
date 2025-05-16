@@ -14,8 +14,7 @@ static NSString * const Name = @"Report Footer";
 @implementation MADReportSectionReportFooter
 
 - (NSString *)localizedDisplayName {
-    id name = NSLocalizedString(Name, Name);
-    return name;
+    return NSLocalizedString(Name, Name);
 }
 
 @end

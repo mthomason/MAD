@@ -450,8 +450,7 @@
 - (MADCurrencyFormatter *)migrateCurrencyFormatterForCurrencyEnabled:(NSNumber *)enabled
 															  locale:(NSString *)locale
 														decimalCount:(NSNumber *)decimalCount {
-	MADCurrencyFormatter *currency;
-	currency = [[MADCurrencyFormatter alloc] init];
+	MADCurrencyFormatter *currency = [[MADCurrencyFormatter alloc] init];
 	currency.enabled = [enabled boolValue];
 	currency.decimalCount = [decimalCount integerValue];
 	currency.locale = [NSLocale currentLocale];

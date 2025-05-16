@@ -33,7 +33,7 @@
 	@property (nonatomic, readwrite, strong) id /* UIViewController * */ <MADOperationRefreshReloadProtocol> viewController;
 	@property (nonatomic, readwrite, strong) MADDatabaseConnection *databaseConnection;
 	@property (atomic) NSUInteger latestRecordCount;
-	@property (nonatomic, assign) BOOL updatePending;
+	@property (atomic, assign) BOOL updatePending;
 	@property (nonatomic, strong) dispatch_queue_t updateQueue;
 
 @end

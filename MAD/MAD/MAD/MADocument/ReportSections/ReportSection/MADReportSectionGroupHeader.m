@@ -16,10 +16,8 @@ static NSString * const Format = @"Group Header (%@)";
 @implementation MADReportSectionGroupHeader
 
 - (NSString *)localizedDisplayName {
-    id format = NSLocalizedString(Format, Format);
     id fieldName =  [self.documentSection.inGroup fieldNameQuery];
-    id name = [[NSString alloc] initWithFormat:format, fieldName];
-    return name;
+	return [NSString stringWithFormat:NSLocalizedString(Format, Format), fieldName];
 }
 
 @end

@@ -315,7 +315,6 @@
 		4C64C436226DBA0300CE93FE /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18741DA14B400093B166 /* libct.a */; };
 		4C64C437226DBA0700CE93FE /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCE18731DA14B400093B166 /* libsybdb.a */; };
 		4C64C43E226E19E300CE93FE /* MADAtomicStoreCacheNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C64C43C226E19E300CE93FE /* MADAtomicStoreCacheNode.h */; };
-		4C64C43F226E19E300CE93FE /* MADAtomicStoreCacheNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C64C43D226E19E300CE93FE /* MADAtomicStoreCacheNode.m */; };
 		4C6F35021E409DE900F4744F /* MADCurrencyFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35001E409DE900F4744F /* MADCurrencyFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F35031E409DE900F4744F /* MADCurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F35011E409DE900F4744F /* MADCurrencyFormatter.m */; };
 		4C6F351E1E40EB0200F4744F /* RptqDatabaseCredentals.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F351A1E40EB0200F4744F /* RptqDatabaseCredentals.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2710,7 +2709,6 @@
 				4CD85D101E444DC1005DA2AF /* MADModelTable.m in Sources */,
 				4C401D411BAE3AF800BAE5FC /* MTPaperB2.m in Sources */,
 				4C6F351F1E40EB0200F4744F /* RptqDatabaseCredentals.m in Sources */,
-				4C64C43F226E19E300CE93FE /* MADAtomicStoreCacheNode.m in Sources */,
 				4C401E491BAE4D8C00BAE5FC /* MADocument.m in Sources */,
 				4C85A1291E3F322600545E94 /* RptqDocumentElementGroupKey+Extras.m in Sources */,
 				4C235CE71D1F82D000D3D77C /* MADReportRow.m in Sources */,

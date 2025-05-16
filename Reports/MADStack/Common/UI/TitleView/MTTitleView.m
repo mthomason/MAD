@@ -16,36 +16,36 @@ static CGFloat Padding = 2.0;
 
 static inline CGRect LabelRect(CGRect bounds);
 static inline CGRect LabelRect(CGRect bounds) {
-    return CGRectMake(CGPointZero.x, CGPointZero.y + Padding,
-                      bounds.size.width, bounds.size.height - Padding);
+	return CGRectMake(CGPointZero.x, CGPointZero.y + Padding,
+					  bounds.size.width, bounds.size.height - Padding);
 }
 
 @implementation MTTitleView
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self initialize];
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		[self initialize];
+	}
+	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self initialize];
-    }
-    return self;
+	if (self = [super initWithFrame:frame]) {
+		[self initialize];
+	}
+	return self;
 }
 
 - (void)initialize {
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:LabelRect(self.bounds)];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"";
-    [self addSubview:label];
-    _label = label;
-    
-    UIColor *color = [UIColor clearColor];
-    self.backgroundColor = color;
+	
+	UILabel *label = [[UILabel alloc] initWithFrame:LabelRect(self.bounds)];
+	label.textAlignment = NSTextAlignmentCenter;
+	label.text = @"";
+	[self addSubview:label];
+	_label = label;
+	
+	UIColor *color = [UIColor clearColor];
+	self.backgroundColor = color;
 }
 
 @end
@@ -53,39 +53,39 @@ static inline CGRect LabelRect(CGRect bounds) {
 @implementation MADTitleViewQueryTable
 
 - (void)setStyle:(MADTitleViewQueryTableStyle)style {
-    if (_style == style) return;
-    
-    switch (style) {
-        case MADTitleViewQueryTableRoot:
-            self.label.textColor = [UIColor whiteColor];
-            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0
-                                                               weight: UIFontWeightSemibold];
-            break;
-        case MADTitleViewQueryTableChild:
-            self.label.textColor = [MADColorEverydayApps newColorBlue];
-            self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0
-                                                               weight: UIFontWeightMedium];
-            break;
-            
-        default:
-            break;
-    }
-    _style = style;
+	if (_style == style) return;
+	
+	switch (style) {
+		case MADTitleViewQueryTableRoot:
+			self.label.textColor = [UIColor whiteColor];
+			self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0
+															   weight: UIFontWeightSemibold];
+			break;
+		case MADTitleViewQueryTableChild:
+			self.label.textColor = [MADColorEverydayApps newColorBlue];
+			self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0
+															   weight: UIFontWeightMedium];
+			break;
+			
+		default:
+			break;
+	}
+	_style = style;
 }
 
 - (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    [[MADColorEverydayApps newColorBlue] setStroke];
-
-    CGMutablePathRef border = CGPathCreateMutable();
-    CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(currentContext, 1.0 / self.traitCollection.displayScale);
-    CGPathMoveToPoint(border, NULL, rect.origin.x, rect.origin.y + rect.size.height);
-    CGPathAddLineToPoint(border, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
-    CGContextAddPath(currentContext, border);
-    CGContextDrawPath(currentContext, kCGPathStroke);
-    CGPathRelease(border);
-
+	[super drawRect:rect];
+	[[MADColorEverydayApps newColorBlue] setStroke];
+	
+	CGMutablePathRef border = CGPathCreateMutable();
+	CGContextRef currentContext = UIGraphicsGetCurrentContext();
+	CGContextSetLineWidth(currentContext, 1.0 / self.traitCollection.displayScale);
+	CGPathMoveToPoint(border, NULL, rect.origin.x, rect.origin.y + rect.size.height);
+	CGPathAddLineToPoint(border, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+	CGContextAddPath(currentContext, border);
+	CGContextDrawPath(currentContext, kCGPathStroke);
+	CGPathRelease(border);
+	
 }
 
 

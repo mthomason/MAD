@@ -9,7 +9,7 @@
 #ifndef Reports_NSData_Comparison_h
 #define Reports_NSData_Comparison_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSData.h>
 
 @interface NSData (Comparison)
 
