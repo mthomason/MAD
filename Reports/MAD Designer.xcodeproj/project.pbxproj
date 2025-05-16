@@ -242,7 +242,7 @@
 		4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
-		4C4C287D2DD6AFE600DB8538 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C287C2DD6AFE600DB8538 /* MADPluginManager.m */; };
+		4C4C28832DD6C47100DB8538 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C28822DD6C47100DB8538 /* MADPluginManager.m */; };
 		4C4F128C1D0C777D0002294E /* NSAttributedString+QueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */; };
 		4C4F128F1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */; };
 		4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */; };
@@ -922,8 +922,8 @@
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
-		4C4C287B2DD6AFE600DB8538 /* MADPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADPluginManager.h; path = Source/MADPluginManager.h; sourceTree = SOURCE_ROOT; };
-		4C4C287C2DD6AFE600DB8538 /* MADPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADPluginManager.m; path = Source/MADPluginManager.m; sourceTree = SOURCE_ROOT; };
+		4C4C28812DD6C47100DB8538 /* MADPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADPluginManager.h; path = Source/MADPluginManager.h; sourceTree = "<group>"; };
+		4C4C28822DD6C47100DB8538 /* MADPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADPluginManager.m; path = Source/MADPluginManager.m; sourceTree = "<group>"; };
 		4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_bzip2.sh; path = ../Compressor/build_bzip2.sh; sourceTree = SOURCE_ROOT; };
 		4C4EC6D32DC97D7A001DBEBE /* build_archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_archive.sh; path = ../Compressor/build_archive.sh; sourceTree = SOURCE_ROOT; };
 		4C4EC6D62DC98EED001DBEBE /* liblzma.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.tbd; path = usr/lib/liblzma.tbd; sourceTree = SDKROOT; };
@@ -1356,15 +1356,6 @@
 			name = Storyboard;
 			sourceTree = "<group>";
 		};
-		4C1F93CE201A32EB00BDDC70 /* PluginManager */ = {
-			isa = PBXGroup;
-			children = (
-				4C4C287B2DD6AFE600DB8538 /* MADPluginManager.h */,
-				4C4C287C2DD6AFE600DB8538 /* MADPluginManager.m */,
-			);
-			path = PluginManager;
-			sourceTree = "<group>";
-		};
 		4C26B94D1BAF0D4300456DC8 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -1764,12 +1755,13 @@
 		4C401EB51BAE5E7100BAE5FC /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4C4C28812DD6C47100DB8538 /* MADPluginManager.h */,
+				4C4C28822DD6C47100DB8538 /* MADPluginManager.m */,
 				4CC8EEF11E44F6DF00139089 /* Viewer */,
 				4CC8EEF31E44F6EE00139089 /* Explorer */,
 				4CC8EEF41E44F6F200139089 /* Query */,
 				4C6D2F051E6E86F5008EFE5D /* Nibs */,
 				4C1E55071E58295F00E3FAF0 /* Storyboard */,
-				4C1F93CE201A32EB00BDDC70 /* PluginManager */,
 				4C26BA321BAF99BE00456DC8 /* Constants.h */,
 				4C26BA331BAF99BE00456DC8 /* Constants.m */,
 				4CC982861F50E6E800E0496A /* MADViewController.h */,
@@ -3388,7 +3380,6 @@
 				4CD7A02C1EC888F90093B2CE /* MADMappingModel2-3c.xcmappingmodel in Sources */,
 				4C401F261BAE703200BAE5FC /* MADTableViewCellQueryLinkName.m in Sources */,
 				4C26BA5B1BAF99F000456DC8 /* MADPopoverBackgroundView.m in Sources */,
-				4C4C287D2DD6AFE600DB8538 /* MADPluginManager.m in Sources */,
 				4C401EE01BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m in Sources */,
 				4C4020411BAE92F200BAE5FC /* NSData+AES256.m in Sources */,
 				4CAEE72E1E55F089009A6096 /* MADNavigationBar.m in Sources */,
@@ -3438,6 +3429,7 @@
 				4C8DE26D1BAFA98B00AD1111 /* MADResizeHandleView.m in Sources */,
 				4C26B98D1BAF11FA00456DC8 /* MADTransparentPresentationController.m in Sources */,
 				4C32A4C31BB07FF300DD59A3 /* main.m in Sources */,
+				4C4C28832DD6C47100DB8538 /* MADPluginManager.m in Sources */,
 				4CF6AFC01CAFB55C00D3AD11 /* MADOperationRefreshReload.m in Sources */,
 				4CFEE8181BB7A2E600AFAA0A /* MADQueryPredicateFormatController.m in Sources */,
 				4C26BA5E1BAF99F000456DC8 /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
