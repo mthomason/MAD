@@ -12,8 +12,7 @@
 #import <Foundation/NSObject.h>
 #import "MADDocumentCreationManagerInterface.h"
 
-@interface MADDocumentCreationManager : NSObject
-	<MADDocumentCreationManagerInterface>
+@interface MADDocumentCreationManager : NSObject <MADDocumentCreationManagerInterface>
 
 @end
 
