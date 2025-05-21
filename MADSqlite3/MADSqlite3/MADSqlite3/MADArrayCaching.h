@@ -14,11 +14,23 @@
 @protocol MADCacheProtocol;
 
 typedef NS_ENUM(int16_t, MADArrayCachingState) {
+	MADArrayCachingStateUnknown = 0,
 	MADArrayCachingStateInital = 2,
 	MADArrayCachingStateLoading = 3,
 	MADArrayCachingStateLoaded = 5,
 	MADArrayCachingStateEmpty = 6,
 };
+
+static inline NSString * _Nonnull NSStringFromMADArrayCachingState(MADArrayCachingState);
+static inline  NSString * _Nonnull NSStringFromMADArrayCachingState(MADArrayCachingState value) {
+	switch (value) {
+		case MADArrayCachingStateInital: return @"MADArrayCachingStateInital";
+		case MADArrayCachingStateLoading: return @"MADArrayCachingStateLoading";
+		case MADArrayCachingStateLoaded: return @"MADArrayCachingStateLoaded";
+		case MADArrayCachingStateEmpty: return @"MADArrayCachingStateEmpty";
+		case MADArrayCachingStateUnknown: default: return @"MADArrayCachingStateUnknown";
+	}
+}
 
 @interface MADArrayCaching<ObjectType> : NSEnumerator<ObjectType>
 
