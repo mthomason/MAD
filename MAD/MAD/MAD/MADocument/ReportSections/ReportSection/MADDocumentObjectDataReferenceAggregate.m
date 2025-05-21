@@ -87,16 +87,18 @@
 	if (!queryAlias || queryAlias.length == 0) {
 		// Potentially return nil or an error placeholder
 	}
-	
-	if (!self.datasource) {
+	NSObject <MADPrintPageRendererDataSourceProtocol> *datasource = self.datasource;
+	if (!datasource) {
+		os_log_debug(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.datasource is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
 		return nil;
 	}
 	
-	if (!self.datasource.database) {
+	if (!datasource.database) {
+		os_log_debug(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.datasource.database is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
 		return nil;
 	}
 	
-	return [self.datasource.database queryKey:fieldName table:queryAlias];
+	return [datasource.database queryKey:fieldName table:queryAlias];
 }
 
 - (NSString *)formattedStringForValue:(id)value {
