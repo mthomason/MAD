@@ -3,16 +3,18 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/27/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
-#import <os/log.h>
+#import "MADOperationUniqueUrlForFilename.h"
+#import "madlog.h"
+
+#import <MADFoundation/MADURLFactory.h>
+
 #import <Foundation/NSString.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSPathUtilities.h>
-#import "MADOperationUniqueUrlForFilename.h"
-#import <MADFoundation/MADURLFactory.h>
 
 @interface MADOperationUniqueUrlForFilename ()
 

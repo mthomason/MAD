@@ -134,10 +134,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
-	MADDatabaseSqlite3 *database;
-	MADDatabaseConnection *databaseConnection;
-	databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-	database = [[MADDatabaseSqlite3 alloc] init];
+	MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
 	[database setDatabaseConnection:databaseConnection];
 	[database openDatabase];
 
@@ -154,8 +152,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	[self reopenDatabaseAtUrl:url];
 	if (![self.database tableExist:MTArrayCachedTableName]) {
 
-		MADDataColumn *columnKey;
-		columnKey = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
+		MADDataColumn *columnKey = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
 		columnKey.type = MADDataTypeInteger;
 		columnKey.primaryKey = YES;
 		columnKey.notNull = YES;
@@ -166,8 +163,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 			createTable: YES
 				 unique: NO];
 
-		MADDataColumn *columnValue;
-		columnValue = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
+		MADDataColumn *columnValue = [[MADDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
 		columnValue.type = MADDataTypeBlob;
 		columnValue.primaryKey = NO;
 		columnValue.notNull = YES;
@@ -223,8 +219,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 		dispatch_sync(self.archivingQueue, ^{
 			@autoreleasepool {
 				
-				int prepare_result = sqlite3_prepare_v2(database->_database, queryString.UTF8String, -1,
-														&stmt_insert, NULL);
+				int prepare_result = sqlite3_prepare_v2(database->_database, queryString.UTF8String, -1, &stmt_insert, NULL);
 				NSAssert(prepare_result == SQLITE_OK, @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
 				success = prepare_result == SQLITE_OK;
 			}
@@ -267,8 +262,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	BOOL success = YES;
 	if (_statementCount == NULL) {
 		MADDatabaseSqlite3 *database = self.database;
-		int prepare_result = sqlite3_prepare_v2(database->_database, queryString.UTF8String,
-									 -1, &_statementCount, NULL);
+		int prepare_result = sqlite3_prepare_v2(database->_database, queryString.UTF8String, -1, &_statementCount, NULL);
 		NSAssert(prepare_result == SQLITE_OK, @"sqlite3_prepare_v2 failed (%s).", (char *)sqlite3_errmsg(database->_database));
 		success = prepare_result == SQLITE_OK;
 	}
@@ -276,11 +270,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSURL *)url {
-	if (_url == nil) {
-		NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory];
-		NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
-		_url = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
-	}
+	NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory];
+	_url = [cachedArrayDirectories URLByAppendingPathComponent:[self.identifier stringByAppendingPathExtension:@"madac"]
+												   isDirectory:NO];
 	return _url;
 }
 
@@ -289,24 +281,19 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	   columnName:(NSString *)columnName
 	  createTable:(BOOL)create
 		   unique:(BOOL)unique {
-	
 	NSString *columnAffinity = [MADDatabaseSqlite3 sqlite3NativeType:column.type];
-	MADQueryCacheAddColumn *queryCacheAddColumn;
-	queryCacheAddColumn =
-		[[MADQueryCacheAddColumn alloc] initWithTableName: table
-											  columnName: columnName
-												  column: column
-											 createTable: create
-										uniqueColumnHack: unique
-										  columnAffinity: columnAffinity];
-	BOOL success = NO;
+	MADQueryCacheAddColumn *queryCacheAddColumn = [[MADQueryCacheAddColumn alloc] initWithTableName: table
+																						 columnName: columnName
+																							 column: column
+																						createTable: create
+																				   uniqueColumnHack: unique
+																					 columnAffinity: columnAffinity];
 	NSError *error = NULL;
-	success = [self.database executeQuery:queryCacheAddColumn withError:&error];
+	BOOL success = [self.database executeQuery:queryCacheAddColumn withError:&error];
 	if (error != nil) {
 		os_log_error(caching_log, "Error: %@", error);
 	}
-	NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg(_database->_database), __PRETTY_FUNCTION__);
 }
 
 - (void)addObject:(id _Nonnull)object {
@@ -327,7 +314,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 		bind_result = sqlite3_bind_blob(statementInsert, 2, data.bytes, (int)data.length, SQLITE_STATIC);
 		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
 		bind_result = sqlite3_step(statementInsert);
-		NSAssert(Sqlite3StepResultOK(bind_result), @"Error: '%s'.", __PRETTY_FUNCTION__);
+		NSAssert((bind_result == SQLITE_OK) || (bind_result == SQLITE_ROW) || (bind_result == SQLITE_DONE), @"Error: '%s'.", __PRETTY_FUNCTION__);
 		if (bind_result == SQLITE_DONE) {
 			sqlite3_reset(statementInsert);
 			sqlite3_clear_bindings(statementInsert);
@@ -338,27 +325,23 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)writeData:(NSData *)data {
-	
 	long long numberOfRows = _numberOfRows;
 	sqlite3_stmt *statementInsert = _statementInsert;
 	NSData *dataToWrite = data;
 	dispatch_async(self.archivingQueue, ^{
-		@autoreleasepool {
-			int bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
-			NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
-			bind_result = sqlite3_bind_blob(statementInsert, 2, dataToWrite.bytes, (int)dataToWrite.length, SQLITE_STATIC);
-			NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
-			bind_result = sqlite3_step(statementInsert);
-			NSAssert(Sqlite3StepResultOK(bind_result), @"Error: '%s'.", __PRETTY_FUNCTION__);
-			if (bind_result == SQLITE_DONE) {
-				sqlite3_reset(statementInsert);
-				sqlite3_clear_bindings(statementInsert);
-				//numberOfRows++;
-			}
+		int bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
+		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
+		bind_result = sqlite3_bind_blob(statementInsert, 2, dataToWrite.bytes, (int)dataToWrite.length, SQLITE_STATIC);
+		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
+		bind_result = sqlite3_step(statementInsert);
+		NSAssert((bind_result == SQLITE_OK) || (bind_result == SQLITE_ROW) || (bind_result == SQLITE_DONE), @"Error: '%s'.", __PRETTY_FUNCTION__);
+		if (bind_result == SQLITE_DONE) {
+			sqlite3_reset(statementInsert);
+			sqlite3_clear_bindings(statementInsert);
 		}
 	});
 	_hasNumberOfRows = MADObjectInitalizedYes;
-	_numberOfRows++;;
+	_numberOfRows++;
 }
 
 - (NSData *)readDataAtIndex:(NSUInteger)index {
@@ -398,7 +381,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	__block id result = nil;
 	sqlite3_stmt *statementSelect = _statementSelect;
 	dispatch_sync(self.unarchiveQueue, ^{
-		@autoreleasepool {
+		//@autoreleasepool {
 			sqlite3_bind_int(statementSelect, 1, (int)index);
 			
 			if (sqlite3_step(statementSelect) == SQLITE_ROW) {
@@ -419,7 +402,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 			}
 			sqlite3_clear_bindings(statementSelect);
 			sqlite3_reset(statementSelect);
-		}
+		//}
 	});
 	
 	MADIndex *idx = [[MADIndex alloc] initWithIndex:index andObject:result];

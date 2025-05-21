@@ -22,8 +22,8 @@
 
 @interface MADElementStylizedText ()
 
-    - (instancetype)init NS_DESIGNATED_INITIALIZER;
-    @property (nonatomic, strong, readwrite) NSMutableDictionary *fontAttributes;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *fontAttributes;
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -31,76 +31,72 @@
 
 - (instancetype)init {
 	self = [super init];
-    return self;
+	return self;
 }
 
 - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
-                                 fontSize:(double) fontsize
-                                textStyle:(RptqTextStyle *)textStyle
-                      horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment {
-    
-    if (self = [super init]) {
-    
+								 fontSize:(double) fontsize
+								textStyle:(RptqTextStyle *)textStyle
+					  horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment {
+	
+	if (self = [super init]) {
+		
 		UIFontDescriptor *fontDescriptor = [UIFontDescriptor newFontDescriptorForFontName: fontname
 																				 fontSize: fontsize
 																					 bold: textStyle.bold
 																				   italic: textStyle.italic];
-
-        
-        UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
-                                                   size: 0.0];
-
-
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
-        paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-        paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-        
-        switch (horizontalAlignment) {
-            case MADHorizontalAlignmentLeft:
-                paragraphStyle.alignment = NSTextAlignmentLeft;
-                break;
-            case MADHorizontalAlignmentRight:
-                paragraphStyle.alignment = NSTextAlignmentRight;
-                break;
-            case MADHorizontalAlignmentCenter:
-                paragraphStyle.alignment = NSTextAlignmentCenter;
-                break;
-            case MADHorizontalAlignmentJustified:
-                paragraphStyle.alignment = NSTextAlignmentJustified;
-                break;
-            case MADHorizontalAlignmentNatrual:
-                paragraphStyle.alignment = NSTextAlignmentNatural;
-                break;
-            default:
-                paragraphStyle.alignment = NSTextAlignmentLeft;
-                break;
-        }
-        
-        NSNumber *baselineOffset = @0.00000000f;
-        NSNumber *underlineStyle;
-        underlineStyle = [[NSNumber alloc] initWithInteger: textStyle.underline ?
-                                              NSUnderlineStyleSingle :
-                                              NSUnderlineStyleNone];
-        
-        NSNumber *strikethroughStyle;
-        strikethroughStyle = [[NSNumber alloc] initWithInteger: textStyle.strikethrough ?
-                                                                        NSUnderlineStyleSingle :
-                                                                        NSUnderlineStyleNone];
-        
-        NSMutableDictionary *fontAttributes;
-        fontAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                    customFont,         NSFontAttributeName,
-                                    baselineOffset,     NSBaselineOffsetAttributeName,
-                                    underlineStyle,     NSUnderlineStyleAttributeName,
-                                    strikethroughStyle, NSStrikethroughStyleAttributeName,
-                                    paragraphStyle,     NSParagraphStyleAttributeName, nil];
-        
-        self.fontAttributes = fontAttributes;
-        
-    }
-    return self;
-    
+		
+		
+		UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
+												   size: 0.0];
+		
+		
+		NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+		// ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
+		paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+		paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+		
+		switch (horizontalAlignment) {
+			case MADHorizontalAlignmentLeft:
+				paragraphStyle.alignment = NSTextAlignmentLeft;
+				break;
+			case MADHorizontalAlignmentRight:
+				paragraphStyle.alignment = NSTextAlignmentRight;
+				break;
+			case MADHorizontalAlignmentCenter:
+				paragraphStyle.alignment = NSTextAlignmentCenter;
+				break;
+			case MADHorizontalAlignmentJustified:
+				paragraphStyle.alignment = NSTextAlignmentJustified;
+				break;
+			case MADHorizontalAlignmentNatrual:
+				paragraphStyle.alignment = NSTextAlignmentNatural;
+				break;
+			default:
+				paragraphStyle.alignment = NSTextAlignmentLeft;
+				break;
+		}
+		
+		NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: textStyle.underline ?
+											 NSUnderlineStyleSingle :
+									NSUnderlineStyleNone];
+		
+		NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger: textStyle.strikethrough ?
+												 NSUnderlineStyleSingle :
+										NSUnderlineStyleNone];
+		
+		NSMutableDictionary *fontAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+											   customFont,         NSFontAttributeName,
+											   @0.0,     NSBaselineOffsetAttributeName,
+											   underlineStyle,     NSUnderlineStyleAttributeName,
+											   strikethroughStyle, NSStrikethroughStyleAttributeName,
+											   paragraphStyle,     NSParagraphStyleAttributeName, nil];
+		
+		self.fontAttributes = fontAttributes;
+		
+	}
+	return self;
+	
 }
 
 @end

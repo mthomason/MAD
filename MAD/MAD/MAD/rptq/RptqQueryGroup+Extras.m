@@ -11,18 +11,6 @@
 #endif
 
 #import "RptqQueryGroup+Extras.h"
-
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSPredicate.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSComparisonPredicate.h>
-
-#import <CoreData/NSPropertyMapping.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-
 #import "RptqDatabaseSchemaField.h"
 
 #import "RptqDocument.h"
@@ -40,6 +28,18 @@
 #import "RptqQuery+Extras.h"
 
 #import "RptqDataHelper.h"
+#import "madlog.h"
+
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSPredicate.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSComparisonPredicate.h>
+
+#import <CoreData/NSPropertyMapping.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 @implementation RptqQueryGroup (Extras)
 
@@ -124,7 +124,10 @@
 
 	NSError *error = nil;
 	NSArray *queryGroupLast = [managedObjectContext executeFetchRequest: request error: &error];
-
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
+	
 	int16_t weight = 0;
 	if (queryGroupLast.count > 0) {
 		RptqQueryGroup *lastGroup = queryGroupLast[0];

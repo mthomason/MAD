@@ -7,9 +7,9 @@
 //
 
 #import "MADPrintPageElementImage.h"
+#import "MADDocumentObjectDataReference.h"
+#import "MADDocumentObjectDataReferenceImage.h"
 #import <UIKit/UIImage.h>
-
-#import "MADDocumentObjectReference.h"
 
 @interface MADPrintPageElementImage ()
     @property (nonatomic, strong) UIImage *image;
@@ -18,18 +18,18 @@
 @implementation MADPrintPageElementImage
 
 - (void)dealloc {
-    _image = nil;
+	_image = nil;
 }
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition {
-    if (self = [super init]) {
-        self.image = definition.image;
-    }
-    return self;
+	if (self = [super init]) {
+		self.image = definition.image;
+	}
+	return self;
 }
 
 - (void)drawInRect:(CGRect)rect {
-    [self.image drawInRect:rect];
+	[self.image drawInRect:rect];
 }
 
 @end

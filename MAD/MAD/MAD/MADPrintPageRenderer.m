@@ -12,48 +12,45 @@
 
 #import "MADPrintPageRenderer.h"
 
-#import <UIKit/UIGraphics.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/NSStringDrawing.h>
-#import <UIKit/UIInterface.h>
-#import <UIKit/NSParagraphStyle.h>
-
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADDatabaseField.h>
-
-#import "MADocument.h"
-
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDocument+Extras.h"
-
 #import "RptqDocumentElement.h"
 #import "RptqDocumentElement+Extras.h"
-
 #import "RptqDatabase.h"
-
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
-
 #import "RptqQueryField.h"
-
 #import "RptqDatabaseCredentals.h"
-
 #import "RptqDocumentSectionRows.h"
-
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
-
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementBarcode+Extras.h"
-
 #import "RptqDatabaseSchemaField.h"
-
 #import "RptqTextStyle.h"
 #import "RptqAlignment.h"
-
 #import "RptqDocumentElementLabel.h"
 #import "RptqDocumentElementLabelDataField+Extras.h"
 #import "RptqDocumentElementImage.h"
+#import "MADocument.h"
+#import "MADParameters+QueryCacheAggregate.h"
+#import "MADElementStylizedText.h"
+#import "MADPrintPageRendererDataSource.h"
+#import "MADDocumentObjectDataReference.h"
+#import "MADDocumentObjectDataReferenceAggregate.h"
+#import "MADPrintPageElement.h"
+#import "MADPrintPageElement+Constructor.h"
+#import "MADSectionRepresentation.h"
+#import "MADReportTextRepresentation.h"
+#import "MADReportPageRepresentation.h"
+#import "MADReportSectionRepresentation.h"
+#import "MADReportSectionRowsRepresentation.h"
+#import "MADReportLineRepresentation.h"
+
+#import <MADQueryCacheAggregateFunctionParamaters.h>
+
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MAD/MTPaper.h>
 #import <MAD/MADReportFormatter.h>
@@ -61,30 +58,16 @@
 #import <MADAPI/MADDatabase.h>
 
 #import <MADSqlite3/MADArrayCaching.h>
-
-#import "MADSectionRepresentation.h"
-
-#import "MADReportTextRepresentation.h"
-#import "MADReportPageRepresentation.h"
-#import "MADReportSectionRepresentation.h"
-#import "MADReportSectionRowsRepresentation.h"
-#import "MADReportLineRepresentation.h"
-
-#import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-
 #import <MADSqlite3/MADDataTableFast.h>
-#import <MADQueryCacheAggregateFunctionParamaters.h>
 
-#import "MADParameters+QueryCacheAggregate.h"
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseField.h>
 
-#import "MADElementStylizedText.h"
-
-#import "MADPrintPageRendererDataSource.h"
-
-#import "MADDocumentObjectReference.h"
-#import "MADPrintPageElement.h"
-#import "MADPrintPageElement+Constructor.h"
+#import <UIKit/UIGraphics.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/NSStringDrawing.h>
+#import <UIKit/UIInterface.h>
+#import <UIKit/NSParagraphStyle.h>
 
 #import <os/log.h>
 
@@ -99,15 +82,9 @@ static inline CGRect ElementBounds(CGRect, CGPoint);
 static inline CGFloat HeightWithVisibility(CGFloat, BOOL);
 static inline CGRect SectionBounds(CGRect, CGFloat, BOOL, MADDocumentSectionType, NSUInteger, NSUInteger, CGFloat);
 
-static inline CGRect ElementBounds(CGRect documentObjectFrame, CGPoint sectionBoundsOrigin) {
-	return CGRectMake(documentObjectFrame.origin.x + sectionBoundsOrigin.x,
-					  documentObjectFrame.origin.y + sectionBoundsOrigin.y,
-					  documentObjectFrame.size.width, documentObjectFrame.size.height);
-}
+static inline CGRect ElementBounds(CGRect frame, CGPoint bounds) { return CGRectMake(frame.origin.x + bounds.x, frame.origin.y + bounds.y, frame.size.width, frame.size.height); }
 
-static inline CGFloat HeightWithVisibility(CGFloat height, BOOL visibility) {
-	return visibility ? height : CGSizeZero.height;
-}
+static inline CGFloat HeightWithVisibility(CGFloat height, BOOL visibility) { return visibility ? height : CGSizeZero.height; }
 
 static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 								   BOOL visility, MADDocumentSectionType sectionType,
@@ -158,22 +135,12 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 		log_print = os_log_create("com.mad", c.UTF8String);
 
 		if ([[NSUserDefaults standardUserDefaults] valueForKey:MTCachedSizeHorizontal] == nil) {
-			
-			[[NSUserDefaults standardUserDefaults] setObject: NSStringFromCGSize(CGSizeZero)
-													  forKey: MTCachedSizeHorizontal];
-			
-			[[NSUserDefaults standardUserDefaults] setObject: NSStringFromCGSize(CGSizeZero)
-													  forKey: MTCachedSizeVertical];
-			
+			[[NSUserDefaults standardUserDefaults] setObject: NSStringFromCGSize(CGSizeZero) forKey: MTCachedSizeHorizontal];
+			[[NSUserDefaults standardUserDefaults] setObject: NSStringFromCGSize(CGSizeZero) forKey: MTCachedSizeVertical];
 			[[NSUserDefaults standardUserDefaults] synchronize];
 			
 		}
 	}
-}
-
-+ (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
-	[datasource updatePrintingReportFormatter];
-	return [[MADPrintPageRenderer alloc] initWithDataSource:datasource];
 }
 
 #pragma -
@@ -196,12 +163,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
 	paragraphStyle.alignment = NSTextAlignmentCenter;
 	
-	UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0/256.0
-												  green:170.0/256.0
-												   blue:170.0/256.0 alpha:0.8000f];
-	UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0/256.0
-													  green:85.0/256.0
-													   blue:85.0/256.0 alpha:0.8];
+	UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0/256.0 green:170.0/256.0 blue:170.0/256.0 alpha:0.8000f];
+	UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0/256.0 green:85.0/256.0 blue:85.0/256.0 alpha:0.8];
 	NSNumber *strokeWidth = @3.0;
 	NSDictionary *results = @{
 		NSFontAttributeName : customFont,
@@ -414,8 +377,6 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
 
 	for (MADSectionRepresentation *pageSection in layoutEnumerator) {
-		os_log_debug(log_print, "%s %@", __PRETTY_FUNCTION__, NSStringFromMADDocumentSectionType(pageSection.sectionType));
-		
 		RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
 																	   andLevel: pageSection.groupLevel];
 
@@ -472,17 +433,19 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	if (sectionRepresentation.visibility) {
 		NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
 
+		os_log_t logger = log_print;
 		for (RptqDocumentSectionRows *row in rowsEnumerator) {
 			NSEnumerator *documentObjectEnumerator = row.hasObjects.objectEnumerator;
 			MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
 			
-			for (RptqDocumentElement *item in documentObjectEnumerator) {
+			for (__kindof RptqDocumentElement *item in documentObjectEnumerator) {
 				
 				MADDocumentObjectDataReference *dataReference = [MADDocumentObjectDataReference newDocumentObjectDataReference: self.datasource
 																													  delegate: self
 																														  page: pageIndex
 																														  item: item
 																														itemID: pageSection.detailRowId];
+				
 				__kindof MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
 
 				[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];

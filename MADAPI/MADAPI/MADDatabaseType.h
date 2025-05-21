@@ -9,6 +9,8 @@
 #ifndef MadApiMadDatabaseType_h
 #define MadApiMadDatabaseType_h
 
+#import <Foundation/NSObjCRuntime.h>
+
 typedef enum MADDatabaseType : int16_t {
 	MADDatabaseTypeNotSet               = -1,
 	MADDatabaseTypeUnknown              = 0,

@@ -18,8 +18,7 @@
 #import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURLFactory.h>
-
-#import <os/log.h>
+#import "madlog.h"
 
 NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
 NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
@@ -35,7 +34,6 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
 	if (self.cancelled) return [self finish];
 
 	NSURL *fileURL, *databaseURL;

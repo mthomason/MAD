@@ -74,7 +74,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 	
 		if (severity >= 5 || dberr == SYBEINTF) {
-			NSString *title = NSLocalizedString(@"Caught an Error", @"Caught an Error");
 			char *osstr = (oserrstr != NULL ? oserrstr : "");
 			char *dbstr = (dberrstr != NULL ? dberrstr : "");
 			
@@ -82,8 +81,10 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			NSString *dbMessage = [[NSString alloc] initWithCString: dbstr encoding:NSUTF8StringEncoding];
 			NSString *errorMessage = [[NSString alloc] initWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
 			
-			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : errorMessage};
-			NSError *error = [NSError errorWithDomain:MADDomainTDS code:dberr userInfo:errorInfo];
+			NSError *error = [NSError errorWithDomain:MADDomainTDS code:dberr userInfo:@{
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Caught an Error", @"Caught an Error"),
+				NSLocalizedFailureReasonErrorKey : errorMessage
+			}];
 			[[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationError object:error];
 			
 			result = INT_CANCEL;
@@ -1197,18 +1198,22 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			dbclose(dbconn);
 			
 		} else {
-			NSString *title = NSLocalizedString(@"Bad Process", @"Bad Process");
-			NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
-			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
-			NSError *error1 = [NSError errorWithDomain:MADDomainTDS code:4379 userInfo:errorInfo];
+			NSError *error1 = [NSError errorWithDomain:MADDomainTDS
+												  code:4379
+											  userInfo:@{
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Bad Process", @"Bad Process"),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Could not run this query.", @"Could not run this query.")
+			}];
 			rsuccess = NO;
 		}
 		
 	} else {
-		NSString *title = NSLocalizedString(@"Bad Query", @"Bad Query");
-		NSString *message = NSLocalizedString(@"Could not run this query.", @"Could not run this query.");
-		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : message};
-		NSError *error2 = [NSError errorWithDomain:MADDomainTDS code:4378 userInfo:errorInfo];
+		NSError *error2 = [NSError errorWithDomain:MADDomainTDS
+											  code:4378
+										  userInfo:@{
+			NSLocalizedDescriptionKey : NSLocalizedString(@"Bad Query", @"Bad Query"),
+			NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Could not run this query.", @"Could not run this query.")
+		}];
 		rsuccess = NO;
 	}
 	return rsuccess;

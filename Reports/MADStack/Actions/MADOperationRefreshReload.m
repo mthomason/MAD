@@ -7,7 +7,6 @@
 //
 
 #import "MADOperationRefreshReload.h"
-#import <os/log.h>
 #import <Foundation/NSArray.h>
 
 #import <MADFoundation/MADCredential.h>
@@ -24,6 +23,7 @@
 #import "MADOperationRefresh.h"
 #import "MADRefreshOperationReload.h"
 #import "MADOperationRefreshReloadProtocol.h"
+#import "madlog.h"
 
 @interface MADOperationRefreshReload ()
 
@@ -71,7 +71,6 @@
 }
 
 - (void)execute {
-	
 	if (self.cancelled) {
 		return [self finish];
 	}
@@ -184,6 +183,12 @@
 												  object: database];
 }
 
-- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors { }
+- (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors {
+	if (errors.count > 0) {
+		for (NSError *error in errors) {
+			os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, error);
+		}
+	}
+}
 
 @end

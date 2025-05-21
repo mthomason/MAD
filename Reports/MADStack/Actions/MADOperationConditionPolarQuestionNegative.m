@@ -7,25 +7,26 @@
 //
 
 #import "MADOperationConditionPolarQuestionNegative.h"
-#import <os/log.h>
-#import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
-#import <MADFoundation/MADErrorUserInfo.h>
-#import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+#import "madlog.h"
+
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
+
+#import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
 
 @interface MADOperationConditionPolarQuestionNegative ()
 
-	@property (nonatomic, readwrite) NSUInteger tag;
+@property (nonatomic, readwrite) NSUInteger tag;
 
 @end
 
 @implementation MADOperationConditionPolarQuestionNegative
 
 - (void)dealloc {
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+	os_log_info(GetDesignerLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
@@ -53,7 +54,7 @@
 
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	os_log_info(OS_LOG_DEFAULT, "Evaluate\t%s", operation.description.UTF8String);
+	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 
 	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
 	MADOperationConditionResult *result = nil;

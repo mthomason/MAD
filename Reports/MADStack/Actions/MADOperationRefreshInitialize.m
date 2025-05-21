@@ -7,16 +7,13 @@
 //
 
 #import "MADOperationRefreshInitialize.h"
-
-#import <os/log.h>
-
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
-
-#import <MADFoundation/MADDataTable.h>
+#import "MADOperationRefreshInitalizeMainDataTable.h"
+#import "madlog.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
+
+#import <MADFoundation/MADDataTable.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADReportFormatter.h>
@@ -31,7 +28,8 @@
 #import <MAD/RptqDocumentSectionEnumerator.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 
-#import "MADOperationRefreshInitalizeMainDataTable.h"
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MADOperationRefreshInitialize ()
 
@@ -58,8 +56,6 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-	//NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-	
 	if (self.cancelled) {
 		return [self finish];
 	}

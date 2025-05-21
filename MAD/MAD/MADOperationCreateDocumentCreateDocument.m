@@ -3,32 +3,30 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADOperationCreateDocumentCreateDocument.h"
-#import <os/log.h>
-
-#import <MADFoundation/MADCredential.h>
+#import "MADOperationUniqueUrlForFilename.h"
+#import "madlog.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
+
+#import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADOperationPromptErrorProtocol.h>
 
 #import <MAD/MADDocumentProtocol.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 
-#import "MADOperationUniqueUrlForFilename.h"
-#import <MADFoundation/MADOperationPromptErrorProtocol.h>
+@interface MADOperationCreateDocumentCreateDocument () <MADocumentDelegate>
 
-@interface MADOperationCreateDocumentCreateDocument ()
-    <MADocumentDelegate>
-    
-    @property (nonatomic, readwrite, strong) MADocument *document;
+@property (nonatomic, readwrite, strong) MADocument *document;
 
-    @property (nonatomic, readwrite, copy) NSURL *url;
-    @property (nonatomic, readwrite, copy) MADCredential *credentials;
-    @property (nonatomic, readwrite, copy) MADDatabaseConnection *databaseConnection;
+@property (nonatomic, readwrite, copy) NSURL *url;
+@property (nonatomic, readwrite, copy) MADCredential *credentials;
+@property (nonatomic, readwrite, copy) MADDatabaseConnection *databaseConnection;
 
 @end
 

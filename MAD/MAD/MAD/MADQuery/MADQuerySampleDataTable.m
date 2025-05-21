@@ -37,8 +37,7 @@
 
 #import "RptqDatabaseCredentals+Extras.h"
 
-@interface MADQuerySampleDataTable ()
-	<MADDatabaseResultsProtocol>
+@interface MADQuerySampleDataTable () <MADDatabaseResultsProtocol>
 
 	@property (nonatomic, strong) id queryObject;
 	@property (nonatomic, strong) MADDataTable *dataTableMaxFieldLength;
@@ -143,15 +142,13 @@
 	NSUInteger *fieldCounter = 0;
 	NSString *safeTableName = [database tableAliasForTable:schemaTable.toString];
 	for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
-			NSString *fieldAlias = [database fieldAliasForField:field.name withSafeTableName:safeTableName];
-			[fieldAliases addObject:fieldAlias];
-
-		}
-		return [fieldAliases componentsJoinedByString:@",\n\t"];
+		NSString *fieldAlias = [database fieldAliasForField:field.name withSafeTableName:safeTableName];
+		[fieldAliases addObject:fieldAlias];
+		
+	}
+	return [fieldAliases componentsJoinedByString:@",\n\t"];
 }
 
-- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
-	return self.dataTableMaxFieldLength;
-}
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query { return self.dataTableMaxFieldLength; }
 
 @end

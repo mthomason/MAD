@@ -17,8 +17,8 @@
 @interface MADPrintPageRenderer : UIPrintPageRenderer
 
 @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
+
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
-+ (instancetype)newReportViewerPrintPageRendererWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
 - (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground;
 
 @end

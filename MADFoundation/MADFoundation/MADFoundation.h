@@ -39,7 +39,6 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADProgress.h>
 
 #import <MADFoundation/MADDataTableType.h>
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>

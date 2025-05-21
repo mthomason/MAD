@@ -7,15 +7,15 @@
 //
 
 #import "MADOperationDocumentCloseDocument.h"
-#import <os/log.h>
-#import <MADFoundation/MADErrorUserInfo.h>
-#import <MAD/MADocument.h>
 #import "MADOperationCreateDocumentCreateDocument.h"
+#import "madlog.h"
+
+#import <MAD/MADocument.h>
 
 @implementation MADOperationDocumentCloseDocument
 
 - (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+    os_log_info(GetMadLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (BOOL)isAsynchronous {
@@ -42,10 +42,10 @@
 			if (success) {
 				[self finish];
 			} else {
-				NSString *title = NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document");
-				NSString *message = NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.");
-				MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-				NSError *error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:893];
+				NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:893 userInfo:@{
+					NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Problem Closing Document", @"Problem Closing Document"),
+					NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to close the document.", @"Failed to close the document.")
+				}];
 				[self finishWithError:error];
 			}
 		}];

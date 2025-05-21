@@ -7,7 +7,7 @@
 //
 
 #import "MADBlockOperation.h"
-#import <os/log.h>
+#import "madlog.h"
 
 @interface MADBlockOperation ()
 
@@ -18,7 +18,7 @@
 @implementation MADBlockOperation
 
 - (void)dealloc {
-	os_log_info(OS_LOG_DEFAULT, "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
+	os_log_info(GetFoundationLog(), "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
 }
 
 /**

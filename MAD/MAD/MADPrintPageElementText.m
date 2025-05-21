@@ -17,7 +17,7 @@
 #import "RptqTextStyle.h"
 #import "RptqAlignment.h"
 
-#import "MADDocumentObjectReference.h"
+#import "MADDocumentObjectDataReference.h"
 #import "MADAlignment.h"
 #import "MADElementStylizedText.h"
 

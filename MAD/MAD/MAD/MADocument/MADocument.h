@@ -23,9 +23,7 @@
 
 @protocol MADActivityProtocol, MADocumentDelegate;
 
-@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument,
-	   MADDatabaseConnection, MADModelDocument, MADocumentState,
-	   MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery;
+@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState, MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery;
 
 
 extern NSString * const MADMimeType;
@@ -35,12 +33,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
    - (void)setStatusText:(NSString *)statusText;
 @end
 
-@interface MADocument : UIManagedDocument
-   <UIPrintInteractionControllerDelegate,
-	   MADDataProtocol,
-	   MADCacheProtocol,
-	   MADReportFormatterDataSource,
-	   MADPrintPageRendererDataSourceProtocol>
+@interface MADocument : UIManagedDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol>
 
 @property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
 @property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;
@@ -53,11 +46,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 @property (readonly, nonatomic)             NSUInteger numberOfResults;
 @property (readonly, nonatomic)             CGSize paperSize;
 
-//Layout
-
-//Query
-
-//Viewer
 @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
 @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
 @property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;

@@ -17,13 +17,11 @@
 
 @interface MADElementStylizedText : NSObject
 
-    - (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
-                                     fontSize:(double) fontsize
-                                    textStyle:(RptqTextStyle  * _Nullable )textStyle
-                          horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment
-                                                                    NS_DESIGNATED_INITIALIZER;
-
-    @property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;
+@property (nonnull, nonatomic, strong, readonly) NSDictionary        *fontAttributes;
+- (nullable instancetype)initWithFontName:(NSString * _Nullable) fontname
+								 fontSize:(double) fontsize
+								textStyle:(RptqTextStyle  * _Nullable )textStyle
+					  horizontalAlignment:(MADHorizontalAlignment)horizontalAlignment NS_DESIGNATED_INITIALIZER;
 
 
 @end

@@ -11,8 +11,8 @@
 
 #import <MADAPI/MADQuery.h>
 
-@interface MADQueryCacheAggregateFunction : MADQuery
-	<MADQueryDataBindingProtocol, MADQueryColumnsProtocol>
+@interface MADQueryCacheAggregateFunction : MADQuery <MADQueryDataBindingProtocol, MADQueryColumnsProtocol>
+
 @end
 
 #endif

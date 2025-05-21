@@ -23,6 +23,7 @@
 		4C6C0A151F5D360400EDA039 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */; };
 		4C6C0A181F5D374600EDA039 /* MADConnectionSQLGenericViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C0A191F5D374600EDA039 /* MADConnectionSQLGenericViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */; };
+		4CAA659E2DDD10760016006E /* MADAliases.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CAA659D2DDD10760016006E /* MADAliases.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */; };
 		4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */; };
 		4CF6AAB01F5518BB0061B0C6 /* MADAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +73,7 @@
 		4C6C0A171F5D374600EDA039 /* MADConnectionSQLGenericViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADConnectionSQLGenericViewController.m; sourceTree = "<group>"; };
 		4C7E248724A6093D005098F2 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7E24AE24A63872005098F2 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CAA659D2DDD10760016006E /* MADAliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAliases.h; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
+				4CAA659D2DDD10760016006E /* MADAliases.h */,
 				4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */,
 				4C6C0A061F5D329700EDA039 /* MADConnectionViewController.h */,
 				4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */,
@@ -222,6 +225,7 @@
 				4C6C0A081F5D329700EDA039 /* MADConnectionViewController.h in Headers */,
 				4CF6AAD51F5526A00061B0C6 /* MADDatabaseTable.h in Headers */,
 				4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */,
+				4CAA659E2DDD10760016006E /* MADAliases.h in Headers */,
 				4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

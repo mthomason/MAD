@@ -11,12 +11,14 @@
 #endif
 
 #import <MADAPI/MADQuery.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseDataBinding.h>
 
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADDataColumn.h>
 
-#import <MADAPI/MADDatabase.h>
-#import <MADAPI/MADDatabaseDataBinding.h>
+#import <Foundation/NSDictionary.h>
+
 
 NSString * const MADQueryKeyPredicateColumn  = @"c";
 NSString * const MADQueryKeyPredicateValue   = @"v";

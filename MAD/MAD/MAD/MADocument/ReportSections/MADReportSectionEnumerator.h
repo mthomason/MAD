@@ -13,17 +13,11 @@
 
 @class RptqQuery;
 
-extern const NSInteger MADIndexMutationPointer;
-extern const NSInteger MADIndexGroupCounter;
-extern const NSInteger MADIndexSectionCount;
-extern const NSInteger MADIndexGroupCount;
+@interface MADReportSectionEnumerator : NSObject <NSFastEnumeration>
 
-@interface MADReportSectionEnumerator : NSObject
-    <NSFastEnumeration>
+@property (nonatomic, readonly, strong) RptqQuery *query;
 
-    - (instancetype)initWithQuery:(RptqQuery *)query NS_DESIGNATED_INITIALIZER;
-
-    @property (nonatomic, readonly, strong) RptqQuery *query;
+- (instancetype)initWithQuery:(RptqQuery *)query NS_DESIGNATED_INITIALIZER;
 
 @end
 

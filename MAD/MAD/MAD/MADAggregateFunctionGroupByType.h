@@ -10,9 +10,20 @@
 #define MADAggregateFunctionGroupByType_h
 
 typedef CF_ENUM(int16_t, MTAggregateGroupByType) {
+	MTAggregateGroupByUnknown = 0,
 	MTAggregateGroupByTypePage = 2,
 	MTAggregateGroupByTypeReport = 3,
 	MTAggregateGroupByTypeSection = 5,
 };
+
+static inline NSString *NSStringFromMADAggregateGroupByType(MTAggregateGroupByType);
+static inline NSString *NSStringFromMADAggregateGroupByType(MTAggregateGroupByType value) {
+	switch (value) {
+		case MTAggregateGroupByTypePage: return @"MTAggregateGroupByTypePage";
+		case MTAggregateGroupByTypeReport: return @"MTAggregateGroupByTypeReport";
+		case MTAggregateGroupByTypeSection: return @"MTAggregateGroupByTypeSection";
+		case MTAggregateGroupByUnknown: default: return @"MTAggregateGroupByUnknown";
+	}
+}
 
 #endif /* MADAggregateFunctionGroupByType_h */

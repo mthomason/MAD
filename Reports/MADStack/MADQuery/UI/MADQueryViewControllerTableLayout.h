@@ -9,7 +9,10 @@
 #ifndef MADDesigner_MADQueryViewControllerTableLayout_h
 #define MADDesigner_MADQueryViewControllerTableLayout_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSValue.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

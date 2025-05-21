@@ -3,31 +3,31 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/18/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADOperationConditionPolarQuestionAffirmative.h"
-#import <asl.h>
-#import <os/log.h>
-#import <Foundation/NSObject.h>
-#import <Foundation/NSArray.h>
-#import <MADFoundation/MADErrorUserInfo.h>
-#import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
+#import "madlog.h"
+
+#import <MADFoundation/MADOperationConditionResult.h>
+#import <MADFoundation/NSError+MADOperationErrors.h>
+
+#import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
+
+#import <asl.h>
 
 @interface MADOperationConditionPolarQuestionAffirmative ()
 
-	@property (nonatomic, readwrite) NSUInteger tag;
+@property (nonatomic, readwrite) NSUInteger tag;
 
 @end
 
 @implementation MADOperationConditionPolarQuestionAffirmative
 
-- (void)dealloc {
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
 	if (self = [super init]) {
@@ -45,14 +45,14 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-	os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 	MADOperationConditionResult *result;
 	result = [self evaluateForOperation:operation];
 	completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 
 	MADOperationConditionResult *result = nil;
 	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;

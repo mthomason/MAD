@@ -7,27 +7,26 @@
 //
 
 #import "MADOperationRefresh.h"
-
-#import <CoreData/NSManagedObjectContext.h>
-#import <Foundation/Foundation.h>
-#import <MADFoundation/MADCredential.h>
+#import "MADOperationRefreshInitialize.h"
+#import "madlog.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADQuery.h>
+
+#import <MADFoundation/MADCredential.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADQueryFull.h>
 
-#import "MADOperationRefreshInitialize.h"
-#import <os/log.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 static const short errCache = 2;
 
 @interface MADOperationRefresh ()
-    @property (nonatomic, weak) MADocument *document;
+@property (nonatomic, weak) MADocument *document;
 @end
 
 @implementation MADOperationRefresh
@@ -42,7 +41,6 @@ static const short errCache = 2;
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-	
 	if (self.cancelled) {
 		return [self finish];
 	}
@@ -75,8 +73,7 @@ static const short errCache = 2;
 											  credentals: credientals
 										 connectionError: &eerror];
 	
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
 	__block NSString *queryString = nil;

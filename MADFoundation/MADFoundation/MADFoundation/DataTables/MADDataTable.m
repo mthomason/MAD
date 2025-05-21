@@ -13,6 +13,8 @@
 #import "MADDataTable.h"
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSFileManager.h>
 #import <Foundation/NSCoder.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSDictionary.h>
@@ -22,8 +24,11 @@
 #import <Foundation/NSStream.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSEnumerator.h>
-
 #import <MADFoundation/MADDataColumn.h>
+#import "madlog.h"
+#import <os/log.h>
+
+NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorDomain";
 
 @implementation MADDataTable
 
@@ -127,31 +132,74 @@
 
 #pragma mark - Caching
 
-- (void)loadFromCacheWithUrl:(NSURL *)url {
+- (BOOL)loadFromCacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
+	if (!url) {
+		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"URL is nil.",
+								   NSURLErrorKey: url ?: [NSNull null]};
+		@throw [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
+								   code:-21
+							   userInfo:userInfo];
+	}
+	
+	os_log_t logger = GetFoundationLog();
+	os_log_info(logger, "[MADDataTable %p] Attempting to loadFromCacheWithUrl: '%{public}@'", self, url);
+	
 	NSString *path = url.path.copy;
-	NSAssert(path != nil, @"Need a path at %s", __PRETTY_FUNCTION__);
-	if (!path) return;
+	BOOL isFileDirectory = NO;
+	BOOL fileExistAtPath = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isFileDirectory];
+	if (!path || !fileExistAtPath) {
+		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"File does not exist.",
+								   NSURLErrorKey: url ?: [NSNull null]};
+		*outError = [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
+										code:-21
+									userInfo:userInfo];
+		return NO;
+	}
 	
 	NSInputStream *inputStream = [[NSInputStream alloc] initWithFileAtPath: path];
 	[inputStream open];
-
-	if (inputStream.streamStatus == NSStreamStatusError) return;
+	if (inputStream.streamStatus == NSStreamStatusError) {
+		if (outError) {
+			*outError = [inputStream.streamError copy];
+		}
+		os_log_error(logger, "Stream error while opening file at path: %@", path);
+		return NO;
+	}
 	
-	NSError *error = nil;
-	id plist = [NSPropertyListSerialization propertyListWithStream: inputStream
-														   options: NSPropertyListImmutable
-															format: nil
-															 error: &error];
-	NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
-	if (!plist) return;
+	NSError *plistError = nil;
+	NSDictionary *plist = [NSPropertyListSerialization propertyListWithStream: inputStream
+																	  options: NSPropertyListImmutable
+																	   format: nil
+																		error: &plistError];
+	[inputStream close];
+	if (plistError || ![plist isKindOfClass:[NSDictionary class]]) {
+		if (outError) {
+			*outError = [plistError copy] ?: [NSError errorWithDomain:MADDataTableErrorDomain
+																 code:-2
+															 userInfo:@{NSLocalizedDescriptionKey: @"Failed to deserialize property list."}];
+		}
+		os_log_error(logger, "Failed to deserialize plist from cache at path: %@, error: %@", path, plistError);
+		return NO;
+	}
 	
-	[self loadWithPlist:plist];
+	if (!plist) return NO;
+	
+	NSError *loadPlistError = nil;
+	BOOL loadPlist = [self loadWithPlist:plist error:&loadPlistError];
+	if (loadPlistError != nil) {
+		*outError = [loadPlistError copy];
+		os_log_error(logger, "Plist: %@ Error: %@", plist, loadPlistError);
+	}
+	return loadPlist;
 }
 
-- (BOOL)cacheWithUrl:(NSURL *)url {
+- (BOOL)cacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
 	if (!url) {
-		NSLog(@"Error: Invalid URL in %s", __PRETTY_FUNCTION__);
-		return NO;
+		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"URL is nil.",
+								   NSURLErrorKey: url ?: [NSNull null]};
+		@throw [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
+								   code:-22
+							   userInfo:userInfo];
 	}
 	
 	NSDictionary *plist = [self copyPlist];
@@ -193,43 +241,76 @@
 	return results;
 }
 
-- (void)loadWithPlist:(NSDictionary *)plist {
-	NSString *name = plist[[MADDataTable keyName]];
-	if (name == nil) {
-		name = @"";
-	}
+- (BOOL)loadWithPlist:(nonnull NSDictionary *)plist error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
+	os_log_info(GetFoundationLog(), "[MADDataTable %p] Loading from plist: %@", self, plist);
 
-	_name = name.copy;
+	if (![plist isKindOfClass:[NSDictionary class]]) {
+		if (outError) {
+			*outError = [NSError errorWithDomain:MADDataTableErrorDomain
+											code:-4
+										userInfo:@{NSLocalizedDescriptionKey: @"Invalid plist format."}];
+		}
+		return NO;
+	}
 	
-	NSString * const keyColumnKeys = [MADDataTable keyColumnKeys];
+	NSString *name = plist[[MADDataTable keyName]] ?: @"";
+	self.name = [name copy];
 	
-	id columnKeysArray = plist[keyColumnKeys];
-	
+	NSArray *columnKeysArray = plist[[MADDataTable keyColumnKeys]];
+	if (![columnKeysArray isKindOfClass:[NSArray class]]) {
+		if (outError) {
+			*outError = [NSError errorWithDomain:MADDataTableErrorDomain
+											code:-5
+										userInfo:@{NSLocalizedDescriptionKey: @"Missing or invalid column keys."}];
+		}
+		return NO;
+	}
 	NSMutableArray <__kindof NSString *> *columnKeys =
 				[[NSMutableArray <__kindof NSString *> alloc] initWithArray: columnKeysArray
 																  copyItems: YES];
 	
-	NSString * const keySortDescriptors = [MADDataTable keySortDescriptors];
-	NSArray * __weak sortDescriptorsArray = plist[keySortDescriptors];
-	NSMutableArray *sortDescriptors = [[NSMutableArray alloc] initWithArray: sortDescriptorsArray
-																  copyItems: YES];
-	self.sortDescriptors = sortDescriptors;
+	NSArray *sortDescriptorsArray = plist[[MADDataTable keySortDescriptors]];
+	if ([sortDescriptorsArray isKindOfClass:[NSArray class]]) {
+		NSMutableArray *sortDescriptors = [[NSMutableArray alloc] initWithArray: sortDescriptorsArray
+																	  copyItems: YES];
+		self.sortDescriptors = sortDescriptors;
+	} else {
+		NSMutableArray *a = [[NSMutableArray alloc] init];
+		self.sortDescriptors = a;
+	}
+
 	
 	NSDictionary *plistDataColumn = [plist objectForKey:NSStringFromSelector(@selector(columns))];
+	if (![plistDataColumn isKindOfClass:[NSDictionary class]]) {
+		if (outError) {
+			*outError = [NSError errorWithDomain:MADDataTableErrorDomain
+											code:-6
+										userInfo:@{NSLocalizedDescriptionKey: @"Missing or invalid column data."}];
+		}
+		return NO;
+	}
 	NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary: plistDataColumn
 																copyItems: YES];
-
+	
 	for (NSString *key in columnKeys) {
-			NSDictionary *columnPlist = columnsPlist[key];
-			MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
+		NSDictionary *columnPlist = columnsPlist[key];
+		if (![columnPlist isKindOfClass:[NSDictionary class]]) {
+			os_log_error(GetFoundationLog(), "Column plist for key %@ is invalid or missing", key);
+			continue;
+		}
+		MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
+		if (column) {
 			self.columns[key] = column;
+		} else {
+			os_log_error(GetFoundationLog(), "Failed to initialize column from plist for key %@", key);
+		}
 	}
 	self.columnKeys = columnKeys;
 	
-	NSString * const keyRowCounter = [MADDataTable keyRowCounter];
-	NSNumber * __weak rowCounterObj = plist[keyRowCounter];
+	NSNumber *rowCounterObj = plist[[MADDataTable keyRowCounter]];
 	self.rowCounter = rowCounterObj.unsignedIntegerValue;
-	
+
+	return YES;
 }
 
 - (NSDictionary *)columnsPlist {
@@ -263,7 +344,7 @@
 	return nil;
 }
 
-- (NSDictionary *)dataForRow:(NSUInteger)cacheId {
+- (NSDictionary *)dataForRow:(NSUInteger)cacheId error:(NSError * __autoreleasing *)error {
 	NSAssert(NO, @"Not implemented: %s", __PRETTY_FUNCTION__);
 	return nil;
 }
@@ -306,7 +387,6 @@
 	return 0;
 }
 
-+ (NSString *)keyUrl { return @"url"; }
 + (NSString *)keyName { return NSStringFromSelector(@selector(name)); }
 + (NSString *)keyColumnKeys { return NSStringFromSelector(@selector(columnKeys)); }
 + (NSString *)keyColumns { return NSStringFromSelector(@selector(columns)); }

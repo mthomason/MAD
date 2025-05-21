@@ -16,6 +16,7 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSDictionary.h>
 #import <MADFoundation/MADDataColumn.h>
+#import "madlog.h"
 
 @interface MADDataTableVirtual ()
 
@@ -55,74 +56,81 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
-		NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
-		self.sortIndex = sortIndex;
+		os_log_info(GetFoundationLog(), "%s: Initializing default", __PRETTY_FUNCTION__);
+		self.sortIndex = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
 	if (self = [super initWithCoder:decoder]) {
-		NSString *key = [MADDataTableVirtual keySortIndex];
-		NSMutableArray *sortIndex = [decoder decodeObjectForKey:key];
-		self.sortIndex = sortIndex;
+		os_log_info(GetFoundationLog(), "%s: Initializing with coder", __PRETTY_FUNCTION__);
+		self.sortIndex = [decoder decodeObjectForKey:[MADDataTableVirtual keySortIndex]];
 	}
 	return self;
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId {
 	if (self = [super initWithId:objectId]) {
-		NSMutableArray *sortIndex = [[NSMutableArray alloc] init];
-		self.sortIndex = sortIndex;
+		os_log_info(GetFoundationLog(), "%s: Initializing with ID %lu", __PRETTY_FUNCTION__, (unsigned long)objectId);
+		self.sortIndex = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
 - (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
 	if (self = [super initWithNumberOfColumns:numberOfColumns]) {
-		NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
-		self.sortIndex = sortIndex;
+		os_log_info(GetFoundationLog(), "%s: Initializing with %lu columns", __PRETTY_FUNCTION__, (unsigned long)numberOfColumns);
+		self.sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
 	}
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
+	os_log_info(GetFoundationLog(), "%s: Encoding object", __PRETTY_FUNCTION__);
 	[super encodeWithCoder:encoder];
-	NSString *key = [MADDataTableVirtual keySortIndex];
-	[encoder encodeObject: _sortIndex forKey: key];
+	[encoder encodeObject:_sortIndex forKey:[MADDataTableVirtual keySortIndex]];
 }
 
-- (void)loadWithPlist:(NSDictionary *)plist {
-	[super loadWithPlist:plist];
+- (BOOL)loadWithPlist:(nonnull NSDictionary *)plist error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
+	os_log_info(GetFoundationLog(), "%s", __PRETTY_FUNCTION__);
+	NSError *loadWithPlistError = nil;
+	BOOL loadWithPlist = [super loadWithPlist:plist error:&loadWithPlistError];
+	if (loadWithPlistError != nil) {
+		os_log_error(GetFoundationLog(), "Error loading plist: %@", loadWithPlistError);
+		if (outError) {
+			*outError = [loadWithPlistError copy];
+		}
+	}
+	if (!loadWithPlist) {
+		return NO;
+	}
 	
-	NSString *keySortIndex = [MADDataTableVirtual keySortIndex];
-	NSArray *sortIndexArray = plist[keySortIndex];
-	
-	NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
-	self.sortIndex = sortIndex;
+	self.sortIndex = [plist[[MADDataTableVirtual keySortIndex]] mutableCopy];
+	os_log_info(GetFoundationLog(), "Loaded sort index with %lu entries", (unsigned long)self.sortIndex.count);
+	return loadWithPlist;
 }
 
 - (NSDictionary *)copyPlist {
-	NSDictionary *superPlist = [super copyPlist];
-	NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
-	NSString *keySortIndex = [MADDataTableVirtual keySortIndex];
-	plist[keySortIndex] = self.sortIndex;
+	os_log_info(GetFoundationLog(), "%s", __PRETTY_FUNCTION__);
+	NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:[super copyPlist]];
+	plist[[MADDataTableVirtual keySortIndex]] = self.sortIndex;
 	return plist;
 }
 
 - (void)addColumn:(MADDataColumn *)column {
-	NSString *identifier = [[NSString alloc] initWithString:column.identifier];
+	os_log_info(GetFoundationLog(), "%s: Adding column with identifier %@", __PRETTY_FUNCTION__, column.identifier);
+	NSString *identifier = [column.identifier copy];
 	[self.columnKeys addObject:identifier];
 	self.columns[identifier] = column;
 }
 
 - (NSArray *)allObjects {
-	return self.sortIndex;
+	os_log_info(GetFoundationLog(), "%s", __PRETTY_FUNCTION__);
+	return [self.sortIndex copy];
 }
 
-- (NSUInteger)numberOfRows {
-	return self.rowCounter;
-}
+- (NSUInteger)numberOfRows { return self.rowCounter; }
 
 - (NSUInteger)sortedIndexForIndex:(NSUInteger)index {
 	NSUInteger sortedIndex;
@@ -137,6 +145,7 @@
 	} else {
 		sortedIndex = index;
 	}
+	os_log_info(GetFoundationLog(), "%s: Mapped index %lu to sorted index %lu", __PRETTY_FUNCTION__, (unsigned long)index, (unsigned long)sortedIndex);
 	return sortedIndex;
 }
 
@@ -159,7 +168,9 @@
 }
 
 - (id)objectAtRow:(NSUInteger)row {
-	return self.sortIndex[row];
+	id obj = self.sortIndex[row];
+	os_log_info(GetFoundationLog(), "%s: Accessed object at row %lu, class: %@", __PRETTY_FUNCTION__, (unsigned long)row, NSStringFromClass([obj class]));
+	return obj;
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
@@ -167,23 +178,19 @@
 	MADDataColumn *dataInColumn = self.columns[fieldKey];
 	NSUInteger sortedIndex = [self sortedIndexForIndex:row];
 	id objectForField = [dataInColumn objectAtIndex:sortedIndex];
+	os_log_info(GetFoundationLog(), "%s: Object at row %lu, column %lu (key %@): class %@", __PRETTY_FUNCTION__, (unsigned long)row, (unsigned long)column, fieldKey, NSStringFromClass([objectForField class]));
 	return objectForField;
 }
 
-// WTF: What is happening here.
 - (id)objectAtIndex:(NSUInteger)index {
 	NSUInteger sortedIndex = [self sortedIndexForIndex:index];
-	
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:(self.columnKeys).count];
-	NSArray *dataInColumn;
-	NSString *fieldKey, *key;
-	for (fieldKey in self.columnKeys) {
-		key = fieldKey;
+	for (NSString *key in self.columnKeys) {
 		if (key.length > 0) {
-			dataInColumn = self.columns[key];
-			// FIXME: what is this?
+			NSArray *dataInColumn = self.columns[key];
 			NSAssert(NO, @"Remove after testing this warning.");
 			id objectForField = dataInColumn[sortedIndex];
+			os_log_info(GetFoundationLog(), "%s: object[%lu][%@] = %@ (%@)", __PRETTY_FUNCTION__, (unsigned long)index, key, objectForField, NSStringFromClass([objectForField class]));
 			data[key] = objectForField;
 		}
 	}
@@ -191,11 +198,11 @@
 }
 
 - (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
+	os_log_info(GetFoundationLog(), "%s: Adding row with %lu values", __PRETTY_FUNCTION__, (unsigned long)row.count);
 	NSUInteger index = 0;
 	NSUInteger numberOfColumns = [self numberOfColumns];
 	NSMutableDictionary *indexedRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
-	NSUInteger numberOfRows = self.rowCounter;
-	NSNumber *ogRowIndex = @(numberOfRows);
+	NSNumber *ogRowIndex = @(self.rowCounter);
 	for (id object in row) {
 		NSString *key = self.columnKeys[index];
 		MADDataColumn *column = self.columns[key];
@@ -205,12 +212,12 @@
 		index++;
 	}
 	[self.sortIndex addObject:indexedRow];
-	numberOfRows++;
-	self.rowCounter = numberOfRows;
+	self.rowCounter++;
 	return true;
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
+	os_log_info(GetFoundationLog(), "%s: Adding row with field keys", __PRETTY_FUNCTION__);
 	for (id key in self.columnKeys) {
 		MADDataColumn *column = self.columns[key];
 		id obj = row[key];
@@ -218,36 +225,30 @@
 		[column addObject:obj];
 	}
 	[self.sortIndex addObject:row];
-	NSUInteger numberOfRows = self.rowCounter + 1;
-	self.rowCounter = numberOfRows;
+	self.rowCounter++;
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+	os_log_info(GetFoundationLog(), "%s: Sorting with %lu descriptors", __PRETTY_FUNCTION__, (unsigned long)sortDescriptors.count);
 	[self.sortIndex sortUsingDescriptors:sortDescriptors];
 	[self.sortDescriptors removeAllObjects];
 	[self.sortDescriptors addObjectsFromArray:sortDescriptors];
 }
 
-- (NSUInteger)count {
-	return [self numberOfRows];
-}
+- (NSUInteger)count { return [self numberOfRows]; }
 
-- (NSUInteger)numberOfColumns {
-	return (self.columnKeys).count;
-}
+- (NSUInteger)numberOfColumns { return (self.columnKeys).count; }
 
-+ (NSString *)keySortIndex {
-	SEL selSortIndex = @selector(sortIndex);
-	return NSStringFromSelector(selSortIndex);
-}
++ (NSString *)keySortIndex { return NSStringFromSelector(@selector(sortIndex)); }
 
 - (NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit {
-	NSRange range = NSMakeRange(row, limit);
-	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
+	os_log_info(GetFoundationLog(), "%s: Getting %lu objects starting at row %lu", __PRETTY_FUNCTION__, (unsigned long)limit, (unsigned long)row);
+	NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(row, limit)];
 	return [self.sortIndex objectsAtIndexes:indexSet];
 }
 
 - (void)removeAllObjects {
+	os_log_info(GetFoundationLog(), "%s: Removing all objects", __PRETTY_FUNCTION__);
 	for (MADDataColumn *column in [self.columns objectEnumerator]) {
 		[column removeAllObjects];
 	}
@@ -258,7 +259,12 @@
 	self.rowCounter = 0;
 }
 
-- (void)beginBulkInsert {}
-- (void)endBulkInsert {}
+- (void)beginBulkInsert {
+	os_log_info(GetFoundationLog(), "%s: Begin bulk insert", __PRETTY_FUNCTION__);
+}
+
+- (void)endBulkInsert {
+	os_log_info(GetFoundationLog(), "%s: End bulk insert", __PRETTY_FUNCTION__);
+}
 
 @end

@@ -7,8 +7,7 @@
 //
 
 #import "MADPrintPageElement+Constructor.h"
-#import <Foundation/NSException.h>
-#import "MADDocumentObjectReference.h"
+#import "MADDocumentObjectDataReference.h"
 
 #import "MADPrintPageElementAggregate.h"
 #import "MADPrintPageElementTextDynamic.h"
@@ -16,18 +15,18 @@
 #import "MADPrintPageElementBarcode.h"
 #import "MADPrintPageElementTextStatic.h"
 
+#import <Foundation/NSException.h>
+
 @implementation MADPrintPageElement (Constructor)
 
-+ (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition {
-	NSLog(@"%s %@", __PRETTY_FUNCTION__, NSStringFromMADPrintPageElementType(definition.type));
-	
++ (instancetype)newDocumentObject:(__kindof MADDocumentObjectDataReference *)definition {	
 	switch (definition.type) {
 		case MADPrintPageElementTypeAggregate:
-			return [[MADPrintPageElementAggregate alloc] initWithDefinition:definition];
+			return [[MADPrintPageElementAggregate alloc] initWithDefinition:(MADDocumentObjectDataReferenceAggregate *)definition];
 			break;
 			
 		case MADPrintPageElementTypeImage:
-			return [[MADPrintPageElementImage alloc] initWithDefinition:definition];
+			return [[MADPrintPageElementImage alloc] initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition];
 			break;
 			
 		case MADPrintPageElementTypeBarcode:
@@ -35,11 +34,11 @@
 			break;
 			
 		case MADPrintPageElementTypeLabelDynamic:
-			return [[MADPrintPageElementTextDynamic alloc] initWithDefinition:definition];
+			return [[MADPrintPageElementTextDynamic alloc] initWithDefinition:(MADDocumentObjectDataReferenceLabelDynamic *)definition];
 			break;
 			
 		case MADPrintPageElementTypeLabelStatic:
-			return [[MADPrintPageElementTextStatic alloc] initWithDefinition:definition];
+			return [[MADPrintPageElementTextStatic alloc] initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition];
 			break;
 			//case MADPrintPageElementTypeWhtiespace:
 			//case MADPrintPageElementTypeGroupKey:

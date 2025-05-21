@@ -7,8 +7,9 @@
 //
 
 #import "MADOperationBackgroundTaskBegin.h"
+#import "madlog.h"
+
 #import <UIKit/UIApplication.h>
-#import <os/log.h>
 
 @interface MADOperationBackgroundTaskBegin ()
 
@@ -24,7 +25,6 @@
 
 - (void)execute {
 	MADOperationBackgroundTaskBegin * __weak weakself = self;
-	
 	NSString *taskName = @"com.everdayapps.operation.document.create.begin";
 	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName: taskName
 																				 expirationHandler: ^{

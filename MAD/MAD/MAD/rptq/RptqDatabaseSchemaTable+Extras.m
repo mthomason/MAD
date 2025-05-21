@@ -77,15 +77,10 @@
 #pragma mark - Static
 
 + (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequestSortTables {
-	NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-	NSFetchRequest *request;
-	NSSortDescriptor *sort;
-	request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-	NSString *keyName = NSStringFromSelector(@selector(name));
+	NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(name))
+														   ascending: YES];
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
 	request.resultType = NSManagedObjectResultType;
-	sort = [NSSortDescriptor sortDescriptorWithKey: keyName
-										 ascending: YES];
-	
 	request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
 	return request;
 }
@@ -94,13 +89,10 @@
 																name:(NSString *)name
 														andQueryable:(BOOL)queryable {
 	
-	NSString *entityName = NSStringFromClass([self class]);
-	
-	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName
+	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([self class])
 												   inManagedObjectContext: managedObjectContext];
-	RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity
-									   insertIntoManagedObjectContext:managedObjectContext];
-
+	RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity: tableEntity
+									   insertIntoManagedObjectContext: managedObjectContext];
 	rptqTable.name = name.copy;
 	rptqTable.queryable = queryable;
 	
@@ -110,25 +102,17 @@
 + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
 															andTable:(MADDatabaseTable *)table {
 	
-	NSString *entityName = NSStringFromClass([self class]);
-	
-	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName
+	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([self class])
 												   inManagedObjectContext: objectContext];
-	RptqDatabaseSchemaTable *rptqTable;
-	rptqTable = [[self alloc] initWithEntity:tableEntity
-			  insertIntoManagedObjectContext:objectContext];
-
+	RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
 	rptqTable.name = table.name.copy;
 	rptqTable.queryable = table.queryable;
-	
 	return rptqTable;
 }
 
 + (RptqDatabaseSchemaTable *)databaseSchemaTableForDatabase:(RptqDatabase *)database andTableName:(NSString *)name {
-
-	NSSet *tables = database.hasTables;
 	RptqDatabaseSchemaTable *result = nil;
-	for (RptqDatabaseSchemaTable *table in tables) {
+	for (RptqDatabaseSchemaTable *table in database.hasTables) {
 		if ([table.name isEqualToString:name]) {
 			result = table;
 			break;

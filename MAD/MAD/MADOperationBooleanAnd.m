@@ -13,7 +13,6 @@
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperationConditionResult.h>
@@ -45,8 +44,7 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-    MADOperationConditionResult *result;
-    result = [self evaluateForOperation:operation];
+    MADOperationConditionResult *result = [self evaluateForOperation:operation];
     completion(result);
 }
 

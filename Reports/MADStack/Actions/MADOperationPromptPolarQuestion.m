@@ -7,10 +7,12 @@
 //
 
 #import "MADOperationPromptPolarQuestion.h"
-#import <os/log.h>
-#import <UIKit/UIAlertController.h>
 #import "MADMutualExclusive.h"
+#import "madlog.h"
+
 #import <MADFoundation/NSError+MADOperationErrors.h>
+
+#import <UIKit/UIAlertController.h>
 
 static NSString * const TextYes = @"Yes";
 static NSString * const TextNo = @"No";
@@ -57,8 +59,6 @@ static NSString * const TextNo = @"No";
 }
 
 - (void)execute {
-	os_log_info(OS_LOG_DEFAULT, "Execute %s", NSStringFromClass(self.class).UTF8String);
-	
 	if (self.cancelled) {
 		return [self finish];
 	}

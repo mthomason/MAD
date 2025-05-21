@@ -19,31 +19,31 @@
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 #import <MADSqlite3/MADDatabaseSqlite3.h>   //FIXME: Should only be included in Cache subset
-
+#import "madlog.h"
 @implementation MADQuery (Sqlite3)
 
-- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
+- (NSString *)orderByClauseWithSortDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors {
 	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
 	if (sortDescriptors.count > 0) {
-		NSUInteger sortCounter = 0;
 		[sql appendString:@" ORDER BY "];
+
+		NSUInteger sortCounter = 0;
 		
-		NSString *key;
 		for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
 			if (sortCounter != 0) [sql appendString:@", "];
+
 			MADDataColumn *dataColumn = nil;
-			
 			if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
 				if (((MADQuery <MADQueryColumnsProtocol> *)self).columns != nil) {
-					if ((key = sortDescriptor.key)) {
+					NSString *key = sortDescriptor.key;
+					if (key != nil) {
 						dataColumn = ((MADQuery <MADQueryColumnsProtocol> *)self).columns[key];
 					}
 				}
 			}
 			NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-			MADSqlite3SortDescription *sortDirection;
-			sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: dataColumn.nativeType
-																			ascending: sortDescriptor.ascending];
+			NSString *sortDirection = [MADDatabaseSqlite3 sortDescriptionForColumnType: dataColumn.nativeType
+																			 ascending: sortDescriptor.ascending];
 			[sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
 			sortCounter++;
 		}
@@ -51,7 +51,7 @@
 	return sql;
 }
 
-- (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
+- (NSString *)whereClauseWithParameters:(NSArray <NSDictionary *> *)whereClause {
 	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
 	if (whereClause.count > 0) {
 		NSUInteger counter = 0, counterBinings = 0;
@@ -82,7 +82,7 @@
 	return sql;
 }
 
-- (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
+- (NSString *)whereClauseWithRowIds:(NSArray <NSNumber *> *)rowids {
 	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
 	BOOL firstTime = YES;
 	if (rowids.count > 0) {
@@ -101,6 +101,8 @@
 	MADDataColumn *column;
 	if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
 		column = ((id <MADQueryColumnsProtocol>)self).columns[columnHandle];
+	} else {
+		os_log_error(GetMadLog(), "No column handle for: %@", columnHandle);
 	}
 	return column != nil ? column.type : 0;
 }

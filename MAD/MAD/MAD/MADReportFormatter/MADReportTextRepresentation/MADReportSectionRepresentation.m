@@ -8,13 +8,15 @@
 
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
+
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
-#import <MADFoundation/MADErrorUserInfo.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSDictionary.h>
 
 @interface MADReportSectionRepresentation ()
 
-	@property (nonatomic, strong, getter=hasRows) NSMutableArray <__kindof MADReportSectionRowsRepresentation *> *rows;
+@property (nonatomic, strong, getter=hasRows) NSMutableArray <__kindof MADReportSectionRowsRepresentation *> *rows;
 
 @end
 
@@ -45,9 +47,10 @@
 	@try {
 		[_rows addObject:row];
 	} @catch (NSException *exception) {
-		MADErrorUserInfo *userInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
-																  andMessage:@"Failed to add null value."];
-		*error = [userInfo errorWithDomain:NSStringFromClass(self.class) code:49832];
+		*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:49832 userInfo:@{
+			NSLocalizedFailureReasonErrorKey: @"Error",
+			NSLocalizedDescriptionKey: @"Failed to add null value."
+		}];
 		success = false;
 	} @finally { }
 	return success;

@@ -7,15 +7,17 @@
 //
 
 #import "MADOperationInstallSampleDocument.h"
-#import <UIKit/NSDataAsset.h>
+#import "madlog.h"
+
+#import <MADFoundation/MADURLFactory.h>
+
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
-#import <MADFoundation/MADURLFactory.h>
 
-#import <os/log.h>
+#import <UIKit/NSDataAsset.h>
 
 @interface MADOperationInstallSampleDocument ()
 
@@ -49,12 +51,9 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
 	if (self.cancelled) {
 		return [self finish];
 	}
-	
-	//[NSBundle bundleWithIdentifier:<#(nonnull NSString *)#>]
 	
 	BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:_installFlag];
 	if (!installed) {

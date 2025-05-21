@@ -9,40 +9,38 @@
 #ifndef MAD_MADParameters
 #define MAD_MADParameters
 
-#import <Foundation/NSObject.h>
 #import "MADAggregateFunctionGroupByType.h"
 #import "MADAggregateFunctionType.h"
+#import <MADAPI/MADAliases.h>
+#import <Foundation/NSObject.h>
 
 @class MADDataTableFast;
 
 typedef NS_ENUM(short, MADParametersType) {
-    MADParametersTypeAggregateByPage,
-    MADParamatersTypeAggregateByGroup,
-    MADParametersTypeAggregateByReport,
+	MADParametersTypeUnknown = 0,
+	MADParametersTypeAggregateByPage = 1,
+	MADParamatersTypeAggregateByGroup = 2,
+	MADParametersTypeAggregateByReport = 3,
 };
+
+static inline NSString *NSStringFromMADParametersType(MADParametersType);
+static inline NSString *NSStringFromMADParametersType(MADParametersType value) {
+	switch (value) {
+		case MADParametersTypeAggregateByPage: return @"MADParametersTypeAggregateByPage";
+		case MADParamatersTypeAggregateByGroup: return @"MADParamatersTypeAggregateByGroup";
+		case MADParametersTypeAggregateByReport: return @"MADParametersTypeAggregateByReport";
+		case MADParametersTypeUnknown: default: return @"MADParametersTypeUnknown";
+	}
+}
 
 @interface MADParameters : NSObject
 
-    + (instancetype)newParamatersAggregateByPageWithFieldKey:(NSString *)fieldKey
-                                                   andRowIds:(NSArray *)rowids
-                                             andFunctionType:(MTAggregateFunctionType)functionType
-                                                andDataTable:(MADDataTableFast *)dataTable;
-
-    + (instancetype)newParamatersAggregateByGroupKeys:(NSArray *)groupKeys
-                                          andFieldKey:(NSString *)fieldKey
-                                      andFunctionType:(MTAggregateFunctionType)functionType
-                                         andDataTable:(MADDataTableFast *)dataTable;
-
-    + (instancetype)newParametersAggregateByReportWithFieldKey:(NSString *)fieldKey
-                                               andFunctionType:(MTAggregateFunctionType)functionType
-                                                  andDataTable:(MADDataTableFast *)dataTable;
-
-    + (instancetype)newParametersAggregateByType:(MTAggregateGroupByType)groupBy
-                                        function:(MTAggregateFunctionType)function
-                                          rowids:(NSArray *)rowids
-                                       groupKeys:(NSArray *)groupKeys
-                                        fieldKey:(NSString *)fieldKey
-                                       dataTable:(MADDataTableFast *)dataTable;
++ (NSDictionary <NSNumber *, MADResult *> *)paramatersAggregateByType:(MTAggregateGroupByType)groupBy
+															 function:(MTAggregateFunctionType)function
+															   rowids:(NSArray *)rowids
+															groupKeys:(NSArray *)groupKeys
+															 fieldKey:(NSString *)fieldKey
+															dataTable:(MADDataTableFast *)dataTable;
 @end
 
 #endif

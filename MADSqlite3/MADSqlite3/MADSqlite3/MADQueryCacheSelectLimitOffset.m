@@ -86,9 +86,8 @@
 						dataColumn = columns[key];
 						key = nil;
 					}
-					MADSqlite3SortDescription *sortDescription;
-					sortDescription = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType)dataColumn.nativeType
-																					  ascending: sortDescriptor.ascending];
+					NSString *sortDescription = [MADDatabaseSqlite3 sortDescriptionForColumnType: (MADDataType)dataColumn.nativeType
+																					   ascending: sortDescriptor.ascending];
 					[sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
 					sortCounter++;
 				}

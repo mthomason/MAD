@@ -14,7 +14,10 @@
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/NSData+Comparison.h>
 
-static inline BOOL isDataTypeNumeric(MADDataType type);
+#import <Foundation/NSString.h>
+#import <Foundation/NSCoder.h>
+
+static inline BOOL isDataTypeNumeric(MADDataType);
 static inline BOOL isDataTypeNumeric(MADDataType type) {
 	switch (type) {
 		case MADDataTypeBit:
@@ -47,10 +50,6 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
 			break;
 	}
 }
-
-@interface MADDatabaseField ()
-
-@end
 
 @implementation MADDatabaseField
 

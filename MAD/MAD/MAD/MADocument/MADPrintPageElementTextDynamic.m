@@ -7,12 +7,12 @@
 //
 
 #import "MADPrintPageElementTextDynamic.h"
+#import "MADDocumentObjectDataReference.h"
+#import "MADDocumentObjectDataReferenceLabelDynamic.h"
+#import "MADPrintPageRendererDataSource.h"
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
-
-#import "MADDocumentObjectReference.h"
-#import "MADPrintPageRendererDataSource.h"
 
 @implementation MADPrintPageElementTextDynamic
 

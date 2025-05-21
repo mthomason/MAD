@@ -15,7 +15,6 @@
 #import <Foundation/NSError.h>
 
 #import <MADFoundation/MADDataColumn.h>
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataTableVirtual.h>
@@ -96,10 +95,10 @@
 		}
 	} else {
 		if (error != NULL) {
-			NSString *errorMessage = @"Missing connection or credentials.";
-			MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:@"Error"
-																		   andMessage:errorMessage];
-			*error = [errorUserInfo errorWithDomain:NSStringFromClass(self.class) code:1001];
+			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:1001 userInfo:@{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Missing connection or credentials.", @"Missing connection or credentials."),
+			}];
 		}
 	}
 	
@@ -133,12 +132,11 @@
 								 error:&sqlError];
 		}
 		if (sqlError) {
-			MADErrorUserInfo *errorUserInfo;
-			errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:sqlError.localizedDescription
-														 andMessage:sqlError.localizedFailureReason];
 			if (error != NULL) {
-				NSError *userError = [errorUserInfo errorWithDomain:sqlError.domain code:sqlError.code];
-				*error = userError;
+				*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:sqlError.code userInfo:@{
+					NSLocalizedDescriptionKey: sqlError.localizedDescription,
+					NSLocalizedFailureReasonErrorKey: sqlError.localizedFailureReason ?: @"Unknown error",
+				}];
 			}
 		} else {
 			result = YES;
@@ -179,11 +177,12 @@
 }
 
 + (NSError *)errorCouldNotGetCredientals {
-	NSString *title = NSLocalizedString(@"Notice", @"Notice");
-	NSString *failureReason = NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.");
-	NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title, NSLocalizedFailureReasonErrorKey : failureReason};
-	NSError *error = [NSError errorWithDomain:@"MADDatabase" code:43421 userInfo:errorInfo];
-	return error;
+	return [NSError errorWithDomain:NSStringFromClass([self class])
+										 code:43421
+									 userInfo:@{
+		NSLocalizedDescriptionKey : NSLocalizedString(@"Notice", @"Notice"),
+		NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.")
+	}];
 }
 
 - (NSString *)domain {

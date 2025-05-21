@@ -7,7 +7,9 @@
 //
 
 #import "NSData+Comparison.h"
-#import <Foundation/Foundation.h>
+#import <Foundation/NSString.h>
+
+#import <string.h>
 
 @implementation NSData (Comparison)
 

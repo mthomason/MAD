@@ -7,16 +7,20 @@
 //
 
 #import "MADOperationPromptPassword.h"
-#import <os/log.h>
+#import "MADOperationPromptCredentials.h"
+#import "MADMutualExclusive.h"
+#import "madlog.h"
+
+#import <MADFoundation/MADCredential.h>
+
+#import <MAD/MADCredentialSourceType.h>
+#import <MAD/MADOperationKeyChainGet.h>
+
+#import <MADCocoaExtensions/MADTextField.h>
+
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
-#import <MADFoundation/MADCredential.h>
-#import <MAD/MADCredentialSourceType.h>
-#import <MADCocoaExtensions/MADTextField.h>
-#import <MAD/MADOperationKeyChainGet.h>
-#import "MADOperationPromptCredentials.h"
-#import "MADMutualExclusive.h"
 
 static NSString * const MADTitlePassword               = @"Password";
 static NSString * const MADMessagePassword             = @"Please enter your password.";
@@ -65,7 +69,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 - (instancetype)initWithPasswordKey:(NSString *)passwordKey
 				  andViewController:(UIViewController *)viewController {
 	if (self = [super init]) {
-		os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
+		os_log_info(GetDesignerLog(), "%s", __PRETTY_FUNCTION__);
 		//MADMutualExclusiveCondition *condition;
 		_passwordKey = passwordKey.copy;
 		_source = MADCredentialSourceNone;
@@ -89,8 +93,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-	os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-
 	if (self.cancelled) {
 		return [self finish];
 	}

@@ -63,25 +63,21 @@ int backup_file(char *path_origin, char *path_destination) {
 	char *path_origin_dirname = dirname(path_origin);
 	char *path_origin_basename = basename(path_origin);
 	if ((r = chdir(path_origin_dirname)) < 0) {
-		os_log_debug(OS_LOG_DEFAULT, "Error: Change directory returned %d. Error (%d): %s",
-				r, errno, strerror(errno));
+		os_log_error(OS_LOG_DEFAULT, "Error: Change directory returned %d. Error (%d): %s", r, errno, strerror(errno));
 	} else {
 		// 1. Does a previous backup exist exist?
 		if (access(path_destination, F_OK) < 0)
-			os_log_debug(OS_LOG_DEFAULT, "No backup file to delete (%d): %s\n\t%s)",
-					errno, strerror(errno), path_destination);
+			os_log_error(OS_LOG_DEFAULT, "No backup file to delete (%d): %s\n\t%s)", errno, strerror(errno), path_destination);
 		else
 			// 2. If a previous backup exist, delete it.
 			if (remove(path_destination) < 0)
-				os_log_debug(OS_LOG_DEFAULT, "Error removing file: %s\n\t%d: %s)",
-						path_destination, errno, strerror(errno));
+				os_log_error(OS_LOG_DEFAULT, "Error removing file: %s\n\t%d: %s)", path_destination, errno, strerror(errno));
 		
 		// 3. Copy file to backup location... that is, create the backup.
 		if (copyfile(path_origin_basename, path_destination, NULL,
 						  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
 						  COPYFILE_COPY_XATTR) < 0)
-			os_log_debug(OS_LOG_DEFAULT, "Error: Copyfile %s.\n\tGot %d: %s.\n\t\n\tStore is migration directory?",
-				  path_origin, errno, strerror(errno));
+			os_log_error(OS_LOG_DEFAULT, "Error: Copyfile %s.\n\tGot %d: %s.\n\t\n\tStore is migration directory?", path_origin, errno, strerror(errno));
 	}
 	
 	return r;
@@ -93,15 +89,15 @@ int write_archive(char *outname, NSURL *filewrapper) {
 	struct archive *archive = archive_write_new();
 	
 	if (archive_write_set_format_pax_restricted(archive) != ARCHIVE_OK) {
-		os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
 
 	if (archive_write_add_filter_bzip2(archive) != ARCHIVE_OK) {
-		os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
 	
 	if ((r = archive_write_open_filename(archive, outname)) != ARCHIVE_OK) {
-		os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
 	
 	NSDirectoryEnumerator <NSURL *> * sourceDirectoryEnumerator =
@@ -109,11 +105,9 @@ int write_archive(char *outname, NSURL *filewrapper) {
 						 includingPropertiesForKeys: nil
 											options: NSDirectoryEnumerationSkipsHiddenFiles
 									   errorHandler: ^BOOL(NSURL * _Nonnull url, NSError * _Nonnull error) {
-										   os_log_debug(OS_LOG_DEFAULT, "Error: %s\n\t%s",
-												   error.localizedDescription.UTF8String,
-												   url.absoluteString.UTF8String);
-										   return YES;
-									   }];
+		os_log_error(OS_LOG_DEFAULT, "Error: %s\n\t%s", error.localizedDescription.UTF8String, url.absoluteString.UTF8String);
+		return YES;
+	}];
 	NSURL *source_filepath, *baseUrl;
 	NSString *source_path_relative;
 	int archive_status;
@@ -131,7 +125,7 @@ int write_archive(char *outname, NSURL *filewrapper) {
 		
 		if ((archive_status = mad_archive_write_file(archive, source_filepath_fsr,
 													 source_path_relative_fsr)) < 0) {
-			os_log_debug(OS_LOG_DEFAULT, "Error %d in archive.", archive_status);
+			os_log_error(OS_LOG_DEFAULT, "Error %d in archive.", archive_status);
 		}
 		free(source_path_relative_fsr); free(source_filepath_fsr);
 	}
@@ -144,16 +138,15 @@ int write_archive(char *outname, NSURL *filewrapper) {
 int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	int r = 0;
 	if ((r = chdir(origional_path)) < 0) {
-		os_log_debug(OS_LOG_DEFAULT, "Error: Change directory returned %d. Error (%d): %s",
-				r, errno, strerror(errno));
+		os_log_error(OS_LOG_DEFAULT, "Error: Change directory returned %d. Error (%d): %s", r, errno, strerror(errno));
 	} else {
 		if ((r = access(backup_path, F_OK)) < 0) {
-			os_log_debug(OS_LOG_DEFAULT, "Can't access file that we want to backup.\n\t%s", backup_path);
+			os_log_error(OS_LOG_DEFAULT, "Can't access file that we want to backup.\n\t%s", backup_path);
 		} else {
 			if ((r = copyfile(backup_path, backup_name, NULL,
 							  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
 							  COPYFILE_COPY_XATTR | COPYFILE_DATA)) < 0)
-				os_log_debug(OS_LOG_DEFAULT, "Copyfile %s error %d - %s", backup_name, errno, strerror(errno));
+				os_log_error(OS_LOG_DEFAULT, "Copyfile %s error %d - %s", backup_name, errno, strerror(errno));
 			
 		}
 	}
@@ -200,12 +193,12 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	
 	// 1. Remove backup.
 	if ((r = backup_file(archive_path, backup_path)) < 0) {
-		os_log_debug(OS_LOG_DEFAULT, "Failed to backup file with %d.", r);
+		os_log_error(OS_LOG_DEFAULT, "Failed to backup file with %d.", r);
 	}
 
 	//2. Write archive.
 	if ((r = write_archive(archive_path, self.filewrapper)) < 0) {
-		os_log_debug(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
+		os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
 	}
 	mad_file_remove_if_exist(backup_path);
 
@@ -214,14 +207,14 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	// 3. Restore backup on failure.
 	if (!success && access(backup_path, F_OK)) {
 		if (restore_backup(origin_path, backup_path, archive_path) < 0) {
-			os_log_debug(OS_LOG_DEFAULT, "Error in restore_backup.");
+			os_log_error(OS_LOG_DEFAULT, "Error in restore_backup.");
 		}
 	}
 	free(archive_path);
 	free(origin_path);
 	free(backup_path);
 
-	if (!success) os_log_debug(OS_LOG_DEFAULT, "Failed to write archive.");
+	if (!success) os_log_error(OS_LOG_DEFAULT, "Failed to write archive.");
 
 	return success;
 }
@@ -273,7 +266,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	if (success >= 0) {
 		
 		if (((r = chdir(destinationURL.fileSystemRepresentation))) != 0) {
-			os_log_debug(OS_LOG_DEFAULT, "Error %d: %s. Chdir (%s) failed.", errno, strerror(errno), destinationURL.fileSystemRepresentation);
+			os_log_error(OS_LOG_DEFAULT, "Error %d: %s. Chdir (%s) failed.", errno, strerror(errno), destinationURL.fileSystemRepresentation);
 			success = -1;
 		} else {
 			char *source = 0, *dest = 0, *filename = 0;
@@ -298,7 +291,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 										 options: NSDataReadingUncached
 										   error: &errorReading];
 	if (errorReading != nil) {
-		os_log_debug(OS_LOG_DEFAULT, "Error: %s.", errorReading.localizedDescription.UTF8String);
+		os_log_error(OS_LOG_DEFAULT, "Error: %s.", errorReading.localizedDescription.UTF8String);
 		success = -2;
 	}
 	
@@ -313,7 +306,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 									error: &errorWriting] ? 0 : -1;
 		
 		if (success < 0 && errorWriting != nil) {
-			os_log_debug(OS_LOG_DEFAULT, "Error: %s.", errorWriting.localizedDescription.UTF8String);
+			os_log_error(OS_LOG_DEFAULT, "Error: %s.", errorWriting.localizedDescription.UTF8String);
 		}
 		
 		NSAssert(success >= 0, @"Failed to write at %s.", __PRETTY_FUNCTION__);

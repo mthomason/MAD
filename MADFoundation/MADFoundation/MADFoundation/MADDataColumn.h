@@ -9,13 +9,12 @@
 #ifndef Reports_MADDataColumn_h
 #define Reports_MADDataColumn_h
 
-#import <Foundation/Foundation.h>
 #import <MADFoundation/MADDataType.h>
+#import <Foundation/NSString.h>
 
 @class NSMutableDictionary;
 
-@interface MADDataColumn : NSObject
-	<NSCoding, NSCopying>
+@interface MADDataColumn : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, readonly, copy) NSString *identifier;
 

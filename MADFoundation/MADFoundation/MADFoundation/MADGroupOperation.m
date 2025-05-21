@@ -7,8 +7,9 @@
 //
 
 #import "MADGroupOperation.h"
-#import <os/log.h>
 #import "MADOperationQueue.h"
+#import "madlog.h"
+
 #import <Foundation/NSArray.h>
 #import <Foundation/NSException.h>
 
@@ -37,7 +38,7 @@
 #pragma mark - Lifecycle
 
 - (void)dealloc {
-	os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
+	os_log_info(GetFoundationLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 #pragma mark - Initialization

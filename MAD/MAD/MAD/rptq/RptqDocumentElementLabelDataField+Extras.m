@@ -11,21 +11,20 @@
 #endif
 
 #import "RptqDocumentElementLabelDataField+Extras.h"
+#import "RptqDocumentElement+Extras.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDocument.h"
+#import "RptqDataHelper.h"
 
+#import <Foundation/NSException.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSEntityDescription.h>
-
-#import "RptqDocumentElement+Extras.h"
-#import "RptqDocumentSection+Extras.h"
-#import "RptqQueryField+Extras.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocument.h"
-
-#import "RptqDataHelper.h"
 
 @implementation RptqDocumentElementLabelDataField (Extras)
 

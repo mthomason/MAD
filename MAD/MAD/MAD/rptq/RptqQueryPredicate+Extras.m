@@ -11,18 +11,6 @@
 #endif
 
 #import "RptqQueryPredicate+Extras.h"
-
-#import <CoreFoundation/CFNumber.h>
-
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSString.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-
-#import <MADFoundation/MADErrorUserInfo.h>
-
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
@@ -31,6 +19,17 @@
 #import "RptqQueryField.h"
 
 #import "RptqDataHelper.h"
+
+#import <CoreFoundation/CFNumber.h>
+
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSError.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
 #import <os/log.h>
 
 static os_log_t rptq_log;
@@ -66,11 +65,12 @@ static os_log_t rptq_log;
 								forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 												  error:(NSError * __autoreleasing *)error {
 	if (leftFieldID == nil || rightFieldID == nil) {
-		NSString *message = @"Missing field.";
-		os_log_error(rptq_log, "%{public}@", message);
+		os_log_error(rptq_log, "%s Missing field.", __PRETTY_FUNCTION__);
 		if (error != NULL) {
-			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
-					  errorWithDomain:[self domain] code:2340];
+			*error = [NSError errorWithDomain:[self domain] code:2340 userInfo:@{
+				NSLocalizedFailureReasonErrorKey: @"Missing field.",
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing field.", NSStringFromClass([self class])]
+			}];
 		}
 		return nil;
 	}
@@ -107,8 +107,10 @@ static os_log_t rptq_log;
 		NSString *message = @"Missing field or value.";
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
-			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
-					  errorWithDomain:[self domain] code:2341];
+			*error = [NSError errorWithDomain:[self domain] code:2341 userInfo:@{
+				NSLocalizedFailureReasonErrorKey: @"Error",
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing field.", NSStringFromClass([self class])]
+			}];
 		}
 		return nil;
 	}
@@ -138,8 +140,10 @@ static os_log_t rptq_log;
 		NSString *message = @"Missing value.";
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
-			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
-					  errorWithDomain:[self domain] code:2342];
+			*error = [NSError errorWithDomain:[self domain] code:2342 userInfo:@{
+				NSLocalizedFailureReasonErrorKey: @"Error",
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing value.", NSStringFromClass([self class])]
+			}];
 		}
 		return nil;
 	}
@@ -161,8 +165,10 @@ static os_log_t rptq_log;
 		NSString *message = @"Missing value or field.";
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
-			*error = [[[MADErrorUserInfo alloc] initWithTitle:@"Error" andMessage:message]
-					  errorWithDomain:[self domain] code:2343];
+			*error = [NSError errorWithDomain:[self domain] code:2343 userInfo:@{
+				NSLocalizedFailureReasonErrorKey: @"Error",
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing value or field.", NSStringFromClass([self class])]
+			}];
 		}
 		return nil;
 	}
@@ -208,7 +214,7 @@ static os_log_t rptq_log;
 
 + (void)deletePredicate:(RptqQueryPredicate *)predicate {
 	if (predicate == nil) {
-		os_log_debug(rptq_log, "Attempted to delete nil predicate");
+		os_log_error(rptq_log, "Attempted to delete nil predicate");
 		return;
 	}
 	

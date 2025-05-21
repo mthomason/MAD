@@ -9,8 +9,9 @@
 #ifndef Reports_MADDatabaseConnection_h
 #define Reports_MADDatabaseConnection_h
 
-#import <Foundation/Foundation.h>
 #import <MADAPI/MADDatabaseType.h>
+
+#import <Foundation/NSObject.h>
 
 @protocol MADConnectionsPropertiesProtocol;
 

@@ -9,9 +9,15 @@
 #ifndef MAD_MADDataTable_h
 #define MAD_MADDataTable_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSEnumerator.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSSortDescriptor.h>
 
 @class MADDataColumn;
+
+extern NSString * const _Nonnull MADDataTableErrorDomain;
 
 typedef NS_ENUM(short, MADDataTableParameters) {
 	MADDataTableParametersType,
@@ -38,13 +44,13 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 
 #pragma mark - Caching
 
-- (BOOL)cacheWithUrl:(nonnull NSURL *)url;
-- (void)loadFromCacheWithUrl:(nonnull NSURL *)url;
+- (BOOL)cacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (BOOL)loadFromCacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 #pragma mark - Plist Operations
 
 - (nonnull NSDictionary *)copyPlist;
-- (void)loadWithPlist:(nonnull NSDictionary *)plist;
+- (BOOL)loadWithPlist:(nonnull NSDictionary *)plist error:(NSError * _Nullable __autoreleasing * _Nullable)outError;
 
 #pragma mark - Row and Column Operations
 
@@ -66,7 +72,7 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 - (nonnull NSArray *)allObjects;
 - (nonnull NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit;
 - (nonnull NSArray<NSDictionary *> *)objectsForGroupKeys:(nonnull NSArray<NSString *> *)groupKeys;
-- (nullable NSDictionary<NSString *, id> *)dataForRow:(NSUInteger)rowID;
+- (nullable NSDictionary<NSString *, id> *)dataForRow:(NSUInteger)rowID error:(NSError * _Nullable __autoreleasing *_Nullable)error;
 
 #pragma mark - Enumerators
 

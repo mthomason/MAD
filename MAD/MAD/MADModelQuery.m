@@ -7,6 +7,7 @@
 //
 
 #import "MADModelQuery.h"
+#import "madlog.h"
 
 #import <CoreFoundation/CFNumber.h>
 
@@ -205,14 +206,13 @@
 
 - (void)updateTables {
 	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
-	
-	NSError * __autoreleasing error = NULL;
-	NSArray <NSDictionary *> *fetchQueryTableResults;
-	
 	NSFetchRequest *fetchQueryTable = [RptqQueryField fetchRequestFieldKeys: self.identifier];
-	
-	fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable
-																 error:&error];
+	NSError *error = nil;
+	NSArray <NSDictionary *> *fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable
+																						   error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	NSAssert(fetchQueryTableResults != nil && error == NULL, @"What? %@", error);
 
 	[self insertTablesFromFetchRequestResults:fetchQueryTableResults];
@@ -340,21 +340,18 @@
 // It creates MADModelQueryLink objects.
 - (void)updateLinks {
 
-	NSArray <NSDictionary *> *fetchQueryLinksResults;
-	NSFetchRequest *fetch;
-
-	NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
-	NSString *inQueryTableID = [MADStringUtilities stringByAppendingPeriodToString:keyInQuery];
-	inQueryTableID = [inQueryTableID stringByAppendingString: keyIdentifier];
+	NSString *inQueryTableID = [[MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(inQuery))] stringByAppendingString: NSStringFromSelector(@selector(identifier))];
 
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
 																 atKeyPath:inQueryTableID];
  
-	fetch = [MADModelQueryLink fetchRequest:predicate];
+	NSFetchRequest *fetch = [MADModelQueryLink fetchRequest:predicate];
 	
-	NSError * __autoreleasing error = NULL;
-	fetchQueryLinksResults = [_managedObjectContext executeFetchRequest:fetch error:&error];
+	NSError *error = nil;
+	NSArray <NSDictionary *> *fetchQueryLinksResults = [_managedObjectContext executeFetchRequest:fetch error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	NSAssert(fetchQueryLinksResults != nil && error == nil, @"Need this to work! %@", error);
 
 	[self insertLinksFromFetchRequestResults:fetchQueryLinksResults];
@@ -420,11 +417,12 @@
 	MADModelQueryTable *table;
 	if ((table = [_tables objectForKey:queryTableID])) return;
 	
-	NSArray <NSDictionary *> *results;
-	
 	NSError * __autoreleasing error = NULL;
 	NSFetchRequest *fetchRequest = [RptqQueryField fetchRequestFieldKeys:queryTableID.longLongValue];
-	results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	
 	NSAssert(results != nil && error == nil, @"What? %@", error);
 	[self insertTablesFromFetchRequestResults:results];
@@ -496,8 +494,11 @@
 																		  options: 0];
 
 	NSFetchRequest *fetchRequest = [MADModelQueryLink fetchRequest:isQueryLink];
-	NSError * __autoreleasing error = NULL;
+	NSError *error = NULL;
 	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	NSAssert(results != nil && error == nil, @"What? %@", error);
 
 	[self insertLinksFromFetchRequestResults:results];

@@ -124,8 +124,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 #pragma mark -
 #pragma mark Storyboard
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-				 fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
 	return NO;
 }
 
@@ -163,35 +162,29 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 
 - (NSFetchedResultsController *)resultsController {
 	if (_resultsController == nil) {
+				
+		NSSortDescriptor *sortTable = [NSSortDescriptor sortDescriptorWithKey: [RptqQueryField keyInQueryTableAlias]
+																	ascending: YES];
 		
-		NSString *keyInQueryTableAlias = [RptqQueryField keyInQueryTableAlias];
-		NSString *keySchemaFieldName = [RptqQueryField keySchemaFieldName];
-		
-		NSSortDescriptor *sortTable, *sortField;
-		sortTable = [NSSortDescriptor sortDescriptorWithKey: keyInQueryTableAlias
-												  ascending: YES];
-		
-		sortField = [NSSortDescriptor sortDescriptorWithKey: keySchemaFieldName
-												  ascending: YES];
-		
+		NSSortDescriptor *sortField = [NSSortDescriptor sortDescriptorWithKey: [RptqQueryField keySchemaFieldName]
+																	ascending: YES];
+
 		NSArray *sortDescriptors = [[NSArray alloc] initWithObjects: sortTable, sortField, nil];
 		
-		NSFetchRequest *request;
-		request = [RptqQueryField fetchRequestFields:1];
+		NSFetchRequest *request = [RptqQueryField fetchRequestFields:1];
 		request.sortDescriptors = sortDescriptors;
 		
-		NSFetchedResultsController *resultsController;
-		resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-																managedObjectContext: self.document.managedObjectContext
-																  sectionNameKeyPath: keyInQueryTableAlias
-																		   cacheName: nil];
-		
+		NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+																					 managedObjectContext: self.document.managedObjectContext
+																					   sectionNameKeyPath: [RptqQueryField keyInQueryTableAlias]
+																								cacheName: nil];
+
 		NSError *error = nil;
-		if (![resultsController performFetch: &error]) {
+		if (![controller performFetch: &error]) {
 			NSLog(@"requestError: %@\n%@", error.localizedDescription, error.localizedFailureReason);
 		}
 		
-		_resultsController = resultsController;
+		_resultsController = controller;
 	}
 	return _resultsController;
 }
@@ -231,14 +224,13 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 	
 	if (self.resultsController.sections.count >= (NSUInteger)indexPath.section) {
 		
-		int16_t dataType;
 		id <NSFetchedResultsSectionInfo> secinfo = self.resultsController.sections[(NSUInteger)indexPath.section];
 		NSDictionary *object = secinfo.objects[(NSUInteger)indexPath.row];
+		int16_t dataType;
 		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)object[keyDataType], kCFNumberSInt16Type, &dataType);
 		
 		NSString *name = object[keyFieldName];
 		NSString *dataTypeDisplay = [RptqDatabaseSchemaField dataTypeDisplay:dataType];
-		
 		cell.textLabel.text = name.copy;
 		cell.detailTextLabel.text = dataTypeDisplay.lowercaseString;
 		cell.accessibilityLabel = name.copy;

@@ -9,6 +9,9 @@
 #ifndef MAD_MADTabBarItemProtocol_h
 #define MAD_MADTabBarItemProtocol_h
 
+#import <Foundation/NSObject.h>
+#import <UIKit/UIImage.h>
+
 @protocol MADTabBarImageProtocol <NSObject>
 
 @required

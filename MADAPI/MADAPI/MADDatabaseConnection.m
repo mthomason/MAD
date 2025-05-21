@@ -8,6 +8,10 @@
 
 #import "MADDatabaseConnection.h"
 
+#import <Foundation/NSString.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSException.h>
+
 @interface MADDatabaseConnection()
 	@property (readwrite, nonatomic, assign) MADDatabaseType databaseType;
 	@property (readwrite, nonatomic, copy) NSString *connectionString;

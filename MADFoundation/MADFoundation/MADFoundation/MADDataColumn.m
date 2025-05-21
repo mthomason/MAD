@@ -11,6 +11,11 @@
 #endif
 
 #import "MADDataColumn.h"
+#import <Foundation/NSArray.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
 #import <CoreFoundation/CFNumber.h>
 
 @interface MADDataColumn ()
@@ -26,7 +31,6 @@
 
 - (id)copyWithZone:(NSZone *)zone {
 	MADDataColumn *copy = [[[self class] allocWithZone:zone] init];
-
 	if (copy) {
 		copy.identifier = [self.identifier copy];
 		copy.defaultValue = [self.defaultValue copy];
@@ -147,6 +151,14 @@
 	return column;
 }
 
+- (NSString *)description {
+    	return [NSString stringWithFormat:@"<%@: %p> %@ (%@) %@ %@ %@ %@", NSStringFromClass([self class]), self, self.fieldName, self.identifier, self.caption, self.column, @(self.type), @(self.nativeType)];
+}
+
+- (NSString *)debugDescription {
+	return [NSString stringWithFormat:@"<%@: %p> %@ (%@) %@ %@ %@ %@", NSStringFromClass([self class]), self, self.fieldName, self.identifier, self.caption, self.column, @(self.type), @(self.nativeType)];
+}
+
 - (id)objectAtIndex:(NSUInteger)index {
 	NSAssert(index < [self.column count], @"Column doesn't exit!");
 	return self.column[index];
@@ -166,67 +178,29 @@
 	const NSUInteger plistCapacity = 12;
 	NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity: (plistCapacity + 1)];
 
-	id key;
-	key = [MADDataColumn keyFieldName];
-	plist[key] = self.fieldName;
+	plist[[MADDataColumn keyFieldName]] = [self.fieldName copy];
+	plist[[MADDataColumn keyIdentifier]] = [_identifier copy];
+	plist[[MADDataColumn keyColumn]] = [_column copy];
+	plist[[MADDataColumn keyDefaultValue]] = [_defaultValue isEqual:[NSNull null]] ? @"~MTNull~" : [_defaultValue copy];
+	plist[[MADDataColumn keyCaption]] = [self.caption copy];
+	plist[[MADDataColumn keyColumnType]] = [[NSNumber alloc] initWithShort:_type];
+	plist[[MADDataColumn keyNativeColumnType]] = [[NSNumber alloc] initWithInteger:_nativeType];
+	plist[[MADDataColumn keyIsPrimaryKey]] = [[NSNumber alloc] initWithBool:_primaryKey];
+	plist[[MADDataColumn keyIsNotNull]] = [[NSNumber alloc] initWithBool:_notNull];
+	plist[[MADDataColumn keyIsAutoIncrement]] = [[NSNumber alloc] initWithBool:_autoIncrement];
 
-	key= [MADDataColumn keyIdentifier];
-	id obj;
-	obj = _identifier.copy;
-	plist[key] = obj;
-
-	key = [MADDataColumn keyColumn];
-	obj = _column.copy;
-	plist[key] = obj;
-
-	key = [MADDataColumn keyDefaultValue];
-	obj = _defaultValue.copy;
-	if ([obj isEqual:[NSNull null]]) {
-		obj = @"~MTNull~";
-	}
-	plist[key] = obj;
-
-	key = [MADDataColumn keyCaption];
-	plist[key] = self.caption;
-	
-	key = [MADDataColumn keyColumnType];
-	obj = [[NSNumber alloc] initWithShort:_type];
-	plist[key] = obj;
-	
-	key = [MADDataColumn keyNativeColumnType];
-	obj = [[NSNumber alloc] initWithInteger:_nativeType];
-	plist[key] = obj;
-	
-	key = [MADDataColumn keyDataLength];
 	CFNumberRef dataLen = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &_dataLength);
-	plist[key] = (__bridge id _Nullable)(dataLen);
+	plist[[MADDataColumn keyDataLength]] = (__bridge id _Nullable)(dataLen);
 	CFRelease(dataLen);
 
-	key = [MADDataColumn keyDataPercision];
 	CFNumberRef dataPer = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &_dataPercision);
-	plist[key] = (__bridge id _Nullable)(dataPer);
+	plist[[MADDataColumn keyDataPercision]] = (__bridge id _Nullable)(dataPer);
 	CFRelease(dataPer);
-	
-	obj = [[NSNumber alloc] initWithBool:_primaryKey];
-	key = [MADDataColumn keyIsPrimaryKey];
-	plist[key] = obj;
 
-	obj = [[NSNumber alloc] initWithBool:_notNull];
-	key = [MADDataColumn keyIsNotNull];
-	plist[key] = obj;
-
-	obj = [[NSNumber alloc] initWithBool:_autoIncrement];
-	key = [MADDataColumn keyIsAutoIncrement];
-	plist[key] = obj;
-
-	//NSAssert(plist.count == plistCapacity, @"Need to update dictionary size.");
-	
 	return plist;
 }
 
-- (void)removeAllObjects {
-	[self.column removeAllObjects];
-}
+- (void)removeAllObjects { [self.column removeAllObjects]; }
 
 + (NSString *)keyDefaultValue { return NSStringFromSelector(@selector(defaultValue)); }
 + (NSString *)keyCaption { return NSStringFromSelector(@selector(caption)); }

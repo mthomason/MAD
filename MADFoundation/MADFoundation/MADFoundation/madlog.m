@@ -7,18 +7,16 @@
 //
 
 #import "madlog.h"
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <os/log.h>
 
 static os_log_t gMADFoundationLog;
 
 os_log_t GetFoundationLog(void) {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		NSString *category = NSStringFromClass([NSOperation class]);
-		gMADFoundationLog = os_log_create("com.mt", category.UTF8String);
+		gMADFoundationLog = os_log_create("com.mt", "MADFoundation");
 		if (gMADFoundationLog == nil || gMADFoundationLog == OS_LOG_DISABLED || gMADFoundationLog == OS_LOG_DEFAULT) {
-			// Fallback or log an issue with a more basic mechanism if critical
-			// For simplicity, os_log_create often defaults to a usable log handle.
 			NSLog(@"Warning: MADOperations log facility could not be created as specified, using default.");
 			if (gMADFoundationLog == nil) gMADFoundationLog = OS_LOG_DEFAULT; // Ensure it's not nil
 		}

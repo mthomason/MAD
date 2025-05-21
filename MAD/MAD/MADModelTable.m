@@ -7,6 +7,7 @@
 //
 
 #import "MADModelTable.h"
+#import "madlog.h"
 
 #import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSException.h>
@@ -164,55 +165,31 @@
 				 *expressionForWidth =          [NSExpression expressionForKeyPath:keyWidth],
 				 *expressionForIdentifier =     [NSExpression expressionForKeyPath:keyIdentifier];
 	
-	setupExpressionWithType(expressionDescription[0],
-							keyName,
-							expressionForName,
-							NSStringAttributeType);
-	setupExpressionWithType(expressionDescription[1],
-							keyPrimaryKey,
-							expressionForPrimaryKey,
-							NSBooleanAttributeType);
-	setupExpressionWithType(expressionDescription[2],
-							keyDataType,
-							expresssionForDataType,
-							NSInteger16AttributeType);
-	setupExpressionWithType(expressionDescription[3],
-							keyDataTypeNative,
-							expressionForDataTypeNative,
-							NSInteger16AttributeType);
-	setupExpressionWithType(expressionDescription[4],
-							keyDecimals,
-							expressionForDecimals,
-							NSInteger16AttributeType);
-	setupExpressionWithType(expressionDescription[5],
-							keyWidth,
-							expressionForWidth,
-							NSInteger64AttributeType);
-	setupExpressionWithType(expressionDescription[6],
-							keyIdentifier,
-							expressionForIdentifier,
-							NSInteger64AttributeType);
+	setupExpressionWithType(expressionDescription[0], keyName, expressionForName, NSStringAttributeType);
+	setupExpressionWithType(expressionDescription[1], keyPrimaryKey, expressionForPrimaryKey, NSBooleanAttributeType);
+	setupExpressionWithType(expressionDescription[2], keyDataType, expresssionForDataType, NSInteger16AttributeType);
+	setupExpressionWithType(expressionDescription[3], keyDataTypeNative, expressionForDataTypeNative, NSInteger16AttributeType);
+	setupExpressionWithType(expressionDescription[4], keyDecimals, expressionForDecimals, NSInteger16AttributeType);
+	setupExpressionWithType(expressionDescription[5], keyWidth, expressionForWidth, NSInteger64AttributeType);
+	setupExpressionWithType(expressionDescription[6], keyIdentifier, expressionForIdentifier, NSInteger64AttributeType);
 
-	NSArray <NSExpressionDescription *> *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
-												   count: expressionCount];
-	
+	NSArray <NSExpressionDescription *> *propertiesToFetch  = [[NSArray alloc] initWithObjects: expressionDescription
+																						 count: expressionCount];
 	fetchQueryTable.propertiesToFetch = propertiesToFetch;
 	fetchQueryTable.resultType = NSDictionaryResultType;
 	
-	NSPredicate *predicate;
 	NSExpression *predicateExpression[2];
 	
 	NSNumber *identifierObject = @(self.identifier);
 	predicateExpression[0] = [NSExpression expressionForKeyPath: keyInTableIdentifier];
 	predicateExpression[1] = [NSExpression expressionForConstantValue: identifierObject];
 	
-	predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-												   rightExpression: predicateExpression[1]
-														  modifier: NSDirectPredicateModifier
-															  type: NSEqualToPredicateOperatorType
-														   options: 0];
-	
+	NSPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
+																rightExpression: predicateExpression[1]
+																	   modifier: NSDirectPredicateModifier
+																		   type: NSEqualToPredicateOperatorType
+																		options: 0];
+
 	fetchQueryTable.predicate = predicate;
 	
 	NSSortDescriptor *sortByFieldName = [[NSSortDescriptor alloc] initWithKey: keyName
@@ -221,7 +198,9 @@
 	fetchQueryTable.sortDescriptors = sortDescriptors;
 
 	results = [managedObjectContext executeFetchRequest:fetchQueryTable error:&error];
-
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	
 	NSMutableOrderedSet <NSNumber *> *fieldIDs = [[NSMutableOrderedSet alloc] init];
 	NSMutableDictionary <NSNumber *, MADModelField *> *fields = [[NSMutableDictionary alloc] init];

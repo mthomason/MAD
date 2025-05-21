@@ -9,7 +9,7 @@
 #ifndef madlog_h
 #define madlog_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSString.h>
 #import <os/log.h>
 
 os_log_t GetFoundationLog(void);

@@ -11,8 +11,16 @@
 #endif
 
 #import "MADQueryBuilderSplitViewController.h"
+#import "MADQueryViewController.h"
+#import "MADViewControllerSQL.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
+#import "MADQueryVisualizationViewController.h"
+#import "MADNavigationControllerQueryBuilder.h"
+#import "MADNavigationControllerQueryVisualization.h"
+#import <MAD/MADocument.h>
 
-#import <CoreData/NSManagedObjectContext.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UINavigationController.h>
@@ -22,20 +30,9 @@
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIStoryboardPopoverSegue.h>
 #import <UIKit/UIImage.h>
+#import <UIKit/UIViewControllerTransitionCoordinator.h>
 
-#import <MAD/MADocument.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADLabelTitle.h>
-
-#import "MADQueryViewController.h"
-#import "MADViewControllerSQL.h"
-
-#import "MTStoreKitController+NonRenewableLicensing.h"
-
-#import "MADQueryVisualizationViewController.h"
-#import "MADNavigationControllerQueryBuilder.h"
-#import "MADNavigationControllerQueryVisualization.h"
+#import <CoreData/NSManagedObjectContext.h>
 
 static NSString * const TextTitleFormat = @"MAD %@";
 static NSString * const TextTitleQuery = @"Query";
@@ -45,8 +42,7 @@ static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitVi
 static NSString * const MADStoryboardQuery = @"MADQuery";
 static NSString * const TextRedraw = @"Redraw";
 
-@interface MADQueryBuilderSplitViewController ()
-	<UISplitViewControllerDelegate, UIPopoverControllerDelegate>
+@interface MADQueryBuilderSplitViewController () <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
 	@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
 	@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;

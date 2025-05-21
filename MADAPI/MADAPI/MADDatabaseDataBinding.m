@@ -11,9 +11,12 @@
 #endif
 
 #import "MADDatabaseDataBinding.h"
+
+#import <MADFoundation/MADDataType.h>
+
 #import <Foundation/NSNull.h>
 #import <Foundation/NSString.h>
-#import <MADFoundation/MADDataType.h>
+#import <Foundation/NSDictionary.h>
 
 static inline MADDataType DataTypeLimited(MADDataType);
 static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
@@ -67,9 +70,9 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
 
 	- (instancetype)init NS_DESIGNATED_INITIALIZER;
 
-	@property (nonatomic, strong, readwrite) id value;
+	@property (nonatomic, strong, readwrite) MADResult *value;
 	@property (nonatomic, assign, readwrite) MADDataType datatype;
-	@property (nonatomic, assign, readwrite) int fieldIndex;
+	@property (nonatomic, assign, readwrite) NSUInteger fieldIndex;
 
 @end
 
@@ -86,28 +89,31 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
 
 - (instancetype)initWithDataType:(MADDataType)datatype
 					  fieldIndex:(NSUInteger)fieldIndex
-						   value:(id)value {
+						   value:(MADResult *)value {
 
 	if (self = [super init]) {
 		
-		if (value == nil || value == [NSNull null]) {
+		if (value == nil) {
 			datatype = MADDataTypeNull;
 			value = [NSNull null];
+		} else if ([value isKindOfClass:[NSNull class]]) {
+			datatype = MADDataTypeNull;
 		} else {
 			datatype = DataTypeLimited(datatype);
 			if (datatype == MADDataTypeUnknown) {
 				value = [[NSString alloc] initWithFormat:@"%@", value];
 				datatype = MADDataTypeString;
+			} else {
+				self.value = [value copy];
 			}
 		}
 		self.datatype = datatype;
 		self.fieldIndex = (int)fieldIndex;
-		self.value = value;
 	}
 	return self;
 }
 
-- (int)columnNumber {
+- (NSUInteger)columnNumber {
 	return self.fieldIndex + 1;
 }
 

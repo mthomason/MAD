@@ -7,14 +7,16 @@
 //
 
 #import "MADOperationConditionDisplayedAlertConfirm.h"
-#import <os/log.h>
-#import <Foundation/NSArray.h>
-#import <MADFoundation/MADErrorUserInfo.h>
+#import "MADOperationConditionDisplayedAlert.h"
+#import "madlog.h"
+
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationConditionResult.h>
+
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
-#import "MADOperationConditionDisplayedAlert.h"
+
+#import <Foundation/NSArray.h>
 
 @implementation MADOperationConditionDisplayedAlertConfirm
 
@@ -35,22 +37,20 @@
 
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-	MADOperationConditionResult *result;
-	result = [self evaluateForOperation:operation];
+	MADOperationConditionResult *result = [self evaluateForOperation:operation];
 	completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	os_log_info(OS_LOG_DEFAULT, "Evaluate\t%s", operation.description.UTF8String);
+	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
 	
 	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
-	MADOperationConditionResult *result = nil;
 	
 	if (dependencies.count == 0) {
-		result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
-		return result;
+		return [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
 	}
 	
+	MADOperationConditionResult *result = nil;
 	for (MADOperation *dependency in dependencies) {
 		
 		if ([dependency conformsToProtocol:@protocol(MADOperationConditionDisplayedAlertProtocol)]) {

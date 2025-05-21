@@ -7,24 +7,24 @@
 //
 
 #import "MADOperationKeyChainPut.h"
-#import <os/log.h>
-#import <security/SecBase.h>
+#import "madlog.h"
+
+#import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADKeyChain.h>
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSArray.h>
 
-#import <MADFoundation/MADCredential.h>
-
-#import <MADFoundation/MADKeyChain.h>
+#import <security/SecBase.h>
 
 static const short StatusNotFound = 35;
 static NSString * const ErrorDomain = @"MADKCP";
 
 @interface MADOperationKeyChainPut ()
 
-	@property (nonatomic, copy) NSString *key;
-	@property (nonatomic, copy) NSString *keyDescription;
+@property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy) NSString *keyDescription;
 
 @end
 
@@ -68,13 +68,13 @@ static NSString * const ErrorDomain = @"MADKCP";
 								withDescription: self.keyDescription];
 		if (status == errSecSuccess) {
 		
-			os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
+			os_log_info(GetMadLog(), "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
 			[self finish];
 
 		} else {
 
 
-			os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
+			os_log_info(GetMadLog(), "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
 			NSError *error = [NSError errorWithDomain: ErrorDomain
 												 code: status
 											 userInfo: nil];
@@ -84,7 +84,7 @@ static NSString * const ErrorDomain = @"MADKCP";
 		
 	} else {
 
-		os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
+		os_log_info(GetMadLog(), "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
 		NSError *error = [NSError errorWithDomain: ErrorDomain
 											 code: StatusNotFound
 										 userInfo: nil];

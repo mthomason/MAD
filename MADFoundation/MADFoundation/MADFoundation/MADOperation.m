@@ -110,9 +110,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 		pthread_mutex_unlock(&_stateLock);
 		return;
 	}
-	
-	os_log_info(OS_LOG_DEFAULT, "[OP:%lu (%@)] State changing from %s to %s", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(_state), MADStringOperationState(newState));
-	
+
 	[self willChangeValueForKey:MADOperatorSelectorState];
 	_state = newState;
 	[self didChangeValueForKey:MADOperatorSelectorState];
@@ -151,34 +149,25 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (BOOL)isReady {
-	MADOperationState currentState = self.state; // Avoid recursive lock
-	os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] Checking isReady. Current state: %s, isCancelled: %{BOOL}d, super.isReady: %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(currentState), self.cancelled, super.ready);
-	
+	MADOperationState currentState = self.state;
 	switch (currentState) {
 		case MADOperationStateInitialized:
-			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Initialized. Returning based on self.cancelled: %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), self.cancelled);
 			return self.cancelled;
 			
 		case MADOperationStatePending:
 			if (self.cancelled) {
-				os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Pending & Cancelled. Returning YES.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class));
 				return YES;
 			}
 			if (super.ready) {
-				os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Pending & super.isReady. Evaluating conditions.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class));
-				[self evaluateConditions]; // This will change state
-				os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Conditions evaluated. New state: %s. Returning %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(self.state), self.state == MADOperationStateReady);
-				return self.state == MADOperationStateReady; // Check the new state
+				[self evaluateConditions];
+				return self.state == MADOperationStateReady;
 			}
-			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Pending & NOT super.isReady. Returning NO.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class));
 			return NO;
 			
 		case MADOperationStateReady:
-			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Already in Ready state or Cancelled. Returning %{BOOL}d", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), super.ready || self.cancelled);
 			return super.ready || self.cancelled;
 			
 		default:
-			os_log_debug(GetFoundationLog(), "[OP:%lu (%@)] isReady: Default case (state: %s). Returning NO.", (unsigned long)self.identifier, self.name ?: NSStringFromClass(self.class), MADStringOperationState(currentState));
 			return NO;
 	}
 }
@@ -207,9 +196,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (void)evaluateConditions {
-	NSAssert(self.state == MADOperationStatePending && !self.cancelled,
-			 @"evaluateConditions() was called out-of-order");
-	
+	NSAssert(self.state == MADOperationStatePending && !self.cancelled, @"evaluateConditions() was called out-of-order");
 	self.state = MADOperationStateEvaluatingConditions;
 	
 	MADOperation __weak *weakself = self;
@@ -373,7 +360,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
 		bring up the Core Data stack.
 	 */
 - (void)finished:(NSArray *)errors {
-	// No op.
+	// This is a no-op by default. Subclasses may override this method to
+	// perform any cleanup or finalization tasks.
+	// For example, you might want to remove any temporary files or
+	// undo any changes made during the operation.
 }
 
 - (void)waitUntilFinished {
@@ -389,8 +379,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 		app, as incentive for you to find a more appropriate way to express
 		the behavior you're wishing to create.
 	 */
-	//NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this
-		// ONLY if you're absolutely sure there is No Other Way™.");
+	NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
 }
 
 - (void)cleanup {
@@ -402,6 +391,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
 	[self.conditions removeAllObjects];
 	[self.observers removeAllObjects];
 	
+}
+
+- (NSString *)name {
+	return NSStringFromClass(self.class);
 }
 
 @end

@@ -7,6 +7,20 @@
 //
 
 #import "MTGraph+RptqQuery.h"
+#import "madlog.h"
+
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryLinks.h>
+
+#import <MADDataStructures/MTVertex.h>
+
+#import <MAD/MADModel.h>
+#import <MAD/MADModelQuery.h>
+#import <MAD/MADModelQueryLink.h>
+#import <MAD/MADTableFieldIdentifier.h>
 
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSExpressionDescription.h>
@@ -26,19 +40,6 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSMapTable.h>
-
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryLinks.h>
-
-#import <MADDataStructures/MTVertex.h>
-
-#import <MAD/MADModel.h>
-#import <MAD/MADModelQuery.h>
-#import <MAD/MADModelQueryLink.h>
-#import <MAD/MADTableFieldIdentifier.h>
 
 @implementation MTGraph (RptqQuery)
 
@@ -112,6 +113,9 @@
 		fetchQueryTable.predicate = predicateInQuery;
 		
 		fetchQueryTableResults = [managedObjectContext executeFetchRequest:fetchQueryTable error:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+		}
 
 
 		NSExpressionDescription *expLeftFieldHasQueryTable = [[NSExpressionDescription alloc] init];
@@ -128,9 +132,13 @@
 		fetchQueryLinks.propertiesToFetch = propertiesToFetch;
 		fetchQueryLinks.resultType = NSDictionaryResultType;
 		fetchQueryLinks.predicate = predicateInQuery;
-		error = NULL;
-		fetchQueryLinksResults = [managedObjectContext executeFetchRequest:fetchQueryLinks error:&error];
 		
+		NSError *error2 = nil;
+		fetchQueryLinksResults = [managedObjectContext executeFetchRequest:fetchQueryLinks error:&error2];
+		if (error2 != nil) {
+			os_log_error(GetDesignerLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error2);
+		}
+
 		NSAssert(error == nil, @"Got error %@", error);
 		
 		//Add a vertex to the graph for each table.

@@ -11,25 +11,21 @@
 #endif
 
 #import "RptqDatabaseCredentals+Extras.h"
-
-#import <CoreFoundation/CFNumber.h>
-
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSPathUtilities.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
+#import "RptqDatabase+Extras.h"
+#import "RptqDataHelper.h"
+#import "MADDatabaseConnection+Constructor.h"
+#import "madlog.h"
 
 #import <MADAPI/MADDatabaseType.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import "RptqDatabase+Extras.h"
-
-#import "RptqDataHelper.h"
-
-#import "MADDatabaseConnection+Constructor.h"
+#import <CoreFoundation/CFNumber.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSPathUtilities.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
 
 @implementation RptqDatabaseCredentals (Extras)
 
@@ -95,29 +91,22 @@
 #pragma mark - Static
 
 + (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext {
-	NSString *entityName = NSStringFromClass([self class]);
-	NSEntityDescription *ed = [NSEntityDescription entityForName: entityName
+	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([self class])
 										  inManagedObjectContext: objectContext];
-	id userCredentals = [[self alloc] initWithEntity:ed
-					  insertIntoManagedObjectContext:objectContext];
+	id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
 	return userCredentals;
 }
 
 + (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)context {
-	NSFetchRequest *request;
-	NSString *dbCredentialsClassName = NSStringFromClass([RptqDatabaseCredentals class]);
-	request = [[NSFetchRequest alloc] initWithEntityName:dbCredentialsClassName];
-	NSSortDescriptor *sort;
-	sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driverID))
-										 ascending: YES];
-	NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
-	request.sortDescriptors = sortDescriptors;
+	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
+	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driverID))
+															  ascending: YES]];
 	NSError *error = nil;
 	NSArray *fetchResults = [context executeFetchRequest:request error:&error];
-	
-	NSArray <RptqDatabaseCredentals *> *results;
-	results = [[NSArray <RptqDatabaseCredentals *> alloc] initWithArray:fetchResults];
-	return results;
+	if (error) {
+		os_log_error(GetMadLog(), "%s Error fetching RptqDatabaseCredentals: %@", __PRETTY_FUNCTION__, error);
+	}
+	return [[NSArray <RptqDatabaseCredentals *> alloc] initWithArray:fetchResults];
 }
 
 + (NSString *)driverIDMySQL {
@@ -139,7 +128,7 @@
 	[description appendFormat:@"Type:                   %@\n",      self.driverID];
 	[description appendFormat:@"Host:                   %@\n",      self.host];
 	[description appendFormat:@"Database:               %@\n",      self.dbname];
-	[description appendFormat:@"Port:                   %lld\n",    self.port];
+	[description appendFormat:@"Port:                   %ld\n",    (long)self.port];
 	[description appendFormat:@"*********   RptqDatabaseCredentals  *********"];
 	return description;
 }

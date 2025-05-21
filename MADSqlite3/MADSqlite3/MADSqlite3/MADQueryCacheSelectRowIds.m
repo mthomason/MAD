@@ -26,7 +26,7 @@
 
 - (instancetype)initWithRowIDs:(NSArray *)rowIDs
 					 tableName:(NSString *)tableName
-			   sortDescriptors:(NSArray *)sortDescriptors
+			   sortDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors
 					   columns:(NSDictionary *)columns {
 	if (self = [super init]) {
 		self.columns = columns.copy;
@@ -63,7 +63,7 @@
 		NSString *tableName = [[obj objectForKey:keyTableName] copy];
 
 		NSNumber *keySortDesc = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
-		NSArray *sortDescriptors = [[obj objectForKey:keySortDesc] copy];
+		NSArray <NSSortDescriptor *> *sortDescriptors = [[obj objectForKey:keySortDesc] copy];
 		
 		NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ ", tableName];
 		[sql appendString:[self whereClauseWithRowIds:rowIDs]];

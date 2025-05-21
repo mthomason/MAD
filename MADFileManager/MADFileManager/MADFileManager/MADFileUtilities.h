@@ -3,13 +3,13 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 5/5/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MADDesigner_MADFileUtilities_h
 #define MADDesigner_MADFileUtilities_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @class MADFile, NSOperationQueue;
 

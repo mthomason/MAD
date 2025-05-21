@@ -9,7 +9,7 @@
 #ifndef MADDataStructures_MADIndex_h
 #define MADDataStructures_MADIndex_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithIndex:(NSUInteger)index
 					andObject:(nullable id)object NS_DESIGNATED_INITIALIZER;
 
-/// Unavailable. Use `initWithIndex:andObject:` instead.
 - (instancetype)init NS_UNAVAILABLE;
 
 @end

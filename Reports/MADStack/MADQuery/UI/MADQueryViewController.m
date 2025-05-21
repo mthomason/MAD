@@ -84,6 +84,7 @@
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryViewDatasourceProtocol.h"
+#import "madlog.h"
 
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationObserver.h>
@@ -1552,6 +1553,10 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 
 	NSError *error = nil;
 	NSArray <RptqDatabase *> *results = [self.queryViewDataSource.managedObjectContext executeFetchRequest:fr error:&error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "%s Error fetching NSArray <RptqDatabase *>: %@", __PRETTY_FUNCTION__, error);
+	}
+
 	RptqDatabaseCredentals *databaseCredentals = ((RptqDatabase *) results.firstObject).ownedByUser;
 
 	MADDatabaseConnection *databaseConnection;

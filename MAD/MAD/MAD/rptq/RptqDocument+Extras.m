@@ -527,12 +527,10 @@ static os_log_t rptq_log;
 
 		} else {
 			
-			NSString *failureFormat = NSLocalizedString(@"Table %@ not Added.", @"Table %@ not Added.");
-			NSString *description = NSLocalizedString(@"Fields not found.", @"Fields not found.");
-			NSString *failure = [[NSString alloc] initWithFormat:failureFormat, table.name];
-			NSDictionary *userInfo = @{NSLocalizedDescriptionKey : description,
-									   NSLocalizedFailureReasonErrorKey : failure};
-			NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:userInfo];
+			NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:@{
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Fields not found.", @"Fields not found."),
+				NSLocalizedFailureReasonErrorKey : [NSString stringWithFormat:NSLocalizedString(@"Table %@ not Added.", @"Table %@ not Added."), table.name]
+			}];
 			[errorContainer addError:error];
 			
 		}

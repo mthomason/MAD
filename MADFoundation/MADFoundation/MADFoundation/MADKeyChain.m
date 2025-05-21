@@ -22,21 +22,17 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 
-#import <MADFoundation/MADErrorUserInfo.h>
-
 NSString * const MADKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 
 @implementation MADKeyChain
 
 + (NSString *)newKeyForUsernameWithMainKey:(NSString *)key {
-	NSString *result = [[NSString alloc] initWithFormat:@"u:%@", key];
-	return result;
+	return [[NSString alloc] initWithFormat:@"u:%@", key];
 }
 
 + (NSString *)newKeyForPasswordWithMainKey:(NSString *)key {
-	NSString *result = [[NSString alloc] initWithFormat:@"p:%@", key];
-	return result;
+	return [[NSString alloc] initWithFormat:@"p:%@", key];
 }
 
 + (NSDictionary *)newDictionaryQueryGeneric:(NSString *)key {
@@ -158,17 +154,6 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	return query;
 }
 
-+ (NSError *)errorUserCanceled {
-	NSString *title = NSLocalizedString(@"User Canceled", @"User Cancled");
-	NSString *message = NSLocalizedString(@"User canceled save.", @"User canceled save.");
-	NSString *domain = @"MADKeyChain";
-	MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: title
-																   andMessage: message];
-	NSError *error = [errorUserInfo errorWithDomain: domain
-											   code: 393920];
-	return error;
-}
-
 + (BOOL)credentialsExist:(NSString *)key {
 	CFDataRef queryUsernameData = NULL;
 	NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:key];
@@ -212,29 +197,25 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 + (OSStatus)saveToken:(NSString *)token
 			   forKey:(NSString *)key
 	  withDescription:(NSString *)description {
-	NSNumber *yes = @YES;
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
-			  (__bridge NSString *)(kSecAttrService) : key,
-			  (__bridge NSString *)(kSecAttrAccount) : description,
-			  (__bridge NSString *)(kSecReturnData) : yes};
-	
+	NSDictionary *query = @{
+		(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
+		(__bridge NSString *)(kSecAttrService) : key,
+		(__bridge NSString *)(kSecAttrAccount) : description,
+		(__bridge NSString *)(kSecReturnData) : @YES
+	};
+
 	CFDataRef queryUsernameData = NULL;
-	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef) query,
-										  (CFTypeRef *)&queryUsernameData);
+	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef) query, (CFTypeRef *)&queryUsernameData);
 	
 	if (status == errSecItemNotFound) {
-		NSDictionary *queryAddUsername;
-		queryAddUsername = [MADKeyChain queryAdd: token forKey: key withDescription: description];
-		status = SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
+		NSDictionary *queryAddUsername = [MADKeyChain queryAdd: token forKey: key withDescription: description];
+		return SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
 	} else {
-		NSDictionary *updateQueryUsername;
-		updateQueryUsername = [MADKeyChain queryUpdate: key withDescription: description];
+		NSDictionary *updateQueryUsername = [MADKeyChain queryUpdate: key withDescription: description];
 		NSDictionary *changesUsername = [MADKeyChain queryUpdateData:token];
-		status = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername,
+		return SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername,
 							   (__bridge CFDictionaryRef)changesUsername);
 	}
-	return status;
 }
 
 + (OSStatus)deleteKey:(NSString *)key {
@@ -256,9 +237,8 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	
 	CFDataRef queryUsernameData = NULL, queryPasswordData = NULL;
 	
-	NSError * __autoreleasing deleteError = nil;
-	OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername,
-												(CFTypeRef *)&queryUsernameData);
+	NSError *deleteError = nil;
+	OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
 	if (deleteStatus == errSecSuccess) {
 		deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
 		if (deleteStatus != errSecSuccess) {

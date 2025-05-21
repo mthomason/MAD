@@ -12,12 +12,11 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADOperationCondition.h>
 
-@interface MADMutualExclusiveCondition : NSObject
-    <MADOperationCondition>
+@interface MADMutualExclusiveCondition : NSObject <MADOperationCondition>
 
-    + (instancetype)newMutualExclusiveConditionForClass:(Class)class;
-    + (instancetype)newMutualExclusiveConditionAlertMutex;
-    + (instancetype)newMutualExclusiveConditionViewControllerMutex;
++ (instancetype)newMutualExclusiveConditionForClass:(Class)class;
++ (instancetype)newMutualExclusiveConditionAlertMutex;
++ (instancetype)newMutualExclusiveConditionViewControllerMutex;
 
 @end
 

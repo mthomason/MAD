@@ -26,19 +26,19 @@ typedef NS_ENUM(NSInteger, MADOperationState) {
 	MADOperationStateFinished,
 };
 
-static inline const char *MADStringOperationState(MADOperationState);
-static inline const char *MADStringOperationState(MADOperationState state) {
+static inline NSString *NSStringFromMADOperationState(MADOperationState);
+static inline NSString *NSStringFromMADOperationState(MADOperationState state) {
 	switch (state) {
-		case MADOperationStateInitialized: return "Initialized";
-		case MADOperationStatePending: return "Pending";
-		case MADOperationStateEvaluatingConditions: return "EvaluatingConditions";
-		case MADOperationStateReady: return "Ready";
-		case MADOperationStateExecuting: return "Executing";
-		case MADOperationStateFinishing: return "Finishing";
-		case MADOperationStateFinished: return "Finished";
-		default: return "Unknown";
+		case MADOperationStateInitialized: return @"Initialized";
+		case MADOperationStatePending: return @"Pending";
+		case MADOperationStateEvaluatingConditions: return @"EvaluatingConditions";
+		case MADOperationStateReady: return @"Ready";
+		case MADOperationStateExecuting: return @"Executing";
+		case MADOperationStateFinishing: return @"Finishing";
+		case MADOperationStateFinished: return @"Finished";
+		default: return @"Unknown";
 	}
-};
+}
 
 @protocol MADOperationCondition;
 @protocol MADOperationObserver;

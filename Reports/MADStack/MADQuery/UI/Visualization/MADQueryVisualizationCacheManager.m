@@ -49,31 +49,24 @@
 
 - (void)updateCacheWithQuery:(MADModelQuery *)query contentOffset:(CGPoint)contentOffset
 				   zoomScale:(CGFloat)zoomScale center:(CGPoint (^)(NSNumber *))center {
-	MADQueryVisualizationModel *queryDef;
-	MTLinkedList *topologicallySortedTables;
-	MADHierarchicalDisplayModel *cacheData;
 	
-	NSNumber *tableID;
-	MADHierarchicalChildViewDefination *tableModel;
 	NSArray <NSNumber *> *startingPoints;
-
-	MTVertex *tableIDVertext;
 	
-	queryDef= [[MADQueryVisualizationModel alloc] initWithQuery:query];
-	topologicallySortedTables = queryDef.topologicallySortedTables;
+	MADQueryVisualizationModel *queryDef = [[MADQueryVisualizationModel alloc] initWithQuery:query];
+	MTLinkedList *topologicallySortedTables = queryDef.topologicallySortedTables;
 	
-	cacheData = [[MADHierarchicalDisplayModel alloc] initWithNumberOfTables:[topologicallySortedTables count]];
+	MADHierarchicalDisplayModel *cacheData = [[MADHierarchicalDisplayModel alloc] initWithNumberOfTables:[topologicallySortedTables count]];
 	cacheData.scrollViewContentOffset = contentOffset;
 	cacheData.scrollViewZoomScale = zoomScale;
 	
 	for (MTPair *pair in queryDef.topologicallySortedTables) {
 		
-		tableIDVertext = (MTVertex *)pair.former;
+		MTVertex *tableIDVertext = (MTVertex *)pair.former;
 		if (tableIDVertext.object != nil) {
 			
-			tableID = (NSNumber *)tableIDVertext.object;
+			NSNumber *tableID = (NSNumber *)tableIDVertext.object;
 			
-			tableModel = [[MADHierarchicalChildViewDefination alloc] init];
+			MADHierarchicalChildViewDefination *tableModel = [[MADHierarchicalChildViewDefination alloc] init];
 			tableModel.center = center(tableID);
 			
 			startingPoints = queryDef.startingPoints;

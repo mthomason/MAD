@@ -9,7 +9,7 @@
 #ifndef MADExplorer_MADFileLocationManager_h
 #define MADExplorer_MADFileLocationManager_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 @protocol MADFileLocationManagerDelegate;
 

@@ -3,12 +3,12 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADOperationCreateDocumentImportSchema.h"
-
-#import <os/log.h>
+#import "MADOperationCreateDocumentCreateDocument.h"
+#import "madlog.h"
 
 #import <CoreData/NSManagedObjectContext.h>
 
@@ -24,8 +24,6 @@
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
-
-#import "MADOperationCreateDocumentCreateDocument.h"
 
 @interface MADOperationCreateDocumentImportSchema ()
 
@@ -71,7 +69,6 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
 	if (self.cancelled) return [self finish];
 
 	MADocument * document = nil;
@@ -111,8 +108,8 @@
 			displayError = [dberror copy];
 			return;
 		}
-		NSMutableDictionary *tablesAndFields   = [[NSMutableDictionary alloc] init];
-		NSMutableArray *tables                 = [[NSMutableArray alloc] init];
+		NSMutableDictionary *tablesAndFields = [[NSMutableDictionary alloc] init];
+		NSMutableArray *tables = [[NSMutableArray alloc] init];
 		
 		NSError *error = NULL;
 		NSArray *resultTables = [document.database getTablesFromConnection:dbconnection
@@ -161,14 +158,14 @@
 		NSError * __autoreleasing saveError = nil;
 		if (success) {
 			if (!(success = [private save:&saveError])) {
-				os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+				os_log_info(GetMadLog(), "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 			}
 			if (saveError) {
 				displayError = [saveError copy];
 			}
 		} else {
 			if (!(success = [private save:&saveError])) {
-				os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+				os_log_info(GetMadLog(), "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 			}
 		}
 

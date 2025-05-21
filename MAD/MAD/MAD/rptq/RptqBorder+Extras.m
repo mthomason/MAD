@@ -7,37 +7,28 @@
 //
 
 #import "RptqBorder+Extras.h"
-#import <CoreData/NSEntityDescription.h>
 #import "RptqDirectionalAsymmetry.h"
 #import "RptqDirectionalProperty.h"
 
+#import <Foundation/NSException.h>
+#import <CoreData/NSEntityDescription.h>
+
 @implementation RptqBorder (Extras)
 
-+ (NSString *)keyWidth {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(width));
-	return key;
-}
-
-+ (NSString *)keyStyle {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(style));
-	return key;
-}
++ (NSString *)keyWidth { return NSStringFromSelector(@selector(width)); }
++ (NSString *)keyStyle { return NSStringFromSelector(@selector(style)); }
 
 - (void)awakeFromInsert {
 	[super awakeFromInsert];
+	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+	NSAssert(managedObjectContext == nil, @"Managed object context is nil");
 	if (self.width == nil) {
-		NSString *name = NSStringFromClass([RptqDirectionalAsymmetry class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.width = [NSEntityDescription insertNewObjectForEntityForName: name
+		self.width = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDirectionalAsymmetry class])
 												   inManagedObjectContext: managedObjectContext];
 	}
 	if (self.style == nil) {
-		NSString *name = NSStringFromClass([RptqDirectionalProperty class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.style = [NSEntityDescription insertNewObjectForEntityForName: name
-												  inManagedObjectContext: managedObjectContext];
+		self.style = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDirectionalProperty class])
+												   inManagedObjectContext: managedObjectContext];
 	}
 }
 

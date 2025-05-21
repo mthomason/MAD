@@ -7,23 +7,23 @@
 //
 
 #import "MADOperationGetCredentials.h"
-#import <os/log.h>
+
+#import <MADAPI/MADDatabaseConnection.h>
 
 #import <MADFoundation/NSOperation+Advanced.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationBooleanAnd.h>
-
-#import <MADAPI/MADDatabaseConnection.h>
-
 #import <MADFoundation/MADKeyChain.h>
-
-#import <MAD/MADOperationKeyChainGet.h>
 #import <MADFoundation/MADOperationConditionMissingResultString.h>
 #import <MADFoundation/MADOperationConditionHasResultString.h>
+
+#import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADOperationKeyChainPut.h>
+
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
 #import "MADOperationConditionDisplayedAlert.h"
+#import "madlog.h"
 
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";
@@ -78,7 +78,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 - (BOOL)manuallyInputtedCredentials { return [self gotCredentials] && [self completedPrompt]; }
 
 - (void)execute {
-
 	MADDatabaseConnection *databaseConnection = _databaseConnection;
 	UIViewController *viewController = _viewController;
 	

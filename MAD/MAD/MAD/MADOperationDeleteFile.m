@@ -7,15 +7,17 @@
 //
 
 #import "MADOperationDeleteFile.h"
-#import <os/log.h>
+
 #import <Foundation/NSArray.h>
 #import <Foundation/NSURL.h>
+
 #import <MADFileManager/MADFileUtilities.h>
 #import <MAD/MADOperationUniqueUrlForFilename.h>
 #import <MAD/MADocument.h>
 #import <MAD/UIManagedDocument+Extras.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MADFoundation/MADOperationTestResults.h>
+#import "madlog.h"
 
 @implementation MADOperationDeleteFile
 
@@ -53,7 +55,7 @@
 				[self finish];
 		}];
 	} else {
-		os_log_info(OS_LOG_DEFAULT, "Delete file %s", fileURL.relativePath.UTF8String);
+		os_log_info(GetMadLog(), "Delete file %s", fileURL.relativePath.UTF8String);
 		[MADFileUtilities removeFileAtURL:fileURL completion:^(NSError *error) {
 			if (error != nil)
 				[self finishWithError:error];

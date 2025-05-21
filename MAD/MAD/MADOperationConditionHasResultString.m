@@ -13,7 +13,6 @@
 #import <Foundation/NSArray.h>
 
 #import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationResultStringProtocol.h>

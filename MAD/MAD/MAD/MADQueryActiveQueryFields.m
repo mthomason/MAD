@@ -7,6 +7,8 @@
 //
 
 #import "MADQueryActiveQueryFields.h"
+#import "madlog.h"
+
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSFetchRequest.h>
 #import <Foundation/NSPredicate.h>
@@ -98,12 +100,13 @@
 }
 
 - (NSArray *)objectOfType:(Class)managedObjectType inContext:(NSManagedObjectContext *)context {
-	NSString *entityObject = NSStringFromClass(managedObjectType);
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityObject];
-	NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-	fetchRequest.predicate = predicate;
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass(managedObjectType)];
+	fetchRequest.predicate = [NSPredicate predicateWithValue:YES];
 	NSError *error = nil;
 	NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	return objects;
 }
 

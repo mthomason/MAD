@@ -7,6 +7,7 @@
 //
 
 #import "RptqDataHelper.h"
+#import "madlog.h"
 
 #import <objc/objc.h>
 
@@ -68,8 +69,11 @@ static NSMutableDictionary *_autoincrementMap;
 		request.fetchLimit = 1;
 		request.resultType = NSDictionaryResultType;
 		
-		NSError * __autoreleasing *error = NULL;
-		fetchResults = [managedObjectContext executeFetchRequest:request error:error];
+		NSError *error = nil;
+		fetchResults = [managedObjectContext executeFetchRequest:request error:&error];
+		if (error != nil) {
+			os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+		}
 		
 		//NSAssert(fetchResults.count == 0, "We expect some results.");
 		

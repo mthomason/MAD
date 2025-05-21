@@ -11,13 +11,16 @@
 #endif
 
 #import "MADDatabase.h"
+
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADStringUtilities.h>
+
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
 #import <MADAPI/MADDatabaseConnection.h>
+
+#import <Foundation/NSException.h>
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 

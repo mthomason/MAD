@@ -91,9 +91,10 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 	NSError *errorFetch = nil;
 	
 	if (!connection) {
-		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : @"Connection is empty.",
-									NSLocalizedFailureReasonErrorKey : @"Connection Error"};
-		errorFetch = [NSError errorWithDomain:[self domain] code:3492 userInfo:errorInfo];
+		errorFetch = [NSError errorWithDomain:[self domain] code:3492 userInfo:@{
+			NSLocalizedDescriptionKey : @"Connection is empty.",
+			NSLocalizedFailureReasonErrorKey : @"Connection Error"
+		}];
 	}
 	
 	if (errorFetch == nil) {

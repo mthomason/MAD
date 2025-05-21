@@ -9,7 +9,7 @@
 #ifndef Reports_MADExplorerCellTitle_h
 #define Reports_MADExplorerCellTitle_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 extern NSString * const MADTextNotDownloaded;
 extern NSString * const Syncing;

@@ -53,8 +53,6 @@
 		4CB98D991F43D5490043B583 /* MADExclusivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D971F43D5490043B583 /* MADExclusivityController.m */; };
 		4CB98D9C1F43D5790043B583 /* NSError+MADOperationErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98D9D1F43D5790043B583 /* NSError+MADOperationErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */; };
-		4CB98DA01F43D5F40043B583 /* MADErrorUserInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CB98DA11F43D5F40043B583 /* MADErrorUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */; };
 		4CB98DA41F43EBA90043B583 /* MADCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DA21F43EBA90043B583 /* MADCredential.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DA51F43EBA90043B583 /* MADCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DA31F43EBA90043B583 /* MADCredential.m */; };
 		4CB98E0E1F47BA720043B583 /* MADOperationResultStringProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98E011F47BA720043B583 /* MADOperationResultStringProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -145,8 +143,6 @@
 		4CB98D971F43D5490043B583 /* MADExclusivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExclusivityController.m; sourceTree = "<group>"; };
 		4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MADOperationErrors.h"; sourceTree = "<group>"; };
 		4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MADOperationErrors.m"; sourceTree = "<group>"; };
-		4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADErrorUserInfo.h; sourceTree = "<group>"; };
-		4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADErrorUserInfo.m; sourceTree = "<group>"; };
 		4CB98DA21F43EBA90043B583 /* MADCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCredential.h; sourceTree = "<group>"; };
 		4CB98DA31F43EBA90043B583 /* MADCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCredential.m; sourceTree = "<group>"; };
 		4CB98E011F47BA720043B583 /* MADOperationResultStringProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationResultStringProtocol.h; sourceTree = "<group>"; };
@@ -347,8 +343,6 @@
 		4CB98E1A1F47BAE00043B583 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				4CB98D9E1F43D5F40043B583 /* MADErrorUserInfo.h */,
-				4CB98D9F1F43D5F40043B583 /* MADErrorUserInfo.m */,
 				4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */,
 				4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */,
 				4CB98D921F43D5310043B583 /* NSOperation+Advanced.h */,
@@ -392,7 +386,6 @@
 				4CB98D781F43D4770043B583 /* MADOperation.h in Headers */,
 				4CB98D8D1F43D4DA0043B583 /* MADOperationObserver.h in Headers */,
 				4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */,
-				4CB98DA01F43D5F40043B583 /* MADErrorUserInfo.h in Headers */,
 				4C6C0A041F5D30B400EDA039 /* MADKeyChain.h in Headers */,
 				4CB9AAEB1C8C2D3B00420CFF /* MADDataType.h in Headers */,
 				4CDA62DB1D0803ED00E95859 /* MADURLFactory.h in Headers */,
@@ -531,7 +524,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CB98DA11F43D5F40043B583 /* MADErrorUserInfo.m in Sources */,
 				4CB98D7F1F43D48E0043B583 /* MADBlockOperation.m in Sources */,
 				4CB98D881F43D4BA0043B583 /* MADBlockObserver.m in Sources */,
 				4C4F06281F57BD5200E09E54 /* MADDataTableVirtual.m in Sources */,

@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqDocumentSection+Extras.h"
+#import "madlog.h"
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -473,9 +474,13 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 
 + (instancetype)newDocumentSectionWithIdentifier:(int64_t)identifier
 							   fromObjectContext:(NSManagedObjectContext *)context {
-	NSFetchRequest <RptqDocumentSection *> *fetchRequet;
-	fetchRequet = [self fetchRequestSectionWithIdentifier: identifier];
-	return [context executeFetchRequest:fetchRequet error:nil].firstObject;
+	NSFetchRequest <RptqDocumentSection *> *fetchRequet = [self fetchRequestSectionWithIdentifier: identifier];
+	NSError *error = nil;
+	NSArray <RptqDocumentSection *> *results = [context executeFetchRequest:fetchRequet error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
+	return [results firstObject];
 }
 
 + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objectID
@@ -585,8 +590,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 		case MADDocumentSectionTypeGroupHeader: {
 			return [NSString stringWithFormat:NSLocalizedString(@"Group Header %d",
 																@"Group Header #"),
-											  MADDocumentSectionIndexLevel(row,
-																		   2 + numberOfGroups) - 1];
+											  MADDocumentSectionIndexLevel(row, 2 + numberOfGroups) - 1];
 			break;
 		}
 		case MADDocumentSectionTypeBody:
@@ -595,8 +599,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 		case MADDocumentSectionTypeGroupFooter: {
 			return [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d",
 																@"Group Footer #"),
-											  MADDocumentSectionIndexLevel(row,
-																		   2 + numberOfGroups) - 1];
+											  MADDocumentSectionIndexLevel(row, 2 + numberOfGroups) - 1];
 			break;
 		}
 		case MADDocumentSectionTypePageFooter:
@@ -709,25 +712,16 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 }
 
 - (int64_t)nextDropIndexForSection:(NSManagedObjectContext *)managedObjectContext {
-	NSString *entityName, *indexName;
-	NSFetchRequest *request;
-	NSSortDescriptor *sort;
-	
-	entityName = NSStringFromClass([RptqDocumentElement class]);
-	indexName = NSStringFromSelector(@selector(dropIndex));
-	request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-
-	sort = [NSSortDescriptor sortDescriptorWithKey: indexName ascending: NO];
-	NSArray <NSSortDescriptor *> *sortDescriptors;
-	sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
-	request.sortDescriptors = sortDescriptors;
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentElement class])];
+	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO]];
 	request.fetchLimit = 1;
 
-	NSError *error = nil;
-	NSArray *fetchResults = [managedObjectContext executeFetchRequest: request
-																error: &error];
 	int64_t dropIndex = 0;
-	if (error == nil) {
+	NSError *error = nil;
+	NSArray *fetchResults = [managedObjectContext executeFetchRequest: request error: &error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	} else {
 		RptqDocumentElement *lastObject = fetchResults.lastObject;
 		if (lastObject.objectID.isTemporaryID == NO) {
 			dropIndex = lastObject.dropIndex + 1;

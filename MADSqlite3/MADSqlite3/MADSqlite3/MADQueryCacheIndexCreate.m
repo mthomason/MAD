@@ -49,7 +49,6 @@
 								object.groupName, object.tableName];
 
 		NSDictionary *columns = object.columns;
-		MADSqlite3SortDescription *sortDirection;
 		NSUInteger sortCounter = 0;
 		for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
 			
@@ -58,8 +57,8 @@
 			MADDataColumn *column = columns[keySortDescriptor];
 			
 			NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-			sortDirection = [MADDatabaseSqlite3 newSqlite3SortDescriptionForColumnType: (MADDataType) column.nativeType
-																			ascending: sortDescriptor.ascending];
+			NSString *sortDirection = [MADDatabaseSqlite3 sortDescriptionForColumnType: (MADDataType) column.nativeType
+																			 ascending: sortDescriptor.ascending];
 			[sql appendFormat:(sortCounter == 0) ? @"%@ %@" : @", %@ %@", keySortDescriptor, sortDirection];
 			sortCounter++;
 		}

@@ -11,6 +11,76 @@
 #endif
 
 #import "MADocument.h"
+#import "MADModel.h"
+#import "MADModelDocument.h"
+#import "MADModelDatabase.h"
+#import "MADPrintPageRenderer.h"
+#import "MADPathUtilities.h"
+#import "MADImageThumbnail.h"
+#import "MADArchiveManager.h"
+#import "MADNotificationFileUpdate.h"
+#import "RptqDataHelper.h"
+#import "MADDocumentObjectDataReference.h"
+#import "MADDesignerViewer.h"
+#import "MADDesignerLayout.h"
+#import "MADDesignerQuery.h"
+#import "MADDocumentProtocol.h"
+#import "MADocumentDesignerProtocol.h"
+#import "MADAggregateFunctionGroupByType.h"
+#import "MADAggregateFunctionType.h"
+#import "MADSortOrder.h"
+#import "MADConstants.h"
+#import "MADSectionLayoutManager.h"
+#import "MADQueryFull.h"
+#import "MADConstants.h"
+#import "MADActivityIndicator.h"
+#import "MADocumentState.h"
+#import "MADReportFormatter.h"
+#import "MADNotificationDidFormatPage.h"
+
+#import "RptqDocument.h"
+#import "RptqBorder.h"
+#import "RptqAlignment.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqDatabaseCredentals.h"
+#import "RptqDatabaseCredentals+Extras.h"
+#import "RptqDocumentElementLabelDataField.h"
+
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+#import "RptqTextStyle.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDocumentElementLabel.h"
+#import "RptqDocumentElementAggregate.h"
+#import "RptqDocumentElement+Extras.h"
+#import "RptqDocumentSectionEnumerator.h"
+#import "RptqDocumentSectionRows.h"
+#import "RptqRect.h"
+#import "RptqSize.h"
+#import "RptqDirectionalAsymmetry.h"
+#import "MADDataTable+Constructor.h"
+#import "MADParameters+QueryCacheAggregate.h"
+#import "NSPredicate+Creators.h"
+#import "MADDatabase+Constructor.h"
+#import "MADQuery+Extras.h"
+#import "miniz.h"
+#import "madlog.h"
 
 #import <os/log.h>
 #import <setjmp.h>
@@ -31,18 +101,14 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIPrintInteractionController.h>
 
-#import "MADDesignerViewer.h"
-#import "MADDesignerLayout.h"
-#import "MADDesignerQuery.h"
-
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADURLFactory.h>
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADStringUtilities.h>
 
+#import <MADAPI/MADAliases.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
@@ -53,113 +119,17 @@
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-#import "MADDataTable+Constructor.h"
 
-#import "MADDocumentProtocol.h"
-#import "MADocumentDesignerProtocol.h"
-#import "MADAggregateFunctionGroupByType.h"
-#import "MADAggregateFunctionType.h"
-
-#import "MADSortOrder.h"
-#import "MADConstants.h"
-
-#import "MADParameters+QueryCacheAggregate.h"
 
 #import <MADAPI/MADQuery.h>
-#import "MADQueryFull.h"
 
-#import "MADConstants.h"
-
-#import "MADActivityIndicator.h"
-#import "MADocumentState.h"
-
-#import "MADReportFormatter.h"
-
-#import "MADNotificationDidFormatPage.h"
-
-#import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
-
-#import "RptqDatabase.h"
-#import "RptqDatabase+Extras.h"
-
-#import "RptqBorder.h"
-
-#import "RptqDocumentSection.h"
-#import "RptqDocumentSection+Extras.h"
-
-#import "RptqAlignment.h"
-
-#import "RptqDocumentSectionRows.h"
-#import "RptqDocumentSectionRows+Extras.h"
-
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-
-#import "RptqDatabaseCredentals.h"
-#import "RptqDatabaseCredentals+Extras.h"
-
-#import "RptqDocumentElementLabelDataField.h"
-
-#import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-#import "RptqTextStyle.h"
-#import "RptqQueryGroup.h"
-#import "RptqQueryGroup+Extras.h"
-
-#import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
-#import "RptqQueryField.h"
-#import "RptqQueryField+Extras.h"
-
-#import "RptqDocumentElementAggregate.h"
-
-#import "RptqDocumentSectionRows.h"
-
-#import "RptqDocumentElement+Extras.h"
-
-#import "RptqDocumentElementLabel.h"
-
-#import "RptqDocumentSectionEnumerator.h"
-#import "RptqRect.h"
-#import "RptqSize.h"
-#import "MADSectionLayoutManager.h"
-#import "RptqDirectionalAsymmetry.h"
 
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADAPI/MADDatabase.h>
-
-#import "MADModel.h"
-#import "MADModelDocument.h"
-#import "MADModelDatabase.h"
-
-#import "MADPrintPageRenderer.h"
-
-#import "MADPathUtilities.h"
-
-#import "MADImageThumbnail.h"
-
-#import "miniz.h"
-
-#import "MADArchiveManager.h"
-
 #import <mach/machine/vm_param.h>
 
-#import "MADNotificationFileUpdate.h"
-
-#import "NSPredicate+Creators.h"
-#import "RptqDataHelper.h"
-
-#import "MADDatabase+Constructor.h"
 
 #import <MADAPI/MADQueryType.h>
-
-#import "MADQuery+Extras.h"
-#import "MADDocumentObjectReference.h"
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -205,41 +175,45 @@ static NSString * const MADManagedObjectModelExtention                  = @"momd
   NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 #endif
 
-void fail(char *err, const char*err2, int n);
-void fail(char *err, const char*err2, int n) { }
-void msg(const char *err);
+static inline NSRange MADRangeToGroup(int64_t);
+void fail(char *, const char *, int);
+void msg(const char *);
+void madwarn(char *,  const char *);
+
+static inline NSRange MADRangeToGroup(int64_t groupNumber) {
+	return NSMakeRange(0, (NSUInteger)groupNumber + 1);
+}
+
+void fail(char *err, const char *err2, int n) { }
 void msg(const char *err) { }
-void madwarn(char *err,  const char*err2);
-void madwarn(char *err,  const char*err2) { }
+void madwarn(char *err,  const char *err2) { }
 
-@interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseResultsProtocol,
-							MADocumentDesignerProtocol>
+@interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseResultsProtocol, MADocumentDesignerProtocol>
 
-	@property (readwrite, nonatomic, strong) MADReportFormatter *printingReportFormatter;
+@property (readwrite, nonatomic, strong) MADReportFormatter *printingReportFormatter;
 
-	@property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
-	@property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
-	@property (nonatomic, readwrite, strong) NSDictionary *madPersistentStoreOptions;
+@property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
+@property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
 
-	@property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
-	@property (nonatomic, readwrite, strong) UIImage *thumbnail;
+@property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
+@property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
-	@property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
-	@property (nonatomic, readwrite, strong) MADDatabase *database;
-	@property (nonatomic, readwrite, strong) MADQueryFull *mainQuery;
+@property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
+@property (nonatomic, readwrite, strong) MADDatabase *database;
+@property (nonatomic, readwrite, strong) MADQueryFull *mainQuery;
 
-	@property (nonatomic, readwrite, strong) NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
+@property (nonatomic, readwrite, strong) NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
 
-	@property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
-	@property (nonatomic, readwrite, strong) MTPaper *paper;
+@property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
+@property (nonatomic, readwrite, strong) MTPaper *paper;
 
-	@property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
-	@property (nonatomic, readwrite, copy) NSURL *urlGuts;
-	@property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
+@property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
+@property (nonatomic, readwrite, copy) NSURL *urlGuts;
+@property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
 
-	@property (nonatomic, readwrite, strong) MADDesignerQuery *designerQuery;
-	@property (nonatomic, readwrite, strong) MADDesignerLayout *designerLayout;
-	@property (nonatomic, readwrite, strong) MADDesignerViewer *designerViewer;
+@property (nonatomic, readwrite, strong) MADDesignerQuery *designerQuery;
+@property (nonatomic, readwrite, strong) MADDesignerLayout *designerLayout;
+@property (nonatomic, readwrite, strong) MADDesignerViewer *designerViewer;
 
 @end
 
@@ -295,7 +269,6 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (void)resetCache {
-
 	NSNumber *typeKey = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
 	NSNumber *type = [[NSNumber alloc] initWithShort: MADDataTableTypePhysical];
 	NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
@@ -304,7 +277,11 @@ void madwarn(char *err,  const char*err2) { }
 	
 	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
 	datatable.cacheDelegate = self;
-	[datatable loadFromCacheWithUrl:self.urlDataTableCache];
+	NSError *error = nil;
+	[datatable loadFromCacheWithUrl:self.urlDataTableCache error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "Error: %@", error);
+	}
 	self.dataTable = datatable;
 
 }
@@ -346,52 +323,37 @@ void madwarn(char *err,  const char*err2) { }
 	return [self initWithFileURL:url andDatabaseConnection:nil];
 }
 
-- (MADDesignerQuery *)designerQuery {
-	if (_designerQuery == nil) {
-		MADDesignerQuery *designerQuery = [[MADDesignerQuery alloc] init];
-		designerQuery.delegate = self;
-		_designerQuery = designerQuery;
-	}
-	return _designerQuery;
-}
-- (MADDesignerLayout *)designerLayout {
-	if (_designerLayout == nil) {
-		MADDesignerLayout *designerLayout = [[MADDesignerLayout alloc] init];
-		designerLayout.delegate = self;
-		_designerLayout = designerLayout;
-	}
-	return _designerLayout;
-}
-- (MADDesignerViewer *)designerViewer {
-	if (_designerViewer == nil) {
-		MADDesignerViewer *designerViewer = [[MADDesignerViewer alloc] init];
-		designerViewer.delegate = self;
-		_designerViewer = designerViewer;
-	}
-	return _designerViewer;
-}
-
 - (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
+	os_log_t logger = GetMadLog(); // Use your logging function
+	os_log_info(logger, "[MADocument %p] initWithFileURL: '%{public}@' andDatabaseConnection: %p", self, url, databaseConnection);
+	
 	if (self = [super initWithFileURL:url]) {
 		
 		_autosaveEnabled = YES;
 		_urlGuts = [MADURLFactory newURLDocumentArchiveForFileURL: url
-												 extension: MADFileExtentionMobleApplicationDocumentArchive];
+														extension: MADFileExtentionMobleApplicationDocumentArchive];
 		_urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
 		
-		MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.fileURL.lastPathComponent.stringByDeletingPathExtension.hash];
+		NSUInteger dataTableIdHash = self.fileURL.lastPathComponent.stringByDeletingPathExtension.hash;
+		
+		MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:dataTableIdHash];
 		datatable.cacheDelegate = self;
 		
 		NSString *cacheName = [datatable newFilenameMDCache];
 		NSURL *cacheUrl = [self newUrlCacheForFilename:cacheName];
 		self.urlDataTableCache = cacheUrl;
-		[datatable loadFromCacheWithUrl:cacheUrl];
+		
+		NSError *error = nil;
+		[datatable loadFromCacheWithUrl:cacheUrl error:&error];
+		if (error != nil) {
+			os_log_error(GetMadLog(), "Error: %@", error);
+		}
 		self.dataTable = datatable;
 		
-		id documentState = [[MADocumentState alloc] init];
+		MADocumentState *documentState = [[MADocumentState alloc] init];
 		self.documentStatus = documentState;
 		
-		id extraInfo = [[NSMutableDictionary alloc] initWithCapacity: 3];
+		NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithCapacity: 3];
 		self.extraInformation = extraInfo;
 		
 		if (databaseConnection != nil) {
@@ -419,6 +381,31 @@ void madwarn(char *err,  const char*err2) { }
 												   object: self];
 	}
 	return self;
+}
+
+- (MADDesignerQuery *)designerQuery {
+	if (_designerQuery == nil) {
+		MADDesignerQuery *designerQuery = [[MADDesignerQuery alloc] init];
+		designerQuery.delegate = self;
+		_designerQuery = designerQuery;
+	}
+	return _designerQuery;
+}
+- (MADDesignerLayout *)designerLayout {
+	if (_designerLayout == nil) {
+		MADDesignerLayout *designerLayout = [[MADDesignerLayout alloc] init];
+		designerLayout.delegate = self;
+		_designerLayout = designerLayout;
+	}
+	return _designerLayout;
+}
+- (MADDesignerViewer *)designerViewer {
+	if (_designerViewer == nil) {
+		MADDesignerViewer *designerViewer = [[MADDesignerViewer alloc] init];
+		designerViewer.delegate = self;
+		_designerViewer = designerViewer;
+	}
+	return _designerViewer;
 }
 
 #pragma mark -
@@ -477,41 +464,34 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (NSURL *)newUrlCacheForFilename:(NSString *)filename {
-	NSURL *cacheUrl = [self.cachedFilesDirectory URLByAppendingPathComponent: filename
-																 isDirectory: NO];
-	return cacheUrl;
+	return [self.cachedFilesDirectory URLByAppendingPathComponent: filename
+													  isDirectory: NO];
 }
 
 #pragma mark -
 #pragma mark MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
-	NSURL *result = [MADURLFactory newURLCacheFilesDirectoryForFilename:self.filename];
-	return result;
+	return [MADURLFactory newURLCacheFilesDirectoryForFilename:self.filename];
 }
 
 #pragma mark -
 #pragma mark UIDocument
 
 - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey {
-	NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
-
-	[self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock:
-	 ^(NSNumber *key, MADSectionLayoutManager *manager, BOOL *stop) {
-		dictionary[key] = @(manager.size.height);
+	NSMutableDictionary *layoutHeights = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
+	[self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock: ^(NSNumber *key, MADSectionLayoutManager *manager, BOOL *stop) {
+		layoutHeights[key] = @(manager.size.height);
 		
 	}];
-	return dictionary;
+	return layoutHeights;
 }
 
 - (NSDictionary *)persistentStoreOptions {
-	if (!_madPersistentStoreOptions) {
-		_madPersistentStoreOptions = @{
-			NSInferMappingModelAutomaticallyOption: @YES,
-			NSMigratePersistentStoresAutomaticallyOption: @YES
-		};
-	}
-	return _madPersistentStoreOptions;
+	return @{
+		NSInferMappingModelAutomaticallyOption: @YES,
+		NSMigratePersistentStoresAutomaticallyOption: @YES
+	};
 }
 
 #pragma mark -
@@ -530,7 +510,8 @@ void madwarn(char *err,  const char*err2) { }
 		MADArchiveManager *archiveManager;
 		archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
 																archiveURL: url];
-		if (!(success = [archiveManager unarchive])) {
+		success = [archiveManager unarchive];
+		if (!success) {
 			os_log_debug(OS_LOG_DEFAULT, "Document unarchive failed.");
 		}
 	}
@@ -550,15 +531,13 @@ void madwarn(char *err,  const char*err2) { }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
 	[super handleError:error userInteractionPermitted:userInteractionPermitted];
-	os_log_debug(OS_LOG_DEFAULT, "MADocument Error (Show UI %s): %s\n\t%s",
-			userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String,
-			error.localizedDescription.UTF8String);
-	NSArray *detailErrors;
-	if((detailErrors = [error.userInfo objectForKey:NSDetailedErrorsKey]).count > 0) {
+	
+	os_log_error(OS_LOG_DEFAULT, "MADocument Error (Show UI %s): %s\n\t%s", userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
+
+	NSArray *detailErrors = [error.userInfo objectForKey:NSDetailedErrorsKey];
+	if (detailErrors.count > 0) {
 		for (NSError *detailError in detailErrors) {
-			os_log_debug(OS_LOG_DEFAULT, "  Error: %s\n\t%s",
-					detailError.localizedFailureReason.UTF8String,
-					detailError.localizedDescription.UTF8String);
+			os_log_error(GetMadLog(), "  Error: %@\n\t%@", detailError.localizedFailureReason, detailError.localizedDescription);
 		}
 	}
 }
@@ -578,16 +557,16 @@ void madwarn(char *err,  const char*err2) { }
 				  safelyToURL:self.urlGuts
 			 forSaveOperation:saveOperation
 						error:&error]) {
-		if (outError != NULL) { // Check if outError is not NULL before dereferencing
-			*outError = error.copy; // Copy the error to outError
+		if (outError != NULL) {
+			*outError = error.copy;
 		}
-		return NO; // Return NO if the write operation fails
+		return NO;
 	}
 
 	MADArchiveManager *archiveManager;
 	archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
 															archiveURL:self.fileURL];
-	return [archiveManager archive:YES]; // Archive the contents and return the result
+	return [archiveManager archive:YES];
 }
 
 - (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
@@ -748,16 +727,16 @@ void madwarn(char *err,  const char*err2) { }
 	self.printingReportFormatter.marginUsingPrintableRect = controller.printPaper.printableRect;
 	self.printingReportFormatter.didRefresh = YES;
 	[self.printingReportFormatter format: controller.printPaper.paperSize
-								 contentChanged: NO];
+						  contentChanged: NO];
 }
+
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)controller {
 	self.printingReportFormatter = nil;
 }
 
 - (void)updatePrintingReportFormatter {
-	MADReportFormatter *reportFormatter;
-	reportFormatter = [MADReportFormatter newReportFormatterWithLayout: self
-															   options: MADReportFormatterOptionsMargin];
+	MADReportFormatter *reportFormatter = [MADReportFormatter newReportFormatterWithLayout: self
+																				   options: MADReportFormatterOptionsMargin];
 	reportFormatter.overrideIdentifier = @"madprinter";
 	self.printingReportFormatter = reportFormatter;
 }
@@ -886,7 +865,6 @@ void madwarn(char *err,  const char*err2) { }
 #pragma mark - UIDocument Notifications
 
 - (void)handleDocumentStateChanged:(NSNotification *)notification {
-
 	if (notification.object != nil) {
 		switch (((MADocument *)notification.object).documentState) {
 			case UIDocumentStateClosed:
@@ -919,11 +897,10 @@ void madwarn(char *err,  const char*err2) { }
 	NSDictionary *parameters = sender.userInfo;
 	NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
 	
-	NSString *decimalString;
-	decimalString = [NSNumberFormatter localizedStringFromNumber: pageNumber
-													 numberStyle: NSNumberFormatterDecimalStyle];
+	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber: pageNumber
+															   numberStyle: NSNumberFormatterDecimalStyle];
 	NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
-	NSString *readRecords = [[NSString alloc] initWithFormat:formatString, decimalString];
+	NSString *readRecords = [[NSString alloc] initWithFormat: formatString, decimalString];
 	[self.documentStatusProtocol performSelectorOnMainThread: @selector(setStatusText:)
 												  withObject: readRecords
 											   waitUntilDone: NO];
@@ -959,59 +936,73 @@ void madwarn(char *err,  const char*err2) { }
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)rowID {
-	return  [self.dataTable dataForRow:rowID];
+	return [self.dataTable dataForRow:rowID error:nil];
+}
+
+- (NSDictionary *)dataForRow:(NSUInteger)rowID error:(NSError *__autoreleasing *)outError {
+	NSError *error = nil;
+	NSDictionary *result = [self.dataTable dataForRow:rowID error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error: %@", __PRETTY_FUNCTION__, error);
+		if (outError != NULL) {
+			*outError = error;
+		}
+	}
+	return result;
 }
 
 #pragma mark -
 #pragma mark MADPrintPageRendererDataSourceProtocol
 
-static inline NSRange MADRangeToGroup(int64_t groupNumber);
-static inline NSRange MADRangeToGroup(int64_t groupNumber) {
-	return NSMakeRange(0, (NSUInteger)groupNumber + 1);
-}
-
 - (NSDictionary *)dataForRow:(NSUInteger)rowID
 					  column:(NSString *)columnKey
 					   error:(NSError * __autoreleasing *)error {
-	NSError * __autoreleasing errorQ = nil;
-	NSDictionary *result = [self.dataTable dataForRow:rowID
-											   column:columnKey
-												error:&errorQ];
+	NSError * errorQ = nil;
+	NSDictionary *result = [self.dataTable dataForRow:rowID column:columnKey error:&errorQ];
 	if (errorQ != nil && error != NULL) {
+		os_log_error(GetMadLog(), "%s Error: %@", __PRETTY_FUNCTION__, errorQ);
 		*error = errorQ;
 	}
 	return result;
 }
 
-- (NSArray *)groupLevelKeys:(int64_t)rowID {
-	NSArray *groupLevelKeys;
-	
-	if (self.reportFormatter.numberOfGroups > 0) {
-		
-		NSDictionary *row = [self.dataTable dataForRow: (NSUInteger)rowID];
-		groupLevelKeys = [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
-		return groupLevelKeys;
-		
-	} else {
-		
-		groupLevelKeys = [[NSArray alloc] init];
-		return groupLevelKeys;
-		
-	}
-}
-
-- (NSArray *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber {
-	NSArray *groupKeys;
-	NSArray *groupLevelKeys = [self groupLevelKeys:rowID];
-	if (groupNumber < (int64_t)groupLevelKeys.count) {
-		groupKeys = [groupLevelKeys subarrayWithRange: MADRangeToGroup(groupNumber)];
+- (NSArray <NSString *> *)groupLevelKeyNames {
+	NSMutableArray <NSString *> *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.dataTable.sortDescriptors.count];
+	for (NSSortDescriptor *sortDescriptor in self.dataTable.sortDescriptors) {
+		NSString *key = sortDescriptor.key;
+		if (key != nil) {
+			[groupKeys addObject:key];
+		}
 	}
 	return groupKeys;
 }
 
+- (NSArray <MADResult *> *)groupLevelKeys:(int64_t)rowID {
+	if (self.reportFormatter.numberOfGroups > 0) {
+		NSError *error = nil;
+		NSDictionary <NSString *, MADResult *> *row = [self.dataTable dataForRow: (NSUInteger)rowID error:&error];
+		if (error != nil) {
+			os_log_error(GetMadLog(), "%s Error: %@", __PRETTY_FUNCTION__, error);
+		}
+		return [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
+	} else {
+		return [[NSArray alloc] init];
+		
+	}
+}
+
+- (NSArray <MADResult *> *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber {
+	NSArray *groupKeys = nil;
+	NSArray <MADResult *> *groupLevelKeys = [self groupLevelKeys:rowID];
+	if (groupNumber < (int64_t)groupLevelKeys.count && groupNumber >= 0) {
+		groupKeys = [groupLevelKeys subarrayWithRange:MADRangeToGroup(groupNumber)];
+	}
+	return groupKeys;
+}
+
+
 - (NSArray <__kindof NSDictionary *> *)dataForGroups:(NSArray *)groupKeys
 											 groupID:(int64_t)groupID {
-	
 	NSArray <__kindof NSDictionary *> *dataForGroup;
 	if (groupID < (int64_t)groupKeys.count) {
 		NSArray *groupKeysInRange = [groupKeys subarrayWithRange: MADRangeToGroup(groupID)];
@@ -1023,62 +1014,76 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	return dataForGroup;
 }
 
-- (__kindof NSObject <NSCopying, NSSecureCoding> *)dataForRows:(NSArray *)rowIDs
-														column:(NSString *)columnKey
-														groups:(NSArray *)groupKeys
-													  function:(MTAggregateFunctionType)function
-													   groupBy:(MTAggregateGroupByType)groupBy {
+- (MADResult *)dataForRows:(NSArray *)rowIDs column:(NSString *)columnKey groups:(NSArray *)groupKeys
+				  function:(MTAggregateFunctionType)function groupBy:(MTAggregateGroupByType)groupBy {
+	os_log_t logger = GetMadLog();
 
-	__kindof NSObject <NSCopying, NSSecureCoding> *result = nil;
-	MADParameters *parameters = [MADParameters newParametersAggregateByType:groupBy
-																   function:function
-																	 rowids:rowIDs
-																  groupKeys:groupKeys
-																   fieldKey:columnKey
-																  dataTable:self.dataTable];
-	if (parameters != nil) {
-		id query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
-												object: parameters];
-		result = [self.dataTable runSelectQuery:query];
+	if (!self.dataTable) {
+		return nil;
 	}
-	return result;
+
+	if (!columnKey || columnKey.length == 0) {
+		os_log_error(logger, "[MADocument dataForRows] CRITICAL - columnKey is NIL or EMPTY. Query will likely fail or return incorrect data.");
+	}
+
+	NSDictionary <NSNumber *, MADResult *> *parameters = [MADParameters paramatersAggregateByType: groupBy
+																						 function: function
+																						   rowids: rowIDs
+																						groupKeys: groupKeys
+																						 fieldKey: columnKey
+																						dataTable: self.dataTable];
+	if (parameters != nil) {
+		__kindof MADQuery *query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
+																object: parameters];
+		MADResult *result = [self.dataTable runSelectQuery:query];
+		return result;
+	}
+	return nil;
 }
 
 - (NSUInteger)rowIDFirstOfReport {
 	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType section;
-	NSArray <MADSectionRepresentation *> *pageLayout;
+	MADDocumentSectionType sectionType;
+	NSArray<__kindof MADSectionRepresentation *> *pageLayout = nil;
+	bool found = false;
+	
 	for (pageLayout in self.reportFormatter.reportLayout) {
 		for (MADSectionRepresentation *pageSection in pageLayout) {
-			section = pageSection.sectionType;
-			if (section == MADDocumentSectionTypeBody) {
+			sectionType = pageSection.sectionType;
+			if (sectionType == MADDocumentSectionTypeBody) {
 				rowID = pageSection.detailRowId;
-				goto END_rowIDFirstOfReport_Loop;
+				found = true;
+				break;
 			}
 		}
+		if (found) {
+			break;
+		}
 	}
-END_rowIDFirstOfReport_Loop:;
 	return rowID;
 }
 
 - (NSUInteger)rowIDLastOfReport {
 	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType section;
-	NSArray <MADSectionRepresentation *> *pageLayout;
+	MADDocumentSectionType sectionType;
+	bool found = false;
+	NSArray<__kindof MADSectionRepresentation *> *pageLayout = nil;
 	NSUInteger reportLayoutCount = self.reportFormatter.reportLayout.count;
-	for (NSUInteger i=reportLayoutCount; i>0; i--) {
-		pageLayout = self.reportFormatter.reportLayout[i-1];
-		NSEnumerator <__kindof MADSectionRepresentation *> *reverseObjectEnumerator;
-		reverseObjectEnumerator = [pageLayout reverseObjectEnumerator];
+	for (NSUInteger i = reportLayoutCount; i > 0; i--) {
+		pageLayout = self.reportFormatter.reportLayout[i - 1];
+		NSEnumerator<MADSectionRepresentation *> *reverseObjectEnumerator = [pageLayout reverseObjectEnumerator];
 		for (MADSectionRepresentation *pageSection in reverseObjectEnumerator) {
-			section = pageSection.sectionType;
-			if (section == MADDocumentSectionTypeBody) {
+			sectionType = pageSection.sectionType;
+			if (sectionType == MADDocumentSectionTypeBody) {
 				rowID = pageSection.detailRowId;
-				goto END_rowIDLastOfReport_Loop;
+				found = true;
+				break;
 			}
 		}
+		if (found) {
+			break;
+		}
 	}
-END_rowIDLastOfReport_Loop:;
 	return rowID;
 }
 
@@ -1099,13 +1104,10 @@ END_rowIDLastOfReport_Loop:;
 
 - (NSUInteger)rowIDLastOfPage:(NSUInteger)page {
 	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType section;
-	NSEnumerator <MADSectionRepresentation *> *enumerator;
-	enumerator = [self.reportFormatter.reportLayout[page] reverseObjectEnumerator];
+	NSEnumerator <MADSectionRepresentation *> *enumerator = [self.reportFormatter.reportLayout[page] reverseObjectEnumerator];
 	for (MADSectionRepresentation *pageSection in enumerator) {
-		section = pageSection.sectionType;
-		if (section == MADDocumentSectionTypeBody) {
-			rowID = pageSection.detailRowId;
+		if (pageSection.sectionType == MADDocumentSectionTypeBody) {
+			return pageSection.detailRowId;
 			break;
 		}
 	}
@@ -1149,7 +1151,12 @@ END_rowIDLastOfReport_Loop:;
 }
 
 - (BOOL)dataTableMakeCache:(NSURL *)url {
-	return [self.dataTable cacheWithUrl:url];
+	NSError *error = nil;
+	BOOL result = [self.dataTable cacheWithUrl:url error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "Error: %@", error);
+	}
+	return result;
 }
 
 - (void)dataTableSort:(RptqQuery *)query {
@@ -1169,7 +1176,7 @@ END_rowIDLastOfReport_Loop:;
 	NSError *error;
 	if (self.managedObjectContext != nil) {
 		if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+			os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 			[self.managedObjectContext save:nil];
 		}
 	}
@@ -1192,9 +1199,7 @@ END_rowIDLastOfReport_Loop:;
 
 	if (_activeDocumentModel == nil) {
 		
-		RptqDocument *document = nil;
-		
-		document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
+		RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
 		
 		[self resetPaper];
 		[self resetMainQuery];
@@ -1209,19 +1214,12 @@ END_rowIDLastOfReport_Loop:;
 
 - (NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *)sectionLayoutManagers {
 	if (_sectionLayoutManagers.count == 0) {
-		NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers;
-		RptqDocumentSectionEnumerator *sections;
-		MADSectionLayoutManager *layoutManager;
-		NSNumber *identifier;
-		
-		sectionLayoutManagers = [[NSMutableDictionary alloc] init];
-		sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.activeDocumentModel];
+		NSMutableDictionary <NSNumber *, MADSectionLayoutManager *> *sectionLayoutManagers = [[NSMutableDictionary alloc] init];
+		RptqDocumentSectionEnumerator *sections = [[RptqDocumentSectionEnumerator alloc] initWithDocument:self.activeDocumentModel];
 		for (RptqDocumentSection *reportSection in sections) {
-			layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
-			identifier = @(reportSection.identifier);
-			sectionLayoutManagers[identifier] = layoutManager;
+			MADSectionLayoutManager *layoutManager = [[MADSectionLayoutManager alloc] initWithDocumentSection:reportSection];
+			sectionLayoutManagers[@(reportSection.identifier)] = layoutManager;
 		}
-		
 		_sectionLayoutManagers = sectionLayoutManagers;
 	}
 	return _sectionLayoutManagers;
@@ -1275,13 +1273,12 @@ END_rowIDLastOfReport_Loop:;
 	fetchReqest.predicate = predicate;
 	NSError *fetchError = nil;
 	NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
-	if (fetchError == nil) {
-		RptqDocumentElement *documentObject; RptqDocumentSection *parentSection;
-		MADSectionLayoutManager *layoutManager;
-		for (documentObject in objectsToDelete) {
-			parentSection = documentObject.inSectionRow.inSection;
-			NSNumber *key = @(parentSection.identifier);
-			layoutManager = self.sectionLayoutManagers[key];
+	if (fetchError != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, fetchError);
+	} else {
+		for (RptqDocumentElement *documentObject in objectsToDelete) {
+			RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
+			MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
 			[RptqDocumentElement removeDocumentObject:documentObject
 									fromParentSection:parentSection
 									withLayoutManager:layoutManager];
@@ -1292,27 +1289,24 @@ END_rowIDLastOfReport_Loop:;
 
 - (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectID
 							 inContent: (NSManagedObjectContext *)managedObjectContext {
-	NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
-	NSFetchRequest *fetchReqest;
-	fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-	NSString *keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(referencesQueryField))];
-	keyInQueryTable = [keyInQueryTable stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
+	NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentElement class])];
+	NSString *keyInQueryTable = [[MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(referencesQueryField))] stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
 	
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
-															   atKeyPath: keyInQueryTable];
-	fetchReqest.predicate = predicate;
+	fetchReqest.predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
+															  atKeyPath: keyInQueryTable];
 	NSError *fetchError = nil;
 	NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest
 																   error:&fetchError];
-	if (fetchError == nil) {
+	if (fetchError != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, fetchError);
+	} else {
 		
-		RptqDocumentSection *parentSection;
-		MADSectionLayoutManager *layoutManager;
+		
 		for (RptqDocumentElement *documentObject in objectsToDelete) {
-			parentSection = documentObject.inSectionRow.inSection;
+			RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
 
 			NSNumber *key = @(parentSection.identifier);
-			layoutManager = self.sectionLayoutManagers[key];
+			MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[key];
 			[RptqDocumentElement removeDocumentObject: documentObject
 									fromParentSection: parentSection
 									withLayoutManager: layoutManager];
@@ -1360,8 +1354,7 @@ END_rowIDLastOfReport_Loop:;
 			
 			NSArray <NSSortDescriptor *> *sortDescriptors;
 			sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
-			NSArray <RptqQueryGroup *> *sortedGroups;
-			sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+			NSArray <RptqQueryGroup *> *sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
 			
 			int16_t counter = 0;
 			for (RptqQueryGroup *sortedGroup in sortedGroups) {
@@ -1408,9 +1401,8 @@ END_rowIDLastOfReport_Loop:;
 
 - (MADReportFormatter *)reportFormatter {
 	if (!_reportFormatter) {
-		MADReportFormatter *formatter;
-		formatter = [[MADReportFormatter alloc] initWithDocument: self
-														 options: MADReportFormatterOptionsNone];
+		MADReportFormatter *formatter = [[MADReportFormatter alloc] initWithDocument: self
+																			 options: MADReportFormatterOptionsNone];
 		_reportFormatter = formatter;
 	}
 	return _reportFormatter;

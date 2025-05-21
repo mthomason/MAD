@@ -21,6 +21,8 @@
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 
+#import "madlog.h"
+
 @interface MADDataTableSingleColumnEnumerator ()
 
 @property (nonatomic, strong) NSDictionary <NSString *, MADDataColumn *> *columns;
@@ -47,7 +49,6 @@
 								columnKeys:(NSArray <NSString *> *)columnKeys
 									 query:(MADQuery *)query {
 	if (self = [super init]) {
-		
 		NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
 		self.fastEnumerationObjects = fastEnumerationObjects;
 		
@@ -59,7 +60,7 @@
 		_empty = columnKeys.count == 0;
 		if (!_empty) {
 			self->_statement = NULL;
-			NSString *sql = [query getSql:nil];
+			NSString *sql = [[query getSql:nil] copy];
 			char *queryString = sqlite3_mprintf(sql.UTF8String);
 			sqlite3_prepare_v2(self.databaseForQuery->_database, queryString, -1, &_statement, NULL);
 			sqlite3_free(queryString);
@@ -98,7 +99,6 @@
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
 								  objects:(id __unsafe_unretained *)stackbuf
 									count:(NSUInteger)len {
-	
 	NSUInteger i = 0;
 	int stepResult;
 	

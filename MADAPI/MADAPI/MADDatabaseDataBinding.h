@@ -9,19 +9,21 @@
 #ifndef MADAPI_MADDatabaseDataBinding_h
 #define MADAPI_MADDatabaseDataBinding_h
 
-#import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
+#import <MADAPI/MADAliases.h>
+
+#import <Foundation/NSObject.h>
 
 @interface MADDatabaseDataBinding : NSObject
 
-	@property (nonatomic, strong, readonly) id value;
-	@property (nonatomic, assign, readonly) MADDataType datatype;
-	@property (nonatomic, assign, readonly) int fieldIndex;
-	@property (nonatomic, assign, readonly) int columnNumber;
+@property (nonatomic, strong, readonly) MADResult *value;
+@property (nonatomic, assign, readonly) NSUInteger fieldIndex;
+@property (nonatomic, assign, readonly) MADDataType datatype;
+@property (nonatomic, readonly) NSUInteger columnNumber;
 
-	- (instancetype)initWithDataType: (MADDataType)datatype
-						  fieldIndex: (NSUInteger)fieldIndex
-							   value: (id)value NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDataType: (MADDataType)datatype
+					  fieldIndex: (NSUInteger)fieldIndex
+						   value: (MADResult *)value NS_DESIGNATED_INITIALIZER;
 
 @end
 

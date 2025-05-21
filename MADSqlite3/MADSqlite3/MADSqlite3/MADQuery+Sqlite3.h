@@ -11,11 +11,13 @@
 
 #import <MADAPI/MADQuery.h>
 
+#import <Foundation/NSSortDescriptor.h>
+
 @interface MADQuery (Sqlite3)
 
-	- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;
-	- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
-	- (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
+- (NSString *)orderByClauseWithSortDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors;
+- (NSString *)whereClauseWithRowIds:(NSArray <NSNumber *> *)rowids;
+- (NSString *)whereClauseWithParameters:(NSArray <NSDictionary *> *)whereClause;
 
 @end
 

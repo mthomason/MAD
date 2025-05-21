@@ -171,18 +171,15 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	double tickValue = numberOfTicks > 0 ? self.maximumValue / (numberOfTicks - 1) : 1;
 	for (NSUInteger i = 0; i < numberOfTicks; i++) {
 		if (i % 2 == 0) {
-			@autoreleasepool {
-				MADLabelPageSlider *label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-																								 rect.size.width, _stringHeight)];
-				label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
-				label.enabled = _enabledColor;
-				[label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
-				[self addSubview:label];
-				[self.labels addObject:label];
-			}
+			MADLabelPageSlider *label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
+																							 rect.size.width, _stringHeight)];
+			label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
+			label.enabled = _enabledColor;
+			[label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
+			[self addSubview:label];
+			[self.labels addObject:label];
 		}
-		drawingPoint = CGPointMake(drawingPoint.x,
-								   drawingPoint.y + _stringHeight + distanceBetweenTicks);
+		drawingPoint.y = drawingPoint.y +  _stringHeight + distanceBetweenTicks;
 	}
 }
 

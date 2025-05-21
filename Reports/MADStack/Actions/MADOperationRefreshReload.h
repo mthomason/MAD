@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 4/2/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_Designer_MADRefreshReloadOperation_h
@@ -16,12 +16,12 @@
 
 @interface MADOperationRefreshReload : MADGroupOperation
 
-	@property (readonly) BOOL completedSuccessfully;
-	@property (nonatomic, readonly, weak) MADocument *document;
+@property (readonly) BOOL completedSuccessfully;
+@property (nonatomic, readonly, weak) MADocument *document;
 
-	- (instancetype)initWithDocument: (MADocument *)document
-					  viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
-				  databaseConnection: (MADDatabaseConnection *)databaseConnection;
+- (instancetype)initWithDocument: (MADocument *)document
+				  viewController: (UIViewController <MADOperationRefreshReloadProtocol> *)viewController
+			  databaseConnection: (MADDatabaseConnection *)databaseConnection;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import "MADModelDocument.h"
+#import "madlog.h"
 
 #import <CoreFoundation/CFNumber.h>
 
@@ -294,8 +295,11 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 	
 	NSFetchRequest *request = [MADModelDocument fetchRequestDocDBQueryIDs];
 	
-	NSError * __autoreleasing error = NULL;
+	NSError *error = nil;
 	results = [managedObjectContext executeFetchRequest:request error:&error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
 	
 	NSAssert(results.count > 0, @"We expect results.");
 	if (results.count == 0) return;

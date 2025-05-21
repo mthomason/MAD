@@ -7,21 +7,22 @@
 //
 
 #import "MADPrintPageElementTextStatic.h"
-#import <Foundation/NSString.h>
-#import "MADDocumentObjectReference.h"
+#import "MADDocumentObjectDataReference.h"
+#import "MADDocumentObjectDataReferenceLabelStatic.h"
 #import "MADPrintPageRendererDataSource.h"
+#import <Foundation/NSString.h>
 
 @implementation MADPrintPageElementTextStatic
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition {
-    if (self = [super initWithDefinition:definition]) {
-        self.text = definition.text.copy;
-    }
-    return self;
+	if (self = [super initWithDefinition:definition]) {
+		self.text = definition.text.copy;
+	}
+	return self;
 }
 
 - (void)drawInRect:(CGRect)rect {
-    [super drawInRect:rect];
+	[super drawInRect:rect];
 }
 
 @end

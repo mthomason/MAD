@@ -11,24 +11,25 @@
 #endif
 
 #import "MADViewerController.h"
+#import "MADOperationRefreshReload.h"
+#import "MADPrintingProtocol.h"
+#import "MADPageSliderProtocol.h"
+#import "MADTabBarController.h"
+#import "MADActivityReportPrintPreview.h"
+#import "MADDocumentPageController.h"
+#import "MADPageSlider.h"
+#import "MADSliderPageVertical.h"
+#import "MADLabelStatus.h"
+#import "MADPageViewAttributes.h"
+#import "MADDocumentScroller.h"
+#import "MADRefreshOperationReload.h"
+#import "NSDate+Extras.h"
+#import "MTStoreKitController+Features.h"
+#import "UIApplication+Extras.h"
+#import "UIViewController+tabBarItem.h"
+#import "madlog.h"
 
-#import <CoreData/CoreData.h>
-
-#import <UIKit/UIAccessibility.h>
-#import <UIKit/UIAccessibilityConstants.h>
-#import <UIKit/UIActivityIndicatorView.h>
-#import <UIKit/UIBarButtonItem.h>
-#import <UIKit/UIDocumentInteractionController.h>
-#import <UIKit/UILocalNotification.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UIPopoverPresentationController.h>
-#import <UIKit/UIPrintInteractionController.h>
-#import <UIKit/UIStoryboard.h>
-#import <UIKit/UITabBarItem.h>
-#import <UIKit/UIToolbar.h>
-#import <UIKit/UIViewController.h>
-#import <UIKit/UIViewControllerTransitioning.h>
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADOperationQueue.h>
@@ -56,38 +57,28 @@
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 
-#import "MADPrintingProtocol.h"
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-#import "MADPageSliderProtocol.h"
+#import <CoreData/CoreData.h>
 
-#import "MADTabBarController.h"
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIAccessibilityConstants.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UIDocumentInteractionController.h>
+#import <UIKit/UILocalNotification.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIPopoverPresentationController.h>
+#import <UIKit/UIPrintInteractionController.h>
+#import <UIKit/UIStoryboard.h>
+#import <UIKit/UITabBarItem.h>
+#import <UIKit/UIToolbar.h>
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIViewControllerTransitioning.h>
 
-#import "MADActivityReportPrintPreview.h"
-
-#import "MADDocumentPageController.h"
-
-#import "MADPageSlider.h"
-#import "MADSliderPageVertical.h"
-#import "MADLabelStatus.h"
-
-#import "MADPageViewAttributes.h"
-
-#import "UIViewController+tabBarItem.h"
-
-#import "MADOperationRefreshReload.h"
-
-#import "MADDocumentScroller.h"
-#import "MADRefreshOperationReload.h"
-
-#import "NSDate+Extras.h"
-#import "MTStoreKitController+Features.h"
-#import "UIApplication+Extras.h"
-#import <os/log.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";
 static const CGFloat MADBarButtonItemsMargin = 8.0000f;
-static os_log_t mad_log;
 
 //#pragma mark -
 //#pragma mark MADOperationRenderOnViewert
@@ -115,11 +106,7 @@ static os_log_t mad_log;
 @end
 
 @interface MADViewerController ()
-	<UIPopoverPresentationControllerDelegate, UIStateRestoring, UIPageViewControllerDelegate,
-		UIPageViewControllerDataSource, UIDocumentInteractionControllerDelegate,
-		UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning,
-		MADOperationObserver, MADPageSliderProtocol, MADPrintingProtocol,
-		MADActivityReportPrintPreviewDelegate, MADActivityItemProviderDelegate>
+	<UIPopoverPresentationControllerDelegate, UIStateRestoring, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIDocumentInteractionControllerDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, MADOperationObserver, MADPageSliderProtocol, MADPrintingProtocol, MADActivityReportPrintPreviewDelegate, MADActivityItemProviderDelegate>
 
 	@property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
 	@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
@@ -162,13 +149,6 @@ static os_log_t mad_log;
 
 #pragma mark -
 #pragma mark Static helpers
-
-+ (void)initialize {
-	if (self == [MADViewerController class]) {
-		NSString *c = NSStringFromClass([MADViewerController class]);
-		mad_log = os_log_create("com.mad", c.UTF8String);
-	}
-}
 
 + (void)setNavigationBarAppearanceTinted {
 	NSArray <Class <UIAppearanceContainer>> *classes;
@@ -589,7 +569,7 @@ static os_log_t mad_log;
 	NSError *error = nil;
 	BOOL success = [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
 	if (error != nil) {
-		os_log_error(mad_log, "Error: %@", error);
+		os_log_error(GetDesignerLog(), "Error: %@", error);
 	}
 	NSAssert(success, @"Failed to delete file.");
 }
@@ -694,8 +674,8 @@ static os_log_t mad_log;
 					if (sharedController) {
 						
 						id document = sself.document;
-						MADPrintPageRenderer *printPageRenderer;
-						printPageRenderer = [MADPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
+						[document updatePrintingReportFormatter];
+						MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource: document];
 						
 						sharedController.delegate = document;
 						sharedController.printPageRenderer = printPageRenderer;
@@ -761,10 +741,9 @@ static os_log_t mad_log;
 		refresh.completionBlock = ^{
 			typeof(self) strongSelf = weakSelf;
 			if (strongSelf) {
-				// End the background task when the operation completes
 				[[UIApplication sharedApplication] endBackgroundTask:strongSelf->_backgroundTaskIdRefresh];
 				strongSelf->_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-				strongSelf->_refreshing = NO; // Reset refreshing flag
+				strongSelf->_refreshing = NO;
 			}
 		};
 		[self.refreshQueue addOperation:refresh];
@@ -935,7 +914,7 @@ static os_log_t mad_log;
 		NSString *path = self.document.urlDataTableCache.path;
 		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error];
 		if (error != nil) {
-			os_log_error(mad_log, "Error: %@", error);
+			os_log_error(GetDesignerLog(), "Error: %@", error);
 		} else {
 			_lastCacheDate = attributes.fileModificationDate.copy;
 		}
@@ -987,7 +966,7 @@ static os_log_t mad_log;
 
 - (void)operationDidStart:(MADOperation *)operation {
 	// log operation start
-	os_log_info(mad_log, "Operation started: %@ type: %@", operation, NSStringFromClass([operation class]));
+	os_log_info(GetDesignerLog(), "Operation started: %@ type: %@", operation, NSStringFromClass([operation class]));
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
 		
 	}
@@ -998,7 +977,7 @@ static os_log_t mad_log;
 - (void)operationDidFinish:(MADOperation *)operation errors:(NSArray<NSError *> *)errors {
 	if (errors != nil && errors.count > 0) {
 		for (NSError *error in errors) {
-			os_log_error(mad_log, "Error: %@", error);
+			os_log_error(GetDesignerLog(), "Error: %@", error);
 		}
 	}
 	// Check if the operation is of a specific type
@@ -1073,9 +1052,8 @@ static os_log_t mad_log;
 						
 						MADocument *document = sself.document;
 						document.activityDelegate = sself;
-						
-						UIPrintPageRenderer *printPageRenderer;
-						printPageRenderer = [MADPrintPageRenderer newReportViewerPrintPageRendererWithDataSource: document];
+						[document updatePrintingReportFormatter];
+						UIPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource: document];
 						sharedController.printPageRenderer = printPageRenderer;
 						sharedController.delegate = document;
 						
@@ -1169,7 +1147,7 @@ static os_log_t mad_log;
 
 - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
 	// log operation setDisplayActive
-	os_log_info(mad_log, "Operation setDisplayActive: %@ type: %@", operation, NSStringFromClass([operation class]));
+	os_log_info(GetDesignerLog(), "Operation setDisplayActive: %@ type: %@", operation, NSStringFromClass([operation class]));
 	if (active) {
 		[self setDisplayActive];
 	} else {
@@ -1179,13 +1157,13 @@ static os_log_t mad_log;
 
 - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
 	// log operation finishReload
-	os_log_info(mad_log, "Operation finishReload: %@ type: %@", operation, NSStringFromClass([operation class]));
+	os_log_info(GetDesignerLog(), "Operation finishReload: %@ type: %@", operation, NSStringFromClass([operation class]));
 	[self finishReload:document];
 }
 
 - (void)finishReload:(MADocument *)document {
 	// log operation finishReload
-	os_log_info(mad_log, "Operation finishReload: %@ type: %@", document, NSStringFromClass([document class]));
+	os_log_info(GetDesignerLog(), "Operation finishReload: %@ type: %@", document, NSStringFromClass([document class]));
 	MADPrintPageRenderer *printPageRenderer;
 	printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
 	self.printPageRendererReport = printPageRenderer;
@@ -1357,13 +1335,11 @@ static os_log_t mad_log;
 }
 
 - (void)main {
-
 	MADPrintPageRenderer *printPageRenderer;
 	MADocument *document;
 
 	if (!self.isCancelled) {
-		document = self.document;
-		printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+		printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:self.document];
 		self.printPageRenderer = printPageRenderer;
 	}
 	
@@ -1384,9 +1360,7 @@ static os_log_t mad_log;
 #pragma mark MADOperationLoadDocument
 
 @interface MADOperationLoadDocument ()
-
 	@property (readwrite, nonatomic, weak) MADocument *document;
-
 @end
 
 @implementation MADOperationLoadDocument {

@@ -9,7 +9,6 @@
 #ifndef Reports_MADDataTableFast_h
 #define Reports_MADDataTableFast_h
 
-#import <Foundation/Foundation.h>
 #import <MADFoundation/MADDataTable.h>
 
 @protocol MADCacheProtocol, MADDataProtocol, MADQueryDataBindingProtocol;
@@ -18,8 +17,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADDataTableFast : MADDataTable
-	<NSCoding, NSFastEnumeration>
+@interface MADDataTableFast : MADDataTable <NSCoding, NSFastEnumeration>
 
 	@property (nonatomic, strong, readonly) MADDatabaseSqlite3 *databaseForSelects;
 

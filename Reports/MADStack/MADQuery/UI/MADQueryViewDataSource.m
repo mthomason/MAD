@@ -7,19 +7,16 @@
 //
 
 #import "MADQueryViewDataSource.h"
+#import "MADTableViewCellQueryTableName.h"
+#import "MADTableViewCellQueryLink.h"
+#import "MADTableViewCellQueryPredicate.h"
+#import "MADTableViewCellQueryGroup.h"
 
-#import <Foundation/NSIndexPath.h>
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSOrderedSet.h>
+#import "NSAttributedString+QueryViewController.h"
 
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSFetchRequestExpression.h>
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-
-#import <UIKit/UILabel.h>
+#import "MADQueryViewSectionDelegate.h"
+#import "MADQueryViewDatasourceProtocol.h"
+#import "madlog.h"
 
 #import <MAD/MADocument.h>
 
@@ -41,15 +38,18 @@
 
 #import <MADFoundation/MADStringUtilities.h>
 
-#import "MADTableViewCellQueryTableName.h"
-#import "MADTableViewCellQueryLink.h"
-#import "MADTableViewCellQueryPredicate.h"
-#import "MADTableViewCellQueryGroup.h"
+#import <Foundation/NSIndexPath.h>
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSOrderedSet.h>
 
-#import "NSAttributedString+QueryViewController.h"
+#import <CoreData/NSExpressionDescription.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSFetchRequestExpression.h>
+#import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
 
-#import "MADQueryViewSectionDelegate.h"
-#import "MADQueryViewDatasourceProtocol.h"
+#import <UIKit/UILabel.h>
 
 short numberOfSectionsForQueryTableCount(NSUInteger, BOOL);
 short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL reportingEnabled) {
@@ -117,18 +117,17 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 			handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
 	if (self = [super init]) {
 	
-		NSString *keyHasQueryTables = @"madQTC";
-		
-		NSArray <NSDictionary <NSString *, NSNumber *> *> *result;
-		NSError * __autoreleasing error = NULL;
-		NSFetchRequest *request = [RptqQuery fetchRequestTableCount:queryID
-													  objectContext:managedObjectContext];
-		
+		NSFetchRequest *request = [RptqQuery fetchRequestTableCount:queryID objectContext:managedObjectContext];
 		NSUInteger numberOfTables = 0;
 
-		result = [managedObjectContext executeFetchRequest:request error:&error];
+		NSError *error = nil;
+		NSArray <NSDictionary <NSString *, NSNumber *> *> *result = [managedObjectContext executeFetchRequest:request error:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+		}
+
 		if (result.count > 0)
-			numberOfTables = (NSUInteger)[result[0][keyHasQueryTables] integerValue];
+			numberOfTables = (NSUInteger)[result[0][@"madQTC"] integerValue];
 		
 		_count = numberOfSectionsForQueryTableCount(numberOfTables, reportingEnabled);
 		_reportingEnabled = reportingEnabled;

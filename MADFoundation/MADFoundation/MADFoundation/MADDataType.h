@@ -9,7 +9,7 @@
 #ifndef MAD_MADFoundation_MADDataType_h
 #define MAD_MADFoundation_MADDataType_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
 
 typedef NS_ENUM(int16_t, MADDataType) {
 	MADDataTypeBit           = 0,

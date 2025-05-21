@@ -7,16 +7,19 @@
 //
 
 #import "MADOperationPromptCredentials.h"
-#import <os/log.h>
+#import "MADMutualExclusive.h"
+#import "madlog.h"
+
+#import <MADFoundation/MADCredential.h>
+
+#import <MAD/MADCredentialSourceType.h>
+#import <MAD/MADOperationKeyChainGet.h>
+
+#import <MADCocoaExtensions/MADTextField.h>
+
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UITextField.h>
 #import <UIKit/UILabel.h>
-#import <MADFoundation/MADCredential.h>
-#import <MAD/MADCredentialSourceType.h>
-
-#import <MADCocoaExtensions/MADTextField.h>
-#import <MAD/MADOperationKeyChainGet.h>
-#import "MADMutualExclusive.h"
 
 static NSString * const MADTitleCredentials            = @"Credentials";
 static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
@@ -89,8 +92,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-	os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
-
 	if (self.cancelled) {
 		return [self finish];
 	}

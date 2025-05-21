@@ -7,15 +7,10 @@
 //
 
 #import "MADOperationDatabaseTestConnection.h"
-
-#import <os/log.h>
-
-#import <Foundation/NSString.h>
-#import <Foundation/NSBundle.h>
+#import "madlog.h"
 
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>
-#import <MADFoundation/MADErrorUserInfo.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTableVirtual.h>
 
@@ -27,6 +22,10 @@
 #import <MAD/MADQueryTest.h>
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADDatabase+Constructor.h>
+
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
 
 @interface MADOperationDatabaseTestConnection ()
 	<MADDatabaseResultsProtocol>
@@ -69,8 +68,6 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
-	// Find credentials from dependencies.
 	if (self.credentials == nil) {
 		
 		NSString *username = nil;
@@ -119,12 +116,11 @@
 	
 	// If we still don't have credentials, then fail.
 	if (self.credentials == nil) {
-		NSString *testFailed = NSLocalizedString(@"Test Failed", @"Test Failed");
-		NSString *credentialsNotFound = NSLocalizedString(@"Credentials not found.", @"Credentials not found.");
-		MADErrorUserInfo *errorInfo = [[MADErrorUserInfo alloc] initWithTitle: testFailed
-																   andMessage: credentialsNotFound];
-		NSError *error = [errorInfo errorWithDomain:NSStringFromClass([self class]) code:-1];
-		self.error = error;
+		NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-1 userInfo:@{
+			NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Test Failed", @"Test Failed"),
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Credentials not found.", @"Credentials not found.")
+		}];
+		self.error = [error copy];
 		[self finishWithError:error];
 		return;
 	}

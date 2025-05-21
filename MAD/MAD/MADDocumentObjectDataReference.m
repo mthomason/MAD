@@ -6,12 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import "MADDocumentObjectReference.h"
-#import <Foundation/NSString.h>
-#import <Foundation/NSDictionary.h>
-#import <MADAPI/MADDatabase.h>
-#import <MADSqlite3/MADDataTableFast.h>
-
+#import "MADDocumentObjectDataReference.h"
 #import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentElementAggregate.h"
 #import "RptqTextStyle.h"
@@ -32,6 +27,17 @@
 #import "MADAggregateFunctionType.h"
 #import "MADDocumentObjectType.h"
 #import "MADPrintPageRendererDataSource.h"
+#import "MADDocumentObjectDataReferenceAggregate.h"
+#import "MADDocumentObjectDataReferenceImage.h"
+#import "MADDocumentObjectDataReferenceLabelStatic.h"
+#import "MADDocumentObjectDataReferenceBarcode.h"
+#import "MADDocumentObjectDataReferenceLabelDynamic.h"
+#import "madlog.h"
+
+#import <MADAPI/MADDatabase.h>
+#import <MADSqlite3/MADDataTableFast.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSDictionary.h>
 
 @interface MADDocumentObjectDataReference ()
 
@@ -134,153 +140,6 @@
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
 	return [self.item formattedString:dataType forValue:value];
-}
-
-@end
-
-@interface MADDocumentObjectDataReferenceAggregate ()
-@property (nonatomic, readonly) RptqDocumentElementAggregate *item;
-@end
-
-@implementation MADDocumentObjectDataReferenceAggregate
-
-@dynamic item;
-@dynamic fieldKey;
-@dynamic groupNumber;
-@dynamic calculateInMemory;
-@dynamic groupType;
-@dynamic functionType;
-
-- (int32_t)groupNumber {
-	return self.item.groupNumber;
-}
-
-- (MTAggregateGroupByType)groupType {
-	return self.item.groupType;
-}
-
-- (MTAggregateFunctionType)functionType {
-	return self.item.functionType;
-}
-
-- (BOOL)calculateInMemory {
-	return self.functionType == MTAggregateFunctionTypeFirst || self.functionType == MTAggregateFunctionTypeLast;
-}
-
-- (NSString *)fieldKey {
-	NSString *fieldName = self.item.aggregateField.databaseSchemaField.name;
-	NSString *queryAlias = [self.item.aggregateField.inQueryTable queryAlias];
-	return [self.datasource.database queryKey: fieldName
-										table: queryAlias];
-}
-
-- (NSString *)formattedStringForValue:(id)value {
-	NSString *result = [self.item formattedString: self.item.aggregateField.databaseSchemaField.dataType
-										 forValue: value];
-	if ([result isEqualToString:MTNullIdentifier]) result = @"";
-	return result;
-}
-
-@end
-
-@interface MADDocumentObjectDataReferenceImage ()
-@property (nonatomic, readonly) RptqDocumentElementImage *item;
-@end
-
-@implementation MADDocumentObjectDataReferenceImage
-
-@dynamic item;
-@dynamic image;
-
-- (UIImage *)image {
-	return self.item.image;
-}
-
-@end
-
-@interface MADDocumentObjectDataReferenceLabelStatic ()
-@property (nonatomic, readonly) RptqDocumentElementLabel *item;
-@end
-
-@implementation MADDocumentObjectDataReferenceLabelStatic
-
-@dynamic item;
-
-- (NSString *)text {
-	return self.item.text;
-}
-
-@end
-
-@interface MADDocumentObjectDataReferenceLabelDynamic ()
-@property (nonatomic, readonly) RptqDocumentElementLabelDataField *item;
-@end
-
-@implementation MADDocumentObjectDataReferenceLabelDynamic
-
-@dynamic item;
-@dynamic fieldKey;
-
-- (NSString *)fieldKey {
-	NSString *qa = [self.item.referencesQueryField.inQueryTable queryAlias];
-	NSString *fieldName = self.item.referencesQueryField.databaseSchemaField.name;
-	NSString *fieldKey = [self.datasource.database queryKey: fieldName table: qa];
-	return fieldKey;
-}
-
-- (NSString *)formattedStringForValue:(id)value {
-	NSString *result;
-	result = [self.item formattedString: self.item.referencesQueryField.databaseSchemaField.dataType
-							   forValue: value];
-	if ([result isEqualToString:MTNullIdentifier]) result = @"";
-	return result;
-}
-
-@end
-
-@interface MADDocumentObjectDataReferenceBarcode ()
-@property (nonatomic, readonly) RptqDocumentElementBarcode *item;
-@end
-
-@implementation MADDocumentObjectDataReferenceBarcode
-
-@dynamic item;
-@dynamic fieldKey1;
-@dynamic fieldKey2;
-@dynamic barcode;
-
-- (id <MTBarcodeProtocol>)barcode {
-	return self.item;
-}
-
-- (NSString *)fieldKey1 {
-	NSString *queryAlias = [self.item.referencesField1.inQueryTable queryAlias];
-	NSString *fieldName = self.item.referencesField1.databaseSchemaField.name;
-	MADSafeQueryField *fieldKey;
-	fieldKey = [self.datasource.database queryKey: fieldName table: queryAlias];
-	return fieldKey;
-}
-
-- (NSString *)fieldKey2 {
-	NSString *queryAlias = [self.item.referencesField2.inQueryTable queryAlias];
-	NSString *fieldName = self.item.referencesField2.databaseSchemaField.name;
-	MADSafeQueryField *fieldKey;
-	fieldKey = [self.datasource.database queryKey: fieldName table: queryAlias];
-	return fieldKey;
-}
-
-- (NSString *)formattedStringForValue1:(id)value {
-	NSString *result = [self.item formattedString: self.item.referencesField1.databaseSchemaField.dataType
-										 forValue: value];
-	if ([result isEqualToString:MTNullIdentifier]) result = @"";
-	return result;
-}
-
-- (NSString *)formattedStringForValue2:(id)value {
-	NSString *result = [self.item formattedString: self.item.referencesField2.databaseSchemaField.dataType
-										 forValue: value];
-	if ([result isEqualToString:MTNullIdentifier]) result = @"";
-	return result;
 }
 
 @end

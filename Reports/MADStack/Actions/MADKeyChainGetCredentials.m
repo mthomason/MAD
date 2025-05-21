@@ -68,7 +68,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
-
 	if (self.cancelled) return [self finish];
 
 	const char PromptForUsernameAndPassword = 1;

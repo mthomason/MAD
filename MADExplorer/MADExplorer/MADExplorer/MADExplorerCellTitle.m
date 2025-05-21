@@ -7,8 +7,9 @@
 //
 
 #import "MADExplorerCellTitle.h"
-#import <MADFileManager/MADMetaData.h>
 #import "MADStandard.h"
+#import <MADFileManager/MADMetaData.h>
+#import <Foundation/NSBundle.h>
 
 NSString * const MADTextNotDownloaded = @"Not Downloaded";
 NSString * const Syncing              = @"Syncing";

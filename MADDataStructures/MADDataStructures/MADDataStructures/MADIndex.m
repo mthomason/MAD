@@ -8,6 +8,8 @@
 
 #import "MADIndex.h"
 
+#import <Foundation/NSString.h>
+
 @implementation MADIndex
 
 - (instancetype)initWithIndex:(NSUInteger)index andObject:(nullable id)object {

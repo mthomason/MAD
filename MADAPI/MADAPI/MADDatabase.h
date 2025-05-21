@@ -11,7 +11,6 @@
 #ifndef Reports_MTDatabase_h
 #define Reports_MTDatabase_h
 
-#import <Foundation/Foundation.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseProtocol.h>
 #import <MADAPI/MADDatabaseSQLProtocol.h>
@@ -23,8 +22,7 @@ extern NSString * const MADSqlTextFromPart;
 
 @protocol MADDatabaseResultsProtocol, MADDatabaseConnectionsProperties;
 
-@class NSMutableArray, MADCredential, MADDatabaseConnection, MADDatabase, MADDatabaseTable,
-	   MADDataTable, MADQuery, MADDatabaseField;
+@class NSMutableArray, MADCredential, MADDatabaseConnection, MADDatabase, MADDatabaseTable, MADDataTable, MADQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
   @required

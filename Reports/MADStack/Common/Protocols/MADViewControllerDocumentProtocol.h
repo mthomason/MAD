@@ -9,6 +9,8 @@
 #ifndef MAD_MADViewControllerDocumentProtocol_h
 #define MAD_MADViewControllerDocumentProtocol_h
 
+#import <Foundation/NSObject.h>
+
 @class MADocument;
 
 @protocol MADViewControllerDocumentProtocol <NSObject>

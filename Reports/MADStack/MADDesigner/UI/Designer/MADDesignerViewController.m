@@ -12,74 +12,6 @@
 
 #import "MADDesignerViewController.h"
 #import "MADViewControllerBarcodeDelegate.h"
-
-#import <os/log.h>
-#import <math.h>
-#import <asl.h>
-
-#import <UIKit/UIStoryboard.h>
-#import <UIKit/UIStoryboardSegue.h>
-#import <UIKit/UICollectionViewFlowLayout.h>
-#import <UIKit/UIAccessibility.h>
-#import <UIKit/UIImagePickerController.h>
-#import <UIKit/UIBarButtonItem.h>
-#import <UIKit/UINibLoading.h>
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UIVisualEffectView.h>
-#import <UIKit/NSAttributedString.h>
-#import <UIKit/UIMenuController.h>
-#import <UIKit/NSStringDrawing.h>
-#import <UIKit/UIPopoverPresentationController.h>
-
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSManagedObjectContext.h>
-
-#import <MADCocoaExtensions/MADCompassDirection.h>
-#import <MADCocoaExtensions/MADResizeAspect.h>
-
-#import <MADCocoaExtensions/MADAlertController.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADMathAlgebra.h>
-#import <MADCocoaExtensions/MADViewHelpers.h>
-
-#import <MADFoundation/MADStringUtilities.h>
-
-#import <MAD/madmath.h>
-
-#import <MAD/MADReportSection.h>
-
-#import <MAD/MADocument.h>
-#import <MAD/MADFont.h>
-
-#import <MAD/MADSectionLayoutManager.h>
-#import <MAD/MADSectionLayoutAttributes.h>
-
-#import <MAD/RptqDocument.h>
-#import <MAD/RptqDocument+Extras.h>
-#import <MAD/RptqDatabase.h>
-#import <MAD/RptqDatabase+Extras.h>
-#import <MAD/RptqDocumentElement.h>
-#import <MAD/RptqDocumentElement+Extras.h>
-#import <MAD/RptqDocumentElementBarcode.h>
-#import <MAD/RptqDocumentElementBarcode+Extras.h>
-#import <MAD/RptqTextStyle.h>
-#import <MAD/RptqDocumentElementLabel.h>
-#import <MAD/RptqDocumentElementLabelDataField.h>
-#import <MAD/RptqDocumentElementAggregate+Extras.h>
-#import <MAD/RptqQuery+Extras.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqDocumentSection+Extras.h>
-#import <MAD/RptqDocumentSectionRows.h>
-#import <MAD/RptqDocumentSectionEnumerator.h>
-#import <MAD/RptqDirectionalAsymmetry.h>
-#import <MAD/RptqNumericFormat.h>
-#import <MAD/RptqAlignment.h>
-#import <MAD/RptqBorder.h>
-#import <MAD/RptqRect.h>
-#import <MAD/RptqSize.h>
-
 #import "MADTabBarController.h"
 
 #import "MADRulerView.h"
@@ -140,6 +72,74 @@
 #import "MADDesignerView.h"
 #import "MADReportSectionDelegateProtocol.h"
 #import "MADReportSectionsDataSource.h"
+#import "madlog.h"
+
+#import <MADCocoaExtensions/MADCompassDirection.h>
+#import <MADCocoaExtensions/MADResizeAspect.h>
+
+#import <MADCocoaExtensions/MADAlertController.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADMathAlgebra.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
+
+#import <MADFoundation/MADStringUtilities.h>
+
+#import <MAD/madmath.h>
+
+#import <MAD/MADReportSection.h>
+
+#import <MAD/MADocument.h>
+#import <MAD/MADFont.h>
+
+#import <MAD/MADSectionLayoutManager.h>
+#import <MAD/MADSectionLayoutAttributes.h>
+
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentElementBarcode.h>
+#import <MAD/RptqDocumentElementBarcode+Extras.h>
+#import <MAD/RptqTextStyle.h>
+#import <MAD/RptqDocumentElementLabel.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElementAggregate+Extras.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentSectionEnumerator.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqNumericFormat.h>
+#import <MAD/RptqAlignment.h>
+#import <MAD/RptqBorder.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqSize.h>
+
+#import <os/log.h>
+#import <math.h>
+#import <asl.h>
+
+#import <UIKit/UIStoryboard.h>
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UIImagePickerController.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UINibLoading.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UIVisualEffectView.h>
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIMenuController.h>
+#import <UIKit/NSStringDrawing.h>
+#import <UIKit/UIPopoverPresentationController.h>
+
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
 	MTToolboxTypeElement = 2,
@@ -276,11 +276,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 + (NSString *)keyPathDocumentRedoTitle {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *keyPathDocument = [self keyPathDocument];
-		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
 		NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriodToString: keyPathDocument];
-		key = [key stringByAppendingString:keyPathUndoManager];
+		key = [MADStringUtilities stringByAppendingPeriodToString: [self keyPathDocument]];
+		key = [key stringByAppendingString:NSStringFromSelector(@selector(undoManager))];
 		key = [MADStringUtilities stringByAppendingPeriodToString: key];
 		key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
 	}
@@ -2541,10 +2539,10 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	}
 	gestureRecognizer.scale = 1.0000f;
 	
-	NSError * __autoreleasing error = NULL;
-	if (![element.managedObjectContext save:&error]) {
-		os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-					 error.localizedDescription.UTF8String);
+	NSError *error = nil;
+	BOOL successSave = [element.managedObjectContext save:&error];
+	if (!successSave || error != nil) {
+		os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", error);
 	}
 }
 
@@ -2967,9 +2965,13 @@ END_deselectElementView:;
 	document = _document;
 	NSFetchRequest <__kindof RptqDocumentElement *> *fetchElement;
 	fetchElement = [RptqDocumentElement fetchRequestElement:cell.identifier];
-	NSError * __autoreleasing error = NULL;
+	NSError *error = nil;
 	elements = [self.document.managedObjectContext executeFetchRequest: fetchElement
 																 error: &error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+	}
+
 	element  = elements.firstObject;
 	sectionView = [self getSectionViewForDocumentSection:element.inSectionRow.inSection];
 	NSNumber *sectionIdentifier = [[NSNumber alloc] initWithLongLong:sectionView.identifier];
@@ -2995,10 +2997,10 @@ END_deselectElementView:;
 		elementB = [RptqDocumentElement newDocumentElementWithIdentifier:cellIdentifier
 													   fromObjectContext:document.managedObjectContext];
 		[document.managedObjectContext deleteObject:elementB];
-		NSError * __autoreleasing err = NULL;
-		if (![document.managedObjectContext save:&err]) {
-			os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-						 err.localizedDescription.UTF8String);
+		NSError *err = nil;
+		BOOL successSave = [document.managedObjectContext save:&err];
+		if (!successSave || err != nil) {
+			os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 		}
 	}];
 }
@@ -3046,11 +3048,11 @@ END_deselectElementView:;
 		_sectionSettingsVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: NULL];
 		[self.view.scroller.container removeBorderFromAllSectionViews];
-		
-		NSError * __autoreleasing error = NULL;
-		if (![self.document.managedObjectContext save:&error]) {
-			os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-					error.localizedDescription.UTF8String);
+
+		NSError *err = nil;
+		BOOL successSave = [self.document.managedObjectContext save:&err];
+		if (!successSave || err != nil) {
+			os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 		}
 	}
 }
@@ -3063,10 +3065,10 @@ END_deselectElementView:;
 		_toolboxVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: NULL];
 		[self deselectAllElementsAnimated:YES];
-		NSError * __autoreleasing error = NULL;
-		if (![self.document.managedObjectContext save:&error]) {
-			os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-					error.localizedDescription.UTF8String);
+		NSError *err = nil;
+		BOOL successSave = [self.document.managedObjectContext save:&err];
+		if (!successSave || err != nil) {
+			os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 		}
 	}
 }
@@ -3260,10 +3262,10 @@ END_deselectElementView:;
 					[documentSectionBlock addDocumentObject: documentObject
 											  withDropPoint: locationInSection
 									   managedObjectContext: managedObjectContext];
-					NSError * __autoreleasing error = NULL;
-					if (![managedObjectContext save:&error]) {
-						os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-								error.localizedDescription.UTF8String);
+					NSError *err = nil;
+					BOOL successSave = [managedObjectContext save:&err];
+					if (!successSave || err != nil) {
+						os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 					}
 
 				} animationComplete:^(BOOL complete) {
@@ -3285,9 +3287,10 @@ END_deselectElementView:;
 					CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
 					sectionBlock.height = sectionViewIntrinsicContentSizeHeight;
 					
-					NSError * __autoreleasing error = NULL;
-					if (![managedObjectContext save:&error]) {
-						os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.", error.localizedDescription.UTF8String);
+					NSError *err = nil;
+					BOOL successSave = [managedObjectContext save:&err];
+					if (!successSave || err != nil) {
+						os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 					}
 					
 					[self redrawAllElementViewsInCollectionView:sectionView];
@@ -3666,11 +3669,13 @@ END_deselectElementView:;
 #pragma mark Actions
 
 - (IBAction)actionDone:(id)sender {
-	NSError * __autoreleasing error = NULL;
-	if (![self.document.managedObjectContext save:&error]) {
-		os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-				error.localizedDescription.UTF8String);
+	
+	NSError *err = nil;
+	BOOL successSave = [self.document.managedObjectContext save:&err];
+	if (!successSave || err != nil) {
+		os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 	}
+
 	if (![self dismissAllPopovers]) {
 		[self.delegate viewControllerDidFinish:nil];
 	} else {
@@ -3714,10 +3719,10 @@ END_deselectElementView:;
 
 - (IBAction)actionDismiss {
 	[self deselectAllElementsAnimated:YES];
-	NSError * __autoreleasing error = NULL;
-	if (![self.document.managedObjectContext save:&error]) {
-		os_log_debug(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-				error.localizedDescription.UTF8String);
+	NSError *err = nil;
+	BOOL successSave = [self.document.managedObjectContext save:&err];
+	if (!successSave || err != nil) {
+		os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
 	}
 }
 

@@ -25,6 +25,8 @@
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 
+#import "madlog.h"
+
 @interface MADDataTableObjectEnumerator ()
 
 	@property (nonatomic, strong) NSDictionary <NSString *, MADDataColumn *> *columns;
@@ -51,7 +53,7 @@
 								columnKeys:(NSArray <NSString *> *)columnKeys
 									 query:(MADQuery *)query {
 	if (self = [super init]) {
-		
+
 		NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
 		self.fastEnumerationObjects = fastEnumerationObjects;
 
@@ -146,7 +148,7 @@
 }
 
 - (__kindof NSObject <NSCopying, NSSecureCoding> *)currentObject {
-	
+	//os_log_debug(GetMadLog(), "Getting current object");
 	NSMutableDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:_columns.count];
 	int columnCounter = 0;
 	for (NSString *key in _columnKeys) {
@@ -163,6 +165,7 @@
 		[currentObject setValue:rowid forKey:MADIdentifierROWID];
 		rowid = nil;
 	}
+	//os_log_debug(GetMadLog(), "Current object: %@", currentObject);
 	return currentObject;
 }
 

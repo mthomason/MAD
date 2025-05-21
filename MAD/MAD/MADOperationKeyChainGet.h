@@ -12,15 +12,14 @@
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationResultStringProtocol.h>
 
-@interface MADOperationKeyChainGet : MADOperation
-	<MADOperationResultStringProtocol>
+@interface MADOperationKeyChainGet : MADOperation <MADOperationResultStringProtocol>
 
-	- (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description;
+- (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description;
 
-	@property (nonatomic, readonly, copy) NSString *key;
-	@property (atomic, readonly, copy) NSString *value;
-	@property (atomic, readonly, assign) BOOL success;
-	@property (atomic, assign) MADKeyChainReadOperationTypes readOperationType;
+@property (nonatomic, readonly, copy) NSString *key;
+@property (atomic, readonly, copy) NSString *value;
+@property (atomic, readonly, assign) BOOL success;
+@property (atomic, assign) MADKeyChainReadOperationTypes readOperationType;
 
 @end
 

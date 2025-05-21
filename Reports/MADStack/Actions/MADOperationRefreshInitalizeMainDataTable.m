@@ -8,6 +8,7 @@
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 #import <MAD/MADocument.h>
+#import "madlog.h"
 
 @interface MADOperationRefreshInitializeMainDataTable ()
 

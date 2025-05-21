@@ -9,7 +9,8 @@
 #ifndef MAD_Designer_MADOperationQueue_h
 #define MAD_Designer_MADOperationQueue_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSOperation.h>
 
 @class MADOperation, MADOperationQueue;
 

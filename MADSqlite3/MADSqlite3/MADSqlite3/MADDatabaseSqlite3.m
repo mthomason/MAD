@@ -8,6 +8,39 @@
 
 #import "MADDatabaseSqlite3.h"
 
+#import "MADQueryCacheDeleteAllFromTable.h"
+#import "MADQueryCacheSyncOff.h"
+#import "MADQueryCacheJournalModeOverride.h"
+#import "MADQueryCacheBeginTransaction.h"
+#import "MADQueryCacheEndTransaction.h"
+#import "MADQueryCacheSyncDefault.h"
+
+#import "madlog.h"
+
+#import <MADSqlite3/sqlite3.h>
+#import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADDataTable.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseDataBinding.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
+#import <MADAPI/MADQuery.h>
+
+#import <CoreFoundation/CFString.h>
+#import <CoreFoundation/CFData.h>
+
+#import <Foundation/NSException.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSData.h>
+#import <Foundation/NSCalendar.h>
+
 #import <string.h>
 #import <stdlib.h>
 #import <stdio.h>
@@ -16,32 +49,6 @@
 #import <dispatch/time.h>
 #import <dispatch/semaphore.h>
 #import <dispatch/object.h>
-
-#import <CoreFoundation/CFString.h>
-#import <CoreFoundation/CFData.h>
-
-#import <MADSqlite3/sqlite3.h>
-
-#import <MADFoundation/MADDataColumn.h>
-#import <MADFoundation/MADErrorUserInfo.h>
-#import <MADFoundation/MADDataTable.h>
-
-#import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADDatabaseTable.h>
-#import <MADAPI/MADDatabaseDataBinding.h>
-
-#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
-
-#import <MADAPI/MADQuery.h>
-
-#import "MADQueryCacheDeleteAllFromTable.h"
-#import "MADQueryCacheSyncOff.h"
-#import "MADQueryCacheJournalModeOverride.h"
-#import "MADQueryCacheBeginTransaction.h"
-#import "MADQueryCacheEndTransaction.h"
-#import "MADQueryCacheSyncDefault.h"
-
 
 NSString * const MADDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MADDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
@@ -57,17 +64,16 @@ int compare_string_utf8_localized_asc_collation(void *data, int len1, const void
 	return (int)(str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] : NSOrderedDescending);
 }
 
-//#ifdef MAD_MTDatabaseSqlite3_DEBUG
-void sqliteLog(void *foo, const char* statement);
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+void sqliteLog(void *, const char*);
 void sqliteLog(void *foo, const char* statement) {
 	printf("=> %s\n", statement);
-	//MTLogStatic(@"=> %s", statement);
 }
-//#endif
+#endif
 
 @interface MADDatabaseSqlite3 ()
 
-	@property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesURL> *databaseConnection;
+@property (nonatomic, strong) MADDatabaseConnection <MADDatabaseConnectionsPropertiesURL> *databaseConnection;
 
 @end
 
@@ -150,16 +156,14 @@ void sqliteLog(void *foo, const char* statement) {
 	return result;
 }
 
-+ (MADSqlite3SortDescription *)newSqlite3SortDescriptionForColumnType:(MADDataType)columnType
-															ascending:(BOOL)ascending {
-	NSString *sortDescription = nil;
++ (NSString *)sortDescriptionForColumnType:(MADDataType)columnType
+								 ascending:(BOOL)ascending {
 	NSString *nativeTypeDescription = [MADDatabaseSqlite3 sqlite3NativeType:columnType];
 	if ([nativeTypeDescription isEqualToString:@"TEXT"]) {
-		sortDescription = ascending ? @"COLLATE LSASC ASC" : @"COLLATE LSASC DESC";
+		return ascending ? @"COLLATE LSASC ASC" : @"COLLATE LSASC DESC";
 	} else {
-		sortDescription = ascending ? @"ASC" : @"DESC";;
+		return ascending ? @"ASC" : @"DESC";;
 	}
-	return sortDescription;
 }
 
 + (MADDataType)dataTypeForNativeTypeNumeric:(MADDataType)dataType {
@@ -232,11 +236,9 @@ void sqliteLog(void *foo, const char* statement) {
 	//NSError *error = nil;
 	//Open conneciton... closed in dealloc.
 	if (!_isOpen) {
-		
-		//NSLog(@"Path: %@", self.databaseConnection.databaseUrl.path);
-		
 		const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
-		BOOL databaseOpen = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL) == SQLITE_OK;
+		int sqlite3_open = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL);
+		BOOL databaseOpen = sqlite3_open == SQLITE_OK;
 		NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s).", (char *)sqlite3_errmsg(_database));
 
 		if (databaseOpen) {
@@ -246,18 +248,18 @@ void sqliteLog(void *foo, const char* statement) {
 										SQLITE_UTF8, (struct sqlite3 *)_database,
 										compare_string_utf8_localized_asc_collation, NULL) == SQLITE_OK;
 			NSAssert(databaseOpen, @"Error: failed to create collation: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
-//#ifdef MAD_MTDatabaseSqlite3_DEBUG
-			//sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
-//#endif
+			
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+#warning Tracing enabled
+			sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
+#endif
 
 		} else {
-			//const char *errorMessage = sqlite3_errmsg(_database);
-			//NSString *message = @(errorMessage);
-			//NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
-			//NSString *domain = @"MTSqlite3";
-			//MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle: title
-			//                                                               andMessage: message];
-			//error = [NSError errorWithDomain:domain code:4832 userInfo:errorUserInfo.userinfo];
+			NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:4832 userInfo:@{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"Connect Failed", @"Connect Failed"),
+				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
+			}];
+			os_log_error(GetMadLog(), "Error: %@", error);
 		}
 		_isOpen = YES;
 	}
@@ -327,70 +329,45 @@ void sqliteLog(void *foo, const char* statement) {
 	completion(success, nil, result);
 }
 
-- (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement
-		 withBindings:(MADDatabaseDataBinding *)databinding {
-
-	int success = 0;
+- (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MADDatabaseDataBinding *)databinding {
 	if ([databinding.value isEqual:[NSNull null]]) {
-		success = sqlite3_bind_null(*statement, databinding.columnNumber);
+		return sqlite3_bind_null(*statement, databinding.columnNumber) == SQLITE_OK;
 	} else {
 		switch (databinding.datatype) {
-				
 			case MADDataTypeBlob: {
-
 				if ([databinding.value isKindOfClass:[NSString class]]) {
-					success = sqlite3_bind_text(*statement, databinding.columnNumber,
+					return sqlite3_bind_text(*statement, databinding.columnNumber,
 												((NSString *)databinding.value).UTF8String,
 												(int)strlen(((NSString *)databinding.value).UTF8String),
-												SQLITE_TRANSIENT);
+												SQLITE_TRANSIENT) == SQLITE_OK;
 				} else if ([databinding.value isKindOfClass:[NSData class]]) {
-					success = sqlite3_bind_blob(*statement,
-												databinding.columnNumber,
-												((NSData *)databinding.value).bytes,
-												(int)((NSData *)databinding.value).length,
-												SQLITE_TRANSIENT);
+					return sqlite3_bind_blob(*statement, databinding.columnNumber, ((NSData *)databinding.value).bytes, (int)((NSData *)databinding.value).length, SQLITE_TRANSIENT) == SQLITE_OK;
 				}
-				
 				break;
 			}
-				
 			case MADDataTypeInteger: {
-				success = sqlite3_bind_int64(*statement, databinding.columnNumber,
-											 ((NSNumber *)databinding.value).longLongValue);
+				return sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue) == SQLITE_OK;
 				break;
 			}
 				
 			case MADDataTypeString: {
-				
 				if ([databinding.value isKindOfClass:[NSString class]]) {
-
-					success = sqlite3_bind_text(*statement, databinding.columnNumber,
-												((NSString *)databinding.value).UTF8String,
-												(int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding],
-												SQLITE_TRANSIENT);
-					
+					return sqlite3_bind_text(*statement, databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT) == SQLITE_OK;
 				} else if ([databinding.value isKindOfClass:[NSDateComponents class]]) {
-					
-					NSDate *date = ((NSDateComponents *)databinding.value).date != nil ?
-										((NSDateComponents *)databinding.value).date :
-										[[NSCalendar currentCalendar] dateFromComponents:databinding.value];
-					success = sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970);
-					
-				} else {
-					//NSAssert(NO, @"What else is there? %s", __PRETTY_FUNCTION__);
+					NSDate *date = ((NSDateComponents *)databinding.value).date != nil ? ((NSDateComponents *)databinding.value).date : [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
+					return sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970) == SQLITE_OK;
 				}
 				break;
 				
 			}
 			case MADDataTypeFloat:
 			case MADDataTypeDouble: {
-				NSNumber * __weak n = (NSNumber *)databinding.value;
-				success = sqlite3_bind_double(*statement, databinding.columnNumber, n.doubleValue);
+				return sqlite3_bind_double(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue) == SQLITE_OK;
 				break;
 			}
 				
 			case MADDataTypeNull:
-				success = sqlite3_bind_null(*statement, databinding.columnNumber);
+				return sqlite3_bind_null(*statement, databinding.columnNumber) == SQLITE_OK;
 				break;
 				
 			default:
@@ -399,25 +376,14 @@ void sqliteLog(void *foo, const char* statement) {
 				
 		}
 	}
-	NSAssert(success == SQLITE_OK, @"Error: '%s, %s'.", __PRETTY_FUNCTION__,
-								   sqlite3_errmsg(_database));
-	return (success == SQLITE_OK);
-}
-
-- (void)handleFailureInMethod:(SEL)selector
-					   object:(id)object
-						 file:(NSString *)fileName
-				   lineNumber:(NSInteger)line
-				  description:(NSString *)format {
-	//NSLog(@"Assert: (%@:%ld)", fileName, (long)line);
+	NSAssert(NO, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+	return NO;
 }
 
 - (void)executeQueryWithSql:(NSString *)queryString
 		queryBinaryBindings:(NSArray *)queryBinaryBindings
 			 queryFieldKeys:(NSArray *)queryFieldKeys
 			 transactionSet:(BOOL)queryPartOfTransactionSet {
-
-	//NSLog(@"SQL: %@", queryString);
 	BOOL success = YES;
 
 	if (queryString.length > 0) {
@@ -430,6 +396,7 @@ void sqliteLog(void *foo, const char* statement) {
 			NSAssert(prepare_result == SQLITE_OK, @"ExecuteQueryWithSql failed (%s).", (char *)sqlite3_errmsg(_database));
 			success = prepare_result == SQLITE_OK;
 		}
+
 		if (queryBinaryBindings.count > 0) {
 			for (MADDatabaseDataBinding *databinding in queryBinaryBindings) {
 				[self bindStatement:(void **)&statement withBindings:databinding];
@@ -453,7 +420,8 @@ void sqliteLog(void *foo, const char* statement) {
 		 fieldKeys:(NSArray *)fieldKeys
 	  onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable
-		 withError:(NSError * __autoreleasing *)error {
+		 withError:(NSError * __autoreleasing *)outError {
+	NSError *error = nil;
 	BOOL result = [self executeSQL: sql
 						 fieldKeys: fieldKeys
 					  onConnection: dbconn
@@ -461,7 +429,13 @@ void sqliteLog(void *foo, const char* statement) {
 					transactionSet: NO
 					returnsResults: YES
 					binaryBindings: nil
-						 withError: error];
+						 withError: &error];
+	if (error != nil) {
+		os_log_error(GetMadLog(), "Error: %s", error.localizedDescription.UTF8String);
+		if (outError != NULL) {
+			*outError = error;
+		}
+	}
 	return result;
 }
 
@@ -469,11 +443,11 @@ void sqliteLog(void *foo, const char* statement) {
 		 fieldKeys:(NSArray *)fieldKeys
 	  onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable
-   transactionSet:(BOOL)partOfTransactionSet
-   returnsResults:(BOOL)returnsResults
-   binaryBindings:(NSArray *)binaryBindings
-		withError:(NSError * __autoreleasing *)resultError {
-   
+	transactionSet:(BOOL)partOfTransactionSet
+	returnsResults:(BOOL)returnsResults
+	binaryBindings:(NSArray *)binaryBindings
+		 withError:(NSError * __autoreleasing *)resultError {
+	
 	BOOL success = NO;
 	sqlite3_stmt *statement = partOfTransactionSet ? _bulkStatement : NULL;
 	char *errorMessage = NULL;
@@ -481,7 +455,6 @@ void sqliteLog(void *foo, const char* statement) {
 	
 	if (statement == NULL) {
 		if (sqlite3_prepare_v2(_database, csql, -1, &statement, NULL) != SQLITE_OK) {
-			os_log_debug(OS_LOG_DEFAULT, "%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
 			success = NO;
 		} else {
 			success = YES;
@@ -500,8 +473,8 @@ void sqliteLog(void *foo, const char* statement) {
 		numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
 
 		NSUInteger rowCounter = 0;
-		while (sqlite3_step(statement) == SQLITE_ROW) { // Directly use sqlite3_step result
-			if (rowCounter == 0) {  // If first time around, calculate column information.
+		while (sqlite3_step(statement) == SQLITE_ROW) {
+			if (rowCounter == 0) {
 				for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
 					NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
 					MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
@@ -520,8 +493,13 @@ void sqliteLog(void *foo, const char* statement) {
 					int pAutoinc = 0;
 					
 					if (tableName != NULL) {
-						sqlite3_table_column_metadata(_database, databaseName, tableName, columnName,
-													  &pzDataType, &pzCollSeq, &pNotNull, &pPrimaryKey, &pAutoinc);
+						int sqlite3_metadata = sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, &pzDataType, &pzCollSeq, &pNotNull, &pPrimaryKey, &pAutoinc);
+						if (sqlite3_metadata != SQLITE_OK) {
+							const char *errName = NULL;
+							const char *errMsg = NULL;
+							mad_sqlite3Err(sqlite3_metadata, &errName, &errMsg);
+							os_log_error(GetMadLog(), "Error: %s at %s", errMsg, __PRETTY_FUNCTION__);
+						}
 					}
 					
 					MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
@@ -541,9 +519,11 @@ void sqliteLog(void *foo, const char* statement) {
 			
 			for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
 				NSString *fieldKey = fieldKeys[(NSUInteger)colCtr];
-				if (fieldKey != nil) { // Ensure the key is not nil
+				if (fieldKey != nil) {
 					resultsForRow[fieldKey] = [MADDatabaseSqlite3 databaseResultValue:statement
 																			columnNumber:colCtr];
+				} else {
+					os_log_error(GetMadLog(), "Error: %s at %s", "Field Key is nil.", __PRETTY_FUNCTION__);
 				}
 			}
 			
@@ -555,8 +535,10 @@ void sqliteLog(void *foo, const char* statement) {
 	}
 	
 	if (!returnsResults) {
-		if (!Sqlite3StepResultOK(sqlite3_step(statement))) {
-			os_log_debug(OS_LOG_DEFAULT, "%s", (char *)sqlite3_errmsg(_database));
+		int result = sqlite3_step(statement);
+		bool resultOK = (result == SQLITE_OK) || (result == SQLITE_ROW) || (result == SQLITE_DONE);
+		if (!resultOK) {
+			os_log_error(GetMadLog(), "Error: %s", (char *)sqlite3_errmsg(_database));
 		}
 	}
 	
@@ -577,22 +559,10 @@ void sqliteLog(void *foo, const char* statement) {
 		NSLog(@"%s.", errorMessage);
 	}
 	
-	NSString *message = nil;
-	if (errorMessage != NULL) {
-		success = NO;
-		message = [[NSString alloc] initWithUTF8String:errorMessage];
-	} else if (success == NO) {
-		message = NSLocalizedString(@"Unknown database failure.", @"Unknown database failure.");
-	}
-
-	NSError *error = nil;
-	if (!success) {
-		NSString *title = NSLocalizedString(@"Error", @"Error");
-		NSString *domain = @"MTSqlite3";
-		MADErrorUserInfo *errorUserInfo = [[MADErrorUserInfo alloc] initWithTitle:title andMessage:message];
-		error = [errorUserInfo errorWithDomain:domain code:4784];
-	}
-	if (resultError != NULL) *resultError = error;
+	if (!success && resultError != NULL) *resultError = [NSError errorWithDomain:NSStringFromClass([self class]) code:4784 userInfo:@{
+		NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
+		NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
+	}];
 
 	sqlite3_free(csql);
 	return success;
@@ -601,36 +571,30 @@ void sqliteLog(void *foo, const char* statement) {
 - (BOOL)executeQuery:(MADQuery <MADQueryDataBindingProtocol> *)query
 	   withDataTable:(__kindof MADDataTable *)dataTable
 			andError:(NSError * __autoreleasing *)error {
-
 	BOOL status = NO;
-	NSError * __autoreleasing sqlError = NULL;
+	NSError *sqlError = NULL;
 	NSString *sqlResult = [query getSql:self error:&sqlError];
 	NSString *queryString = [[NSString alloc] initWithString: sqlResult];
 	
 	NSAssert(sqlError == NULL, @"Error %@", @"Could not create query string.");
 
 	if (queryString.length > 0) {
-
-		//NSAssert(dataTable != nil, @"Need a datatable");
 		
-		NSError * __autoreleasing *executeError = NULL;
+		NSError *executeError = NULL;
 		status = [self executeSQL: queryString
-						fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
-									((MADQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
+						fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ? ((MADQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
 					 onConnection: nil
 				  intoResultTable: dataTable
 				   transactionSet: query.partOfTransactionSet
 				   returnsResults: query.returnsResults
 				   binaryBindings: [query conformsToProtocol:@protocol(MADQueryDataBindingProtocol)] ? query.binaryBindings : nil
-						withError: executeError];
-		
-		NSAssert(executeError == NULL, @"Error: %@", (*executeError).localizedDescription);
-		
-
+						withError: &executeError];
+		if (executeError != nil) {
+			os_log_error(GetMadLog(), "Error: %@", executeError.localizedDescription);
+		}
 	}
 	
 	return status;
-
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
@@ -647,9 +611,8 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (id <NSCopying>)object: (void * /* sqlite3_stmt * */)statement
-		 forColumnNumber:(int)columnCounter
+		 forColumnNumber: (int)columnCounter
 				withType: (MADDataType)type {
-
 	id <NSCopying> columnValue;
 	switch (type) {
 
@@ -762,11 +725,10 @@ void sqliteLog(void *foo, const char* statement) {
 - (void)beginBulkInsert {
 	int size_of_wal_log;
 	int number_of_checkpointed_frames;
-	int	wal = sqlite3_wal_checkpoint_v2(_database, NULL, SQLITE_CHECKPOINT_RESTART,
-								   &size_of_wal_log, &number_of_checkpointed_frames);
+	int	wal = sqlite3_wal_checkpoint_v2(_database, NULL, SQLITE_CHECKPOINT_RESTART, &size_of_wal_log, &number_of_checkpointed_frames);
 	NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
-	//dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
-	
+
+	dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
 	[self getTables:^(BOOL success, NSError *error, NSArray *tables) {
 		
 		MADQuery *dropTable;
@@ -774,61 +736,52 @@ void sqliteLog(void *foo, const char* statement) {
 		for (MADDatabaseTable *table in tables) {
 			dropTable = [[MADQueryCacheDeleteAllFromTable alloc] initWithTableName:table.name];
 			successQuery = [self executeQuery:dropTable withError:nil];
-			NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-					 __PRETTY_FUNCTION__);
-
+			NSAssert(successQuery, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database), __PRETTY_FUNCTION__);
 		}
 		
-	//    dispatch_semaphore_signal(s0);
+	    dispatch_semaphore_signal(s0);
 	}];
-	//dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
+	dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
 	//dispatch_release(s0);
 	
 	BOOL success = NO;
-	NSError * __autoreleasing errorQuerySyncMode = NULL;
+	NSError *errorQuerySyncMode = NULL;
 	MADQuery *querySyncMode = [[MADQueryCacheSyncOff alloc] init];
 	success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
-	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database), __PRETTY_FUNCTION__);
 
-	NSError * __autoreleasing errorQueryJournalMode = NULL;
+	NSError *errorQueryJournalMode = NULL;
 	MADQuery *queryJournalMode = [[MADQueryCacheJournalModeOverride alloc] init];
 	success = [self executeQuery:queryJournalMode withError:&errorQueryJournalMode];
-	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database), __PRETTY_FUNCTION__);
 
-	//char *err = 0;
-	//sqlite3_exec((sqlite3 *)self->_database, "PRAGMA journal_mode = MEMORY", NULL, NULL, &err);
+	char *err = 0;
+	sqlite3_exec((sqlite3 *)self->_database, "PRAGMA journal_mode = MEMORY", NULL, NULL, &err);
 
-	NSError * __autoreleasing errorQueryCacheBeginTransaction = NULL;
+	NSError *errorQueryCacheBeginTransaction = NULL;
 	MADQuery *query = [[MADQueryCacheBeginTransaction alloc] init];
 	success = [self executeQuery:query withError:&errorQueryCacheBeginTransaction];
-	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database), __PRETTY_FUNCTION__);
 
 }
 
 - (void)endBulkInsert {
-
 	BOOL success = NO;
 
-	NSError * __autoreleasing errorCacheEndTransaction = NULL;
+	NSError *errorCacheEndTransaction = NULL;
 	MADQuery *query = [[MADQueryCacheEndTransaction alloc] init];
 	success = [self executeQuery:query withError:&errorCacheEndTransaction];
-	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database), __PRETTY_FUNCTION__);
 
 	NSError * __autoreleasing errorQuerySyncMode = NULL;
 	MADQuery *querySyncMode = [[MADQueryCacheSyncDefault alloc] init];
 	success = [self executeQuery:querySyncMode withError:&errorQuerySyncMode];
-	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database),
-			 __PRETTY_FUNCTION__);
+	NSAssert(success, @"%s at %s", sqlite3_errmsg((sqlite3 *)self->_database), __PRETTY_FUNCTION__);
 
-	/*
-	 NSError * __autoreleasing errorJournalMode = NULL;
-	 MADQuery *queryJournalMode = [[MADQuery alloc] initWithQueryType:MADQueryTypeCacheJournalModeDefault object:@{}];
-	 [queryJournalMode performQueryWithDatabase:self withError:&errorJournalMode];
-	*/
+	
+	 //NSError * __autoreleasing errorJournalMode = NULL;
+	 //MADQuery *queryJournalMode = [[MADQuery alloc] initWithQueryType:MADQueryTypeCacheJournalModeDefault object:@{}];
+	 //[queryJournalMode performQueryWithDatabase:self withError:&errorJournalMode];
 	
 	sqlite3_finalize(_bulkStatement);
 	_bulkStatement = NULL;
@@ -843,15 +796,11 @@ void sqliteLog(void *foo, const char* statement) {
 - (void)enumerateTablesFromConnection:(id)process
 						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
 						   completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-	
 	NSMutableArray *result = [[NSMutableArray alloc] init];
 	BOOL success = NO;
 	sqlite3_stmt *statement;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	const char *queryStartChar = queryStart.UTF8String;
-	char *sql = sqlite3_mprintf((char *) queryStartChar);
-	//NSLog(@"SQL3: %s", sql);
-
+	char *sql = sqlite3_mprintf(queryStart.UTF8String);
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
 		success = YES;
 		BOOL stop = NO;
@@ -861,12 +810,11 @@ void sqliteLog(void *foo, const char* statement) {
 			const char *resultString = (char *)sqlite3_column_text(statement, 0);
 			NSString *readName = [[NSString alloc] initWithCString: resultString
 														  encoding: NSUTF8StringEncoding];
-			
-			
-			MADDatabaseTable *databaseTable;
-			databaseTable = [[MADDatabaseTable alloc] initWithTableName: readName];
+
+			MADDatabaseTable *databaseTable = [[MADDatabaseTable alloc] initWithTableName: readName];
 			[result addObject:databaseTable];
 			block(databaseTable, counter, &stop);
+
 			if (stop) break;
 			counter++;
 		}
@@ -881,8 +829,8 @@ void sqliteLog(void *foo, const char* statement) {
 - (void)getTablesFromConnection:(id)process
 					 completion:(void (^)(BOOL, NSError *, NSArray *))completion {
 	[self getTables:^(BOOL success, NSError *error, NSArray *tables) {
-		if (error) {
-			//NSLog(@"Error: %@", error);
+		if (error != nil) {
+			os_log_error(GetMadLog(), "Error: %@", error.localizedDescription);
 		}
 		completion(success, error, tables);
 	}];
@@ -921,8 +869,8 @@ void sqliteLog(void *foo, const char* statement) {
 	sqlite3_stmt *statement;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
 	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
-	
-	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+	int sqlite3_prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
+	if (sqlite3_prepare_result == SQLITE_OK) {
 		while (sqlite3_step(statement) == SQLITE_ROW) {
 			
 			const char *resultString = (const char *)sqlite3_column_text(statement, 0);
@@ -933,19 +881,19 @@ void sqliteLog(void *foo, const char* statement) {
 			[result addObject:databaseTable];
 		}
 	} else {
-		//NSLog(@"Error: %@", queryStart);
+		os_log_error(GetMadLog(), "Error: %s", sqlite3_errmsg(_database));
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:4784 userInfo:@{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
+				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
+			}];
+		}
 	}
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
 	return result;
 }
 
-/*
- const char *errorName = NULL, *errorMessage = NULL;
- mad_sqlite3Err(SQLITE_OK, &errorName, &errorMessage);
- NSString *fullMessage = [[NSString alloc] initWithFormat:@"%s: %s", errorName, errorMessage];
- //NSLog(@"%@", fullMessage);
- */
 void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 	*errName = 0;
 	*errMsg = "unknown error";
@@ -1234,47 +1182,36 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 }
 
 + (__kindof NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber {
-	id value = nil;
 	switch (sqlite3_column_type(statement, columnNumber)) { //http://www.sqlite.org/c3ref/c_blob.html
 		case SQLITE_INTEGER: {
-			value = [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnNumber)];
-			break;
+			return [[NSNumber alloc] initWithLongLong: sqlite3_column_int64(statement, columnNumber)];
 		}
 		case SQLITE_FLOAT: {
-			value = [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnNumber)];
-			break;
+			return [[NSNumber alloc] initWithDouble: sqlite3_column_double(statement, columnNumber)];
 		}
 		case SQLITE_BLOB: {
 			const void *blob = sqlite3_column_blob(statement, columnNumber);
-			value = [[NSData alloc] initWithBytes: blob
-										   length: (NSUInteger)sqlite3_column_bytes16(statement, columnNumber)];
-			break;
+			return [[NSData alloc] initWithBytes: blob
+										  length: (NSUInteger)sqlite3_column_bytes16(statement, columnNumber)];
 		}
 		case SQLITE_NULL: {
-			value = [NSNull null];
-			break;
+			return [NSNull null];
 		}
 		case SQLITE3_TEXT: {
 			const char *resultString = (char *)sqlite3_column_text(statement, columnNumber);
-			value = [[NSString alloc] initWithCString: resultString
+			return [[NSString alloc] initWithCString: resultString
 											 encoding: NSUTF8StringEncoding];
-			break;
 		}
 		default:
 			NSAssert(NO, @"Unhandled case");
 			break;
 	}
-	
-	if (value == nil) {
-		value = [NSNull null];
-	}
-	return value;
+	return [NSNull null];
 }
 
 + (NSObject <NSCopying, NSSecureCoding> *)databaseResultValueCast: (void * /* sqlite3_stmt * */)statement
-													 forColumnNumber: (int)columnCounter
-															withType: (MADDataType)type {
-
+												  forColumnNumber: (int)columnCounter
+														 withType: (MADDataType)type {
 	id columnValue;
 	switch (type) {
 			
@@ -1326,6 +1263,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 				columnValue = [[NSString alloc] initWithCString: (const char *) text
 													   encoding: NSUTF8StringEncoding];
 			}
+			free((char *)text);
 			break;
 		}
 			
@@ -1350,6 +1288,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 					columnValue = [[NSString alloc] initWithCString: (const char *) text
 														   encoding: NSUTF8StringEncoding];
 				}
+				free((char *)text);
 			}
 			break;
 		}
