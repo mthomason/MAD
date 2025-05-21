@@ -21,7 +21,7 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 //#import <MADBarcodes/pngconf.h>
 
 #import <MADBarcodes/zint.h>
-
+#import <MADBarcodes/png.h>
 #import <MADBarcodes/MTBarcodeProtocol.h>
 #import <MADBarcodes/MADBarcodeType.h>
 #import <MADBarcodes/MTBarcode.h>
