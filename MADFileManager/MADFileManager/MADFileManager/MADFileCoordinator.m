@@ -117,11 +117,7 @@
 }
 
 - (id)debugQuickLookObject {
-	NSMutableString *debug = [[NSMutableString alloc] init];
-	NSString *classname = NSStringFromClass([self class]);
-	id uppercaseClassname = [classname uppercaseString];
-	[debug appendFormat:@"--%@--\n", uppercaseClassname];
-	return debug;
+	return [NSString stringWithFormat:@"--%@--\n", [NSStringFromClass([self class]) uppercaseString]];
 }
 
 @end

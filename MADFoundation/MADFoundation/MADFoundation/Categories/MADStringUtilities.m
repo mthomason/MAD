@@ -12,20 +12,14 @@ static NSString * const kMADPeriodString = @".";
 
 @implementation MADStringUtilities
 
-+ (NSString *)stringByAppendingPeriodToString:(NSString *)string {
-	if (string.length == 0) {
-		return kMADPeriodString;
-	}
-	return [string hasSuffix:kMADPeriodString] ?
-				string : [string stringByAppendingString:kMADPeriodString];
++ (NSString *)stringByAppendingPeriod:(NSString *)string {
+	if (string.length == 0) { return kMADPeriodString; }
+	return [string hasSuffix:kMADPeriodString] ? string : [string stringByAppendingString:kMADPeriodString];
 }
 
 + (NSString *)stringByAppendingKeyPath:(NSString *)keyPath toString:(NSString *)string {
-	if (keyPath.length == 0) {
-		return string;
-	}
-	NSString *stringWithPeriod = [self stringByAppendingPeriodToString:string];
-	return [stringWithPeriod stringByAppendingString:keyPath];
+	if (keyPath.length == 0) { return string; }
+	return [[self stringByAppendingPeriod:string] stringByAppendingString:keyPath];
 }
 
 @end

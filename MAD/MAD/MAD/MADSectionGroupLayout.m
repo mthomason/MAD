@@ -72,7 +72,7 @@
 	NSString *queryTableAlias = [RptqQueryTable queryAliasForSchemaTableName:_tableAlias dropIndex:_dropIndex];
 	NSString *safeTableAlias = self.safeIdentifier(queryTableAlias);
 	NSString *safeFieldName = self.safeIdentifier(_fieldName);
-	NSString *sortKey = [MADStringUtilities stringByAppendingPeriodToString:safeTableAlias];
+	NSString *sortKey = [MADStringUtilities stringByAppendingPeriod:safeTableAlias];
 	return [sortKey stringByAppendingString:safeFieldName];
 }
 

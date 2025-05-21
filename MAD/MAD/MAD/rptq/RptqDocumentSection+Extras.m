@@ -181,7 +181,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 + (NSString *)keyPathInGroupSort {
 	NSString *result = [self keyPathInGroup];
 	NSString *keyPathSort = [self keyPathSort];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathSort];
 	return result;
 }
@@ -189,7 +189,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 + (NSString *)keyPathInGroupWeight {
 	NSString *result = [self keyPathInGroup];
 	NSString *keyPathWeight = [self keyPathWeight];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathWeight];
 	return result;
 }
@@ -198,9 +198,9 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
 	NSString *keyPathSchemaFieldName = [RptqQueryField keySchemaFieldName];
 	NSString *result = [self keyPathInGroup];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathHasField];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathSchemaFieldName];
 	return result;
 }
@@ -210,11 +210,11 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	NSString *keyPathInQueryTable = [RptqQueryField keyInQueryTable];
 	NSString *keyPathAlias = [RptqQueryTable keyPathAlias];
 	NSString *result = [self keyPathInGroup];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathHasField];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathInQueryTable];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathAlias];
 	return result;
 }
@@ -224,11 +224,11 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	NSString *keyPathInQueryTable = [RptqQueryField keyInQueryTable];
 	NSString *keyPathDropIndex = [RptqQueryTable keyPathDropIndex];
 	NSString *result = [self keyPathInGroup];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathHasField];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathInQueryTable];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathDropIndex];
 	return result;
 }
@@ -237,9 +237,9 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
 	NSString *keyPathSchemaFieldDataType = [RptqQueryField keySchemaFieldDataType];
 	NSString *result = [self keyPathInGroup];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathHasField];
-	result = [MADStringUtilities stringByAppendingPeriodToString:result];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
 	result = [result stringByAppendingString:keyPathSchemaFieldDataType];
 	return result;
 }

@@ -200,13 +200,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 + (NSString *)keyRowNumber {
 	NSString *result = [self keyInSectionRow];
-	result = [MADStringUtilities stringByAppendingPeriodToString: result];
+	result = [MADStringUtilities stringByAppendingPeriod: result];
 	result = [result stringByAppendingString:NSStringFromSelector(@selector(rowNumber))];
 	return result;
 }
 
 + (NSString *)keyInSection {
-	NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(inSectionRow))];
+	NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(inSectionRow))];
 	return [result stringByAppendingString: NSStringFromSelector(@selector(inSection))];
 }
 
@@ -228,9 +228,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyBorderWidthTop {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(border))];
+		NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(border))];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:NSStringFromSelector(@selector(top))];
 	}
 	return key;
@@ -240,9 +240,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	static NSString *key = nil;
 	if (key == nil) {
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(border))];
+		NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(border))];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
 	return key;
@@ -252,9 +252,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	static NSString *key = nil;
 	if (key == nil) {
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(border))];
+		NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(border))];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
 	return key;
@@ -265,9 +265,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = NSStringFromSelector(@selector(border));
 		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyRight];
 	}
 	return key;
@@ -278,7 +278,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyTop = [RptqDirectionalAsymmetry keyTop];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyTop];
 	}
 	return key;
@@ -289,7 +289,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
 	return key;
@@ -300,7 +300,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
 	return key;
@@ -311,7 +311,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyPadding];
 		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyRight];
 	}
 	return key;
@@ -322,7 +322,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyTop = [RptqDirectionalAsymmetry keyTop];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyTop];
 	}
 	return key;
@@ -333,7 +333,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyBottom = [RptqDirectionalAsymmetry keyBottom];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyBottom];
 	}
 	return key;
@@ -344,7 +344,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	if (key == nil) {
 		NSString *result = [self keyMargin];
 		NSString *keyLeft = [RptqDirectionalAsymmetry keyLeft];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:keyLeft];
 	}
 	return key;
@@ -353,10 +353,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyMarginRight {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [self keyMargin];
-		NSString *keyRight = [RptqDirectionalAsymmetry keyRight];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:keyRight];
+		key = [[MADStringUtilities stringByAppendingPeriod: [self keyMargin]] stringByAppendingString:[RptqDirectionalAsymmetry keyRight]];
 	}
 	return key;
 }
@@ -364,10 +361,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectOriginY {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
-		result = [result stringByAppendingString:NSStringFromSelector(@selector(origin))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
-		key = [result stringByAppendingString:NSStringFromSelector(@selector(y))];
+		key = [[MADStringUtilities stringByAppendingPeriod: [[MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(rect))] stringByAppendingString:NSStringFromSelector(@selector(origin))]] stringByAppendingString:NSStringFromSelector(@selector(y))];
 	}
 	return key;
 }
@@ -375,9 +369,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectOriginX {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(rect))];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(origin))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:NSStringFromSelector(@selector(x))];
 	}
 	return key;
@@ -386,9 +380,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectSizeHeight {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(rect))];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(size))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString: NSStringFromSelector(@selector(height))];
 	}
 	return key;
@@ -397,9 +391,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 + (NSString *)keyRectSizeWidth {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *result = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(rect))];
+		NSString *result = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(rect))];
 		result = [result stringByAppendingString:NSStringFromSelector(@selector(size))];
-		result = [MADStringUtilities stringByAppendingPeriodToString: result];
+		result = [MADStringUtilities stringByAppendingPeriod: result];
 		key = [result stringByAppendingString:NSStringFromSelector(@selector(width))];
 	}
 	return key;
@@ -423,70 +417,34 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 + (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID {
-	
-	NSFetchRequest *request;
+
 	NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
-	
-	NSString *keyBorderWidthTop = [self keyBorderWidthTop];
-	NSString *keyBorderWidthBottom = [self keyBorderWidthBottom];
-	NSString *keyPaddingTop = [self keyPaddingTop];
-	NSString *keyPaddingBottom = [self keyPaddingBottom];
-	NSString *keyMarginTop = [self keyMarginTop];
-	NSString *keyMarginBottom = [self keyMarginBottom];
-	NSString *keyRectOriginY = [self keyRectOriginY];
-	NSString *keyRectSizeHeight = [self keyRectSizeHeight];
-	
-	NSUInteger expressionsToSumCount = 8;
-	NSExpression *expressionsToSum[] = {
-		[NSExpression expressionForKeyPath:keyBorderWidthTop],
-		[NSExpression expressionForKeyPath:keyBorderWidthBottom],
-		[NSExpression expressionForKeyPath:keyPaddingTop],
-		[NSExpression expressionForKeyPath:keyPaddingBottom],
-		[NSExpression expressionForKeyPath:keyMarginTop],
-		[NSExpression expressionForKeyPath:keyMarginBottom],
-		[NSExpression expressionForKeyPath:keyRectOriginY],
-		[NSExpression expressionForKeyPath:keyRectSizeHeight],
-	};
-	
-	NSExpression *borderTop = [NSExpression expressionForKeyPath:keyBorderWidthTop];
-	NSExpression *borderBottom = [NSExpression expressionForKeyPath:keyBorderWidthBottom];
-	NSArray *borderExpressions = [[NSArray alloc] initWithObjects:borderTop, borderBottom, nil];
-	NSExpression *addBorder = [NSExpression expressionForFunction: @"add:to:"
-														arguments: borderExpressions];
+	NSExpression *addBorder = [NSExpression expressionForFunction: @"add:to:" arguments: @[
+		[NSExpression expressionForKeyPath:[self keyBorderWidthTop]],
+		[NSExpression expressionForKeyPath:[self keyBorderWidthBottom]]
+	]];
 
-	NSExpression *paddingTop = [NSExpression expressionForKeyPath:keyPaddingTop];
-	NSExpression *paddingBottom = [NSExpression expressionForKeyPath:keyPaddingBottom];
-	NSArray *paddingExpressions = [[NSArray alloc] initWithObjects:paddingTop, paddingBottom, nil];
-	NSExpression *addPadding = [NSExpression expressionForFunction: @"add:to:"
-														arguments: paddingExpressions];
+	NSExpression *addPadding = [NSExpression expressionForFunction: @"add:to:" arguments: @[
+		[NSExpression expressionForKeyPath:[self keyPaddingTop]],
+		[NSExpression expressionForKeyPath:[self keyPaddingBottom]]
+	]];
 
-	NSExpression *marginTop = [NSExpression expressionForKeyPath:keyMarginTop];
-	NSExpression *marginBottom = [NSExpression expressionForKeyPath:keyMarginBottom];
-	NSArray *marginExpressions = [[NSArray alloc] initWithObjects:marginTop, marginBottom, nil];
-	NSExpression *addMargin = [NSExpression expressionForFunction: @"add:to:"
-														 arguments: marginExpressions];
+	NSExpression *addMargin = [NSExpression expressionForFunction: @"add:to:" arguments: @[
+		[NSExpression expressionForKeyPath:[self keyMarginTop]],
+		[NSExpression expressionForKeyPath:[self keyMarginBottom]]
+	]];
 
-	NSExpression *rectOriginY = [NSExpression expressionForKeyPath:keyRectOriginY];
-	NSExpression *rectSizeHeight = [NSExpression expressionForKeyPath:keyRectSizeHeight];
-	NSArray *rectExpressions = [[NSArray alloc] initWithObjects:rectOriginY, rectSizeHeight, nil];
-	NSExpression *addRect = [NSExpression expressionForFunction: @"add:to:"
-														arguments: rectExpressions];
+	NSExpression *addRect = [NSExpression expressionForFunction: @"add:to:" arguments: @[
+		[NSExpression expressionForKeyPath:[self keyRectOriginY]],
+		[NSExpression expressionForKeyPath:[self keyRectSizeHeight]]
+	]];
 
-	NSArray *addRectMarginExpressions = [[NSArray alloc] initWithObjects:addMargin, addRect, nil];
-	NSExpression *addMarginRect = [NSExpression expressionForFunction: @"add:to:"
-															arguments: addRectMarginExpressions];
-	
-	NSArray *addPaddingBorderExpressions = [[NSArray alloc] initWithObjects:addPadding, addBorder, nil];
-	NSExpression *addPaddingBorder = [NSExpression expressionForFunction: @"add:to:"
-															  arguments: addPaddingBorderExpressions];
-	
-	NSArray *totalColumnSumExpressions = [[NSArray alloc] initWithObjects:addMarginRect, addPaddingBorder, nil];
-	NSExpression *totalColumnSumExpression = [NSExpression expressionForFunction: @"add:to:"
-																 arguments: totalColumnSumExpressions];
+	NSExpression *addMarginRect = [NSExpression expressionForFunction: @"add:to:" arguments: @[addMargin, addRect]];
+	NSExpression *addPaddingBorder = [NSExpression expressionForFunction: @"add:to:" arguments: @[addPadding, addBorder]];
 	
 	NSExpressionDescription *expressionSum = [[NSExpressionDescription alloc] init];
 	expressionSum.name = [self keyCalculatedHeight];
-	expressionSum.expression = totalColumnSumExpression;
+	expressionSum.expression = [NSExpression expressionForFunction: @"add:to:" arguments: @[addMarginRect, addPaddingBorder]];
 	expressionSum.expressionResultType = NSFloatAttributeType;
 /*
 	NSExpressionDescription *expressionMax = [[NSExpressionDescription alloc] init];
@@ -495,17 +453,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	expressionMax.expressionResultType = NSFloatAttributeType;
 */
 	
-	NSString *entityName = NSStringFromClass([self class]);
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionSum, nil];
-	request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
 	request.predicate = predicate;
 	request.resultType = NSDictionaryResultType;
-	request.propertiesToFetch = propertiesToFetch;
-	
-	for (NSUInteger i=0; i<expressionsToSumCount; i++) {
-		expressionsToSum[i] = nil;
-	}
-	
+	request.propertiesToFetch = @[expressionSum];
 	return request;
 }
 
@@ -568,12 +519,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	NSString *keyRectOriginY = [self keyRectOriginY];
 	NSString *keyRectSizeHeight = [self keyRectSizeHeight];
 	
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionSelf,
-										keyBorderWidthTop, keyBorderWidthBottom,
-										keyPaddingTop, keyPaddingBottom,
-										keyMarginTop, keyMarginBottom,
-										keyRectOriginY, keyRectSizeHeight, nil];
-	request.propertiesToFetch = propertiesToFetch;
+	request.propertiesToFetch = @[expressionSelf, keyBorderWidthTop, keyBorderWidthBottom, keyPaddingTop, keyPaddingBottom, keyMarginTop, keyMarginBottom, keyRectOriginY, keyRectSizeHeight];
 	
 	return request;
 }
@@ -1029,7 +975,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
 	if (!value) {
-		os_log_debug(rptq_log, "Nil value passed to formattedString");
 		return @"";
 	}
 

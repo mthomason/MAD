@@ -62,7 +62,7 @@ static os_log_t rptq_log;
 + (NSString *)keyOwnedByUserDriverID {
 	NSString *keyOwnedByUser = [self keyOwnedByUser];
 	NSString *keyDriverID = [self keyDriverID];
-	NSString *keyOwndByUserDriverID = [MADStringUtilities stringByAppendingPeriodToString:keyOwnedByUser];
+	NSString *keyOwndByUserDriverID = [MADStringUtilities stringByAppendingPeriod:keyOwnedByUser];
 	keyOwndByUserDriverID = [keyOwndByUserDriverID stringByAppendingString:keyDriverID];
 	return keyOwndByUserDriverID;
 }
@@ -70,7 +70,7 @@ static os_log_t rptq_log;
 + (NSString *)keyOwnedByUserDatabaseName {
 	NSString *keyOwnedByUser = [self keyOwnedByUser];
 	NSString *keyDatabaseName = NSStringFromSelector(@selector(dbname));
-	NSString *keyOwndByUserDBName = [MADStringUtilities stringByAppendingPeriodToString:keyOwnedByUser];
+	NSString *keyOwndByUserDBName = [MADStringUtilities stringByAppendingPeriod:keyOwnedByUser];
 	keyOwndByUserDBName = [keyOwndByUserDBName stringByAppendingString:keyDatabaseName];
 	return keyOwndByUserDBName;
 }

@@ -13,7 +13,7 @@
 
 @interface MADStringUtilities : NSObject
 
-+ (NSString *)stringByAppendingPeriodToString:(NSString *)string;
++ (NSString *)stringByAppendingPeriod:(NSString *)string;
 + (NSString *)stringByAppendingKeyPath:(NSString *)keyPath toString:(NSString *)string;
 
 @end

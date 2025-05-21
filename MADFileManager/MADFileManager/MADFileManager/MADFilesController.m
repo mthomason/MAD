@@ -492,8 +492,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 								  updatedMetaDatum:(NSArray *)updates
 										completion:(void (^)(BOOL success, NSError *error))completion {
 
-	//NSLog(@"%s\n\t%@\n\t%@\n\t%@", __PRETTY_FUNCTION__, inserts, removes, updates);
-	
 	NSArray *insertedMetaDatum = inserts.copy;
 	NSArray *removedMetaDatum = removes.copy;
 	NSArray *updatedMetaDatum = updates.copy;
@@ -512,14 +510,9 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 		NSArray *fileMetaDatum = [[NSArray alloc] initWithArray:sself.fileMetaDatum];
 		
 		dispatch_sync(fileMetaDataQueue, ^{
-			
-			
-			id contains = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
-			trackedRemovedFileInfos = [removedMetaDatum filteredArrayUsingPredicate:contains];
-			
-			id excludes = [NSCompoundPredicate notPredicateWithSubpredicate:contains];
-			untrackedInsertedFileInfos = [insertedMetaDatum filteredArrayUsingPredicate:excludes];
-			
+			NSPredicate *contains = [NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum];
+			trackedRemovedFileInfos = [removedMetaDatum filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"URL in %@.URL", fileMetaDatum]];
+			untrackedInsertedFileInfos = [insertedMetaDatum filteredArrayUsingPredicate:[NSCompoundPredicate notPredicateWithSubpredicate:contains]];
 		});
 		
 		if (untrackedInsertedFileInfos.count == 0 && trackedRemovedFileInfos.count == 0 &&
@@ -538,22 +531,16 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 			
 			MADFilesController * __weak wself = sself;
 			dispatch_sync(fileMetaDataQueue, ^{
-				
-				
 				MADFilesController *sself2 = wself;
 				trackedRemovedFileInfoIndex =
 				[sself2.fileMetaDatum indexOfObject:trackedRemovedFileInfo];
 				[sself2.fileMetaDatum removeObjectAtIndex: trackedRemovedFileInfoIndex];
-				
 			});
 			
-			SEL didRemoveFileInfo = @selector(filesController:didRemoveFileInfo:atIndex:);
-			if ([delegate respondsToSelector:didRemoveFileInfo]) {
-				
+			if ([delegate respondsToSelector:@selector(filesController:didRemoveFileInfo:atIndex:)]) {
 				[delegate filesController: sself
 						didRemoveFileInfo: trackedRemovedFileInfo
 								  atIndex: trackedRemovedFileInfoIndex];
-				
 			}
 		}
 		
@@ -589,42 +576,28 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 		for (MADMetaData *updatedFileInfo in updatedMetaDatum) {
 			
 			__block NSUInteger updatedFileInfoIndex;
-			
 			MADFilesController *__weak wself = sself;
-			
 			dispatch_block_t findUpdatedIndex = ^{
-				
 				MADFilesController *sself2 = wself;
 				updatedFileInfoIndex = [sself2.fileMetaDatum indexOfObject:updatedFileInfo];
-				
 				if (updatedFileInfoIndex != NSNotFound) {
 					sself2.fileMetaDatum[updatedFileInfoIndex] = updatedFileInfo;
 				}
-				
 			};
 			
 			dispatch_sync(fileMetaDataQueue, findUpdatedIndex);
-			
-			SEL didUpdateFileInfo = @selector(filesController:didUpdateFileInfo:atIndex:);
-			
-			if (updatedFileInfoIndex != NSNotFound && [delegate respondsToSelector:didUpdateFileInfo]) {
-				
+			if (updatedFileInfoIndex != NSNotFound && [delegate respondsToSelector:@selector(filesController:didUpdateFileInfo:atIndex:)]) {
 				[delegate filesController: sself
 						didUpdateFileInfo: updatedFileInfo
 								  atIndex: updatedFileInfoIndex];
-				
 			}
 		}
 		
-		SEL didChangeContent = @selector(filesControllerDidChangeContent:completion:);
-		if ([delegate respondsToSelector:didChangeContent]) {
-			
-			void (^handleCompletion)(BOOL, NSError *);
-			handleCompletion = ^(BOOL success, NSError *error) { };
+		if ([delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
+			void (^handleCompletion)(BOOL, NSError *) = ^(BOOL success, NSError *error) { };
 			[delegate filesControllerDidChangeContent: sself
 										   completion: handleCompletion];
 			completion(YES, nil);
-			
 		} else {
 			completion(YES, nil);
 		}
@@ -634,14 +607,12 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 #pragma mark - Convenience
 
 - (NSArray *)fileInfosByMappingURLs:(NSArray *)URLs {
-
 	NSMutableArray *fileMetaDatum = [NSMutableArray arrayWithCapacity:URLs.count];
 	for (NSURL *URL in URLs) {
 		MADMetaData *fileMetaData = [[MADMetaData alloc] initWithURL:URL];
 		[fileMetaDatum addObject:fileMetaData];
 	}
 	return fileMetaDatum;
-	
 }
 
 - (id)debugQuickLookObject {

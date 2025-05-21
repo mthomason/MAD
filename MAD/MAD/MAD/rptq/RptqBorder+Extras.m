@@ -21,7 +21,7 @@
 - (void)awakeFromInsert {
 	[super awakeFromInsert];
 	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-	NSAssert(managedObjectContext == nil, @"Managed object context is nil");
+	NSAssert(managedObjectContext != nil, @"Managed object context is nil");
 	if (self.width == nil) {
 		self.width = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDirectionalAsymmetry class])
 												   inManagedObjectContext: managedObjectContext];

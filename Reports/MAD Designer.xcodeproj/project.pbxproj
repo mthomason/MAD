@@ -317,7 +317,6 @@
 		4CA1AAAE1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */; };
 		4CA4D6201D1714BD00A1240C /* MADNavigationControllerFileExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */; };
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
-		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4CA8B2EA2DD5DCE0001E27B3 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */; };
 		4CA8B2EB2DD5DCE0001E27B3 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E92DD5DCE0001E27B3 /* libssl.a */; };
 		4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* MADStringEncryption.m */; };
@@ -1291,7 +1290,6 @@
 				4C29162924AC75E400EC794B /* MADTdsClient.framework in Frameworks */,
 				4C29162524AC75E400EC794B /* MADMySQL.framework in Frameworks */,
 				4C29161B24AC75E300EC794B /* MADDataStructures.framework in Frameworks */,
-				4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */,
 				4CA54D341893828B006B301A /* libc++.dylib in Frameworks */,
 				4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */,
 				4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */,

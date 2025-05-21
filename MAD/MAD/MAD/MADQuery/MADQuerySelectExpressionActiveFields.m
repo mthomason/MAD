@@ -55,7 +55,7 @@
             NSString *tableName = [queryField.inQueryTable queryAlias];
             MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
             
-			NSString *tableAlias = [MADStringUtilities stringByAppendingPeriodToString:safeTableName];
+			NSString *tableAlias = [MADStringUtilities stringByAppendingPeriod:safeTableName];
             MADSafeQueryField *fieldName = [database newSafeIdentifier: field.name];
             
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];

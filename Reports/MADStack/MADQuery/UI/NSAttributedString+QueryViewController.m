@@ -144,7 +144,7 @@
 @implementation MADStringQueryController
 
 + (instancetype)newStringFieldDisplayWithTable:(NSString *)table andField:(NSString *)field {
-	id result = [MADStringUtilities stringByAppendingPeriodToString:table.capitalizedString];
+	id result = [MADStringUtilities stringByAppendingPeriod:table.capitalizedString];
 	result = [result stringByAppendingString:field.capitalizedString];
 	return result;
 }

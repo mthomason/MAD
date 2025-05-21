@@ -124,7 +124,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 #pragma mark -
 #pragma mark Storyboard
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(nonnull UIViewController *)fromViewController sender:(nullable id)sender {
 	return NO;
 }
 

@@ -59,27 +59,21 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	_paragraphAttributes = @{NSParagraphStyleAttributeName: paragraphStyle};
 	
 	// Initialize with empty strings
-	_statusMessage1 = [[NSMutableAttributedString alloc] initWithString:@" "
-															 attributes:_boldAttributes];
-	_statusMessage2 = [[NSMutableAttributedString alloc] initWithString:@" "
-															 attributes:_lightAttributes];
-	_statusMessage3 = [[NSMutableAttributedString alloc] initWithString:@" "
-															 attributes:_lightAttributes];
-	_display = [[NSMutableAttributedString alloc] initWithString:@" "
-													  attributes:_paragraphAttributes];
+	_statusMessage1 = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_boldAttributes];
+	_statusMessage2 = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_lightAttributes];
+	_statusMessage3 = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_lightAttributes];
+	_display = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_paragraphAttributes];
 }
 
 - (void)updatePageStatus:(MADReportPosition)reportPosition {
 	// Perform string formatting off main thread
 	NSString *localizedPageOfPages;
 	if (reportPosition.totalPages == 0) {
-		localizedPageOfPages = NSLocalizedString(MADTextNothingToDisplay, nil);
+		localizedPageOfPages = NSLocalizedString(MADTextNothingToDisplay, MADTextNothingToDisplay);
 	} else {
-		NSString *start = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.currentPage + 1)
-															numberStyle:NSNumberFormatterDecimalStyle];
-		NSString *end = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.totalPages)
-														  numberStyle:NSNumberFormatterDecimalStyle];
-		localizedPageOfPages = [NSString stringWithFormat:NSLocalizedString(MADTextPageXofY, nil), start, end];
+		NSString *start = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.currentPage + 1) numberStyle:NSNumberFormatterDecimalStyle];
+		NSString *end = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.totalPages) numberStyle:NSNumberFormatterDecimalStyle];
+		localizedPageOfPages = [NSString stringWithFormat:NSLocalizedString(MADTextPageXofY, MADTextPageXofY), start, end];
 	}
 	
 	__weak typeof(self) weakSelf = self;
@@ -89,9 +83,8 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 }
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
-	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs
-																numberStyle:NSNumberFormatterDecimalStyle];
-	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextFormattingPage, nil), decimalString];
+	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage), decimalString];
 	
 	__weak typeof(self) weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -102,7 +95,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
 	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs
 																numberStyle:NSNumberFormatterDecimalStyle];
-	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextReadRecords, nil), decimalString];
+	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextReadRecords, MADTextReadRecords), decimalString];
 	
 	__weak typeof(self) weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -113,7 +106,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 - (void)displayNoCache {
 	__weak typeof(self) weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[weakSelf updateStatusWithTime:NSLocalizedString(MADTextNoCache, nil)];
+		[weakSelf updateStatusWithTime:NSLocalizedString(MADTextNoCache, MADTextNoCache)];
 	});
 }
 

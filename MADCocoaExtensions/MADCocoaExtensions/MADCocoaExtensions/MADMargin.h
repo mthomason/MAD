@@ -11,8 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MADMargin : NSObject
-	<NSCoding, NSCopying>
+@interface MADMargin : NSObject <NSCoding, NSCopying>
 
 	- (instancetype)initWithLeft:(Float64)left right:(Float64)right
 							 top:(Float64)top bottom:(Float64)bottom;

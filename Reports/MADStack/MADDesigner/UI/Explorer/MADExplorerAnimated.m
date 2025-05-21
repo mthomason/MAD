@@ -14,8 +14,12 @@
 #import "MADExplorerController.h"
 
 static inline CGRect CGRectTabBar(CGRect, BOOL) __attribute__((unused));
-static inline CGRect CGRectTabBarOffscreen(CGRect rect);
-static inline CGRect CGRectTabBarOnscreen(CGRect rect);
+static inline CGRect CGRectTabBarOffscreen(CGRect);
+static inline CGRect CGRectTabBarOnscreen(CGRect);
+
+static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing)  { return pushing ? CGRectTabBarOnscreen(rect) : CGRectTabBarOffscreen(rect); }
+static inline CGRect CGRectTabBarOffscreen(CGRect rect)  { return CGRectOffset(rect, CGSizeZero.width, rect.size.height); }
+static inline CGRect CGRectTabBarOnscreen(CGRect rect)  { return CGRectOffset(rect, CGSizeZero.width, rect.size.height); }
 
 @implementation MADExplorerAnimatedCrossFadePop {
 	BOOL _hideToolbar;
@@ -120,8 +124,8 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect);
 		if (finished) {
 			BOOL canceled;
 			id fromView = [transitionContext viewForKey: UITransitionContextFromViewKey];
-
-			if (!(canceled = [transitionContext transitionWasCancelled])) {
+			canceled = [transitionContext transitionWasCancelled];
+			if (!canceled) {
 				if (pushingFileExplorer) {
 					//[toViewController.navigationController setToolbarHidden: NO animated:NO];
 				} else if (poppingFileExplorer) {
@@ -136,15 +140,3 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect);
 }
 
 @end
-
-static inline CGRect CGRectTabBar(CGRect rect, BOOL pushing)  {
-	return pushing ? CGRectTabBarOnscreen(rect) : CGRectTabBarOffscreen(rect);
-}
-
-static inline CGRect CGRectTabBarOffscreen(CGRect rect)  {
-	return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
-}
-
-static inline CGRect CGRectTabBarOnscreen(CGRect rect)  {
-	return CGRectOffset(rect, CGSizeZero.width, rect.size.height);
-}

@@ -243,13 +243,13 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 	NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
 	NSString *inDocument;
 	NSString *keyOwnedByQuery = NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
-	inDocument = [MADStringUtilities stringByAppendingPeriodToString:inDatabase];
+	inDocument = [MADStringUtilities stringByAppendingPeriod:inDatabase];
 	inDocument = [inDocument stringByAppendingString: keyOwnedByQuery];
 	
-	NSString *inDBID = [MADStringUtilities stringByAppendingPeriodToString:inDatabase];
+	NSString *inDBID = [MADStringUtilities stringByAppendingPeriod:inDatabase];
 	inDBID = [inDBID stringByAppendingString:identifier];
 	
-	NSString *inDocID = [MADStringUtilities stringByAppendingPeriodToString:inDocument];
+	NSString *inDocID = [MADStringUtilities stringByAppendingPeriod:inDocument];
 	inDocID = [inDocID stringByAppendingString:identifier];
 	
 	NSExpression *dbExpression = [NSExpression expressionForKeyPath:inDatabase];

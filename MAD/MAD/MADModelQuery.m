@@ -230,7 +230,7 @@
 	NSOrderedSet <NSManagedObjectID *> *tableObjectIDs;
 	tableObjectIDs = [[NSOrderedSet alloc] initWithArray: tableValues copyItems:NO];
 	
-	NSString *dropIndex = [MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(inQueryTable))];
+	NSString *dropIndex = [MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inQueryTable))];
 	dropIndex = [dropIndex stringByAppendingString:NSStringFromSelector(@selector(dropIndex))];
 	
 	NSString *keySchemaTableID = [RptqQueryField keySchemaTableID];
@@ -340,7 +340,7 @@
 // It creates MADModelQueryLink objects.
 - (void)updateLinks {
 
-	NSString *inQueryTableID = [[MADStringUtilities stringByAppendingPeriodToString:NSStringFromSelector(@selector(inQuery))] stringByAppendingString: NSStringFromSelector(@selector(identifier))];
+	NSString *inQueryTableID = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inQuery))] stringByAppendingString: NSStringFromSelector(@selector(identifier))];
 
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
 																 atKeyPath:inQueryTableID];

@@ -147,7 +147,7 @@
 	keyWidth = NSStringFromSelector(@selector(width));
 	keyIdentifier = NSStringFromSelector(@selector(identifier));
 	keyInTableIdentifier = NSStringFromSelector(@selector(inTable));
-	keyInTableIdentifier = [MADStringUtilities stringByAppendingPeriodToString: keyInTableIdentifier];
+	keyInTableIdentifier = [MADStringUtilities stringByAppendingPeriod: keyInTableIdentifier];
 	keyInTableIdentifier = [keyInTableIdentifier stringByAppendingString:keyIdentifier];
 
 	

@@ -101,18 +101,18 @@ static NSString * const NSFetchedResultsCachePredicates             = @"NSFetche
 
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
-static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing);
-static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing);
+//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL);
+//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL);
 BOOL storeEnabled(void);
 
-static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
-	return pushing ? UITransitionContextFromViewControllerKey :
-					 UITransitionContextToViewControllerKey;
-}
-static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
-	return pushing ? UITransitionContextToViewControllerKey :
-					 UITransitionContextFromViewControllerKey;
-}
+//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
+//	return pushing ? UITransitionContextFromViewControllerKey :
+//					 UITransitionContextToViewControllerKey;
+//}
+//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
+//	return pushing ? UITransitionContextToViewControllerKey :
+//					 UITransitionContextFromViewControllerKey;
+//}
 
 BOOL storeEnabled(void) {
 	return [MTStoreKitController sharedObject].reportingEnabled;
@@ -183,9 +183,7 @@ BOOL storeEnabled(void) {
 			[switchQueryMode addTarget: nil action: @selector(handleToggleReportingMode:)
 					  forControlEvents: UIControlEventValueChanged];
 			cell.accessoryView = switchQueryMode;
-			cell.textLabel.text = switchQueryMode.on ?
-			@"Reporting Mode" :
-			@"Designer Mode (limited)";
+			cell.textLabel.text = switchQueryMode.on ? NSLocalizedString(@"Reporting Mode", @"Reporting Mode") : NSLocalizedString(@"Designer Mode (limited)", @"Designer Mode (limited)");
 			break;
 		}
 			
@@ -781,11 +779,11 @@ BOOL storeEnabled(void) {
 	
 }
 
-- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController {
 	return YES;
 }
 
-- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
 	[(MADTabBarController *)self.tabBarController enableTabBarItems];
 }
 
@@ -816,9 +814,7 @@ BOOL storeEnabled(void) {
 	tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
 	
 	if (tableSection == MADIdentifierQueryViewSectionsLinks) {
-		NSIndexSet *linksSection;
-		linksSection = [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection];
-		[self.tableView reloadSections: linksSection
+		[self.tableView reloadSections: [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection]
 					  withRowAnimation: UITableViewRowAnimationAutomatic];
 	}
 	
@@ -829,13 +825,11 @@ BOOL storeEnabled(void) {
 #pragma mark -
 #pragma mark MADQueryBuilderAddGroupDelegate
 
-- (void)viewController: (MADQueryBuilderAddGroupViewController *)viewController
-addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
-		  andSortOrder: (MADSortOrder)sortOrder {
+- (void)viewController:(MADQueryBuilderAddGroupViewController *)vc addedGroupOnQueryField:(NSManagedObjectID *)objectID
+		  andSortOrder:(MADSortOrder)sortOrder {
 	
 	[self dismissViewController];
-	[self.document addQueryGroupWithQueryField: queryFieldID
-								  andSortOrder: sortOrder];
+	[self.document addQueryGroupWithQueryField: objectID andSortOrder: sortOrder];
 }
 
 #pragma mark -
@@ -845,14 +839,13 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 							 tableCountEnd:(NSUInteger)numberOfTablesEnd
 						  reportingEnabled:(BOOL)reportingEnabled {
 
-	MADQueryViewDataSource *oldQueryLayout, *newQueryLayout;
-	oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
-														   reportingEnabled: reportingEnabled
-														handleConfigureCell: nil];
+	MADQueryViewDataSource *oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
+																				   reportingEnabled: reportingEnabled
+																				handleConfigureCell: nil];
 	
-	newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTablesEnd
-														   reportingEnabled: reportingEnabled
-														handleConfigureCell: nil];
+	MADQueryViewDataSource *newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTablesEnd
+																				   reportingEnabled: reportingEnabled
+																				handleConfigureCell: nil];
 	NSMutableIndexSet *indexesToAdd = newQueryLayout.sectionTypesIndexs.mutableCopy;
 	[indexesToAdd removeIndexes:oldQueryLayout.sectionTypesIndexs];
 	__block short ctr = 0;
@@ -866,8 +859,7 @@ addedGroupOnQueryField: (NSManagedObjectID *)queryFieldID
 	return indexSetSections;
 }
 
-- (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
- addedQueryTableWithID:(NSManagedObjectID *)objectID {
+- (void)viewController:(MADQueryBuilderAddTableViewController *)vc addedQueryTableWithID:(NSManagedObjectID *)objectID {
 	
 	MADocument *document = self.document;
 	typeof(self) __weak weakself = self;

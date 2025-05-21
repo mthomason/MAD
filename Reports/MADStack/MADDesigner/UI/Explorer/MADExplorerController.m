@@ -847,8 +847,7 @@ typedef NS_ENUM(short, MADExplorerState) {
 #pragma mark -
 #pragma mark UIDocumentPickerDelegate
 
-- (void)documentPicker:(UIDocumentPickerViewController *)controller
-  didPickDocumentAtURL:(NSURL *)url {
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
 	[controller removeFromParentViewController];
 }
 

@@ -147,12 +147,11 @@
 														   toViewController:(UIViewController *)toVC  {
 
 	id <UIViewControllerAnimatedTransitioning> animationController;
-	BOOL toTabViewController = NO;
-	BOOL toFileExplorferViewController = NO;
-	if ((toFileExplorferViewController = [toVC isKindOfClass:[MADExplorerController class]]) ||
-		(toTabViewController = [toVC isKindOfClass:[UITabBarController class]])) {
+	BOOL toTabViewController = [toVC isKindOfClass:[UITabBarController class]];
+	BOOL toFileExplorferViewController = [toVC isKindOfClass:[MADExplorerController class]];
+
+	if (toTabViewController || toFileExplorferViewController) {
 		toVC.modalPresentationStyle = UIModalPresentationCustom;
-		
 		switch (operation) {
 			case UINavigationControllerOperationPush:
 				animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController

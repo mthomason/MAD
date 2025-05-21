@@ -277,9 +277,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	static NSString *key = nil;
 	if (key == nil) {
 		NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriodToString: [self keyPathDocument]];
+		key = [MADStringUtilities stringByAppendingPeriod: [self keyPathDocument]];
 		key = [key stringByAppendingString:NSStringFromSelector(@selector(undoManager))];
-		key = [MADStringUtilities stringByAppendingPeriodToString: key];
+		key = [MADStringUtilities stringByAppendingPeriod: key];
 		key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
 	}
 	return key;
@@ -291,9 +291,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		NSString *keyPathDocument = [self keyPathDocument];
 		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
 		NSString *keyPathUndoMenuItemTitle = NSStringFromSelector(@selector(undoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriodToString: keyPathDocument];
+		key = [MADStringUtilities stringByAppendingPeriod: keyPathDocument];
 		key = [key stringByAppendingString:keyPathUndoManager];
-		key = [MADStringUtilities stringByAppendingPeriodToString: key];
+		key = [MADStringUtilities stringByAppendingPeriod: key];
 		key = [key stringByAppendingString:keyPathUndoMenuItemTitle];
 	}
 	return key;

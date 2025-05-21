@@ -71,14 +71,13 @@
 	 intersectingItems:(NSArray <MADSectionLayoutAttributes *> *)allItems {
 	
 	CGPoint dropPoint = CGPointZero;
-	double distance = MADDistance(placedItem.frame.origin, dropPoint),
-		   tmpDistance;
+	double distance = MADDistance(placedItem.frame.origin, dropPoint);
 	for (MADSectionLayoutAttributes *item in allItems) {
 		if (placedItem.objectID != item.objectID) {
 			
 			NSArray *array = [item copyDropPoints];
 			for (NSValue *v in array) {
-				tmpDistance = MADDistance(placedItem.frame.origin, v.CGPointValue);
+				double tmpDistance = MADDistance(placedItem.frame.origin, v.CGPointValue);
 				if (tmpDistance < distance) {
 					dropPoint = v.CGPointValue;
 					distance = tmpDistance;
@@ -87,8 +86,7 @@
 			}
 		}
 	}
-	placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y,
-								  placedItem.frame.size.width, placedItem.frame.size.height);
+	placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 
 #pragma mark -

@@ -1264,7 +1264,7 @@ void madwarn(char *err,  const char *err2) { }
 	
 	keyInQueryTableRel = NSStringFromSelector(@selector(inQueryTable));
 	
-	keyInQueryTable = [MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(aggregateField))];
+	keyInQueryTable = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(aggregateField))];
 	keyInQueryTable = [keyInQueryTable stringByAppendingString:keyInQueryTableRel];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
@@ -1290,7 +1290,7 @@ void madwarn(char *err,  const char *err2) { }
 - (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectID
 							 inContent: (NSManagedObjectContext *)managedObjectContext {
 	NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentElement class])];
-	NSString *keyInQueryTable = [[MADStringUtilities stringByAppendingPeriodToString: NSStringFromSelector(@selector(referencesQueryField))] stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
+	NSString *keyInQueryTable = [[MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(referencesQueryField))] stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
 	
 	fetchReqest.predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
 															  atKeyPath: keyInQueryTable];

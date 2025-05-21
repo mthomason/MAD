@@ -38,7 +38,7 @@
 	switch (indexPath.row) {
 			
 		case 0:
-			cell.label.text = @"MAD Designer Details";
+			cell.label.text = NSLocalizedString(@"MAD Designer Details", @"MAD Designer Details");
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 			cell.marginStyle = MADTableViewCellMarginStyleTop;
 			break;

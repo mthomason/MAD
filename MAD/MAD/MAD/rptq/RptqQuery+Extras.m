@@ -141,7 +141,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 			nameTablePart = [database newSafeIdentifier: valueInQueryTableAlias];
 			nameFieldPart = [database newSafeIdentifier: groupField.databaseSchemaField.name];
 			
-			keyForSort = [MADStringUtilities stringByAppendingPeriodToString:nameTablePart];
+			keyForSort = [MADStringUtilities stringByAppendingPeriod:nameTablePart];
 			keyForSort = [keyForSort stringByAppendingString: nameFieldPart];
 			
 			SEL sel = MADDataTypeSelectorForSorting(groupField.databaseSchemaField.dataType);

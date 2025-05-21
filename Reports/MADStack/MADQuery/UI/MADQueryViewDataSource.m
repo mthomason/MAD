@@ -581,7 +581,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 		NSString *keyAlias = NSStringFromSelector(@selector(alias));
 		NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
 		NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
-		keyInQuery = [MADStringUtilities stringByAppendingPeriodToString: keyInQuery];
+		keyInQuery = [MADStringUtilities stringByAppendingPeriod: keyInQuery];
 		keyInQuery = [keyInQuery stringByAppendingString:keyIdentifier];
 
 		id predicate;

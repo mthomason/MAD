@@ -202,7 +202,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 #pragma mark MADDatabaseSQLProtocol
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-	NSString *result = [MADStringUtilities stringByAppendingPeriodToString:tableName];
+	NSString *result = [MADStringUtilities stringByAppendingPeriod:tableName];
 	return [result stringByAppendingString:fieldName];
 }
 
@@ -238,7 +238,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (NSString *)fieldAliasForField:(NSString *)field
 			   withSafeTableName:(NSString *)safeTableName {
-	NSString *tableAlias = [MADStringUtilities stringByAppendingPeriodToString:safeTableName];
+	NSString *tableAlias = [MADStringUtilities stringByAppendingPeriod:safeTableName];
 	MADSafeQueryField *fieldName = [self newSafeIdentifier: field];
 	NSString *alias = [tableAlias stringByAppendingString:fieldName];
 	return alias;

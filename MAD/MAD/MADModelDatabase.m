@@ -289,10 +289,10 @@ static os_log_t log_mad;
 	NSString *keyPathQuerable = NSStringFromSelector(@selector(queryable));
 
 	NSString *inTableInDB = [MADStringUtilities stringByAppendingKeyPath:inTable toString:inDatabase];
-	NSString *inTableInDBIdentifier = [MADStringUtilities stringByAppendingPeriodToString:inTableInDB];
+	NSString *inTableInDBIdentifier = [MADStringUtilities stringByAppendingPeriod:inTableInDB];
 	inTableInDBIdentifier = [inTableInDBIdentifier stringByAppendingString:keyIdentifier];
 	
-	NSString *inDatabaseIdentifier = [MADStringUtilities stringByAppendingPeriodToString:inDatabase];
+	NSString *inDatabaseIdentifier = [MADStringUtilities stringByAppendingPeriod:inDatabase];
 	inDatabaseIdentifier = [inDatabaseIdentifier stringByAppendingString:keyIdentifier];
 	
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
@@ -361,7 +361,7 @@ static os_log_t log_mad;
 	expressionDescription.expressionResultType = NSInteger64AttributeType;
 
 	NSString *keyPath = NSStringFromSelector(@selector(inDatabase));
-	keyPath = [MADStringUtilities stringByAppendingPeriodToString:keyPath];
+	keyPath = [MADStringUtilities stringByAppendingPeriod:keyPath];
 	keyPath = [keyPath stringByAppendingString:NSStringFromSelector(@selector(identifier))];
 
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];

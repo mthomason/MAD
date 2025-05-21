@@ -7,12 +7,11 @@
 //
 
 #import "RptqRect+Extras.h"
-
-#import <CoreData/NSEntityDescription.h>
-#import <CoreGraphics/CGGeometry.h>
-
 #import "RptqPoint.h"
 #import "RptqSize.h"
+#import "madlog.h"
+#import <CoreData/NSEntityDescription.h>
+#import <CoreGraphics/CGGeometry.h>
 
 @implementation RptqRect (Extras)
 
@@ -30,22 +29,21 @@
 
 - (void)awakeFromInsert {
 	[super awakeFromInsert];
+	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+	if (managedObjectContext == nil) {
+		os_log_error(OS_LOG_DEFAULT, "Managed object context is nil");
+		return;
+	}
 	if (self.origin == nil) {
-		NSString *name = NSStringFromClass([RptqPoint class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.origin = [NSEntityDescription insertNewObjectForEntityForName: name
+		self.origin = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqPoint class])
 													inManagedObjectContext: managedObjectContext];
 	}
 	if (self.size == nil) {
-		NSString *name = NSStringFromClass([RptqSize class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.size = [NSEntityDescription insertNewObjectForEntityForName: name
+		self.size = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqSize class])
 												  inManagedObjectContext: managedObjectContext];
 	}
 }
 
-- (CGRect)frame {
-	return CGRectMake(self.origin.x, self.origin.y, self.size.width, self.size.height);
-}
+- (CGRect)frame { return CGRectMake(self.origin.x, self.origin.y, self.size.width, self.size.height); }
 
 @end

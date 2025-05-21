@@ -128,7 +128,7 @@
 	[description appendFormat:@"Type:                   %@\n",      self.driverID];
 	[description appendFormat:@"Host:                   %@\n",      self.host];
 	[description appendFormat:@"Database:               %@\n",      self.dbname];
-	[description appendFormat:@"Port:                   %ld\n",    (long)self.port];
+	[description appendFormat:@"Port:                   %lld\n",    self.port];
 	[description appendFormat:@"*********   RptqDatabaseCredentals  *********"];
 	return description;
 }

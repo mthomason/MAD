@@ -170,10 +170,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 + (MADAppStorage)StorageOption {
-	MADAppStorage storageOption;
-	storageOption = [self StorageOptionsInitialized] ? [self StorageOptionUserDefaults] :
-													  MADAppStorageStateUnknown;
-	return storageOption;
+	return [self StorageOptionsInitialized] ? [self StorageOptionUserDefaults] : MADAppStorageStateUnknown;
 }
 
 + (void)setStorageOption:(MADAppStorage)storageOption {
@@ -305,15 +302,12 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
 
 		self.getUserCloudPrefsFirstCall = NO;
-
-		MADStorageState *storageState;
-		MADAppStorage storageOption = [self.class StorageOption];
 		BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
 		BOOL isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
 		
-		storageState = [MADStorageState newStorageStateWithStorageOption: storageOption
-											  hasUbiquityIdentityChanged: hasUbiquityIdentityChanged
-												 isCloudReadilyAvailable: isCloudReadilyAvailable];
+		MADStorageState *storageState = [MADStorageState newStorageStateWithStorageOption: [self.class StorageOption]
+															   hasUbiquityIdentityChanged: hasUbiquityIdentityChanged
+																  isCloudReadilyAvailable: isCloudReadilyAvailable];
 		if (storageState.cloudAvailable) {
 			
 			if (storageState.storageOption == MADAppStorageCloud) {
@@ -343,12 +337,9 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (void)getUserCloudPrefsSubsquient {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-
-	MADStorageState *storageState;
-	storageState = [MADStorageState newStorageStateWithStorageOption: [self.class StorageOption]
-										  hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
-											 isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
+	MADStorageState *storageState = [MADStorageState newStorageStateWithStorageOption: [self.class StorageOption]
+														   hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
+															  isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
 	if (storageState.accountDidChange) {
 		
 		switch (storageState.storageOption) {
@@ -356,14 +347,10 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			case MADAppStorageCloud: {
 			
 				[self.class setStorageOption: MADAppStorageNotSet];
-				
-				id <MADFileLocationManagerDelegate> delegate;
-				delegate = _delegate;
-				
+				id <MADFileLocationManagerDelegate> delegate = _delegate;
 				if ([delegate respondsToSelector:@selector(didDisconnectFromCloud:)]) {
 					[delegate didDisconnectFromCloud:self];
 				}
-				
 				break;
 			}
 
@@ -372,22 +359,13 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			default:
 				[self getUserCloudPrefs];
 				break;
-
 		}
-		
-		
 	} else {
-
 		if (storageState.storageOption == MADAppStorageNotSet) {
-
 			[self getUserCloudPrefs];
-
 		} else {
-
 			[self configureFilesController: NO storageOptionChangeHandler: nil];
-
 		}
-
 	}
 }
 
@@ -396,8 +374,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 
 	if (self.filesController != nil && !accountChanged) return;
 
-	id <MADFileLocationManagerDelegate> delegate;
-	delegate = _delegate;
+	id <MADFileLocationManagerDelegate> delegate = _delegate;
 	
 	if (!_filesController) {
 		

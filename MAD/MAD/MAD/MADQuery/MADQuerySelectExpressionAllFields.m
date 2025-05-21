@@ -45,7 +45,7 @@
 				
 				NSString *tableName = [table queryAlias];
 				MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
-				NSString *tableAlias = [MADStringUtilities stringByAppendingPeriodToString:safeTableName];
+				NSString *tableAlias = [MADStringUtilities stringByAppendingPeriod:safeTableName];
 
 				NSUInteger fieldCounter = 0;
 				NSEnumerator <RptqQueryField *> *hasQueryFields = table.hasQueryFields.objectEnumerator;
