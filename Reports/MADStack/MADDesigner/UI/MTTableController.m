@@ -130,7 +130,7 @@
 	
 	// Create and show activity indicator
 	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc]
-		initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+		initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 	[activityIndicator startAnimating];
 	activityIndicator.hidesWhenStopped = YES;
 	

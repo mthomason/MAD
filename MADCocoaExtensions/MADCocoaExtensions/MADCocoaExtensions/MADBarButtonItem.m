@@ -44,7 +44,7 @@
 	id barButtonItem;
 	UIActivityIndicatorView *activityIndicator;
 	
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
+	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 
 	[activityIndicator startAnimating];

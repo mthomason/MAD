@@ -40,7 +40,7 @@
 		
 		UIActivityIndicatorView *activityIndicator;
 		activityIndicator= [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-														UIActivityIndicatorViewStyleWhiteLarge];
+														UIActivityIndicatorViewStyleLarge];
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
 								UIViewAutoresizingFlexibleRightMargin |

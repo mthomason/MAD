@@ -9,7 +9,7 @@
 #ifndef MADExplorer_MADExplorerActivityIndicator_h
 #define MADExplorer_MADExplorerActivityIndicator_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIActivityIndicatorView.h>
 
 @interface MADExplorerActivityIndicator : UIActivityIndicatorView
 	+ (instancetype)newExplorerActivityIndicator;

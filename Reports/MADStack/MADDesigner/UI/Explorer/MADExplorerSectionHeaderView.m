@@ -95,7 +95,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 		UIActivityIndicatorView *activityView;
 		activityView = [[UIActivityIndicatorView alloc]
-						initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+						initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 		activityView.hidesWhenStopped = YES;
 		activityView.frame = MADFrameActivityView(self.frame.size, activityView.frame.size);
 		[activityView stopAnimating];

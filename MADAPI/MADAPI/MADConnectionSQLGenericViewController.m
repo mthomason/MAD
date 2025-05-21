@@ -415,7 +415,7 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	[self disableNavigation];
 	
 	UIActivityIndicatorView *activityIndicator;
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 	[activityIndicator startAnimating];
 	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = NO;

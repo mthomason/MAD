@@ -11,9 +11,7 @@
 @implementation MADExplorerActivityIndicator
 
 + (instancetype)newExplorerActivityIndicator {
-	id activityIndicatorView;
-	activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-							 UIActivityIndicatorViewStyleGray];
+	id activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	[activityIndicatorView stopAnimating];
 	[activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |
 												UIViewAutoresizingFlexibleRightMargin |

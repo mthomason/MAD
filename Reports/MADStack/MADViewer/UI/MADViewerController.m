@@ -602,8 +602,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	_refreshing = YES;
 	_updatingOfTimerIsPaused = NO;
 	
-	UIActivityIndicatorView *activityIndicator;
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
+	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = NO;
 	UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
