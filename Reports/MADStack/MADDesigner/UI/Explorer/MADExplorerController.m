@@ -91,6 +91,9 @@
 
 #import "MADExplorerAnimatedTransitioning.h"
 
+#import "MADColorTransformer.h"
+#import "MADLocaleTransformer.h"
+
 //const NSUInteger MADIDInstallOperationSampleDatabaseChinook     = 1;
 //const NSUInteger MADIDInstallOperationSampleDocumentMusic       = 2;
 //const NSUInteger MADIDInstallOperationSampleDocumentLondon      = 3;
@@ -253,72 +256,34 @@ typedef NS_ENUM(short, MADExplorerState) {
 	
 	if (self == [MADExplorerController self]) {
 		
+		[NSValueTransformer setValueTransformer:[[MADLocaleTransformer alloc] init] forName:NSStringFromClass([MADLocaleTransformer class])];
+		[NSValueTransformer setValueTransformer:[[MADColorTransformer alloc] init] forName:NSStringFromClass([MADColorTransformer class])];
 		@autoreleasepool {
 			
-			NSUserDefaults *defaults;
-			NSDictionary *defaultsToRegister;
-			
-			defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.everydayapps.mad.primary"];
-			defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
+			NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.everydayapps.mad.primary"];
+			NSDictionary *defaultsToRegister = [[NSDictionary alloc] initWithObjectsAndKeys:
 								  @NO, MADUpgradeInstalledChinook,
 								  @NO, MADUpgradeInstalledSamples,
 								  @NO, MADAppConfigurationUserDefaultsSamplesInstalled, nil];
 			
 			[defaults registerDefaults:defaultsToRegister];
-			
-			UIColor *madColor4 = [MADColorEverydayApps newColorAnalogous4];
-			UIColor *redColor = [MADColorEverydayApps newColorRed];
-			UIColor *whiteColor = [MADColorEverydayApps newColorWhite];
-			
-			UITabBarItem *tabBarItemAppearance;
-			tabBarItemAppearance = [UITabBarItem appearance];
-			id titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
-									  whiteColor, NSForegroundColorAttributeName, nil];
-			[tabBarItemAppearance setTitleTextAttributes: titleTextAttributes
-												forState: UIControlStateNormal];
-			
-			UIToolbar *toolbarAppearance;
-			toolbarAppearance = [UIToolbar appearance];
-			[toolbarAppearance setBarTintColor: [MADColorEverydayApps newColorBlue]];
-			
-			UIBarButtonItem *barButtonItem;
-			barButtonItem = [UIBarButtonItem appearance];
-			barButtonItem.tintColor = whiteColor.copy;
-			
-			NSArray <Class <UIAppearanceContainer>> *classes;
-			UINavigationBar *navigationBar;
 
-			classes = [[NSArray alloc] initWithObjects:[QLPreviewController class], nil];
-			navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
-			navigationBar.barTintColor  = madColor4.copy;
-			navigationBar.tintColor     = redColor.copy;
+			UITabBarItem *tabBarItemAppearance = [UITabBarItem appearance];
 			
-			classes = [[NSArray alloc] initWithObjects: [UINavigationController class],
-														[UIViewController class], nil];
-			navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
-			navigationBar.tintColor     = whiteColor.copy;
+			NSDictionary *titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys: [MADColorEverydayApps newColorWhite], NSForegroundColorAttributeName, nil];
+			[tabBarItemAppearance setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
 			
-			classes = [[NSArray alloc] initWithObjects:[UIToolbar class], nil];
-			barButtonItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses: classes];
-			barButtonItem.tintColor = whiteColor.copy;
-			
-			
-			UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
-			navigationBarAppearance.titleTextAttributes = titleTextAttributes;
-			
-			UIColor *orangeColor = [MADColorEverydayApps newColorOrange];
-			
-			UILabel *labelInTableCell;
-			classes = [[NSArray alloc] initWithObjects:[UITableViewCell class],
-													   [UICollectionViewCell class], nil];
-			labelInTableCell = [UILabel appearanceWhenContainedInInstancesOfClasses: classes];
-			labelInTableCell.highlightedTextColor = orangeColor.copy;
-			
-			
-			UIImageView *imageView;
-			imageView = [UIImageView appearanceWhenContainedInInstancesOfClasses: classes];
-			imageView.tintColor = orangeColor.copy;
-			
+			[[UIToolbar appearance] setBarTintColor: [MADColorEverydayApps newColorBlue]];
+			[[UIBarButtonItem appearance] setTintColor: [MADColorEverydayApps newColorWhite]];
+			[[UINavigationBar appearanceWhenContainedInInstancesOfClasses: @[[UINavigationController class], [UIViewController class]]] setTintColor:[MADColorEverydayApps newColorWhite]];
+			[[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses: @[[UIToolbar class]]] setTintColor: [MADColorEverydayApps newColorWhite]];
+			[[UINavigationBar appearance] setTitleTextAttributes:titleTextAttributes];
+			[[UILabel appearanceWhenContainedInInstancesOfClasses: @[[UITableViewCell class], [UICollectionViewCell class]]] setHighlightedTextColor:[MADColorEverydayApps newColorOrange]];
+			[[UIImageView appearanceWhenContainedInInstancesOfClasses: @[[UITableViewCell class], [UICollectionViewCell class]]] setTintColor: [MADColorEverydayApps newColorOrange]];
+			UINavigationBar *navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: @[[QLPreviewController class]]];
+			navigationBar.barTintColor  = [MADColorEverydayApps newColorAnalogous4];
+			navigationBar.tintColor     = [MADColorEverydayApps newColorRed];
+
 		}
 	}
 }
