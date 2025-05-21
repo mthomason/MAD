@@ -331,45 +331,62 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MADDatabaseDataBinding *)databinding {
 	if ([databinding.value isEqual:[NSNull null]]) {
-		return sqlite3_bind_null(*statement, databinding.columnNumber) == SQLITE_OK;
+		int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
+		if (sqlite3_bind_result != SQLITE_OK) {
+			os_log_error(GetMadLog(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+		}
+		return sqlite3_bind_result == SQLITE_OK;
 	} else {
 		switch (databinding.datatype) {
 			case MADDataTypeBlob: {
 				if ([databinding.value isKindOfClass:[NSString class]]) {
-					return sqlite3_bind_text(*statement, databinding.columnNumber,
-												((NSString *)databinding.value).UTF8String,
-												(int)strlen(((NSString *)databinding.value).UTF8String),
-												SQLITE_TRANSIENT) == SQLITE_OK;
+					int sqlite3_bind_result = sqlite3_bind_text(*statement, (int)databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
+					if (sqlite3_bind_result != SQLITE_OK) {
+						os_log_error(GetMadLog(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+					}
+					return sqlite3_bind_result == SQLITE_OK;
 				} else if ([databinding.value isKindOfClass:[NSData class]]) {
-					return sqlite3_bind_blob(*statement, databinding.columnNumber, ((NSData *)databinding.value).bytes, (int)((NSData *)databinding.value).length, SQLITE_TRANSIENT) == SQLITE_OK;
+					int sqlite3_bind_result = sqlite3_bind_blob(*statement, (int)databinding.columnNumber, ((NSData *)databinding.value).bytes, (int)((NSData *)databinding.value).length, SQLITE_TRANSIENT);
+					if (sqlite3_bind_result != SQLITE_OK) {
+						os_log_error(GetMadLog(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+					}
+					return sqlite3_bind_result == SQLITE_OK;
 				}
 				break;
 			}
 			case MADDataTypeInteger: {
-				return sqlite3_bind_int64(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue) == SQLITE_OK;
+				int sqlite3_bind_result = sqlite3_bind_int64(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue);
+				if (sqlite3_bind_result != SQLITE_OK) {
+					os_log_error(GetMadLog(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+				}
+				return sqlite3_bind_result == SQLITE_OK;
 				break;
 			}
 				
 			case MADDataTypeString: {
 				if ([databinding.value isKindOfClass:[NSString class]]) {
-					return sqlite3_bind_text(*statement, databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)[((NSString *)databinding.value) lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT) == SQLITE_OK;
+					int sqlite3_bind_result = sqlite3_bind_text(*statement, (int)databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
+					return sqlite3_bind_result == SQLITE_OK;
 				} else if ([databinding.value isKindOfClass:[NSDateComponents class]]) {
 					NSDate *date = ((NSDateComponents *)databinding.value).date != nil ? ((NSDateComponents *)databinding.value).date : [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
-					return sqlite3_bind_double(*statement, databinding.columnNumber, date.timeIntervalSince1970) == SQLITE_OK;
+					int sqlite3_bind_result = sqlite3_bind_double(*statement, (int)databinding.columnNumber, date.timeIntervalSince1970);
+					return sqlite3_bind_result == SQLITE_OK;
 				}
 				break;
 				
 			}
 			case MADDataTypeFloat:
 			case MADDataTypeDouble: {
-				return sqlite3_bind_double(*statement, databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue) == SQLITE_OK;
+				int sqlite3_bind_result = sqlite3_bind_double(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue);
+				return sqlite3_bind_result == SQLITE_OK;
 				break;
 			}
 				
-			case MADDataTypeNull:
-				return sqlite3_bind_null(*statement, databinding.columnNumber) == SQLITE_OK;
+			case MADDataTypeNull: {
+				int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
+				return sqlite3_bind_result == SQLITE_OK;
 				break;
-				
+			}
 			default:
 				NSAssert(NO, @"This is going to end badly.  Only binding blobs right now.");
 				break;
