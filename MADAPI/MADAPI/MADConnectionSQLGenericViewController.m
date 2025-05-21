@@ -433,8 +433,7 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 																				action: self.actionSave];
 	[self.navigationItem setRightBarButtonItem:buttonSave animated:YES];
 	self.navigationItem.rightBarButtonItem.enabled = YES;
-	self.progressView.progress = 0.0000f;
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	self.progressView.progress = 0.0;
 }
 
 @end

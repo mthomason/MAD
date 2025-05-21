@@ -14,9 +14,6 @@
 @interface UIApplication (Extras)
 
 	+ (NSString *)version;
-
-	- (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible;
-
 	- (UIBackgroundTaskIdentifier)requestBackgroundTask;
 	- (void)handoffBackground:(NSNumber *)bgTask;
 	- (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask;

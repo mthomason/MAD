@@ -15,33 +15,7 @@
 @implementation UIApplication (Extras)
 
 + (NSString *)version {
-	NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(),
-															 kCFBundleVersionKey);
-	return version;
-}
-
-- (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible {
-	static NSInteger setVisibleCounter = 0;
-	if (networkActivityIndicatorVisible)
-		setVisibleCounter++;
-	else
-		setVisibleCounter--;
-	
-	if (setVisibleCounter == 0) {
-		networkActivityIndicatorVisible = NO;
-	}
-	if ([NSThread isMainThread] == NO) {
-		UIApplication * __weak weakself = self;
-		if (weakself.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				weakself.networkActivityIndicatorVisible = networkActivityIndicatorVisible;
-			});
-		}
-	} else {
-		if (self.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
-			self.networkActivityIndicatorVisible = networkActivityIndicatorVisible;
-		}
-	}
+	return CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
 }
 
 - (UIBackgroundTaskIdentifier)requestBackgroundTask {
