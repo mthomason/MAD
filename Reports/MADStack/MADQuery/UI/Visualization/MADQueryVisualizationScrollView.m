@@ -52,7 +52,7 @@ static const CGFloat contentViewHeight = 1024.0;
 	self.translatesAutoresizingMaskIntoConstraints = NO;
 	self.autoresizesSubviews = NO;
 	self.delegate = self;
-	self.backgroundColor = [[UIColor groupTableViewBackgroundColor] colorWithAlphaComponent: 0.02];
+	self.backgroundColor = [[UIColor systemGroupedBackgroundColor] colorWithAlphaComponent: 0.02];
 	self.opaque = NO;
 	
 	self.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);

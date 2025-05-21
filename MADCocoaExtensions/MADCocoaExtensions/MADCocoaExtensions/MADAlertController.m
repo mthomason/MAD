@@ -334,7 +334,7 @@ static NSString * const MADButtonRemove                = @"Remove";
 	actionDefault = [UIAlertAction actionWithTitle: rename
 											 style: UIAlertActionStyleDefault
 										   handler: ^(UIAlertAction *action) {
-											   handlerConfirm(action, textField.text);
+											   handlerConfirm(action, text);
 										   }];
 	
 	actionCancel = [UIAlertAction actionWithTitle: cancel

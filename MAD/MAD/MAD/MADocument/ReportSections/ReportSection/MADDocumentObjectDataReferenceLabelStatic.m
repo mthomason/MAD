@@ -31,7 +31,7 @@
 @dynamic item;
 
 - (NSString *)text {
-	return self.item.text;
+	return self.item.text ?: @"";
 }
 
 @end

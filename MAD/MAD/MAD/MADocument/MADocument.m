@@ -269,11 +269,11 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (void)resetCache {
-	NSNumber *typeKey = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
-	NSNumber *type = [[NSNumber alloc] initWithShort: MADDataTableTypePhysical];
-	NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
-	NSNumber *objectIdV = [[NSNumber alloc] initWithUnsignedInteger: self.filename.hash];
-	NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
+	//NSNumber *typeKey = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
+	//NSNumber *type = [[NSNumber alloc] initWithShort: MADDataTableTypePhysical];
+	//NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
+	//NSNumber *objectIdV = [[NSNumber alloc] initWithUnsignedInteger: self.filename.hash];
+	//NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
 	
 	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
 	datatable.cacheDelegate = self;

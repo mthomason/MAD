@@ -30,7 +30,7 @@
     [super drawRect: rect];
 
     if (_numberOfRowsInBackground >= 2) {
-        [[UIColor groupTableViewBackgroundColor] setStroke];
+		[[UIColor systemGroupedBackgroundColor] setStroke];
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         

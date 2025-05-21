@@ -16,9 +16,7 @@
 	[super initialize];
 	if (self == [MADExplorerView self]) {
 		@autoreleasepool {
-			MADExplorerView *view;
-			view = [MADExplorerView appearance];
-			view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+			[[MADExplorerView appearance] setBackgroundColor: [UIColor systemGroupedBackgroundColor]];
 		}
 	}
 }

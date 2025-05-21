@@ -95,13 +95,13 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
 		
 		if (value == nil) {
 			datatype = MADDataTypeNull;
-			value = [NSNull null];
+			self.value = [NSNull null];
 		} else if ([value isKindOfClass:[NSNull class]]) {
 			datatype = MADDataTypeNull;
 		} else {
 			datatype = DataTypeLimited(datatype);
 			if (datatype == MADDataTypeUnknown) {
-				value = [[NSString alloc] initWithFormat:@"%@", value];
+				self.value = [NSString stringWithFormat:@"%@", value];
 				datatype = MADDataTypeString;
 			} else {
 				self.value = [value copy];

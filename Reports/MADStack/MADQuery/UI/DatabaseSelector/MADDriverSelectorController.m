@@ -64,7 +64,7 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 	self.tableView.estimatedRowHeight = 44.0;
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
 	self.tableView.allowsSelection = YES;
-	self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+	self.tableView.backgroundColor = [UIColor systemGroupedBackgroundColor];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return 1; }

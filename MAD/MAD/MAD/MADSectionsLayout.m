@@ -264,13 +264,13 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
             break;
             
         case MADDocumentSectionTypeGroupHeader:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%d)",
-                                                                  @"\"Group Header 1\""), groupHeaderIndex(index)];
+			result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%lu)",
+                                                                  @"\"Group Header 1\""), (unsigned long)groupHeaderIndex(index)];
             break;
             
         case MADDocumentSectionTypeGroupFooter:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%d)",
-                                                                  @"\"Group Footer 1\""), groupFooterIndex(index, groupCount)];
+			result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%lu)",
+																  @"\"Group Footer 1\""), (unsigned long)groupFooterIndex(index, groupCount)];
             break;
             
         default:

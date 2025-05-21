@@ -48,7 +48,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.barcodeView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+	self.barcodeView.backgroundColor = [UIColor systemGroupedBackgroundColor];
 }
 
 - (void)setBarcodeToPreview:(MTBarcode *)barcode {

@@ -219,8 +219,7 @@
 		conditionFailedImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
 		conditionFailedImport.reverseCondition = YES;
 
-		MADOperationPromptError *displayErrorImport;
-		displayErrorImport = [[MADOperationPromptError alloc] initWithViewController:viewController];
+		MADOperationPromptError *displayErrorImport = [[MADOperationPromptError alloc] initWithViewController:viewController];
 		displayErrorImport.name = @"com.everydayapps.mad.operation.display.error.import.schema";
 		[displayErrorImport addDependency: importSchema];
 		[displayErrorImport addCondition: conditionFailedImport];
@@ -237,8 +236,7 @@
 		[saveOperation addCondition: conditionSuccessImport];
 		*/
 		// Close the new document.
-		MADOperationDocumentCloseDocument *closeDocument;
-		closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
+		MADOperationDocumentCloseDocument *closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
 		closeDocument.name = @"com.everydayapps.mad.operation.document.close";
 		[closeDocument addDependency: createDocument];
 		[closeDocument addDependency: importSchema];
@@ -247,9 +245,8 @@
 		//[closeDocument addDependency: saveOperation];
 		
 		//Test if credentals are saved
-		MADOperationKeyChainGet *operationGetUsername;
-		operationGetUsername = [[MADOperationKeyChainGet alloc] initWithKey: keyUsername
-															withDescription: MADKeyChainUsernameAccountDesc];
+		MADOperationKeyChainGet *operationGetUsername = [[MADOperationKeyChainGet alloc] initWithKey: keyUsername
+																					 withDescription: MADKeyChainUsernameAccountDesc];
 		operationGetUsername.name = @"com.everydayapps.mad.operation.keychain.read.username";
 		operationGetUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
 		[operationGetUsername addDependency: displayErrorCredentials];

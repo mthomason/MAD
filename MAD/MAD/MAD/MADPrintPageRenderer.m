@@ -433,7 +433,6 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	if (sectionRepresentation.visibility) {
 		NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
 
-		os_log_t logger = log_print;
 		for (RptqDocumentSectionRows *row in rowsEnumerator) {
 			NSEnumerator *documentObjectEnumerator = row.hasObjects.objectEnumerator;
 			MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];

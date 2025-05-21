@@ -139,7 +139,7 @@
 + (NSString *)sqlAllFieldsInTable: (RptqDatabaseSchemaTable *)schemaTable
 					usingDatabase: (MADDatabase *)database {
 	NSMutableArray<NSString *> *fieldAliases = [[NSMutableArray alloc] init];
-	NSUInteger *fieldCounter = 0;
+	//NSUInteger *fieldCounter = 0;
 	NSString *safeTableName = [database tableAliasForTable:schemaTable.toString];
 	for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
 		NSString *fieldAlias = [database fieldAliasForField:field.name withSafeTableName:safeTableName];

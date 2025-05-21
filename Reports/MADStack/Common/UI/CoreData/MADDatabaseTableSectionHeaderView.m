@@ -86,7 +86,7 @@ static const CGFloat PaddingSize = 5.0;
     
     self.disclosureButton = button;
     
-    self.contentView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+	self.contentView.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.userInteractionEnabled = YES;
 }
 

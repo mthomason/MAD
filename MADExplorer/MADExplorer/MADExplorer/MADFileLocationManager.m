@@ -8,8 +8,6 @@
 
 #import "MADFileLocationManager.h"
 
-#import <UIKit/UIViewController.h>
-#import <UIKit/UIAlertController.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
@@ -19,6 +17,11 @@
 #import <MADFileManager/MADFileCoordinator.h>
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADAppStorageOption.h>
+
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIAlertController.h>
+
+#import <os/log.h>
 
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken    = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption    = @"MADAppConfigurationUserDefaultsStorageOption";
@@ -123,35 +126,35 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
-	id <NSObject, NSCopying, NSCoding> storedToken = nil;
+	id<NSObject, NSCopying, NSCoding> storedToken = nil;
 	
-	// Determine if the iCloud account associated with this device has changed since the last
-	//    time the user launched the app.
-	NSData *ubiquityIdentityTokenArchive;
-	ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults]
-									objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+	NSData *ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults] objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
 	
 	if (ubiquityIdentityTokenArchive) {
-		storedToken = [NSKeyedUnarchiver unarchiveObjectWithData:ubiquityIdentityTokenArchive];
+		NSError *error = nil;
+		storedToken = [NSKeyedUnarchiver unarchivedObjectOfClasses:[NSSet setWithObjects:[NSObject class], nil] fromData:ubiquityIdentityTokenArchive error:&error];
+		if (error) {
+			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
+		}
 	}
 	
 	return storedToken;
 }
 
+
 - (void)persistAccount {
-	//NSLog(@"\t%s", __PRETTY_FUNCTION__);
 	
-	id<NSObject, NSCopying, NSCoding> token;
-	token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
+	id <NSObject, NSCopying, NSCoding> token; token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
 	if (token) {
-		NSData *ubiquityIdentityTokenArchive;
-		ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token];
-		[[NSUserDefaults standardUserDefaults]
-										setObject: ubiquityIdentityTokenArchive
-										   forKey: MADAppConfigurationUserDefaultsUbiquityToken];
+		NSError *error = nil;
+		NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token requiringSecureCoding:YES error:&error];
+		if (ubiquityIdentityTokenArchive && !error) {
+			[[NSUserDefaults standardUserDefaults] setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
+		} else {
+			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
+		}
 	} else {
-		[[NSUserDefaults standardUserDefaults]
-								removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
 	}
 }
 
@@ -398,20 +401,19 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	
 	if (!_filesController) {
 		
-		id filesController;
-		filesController = [MADFilesController newFilesControllerWithPathExtension: [delegate fileExtention]
-																	storageOption: [self.class StorageOption]
-																	   identifier: [self identifierForStorageOption]
-																firstQueryHandler: storageChangedHandler];
+		MADFilesController *filesController = [MADFilesController newFilesControllerWithPathExtension: [delegate fileExtention]
+																						storageOption: [self.class StorageOption]
+																						   identifier: [self identifierForStorageOption]
+																					firstQueryHandler: storageChangedHandler];
 		[delegate didConfigureFilesController: filesController];
 		[filesController startSearching];
 		_filesController = filesController;
 		
 	} else if (accountChanged) {
-		id fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: [delegate fileExtention]
-														  storageOption: [self.class StorageOption]
-															 identifier: [self identifierForStorageOption]
-													  firstQueryHandler: storageChangedHandler];
+		MADFileCoordinator *fc = [MADFileCoordinator newFileCoordinatorWithPathExtension: [delegate fileExtention]
+																		   storageOption: [self.class StorageOption]
+																			  identifier: [self identifierForStorageOption]
+																	   firstQueryHandler: storageChangedHandler];
 		_filesController.fileCoordinator = fc;
 		[delegate didConfigureFilesController: _filesController];
 	}

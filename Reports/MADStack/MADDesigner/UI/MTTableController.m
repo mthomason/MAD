@@ -277,9 +277,8 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
 				  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	
-	NSUInteger column, row;
-	column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
-	row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
+	NSUInteger column =[(MADTableLayout *)collectionView.collectionViewLayout columnForIndexPath:indexPath];
+	NSUInteger row = [(MADTableLayout *)collectionView.collectionViewLayout rowForIndexPath:indexPath];
 	
 	NSString *reuseId = [self reuseIdForColumn:(NSInteger)column];
 	
@@ -290,8 +289,7 @@
 	NSString *fieldKey = [self.query fieldKeyForIndex:column];
 
 	id fieldValue = rowData[fieldKey];
-	NSString *text = [[NSString alloc] initWithFormat:@"%@", fieldValue];
-	cell.label.text = text;
+	cell.label.text = [NSString stringWithFormat:@"%@", fieldValue];
 
 	return cell;
 }

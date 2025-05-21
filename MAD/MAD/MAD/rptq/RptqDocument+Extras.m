@@ -556,9 +556,7 @@ static os_log_t rptq_log;
 	
 	NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
 	MADPrintPageElementType objectType = (MADPrintPageElementType)objectTypeObj.unsignedIntegerValue;
-	
-	NSString *entityName;
-	
+
 	RptqDocumentElement *reportObject;
 	
 	NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
@@ -569,8 +567,7 @@ static os_log_t rptq_log;
 			NSManagedObjectID *fieldObjectID;
 			RptqQueryField *field;
 			
-			entityName = NSStringFromClass([RptqDocumentElementLabelDataField class]);
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
+			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementLabelDataField class])
 																 inManagedObjectContext: managedObjectContext];
 			
 			fieldObjectID = defination[MTDocumentObjectDefinationObject];
@@ -590,8 +587,7 @@ static os_log_t rptq_log;
 		}
 		case MADPrintPageElementTypeLabelStatic: {
 			
-			entityName = NSStringFromClass([RptqDocumentElementLabel class]);
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
+			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementLabel class])
 																 inManagedObjectContext: managedObjectContext];
 			
 			NSString *labelText = defination[MTDocumentObjectDefinationObject];
@@ -607,8 +603,7 @@ static os_log_t rptq_log;
 		}
 		case MADPrintPageElementTypeAggregate: {
 			
-			entityName = NSStringFromClass([RptqDocumentElementAggregate class]);
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
+			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementAggregate class])
 																 inManagedObjectContext: managedObjectContext];
 			
 			NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
@@ -647,8 +642,7 @@ static os_log_t rptq_log;
 		}
 		case MADPrintPageElementTypeImage: {
 			
-			entityName = NSStringFromClass([RptqDocumentElementImage class]);
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: entityName
+			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementImage class])
 																 inManagedObjectContext: managedObjectContext];
 			
 			UIImage *image = defination[MTDocumentObjectDefinationObject];

@@ -7,6 +7,7 @@
 //
 
 #import "MADFileUtilities.h"
+
 #import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSException.h>
@@ -17,6 +18,8 @@
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSFileWrapper.h>
+
+#import <os/log.h>
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
 static NSString * const MADPathComponentCache      = @"Cache";
@@ -142,53 +145,90 @@ static NSString * const MADPathComponentData       = @"Data";
 	});
 }
 
-+ (void)readFileAtURL:(NSURL *)url
-			completion:(void (^)(MADFile *list, NSError *error))completion {
++ (void)readObjectOfClass:(Class)cls
+				  fromURL:(NSURL *)url
+			   completion:(void (^)(id object, NSError *error))completion {
 	
 	NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+	BOOL startedAccess = [url startAccessingSecurityScopedResource];
 	
-	// `url` may be a security scoped resource.
-	BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
+	NSFileAccessIntent *intent = [NSFileAccessIntent readingIntentWithURL:url
+																  options:NSFileCoordinatorReadingWithoutChanges];
 	
-	NSFileAccessIntent *readingIntent;
-	readingIntent = [NSFileAccessIntent readingIntentWithURL:url
-													 options:NSFileCoordinatorReadingWithoutChanges];
-	NSArray *intents = [[NSArray alloc] initWithObjects: readingIntent, nil];
-	[fileCoordinator coordinateAccessWithIntents: intents
-										   queue: [self queue]
-									  byAccessor: ^(NSError *accessError) {
-		if (accessError) {
-			if (successfulSecurityScopedResourceAccess) {
-				[url stopAccessingSecurityScopedResource];
-			}
-			
-			if (completion) {
-				completion(nil, accessError);
-			}
-			
+	[fileCoordinator coordinateAccessWithIntents:@[intent]
+										   queue:[self queue]
+									  byAccessor:^(NSError *error) {
+		if (error) {
+			if (startedAccess) [url stopAccessingSecurityScopedResource];
+			if (completion) completion(nil, error);
 			return;
 		}
 		
-		NSError *readError;
-		MADFile *deserializedList;
+		NSError *readError = nil;
+		NSData *data = [NSData dataWithContentsOfURL:intent.URL options:0 error:&readError];
+		if (!data || readError) {
+			if (startedAccess) [url stopAccessingSecurityScopedResource];
+			if (completion) completion(nil, readError);
+			return;
+		}
 		
-		NSData *contents = [[NSData alloc] initWithContentsOfURL:readingIntent.URL
-														 options:NSDataReadingUncached
-														   error:&readError];
+		NSError *decodeError = nil;
+		id object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls
+													  fromData:data
+														 error:&decodeError];
 		
-		if (contents) {
-			deserializedList = [NSKeyedUnarchiver unarchiveObjectWithData:contents];
+		if (startedAccess) [url stopAccessingSecurityScopedResource];
+		if (completion) completion(object, decodeError);
+	}];
+}
+
++ (void)writeObject:(__kindof NSObject<NSCopying, NSSecureCoding> *)object
+			  toURL:(NSURL *)url
+		 completion:(void (^)(NSError *error))completion {
+	
+	NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+	NSFileAccessIntent *intent = [NSFileAccessIntent writingIntentWithURL:url
+																  options:NSFileCoordinatorWritingForReplacing];
+	
+	[fileCoordinator coordinateAccessWithIntents:@[intent]
+										   queue:[self queue]
+									  byAccessor:^(NSError *error) {
+		if (error) {
+			if (completion) completion(error);
+			return;
+		}
+		
+		NSError *archiveError = nil;
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object
+											 requiringSecureCoding:YES
+															 error:&archiveError];
+		if (archiveError != nil) {
+			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
+			if (completion) completion(archiveError);
+			return;
+		}
+		
+		NSError *writeError = nil;
+		BOOL success = [data writeToURL:intent.URL options:NSDataWritingAtomic error:&writeError];
+		
+		if (success) {
+			NSString *path = intent.URL.path;
+			NSError *setAttributesError = nil;
+			[[NSFileManager defaultManager] setAttributes:@{ NSFileExtensionHidden: @YES }
+											 ofItemAtPath:path
+													error:&setAttributesError];
+			if (setAttributesError != nil) {
+				if (completion) completion(setAttributesError);
+				os_log_error(OS_LOG_DEFAULT, "%s: Error setting file attributes: %@", __PRETTY_FUNCTION__, setAttributesError);
+			}
 			
-			NSAssert(deserializedList != nil, @"The provided URL must correspond to an AAPLList object.");
+		} else {
+			if (writeError != nil) {
+				os_log_error(OS_LOG_DEFAULT, "%s: Error writing data to file: %@", __PRETTY_FUNCTION__, writeError);
+			}
 		}
-		
-		if (successfulSecurityScopedResourceAccess) {
-			[url stopAccessingSecurityScopedResource];
-		}
-		
-		if (completion) {
-			completion(deserializedList, readError);
-		}
+
+		if (completion) completion(writeError);
 	}];
 }
 
@@ -213,21 +253,34 @@ static NSString * const MADPathComponentData       = @"Data";
 			return;
 		}
 		
-		NSError *error;
-		
 		NSNumber *zero = @0;
-		NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero];
+		NSError *archiveError = nil;
+		NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero requiringSecureCoding:YES error:&archiveError];
+		if (archiveError != nil) {
+			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
+			completion(archiveError);
+		}
 		
+		NSError *error;
 		BOOL success = [serializedListData writeToURL:writing.URL
 											  options:NSDataWritingAtomic error:&error];
-		
+		if (error != nil) {
+			os_log_error(OS_LOG_DEFAULT, "%s: Error writing data to file: %@", __PRETTY_FUNCTION__, error);
+			if (!success) completion(error);
+		}
 		if (success) {
 			NSDictionary <NSString *, NSNumber *> *fileAttributes;
 			fileAttributes = @{ NSFileExtensionHidden : @YES };
 			NSString *path = writing.URL.path;
-			[[NSFileManager defaultManager] setAttributes: fileAttributes
-											 ofItemAtPath: path
-													error: nil];
+			if (path.length > 0) {
+				NSError *setAttributesError = nil;
+				[[NSFileManager defaultManager] setAttributes: fileAttributes
+												 ofItemAtPath: path
+														error: &setAttributesError];
+				if (setAttributesError != nil) {
+					os_log_error(OS_LOG_DEFAULT, "%s: Error setting file attributes: %@", __PRETTY_FUNCTION__, setAttributesError);
+				}
+			}
 		}
 		
 		if (completion) {
@@ -479,12 +532,10 @@ static NSString * const MADPathComponentData       = @"Data";
 /// An internal queue to the \c AAPLListUtilities class that is used for \c NSFileCoordinator callbacks.
 + (NSOperationQueue *)queue {
 	static NSOperationQueue *queue;
-	
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		queue = [[NSOperationQueue alloc] init];
 	});
-	
 	return queue;
 }
 

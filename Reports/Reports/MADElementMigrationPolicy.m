@@ -7,8 +7,7 @@
 //
 
 #import "MADElementMigrationPolicy.h"
-#import <UIKit/UIGeometry.h>
-#import <UIKit/UIColor.h>
+#import "madlog.h"
 
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqBorder.h>
@@ -28,6 +27,9 @@
 #import <MADCocoaExtensions/MADMargin.h>
 #import <MADCocoaExtensions/MADPadding.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
+
+#import <UIKit/UIGeometry.h>
+#import <UIKit/UIColor.h>
 
 @implementation MADElementMigrationManager
 
@@ -370,7 +372,13 @@
 }
 
 - (UIColor *)migrateColorFromData:(NSData *)colorData {
-	return colorData != nil ? [NSKeyedUnarchiver unarchiveObjectWithData:colorData] : nil;
+	if (colorData == nil) return nil;
+	NSError *error = nil;
+	UIColor *color = [NSKeyedUnarchiver unarchivedObjectOfClass:[UIColor class] fromData:colorData error:&error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, error);
+	}
+	return color;
 }
 
 - (MADMargin *)migrateValueFromMarginLeft:(NSNumber *)left

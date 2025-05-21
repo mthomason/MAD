@@ -335,12 +335,9 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 
 	[self.selected[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
-
-	MADMetaData *metadata;
-	NSURL *url;
 	
-	metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-	url = metadata.URL.copy;
+	MADMetaData *metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+	NSURL *url = metadata.URL.copy;
 	
 	if (self.isEditing) {
 		[self downloadIfNotYetDownloaded: metadata];

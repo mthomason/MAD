@@ -93,9 +93,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 		[self addSubview: label];
 
-		UIActivityIndicatorView *activityView;
-		activityView = [[UIActivityIndicatorView alloc]
-						initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 		activityView.hidesWhenStopped = YES;
 		activityView.frame = MADFrameActivityView(self.frame.size, activityView.frame.size);
 		[activityView stopAnimating];
@@ -106,17 +104,14 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 		self.activityIndicatorView = activityView;
 		
 		UIColor *foregroundColor = [MADColorEverydayApps newColorRed];
-		NSDictionary *attributes;
-		attributes = [[NSDictionary alloc] initWithObjectsAndKeys: foregroundColor, NSForegroundColorAttributeName, nil ];
+		NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys: foregroundColor, NSForegroundColorAttributeName, nil ];
 		
-		NSAttributedString *attributedStringLocal;
-		attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
-																attributes: attributes];
+		NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
+																					attributes: attributes];
 		self.localizedAttrbiutedTextLocal = attributedStringLocal;
 		
-		NSAttributedString *attributedStringCloud;
-		attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
-																attributes: attributes];
+		NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
+																					attributes: attributes];
 		self.localizedAttrbiutedTextCloud = attributedStringCloud;
 		
 		self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];
@@ -124,7 +119,6 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 		label.textColor = [MADColorEverydayApps newColorRed];
 		
 		self.label = label;
-		
 	}
 	return self;
 }

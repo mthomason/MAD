@@ -588,18 +588,18 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 			return NSLocalizedString(@"Page Header", @"Page Header");
 			break;
 		case MADDocumentSectionTypeGroupHeader: {
-			return [NSString stringWithFormat:NSLocalizedString(@"Group Header %d",
+			return [NSString stringWithFormat:NSLocalizedString(@"Group Header %lu",
 																@"Group Header #"),
-											  MADDocumentSectionIndexLevel(row, 2 + numberOfGroups) - 1];
+					(unsigned long)(MADDocumentSectionIndexLevel(row, 2 + numberOfGroups) - 1)];
 			break;
 		}
 		case MADDocumentSectionTypeBody:
 			return NSLocalizedString(@"Report Detail", @"Report Detail");
 			break;
 		case MADDocumentSectionTypeGroupFooter: {
-			return [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d",
+			return [NSString stringWithFormat:NSLocalizedString(@"Group Footer %lu",
 																@"Group Footer #"),
-											  MADDocumentSectionIndexLevel(row, 2 + numberOfGroups) - 1];
+					(unsigned long)MADDocumentSectionIndexLevel(row, 2 + numberOfGroups) - 1];
 			break;
 		}
 		case MADDocumentSectionTypePageFooter:

@@ -7,13 +7,12 @@
 //
 
 #import "MADOperationArchiveData.h"
+#import "madlog.h"
 #import <Foundation/NSData.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSKeyedArchiver.h>
-
-#import <os/log.h>
 
 @interface MADOperationArchiveData ()
 	@property (nonatomic, copy) NSURL *url;
@@ -41,16 +40,24 @@
 	}
 	
 	BOOL success = NO;
-	NSError *error = nil;
+	NSError *finalError = nil;
 
 	@try {
 
 		id <NSCoding> obj = self.object;
-		NSData *d = [NSKeyedArchiver archivedDataWithRootObject:obj];
-		success = [d writeToURL:self.url options:NSDataWritingAtomic error:&error];
-		//success = [d writeToURL:self.url atomically:NO];
-		obj = nil;
-		d = nil;
+		NSError *errorArchiver = nil;
+		NSData *d = [NSKeyedArchiver archivedDataWithRootObject:obj requiringSecureCoding:YES error:&errorArchiver];
+		if (errorArchiver != nil) {
+			finalError = [errorArchiver copy];
+			os_log_error(GetDesignerLog(), "%s: Error archiving object: %@", __PRETTY_FUNCTION__, errorArchiver);
+		}
+
+		NSError *writingError = nil;
+		success = [d writeToURL:self.url options:NSDataWritingAtomic error:&writingError];
+		if (writingError != nil) {
+			finalError = [writingError copy];
+			os_log_error(GetDesignerLog(), "%s: Error writing data to file: %@", __PRETTY_FUNCTION__, writingError);
+		}
 		self.object = nil;
 		
 	} @catch (NSException *exception) {
@@ -60,8 +67,7 @@
 		if (success) {
 			[self finish];
 		} else {
-			NSError *err = error != nil ? error.copy : nil;
-			[self finishWithError:err];
+			[self finishWithError:finalError];
 		}
 
 	}

@@ -31,8 +31,7 @@ static NSMutableDictionary *_autoincrementMap;
 	_autoincrementMap = nil;
 }
 
-+ (int64_t)nextIdentifierForClass:(Class)class
-			 managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (int64_t)nextIdentifierForClass:(Class)class managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 	if (_autoincrementMap == nil) {
 		_autoincrementMap = [[NSMutableDictionary alloc] init];
 	}
@@ -44,24 +43,16 @@ static NSMutableDictionary *_autoincrementMap;
 	if (idNumber != nil) {
 		identifier64 = idNumber.longLongValue + 1;
 	} else {
-		NSExpressionDescription *edIdentifier;
-		NSFetchRequest *request;
-		NSSortDescriptor *sortDescriptor;
-		NSArray <NSSortDescriptor *> *sortDescriptors;
-		NSArray *fetchResults;
-		NSString *path = NSStringFromSelector(@selector(identifier));
 		
-		edIdentifier = [[NSExpressionDescription alloc] init];
+		NSExpressionDescription *edIdentifier = [[NSExpressionDescription alloc] init];
 		edIdentifier.name = @"ID";
-		edIdentifier.expression = [NSExpression expressionForKeyPath:path];
+		edIdentifier.expression = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
 		edIdentifier.expressionResultType = NSInteger64AttributeType;
 		
-		request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass(class)];
+		NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass(class)];
 		
-		sortDescriptor = [[NSSortDescriptor alloc] initWithKey: path
-													 ascending: NO];
-		
-		sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: NSStringFromSelector(@selector(identifier)) ascending: NO];
+		NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
 		
 		NSArray *properties = [[NSArray alloc] initWithObjects:edIdentifier, nil];
 		request.propertiesToFetch = properties;
@@ -70,13 +61,11 @@ static NSMutableDictionary *_autoincrementMap;
 		request.resultType = NSDictionaryResultType;
 		
 		NSError *error = nil;
-		fetchResults = [managedObjectContext executeFetchRequest:request error:&error];
+		NSArray *fetchResults = [managedObjectContext executeFetchRequest:request error:&error];
 		if (error != nil) {
 			os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
 		}
-		
-		//NSAssert(fetchResults.count == 0, "We expect some results.");
-		
+				
 		if (fetchResults.count > 0) {
 			NSNumber *identifierNumber;
 			if ((identifierNumber = [[fetchResults firstObject] objectForKey:@"ID"]) != nil) {
@@ -91,8 +80,6 @@ static NSMutableDictionary *_autoincrementMap;
 
 }
 
-- (void)identifier {
-	
-}
+- (void)identifier { }
 
 @end

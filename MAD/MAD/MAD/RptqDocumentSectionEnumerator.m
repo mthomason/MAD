@@ -92,9 +92,8 @@
 	NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:(_total - _current)];
 	for (; _current<_total; _current++) {
 		@autoreleasepool {
-			RptqDocumentSection *section;
-			section = [_document documentSectionForSelectedIndex: _current
-											  withNumberOfGroups: _numberOfGroups];
+			RptqDocumentSection *section = [_document documentSectionForSelectedIndex: _current
+																   withNumberOfGroups: _numberOfGroups];
 			[result addObject:section];
 		}
 	}

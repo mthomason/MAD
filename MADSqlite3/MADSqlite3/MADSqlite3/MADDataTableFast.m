@@ -70,18 +70,6 @@
 static const char * MADQueueBulkAdd = "com.everydayapps.mad.cache.fast";
 static os_log_t mlog;
 
-static NSString * describe_id(id);
-static NSString * describe_id(id obj) {
-	if (obj == nil) return @"<nil>";
-	if (obj == [NSNull null]) return @"<NSNull>";
-	if ([obj isKindOfClass:[NSString class]]) return [NSString stringWithFormat:@"NSString(@\"%@\")", obj];
-	if ([obj isKindOfClass:[NSNumber class]]) return [NSString stringWithFormat:@"NSNumber(@%@)", obj];
-	if ([obj isKindOfClass:[NSArray class]]) return [NSString stringWithFormat:@"NSArray (count: %lu)", (unsigned long)[(NSArray*)obj count]];
-	if ([obj isKindOfClass:[NSDictionary class]]) return [NSString stringWithFormat:@"NSDictionary (count: %lu)", (unsigned long)[(NSDictionary*)obj count]];
-	if ([obj isKindOfClass:[NSData class]]) return [NSString stringWithFormat:@"NSData (length: %lu)", (unsigned long)[(NSData*)obj length]];
-	return [NSString stringWithFormat:@"%@ (%p)", NSStringFromClass([obj class]), obj];
-}
-
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol, MADQueryParametersColumnKeysProtocol, MADQueryParametersColumnMetaProtocol, MADQueryParametersColumnDataProtocol>
 
 @property (nonatomic, readwrite, strong) dispatch_queue_t queueBulkAdd;

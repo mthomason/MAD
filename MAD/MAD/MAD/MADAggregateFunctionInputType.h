@@ -10,8 +10,8 @@
 #define MADAggregateFunctionInputType_h
 
 typedef CF_ENUM(short, MTAggregateFunctionInputType) {
-    MTAggregateFunctionInputTypeField = 0,
-    MTAggregateFunctionInputTypeFormula
+	MTAggregateFunctionInputTypeField = 0,
+	MTAggregateFunctionInputTypeFormula
 };
 
 #endif /* MADAggregateFunctionInputType_h */

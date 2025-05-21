@@ -65,8 +65,7 @@
 - (instancetype)initWithPathExtension: (NSString *)pathExtension
 						   identifier: (NSString *)fileGroup
 			  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(pathExtension = %@)", pathExtension];
-	if (self = [self initWithPredicate: predicate
+	if (self = [self initWithPredicate: [NSPredicate predicateWithFormat:@"(pathExtension = %@)", pathExtension]
 							identifier: fileGroup
 			   firstQueryUpdateHandler: firstQueryUpdateHandler]) {
 		
@@ -77,7 +76,6 @@
 - (instancetype)initWithLastPathComponent: (NSString *)lastPathComponent
 							   identifier: (NSString *)fileGroup
 				  firstQueryUpdateHandler: (void (^)(void))firstQueryUpdateHandler {
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(lastPathComponent = %@)", lastPathComponent];
 	if (self = [self initWithPredicate: [NSPredicate predicateWithFormat:@"(lastPathComponent = %@)", lastPathComponent]
 							identifier: fileGroup
 			   firstQueryUpdateHandler: firstQueryUpdateHandler]) {
@@ -163,9 +161,10 @@
 				extention:(NSString *)extention
 				fileGroup:(NSString *)fileGroup {
 
-	NSURL *documentURL = [MADURLFactory newURLLocalDocumentWithName:name extention:extention
-												   fileGroup:fileGroup];
-	
+	NSURL *documentURL = [MADURLFactory newURLLocalDocumentWithName:name
+														  extention:extention
+														  fileGroup:fileGroup];
+
 	id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
 	[MADFileUtilities createFileAtURL:documentURL completion:^(NSError *error) {
 

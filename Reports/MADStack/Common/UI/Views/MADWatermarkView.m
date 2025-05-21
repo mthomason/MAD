@@ -110,7 +110,7 @@ static CGPoint LogoOrigin(NSUInteger counter[2], const CGSize strings[2], CGSize
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
+		UIColor *bgColor = [UIColor systemGroupedBackgroundColor];
         self.backgroundColor =  bgColor;
         _drawn = NO;
     }
