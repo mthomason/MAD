@@ -26,8 +26,12 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
 
-static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
-				*keyIDDatabase = @"ID", *keyIDQuery = @"IQ", *keyIDDocument = @"IO";
+static NSString *keyDatabase = @"DA";
+static NSString *keyQuery = @"QU";
+static NSString *keyDocument = @"DO";
+static NSString *keyIDDatabase = @"ID";
+static NSString *keyIDQuery = @"IQ";
+static NSString *keyIDDocument = @"IO";
 
 @interface MADModelDocument ()
 	- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
@@ -38,14 +42,14 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 #pragma mark MAD Document Object ID
 
 @implementation MADModelDocument {
-  @protected
+@protected
 	NSOperationQueue *_objectContextQueue;
 	NSManagedObjectContext * __weak _managedObjectContext;
 	id <NSObject> _observeChangeNotification;
 	id <NSObject> _observeWillSaveNotification;
 	id <NSObject> _observeDidSaveNotification;
 }
-	@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectContext = _managedObjectContext;
 
 - (void)dealloc {
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -86,8 +90,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 		objectContextQueue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
 		
 		__typeof(self) __weak wself = self;
-		void (^blockChange)(NSNotification *);
-		blockChange = ^(NSNotification *note) {
+		void (^blockChange)(NSNotification *) = ^(NSNotification *note) {
 			//NSLog(@"%@: %@", NSStringFromClass(note.class), note);
 			//id keys = note.userInfo.keyEnumerator;
 			//id objects = note.userInfo.objectEnumerator;
@@ -207,8 +210,7 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 // MARK: Fetch request <RptqDocument::ObjectID>.
 
 + (NSFetchRequest <NSManagedObjectID *> *)fetchRequestObjectID {
-	NSFetchRequest *request;
-	request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
+	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
 	request.fetchLimit = 1;
 	request.resultType = NSManagedObjectIDResultType;
 	request.includesSubentities = NO;
@@ -219,67 +221,35 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 // MARK: Fetch request <RptqDocument::ObjectID, RptqDatabase::ObjectID, RptqQuery::ObjectID>.
 
 + (NSFetchRequest <NSDictionary <NSString *, __kindof NSObject *> *> *)fetchRequestDocDBQueryIDs {
-	NSFetchRequest *request;
-	
-	void (^initExpression)(NSExpressionDescription *, NSString *,
-							NSExpression *, NSAttributeType) =
-	^void(NSExpressionDescription *expressionDescription, NSString *name,
-		  NSExpression *expression, NSAttributeType type) {
-		expressionDescription.name = name.copy;
-		expressionDescription.expression = expression;
+	void (^initExpression)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) = ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
+		expressionDescription.name = [name copy];
+		expressionDescription.expression = [expression copy];
 		expressionDescription.expressionResultType = type;
 	};
 	
 	NSUInteger expressionCount = 6;
-	NSExpressionDescription *description[expressionCount];
+	NSMutableArray <NSExpressionDescription *> *expressionDescriptions = [[NSMutableArray alloc] initWithCapacity:expressionCount];
 	
 	for (NSUInteger i=0; i<expressionCount; i++) {
-		description[i] = [[NSExpressionDescription alloc] init];
+		NSExpressionDescription *description = [[NSExpressionDescription alloc] init];
+		[expressionDescriptions addObject: description];
 	}
 	
-	request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
 	
-	NSString *identifier = NSStringFromSelector(@selector(identifier));
-	NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
-	NSString *inDocument;
-	NSString *keyOwnedByQuery = NSStringFromSelector(@selector(ownedByQueryAsStaticResource));
-	inDocument = [MADStringUtilities stringByAppendingPeriod:inDatabase];
-	inDocument = [inDocument stringByAppendingString: keyOwnedByQuery];
+	NSString *inDocument = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString: NSStringFromSelector(@selector(ownedByQueryAsStaticResource))];
+	NSString *inDBID = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
+	NSString *inDocID = [[MADStringUtilities stringByAppendingPeriod:inDocument] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
 	
-	NSString *inDBID = [MADStringUtilities stringByAppendingPeriod:inDatabase];
-	inDBID = [inDBID stringByAppendingString:identifier];
+	initExpression(expressionDescriptions[0], keyDatabase, [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inDatabase))], NSObjectIDAttributeType);
+	initExpression(expressionDescriptions[1], keyDocument, [NSExpression expressionForKeyPath:inDocument], NSObjectIDAttributeType);
+	initExpression(expressionDescriptions[2], keyQuery, [NSExpression expressionForEvaluatedObject], NSObjectIDAttributeType);
+	initExpression(expressionDescriptions[3], keyIDDatabase, [NSExpression expressionForKeyPath:inDBID], NSInteger64AttributeType);
+	initExpression(expressionDescriptions[4], keyIDQuery, [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))], NSInteger64AttributeType);
+	initExpression(expressionDescriptions[5], keyIDDocument, [NSExpression expressionForKeyPath:inDocID], NSInteger64AttributeType);
 	
-	NSString *inDocID = [MADStringUtilities stringByAppendingPeriod:inDocument];
-	inDocID = [inDocID stringByAppendingString:identifier];
-	
-	NSExpression *dbExpression = [NSExpression expressionForKeyPath:inDatabase];
-	NSExpression *dbInDocExpression = [NSExpression expressionForKeyPath:inDocument];
-	NSExpression *selfExpresssion = [NSExpression expressionForEvaluatedObject];
-	NSExpression *dbIDExpression = [NSExpression expressionForKeyPath:inDBID];
-	NSExpression *queryIDExpression = [NSExpression expressionForKeyPath:identifier];
-	NSExpression *docIDExpression = [NSExpression expressionForKeyPath:inDocID];
-
-	initExpression(description[0], keyDatabase, dbExpression, NSObjectIDAttributeType);
-	initExpression(description[1], keyDocument, dbInDocExpression, NSObjectIDAttributeType);
-	initExpression(description[2], keyQuery, selfExpresssion, NSObjectIDAttributeType);
-	initExpression(description[3], keyIDDatabase, dbIDExpression, NSInteger64AttributeType);
-	initExpression(description[4], keyIDQuery, queryIDExpression, NSInteger64AttributeType);
-	initExpression(description[5], keyIDDocument, docIDExpression, NSInteger64AttributeType);
-	
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
 	request.resultType = NSDictionaryResultType;
-	
-	NSArray *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects:description
-												   count:expressionCount];
-	request.propertiesToFetch = propertiesToFetch;
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		description[i] = nil;
-	}
-	
-	inDatabase = nil;
-	inDocument = nil;
-	
+	request.propertiesToFetch = expressionDescriptions;
 	return request;
 }
 
@@ -288,15 +258,11 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 
 - (void)updateDocumentDatabaseQuery {
 	
-	NSArray <NSDictionary *> *results;
-
-	NSManagedObjectContext *managedObjectContext;
-	managedObjectContext = _managedObjectContext;
-	
+	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
 	NSFetchRequest *request = [MADModelDocument fetchRequestDocDBQueryIDs];
 	
 	NSError *error = nil;
-	results = [managedObjectContext executeFetchRequest:request error:&error];
+	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:request error:&error];
 	if (error != nil) {
 		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
 	}
@@ -304,27 +270,15 @@ static NSString *keyDatabase = @"DA", *keyQuery = @"QU", *keyDocument = @"DO",
 	NSAssert(results.count > 0, @"We expect results.");
 	if (results.count == 0) return;
 	
-	NSMutableOrderedSet <MADModelDatabase *> *databases;
-	databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:results.count];
-	
-	MADModelDatabase *database;
-
-	NSDictionary <NSString *, __kindof NSObject *> *resultWrapper;
-	
-	//_objectID = [[results.firstObject objectForKey: keyDocument] copy];
-
-	int64_t docID, dbID, qID;
-	for (resultWrapper in results) {
-
-		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery],
-						 kCFNumberSInt64Type, &qID);
-		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDatabase],
-						 kCFNumberSInt64Type, &dbID);
-		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDocument],
-						 kCFNumberSInt64Type, &docID);
-		database = [[MADModelDatabase alloc] initWithIdentifier: dbID
-												queryIdentifier: qID
-										   managedObjectContext: managedObjectContext];
+	NSMutableOrderedSet <MADModelDatabase *> *databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:results.count];
+	for (NSDictionary <NSString *, __kindof NSObject *> *resultWrapper in results) {
+		int64_t docID = 0, dbID = 0, qID = 0;
+		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDQuery], kCFNumberSInt64Type, &qID);
+		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDatabase], kCFNumberSInt64Type, &dbID);
+		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)resultWrapper[keyIDDocument], kCFNumberSInt64Type, &docID);
+		MADModelDatabase *database = [[MADModelDatabase alloc] initWithIdentifier: dbID
+																  queryIdentifier: qID
+															 managedObjectContext: managedObjectContext];
 		[databases addObject: database];
 		database = nil;
 	}

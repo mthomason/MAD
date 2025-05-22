@@ -10,9 +10,7 @@
 #define MADModelIDProtocol_h
 
 @protocol MADModelIDProtocol <NSObject>
-
-	@property (nonatomic, readonly, assign) int64_t identifier;
-
+@property (nonatomic, readonly) int64_t identifier;
 @end
 
 #endif /* MADModelIDProtocol_h */

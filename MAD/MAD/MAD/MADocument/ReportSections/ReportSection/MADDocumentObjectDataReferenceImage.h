@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MADDocumentObjectDataReferenceImage : MADDocumentObjectDataReference
 
-@property (nonatomic, copy, readonly) UIImage *image;
+@property (nullable, nonatomic, copy, readonly) UIImage *image;
 
 @end
 

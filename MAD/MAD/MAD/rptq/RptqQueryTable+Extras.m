@@ -69,60 +69,38 @@
 + (NSFetchRequest *)fetchRequestQueryTables:(NSPredicate *)predicate {
 	
 	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryTable class])];
-	
-	NSString *keyPathFieldName = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(databaseSchemaField))] stringByAppendingString:NSStringFromSelector(@selector(name))];
-	
 	NSString *keyPathTableName = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inQueryTable))] stringByAppendingString: NSStringFromSelector(@selector(databaseSchemaTable))];
 	keyPathTableName = [MADStringUtilities stringByAppendingPeriod:keyPathTableName];
 	keyPathTableName = [keyPathTableName stringByAppendingString: NSStringFromSelector(@selector(name))];
 	
-	NSString *keyPathSchemaTable = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inQueryTable))] stringByAppendingString: NSStringFromSelector(@selector(databaseSchemaTable))];
-	
-	NSUInteger expressionCount = 10;
-	NSExpressionDescription *expressionDescription[expressionCount];
-	NSString *keys[] = {
+	NSArray<NSString *> *keys = @[
 		@"QTI",
 		@"STI",
-	};
+	];
 	
-	//NSString *keyQueryTableID, *keyQueryFieldID, *keySchemaTableID, *keySchemaFieldID;
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
-	
-	NSString *keyQueryTableID = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inQueryTable))] stringByAppendingString:keyIdentifier];
-	NSString *keyQueryFieldID = keyIdentifier.copy;
-	NSString *keySchemaTableID = [[MADStringUtilities stringByAppendingPeriod:keyPathSchemaTable] stringByAppendingString:keyIdentifier];
-	NSString *keySchemaFieldID = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(databaseSchemaField))] stringByAppendingString:keyIdentifier];
-	
-	NSExpression *expressions[] = {
-		[NSExpression expressionForKeyPath: keyIdentifier],
+	NSArray<NSExpression *> *expressions = @[
+		[NSExpression expressionForKeyPath: NSStringFromSelector(@selector(identifier))],
 		[NSExpression expressionForKeyPath: NSStringFromSelector(@selector(databaseSchemaTable))],
-	};
+	];
 	
-	NSAttributeType types[] = {
-		NSInteger64AttributeType,
-		NSInteger64AttributeType,
-	};
+	NSArray<NSNumber *> *types = @[
+		@(NSInteger64AttributeType),
+		@(NSInteger64AttributeType),
+	];
 	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = [[NSExpressionDescription alloc] init];
-		expressionDescription[i].name = keys[i].copy;
-		expressionDescription[i].expression = expressions[i];
-		expressionDescription[i].expressionResultType = types[i];
-		
+	NSMutableArray<NSExpressionDescription *> *descriptions = [NSMutableArray arrayWithCapacity:keys.count];
+	for (NSUInteger i=0; i<keys.count; i++) {
+		NSExpressionDescription *desc = [[NSExpressionDescription alloc] init];
+		desc.name = keys[i];
+		desc.expression = expressions[i];
+		desc.expressionResultType = types[i].unsignedIntegerValue;
+		[descriptions addObject:desc];
 	}
 	
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
-												   count: (NSUInteger)expressionCount];
-	
-	fetchQueryTable.propertiesToFetch = propertiesToFetch;
+	fetchQueryTable.propertiesToFetch = descriptions;
 	fetchQueryTable.resultType = NSDictionaryResultType;
 	fetchQueryTable.predicate = predicate;
 	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = nil;
-		keys[i] = nil;
-		expressions[i] = nil;
-	}
 	return fetchQueryTable;
 }
 
@@ -142,14 +120,10 @@
 	
 	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class]) inManagedObjectContext: managedObjectContext];
 	RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
-
 	queryTable.databaseSchemaTable = databaseSchemaTable;
 	queryTable.inQuery = query;
-
 	queryTable.dropIndex = dupeCtr;
-	
-	NSString *alias = [[NSString alloc] initWithString:queryTable.tableAlias];
-	queryTable.alias = alias;
+	queryTable.alias = [queryTable.tableAlias copy];
 	
 	return queryTable;
 }
