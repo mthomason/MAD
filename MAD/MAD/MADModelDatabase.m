@@ -273,55 +273,39 @@ static os_log_t log_mad;
 
 	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
 	
-	void (^setupExpressionWithType)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
-	^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
+	void (^setupExpressionWithType)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) = ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
 		expressionDescription.name = name.copy;
 		expressionDescription.expression = expression;
 		expressionDescription.expressionResultType = type;
 	};
 	
 	NSUInteger expressionCount = 3;
-	NSExpressionDescription *expressionDescription[expressionCount];
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
-	NSString *inTable = NSStringFromSelector(@selector(inTable));
-	NSString *inDatabase = NSStringFromSelector(@selector(inDatabase));
-	NSString *name = NSStringFromSelector(@selector(name));
-	NSString *keyPathQuerable = NSStringFromSelector(@selector(queryable));
-
-	NSString *inTableInDB = [MADStringUtilities stringByAppendingKeyPath:inTable toString:inDatabase];
-	NSString *inTableInDBIdentifier = [MADStringUtilities stringByAppendingPeriod:inTableInDB];
-	inTableInDBIdentifier = [inTableInDBIdentifier stringByAppendingString:keyIdentifier];
+	NSMutableArray <NSExpressionDescription *> *expressionDescriptionArray = [[NSMutableArray alloc] initWithCapacity:expressionCount];
 	
-	NSString *inDatabaseIdentifier = [MADStringUtilities stringByAppendingPeriod:inDatabase];
-	inDatabaseIdentifier = [inDatabaseIdentifier stringByAppendingString:keyIdentifier];
-	
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier
-																 atKeyPath:inDatabaseIdentifier];
+	NSString *inDbKey = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
+	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier atKeyPath:inDbKey];
 	
 	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = [[NSExpressionDescription alloc] init];
+		NSExpressionDescription *ed = [[NSExpressionDescription alloc] init];
+		[expressionDescriptionArray addObject:ed];
 	}
 	
-	NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabaseSchemaTable class])];
 	
-	NSExpression *expressionForSelf = [NSExpression expressionForKeyPath:keyIdentifier];
-	NSExpression *expresssionForQueryable = [NSExpression expressionForKeyPath:keyPathQuerable];
-	NSExpression *expressionForName = [NSExpression expressionForKeyPath:name];
-	setupExpressionWithType(expressionDescription[0], keyIdentifier, expressionForSelf, NSInteger64AttributeType);
-	setupExpressionWithType(expressionDescription[1], keyPathQuerable, expresssionForQueryable, NSBooleanAttributeType);
-	setupExpressionWithType(expressionDescription[2], name, expressionForName, NSStringAttributeType);
+	NSExpression *expressionForSelf = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
+	NSExpression *expresssionForQueryable = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(queryable))];
+	NSExpression *expressionForName = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(name))];
 	
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription
-															count:expressionCount];
-	fetchQueryTable.propertiesToFetch = propertiesToFetch;
+	setupExpressionWithType(expressionDescriptionArray[0], NSStringFromSelector(@selector(identifier)), expressionForSelf, NSInteger64AttributeType);
+	setupExpressionWithType(expressionDescriptionArray[1], NSStringFromSelector(@selector(queryable)), expresssionForQueryable, NSBooleanAttributeType);
+	setupExpressionWithType(expressionDescriptionArray[2], NSStringFromSelector(@selector(name)), expressionForName, NSStringAttributeType);
+	
+	fetchQueryTable.propertiesToFetch = expressionDescriptionArray;
 	fetchQueryTable.resultType = NSDictionaryResultType;
 	fetchQueryTable.predicate = predicate;
 	
-	NSSortDescriptor *sortByTableName = [[NSSortDescriptor alloc] initWithKey:name ascending:YES];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortByTableName, nil];
-	
-	fetchQueryTable.sortDescriptors = sortDescriptors;
+	NSSortDescriptor *sortByTableName = [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector(@selector(name)) ascending:YES];
+	fetchQueryTable.sortDescriptors = @[sortByTableName];
 	
 	NSError *fetchError = nil;
 	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:fetchQueryTable error:&fetchError];
@@ -334,9 +318,9 @@ static os_log_t log_mad;
 	
 	for (NSDictionary *tableData in results) {
 		
-		NSNumber *schemaTableIdentifier = tableData[keyIdentifier];
-		NSString *schemaTableName = tableData[name];
-		NSNumber *schemaTableQuerable = tableData[keyPathQuerable];
+		NSNumber *schemaTableIdentifier = tableData[NSStringFromSelector(@selector(identifier))];
+		NSString *schemaTableName = tableData[NSStringFromSelector(@selector(name))];
+		NSNumber *schemaTableQuerable = tableData[NSStringFromSelector(@selector(queryable))];
 		
 		MADModelTable *table = [[MADModelTable alloc] initWithIdentifier: schemaTableIdentifier.longLongValue
 													managedObjectContext: managedObjectContext
@@ -344,10 +328,6 @@ static os_log_t log_mad;
 															   queryable: schemaTableQuerable.boolValue];
 		[tables addObject:schemaTableIdentifier];
 		[tableDictionary setObject:table forKey:schemaTableIdentifier];
-	}
-
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = nil;
 	}
 
 	_tableDictionary = tableDictionary;
@@ -360,9 +340,7 @@ static os_log_t log_mad;
 	expressionDescription.expression = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
 	expressionDescription.expressionResultType = NSInteger64AttributeType;
 
-	NSString *keyPath = NSStringFromSelector(@selector(inDatabase));
-	keyPath = [MADStringUtilities stringByAppendingPeriod:keyPath];
-	keyPath = [keyPath stringByAppendingString:NSStringFromSelector(@selector(identifier))];
+	NSString *keyPath = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
 
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
 	

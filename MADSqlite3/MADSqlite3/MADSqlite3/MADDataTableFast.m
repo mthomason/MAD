@@ -238,13 +238,12 @@ static os_log_t mlog;
 		NSError *error = nil;
 		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.groupKeyIndexes requiringSecureCoding:YES error:&error];
 		if (error != nil) {
-			os_log_error(mlog, "NSKeyedArchiver Error: %@", error.localizedDescription);
+			os_log_error(mlog, "%s: NSKeyedArchiver Error: %@", __PRETTY_FUNCTION__, error);
 		} else if (data) {
 			[plist setObject:data forKey:[MADDataTableFast keyGroupKeys]];
-		} else {
-			os_log_error(mlog, "[MADDataTableFast %p copyPlist] groupKeyIndexes archived to nil data without error.", self);
 		}
-		[plist setObject:data forKey:[MADDataTableFast keyGroupKeys]];
+	} else {
+		os_log_error(mlog, "%s: groupKeyIndexes is nil.", __PRETTY_FUNCTION__);
 	}
 	
 	NSNumber *sortSet = [[NSNumber alloc] initWithBool:_sortDescriptorsSet];
@@ -267,9 +266,8 @@ static os_log_t mlog;
 	self.queueBulkAdd = queue;
 	
 	NSString *absoluteString = plist[[MADDataTableFast keyUrlFastCache]];
-	if (absoluteString) {
-		NSURL *url = [[NSURL alloc] initWithString:absoluteString];
-		self.urlFastCache = url;
+	if (absoluteString.length > 0) {
+		self.urlFastCache = [NSURL URLWithString:absoluteString];
 	} else {
 		os_log_error(mlog, "[MADDataTableFast %p loadWithPlist] urlFastCache string from plist is nil.", self);
 	}
@@ -288,10 +286,8 @@ static os_log_t mlog;
 	if (error != nil) {
 		os_log_error(mlog, "NSKeyedArchiver Error: %@", error.localizedDescription);
 	}
-	NSMutableIndexSet *groupKeys = (groupKeysArray != nil) ?
-	[[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray] :
-	[[NSMutableIndexSet alloc] init];
-	self.groupKeyIndexes = groupKeys;
+
+	self.groupKeyIndexes = (groupKeysArray != nil) ? [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray] : [[NSMutableIndexSet alloc] init];
 	
 	[self reopenDbConnection];
 	return YES;
