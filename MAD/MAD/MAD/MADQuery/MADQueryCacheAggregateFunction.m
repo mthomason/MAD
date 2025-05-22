@@ -17,28 +17,6 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
 
-static inline const char *functionName(MTAggregateFunctionType);
-static inline const char *functionName(MTAggregateFunctionType functionType) {
-	switch (functionType) {
-		case MTAggregateFunctionTypeCount:
-			return "COUNT";
-		case MTAggregateFunctionTypeFirst:
-			return "FIRST";
-		case MTAggregateFunctionTypeLast:
-			return "LAST";
-		case MTAggregateFunctionTypeMax:
-			return "MAX";
-		case MTAggregateFunctionTypeMean:
-			return "AVG";
-		case MTAggregateFunctionTypeMin:
-			return "MIN";
-		case MTAggregateFunctionTypeSum:
-			return "SUM";
-		default:
-			return "SUM";
-	}
-}
-
 static inline NSString *NSStringForAggregateFunctionType(MTAggregateFunctionType);
 static inline NSString *NSStringForAggregateFunctionType(MTAggregateFunctionType functionType) {
 	switch (functionType) {

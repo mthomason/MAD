@@ -13,7 +13,7 @@
 
 @interface MADViewController : UIViewController
 
-	+ (instancetype)newViewControllerQueryVisulization;
++ (instancetype)newViewControllerQueryVisulization;
 
 @end
 

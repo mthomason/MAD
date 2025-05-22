@@ -17,10 +17,10 @@
 
   @required
 
-    @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
+    @property (nonatomic, assign, readonly) int16_t barcodeType;
+	@property (nonatomic, assign) int16_t barcodeBorderStyle;
     @property (nonatomic, assign) int16_t whitespaceWidth;
     @property (nonatomic, assign) BOOL has2dComponentEnabled;
-    @property (nonatomic, assign) MTBarcodeBorderStyle barcodeBorderStyle;
     @property (nonatomic, assign) int16_t barcodeBorderWidth;
     @property (nonatomic, assign) int16_t barcodeHeight;
     @property (nonatomic, assign) BOOL humanReadable;

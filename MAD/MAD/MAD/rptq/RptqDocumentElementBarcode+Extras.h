@@ -14,14 +14,14 @@
 
 @class MTBarcode;
 
-@interface RptqDocumentElementBarcode (Extras)
-	<MTBarcodeProtocol>
+@interface RptqDocumentElementBarcode (Extras) <MTBarcodeProtocol>
 
-	- (void)updateWithBarcode:(MTBarcode *)barcode field1ID:(NSManagedObjectID *)field1ID
-					 field2ID:(NSManagedObjectID *)field2ID;
-	+ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
-						   queryFieldOne:(RptqQueryField *)queryFieldOne
-						   queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;
+- (void)updateWithBarcode:(MTBarcode *)barcode
+				 field1ID:(NSManagedObjectID *)field1ID
+				 field2ID:(NSManagedObjectID *)field2ID;
++ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
+					   queryFieldOne:(RptqQueryField *)queryFieldOne
+					   queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;
 
 @end
 

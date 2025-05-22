@@ -12,32 +12,28 @@
 
 #import "RptqDocumentElementBarcode+Extras.h"
 
-#import <os/log.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-
-#import <MADFoundation/MADDataType.h>
-
-#import <MADBarcodes/MADBarcodes.h>
-
 #import "RptqDocumentElement+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDataHelper.h"
+
+#import <MADFoundation/MADDataType.h>
+#import <MADBarcodes/MADBarcodes.h>
+#import <MADBarcodes/MADBarcodeType.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
+#import <os/log.h>
 
 @implementation RptqDocumentElementBarcode (Extras)
 
 @dynamic has2dComponentEnabled;
 
 - (NSString *)designerRepresentationText {
-	NSString *barcodeName = [(RptqDocumentElementBarcode *)self copyBarcodeTypeName];
+	NSString *barcodeName = [MTBarcode newBarcodeNameForType:barcodeTypeForInt(self.barcodeType)];
 	id result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
-	return result;
-}
-
-- (NSString *)copyBarcodeTypeName {
-	NSString *result = [MTBarcode newBarcodeNameForType:self.barcodeType];
 	return result;
 }
 
