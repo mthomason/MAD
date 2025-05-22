@@ -14,7 +14,7 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MADDatabaseDataBinding : NSObject
+@interface MADDatabaseDataBinding : NSObject <NSCopying, NSSecureCoding>
 
 @property (nonatomic, strong, readonly) MADResult *value;
 @property (nonatomic, assign, readonly) NSUInteger fieldIndex;

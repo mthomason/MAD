@@ -28,8 +28,7 @@
 	@property (readonly, class) NSString *Identifier;
 @end
 
-@interface MADDatabaseConnection : NSObject
-	<MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying, NSCoding>
+@interface MADDatabaseConnection : NSObject <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying, NSSecureCoding>
 
 @end
 

@@ -11,8 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MADCurrencyFormatter : NSObject
-	<NSSecureCoding>
+@interface MADCurrencyFormatter : NSObject <NSSecureCoding>
 
 	@property (nonatomic, assign) BOOL enabled;
 	@property (nonatomic, assign) NSInteger decimalCount;

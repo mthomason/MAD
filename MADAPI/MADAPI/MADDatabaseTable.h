@@ -11,8 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@interface MADDatabaseTable : NSObject
-	<NSCopying>
+@interface MADDatabaseTable : NSObject <NSCopying>
 
 	@property (nonatomic, copy) NSString *name;
 	@property (nonatomic, assign) BOOL queryable;

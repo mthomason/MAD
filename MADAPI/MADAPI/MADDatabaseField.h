@@ -12,24 +12,23 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADDataType.h>
 
-@interface MADDatabaseField : NSObject
-	<NSCopying, NSCoding>
-	
-	- (instancetype)initWithName:(NSString *)name;
+@interface MADDatabaseField : NSObject <NSCopying, NSSecureCoding>
 
-	@property (nonatomic, copy) NSString *name;
-	@property (nonatomic, assign) NSUInteger calculatedWidth;
+- (instancetype)initWithName:(NSString *)name;
 
-	@property (nonatomic, assign) MADDataType fieldType;
-	@property (nonatomic, assign) int64_t width;
-	@property (nonatomic, assign) int16_t decimals;
-	@property (nonatomic, assign) int16_t fieldTypeNative;
-	@property (nonatomic, assign) BOOL primaryKey;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, assign) NSUInteger calculatedWidth;
 
-	- (BOOL)isNumeric;
-	+ (BOOL)isNumeric:(MADDataType)dataType;
+@property (nonatomic, assign) MADDataType fieldType;
+@property (nonatomic, assign) int64_t width;
+@property (nonatomic, assign) int16_t decimals;
+@property (nonatomic, assign) int16_t fieldTypeNative;
+@property (nonatomic, assign) BOOL primaryKey;
 
-	- (SEL)selectorForSorting;
+- (BOOL)isNumeric;
++ (BOOL)isNumeric:(MADDataType)dataType;
+
+- (SEL)selectorForSorting;
 
 @end
 

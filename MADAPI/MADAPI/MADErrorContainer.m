@@ -39,11 +39,10 @@ static NSString * const MADErrorContainerDate   = @"d";
 
 - (void)addError:(NSError *)error {
 	NSError *errorCopy = error.copy;
-	NSDate *date = [NSDate date];
 	NSDictionary *errorHolder = @{
-								  MADErrorContainerError    : errorCopy,
-								  MADErrorContainerDate     : date
-								  };
+		MADErrorContainerError    : errorCopy,
+		MADErrorContainerDate     : [NSDate date]
+	};
 	[self.errors addObject:errorHolder];
 }
 

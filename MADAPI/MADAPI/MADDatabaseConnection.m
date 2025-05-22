@@ -7,16 +7,15 @@
 //
 
 #import "MADDatabaseConnection.h"
-
 #import <Foundation/NSString.h>
 #import <Foundation/NSCoder.h>
 #import <Foundation/NSException.h>
 
 @interface MADDatabaseConnection()
-	@property (readwrite, nonatomic, assign) MADDatabaseType databaseType;
-	@property (readwrite, nonatomic, copy) NSString *connectionString;
-	@property (readwrite, nonatomic, assign) BOOL requiresCredentials;
-	@property (readwrite, nonatomic, copy) NSString *identifier;
+@property (readwrite, nonatomic, assign) BOOL requiresCredentials;
+@property (readwrite, nonatomic, assign) MADDatabaseType databaseType;
+@property (readwrite, nonatomic, copy) NSString *connectionString;
+@property (readwrite, nonatomic, copy) NSString *identifier;
 @end
 
 @implementation MADDatabaseConnection
@@ -26,39 +25,41 @@
 @synthesize connectionString = _connectionString;
 @synthesize identifier = _identifier;
 
-#pragma mark - NSCopying
+#pragma mark - NSSecureCoding
 
-- (id)copyWithZone:(nullable NSZone *)zone {
-	typeof(self) copy = [[[self class] allocWithZone:zone] init];
-	copy->_databaseType = _databaseType;
-	copy->_connectionString = [_connectionString copy];
-	copy->_requiresCredentials = _requiresCredentials;
-	copy->_identifier = [_identifier copy];
-	return copy;
-}
++ (BOOL)supportsSecureCoding { return YES; }
 
 #pragma mark - NSCoding
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-	self = [super init];
-	if (self) {
-		// Decode properties using instance variables
-		_databaseType = [decoder decodeIntegerForKey:@"databaseType"];
-		_connectionString = [decoder decodeObjectOfClass:[NSString class] forKey:@"connectionString"];
-		_requiresCredentials = [decoder decodeBoolForKey:@"requiresCredentials"];
-		_identifier = [decoder decodeObjectOfClass:[NSString class] forKey:@"identifier"];
+	if (self = [super init]) {
+		_databaseType = [decoder decodeIntegerForKey:NSStringFromSelector(@selector(databaseType))];
+		_connectionString = [decoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(connectionString))];
+		_requiresCredentials = [decoder decodeBoolForKey:NSStringFromSelector(@selector(requiresCredentials))];
+		_identifier = [decoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(identifier))];
 	}
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	// Encode properties using instance variables
-	[coder encodeInteger:_databaseType forKey:@"databaseType"];
-	[coder encodeObject:_connectionString forKey:@"connectionString"];
-	[coder encodeBool:_requiresCredentials forKey:@"requiresCredentials"];
-	[coder encodeObject:_identifier forKey:@"identifier"];
+	[coder encodeInteger:_databaseType forKey:NSStringFromSelector(@selector(databaseType))];
+	[coder encodeObject:_connectionString forKey:NSStringFromSelector(@selector(connectionString))];
+	[coder encodeBool:_requiresCredentials forKey:NSStringFromSelector(@selector(requiresCredentials))];
+	[coder encodeObject:_identifier forKey:NSStringFromSelector(@selector(identifier))];
 }
 
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+	typeof(self) copy = [[[self class] allocWithZone:zone] init];
+	if (copy) {
+		copy->_databaseType = _databaseType;
+		copy->_connectionString = [_connectionString copy];
+		copy->_requiresCredentials = _requiresCredentials;
+		copy->_identifier = [_identifier copy];
+	}
+	return copy;
+}
 
 #pragma mark - Factory Class Design
 

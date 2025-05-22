@@ -25,13 +25,12 @@ extern NSString * const MADSqlTextFromPart;
 @class NSMutableArray, MADCredential, MADDatabaseConnection, MADDatabase, MADDatabaseTable, MADDataTable, MADQuery, MADDatabaseField;
 
 @protocol MADErrorHandler <NSObject>
-  @required
-	- (void)displayError:(NSError *)error;
+@required
+- (void)displayError:(NSError *)error;
 @end
 
 @interface MADDatabase : NSObject
-	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource,
-		MADDatabaseDBProtocol, MADDatabaseSQLProtocol, NSCoding, NSCopying>
+	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseDBProtocol, MADDatabaseSQLProtocol, NSCoding, NSCopying>
 
 	+ (NSString *)imageIconName;
 	+ (NSString *)driverName;

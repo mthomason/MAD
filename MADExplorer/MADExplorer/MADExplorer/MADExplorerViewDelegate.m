@@ -7,21 +7,6 @@
 //
 
 #import "MADExplorerViewDelegate.h"
-
-#import <UIKit/UITableView.h>
-#import <UIKit/UIActivityIndicatorView.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/UIImageView.h>
-#import <UIKit/UILongPressGestureRecognizer.h>
-#import <UIKit/UITapGestureRecognizer.h>
-
-#import <MADCocoaExtensions/MADLabel.h>
-#import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/MADNumberFormatter.h>
-#import <MADCocoaExtensions/MADViewHelpers.h>
-
-#import <MADFileManager/MADMetaData.h>
-
 #import "MADExplorerProtocol.h"
 #import "MADExplorerCaption.h"
 
@@ -32,6 +17,21 @@
 
 #import "MADStandard.h"
 #import "MADExplorerCellTitle.h"
+
+#import <MADCocoaExtensions/MADLabel.h>
+#import <MADCocoaExtensions/MTMath.h>
+#import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
+
+#import <MADFileManager/MADMetaData.h>
+
+#import <UIKit/UITableView.h>
+#import <UIKit/UIActivityIndicatorView.h>
+#import <UIKit/UIImage.h>
+#import <UIKit/UIImageView.h>
+#import <UIKit/UILongPressGestureRecognizer.h>
+#import <UIKit/UITapGestureRecognizer.h>
+#import <os/log.h>
 
 /*char *string_for_n(unsigned long fileSize) {
 	char buffer_int[12];
@@ -463,13 +463,15 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 		
 		NSURL *url = metadata.URL.copy;
 		
-		void (^startDownload)(void);
-		startDownload = ^{
+		void (^startDownload)(void) = ^{
 
 			if (url != nil) {
 				NSError *error = nil;
 				[[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL: url
 																			  error: &error];
+				if (error != nil) {
+					os_log_error(OS_LOG_DEFAULT, "Error starting download: %@", error);
+				}
 			}
 
 		};
@@ -492,17 +494,10 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 }
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
-	MADMetaData *metadata;
-	NSURL *url;
-	NSString *lastPathComponent, *title, *result;
-	
-	metadata = [self.delegate metadataForItemAtIndexPath:indexPath];
-	url = metadata.URL.copy;
-	
-	lastPathComponent = url.lastPathComponent;
-	title = lastPathComponent.stringByDeletingPathExtension;
-	
-	result = [[NSString alloc] initWithString: title];
+	MADMetaData *metadata = [self.delegate metadataForItemAtIndexPath:indexPath];
+	NSURL *url = metadata.URL.copy;
+	NSString *title = url.lastPathComponent.stringByDeletingPathExtension;
+	NSString *result = [[NSString alloc] initWithString: title];
 	return result;
 }
 
