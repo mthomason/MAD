@@ -11,9 +11,10 @@
 
 #import <UIKit/UIViewController.h>
 
-@interface MADStackViewController : UIViewController
+@interface UIApplication (Helpers)
 
-	+ (instancetype)topViewController NS_RETURNS_NOT_RETAINED;
++ (__kindof UIViewController *)topViewController NS_RETURNS_NOT_RETAINED;
+- (UIWindow *)safeKeyWindow;
 
 @end
 

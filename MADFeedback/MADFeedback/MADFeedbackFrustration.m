@@ -7,13 +7,13 @@
 //
 
 #import "MADFeedbackFrustration.h"
-
-#import <MessageUI/MessageUI.h>
+#import "MADAlertControllerFeedback.h"
 
 #import <MADCocoaExtensions/UIViewController+Utilities.h>
+#import <MADCocoaExtensions/UIApplication+Helpers.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
-#import "MADAlertControllerFeedback.h"
+#import <MessageUI/MessageUI.h>
 
 @interface MADFeedbackFrustration()
 	<MFMailComposeViewControllerDelegate>
@@ -41,35 +41,31 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
 	if (event.subtype == UIEventSubtypeMotionShake) {
 
-		UIViewController *topMostController = [UIViewController copyTopmostViewController];
 		UIAlertController *alertController = [MADAlertControllerFeedback newAlertControllerFeedbackWithHandler:^(UIAlertAction *action) {
 			
 			
 			MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
-			mailComposer.subject = NSLocalizedString(@"Feedback for MAD Designer",
-													 @"Feedback for MAD Designer");
+			mailComposer.subject = NSLocalizedString(@"Feedback for MAD Designer", @"Feedback for MAD Designer");
 			[mailComposer setMessageBody:@"" isHTML:NO];
 			NSString *emailAddress = @"admin@everydayapps.com";
 			NSArray *to = @[emailAddress];
 			mailComposer.toRecipients = to;
 			mailComposer.mailComposeDelegate = self;
-			[topMostController presentViewController:mailComposer animated:YES completion:^{}];
+			[[UIApplication topViewController] presentViewController:mailComposer animated:YES completion:^{}];
 		} cancel:^(UIAlertAction *action) {
 			
 		}];
-		[topMostController presentViewController:alertController animated:YES completion:^{}];
+		[[UIApplication topViewController] presentViewController:alertController animated:YES completion:^{}];
 		
 	}
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-
-	UIViewController *topMostController = [UIViewController copyTopmostViewController];
 	if (error) {
 		UIAlertController *alertController = [MADAlertController newAlertControllerError:error];
-		[topMostController showViewController:alertController sender:self];
+		[[UIApplication topViewController] showViewController:alertController sender:self];
 	} else {
-		[topMostController dismissViewControllerAnimated:YES completion:^{ }];
+		[[UIApplication topViewController] dismissViewControllerAnimated:YES completion:^{ }];
 	}
 }
 

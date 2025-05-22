@@ -12,9 +12,7 @@
 #import "MADViewHelpers.h"
 
 @interface MADLabelTitle ()
-
-	@property (nonatomic, weak) UILabel *title;
-
+@property (nonatomic, weak) UILabel *title;
 @end
 
 @implementation MADLabelTitle
@@ -40,14 +38,12 @@
 - (void)setText:(NSString *)text {
 
 	NSString *safetext = text.copy;
-	
 	MADAttributedStringLogo *attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
 	
 	UILabel *title = self.title;
-	text = safetext;
 	title.attributedText = attributedText;
-
 	[title sizeToFit];
+	
 	self.bounds = title.bounds;
 }
 

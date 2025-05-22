@@ -25,7 +25,7 @@
 		mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
 		mailComposer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 		mailComposer.providesPresentationContextTransitionStyle = YES;
-		mailComposer.modalInPopover = NO;
+		mailComposer.modalInPresentation = NO;
 	}
 	return mailComposer;
 }

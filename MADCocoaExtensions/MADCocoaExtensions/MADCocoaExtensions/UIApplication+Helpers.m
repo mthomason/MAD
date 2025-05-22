@@ -9,11 +9,27 @@
 #import "UIApplication+Helpers.h"
 #import <UIKit/UIWindow.h>
 #import <UIKit/UINavigationController.h>
+#import <UIKit/UIWindowScene.h>
 
-@implementation MADStackViewController
+@implementation UIApplication (KeyWindowSafe)
 
-+ (instancetype)topViewController NS_RETURNS_NOT_RETAINED {
-	id viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+- (UIWindow *)safeKeyWindow {
+	for (UIScene *scene in self.connectedScenes) {
+		if (scene.activationState == UISceneActivationStateForegroundActive &&
+			[scene isKindOfClass:[UIWindowScene class]]) {
+			for (UIWindow *window in ((UIWindowScene *)scene).windows) {
+				if (window.isKeyWindow) {
+					return window;
+				}
+			}
+		}
+	}
+	return nil;
+}
+
++ (__kindof UIViewController *)topViewController NS_RETURNS_NOT_RETAINED {
+	UIWindow *keyWindow = [[UIApplication sharedApplication] safeKeyWindow];
+	__kindof UIViewController *viewController = [keyWindow rootViewController];
 	if ([viewController isKindOfClass:([UINavigationController  class])]) {
 		if (((UINavigationController *)viewController).visibleViewController != nil) {
 			viewController = ((UINavigationController *)viewController).visibleViewController;

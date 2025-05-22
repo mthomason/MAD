@@ -128,7 +128,6 @@
 	MADDatabaseConnection *databaseConnection = self.databaseConnection;
 	MADQueryTest *queryTest = [[MADQueryTest alloc] initWithObject: databaseConnection];
 	__kindof MADDataTable *datatable = [[MADDataTableVirtual alloc] initWithId: databaseConnection.hash];
-	
 	self.datatable = datatable;
 	
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];

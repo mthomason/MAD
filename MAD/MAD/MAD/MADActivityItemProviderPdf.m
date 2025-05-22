@@ -21,6 +21,7 @@
 #import <UIKit/UIImageView.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MADCocoaExtensions/UIApplication+Helpers.h>
 
 #import "MADocument.h"
 #import "MADReportFormatter.h"
@@ -119,10 +120,9 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 
 	[self disableUserInteraction:window.view];
 
-	UIView *mainWindow = [UIApplication sharedApplication].keyWindow.viewForLastBaselineLayout;
+	UIView *mainWindow = [[UIApplication sharedApplication] safeKeyWindow];
 
-	MADActivityIndicator *activityView;
-	activityView = [[MADActivityIndicator alloc] initWithFrame:CellDefaultBounds()];
+	MADActivityIndicator *activityView = [[MADActivityIndicator alloc] initWithFrame:CellDefaultBounds()];
 	activityView.center = mainWindow.center;
 	
 	[mainWindow performSelectorOnMainThread: @selector(addSubview:)
@@ -142,9 +142,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 	dispatch_async(dipatchQueue, ^{
 		
 		MADocument *sdocument = weakdoc;
-		NSDictionary <NSString *, NSString *> *options;
-		options = [[NSDictionary alloc] initWithObjectsAndKeys:
-									@"MAD® Designer", (NSString *)kCGPDFContextCreator, nil];
+		NSDictionary <NSString *, NSString *> *options = [[NSDictionary alloc] initWithObjectsAndKeys: @"MAD® Designer", (NSString *)kCGPDFContextCreator, nil];
 		CGRect letterRect = [MTPaper rectLetter];
 		NSArray *sortDescriptors = sdocument.sortDescriptors;
 		
@@ -187,19 +185,15 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 														 numberStyle: NSNumberFormatterDecimalStyle];
 		
 		for (NSUInteger i=0; i<reportFormatter.numberOfPages; i++) {
-
-			NSNumber *pageNumber;
-			NSString *page, *text;
-
 			UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
 			[printPageRenderer drawPageAtIndex:(NSInteger)i inRect:PdfTrimBox(letterRect)];
 			
-			pageNumber = [[NSNumber alloc] initWithUnsignedInteger: i];
+			NSNumber *pageNumber = [[NSNumber alloc] initWithUnsignedInteger: i];
 			
-			page  = [NSNumberFormatter localizedStringFromNumber: pageNumber
-													 numberStyle: NSNumberFormatterDecimalStyle];
-			
-			text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", page, totalPages];
+			NSString *page  = [NSNumberFormatter localizedStringFromNumber: pageNumber
+															   numberStyle: NSNumberFormatterDecimalStyle];
+
+			NSString *text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", page, totalPages];
 			
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				activityView.status.text = text.copy;
@@ -226,7 +220,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 		} else if ([subview isKindOfClass:[UIImageView class]]) {
 			dispatch_queue_t dipatchQueueMain = dispatch_get_main_queue();
 			dispatch_sync(dipatchQueueMain, ^{
-				subview.alpha = 0.3333f;
+				subview.alpha = 1.0/3.0;
 			});
 		}
 		[self disableUserInteraction:subview];

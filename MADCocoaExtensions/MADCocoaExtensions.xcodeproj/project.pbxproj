@@ -25,8 +25,6 @@
 		4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; };
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
-		4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */; };
 		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; };
 		4C5205AA1BA7E2A2000E6A59 /* MADColorSocial.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205AB1BA7E2A2000E6A59 /* MADColorSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */; };
@@ -100,8 +98,6 @@
 		4C5205671BA7E1DC000E6A59 /* MADCocoaExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADCocoaExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCocoaExtensionsTests.m; sourceTree = "<group>"; };
 		4C52056E1BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Utilities.h"; path = "MADCocoaExtensions/UIViewController+Utilities.h"; sourceTree = "<group>"; };
-		4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Utilities.m"; path = "MADCocoaExtensions/UIViewController+Utilities.m"; sourceTree = "<group>"; };
 		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MacroVendColor.h; path = MADCocoaExtensions/MacroVendColor.h; sourceTree = "<group>"; };
 		4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColorSocial.h; path = MADCocoaExtensions/MADColorSocial.h; sourceTree = "<group>"; };
 		4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColorSocial.m; path = MADCocoaExtensions/MADColorSocial.m; sourceTree = "<group>"; };
@@ -220,8 +216,6 @@
 				4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */,
 				4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */,
 				4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */,
-				4C52057C1BA7E2A2000E6A59 /* UIViewController+Utilities.h */,
-				4C52057D1BA7E2A2000E6A59 /* UIViewController+Utilities.m */,
 				4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */,
 				4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */,
 				4C5205811BA7E2A2000E6A59 /* MADNumberFormatter.h */,
@@ -320,7 +314,6 @@
 				4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */,
 				4C5205AA1BA7E2A2000E6A59 /* MADColorSocial.h in Headers */,
 				4C1CC25B24C624EE0027A454 /* MADViewHelpers.h in Headers */,
-				4C5205A71BA7E2A2000E6A59 /* UIViewController+Utilities.h in Headers */,
 				4C3622B71CF34A8B002B8649 /* MADResizeAspect.h in Headers */,
 				4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */,
 			);
@@ -437,7 +430,6 @@
 				4C6C09E31F5D0DFF00EDA039 /* MADLabelTitle.m in Sources */,
 				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
 				4C5767471E1CB68500611F37 /* MADTextField.m in Sources */,
-				4C5205A81BA7E2A2000E6A59 /* UIViewController+Utilities.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
 				4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */,
 				4C6C09E71F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m in Sources */,

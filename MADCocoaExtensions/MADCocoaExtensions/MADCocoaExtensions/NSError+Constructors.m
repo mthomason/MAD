@@ -26,38 +26,28 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 		completion(YES);
 		return;
 	}
-
-	UIViewController *displayController;
-	UIAlertController *alert;
-	UIAlertAction *ok;
-	NSString *dismissButtonTitle, *localizedDescription, *localizedFailureReason;
-	NSError *underlyingError;
-	
-	displayController = viewController ?:  [MADStackViewController topViewController];
+	UIViewController *displayController = viewController ?:  [UIApplication topViewController];
 	displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
 	
-	dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
-	localizedDescription = error.localizedDescription.copy;
-	localizedFailureReason = error.localizedFailureReason.copy;
+	NSString *localizedDescription = error.localizedDescription.copy;
+	NSString *localizedFailureReason = error.localizedFailureReason.copy;
 	
-	underlyingError = error.userInfo[NSUnderlyingErrorKey];
+	NSError *underlyingError = [error.userInfo[NSUnderlyingErrorKey] copy];
 	
-	if (underlyingError.localizedDescription != nil) {
+	if ([underlyingError localizedDescription] != nil) {
 		localizedDescription = underlyingError.localizedDescription;
 		localizedFailureReason = underlyingError.localizedFailureReason;
 	}
 	
-	alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
-												message: localizedDescription
-										 preferredStyle: UIAlertControllerStyleAlert];
-	
-	ok = [UIAlertAction actionWithTitle: dismissButtonTitle
-								  style: UIAlertActionStyleDefault
-								handler: ^(UIAlertAction *action) {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
+																   message: localizedDescription
+															preferredStyle: UIAlertControllerStyleAlert];
 
-									if (completion) completion(YES);
-
-								}];
+	UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
+												 style: UIAlertActionStyleDefault
+											   handler: ^(UIAlertAction *action) {
+		if (completion) completion(YES);
+	}];
 	[alert addAction:ok];
 	
 	[displayController presentViewController:alert animated:YES completion:NULL];
