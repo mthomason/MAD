@@ -12,7 +12,6 @@
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
 
 #import "MADTableViewCellReceiptInAppPurchase.h"
 #import "MADTableViewCellReceiptApplication.h"

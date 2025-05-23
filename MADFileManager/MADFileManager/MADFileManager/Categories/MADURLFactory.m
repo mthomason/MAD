@@ -14,7 +14,6 @@
 #import <Foundation/NSFileManager.h>
 
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADStringUtilities.h>
 
@@ -68,8 +67,8 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLThumbnailForURL:(NSURL *)madUrl {
-	NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension.copy;
-	return [self newURLThumbnailForHandle: handle andRetinaDisplay: [self isRetinaDisplay]];
+	return [self newURLThumbnailForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
+						 andRetinaDisplay: [self isRetinaDisplay]];
 	
 }
 

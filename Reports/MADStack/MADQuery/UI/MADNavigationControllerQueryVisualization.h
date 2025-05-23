@@ -12,8 +12,7 @@
 #import <UIKit/UINavigationController.h>
 #import "MADViewControllerDocumentProtocol.h"
 
-@interface MADNavigationControllerQueryVisualization : UINavigationController
-	<MADViewControllerDocumentProtocol>
+@interface MADNavigationControllerQueryVisualization : UINavigationController <MADViewControllerDocumentProtocol>
 
 @end
 

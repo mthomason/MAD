@@ -10,17 +10,19 @@
 #define MAD_MADFoundation_MADApplication_h
 
 #import <Foundation/NSObject.h>
-#import <MADFoundation/MADAppDelegate.h>
+#import <UIKit/UIApplication.h>
+
+@protocol MADApplicationProtocol;
 
 @interface MADApplication : NSObject
 
-	+ (MADAppDelegate)AppDelegate;
++ (id <UIApplicationDelegate, MADApplicationProtocol>)AppDelegate;
 
-	+ (NSString *)groupIdentifier;
-	+ (NSString *)ubiquityIdentifier;
++ (NSString *)groupIdentifier;
++ (NSString *)ubiquityIdentifier;
 
-	+ (BOOL)isMADDesigner;
-	+ (BOOL)isMADViewer;
++ (BOOL)isMADDesigner;
++ (BOOL)isMADViewer;
 
 @end
 

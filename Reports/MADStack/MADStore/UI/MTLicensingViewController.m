@@ -15,7 +15,6 @@
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplication.h>
 
 @interface MTLicensingViewController ()

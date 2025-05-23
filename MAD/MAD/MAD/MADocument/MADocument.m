@@ -105,7 +105,6 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADURLFactory.h>
-#import <MADFoundation/UIScreen+Properties.h>
 #import <MADFoundation/MADStringUtilities.h>
 
 #import <MADAPI/MADAliases.h>

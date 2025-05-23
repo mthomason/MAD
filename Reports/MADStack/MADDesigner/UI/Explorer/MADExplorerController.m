@@ -159,9 +159,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
 	[characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
 	NSArray *components = [desiredName componentsSeparatedByCharactersInSet:characterSet.invertedSet];
-	NSString *result = [components componentsJoinedByString:@""];
-	return result.copy;
-	
+	return [components componentsJoinedByString:@""];
 }
 
 + (instancetype)newExplorerController {
@@ -184,22 +182,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 				MADAppConfigurationUserDefaultsSamplesInstalled: @NO,
 				MADUpgradeInstalledChinook: @NO
 			}];
-
-			//UITabBarItem *tabBarItemAppearance = [UITabBarItem appearance];
-			
-			//NSDictionary *titleTextAttributes = [[NSDictionary alloc] initWithObjectsAndKeys: [MADColorEverydayApps newColorWhite], NSForegroundColorAttributeName, nil];
-			//[tabBarItemAppearance setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
-			
-			//[[UIToolbar appearance] setBarTintColor: [MADColorEverydayApps newColorBlue]];
-			//[[UIBarButtonItem appearance] setTintColor: [MADColorEverydayApps newColorWhite]];
-			//[[UINavigationBar appearanceWhenContainedInInstancesOfClasses: @[[UINavigationController class], [UIViewController class]]] setTintColor:[MADColorEverydayApps newColorWhite]];
-			//[[UIBarButtonItem appearanceWhenContainedInInstancesOfClasses: @[[UIToolbar class]]] setTintColor: [MADColorEverydayApps newColorWhite]];
-			//[[UINavigationBar appearance] setTitleTextAttributes:titleTextAttributes];
-			//[[UILabel appearanceWhenContainedInInstancesOfClasses: @[[UITableViewCell class], [UICollectionViewCell class]]] setHighlightedTextColor:[MADColorEverydayApps newColorOrange]];
-			//[[UIImageView appearanceWhenContainedInInstancesOfClasses: @[[UITableViewCell class], [UICollectionViewCell class]]] setTintColor: [MADColorEverydayApps newColorOrange]];
-			//UINavigationBar *navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: @[[QLPreviewController class]]];
-			//navigationBar.barTintColor  = [MADColorEverydayApps newColorAnalogous4];
-			//navigationBar.tintColor     = [MADColorEverydayApps newColorRed];
 
 		}
 	}

@@ -18,7 +18,6 @@
 #import <MAD/MADConstants.h>
 
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADBlockOperation.h>

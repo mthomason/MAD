@@ -67,14 +67,11 @@
 
 - (void)pushViewController:(UIViewController *)viewController
 				  animated:(BOOL)animated {
-	[super pushViewController: viewController
-					 animated: animated];
-	//[self setNavigationBarHidden: NO animated: animated];
+	[super pushViewController: viewController animated: animated];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	//[self setNavigationBarHidden:YES animated:animated];
 	[self setToolbarHidden:NO animated:animated];
 }
 
@@ -97,8 +94,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	if (self.isBeingDismissed) {
-		NSArray *viewControllers = [[NSArray alloc] init];
-		[self setViewControllers:viewControllers animated:animated];
+		[self setViewControllers:@[] animated:animated];
 	}
 }
 
@@ -106,7 +102,7 @@
 	[super viewWillLayoutSubviews];
 	for (UIViewController *vc in self.childViewControllers) {
 		[vc.view setNeedsLayout];
-	}// self.childViewControllers
+	}
 }
 
 - (void)viewDidLayoutSubviews {

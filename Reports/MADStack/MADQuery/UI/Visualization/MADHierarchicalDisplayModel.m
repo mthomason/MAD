@@ -9,7 +9,6 @@
 #import "MADHierarchicalDisplayModel.h"
 #import "MADHierarchicalChildViewDefination.h"
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <CoreData/NSManagedObjectID.h>
 
 #import <Foundation/NSDictionary.h>

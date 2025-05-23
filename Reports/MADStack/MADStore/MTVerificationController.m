@@ -12,7 +12,6 @@
 #include <Security/Security.h>
 #include <AssertMacros.h>
 
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADApplication.h>
 

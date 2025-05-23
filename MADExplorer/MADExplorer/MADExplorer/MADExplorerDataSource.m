@@ -11,7 +11,6 @@
 #import <UIKit/UIViewController.h>
 
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 #import <MADFileManager/MADFilesControllerDelegate.h>

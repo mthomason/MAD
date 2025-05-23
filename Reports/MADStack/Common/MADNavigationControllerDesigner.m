@@ -45,8 +45,7 @@
 
 - (NSString *)title {
 	if (_title == nil) {
-		_title = self.designerController == nil ?
-					[MADDesignerViewController Title] : self.designerController.title;
+		_title = self.designerController == nil ? [MADDesignerViewController Title] : self.designerController.title;
 	}
 	return _title;
 }

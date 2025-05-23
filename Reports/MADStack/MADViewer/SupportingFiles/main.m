@@ -13,7 +13,7 @@
 #import "MADViewerAppDelegate.h"
 
 int main(int argc, char *argv[]) {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([MADViewerAppDelegate class]));
-    }
+	@autoreleasepool {
+		return UIApplicationMain(argc, argv, nil, NSStringFromClass([MADViewerAppDelegate class]));
+	}
 }

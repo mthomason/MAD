@@ -22,7 +22,7 @@
 static NSString * const MADApplicationIdMadDesigner                         = @"666001433";
 static NSString * const MADApplicationIdMadViewer                           = @"666003759";
 
-+ (id)AppDelegate {
++ (id <UIApplicationDelegate, MADApplicationProtocol>)AppDelegate {
 	id appDelegate;
 	if ([NSThread isMainThread]) {
 		#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
@@ -57,13 +57,13 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 }
 
 + (BOOL)isMADDesigner {
-	MADAppDelegate appDelegate = [self AppDelegate];
+	id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [self AppDelegate];
 	NSString *appIdentifier = [appDelegate applicationIdentifier];
 	return [appIdentifier isEqualToString: MADApplicationIdMadDesigner];
 }
 
 + (BOOL)isMADViewer {
-	MADAppDelegate appDelegate = [self AppDelegate];
+	id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [self AppDelegate];
 	NSString *appIdentifier = [appDelegate applicationIdentifier];
 	return [appIdentifier isEqualToString: MADApplicationIdMadViewer];
 }

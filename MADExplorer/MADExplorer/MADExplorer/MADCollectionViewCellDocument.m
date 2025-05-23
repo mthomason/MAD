@@ -11,8 +11,18 @@
 #endif
 
 #import "MADCollectionViewCellDocument.h"
+#import "MADExplorerCaption.h"
+#import "MADExplorerActivityIndicator.h"
+#import "MADLabelFileExplorerDocumentCellTitle.h"
+#import "MADLabelFileExplorerDocumentCellSubtitle.h"
+#import "MADBackgroundViewSelected.h"
+#import "MADStandard.h"
+#import "MADThumbnailView.h"
+#import "MADExplorerCellTitle.h"
 
-#import <QuartzCore/CALayer.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADFileManager/MADMetaData.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import <UIKit/UINibLoading.h>
 #import <UIKit/NSAttributedString.h>
@@ -23,32 +33,17 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIAccessibility.h>
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADFileManager/MADMetaData.h>
-#import <MADFoundation/MADURLFactory.h>
-
-#import "MADExplorerCaption.h"
-#import "MADExplorerActivityIndicator.h"
-
-#import "MADLabelFileExplorerDocumentCellTitle.h"
-#import "MADLabelFileExplorerDocumentCellSubtitle.h"
-
-#import "MADBackgroundViewSelected.h"
-#import "MADStandard.h"
-#import "MADThumbnailView.h"
-#import "MADExplorerCellTitle.h"
+#import <QuartzCore/CALayer.h>
+#import <os/log.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
-const CGFloat MTAnimationRotateDeg = 1.0000f;
-#define degreesToRadians(x) (M_PI * (x) / 180.0)
-#define kAnimationRotateDeg 1.0
+static const CGFloat MTAnimationRotateDeg = 6.0;
+static const CGFloat Float_0 =   0.0;
+static const CGFloat Float_100 = 100.0;
 
-static const CGFloat Float_0                    =   0.0;
-static const CGFloat Float_100                  = 100.0;
-
-static inline double wobbleFactor(void);
-static inline double wobbleFactor(void) {
-	return (arc4random_uniform(500) / 500.0) + 0.5;
+static inline double wobbleRandomFactor(void);
+static inline double wobbleRandomFactor(void) {
+	return (arc4random_uniform(100) / 100.0);
 }
 
 @interface MADCollectionViewCellDocument ()
@@ -56,7 +51,7 @@ static inline double wobbleFactor(void) {
 @end
 
 @implementation MADCollectionViewCellDocument {
-  @protected
+@protected
 	UIView * _selectedBackgroundView;
 }
 
@@ -87,9 +82,11 @@ static inline double wobbleFactor(void) {
 - (void)awakeFromNib {
 	[super awakeFromNib];
 	_wobbling = NO;
-	UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc]
-									  initWithFrame:self.contentView.frame];
-	[self setSelectedBackgroundView: selectedBackgroundView];
+	if (!self.selectedBackgroundView) {
+		UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc] initWithFrame:self.contentView.frame];
+		self.selectedBackgroundView = selectedBackgroundView;
+	}
+	
 	self.translatesAutoresizingMaskIntoConstraints = NO;
 	self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
 }
@@ -233,8 +230,18 @@ static inline double wobbleFactor(void) {
 	[super prepareForReuse];
 	[self stopWobble];
 	[self.imagePreview prepareForReuse];
-	NSArray *gestureRecognizers = [[NSArray alloc] init];
-	self.gestureRecognizers = gestureRecognizers;
+	self.gestureRecognizers = @[];
+	self.labelTitle.text = nil;
+	self.labelTitleSub.text = nil;
+	self.imageCloudIndicator.image = nil;
+	[self.progressViewDownload setProgress:0.0f];
+	self.progressViewDownload.hidden = YES;
+	[self.progressViewUpload setProgress:0.0f];
+	self.progressViewUpload.hidden = YES;
+	UIActivityIndicatorView *activityIndicator = self.activityIndicator;
+	if (activityIndicator) {
+		[activityIndicator stopAnimating];
+	}
 }
 
 #pragma mark -
@@ -283,46 +290,62 @@ static inline double wobbleFactor(void) {
 #pragma mark Wobble
 
 - (void)startWobble {
-
 	_wobbling = YES;
-	double r = wobbleFactor();
-	[self.layer removeAllAnimations];
-	self.transform = CGAffineTransformIdentity;
+	_wobbling = YES;
+	
+	// Make sure we are in the view hierarchy
+	if (!self.superview) {
+		return;
+	}
+	
+	[self.layer removeAllAnimations]; // Clear any previous animations
+	self.transform = CGAffineTransformIdentity; // Reset transform before starting a new one
 	self.layer.anchorPoint = CGPointMake(0.5, 0.5);
-
-	typeof(self) __weak weakself = self;
-	[UIView animateWithDuration: 0.2 animations: ^{
-		weakself.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians((kAnimationRotateDeg * -1.0) - r));
-	} completion: ^(BOOL finishedInital) {
-						 
-		[UIView animateWithDuration: 0.2
-							  delay: 0.0
-							options: UIViewAnimationOptionAllowUserInteraction |
-										UIViewAnimationOptionRepeat |
-										UIViewAnimationOptionAutoreverse |
-										UIViewAnimationOptionBeginFromCurrentState
-						 animations: ^(void){
-							 [UIView setAnimationRepeatCount: MAXFLOAT];
-							 weakself.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians(kAnimationRotateDeg + r ));
-						 } completion:^(BOOL finished) {
-							 typeof(self) strongself = weakself;
-							 if (!finished && strongself.wobbling && strongself.superview != nil) {
-								 [strongself startWobble];
-							 }
-						 }];
-	}];
+	
+	// Randomize aspects of the wobble for a more natural look
+	CGFloat randomAngleOffset = (CGFloat)((wobbleRandomFactor() - 0.5) * MTAnimationRotateDeg * 0.5); // Small random offset to base angle
+	CGFloat angle = degreesToRadians(MTAnimationRotateDeg + randomAngleOffset);
+	NSTimeInterval duration = 0.15 + (wobbleRandomFactor() * 0.1); // Duration between 0.15s and 0.25s
+	
+	// Start slightly offset so the autoreverse creates a back-and-forth motion around the center
+	self.transform = CGAffineTransformMakeRotation(-angle * 0.5f);
+	
+	typeof(self) __weak weakSelf = self;
+	[UIView animateWithDuration:duration
+						  delay:0.0
+						options:UIViewAnimationOptionAllowUserInteraction |
+	 UIViewAnimationOptionRepeat |
+	 UIViewAnimationOptionAutoreverse |
+	 UIViewAnimationOptionBeginFromCurrentState
+					 animations:^{
+		typeof(weakSelf) __strong strongSelf = weakSelf;
+		if (!strongSelf) return; // Safety check
+		strongSelf.transform = CGAffineTransformMakeRotation(angle);
+	} completion:nil];
 }
 
 - (void)stopWobble {
 	_wobbling = NO;
-	[self.layer removeAllAnimations];
+	if (self.layer.animationKeys.count > 0) {
+		[self.layer removeAllAnimations];
+	}
 	self.transform = CGAffineTransformIdentity;
 }
 
 - (void)setWobbling:(BOOL)wobbling {
 	if (_wobbling != wobbling) {
-		if ((_wobbling = wobbling)) [self startWobble];
-		else [self stopWobble];
+		if (wobbling && self.layer.animationKeys.count == 0 && self.superview) {
+			[self startWobble];
+		}
+		return;
+	}
+	_wobbling = wobbling;
+	if (_wobbling) {
+		if (self.superview) {
+			[self startWobble];
+		}
+	} else {
+		[self stopWobble];
 	}
 }
 
@@ -353,42 +376,26 @@ static inline double wobbleFactor(void) {
 
 - (void)updateDisplayForMetaData:(MADMetaData *)metadata editing:(BOOL)editing {
 	
-	BOOL notDownloaded, isDownloading, isUploading, isUbiquitous;
-	double percentage;
-	
-	MADLabelFileExplorerDocumentCellTitle *labelTitle;
-	MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub;
-	
-	UIImageView *cloudIndicatorImageView;
-	UIImage *cloudIndicatorImage;
-
 	self.wobbling = editing;
-	NSString *name, *subtitle, *ubiquitousItemDownloadingStatus;
-	
-	cloudIndicatorImageView = self.imageCloudIndicator;
-	
-	labelTitle = self.labelTitle;
-	labelTitleSub = self.labelTitleSub;
 
-	name = metadata.name;
-	labelTitle.text = name.copy;
+	UIImageView *cloudIndicatorImageView = self.imageCloudIndicator;
+	MADLabelFileExplorerDocumentCellTitle *labelTitle = self.labelTitle;
+	MADLabelFileExplorerDocumentCellSubtitle *labelTitleSub = self.labelTitleSub;
 
-	ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
-	notDownloaded = metadata.isUbiquitousItemDownloadingStatusNotDownloaded;
-	isDownloading = metadata.ubiquitousItemIsDownloading;
-	isUploading = metadata.ubiquitousItemIsUploading;
-	isUbiquitous = metadata.isUbiquitous;
+	labelTitle.text = [metadata.name copy];
+
+	//NSString *ubiquitousItemDownloadingStatus = metadata.ubiquitousItemDownloadingStatus.copy;
+	BOOL notDownloaded = metadata.isUbiquitousItemDownloadingStatusNotDownloaded;
+	BOOL isDownloading = metadata.ubiquitousItemIsDownloading;
+	BOOL isUploading = metadata.ubiquitousItemIsUploading;
+	BOOL isUbiquitous = metadata.isUbiquitous;
 	
-	subtitle = [MADExplorerCellTitle newExplorerCellTitleSubtitle:metadata];
-	labelTitleSub.text = subtitle.copy;
+	labelTitleSub.text = [MADExplorerCellTitle newExplorerCellTitleSubtitle:metadata];
 	
-	percentage = metadata.ubiquitousItemPercentUploaded;
-	[self setUploadingActive: isUploading percent: percentage];
+	[self setUploadingActive: isUploading percent: metadata.ubiquitousItemPercentUploaded];
+	[self setDownloadingActive:isDownloading percent: metadata.ubiquitousItemPercentDownloaded];
 	
-	percentage = metadata.ubiquitousItemPercentDownloaded;
-	[self setDownloadingActive:isDownloading percent: percentage];
-	
-	cloudIndicatorImage = notDownloaded && isUbiquitous ?
+	UIImage *cloudIndicatorImage = notDownloaded && isUbiquitous ?
 								[UIImage imageNamed:@"MADImageToolbarCloudDownload"] : nil;
 	
 	[cloudIndicatorImageView setImage: cloudIndicatorImage];
@@ -400,19 +407,19 @@ static inline double wobbleFactor(void) {
 	
 	dispatch_block_t read_iamge = ^{
 		@autoreleasepool {
+			NSURL *metadataURL = [metadata.URL copy];
+			NSURL *thumbnailUrl = [MADURLFactory newURLThumbnailForURL:metadataURL];
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-				NSURL *metadataURL, *thumbnailUrl;
 				UIActivityIndicatorView *activityIndicatorView = self.activityIndicator;
 				if (isDownloading || isUploading) {
 					[activityIndicatorView performSelector:@selector(startAnimating)];
 				} else {
 					[activityIndicatorView performSelector:@selector(stopAnimating)];
 				}
-				metadataURL = metadata.URL.copy;
-				thumbnailUrl = [MADURLFactory newURLThumbnailForURL:metadataURL];
-				self.imagePreview.thumbnailURL = thumbnailUrl;
+				if ([self.labelTitle.text isEqualToString:metadata.name]) {
+					self.imagePreview.thumbnailURL = thumbnailUrl;
+				}
 			}];
-			
 		}
 	};
 	

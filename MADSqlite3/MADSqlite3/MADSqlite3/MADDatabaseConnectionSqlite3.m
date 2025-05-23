@@ -15,7 +15,6 @@
 
 #import <MADFoundation/MADURLFactory.h>
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>

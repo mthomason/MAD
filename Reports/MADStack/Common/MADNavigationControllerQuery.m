@@ -30,11 +30,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
-	//self.root
-	//if (self.viewControllers.count == 0) {
-	//    self setRoot self.queryController animated:animated];
-	//}
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

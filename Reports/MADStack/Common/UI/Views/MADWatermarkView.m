@@ -12,7 +12,6 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSStringDrawing.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 

@@ -37,12 +37,7 @@ const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 NSString *s = @"";
 #endif
 
-/*#if MAD_DESIGNER || MADWATCHKIT
 NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.designer";
-#elif MAD_VIEWER
-NSString * const MADUbiquityIdentifier                                  = @"iCloud.com.everydayapps.mad.viewer";
-#endif*/
-
 NSString * const MADIdentifierGroup                                     = @"group.everydayapps.mad";
 
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
@@ -113,6 +108,31 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     NSString *version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), MADKeyRevision);
     return version;
 }
+
++ (NSString *)bundleDisplayName { 
+	<#code#>
+}
+
+
++ (NSString *)bundleVersion { 
+	<#code#>
+}
+
+
+- (NSString *)groupIdentifier { 
+	<#code#>
+}
+
+
++ (NSString *)humanReadableCopyright { 
+	<#code#>
+}
+
+
+- (NSString *)ubiquityIdentifier { 
+	return [MADViewerAppDelegate ubiquityIdentifier];
+}
+
 
 #pragma mark - Initialization
 

@@ -13,7 +13,7 @@
 #import "MADBarcodesAppDelegate.h"
 
 int main(int argc, char *argv[]) {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([MADBarcodesAppDelegate class]));
-    }
+	@autoreleasepool {
+		return UIApplicationMain(argc, argv, nil, NSStringFromClass([MADBarcodesAppDelegate class]));
+	}
 }

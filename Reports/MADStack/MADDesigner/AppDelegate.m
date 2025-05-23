@@ -185,8 +185,7 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	return YES;
 }
 
-- (BOOL)application:(UIApplication *)application
-didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[[NSBundle mainBundle] load];
 	if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
 		id notification = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound
@@ -212,8 +211,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	//[self.appConfiguration cleanupBeforeTerminate];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 	// FIXME: Open a file, YO!!!
 	return NO;
 }

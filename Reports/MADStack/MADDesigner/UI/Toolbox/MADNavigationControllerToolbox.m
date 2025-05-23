@@ -22,10 +22,8 @@
 	[super initialize];
 	if (self == [MADNavigationControllerToolbox self]) {
 		@autoreleasepool {
-			NSArray <Class <UIAppearanceContainer>> *classes;
-			UINavigationBar <UIAppearance> *appearanceProxy;
-			classes = [[NSArray <Class <UIAppearanceContainer>> alloc] initWithObjects: self, nil];
-			appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray <Class <UIAppearanceContainer>> alloc] initWithObjects: self, nil];
+			UINavigationBar <UIAppearance> *appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
 			appearanceProxy.barTintColor = [UIColor clearColor];
 		}
 	}

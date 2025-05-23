@@ -13,10 +13,9 @@
 #import <UIKit/UIApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
-@interface AppDelegate : UIResponder
-	<UIApplicationDelegate, MADApplicationProtocol>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, MADApplicationProtocol>
 
-	@property (nullable, nonatomic, strong) UIWindow *window;
+@property (nullable, nonatomic, strong) UIWindow *window;
 
 @end
 

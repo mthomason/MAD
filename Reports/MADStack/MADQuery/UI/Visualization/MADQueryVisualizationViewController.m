@@ -33,13 +33,10 @@
 #import <MADDataStructures/MTLinkedList.h>
 
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURLFactory.h>
 
 #import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/UIScreen+Properties.h>
-
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <MAD/MADocument.h>

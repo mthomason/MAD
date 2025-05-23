@@ -13,7 +13,6 @@
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADFoundation/madlib.h>
 #import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADAppDelegate.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURLFactory.h>
 #import <MADFoundation/MADCacheProtocol.h>
@@ -303,7 +302,7 @@ static os_log_t mlog;
 	NSURL *cacheDirectory;
 	
 	if (self.cacheDelegate == nil) {
-		MADAppDelegate appDelegate = [MADApplication AppDelegate];
+		id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [MADApplication AppDelegate];
 		id groupIdentifier = [appDelegate groupIdentifier].copy;
 		cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
 	} else {
