@@ -6,7 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UITableViewCell.h>
 
 @interface MADTableViewCellQueryCountID : UITableViewCell
 

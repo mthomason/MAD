@@ -23,13 +23,9 @@
 	
 	if (self = [super initWithFrame:frame]) {
 		
-		UIImage *imageBlank;
-
-		imageBlank = [UIImage new];
-		[self setMinimumTrackImage:imageBlank forState: UIControlStateNormal];
+		[self setMinimumTrackImage:[UIImage new] forState: UIControlStateNormal];
 		
-		imageBlank = [UIImage new];
-		[self setMaximumTrackImage:imageBlank forState: UIControlStateNormal];
+		[self setMaximumTrackImage:[UIImage new] forState: UIControlStateNormal];
 		
 		self.maximumValue = 0.0;
 		self.minimumValue = 0.0;
@@ -37,8 +33,7 @@
 		self.continuous = YES;
 		self.tintColor = [MADColorEverydayApps newColorRed];
 		self.backgroundColor = [UIColor clearColor];
-		UIImage *image = [self imageEnabled];
-		[self setThumbImage: image forState: UIControlStateNormal];
+		[self setThumbImage: [self imageEnabled] forState: UIControlStateNormal];
 		
 	}
 	return self;
@@ -60,8 +55,8 @@
 
 - (void)setEnabled:(BOOL)enabled {
 	[super setEnabled:enabled];
-	UIImage *image = enabled ? self.imageEnabled : self.imageDisabled;
-	[self setThumbImage: image forState: UIControlStateNormal];
+	[self setThumbImage: enabled ? self.imageEnabled : self.imageDisabled
+			   forState: UIControlStateNormal];
 }
 
 @end

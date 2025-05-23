@@ -38,8 +38,6 @@
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 static const CGFloat MTAnimationRotateDeg = 6.0;
-static const CGFloat Float_0 =   0.0;
-static const CGFloat Float_100 = 100.0;
 
 static inline double wobbleRandomFactor(void);
 static inline double wobbleRandomFactor(void) {
@@ -61,13 +59,13 @@ static inline double wobbleRandomFactor(void) {
 	
 	if (!active) {
 		progressView.hidden = YES;
-		[progressView setProgress:Float_0 animated:YES];
+		[progressView setProgress:0.0 animated:YES];
 		return;
 	}
 	
 	progressView.hidden = NO;
-	if (progressView.progress < percent / Float_100) {
-		[progressView setProgress: (float) (percent / Float_100) animated: YES];
+	if (progressView.progress < percent / 100.0) {
+		[progressView setProgress: (float) (percent / 100.0) animated: YES];
 	}
 }
 

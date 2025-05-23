@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADPageSlider_h
 #define MAD_Designer_MADPageSlider_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 
 @protocol MADPageSliderProtocol;
 
@@ -17,12 +17,11 @@
 
 @interface MADPageSlider : UIView
 
-	@property (nonatomic) NSUInteger numberOfPages;
-	@property (nonatomic, getter=isEnabled) BOOL enabled;
+@property (nonatomic) NSUInteger numberOfPages;
+@property (nonatomic, getter=isEnabled) BOOL enabled;
 
-	@property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
-
-	@property (readonly, weak, getter=pageSlider) MADSliderPageVertical *slider;
+@property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
+@property (readonly, weak, getter=pageSlider) MADSliderPageVertical *slider;
 
 @end
 

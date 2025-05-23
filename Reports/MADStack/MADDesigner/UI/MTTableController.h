@@ -9,7 +9,7 @@
 #ifndef MAD_MADTableController_h
 #define MAD_MADTableController_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UICollectionViewController.h>
 
 @class MADDataFormatter, MADDatabase, MADQuery, NSManagedObjectID;
 @protocol MADQueryDatabaseProtocol;

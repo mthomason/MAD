@@ -6,8 +6,6 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-//#import <UIKit/UIKit.h>
-
 //! Project version number for Feedback.
 FOUNDATION_EXPORT double FeedbackVersionNumber;
 

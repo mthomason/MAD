@@ -1,9 +1,9 @@
 //
-//  MUIViewControllerQueryBuilder.m
+//  MADQueryViewController.m
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -11,14 +11,46 @@
 #endif
 
 #import "MADQueryViewController.h"
-#import <os/log.h>
+#import "MADQueryViewSectionDelegate.h"
+#import "MADTabBarController.h"
+#import "MTStoreKitController+Features.h"
+#import "MADWatermarkView.h"
+#import "MADQueryBuilderAddTableViewController.h"
+#import "MADQueryBuilderAddGroupViewController.h"
+#import "MADQueryPredicateFormatController.h"
+#import "MADTableViewCellQueryTableName.h"
+#import "MADTableViewCellQueryLink.h"
+#import "MADTableViewCellQueryGroup.h"
+#import "MADTableViewCellQueryPredicate.h"
+#import "MTTableController.h"
+#import "MADQueryLinkBuilderController.h"
+#import "MADTableViewHeader.h"
+#import "MADDesignerSectionLayoutController.h"
+#import "MADNavigationController.h"
+#import "MADViewControllerSQL.h"
+#import "UIViewController+tabBarItem.h"
+#import "MADQueryViewDataSource.h"
+#import "MADQueryBuilderAddGroupDelegate.h"
+#import "MADQueryViewControllerTableLayout.h"
+#import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
+#import "NSAttributedString+QueryViewController.h"
+#import "MADViewTableHeader+QueryViewSectionTypes.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
+#import "MADQueryViewDelegate.h"
+#import "MADTabBarItemProtocol.h"
+#import "MADQueryViewDatasourceProtocol.h"
+#import "MADOperationGetCredentials.h"
+#import "madlog.h"
 
+
+#import <MADAPI/MADQuery.h>
+
+#import <MADAPI/MADQuery.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/NSParagraphStyle+CommonStyles.h>
 
 #import <MAD/MADocument.h>
-#import <MADAPI/MADQuery.h>
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDatabase+Constructor.h>
@@ -43,52 +75,13 @@
 #import <MAD/MADModelQuery.h>
 
 #import <MADFoundation/MADOperationObserver.h>
-
-#import "MADQueryViewSectionDelegate.h"
-#import "MADTabBarController.h"
-#import "MTStoreKitController+Features.h"
-#import "MADWatermarkView.h"
-
-#import "MADQueryBuilderAddTableViewController.h"
-#import "MADQueryBuilderAddGroupViewController.h"
-#import "MADQueryPredicateFormatController.h"
-
-#import "MADTableViewCellQueryTableName.h"
-#import "MADTableViewCellQueryLink.h"
-#import "MADTableViewCellQueryGroup.h"
-#import "MADTableViewCellQueryPredicate.h"
-#import "MTTableController.h"
-
-#import "MADQueryLinkBuilderController.h"
-
-#import "MADTableViewHeader.h"
-
-#import "MADDesignerSectionLayoutController.h"
-
-#import "MADNavigationController.h"
-
-#import "MADViewControllerSQL.h"
-
-#import "UIViewController+tabBarItem.h"
-
-#import "MADQueryViewDataSource.h"
-
-#import "MADQueryBuilderAddGroupDelegate.h"
-#import "MADQueryViewControllerTableLayout.h"
-#import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
-
-#import "NSAttributedString+QueryViewController.h"
-#import "MADViewTableHeader+QueryViewSectionTypes.h"
-#import "MTStoreKitController+NonRenewableLicensing.h"
-
-#import "MADQueryViewDelegate.h"
-#import "MADTabBarItemProtocol.h"
-#import "MADQueryViewDatasourceProtocol.h"
-#import "madlog.h"
-
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationObserver.h>
-#import "MADOperationGetCredentials.h"
+
+#import <UIKit/UIPopoverPresentationController.h>
+#import <UIKit/UISwitch.h>
+#import <UIKit/UIStoryboard.h>
+#import <UIKit/UILabel.h>
 
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
@@ -120,36 +113,17 @@ BOOL storeEnabled(void) {
 
 #pragma mark - Private Category
 
-@interface MADQueryViewController ()
+@interface MADQueryViewController () <NSFetchedResultsControllerDelegate, UIPopoverPresentationControllerDelegate, UIViewControllerTransitioningDelegate, MADOperationQueueDelegate, MADOperationObserver, MADQueryViewDelegateProtocol, MADQueryViewControllerLayoutSectionSelectorProtocol, MADQueryBuilderAddTableDelegate, MADQueryBuilderAddGroupDelegate, MADViewControllerStandardProtocol, MADQueryBuilderLinkBuilderDelegate, MADViewControllerStandardProtocol, MADDesignerSectionLayoutDelegate, MADQueryBuilderPredicateFormatDelegate, MADQueryViewControllerDatasourceProtocol>
 
-	<NSFetchedResultsControllerDelegate,
-		UIPopoverPresentationControllerDelegate,
-		UIViewControllerTransitioningDelegate,
-		MADOperationQueueDelegate,
-		MADOperationObserver,
-		MADQueryViewDelegateProtocol,
-		MADQueryViewControllerLayoutSectionSelectorProtocol,
-		MADQueryBuilderAddTableDelegate,
-		MADQueryBuilderAddGroupDelegate,
-		MADViewControllerStandardProtocol,
-		MADQueryBuilderLinkBuilderDelegate,
-		MADViewControllerStandardProtocol,
-		MADDesignerSectionLayoutDelegate,
-		MADQueryBuilderPredicateFormatDelegate,
-		MADQueryViewControllerDatasourceProtocol>
+@property (nonatomic, assign) NSInteger showingTableIndex;
+@property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
+@property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
+@property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
+@property (nonatomic, strong) MADOperationQueue *credentailsQueue;
 
-	@property (nonatomic, strong) MADQueryViewDataSource *queryViewDataSource;
-	@property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
+@property (nonatomic, readonly) MADTabBarController *tabBarController;
 
-	@property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
-
-	@property (nonatomic, readonly) MADTabBarController *tabBarController;
-
-	@property (nonatomic, weak) UIPresentationController *showSQLPresentationController;
-
-	@property (nonatomic, strong) MADOperationQueue *credentailsQueue;
-
-	@property (nonatomic, assign) NSInteger showingTableIndex;
+@property (nonatomic, weak) UIPresentationController *showSQLPresentationController;
 
 @end
 
@@ -165,10 +139,7 @@ BOOL storeEnabled(void) {
 @synthesize document = _document;
 
 #pragma mark -
-#pragma mark Static
-
-#pragma mark -
-#pragma mark Helper
+#pragma mark Static Helpers
 
 + (void)configureCell: (UITableViewCell *)cell
 		   forSection: (MADIdentifierQueryViewSections)section
@@ -282,10 +253,7 @@ BOOL storeEnabled(void) {
 	queryViewDelegate.delegate = self;
 	self.queryViewDelegate = queryViewDelegate;
 	
-	MADQueryViewCellConfigureHandler handleConfigureCell;
-	handleConfigureCell = ^(UITableViewCell *cell,
-							MADIdentifierQueryViewSections forSection,
-							NSInteger row) {
+	MADQueryViewCellConfigureHandler handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
 		
 		[MADQueryViewController configureCell: cell
 								   forSection: forSection
@@ -1915,13 +1883,5 @@ BOOL storeEnabled(void) {
 		[transitionContext completeTransition:!wasCancelled];
 	}];
 }
-
-@end
-
-@interface MADAnimatedTransitioningPush : NSObject <UIViewControllerAnimatedTransitioning>
-
-@end
-
-@implementation MADAnimatedTransitioningPush
 
 @end

@@ -9,13 +9,14 @@
 #ifndef Reports_MADViewerController_h
 #define Reports_MADViewerController_h
 
-#import <UIKit/UIPageViewController.h>
-
-#import <MAD/MADActivityProtocol.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADTabBarItemProtocol.h"
 #import "MADOperationRefreshReload.h"
 #import "MADOperationRefreshReloadProtocol.h"
+
+#import <MAD/MADActivityProtocol.h>
+
+#import <UIKit/UIPageViewController.h>
 
 @protocol MADViewControllerStandardProtocol;
 

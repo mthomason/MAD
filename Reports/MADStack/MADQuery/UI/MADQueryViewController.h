@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MADQueryViewController_h
@@ -21,10 +21,10 @@ extern NSString * const MADImageBarButtonItemDatabase8;
 
 @interface MADQueryViewController : UITableViewController <MADViewControllerDocumentProtocol, MADTabBarImageProtocol, MADQueryNavigationProtocol, UIViewControllerAnimatedTransitioning>
 
-	+ (void)deleteCoreDataCache;
++ (void)deleteCoreDataCache;
 
-	- (void)reloadMainDocumentAnimated:(BOOL)animated;
-	- (IBAction)edit:(id)sender;
+- (void)reloadMainDocumentAnimated:(BOOL)animated;
+- (IBAction)edit:(id)sender;
 
 @end
 
