@@ -13,10 +13,7 @@
 
 @interface MADBarButtonItem : UIBarButtonItem
 
-	+ (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action;
 	+ (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action;
-	+ (instancetype)newBarButtonItemEditDone:(id)target action:(SEL)action;
-	+ (instancetype)newBarButtonItemActivityIndicator;
 
 @end
 

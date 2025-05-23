@@ -286,6 +286,15 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	//cell.delegate = nil;
 }
 
+// Implement file explorer options with menu
+//collectionView:contextMenuConfigurationForItemsAtIndexPaths:point:
+
+- (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView
+	contextMenuConfigurationForItemAtIndexPath:(NSIndexPath *)indexPath
+										point:(CGPoint)point {
+	return nil;
+}
+
 - (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action
 	forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
 	return YES;

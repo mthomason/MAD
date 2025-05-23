@@ -72,25 +72,16 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
 		
-		NSString *localizedTextCloud = NSLocalizedString(MADTextCloud, MADTextCloud);
-		self.localizedTextCloud = localizedTextCloud;
-		
-		NSString *localizedTextLocal = NSLocalizedString(MADTextLocal, MADTextLocal);
-		self.localizedTextLocal = localizedTextLocal;
-		
-		// Initialize the section type
-		CGRect labelRect = CGRectMake(CGPointZero.x + 10.0, CGPointZero.y,
-									  frame.size.width - 10.0, frame.size.height);
-		
-		UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
-		label.textAlignment = NSTextAlignmentLeft;
+		self.localizedTextCloud = NSLocalizedString(MADTextCloud, MADTextCloud);
+		self.localizedTextLocal = NSLocalizedString(MADTextLocal, MADTextLocal);
 		self.fontType = UIFontTextStyleHeadline;
-		label.font = [UIFont preferredFontForTextStyle:self.fontType];
-		label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-		
-		label.text = localizedTextLocal;
 		self.sectionType = MACloudManagerSectionLocal;
 
+		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x + 10.0, CGPointZero.y, frame.size.width - 10.0, frame.size.height)];
+		label.textAlignment = NSTextAlignmentLeft;
+		label.font = [UIFont preferredFontForTextStyle:self.fontType];
+		label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		label.text = NSLocalizedString(MADTextLocal, MADTextLocal);
 		[self addSubview: label];
 
 		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
@@ -103,15 +94,12 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 		self.activityIndicatorView = activityView;
 		
-		UIColor *foregroundColor = [MADColorEverydayApps newColorRed];
-		NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys: foregroundColor, NSForegroundColorAttributeName, nil ];
-		
-		NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
-																					attributes: attributes];
+		NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: NSLocalizedString(MADTextLocal, MADTextLocal)
+																					attributes: @{ NSForegroundColorAttributeName: [MADColorEverydayApps newColorRed] }];
 		self.localizedAttrbiutedTextLocal = attributedStringLocal;
 		
-		NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
-																					attributes: attributes];
+		NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: NSLocalizedString(MADTextCloud, MADTextCloud)
+																					attributes: @{ NSForegroundColorAttributeName: [MADColorEverydayApps newColorRed] }];
 		self.localizedAttrbiutedTextCloud = attributedStringCloud;
 		
 		self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];

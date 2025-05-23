@@ -101,11 +101,13 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
         MADFeatures *features = [[MADFeatures alloc] init];
         NSArray *products = [features availableFeaturesProductIDs];
         
-        UIBarButtonItem *barButtonItem = [MADBarButtonItem newBarButtonItemActivityIndicator];
+		UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
+		[activityIndicator startAnimating];
+		activityIndicator.hidden = NO;
+		activityIndicator.hidesWhenStopped = NO;
+		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
         [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
-
-        MTBlockCompletion handleStoreCompletion;
-        handleStoreCompletion = ^(BOOL success, NSError *error) {
+        MTBlockCompletion handleStoreCompletion = ^(BOOL success, NSError *error) {
             if (!success && error) {
                 id alert = [MADAlertController newAlertControllerError:error];
                 [self presentViewController:alert animated:YES completion:NULL];

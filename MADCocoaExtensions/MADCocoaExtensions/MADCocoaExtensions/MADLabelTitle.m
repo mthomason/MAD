@@ -8,7 +8,7 @@
 
 #import "MADLabelTitle.h"
 #import <UIKit/UILabel.h>
-#import "MADAttributedStringLogo.h"
+#import "MADBrandingStringHelper.h"
 #import "MADViewHelpers.h"
 
 @interface MADLabelTitle ()
@@ -38,12 +38,9 @@
 - (void)setText:(NSString *)text {
 
 	NSString *safetext = text.copy;
-	MADAttributedStringLogo *attributedText = [MADAttributedStringLogo newLogoStringForTitle:safetext];
-	
 	UILabel *title = self.title;
-	title.attributedText = attributedText;
+	title.attributedText = [MADBrandingStringHelper logoAttributedStringForTitle:safetext];
 	[title sizeToFit];
-	
 	self.bounds = title.bounds;
 }
 

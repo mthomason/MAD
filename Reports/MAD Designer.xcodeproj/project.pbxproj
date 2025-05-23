@@ -267,7 +267,6 @@
 		4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9AB1BAF123A00456DC8 /* MADTabBar.m */; };
 		4C692B371E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */; };
 		4C692B3E1E1E40DF00DC2CB0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */; };
-		4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */; };
 		4C6CDFD214B8E9B600DABF86 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C6D2EEF1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EEE1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m */; };
 		4C6D2EF21E6DE469008EFE5D /* MADQueryAddGroupNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D2EF11E6DE469008EFE5D /* MADQueryAddGroupNavigationItem.m */; };
@@ -978,8 +977,6 @@
 		4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationControllerIdentity.h; path = UI/MADNavigationControllerIdentity.h; sourceTree = "<group>"; };
 		4C692B3C1E1D2C6800DC2CB0 /* MADTabBarItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTabBarItemProtocol.h; path = ../MADTabBarItemProtocol.h; sourceTree = "<group>"; };
 		4C692B3D1E1E40DF00DC2CB0 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = ../StaticResources/Fonts/FontAwesome.ttf; sourceTree = "<group>"; };
-		4C692B431E1F132400DC2CB0 /* MADNavigationItemTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationItemTitle.h; sourceTree = "<group>"; };
-		4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationItemTitle.m; sourceTree = "<group>"; };
 		4C6C09C61F5CF00E00EDA039 /* MADDocumentCreationManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerInterface.h; sourceTree = "<group>"; };
 		4C6C09C71F5CF02200EDA039 /* MADDocumentCreationManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManagerProtocol.h; sourceTree = "<group>"; };
 		4C6CDFD114B8E9B600DABF86 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -1134,8 +1131,6 @@
 		4CC982731F4ACDB300E0496A /* MADOperationRefreshReloadProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshReloadProtocol.h; sourceTree = "<group>"; };
 		4CC982861F50E6E800E0496A /* MADViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADViewController.h; path = MADStack/MADViewController.h; sourceTree = "<group>"; };
 		4CC982871F50E6E800E0496A /* MADViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADViewController.m; path = MADStack/MADViewController.m; sourceTree = "<group>"; };
-		4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNavigationItemTitleView.h; path = MADStack/Common/UI/MADNavigationItemTitleView.h; sourceTree = SOURCE_ROOT; };
-		4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNavigationItemTitleView.m; path = MADStack/Common/UI/MADNavigationItemTitleView.m; sourceTree = SOURCE_ROOT; };
 		4CD0C1942C50AD3700CB4233 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
@@ -2596,8 +2591,6 @@
 				4CAEE7251E55D11F009A6096 /* Navigation Items */,
 				4C26BA8B1BAF9B9B00456DC8 /* MADNavigationController.h */,
 				4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */,
-				4CCDB2921E21738400B4232E /* MADNavigationItemTitleView.h */,
-				4CCDB2931E21738400B4232E /* MADNavigationItemTitleView.m */,
 				4C692B3B1E1D279300DC2CB0 /* MADNavigationControllerIdentity.h */,
 				4C26B9B21BAF123A00456DC8 /* MADNavigationControllerToolbox.h */,
 				4C26B9B31BAF123A00456DC8 /* MADNavigationControllerToolbox.m */,
@@ -2615,8 +2608,6 @@
 				4C1E550C1E58363B00E3FAF0 /* MADNavigationControllerQuery.m */,
 				4C1E55081E582F9500E3FAF0 /* MADNavigationControllerDesigner.h */,
 				4C1E55091E582F9500E3FAF0 /* MADNavigationControllerDesigner.m */,
-				4C692B431E1F132400DC2CB0 /* MADNavigationItemTitle.h */,
-				4C692B441E1F132400DC2CB0 /* MADNavigationItemTitle.m */,
 			);
 			name = Navigation;
 			path = MADStack/Common;
@@ -3350,7 +3341,6 @@
 				4C28DDE31E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m in Sources */,
 				4CF6AFC61CAFC14200D3AD11 /* MADOperationRefreshInitialize.m in Sources */,
 				4C636A021E15893F00BCCED4 /* MADTabBar.m in Sources */,
-				4C692B451E1F132400DC2CB0 /* MADNavigationItemTitle.m in Sources */,
 				4C26BA0B1BAF14F200456DC8 /* MADInformationTableViewController.m in Sources */,
 				4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */,
 				4C26B9CF1BAF123A00456DC8 /* MADToolboxStyleViewController.m in Sources */,

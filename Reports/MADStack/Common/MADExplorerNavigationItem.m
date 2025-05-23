@@ -13,20 +13,17 @@
 @implementation MADExplorerNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *MADHintAppTitle = @"MAD Designer is the mobile analytics document designer.";
-        NSString *title = @"MAD Designer";
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = NSLocalizedString(MADHintAppTitle, MADHintAppTitle);
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-
-        self.titleView = titleView;
-        self.title = title;
-        self.hidesBackButton = YES;
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"MAD Designer", @"MAD Designer");
+		titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"MAD Designer", @"MAD Designer");
+		self.hidesBackButton = YES;
+	}
+	return self;
 }
 
 @end

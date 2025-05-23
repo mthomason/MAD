@@ -14,10 +14,9 @@
 
 static CGFloat Padding = 2.0;
 
-static inline CGRect LabelRect(CGRect bounds);
+static inline CGRect LabelRect(CGRect);
 static inline CGRect LabelRect(CGRect bounds) {
-	return CGRectMake(CGPointZero.x, CGPointZero.y + Padding,
-					  bounds.size.width, bounds.size.height - Padding);
+	return CGRectMake(CGPointZero.x, CGPointZero.y + Padding, bounds.size.width, bounds.size.height - Padding);
 }
 
 @implementation MTTitleView

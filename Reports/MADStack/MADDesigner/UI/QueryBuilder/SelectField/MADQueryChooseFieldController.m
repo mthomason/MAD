@@ -48,9 +48,6 @@
 
 #import "MADDatabaseTableSectionHeaderView.h"
 
-//#import "MADNavigationItemTitleView.h"
-
-
 typedef NSArray <MADSchemaFieldSelectorModel *> MADSectionInfoArray;
 
 static inline double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);

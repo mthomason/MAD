@@ -25,25 +25,17 @@
 #import "MADFileUtilities.h"
 #import <MADFoundation/MADURLFactory.h>
 
-NSInteger finderSortWithLocale(id string1, id string2, void *locale);
+NSInteger finderSortWithLocale(id, id, void *);
 NSInteger finderSortWithLocale(id string1, id string2, void *locale) {
-	
-	static NSStringCompareOptions comparisonOptions =
-		(NSStringCompareOptions)(NSCaseInsensitiveSearch | NSNumericSearch |
-								 NSWidthInsensitiveSearch | NSForcedOrderingSearch);
-	
-	NSRange string1Range = NSMakeRange(0, ((MADMetaData *)string1).fileSystemName.length);
-	
-	return [((MADMetaData *)string1).fileSystemName compare:((MADMetaData *)string2).fileSystemName
-													options:comparisonOptions range:string1Range
-													 locale:(__bridge NSLocale *)locale];
-	
+	return [((MADMetaData *)string1).fileSystemName compare: ((MADMetaData *)string2).fileSystemName
+													options: (NSStringCompareOptions)(NSCaseInsensitiveSearch | NSNumericSearch | NSWidthInsensitiveSearch | NSForcedOrderingSearch)
+													  range: NSMakeRange(0, ((MADMetaData *)string1).fileSystemName.length)
+													 locale: (__bridge NSLocale *)locale];
 }
 
 static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.information";
 
-@interface MADFilesController ()
-	<MADFileCoordinatorDelegate>
+@interface MADFilesController () <MADFileCoordinatorDelegate>
 
 	@property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
 	@property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;
@@ -58,8 +50,7 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 
 #pragma mark - Static helpers
 
-NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
-	^NSComparisonResult(MADMetaData *lhs,MADMetaData *rhs){
+NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparisonResult(MADMetaData *lhs,MADMetaData *rhs){
 	return [lhs.name localizedCaseInsensitiveCompare:rhs.name];
 };
 
@@ -67,8 +58,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 									  storageOption: (MADAppStorage)storageOption
 										 identifier: (NSString *)identifier
 								  firstQueryHandler: (void (^)(void))firstQueryHandler {
-	//NSLog(@"Creating a File Controller with extension %@.", pathExtension);
-
 	id coordinator, controller;
 	coordinator = [MADFileCoordinator newFileCoordinatorWithPathExtension: pathExtension
 															storageOption: storageOption
@@ -85,10 +74,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 										  storageOption: (MADAppStorage)storageOption
 											 identifier: (NSString *)identifier
 									  firstQueryHandler: (void (^)(void))firstQueryHandler {
-
-	//NSLog(@"Creating a File Controller with last path component %@.", lastPathComponent);
-
-
 	id coordinator, controller;
 	coordinator = [MADFileCoordinator newFileCoordinatorWithLastPathComponent: lastPathComponent
 																storageOption: storageOption
@@ -103,8 +88,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 + (BOOL)isCloudReadilyAvailable {
-	//NSLog(@"Checking if cloud is readily available %@.",
-		  //[NSFileManager defaultManager].ubiquityIdentityToken != nil ? @"YES" : @"NO");
 	return [NSFileManager defaultManager].ubiquityIdentityToken != nil;
 }
 
@@ -113,12 +96,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 											   delay: (void (^)(void))handleLongRunningCall
 										  completion: (MADBlockFileStorageLocation)handleCompletion {
 
-	//NSLog(@"Getting file storage locations for ubiquity identifier: %@", ubiquityIdentifier);
-
 	if ([self isCloudReadilyAvailable]) {
-
-		//NSLog(@"Going to background thread to get ubiquity url: %@", ubiquityIdentifier);
-
 		void (^longRunningCallBlock)(void) = [handleLongRunningCall copy];
 		
 		[NSTimer timerWithTimeInterval: (NSTimeInterval)0.5000
@@ -134,11 +112,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 			NSURL *ubiquityContainer;
 
 			NSFileManager *fileManager = [[NSFileManager alloc] init];
-			//This call may be SLOW, so only do on BACKGROUND thread.
-			
 			ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
-
-			//NSLog(@"Got ubiquity container: %@.", ubiquityContainer);
 
 			dispatch_queue_t main_queue = dispatch_get_main_queue();
 			dispatch_sync(main_queue, ^{
@@ -150,8 +124,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 				NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
 				[MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
 				
-				//NSLog(@"Back on main thread with directories:\n\t%@\n\t%@", documentDirectory,
-				//                                                            dataDirectory);
 				if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
 				
 			});
@@ -168,7 +140,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 + (void)handleLongRunningCloudUrlLookup:(NSTimer *)timer {
-	//NSLog(@"Detected a long running cloud lookup.");
 	if(timer.userInfo) {
 		void (^block)(void) = (void (^)(void))timer.userInfo;
 		block();
@@ -182,15 +153,12 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 						 sortComparator: (NSComparisonResult (^)(MADMetaData *,
 																 MADMetaData *))sortComparator {
 
-	//NSLog(@"Initalizing file coordinator.");
 	if (self = [super init]) {
 		
 		_fileCoordinator = fileCoordinator;
-		
 		_delegateQueue = delegateQueue ?: [NSOperationQueue mainQueue];
 		
-		dispatch_queue_t fileMetaDataQueue;
-		fileMetaDataQueue = dispatch_queue_create(QueueFileInfoID, DISPATCH_QUEUE_SERIAL);
+		dispatch_queue_t fileMetaDataQueue = dispatch_queue_create(QueueFileInfoID, DISPATCH_QUEUE_SERIAL);
 		self.fileMetaDataQueue = fileMetaDataQueue;
 				
 		NSMutableArray *fileMetaData = [[NSMutableArray alloc] init];
@@ -203,36 +171,28 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 }
 
 - (void)startSearching {
-	//NSLog(@"Starting search.");
 	[self.fileCoordinator startQuery];
 }
 
 - (void)stopSearching {
-	//NSLog(@"Stopping search.");
 	[self.fileCoordinator stopQuery];
 }
 
 #pragma mark - Property Overrides
 
 - (NSUInteger)count {
-	//NSLog(@"We got a grand total of %d items.", self.fileMetaDatum.count);
 	return self.fileMetaDatum.count;
 }
 
 - (void)setFileCoordinator:(id <MADFileCoordinatorProtocol>)fileCoordinator {
 	
-	//NSLog(@"Trying to set the file coordinator.");
-	
 	if (![_fileCoordinator isEqual:fileCoordinator]) {
-
-		//NSLog(@"Set the file coordinator.");
 
 		id <MADFileCoordinatorProtocol> oldFileCoordinator = _fileCoordinator;
 		_fileCoordinator = fileCoordinator;
 		
 		[oldFileCoordinator stopQuery];
 		
-		// Map the fileInfo objects protected by fileInfoQueue.
 		__block NSArray *allURLs;
 		dispatch_sync(self.fileMetaDataQueue, ^{
 			allURLs = [self.fileMetaDatum valueForKey:@"URL"];
@@ -246,8 +206,6 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) =
 										updatedMetaDatum: updated
 											  completion: ^(BOOL success, NSError *error) {
 											  
-			//NSLog(@"processContentChangesWithInsertedMetaDatum completed.");
-
 		}];
 		
 		_fileCoordinator.delegate = self;

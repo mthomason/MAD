@@ -27,16 +27,13 @@ static NSString * const MADAppConfigurationUserDefaultsUbiquityToken    = @"MADA
 static NSString * const MADAppConfigurationUserDefaultsStorageOption    = @"MADAppConfigurationUserDefaultsStorageOption";
 static NSString * const MADFirstLaunch                                  = @"MADFirstLaunch";
 
-#import <UIKit/UIKit.h>
-
 static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void));
 static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void)) {
 	if (!handlerLocal && !handlerCloud) {
 		return nil;
 	}
-	NSString *messageKey = @"Do you want to store documents in iCloud or only on this device?";
 	NSString *title = NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option");
-	NSString *message = NSLocalizedString(messageKey, messageKey);
+	NSString *message = NSLocalizedString(@"Do you want to store documents in iCloud or only on this device?", @"Do you want to store documents in iCloud or only on this device?");
 	NSString *localOnlyActionTitle = NSLocalizedString(@"Local Only", @"Local Only");
 	NSString *cloudActionTitle = NSLocalizedString(@"iCloud", @"iCloud");
 
@@ -95,9 +92,6 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 		};
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
 		self.getUserCloudPrefsFirstCall = YES;
-		
-		
-		
 	}
 	return self;
 }
@@ -107,11 +101,8 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 - (BOOL)hasUbiquityIdentityChanged {
 	BOOL hasChanged = NO;
 	
-	id <NSObject, NSCopying, NSCoding> currentToken,
-									   storedToken;
-	
-	currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
-	storedToken = [self copyStoredUbiquityIdentityToken];
+	id <NSObject, NSCopying, NSCoding> currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
+	id <NSObject, NSCopying, NSCoding> storedToken = [self copyStoredUbiquityIdentityToken];
 	
 	if ((!currentToken && storedToken) ||
 		(!storedToken && currentToken) ||

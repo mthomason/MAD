@@ -70,14 +70,13 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  { return CGRectOffset(re
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
 	
-	UIViewController *fromViewController, *toViewController;
-	UIView *toView;
+	UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+	UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
 	
-	fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-	toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-	
-	BOOL pushingFileExplorer = NO, poppingFileExplorer = NO,
-	pushingTabBarController = NO, poppingTabBarController = NO;
+	BOOL pushingFileExplorer = NO;
+	BOOL poppingFileExplorer = NO;
+	BOOL pushingTabBarController = NO;
+	BOOL poppingTabBarController = NO;
 	if ([toViewController isKindOfClass:[MADExplorerController class]]) {
 		pushingFileExplorer = YES;
 		poppingFileExplorer = NO;
@@ -96,7 +95,7 @@ static inline CGRect CGRectTabBarOnscreen(CGRect rect)  { return CGRectOffset(re
 		poppingTabBarController = YES;
 	}
 	
-	toView = [transitionContext viewForKey:UITransitionContextToViewKey];
+	UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
 	
 	[[transitionContext containerView] addSubview:toView];
 

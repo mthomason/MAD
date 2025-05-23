@@ -11,10 +11,14 @@
 
 #import <Foundation/NSAttributedString.h>
 
-@interface MADAttributedStringLogo : NSAttributedString
+NS_ASSUME_NONNULL_BEGIN
 
-	+ (instancetype)newLogoStringForTitle:(NSString *)title;
+@interface MADBrandingStringHelper : NSObject
+
++ (NSAttributedString *)logoAttributedStringForTitle:(NSString *)title;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

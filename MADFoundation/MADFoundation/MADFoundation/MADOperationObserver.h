@@ -11,19 +11,11 @@
 
 @class NSOperation, MADOperation;
 
-// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
 @protocol MADOperationObserver <NSObject>
 
-	// Invoked immediately prior to the `Operation`'s `execute()` method.
-	- (void)operationDidStart:(nonnull MADOperation *)operation;
-
-	// Invoked when `Operation.produceOperation(_:)` is executed.
-	- (void)operation:(nonnull MADOperation *)operation
-  didProduceOperation:(nonnull NSOperation *)newOperation;
-
-	// Invoked as an `Operation` finishes, along with any errors produced during execution (or readiness evaluation).
-	- (void)operationDidFinish:(nonnull MADOperation *)operation
-						errors:(nullable NSArray <NSError *> *)errors;
+- (void)operationDidStart:(nonnull MADOperation *)operation;
+- (void)operation:(nonnull MADOperation *)operation didProduceOperation:(nonnull NSOperation *)newOperation;
+- (void)operationDidFinish:(nonnull MADOperation *)operation errors:(nullable NSArray <NSError *> *)errors;
 
 @end
 

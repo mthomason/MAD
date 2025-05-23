@@ -31,7 +31,6 @@
 		4CA4D62A1D17CCE400A1240C /* MADExplorerCaption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D6281D17CCE400A1240C /* MADExplorerCaption.m */; };
 		4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4D62B1D183DD400A1240C /* MADStandard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D62C1D183DD400A1240C /* MADStandard.mm */; };
-		4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA4D62F1D18451200A1240C /* libc++.tbd */; };
 		4CB0DF4E24ACCA01002C7A95 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB0DF4D24ACCA01002C7A95 /* MADCocoaExtensions.framework */; };
 		4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */; };
@@ -115,7 +114,6 @@
 				4CB0DF4E24ACCA01002C7A95 /* MADCocoaExtensions.framework in Frameworks */,
 				4C7E24A824A60A72005098F2 /* MADFoundation.framework in Frameworks */,
 				4C7E24A624A60A72005098F2 /* MADFileManager.framework in Frameworks */,
-				4CA4D6301D18451200A1240C /* libc++.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

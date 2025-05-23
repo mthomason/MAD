@@ -12,9 +12,9 @@
 @class MADCredential, NSString;
 
 @protocol MADocumentDelegate
-  @required
-  @optional
-	- (MADCredential *)getCredentialsForKey:(NSString *)key;
+@required
+@optional
+- (MADCredential *)getCredentialsForKey:(NSString *)key;
 @end
 
 #endif /* MADDocumentProtocol_h */

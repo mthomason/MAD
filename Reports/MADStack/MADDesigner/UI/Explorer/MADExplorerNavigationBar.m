@@ -13,9 +13,7 @@
 
 @implementation MADExplorerNavigationBar
 
-- (UIBarStyle)barStyle {
-    return UIBarStyleBlack;
-}
+//- (UIBarStyle)barStyle { return UIBarStyleBlack; }
 
 /*+ (void)initialize {
     if (self == [MADExplorerNavigationBar class]) {

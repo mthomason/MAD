@@ -12,46 +12,13 @@
 
 @implementation MADBarButtonItem
 
-+ (instancetype)newBarButtonItemEdit:(id)target action:(SEL)action {
-	id button = [[self alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-												   target: target
-												   action: action];
-	return button;
-}
-
 + (instancetype)newBarButtonItemDuplicate:(id)target action:(SEL)action {
-	id barButtonItemDuplicate = nil;
-
-	UIImage *imageDuplcate = [UIImage imageNamed: @"MADImageToolbarDuplicate"];
-	barButtonItemDuplicate = [[self alloc] initWithImage: imageDuplcate
-												   style: UIBarButtonItemStylePlain
-												  target: target
-												  action: action];
-	imageDuplcate = nil;
+	id barButtonItemDuplicate = [[self alloc] initWithImage: [UIImage imageNamed: @"MADImageToolbarDuplicate"]
+													  style: UIBarButtonItemStylePlain
+													 target: target
+													 action: action];
 	[barButtonItemDuplicate setEnabled: NO];
 	return barButtonItemDuplicate;
-}
-
-+ (instancetype)newBarButtonItemEditDone:(id)target action:(SEL)action {
-	id button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-															  target: target
-															  action: action];
-	return button;
-}
-
-+ (instancetype)newBarButtonItemActivityIndicator {
-
-	id barButtonItem;
-	UIActivityIndicatorView *activityIndicator;
-	
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
-	barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-
-	[activityIndicator startAnimating];
-	activityIndicator.hidden = NO;
-	activityIndicator.hidesWhenStopped = NO;
-	
-	return barButtonItem;
 }
 
 @end

@@ -51,8 +51,8 @@
 		4C5767481E1CB68500611F37 /* MADTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5767461E1CB68500611F37 /* MADTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09E21F5D0DFF00EDA039 /* MADLabelTitle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09E31F5D0DFF00EDA039 /* MADLabelTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */; };
-		4C6C09E41F5D0DFF00EDA039 /* MADAttributedStringLogo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09DC1F5D0DFF00EDA039 /* MADAttributedStringLogo.h */; };
-		4C6C09E51F5D0DFF00EDA039 /* MADAttributedStringLogo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09DD1F5D0DFF00EDA039 /* MADAttributedStringLogo.m */; };
+		4C6C09E41F5D0DFF00EDA039 /* MADBrandingStringHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09DC1F5D0DFF00EDA039 /* MADBrandingStringHelper.h */; };
+		4C6C09E51F5D0DFF00EDA039 /* MADBrandingStringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09DD1F5D0DFF00EDA039 /* MADBrandingStringHelper.m */; };
 		4C6C09E61F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09DE1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09E71F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09DF1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m */; };
 		4C6C09EE1F5D0F1400EDA039 /* MADProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09EC1F5D0F1400EDA039 /* MADProgressView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -125,8 +125,8 @@
 		4C5767461E1CB68500611F37 /* MADTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextField.h; path = MADCocoaExtensions/MADTextField.h; sourceTree = "<group>"; };
 		4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabelTitle.h; path = MADCocoaExtensions/MADLabelTitle.h; sourceTree = "<group>"; };
 		4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabelTitle.m; path = MADCocoaExtensions/MADLabelTitle.m; sourceTree = "<group>"; };
-		4C6C09DC1F5D0DFF00EDA039 /* MADAttributedStringLogo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAttributedStringLogo.h; path = MADCocoaExtensions/MADAttributedStringLogo.h; sourceTree = "<group>"; };
-		4C6C09DD1F5D0DFF00EDA039 /* MADAttributedStringLogo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAttributedStringLogo.m; path = MADCocoaExtensions/MADAttributedStringLogo.m; sourceTree = "<group>"; };
+		4C6C09DC1F5D0DFF00EDA039 /* MADBrandingStringHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBrandingStringHelper.h; path = MADCocoaExtensions/MADBrandingStringHelper.h; sourceTree = "<group>"; };
+		4C6C09DD1F5D0DFF00EDA039 /* MADBrandingStringHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBrandingStringHelper.m; path = MADCocoaExtensions/MADBrandingStringHelper.m; sourceTree = "<group>"; };
 		4C6C09DE1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSParagraphStyle+CommonStyles.h"; path = "MADCocoaExtensions/NSParagraphStyle+CommonStyles.h"; sourceTree = "<group>"; };
 		4C6C09DF1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSParagraphStyle+CommonStyles.m"; path = "MADCocoaExtensions/NSParagraphStyle+CommonStyles.m"; sourceTree = "<group>"; };
 		4C6C09EC1F5D0F1400EDA039 /* MADProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADProgressView.h; path = MADCocoaExtensions/MADProgressView.h; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 				4C6C09ED1F5D0F1400EDA039 /* MADProgressView.m */,
 				4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */,
 				4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */,
-				4C6C09DC1F5D0DFF00EDA039 /* MADAttributedStringLogo.h */,
-				4C6C09DD1F5D0DFF00EDA039 /* MADAttributedStringLogo.m */,
+				4C6C09DC1F5D0DFF00EDA039 /* MADBrandingStringHelper.h */,
+				4C6C09DD1F5D0DFF00EDA039 /* MADBrandingStringHelper.m */,
 				4C6C09DE1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h */,
 				4C6C09DF1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m */,
 				4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */,
@@ -285,7 +285,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C6C09E41F5D0DFF00EDA039 /* MADAttributedStringLogo.h in Headers */,
+				4C6C09E41F5D0DFF00EDA039 /* MADBrandingStringHelper.h in Headers */,
 				4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */,
 				4C5205CC1BA7E2A2000E6A59 /* MTMath.h in Headers */,
 				4C5205AC1BA7E2A2000E6A59 /* MADNumberFormatter.h in Headers */,
@@ -419,7 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C7AEBAB21CC0DD700849874 /* MADColor.m in Sources */,
-				4C6C09E51F5D0DFF00EDA039 /* MADAttributedStringLogo.m in Sources */,
+				4C6C09E51F5D0DFF00EDA039 /* MADBrandingStringHelper.m in Sources */,
 				4C17AE241E427D6B0056A0EA /* MADPadding.m in Sources */,
 				4C17AE281E427ECB0056A0EA /* MADTextStyle.m in Sources */,
 				4C17AE261E427EBB0056A0EA /* MADBorderStyle.m in Sources */,
