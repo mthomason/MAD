@@ -14,8 +14,8 @@
 @protocol MTTableViewControllerBarcodeExtraAztecDelegate
 
 	- (void)barcodeAztecDidEnableAutomaticResizing;
-	- (void)barcodeAztecDidSetSize:(NSInteger)size;
-	- (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection;
+	- (void)barcodeAztecDidSetSize:(NSUInteger)size;
+	- (void)barcodeAztecDidSetErrorCorrection:(NSUInteger)errorCorrection;
 
 	- (BOOL)barcodeAztecAutomaticResizing;
 	- (NSInteger)barcodeAztecInitalSize;

@@ -921,11 +921,11 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     [self.delegate barcodeAztecDidEnableAutomaticResizing];
 }
 
-- (void)barcodeAztecDidSetSize:(NSInteger)size {
+- (void)barcodeAztecDidSetSize:(NSUInteger)size {
     [self.delegate barcodeAztecDidSetSize:size];
 }
 
-- (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection {
+- (void)barcodeAztecDidSetErrorCorrection:(NSUInteger)errorCorrection {
     [self.delegate barcodeAztecDidSetErrorCorrection:errorCorrection];
 }
 

@@ -156,9 +156,9 @@
     id <MTTableViewControllerBarcodeExtraAztecDelegate> delegate;
     delegate = self.delegate;
     if (self.displayingSize) {
-        [delegate barcodeAztecDidSetSize:tag];
+        [delegate barcodeAztecDidSetSize:(unsigned long)tag];
     } else {
-        [delegate barcodeAztecDidSetErrorCorrection:tag];
+        [delegate barcodeAztecDidSetErrorCorrection:(unsigned long)tag];
     }
     [self updateCells];
 }

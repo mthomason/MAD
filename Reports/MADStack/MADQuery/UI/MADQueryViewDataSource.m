@@ -171,7 +171,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 	NSMutableIndexSet *sectionTypes = [[NSMutableIndexSet alloc] init];
 	NSArray <__kindof MADQueryViewSectionDelegate *> *sections = self.sections;
 	for (MADQueryViewSectionDelegate *section in sections) {
-		[sectionTypes addIndex:section.querySection];
+		[sectionTypes addIndex:(unsigned int)section.querySection];
 	}
 	return sectionTypes;
 }
