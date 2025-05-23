@@ -100,16 +100,14 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (NSString *)name {
 	if (!_name) {
-		id tm = [self trademark], sx = self.applicationNameSufixPart;
-		_name = [[NSString alloc] initWithFormat:@"%@ %@", tm, sx];
+		_localizedName = [[NSString alloc] initWithFormat:@"%@ %@", [self trademark], self.localizedApplicationNameSufixPart];
 	}
 	return _name;
 }
 
 - (NSString *)localizedName {
 	if (!_localizedName) {
-		id tm = [self trademark], sx = self.localizedApplicationNameSufixPart;
-		_localizedName = [[NSString alloc] initWithFormat:@"%@ %@", tm, sx];
+		_localizedName = [[NSString alloc] initWithFormat:@"%@ %@", [self trademark], self.localizedApplicationNameSufixPart];
 	}
 	return _localizedName;
 }
@@ -211,8 +209,7 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	//[self.appConfiguration cleanupBeforeTerminate];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-	// FIXME: Open a file, YO!!!
+- (BOOL)application:(UIApplication *)application OpenURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 	return NO;
 }
 

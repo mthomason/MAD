@@ -15,27 +15,109 @@
 
 #import <Foundation/NSData.h>
 
+#import <openssl/evp.h>
+#import <openssl/err.h>
+
 @implementation MADStringEncryption
 
 + (NSData *)encryptString:(NSString *)s withKey:(unsigned char *)key keySize:(int)keySize {
-	const unsigned char *org = (const unsigned char *)[s cStringUsingEncoding:NSUTF8StringEncoding];
-	AES_KEY key_enc;
-	unsigned char *part_encrypted = malloc(sizeof(unsigned char) * strlen((const char *)org));
-	AES_set_encrypt_key(key, keySize, &key_enc);
-	AES_encrypt(org, part_encrypted, &key_enc);
-	return [NSData dataWithBytes:part_encrypted length:strlen((const char *)part_encrypted)];
+	NSData *plainData = [s dataUsingEncoding:NSUTF8StringEncoding];
+	if (!plainData || plainData.length == 0) return nil;
+	
+	if (keySize != 16 && keySize != 24 && keySize != 32) { // 128, 192, 256 bits
+		return nil;
+	}
+	
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+	if (!ctx) return nil;
+	
+	const EVP_CIPHER *cipher = NULL;
+	switch (keySize) {
+		case 16: cipher = EVP_aes_128_ecb(); break;
+		case 24: cipher = EVP_aes_192_ecb(); break;
+		case 32: cipher = EVP_aes_256_ecb(); break;
+		default:
+			EVP_CIPHER_CTX_free(ctx);
+			return nil;
+	}
+	
+	if (1 != EVP_EncryptInit_ex(ctx, cipher, NULL, key, NULL)) {
+		EVP_CIPHER_CTX_free(ctx);
+		return nil;
+	}
+	
+	int blockSize = EVP_CIPHER_CTX_block_size(ctx);
+	if (blockSize <= 0) {
+		EVP_CIPHER_CTX_free(ctx);
+		return nil;
+	}
+	NSMutableData *cipherData = [NSMutableData dataWithLength:plainData.length + (unsigned int)blockSize];
+	int outLen = 0;
+	
+	if (1 != EVP_EncryptUpdate(ctx, cipherData.mutableBytes, &outLen,
+							   plainData.bytes, (int)plainData.length)) {
+		EVP_CIPHER_CTX_free(ctx);
+		return nil;
+	}
+	
+	int finalLen = 0;
+	if (1 != EVP_EncryptFinal_ex(ctx, cipherData.mutableBytes + outLen, &finalLen)) {
+		EVP_CIPHER_CTX_free(ctx);
+		return nil;
+	}
+	
+	outLen += finalLen;
+	EVP_CIPHER_CTX_free(ctx);
+	
+	cipherData.length = (unsigned int)outLen;
+	return cipherData;
 }
 
 + (NSString *)decryptString:(NSData *)data withKey:(unsigned char *)key keySize:(int)keySize {
+	if (!data || data.length == 0) return @"";
 	
-	AES_KEY key_dec;
-	unsigned char *dec_out = malloc(sizeof(unsigned char) * data.length);
+	if (keySize != 16 && keySize != 24 && keySize != 32) {
+		return @"";
+	}
 	
-	AES_set_decrypt_key(key, keySize, &key_dec);
-	AES_decrypt(data.bytes, dec_out, &key_dec);
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+	if (!ctx) return @"";
 	
-	return strlen((char *)dec_out) ? [NSString stringWithCString:(char *)dec_out
-														encoding:NSUTF8StringEncoding] : @"";
+	const EVP_CIPHER *cipher = NULL;
+	switch (keySize) {
+		case 16: cipher = EVP_aes_128_ecb(); break;
+		case 24: cipher = EVP_aes_192_ecb(); break;
+		case 32: cipher = EVP_aes_256_ecb(); break;
+		default:
+			EVP_CIPHER_CTX_free(ctx);
+			return @"";
+	}
+	
+	if (1 != EVP_DecryptInit_ex(ctx, cipher, NULL, key, NULL)) {
+		EVP_CIPHER_CTX_free(ctx);
+		return @"";
+	}
+	
+	NSMutableData *plainData = [NSMutableData dataWithLength:data.length];
+	int outLen = 0;
+	
+	if (1 != EVP_DecryptUpdate(ctx, plainData.mutableBytes, &outLen,
+							   data.bytes, (int)data.length)) {
+		EVP_CIPHER_CTX_free(ctx);
+		return @"";
+	}
+	
+	int finalLen = 0;
+	if (1 != EVP_DecryptFinal_ex(ctx, plainData.mutableBytes + outLen, &finalLen)) {
+		EVP_CIPHER_CTX_free(ctx);
+		return @"";
+	}
+	
+	outLen += finalLen;
+	EVP_CIPHER_CTX_free(ctx);
+	
+	plainData.length = (unsigned int)outLen;
+	return [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding] ?: @"";
 }
 
 @end

@@ -7,22 +7,21 @@
 //
 
 #import "MADInformationTableViewController.h"
-
-#import <MessageUI/MFMailComposeViewController.h>
-#import <Accounts/Accounts.h>
-#import <Social/Social.h>
-
-#import <MADCocoaExtensions/MADMailComposeViewController.h>
-#import <MADCocoaExtensions/MADAlertController.h>
-
 #import "MADTableViewCellAuto.h"
 #import "ACAccountStore+Social.h"
 #import "MADButtonTwitter.h"
 #import "MADAttributedStringCommon.h"
-
-#import <MADFoundation/MADOperationQueue.h>
 #import "MADOperationPromptError.h"
+#import "madlog.h"
+
+#import <MADCocoaExtensions/MADMailComposeViewController.h>
+#import <MADCocoaExtensions/MADAlertController.h>
+#import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADBlockOperation.h>
+
+#import <MessageUI/MFMailComposeViewController.h>
+#import <Accounts/Accounts.h>
+#import <Social/Social.h>
 
 @interface MADInformationTableViewController ()
 	<MFMailComposeViewControllerDelegate>
@@ -87,7 +86,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-
 	switch (indexPath.item) {
 			
 		case 1:
@@ -114,23 +112,19 @@
 - (void)actionWhatIsMad {
 	[self performSegueWithIdentifier:@"MADStoryboardSegueWhatIsMAD" sender:self];
 }
+
 - (void)actionGoToEverydayAppsCom {
 	NSURL *eda = [NSURL URLWithString: @"https://everydayapps.com"];
-	NSDictionary<NSString *,id> *options = @{
-													 
-													 };
 	[[UIApplication sharedApplication] openURL:eda
-									   options:options
-							 completionHandler:^(BOOL success) { }];
+									   options:@{}
+							 completionHandler:^(BOOL success) {
+	}];
 }
 
 - (void)actionTwitterVisitEverydayApps {
 	NSURL *eda = [NSURL URLWithString: @"https://twitter.com/EverydayApps"];
-	NSDictionary<NSString *,id> *options = @{
-											 
-											 };
 	[[UIApplication sharedApplication] openURL:eda
-									   options:options
+									   options:@{}
 							 completionHandler:^(BOOL success) { }];
 }
 
@@ -206,27 +200,12 @@
 }
 
 - (void)followEverydayApps {
+	os_log_error(GetDesignerLog(), "%s Not implemented", __PRETTY_FUNCTION__);
 	if (self.popoverPresentationController != nil) {
 		[self dismissViewControllerAnimated:YES completion:^{
 			
 		}];
 	}
-	NSString *user = @"EverydayApps";
-	[ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
-		UIAlertController *alert;
-		if (!success && error) {
-			alert = [MADAlertController newAlertControllerError:error];
-		} else if (success) {
-			NSString *title = NSLocalizedString(@"Success", @"Success");
-			NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
-														@"You are now Twitter following user %@.");
-			NSString *message = [NSString stringWithFormat:messageFormat, user];
-			alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-																			 message: message
-																	   andCompletion: ^(UIAlertAction *action) { }];
-		}
-		[self presentViewController:alert animated:YES completion:NULL];
-	}];
 }
 
 @end
