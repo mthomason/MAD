@@ -13,61 +13,42 @@
 #import "MADDesignerViewController.h"
 #import "MADViewControllerBarcodeDelegate.h"
 #import "MADTabBarController.h"
-
 #import "MADRulerView.h"
-
 #import "MADDesignerElementView.h"
 #import "MADDesignerElementTextView.h"
 #import "MADDesignerElementView+Constructor.h"
-
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
-
 #import "MADDesignerElementPickerViewController.h"
-
 #import "MADCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
-
 #import "MADDesignerSectionLayoutLiquid.h"
 #import "MADDesignerSectionLayoutController.h"
 #import "MADDesignerSectionBackground.h"
 #import "MADManagedObjectCollectionView.h"
-
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
-
 #import "MADPopoverBackgroundView.h"
-
 #import "MADToolboxPresentationController.h"
-
 #import "MADDesignerStatusLabel.h"
 #import "MADDesignerScrollView.h"
 #import "MADPromptManager.h"
-
 #import "MADQueryChooseFieldProtocol.h"
 #import "MADQueryChooseFieldController.h"
-
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
-
 #import "MADNavigationControllerToolbox.h"
-
 #import "MADDesignerSectionLayoutLiquid.h"
-
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"
 #import "MADNavigationController.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIView+Extras.h"
-
 #import "MADManagedObjectViewProtocol.h"
 #import "MADCellElementDelegate.h"
-
 #import "MTViewControllerBarcode.h"
-
 #import "MADElementPickerProtocol.h"
-
 #import "MADDesignerLayoutDesignView.h"
 #import "MADDesignerView.h"
 #import "MADReportSectionDelegateProtocol.h"
@@ -76,9 +57,7 @@
 
 #import <MADCocoaExtensions/MADCompassDirection.h>
 #import <MADCocoaExtensions/MADResizeAspect.h>
-
 #import <MADCocoaExtensions/MADAlertController.h>
-
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
@@ -86,15 +65,11 @@
 #import <MADFoundation/MADStringUtilities.h>
 
 #import <MAD/madmath.h>
-
 #import <MAD/MADReportSection.h>
-
 #import <MAD/MADocument.h>
 #import <MAD/MADFont.h>
-
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADSectionLayoutAttributes.h>
-
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase.h>
@@ -207,7 +182,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	@property (nonatomic, strong) NSMutableSet <MADDesignerElementView *> *visibleElementViews;
 	@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElementIDs;
 
-	@property (nonatomic, strong) NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementViewsDictionary;
+	@property (nonatomic, strong) NSMutableDictionary <NSNumber *, __kindof MADDesignerElementView *> *elementViewsDictionary;
 	@property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
 
 	@property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
@@ -742,8 +717,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	if (self.toolboxTransitioningDelegate.presentationController.presentedView.superview != nil &&
 		self.presentedViewController.childViewControllers.count > 0 &&
 		self.toolboxTransitioningDelegate.presentationController != nil &&
-		!(self.presentingViewController.traitCollection.verticalSizeClass ==
-															UIUserInterfaceSizeClassCompact)) {
+		!(self.presentingViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact)) {
 		
 		insets = UIEdgeInsetsMake(self.topLayoutGuide.length,
 								  CGSizeZero.width,
@@ -901,10 +875,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	return _visibleElementViews;
 }
 
-- (NSMutableDictionary <NSNumber *, MADDesignerElementView *> *)elementViewsDictionary {
+- (NSMutableDictionary <NSNumber *, __kindof MADDesignerElementView *> *)elementViewsDictionary {
 	if (!_elementViewsDictionary) {
-		NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementViewsDictionary;
-		elementViewsDictionary = [[NSMutableDictionary alloc] init];
+		NSMutableDictionary <NSNumber *, __kindof MADDesignerElementView *> *elementViewsDictionary = [[NSMutableDictionary alloc] init];
 		_elementViewsDictionary = elementViewsDictionary;
 	}
 	return _elementViewsDictionary;
@@ -1182,24 +1155,22 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	NSError * __autoreleasing error = NULL;
 	BOOL success = NO;
 	if (!(success = [section.managedObjectContext save:&error])) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
 
 	
-	NSNumber *key = @(section.identifier);
-	UICollectionView *collectionView = self.view.scroller.container.sectionViews[key];
+	UICollectionView *collectionView = self.view.scroller.container.sectionViews[@(section.identifier)];
 	[collectionView.backgroundView setNeedsDisplay];
 	[documentSectionView.collectionViewLayout invalidateLayout];
 	[section setInterfaceHeight: collectionViewContentSize.height];
 	if (!(success = [section.managedObjectContext save:&error])) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
 	
 	[self.view setNeedsUpdateConstraints];
 	
 }
 
-// FIXME: Unused... Used for multiple rows in the document section... currently unused
 - (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows {
 	
 	MADocument *doc = self.document;
@@ -1212,35 +1183,27 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	BOOL insertNewSection = numberOfRows > section.numberOfRows;
 	BOOL deleteLastSection = numberOfRows < section.numberOfRows;
 	
-	UICollectionView *documentSectionView;
-	documentSectionView = [self getSectionViewForSectionID: section.identifier];
+	UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.identifier];
 	
 	if (section.numberOfRows == (int64_t)numberOfRows) {
-		
-		//No change
-		
+		// No change... do nothing
 	} else if ((int64_t)numberOfRows > section.numberOfRows) {
 		
-		//Add row
-		RptqDocumentSectionRows *newRowToAppend;
-		newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-													   inManagedObjectContext: doc.managedObjectContext];
+		RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+																				inManagedObjectContext: doc.managedObjectContext];
 		NSArray *hasRowsArray = section.hasRows.array;
-		NSMutableOrderedSet *hasRows;
-		hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
-										[[NSMutableOrderedSet alloc] init];
+		NSMutableOrderedSet *hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+															 [[NSMutableOrderedSet alloc] init];
 		newRowToAppend.inSection = section;
 		[hasRows addObject:newRowToAppend];
 		section.hasRows = hasRows;
 		
 	} else if ((int64_t)numberOfRows < section.numberOfRows) {
 		
-		//Remove row
 		RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
 		NSArray *hasRowsArray = section.hasRows.array;
-		NSMutableOrderedSet *hasRows;
-		hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
-										[[NSMutableOrderedSet alloc] init];
+		NSMutableOrderedSet *hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
+															 [[NSMutableOrderedSet alloc] init];
 		if ([hasRows count] > 0) {
 			[hasRows.lastObject setInSection:nil];
 			[hasRows removeObjectAtIndex:hasRows.count - 1];
@@ -1276,6 +1239,50 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark -
 #pragma mark NSManagedObjectContextObjectsDidChangeNotification
 
+- (void)updateForChangesToDocumentElement:(RptqDocumentElement *)documentObject {
+	MADocument *doc = self.document;
+	NSDictionary <NSString *, id> *changes = [documentObject changedValues];
+	NSNumber *fontsize = [changes objectForKey:NSStringFromSelector(@selector(fontsize))];
+	if (fontsize != nil) {
+		MADDesignerElementTextView *elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:documentObject];
+		[elementView updateFontSize:fontsize.doubleValue];
+		[elementView setNeedsDisplay];
+	}
+	
+	NSString *fontname = [changes objectForKey:NSStringFromSelector(@selector(fontname))];
+	if (fontname != nil) {
+		MADDesignerElementTextView *elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:documentObject];
+		[elementView updateFontName:fontname];
+		[elementView setNeedsDisplay];
+	}
+	
+	for (id change in changes) {
+		
+		if ([change isEqualToString: NSStringFromSelector(@selector(rect))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(margin))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(border))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(textStyle))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(alignment))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(numericFormat))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(padding))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(dropPoint))] ||
+			[change isEqualToString: NSStringFromSelector(@selector(inSectionRow))]) {
+			
+			MADDesignerSectionView *section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
+			MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[@(section.identifier)];
+			MADSectionLayoutAttributes *attributes = layoutManager.items[@(documentObject.identifier)];
+			if (attributes != nil) {
+				attributes.frame = [documentObject elementViewFrameDesignerFrameCalculated];
+				_identifierJustDisplayed = documentObject.identifier;
+				[layoutManager positionItem:attributes];
+				[section.collectionViewLayout invalidateLayout];
+			}
+			
+		}
+		
+	}
+}
+
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
 	UIBarButtonItem *undoButton = self.undoButton;
 	MADocument *document = self.document;
@@ -1297,20 +1304,17 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 				[elementView updateSetUnderline:updatedTextStyle.underline];
 				[elementView updateSetStrikethrough:updatedTextStyle.strikethrough];
 				[elementView setNeedsDisplay];
-				//[elementView updateWithElement:updatedTextStyle.inElement];
 			}
 		} else if ([updatedObject isKindOfClass:[RptqAlignment class]]) {
 
 			NSNumber *horizontal = [updatedObject.changedValues objectForKey:@"horizontal"];
 			if (horizontal != nil) {
-				MADDesignerElementTextView *elementView;
-				elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:((RptqAlignment *)updatedObject).inElement];
+				MADDesignerElementTextView *elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:((RptqAlignment *)updatedObject).inElement];
 				[elementView updateHorizontalAlignment:horizontal.shortValue];
 				[elementView setNeedsDisplay];
 			}
 
 		} else if ([updatedObject isKindOfClass:[RptqDirectionalAsymmetry class]]) {
-			
 			if (((RptqDirectionalAsymmetry *)updatedObject).inElementMargin != nil) {
 				[self positionItem:((RptqDirectionalAsymmetry *)updatedObject).inElementMargin];
 				
@@ -1323,73 +1327,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 			
 		} else if ([updatedObject isKindOfClass:[RptqSize class]]) {
 			[self positionItem:((RptqSize *)updatedObject).inRect.inElement];
-/*
-			float width = [(RptqSize *)updatedObject width];
-			MADDesignerElementView *elementView;
-			elementView = [self elementViewForManagedObject:((RptqSize *)updatedObject).inRect.inElement];
-			[elementView updateFontSize:fontsize.doubleValue];
-			[elementView setNeedsDisplay];
-			
-			float height = [(RptqSize *)updatedObject height];
-			[elementView updateFontSize:fontsize.doubleValue];
-			[elementView setNeedsDisplay];
-*/
 		} else if ([updatedObject isKindOfClass:[RptqDocumentElement class]]) {
-			RptqDocumentElement *documentObject = (RptqDocumentElement *)updatedObject;
-			NSDictionary *changes = [documentObject changedValues];
-			
-			MADocument *doc = self.document;
-			MADDesignerSectionView *section;
-			MADSectionLayoutManager *layoutManager;
-			MADSectionLayoutAttributes *attributes;
-			
-			NSNumber *fontsize = [changes objectForKey:@"fontsize"];
-			if (fontsize != nil) {
-				MADDesignerElementTextView *elementView;
-				elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:documentObject];
-				[elementView updateFontSize:fontsize.doubleValue];
-				[elementView setNeedsDisplay];
-			}
-			
-			NSString *fontname = [changes objectForKey:@"fontname"];
-			if (fontname != nil) {
-				MADDesignerElementTextView *elementView;
-				elementView = (MADDesignerElementTextView *)[self elementViewForManagedObject:documentObject];
-				[elementView updateFontName:fontname];
-				[elementView setNeedsDisplay];
-			}
-
-			for (id change in changes) {
-				
-				if ([change isEqualToString: NSStringFromSelector(@selector(sizewidth))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(marginLeft))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(marginRight))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(paddingLeft))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(paddingRight))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(sizeheight))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(marginTop))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(marginBottom))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(paddingTop))] ||
-					[change isEqualToString: NSStringFromSelector(@selector(paddingBottom))]) {
-					
-					section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
-					
-					NSNumber *identifier = @(section.identifier);
-					layoutManager = doc.sectionLayoutManagers[identifier];
-					
-					identifier = @(documentObject.identifier);
-					attributes = layoutManager.items[identifier];
-					
-					if (attributes != nil) {
-						attributes.frame = [documentObject elementViewFrameDesignerFrameCalculated];
-						_identifierJustDisplayed = documentObject.identifier;
-						[layoutManager positionItem:attributes];
-						[section.collectionViewLayout invalidateLayout];
-					}
-					
-				}
-				
-			}
+			[self updateForChangesToDocumentElement:(RptqDocumentElement *)updatedObject];
 		} else if ([updatedObject isKindOfClass:[RptqDocumentSection class]]) {
 		
 			RptqDocumentSection *documentSection = (RptqDocumentSection *)updatedObject;
@@ -1416,26 +1355,24 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (void)positionItem:(RptqDocumentElement *)documentObject {
 	MADocument *doc = self.document;
-	MADDesignerSectionView *section;
-	MADSectionLayoutManager *layoutManager;
-	MADSectionLayoutAttributes *attributes;
-
-	section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
-	
-	NSNumber *identifier = @(section.identifier);
-	layoutManager = doc.sectionLayoutManagers[identifier];
-	
-	identifier = @(documentObject.identifier);
-	attributes = layoutManager.items[identifier];
-	
+	MADDesignerSectionView *section = [self getSectionViewForSectionID: documentObject.inSectionRow.inSection.identifier];
+	if (section == nil) {
+		os_log_error(GetDesignerLog(), "Section not found for document object.");
+		return;
+	}
+	MADSectionLayoutManager *layoutManager = doc.sectionLayoutManagers[@(section.identifier)];
+	if (layoutManager == nil) {
+		os_log_error(GetDesignerLog(), "Layout manager not found for section.");
+		return;
+	}
+	MADSectionLayoutAttributes *attributes = layoutManager.items[@(documentObject.identifier)];
 	if (attributes != nil) {
 		attributes.frame = [documentObject elementViewFrame];
 		_identifierJustDisplayed = documentObject.identifier;
 		[layoutManager positionItem:attributes];
 		[section.collectionViewLayout invalidateLayout];
 	}
-	MADDesignerElementView *elementView;
-	elementView = [self elementViewForManagedObject:documentObject];
+	MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
 	[elementView setNeedsDisplay];
 }
 
@@ -1443,15 +1380,15 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark NSManagedObjectContextDidSaveNotification
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-	
 	NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-	NSManagedObjectContext *context = notification.object;
-	NSManagedObject *object;
-	for (object in updatedObjects) {
+	if (updatedObjects == nil) {
+		os_log_error(GetDesignerLog(), "No updated objects in context save notification.");
+		return;
+	}
+	for (NSManagedObject *object in updatedObjects) {
 		if ([object isKindOfClass:[RptqDocumentElement class]]) {
-			MADDesignerElementView *elementView;
-			elementView = [self elementViewForManagedObject:(RptqDocumentElement *)object];
-			[elementView updateForManagedObjectContent:context];
+			MADDesignerElementView *elementView = [self elementViewForManagedObject:(RptqDocumentElement *)object];
+			[elementView updateForManagedObjectContent:notification.object];
 		}
 	}
 }
@@ -1591,11 +1528,11 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	popoverPresentationController.backgroundColor = nil;
 }
 
-- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController {
 	return YES;
 }
 
-- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
 	[self actionDismiss];
 	[self setDisplayActive];
 }
@@ -1615,20 +1552,20 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark MADCellElement Delegate
 
 - (MADPrintPageElementType)objectTypeRepresentedByCell:(MADCellElement *)cell {
-	RptqDocumentElement *element;
-	element = [RptqDocumentElement newDocumentElementWithIdentifier: cell.identifier
-												  fromObjectContext: _document.managedObjectContext];
+	RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: cell.identifier
+																	   fromObjectContext: _document.managedObjectContext];
 	return element.type;
 }
 
 - (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell {
-	id elementView;
+	//id elementView;
 	
 	[self deselectAllElementsAnimated:YES];
 	_lastMenuItemSelectRequiresElementView = YES;
 	
-	NSNumber *cellIdentifier = @(cell.identifier);
-	elementView = [self.elementViewsDictionary objectForKey:cellIdentifier];;
+	//NSNumber *cellIdentifier = @(cell.identifier);
+	//NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementView;
+	__kindof MADDesignerElementView *elementView = [self.elementViewsDictionary objectForKey:@(cell.identifier)];
 	[self selectElementView: elementView];
 	
 }
@@ -2215,7 +2152,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	if ((NSInteger)objects.count > row) {
 		RptqDocumentElement *documentObject = objects[(NSUInteger)row];
-		
 		if (action == @selector(delete:)) {
 			[self delete:documentObject];
 		} else if (action == @selector(edit:)) {
@@ -2225,32 +2161,23 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	}
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView
-									shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
 	
 	[self dismissAllPopovers];
 	[self dismissSectionPresentationIfOpen];
 	[self dismissToolboxPresentationIfOpen];
 	[self deselectAllElementsAnimated:NO];
 	
-	MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath
-													  inCollectionView: collectionView];
+	MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath inCollectionView: collectionView];
 	[self.view.scroller.container applyBorderToView:elementView];
 	self.lastElementViewToShowMenu = elementView;
 	return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-										didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView
-										didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView
-										didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
-
-- (void)collectionView:(UICollectionView *)collectionView
-										didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 #pragma mark -
 #pragma mark MADReportSectionDelegate Protocol
@@ -2272,10 +2199,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	if (sender.state != UIGestureRecognizerStateEnded) return;
 	
 	MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
-	
-	[[UIMenuController sharedMenuController] setMenuVisible: NO
-												   animated: YES];
-	
+	[[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
 	[self dismissToolboxPresentationIfOpen];
 	
 	NSSet *selectedElementViews = [self selectedElementViews];
@@ -2805,7 +2729,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	}
 }
 
-- (void)selectElementView:(MADDesignerElementView *)elementView {
+- (void)selectElementView:(__kindof MADDesignerElementView *)elementView {
 	if (self.view.scroller.container.selectedSections.count > 0) {
 		[self.view.scroller.container removeBorderFromAllSectionViews];
 	} else {

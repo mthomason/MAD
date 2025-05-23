@@ -929,8 +929,6 @@
 		4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_bzip2.sh; path = ../Compressor/build_bzip2.sh; sourceTree = SOURCE_ROOT; };
 		4C4EC6D32DC97D7A001DBEBE /* build_archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_archive.sh; path = ../Compressor/build_archive.sh; sourceTree = SOURCE_ROOT; };
 		4C4EC6D62DC98EED001DBEBE /* liblzma.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.tbd; path = usr/lib/liblzma.tbd; sourceTree = SDKROOT; };
-		4C4EC7312DC9A6DA001DBEBE /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = Compressor/library/openssl/lib/libssl.a; sourceTree = "<group>"; };
-		4C4EC7322DC9A6DA001DBEBE /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = Compressor/library/openssl/lib/libcrypto.a; sourceTree = "<group>"; };
 		4C4F128A1D0C777D0002294E /* NSAttributedString+QueryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+QueryViewController.h"; sourceTree = "<group>"; };
 		4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+QueryViewController.m"; sourceTree = "<group>"; };
 		4C4F128D1D0CF8C20002294E /* MADQueryViewControllerTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewControllerTableLayout.h; sourceTree = "<group>"; };
@@ -2440,8 +2438,6 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C4EC7322DC9A6DA001DBEBE /* libcrypto.a */,
-				4C4EC7312DC9A6DA001DBEBE /* libssl.a */,
 				4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */,
 				4CA8B2E92DD5DCE0001E27B3 /* libssl.a */,
 				4C4EC6D62DC98EED001DBEBE /* liblzma.tbd */,
