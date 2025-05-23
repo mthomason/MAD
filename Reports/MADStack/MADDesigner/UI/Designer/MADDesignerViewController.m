@@ -359,7 +359,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
-				 fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+				 fromViewController:(UIViewController *)fromViewController
+							 sender:(nullable id)sender {
 	return action == @selector(unwindToDesigner:);
 }
 

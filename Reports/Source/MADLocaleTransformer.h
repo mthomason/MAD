@@ -9,7 +9,7 @@
 #ifndef Reports_MADLocaleTransformer_h
 #define Reports_MADLocaleTransformer_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSValueTransformer.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

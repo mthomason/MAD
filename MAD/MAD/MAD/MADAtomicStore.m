@@ -7,7 +7,6 @@
 //
 
 #import "MADAtomicStore.h"
-#import <Foundation/Foundation.h>
 
 @implementation MADAtomicStore
 

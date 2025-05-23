@@ -22,7 +22,7 @@
 #import "MADLabelPageSlider.h"
 
 static const CGFloat MADSliderPaginationWidth = 40.0;
-static NSString * const ConstTestStringValue = @"0";
+
 inline static double numberOfTicksCalc(CGFloat viewSizeHeight, CGFloat elementSizeHeight);
 inline static unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat elementSizeHeight, float maximumValue);
 static inline CGFloat MaxDimension(CGSize size);
@@ -109,8 +109,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 		NSStrokeWidthAttributeName: strokeWidth
 	};
 
-	NSAttributedString *testString = [[NSAttributedString alloc] initWithString:ConstTestStringValue
-																	attributes:attributes];
+	NSAttributedString *testString = [[NSAttributedString alloc] initWithString:@"0" attributes:attributes];
 	CGSize bounds = [MADPageSlider BoundsForAttributedString:testString];
 	_stringHeight = bounds.height;
 	self.labels = nil;
@@ -261,8 +260,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (NSMutableArray <UILabel *> *)labels {
 	if (_labels == nil) {
-		NSMutableArray *labels;
-		labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
+		NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity: [self maximumNumberOfLabels]];
 		_labels = labels;
 	}
 	return _labels;
@@ -314,8 +312,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 		CGPoint pt = [tap locationInView:slider];
 		CGFloat percentage = pt.x / slider.bounds.size.width;
 		CGFloat delta = slider.maximumValue - slider.minimumValue;
-		CGFloat newValue = slider.minimumValue + (percentage * delta);
-		[slider setValue:(float)newValue animated:YES];
+		[slider setValue:slider.minimumValue + (float)(percentage * delta) animated:YES];
 		[self handleSliderDidFinishDrag:slider];
 		[self handleSliderChangedPage:slider];
 	}
@@ -343,15 +340,13 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point
 		   inContext:(CGContextRef)context {
 	
-	CGSize boundingSize;
 	CGContextSaveGState(context);
-	boundingSize = [MADPageSlider BoundsForAttributedString:string];
+	CGSize boundingSize = [MADPageSlider BoundsForAttributedString:string];
 	[self rotateBoundingSize:boundingSize inContext:context];
 	[string drawAtPoint:point];
 	CGContextRestoreGState(context);
 	
 	return CGRectMake(point.x, point.y, boundingSize.width, boundingSize.height);
-	
 }
 
 - (NSUInteger)maximumNumberOfLabels {

@@ -8,7 +8,7 @@
 #ifndef MADTdsDb_h
 #define MADTdsDb_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

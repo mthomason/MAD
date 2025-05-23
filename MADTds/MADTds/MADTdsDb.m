@@ -7,6 +7,12 @@
 
 #import "MADTdsDb.h"
 #import "sybdb.h"
+
+#import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSNull.h>
+
 #import <os/log.h>
 
 int err_handler(DBPROCESS *, int, int, int, char *, char *);

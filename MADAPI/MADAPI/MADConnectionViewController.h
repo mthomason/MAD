@@ -9,16 +9,12 @@
 #ifndef MADAPI_MADConnectionViewController_h
 #define MADAPI_MADConnectionViewController_h
 
-#import <UIKit/UIKit.h>
-
-#import <UIKit/UITableViewController.h>
 #import <MADAPI/MADDatabaseType.h>
-
 #import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
-
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <UIKit/UITableViewController.h>
 
 @protocol MADViewControllerStandardProtocol, MADSaveFileProtocol;
 @class MADDatabaseConnection;

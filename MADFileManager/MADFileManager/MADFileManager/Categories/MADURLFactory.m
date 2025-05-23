@@ -17,11 +17,7 @@
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADStringUtilities.h>
 
-#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
-#import <UIKit/UIKit.h>
-#elif TARGET_OS_OSX
-#import <AppKit/AppKit.h>
-#endif
+#import <UIKit/UIScreen.h>
 
 static NSString * const MADPathComponentData       = @"Data";
 static NSString * const MADPathComponentDocuments  = @"Documents";
@@ -32,13 +28,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 @implementation MADURLFactory
 
 + (BOOL)isRetinaDisplay {
-#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 	return [UIScreen mainScreen].scale > 1.0;
-#elif TARGET_OS_OSX
-	return [NSScreen mainScreen].backingScaleFactor > 1.0;
-#else
-	return NO;
-#endif
 }
 
 + (NSString *)filenameID:(NSUInteger)tag {

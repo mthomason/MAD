@@ -74,7 +74,9 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark -
 #pragma mark Storyboard Interactions
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController withSender:(id)sender {
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+				 fromViewController:(UIViewController *)fromViewController
+							 sender:(nullable id)sender {
 	return NO;
 }
 

@@ -7,8 +7,8 @@
 //
 
 #import "madlog.h"
-#import <dispatch/once.h>
 #import <Foundation/NSObjCRuntime.h>
+#import <dispatch/once.h>
 
 static os_log_t gMADDesignerLog;
 

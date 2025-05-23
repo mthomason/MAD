@@ -9,7 +9,7 @@
 #ifndef MAD_Designer_MADLabelPageSlider_h
 #define MAD_Designer_MADLabelPageSlider_h
 
-#import <UIKit/UIKit.h>
+#import <UIKit/UILabel.h>
 
 @interface MADLabelPageSlider : UILabel
 
