@@ -7,6 +7,8 @@
 //
 
 #import "MADLocaleTransformer.h"
+#import <Foundation/NSLocale.h>
+#import <Foundation/NSSet.h>
 
 @implementation MADLocaleTransformer
 
