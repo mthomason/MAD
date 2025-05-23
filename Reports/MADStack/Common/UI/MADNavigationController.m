@@ -37,7 +37,6 @@
 
 + (void)initialize {
 	[super initialize];
-
 	if (self == [MADNavigationController self]) {
 		@autoreleasepool {
 			NSArray<Class <UIAppearanceContainer>> * classes;

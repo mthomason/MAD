@@ -1613,23 +1613,23 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark UIPopoverPresentationControllerDelegate
 
-- (void)prepareForPopoverPresentation: (UIPopoverPresentationController *)controller {
+- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)controller {
 	self.fileExplorerViewDelegate.showingPopover = YES;
 	//[self.collectionView reloadData];
 }
 
-- (BOOL)popoverPresentationControllerShouldDismissPopover: (UIPopoverPresentationController *)controller {
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController {
 	return YES;
 }
 
-- (void)popoverPresentationControllerDidDismissPopover: (UIPopoverPresentationController *)controller {
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
 	self.fileExplorerViewDelegate.showingPopover = NO;
-	//[self.collectionView reloadData];
-	
-	controller.passthroughViews = nil;
-	controller.barButtonItem = nil;
-	controller.delegate = nil;
-	
+	if ([UIPresentationController isKindOfClass:[UIPopoverPresentationController class]]) {
+		UIPopoverPresentationController *popoverPresentationController = (UIPopoverPresentationController *)presentationController;
+		popoverPresentationController.passthroughViews = nil;
+		popoverPresentationController.barButtonItem = nil;
+		popoverPresentationController.delegate = nil;
+	}
 	_aboutViewControllerOnScreen = NO;
 }
 

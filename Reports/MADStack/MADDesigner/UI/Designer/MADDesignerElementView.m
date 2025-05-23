@@ -8,15 +8,12 @@
 
 #import "MADDesignerElementView.h"
 
-#import <os/log.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-
-#import <QuartzCore/CALayer.h>
-#import <CoreGraphics/CGContext.h>
-
-#import <UIKit/NSParagraphStyle.h>
-#import <UIKit/UIGraphics.h>
+#import "MADElementCanvas.h"
+#import "MADResizeHandles.h"
+#import "MADResizeHandleView.h"
+#import "UITapGestureRecognizer+Designer.h"
+#import "UIView+Extras.h"
+#import "madlog.h"
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -34,16 +31,17 @@
 #import <MAD/RptqDocumentElementImage.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
-
 #import <MAD/MADElementStylizedText.h>
 #import <MAD/MADAlignment.h>
 
-#import "MADElementCanvas.h"
-#import "MADResizeHandles.h"
-#import "MADResizeHandleView.h"
+#import <UIKit/NSParagraphStyle.h>
+#import <UIKit/UIGraphics.h>
 
-#import "UITapGestureRecognizer+Designer.h"
-#import "UIView+Extras.h"
+#import <CoreData/NSManagedObjectID.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreGraphics/CGContext.h>
+
+#import <QuartzCore/CALayer.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -270,9 +268,10 @@ static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnima
 		
 		self.layer.anchorPoint = CGPointMake(0.5000f, 0.5000f);
 
-		[UIView animateWithDuration:0.3500 delay:0 options: MADViewAnimationOptionsWobble
+		[UIView animateWithDuration:0.3500
+							  delay:0
+							options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
 						 animations: ^{
-			[UIView setAnimationRepeatCount:NSNotFound];
 			self.transform = rightWobble;
 		} completion:nil];
 		

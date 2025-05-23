@@ -267,8 +267,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	
 	self.definesPresentationContext = YES;
 	
-#warning Assuming is retna display is true.
-	BOOL isRetnaDisplay = YES; // [UIScreen mainScreen].isRetnaDisplay
+	BOOL isRetnaDisplay = YES;
 	self.backgroundContainer.layer.borderWidth = isRetnaDisplay ? 0.5 : 1.0;
 	self.backgroundContainer.backgroundColor = [UIColor clearColor];
 	self.backgroundContainer.opaque = NO;

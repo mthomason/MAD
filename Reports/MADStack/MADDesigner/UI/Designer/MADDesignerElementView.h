@@ -17,11 +17,9 @@
 
 @protocol UIGestureRecognizerDelegate;
 
-@class UIPanGestureRecognizer, NSManagedObjectID, NSManagedObjectContext, MADDesignerElementView,
-	   MTBarcode, RptqDocumentElement;
+@class UIPanGestureRecognizer, NSManagedObjectID, NSManagedObjectContext, MADDesignerElementView, MTBarcode, RptqDocumentElement;
 
-@interface MADDesignerElementView : UIView
-	<MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
+@interface MADDesignerElementView : UIView <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
 
 	@property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
 

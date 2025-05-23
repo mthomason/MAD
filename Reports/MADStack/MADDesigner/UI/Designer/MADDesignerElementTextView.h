@@ -28,8 +28,7 @@
 
 @end
 
-@interface MADDesignerElementTextView : MADDesignerElementView
-	<MADTextElementProtocol>
+@interface MADDesignerElementTextView : MADDesignerElementView <MADTextElementProtocol>
 
 	@property (nonatomic, readwrite, strong) NSMutableAttributedString *displayObject;
 
