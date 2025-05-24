@@ -98,26 +98,22 @@
 	}
 	
 	self.sortIndex = [plist[[MADDataTableVirtual keySortIndex]] mutableCopy];
-	os_log_info(GetFoundationLog(), "Loaded sort index with %lu entries", (unsigned long)self.sortIndex.count);
 	return loadWithPlist;
 }
 
 - (NSDictionary *)copyPlist {
-	os_log_info(GetFoundationLog(), "%s", __PRETTY_FUNCTION__);
 	NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:[super copyPlist]];
 	plist[[MADDataTableVirtual keySortIndex]] = self.sortIndex;
 	return plist;
 }
 
 - (void)addColumn:(MADDataColumn *)column {
-	os_log_info(GetFoundationLog(), "%s: Adding column with identifier %@", __PRETTY_FUNCTION__, column.identifier);
 	NSString *identifier = [column.identifier copy];
 	[self.columnKeys addObject:identifier];
 	self.columns[identifier] = column;
 }
 
 - (NSArray *)allObjects {
-	os_log_info(GetFoundationLog(), "%s", __PRETTY_FUNCTION__);
 	return [self.sortIndex copy];
 }
 
@@ -136,7 +132,6 @@
 	} else {
 		sortedIndex = index;
 	}
-	os_log_info(GetFoundationLog(), "%s: Mapped index %lu to sorted index %lu", __PRETTY_FUNCTION__, (unsigned long)index, (unsigned long)sortedIndex);
 	return sortedIndex;
 }
 
@@ -149,9 +144,7 @@
 - (id)objectAtIndexedSubscript:(NSUInteger)index { return [self objectAtRow:index]; }
 - (id)objectAtIndex:(NSUInteger)index { return [self objectAtRow:index]; }
 - (id)objectAtRow:(NSUInteger)row { return [self.sortIndex objectAtIndex:row]; }
-
 - (NSEnumerator *)objectEnumerator { return [self.sortIndex objectEnumerator]; }
-
 - (NSEnumerator *)columnsEnumerator { return [self.columns objectEnumerator]; }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {

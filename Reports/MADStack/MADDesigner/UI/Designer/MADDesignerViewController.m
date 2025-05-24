@@ -1558,24 +1558,17 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)formatDocumentObjectRepresentedByCell:(MADCellElement *)cell {
-	//id elementView;
-	
 	[self deselectAllElementsAnimated:YES];
 	_lastMenuItemSelectRequiresElementView = YES;
 	
-	//NSNumber *cellIdentifier = @(cell.identifier);
-	//NSMutableDictionary <NSNumber *, MADDesignerElementView *> *elementView;
 	__kindof MADDesignerElementView *elementView = [self.elementViewsDictionary objectForKey:@(cell.identifier)];
 	[self selectElementView: elementView];
-	
 }
 
 - (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell {
 	
-	NSManagedObjectContext *private;
-	int64_t elementID;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	elementID = cell.identifier;
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	int64_t elementID = cell.identifier;
 	private.parentContext = self.document.managedObjectContext;
 	
 	[private performBlock:^{

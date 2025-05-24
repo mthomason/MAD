@@ -99,16 +99,14 @@
 		NSExpressionDescription *expSelf = [[NSExpressionDescription alloc] init];
 		expSelf.name = @"T1";
 		expSelf.expression = [NSExpression expressionForEvaluatedObject];
-		expSelf.expressionResultType = NSManagedObjectIDResultType;
+		expSelf.expressionResultType = NSObjectIDAttributeType;
 
 		NSExpressionDescription *expQuery = [[NSExpressionDescription alloc] init];
 		expQuery.name = @"IQ";
 		expQuery.expression = [NSExpression expressionForKeyPath:@"inQuery"];
-		expQuery.expressionResultType = NSManagedObjectIDResultType;
+		expQuery.expressionResultType = NSObjectIDAttributeType;
 
-		NSArray *propertiesToFetch1 = [[NSArray alloc] initWithObjects:expSelf, expQuery, nil];
-		
-		fetchQueryTable.propertiesToFetch = propertiesToFetch1;
+		fetchQueryTable.propertiesToFetch = @[expSelf, expQuery];
 		fetchQueryTable.resultType = NSManagedObjectIDResultType;
 		fetchQueryTable.predicate = predicateInQuery;
 		
@@ -117,16 +115,15 @@
 			os_log_error(GetDesignerLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
 		}
 
-
 		NSExpressionDescription *expLeftFieldHasQueryTable = [[NSExpressionDescription alloc] init];
 		expLeftFieldHasQueryTable.name = @"LT";
 		expLeftFieldHasQueryTable.expression = [NSExpression expressionForKeyPath:@"hasLeftField.inQueryTable"];
-		expLeftFieldHasQueryTable.expressionResultType = NSManagedObjectIDResultType;
+		expLeftFieldHasQueryTable.expressionResultType = NSObjectIDAttributeType;
 
 		NSExpressionDescription *expRightFieldHasQueryTable = [[NSExpressionDescription alloc] init];
 		expRightFieldHasQueryTable.name = @"RT";
 		expRightFieldHasQueryTable.expression = [NSExpression expressionForKeyPath:@"hasRightField.inQueryTable"];
-		expRightFieldHasQueryTable.expressionResultType = NSManagedObjectIDResultType;
+		expRightFieldHasQueryTable.expressionResultType = NSObjectIDAttributeType;
 
 		NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expSelf, expLeftFieldHasQueryTable, expRightFieldHasQueryTable, nil];
 		fetchQueryLinks.propertiesToFetch = propertiesToFetch;
@@ -141,23 +138,14 @@
 
 		NSAssert(error == nil, @"Got error %@", error);
 		
-		//Add a vertex to the graph for each table.
-		NSManagedObjectID *objectID;
-		for (objectID in fetchQueryTableResults) {
+		for (NSManagedObjectID *objectID in fetchQueryTableResults) {
 			@autoreleasepool {
 				[self addVertexWithObject: objectID.copy];
 			}
 		}
-		objectID = nil;
-		
-		//Create an edge in the graph for each query link.
-		NSNumber *weight = @(1);
-		
-		MTVertex *vertexOrigin;
-		MTVertex *vertexDestination;
-		NSDictionary <NSString *, NSManagedObjectID *> *queryLinkObjectIDS;
-		for (queryLinkObjectIDS in fetchQueryLinksResults) {
-			//@autoreleasepool {
+
+		for (NSDictionary <NSString *, NSManagedObjectID *> *queryLinkObjectIDS in fetchQueryLinksResults) {
+			@autoreleasepool {
 				// T1 is the queryLink objectID
 				//queryLink.inQuery
 				// LT is the left query table objectID
@@ -165,18 +153,15 @@
 				// RT is the right query table objectID
 				//queryLink.hasRightField.inQueryTable.objectID
 				
-				vertexOrigin =        [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"LT"]] copy];
-				
-				vertexDestination =   [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"RT"]] copy];
+				MTVertex *vertexOrigin =        [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"LT"]] copy];
+				MTVertex *vertexDestination =   [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"RT"]] copy];
 				
 				[self addEdgeWithOrigin: vertexOrigin
 							destination: vertexDestination
 								 object: [queryLinkObjectIDS[@"T1"] copy]
-							  andWeight: weight.copy];
-			//}
+							  andWeight: @(1)];
+			}
 		}
-		vertexOrigin = nil;
-		vertexDestination = nil;
 	}
 	
 	return self;

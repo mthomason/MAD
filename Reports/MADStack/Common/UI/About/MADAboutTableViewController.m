@@ -11,32 +11,25 @@
 #endif
 
 #import "MADAboutTableViewController.h"
+#import "AppDelegate.h"
+#import "MADTableViewCellBase.h"
+#import "MADButtonTwitter.h"
+#import "ACAccountStore+Social.h"
+#import "MADOperationPromptError.h"
+#import "MADAttributedStringCommon.h"
+#import "madlog.h"
 
-#import <CoreText/CTStringAttributes.h>
-#import <MessageUI/MFMailComposeViewController.h>
-
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MAD/MADConstants.h>
-
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADBlockOperation.h>
-
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADAlertController.h>
+#import <CoreText/CTStringAttributes.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-
-#import "AppDelegate.h"
-
-#import "MADTableViewCellBase.h"
-
-#import "MADButtonTwitter.h"
-#import "ACAccountStore+Social.h"
-
-#import "MADOperationPromptError.h"
-
-#import "MADAttributedStringCommon.h"
 
 static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutViewController";
 
@@ -258,26 +251,10 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 }
 
 - (void)followUser:(NSString *)user {
-    if (self.popoverPresentationController != nil) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }
-    [ACAccountStore twitterFollow:user completion:^(BOOL success, NSError *error) {
-        UIAlertController *alert;
-        if (!success && error) {
-            alert = [MADAlertController newAlertControllerError:error];
-        } else if (success) {
-            NSString *title = NSLocalizedString(@"Success", @"Success");
-            NSString *messageFormat = NSLocalizedString(@"You are now Twitter following user %@.",
-                                                        @"You are now Twitter following user %@.");
-            NSString *message = [NSString stringWithFormat:messageFormat, user];
-            alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                             message: message
-                                                                       andCompletion: ^(UIAlertAction *action) { }];
-        }
-        [self presentViewController:alert animated:YES completion:NULL];
-    }];
+	os_log_error(GetDesignerLog(), "%s: Not implemented.", __PRETTY_FUNCTION__);
+	@throw [NSException exceptionWithName:@"NotImplemented"
+							   reason:@"Not implemented"
+							 userInfo:nil];
 }
 
 - (void)followEverydayApps {
