@@ -2491,10 +2491,9 @@
 			};
 			buildConfigurationList = 4CF7813E1BADE5EA0050A67D /* Build configuration list for PBXProject "MAD" */;
 			compatibilityVersion = "Xcode 10.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 			);
 			mainGroup = 4CF7813A1BADE5EA0050A67D;
