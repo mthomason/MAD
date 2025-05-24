@@ -251,11 +251,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 + (NSString *)keyPathDocumentRedoTitle {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *keyPathRedoMenuItemTitle = NSStringFromSelector(@selector(redoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriod: [self keyPathDocument]];
-		key = [key stringByAppendingString:NSStringFromSelector(@selector(undoManager))];
-		key = [MADStringUtilities stringByAppendingPeriod: key];
-		key = [key stringByAppendingString:keyPathRedoMenuItemTitle];
+		key = [[MADStringUtilities stringByAppendingPeriod: [self keyPathDocument]] stringByAppendingString:NSStringFromSelector(@selector(undoManager))];
+		key = [[MADStringUtilities stringByAppendingPeriod: key] stringByAppendingString:NSStringFromSelector(@selector(redoMenuItemTitle))];
 	}
 	return key;
 }
@@ -263,20 +260,14 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 + (NSString *)keyPathDocumentUndoTitle {
 	static NSString *key = nil;
 	if (key == nil) {
-		NSString *keyPathDocument = [self keyPathDocument];
-		NSString *keyPathUndoManager = NSStringFromSelector(@selector(undoManager));
-		NSString *keyPathUndoMenuItemTitle = NSStringFromSelector(@selector(undoMenuItemTitle));
-		key = [MADStringUtilities stringByAppendingPeriod: keyPathDocument];
-		key = [key stringByAppendingString:keyPathUndoManager];
-		key = [MADStringUtilities stringByAppendingPeriod: key];
-		key = [key stringByAppendingString:keyPathUndoMenuItemTitle];
+		key = [[MADStringUtilities stringByAppendingPeriod: [self keyPathDocument]] stringByAppendingString:NSStringFromSelector(@selector(undoManager))];
+		key = [[MADStringUtilities stringByAppendingPeriod: key] stringByAppendingString:NSStringFromSelector(@selector(undoMenuItemTitle))];
 	}
 	return key;
 }
 
 + (NSString *)Title {
-	NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
-	return [NSString stringWithFormat: @"MAD %@", localizedSuffix];
+	return [NSString stringWithFormat: @"MAD %@", NSLocalizedString(@"Designer", @"Designer")];
 }
 
 #pragma mark -
@@ -287,12 +278,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 + (instancetype)newDesignerViewController:(MADocument *)document {
-	NSString *MADDesignerStoryboardID = @"MADIdentifierStoryboardDesignerViewController";
-	id bundle = [NSBundle mainBundle];
-	UIStoryboard *storyboard;
-	storyboard = [UIStoryboard storyboardWithName:@"MADDesigner" bundle:bundle];
-	id controller = [storyboard instantiateViewControllerWithIdentifier:MADDesignerStoryboardID];
-	[((typeof(self))controller) setDocument: document];
+	MADDesignerViewController *controller = [[UIStoryboard storyboardWithName:@"MADDesigner"
+																	   bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
+	[controller setDocument: document];
 	return controller;
 }
 
@@ -400,8 +388,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (MADDesignerStatusLabel *)statusLabelZoomScale {
 	if (_statusLabelZoomScale == nil) {
-		MADDesignerStatusLabel *detailDisplay;
-		detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: [self detailDisplayFrame]];
+		MADDesignerStatusLabel *detailDisplay = [[MADDesignerStatusLabel alloc] initWithFrame: [self detailDisplayFrame]];
 		_statusLabelZoomScale = detailDisplay;
 	}
 	return _statusLabelZoomScale;
@@ -418,8 +405,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (MADToolboxTransitioningDelegate *)toolboxTransitioningDelegate {
 	if (_toolboxTransitioningDelegate == nil) {
-		MADToolboxTransitioningDelegate *delegate;
-		delegate = [[MADToolboxTransitioningDelegate alloc] init];
+		MADToolboxTransitioningDelegate *delegate = [[MADToolboxTransitioningDelegate alloc] init];
 		_toolboxTransitioningDelegate = delegate;
 	}
 	return _toolboxTransitioningDelegate;
@@ -427,8 +413,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (MADToolboxTransitioningDelegate *)settingsTransitioningDelegate {
 	if (_settingsTransitioningDelegate == nil) {
-		MADToolboxTransitioningDelegate *delegate;
-		delegate = [[MADToolboxTransitioningDelegate alloc] init];
+		MADToolboxTransitioningDelegate *delegate = [[MADToolboxTransitioningDelegate alloc] init];
 		_settingsTransitioningDelegate = delegate;
 	}
 	return _settingsTransitioningDelegate;
@@ -436,8 +421,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (UINavigationController *)navigationControllerToolbox {
 	if (_navigationControllerToolbox == nil) {
-		UINavigationController *navigation;
-		navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
+		UINavigationController *navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
 		navigation.transitioningDelegate = self.toolboxTransitioningDelegate;
 		navigation.modalPresentationStyle = UIModalPresentationCustom;
 		navigation.preferredContentSize = sizePopoverDefault();
@@ -448,8 +432,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (UINavigationController *)navigationControllerSectionLayoutSettings {
 	if (_navigationControllerSectionLayoutSettings == nil) {
-		UINavigationController *navigationController;
-		navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
+		UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
 		navigationController.transitioningDelegate = self.settingsTransitioningDelegate;
 		navigationController.modalPresentationStyle = UIModalPresentationCustom;
 		navigationController.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
@@ -460,8 +443,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (MADToolboxViewController *)viewControllerToolbox {
 	if (_viewControllerToolbox == nil) {
-		MADToolboxViewController *viewControllerToolbox;
-		viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
+		MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)self.navigationControllerToolbox.topViewController;
 		viewControllerToolbox.clearsBackground = [self padLike];
 		viewControllerToolbox.document = _document;
 		viewControllerToolbox.selectedElementIDs = self.selectedElementIDs;
@@ -501,17 +483,15 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	self.hidesStatusBar = NO;
 	
-	NSArray <NSLayoutConstraint *> *constraints;
-	constraints = self.view.scroller.container.constraints;
-	if (constraints.count > 0) {
-		[self.view.scroller.container removeConstraints:constraints];
+	NSArray <NSLayoutConstraint *> *containerConstraints = self.view.scroller.container.constraints;
+	if (containerConstraints.count > 0) {
+		[self.view.scroller.container removeConstraints:containerConstraints];
 	}
 	
-	constraints = self.view.scroller.constraints;
-	if (constraints.count > 0) {
-		[self.view.scroller removeConstraints:constraints];
+	NSArray <NSLayoutConstraint *> *scrollerConstraints = self.view.scroller.constraints;
+	if (scrollerConstraints.count > 0) {
+		[self.view.scroller removeConstraints:scrollerConstraints];
 	}
-	constraints = nil;
 	
 	self.view.scroller.container.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.3333f];
 	self.view.scroller.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:0.3333f];
@@ -520,10 +500,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	UITapGestureRecognizer *tapGestureDoubleTap = self.view.scroller.doubleTapToZoom;
 	tapGestureDoubleTap.delegate =  self;
 	
-	UIGestureRecognizer *tap;
-	tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget: self
-																		action: @selector(handleTapStray:)
-																	  delegate: self];
+	UIGestureRecognizer *tap = [MADTapGestureRecognizer newTapGestureRecognizerStrayTouchWithTarget: self
+																							 action: @selector(handleTapStray:)
+																						   delegate: self];
 	[tap requireGestureRecognizerToFail:tapGestureDoubleTap];
 	[self.view.scroller addGestureRecognizer:tap];
 	self.view.scroller.delegate = self;
@@ -532,36 +511,33 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	//self.view.scroller.container.backgroundColor =   [UIColor greenColor];
 	//self.view.scroller.backgroundColor =             [UIColor blueColor];
 
-	NSLayoutConstraint *constraintContentLeft, *constraintContentRight, *viewScrollerTop,
-					   *constraintContentTop, *constraintScrollerBottom, *constraintWidth;
 	
-	constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
-														   containerLeft: self.view.scroller.container];
+	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
+																			   containerLeft: self.view.scroller.container];
 	
-	constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view
-														   containerRight: self.view.scroller.container];
+	NSLayoutConstraint *constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view
+																			   containerRight: self.view.scroller.container];
 	
-	constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.view.scroller
-														   containerTop: self.view.scroller.container];
+	NSLayoutConstraint *constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.view.scroller
+																			   containerTop: self.view.scroller.container];
 	
-	constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.view.scroller
-																		 bottom: self.view.scroller.container];
+	NSLayoutConstraint *constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.view.scroller
+																							 bottom: self.view.scroller.container];
 	
-	constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container
-																width: [self widthForCurrentZoom]];
+	NSLayoutConstraint *constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container
+																					width: [self widthForCurrentZoom]];
 	constraintContentLeft.priority = 999;
 	constraintContentRight.priority = 999;
 	
-	viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller
-																		 view: self.view.scroller.container];
+	NSLayoutConstraint *viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller
+																							 view: self.view.scroller.container];
 
-	constraints = [[NSArray alloc] initWithObjects: constraintContentLeft,
-													constraintContentRight,
-													constraintContentTop,
-													constraintScrollerBottom,
-													constraintWidth,
-													viewScrollerTop, nil];
-	[self.view addConstraints:constraints];
+	[self.view addConstraints:@[constraintContentLeft,
+								constraintContentRight,
+								constraintContentTop,
+								constraintScrollerBottom,
+								constraintWidth,
+								viewScrollerTop]];
 
 	self.layoutConstraintContainerLeft = constraintContentLeft;
 	self.layoutConstraintContainerWidth = constraintWidth;
@@ -590,10 +566,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	NSLog(@"%@", self.document.undoManager.undoMenuItemTitle);
-	NSLog(@"Keypath: %@", keyPath);
-	NSLog(@"Object: %@", object);
-	NSLog(@"Change: %@", change);
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -1077,9 +1050,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		  newPageAfter:(BOOL)newPageAfter {
 	
 	NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
-	
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
 	private.parentContext = self.document.managedObjectContext;
 	[private performBlock:^{
 	
@@ -1091,13 +1062,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 															  withNumberOfGroups: query.hasQueryGroups.count];
 		
 		[section setProducesFormFeed: newPageAfter];
-		
-		NSError * __autoreleasing error = NULL;
-		BOOL success = NO;
-		if (!(success = [private save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		if ([private hasChanges]) {
+			NSError *error = NULL;
+			[private save:&error];
+			if (error != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+			}
 		}
-
 	}];
 	
 }
@@ -1131,12 +1102,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		};
 		[[NSOperationQueue mainQueue] addOperationWithBlock:updateVisibility];
 
-		NSError * __autoreleasing error = NULL;
-		BOOL success = NO;
-		if (!(success = [private save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		if ([private hasChanges]) {
+			NSError *error = NULL;
+			[private save:&error];
+			if (error != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+			}
 		}
-
 	}];
 }
 
@@ -1152,23 +1124,28 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
 	[section setInterfaceHeight: collectionViewContentSize.height];
 	
-	NSError * __autoreleasing error = NULL;
-	BOOL success = NO;
-	if (!(success = [section.managedObjectContext save:&error])) {
-		os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	if ([section.managedObjectContext hasChanges]) {
+		NSError *error = NULL;
+		[section.managedObjectContext save:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+		}
 	}
-
 	
 	UICollectionView *collectionView = self.view.scroller.container.sectionViews[@(section.identifier)];
 	[collectionView.backgroundView setNeedsDisplay];
 	[documentSectionView.collectionViewLayout invalidateLayout];
 	[section setInterfaceHeight: collectionViewContentSize.height];
-	if (!(success = [section.managedObjectContext save:&error])) {
-		os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	
+	if ([section.managedObjectContext hasChanges]) {
+		NSError *error = NULL;
+		[section.managedObjectContext save:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+		}
 	}
 	
 	[self.view setNeedsUpdateConstraints];
-	
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows {
@@ -1213,16 +1190,17 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	}
 	
 	section.numberOfRows = numberOfRows;
-	
-	id sectionKey = section.objectID.copy;
+	NSManagedObjectID *sectionKey = section.objectID.copy;
 	UICollectionView *collectionView = self.view.scroller.container.sectionViews[sectionKey];
 	MADDesignerSectionBackground *backgroundView = (MADDesignerSectionBackground *)collectionView.backgroundView;
 	[backgroundView setNumberOfRowsInBackground:numberOfRows];
 	
-	NSError * __autoreleasing error = NULL;
-	BOOL successSave = NO;
-	if (!(successSave = [doc.managedObjectContext save:&error])) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	if ([doc.managedObjectContext hasChanges]) {
+		NSError *error = NULL;
+		[doc.managedObjectContext save:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+		}
 	}
 	[doc updateChangeCount:UIDocumentChangeDone];
 	[doc autosaveWithCompletionHandler:^(BOOL success) {
@@ -1495,19 +1473,16 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 //???: Test one function, and uses another (topViewController)?
 			if (navigationController.navigationItem.leftBarButtonItem == nil) {
-				UIBarButtonItem *cancel;
-				cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-																	   target:self
-																	   action:@selector(actionCancel:)];
+				UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+																						target:self
+																						action:@selector(actionCancel:)];
 				[navigationController.topViewController.navigationItem setLeftBarButtonItem:cancel animated:NO];
 			}
 			
-			UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
-			UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+			UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
 			visualEffectsView.frame = navigationController.view.bounds;
 			visualEffectsView.autoresizingMask = MADViewAutoresizingFlexable();
 			[navigationController.view insertSubview:visualEffectsView atIndex:0];
-			
 			result = navigationController;
 		
 		} else {
@@ -1804,24 +1779,20 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		textField.clearButtonMode = UITextFieldViewModeAlways;
 	};
 
-	void (^completion)(UIAlertAction *action, NSString *text);
-	completion = ^(UIAlertAction *action, NSString *text) {
-		
+	void (^completion)(UIAlertAction *action, NSString *text) = ^(UIAlertAction *action, NSString *text) {
 		((RptqDocumentElementLabel *)object).text = text.copy;
-		
-		NSError * __autoreleasing error = NULL;
-		BOOL successSave = NO;
-		if (!(successSave = [object.managedObjectContext save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		if ([object.managedObjectContext hasChanges]) {
+			NSError *error = NULL;
+			[object.managedObjectContext save:&error];
+			if (error != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+			}
 		}
-		
 	};
 	
 	alert = [MADAlertController newAlertControllerEditLabel: configureLabel
 												 completion: completion];
-	
 	[self presentViewController:alert animated:YES completion:nil];
-	
 }
 
 #pragma mark -
@@ -1833,8 +1804,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 						 andFieldTwo:(NSManagedObjectID /* RptqQueryField */ *)fieldTwo {
 	
 	UIManagedDocument *document = self.document;
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
 	NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
@@ -1842,13 +1812,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 		RptqDocumentElementBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
 		[barcodeToEdit updateWithBarcode: barcode field1ID: fieldOne field2ID: fieldTwo];
-
-		NSError * __autoreleasing error = NULL;
-		BOOL successSave = NO;
-		if (!(successSave = [private save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		if ([private hasChanges]) {
+			NSError *error = NULL;
+			[private save:&error];
+			if (error != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+			}
 		}
-
 	}];
 	[document updateChangeCount: UIDocumentChangeDone];
 }
@@ -1884,13 +1854,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: field.identifier
 																	   fromObjectContext: context];
 	documentObject.referencesQueryField = field;
-	
-	NSError * __autoreleasing error = NULL;
-	BOOL successSave = NO;
-	if (!(successSave = [field.managedObjectContext save:&error])) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	if ([documentObject.managedObjectContext hasChanges]) {
+		NSError *error = NULL;
+		[documentObject.managedObjectContext save:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+		}
 	}
-
 }
 
 #pragma mark -
@@ -2050,12 +2020,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	return result;
 }
 
-- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView
-	 numberOfItemsInSection: (NSInteger)section {
-	MADSectionLayoutManager *layoutManager;
-	NSNumber *collectionViewIdentifier = @(collectionView.identifier);
-
-	layoutManager = self.document.sectionLayoutManagers[collectionViewIdentifier];
+- (NSInteger)collectionView: (MADDesignerSectionView *)collectionView numberOfItemsInSection: (NSInteger)section {
+	if (collectionView == nil) return 0;
+	MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[@(collectionView.identifier)];
 	return (NSInteger)layoutManager.items.count;
 }
 
@@ -2066,29 +2033,24 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark -
 #pragma mark UICollectionViewDelegate
 
-- (void)collectionView: (UICollectionView *)collectionView
-	   willDisplayCell: (MADManagedObjectCollectionViewCell *)cell
-	forItemAtIndexPath: (NSIndexPath *)indexPath {
+- (void)collectionView: (UICollectionView *)collectionView willDisplayCell: (MADManagedObjectCollectionViewCell *)cell forItemAtIndexPath: (NSIndexPath *)indexPath {
 	
-	id elementView = nil;
+	__kindof MADDesignerElementView *elementView = nil;
 
 	for (UIView *view in cell.contentView.subviews) {
 		if ([view isKindOfClass:[MADDesignerElementView class]]) {
-			elementView = view;
+			elementView = (MADDesignerElementView *)view;
 			break;
 		}
 	}
 
 	if (cell.frame.origin.x < 0.0f || cell.frame.origin.y < 0.0f) {
-		cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
-								cell.frame.size.width, cell.frame.size.height);
+		cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, cell.frame.size.width, cell.frame.size.height);
 	}
-	//NSAssert(elementView != nil, @"We need an element view people.");
 	if (elementView) {
 		[self.visibleElementViews addObject:elementView];
 	}
 	[self adjustPassthroughViews];
-	
 }
 
 - (void)collectionView: (UICollectionView *)collectionView
@@ -2097,8 +2059,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	NSSet <__kindof MADDesignerElementView *> *elementViewSet;
 	
-	BOOL (^predicate)(id obj, BOOL *stop);
-	predicate = ^BOOL(__kindof MADDesignerElementView * _Nonnull obj, BOOL * _Nonnull stop) {
+	BOOL (^predicate)(id obj, BOOL *stop) = ^BOOL(__kindof MADDesignerElementView * _Nonnull obj, BOOL * _Nonnull stop) {
 		if (obj.identifier == cell.identifier) {
 			*stop = YES;
 			return YES;
@@ -2120,10 +2081,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 }
 
-- (BOOL)collectionView: (UICollectionView *)collectionView
-	  canPerformAction: (SEL)action
-	forItemAtIndexPath: (NSIndexPath *)indexPath
-			withSender: (id)sender {
+- (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
 	
 	BOOL result = NO;
 	if (action == @selector(delete:) || action == @selector(edit:)) {
@@ -2138,9 +2096,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	NSInteger row = indexPath.row;
 	
-	RptqDocumentSection *section;
-	section = [RptqDocumentSection newDocumentSectionWithIdentifier: collectionView.identifier
-												  fromObjectContext: _document.managedObjectContext];
+	RptqDocumentSection *section = [RptqDocumentSection newDocumentSectionWithIdentifier: collectionView.identifier
+																	   fromObjectContext: _document.managedObjectContext];
 	NSOrderedSet *objects = [section.hasRows[(NSUInteger)indexPath.section] hasObjects];
 	
 	if ((NSInteger)objects.count > row) {
@@ -2153,6 +2110,16 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		
 	}
 }
+
+/*
+ 
+ - (UIContextMenuConfiguration *) collectionView:(UICollectionView *) collectionView
+ contextMenuConfigurationForItemsAtIndexPaths:(NSArray<NSIndexPath *> *) indexPaths
+ point:(CGPoint) point {
+ return nil;
+ }
+ 
+ */
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
 	
@@ -2198,25 +2165,17 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	NSSet *selectedElementViews = [self selectedElementViews];
 	
 	BOOL hideToolbox = NO;
-	
 	if (selectedElementViews.count >= 1) {
 		hideToolbox = YES;
-		
 	}
 	
 	self.viewControllerToolbox.document = self.document;
 	
 	if (label.selected) {
-		
-		
 		[label normalView];
 		hideToolbox = YES;
-		
 	} else {
-		
 		[self deselectAllElementsAnimated:YES];
-		
-		
 		self.lastSelectedSectionControlPanel = label.tag;
 		self.lastSelectedLabel = label;
 		RptqDocumentSection *section = [self sectionForLabelTag:label.tag];
@@ -2231,7 +2190,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
 		_viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
 		_viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
-		
 		[self actionShowSectionSettingsFromLabel:label];
 		[self setDisplayInactive];
 	}
@@ -2255,13 +2213,10 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field {
 	[self setDisplayActive];
-	NSNumber *objTypeKey;
-	NSDictionary *parameters;
-	objTypeKey = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelDynamic];
-	parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
-							objTypeKey,     MTDocumentObjectDefinationType,
-							field.objectID, MTDocumentObjectDefinationObject, nil];
-	[self insertDocumentObjectWithDefination: parameters];
+	[self insertDocumentObjectWithDefination: @{
+		MTDocumentObjectDefinationType: [NSNumber numberWithShort:MADPrintPageElementTypeLabelDynamic],
+		MTDocumentObjectDefinationObject: field.objectID,
+	}];
 	self.hidesStatusBar = NO;
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -2272,36 +2227,28 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 											   groupType:(MTAggregateGroupByType)groupType
 											 groupNumber:(NSNumber *)groupNumber {
 	[self setDisplayActive];
+	NSDictionary *documentObject = @{
+		MTDocumentObjectDefinationAggregateType: [NSNumber numberWithShort: functionType],
+		MTDocumentObjectDefinationAggregatePivotNumber: groupNumber,
+		MTDocumentObjectDefinationAggregatePivotType: [NSNumber numberWithShort: groupType],
+		MTDocumentObjectDefinationAggregateObjectId: inputObject,
+		MTDocumentObjectDefinationAggregateFunctionInputType: [NSNumber numberWithShort: inputType],
+	};
 
-	NSNumber *functionTypeNumber =  [[NSNumber alloc] initWithShort: functionType],
-			 *groupTypeNumber =     [[NSNumber alloc] initWithShort: groupType],
-			 *inputTypeNumber =     [[NSNumber alloc] initWithShort: inputType],
-			 *objectType =          [[NSNumber alloc] initWithShort: MADPrintPageElementTypeAggregate];
-	
-	NSDictionary *documentObject =  [[NSDictionary alloc] initWithObjectsAndKeys:
-		functionTypeNumber,    MTDocumentObjectDefinationAggregateType,
-		groupNumber,           MTDocumentObjectDefinationAggregatePivotNumber,
-		groupTypeNumber,       MTDocumentObjectDefinationAggregatePivotType,
-		inputObject,           MTDocumentObjectDefinationAggregateObjectId,
-		inputTypeNumber,       MTDocumentObjectDefinationAggregateFunctionInputType, nil
-	];
-	NSDictionary *documentObjectDefination;
-	documentObjectDefination = [[NSDictionary alloc] initWithObjectsAndKeys:
-								objectType,     MTDocumentObjectDefinationType,
-								documentObject, MTDocumentObjectDefinationObject, nil];
-	
-	[self insertDocumentObjectWithDefination: documentObjectDefination];
+	[self insertDocumentObjectWithDefination: @{
+		MTDocumentObjectDefinationType: [NSNumber numberWithShort: MADPrintPageElementTypeAggregate],
+		MTDocumentObjectDefinationObject: documentObject,
+	}];
 	self.hidesStatusBar = NO;
 }
 
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
 	[self setDisplayActive];
-	NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelStatic];
-	NSDictionary *defination = [[NSDictionary alloc] initWithObjectsAndKeys:
-								type, MTDocumentObjectDefinationType,
-								labelText, MTDocumentObjectDefinationObject, nil];
-	[self insertDocumentObjectWithDefination:defination];
+	[self insertDocumentObjectWithDefination:@{
+		MTDocumentObjectDefinationType: [NSNumber numberWithShort: MADPrintPageElementTypeLabelStatic],
+		MTDocumentObjectDefinationObject: labelText,
+	}];
 }
 
 #pragma mark -
@@ -2370,8 +2317,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 															 fromObjectContext: objectContext];
 		[documentObject setOriginPoint:attributes.frame.origin];
 	}
-
-	//[objectContext save:nil];
 }
 
 - (MADSectionLayoutAttributes *)collectionView: (MADDesignerSectionView *)collectionView
@@ -2456,11 +2401,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 	}
 	gestureRecognizer.scale = 1.0000f;
-	
-	NSError *error = nil;
-	BOOL successSave = [element.managedObjectContext save:&error];
-	if (!successSave || error != nil) {
-		os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", error);
+	if ([element.managedObjectContext hasChanges]) {
+		NSError *error = NULL;
+		[element.managedObjectContext save:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+		}
 	}
 }
 
@@ -2848,10 +2794,12 @@ END_deselectElementView:;
 		
 		[collectionView insertItemsAtIndexPaths: indexPathsInserted];
 
-		NSError * __autoreleasing saveError = NULL;
-		if (![managedObjectContext save:&saveError]) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object context: %s.",
-					saveError.localizedDescription.UTF8String);
+		if ([managedObjectContext hasChanges]) {
+			NSError *saveError = NULL;
+			[managedObjectContext save:&saveError];
+			if (saveError != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+			}
 		}
 
 		layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
@@ -2911,14 +2859,15 @@ END_deselectElementView:;
 	} completion:^() {
 
 		[self redrawAllElementViewsInCollectionView:sectionView];
-		RptqDocumentElement *elementB;
-		elementB = [RptqDocumentElement newDocumentElementWithIdentifier:cellIdentifier
-													   fromObjectContext:document.managedObjectContext];
+		RptqDocumentElement *elementB = [RptqDocumentElement newDocumentElementWithIdentifier:cellIdentifier
+																			fromObjectContext:document.managedObjectContext];
 		[document.managedObjectContext deleteObject:elementB];
-		NSError *err = nil;
-		BOOL successSave = [document.managedObjectContext save:&err];
-		if (!successSave || err != nil) {
-			os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
+		if ([document.managedObjectContext hasChanges]) {
+			NSError *saveError = NULL;
+			[document.managedObjectContext save:&saveError];
+			if (saveError != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+			}
 		}
 	}];
 }
@@ -2960,17 +2909,19 @@ END_deselectElementView:;
 
 - (void)dismissSectionPresentationIfOpen {
 	
-	if (_sectionSettingsVisible &&
-		self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
+	if (_sectionSettingsVisible && self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
 		
 		_sectionSettingsVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: NULL];
 		[self.view.scroller.container removeBorderFromAllSectionViews];
 
-		NSError *err = nil;
-		BOOL successSave = [self.document.managedObjectContext save:&err];
-		if (!successSave || err != nil) {
-			os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
+		__strong MADocument *document = self.document;
+		if ([document.managedObjectContext hasChanges]) {
+			NSError *saveError = NULL;
+			[document.managedObjectContext save:&saveError];
+			if (saveError != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+			}
 		}
 	}
 }
@@ -2983,10 +2934,14 @@ END_deselectElementView:;
 		_toolboxVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: NULL];
 		[self deselectAllElementsAnimated:YES];
-		NSError *err = nil;
-		BOOL successSave = [self.document.managedObjectContext save:&err];
-		if (!successSave || err != nil) {
-			os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
+		
+		__strong MADocument *document = self.document;
+		if ([document.managedObjectContext hasChanges]) {
+			NSError *saveError = NULL;
+			[document.managedObjectContext save:&saveError];
+			if (saveError != nil) {
+				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+			}
 		}
 	}
 }
@@ -2994,14 +2949,14 @@ END_deselectElementView:;
 #pragma mark -
 #pragma mark Gesture Helpers
 
-- (void)translatePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
-	CGPoint translation = [gestureRecognizer translationInView:self.view];
-	gestureRecognizer.view.center = CGPointMake(gestureRecognizer.view.center.x + translation.x,
-												gestureRecognizer.view.center.y + translation.y);
-	[gestureRecognizer setTranslation:CGPointZero inView:self.view];
+- (void)translatePanGesture:(UIPanGestureRecognizer *)gesture {
+	CGPoint translation = [gesture translationInView:self.view];
+	gesture.view.center = CGPointMake(gesture.view.center.x + translation.x, gesture.view.center.y + translation.y);
+	[gesture setTranslation:CGPointZero inView:self.view];
 }
 
-- (void)beginPanPiece: (MADDesignerElementView *)piece transition: (void (^)(void))transition
+- (void)beginPanPiece: (MADDesignerElementView *)piece
+		   transition: (void (^)(void))transition
 		   completion: (void (^)(void))completion {
 	
 	[[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
@@ -3013,14 +2968,13 @@ END_deselectElementView:;
 	[self setScrollersEnabled: NO];
 	
 	[UIView animateWithDuration:0.2 animations:^{
-		piece.alpha = 0.80000f;
+		piece.alpha = 0.8;
 	}];
 	[self.view.scroller.container bringSubviewToFront: piece];
 
 	int64_t pieceID = piece.identifier;
 
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = _document.managedObjectContext;
 	
 	MADDesignerViewController __weak *weakself = self;
@@ -3030,22 +2984,20 @@ END_deselectElementView:;
 		
 		RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceID
 																				  fromObjectContext: private];
-		NSNumber *sectionIdentifier;
-		sectionIdentifier = @(documentObject.inSectionRow.inSection.identifier);
+		NSNumber *sectionIdentifier = @(documentObject.inSectionRow.inSection.identifier);
 
 		MADDesignerViewController __weak *weakself1 = strongself;
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 		   
 			MADDesignerViewController *strongself1 = weakself1;
 			
-			MADDesignerSectionView *sectionView;
-			sectionView = strongself1.view.scroller.container.sectionViews[sectionIdentifier];
+			MADDesignerSectionView *sectionView = strongself1.view.scroller.container.sectionViews[sectionIdentifier];
 			CGRect b = [strongself1.view convertRect:piece.frame fromView:sectionView];
 			piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
 			[strongself1.view addSubview: piece];
 			
 			[UIView animateWithDuration:0.2 animations:^{
-				piece.alpha = 0.80000f;
+				piece.alpha = 0.8;
 			}];
 			
 			transition();
@@ -3059,23 +3011,18 @@ END_deselectElementView:;
 			
 			MADocument * __weak wdocument = document;
 			MADDesignerViewController __weak *weakself2 = strongself1;
-			[sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
 			
+			[sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
 				[wdocument removeDocumentObjectWithObjectID: pieceID];
-				
 			} animationComplete:^(BOOL complete) {
-
 				if (complete) {
 					MADDesignerViewController *strongself2 = weakself2;
 					[strongself2.view.scroller.container invalidateIntrinsicContentSize];
 					[strongself2.view setNeedsUpdateConstraints];
 				}
-
 			} completion:^() {
-
 				[weakself2 redrawAllElementViewsInCollectionView:sectionView];
 				completion();
-
 			}];
 		}];
 		
@@ -3180,12 +3127,14 @@ END_deselectElementView:;
 					[documentSectionBlock addDocumentObject: documentObject
 											  withDropPoint: locationInSection
 									   managedObjectContext: managedObjectContext];
-					NSError *err = nil;
-					BOOL successSave = [managedObjectContext save:&err];
-					if (!successSave || err != nil) {
-						os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
-					}
 
+					if ([managedObjectContext hasChanges]) {
+						NSError *saveError = NULL;
+						[managedObjectContext save:&saveError];
+						if (saveError != nil) {
+							os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+						}
+					}
 				} animationComplete:^(BOOL complete) {
 					
 					if (complete) {
@@ -3204,13 +3153,13 @@ END_deselectElementView:;
 
 					CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
 					sectionBlock.height = sectionViewIntrinsicContentSizeHeight;
-					
-					NSError *err = nil;
-					BOOL successSave = [managedObjectContext save:&err];
-					if (!successSave || err != nil) {
-						os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
+					if ([managedObjectContext hasChanges]) {
+						NSError *saveError = NULL;
+						[managedObjectContext save:&saveError];
+						if (saveError != nil) {
+							os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+						}
 					}
-					
 					[self redrawAllElementViewsInCollectionView:sectionView];
 					[self.view setNeedsLayout];
 					
@@ -3489,7 +3438,6 @@ END_deselectElementView:;
 
 - (void)scrollToDetailSectionView {
 	if (self.presentedViewController != nil) {
-		
 		self.hidesStatusBar = NO;
 		[self.view.scroller scrollRectToVisible: self.view.scroller.container.sectionLabelDetail.frame
 									   animated: YES];
@@ -3509,91 +3457,87 @@ END_deselectElementView:;
 #pragma mark NSNotificationCenter Helpers
 
 - (void)addObservers {
-
 	MADocument *document = self.document;
-	NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(managedObjectContextDidChange:)
+												 name: NSManagedObjectContextObjectsDidChangeNotification
+											   object: document.managedObjectContext];
 	
-	[defaultCenter addObserver: self
-					  selector: @selector(managedObjectContextDidChange:)
-						  name: NSManagedObjectContextObjectsDidChangeNotification
-						object: document.managedObjectContext];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(managedObjectContextDidSave:)
+												 name: NSManagedObjectContextDidSaveNotification
+											   object: document.managedObjectContext];
 	
-	[defaultCenter addObserver: self
-					  selector: @selector(managedObjectContextDidSave:)
-						  name: NSManagedObjectContextDidSaveNotification
-						object: document.managedObjectContext];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(didHideMenuNotification:)
+												 name: UIMenuControllerDidHideMenuNotification
+											   object: nil];
 	
-	[defaultCenter addObserver: self
-					  selector: @selector(didHideMenuNotification:)
-						  name: UIMenuControllerDidHideMenuNotification
-						object: nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(willHideMenuNotification:)
+												 name: UIMenuControllerWillHideMenuNotification
+											   object: nil];
 	
-	[defaultCenter addObserver: self
-					  selector: @selector(willHideMenuNotification:)
-						  name: UIMenuControllerWillHideMenuNotification
-						object: nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(didShowMenuNotification:)
+												 name: UIMenuControllerDidShowMenuNotification
+											   object: nil];
 	
-	[defaultCenter addObserver: self
-					  selector: @selector(didShowMenuNotification:)
-						  name: UIMenuControllerDidShowMenuNotification
-						object: nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(willShowMenuNotification:)
+												 name: UIMenuControllerWillShowMenuNotification
+											   object: nil];
 	
-	[defaultCenter addObserver: self
-					  selector: @selector(willShowMenuNotification:)
-						  name: UIMenuControllerWillShowMenuNotification
-						object: nil];
-	
-	[defaultCenter addObserver: self
-					  selector: @selector(documentStateChanged)
-						  name: UIDocumentStateChangedNotification
-						object: document];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(documentStateChanged)
+												 name: UIDocumentStateChangedNotification
+											   object: document];
 }
 
 - (void)removeObservers {
 	
 	MADocument *document = self.document;
-	NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: NSManagedObjectContextObjectsDidChangeNotification
+												  object: document.managedObjectContext];
 	
-	[defaultCenter removeObserver: self
-							 name: NSManagedObjectContextObjectsDidChangeNotification
-						   object: document.managedObjectContext];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: NSManagedObjectContextDidSaveNotification
+												  object: document.managedObjectContext];
 	
-	[defaultCenter removeObserver: self
-							 name: NSManagedObjectContextDidSaveNotification
-						   object: document.managedObjectContext];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: UIMenuControllerDidHideMenuNotification
+												  object: nil];
 	
-	[defaultCenter removeObserver: self
-							 name: UIMenuControllerDidHideMenuNotification
-						   object: nil];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: UIMenuControllerDidShowMenuNotification
+												  object: nil];
 	
-	[defaultCenter removeObserver: self
-							 name: UIMenuControllerDidShowMenuNotification
-						   object: nil];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: UIMenuControllerWillHideMenuNotification
+												  object: nil];
 	
-	[defaultCenter removeObserver: self
-							 name: UIMenuControllerWillHideMenuNotification
-						   object: nil];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: UIMenuControllerWillShowMenuNotification
+												  object: nil];
 	
-	[defaultCenter removeObserver: self
-							 name: UIMenuControllerWillShowMenuNotification
-						   object: nil];
-	
-	[defaultCenter removeObserver: self
-							 name: UIDocumentStateChangedNotification
-						   object: document];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: UIDocumentStateChangedNotification
+												  object: document];
 }
 
 #pragma mark -
 #pragma mark Actions
 
 - (IBAction)actionDone:(id)sender {
-	
-	NSError *err = nil;
-	BOOL successSave = [self.document.managedObjectContext save:&err];
-	if (!successSave || err != nil) {
-		os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
+	__strong MADocument *document = self.document;
+	if ([document.managedObjectContext hasChanges]) {
+		NSError *saveError = NULL;
+		[document.managedObjectContext save:&saveError];
+		if (saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+		}
 	}
-
 	if (![self dismissAllPopovers]) {
 		[self.delegate viewControllerDidFinish:nil];
 	} else {
@@ -3602,21 +3546,15 @@ END_deselectElementView:;
 }
 
 - (IBAction)actionAdd:(id)sender {
-	
-	UINavigationController *navigationController;
-	MADDesignerElementPickerViewController *pickerController;
-	UIPopoverPresentationController *popoverController;
-
-	navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeElementPicker];
-	
-	pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
+	UINavigationController *navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeElementPicker];
+	MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
 	pickerController.objectSelectorDelegate = self;
 	pickerController.document = self.document;
 	
 	navigationController.modalPresentationStyle = UIModalPresentationPopover;
 	navigationController.preferredContentSize = sizePopoverDefault();
 	
-	popoverController = navigationController.popoverPresentationController;
+	UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
 	popoverController.delegate = self;
 	popoverController.barButtonItem = sender;
 	popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -3637,10 +3575,13 @@ END_deselectElementView:;
 
 - (IBAction)actionDismiss {
 	[self deselectAllElementsAnimated:YES];
-	NSError *err = nil;
-	BOOL successSave = [self.document.managedObjectContext save:&err];
-	if (!successSave || err != nil) {
-		os_log_error(OS_LOG_DEFAULT, "Error saving managed object context: %@.", err);
+	__strong MADocument *document = self.document;
+	if ([document.managedObjectContext hasChanges]) {
+		NSError *saveError = NULL;
+		[document.managedObjectContext save:&saveError];
+		if (saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+		}
 	}
 }
 

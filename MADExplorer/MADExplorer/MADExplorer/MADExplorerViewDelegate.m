@@ -423,10 +423,10 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView
-							shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-	return NO;
+- (UIContextMenuConfiguration *) collectionView:(UICollectionView *) collectionView
+   contextMenuConfigurationForItemsAtIndexPaths:(NSArray<NSIndexPath *> *) indexPaths
+										  point:(CGPoint) point {
+	return nil;
 }
 
 #pragma mark -

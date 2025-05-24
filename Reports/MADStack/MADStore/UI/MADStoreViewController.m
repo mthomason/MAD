@@ -175,7 +175,20 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 
 #pragma mark <UICollectionViewDelegate>
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath { return NO; }
+- (UIContextMenuConfiguration *) collectionView:(UICollectionView *) collectionView
+   contextMenuConfigurationForItemsAtIndexPaths:(NSArray<NSIndexPath *> *) indexPaths
+										  point:(CGPoint) point {
+	return nil;
+}
+
+/*
+ - (UIContextMenuConfiguration *) collectionView:(UICollectionView *) collectionView
+ contextMenuConfigurationForItemsAtIndexPaths:(NSArray<NSIndexPath *> *) indexPaths
+ point:(CGPoint) point {
+ return nil;
+ }
+
+ */
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];

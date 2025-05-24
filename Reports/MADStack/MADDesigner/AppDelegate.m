@@ -34,10 +34,9 @@ const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
-@interface AppDelegate()
-    <UIDocumentInteractionControllerDelegate>
+@interface AppDelegate() <UIDocumentInteractionControllerDelegate>
 
-    @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
+@property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
 
 @end
 
@@ -187,19 +186,15 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[[NSBundle mainBundle] load];
-	
-	UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-	//center.delegate = self;
-	
-	[center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
+
+	[[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
 						  completionHandler:^(BOOL granted, NSError * _Nullable error) {
 		if (granted) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[application registerForRemoteNotifications];
 			});
 		} else {
-			// Handle the case when permission is denied
-			NSLog(@"Notification permission denied: %@", error);
+			os_log_info(OS_LOG_DEFAULT, "%s: Notification permission denied: %@", __PRETTY_FUNCTION__, error);
 		}
 	}];
 	return YES;
