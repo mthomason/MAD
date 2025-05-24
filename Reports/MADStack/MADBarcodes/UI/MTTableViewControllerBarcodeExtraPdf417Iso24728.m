@@ -36,6 +36,8 @@
 
 #pragma mark - Exit
 
+- (IBAction)unwindToBarcodeExtraGridMatrix:(UIStoryboardSegue *)action { }
+
 - (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController sender:(id)sender {
 	if (action == @selector(unwindToBarcodeExtraGridMatrix:)) {
 		return YES;
