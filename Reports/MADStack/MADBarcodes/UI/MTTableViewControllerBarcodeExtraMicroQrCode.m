@@ -29,21 +29,11 @@
 
 - (IBAction)unwindToBarcodeExtraMicroQrCode:(UIStoryboardSegue *)action { }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-				 fromViewController:(UIViewController *)fromViewController
-							 sender:(nullable id)sender {
-	return action == @selector(unwindToBarcodeExtraMicroQrCode:);
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    return action == @selector(unwindToBarcodeExtraMicroQrCode:) ?
-            self :
-            [super viewControllerForUnwindSegueAction: action
-                                   fromViewController: fromViewController
-                                           withSender: sender];
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController sender:(id)sender {
+	if (action == @selector(unwindToBarcodeExtraMicroQrCode:)) {
+		return YES;
+	}
+	return [super canPerformUnwindSegueAction:action fromViewController:fromViewController sender:sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {

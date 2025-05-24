@@ -11,32 +11,19 @@
 #endif
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
-
-#import <CoreData/NSManagedObjectContext.h>
+#import "MADQueryChooseFieldController.h"
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
-
-#import <UIKit/UIStoryboardSegue.h>
-#import <UIKit/UINavigationController.h>
-
-#import <CoreData/NSManagedObjectID.h>
-
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADQuery.h>
+#import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>
-
-#import <MADAPI/MADDatabaseConnection.h>
-
-#import <MADCocoaExtensions/NSError+Constructors.h>
-
 #import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADocument.h>
-
-#import <MADAPI/MADDatabase.h>
-
-#import <MADAPI/MADQuery.h>
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
-
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqQuery.h>
@@ -45,87 +32,79 @@
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 #import <MAD/MADDataTable+Constructor.h>
 
-#import "MADQueryChooseFieldController.h"
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UINavigationController.h>
+
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
-
-    @property (nonatomic, strong) MADDataTable *dataTableSampleData;
-
+@property (nonatomic, strong) MADDataTable *dataTableSampleData;
 @end
 
 @implementation MTTableViewControllerBarcodeExtraMaxicode
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    NSInteger row = [self.delegate initalEncodingMode];
-    NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+	[super viewWillAppear:animated];
+	NSInteger row = [self.delegate initalEncodingMode];
+	NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+	cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.destinationViewController isKindOfClass:[MADQueryChooseFieldController class]]) {
-        ((MADQueryChooseFieldController *)segue.destinationViewController).delegate = self;
-        MADocument *document = self.document;
-        [(segue.destinationViewController) setDocument: document];
-    }
+	if ([segue.destinationViewController isKindOfClass:[MADQueryChooseFieldController class]]) {
+		((MADQueryChooseFieldController *)segue.destinationViewController).delegate = self;
+		MADocument *document = self.document;
+		[(segue.destinationViewController) setDocument: document];
+	}
 }
 
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                    withFieldID: (NSManagedObjectID *)fieldID {
-    
-    NSManagedObjectContext *context = self.document.managedObjectContext;
-    RptqQueryField *field = [context objectWithID: fieldID];
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-    RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
-    MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
-    self.dataTableSampleData = dataTable;
-    MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-    querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
-                                                                                             object: schemaField];
-    
-    
-    MADDatabaseConnection *connection;
-    connection = [MADDatabaseConnection newDatabaseConnection:((NSObject <MADConnectionsPropertiesProtocol> *)schemaField.inTable.inDatabase.ownedByUser)];
-    MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
-    if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
-        db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);
-    }
-    NSError * __autoreleasing error = NULL;
-    BOOL success = [db executeQuery:querySampleDataField withError:&error];
-    
-    if (success) {
-        MADDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
-        self.dataTableSampleData = dt;
-        NSArray *allObjects = [self.dataTableSampleData allObjects];
-        [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
-        [self.tableView reloadData];
-    } else {
-        MTTableViewControllerBarcodeExtraMaxicode * __weak wself = self;
-        [NSError presentError: error
-             onViewController: wself
-                   completion:^(BOOL presentErrorSuccess) {
-                       NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                       [MADKeyChain deleteKey:key];
-                   }];
-        
-    }
+									withFieldID: (NSManagedObjectID *)fieldID {
+	
+	NSManagedObjectContext *context = self.document.managedObjectContext;
+	RptqQueryField *field = [context objectWithID: fieldID];
+	
+	[self.navigationController popViewControllerAnimated:YES];
+	
+	RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
+	MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
+	self.dataTableSampleData = dataTable;
+	MADQuery <MADQueryDatabaseProtocol> *querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
+																																	object: schemaField];
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection:((NSObject <MADConnectionsPropertiesProtocol> *)schemaField.inTable.inDatabase.ownedByUser)];
+	MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
+	if ([querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
+		db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)querySampleDataField);
+	}
+	NSError *error = NULL;
+	BOOL success = [db executeQuery:querySampleDataField withError:&error];
+	if (success) {
+		MADDataTable * __autoreleasing dt = [querySampleDataField.database.delegate dataTableForQuery:querySampleDataField];
+		self.dataTableSampleData = dt;
+		NSArray *allObjects = [self.dataTableSampleData allObjects];
+		[self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
+		[self.tableView reloadData];
+	} else {
+		MTTableViewControllerBarcodeExtraMaxicode * __weak wself = self;
+		[NSError presentError: error onViewController: wself
+				   completion:^(BOOL presentErrorSuccess) {
+			NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
+			[MADKeyChain deleteKey:key];
+		}];
+	}
 }
 
 + (MADDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-    NSUInteger hash = objectID.URIRepresentation.absoluteString.hash;
-    NSNumber *typeKey = @(MADDataTableParametersType);
-    NSNumber *type = @(MADDataTableTypeVirtual);
-    NSNumber *objectIdKey = @(MADDataTableParametersIdentifier);
-    NSNumber *objectIdV =  @(hash);
-    NSDictionary *options = @{typeKey : type,
-                              objectIdKey : objectIdV};
-    MADDataTable *dataTable = [MADDataTable newDataTableWithDefinition:options];
-    return dataTable;
+	NSUInteger hash = objectID.URIRepresentation.absoluteString.hash;
+	NSDictionary *options = @{
+		@(MADDataTableParametersType) : @(MADDataTableTypeVirtual),
+		@(MADDataTableParametersIdentifier) : @(hash)
+	};
+	return [MADDataTable newDataTableWithDefinition:options];
 }
 
 #pragma mark - Table view delegate

@@ -37,21 +37,11 @@
 
 - (IBAction)unwindToBarcodeExtraGridMatrix:(UIStoryboardSegue *)action { }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-				 fromViewController:(UIViewController *)fromViewController
-							 sender:(nullable id)sender {
-	return action == @selector(unwindToBarcodeExtraGridMatrix:);
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    return action == @selector(unwindToBarcodeExtraGridMatrix:) ?
-            self :
-            [super viewControllerForUnwindSegueAction: action
-                                   fromViewController: fromViewController
-                                           withSender: sender];
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController sender:(id)sender {
+	if (action == @selector(unwindToBarcodeExtraGridMatrix:)) {
+		return YES;
+	}
+	return [super canPerformUnwindSegueAction:action fromViewController:fromViewController sender:sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
@@ -81,21 +71,20 @@
     UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    NSString *automatic = NSLocalizedString(@"Automatic", @"Automatic");
     if (autoresize) {
         cellAuto.accessoryType = UITableViewCellAccessoryCheckmark;
-        cellSize.detailTextLabel.text = automatic;
-        cellError.detailTextLabel.text = automatic;
+        cellSize.detailTextLabel.text = NSLocalizedString(@"Automatic", @"Automatic");
+        cellError.detailTextLabel.text = NSLocalizedString(@"Automatic", @"Automatic");
     } else {
         cellAuto.accessoryType = UITableViewCellAccessoryNone;
         NSInteger initalErrorCorrecion = [delegate barcodeGridMatrixInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
-            cellError.detailTextLabel.text = automatic;
+            cellError.detailTextLabel.text = NSLocalizedString(@"Automatic", @"Automatic");
             cellSize.detailTextLabel.text = @"Custom";
         }
         NSInteger initalSize = [delegate barcodeGridMatrixInitalSize];
         if (initalSize == 0) {
-            cellSize.detailTextLabel.text = automatic;
+            cellSize.detailTextLabel.text = NSLocalizedString(@"Automatic", @"Automatic");
             cellError.detailTextLabel.text = @"Custom";
         }
     }
@@ -151,19 +140,18 @@
 }
 
 - (NSInteger)initalRow {
-    id <MTTableViewControllerBarcodeExtraGridMatrixDelegate> delegate = _delegate;
-    return self.displayingSize ? [delegate barcodeGridMatrixInitalSize] :
-                                 [delegate barcodeGridMatrixInitalErrorCorrection];
+	id <MTTableViewControllerBarcodeExtraGridMatrixDelegate> delegate = _delegate;
+	return self.displayingSize ? [delegate barcodeGridMatrixInitalSize] : [delegate barcodeGridMatrixInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
-    id <MTTableViewControllerBarcodeExtraGridMatrixDelegate> delegate = _delegate;
-    if (self.displayingSize) {
-        [delegate barcodeGridMatrixDidSetSize:tag];
-    } else {
-        [delegate barcodeGridMatrixDidSetErrorCorrection:tag];
-    }
-    [self updateCells];
+	id <MTTableViewControllerBarcodeExtraGridMatrixDelegate> delegate = _delegate;
+	if (self.displayingSize) {
+		[delegate barcodeGridMatrixDidSetSize:tag];
+	} else {
+		[delegate barcodeGridMatrixDidSetErrorCorrection:tag];
+	}
+	[self updateCells];
 }
 
 @end

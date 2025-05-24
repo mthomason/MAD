@@ -8,11 +8,11 @@
 
 #import "MADReportSectionsDataSource.h"
 #import "MADDesignerLayoutDesignView.h"
-#import <CoreData/NSManagedObjectContext.h>
-#import <MAD/MADSectionsLayout.h>
-#import <MAD/MADSectionLayout.h>
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
+#import <MAD/MADSectionsLayout.h>
+#import <MAD/MADSectionLayout.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADReportSectionsDataSource ()
 
@@ -57,18 +57,6 @@
 	return self.sectionsLayout.count;
 }
 
-- (NSUInteger)numberOfRowsInDesignView:(MADDesignerLayoutDesignView *)designView
-						   sectionView:(MADDesignerSectionView *)sectionView
-							   section:(NSUInteger)section {
-	
-}
-- (NSUInteger)numberOfElementsInDesignView:(MADDesignerLayoutDesignView *)designView
-							   sectionView:(MADDesignerSectionView *)sectionView
-								   section:(NSUInteger)section
-									   row:(NSUInteger)row {
-	
-}
-
 - (double)designView:(MADDesignerLayoutDesignView *)designView heightForSectionAtIndex:(NSUInteger)index {
 	MADSectionLayout *layout = [self.sectionsLayout sectionLayoutAtIndex:index];
 	return layout.height;
@@ -91,24 +79,17 @@
 	return @(self.sectionsLayout.detail.identifier);
 }
 
-- (MADDesignerSectionView *)designView:(MADDesignerLayoutDesignView *)designView
-		  sectionViewForSectionAtIndex:(NSUInteger)index {
+- (MADDesignerSectionView *)designView:(MADDesignerLayoutDesignView *)designView sectionViewForSectionAtIndex:(NSUInteger)index {
 	MADSectionLayout *section = [self.sectionsLayout sectionLayoutAtIndex:index];
-	MADDesignerSectionView *sectionView = [MADDesignerSectionView newDesignerSectionView: section.identifier
-																	designViewIdentifier: index
-																			   isVisible: section.isVisible
-																				delegate: self.eventDelegate];
-	
-	
-	return sectionView;
+	return [MADDesignerSectionView newDesignerSectionView: section.identifier
+									 designViewIdentifier: index
+												isVisible: section.isVisible
+												 delegate: self.eventDelegate];
 }
 
-- (MADDesignerSectionLabel *)designView:(MADDesignerLayoutDesignView *)designView
-	  sectionLabelViewForSectionAtIndex:(NSUInteger)index {
-	MADSectionLayout *section = [self.sectionsLayout sectionLayoutAtIndex:index];
-	NSString *localizedDisplay = [section localizedDisplay];
-	MADDesignerSectionLabel *sectionViewLabel = [[MADDesignerSectionLabel alloc] initWithText:localizedDisplay];
-	return sectionViewLabel;
+- (MADDesignerSectionLabel *)designView:(MADDesignerLayoutDesignView *)designView sectionLabelViewForSectionAtIndex:(NSUInteger)index {
+	NSString *localizedDisplay = [[self.sectionsLayout sectionLayoutAtIndex:index] localizedDisplay];
+	return [[MADDesignerSectionLabel alloc] initWithText:localizedDisplay];
 }
 
 @end

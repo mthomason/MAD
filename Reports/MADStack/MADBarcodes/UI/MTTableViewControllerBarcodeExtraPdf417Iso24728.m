@@ -36,22 +36,11 @@
 
 #pragma mark - Exit
 
-- (IBAction)unwindToBarcodeExtraGridMatrix:(UIStoryboardSegue *)action { }
-
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-				 fromViewController:(UIViewController *)fromViewController
-							 sender:(nullable id)sender {
-	return action == @selector(unwindToBarcodeExtraGridMatrix:);
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-									  fromViewController:(UIViewController *)fromViewController
-											  withSender:(id)sender {
-	
-	return action == @selector(unwindToBarcodeExtraGridMatrix:) ? self :
-	[super viewControllerForUnwindSegueAction: action
-						   fromViewController: fromViewController
-								   withSender: sender];
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController sender:(id)sender {
+	if (action == @selector(unwindToBarcodeExtraGridMatrix:)) {
+		return YES;
+	}
+	return [super canPerformUnwindSegueAction:action fromViewController:fromViewController sender:sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {

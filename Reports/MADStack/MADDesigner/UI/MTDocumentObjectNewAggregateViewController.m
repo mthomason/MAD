@@ -215,23 +215,23 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 	
 	[self updateDisplay];
 }
+
+//- (BOOL)canPerformUnwindSegueAction:(SEL)action
+//				 fromViewController:(UIViewController *)fromViewController
+//							 sender:(nullable id)sender {
+//	return self.delegate == nil;
+//}
 /*
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-				 fromViewController:(UIViewController *)fromViewController
-							 sender:(nullable id)sender {
-	return self.delegate == nil;
-}
-*/
-/*- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
 									  fromViewController:(UIViewController *)fromViewController
-											  withSender:(id)sender {
-	
-	return self.unwindViewController ?
-			self.unwindViewController :
-			[super viewControllerForUnwindSegueAction: action
+											  sender:(nullable id)sender {
+	__strong UIViewController *vc = self.unwindViewController;
+	return vc ? vc :
+	[super viewControllerForUnwindSegueAction: action
 						   fromViewController: fromViewController
 								   withSender: sender];
-}*/
+}
+*/
 
 - (void)updateDisplay {
 	

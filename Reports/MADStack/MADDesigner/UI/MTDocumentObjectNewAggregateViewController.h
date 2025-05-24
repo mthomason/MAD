@@ -30,8 +30,7 @@
 
 @end
 
-@interface MTDocumentObjectNewAggregateViewController : UITableViewController
-	<MADUnwindProtocol, UITableViewDelegate>
+@interface MTDocumentObjectNewAggregateViewController : UITableViewController <MADUnwindProtocol, UITableViewDelegate>
 
 	@property (nonatomic, weak) id <MTViewControllerAggregateDelegate> aggregateDelegate;
 	@property (nonatomic, weak) MADocument *document;

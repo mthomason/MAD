@@ -108,21 +108,11 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 
 - (IBAction)unwindToBarcodeOptions:(UIStoryboardSegue *)action { }
 
-- (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
-							 sender:(nullable id)sender {
-    return action == @selector(unwindToBarcodeOptions:);
-}
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
-                                      fromViewController:(UIViewController *)fromViewController
-                                              withSender:(id)sender {
-    
-    return action == @selector(unwindToBarcodeOptions:) ?
-            self :
-            [super viewControllerForUnwindSegueAction: action
-                                   fromViewController: fromViewController
-                                           withSender: sender];
+- (BOOL)canPerformUnwindSegueAction:(SEL)action fromViewController:(UIViewController *)fromViewController sender:(id)sender {
+	if (action == @selector(unwindToBarcodeOptions:)) {
+		return YES;
+	}
+	return [super canPerformUnwindSegueAction:action fromViewController:fromViewController sender:sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
@@ -150,16 +140,13 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     self.sampleBarcodeIndex = 0;
     
     NSDictionary *d = @{SetDatasource : SetDatasource};
-    NSArray *sampleBarcodeData = @[d];
-    self.sampleBarcodeData = sampleBarcodeData;
+    self.sampleBarcodeData = @[d];
     
     NSDictionary *d2 = @{StringEmpty : StringEmpty};
-    NSArray *sampleBarcodeDataMaxicode = @[d2];
-    self.sampleBarcodeDataMaxicode = sampleBarcodeDataMaxicode;
+    self.sampleBarcodeDataMaxicode = @[d2];
     
     NSDictionary *d3 = @{StringEmpty : StringEmpty};
-    NSArray *sampleBarcodeData2dComponent = @[d3];
-    self.sampleBarcodeData2dComponent = sampleBarcodeData2dComponent;
+    self.sampleBarcodeData2dComponent = @[d3];
 
     self.selectingField1 = NO;
     self.selectingField2 = NO;
@@ -169,13 +156,10 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString *barcodeType = NSStringFromSelector(@selector(barcodeType));
-    NSString *showErrorMessage = NSStringFromSelector(@selector(showErrorMessage));
-    NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
-    [self addObserver:barcode forKeyPath:barcodeType options:NSKeyValueObservingOptionNew context:NULL];
-    [self addObserver:barcode forKeyPath:showErrorMessage options:NSKeyValueObservingOptionNew context:NULL];
-    [self addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:barcode forKeyPath:NSStringFromSelector(@selector(barcodeType)) options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:barcode forKeyPath:NSStringFromSelector(@selector(showErrorMessage)) options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:barcode forKeyPath:NSStringFromSelector(@selector(humanReadable)) options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

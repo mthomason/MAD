@@ -631,7 +631,7 @@ BOOL storeEnabled(void) {
 		[private deleteObject:objectToDelete];
 		numberOfTables--;
 		
-		NSError * __autoreleasing error = NULL;
+		NSError *error = NULL;
 		BOOL success = NO;
 		if (!(success = [private save:&error])) {
 			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
@@ -678,8 +678,7 @@ BOOL storeEnabled(void) {
 	UIManagedDocument *document = self.document;
 	MADTableViewCellQueryLink *cell = (MADTableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
 	NSManagedObjectID *tableID = cell.linkID;
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
 	[private performBlockAndWait:^{
@@ -688,7 +687,7 @@ BOOL storeEnabled(void) {
 		NSAssert(objectToDelete != nil, @"Need a non-nil value for %@", tableID);
 		[private deleteObject:objectToDelete];
 		
-		NSError * __autoreleasing error = NULL;
+		NSError *error = NULL;
 		BOOL successSave = NO;
 		if (!(successSave = [private save:&error])) {
 			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);

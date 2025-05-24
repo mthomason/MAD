@@ -193,7 +193,7 @@
 			database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);
 		}
 
-		NSError * __autoreleasing error = NULL;
+		NSError *error = NULL;
 		BOOL success = [database executeQuery:querySampleDataField withError:&error];
 
 		if (success) {

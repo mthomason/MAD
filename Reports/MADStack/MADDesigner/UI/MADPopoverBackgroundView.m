@@ -46,10 +46,6 @@
 	return 5.0000f;
 }
 
-+ (BOOL)wantsDefaultContentAppearance {
-	return YES;
-}
-
 - (CGFloat)arrowOffset {
 	return self.arrowDirectionHolder;
 }

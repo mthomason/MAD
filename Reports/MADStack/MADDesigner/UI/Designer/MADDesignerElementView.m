@@ -48,11 +48,6 @@
 #define kAnimationTranslateX 2.0
 #define kAnimationTranslateY 2.0
 
-static const UIViewAnimationOptions MADViewAnimationOptionsWobble = (UIViewAnimationOptions)
-													(UIViewAnimationOptionAllowUserInteraction |
-														UIViewAnimationOptionRepeat |
-														UIViewAnimationOptionAutoreverse);
-
 #pragma mark - MTElementView
 
 @interface MADDesignerElementView ()

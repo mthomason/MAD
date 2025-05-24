@@ -42,23 +42,15 @@ static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
 }
 
 static inline MADBorderState borderState(BOOL selected, BOOL visible) {
-	if (selected) {
-		return MADBorderStateSelected;
-	} else if (visible) {
-		return MADBorderStateNormal;
-	} else {
-		return MADBorderStateDisabled;
-	}
+	if (selected) return MADBorderStateSelected;
+	if (visible) return MADBorderStateNormal;
+	return MADBorderStateDisabled;
 }
 
-static NSString * const MADTextAccessSectionElements = @"Access section elements.";
-
 @interface MADDesignerSectionView ()
-
-	@property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
-	@property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
-	@property (nonatomic, assign) BOOL accessibile;
-
+@property (nonatomic, assign) CGFloat resizeHeightDifferenceInital;
+@property (nonatomic, assign) CGFloat resizeHeightBoundsHeightInital;
+@property (nonatomic, assign) BOOL accessibile;
 @end
 
 @implementation MADDesignerSectionView
@@ -77,8 +69,7 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 	MADDesignerSectionLayoutLiquid *layout = [[MADDesignerSectionLayoutLiquid alloc] init];
 	layout.delegate = layoutDelegate;
 	layout.designViewIdentifier = identifier;
-	MADDesignerSectionView *collectionView;
-	collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+	MADDesignerSectionView *collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
 	collectionView.delegate     = layoutDelegate;
 	collectionView.dataSource   = layoutDelegate;
 	collectionView.identifier   = identifier;
@@ -91,38 +82,30 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 	
 	if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
 
-		UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
-		UIColor *clearColor = [UIColor clearColor];
-		
 		self.accessibile = YES;
 		
-		MADDesignerSectionBackground *backgroundView;
-		backgroundView = [[MADDesignerSectionBackground alloc] initWithFrame:CGRectZero];
+		MADDesignerSectionBackground *backgroundView = [[MADDesignerSectionBackground alloc] initWithFrame:CGRectZero];
 		[backgroundView setNumberOfRowsInBackground:1];
-		backgroundView.backgroundColor = clearColor;
+		backgroundView.backgroundColor = [UIColor clearColor];
 
 		NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
 		NSString *documentElementReuseIdentifier = [MADCellElement reuseIdentifier];
 		
-		[self registerClass: [MADCellElement class]
- forCellWithReuseIdentifier: documentElementReuseIdentifier];
+		[self registerClass: [MADCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
 		
-		[self registerClass: [MTCollectionReuseableViewDefault class]
- forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-		withReuseIdentifier: supplmentaryViewReuseIdHeader];
-		
-		[self registerClass: [MTCollectionReuseableViewDefault class]
- forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
-		withReuseIdentifier: supplmentaryViewReuseIdHeader];
+		[self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionHeader withReuseIdentifier: supplmentaryViewReuseIdHeader];
+		[self registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind: UICollectionElementKindSectionFooter withReuseIdentifier: supplmentaryViewReuseIdHeader];
 		
 		self.clipsToBounds = YES;
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.allowsSelection = YES;
 		self.allowsMultipleSelection = YES;
 		self.translatesAutoresizingMaskIntoConstraints = NO;
+
+		UIColor *borderColor = [MADColorEverydayApps newColorBorderColor];
 		self.layer.borderColor = borderColor.CGColor;
 		self.backgroundView = nil;
-		self.backgroundColor = clearColor;
+		self.backgroundColor = [UIColor clearColor];
 		self.layer.borderWidth = [UIView borderWidthThin];
 		self.showsVerticalScrollIndicator = YES;
 
@@ -144,7 +127,6 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
 	CGContextRef context = UIGraphicsGetCurrentContext();
-
 	UIColor *bgcolor = backgroundColor(self.selected, self.visible);
 	CGContextSetFillColorWithColor(context, bgcolor.CGColor);
 	CGContextFillRect(context, rect);
@@ -170,15 +152,10 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 #pragma mark -
 #pragma mark Accessors
 
-- (void)removeItemAtIndex: (NSIndexPath *)deletePath
-				   update: (void (^)(void))update
-		animationComplete: (void (^)(BOOL))animationComplete
-			   completion: (void (^)(void))completion {
+- (void)removeItemAtIndex: (NSIndexPath *)deletePath update: (void (^)(void))update
+		animationComplete: (void (^)(BOOL))animationComplete completion: (void (^)(void))completion {
 
-	void (^updates)(void);
-	void (^complets)(BOOL);
-
-	updates = ^{
+	void (^updates)(void) = ^{
 		
 		if (update != nil) update();
 		NSArray *indexPaths = [[NSArray alloc] initWithObjects:deletePath, nil];
@@ -186,18 +163,15 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 		
 	};
 
-	complets = ^(BOOL finished) {
+	void (^complets)(BOOL) = ^(BOOL finished) {
 		
 		if (finished) {
 
-			void (^animate)(void);
-			void (^finish)(BOOL);
-
-			animate = ^{
+			void (^animate)(void) = ^{
 				[self invalidateIntrinsicContentSize];
 			};
 
-			finish = ^(BOOL animateFinished) {
+			void (^finish)(BOOL) = ^(BOOL animateFinished) {
 				if (animateFinished) {
 					if (animationComplete != nil) animationComplete(animateFinished);
 				}
@@ -215,8 +189,7 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 				   completion:complets];
 }
 
-- (void)insertItemAtIndex: (NSIndexPath *)path
-				   update: (void (^)(void))update
+- (void)insertItemAtIndex: (NSIndexPath *)path update: (void (^)(void))update
 		animationComplete: (void (^)(BOOL))animationComplete
 			   completion: (void (^)(void))completion {
 	
@@ -284,16 +257,11 @@ static NSString * const MADTextAccessSectionElements = @"Access section elements
 #pragma mark Accessibility
 
 - (NSArray <__kindof UIAccessibilityCustomAction *> *)accessibilityCustomActions {
-	NSString *toggleAccessibilityName = NSLocalizedString(MADTextAccessSectionElements,
-														  MADTextAccessSectionElements);
-	UIAccessibilityCustomAction *toggleAccessibility;
-	SEL toggle = @selector(toggleAccessibility:);
-	toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: toggleAccessibilityName
-																	 target: self
-																   selector: toggle];
-	NSArray  <__kindof UIAccessibilityCustomAction *> *customActions;
-	customActions = [[NSArray alloc] initWithObjects:toggleAccessibility, nil];
-	return customActions;
+	NSString *toggleAccessibilityName = NSLocalizedString(@"Access section elements.", @"Access section elements.");
+	UIAccessibilityCustomAction *toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: toggleAccessibilityName
+																								  target: self
+																								selector: @selector(toggleAccessibility:)];
+	return @[toggleAccessibility];
 }
 
 - (BOOL)isAccessibilityElement {
