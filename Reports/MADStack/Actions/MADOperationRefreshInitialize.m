@@ -40,12 +40,9 @@
 
 @implementation MADOperationRefreshInitialize
 
-- (void)dealloc {
-	//NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
-}
+- (void)dealloc {}
 
 - (instancetype)initWithDocument:(MADocument *)document {
-	//NSLog(@"%@-%s", NSStringFromClass(self.class), __func__);
 	if (self = [super init]) {
 		_document = document;
 		_success = NO;
@@ -59,33 +56,31 @@
 	if (self.cancelled) {
 		return [self finish];
 	}
-
+	
 	MADocument *doc = _document;
-		for (NSOperation *dependency in self.dependencies) {
-			if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitializeMainDataTableProtocol)]) {
-				doc = ((id <MADOperationRefreshInitializeMainDataTableProtocol>)dependency).document;
-				break;
-			}
+	for (NSOperation *dependency in self.dependencies) {
+		if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitializeMainDataTableProtocol)]) {
+			doc = ((id <MADOperationRefreshInitializeMainDataTableProtocol>)dependency).document;
+			break;
 		}
-   
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	}
+	
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = doc.managedObjectContext;
-
+	
 	MADocument * __weak wdocument = doc;
 	[private performBlockAndWait:^{
+		
 		MADocument *document = wdocument;
-
-		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: doc.managedObjectContext];
+		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: document.managedObjectContext];
 		if (rptqDocument == nil) {
-			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: doc.managedObjectContext];
+			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: document.managedObjectContext];
 		}
 		
 		RptqDatabase *rptqDatabase;
 		RptqQuery *rptqQuery;
 		
-		//Initialize main database
-		if (doc.database == nil) {
+		if (document.database == nil) {
 			RptqDatabaseCredentals *rptqUser;
 			MADDatabaseConnection *databaseConnection;
 			MADDatabase *database;
@@ -93,28 +88,23 @@
 			rptqQuery = rptqDatabase.hasQueries.anyObject;
 			rptqUser = rptqQuery.inDatabase.ownedByUser;
 			databaseConnection = [MADDatabaseConnection newDatabaseConnection:rptqUser];
-			[doc updateDatabaseWithConnection:databaseConnection];
+			[document updateDatabaseWithConnection:databaseConnection];
 			database = [MADDatabase newDatabaseWithConnection:databaseConnection];
 		}
-		doc.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
-		
+		document.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
 		if (rptqDatabase == nil || rptqQuery == nil) {
 			rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
 			rptqQuery = rptqDatabase.hasQueries.anyObject;
 		}
-	
-		[doc dataTableSort:rptqQuery];
-	
-		//Initialize the section layout manager... Not neede for creating the report.
-		[doc resetSectionLayoutManagers];
-
-		MADReportFormatter *formatter;
-		formatter = [MADReportFormatter newReportFormatterWithLayout: doc
-															 options: MADReportFormatterOptionsNone];
-
-		doc.reportFormatter = formatter;
+		[document dataTableSort:rptqQuery];
+		[document resetSectionLayoutManagers];
+		MADReportFormatter *formatter = [MADReportFormatter newReportFormatterWithLayout: document
+																				 options: MADReportFormatterOptionsNone];
+		
+		document.reportFormatter = formatter;
 		
 	}];
+	
 	[self finish];
 	
 }

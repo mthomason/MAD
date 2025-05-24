@@ -12,14 +12,16 @@
 
 
 #import "AppDelegate.h"
-#import <QuickLook/QLPreviewController.h>
-#import <Foundation/NSString.h>
 
 #import <MAD/MADConstants.h>
 #import "Constants.h"
+#import "madlog.h"
 
 #import <MADDataStructures/MADVectorBool.h>
-#import <os/log.h>
+
+#import <Foundation/NSString.h>
+#import <UserNotifications/UNUserNotificationCenter.h>
+#import <QuickLook/QLPreviewController.h>
 
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIDUser                                          = @"MADIDUser";
@@ -185,11 +187,21 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[[NSBundle mainBundle] load];
-	if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-		id notification = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound
-															categories: nil];
-		[application registerUserNotificationSettings:notification];
-	}
+	
+	UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+	//center.delegate = self;
+	
+	[center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
+						  completionHandler:^(BOOL granted, NSError * _Nullable error) {
+		if (granted) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[application registerForRemoteNotifications];
+			});
+		} else {
+			// Handle the case when permission is denied
+			NSLog(@"Notification permission denied: %@", error);
+		}
+	}];
 	return YES;
 }
 

@@ -137,6 +137,7 @@
 		4C2F3B3B1CA26495002CF271 /* MADMutualExclusive.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F3B3A1CA26495002CF271 /* MADMutualExclusive.m */; };
 		4C30A5401E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C30A53F1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m */; };
 		4C30A5431E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C30A5421E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m */; };
+		4C3186312DE2018E0007DDA2 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3186302DE2018E0007DDA2 /* UserNotifications.framework */; };
 		4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */; };
 		4C32A4C31BB07FF300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; };
 		4C3500121E7051E8009423B0 /* MADTableViewCellQueryCountID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3500111E7051E8009423B0 /* MADTableViewCellQueryCountID.m */; };
@@ -689,6 +690,7 @@
 		4C30A53F1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitioningNavigationCrossFadePop.m; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePop.m; sourceTree = "<group>"; };
 		4C30A5411E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAnimatedTransitioningNavigationCrossFadePush.h; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePush.h; sourceTree = "<group>"; };
 		4C30A5421E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitioningNavigationCrossFadePush.m; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePush.m; sourceTree = "<group>"; };
+		4C3186302DE2018E0007DDA2 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		4C32A4A41BB0763300DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		4C32A4A51BB0765900DD59A3 /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		4C32A4AA1BB076A900DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
@@ -1255,6 +1257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3186312DE2018E0007DDA2 /* UserNotifications.framework in Frameworks */,
 				4CA8B2EA2DD5DCE0001E27B3 /* libcrypto.a in Frameworks */,
 				4CA8B2EB2DD5DCE0001E27B3 /* libssl.a in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
@@ -2438,6 +2441,7 @@
 		4CAEA4EC1CC681810064E9A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C3186302DE2018E0007DDA2 /* UserNotifications.framework */,
 				4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */,
 				4CA8B2E92DD5DCE0001E27B3 /* libssl.a */,
 				4C4EC6D62DC98EED001DBEBE /* liblzma.tbd */,
