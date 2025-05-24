@@ -380,7 +380,6 @@
 		4CB98DC21F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB01F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m */; };
 		4CB98DC31F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB11F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DC41F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB21F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m */; };
-		4CB98DC61F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB41F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m */; };
 		4CB98DC71F43F0A00043B583 /* MADOperationDocumentCloseDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB51F43F0A00043B583 /* MADOperationDocumentCloseDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DC81F43F0A00043B583 /* MADOperationDocumentCloseDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB61F43F0A00043B583 /* MADOperationDocumentCloseDocument.m */; };
 		4CB98DC91F43F0A00043B583 /* MADOperationCreateDocumentFirstTimeSetup.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB71F43F0A00043B583 /* MADOperationCreateDocumentFirstTimeSetup.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2665,7 +2664,6 @@
 				4CC282431BADE81A00775B72 /* MADSectionLayoutManager.m in Sources */,
 				4CC284A21BADE9FB00775B72 /* RptqDatabaseCredentals+Extras.m in Sources */,
 				4C5939901E3EF7E400582271 /* RptqDocumentElement.m in Sources */,
-				4CB98DC61F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m in Sources */,
 				4CD79FC01EC862840093B2CE /* RptqRect.m in Sources */,
 				4CC2848E1BADE9D300775B72 /* MADSchemaFieldSelectorModel.m in Sources */,
 				4C35E2721EC9E9500090D1BF /* RptqSize+Extras.m in Sources */,
