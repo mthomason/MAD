@@ -6,8 +6,10 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
+/*
 #import "MADNavigationControllerQuery.h"
 #import "MADQueryBuilderSplitViewController.h"
+#import "MADThemeManager.h"
 
 @interface MADNavigationControllerQuery ()
 	@property (nonatomic, strong) MADQueryBuilderSplitViewController *queryController;
@@ -20,7 +22,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	id rootViewController = [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController: _document];
+	MADQueryBuilderSplitViewController *rootViewController = [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController: _document];
 	self.queryController = rootViewController;
 }
 
@@ -35,8 +37,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	if (self.isBeingDismissed) {
-		NSArray *viewControllers = [[NSArray alloc] init];
-		[self setViewControllers:viewControllers animated:animated];
+		[self setViewControllers:@[] animated:animated];
 	}
 }
 
@@ -46,8 +47,7 @@
 
 - (NSString *)title {
 	if (_title == nil) {
-		_title = self.queryController == nil ?
-					[MADQueryBuilderSplitViewController Title] : self.queryController.title;
+		_title = self.queryController == nil ? [MADQueryBuilderSplitViewController Title] : [self.queryController.title copy];
 	}
 	return _title;
 }
@@ -62,4 +62,10 @@
 	return UIStatusBarStyleLightContent;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
+}
+
 @end
+*/

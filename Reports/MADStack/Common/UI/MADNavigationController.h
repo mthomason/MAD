@@ -16,18 +16,14 @@
 
 @protocol MADViewControllerStandardProtocol;
 
-@interface MADNavigationController : UINavigationController
-	<UINavigationControllerDelegate,
-		UIViewControllerTransitioningDelegate,
-		MADViewControllerDocumentProtocol,
-		MADNavigationControllerIdentify>
+@interface MADNavigationController : UINavigationController <UINavigationControllerDelegate, UIViewControllerTransitioningDelegate, MADViewControllerDocumentProtocol, MADNavigationControllerIdentify>
 
-	+ (instancetype)newNavigationController:(MADNavigationControllerType)type;
++ (instancetype)newNavigationController:(MADNavigationControllerType)type;
 
-	@property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
-	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+@property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
+@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-	- (IBAction)done:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 

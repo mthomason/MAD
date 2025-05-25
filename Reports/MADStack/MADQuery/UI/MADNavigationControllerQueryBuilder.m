@@ -7,23 +7,20 @@
 //
 
 #import "MADNavigationControllerQueryBuilder.h"
+#import "MADViewControllerDocumentProtocol.h"
+#import "MADQueryViewController.h"
+#import "MADAnimatedTransitionControllerPop.h"
+#import "MADAnimatedTransitionControllerPush.h"
+#import "MADThemeManager.h"
+
 #import <Foundation/NSObject.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIToolbar.h>
-#import <UIKit/UIAppearance.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIResponder.h>
 
-#import "MADViewControllerDocumentProtocol.h"
-
-#import "MADQueryViewController.h"
-
-#import "MADAnimatedTransitionControllerPop.h"
-#import "MADAnimatedTransitionControllerPush.h"
-
-@interface MADNavigationControllerQueryBuilder ()
-	<UINavigationControllerDelegate>
+@interface MADNavigationControllerQueryBuilder () <UINavigationControllerDelegate>
 	@property (nonatomic, weak) IBOutlet UIToolbar *bottomToolbar;
 
 @end
@@ -33,16 +30,6 @@
 }
 
 @synthesize document = _document;
-
-+ (void)initialize {
-	[super initialize];
-	
-	if (self == [MADNavigationControllerQueryBuilder self]) {
-		@autoreleasepool {
-
-		}
-	}
-}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
@@ -54,8 +41,12 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	///self.hide
 	self.hidesBarsWhenVerticallyCompact = NO;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
 #pragma mark - Navigation

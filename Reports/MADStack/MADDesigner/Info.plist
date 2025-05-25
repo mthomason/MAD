@@ -37,19 +37,19 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.2258</string>
+	<string>8.0.2259</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>8.0.2258</string>
+	<string>8.0.2259</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADBuildDate</key>
-	<string>2025-05-25T09:14:35EDT</string>
+	<string>2025-05-25T13:08:29EDT</string>
 	<key>MADBuildNumber</key>
-	<string>35457</string>
+	<string>35497</string>
 	<key>MADRevision</key>
-	<string>4200</string>
+	<string>4201</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2025 Michael Thomason.  All rights reserved.</string>
 	<key>NSUbiquitousContainers</key>

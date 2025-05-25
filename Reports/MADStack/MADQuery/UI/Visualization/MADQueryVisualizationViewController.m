@@ -944,20 +944,15 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		evaluatedJoinedTables = [NSExpression expressionForConstantValue:orphaned];
 		expressionMinusSet = [NSExpression expressionForMinusSet: evaluatedObject
 															with: evaluatedJoinedTables];
-		NSNumber *objectID;
 		for (NSNumber *orphanedTableIDs in orphaned) {
 			
 			@autoreleasepool {
-				objectID = orphanedTableIDs.copy;
-				MADHierarchicalChildViewDefination *tableDefination;
-				tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
+				NSNumber *objectID = orphanedTableIDs.copy;
+				MADHierarchicalChildViewDefination *tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:orphanedTableIDs.longLongValue];
 				tableDefination.root = YES;
-				NSNumber *controllerID = @(orphanedTableIDs.longLongValue);
-				MADHierarchicalChildController *tableController;
-				tableController = self.controllersByObjectID[controllerID];
+				MADHierarchicalChildController *tableController = self.controllersByObjectID[@(orphanedTableIDs.longLongValue)];
 				tableController.root = YES;
 				[self.rootTables addObject: objectID];
-				objectID = nil;
 			}
 		}
 		
@@ -979,14 +974,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
 	if ([sender isKindOfClass:[MADQueryTableViewController class]]) {
 		
-		MADQueryTableViewController *controller;
-		
-		NSEnumerator <MADModelQueryLink *> *links; MADModelQueryLink *link;
-		controller = (MADQueryTableViewController *)sender;
-		
-		links = self.document.documentModel.firstQuery.links.objectEnumerator;
-		
-		for (link in links) {
+		MADQueryTableViewController *controller = (MADQueryTableViewController *)sender;
+		NSEnumerator <MADModelQueryLink *> *links = self.document.documentModel.firstQuery.links.objectEnumerator;
+		for (MADModelQueryLink *link in links) {
 			if (link.leftFieldIdentifier.tableID == controller.identifier ||
 				link.rightFieldIdentifier.tableID == controller.identifier) {
 				[self layoutQueryLinkViewControllerWithModelObject: link];
@@ -997,11 +987,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)layoutQueryLinkViewControllerWithModelObject:(MADModelQueryLink *)link {
  
-	MADConnectorView *connectorView;
-
-	connectorView = self.connectionViewsByObjectID[link.objectID];
+	MADConnectorView *connectorView = self.connectionViewsByObjectID[link.objectID];
 	
-	static const CGFloat padding = 44.0;
+	const CGFloat padding = 44.0;
 
 	CGFloat(^bottomLeftY)(CGRect) = ^CGFloat(CGRect rect) {
 		return rect.origin.y + rect.size.height;

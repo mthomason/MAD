@@ -7,6 +7,15 @@
 //
 
 #import "MADNavigationController.h"
+#import "MADNavigationControllerViewer.h"
+#import "MADNavigationControllerDesigner.h"
+#import "MADNavigationControllerQuery.h"
+#import "MADDesignerNavigationBar.h"
+#import "MADViewerNavigationBar.h"
+#import "MADTransparentPresentationController.h"
+#import "madlog.h"
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIViewController.h>
@@ -16,17 +25,6 @@
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIViewController.h>
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import "MADNavigationControllerViewer.h"
-#import "MADNavigationControllerDesigner.h"
-#import "MADNavigationControllerQuery.h"
-
-#import "MADDesignerNavigationBar.h"
-#import "MADViewerNavigationBar.h"
-
-#import "MADTransparentPresentationController.h"
-
 @interface MADNavigationController ()
 	@property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
 @end
@@ -35,26 +33,21 @@
 
 @dynamic document;
 
+/*
 + (void)initialize {
 	[super initialize];
 	if (self == [MADNavigationController self]) {
 		@autoreleasepool {
-			NSArray<Class <UIAppearanceContainer>> * classes;
-			UIToolbar *toolbar;
-			
-			classes = [[NSArray alloc] initWithObjects: self, nil];
-
-			toolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses:classes];
-			UIColor *white, *blue;
-			white = [MADColorEverydayApps newColorWhite];
-			blue = [MADColorEverydayApps newColorBlue];
-			toolbar.tintColor = white;
-			toolbar.barTintColor = blue;
+			NSArray<Class <UIAppearanceContainer>> * classes = [[NSArray alloc] initWithObjects: self, nil];
+			UIToolbar *toolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses:classes];
+			toolbar.tintColor = [MADColorEverydayApps newColorWhite];
+			toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
 			toolbar.barStyle = UIBarStyleBlack;
 			toolbar.translucent = YES;
 		}
 	}
 }
+*/
 
 + (instancetype)newNavigationController:(MADNavigationControllerType)type {
 
@@ -114,11 +107,12 @@
 																				toolbarClass: nil];
 			break;
 
-		case MADNavigationControllerTypeQuery:
-			controller = [[MADNavigationControllerQuery alloc] init];
-			break;
+		//case MADNavigationControllerTypeQuery:
+		//	controller = [[MADNavigationControllerQuery alloc] init];
+		//	break;
 
 		default:
+			os_log_info(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
 			break;
 	}
 	

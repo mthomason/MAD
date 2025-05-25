@@ -8,6 +8,7 @@
 
 #import "MADNavigationControllerDesigner.h"
 #import "MADDesignerViewController.h"
+#import "MADThemeManager.h"
 
 @interface MADNavigationControllerDesigner ()
 	@property (nonatomic, strong) MADDesignerViewController *designerController;
@@ -20,8 +21,8 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	id rootViewController = [MADDesignerViewController newDesignerViewController: _document];
-	self.designerController = rootViewController;
+	MADDesignerViewController *vc = [MADDesignerViewController newDesignerViewController: _document];
+	self.designerController = vc;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -34,8 +35,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 	if (self.isBeingDismissed) {
-		NSArray *viewControllers = [[NSArray alloc] init];
-		[self setViewControllers:viewControllers animated:animated];
+		[self setViewControllers:@[] animated:animated];
 	}
 }
 
@@ -58,6 +58,11 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
 	return UIStatusBarStyleLightContent;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
 @end
