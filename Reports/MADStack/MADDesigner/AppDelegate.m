@@ -35,9 +35,7 @@ const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 @interface AppDelegate() <UIDocumentInteractionControllerDelegate>
-
 @property (nonatomic, strong, readwrite) dispatch_queue_t appDelegateQueueSerial;
-
 @end
 
 @implementation AppDelegate {
@@ -56,20 +54,17 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 #pragma mark - MADApplicationProtocol
 
-//@"group.everydayapps.mad"
 + (NSString *)groupIdentifier {
 	NSURL *url = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
 	NSAssert(url != nil, @"We need a URL.");
 	return [NSDictionary dictionaryWithContentsOfURL:url][@"com.apple.security.application-groups"][0];
 }
 
-//@"iCloud.com.everydayapps.mad.designer"
 + (NSString *)ubiquityIdentifier {
 	return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
 }
 
 + (NSString *)bundleVersion {
-	//kCFBundleVersionKey
 	return [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
 }
 
@@ -179,12 +174,12 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 #pragma mark - Application Lifecycle
 
-- (BOOL)application:(UIApplication *)application
-willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	return YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	
 	[[NSBundle mainBundle] load];
 
 	[[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
@@ -194,7 +189,7 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 				[application registerForRemoteNotifications];
 			});
 		} else {
-			os_log_info(OS_LOG_DEFAULT, "%s: Notification permission denied: %@", __PRETTY_FUNCTION__, error);
+			os_log_info(GetDesignerLog(), "%s: Notification permission denied: %@", __PRETTY_FUNCTION__, error);
 		}
 	}];
 	return YES;
@@ -222,9 +217,7 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application
   supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-	return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
-	UIInterfaceOrientationMaskAllButUpsideDown :
-	UIInterfaceOrientationMaskAll;
+	return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskAll;
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
@@ -244,18 +237,21 @@ willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
-	NSError *error = nil;
 	NSURL *itemToRemove = controller.URL;
-	if (itemToRemove)
-		[[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
+	if (!itemToRemove) return;
+	
+	NSError *error = nil;
+	BOOL removed = [[NSFileManager defaultManager] removeItemAtURL:itemToRemove error:&error];
+	if (!removed && error != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error removing item: %@", __PRETTY_FUNCTION__, error);
+	}
 }
 
 #pragma mark - Convenience
 
 - (NSString *)bundleDisplayName {
 	if (!_bundleDisplayName) {
-		NSString *result = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-		_bundleDisplayName = result.copy;
+		_bundleDisplayName = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] copy];
 	}
 	return _bundleDisplayName;
 }

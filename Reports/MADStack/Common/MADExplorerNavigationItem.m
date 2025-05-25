@@ -7,8 +7,8 @@
 //
 
 #import "MADExplorerNavigationItem.h"
-#import <UIKit/UIAccessibility.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
+#import <UIKit/UIAccessibility.h>
 
 @implementation MADExplorerNavigationItem
 

@@ -676,24 +676,17 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	MADQueryVisualizationModel *queryVisualizationModel = [[MADQueryVisualizationModel alloc] initWithQuery:query];
 	MTLinkedList *topologicallySortedTables = queryVisualizationModel.topologicallySortedTables;
 	
-	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
-	
-	NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;
-	
-	MTVertex *vertexTableID;
-	NSNumber *objectID;
 	
 	typeof(self) __weak wself = self;
 	
-	NSMutableArray <MADQueryTableViewController *> *viewControllers;
-	viewControllers = [[NSMutableArray alloc] init];
+	NSMutableArray <MADQueryTableViewController *> *viewControllers = [[NSMutableArray alloc] init];
 	for (MTPair *pair in topologicallySortedTables) {
 
-		vertexTableID = pair.former;
+		MTVertex *vertexTableID = pair.former;
 
 		if (vertexTableID.object != nil) {
 			
-			objectID = ((NSNumber *)vertexTableID.object).copy;
+			NSNumber *objectID = ((NSNumber *)vertexTableID.object).copy;
 			int64_t tableID = objectID.longLongValue;
 			
 			BOOL topLevel = [queryVisualizationModel isTopLevel:objectID];
@@ -710,7 +703,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	}
 
 	
-	MADHierarchicalDisplayModel *cacheData;
+	MADHierarchicalDisplayModel *cacheData = nil;
 	NSString *path = self.localCacheFileURL.filePathURL.path.copy;
 	if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
 		cacheData = [self.cacheManager loadCache];

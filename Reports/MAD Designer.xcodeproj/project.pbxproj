@@ -245,6 +245,7 @@
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4B4B842DE25DAA0035A316 /* MADLaunchIOS13.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */; };
+		4C4B4B902DE34A170035A316 /* MADThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */; };
 		4C4C28832DD6C47100DB8538 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C28822DD6C47100DB8538 /* MADPluginManager.m */; };
 		4C4F128C1D0C777D0002294E /* NSAttributedString+QueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */; };
 		4C4F128F1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */; };
@@ -929,6 +930,8 @@
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
 		4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = MADLaunchIOS13.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADLaunchIOS13.storyboard; sourceTree = "<group>"; };
 		4C4B4B852DE2C16F0035A316 /* build_sqlite3.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_sqlite3.sh; path = ../Compressor/build_sqlite3.sh; sourceTree = SOURCE_ROOT; };
+		4C4B4B8E2DE34A170035A316 /* MADThemeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADThemeManager.h; path = Source/MADThemeManager.h; sourceTree = "<group>"; };
+		4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADThemeManager.m; path = Source/MADThemeManager.m; sourceTree = "<group>"; };
 		4C4C28812DD6C47100DB8538 /* MADPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADPluginManager.h; path = Source/MADPluginManager.h; sourceTree = "<group>"; };
 		4C4C28822DD6C47100DB8538 /* MADPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADPluginManager.m; path = Source/MADPluginManager.m; sourceTree = "<group>"; };
 		4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_bzip2.sh; path = ../Compressor/build_bzip2.sh; sourceTree = SOURCE_ROOT; };
@@ -1796,6 +1799,8 @@
 				4C1E74A82DDE1D2200F2334F /* MADColorTransformer.m */,
 				4C1E74AA2DDE20B900F2334F /* MADLocaleTransformer.h */,
 				4C1E74AB2DDE20B900F2334F /* MADLocaleTransformer.m */,
+				4C4B4B8E2DE34A170035A316 /* MADThemeManager.h */,
+				4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -3538,6 +3543,7 @@
 				4C401F281BAE703200BAE5FC /* MADTableViewCellQueryGroup.m in Sources */,
 				4C26BA241BAF150F00456DC8 /* MADQueryVisualizationViewController.m in Sources */,
 				4C26BA381BAF99BE00456DC8 /* MADPromptManager.m in Sources */,
+				4C4B4B902DE34A170035A316 /* MADThemeManager.m in Sources */,
 				4C5B55FE1C98DD4D005C19D9 /* MADOperationPromptPassword.m in Sources */,
 				4CEA05AB1ED3E6100062624F /* MADDesignerElementImageView.m in Sources */,
 				4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */,
