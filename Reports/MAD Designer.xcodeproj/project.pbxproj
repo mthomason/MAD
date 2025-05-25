@@ -244,6 +244,7 @@
 		4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
+		4C4B4B842DE25DAA0035A316 /* MADLaunchIOS13.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */; };
 		4C4C28832DD6C47100DB8538 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C28822DD6C47100DB8538 /* MADPluginManager.m */; };
 		4C4F128C1D0C777D0002294E /* NSAttributedString+QueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128B1D0C777D0002294E /* NSAttributedString+QueryViewController.m */; };
 		4C4F128F1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128E1D0CF8C20002294E /* MADQueryViewControllerTableLayout.m */; };
@@ -926,6 +927,8 @@
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4AA56D1C92C055008558E4 /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
 		4C4AA56E1C92C055008558E4 /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
+		4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = MADLaunchIOS13.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADLaunchIOS13.storyboard; sourceTree = "<group>"; };
+		4C4B4B852DE2C16F0035A316 /* build_sqlite3.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_sqlite3.sh; path = ../Compressor/build_sqlite3.sh; sourceTree = SOURCE_ROOT; };
 		4C4C28812DD6C47100DB8538 /* MADPluginManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADPluginManager.h; path = Source/MADPluginManager.h; sourceTree = "<group>"; };
 		4C4C28822DD6C47100DB8538 /* MADPluginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADPluginManager.m; path = Source/MADPluginManager.m; sourceTree = "<group>"; };
 		4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_bzip2.sh; path = ../Compressor/build_bzip2.sh; sourceTree = SOURCE_ROOT; };
@@ -1334,6 +1337,7 @@
 		4C1E55071E58295F00E3FAF0 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */,
 				4C401F091BAE6DF100BAE5FC /* MADAbout.storyboard */,
 				4C26BA091BAF14F200456DC8 /* MADAboutApp.storyboard */,
 				4C26BA021BAF14B300456DC8 /* MADAboutDocument.storyboard */,
@@ -1738,6 +1742,7 @@
 		4C3A969A189F7CB6007AF476 /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
+				4C4B4B852DE2C16F0035A316 /* build_sqlite3.sh */,
 				4CA8B2E32DD5DA5A001E27B3 /* build_openssl_thridparty.sh */,
 				4C4EC6D32DC97D7A001DBEBE /* build_archive.sh */,
 				4C4EC6CF2DC96ABD001DBEBE /* build_bzip2.sh */,
@@ -3229,6 +3234,7 @@
 				4C8DE2911BAFB2CA00AD1111 /* MAD Designer.entitlements in Resources */,
 				4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */,
 				4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */,
+				4C4B4B842DE25DAA0035A316 /* MADLaunchIOS13.storyboard in Resources */,
 				4CC3D7291BCB6D9500BDA5D3 /* MADIcon22x29.png in Resources */,
 				4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */,
 				4CFEE80B1BB7993300AFAA0A /* MADQueryAddTable.storyboard in Resources */,
@@ -3867,7 +3873,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
@@ -3931,7 +3936,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
