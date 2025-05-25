@@ -25,12 +25,9 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UIViewController.h>
-#import <UIKit/UIBlurEffect.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIToolbar.h>
-#import <UIKit/UINavigationBarAppearance.h>
-#import <UIKit/UIToolbarAppearance.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIResponder.h>
 
