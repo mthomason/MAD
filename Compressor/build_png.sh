@@ -6,7 +6,7 @@ readonly libpng_version="1.6.47"
 readonly path_base="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly path_library="${path_base}/library/libpng"
 readonly path_build="${path_base}/build/libpng"
-readonly path_source="${path_base}/source/libpng"
+readonly path_source="${path_base}/src/libpng"
 readonly zlib_dir="${path_base}/library/zlib"
 
 # Minimum iOS versions
