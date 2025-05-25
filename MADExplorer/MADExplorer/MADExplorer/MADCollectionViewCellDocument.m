@@ -11,7 +11,6 @@
 #endif
 
 #import "MADCollectionViewCellDocument.h"
-#import "MADExplorerCaption.h"
 #import "MADExplorerActivityIndicator.h"
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
@@ -262,13 +261,32 @@ static inline double wobbleRandomFactor(void) {
 
 - (void)handleContentSizeCategoryDidChangeNotification {
 	
-	NSAttributedString *attributedString;
-	attributedString = [MADExplorerCaption newExplorerCaption:self.labelTitle.text];
+	NSAttributedString *attributedString = [MADCollectionViewCellDocument explorerCaption:self.labelTitle.text];
 
 	UILabel *labelTitle = _labelTitle;
 	labelTitle.attributedText = attributedString;
 	labelTitle.text = self.labelTitle.text.copy;
 
+}
+
++ (NSAttributedString *)explorerCaption:(NSString *)text {
+	NSString *caption = [text copy];
+	
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+	paragraphStyle.alignment = NSTextAlignmentCenter;
+	
+	UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+	
+	NSDictionary<NSAttributedStringKey, id> *attributes = @{
+		NSFontAttributeName: font,
+		NSParagraphStyleAttributeName: paragraphStyle,
+		NSKernAttributeName: [NSNull null]
+	};
+	
+	return [[NSMutableAttributedString alloc] initWithString: caption
+												  attributes: attributes];
 }
 
 #pragma mark Motion Effects
@@ -388,7 +406,7 @@ static inline double wobbleRandomFactor(void) {
 	BOOL isUploading = metadata.ubiquitousItemIsUploading;
 	BOOL isUbiquitous = metadata.isUbiquitous;
 	
-	labelTitleSub.text = [MADExplorerCellTitle newExplorerCellTitleSubtitle:metadata];
+	labelTitleSub.text = [MADExplorerCellTitle explorerCellTitleSubtitle:metadata];
 	
 	[self setUploadingActive: isUploading percent: metadata.ubiquitousItemPercentUploaded];
 	[self setDownloadingActive:isDownloading percent: metadata.ubiquitousItemPercentDownloaded];

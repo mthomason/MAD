@@ -270,7 +270,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 
 - (NSString *)subtitle:(NSIndexPath *)index {
 	id metadata = [self metadata:index];
-	id subtitle = [MADExplorerCellTitle newExplorerCellTitle:metadata];
+	id subtitle = [MADExplorerCellTitle explorerCellTitle:metadata];
 	return subtitle;
 }
 

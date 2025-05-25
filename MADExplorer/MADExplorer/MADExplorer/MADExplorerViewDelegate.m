@@ -8,7 +8,6 @@
 
 #import "MADExplorerViewDelegate.h"
 #import "MADExplorerProtocol.h"
-#import "MADExplorerCaption.h"
 
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
@@ -17,6 +16,7 @@
 
 #import "MADStandard.h"
 #import "MADExplorerCellTitle.h"
+#import "madlog.h"
 
 #import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MTMath.h>
@@ -31,7 +31,6 @@
 #import <UIKit/UIImageView.h>
 #import <UIKit/UILongPressGestureRecognizer.h>
 #import <UIKit/UITapGestureRecognizer.h>
-#import <os/log.h>
 
 /*char *string_for_n(unsigned long fileSize) {
 	char buffer_int[12];
@@ -79,22 +78,19 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 - (instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections {
 	if (self = [super init]) {
 		
-		id array = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
-		id indexSet;
+		NSMutableArray <NSMutableIndexSet *> *arraySelected = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
 		for (NSUInteger i = 0; i < numberOfSections; i++) {
-			indexSet = [[NSMutableIndexSet alloc] init];
-			[array addObject:indexSet];
-			indexSet = nil;
+			NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+			[arraySelected addObject:indexSet];
 		}
-		self.selected = array;
+		self.selected = arraySelected;
 		
-		array = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
+		NSMutableArray <NSMutableIndexSet *> *arrayHighlighted = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
 		for (NSUInteger i = 0; i < numberOfSections; i++) {
-			indexSet = [[NSMutableIndexSet alloc] init];
-			[array addObject:indexSet];
-			indexSet = nil;
+			NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+			[arrayHighlighted addObject:indexSet];
 		}
-		self.highlighted = array;
+		self.highlighted = arrayHighlighted;
 		
 		_editing = NO;
 		
@@ -113,8 +109,7 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	NSInteger sectionIndex = 0;
 	for (NSIndexSet *set in _selected) {
 		[set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-			NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)idx
-													inSection:sectionIndex];
+			NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)idx inSection:sectionIndex];
 			indexPaths = [indexPaths arrayByAddingObject:path];
 		}];
 		sectionIndex++;
@@ -238,21 +233,17 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 			NSIndexPath *tappedCellPath = [fileExplorerView indexPathForCell:c];
 			if (tappedCellPath != nil) {
 				if (c.isSelected) {
-					if ([strongself collectionView:fileExplorerView
-					 shouldDeselectItemAtIndexPath:tappedCellPath]) {
-						[fileExplorerView deselectItemAtIndexPath: tappedCellPath
-														 animated: YES];
+					if ([strongself collectionView:fileExplorerView shouldDeselectItemAtIndexPath:tappedCellPath]) {
+						[fileExplorerView deselectItemAtIndexPath: tappedCellPath animated: YES];
 						[strongself collectionView:fileExplorerView
 						didDeselectItemAtIndexPath:tappedCellPath];
 					}
 				} else {
-					if ([strongself collectionView:fileExplorerView
-					   shouldSelectItemAtIndexPath:tappedCellPath]) {
+					if ([strongself collectionView:fileExplorerView shouldSelectItemAtIndexPath:tappedCellPath]) {
 						[fileExplorerView selectItemAtIndexPath: tappedCellPath
 													   animated: YES
 												 scrollPosition: UICollectionViewScrollPositionNone];
-						[strongself collectionView:fileExplorerView
-						  didSelectItemAtIndexPath:tappedCellPath];
+						[strongself collectionView:fileExplorerView didSelectItemAtIndexPath:tappedCellPath];
 					}
 				}
 			}
@@ -286,18 +277,10 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	//cell.delegate = nil;
 }
 
-// Implement file explorer options with menu
-//collectionView:contextMenuConfigurationForItemsAtIndexPaths:point:
-
 - (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView
 	contextMenuConfigurationForItemAtIndexPath:(NSIndexPath *)indexPath
 										point:(CGPoint)point {
 	return nil;
-}
-
-- (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action
-	forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
-	return YES;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView
@@ -310,15 +293,11 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 
 #pragma mark Highlight Item
 
-- (BOOL)collectionView:(UICollectionView *)collectionView
-							shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 	return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-										didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.highlighted[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 }
 
@@ -327,7 +306,6 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 - (void)collectionView:(UICollectionView *)collectionView
 										didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 	[self.highlighted[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 }
 
@@ -335,14 +313,10 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 
 - (BOOL)collectionView:(UICollectionView *)collectionView
 							shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 	return YES;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-							didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.selected[(NSUInteger)indexPath.section] addIndex:(NSUInteger)indexPath.item];
 	
 	MADMetaData *metadata = [_delegate metadataForItemAtIndexPath:indexPath];
@@ -352,8 +326,7 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 		[self downloadIfNotYetDownloaded: metadata];
 	} else {
 		collectionView.allowsSelection = NO;
-		MADCollectionViewCellDocument *cell;
-		cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+		MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
 		cell.working = YES;
 		[self.delegate openDocumentAtURL:url];
 	}
@@ -368,12 +341,11 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 		NSInteger section = 0;
 		for (NSMutableIndexSet *selectedSections in self.selected) {
 			[selectedSections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-				MADCollectionViewCellDocument *cell;
-				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger)idx
-															 inSection:section];
-				cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-				if (cell != nil) cell.working = NO;
-
+				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger)idx inSection:section];
+				MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+				if (cell != nil) {
+					cell.working = NO;
+				}
 			}];
 			section++;
 		}
@@ -405,22 +377,13 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	return shouldDeselect;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-							didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
-	MADCollectionViewCellDocument *cell;
-	cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+	MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
 	cell.working = NO;
 	[self.selected[(NSUInteger)indexPath.section] removeIndex:(NSUInteger)indexPath.item];
 	[self invokeOperationDidChangeNumberOfItemsSelected:collectionView];
-}
-
-- (void)collectionView:(UICollectionView *)collectionView
-		 performAction:(SEL)action
-	forItemAtIndexPath:(NSIndexPath *)indexPath
-			withSender:(id)sender {
-	//NSLog(@"%s: %ld", __PRETTY_FUNCTION__, (unsigned long)indexPath.item);
 }
 
 - (UIContextMenuConfiguration *) collectionView:(UICollectionView *) collectionView
@@ -436,22 +399,20 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 						layout:(UICollectionViewLayout*)collectionViewLayout
 		insetForSectionAtIndex:(NSInteger)section {
 	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-									UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f) :
-									UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+									UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0) :
+									UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
 				   layout:(UICollectionViewLayout*)collectionViewLayout
 									minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-									5.0000f : 5.0000f;
+	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 5.0 : 5.0;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
 				   layout:(UICollectionViewLayout*)collectionViewLayout
 									minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-									5.0000f : 5.0000f;
+	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 5.0 : 5.0;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
@@ -476,10 +437,9 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 
 			if (url != nil) {
 				NSError *error = nil;
-				[[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL: url
-																			  error: &error];
-				if (error != nil) {
-					os_log_error(OS_LOG_DEFAULT, "Error starting download: %@", error);
+				BOOL startedDownloading = [[NSFileManager defaultManager] startDownloadingUbiquitousItemAtURL: url error: &error];
+				if (!startedDownloading && error != nil) {
+					os_log_error(GetExplorerLog(), "%s: Error starting download: %@", __PRETTY_FUNCTION__, error);
 				}
 			}
 
@@ -495,24 +455,20 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 #pragma mark Helpers
 
 - (NSString *)subtitleForStatus:(NSString *)status fileSize:(unsigned long long)fileSize {
-	id result;
-	result = [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
+	return [status isEqualToString: NSMetadataUbiquitousItemDownloadingStatusNotDownloaded] ?
 						NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded) :
-						[MADStandard newStandardStringForFileSize:fileSize];
-	return result;
+						[MADStandard standardStringForFileSize:fileSize];
 }
 
 - (NSString *)titleForItemAtIndexPath:(NSIndexPath *)indexPath {
 	MADMetaData *metadata = [self.delegate metadataForItemAtIndexPath:indexPath];
 	NSURL *url = metadata.URL.copy;
-	NSString *title = url.lastPathComponent.stringByDeletingPathExtension;
-	NSString *result = [[NSString alloc] initWithString: title];
-	return result;
+	return url.lastPathComponent.stringByDeletingPathExtension;
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
 	id metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-	id subtitle = [MADExplorerCellTitle newExplorerCellTitle:metadata];
+	id subtitle = [MADExplorerCellTitle explorerCellTitle:metadata];
 	return subtitle;
 }
 

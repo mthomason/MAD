@@ -13,21 +13,21 @@
 
 @implementation MADStandard
 
-+ (instancetype)newStandardStringForDouble:(double)d {
++ (NSString *)standardStringForDouble:(double)d {
 	std::string d_str = std::to_string(d);
 	const char *c_str = d_str.c_str();
 	id result = [[NSString alloc] initWithUTF8String: c_str];
 	return result;
 }
 
-+ (instancetype)newStandardStringForUnsignedLong:(unsigned long)ul {
++ (NSString *)standardStringForUnsignedLong:(unsigned long)ul {
 	std::string d_str = std::to_string(ul);
 	const char *c_str = d_str.c_str();
 	id result = [[NSString alloc] initWithUTF8String: c_str];
 	return result;
 }
 
-+ (instancetype)newStandardStringForFileSize:(unsigned long long)filesize {
++ (NSString *)standardStringForFileSize:(unsigned long long)filesize {
 	const std::string decimal = ".", zero = "0", mb = " MB";
 	const double roundFactor = 1000.0, bitsToMBFactor = 1000000.0;
 	std::string filesize_str;

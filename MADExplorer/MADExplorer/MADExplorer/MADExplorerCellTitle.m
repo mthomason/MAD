@@ -17,26 +17,26 @@ NSString * const Downloading          = @"Downloading";
 
 @implementation MADExplorerCellTitle
 
-+ (NSString *)newExplorerCellTitle:(MADMetaData *)data {
++ (NSString *)explorerCellTitle:(MADMetaData *)data {
 	id result;
 	if (data.isUbiquitousItemDownloadingStatusNotDownloaded) {
 		NSString *textNotDownloaded;
 		textNotDownloaded = NSLocalizedString(MADTextNotDownloaded, MADTextNotDownloaded);
 		result = [[NSString alloc] initWithString:textNotDownloaded];
 	} else {
-		result = [MADStandard newStandardStringForFileSize:data.fileSystemFileSize];
+		result = [MADStandard standardStringForFileSize:data.fileSystemFileSize];
 	}
 	return result;
 }
 
-+ (NSString *)newExplorerCellTitleSubtitle:(MADMetaData *)data {
++ (NSString *)explorerCellTitleSubtitle:(MADMetaData *)data {
 	NSString *subtitle;
 	if (data.ubiquitousItemIsDownloading) {
 		subtitle = NSLocalizedString(Downloading, Downloading);
 	} else if (data.ubiquitousItemIsUploading) {
 		subtitle = NSLocalizedString(Syncing, Syncing);
 	} else {
-		subtitle = [MADExplorerCellTitle newExplorerCellTitle: data];
+		subtitle = [MADExplorerCellTitle explorerCellTitle: data];
 	}
 	return subtitle;
 }
