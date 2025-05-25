@@ -278,34 +278,17 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	scrollView = [[MADQueryVisualizationScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
 	[self.backgroundContainer addSubview:scrollView];
 	
-	NSDictionary <NSString *, __kindof UIView *> *viewDictionary;
-	viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:scrollView, @"sv",
-																  _backgroundContainer, @"bg", nil];
-	
-	NSMutableArray <NSLayoutConstraint *> *constraints;
-	constraints = [[NSMutableArray alloc] init];
+	NSDictionary <NSString *, __kindof UIView *> *viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:scrollView, @"sv", _backgroundContainer, @"bg", nil];
 
-	NSArray <NSLayoutConstraint *> * constraintGroup;
-	constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary];
-	[constraints addObjectsFromArray:constraintGroup];
-	
-	constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|" options:0 metrics:0 views:viewDictionary];
-	[constraints addObjectsFromArray:constraintGroup];
-	
+	NSMutableArray <NSLayoutConstraint *> *constraints = [[NSMutableArray alloc] init];
+	[constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary]];
+	[constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|" options:0 metrics:0 views:viewDictionary]];
 	[self.view addConstraints:constraints];
 
-	[constraints removeAllObjects];
-	
-	constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|" options:0 metrics:0 views:viewDictionary];
-	[constraints addObjectsFromArray:constraintGroup];
-
-	constraintGroup = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|" options:0 metrics:0 views:viewDictionary];
-	[constraints addObjectsFromArray:constraintGroup];
-
-	[self.backgroundContainer addConstraints:constraints];
-	
-	[constraints removeAllObjects];
-	
+	NSMutableArray <NSLayoutConstraint *> *constraints2 = [[NSMutableArray alloc] init];
+	[constraints2 addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|" options:0 metrics:0 views:viewDictionary]];
+	[constraints2 addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|" options:0 metrics:0 views:viewDictionary]];
+	[self.backgroundContainer addConstraints:constraints2];
 	
 	self.scrollView = scrollView;
 }
@@ -434,8 +417,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (void)layoutQueryLinks {
-	NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
-	queryLinkEnumerator = self.document.documentModel.firstQuery.links.objectEnumerator;
+	NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = self.document.documentModel.firstQuery.links.objectEnumerator;
 	for (MADModelQueryLink *link in queryLinkEnumerator) {
 		[self layoutQueryLinkViewControllerWithModelObject:link];
 	}
@@ -688,25 +670,16 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	[self.controllersByObjectID removeAllObjects];
 	[self.connectionViewsByObjectID removeAllObjects];
 	
-	MADModelQuery *query;
-	MADModelDocument *document;
+	MADModelDocument *document = _document.documentModel;
+	MADModelQuery *query = document.firstQuery;
 	
-	MTLinkedList *topologicallySortedTables;
-	NSManagedObjectContext *managedObjectContext;
-
-	document = _document.documentModel;
-	query = document.firstQuery;
+	MADQueryVisualizationModel *queryVisualizationModel = [[MADQueryVisualizationModel alloc] initWithQuery:query];
+	MTLinkedList *topologicallySortedTables = queryVisualizationModel.topologicallySortedTables;
 	
-	MADQueryVisualizationModel *queryVisualizationModel;
-	queryVisualizationModel = [[MADQueryVisualizationModel alloc] initWithQuery:query];
-	topologicallySortedTables = queryVisualizationModel.topologicallySortedTables;
+	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
 	
-	managedObjectContext = document.managedObjectContext;
+	NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator = query.links.objectEnumerator;
 	
-	NSEnumerator <MADModelQueryLink *> *queryLinkEnumerator;
-	queryLinkEnumerator = query.links.objectEnumerator;
-	
-	BOOL topLevel;
 	MTVertex *vertexTableID;
 	NSNumber *objectID;
 	
@@ -723,29 +696,27 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 			objectID = ((NSNumber *)vertexTableID.object).copy;
 			int64_t tableID = objectID.longLongValue;
 			
-			if ((topLevel = [queryVisualizationModel isTopLevel:objectID]))
+			BOOL topLevel = [queryVisualizationModel isTopLevel:objectID];
+			if (topLevel) {
 				[self.rootTables addObject: objectID];
-			
-			MADQueryTableViewController *viewController;
-			viewController = [MADQueryTableViewController newQueryTableViewController:tableID
-																				 root:topLevel
-																			 delegate:self
-																			 document:self.document];
+			}
+			MADQueryTableViewController *viewController = [MADQueryTableViewController newQueryTableViewController:tableID
+																											  root:topLevel
+																										  delegate:self
+																										  document:self.document];
 			viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
 			[viewControllers addObject:viewController];
 		}
 	}
 
 	
-	BOOL hasCache = NO;
 	MADHierarchicalDisplayModel *cacheData;
 	NSString *path = self.localCacheFileURL.filePathURL.path.copy;
 	if (path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path]) {
 		cacheData = [self.cacheManager loadCache];
-		hasCache = cacheData != nil;
 	}
 	
-	if (hasCache) {
+	if (cacheData != nil) {
 		self.scrollView.contentOffset = cacheData.scrollViewContentOffset;
 		self.scrollView.zoomScale = cacheData.scrollViewZoomScale;
 	}
@@ -754,23 +725,20 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		typeof(self) sself = wself;
 		MADModelDocument *modelDocument = sself.document.documentModel;
 		MADModelQuery *modelQuery = modelDocument.firstQuery;
-		NSEnumerator <MADModelQueryLink *> *queryLinks;
-		queryLinks = modelQuery.links.objectEnumerator;
+		NSEnumerator <MADModelQueryLink *> *queryLinks = modelQuery.links.objectEnumerator;
 		
-		MADModelQueryLink *link;
-		for (link in queryLinks) {
+		for (MADModelQueryLink *link in queryLinks) {
 			[sself addLinkViewControllerForQueryLinkModel:link animated:animated];
 		}
 		
-		NSEnumerator <MADConnectorView *> *views;
-		views = sself.connectionViewsByObjectID.objectEnumerator;
+		NSEnumerator <MADConnectorView *> *views = sself.connectionViewsByObjectID.objectEnumerator;
 		for (UIView *view in views) {
 			[sself.contentView bringSubviewToFront:view];
 		}
 	};
 	
 	[self addViewControllers: viewControllers
-				   cacheData: hasCache? cacheData : nil
+				   cacheData: cacheData
 	 queryVisualizationModel: queryVisualizationModel
 					animated: animated
 				  completion: completion];

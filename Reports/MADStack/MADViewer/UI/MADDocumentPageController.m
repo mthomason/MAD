@@ -11,10 +11,13 @@
 #endif
 
 #import "MADDocumentPageController.h"
-
-#import <UIKit/UIAccessibility.h>
-#import <UIKit/UITabBarController.h>
-#import <UIKit/UINavigationController.h>
+#import "MADPrintingProtocol.h"
+#import "MADReportPageViewProtocol.h"
+#import "MADTabBarController.h"
+#import "MADReportPageView.h"
+#import "MADDocumentScroller.h"
+#import "MADPageViewAttributes.h"
+#import "madlog.h"
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -22,15 +25,9 @@
 #import <MAD/MTPaper.h>
 #import <MAD/MADocument.h>
 
-#import "MADPrintingProtocol.h"
-#import "MADReportPageViewProtocol.h"
-
-#import "MADTabBarController.h"
-
-#import "MADReportPageView.h"
-#import "MADDocumentScroller.h"
-#import "MADPageViewAttributes.h"
-#import <os/log.h>
+#import <UIKit/UIAccessibility.h>
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UINavigationController.h>
 
 static const CGFloat PageEdgeInsetMargin = 3.0;
 
@@ -41,15 +38,10 @@ static inline CGFloat MaximumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGFloat MinimumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 
-@interface MADDocumentPageController ()
-	<UIAccessibilityReadingContent,
-		UIScrollViewDelegate,
-		MADReportPageViewProtocol>
+@interface MADDocumentPageController () <UIAccessibilityReadingContent, UIScrollViewDelegate, MADReportPageViewProtocol>
 
 	@property (readwrite, nonatomic, weak) MADocument *document;
-
 	@property (readwrite, nonatomic, weak) MADReportPageView *documentView;
-
 	@property (readwrite, nonatomic, copy) MADPageViewAttributes *pageViewAttributes;
 	@property (readwrite, nonatomic, weak) MADDocumentScroller *documentScroller;
 
@@ -308,7 +300,7 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 			NSDate *lastD = [attributes fileModificationDate];
 			self.pageViewAttributes.reportLastCacheDate = lastD.copy;
 		} else {
-			os_log_error(OS_LOG_DEFAULT, "Error: %@", error);
+			os_log_error(GetDesignerLog(), "Error: %@", error);
 		}
 	}
 	return self.pageViewAttributes.reportLastCacheDate;

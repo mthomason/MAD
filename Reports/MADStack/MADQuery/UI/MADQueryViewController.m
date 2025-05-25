@@ -631,10 +631,10 @@ BOOL storeEnabled(void) {
 		[private deleteObject:objectToDelete];
 		numberOfTables--;
 		
-		NSError *error = NULL;
-		BOOL success = NO;
-		if (!(success = [private save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		NSError *error = nil;
+		BOOL success = [private save:&error];
+		if (!success && error != nil) {
+			os_log_error(GetDesignerLog(), "Error saving managed object: %@", error);
 		} else {
 			[strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
 
@@ -663,10 +663,10 @@ BOOL storeEnabled(void) {
 			strongself->_suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
 		}
 	}];
-	NSError * __autoreleasing error = NULL;
-	BOOL success = NO;
-	if (!(success = [document.managedObjectContext save:&error])) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	NSError *error = nil;
+	BOOL success = [document.managedObjectContext save:&error];
+	if (!success && error != nil) {
+		os_log_error(GetDesignerLog(), "Error saving managed object: %@", error);
 	}
 	[self observeManagedObjectContextChanges:document.managedObjectContext];
 	[document updateChangeCount: UIDocumentChangeDone];
@@ -687,10 +687,11 @@ BOOL storeEnabled(void) {
 		NSAssert(objectToDelete != nil, @"Need a non-nil value for %@", tableID);
 		[private deleteObject:objectToDelete];
 		
-		NSError *error = NULL;
-		BOOL successSave = NO;
-		if (!(successSave = [private save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		NSError *error = nil;
+		BOOL successSave = [private save:&error];
+		
+		if (!successSave && error != nil) {
+			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 	}];
 	[document updateChangeCount: UIDocumentChangeDone];
@@ -701,8 +702,7 @@ BOOL storeEnabled(void) {
 						  atIndexPath: (NSIndexPath *)indexPath {
 	
 	UIManagedDocument *document = self.document;
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
 	typeof(self) __weak weakself = self;
@@ -714,10 +714,10 @@ BOOL storeEnabled(void) {
 		RptqQueryGroup *groupToRemove = [rptqQuery queryGroupForIndex:(NSUInteger)indexPath.row];
 		[strongself.document removeGroupWitObjectID:groupToRemove.objectID fromManagedObjectContext:private];
 		
-		NSError * __autoreleasing error = NULL;
-		BOOL successSave = NO;
-		if (!(successSave = [private save:&error])) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		NSError *error = nil;
+		BOOL successSave = [private save:&error];
+		if (!successSave && error != nil) {
+			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 	}];
 	[document updateChangeCount: UIDocumentChangeDone];
@@ -727,14 +727,16 @@ BOOL storeEnabled(void) {
 - (void)deleteQueryPredicateFromTableView: (UITableView *)tableView
 							  atIndexPath: (NSIndexPath *)indexPath {
 	MADocument *document = self.document;
-	MADTableViewCellQueryPredicate *cell;
-	cell = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
+	MADTableViewCellQueryPredicate *cell = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
 	NSManagedObjectID *objid = cell.predicateID;
 	NSManagedObject *predicate = [document.managedObjectContext objectWithID:objid];
 	[document.managedObjectContext deleteObject:predicate];
-	NSError *error = NULL;
-	if ([document.managedObjectContext save:&error])
-		NSLog(@"Error saving managed object context: %@", error);
+
+	NSError *error = nil;
+	[document.managedObjectContext save:&error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "Error saving managed object context: %@", error);
+	}
 	[document updateChangeCount: UIDocumentChangeDone];
 	[document autosaveWithCompletionHandler:^(BOOL successAutosave) { }];
 }
@@ -777,8 +779,7 @@ BOOL storeEnabled(void) {
 	
 	NSInteger suspectedSection = 2;
 	
-	MADIdentifierQueryViewSections tableSection;
-	tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
+	MADIdentifierQueryViewSections tableSection = [self.queryViewDataSource sectionAtIndex:(short)suspectedSection];
 	
 	if (tableSection == MADIdentifierQueryViewSectionsLinks) {
 		[self.tableView reloadSections: [NSIndexSet indexSetWithIndex:(NSUInteger)suspectedSection]
@@ -835,12 +836,10 @@ BOOL storeEnabled(void) {
 	
 	_suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
 	
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	[private performBlockAndWait: ^{
 		typeof(self) strongself = weakself;
-		
 		
 		RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -875,18 +874,17 @@ BOOL storeEnabled(void) {
 		[tablesInQuery addObject:newQueryTable];
 		query.hasQueryTables = tablesInQuery;
 		
-		NSError * __autoreleasing error = NULL;
-		if (![private save:&error]) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s",
-						error.localizedDescription.UTF8String);
+		NSError *error = NULL;
+		[private save:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		} else {
 			error = NULL;
 			NSManagedObjectContext *parentContext = [private parentContext];
 			[parentContext performBlockAndWait:^{
 				NSError * __autoreleasing errorParent = NULL;
 				if (![parentContext save:&errorParent]) {
-					os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s",
-								errorParent.localizedDescription.UTF8String);
+					os_log_error(GetDesignerLog(), "Error saving managed object: %s", errorParent.localizedDescription.UTF8String);
 				}
 			}];
 			[strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
@@ -929,8 +927,9 @@ BOOL storeEnabled(void) {
 	}];
 	
 	NSError * __autoreleasing error = NULL;
-	if (![document.managedObjectContext save:&error]) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	[document.managedObjectContext save:&error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
 	[document updateChangeCount: UIDocumentChangeDone];
 	[document autosaveWithCompletionHandler:^(BOOL success) {
@@ -944,17 +943,14 @@ BOOL storeEnabled(void) {
 	  insertTable:(NSUInteger)tableIndex
 	   andSection:(NSIndexSet *)sections {
 	
-	NSArray <NSIndexPath *> *tablePaths;
 	NSIndexPath *tablePath = [NSIndexPath indexPathForRow: (NSInteger)tableIndex
 												inSection: 1];
-	tablePaths = [[NSArray <NSIndexPath *> alloc] initWithObjects: tablePath, nil];
+	NSArray <NSIndexPath *> *tablePaths = [[NSArray <NSIndexPath *> alloc] initWithObjects: tablePath, nil];
 	
 	[tableView beginUpdates];
-	[tableView insertRowsAtIndexPaths: tablePaths
-					 withRowAnimation: UITableViewRowAnimationAutomatic];
+	[tableView insertRowsAtIndexPaths: tablePaths withRowAnimation: UITableViewRowAnimationAutomatic];
 	if (sections.count > 0) {
-		[tableView insertSections: sections
-				 withRowAnimation: UITableViewRowAnimationAutomatic];
+		[tableView insertSections: sections withRowAnimation: UITableViewRowAnimationAutomatic];
 	}
 	[tableView endUpdates];
 }

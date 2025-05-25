@@ -37,14 +37,12 @@
 #import "MADocumentState.h"
 #import "MADReportFormatter.h"
 #import "MADNotificationDidFormatPage.h"
-
 #import "RptqDocument.h"
 #import "RptqBorder.h"
 #import "RptqAlignment.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
-
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSectionRows.h"
@@ -56,7 +54,6 @@
 #import "RptqDatabaseCredentals.h"
 #import "RptqDatabaseCredentals+Extras.h"
 #import "RptqDocumentElementLabelDataField.h"
-
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqTextStyle.h"
@@ -82,12 +79,28 @@
 #import "miniz.h"
 #import "madlog.h"
 
-#import <os/log.h>
-#import <setjmp.h>
-#import <asl.h>
+#import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADDataTable.h>
+#import <MADFoundation/MADCredential.h>
+#import <MADFoundation/MADURLFactory.h>
+#import <MADFoundation/MADStringUtilities.h>
+
+#import <MADAPI/MADQuery.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADQueryType.h>
+#import <MADAPI/MADAliases.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+
+#import <MADFileManager/MADFileUtilities.h>
+
+#import <MADSqlite3/MADArrayCaching.h>
+#import <MADSqlite3/MADDataTableFast.h>
+
+#import <MADCocoaExtensions/NSError+Constructors.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <Foundation/NSEnumerator.h>
-
 #import <CoreData/NSManagedObjectModel.h>
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -101,34 +114,10 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIPrintInteractionController.h>
 
-#import <MADFoundation/MADDataTableType.h>
-#import <MADFoundation/MADDataTable.h>
-#import <MADFoundation/MADCredential.h>
-#import <MADFoundation/MADURLFactory.h>
-#import <MADFoundation/MADStringUtilities.h>
-
-#import <MADAPI/MADAliases.h>
-#import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-
-#import <MADFileManager/MADFileUtilities.h>
-
-#import <MADSqlite3/MADArrayCaching.h>
-
-#import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-
-
-
-#import <MADAPI/MADQuery.h>
-
-
-#import <MADSqlite3/MADDataTableFast.h>
-#import <MADAPI/MADDatabase.h>
+#import <os/log.h>
+#import <setjmp.h>
+#import <asl.h>
 #import <mach/machine/vm_param.h>
-
-
-#import <MADAPI/MADQueryType.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
@@ -268,12 +257,6 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (void)resetCache {
-	//NSNumber *typeKey = [[NSNumber alloc] initWithShort: MADDataTableParametersType];
-	//NSNumber *type = [[NSNumber alloc] initWithShort: MADDataTableTypePhysical];
-	//NSNumber *objectIdKey = [[NSNumber alloc] initWithShort: MADDataTableParametersIdentifier];
-	//NSNumber *objectIdV = [[NSNumber alloc] initWithUnsignedInteger: self.filename.hash];
-	//NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:type, typeKey, objectIdV, objectIdKey, nil];
-	
 	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
 	datatable.cacheDelegate = self;
 	NSError *error = nil;
@@ -323,9 +306,6 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (instancetype)initWithFileURL:(NSURL *)url andDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
-	os_log_t logger = GetMadLog(); // Use your logging function
-	os_log_info(logger, "[MADocument %p] initWithFileURL: '%{public}@' andDatabaseConnection: %p", self, url, databaseConnection);
-	
 	if (self = [super initWithFileURL:url]) {
 		
 		_autosaveEnabled = YES;
@@ -450,11 +430,8 @@ void madwarn(char *err,  const char *err2) { }
 
 - (NSURL *)thumbnailURL {
 	NSString *name = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
-#warning Assuming retna display... not sure if correct, but needed to build.
-	BOOL isRetnaDisplay = YES;
-	NSURL *url = [MADURLFactory newURLThumbnailForHandle: name
-								 andRetinaDisplay: isRetnaDisplay];
-	return url;
+	return [MADURLFactory newURLThumbnailForHandle: name
+								  andRetinaDisplay: YES];
 }
 
 - (NSURL *)urlDataTableCache {
@@ -503,15 +480,12 @@ void madwarn(char *err,  const char *err2) { }
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
 	__block BOOL success = NO;
-
-	/// 1. Unarchive the MAD file; it's a zip file (tar.bz2 maybe).
 	if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
-		MADArchiveManager *archiveManager;
-		archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
-																archiveURL: url];
+		MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
+																				   archiveURL: url];
 		success = [archiveManager unarchive];
 		if (!success) {
-			os_log_debug(OS_LOG_DEFAULT, "Document unarchive failed.");
+			os_log_error(GetMadLog(), "%s: Document unarchive failed.", __PRETTY_FUNCTION__);
 		}
 	}
 	
@@ -531,7 +505,7 @@ void madwarn(char *err,  const char *err2) { }
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
 	[super handleError:error userInteractionPermitted:userInteractionPermitted];
 	
-	os_log_error(OS_LOG_DEFAULT, "MADocument Error (Show UI %s): %s\n\t%s", userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
+	os_log_error(GetMadLog(), "MADocument Error (Show UI %s): %s\n\t%s", userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
 
 	NSArray *detailErrors = [error.userInfo objectForKey:NSDetailedErrorsKey];
 	if (detailErrors.count > 0) {
@@ -550,13 +524,13 @@ void madwarn(char *err,  const char *err2) { }
 	 forSaveOperation:(UIDocumentSaveOperation)saveOperation
 				error:(NSError * __autoreleasing *)outError {
 	
-	NSError * __autoreleasing error = nil;
+	NSError *error = nil;
 	if (![super writeContents:contents
 				andAttributes:additionalFileAttributes
 				  safelyToURL:self.urlGuts
 			 forSaveOperation:saveOperation
 						error:&error]) {
-		if (outError != NULL) {
+		if (outError != nil) {
 			*outError = error.copy;
 		}
 		return NO;
@@ -805,7 +779,7 @@ void madwarn(char *err,  const char *err2) { }
 
 		NSError * __autoreleasing error = NULL;
 		if (![private save:&error]) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+			os_log_info(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 		
 		RptqQueryField *groupByField = queryGroup.hasField;
@@ -1175,7 +1149,7 @@ void madwarn(char *err,  const char *err2) { }
 	NSError *error;
 	if (self.managedObjectContext != nil) {
 		if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
-			os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+			os_log_error(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 			[self.managedObjectContext save:nil];
 		}
 	}
@@ -1248,7 +1222,7 @@ void madwarn(char *err,  const char *err2) { }
 
 		NSError * __autoreleasing error = NULL;
 		if (![private save:&error]) {
-			os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+			os_log_info(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 	}];
 	[self updateChangeCount: UIDocumentChangeDone];
@@ -1332,12 +1306,8 @@ void madwarn(char *err,  const char *err2) { }
 			
 			RptqDocumentSection *section0 = sections[0];
 			RptqDocumentSection *section1 = sections[1];
-			
-			NSNumber *key = @(section0.identifier);
-			[self.sectionLayoutManagers removeObjectForKey:key];
-
-			key = @(section1.identifier);
-			[self.sectionLayoutManagers removeObjectForKey:key];
+			[self.sectionLayoutManagers removeObjectForKey:@(section0.identifier)];
+			[self.sectionLayoutManagers removeObjectForKey:@(section1.identifier)];
 			
 			[group removeHasSectionObject: section0];
 			[group removeHasSectionObject: section1];
@@ -1345,15 +1315,10 @@ void madwarn(char *err,  const char *err2) { }
 			[query.managedObjectContext deleteObject: group];
 			[query removeHasQueryGroupsObject: group];
 			
-			//Reweight Groups
-			SEL weightSelector = @selector(weight);
-			NSSortDescriptor *sort;
-			sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(weightSelector)
-												 ascending: YES];
-			
-			NSArray <NSSortDescriptor *> *sortDescriptors;
-			sortDescriptors = [[NSArray alloc] initWithObjects: sort, nil];
-			NSArray <RptqQueryGroup *> *sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:sortDescriptors];
+			NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
+																   ascending: YES];
+
+			NSArray <RptqQueryGroup *> *sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:@[sort]];
 			
 			int16_t counter = 0;
 			for (RptqQueryGroup *sortedGroup in sortedGroups) {
@@ -1363,13 +1328,10 @@ void madwarn(char *err,  const char *err2) { }
 			
 		}
 		
-		NSError * __autoreleasing error = NULL;
+		NSError *error = NULL;
 	if (![managedObjectContext save:&error]) {
-		os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		os_log_info(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
-
-	//}];
-
 }
 
 - (MADQuery *)mainQuery {

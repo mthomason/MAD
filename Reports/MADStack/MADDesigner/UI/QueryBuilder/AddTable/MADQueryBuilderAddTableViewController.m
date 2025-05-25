@@ -11,11 +11,13 @@
 #endif
 
 #import "MADQueryBuilderAddTableViewController.h"
-#import <os/log.h>
+#import "madlog.h"
+
+#import <MAD/RptqDatabaseSchemaTable+Extras.h>
+
 #import <CoreData/NSFetchedResultsController.h>
 #import <CoreData/NSExpressionDescription.h>
 #import <UIKit/UILabel.h>
-#import <MAD/RptqDatabaseSchemaTable+Extras.h>
 
 @implementation MADQueryBuilderAddTableViewController
 
@@ -34,9 +36,9 @@
 																	cacheName: nil];
 		
 		NSError *error = nil;
-		if (![controller performFetch:&error]) {
-			os_log_error(OS_LOG_DEFAULT, "Error: %@ (%@)",
-						 error.localizedDescription, error.localizedFailureReason);
+		[controller performFetch:&error];
+		if (error != nil) {
+			os_log_error(GetDesignerLog(), "Error: %@ (%@)", error.localizedDescription, error.localizedFailureReason);
 		}
 		controller.delegate = self;
 		_fetchedResultsController = controller;
