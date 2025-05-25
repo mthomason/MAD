@@ -69,7 +69,7 @@
 		4C2D78611F56F636005415F7 /* MADDatabaseConnectionSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D785F1F56F636005415F7 /* MADDatabaseConnectionSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78621F56F636005415F7 /* MADDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D78601F56F636005415F7 /* MADDatabaseConnectionSqlite3.m */; };
 		4C3D207C2DCD092300F40CE5 /* MADArrayCachingEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3D207A2DCD092300F40CE5 /* MADArrayCachingEnumerator.h */; };
-		4C4B4B8C2DE31A050035A316 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B8B2DE31A050035A316 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-Wno-ambiguous-macro -Wno-#warnings -Wno-unreachable-code -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-implicit-int -Wno-pointer-sign -Wno-comma"; }; };
+		4C4B4B8C2DE31A050035A316 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B8B2DE31A050035A316 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-Wno-ambiguous-macro -Wno-#warnings -Wno-unreachable-code -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-implicit-int -Wno-pointer-sign -Wno-comma -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C4B4B8D2DE31A050035A316 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B4B8A2DE31A050035A316 /* sqlite3.h */; };
 		4C92A49F2DD7EA2D008171A9 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C92A49E2DD7EA2D008171A9 /* madlog.m */; };
 		4C92A4A02DD7EA2D008171A9 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C92A49D2DD7EA2D008171A9 /* madlog.h */; };
