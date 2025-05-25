@@ -74,8 +74,6 @@
 - (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
 
 - (void)operationDidFinish:(nonnull MADOperation *)operation errors:(nullable NSArray<NSError *> *)errors {
-	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-	
 	BOOL success = NO;
 	if ([operation isKindOfClass:[MADOperationCreateDocument class]]) {
 		if (((MADOperationCreateDocument *)operation).isSuccessConnection &&

@@ -795,7 +795,6 @@ BOOL storeEnabled(void) {
 
 - (void)viewController:(MADQueryBuilderAddGroupViewController *)vc addedGroupOnQueryField:(NSManagedObjectID *)objectID
 		  andSortOrder:(MADSortOrder)sortOrder {
-	
 	[self dismissViewController];
 	[self.document addQueryGroupWithQueryField: objectID andSortOrder: sortOrder];
 }
@@ -854,19 +853,15 @@ BOOL storeEnabled(void) {
 																		   database: rptqDatabase
 															forManagedObjectContext: private];
 		
-		NSMutableSet <RptqQueryTable *> *tablesInQuery;
-		NSMutableSet <RptqQueryField *> *newQueryFields;
-		tablesInQuery = query.hasQueryTables.mutableCopy;
-		newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
+		NSMutableSet <RptqQueryTable *> *tablesInQuery = query.hasQueryTables.mutableCopy;
+		NSMutableSet <RptqQueryField *> *newQueryFields = [[NSMutableSet alloc] initWithCapacity: schemaTable.hasFields.count];
 		
 		for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
 			@autoreleasepool {
-				
 				RptqQueryField *newQueryField = [RptqQueryField newQueryField:private];
 				newQueryField.inQueryTable = newQueryTable;
 				newQueryField.databaseSchemaField = field;
 				[newQueryFields addObject:newQueryField];
-				
 			}
 		}
 		newQueryTable.hasQueryFields = newQueryFields;
@@ -874,16 +869,16 @@ BOOL storeEnabled(void) {
 		[tablesInQuery addObject:newQueryTable];
 		query.hasQueryTables = tablesInQuery;
 		
-		NSError *error = NULL;
-		[private save:&error];
-		if (error != nil) {
-			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		NSError *errorSave = nil;
+		[private save:&errorSave];
+		if (errorSave != nil) {
+			os_log_error(GetDesignerLog(), "Error saving managed object: %@", errorSave);
 		} else {
-			error = NULL;
 			NSManagedObjectContext *parentContext = [private parentContext];
 			[parentContext performBlockAndWait:^{
-				NSError * __autoreleasing errorParent = NULL;
-				if (![parentContext save:&errorParent]) {
+				NSError *errorParent = NULL;
+				BOOL success = [parentContext save:&errorParent];
+				if (!success && errorParent != nil) {
 					os_log_error(GetDesignerLog(), "Error saving managed object: %s", errorParent.localizedDescription.UTF8String);
 				}
 			}];
