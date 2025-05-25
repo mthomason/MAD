@@ -85,11 +85,6 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
     return selectedElementIDs;
 }
 
-+ (NSString *)keyPathDocument {
-    NSString *document = NSStringFromSelector(@selector(document));
-    return document;
-}
-
 - (CGSize)preferredContentSize {
     switch (self.sceneSelector.selectedSegmentIndex) {
         case 0:
@@ -112,7 +107,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 - (void)dealloc {
 
     [self removeObserver: self
-              forKeyPath: [MADToolboxViewController keyPathDocument]];
+              forKeyPath: NSStringFromSelector(@selector(document))];
 
     [self removeObserver: self
               forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]];
@@ -122,273 +117,242 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 
     if (self = [super initWithCoder:aDecoder]) {
-        
-        
-        UIStoryboard *storyboard;
-        NSString *keyPaths;
+		UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]];
+		self.layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
+		self.format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
 
-        storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox"
-                                               bundle: [NSBundle mainBundle]];
-        
-        MADToolboxPanel *layout, *format;
-        layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
-        self.layout = layout;
-        
-        format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
-        self.format = format;
-        
-        UINavigationController *navigationController;
-        navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeFontPicker];
-        
-        
-        self.styleNavigationController = navigationController;
-        self.currentViewController = self.styleNavigationController;
-
-        self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
-        
-        
-        keyPaths = [MADToolboxViewController keyPathSelectedObjectIds];
-        [self addObserver: self
-               forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]
-                  options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
-                  context: NULL];
-        
-        keyPaths = [MADToolboxViewController keyPathDocument];
-        [self addObserver: self
-               forKeyPath: [MADToolboxViewController keyPathDocument]
-                  options: (NSKeyValueObservingOptions)0        //Can pass zero according to docs
-                  context: NULL];
-    }
-    
-    return self;
+		UINavigationController *navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeFontPicker];
+		self.styleNavigationController = navigationController;
+		self.currentViewController = self.styleNavigationController;
+		self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
+		
+		
+		[self addObserver: self
+			   forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]
+				  options: (NSKeyValueObservingOptions)0
+				  context: NULL];
+		
+		[self addObserver: self
+			   forKeyPath: NSStringFromSelector(@selector(document))
+				  options: (NSKeyValueObservingOptions)0
+				  context: NULL];
+	}
+	return self;
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.modalPresentationStyle = UIModalPresentationPopover;
-    self.modalTransitionStyle = self.segmentedControlActionStyle;
-    
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.translucent = YES;
-    self.sceneSelector.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
+	[super viewDidLoad];
+	
+	self.modalPresentationStyle = UIModalPresentationPopover;
+	self.modalTransitionStyle = self.segmentedControlActionStyle;
+	
+	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+	self.navigationController.navigationBar.translucent = YES;
+	self.sceneSelector.tintColor = [UIColor whiteColor];
+	self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.styleNavigationController popToRootViewControllerAnimated:animated];
-
-    self.clearsBackground = self.clearsBackground;
-    MADToolboxPanelTable *style;
-    style = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
-    [style setDocument:self.document];
-    [style setSelectedDocumentObjects:self.selectedElementIDs];
-
+	[super viewWillAppear:animated];
+	[self.styleNavigationController popToRootViewControllerAnimated:animated];
+	
+	self.clearsBackground = self.clearsBackground;
+	MADToolboxPanelTable *style = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
+	[style setDocument:self.document];
+	[style setSelectedDocumentObjects:self.selectedElementIDs];
 }
 
 - (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    if (self.childViewControllers.count == 0) {
-        [self showInitalChildViewController];
-    }
+	[super viewWillLayoutSubviews];
+	if (self.childViewControllers.count == 0) {
+		[self showInitalChildViewController];
+	}
 }
 
 - (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    self.sceneSelector.center = CGPointMake(self.view.center.x,
-                                            self.navigationItem.titleView.center.y);
+	[super viewDidLayoutSubviews];
+	self.sceneSelector.center = CGPointMake(self.view.center.x, self.navigationItem.titleView.center.y);
 }
 
 #pragma mark -
 #pragma mark Helpers
 
 - (void)showInitalChildViewController {
-    
-    UIViewController *viewControllerToShow = self.styleNavigationController;
-    self.currentViewController = viewControllerToShow;
-
-    MADToolboxPanelTable *viewControllerToUpdate = nil;
-    viewControllerToUpdate = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
-    
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
-    viewControllerToUpdate.document = self.document;
-    viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
-    
-    viewControllerToShow.view.frame = self.view.bounds;
-    [self addChildViewController:viewControllerToShow];
-    
-    [viewControllerToShow beginAppearanceTransition:YES animated:NO];
-    [self.view addSubview:viewControllerToShow.view];
-    [viewControllerToShow didMoveToParentViewController:self];
-    [viewControllerToShow endAppearanceTransition];
-
+	UIViewController *viewControllerToShow = self.styleNavigationController;
+	self.currentViewController = viewControllerToShow;
+	
+	MADToolboxPanelTable *viewControllerToUpdate = (MADToolboxPanelTable *)self.styleNavigationController.viewControllers.firstObject;
+	[viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
+	viewControllerToUpdate.document = self.document;
+	viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+	viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
+	viewControllerToShow.view.frame = self.view.bounds;
+	[self addChildViewController:viewControllerToShow];
+	[viewControllerToShow beginAppearanceTransition:YES animated:NO];
+	[self.view addSubview:viewControllerToShow.view];
+	[viewControllerToShow didMoveToParentViewController:self];
+	[viewControllerToShow endAppearanceTransition];
 }
 
 - (void)showStyleViewController {
-    
-    MADToolboxPanel *viewControllerToUpdate = (MADToolboxPanel *)self.styleNavigationController.viewControllers.firstObject;
-
-    UIViewController *viewControllerToShow = self.styleNavigationController;
-    self.currentViewController = viewControllerToShow;
-
-    UIViewAnimationOptions options = UIViewAnimationOptionTransitionFlipFromRight;
-    options = UIViewAnimationOptionTransitionCrossDissolve;
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
-    viewControllerToUpdate.document = self.document;
-    viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
-    
-    UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
-    viewControllerToShow.view.frame = self.view.bounds;
-    
-    [self addChildViewController:viewControllerToShow];
-    [viewControllerToHide willMoveToParentViewController:nil];
-    [viewControllerToShow beginAppearanceTransition:YES animated:YES];
-    [self.styleNavigationController.topViewController beginAppearanceTransition:YES animated:YES];
-    
-    [self transitionFromViewController: viewControllerToHide
-                      toViewController: viewControllerToShow
-                              duration: 0.23232323f
-                               options: options
-                            animations:^{ } completion:^(BOOL finished) {
-                                
-                                if (!finished) return;
-                                
-                                [viewControllerToHide removeFromParentViewController];
-                                [viewControllerToShow didMoveToParentViewController:self];
-                                [((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:self];
-
-                                
-                            }];
-
+	
+	MADToolboxPanel *viewControllerToUpdate = (MADToolboxPanel *)self.styleNavigationController.viewControllers.firstObject;
+	UIViewController *viewControllerToShow = self.styleNavigationController;
+	self.currentViewController = viewControllerToShow;
+	
+	UIViewAnimationOptions options = UIViewAnimationOptionTransitionFlipFromRight;
+	options = UIViewAnimationOptionTransitionCrossDissolve;
+	[viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
+	viewControllerToUpdate.document = self.document;
+	viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+	viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
+	
+	UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
+	viewControllerToShow.view.frame = self.view.bounds;
+	
+	[self addChildViewController:viewControllerToShow];
+	[viewControllerToHide willMoveToParentViewController:nil];
+	[viewControllerToShow beginAppearanceTransition:YES animated:YES];
+	[self.styleNavigationController.topViewController beginAppearanceTransition:YES animated:YES];
+	
+	[self transitionFromViewController: viewControllerToHide
+					  toViewController: viewControllerToShow
+							  duration: 0.23232323f
+							   options: options
+							animations:^{ } completion:^(BOOL finished) {
+		
+		if (!finished) return;
+		
+		[viewControllerToHide removeFromParentViewController];
+		[viewControllerToShow didMoveToParentViewController:self];
+		[((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:self];
+		
+		
+	}];
+	
 }
 
 #pragma mark -
 #pragma mark Accessors
 
 - (void)setClearsBackground:(BOOL)clearsBackground {
-    _clearsBackground = clearsBackground;
-    self.layout.clearsBackground = clearsBackground;
-    self.format.clearsBackground = clearsBackground;
-    for (UIViewController <MADToolboxDisplayProtocol> *viewController in self.styleNavigationController.viewControllers) {
-        viewController.clearsBackground = clearsBackground;
-    }
+	_clearsBackground = clearsBackground;
+	self.layout.clearsBackground = clearsBackground;
+	self.format.clearsBackground = clearsBackground;
+	for (UIViewController <MADToolboxDisplayProtocol> *viewController in self.styleNavigationController.viewControllers) {
+		viewController.clearsBackground = clearsBackground;
+	}
 }
 
 - (IBAction)done:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (MADToolboxPanel *)delegateForController:(UIViewController *)controller {
-    MADToolboxPanel *delegate;
-    if ([controller isKindOfClass:[UINavigationController class]]) {
-        delegate = (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
-    } else {
-        delegate = (MADToolboxPanel *)controller;
-    }
-    return delegate;
+	MADToolboxPanel *delegate;
+	if ([controller isKindOfClass:[UINavigationController class]]) {
+		delegate = (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
+	} else {
+		delegate = (MADToolboxPanel *)controller;
+	}
+	return delegate;
 }
 
 #pragma mark -
 #pragma mark KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary <NSKeyValueChangeKey, id> *)change
-                       context:(void *)context {
-    
-    if ([keyPath isEqualToString:[MADToolboxViewController keyPathDocument]]) {
-    
-        id <MADViewControllerDocumentProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
-        [delegate setDocument:self.document];
-
-    } else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
-        
-        id <MADToolboxControllerProtocol> delegate;
-        delegate = [self delegateForController:self.childViewControllers.firstObject];
-        [delegate setSelectedDocumentObjects:self.selectedElementIDs];
-    
-    }
+					  ofObject:(id)object
+						change:(NSDictionary <NSKeyValueChangeKey, id> *)change
+					   context:(void *)context {
+	
+	if ([keyPath isEqualToString:NSStringFromSelector(@selector(document))]) {
+		
+		id <MADViewControllerDocumentProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
+		[delegate setDocument:self.document];
+		
+	} else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
+		
+		id <MADToolboxControllerProtocol> delegate;
+		delegate = [self delegateForController:self.childViewControllers.firstObject];
+		[delegate setSelectedDocumentObjects:self.selectedElementIDs];
+		
+	}
 }
 
 #pragma mark -
 #pragma mark Accessors
 
 - (IBAction)valueChanged:(id)sender {
-
-    UIViewController *viewControllerToShow = nil;
-    MADToolboxPanel *viewControllerToUpdate = nil;
-    UIViewAnimationOptions options;
-
-    switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
-    
-        case 0:
-            
-            [self showStyleViewController];   //Handles this case alone...
-            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
-            return;
-            
-            break;
-            
-        case 1:
-            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
-            viewControllerToShow = self.layout;
-            viewControllerToUpdate = self.layout;
-            break;
-            
-        case 2:
-            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
-            viewControllerToShow = self.format;
-            viewControllerToUpdate = self.format;
-            break;
-            
-        default:
-            self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
-            viewControllerToShow = self.layout;
-            viewControllerToUpdate = self.layout;
-            break;
-    }
-
-    self.currentViewController = viewControllerToShow;
-    
-    options = UIViewAnimationOptionTransitionCrossDissolve;
-    viewControllerToUpdate.document = self.document;
-    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
-    viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
-    
-    UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
-
-    viewControllerToShow.view.frame = self.view.bounds;
-    
-    MADToolboxViewController * __weak weakself = self;
-    [self addChildViewController:viewControllerToShow];
-    [viewControllerToHide willMoveToParentViewController:nil];
-    [viewControllerToShow beginAppearanceTransition:YES animated:YES];
-    
-    
-    [self transitionFromViewController: viewControllerToHide
-                      toViewController: viewControllerToShow
-                              duration: 0.23232323f
-                               options: options
-                            animations:^{
-                                
-                            } completion:^(BOOL finished) {
-                                if (finished) {
-                                    [viewControllerToHide removeFromParentViewController];
-                                    [viewControllerToShow didMoveToParentViewController:weakself];
-                                    [viewControllerToShow endAppearanceTransition];
-                                }
-                            }];
+	
+	UIViewController *viewControllerToShow = nil;
+	MADToolboxPanel *viewControllerToUpdate = nil;
+	
+	switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
+			
+		case 0:
+			[self showStyleViewController];   //Handles this case alone...
+			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			return;
+			break;
+			
+		case 1:
+			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			viewControllerToShow = self.layout;
+			viewControllerToUpdate = self.layout;
+			break;
+			
+		case 2:
+			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			viewControllerToShow = self.format;
+			viewControllerToUpdate = self.format;
+			break;
+			
+		default:
+			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			viewControllerToShow = self.layout;
+			viewControllerToUpdate = self.layout;
+			break;
+	}
+	
+	self.currentViewController = viewControllerToShow;
+	
+	UIViewAnimationOptions options = UIViewAnimationOptionTransitionCrossDissolve;
+	viewControllerToUpdate.document = self.document;
+	[viewControllerToUpdate setSelectedDocumentObjects: self.selectedElementIDs];
+	viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+	viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
+	
+	UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
+	
+	viewControllerToShow.view.frame = self.view.bounds;
+	
+	MADToolboxViewController * __weak weakself = self;
+	[self addChildViewController:viewControllerToShow];
+	[viewControllerToHide willMoveToParentViewController:nil];
+	[viewControllerToShow beginAppearanceTransition:YES animated:YES];
+	
+	
+	[self transitionFromViewController: viewControllerToHide
+					  toViewController: viewControllerToShow
+							  duration: 0.23232323f
+							   options: options
+							animations:^{
+		
+	} completion:^(BOOL finished) {
+		if (finished) {
+			[viewControllerToHide removeFromParentViewController];
+			[viewControllerToShow didMoveToParentViewController:weakself];
+			[viewControllerToShow endAppearanceTransition];
+		}
+	}];
 }
 
 #pragma mark -
 #pragma mark Accessibility
 
 - (BOOL)accessibilityPerformEscape {
-    return [self.navigationController.presentationController accessibilityPerformEscape];
+	return [self.navigationController.presentationController accessibilityPerformEscape];
 }
 
 @end
