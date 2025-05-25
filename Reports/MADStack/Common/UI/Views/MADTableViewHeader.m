@@ -112,4 +112,15 @@
     return self;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
+		if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+			self.backgroundColor = [UIColor secondarySystemBackgroundColor];
+		} else {
+			self.backgroundColor = [MADColorEverydayApps newColorHeaderColor];
+		}
+	}
+}
+
 @end

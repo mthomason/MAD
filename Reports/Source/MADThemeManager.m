@@ -17,6 +17,9 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIToolbar.h>
+#import <UIKit/UITabBarController.h>
+#import <UIKit/UITabBarAppearance.h>
+#import <UIKit/UIBarAppearance.h>
 
 @implementation MADThemeManager
 
@@ -95,6 +98,59 @@
 		navigationController.toolbar.scrollEdgeAppearance = toolbarAppearance;
 	}
 	[navigationController.view setNeedsLayout];
+}
+
++ (void)applyAppearanceToTabBarController:(UITabBarController *)tabBarController
+						  traitCollection:(UITraitCollection *)traitCollection {
+	UITabBarAppearance *tabBarAppearance = [[UITabBarAppearance alloc] init];
+	
+	// Create a single UITabBarItemAppearance instance
+	UITabBarItemAppearance *itemAppearance = [[UITabBarItemAppearance alloc] init];
+	
+	if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+		[tabBarAppearance configureWithTransparentBackground];
+		tabBarAppearance.backgroundColor = [UIColor clearColor];
+		tabBarAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemMaterialDark];
+		
+		// Configure UNSELECTED state directly on itemAppearance.normal
+		[itemAppearance.normal setTitleTextAttributes:@{
+			NSForegroundColorAttributeName: [UIColor lightGrayColor]
+		}];
+		itemAppearance.normal.iconColor = [UIColor lightGrayColor];
+		
+		// Configure SELECTED state directly on itemAppearance.selected
+		[itemAppearance.selected setTitleTextAttributes:@{
+			NSForegroundColorAttributeName: [UIColor systemBlueColor]
+		}];
+		itemAppearance.selected.iconColor = [UIColor systemBlueColor];
+		
+	} else { // Light mode
+		[tabBarAppearance configureWithOpaqueBackground];
+		tabBarAppearance.backgroundColor = [MADColorEverydayApps newColorBlue];
+		
+		// Configure UNSELECTED state directly on itemAppearance.normal
+		[itemAppearance.normal setTitleTextAttributes:@{
+			NSForegroundColorAttributeName: [[MADColorEverydayApps newColorWhite] colorWithAlphaComponent:0.7]
+		}];
+		itemAppearance.normal.iconColor = [[MADColorEverydayApps newColorWhite] colorWithAlphaComponent:0.7];
+		
+		// Configure SELECTED state directly on itemAppearance.selected
+		[itemAppearance.selected setTitleTextAttributes:@{
+			NSForegroundColorAttributeName: [MADColorEverydayApps newColorWhite]
+		}];
+		itemAppearance.selected.iconColor = [MADColorEverydayApps newColorWhite];
+	}
+	
+	// Assign the configured itemAppearance (which now includes both normal and selected states)
+	// to the relevant layout appearances on the main tabBarAppearance.
+	tabBarAppearance.stackedLayoutAppearance = itemAppearance;
+	tabBarAppearance.inlineLayoutAppearance = itemAppearance; // If you might use other layouts
+	tabBarAppearance.compactInlineLayoutAppearance = itemAppearance; // If you might use other layouts
+	
+	tabBarController.tabBar.standardAppearance = tabBarAppearance;
+	if (@available(iOS 15.0, *)) {
+		tabBarController.tabBar.scrollEdgeAppearance = tabBarAppearance;
+	}
 }
 
 @end

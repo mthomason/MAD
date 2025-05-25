@@ -30,9 +30,7 @@
 
 @implementation MADOperationInstallSampleDocument
 
-- (void)dealloc {
-	//NSLog(@"dealloc MADOperationInstallSampleDocument");
-}
+- (void)dealloc { }
 
 - (instancetype)initWithFilename:(NSString *)filename fileExtension:(NSString *)fileExtension
 				 groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {

@@ -13,19 +13,17 @@
 #import "MADViewControllerDocumentProtocol.h"
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 
-@class MADocument, MADQueryBuilderSplitViewController, MADDesignerViewController,
-	   MADViewerController;
+@class MADocument, MADQueryBuilderSplitViewController, MADDesignerViewController, MADViewerController;
 
-@interface MADTabBarController : UITabBarController
-	<MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
+@interface MADTabBarController : UITabBarController <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
 
-	+ (instancetype)newTabBarController:(MADocument *)document
-								 prompt:(NSString *)prompt;
++ (instancetype)newTabBarController:(MADocument *)document
+							 prompt:(NSString *)prompt;
 
-	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-	- (void)enableTabBarItems;
-	- (void)disableTabBarItems;
+- (void)enableTabBarItems;
+- (void)disableTabBarItems;
 
 @end
 

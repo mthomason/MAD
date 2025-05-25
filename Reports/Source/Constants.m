@@ -34,4 +34,3 @@ NSString * const MTPersistentStoreAliasUserPreferences              = @"preferen
 NSString * const TEMPLATES                                          = @"Templates";
 
 const CGFloat MNSTableViewCellQueryInputHeightDefault = 100.0000f;
-const CGFloat MNSTableViewCellQueryLinkHeightDefault = 50.0000f;

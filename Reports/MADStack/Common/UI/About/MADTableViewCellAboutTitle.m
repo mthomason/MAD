@@ -8,28 +8,25 @@
 
 #import "MADTableViewCellAboutTitle.h"
 #import <UIKit/UILabel.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADTableViewCellAboutTitle
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        [self initalize];
-    }
-    return self;
+	if ((self = [super initWithCoder:aDecoder])) {
+		self.textLabel.textColor = [UIColor labelColor];
+		self.detailTextLabel.text = @"";
+		self.textLabel.numberOfLines = 0;
+	}
+	return self;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        [self initalize];
-    }
-    return self;
-}
-
-- (void)initalize {
-    self.detailTextLabel.text = @"";
-    self.tintColor = [MADColorEverydayApps newColorBlackTwentyFivePercent];
-    self.textLabel.numberOfLines = 0;
+	if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
+		self.textLabel.textColor = [UIColor labelColor];
+		self.detailTextLabel.text = @"";
+		self.textLabel.numberOfLines = 0;
+	}
+	return self;
 }
 
 @end

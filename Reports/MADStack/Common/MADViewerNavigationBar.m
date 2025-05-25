@@ -10,7 +10,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADViewerNavigationBar
-
+/*
 + (void)initialize {
     [super initialize];
     if (self == [MADViewerNavigationBar self]) {
@@ -22,5 +22,5 @@
 - (UIBarStyle)barStyle {
     return UIBarStyleBlack;
 }
-
+*/
 @end

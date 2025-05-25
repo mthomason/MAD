@@ -7,6 +7,7 @@
 //
 
 #import "MADTableViewCellQueryInstructions.h"
+#import <UIKit/UILabel.h>
 
 @implementation MADTableViewCellQueryInstructions
 
@@ -16,7 +17,9 @@
 		
 		[self setBackgroundView: nil];
 		[self setSelectedBackgroundView: nil];
-		
+		[self setBackgroundColor:[UIColor systemGroupedBackgroundColor]];
+		self.textLabel.textColor = [UIColor labelColor];
+
 	}
 	return self;
 }
@@ -29,6 +32,9 @@
 		
 		[self setBackgroundView: nil];
 		[self setSelectedBackgroundView: nil];
+		[self setBackgroundColor:[UIColor systemGroupedBackgroundColor]];
+		self.textLabel.textColor = [UIColor labelColor];
+
 		
 	}
 	return self;

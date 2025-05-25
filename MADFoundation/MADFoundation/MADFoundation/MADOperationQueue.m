@@ -87,8 +87,6 @@
 #pragma mark - Dependency Management
 
 - (void)addConditionDependenciesForOperation:(nonnull MADOperation *)operation {
-	os_log_info(GetFoundationLog(), "%s %@", __PRETTY_FUNCTION__, operation.name);
-
 	NSMutableArray<NSOperation *> *dependencies = [NSMutableArray arrayWithCapacity:operation.conditions.count];
 	for (id<MADOperationCondition> condition in operation.conditions) {
 		NSOperation *dependency = [condition dependencyForOperation:operation];
@@ -106,8 +104,6 @@
 #pragma mark - Mutual Exclusivity
 
 - (void)enforceMutualExclusivityForOperation:(nonnull MADOperation *)operation {
-	os_log_info(GetFoundationLog(), "%s %@", __PRETTY_FUNCTION__, operation.name);
-
 	NSMutableArray<NSString *> *concurrencyCategories = [NSMutableArray array];
 	for (id<MADOperationCondition> condition in operation.conditions) {
 		if ([condition isMutuallyExclusive]) {
@@ -132,8 +128,6 @@
 #pragma mark - Batch Operations
 
 - (void)addOperations:(nonnull NSArray<NSOperation *> *)ops waitUntilFinished:(BOOL)wait {
-	os_log_info(GetFoundationLog(), "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
-
 	for (NSOperation * op in ops) {
 		[self addOperation:op];
 	}

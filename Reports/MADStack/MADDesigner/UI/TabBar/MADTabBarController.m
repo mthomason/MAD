@@ -19,8 +19,7 @@
 
 #import "MADQueryBuilderSplitViewController.h"
 
-@interface MADTabBarController ()
-	<UITabBarControllerDelegate>
+@interface MADTabBarController () <UITabBarControllerDelegate>
 
 @end
 
@@ -32,11 +31,8 @@
 @synthesize document = _document;
 
 + (instancetype)newTabBarController:(MADocument *)document prompt:(NSString *)prompt {
-	
-	UIStoryboard *storyboard;
-	id controller;
-	storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: [NSBundle mainBundle]];
-	controller = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: [NSBundle mainBundle]];
+	id controller = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
 	return controller;
 }
 
@@ -75,42 +71,33 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
 	self.delegate = self;
-
-	self.view.backgroundColor = [UIColor purpleColor];
+	//self.view.backgroundColor = [UIColor purpleColor];
 	self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-	
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
 	MADocument *document = self.document;
-	
-	MADQueryBuilderSplitViewController *splitViewController;
-	MADNavigationController *navControllerViewer;
-	MADNavigationController *navControllerDesigner;
-	
+		
 	NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
 	tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
 	
-	splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
+	MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
 	[tabBarViewControllers addObject: splitViewController];
 	
-	navControllerDesigner = [MADNavigationController newNavigationController:MADNavigationControllerTypeDesigner];
+	MADNavigationController *navControllerDesigner = [MADNavigationController newNavigationController:MADNavigationControllerTypeDesigner];
 	navControllerDesigner.document = document;
 	[tabBarViewControllers addObject: navControllerDesigner];
 	
-	navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
+	MADNavigationController *navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
 	navControllerViewer.document = document;
 	[tabBarViewControllers addObject: navControllerViewer];
 
-	id <MADViewControllerStandardProtocol> delegate;
-	delegate = self.viewControllerDelegate;
+	id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
 
 	navControllerViewer.viewControllerDelegate = delegate;
 	splitViewController.viewControllerDelegate = delegate;
@@ -144,13 +131,12 @@
 	[super viewWillDisappear:animated];
 	
 	UINavigationItem *navigationItem = self.navigationItem;
-
-	if (navigationItem.leftBarButtonItem)
+	if (navigationItem.leftBarButtonItem) {
 		[navigationItem setLeftBarButtonItem: nil animated: animated];
-
-	if (navigationItem.rightBarButtonItem)
+	}
+	if (navigationItem.rightBarButtonItem) {
 		[navigationItem setRightBarButtonItem: nil animated: animated];
-
+	}
 	for (id viewController in self.viewControllers) {
 		if ([viewController isKindOfClass:[UINavigationController class]]) {
 			[((UINavigationController *)viewController) dismissViewControllerAnimated:animated completion:^{
@@ -186,8 +172,7 @@
 #pragma mark -
 #pragma mark UITabBarControllerDelegate
 
-- (BOOL)tabBarController:(UITabBarController *)tabBarController
-	shouldSelectViewController:(UIViewController *)viewController {
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
 	
 	if ([viewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
 		id document = ((id <MADViewControllerDocumentProtocol>)tabBarController).document;
@@ -199,8 +184,7 @@
 	return YES;
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController
- didSelectViewController:(UIViewController *)viewController {
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
 	const int8_t MADIndexQuery = 0;
 	const int8_t MADIndexDesigner = 1;
 	const int8_t MADIndexViewer = 2;
@@ -251,52 +235,22 @@
 	UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
 	
 	UIView *containerView = transitionContext.containerView;
-	UIView *fromView;
-	UIView *toView;
-	
-	// In iOS 8, the viewForKey: method was introduced to get views that the
-	// animator manipulates.  This method should be preferred over accessing
-	// the view of the fromViewController/toViewController directly.
-	//if ([transitionContext respondsToSelector:@selector(viewForKey:)]) {
-		fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
-		toView = [transitionContext viewForKey:UITransitionContextToViewKey];
-	//} else {
-	//    fromView = fromViewController.view;
-	//    toView = toViewController.view;
-	//}
-	
+	UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
+	UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
 	CGRect fromFrame = [transitionContext initialFrameForViewController:fromViewController];
 	CGRect toFrame = [transitionContext finalFrameForViewController:toViewController];
-	
-	// Based on the configured targetEdge, derive a normalized vector that will
-	// be used to offset the frame of the view controllers.
-	CGVector offset;
-	//if (self.targetEdge == UIRectEdgeLeft)
-	//    offset = CGVectorMake(-1.f, 0.f);
-	//else if (self.targetEdge == UIRectEdgeRight)
-	offset = CGVectorMake(1.f, 0.f);
-	//else
-	//    NSAssert(NO, @"targetEdge must be one of UIRectEdgeLeft, or UIRectEdgeRight.");
-	
-	// The toView starts off-screen and slides in as the fromView slides out.
+	CGVector offset = CGVectorMake(1.f, 0.f);
+
 	fromView.frame = fromFrame;
-	toView.frame = CGRectOffset(toFrame, toFrame.size.width * offset.dx * -1,
-								toFrame.size.height * offset.dy * -1);
-	
-	// We are responsible for adding the incoming view to the containerView.
+	toView.frame = CGRectOffset(toFrame, toFrame.size.width * offset.dx * -1, toFrame.size.height * offset.dy * -1);
 	[containerView addSubview:toView];
 	
 	NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
-	
 	[UIView animateWithDuration:transitionDuration animations:^{
-		fromView.frame = CGRectOffset(fromFrame, fromFrame.size.width * offset.dx,
-									  fromFrame.size.height * offset.dy);
+		fromView.frame = CGRectOffset(fromFrame, fromFrame.size.width * offset.dx, fromFrame.size.height * offset.dy);
 		toView.frame = toFrame;
 	} completion:^(BOOL finished) {
 		BOOL wasCancelled = [transitionContext transitionWasCancelled];
-		// When we complete, tell the transition context
-		// passing along the BOOL that indicates whether the transition
-		// finished or not.
 		[transitionContext completeTransition:!wasCancelled];
 	}];
 }

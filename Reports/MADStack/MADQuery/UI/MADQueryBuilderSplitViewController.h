@@ -17,13 +17,9 @@
 @class MADQueryVisualizationViewController, MADNavigationControllerQueryBuilder,
 	   MADQueryViewController, MADocument, MADNavigationControllerQueryVisualization;
 
-@interface MADQueryBuilderSplitViewController : UISplitViewController
-	<MADViewControllerStandardProtocol,
-		MADViewControllerDocumentProtocol,
-		MADTabBarImageProtocol>
+@interface MADQueryBuilderSplitViewController : UISplitViewController <MADViewControllerStandardProtocol, MADViewControllerDocumentProtocol, MADTabBarImageProtocol>
 
 	+ (instancetype)newQueryBuilderSplitViewController:(MADocument *)document;
-
 	- (IBAction)redrawQueryVisualization:(id)sender;
 
 	@property (readwrite, nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;

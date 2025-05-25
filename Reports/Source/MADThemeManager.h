@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 
-@class UINavigationController, UITraitCollection;
+@class UINavigationController, UITabBarController, UITraitCollection;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)applyAppearanceToNavigationController:(UINavigationController *)navigationController
 							  traitCollection:(UITraitCollection *)traitCollection;
+
++ (void)applyAppearanceToTabBarController:(UITabBarController *)tabBarController
+						  traitCollection:(UITraitCollection *)traitCollection;
 
 @end
 

@@ -26,7 +26,6 @@
 #import <MAD/MADocument.h>
 
 #import <UIKit/UIAccessibility.h>
-#import <UIKit/UITabBarController.h>
 #import <UIKit/UINavigationController.h>
 
 static const CGFloat PageEdgeInsetMargin = 3.0;

@@ -243,8 +243,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	
 	self.view.backgroundColor = [UIColor lightGrayColor];
 
-	self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-	self.navigationController.toolbar.tintColor    = [MADColorEverydayApps newColorWhite];
+//	self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
+//	self.navigationController.toolbar.tintColor    = [MADColorEverydayApps newColorWhite];
 
 	_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
 	self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -644,10 +644,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	
 	NSArray *applicationActivities = [[NSArray alloc] initWithObjects: printPreview, nil];
 	
-	UIActivityViewController *activityViewController;
-	activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
-															   applicationActivities:applicationActivities];
-	
+	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
+																						 applicationActivities:applicationActivities];
+
 	MADViewerController * __weak weakself = self;
 
 	activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
@@ -667,8 +666,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 				
 				if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
 					
-					UIPrintInteractionController *sharedController;
-					sharedController = [UIPrintInteractionController sharedPrintController];
+					UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
 					
 					if (sharedController) {
 						

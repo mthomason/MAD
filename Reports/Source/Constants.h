@@ -40,7 +40,6 @@ extern const CGFloat MNSAnimationDurationNormal;
 extern const CGFloat MNSAnimationDurationNone;
 
 extern const CGFloat MNSTableViewCellQueryInputHeightDefault;
-extern const CGFloat MNSTableViewCellQueryLinkHeightDefault;
 
 extern const CGFloat MNSDocumentHeight;
 

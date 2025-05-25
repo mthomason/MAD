@@ -13,13 +13,14 @@
 @implementation MADTableViewCellQueryLink
 
 + (CGFloat)defaultHeight {
-	return MNSTableViewCellQueryLinkHeightDefault;
+	return 50.0;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
 			  reuseIdentifier:(NSString *)reuseIdentifier {
 	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
 		self.textLabel.numberOfLines = 0;
+		self.textLabel.textColor = [UIColor labelColor];
 	}
 	return self;
 }
@@ -27,6 +28,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
 		self.textLabel.numberOfLines = 0;
+		self.textLabel.textColor = [UIColor labelColor];
 	}
 	return self;
 }

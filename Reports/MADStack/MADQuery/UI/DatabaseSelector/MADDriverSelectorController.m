@@ -92,8 +92,7 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 		default:
 			break;
 	}
-	UIColor *newBlue = [MADColorEverydayApps newColorBlue];
-	[UITableViewCell appearance].textLabel.highlightedTextColor = newBlue;
+	[UITableViewCell appearance].textLabel.highlightedTextColor = [MADColorEverydayApps newColorBlue];
 	return cell;
 }
 

@@ -141,7 +141,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 	
 	self.toolbar.backgroundColor = [UIColor darkGrayColor];
 	
-	self.view.layer.shadowColor = [MADColorEverydayApps newColorBlueDark].CGColor;
+	//self.view.layer.shadowColor = [MADColorEverydayApps newColorBlueDark].CGColor;
 	self.view.layer.shadowOpacity = 1.0;
 	self.view.layer.shadowRadius = 1.0;
 	self.view.layer.shadowOffset = CGSizeMake(5.0, 5.0);

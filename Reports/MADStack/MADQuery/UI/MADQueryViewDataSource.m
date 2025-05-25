@@ -376,16 +376,10 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 			NSString *databaseType = db.driverID.copy;
 			NSString *schemaName = db.schemaName.copy;
 			
-			NSString *TextFormatConnection = @"You are connecting to %1$@"
-			@" datasource named %2$@.";
-			NSString *localizedMessageFormat;
-			NSString *localizedMessage;
-			NSAttributedString *message;
-			localizedMessageFormat = NSLocalizedString(TextFormatConnection, TextFormatConnection);
-			localizedMessage = [[NSString alloc] initWithFormat:localizedMessageFormat, databaseType, schemaName];
-			message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
-																								 databaseType: databaseType
-																								   schemaName: schemaName];
+			NSString *localizedMessage = [[NSString alloc] initWithFormat:NSLocalizedString(@"You are connecting to %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@."), databaseType, schemaName];
+			NSAttributedString *message = [MADAttributedStringQueryController newAttributedStringQuerySectionDatasourceForMessage: localizedMessage
+																													 databaseType: databaseType
+																													   schemaName: schemaName];
 			cell.textLabel.attributedText = message;
 			cell.textLabel.text = localizedMessage;
 			break;

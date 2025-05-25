@@ -10,7 +10,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADQueryNavigationBar
-
+/*
 + (void)initialize {
     [super initialize];
     if (self == [MADQueryNavigationBar self]) {
@@ -22,5 +22,5 @@
 - (UIBarStyle)barStyle {
     return UIBarStyleBlack;
 }
-
+*/
 @end
