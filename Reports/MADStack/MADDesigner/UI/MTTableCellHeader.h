@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 3/25/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_MTTableCellHeader_Extras_h
@@ -15,7 +15,7 @@
 
 @interface MADTableCellHeader : UICollectionReusableView
 
-	@property (nonatomic, strong, readonly) UILabel *label;
+@property (nonatomic, strong, readonly) UILabel *label;
 
 @end
 

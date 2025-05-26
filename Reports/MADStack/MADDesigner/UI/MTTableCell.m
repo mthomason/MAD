@@ -33,10 +33,9 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		UIColor *color = [UIColor darkGrayColor];
 		UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
-		
-		lbl.backgroundColor = [UIColor whiteColor];
+		lbl.backgroundColor = [UIColor systemBackgroundColor];
+		lbl.textColor = [UIColor labelColor];
 		
 		[self.contentView addSubview:lbl];
 		lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
@@ -46,7 +45,7 @@
 								UIViewAutoresizingFlexibleRightMargin |
 								UIViewAutoresizingFlexibleLeftMargin;
 		self.contentView.layer.borderWidth = 1.0000f;
-		self.contentView.layer.borderColor = color.CGColor;
+		self.contentView.layer.borderColor = [[UIColor secondarySystemBackgroundColor] CGColor];
 		self.label = lbl;
 	}
 	return self;

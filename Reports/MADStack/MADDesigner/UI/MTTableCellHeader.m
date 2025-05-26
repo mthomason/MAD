@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 3/25/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -48,21 +48,14 @@
 
 - (void)initialize {
 	UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
-	UIColor *bgcolor = [MADColorEverydayApps newColorBlue];
-	UIColor *textColor = [MADColorEverydayApps newColorWhite];
-	lbl.backgroundColor = bgcolor;
-	lbl.textColor = textColor;
-	lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
-						   UIViewAutoresizingFlexibleWidth |
-						   UIViewAutoresizingFlexibleTopMargin |
-						   UIViewAutoresizingFlexibleBottomMargin |
-						   UIViewAutoresizingFlexibleRightMargin |
-						   UIViewAutoresizingFlexibleLeftMargin;
-
+	lbl.backgroundColor = [MADColorEverydayApps blueHeaderSecondaryColor];
+	lbl.textColor = [UIColor labelColor];
+	lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin |
+						   UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
 	[self addSubview:lbl];
 	self.label = lbl;
 	self.layer.borderWidth = 1.0000f;
-	self.layer.borderColor = bgcolor.CGColor;
+	self.layer.borderColor = [[UIColor secondarySystemBackgroundColor] CGColor];
 }
 
 @end
