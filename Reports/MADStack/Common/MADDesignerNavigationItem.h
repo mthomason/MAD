@@ -9,7 +9,7 @@
 #ifndef MAD_MADDesignerNavigationItem_h
 #define MAD_MADDesignerNavigationItem_h
 
-#import <UIKit/UINavigationBar.h>
+#import <UIKit/UINavigationItem.h>
 
 @interface MADDesignerNavigationItem : UINavigationItem
 

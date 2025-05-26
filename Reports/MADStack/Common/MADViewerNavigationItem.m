@@ -13,32 +13,26 @@
 @implementation MADViewerNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *hint = NSLocalizedString(@"View your report.", @"Hint");
-        NSString *title;
-        title = NSLocalizedString(@"MAD Viewer",
-                                  @"Title for the store... list program features. ");
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = hint;
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        
-        self.titleView = titleView;
-        self.title = title;
-        self.leftItemsSupplementBackButton = YES;
-        
-        UIBarButtonItem *doneButton;
-        doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                   target: nil
-                                                                   action: @selector(done:)];
-        self.leftBarButtonItem = doneButton;
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"MAD Viewer", @"Title for the store... list program features. ");
+		titleView.accessibilityHint = NSLocalizedString(@"View your report.", @"Hint");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"MAD Viewer", @"Title for the store... list program features. ");
+		self.leftItemsSupplementBackButton = YES;
+		
+		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+																					target: nil
+																					action: @selector(done:)];
+		self.leftBarButtonItem = doneButton;
+	}
+	return self;
 }
 
 - (void)done:(nullable id)sender {
-    @throw NSInternalInconsistencyException;
+	@throw NSInternalInconsistencyException;
 }
 
 @end

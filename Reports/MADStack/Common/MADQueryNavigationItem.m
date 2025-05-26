@@ -27,10 +27,10 @@
 		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
 																					target: nil
 																					action: @selector(done:)];
+		self.leftBarButtonItem = doneButton;
 		UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
 																					target: self
 																					action: @selector(actionEdit:)];
-		self.leftBarButtonItem = doneButton;
 		self.rightBarButtonItem = editButton;
 	}
 	return self;

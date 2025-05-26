@@ -475,10 +475,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		[self.view.scroller removeConstraints:scrollerConstraints];
 	}
 	
-	self.view.scroller.container.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.3333f];
-	self.view.scroller.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:0.3333f];
-	self.view.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.3333f];
-	
+	self.view.scroller.container.backgroundColor = [UIColor secondarySystemBackgroundColor];
+	self.view.scroller.backgroundColor = [UIColor systemBackgroundColor];
+
 	UITapGestureRecognizer *tapGestureDoubleTap = self.view.scroller.doubleTapToZoom;
 	tapGestureDoubleTap.delegate =  self;
 	
@@ -489,10 +488,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	[self.view.scroller addGestureRecognizer:tap];
 	self.view.scroller.delegate = self;
 	self.strayTouchGesture = tap;
-	
-	//self.view.scroller.container.backgroundColor =   [UIColor greenColor];
-	//self.view.scroller.backgroundColor =             [UIColor blueColor];
-
+		
 	
 	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
 																			   containerLeft: self.view.scroller.container];

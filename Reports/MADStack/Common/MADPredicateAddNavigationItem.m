@@ -13,23 +13,17 @@
 @implementation MADPredicateAddNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *hint = NSLocalizedString(@"Add a condition to your report.", @"Hint");
-        NSString *title;
-        title = NSLocalizedString(@"Add Predicate",
-                                  @"Title for the add predicate screen. ");
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = hint;
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        
-        self.titleView = titleView;
-        self.title = title;
-        self.leftItemsSupplementBackButton = YES;
-        
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"Add Predicate", @"Title for the add predicate screen. ");
+		titleView.accessibilityHint = NSLocalizedString(@"Add a condition to your report.", @"Hint");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"Add Predicate", @"Title for the add predicate screen. ");
+		self.leftItemsSupplementBackButton = YES;
+		
+	}
+	return self;
 }
 
 @end

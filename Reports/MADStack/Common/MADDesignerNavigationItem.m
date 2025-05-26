@@ -7,38 +7,32 @@
 //
 
 #import "MADDesignerNavigationItem.h"
-#import <UIKit/UIAccessibility.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
+#import <UIKit/UIAccessibility.h>
 
 @implementation MADDesignerNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *hint = NSLocalizedString(@"Design the layout for your report.", @"Hint");
-        NSString *title;
-        title = NSLocalizedString(@"MAD Designer",
-                                  @"Title for the store... list program features. ");
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = hint;
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        
-        self.titleView = titleView;
-        self.title = title;
-        self.leftItemsSupplementBackButton = YES;
-        
-        UIBarButtonItem *doneButton;
-        doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-                                                                   target: nil
-                                                                   action: @selector(done:)];
-        self.leftBarButtonItem = doneButton;
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"MAD Designer", @"Title for the store... list program features. ");
+		titleView.accessibilityHint = NSLocalizedString(@"Design the layout for your report.", @"Hint");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"MAD Designer", @"Title for the store... list program features. ");
+		self.leftItemsSupplementBackButton = YES;
+		
+		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+																					target: nil
+																					action: @selector(done:)];
+		self.leftBarButtonItem = doneButton;
+	}
+	return self;
 }
 
 - (void)done:(nullable id)sender {
-    @throw NSInternalInconsistencyException;
+	@throw NSInternalInconsistencyException;
 }
 
 @end

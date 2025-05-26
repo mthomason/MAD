@@ -13,24 +13,18 @@
 @implementation MADPredicateFormatNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *hint = NSLocalizedString(@"What type of predicate would you like to use?",
-                                           @"Hint");
-        NSString *title;
-        title = NSLocalizedString(@"Predicate Format",
-                                  @"Title for the predicate format screen. ");
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = hint;
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        
-        self.titleView = titleView;
-        self.title = title;
-        self.leftItemsSupplementBackButton = YES;
-
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"Predicate Format", @"Title for the predicate format screen.");
+		titleView.accessibilityHint = NSLocalizedString(@"What type of predicate would you like to use?", @"Hint");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"Predicate Format", @"Title for the predicate format screen.");
+		self.leftItemsSupplementBackButton = YES;
+		
+	}
+	return self;
 }
 
 @end
