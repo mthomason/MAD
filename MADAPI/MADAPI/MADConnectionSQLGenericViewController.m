@@ -141,20 +141,12 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
-	//UITableViewHeaderFooterView *headerView = [self.tableView headerViewForSection:2];
-	//headerView.textLabel = NSLocalizedString(@"Database Settings", @"Database Settings")
-	
+		
 	self.actionSave = self.navigationItem.rightBarButtonItem.action;
 	self.actionSaveTarget = self.navigationItem.rightBarButtonItem.target;
 	
-	NSString *prompt = NSLocalizedString(@"Each report requires a database connection.",
-										 @"Each report requires a database connection.");
-	self.navigationItem.prompt = prompt;
-	
-	NSString *title = NSLocalizedString(@"Database Settings",
-										@"Database Settings");
-	self.title = title;
+	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.", @"Each report requires a database connection.");
+	self.title = NSLocalizedString(@"Database Settings", @"Database Settings");
 	
 	self.clearsSelectionOnViewWillAppear = YES;
 	
@@ -168,14 +160,14 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	NSString *databaseSettings = @"Database Settings";
 	titleView.text = NSLocalizedString(databaseSettings, databaseSettings);
 	self.navigationItem.titleView = titleView;
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	CGRect frameProgress, frameTable;
-	frameProgress = self.progressView.frame;
-	frameTable = self.tableView.frame;;
+	CGRect frameProgress = self.progressView.frame;
+	CGRect frameTable = self.tableView.frame;;
 	
 	self.progressView.frame = CGRectMake(frameProgress.origin.x, frameProgress.origin.y,
 										 frameTable.size.width, frameProgress.size.height);
@@ -207,8 +199,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 #pragma mark Progress Notifications
 
 - (void)objectDidUpdateProgress:(NSNotification *)sender {
-	MADProgress *progress;
-	progress = sender.userInfo[MADNotificationProgressKey];
+	MADProgress *progress = sender.userInfo[MADNotificationProgressKey];
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		self.progressView.progress = progress.progress;
 		self.navigationItem.prompt = progress.message.copy;
@@ -222,18 +213,18 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	[tableView deselectRowAtIndexPath: indexPath animated: NO];
 }
 
-- (void)tableView:(UITableView *)tableView
-willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	if (section == 1 && [view isKindOfClass:[UITableViewHeaderFooterView class]]) {
-		NSString *displaySettings = NSLocalizedString(@"Database Settings",
-													  @"Database Settings");
 		NSString *displayName = [self displayName];
 		if (displayName.length > 0) {
-			displaySettings = [[NSString alloc] initWithFormat:@"%@ %@",
-												displayName, displaySettings];
+			((UITableViewHeaderFooterView *)view).textLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", displayName, NSLocalizedString(@"Database Settings", @"Database Settings")];
 		}
-		((UITableViewHeaderFooterView *)view).textLabel.text = displaySettings;
 	}
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(nonnull UITableViewCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+	cell.textLabel.textColor = [UIColor labelColor];
+	cell.backgroundColor = [UIColor systemBackgroundColor];
 }
 
 #pragma mark -
@@ -241,9 +232,8 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
 	
-	UIViewController *viewControllerFrom, *viewControllerTo;
-	viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-	viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+	UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+	UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
 	transitionContext.containerView.backgroundColor = [UIColor clearColor];
 	[transitionContext.containerView setOpaque:NO];
 	viewControllerTo.view.bounds = viewControllerFrom.view.bounds;
@@ -251,10 +241,10 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	[transitionContext.containerView addSubview:viewControllerTo.view];
 	viewControllerTo.view.bounds = transitionContext.containerView.bounds;
 	viewControllerTo.view.center = transitionContext.containerView.center;
-	viewControllerTo.view.alpha = 0.0000f;
+	viewControllerTo.view.alpha = 0.0;
 	
-	[UIView animateWithDuration:0.4000f animations:^{
-		viewControllerTo.view.alpha = 1.0000f;
+	[UIView animateWithDuration:0.4 animations:^{
+		viewControllerTo.view.alpha = 1.0;
 		[transitionContext.containerView addSubview:viewControllerTo.view];
 	} completion:^(BOOL finished) {
 		[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
@@ -264,7 +254,7 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 - (void)animationEnded:(BOOL)transitionCompleted { }
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-	return 0.4000f;
+	return 0.4;
 }
 
 #pragma mark -
@@ -305,17 +295,11 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 
 - (void)showErrorLog:(MADErrorContainer *)errorContainer {
 	if (errorContainer && [errorContainer count] > 0) {
-		NSString *errorText = [errorContainer errorLogCompact];
-		
-		NSString *alertTitle = NSLocalizedString(@"Issues Encounterd", @"Alert Title 'Issues Encounterd'.");
-		NSString *alertButton = NSLocalizedString(@"Continue", @"Button 'Continue'");
-		
-		UIAlertController *alert;
-		alert = [UIAlertController alertControllerWithTitle: alertTitle
-													message: errorText
-											 preferredStyle: UIAlertControllerStyleAlert];
-		
-		UIAlertAction *ok = [UIAlertAction actionWithTitle: alertButton
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Issues Encounterd", @"Alert Title 'Issues Encounterd'.")
+																	   message: [errorContainer errorLogCompact]
+																preferredStyle: UIAlertControllerStyleAlert];
+
+		UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Button 'Continue'")
 													 style: UIAlertActionStyleDefault
 												   handler: nil];
 		[alert addAction:ok];
@@ -343,9 +327,7 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 
 - (IBAction)save:(id)sender {
 	NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
-	NSString *message = NSLocalizedString(@"Importing schema.",
-										  @"Importing schema.");
-	[self disableUserInteractionWithMessage:message];
+	[self disableUserInteractionWithMessage:NSLocalizedString(@"Importing schema.", @"Importing schema.")];
 	[self addObserverToObjectForProgress];
 	[self.delegate viewControllerDidFinish:self];
 }
@@ -378,8 +360,7 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 
 - (void)resetInterface {
 	[self removeObserverFromObjectForProgress];
-	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.",
-												   @"Each report requires a database connection.");
+	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.", @"Each report requires a database connection.");
 }
 
 #pragma mark Helpers
@@ -414,8 +395,7 @@ willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	
 	[self disableNavigation];
 	
-	UIActivityIndicatorView *activityIndicator;
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 	[activityIndicator startAnimating];
 	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = NO;

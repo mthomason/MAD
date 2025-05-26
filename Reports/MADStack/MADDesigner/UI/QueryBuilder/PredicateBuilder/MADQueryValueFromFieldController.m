@@ -326,6 +326,7 @@
 	MADCellTextInput *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
 	
 	(result.textField).returnKeyType = UIReturnKeyDone;
+	result.textField.textColor = [UIColor labelColor];
 	result.textField.delegate = self;
 	
 	self.textField = result.textField;

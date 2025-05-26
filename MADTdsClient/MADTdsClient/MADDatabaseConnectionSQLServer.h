@@ -12,11 +12,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-@interface MADDatabaseConnectionSQLServer : MADDatabaseConnection
-	<MADDatabaseConnectionConstructors,
-		MADDatabaseConnectionsProperties,
-		MADConnectionsPropertiesProtocol,
-		NSCopying>
+@interface MADDatabaseConnectionSQLServer : MADDatabaseConnection <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, MADConnectionsPropertiesProtocol, NSCopying>
 	
 	- (instancetype)initWithHost:(NSString *)host
 						  server:(NSString *)server

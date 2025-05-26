@@ -51,7 +51,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 #pragma mark -
 #pragma mark NSObject
-
+/*
 + (void)initialize {
 	[super initialize];
 	
@@ -68,6 +68,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 		}
 	}
 }
+*/
 
 + (void)viewController:(id)viewController
 		 displayErrors:(NSArray <__kindof NSError *> *)errors
@@ -129,13 +130,9 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	self.actionSave = self.navigationItem.rightBarButtonItem.action;
 	self.actionSaveTarget = self.navigationItem.rightBarButtonItem.target;
 	
-	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.",
-												   @"Each report requires a database connection.");
-	self.title = NSLocalizedString(@"Database Settings",
-								   @"Database Settings");
-
+	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.", @"Each report requires a database connection.");
+	self.title = NSLocalizedString(@"Database Settings", @"Database Settings");
 	self.clearsSelectionOnViewWillAppear = YES;
-	
 	self.navigationItem.hidesBackButton = NO;
 	self.navigationItem.leftItemsSupplementBackButton = YES;
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -150,12 +147,10 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	CGRect frameProgress, frameTable;
-	frameProgress = self.progressView.frame;
-	frameTable = self.tableView.frame;;
+	CGRect frameProgress = self.progressView.frame;
+	CGRect frameTable = self.tableView.frame;;
 	
-	self.progressView.frame = CGRectMake(frameProgress.origin.x, frameProgress.origin.y,
-										 frameTable.size.width, frameProgress.size.height);
+	self.progressView.frame = CGRectMake(frameProgress.origin.x, frameProgress.origin.y, frameTable.size.width, frameProgress.size.height);
 	[self.tableView addSubview:self.progressView];
 	
 }
@@ -184,8 +179,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 #pragma mark Progress Notifications
 
 - (void)objectDidUpdateProgress:(NSNotification *)sender {
-	MADProgress *progress;
-	progress = sender.userInfo[MADNotificationProgressKey];
+	MADProgress *progress = sender.userInfo[MADNotificationProgressKey];
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		self.progressView.progress = progress.progress;
 		self.navigationItem.prompt = progress.message.copy;
@@ -204,9 +198,8 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
 	
-	UIViewController *viewControllerFrom, *viewControllerTo;
-	viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-	viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+	UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+	UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
 	transitionContext.containerView.backgroundColor = [UIColor clearColor];
 	[transitionContext.containerView setOpaque:NO];
 	viewControllerTo.view.bounds = viewControllerFrom.view.bounds;
@@ -227,7 +220,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 - (void)animationEnded:(BOOL)transitionCompleted { }
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
-	return 0.4000f;
+	return 0.4;
 }
 
 #pragma mark -
@@ -270,20 +263,16 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	if (errorContainer && [errorContainer count] > 0) {
 		NSString *errorText = [errorContainer errorLogCompact];
 		
-		NSString *alertTitle = NSLocalizedString(@"Issues Encounterd",
-												 @"Alert Title 'Issues Encounterd'.");
-		NSString *alertButton = NSLocalizedString(@"Continue",
-												  @"Button 'Continue'");
+		NSString *alertTitle = NSLocalizedString(@"Issues Encounterd", @"Alert Title 'Issues Encounterd'.");
+		NSString *alertButton = NSLocalizedString(@"Continue", @"Button 'Continue'");
 		
-		UIAlertController *alert;
-		alert = [UIAlertController alertControllerWithTitle: alertTitle
-													message: errorText
-											 preferredStyle: UIAlertControllerStyleAlert];
-		
-		UIAlertAction *ok = [UIAlertAction actionWithTitle: alertButton
-													 style: UIAlertActionStyleDefault
-												   handler: nil];
-		[alert addAction:ok];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle: alertTitle
+																	   message: errorText
+																preferredStyle: UIAlertControllerStyleAlert];
+
+		[alert addAction:[UIAlertAction actionWithTitle: alertButton
+												  style: UIAlertActionStyleDefault
+												handler: nil]];
 		[self presentViewController:alert
 						   animated:YES
 						 completion:nil];
@@ -308,9 +297,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (IBAction)save:(id)sender {
 	NSAssert(sender != nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
-	NSString *message = NSLocalizedString(@"Importing schema.",
-										  @"Importing schema.");
-	[self disableUserInteractionWithMessage:message];
+	[self disableUserInteractionWithMessage:NSLocalizedString(@"Importing schema.", @"Importing schema.")];
 	[self addObserverToObjectForProgress];
 	[self.delegate viewControllerDidFinish:self];
 }
@@ -329,8 +316,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (void)resetInterface {
 	[self removeObserverFromObjectForProgress];
-	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.",
-												   @"Each report requires a database connection.");
+	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.", @"Each report requires a database connection.");
 }
 
 #pragma mark Helpers
@@ -356,8 +342,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	
 	[self disableNavigation];
 	
-	UIActivityIndicatorView *activityIndicator;
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 	[activityIndicator startAnimating];
 	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = NO;

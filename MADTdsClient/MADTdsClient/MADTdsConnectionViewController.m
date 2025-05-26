@@ -19,12 +19,10 @@
 #pragma mark Override Points
 
 - (MADDatabaseConnection *)databaseConnection {
-	MADDatabaseConnectionSQLServer *connection;
-	connection = [[MADDatabaseConnectionSQLServer alloc] initWithHost: self.textFieldHost.text
-															   server: self.textFieldHost.text
-															 database: self.textFieldDatabase.text
-															  andPort: self.textFieldPort.text.integerValue];
-	return connection;
+	return [[MADDatabaseConnectionSQLServer alloc] initWithHost: self.textFieldHost.text
+														 server: self.textFieldHost.text
+													   database: self.textFieldDatabase.text
+														andPort: self.textFieldPort.text.integerValue];
 }
 
 - (NSString *)displayName {
