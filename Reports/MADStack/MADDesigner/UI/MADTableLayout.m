@@ -15,20 +15,17 @@
 #import <UIKit/UITableView.h>
 #import <Foundation/NSIndexPath.h>
 
-static NSString * const MADTableCellHederKey = @"MADTableCellHeader";
-
-@interface MADTableLayout ()
-	<UICollectionViewDelegate>
+@interface MADTableLayout() <UICollectionViewDelegate>
 
 typedef struct _ColumnWidth {
 	CGFloat originX, width;
 } ColumnWidth;
 
-	@property (nonatomic, strong) NSMutableArray <NSValue *> *columnWidth;
-	@property (nonatomic, assign) NSUInteger rowCount;
-	@property (nonatomic, assign) NSUInteger columnCount;
-	@property (nonatomic, assign) CGFloat heightRow;
-	@property (nonatomic, assign) CGFloat heightHeader;
+@property (nonatomic, strong) NSMutableArray <NSValue *> *columnWidth;
+@property (nonatomic, assign) NSUInteger rowCount;
+@property (nonatomic, assign) NSUInteger columnCount;
+@property (nonatomic, assign) CGFloat heightRow;
+@property (nonatomic, assign) CGFloat heightHeader;
 
 @end
 
@@ -56,11 +53,7 @@ typedef struct _ColumnWidth {
 }
 
 - (void)initializeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
-	
-	self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width,
-																 CGSizeZero.height,
-																 CGSizeZero.width);
-	
+	self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
 	NSMutableArray *columnWidths = [NSMutableArray array];
 	self.columnWidth = columnWidths;
 	self.rowCount = rowCount;
@@ -106,9 +99,8 @@ typedef struct _ColumnWidth {
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
 																	 atIndexPath:(NSIndexPath *)indexPath {
 
-	UICollectionViewLayoutAttributes *supplementalAttributes;
-	supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: MADTableCellHederKey
-																							withIndexPath: indexPath];
+	UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: @"MADTableCellHeader"
+																															  withIndexPath: indexPath];
 	NSUInteger column = (NSUInteger)indexPath.row;
 	CGRect frame = [self locationOfHeaderAtColumn:column];
 	supplementalAttributes.frame = frame;
@@ -128,11 +120,9 @@ typedef struct _ColumnWidth {
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
 	NSUInteger column = [self columnForIndexPath:indexPath];
 	NSUInteger row = [self rowForIndexPath:indexPath];
-	CGRect elementFrame = [self locationOfObjectAtRow:row andColumn:column];
-	UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtRow: row
-																			andColumn: column
-																			withFrame: elementFrame];
-	return attributes;
+	return [self layoutAttributesForItemAtRow: row
+									andColumn: column
+									withFrame: [self locationOfObjectAtRow:row andColumn:column]];
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -194,15 +184,12 @@ typedef struct _ColumnWidth {
 	NSUInteger lastColumn = columnsToDisplay + firstColumn;
 	if (lastColumn > self.columnCount) lastColumn = self.columnCount;
 	
-	UICollectionViewLayoutAttributes *supplementalAttributes;
-	NSIndexPath *indexPath;
 	for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
-		indexPath = [NSIndexPath indexPathForItem:(NSInteger)colCounter inSection:0];
-		supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind: MADTableCellHederKey
-																	  atIndexPath: indexPath];
+		UICollectionViewLayoutAttributes *supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind: @"MADTableCellHeader"
+																										atIndexPath: [NSIndexPath indexPathForItem:(NSInteger)colCounter inSection:0]];
 		[layoutAttributes addObject:supplementalAttributes];
 	}
-	
+
 	NSUInteger lastRow = rowsToDisplay + firstRow;
 	if (lastRow > self.rowCount) lastRow = self.rowCount;
 	for (NSUInteger rowCounter = firstRow; rowCounter < lastRow; rowCounter++) {
@@ -325,7 +312,7 @@ typedef struct _ColumnWidth {
 }
 
 + (CGFloat)sumArrayOfFloats:(NSArray *)array toIndex:(NSUInteger)stopPoint {
-	__block CGFloat sum = 0.0000f;
+	__block CGFloat sum = 0.0;
 	block_enumerateObjectsUsingBlock blockSumFloats = ^(id obj, NSUInteger idx, BOOL *stop) {
 		sum += [obj floatValue];
 		if (idx == stopPoint) *stop = YES;

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 12/6/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MTShowSqlViewController_h
@@ -17,11 +17,11 @@
 
 @interface MADViewControllerSQL : UIViewController
 
-	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
-	@property (nonatomic, weak) MADocument *document;
-	@property (nonatomic, weak) IBOutlet UITextView *textView;
+@property (nonatomic, weak) id <MADViewControllerStandardProtocol> delegate;
+@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, weak) IBOutlet UITextView *textView;
 
-	- (IBAction)done:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 

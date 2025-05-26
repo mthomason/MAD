@@ -49,14 +49,14 @@
 
 		self.textView.text = @"";
 		
-		UIAlertController *alertController;
-		alertController = [MADAlertController newAlertControllerErrorEmptyQuery];
+		UIAlertController *alertController  = [MADAlertController newAlertControllerErrorEmptyQuery];
 		[self presentViewController: alertController
 						   animated: YES
 						 completion: nil];
 		
 
 	}
+	self.textView.textColor = [UIColor labelColor];
 }
 
 - (IBAction)done:(id)sender {

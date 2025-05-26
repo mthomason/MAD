@@ -40,6 +40,7 @@
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryViewDatasourceProtocol.h"
 #import "MADOperationGetCredentials.h"
+#import "MADThemeManager.h"
 #import "madlog.h"
 
 
@@ -94,19 +95,7 @@ static NSString * const NSFetchedResultsCachePredicates             = @"NSFetche
 
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
-//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL);
-//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL);
 BOOL storeEnabled(void);
-
-//static inline UITransitionContextViewControllerKey leftCntrollerKey(BOOL pushing) {
-//	return pushing ? UITransitionContextFromViewControllerKey :
-//					 UITransitionContextToViewControllerKey;
-//}
-//static inline UITransitionContextViewControllerKey rightControllerKey(BOOL pushing) {
-//	return pushing ? UITransitionContextToViewControllerKey :
-//					 UITransitionContextFromViewControllerKey;
-//}
-
 BOOL storeEnabled(void) {
 	return [MTStoreKitController sharedObject].reportingEnabled;
 }
@@ -120,9 +109,7 @@ BOOL storeEnabled(void) {
 @property (nonatomic, strong) MADQueryViewDelegate *queryViewDelegate;
 @property (nonatomic, strong) MADQueryViewCellConfigureHandler handleConfigureCell;
 @property (nonatomic, strong) MADOperationQueue *credentailsQueue;
-
 @property (nonatomic, readonly) MADTabBarController *tabBarController;
-
 @property (nonatomic, weak) UIPresentationController *showSQLPresentationController;
 
 @end
@@ -155,6 +142,7 @@ BOOL storeEnabled(void) {
 					  forControlEvents: UIControlEventValueChanged];
 			cell.accessoryView = switchQueryMode;
 			cell.textLabel.text = switchQueryMode.on ? NSLocalizedString(@"Reporting Mode", @"Reporting Mode") : NSLocalizedString(@"Designer Mode (limited)", @"Designer Mode (limited)");
+			cell.textLabel.textColor = [UIColor labelColor];
 			break;
 		}
 			
@@ -1279,12 +1267,10 @@ BOOL storeEnabled(void) {
 }
 
 - (IBAction)displaySQL:(id)sender {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQuery" bundle:nil];
-	UINavigationController *navigationController;
-	navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADQuerySQLNavigationController"];
+	UINavigationController *navigationController = [[UIStoryboard storyboardWithName:@"MADQuery" bundle:nil] instantiateViewControllerWithIdentifier:@"MADQuerySQLNavigationController"];
 	navigationController.modalPresentationStyle = UIModalPresentationPopover;
-	MADViewControllerSQL *viewController;
-	viewController = (MADViewControllerSQL *)navigationController.topViewController;
+	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
+	MADViewControllerSQL *viewController = (MADViewControllerSQL *)navigationController.topViewController;
 	viewController.document = self.document;
 	viewController.delegate = self;
 	UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
@@ -1299,38 +1285,26 @@ BOOL storeEnabled(void) {
 }
 
 - (void)addTable:(id)sender {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddTable" bundle:nil];
-	UINavigationController *navigationController;
-	navigationController = [storyboard instantiateInitialViewController];
-	navigationController.modalPresentationStyle =
-				self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
-														UIModalPresentationFormSheet :
-														UIModalPresentationOverFullScreen;
+	UINavigationController *navigationController = [[UIStoryboard storyboardWithName:@"MADQueryAddTable" bundle:nil] instantiateInitialViewController];
+	navigationController.modalPresentationStyle = self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationOverFullScreen;
 	UIPresentationController *pc = navigationController.presentationController;
 	pc.delegate = self;
 	
-	
-	MADQueryBuilderAddTableViewController *tvc;
-	tvc = (MADQueryBuilderAddTableViewController *)navigationController.topViewController;
+	MADQueryBuilderAddTableViewController *tvc = (MADQueryBuilderAddTableViewController *)navigationController.topViewController;
 	tvc.delegate = self;
 	tvc.managedObjectContext = self.document.managedObjectContext;
+
 	[self presentViewController:navigationController animated:YES completion:^{
 		[self.tabBarController disableTabBarItems];
 	}];
 }
 
 - (void)addLink:(id)sender {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddJoin" bundle:nil];
-	UINavigationController *navigationController;
-	navigationController = [storyboard instantiateInitialViewController];
-	navigationController.modalPresentationStyle =
-				self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
-														UIModalPresentationFormSheet :
-														UIModalPresentationOverFullScreen;
+	UINavigationController *navigationController = [[UIStoryboard storyboardWithName:@"MADQueryAddJoin" bundle:nil] instantiateInitialViewController];
+	navigationController.modalPresentationStyle = self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationOverFullScreen;
 	UIPresentationController *pc = navigationController.presentationController;
 	pc.delegate = self;
-	MADQueryLinkBuilderController *tvc;
-	tvc = (MADQueryLinkBuilderController *)navigationController.topViewController;
+	MADQueryLinkBuilderController *tvc = (MADQueryLinkBuilderController *)navigationController.topViewController;
 	tvc.queryLinkDelegate = self;
 	tvc.document = self.document;
 	[self presentViewController:navigationController animated:YES completion:^{
@@ -1339,17 +1313,11 @@ BOOL storeEnabled(void) {
 }
 
 - (void)addPredicate:(id)sender {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddPredicate" bundle:nil];
-	UINavigationController *navigationController;
-	navigationController = [storyboard instantiateInitialViewController];
-	navigationController.modalPresentationStyle =
-				self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
-														UIModalPresentationFormSheet :
-														UIModalPresentationOverFullScreen;
+	UINavigationController *navigationController = [[UIStoryboard storyboardWithName:@"MADQueryAddPredicate" bundle:nil] instantiateInitialViewController];
+	navigationController.modalPresentationStyle = self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationOverFullScreen;
 	UIPresentationController *pc = navigationController.presentationController;
 	pc.delegate = self;
-	MADQueryPredicateFormatController *tvc;
-	tvc = (MADQueryPredicateFormatController *)navigationController.topViewController;
+	MADQueryPredicateFormatController *tvc = (MADQueryPredicateFormatController *)navigationController.topViewController;
 	tvc.delegate = self;
 	tvc.document = self.document;
 	[self presentViewController:navigationController animated:YES completion:^{
@@ -1358,17 +1326,11 @@ BOOL storeEnabled(void) {
 }
 
 - (void)addGroup:(id)sender {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQueryAddGroup" bundle:nil];
-	UINavigationController *navigationController;
-	navigationController = [storyboard instantiateInitialViewController];
-	navigationController.modalPresentationStyle =
-				self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ?
-														UIModalPresentationFormSheet :
-														UIModalPresentationOverFullScreen;
+	UINavigationController *navigationController = [[UIStoryboard storyboardWithName:@"MADQueryAddGroup" bundle:nil] instantiateInitialViewController];
+	navigationController.modalPresentationStyle = self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIModalPresentationFormSheet : UIModalPresentationOverFullScreen;
 	UIPresentationController *pc = navigationController.presentationController;
 	pc.delegate = self;
-	MADQueryBuilderAddGroupViewController *tvc;
-	tvc = (MADQueryBuilderAddGroupViewController *)navigationController.topViewController;
+	MADQueryBuilderAddGroupViewController *tvc = (MADQueryBuilderAddGroupViewController *)navigationController.topViewController;
 	tvc.delegate = self;
 	tvc.document = self.document;
 	[self presentViewController:navigationController animated:YES completion:^{
@@ -1403,8 +1365,7 @@ BOOL storeEnabled(void) {
 
 - (MADIdentifierQueryViewSections)sectionIndexForSectionType:(MADIdentifierQueryViewSections)sec {
 	MADIdentifierQueryViewSections result = 0;
-	NSInteger numberOfRows = [self.tableView numberOfRowsInSection: 1];
-	MADQueryViewControllerTableLayout *tableLayout  = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:numberOfRows
+	MADQueryViewControllerTableLayout *tableLayout  = [[MADQueryViewControllerTableLayout alloc] initWithNumberOfTables:[self.tableView numberOfRowsInSection: 1]
 																									   reportingEnabled:storeEnabled()];
 	NSInteger secPos = 0;
 	

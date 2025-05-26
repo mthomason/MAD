@@ -339,23 +339,14 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	
-	//[self archiveCache];
 	[self clearScreen];
-	
-	MADocument *document = self.document;
-	NSManagedObjectContext *managedObjectContext;
-	managedObjectContext = document.documentModel.managedObjectContext;
 
-	
-	NSString *willSave = NSManagedObjectContextWillSaveNotification;
+	NSManagedObjectContext *managedObjectContext = self.document.documentModel.managedObjectContext;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: willSave
+													name: NSManagedObjectContextWillSaveNotification
 												  object: managedObjectContext];
-	
-	NSString *didSave = NSManagedObjectContextDidSaveNotification;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: didSave
+													name: NSManagedObjectContextDidSaveNotification
 												  object: managedObjectContext];
 }
 
@@ -369,9 +360,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)viewWillLayoutSubviews {
 	[super viewWillLayoutSubviews];
-	//self.scrollView.scrollIndicatorInsets =
-	//    UIEdgeInsetsMake(self.view.safeAreaLayoutGuide.length, CGSizeZero.width,
-	//                     self.bottomLayoutGuide.length, CGSizeZero.height);
 }
 
 - (void)viewDidLayoutSubviews {
@@ -402,9 +390,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 			}
 			
 			if (tableDefination.root) {
-				NSNumber *objectID;
-				objectID = @(((MADHierarchicalChildController *)childContoller).identifier);
-				[self.rootTables addObject: objectID];
+				[self.rootTables addObject: @(((MADHierarchicalChildController *)childContoller).identifier)];
 			}
 
 			childContoller.view.frame = CGRectMake(tableDefination.center.x - childContoller.view.frame.size.width / 2,

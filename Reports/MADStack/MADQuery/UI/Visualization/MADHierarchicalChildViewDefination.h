@@ -12,13 +12,12 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@interface MADHierarchicalChildViewDefination : NSObject
-    <NSCoding, NSCopying>
+@interface MADHierarchicalChildViewDefination : NSObject <NSCopying, NSSecureCoding>
 
-    + (instancetype)newTableDefination;
++ (instancetype)newTableDefination;
 
-    @property (nonatomic, assign) CGPoint center;
-    @property (nonatomic, assign, getter=isRoot) BOOL root;
+@property (nonatomic, assign) CGPoint center;
+@property (nonatomic, assign, getter=isRoot) BOOL root;
 
 @end
 
