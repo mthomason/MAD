@@ -135,7 +135,7 @@
 		NSNumber *bgtask;
 		bgtask = [[NSNumber alloc] initWithUnsignedInteger: self.backgroundTaskIdRefresh];
 		_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-		[[UIApplication sharedApplication] handoffBackground:bgtask];
+		[[UIApplication sharedApplication] endBackgroundTask:bgtask.unsignedIntegerValue];
 	}
 }
 

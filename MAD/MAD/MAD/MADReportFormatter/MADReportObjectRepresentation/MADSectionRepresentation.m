@@ -7,15 +7,33 @@
 //
 
 #import "MADSectionRepresentation.h"
+#import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSValue.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSCoder.h>
+#import <Foundation/NSData.h>
+#import <string.h>
 
+typedef struct __attribute__((__packed__)) {
+	int16_t sectionType;
+	uint64_t groupLevel;
+	uint64_t row;
+} MADSectionEncodedData;
+
+/*
+static inline uint64_t htonll(uint64_t);
+static inline uint64_t ntohll(uint64_t);
+
+static inline uint64_t htonll(uint64_t x) {
+	return __DARWIN_OSSwapInt64(x);
+}
+static inline uint64_t ntohll(uint64_t x) {
+	return __DARWIN_OSSwapInt64(x);
+}
+*/
 @implementation MADSectionRepresentation {
-	MADDocumentSectionType _sectionType;
-	NSUInteger _groupLevel;
-	NSUInteger _row;
+	MADSectionEncodedData _data;
 }
 
 + (BOOL)supportsSecureCoding { return YES; }
@@ -23,18 +41,12 @@
 + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
 							  groupLevel:(NSUInteger)groupLevel
 									 row:(NSUInteger)row {
-	id result = [[self alloc] initSectionRepresentation: sectionType
-											 groupLevel: groupLevel
-													row: row];
-	return result;
+	return [[self alloc] initSectionRepresentation: sectionType groupLevel: groupLevel row: row];
 }
 
 + (instancetype)newSectionRepresentation:(MADDocumentSectionType)sectionType
 									 row:(NSUInteger)row {
-	id result = [[self alloc] initSectionRepresentation: sectionType
-											 groupLevel: NSUIntegerMax
-													row: row];
-	return result;
+	return [[self alloc] initSectionRepresentation: sectionType groupLevel: NSUIntegerMax row: row];
 }
 
 - (instancetype)initSectionRepresentation:(MADDocumentSectionType)sectionType
@@ -48,47 +60,56 @@
 							   groupLevel:(NSUInteger)groupLevel
 									  row:(NSUInteger)row {
 	if (self = [super init]) {
-		_sectionType = sectionType;
-		_groupLevel = groupLevel;
-		_row = row;
-	}
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)decoder {
-	if (self = [super init]) {
-		[decoder decodeValueOfObjCType:@encode(MADDocumentSectionType)
-									at:&_sectionType
-								  size:sizeof(MADDocumentSectionType)];
-		[decoder decodeValueOfObjCType:@encode(NSUInteger)
-									at:&_groupLevel
-								  size:sizeof(NSUInteger)];
-		[decoder decodeValueOfObjCType:@encode(NSUInteger)
-									at:&_row
-								  size:sizeof(NSUInteger)];
+		_data.sectionType = sectionType;
+		_data.groupLevel = groupLevel;
+		_data.row = row;
 	}
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-	[encoder encodeValueOfObjCType:@encode(MADDocumentSectionType)
-								at:&_sectionType];
-	[encoder encodeValueOfObjCType:@encode(NSUInteger)
-								at:&_groupLevel];
-	[encoder encodeValueOfObjCType:@encode(NSUInteger)
-								at:&_row];
+	MADSectionEncodedData encoded;
+	encoded.sectionType = _data.sectionType;
+	encoded.groupLevel = htonll(_data.groupLevel);
+	encoded.row = htonll(_data.row);
+	
+	NSData *data = [NSData dataWithBytes:&encoded length:sizeof(encoded)];
+	[encoder encodeObject:data forKey:@"d"];
 }
 
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+	if (self = [super init]) {
+		NSData *encoded = [decoder decodeObjectOfClass:[NSData class] forKey:@"d"];
+		if (encoded.length == sizeof(MADSectionEncodedData)) {
+			MADSectionEncodedData decoded;
+			[encoded getBytes:&decoded length:sizeof(decoded)];
+			_data.sectionType = decoded.sectionType;
+			_data.groupLevel = ntohll(decoded.groupLevel);
+			_data.row = ntohll(decoded.row);
+		} else {
+			_data.sectionType = 0;
+			_data.groupLevel = 0;
+			_data.row = 0;
+		}
+	}
+	return self;
+}
 - (NSUInteger)groupLevel {
-	return _groupLevel;
+	return _data.groupLevel;
 }
 
 - (MADDocumentSectionType)sectionType {
-	return _sectionType;
+	return _data.sectionType;
 }
 
 - (NSUInteger)detailRowId {
-	return _row;
+	return _data.row;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+	return [[[self class] allocWithZone:zone] initSectionRepresentation:_data.sectionType
+															 groupLevel:_data.groupLevel
+																	row:_data.row];
 }
 
 - (id)debugQuickLookObject {
@@ -99,8 +120,7 @@
 	[debugString appendFormat:@"Section type: %hd\n", self.sectionType];
 	[debugString appendFormat:@"Group level:  %lu\n", (unsigned long)self.groupLevel];
 	[debugString appendString:@"-----------------------------\n"];
-	[debugString appendString:@"\n"];
-	return @"";
+	return debugString;
 }
 
 @end

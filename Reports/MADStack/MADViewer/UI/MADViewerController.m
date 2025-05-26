@@ -717,8 +717,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 
 - (IBAction)refresh:(id)sender {
 	_didRefreshBeforeReaload = YES;
-	
-	// Request a background task
 	_backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
 	
 	if (_refreshing == NO) {
@@ -728,10 +726,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 		[self setDisplayInactive];
 		
 		MADocument *document = self.document;
-		
-		MADOperationRefreshReload *refresh = [[MADOperationRefreshReload alloc] initWithDocument:document
-																				  viewController:self
-																			  databaseConnection:document.database.databaseConnection];
+		MADOperationRefreshReload *refresh = [[MADOperationRefreshReload alloc] initWithDocument: document
+																				  viewController: self
+																			  databaseConnection: document.database.databaseConnection];
 		[refresh addObserver:self];
 
 		__weak typeof(self) weakSelf = self;

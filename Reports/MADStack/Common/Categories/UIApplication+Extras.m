@@ -21,26 +21,10 @@
 - (UIBackgroundTaskIdentifier)requestBackgroundTask {
 	__block UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
 	bgTask = [self beginBackgroundTaskWithExpirationHandler:^{
-		// Use the current value of bgTask
 		[self endBackgroundTask:bgTask];
-		bgTask = UIBackgroundTaskInvalid; // Reset the task identifier
+		bgTask = UIBackgroundTaskInvalid;
 	}];
 	return bgTask;
-}
-
-- (void)handoffBackground:(NSNumber *)bgTask {
-	[self endBackgroundTask:bgTask.unsignedIntegerValue];
-}
-
-- (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask {
-	
-	NSTimeInterval time = self.backgroundTimeRemaining > 7.0 ? 5.0 : self.backgroundTimeRemaining - 0.1;
-	[NSTimer scheduledTimerWithTimeInterval: time
-									 target: self
-								   selector: @selector(handoffBackground:)
-								   userInfo: bgTask
-									repeats: NO];
-	
 }
 
 @end

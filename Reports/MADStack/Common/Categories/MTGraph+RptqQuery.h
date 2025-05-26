@@ -17,8 +17,7 @@
 
 	- (instancetype)initWithQuery:(RptqQuery *)query;
 	- (instancetype)initWtthQueryID:(MADModelQuery *)query;
-	- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
-			   managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID managedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 

@@ -15,13 +15,13 @@
 
 @interface MTObject ()
 
-@property (readwrite, nonatomic, strong) id object;
+@property (readwrite, nonatomic, strong) NSObject <NSCopying> *object;
 
 @end
 
 @implementation MTObject
 
-+ (instancetype)newObject:(id <NSCopying>)object {
++ (instancetype)newObject:(NSObject <NSCopying> *)object {
 	return [[MTObject alloc] initWithObject:object];
 }
 
@@ -47,7 +47,7 @@
 - (BOOL)isEqualTo:(id)sender {
 	BOOL result;
 	if ([self.object conformsToProtocol:@protocol(MTProtocolCompare)]) {
-		result = [self.object isEqualTo:sender];
+		result = [(id <MTProtocolCompare>)self.object isEqualTo:sender];
 	} else {
 		result = [self.object isEqual:sender];
 	}

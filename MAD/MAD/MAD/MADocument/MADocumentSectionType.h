@@ -11,6 +11,12 @@
 
 #import <Foundation/NSObjCRuntime.h>
 
+extern const NSUInteger MADDocumentSectionIndexDocumentHeader;
+extern const NSUInteger MADDocumentSectionIndexPageHeader;
+extern const NSUInteger MADDocumentSectionIndexDetail;
+extern const NSUInteger MADDocumentSectionIndexPageFooter;
+extern const NSUInteger MADDocumentSectionIndexDocumentFooter;
+
 typedef NS_ENUM(int16_t, MADDocumentSectionType) {
 	MADDocumentSectionTypeUnknown = 0,
 	MADDocumentSectionTypeReportHeader = 1,
@@ -23,6 +29,9 @@ typedef NS_ENUM(int16_t, MADDocumentSectionType) {
 };
 
 static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionType);
+static inline NSUInteger documentSectionDynamicIndexDetail(NSUInteger);
+static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger);
+
 static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionType value) {
 	switch (value) {
 		case MADDocumentSectionTypeReportHeader: return @"MADDocumentSectionTypeReportHeader";
@@ -36,18 +45,10 @@ static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionTyp
 	}
 }
 
-extern const NSUInteger MADDocumentSectionIndexDocumentHeader;
-extern const NSUInteger MADDocumentSectionIndexPageHeader;
-extern const NSUInteger MADDocumentSectionIndexDetail;
-extern const NSUInteger MADDocumentSectionIndexPageFooter;
-extern const NSUInteger MADDocumentSectionIndexDocumentFooter;
-
-static inline NSUInteger documentSectionDynamicIndexDetail(NSUInteger numberOfGroups);
 static inline NSUInteger documentSectionDynamicIndexDetail(NSUInteger numberOfGroups) {
 	return MADDocumentSectionIndexDetail + numberOfGroups;
 }
 
-static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger numberOfGroups);
 static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger numberOfGroups) {
 	return MADDocumentSectionIndexPageFooter + (2 * numberOfGroups);
 }

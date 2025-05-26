@@ -608,15 +608,7 @@ void madwarn(char *err,  const char *err2) { }
 	}
 	
 	if (imageData != nil) {
-		UIImage *image = [UIImage imageWithData: imageData];
-		if (image != nil) {
-			UIImage *extraImage = [UIImage imageWithData:imageData];
-#warning Assuming retna display... not sure if correct, but needed to build.
-			NSString *key = MADDocumentInfoKeyThumbnailRetna;
-			self.extraInformation[key] = extraImage;
-			extraImage = nil;
-		}
-		image = nil;
+		self.extraInformation[MADDocumentInfoKeyThumbnailRetna] = [UIImage imageWithData:imageData];
 	}
 	
 	NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];

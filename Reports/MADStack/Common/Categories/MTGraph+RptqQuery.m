@@ -153,8 +153,8 @@
 				// RT is the right query table objectID
 				//queryLink.hasRightField.inQueryTable.objectID
 				
-				MTVertex *vertexOrigin =        [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"LT"]] copy];
-				MTVertex *vertexDestination =   [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"RT"]] copy];
+				MTVertex *vertexOrigin = [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"LT"]] copy];
+				MTVertex *vertexDestination = [[self vertexForObject:(MTObject *)queryLinkObjectIDS[@"RT"]] copy];
 				
 				[self addEdgeWithOrigin: vertexOrigin
 							destination: vertexDestination

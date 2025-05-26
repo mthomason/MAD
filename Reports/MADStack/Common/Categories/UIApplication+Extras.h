@@ -13,10 +13,8 @@
 
 @interface UIApplication (Extras)
 
-	+ (NSString *)version;
-	- (UIBackgroundTaskIdentifier)requestBackgroundTask;
-	- (void)handoffBackground:(NSNumber *)bgTask;
-	- (void)handoffBackgroundUsingTimer:(NSNumber *)bgTask;
++ (NSString *)version;
+- (UIBackgroundTaskIdentifier)requestBackgroundTask;
 
 @end
 

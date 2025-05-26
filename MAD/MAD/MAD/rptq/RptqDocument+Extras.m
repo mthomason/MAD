@@ -347,7 +347,7 @@ static os_log_t rptq_log;
 													  query: self.defaultDatabase.defaultQuery];
 			break;
 		default:
-			NSAssert(NO, @"Unknown type: %hd at level %ld", type, level);
+			//NSAssert(NO, @"Unknown type: %hd at level %ld", type, level);
 			return nil;
 			break;
 	}
