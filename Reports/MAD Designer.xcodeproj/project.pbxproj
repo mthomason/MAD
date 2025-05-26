@@ -212,7 +212,6 @@
 		4C401FC91BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBB1BAE8AD500BAE5FC /* MTViewControllerBarcodePreview.m */; };
 		4C401FCA1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */; };
 		4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C401FCE1BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard */; };
-		4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */; };
 		4C4020371BAE92F200BAE5FC /* MADAffineTransformSwing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FD71BAE92F200BAE5FC /* MADAffineTransformSwing.m */; };
 		4C40203B1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */; };
 		4C40203C1BAE92F200BAE5FC /* MTGraph+RptqQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FE11BAE92F200BAE5FC /* MTGraph+RptqQuery.m */; };
@@ -229,7 +228,6 @@
 		4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */; };
 		4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */; };
-		4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020291BAE92F200BAE5FC /* UIView+Extras.m */; };
 		4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */; };
 		4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020681BAE938500BAE5FC /* NSData+Base64.m */; };
 		4C40206E1BAE940E00BAE5FC /* UIApplication+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */; };
@@ -531,8 +529,6 @@
 		4C26B9671BAF11C800456DC8 /* MADOperationRegisterDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRegisterDefaults.m; sourceTree = "<group>"; };
 		4C26B9811BAF11FA00456DC8 /* MADTransparentPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTransparentPresentationController.h; sourceTree = "<group>"; };
 		4C26B9821BAF11FA00456DC8 /* MADTransparentPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTransparentPresentationController.m; sourceTree = "<group>"; };
-		4C26B9831BAF11FA00456DC8 /* MADVibrantCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantCollectionView.h; sourceTree = "<group>"; };
-		4C26B9841BAF11FA00456DC8 /* MADVibrantCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantCollectionView.m; sourceTree = "<group>"; };
 		4C26B9851BAF11FA00456DC8 /* MADVibrantTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableView.h; sourceTree = "<group>"; };
 		4C26B9861BAF11FA00456DC8 /* MADVibrantTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableView.m; sourceTree = "<group>"; };
 		4C26B9871BAF11FA00456DC8 /* MADVibrantTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableViewCellBase.h; sourceTree = "<group>"; };
@@ -787,8 +783,6 @@
 		4C401F2F1BAE754200BAE5FC /* MADTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellBase.h; sourceTree = "<group>"; };
 		4C401F301BAE754200BAE5FC /* MADTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableViewCellBase.m; sourceTree = "<group>"; };
 		4C401F311BAE754200BAE5FC /* MADTableViewCellMargin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableViewCellMargin.h; sourceTree = "<group>"; };
-		4C401F511BAE7BFE00BAE5FC /* MTPageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPageCaching.h; sourceTree = "<group>"; };
-		4C401F521BAE7BFE00BAE5FC /* MTPageCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPageCaching.m; sourceTree = "<group>"; };
 		4C401F551BAE7EB500BAE5FC /* MADDesignerStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerStatusLabel.h; sourceTree = "<group>"; };
 		4C401F561BAE7EB500BAE5FC /* MADDesignerStatusLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerStatusLabel.m; sourceTree = "<group>"; };
 		4C401F571BAE7EB500BAE5FC /* MADSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSliderPageVertical.h; sourceTree = "<group>"; };
@@ -821,13 +815,6 @@
 		4C401F8D1BAE86AC00BAE5FC /* MADPreferencesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPreferencesManager.m; sourceTree = "<group>"; };
 		4C401F8E1BAE86AC00BAE5FC /* MADUserDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUserDefault.h; sourceTree = "<group>"; };
 		4C401F8F1BAE86AC00BAE5FC /* MADUserDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUserDefault.m; sourceTree = "<group>"; };
-		4C401F971BAE89C300BAE5FC /* MTArrayDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSource.h; sourceTree = "<group>"; };
-		4C401F981BAE89C300BAE5FC /* MTArrayDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayDataSource.m; sourceTree = "<group>"; };
-		4C401F991BAE89C300BAE5FC /* MTArrayDataSourceCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourceCollectionView.h; sourceTree = "<group>"; };
-		4C401F9A1BAE89C300BAE5FC /* MTArrayDataSourceCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayDataSourceCollectionView.m; sourceTree = "<group>"; };
-		4C401F9B1BAE89C300BAE5FC /* MTArrayDataSourcePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourcePrivate.h; sourceTree = "<group>"; };
-		4C401F9C1BAE89C300BAE5FC /* MTArrayDataSourceTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourceTableView.h; sourceTree = "<group>"; };
-		4C401F9D1BAE89C300BAE5FC /* MTArrayDataSourceTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayDataSourceTableView.m; sourceTree = "<group>"; };
 		4C401FA41BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBarcodeCompositCode.h; sourceTree = "<group>"; };
 		4C401FA51BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBarcodeCompositCode.m; sourceTree = "<group>"; };
 		4C401FA61BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTableViewControllerBarcodeExtraAztec.h; path = MADStack/MADBarcodes/UI/MTTableViewControllerBarcodeExtraAztec.h; sourceTree = "<group>"; };
@@ -856,8 +843,6 @@
 		4C401FBD1BAE8AD500BAE5FC /* MTViewControllerBarcodeType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTViewControllerBarcodeType.m; path = MADStack/MADBarcodes/UI/MTViewControllerBarcodeType.m; sourceTree = "<group>"; };
 		4C401FCB1BAE8BB700BAE5FC /* MTViewControllerBarcodePreviewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTViewControllerBarcodePreviewDelegate.h; path = MADStack/MADBarcodes/UI/MTViewControllerBarcodePreviewDelegate.h; sourceTree = "<group>"; };
 		4C401FCE1BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADLaunchImagesOS7.storyboard; path = MADStack/Common/UI/Storyboards/MADLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
-		4C401FD41BAE92F200BAE5FC /* ACAccountStore+Social.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+Social.h"; sourceTree = "<group>"; };
-		4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+Social.m"; sourceTree = "<group>"; };
 		4C401FD61BAE92F200BAE5FC /* MADAffineTransformSwing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAffineTransformSwing.h; path = Categories/MADAffineTransformSwing.h; sourceTree = "<group>"; };
 		4C401FD71BAE92F200BAE5FC /* MADAffineTransformSwing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAffineTransformSwing.m; path = Categories/MADAffineTransformSwing.m; sourceTree = "<group>"; };
 		4C401FDE1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+FileManager.h"; sourceTree = "<group>"; };
@@ -882,8 +867,6 @@
 		4C4020011BAE92F200BAE5FC /* MADButtonTwitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADButtonTwitter.m; sourceTree = "<group>"; };
 		4C4020021BAE92F200BAE5FC /* UICollectionReusableView+Reuse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionReusableView+Reuse.h"; sourceTree = "<group>"; };
 		4C4020031BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionReusableView+Reuse.m"; sourceTree = "<group>"; };
-		4C4020061BAE92F200BAE5FC /* UIColor+Gradients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Gradients.h"; sourceTree = "<group>"; };
-		4C4020071BAE92F200BAE5FC /* UIColor+Gradients.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Gradients.m"; sourceTree = "<group>"; };
 		4C4020081BAE92F200BAE5FC /* UIColor+PaperPatterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PaperPatterns.h"; sourceTree = "<group>"; };
 		4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PaperPatterns.m"; sourceTree = "<group>"; };
 		4C40200A1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADGestureRecognizerAnchorPoint.h; path = Categories/MADGestureRecognizerAnchorPoint.h; sourceTree = "<group>"; };
@@ -896,8 +879,6 @@
 		4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIMotionEffectGroup+HoverEffects.m"; sourceTree = "<group>"; };
 		4C4020261BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITapGestureRecognizer+Designer.h"; sourceTree = "<group>"; };
 		4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITapGestureRecognizer+Designer.m"; sourceTree = "<group>"; };
-		4C4020281BAE92F200BAE5FC /* UIView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extras.h"; sourceTree = "<group>"; };
-		4C4020291BAE92F200BAE5FC /* UIView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extras.m"; sourceTree = "<group>"; };
 		4C4020301BAE92F200BAE5FC /* UIViewController+tabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+tabBarItem.h"; sourceTree = "<group>"; };
 		4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+tabBarItem.m"; sourceTree = "<group>"; };
 		4C4020671BAE938500BAE5FC /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -1401,8 +1382,6 @@
 				4C26B9D31BAF146700456DC8 /* MADVibrantTableViewCell.m */,
 				4C26B9811BAF11FA00456DC8 /* MADTransparentPresentationController.h */,
 				4C26B9821BAF11FA00456DC8 /* MADTransparentPresentationController.m */,
-				4C26B9831BAF11FA00456DC8 /* MADVibrantCollectionView.h */,
-				4C26B9841BAF11FA00456DC8 /* MADVibrantCollectionView.m */,
 				4C26B9851BAF11FA00456DC8 /* MADVibrantTableView.h */,
 				4C26B9861BAF11FA00456DC8 /* MADVibrantTableView.m */,
 				4C26B9871BAF11FA00456DC8 /* MADVibrantTableViewCellBase.h */,
@@ -1904,7 +1883,6 @@
 				4C40200A1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.h */,
 				4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */,
 				4C401EFF1BAE64AF00BAE5FC /* Categories */,
-				4C401F501BAE7BFE00BAE5FC /* Containers */,
 				4C26BA861BAF9B3000456DC8 /* ObjectiveC */,
 				4C401F891BAE86AC00BAE5FC /* PreferenceManager */,
 				4C26BA2C1BAF999800456DC8 /* Types */,
@@ -1922,8 +1900,6 @@
 				4C40206D1BAE940E00BAE5FC /* UIApplication+Extras.m */,
 				4C4020671BAE938500BAE5FC /* NSData+Base64.h */,
 				4C4020681BAE938500BAE5FC /* NSData+Base64.m */,
-				4C401FD41BAE92F200BAE5FC /* ACAccountStore+Social.h */,
-				4C401FD51BAE92F200BAE5FC /* ACAccountStore+Social.m */,
 				4C401FDE1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.h */,
 				4C401FDF1BAE92F200BAE5FC /* MFMailComposeViewController+FileManager.m */,
 				4C401FE01BAE92F200BAE5FC /* MTGraph+RptqQuery.h */,
@@ -1944,8 +1920,6 @@
 				4C4020011BAE92F200BAE5FC /* MADButtonTwitter.m */,
 				4C4020021BAE92F200BAE5FC /* UICollectionReusableView+Reuse.h */,
 				4C4020031BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m */,
-				4C4020061BAE92F200BAE5FC /* UIColor+Gradients.h */,
-				4C4020071BAE92F200BAE5FC /* UIColor+Gradients.m */,
 				4C4020081BAE92F200BAE5FC /* UIColor+PaperPatterns.h */,
 				4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */,
 				4C401F001BAE64AF00BAE5FC /* UIFont+Helpers.h */,
@@ -1958,8 +1932,6 @@
 				4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */,
 				4C4020261BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.h */,
 				4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */,
-				4C4020281BAE92F200BAE5FC /* UIView+Extras.h */,
-				4C4020291BAE92F200BAE5FC /* UIView+Extras.m */,
 				4C4020301BAE92F200BAE5FC /* UIViewController+tabBarItem.h */,
 				4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */,
 			);
@@ -2046,16 +2018,6 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		4C401F501BAE7BFE00BAE5FC /* Containers */ = {
-			isa = PBXGroup;
-			children = (
-				4C401F961BAE89C300BAE5FC /* ArrayDataSource */,
-				4C401F511BAE7BFE00BAE5FC /* MTPageCaching.h */,
-				4C401F521BAE7BFE00BAE5FC /* MTPageCaching.m */,
-			);
-			path = Containers;
-			sourceTree = "<group>";
-		};
 		4C401F541BAE7EB500BAE5FC /* Controls */ = {
 			isa = PBXGroup;
 			children = (
@@ -2122,20 +2084,6 @@
 				4C401F8F1BAE86AC00BAE5FC /* MADUserDefault.m */,
 			);
 			path = PreferenceManager;
-			sourceTree = "<group>";
-		};
-		4C401F961BAE89C300BAE5FC /* ArrayDataSource */ = {
-			isa = PBXGroup;
-			children = (
-				4C401F9B1BAE89C300BAE5FC /* MTArrayDataSourcePrivate.h */,
-				4C401F971BAE89C300BAE5FC /* MTArrayDataSource.h */,
-				4C401F981BAE89C300BAE5FC /* MTArrayDataSource.m */,
-				4C401F991BAE89C300BAE5FC /* MTArrayDataSourceCollectionView.h */,
-				4C401F9A1BAE89C300BAE5FC /* MTArrayDataSourceCollectionView.m */,
-				4C401F9C1BAE89C300BAE5FC /* MTArrayDataSourceTableView.h */,
-				4C401F9D1BAE89C300BAE5FC /* MTArrayDataSourceTableView.m */,
-			);
-			path = ArrayDataSource;
 			sourceTree = "<group>";
 		};
 		4C401FA11BAE8AD500BAE5FC /* MADBarcodes */ = {
@@ -3364,7 +3312,6 @@
 				4C26B9D51BAF146700456DC8 /* MADVibrantTableViewCell.m in Sources */,
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,
 				4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */,
-				4C4020601BAE92F200BAE5FC /* UIView+Extras.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
 				4CF6AA261F5269790061B0C6 /* MADExplorerAnimatedTransitioning.m in Sources */,
 				4C6D2EF51E6DE4F6008EFE5D /* MADSortOrderNavigationItem.m in Sources */,
@@ -3526,7 +3473,6 @@
 				4C5B56011C98DD76005C19D9 /* MADOperationPromptCredentials.m in Sources */,
 				4C401F321BAE754200BAE5FC /* MADTableViewCellAuto.m in Sources */,
 				4C26B9C21BAF123A00456DC8 /* MADExplorerSectionHeaderView.m in Sources */,
-				4C4020361BAE92F200BAE5FC /* ACAccountStore+Social.m in Sources */,
 				4C6D2F011E6E796D008EFE5D /* MADSelectOperatorNavigationItem.m in Sources */,
 				4CC982721F4AC32000E0496A /* MADLabelPageSlider.m in Sources */,
 				4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */,

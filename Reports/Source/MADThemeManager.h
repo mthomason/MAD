@@ -10,12 +10,15 @@
 #define Reports_MADThemeManager_h
 
 #import <Foundation/NSObject.h>
+#import <CoreFoundation/CFCGTypes.h>
 
 @class UINavigationController, UITabBarController, UITraitCollection;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MADThemeManager : NSObject
+
++ (CGFloat)borderWidthThin;
 
 + (void)applyAppearanceToNavigationController:(UINavigationController *)navigationController
 							  traitCollection:(UITraitCollection *)traitCollection;

@@ -8,7 +8,6 @@
 
 #import "MADInformationTableViewController.h"
 #import "MADTableViewCellAuto.h"
-#import "ACAccountStore+Social.h"
 #import "MADButtonTwitter.h"
 #import "MADAttributedStringCommon.h"
 #import "MADOperationPromptError.h"
@@ -23,8 +22,7 @@
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
 
-@interface MADInformationTableViewController ()
-	<MFMailComposeViewControllerDelegate>
+@interface MADInformationTableViewController () <MFMailComposeViewControllerDelegate>
 
 @end
 

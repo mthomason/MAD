@@ -11,11 +11,7 @@
 @implementation MADNavigationBar
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
+	[super layoutSubviews];
 }
-
-//- (UIBarStyle)barStyle {
-//    return UIBarStyleBlack;
-//}
 
 @end

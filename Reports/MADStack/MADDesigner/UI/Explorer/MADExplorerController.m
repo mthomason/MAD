@@ -1205,7 +1205,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
 		[self.searchBar sizeToFit];
 		
-		
 		UIView *searchViewHolder = [[UIView alloc] initWithFrame:self.searchBar.bounds];
 		self.searchBar.autoresizingMask = MADViewAutoresizingFlexable();
 		searchViewHolder.autoresizingMask = MADViewAutoresizingFlexable();

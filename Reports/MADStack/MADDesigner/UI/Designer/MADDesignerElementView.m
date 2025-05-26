@@ -12,7 +12,7 @@
 #import "MADResizeHandles.h"
 #import "MADResizeHandleView.h"
 #import "UITapGestureRecognizer+Designer.h"
-#import "UIView+Extras.h"
+#import "MADThemeManager.h"
 #import "madlog.h"
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
@@ -303,7 +303,7 @@
 	self.enableResizing = YES;
 	UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
 	self.layer.borderColor = tintColor.CGColor;
-	self.layer.borderWidth = [UIView borderWidthThin];
+	self.layer.borderWidth = [MADThemeManager borderWidthThin];
 }
 
 - (void)removeBorder {

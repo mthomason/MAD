@@ -13,31 +13,4 @@
 
 @implementation MADExplorerNavigationBar
 
-//- (UIBarStyle)barStyle { return UIBarStyleBlack; }
-
-/*+ (void)initialize {
-    if (self == [MADExplorerNavigationBar class]) {
-        @autoreleasepool {
-            
-            NSArray <Class <UIAppearanceContainer>> *classes;
-            UINavigationBar *navigationBar;
-            NSMutableDictionary *titleTextAttributes;
-            
-            classes = [[NSArray alloc] initWithObjects: [UINavigationController class],
-                                                        [UIViewController class], nil];
-            
-            navigationBar = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
-            navigationBar.tintColor = [UIColor whiteColor];
-            
-            titleTextAttributes = navigationBar.titleTextAttributes.mutableCopy;
-            if (!titleTextAttributes) {
-                titleTextAttributes = [[NSMutableDictionary <NSString *,id> alloc] initWithCapacity: 1];
-            }
-           
-            titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-            [navigationBar setTitleTextAttributes:titleTextAttributes];
-        }
-    }
-}*/
-
 @end

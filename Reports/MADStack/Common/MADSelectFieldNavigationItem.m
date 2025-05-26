@@ -13,22 +13,17 @@
 @implementation MADSelectFieldNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *hint = NSLocalizedString(@"Select a field.", @"Hint");
-        NSString *title;
-        title = NSLocalizedString(@"Select Field",
-                                  @"Title for the select field screen. ");
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = hint;
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        
-        self.titleView = titleView;
-        self.title = title;
-        self.leftItemsSupplementBackButton = YES;
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"Select Field", @"Title for the select field screen. ");
+		titleView.accessibilityHint = NSLocalizedString(@"Select a field.", @"Hint");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"Select Field", @"Title for the select field screen. ");
+		self.leftItemsSupplementBackButton = YES;
+	}
+	return self;
 }
 
 @end

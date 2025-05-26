@@ -96,7 +96,7 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 	NSMutableString *text = [[NSMutableString alloc] initWithString:@"Updated "];
 	NSDate *now = [NSDate date];
 	NSDateComponents *aDateComponents = [[NSCalendar currentCalendar] components: calUnitsAll()
-																		fromDate: now
+																		fromDate: [NSDate date]
 																		  toDate: lastDate
 																		 options: 0];
 	
@@ -268,8 +268,7 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		includedComponetsCounter++;
 	}
 	
-	NSString *textAgo = NSLocalizedString(TextAgo, TextAgo);
-	[text appendString: textAgo];
+	[text appendString: NSLocalizedString(TextAgo, TextAgo)];
 	
 	NSNumber *resultType = [[NSNumber alloc] initWithShort: resultResolution];
 	NSString *resultText = text.copy;

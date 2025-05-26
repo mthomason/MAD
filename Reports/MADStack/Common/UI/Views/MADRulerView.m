@@ -7,17 +7,15 @@
 //
 
 #import "MADRulerView.h"
+#import "MADThemeManager.h"
 
-#import <QuartzCore/CALayer.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <UIKit/UIGraphics.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/NSStringDrawing.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import "UIView+Extras.h"
+#import <QuartzCore/CALayer.h>
 
 const CGFloat MTReportDesignerRulerHeight           = 20.0;
 
@@ -46,11 +44,11 @@ static inline double xPoint(NSInteger i, double offset) { return i * offset; }
 		UIFontDescriptor *fontDescriptor;
 		NSMutableParagraphStyle *paragraphStyle;
 		
-		self.layer.borderWidth = [UIView borderWidthThin];
+		self.layer.borderWidth = [MADThemeManager borderWidthThin];
 		self.layer.borderColor = [UIColor blackColor].CGColor;
 		self.backgroundColor = [UIColor whiteColor];
 		
-		self.layer.borderWidth = [UIView borderWidthThin];
+		self.layer.borderWidth = [MADThemeManager borderWidthThin];
 		self.layer.borderColor = [MADColorEverydayApps newColorBorderColor].CGColor;
 		self.translatesAutoresizingMaskIntoConstraints = NO;
 		

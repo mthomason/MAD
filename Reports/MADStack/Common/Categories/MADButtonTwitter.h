@@ -14,9 +14,9 @@
 
 @interface MADButtonTwitter : UIButton
 
-	+ (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action;
-	+ (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action
-														size:(MADSizeGeneral)size;
++ (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action;
++ (instancetype)newButtonTwitterFolllowTwitterWithTarget:(id)target action:(SEL)action
+													size:(MADSizeGeneral)size;
 
 @end
 

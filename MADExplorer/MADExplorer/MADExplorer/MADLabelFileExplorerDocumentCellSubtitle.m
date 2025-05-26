@@ -26,15 +26,11 @@
 }
 
 + (void)commonInitalization:(MADLabelFileExplorerDocumentCellSubtitle *)this {
-
-	UIColor *clearColor = [UIColor clearColor];
-	UIColor *lightGrayColor = [UIColor lightGrayColor];
-	this.textColor = lightGrayColor;
+	this.textColor = [UIColor lightGrayColor];
 	this.clipsToBounds = NO;
 	this.numberOfLines = 0;
-	this.backgroundColor = clearColor;
+	this.backgroundColor = [UIColor clearColor];
 	this.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-	
 }
 
 - (UIColor *)highlightedTextColor {

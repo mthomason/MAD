@@ -7,18 +7,15 @@
 //
 
 #import "MADDesignerSectionLabel.h"
-
-#import <QuartzCore/CALayer.h>
-
-#import <MAD/RptqDocumentSection+Extras.h>
-#import <MAD/MADReportSection.h>
+#import "MADThemeManager.h"
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/MADReportSection.h>
 
 #import <UIKit/UITapGestureRecognizer.h>
-
-#import "UIView+Extras.h"
+#import <QuartzCore/CALayer.h>
 
 const CGFloat MADesignerSectionLabelFontSize = 10.0;
 
@@ -92,7 +89,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0;
 - (void)applyBorder {
 	UIColor *tintColor = [MADColorEverydayApps newColorAnalogous4];
 	self.layer.borderColor = tintColor.CGColor;
-	self.layer.borderWidth = [UIView borderWidthThin];
+	self.layer.borderWidth = [MADThemeManager borderWidthThin];
 }
 
 - (void)removeBorder {

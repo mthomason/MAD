@@ -12,13 +12,13 @@
 
 @implementation NSDateFormatter (RFC_3339)
 
-+ (instancetype) RFC_3339 {
-    NSDateFormatter *rfc3339DateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    rfc3339DateFormatter.locale = enUSPOSIXLocale;
-    rfc3339DateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'";
-    rfc3339DateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-    return rfc3339DateFormatter;
++ (instancetype)RFC_3339 {
+	NSDateFormatter *rfc3339DateFormatter = [[NSDateFormatter alloc] init];
+	NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+	rfc3339DateFormatter.locale = enUSPOSIXLocale;
+	rfc3339DateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'";
+	rfc3339DateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+	return rfc3339DateFormatter;
 }
 
 @end

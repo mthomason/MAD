@@ -22,6 +22,7 @@
 #import <Foundation/NSString.h>
 #import <UserNotifications/UNUserNotificationCenter.h>
 #import <QuickLook/QLPreviewController.h>
+#import <CoreFoundation/CFBundle.h>
 
 static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
 static NSString * const MADIDUser                                          = @"MADIDUser";
@@ -251,7 +252,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (NSString *)bundleDisplayName {
 	if (!_bundleDisplayName) {
-		_bundleDisplayName = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] copy];
+		_bundleDisplayName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
 	}
 	return _bundleDisplayName;
 }

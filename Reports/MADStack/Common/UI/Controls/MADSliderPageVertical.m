@@ -8,7 +8,7 @@
 
 #import "MADSliderPageVertical.h"
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import "UIImage+ImageEffects.h"
+#import <UIKit/UIImage.h>
 
 @interface MADSliderPageVertical ()
 

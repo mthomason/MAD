@@ -14,7 +14,6 @@
 #import "AppDelegate.h"
 #import "MADTableViewCellBase.h"
 #import "MADButtonTwitter.h"
-#import "ACAccountStore+Social.h"
 #import "MADOperationPromptError.h"
 #import "MADAttributedStringCommon.h"
 #import "madlog.h"

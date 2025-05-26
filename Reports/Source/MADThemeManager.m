@@ -23,6 +23,8 @@
 
 @implementation MADThemeManager
 
++ (CGFloat)borderWidthThin { return 1.0; }
+
 + (void)applyAppearanceToNavigationController:(UINavigationController *)navigationController
 							  traitCollection:(UITraitCollection *)traitCollection {
 	UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];

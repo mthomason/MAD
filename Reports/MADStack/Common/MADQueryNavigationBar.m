@@ -10,17 +10,5 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADQueryNavigationBar
-/*
-+ (void)initialize {
-    [super initialize];
-    if (self == [MADQueryNavigationBar self]) {
-        UIColor *c = [MADColorEverydayApps newColorBlue];
-        [[MADQueryNavigationBar appearance] setBarTintColor:c];
-    }
-}
 
-- (UIBarStyle)barStyle {
-    return UIBarStyleBlack;
-}
-*/
 @end

@@ -16,7 +16,6 @@
 #import <Foundation/NSString.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MADNavigationController.h"
 #import "Constants.h"
@@ -323,7 +322,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (NSString *)bundleDisplayName {
-    return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];
+	return  [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
 }
 
 

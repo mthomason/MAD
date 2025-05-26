@@ -44,7 +44,6 @@
 #import "UITapGestureRecognizer+Designer.h"
 #import "MADNavigationController.h"
 #import "UIViewController+tabBarItem.h"
-#import "UIView+Extras.h"
 #import "MADManagedObjectViewProtocol.h"
 #import "MADCellElementDelegate.h"
 #import "MTViewControllerBarcode.h"

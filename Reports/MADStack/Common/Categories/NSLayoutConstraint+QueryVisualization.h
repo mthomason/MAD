@@ -15,8 +15,8 @@
 
 @interface NSLayoutConstraint (QueryVisualization)
 
-	+ (instancetype)newLayoutConstraintHeightForView:(UIView *)view andHeight:(CGFloat)height;
-	+ (instancetype)newLayoutConstraintWidthForView:(UIView *)view andWidth:(CGFloat)width;
++ (instancetype)newLayoutConstraintHeightForView:(UIView *)view andHeight:(CGFloat)height;
++ (instancetype)newLayoutConstraintWidthForView:(UIView *)view andWidth:(CGFloat)width;
 
 @end
 

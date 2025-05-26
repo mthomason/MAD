@@ -7,27 +7,23 @@
 //
 
 #import "MADDesignerSectionView.h"
-
-#import <QuartzCore/CALayer.h>
-
-#import <CoreData/NSManagedObjectID.h>
-
-#import <UIKit/UIGraphics.h>
-
-#import <UIKit/UIAccessibilityCustomAction.h>
-#import <UIKit/UICollectionViewFlowLayout.h>
-#import <UIKit/UIAccessibilityConstants.h>
-#import <UIKit/UIGestureRecognizer.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-
 #import "MADDesignerSectionLayoutLiquid.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
 #import "MADCellElement.h"
 #import "MADDesignerSectionBackground.h"
-#import "UIView+Extras.h"
+#import "MADThemeManager.h"
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+
+#import <UIKit/UIGraphics.h>
+#import <UIKit/UIAccessibilityCustomAction.h>
+#import <UIKit/UICollectionViewFlowLayout.h>
+#import <UIKit/UIAccessibilityConstants.h>
+#import <UIKit/UIGestureRecognizer.h>
+#import <QuartzCore/CALayer.h>
+#import <CoreData/NSManagedObjectID.h>
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
 	if (!selected && !visible) {
@@ -70,11 +66,11 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 	layout.delegate = layoutDelegate;
 	layout.designViewIdentifier = identifier;
 	MADDesignerSectionView *collectionView = [[self alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-	collectionView.delegate     = layoutDelegate;
-	collectionView.dataSource   = layoutDelegate;
-	collectionView.identifier   = identifier;
-	collectionView.tag          = identifier;
-	collectionView.visible      = isVisible;
+	collectionView.delegate = layoutDelegate;
+	collectionView.dataSource = layoutDelegate;
+	collectionView.identifier = identifier;
+	collectionView.tag = identifier;
+	collectionView.visible = isVisible;
 	return collectionView;
 }
 
@@ -106,7 +102,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 		self.layer.borderColor = borderColor.CGColor;
 		self.backgroundView = nil;
 		self.backgroundColor = [UIColor clearColor];
-		self.layer.borderWidth = [UIView borderWidthThin];
+		self.layer.borderWidth = [MADThemeManager borderWidthThin];
 		self.showsVerticalScrollIndicator = YES;
 
 		[self setContentHuggingPriority: UILayoutPriorityDefaultLow

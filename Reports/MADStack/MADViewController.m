@@ -12,7 +12,8 @@
 @implementation MADViewController
 
 + (instancetype)newViewControllerQueryVisulization {
-	return [[UIStoryboard storyboardWithName: @"MADQuery" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADStoryboardIDQueryVisulization"];
+	id viewController = [[UIStoryboard storyboardWithName: @"MADQuery" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADStoryboardIDQueryVisulization"];
+	return viewController;
 }
 
 @end

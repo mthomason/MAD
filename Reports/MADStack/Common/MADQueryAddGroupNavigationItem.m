@@ -18,26 +18,21 @@
 @implementation MADQueryAddGroupNavigationItem
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        NSString *hint = NSLocalizedString(@"Define a grouping the query and report.", @"Hint");
-        NSString *title;
-        title = NSLocalizedString(@"Add Group",
-                                  @"Title for the add group screen. ");
-        MADLabelTitle *titleView;
-        titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-        titleView.text = title;
-        titleView.accessibilityHint = hint;
-        titleView.accessibilityTraits = UIAccessibilityTraitHeader;
-        
-        self.leftBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
-        self.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
-        self.backBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
-        
-        self.titleView = titleView;
-        self.title = title;
-        self.leftItemsSupplementBackButton = YES;
-    }
-    return self;
+	if (self = [super initWithCoder:coder]) {
+		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
+		titleView.text = NSLocalizedString(@"Add Group", @"Title for the add group screen. ");
+		titleView.accessibilityHint = NSLocalizedString(@"Define a grouping the query and report.", @"Hint");
+		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
+		
+		self.leftBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+		self.rightBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+		self.backBarButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+		
+		self.titleView = titleView;
+		self.title = NSLocalizedString(@"Add Group", @"Title for the add group screen. ");
+		self.leftItemsSupplementBackButton = YES;
+	}
+	return self;
 }
 
 @end

@@ -133,8 +133,6 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 	documentScroller.translatesAutoresizingMaskIntoConstraints = YES;
 	documentScroller.delegate = self;
 	
-	self.view.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.80];
-	
 	MADReportPageView *documentView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
 	documentView.backgroundColor = [UIColor whiteColor];
 	documentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |

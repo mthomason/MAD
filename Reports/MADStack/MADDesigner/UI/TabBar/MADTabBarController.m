@@ -72,7 +72,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.delegate = self;
-	//self.view.backgroundColor = [UIColor purpleColor];
 	self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	self.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	[self.navigationController setNavigationBarHidden:YES animated:NO];

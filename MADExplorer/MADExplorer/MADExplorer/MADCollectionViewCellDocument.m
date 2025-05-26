@@ -335,7 +335,7 @@ static inline double wobbleRandomFactor(void) {
 	 UIViewAnimationOptionBeginFromCurrentState
 					 animations:^{
 		typeof(weakSelf) __strong strongSelf = weakSelf;
-		if (!strongSelf) return; // Safety check
+		if (!strongSelf) return;
 		strongSelf.transform = CGAffineTransformMakeRotation(angle);
 	} completion:nil];
 }
@@ -413,7 +413,6 @@ static inline double wobbleRandomFactor(void) {
 	
 	UIImage *cloudIndicatorImage = notDownloaded && isUbiquitous ?
 								[UIImage imageNamed:@"MADImageToolbarCloudDownload"] : nil;
-	
 	[cloudIndicatorImageView setImage: cloudIndicatorImage];
 	
 	[labelTitle setNeedsLayout];

@@ -10,19 +10,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADDesignerNavigationBar
-/*
-+ (void)initialize {
-    [super initialize];
-    if (self == [MADDesignerNavigationBar self]) {
-        UIColor *c = [MADColorEverydayApps newColorBlue];
-        [[MADDesignerNavigationBar appearance] setBarTintColor:c];
-    }
-}
 
-- (UIBarStyle)barStyle {
-    return UIBarStyleBlack;
-}
-*/
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	[self.topItem.titleView sizeToFit];

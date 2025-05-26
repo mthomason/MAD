@@ -13,7 +13,7 @@
 
 @interface NSDateFormatter (RFC_3339)
 
-    + (instancetype)RFC_3339;
++ (instancetype)RFC_3339;
 
 @end
 
