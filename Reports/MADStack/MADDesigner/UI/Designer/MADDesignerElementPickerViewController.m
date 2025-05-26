@@ -51,21 +51,15 @@ static const NSInteger MADViewTagDocumentObjectNewAggregate     = 2017;
 static const NSInteger MADViewTagDocumentObjectNewLabelStatic   = 2027;
 static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
-@interface MADDesignerElementPickerViewController ()
-	<MADQueryChooseFieldProtocol,
-		MADAggregateFunctionsViewControllerDelegate,
-		MADGroupByViewControllerDelegate,
-		UINavigationControllerDelegate,
-		UICollectionViewDataSource,
-		UICollectionViewDelegateFlowLayout>
+@interface MADDesignerElementPickerViewController () <MADQueryChooseFieldProtocol, MADAggregateFunctionsViewControllerDelegate, MADGroupByViewControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-	@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
-	@property (nonatomic, assign) int32_t aggregateGroupBySectionNumber;
-	@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
-	@property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
-	@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
+@property (nonatomic, assign) int32_t aggregateGroupBySectionNumber;
+@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
+@property (nonatomic, strong) NSArray *dataSource;
 
-	- (IBAction)done:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 
@@ -81,16 +75,10 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-	
 	if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
-		
-		MADocument *document = _document;
-		[segue.destinationViewController setDocument: document];
-		
+		[segue.destinationViewController setDocument: _document];
 	}
-	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
-									segue.destinationViewController.accessibilityElements.firstObject);
-	
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, segue.destinationViewController.accessibilityElements.firstObject);
 }
 
 - (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -118,18 +106,17 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	self.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
-	self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
+	self.preferredContentSize = CGSizeMake(320.0, 320.0);
+	self.navigationController.preferredContentSize = CGSizeMake(320.0, 320.0);
 	
 	NSMutableArray *dataSource = [[NSMutableArray alloc] initWithCapacity:6];
-	NSNumber *labelDynamic =    [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelDynamic];
-	NSNumber *labelStatic =     [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelStatic];
-	NSNumber *aggregate =       [[NSNumber alloc] initWithShort:MADPrintPageElementTypeAggregate];
-	NSNumber *image =           [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
-	NSNumber *whitespace =      [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
-	NSArray *defaults = [[NSArray alloc] initWithObjects: labelDynamic, labelStatic, aggregate,
-														  image, whitespace, nil];
-	[dataSource addObjectsFromArray:defaults];
+	NSNumber *labelDynamic = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelDynamic];
+	NSNumber *labelStatic = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelStatic];
+	NSNumber *aggregate = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeAggregate];
+	NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
+	NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
+
+	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace]];
 	
 	if ([MTStoreKitController sharedObject].barcodeDesignerEnabled) {
 		NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
@@ -189,28 +176,25 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	[self presentViewController:imagePicker animated:YES completion:NULL];
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-				  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	
 	static NSString *MADIdentiferDocumentObjectCell = @"MADIdentiferDocumentObjectCell";
 	
 	MADDocumentObjectCollectionViewCell *result;
 	result = [collectionView dequeueReusableCellWithReuseIdentifier: MADIdentiferDocumentObjectCell
 													   forIndexPath: indexPath];
-	NSNumber * __weak  madob = self.dataSource[(NSUInteger)indexPath.row];
+	NSNumber *madob = [self.dataSource[(NSUInteger)indexPath.row] copy];
 	short madobValue = madob.shortValue;
-	
 	result.type = madobValue;
 	result.contentView.tag = madobValue;
 	
 	if (result.selectedBackgroundView == nil) {
-	
 		UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
 		UIColor *bgColor = [[UIColor alloc] initWithWhite:0.30000f alpha:0.30000f];
 		selectedBackgroundView.backgroundColor = bgColor;
 		result.selectedBackgroundView = selectedBackgroundView;
-		
 	}
+
 	return result;
 }
 
@@ -235,10 +219,9 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark UICollectionViewFlowLayoutDelegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
-				  layout:(UICollectionViewLayout*)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+				  layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 	
-	return CGSizeMake(150.0000f, 100.0000f);
+	return CGSizeMake(150.0, 100.0);
 
 }
 
@@ -255,9 +238,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
 	if (self.aggregateViewController) {
-		NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForType:functionType];
-		detailText = [detailText stringByAppendingString:@"(x)"];
-		(self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel).text = detailText;
+		(self.aggregateViewController.tableViewCellAggrageFunction.detailTextLabel).text = [[RptqDocumentElementAggregate newStringDisplayForType:functionType] stringByAppendingString:@"(x)"];
 	}
 }
 
@@ -395,16 +376,14 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 				
 				case 0: {   // Group by a Field
 					
-					NSString *navigationItemTitle = NSLocalizedString(@"Field Selector", @"Field Selector");
-					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Field Selector", @"Field Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
 
 				}
 				case 1: {   // Group by a Formula
 
-					NSString *navigationItemTitle = NSLocalizedString(@"Formula Selector", @"Formula Selector");
-					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Formula Selector", @"Formula Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
 
@@ -424,24 +403,23 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 				case 0: {   // Aggrage Function *f(x)*
 
-					NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
-					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Function Selector", @"Function Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
-					
+
 				}
 				case 1: {   // Input *x*
-					
-					NSString *navigationItemTitle = NSLocalizedString(@"Data Object Selector", @"Data Object Selector");
-					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+
+					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Data Object Selector", @"Data Object Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
 				}
 				case 2: {   //Group By *For Each*
-					NSString *navigationItemTitle = NSLocalizedString(@"Group By Selector", @"Group By Selector");
-					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
+
+					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Group By Selector", @"Group By Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
+
 				}
 				default:
 					break;

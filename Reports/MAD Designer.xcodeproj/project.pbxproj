@@ -34,7 +34,6 @@
 		4C1E55031E581D3000E3FAF0 /* MADDesignerNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E55021E581D3000E3FAF0 /* MADDesignerNavigationItem.m */; };
 		4C1E55061E581D3C00E3FAF0 /* MADQueryNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E55051E581D3C00E3FAF0 /* MADQueryNavigationItem.m */; };
 		4C1E550A1E582F9500E3FAF0 /* MADNavigationControllerDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E55091E582F9500E3FAF0 /* MADNavigationControllerDesigner.m */; };
-		4C1E550D1E58363B00E3FAF0 /* MADNavigationControllerQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E550C1E58363B00E3FAF0 /* MADNavigationControllerQuery.m */; };
 		4C1E74A92DDE1D2200F2334F /* MADColorTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E74A82DDE1D2200F2334F /* MADColorTransformer.m */; };
 		4C1E74AC2DDE20B900F2334F /* MADLocaleTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1E74AB2DDE20B900F2334F /* MADLocaleTransformer.m */; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
@@ -505,8 +504,6 @@
 		4C1E55051E581D3C00E3FAF0 /* MADQueryNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryNavigationItem.m; sourceTree = "<group>"; };
 		4C1E55081E582F9500E3FAF0 /* MADNavigationControllerDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerDesigner.h; sourceTree = "<group>"; };
 		4C1E55091E582F9500E3FAF0 /* MADNavigationControllerDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerDesigner.m; sourceTree = "<group>"; };
-		4C1E550B1E58363B00E3FAF0 /* MADNavigationControllerQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerQuery.h; sourceTree = "<group>"; };
-		4C1E550C1E58363B00E3FAF0 /* MADNavigationControllerQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerQuery.m; sourceTree = "<group>"; };
 		4C1E74A72DDE1D2200F2334F /* MADColorTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADColorTransformer.h; path = Source/MADColorTransformer.h; sourceTree = "<group>"; };
 		4C1E74A82DDE1D2200F2334F /* MADColorTransformer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADColorTransformer.m; path = Source/MADColorTransformer.m; sourceTree = "<group>"; };
 		4C1E74AA2DDE20B900F2334F /* MADLocaleTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADLocaleTransformer.h; path = Source/MADLocaleTransformer.h; sourceTree = "<group>"; };
@@ -2562,8 +2559,6 @@
 				4C4020781BAE966000BAE5FC /* MADNavigationControllerQueryVisualization.m */,
 				4C692B351E1D0A1400DC2CB0 /* MADNavigationControllerViewer.h */,
 				4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */,
-				4C1E550B1E58363B00E3FAF0 /* MADNavigationControllerQuery.h */,
-				4C1E550C1E58363B00E3FAF0 /* MADNavigationControllerQuery.m */,
 				4C1E55081E582F9500E3FAF0 /* MADNavigationControllerDesigner.h */,
 				4C1E55091E582F9500E3FAF0 /* MADNavigationControllerDesigner.m */,
 			);
@@ -3289,7 +3284,6 @@
 				4C26BA211BAF150F00456DC8 /* MADQueryVisualizationModel.m in Sources */,
 				4CFEE7FB1BB77BD600AFAA0A /* MADQueryChooseFieldController.m in Sources */,
 				4C26B9F91BAF14A500456DC8 /* MADDesignerElementView.m in Sources */,
-				4C1E550D1E58363B00E3FAF0 /* MADNavigationControllerQuery.m in Sources */,
 				4CEBD0301E319535009FE2DC /* MADAnimatedTransitionControllerPush.m in Sources */,
 				4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */,
 				4CFEE8031BB78CAB00AFAA0A /* MADTableViewControllerOpperators.m in Sources */,

@@ -12,8 +12,7 @@
 #import <UIKit/UINavigationController.h>
 #import "MADNavigationControllerIdentity.h"
 
-@interface MADNavigationControllerToolbox : UINavigationController
-	<MADNavigationControllerIdentify>
+@interface MADNavigationControllerToolbox : UINavigationController <MADNavigationControllerIdentify>
 
 @end
 

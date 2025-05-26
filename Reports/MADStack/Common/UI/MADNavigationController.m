@@ -9,7 +9,6 @@
 #import "MADNavigationController.h"
 #import "MADNavigationControllerViewer.h"
 #import "MADNavigationControllerDesigner.h"
-#import "MADNavigationControllerQuery.h"
 #import "MADDesignerNavigationBar.h"
 #import "MADViewerNavigationBar.h"
 #import "MADTransparentPresentationController.h"
@@ -106,10 +105,6 @@
 			controller = [[MADNavigationControllerDesigner alloc] initWithNavigationBarClass: [MADDesignerNavigationBar class]
 																				toolbarClass: nil];
 			break;
-
-		//case MADNavigationControllerTypeQuery:
-		//	controller = [[MADNavigationControllerQuery alloc] init];
-		//	break;
 
 		default:
 			os_log_info(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
