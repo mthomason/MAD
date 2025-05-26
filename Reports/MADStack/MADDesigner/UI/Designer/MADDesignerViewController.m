@@ -52,6 +52,7 @@
 #import "MADDesignerView.h"
 #import "MADReportSectionDelegateProtocol.h"
 #import "MADReportSectionsDataSource.h"
+#import "MADThemeManager.h"
 #import "madlog.h"
 
 #import <MADCocoaExtensions/MADCompassDirection.h>
@@ -403,7 +404,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (UINavigationController *)navigationControllerToolbox {
 	if (_navigationControllerToolbox == nil) {
-		UINavigationController *navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeToolbox];
+		UINavigationController *navigation = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeToolbox];
+		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
 		navigation.transitioningDelegate = self.toolboxTransitioningDelegate;
 		navigation.modalPresentationStyle = UIModalPresentationCustom;
 		navigation.preferredContentSize = sizePopoverDefault();
@@ -1580,7 +1582,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		if (!strongself) return;
 		
 		UIView *viewToEdit = [strongself.elementViewsDictionary objectForKey:identifier];
-		UINavigationController *navigation = [MADNavigationController newNavigationController: MADNavigationControllerTypeAggregateAdd];
+		UINavigationController *navigation = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeAggregateAdd];
+		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
+
 		MADocument *document = strongself.document;
 		RptqDocumentElementAggregate *aggregateToEdit = [document.managedObjectContext objectWithID:objectID];
 		
@@ -3440,20 +3444,22 @@ END_deselectElementView:;
 }
 
 - (IBAction)actionAdd:(id)sender {
-	UINavigationController *navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeElementPicker];
-	MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigationController.topViewController;
+	UINavigationController *navigation = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeElementPicker];
+	[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
+
+	MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigation.topViewController;
 	pickerController.objectSelectorDelegate = self;
 	pickerController.document = self.document;
 	
-	navigationController.modalPresentationStyle = UIModalPresentationPopover;
-	navigationController.preferredContentSize = sizePopoverDefault();
+	navigation.modalPresentationStyle = UIModalPresentationPopover;
+	navigation.preferredContentSize = sizePopoverDefault();
 	
-	UIPopoverPresentationController *popoverController = navigationController.popoverPresentationController;
+	UIPopoverPresentationController *popoverController = navigation.popoverPresentationController;
 	popoverController.delegate = self;
 	popoverController.barButtonItem = sender;
 	popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
 	
-	[self presentViewController: navigationController animated: YES completion:^{
+	[self presentViewController: navigation animated: YES completion:^{
 		UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, pickerController);
 	}];
 	[self setDisplayInactive];

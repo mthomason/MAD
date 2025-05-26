@@ -9,6 +9,8 @@
 #ifndef MADNavigationControllerIdentity_h
 #define MADNavigationControllerIdentity_h
 
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+
 typedef NS_ENUM(short, MADNavigationControllerType) {
 	MADNavigationControllerTypeUnknown = 0,
 	MADNavigationControllerTypeInformation,
@@ -44,8 +46,12 @@ static inline NSString *NSStringFromMADNavigationControllerType(MADNavigationCon
 }
 
 @protocol MADNavigationControllerIdentify <NSObject>
-	@property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
+@property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
 @end
 
+@protocol MADNavigationProtocol <NSObject>
+@property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
+@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+@end
 
 #endif /* MADNavigationControllerIdentity_h */

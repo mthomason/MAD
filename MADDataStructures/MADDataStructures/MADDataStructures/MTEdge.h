@@ -40,16 +40,17 @@ typedef NS_ENUM(short, MTEdgeType) {
 	@property (nonatomic, assign) MTEdgeType dfsEdgeType;
 	@property (nonatomic, strong) NSNumber *weight;
 
+
 	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
 					  andDestination:(MTVertex *)vertex2;
 
 	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
 						 destination:(MTVertex *)vertex2
-						   andObject:(id <NSCopying>)object;
+						   andObject:(NSObject <NSCopying> *)object;
 
 	- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1
 						 destination:(MTVertex *)vertex2
-							  object:(id <NSCopying>)object
+							  object:(NSObject <NSCopying> *)object
 						   andWeight:(NSNumber *)weight NS_DESIGNATED_INITIALIZER;
 
 @end

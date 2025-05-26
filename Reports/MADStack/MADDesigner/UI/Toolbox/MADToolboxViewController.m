@@ -7,6 +7,12 @@
 //
 
 #import "MADToolboxViewController.h"
+#import "MADToolboxControllerProtocol.h"
+#import "MADNavigationController.h"
+#import "MADViewControllerDocumentProtocol.h"
+#import "MADThemeManager.h"
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <UIKit/UIAppearance.h>
 #import <UIKit/UIStoryboard.h>
@@ -18,12 +24,6 @@
 #import <UIKit/UITableViewController.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/UIGraphics.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import "MADToolboxControllerProtocol.h"
-#import "MADNavigationController.h"
-#import "MADViewControllerDocumentProtocol.h"
 
 NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
@@ -38,15 +38,15 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 @interface MADToolboxViewController ()
 
-    @property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
-    @property (nonatomic, strong) MADToolboxPanel *layout;
-    @property (nonatomic, strong) MADToolboxPanel *format;
+@property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
+@property (nonatomic, strong) MADToolboxPanel *layout;
+@property (nonatomic, strong) MADToolboxPanel *format;
 
-    @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
-    @property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
+@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
 
-    @property (nonatomic, weak) UIViewController *currentViewController;
-    @property (nonatomic, strong) UINavigationController *styleNavigationController;
+@property (nonatomic, weak) UIViewController *currentViewController;
+@property (nonatomic, strong) UINavigationController *styleNavigationController;
 
 @end
 
@@ -121,7 +121,9 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 		self.layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
 		self.format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
 
-		UINavigationController *navigationController = [MADNavigationController newNavigationController: MADNavigationControllerTypeFontPicker];
+		UINavigationController *navigationController = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeFontPicker];
+		[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
+
 		self.styleNavigationController = navigationController;
 		self.currentViewController = self.styleNavigationController;
 		self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;

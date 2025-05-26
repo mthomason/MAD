@@ -11,6 +11,7 @@
 #import "MADNavigationControllerDesigner.h"
 #import "MADDesignerNavigationBar.h"
 #import "MADViewerNavigationBar.h"
+#import "MADNavigationControllerToolbox.h"
 #import "MADTransparentPresentationController.h"
 #import "madlog.h"
 
@@ -48,88 +49,60 @@
 }
 */
 
-+ (instancetype)newNavigationController:(MADNavigationControllerType)type {
-
-	id controller = nil, controllerID = nil,
-		storyboardID = nil, bundle = nil, storyboard = nil;
-	
++ (UINavigationController *)navigationControllerWithType:(MADNavigationControllerType)type {
 	switch (type) {
-
 		case MADNavigationControllerTypeInformation:
-			storyboardID = @"MADAboutApp";
-			controllerID = @"MADIdentifierNavControllerInfo";
-			bundle = [NSBundle mainBundle];
-			break;
-			
+			return [[UIStoryboard storyboardWithName: @"MADAboutApp" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierNavControllerInfo"];
 		case MADNavigationControllerTypeLicensing:
-			storyboardID = @"MADStore";
-			controllerID = @"MADIdentifierNavControllerStore";
-			bundle = [NSBundle mainBundle];
-			break;
-			
-		case MADNavigationControllerTypeNewDocument:
-			storyboardID = @"MADCreateDocument";
-			controllerID = @"MADIdentifierNavControllerCreateDoc";
-			bundle = [NSBundle mainBundle];
-			break;
-			
-		case MADNavigationControllerTypeToolbox:
-			storyboardID = @"MADDesignerToolbox";
-			bundle = [NSBundle mainBundle];
-			break;
-			
-		case MADNavigationControllerTypeFontPicker:
-			storyboardID = @"MADDesignerToolbox";
-			controllerID = @"MADIdentifierNavControllerFontPicker";
-			bundle = [NSBundle mainBundle];
-			break;
+			return [[UIStoryboard storyboardWithName: @"MADStore" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierNavControllerStore"];
 
+
+
+		case MADNavigationControllerTypeNewDocument:
+			return [[UIStoryboard storyboardWithName: @"MADCreateDocument" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierNavControllerCreateDoc"];
+		case MADNavigationControllerTypeFontPicker:
+			return [[UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierNavControllerFontPicker"];
 		case MADNavigationControllerTypeAggregateAdd:
-			storyboardID = @"MADDesignerObjectSelector";
-			controllerID = @"MADIdentifierNavControllerAggregate";
-			bundle = [NSBundle mainBundle];
-			break;
-			
+			return [[UIStoryboard storyboardWithName: @"MADDesignerObjectSelector" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierNavControllerAggregate"];
+
 		case MADNavigationControllerTypeElementPicker:
-			storyboardID = @"MADDesignerObjectSelector";
-			controllerID = @"MADIdentifierNavControllerObjectSelector";
-			bundle = [NSBundle mainBundle];
-			break;
-			
-		case MADNavigationControllerTypeViewer:
-			controller = [[MADNavigationControllerViewer alloc] initWithNavigationBarClass: [MADViewerNavigationBar class]
-																			  toolbarClass: nil];
-			break;
-			
-		case MADNavigationControllerTypeDesigner:
-			controller = [[MADNavigationControllerDesigner alloc] initWithNavigationBarClass: [MADDesignerNavigationBar class]
-																				toolbarClass: nil];
-			break;
+			return [[UIStoryboard storyboardWithName: @"MADDesignerObjectSelector" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierNavControllerObjectSelector"];
+
+		case MADNavigationControllerTypeToolbox:
+			return [[UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]] instantiateInitialViewController];
 
 		default:
-			os_log_info(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
+			os_log_error(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
+			@throw [NSException exceptionWithName: NSInternalInconsistencyException
+										   reason: @"MADNavigationController: newNavigationControllerWithType: called with unsupported type."
+										 userInfo: nil];
+	}
+}
+
++ (UINavigationController <MADViewControllerDocumentProtocol> *)documentNavigationControllerWithType:(MADNavigationControllerType)type
+																							document:(MADocument *)document {
+	switch (type) {
+		case MADNavigationControllerTypeViewer: {
+			UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *controller = [[MADNavigationControllerViewer alloc] initWithNavigationBarClass: [MADViewerNavigationBar class]
+																																								 toolbarClass: nil];
+			controller.document = document;
+			return controller;
+			break;
+		}
+		case MADNavigationControllerTypeDesigner: {
+			UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> * controller = [[MADNavigationControllerDesigner alloc] initWithNavigationBarClass: [MADDesignerNavigationBar class]
+																																									toolbarClass: nil];
+			controller.document = document;
+			return controller;
+			break;
+		}
+		default:
+			os_log_error(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
+			@throw [NSException exceptionWithName: NSInternalInconsistencyException
+										   reason: @"MADNavigationController: newNavigationControllerWithType:document: called with unsupported type."
+										 userInfo: nil];
 			break;
 	}
-	
-	if (controller == nil) {
-		if (storyboardID != nil) {
-			
-			storyboard = [UIStoryboard storyboardWithName: storyboardID bundle: bundle];
-			controller = controllerID != nil ?
-				[storyboard instantiateViewControllerWithIdentifier: controllerID] :
-				[storyboard instantiateInitialViewController];
-			
-		} else {
-			controller = [[self alloc] initWithNavigationBarClass: nil
-													 toolbarClass: nil];
-		}
-	}
-
-	if ([controller respondsToSelector:@selector(setControllerType:)]) {
-		[controller setControllerType: type];
-	}
-	
-	return controller;
 }
 
 #pragma mark -

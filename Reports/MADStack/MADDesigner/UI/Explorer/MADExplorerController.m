@@ -34,6 +34,7 @@
 #import "MADExplorerAnimatedTransitioning.h"
 #import "MADColorTransformer.h"
 #import "MADLocaleTransformer.h"
+#import "MADThemeManager.h"
 #import "madlog.h"
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
@@ -1063,7 +1064,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (IBAction)actionAddDocument:(id)sender {
 	
-	UINavigationController *navControl = [MADNavigationController newNavigationController: MADNavigationControllerTypeNewDocument];
+	UINavigationController *navControl = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeNewDocument];
+	[MADThemeManager applyAppearanceToNavigationController:navControl traitCollection:self.traitCollection];
+
 	navControl.modalPresentationStyle = UIModalPresentationFormSheet;
 	navControl.presentationController.delegate = self;
 	
@@ -1089,7 +1092,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		_infoControllerOnScreen = NO;
 		[self dismissViewControllerAnimated:YES completion:^{ }];
 	} else {
-		UINavigationController *infoViewController = [MADNavigationController newNavigationController:MADNavigationControllerTypeInformation];
+		UINavigationController *infoViewController = [MADNavigationController navigationControllerWithType:MADNavigationControllerTypeInformation];
+		[MADThemeManager applyAppearanceToNavigationController:infoViewController traitCollection:self.traitCollection];
+
 		infoViewController.modalPresentationStyle = UIModalPresentationPopover;
 		infoViewController.preferredContentSize = CGSizeMake(420.0, 480.0);
 		
@@ -1164,9 +1169,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (IBAction)actionStore:(id)sender {
 	
-	MADNavigationController *licensing;
-	licensing = [MADNavigationController newNavigationController: MADNavigationControllerTypeLicensing];
-	
+	UINavigationController *licensing = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeLicensing];
+	[MADThemeManager applyAppearanceToNavigationController:licensing traitCollection:self.traitCollection];
 	//licensing.modalPresentationStyle = UIModalPresentationFormSheet;
 	//licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	//MADExplorerAnimatedTransitioningDelegate *transitioningDelegate;

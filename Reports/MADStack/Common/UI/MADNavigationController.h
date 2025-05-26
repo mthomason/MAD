@@ -14,14 +14,14 @@
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADNavigationControllerIdentity.h"
 
-@protocol MADViewControllerStandardProtocol;
-
-@interface MADNavigationController : UINavigationController <UINavigationControllerDelegate, UIViewControllerTransitioningDelegate, MADViewControllerDocumentProtocol, MADNavigationControllerIdentify>
-
-+ (instancetype)newNavigationController:(MADNavigationControllerType)type;
+@interface MADNavigationController : UINavigationController <UINavigationControllerDelegate, UIViewControllerTransitioningDelegate, MADNavigationProtocol, MADViewControllerDocumentProtocol, MADNavigationControllerIdentify>
 
 @property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
 @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+
++ (UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *)documentNavigationControllerWithType:(MADNavigationControllerType)type
+																															   document:(MADocument *)document;
++ (UINavigationController *)navigationControllerWithType:(MADNavigationControllerType)type;
 
 - (IBAction)done:(id)sender;
 

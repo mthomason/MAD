@@ -41,7 +41,7 @@
 	return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 andObject:nil];
 }
 
-- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id <NSCopying>)object {
+- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(NSObject <NSCopying> *)object {
 	NSNumber *one = @(1);
 	return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 object:nil andWeight:one];
 }
@@ -49,7 +49,7 @@
 - (instancetype)initWithUniqueID:(NSNumber *)uniqueID
 						  origin:(MTVertex *)vertex1
 					 destination:(MTVertex *)vertex2
-						  object:(id <NSCopying>)object
+						  object:(NSObject <NSCopying> *)object
 					   andWeight:(NSNumber *)weight {
 	if (self = [super initWithObject:object]) {
 

@@ -12,8 +12,7 @@
 #import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 
-@interface MADQueryVisualizationViewController : UIViewController
-	<MADViewControllerDocumentProtocol>
+@interface MADQueryVisualizationViewController : UIViewController <MADViewControllerDocumentProtocol>
 
 	- (void)redraw:(BOOL)animated;
 

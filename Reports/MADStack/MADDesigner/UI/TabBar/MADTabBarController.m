@@ -82,18 +82,15 @@
 
 	MADocument *document = self.document;
 		
-	NSMutableArray <__kindof UIViewController *> *tabBarViewControllers;
-	tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
+	NSMutableArray <__kindof UIViewController *> *tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
 	
 	MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
 	[tabBarViewControllers addObject: splitViewController];
 	
-	MADNavigationController *navControllerDesigner = [MADNavigationController newNavigationController:MADNavigationControllerTypeDesigner];
-	navControllerDesigner.document = document;
+	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [MADNavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
 	[tabBarViewControllers addObject: navControllerDesigner];
 	
-	MADNavigationController *navControllerViewer = [MADNavigationController newNavigationController:MADNavigationControllerTypeViewer];
-	navControllerViewer.document = document;
+	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [MADNavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
 	[tabBarViewControllers addObject: navControllerViewer];
 
 	id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;

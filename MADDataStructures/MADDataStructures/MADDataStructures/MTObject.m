@@ -29,7 +29,7 @@
 	return [self initWithObject:nil];
 }
 
-- (instancetype)initWithObject:(id <NSCopying>)object {
+- (instancetype)initWithObject:(NSObject <NSCopying> *)object {
 	if (self = [super init]) {
 		_object = [object copyWithZone:nil];
 	}

@@ -11,6 +11,16 @@
 #endif
 
 #import "MADDriverSelectorController.h"
+#import "MADDocumentCreationManager.h"
+#import "MADDocumentCreationManagerProtocol.h"
+#import "madlog.h"
+
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADConnectionViewController.h>
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -21,41 +31,18 @@
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UILabel.h>
 
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADConnectionViewController.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADLabelTitle.h>
-
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-
-#import "MADVibrantTableView.h"
-
-#import "MADDocumentCreationManager.h"
-#import "MADDocumentCreationManagerProtocol.h"
-
-NSString * const MADDriverSelectorControllerDefaultPrompt               = @"Select database type.";
-NSString * const MADDriverSelectorControllerDefaultTitle                = @"New Report";
-
-@interface MADDriverSelectorController ()
-	<MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
+@interface MADDriverSelectorController () <MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
 	@property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
 	@property (nonatomic, weak) __kindof MADConnectionViewController *connectionViewController;
-
 @end
 
 @implementation MADDriverSelectorController
 
 - (NSURL *)documentDirectory {
-	NSURL *url = [self.saveFileDelegate documentDirectory];
-	return  url;
+	return [self.saveFileDelegate documentDirectory];
 }
 
 #pragma mark - MADVibrantTableViewCellDelegate
-
-- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
-	return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
-}
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -79,19 +66,19 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 	switch (indexPath.row) {
 		case 0:
 			cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
-			cell.textLabel.text = NSLocalizedString(@"MySQL Native Driver",
-													@"Selection Label 'MySQL Native Driver'");
+			cell.textLabel.text = NSLocalizedString(@"MySQL Native Driver", @"Selection Label 'MySQL Native Driver'");
 			break;
 
 		case 1:
 			cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
-			cell.textLabel.text = NSLocalizedString(@"Sql Server / TDS Driver",
-													@"Selection Label 'Sql Server / TDS Driver'");
+			cell.textLabel.text = NSLocalizedString(@"Sql Server / TDS Driver", @"Selection Label 'Sql Server / TDS Driver'");
 			break;
 			
 		default:
+			os_log_error(GetDesignerLog(), "%s: Unknown row in driver selector: %ld", __PRETTY_FUNCTION__, (long)indexPath.row);
 			break;
 	}
+	cell.textLabel.textColor = [UIColor labelColor];
 	[UITableViewCell appearance].textLabel.highlightedTextColor = [MADColorEverydayApps newColorBlue];
 	return cell;
 }
@@ -100,14 +87,12 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 	return 104.0;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
-										 forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	[cell.contentView setNeedsLayout];
 	[cell.contentView layoutIfNeeded];
 }
 
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell
-											  forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	[cell.contentView setNeedsLayout];
 	[cell.contentView layoutIfNeeded];
 }
@@ -117,16 +102,8 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 }
 
 - (void)showViewControllerConnection:(NSInteger)type {
-	NSString *storyboardName = @"MADCreateDocument";
-	NSString *viewControllerID = @"MADConnectionViewControllerSQLGeneric";
-	//NSString *viewControllerID = type == 0 ? @"MADConnectionViewControllerMySQL" :
-	//                                         @"MADConnectionViewControllerTDS";
-	NSString *nibName = type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient";
-	NSBundle *bundle = [NSBundle bundleWithIdentifier:nibName];
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName
-														 bundle:bundle];
-	MADConnectionViewController *connectionViewController;
-	connectionViewController = [storyboard instantiateViewControllerWithIdentifier:viewControllerID];
+	MADConnectionViewController *connectionViewController = [[UIStoryboard storyboardWithName: @"MADCreateDocument"
+																					   bundle: [NSBundle bundleWithIdentifier:type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient"]] instantiateViewControllerWithIdentifier:@"MADConnectionViewControllerSQLGeneric"];
 	connectionViewController.delegate = self;
 	connectionViewController.saveFileDelegate = self;
 	connectionViewController.databaseType = type == 0 ? MADDatabaseTypeMySQL :
@@ -138,14 +115,12 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 
 - (void)viewControllerDidFinish:(id)sender {
 	if ([sender isKindOfClass:[MADConnectionViewController class]]) {
-		MADDocumentCreationManager *documentCreationManager;
-		MADConnectionViewController *viewController = ((MADConnectionViewController *)sender);
-		MADDatabaseConnection *databaseConnection = [viewController databaseConnection];
-		documentCreationManager = [[MADDocumentCreationManager alloc] initWithFilename: viewController.textFieldReportName.text
-																			  delegate: self
-																	documentsDirectory: self.documentDirectory
-																	databaseConnection: databaseConnection
-																		viewController: viewController];
+		MADDatabaseConnection *databaseConnection = [((MADConnectionViewController *)sender) databaseConnection];
+		MADDocumentCreationManager *documentCreationManager = [[MADDocumentCreationManager alloc] initWithFilename: ((MADConnectionViewController *)sender).textFieldReportName.text
+																										  delegate: self
+																								documentsDirectory: self.documentDirectory
+																								databaseConnection: databaseConnection
+																									viewController: ((MADConnectionViewController *)sender)];
 		[documentCreationManager start];
 		self.documentCreationManager = documentCreationManager;
 
@@ -163,8 +138,7 @@ NSString * const MADDriverSelectorControllerDefaultTitle                = @"New 
 #pragma mark -
 #pragma mark MADDocumentCreationManagerProtocol
 
-- (void)documentCreationManager:(id <MADDocumentCreationManagerInterface>)manager
-					  didFinish:(BOOL)success {
+- (void)documentCreationManager:(id <MADDocumentCreationManagerInterface>)manager didFinish:(BOOL)success {
 	MADConnectionViewController *connectionViewController = self.connectionViewController;
 	[connectionViewController resetInterface];
 	if (success) {

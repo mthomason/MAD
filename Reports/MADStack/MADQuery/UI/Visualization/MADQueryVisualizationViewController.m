@@ -98,12 +98,7 @@ typedef UIViewController <MADManagedObjectViewProtocol, MADHierarchicalGroupingN
 typedef NSMutableDictionary <NSNumber *,
 							 MADHierarchicalChildController *> MADMutableMapHierarchicalChildControllers;
 
-@interface MADQueryVisualizationViewController ()
-	<UIGestureRecognizerDelegate,
-		UIPopoverControllerDelegate,
-		MADQueryVisualizationSchemaPresentationDelegate,
-		MADQueryVisualizationSchemaDelegate,
-		MADViewControllerStandardProtocol>
+@interface MADQueryVisualizationViewController () <UIGestureRecognizerDelegate, UIPopoverControllerDelegate, MADQueryVisualizationSchemaPresentationDelegate, MADQueryVisualizationSchemaDelegate, MADViewControllerStandardProtocol>
 
 	@property (nonatomic, strong) MADQueryVisualizationCacheManager *cacheManager;
 	@property (nonatomic, strong) MADMutableMapHierarchicalChildControllers *controllersByObjectID;
@@ -131,7 +126,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 @implementation MADQueryVisualizationViewController
-
 @synthesize document = _document;
 
 #pragma mark -
