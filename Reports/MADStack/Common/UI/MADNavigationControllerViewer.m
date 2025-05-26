@@ -66,4 +66,8 @@
 	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
+- (MADNavigationControllerType)controllerType {
+	return MADNavigationControllerTypeViewer;
+}
+
 @end

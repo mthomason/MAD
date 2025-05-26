@@ -150,6 +150,10 @@
 	}
 }
 
+- (MADNavigationControllerType)controllerType {
+	return MADNavigationControllerTypeQuery;
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle {
 	return UIStatusBarStyleLightContent;
 }

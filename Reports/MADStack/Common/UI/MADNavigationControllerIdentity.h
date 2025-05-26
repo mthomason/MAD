@@ -21,7 +21,8 @@ typedef NS_ENUM(short, MADNavigationControllerType) {
 	MADNavigationControllerTypeViewer,
 	MADNavigationControllerTypeFileExplorer,
 	MADNavigationControllerTypeDesigner,
-	MADNavigationControllerTypeQuery
+	MADNavigationControllerTypeQuery,
+	MADNavigationControllerTypeQueryVisualization
 };
 
 static inline NSString *NSStringFromMADNavigationControllerType(MADNavigationControllerType);

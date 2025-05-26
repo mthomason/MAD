@@ -12,12 +12,12 @@
 #import <UIKit/UIViewControllerTransitionCoordinator.h>
 #import "MADToolboxViewController.h"
 
-@interface MADNavigationControllerToolbox ()
-	<UINavigationBarDelegate, UIBarPositioningDelegate>
+@interface MADNavigationControllerToolbox () <UINavigationBarDelegate, UIBarPositioningDelegate>
 @end
 
 @implementation MADNavigationControllerToolbox
 
+/*
 + (void)initialize {
 	[super initialize];
 	if (self == [MADNavigationControllerToolbox self]) {
@@ -28,6 +28,7 @@
 		}
 	}
 }
+*/
 
 - (BOOL)prefersStatusBarHidden {
 	return YES;

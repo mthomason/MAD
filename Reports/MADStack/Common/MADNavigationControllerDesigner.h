@@ -9,14 +9,16 @@
 #ifndef Reports_MADNavigationControllerDesigner_h
 #define Reports_MADNavigationControllerDesigner_h
 
-#import <UIKit/UINavigationController.h>
 #import "MADTabBarItemProtocol.h"
+#import "MADNavigationControllerIdentity.h"
 #import "MADViewControllerDocumentProtocol.h"
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 
+#import <UIKit/UINavigationController.h>
+
 @protocol MADViewControllerStandardProtocol;
 
-@interface MADNavigationControllerDesigner : UINavigationController <MADTabBarImageProtocol, MADViewControllerDocumentProtocol>
+@interface MADNavigationControllerDesigner : UINavigationController <MADNavigationControllerIdentify, MADTabBarImageProtocol, MADViewControllerDocumentProtocol>
 
 @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 

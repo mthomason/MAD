@@ -30,4 +30,8 @@
 	}
 }
 
+- (MADNavigationControllerType)controllerType {
+	return MADNavigationControllerTypeFontPicker;
+}
+
 @end

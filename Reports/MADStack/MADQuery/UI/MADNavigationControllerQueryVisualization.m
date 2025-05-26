@@ -59,4 +59,8 @@
 	}
 }
 
+- (MADNavigationControllerType)controllerType {
+	return MADNavigationControllerTypeQueryVisualization;
+}
+
 @end

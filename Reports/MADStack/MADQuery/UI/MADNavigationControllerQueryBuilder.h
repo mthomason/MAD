@@ -10,10 +10,11 @@
 #define MAD_MADNavigationControllerQueryBuilder_h
 
 #import "MADViewControllerDocumentProtocol.h"
+#import "MADNavigationControllerIdentity.h"
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <UIKit/UINavigationController.h>
 
-@interface MADNavigationControllerQueryBuilder : UINavigationController <MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
+@interface MADNavigationControllerQueryBuilder : UINavigationController <MADNavigationControllerIdentify, MADViewControllerDocumentProtocol, MADViewControllerStandardProtocol>
 
 @end
 
