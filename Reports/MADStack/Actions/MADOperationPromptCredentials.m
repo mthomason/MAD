@@ -50,9 +50,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 
 @implementation MADOperationPromptCredentials
 
-- (void)dealloc {
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithUsernameKey:(NSString *)usernameKey
 						passwordKey:(NSString *)passwordKey
@@ -118,7 +116,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 		UIAlertController * __weak weakAlertController = alertController;
 		
 		UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {
-			os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "OK");
 			MADOperationPromptCredentials *strongself = weakself;
 			UIAlertController *strongAlertController = weakAlertController;
 			username = ((UITextField *)strongAlertController.textFields.firstObject).text.copy;
@@ -146,7 +143,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 		actionAlertCancel = [UIAlertAction actionWithTitle: cancel
 													 style: UIAlertActionStyleCancel
 												   handler: ^(UIAlertAction *action) {
-			os_log_info(OS_LOG_DEFAULT, "%s\t%s", __PRETTY_FUNCTION__, "Cancel");
 			MADOperationPromptCredentials *strongself = weakself;
 			password = nil; username = nil;
 			success = NO;

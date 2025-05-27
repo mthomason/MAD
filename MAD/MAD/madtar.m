@@ -362,7 +362,7 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 	struct stat st;
 	
 	if ((status = stat(filename, &st)) < 0) {
-		os_log_debug(OS_LOG_DEFAULT, "Failed to get file status for %s.", filename);
+		os_log_error(OS_LOG_DEFAULT, "Failed to get file status for %s.", filename);
 	} else {
 		entry = archive_entry_new2(archive);
 		archive_entry_copy_stat(entry, &st);
@@ -379,7 +379,7 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 			while ((len = read(fd, buff, buff_size)) > 0) {
 				w_size = archive_write_data(archive, buff, (size_t)len);
 				if (w_size < 0) {
-					os_log_info(OS_LOG_DEFAULT, "Error: archive_write_data() returned %ld.", w_size);
+					os_log_error(OS_LOG_DEFAULT, "Error: archive_write_data() returned %ld.", w_size);
 				}
 			}
 			

@@ -42,8 +42,6 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-	
 	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
 	
 	if (dependencies.count == 0) {

@@ -155,17 +155,19 @@
 		
 		success = YES;
 		
-		NSError * __autoreleasing saveError = nil;
+		NSError *saveError = nil;
 		if (success) {
-			if (!(success = [private save:&saveError])) {
-				os_log_info(GetMadLog(), "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+			success = [private save:&saveError];
+			if (!success && saveError != nil) {
+				os_log_error(GetMadLog(), "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 			}
 			if (saveError) {
 				displayError = [saveError copy];
 			}
 		} else {
-			if (!(success = [private save:&saveError])) {
-				os_log_info(GetMadLog(), "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+			success = [private save:&saveError];
+			if (!success && saveError != nil) {
+				os_log_error(GetMadLog(), "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 			}
 		}
 

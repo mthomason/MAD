@@ -934,11 +934,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 		self.timerLabelTimeSinceRefreh = nil;
 	}
 	
-	NSTimer *t;
-	t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
-										 target: self
-									   selector: @selector(updateTimeSinceLastRefresh:)
-									   userInfo: nil repeats: NO];
+	NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: [MADDateFromTimeFormatter timeIntervalForResolution:resolution]
+												  target: self
+												selector: @selector(updateTimeSinceLastRefresh:)
+												userInfo: nil repeats: NO];
 	self.timerLabelTimeSinceRefreh = t;
 }
 
@@ -959,8 +958,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark MADOperationObserver
 
 - (void)operationDidStart:(MADOperation *)operation {
-	// log operation start
-	os_log_info(GetDesignerLog(), "Operation started: %@ type: %@", operation, NSStringFromClass([operation class]));
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
 		
 	}
@@ -1140,8 +1137,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 #pragma mark Operations
 
 - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
-	// log operation setDisplayActive
-	os_log_info(GetDesignerLog(), "Operation setDisplayActive: %@ type: %@", operation, NSStringFromClass([operation class]));
 	if (active) {
 		[self setDisplayActive];
 	} else {
@@ -1150,25 +1145,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 }
 
 - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document {
-	// log operation finishReload
-	os_log_info(GetDesignerLog(), "Operation finishReload: %@ type: %@", operation, NSStringFromClass([operation class]));
 	[self finishReload:document];
 }
 
 - (void)finishReload:(MADocument *)document {
-	// log operation finishReload
-	os_log_info(GetDesignerLog(), "Operation finishReload: %@ type: %@", document, NSStringFromClass([document class]));
-	MADPrintPageRenderer *printPageRenderer;
-	printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+	MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
 	self.printPageRendererReport = printPageRenderer;
 	
-	MADPageViewAttributes *pageAttributes;
-	pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
-																size: document.paperSize];
+	MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
+																					   size: document.paperSize];
 	
-	MADDocumentPageController *page =
-	[MADDocumentPageController newDocumentPageController: document
-										  pageAttributes: pageAttributes];
+	MADDocumentPageController *page = [MADDocumentPageController newDocumentPageController: document
+																			pageAttributes: pageAttributes];
 	page.view.frame = self.view.bounds;
 	page.delegate = self;
 	

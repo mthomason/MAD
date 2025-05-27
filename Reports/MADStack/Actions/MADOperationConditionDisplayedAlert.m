@@ -27,9 +27,7 @@
 
 @synthesize reverseCondition = _reverseCondition;
 
-- (void)dealloc {
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
 	if (self = [super init]) {
@@ -58,8 +56,6 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	//os_log_info(OS_LOG_DEFAULT, "Evaluate %s", NSStringFromClass(self.class).UTF8String);
-
 	NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
 	MADOperationConditionResult *result = nil;
 	NSString *domain = self.name.copy;

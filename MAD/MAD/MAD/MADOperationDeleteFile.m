@@ -55,7 +55,6 @@
 				[self finish];
 		}];
 	} else {
-		os_log_info(GetMadLog(), "Delete file %s", fileURL.relativePath.UTF8String);
 		[MADFileUtilities removeFileAtURL:fileURL completion:^(NSError *error) {
 			if (error != nil)
 				[self finishWithError:error];

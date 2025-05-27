@@ -25,9 +25,7 @@
 
 @implementation MADOperationConditionPolarQuestionNegative
 
-- (void)dealloc {
-	os_log_info(GetDesignerLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithOperationIdentifier:(NSUInteger)tag {
 	if (self = [super init]) {
@@ -47,15 +45,12 @@
 
 - (void)evaluateForOperation:(MADOperation *)operation
 				  completion:(void (^)(MADOperationConditionResult *))completion {
-	MADOperationConditionResult *result;
-	result = [self evaluateForOperation:operation];
+	MADOperationConditionResult *result = [self evaluateForOperation:operation];
 	completion(result);
 }
 
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-
 	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
 	MADOperationConditionResult *result = nil;
 	

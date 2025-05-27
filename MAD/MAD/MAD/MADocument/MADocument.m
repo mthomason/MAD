@@ -769,9 +769,10 @@ void madwarn(char *err,  const char *err2) { }
 		RptqQuery *query = database.hasQueries.anyObject;
 		[query addHasQueryGroupsObject: queryGroup];
 
-		NSError * __autoreleasing error = NULL;
-		if (![private save:&error]) {
-			os_log_info(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		NSError *error = NULL;
+		BOOL saved = [private save:&error];
+		if (!saved && error != nil) {
+			os_log_error(GetMadLog(), "Error saving managed object: %@", error);
 		}
 		
 		RptqQueryField *groupByField = queryGroup.hasField;
@@ -833,22 +834,22 @@ void madwarn(char *err,  const char *err2) { }
 	if (notification.object != nil) {
 		switch (((MADocument *)notification.object).documentState) {
 			case UIDocumentStateClosed:
-				NSLog(@"\n\n\tDocument state closed.\n\n");
+				os_log_debug(GetMadLog(), "Document state closed.");
 				break;
 			case UIDocumentStateEditingDisabled:
-				NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+				os_log_debug(GetMadLog(), "Document state editing disabled.");
 				break;
 			case UIDocumentStateInConflict:
-				NSLog(@"\n\n\tDocument state in conflict.\n\n");
+				os_log_debug(GetMadLog(), "Document state in conflict.");
 				break;
 			case UIDocumentStateNormal:
-				NSLog(@"\n\n\tDocument state normal.\n\n");
+				os_log_debug(GetMadLog(), "Document state normal.");
 				break;
 			case UIDocumentStateSavingError:
-				NSLog(@"\n\n\tDocument state saving error.\n\n");
+				os_log_debug(GetMadLog(), "Document state saving error.");
 				break;
 			case UIDocumentStateProgressAvailable:
-				NSLog(@"Document progress: %@", notification);
+				os_log_debug(GetMadLog(), "Document progress: %@", notification);
 				break;
 			default:
 				break;
@@ -1212,9 +1213,10 @@ void madwarn(char *err,  const char *err2) { }
 								fromParentSection: parentSection
 								withLayoutManager: layoutManager];
 
-		NSError * __autoreleasing error = NULL;
-		if (![private save:&error]) {
-			os_log_info(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
+		NSError *error = NULL;
+		BOOL saved = [private save:&error];
+		if (!saved && error != nil) {
+			os_log_error(GetMadLog(), "Error saving managed object: %@", error);
 		}
 	}];
 	[self updateChangeCount: UIDocumentChangeDone];
@@ -1282,47 +1284,48 @@ void madwarn(char *err,  const char *err2) { }
 
 - (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
 	  fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-
+	
 	//NSManagedObjectContext *private;
 	// = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	//private.parentContext = managedObjectContext;
 	
 	//[private performBlockAndWait: ^{
+	
+	RptqQueryGroup *group = [managedObjectContext objectWithID:groupID];
+	if (group != nil) {
+		RptqQuery *query = group.inQuery;
 		
-		RptqQueryGroup *group = [managedObjectContext objectWithID:groupID];
-		if (group) {
-			RptqQuery *query = group.inQuery;
-			
-			NSArray *sections = group.hasSection.allObjects;
-			NSAssert(sections.count == 2, @"Expecting a header and footer.");
-			
-			RptqDocumentSection *section0 = sections[0];
-			RptqDocumentSection *section1 = sections[1];
-			[self.sectionLayoutManagers removeObjectForKey:@(section0.identifier)];
-			[self.sectionLayoutManagers removeObjectForKey:@(section1.identifier)];
-			
-			[group removeHasSectionObject: section0];
-			[group removeHasSectionObject: section1];
-			
-			[query.managedObjectContext deleteObject: group];
-			[query removeHasQueryGroupsObject: group];
-			
-			NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
-																   ascending: YES];
-
-			NSArray <RptqQueryGroup *> *sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:@[sort]];
-			
-			int16_t counter = 0;
-			for (RptqQueryGroup *sortedGroup in sortedGroups) {
-				sortedGroup.weight = counter;
-				counter++;
-			}
-			
+		NSArray *sections = group.hasSection.allObjects;
+		NSAssert(sections.count == 2, @"Expecting a header and footer.");
+		
+		RptqDocumentSection *section0 = sections[0];
+		RptqDocumentSection *section1 = sections[1];
+		[self.sectionLayoutManagers removeObjectForKey:@(section0.identifier)];
+		[self.sectionLayoutManagers removeObjectForKey:@(section1.identifier)];
+		
+		[group removeHasSectionObject: section0];
+		[group removeHasSectionObject: section1];
+		
+		[query.managedObjectContext deleteObject: group];
+		[query removeHasQueryGroupsObject: group];
+		
+		NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
+															   ascending: YES];
+		
+		NSArray <RptqQueryGroup *> *sortedGroups = [query.hasQueryGroups sortedArrayUsingDescriptors:@[sort]];
+		
+		int16_t counter = 0;
+		for (RptqQueryGroup *sortedGroup in sortedGroups) {
+			sortedGroup.weight = counter;
+			counter++;
 		}
 		
-		NSError *error = NULL;
-	if (![managedObjectContext save:&error]) {
-		os_log_info(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
+	}
+		
+	NSError *error = NULL;
+	BOOL saved = [managedObjectContext save:&error];
+	if (!saved && error != nil) {
+		os_log_error(GetMadLog(), "Error saving managed object: %@", error);
 	}
 }
 

@@ -37,9 +37,7 @@
 
 #pragma mark - Lifecycle
 
-- (void)dealloc {
-	os_log_info(GetFoundationLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 #pragma mark - Initialization
 

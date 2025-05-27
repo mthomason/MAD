@@ -14,9 +14,7 @@
 
 @implementation MADOperationDocumentCloseDocument
 
-- (void)dealloc {
-    os_log_info(GetMadLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (BOOL)isAsynchronous {
     return YES;

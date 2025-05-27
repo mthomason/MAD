@@ -20,7 +20,7 @@ os_log_t GetExplorerLog(void) {
 			NSLog(@"Warning: MADOperations log facility could not be created as specified, using default.");
 			if (gMADExplorerLog == nil) gMADExplorerLog = OS_LOG_DEFAULT; // Ensure it's not nil
 		}
-		os_log_info(gMADExplorerLog, "MADOperations log facility initialized.");
+		os_log_debug(gMADExplorerLog, "MADOperations log facility initialized.");
 	});
 	return gMADExplorerLog;
 }

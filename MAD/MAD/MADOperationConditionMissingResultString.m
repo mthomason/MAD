@@ -22,22 +22,18 @@
 #import <os/log.h>
 
 @interface MADOperationConditionMissingResultString ()
-
-    @property (nonatomic, readwrite, copy) NSString *key;
-
+@property (nonatomic, readwrite, copy) NSString *key;
 @end
 
 @implementation MADOperationConditionMissingResultString
 
-- (void)dealloc {
-    //os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class));
-}
+- (void)dealloc { }
 
 - (instancetype)initWithKey:(NSString *)key {
-    if (self = [super init]) {
-        self.key = key.copy;
-    }
-    return self;
+	if (self = [super init]) {
+		self.key = key.copy;
+	}
+	return self;
 }
 
 #pragma mark - Condition
@@ -49,40 +45,37 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-    MADOperationConditionResult *result;
-    result = [self evaluateForOperation:operation];
-    completion(result);
+	MADOperationConditionResult *result = [self evaluateForOperation:operation];
+	completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-    //os_log_info(OS_LOG_DEFAULT, "Evaluate %s", operation.description.UTF8String);
-
-    MADOperationConditionResult *result = nil;
-    NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
-    if (dependencies.count == 0) {
-        result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
-        return result;
-    }
-    
-    for (NSOperation *dependency in dependencies) {
-        if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
-            [self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
-            if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
-                result = [MADOperationConditionHasResultStringResult newOperationConditionResult: YES
-                                                                                           value: ((NSObject <MADOperationResultStringProtocol> *)dependency).value
-                                                                                            name: self.name];
-                break;
-            }
-        }
-    }
-    
-    if (result != nil) {
-        return result;
-    } else {
-        result = [MADOperationConditionHasResultStringResult newOperationConditionResultFailedNotSatisfied:self.name];
-        return result;
-    }
-    
+	MADOperationConditionResult *result = nil;
+	NSArray <__kindof NSOperation *> *dependencies = operation.dependencies;
+	if (dependencies.count == 0) {
+		result = [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:NSStringFromClass(self.class)];
+		return result;
+	}
+	
+	for (NSOperation *dependency in dependencies) {
+		if ([dependency conformsToProtocol:@protocol(MADOperationResultStringProtocol)] &&
+			[self.key isEqualToString: ((NSObject <MADOperationResultStringProtocol> *) dependency).key]) {
+			if(!((NSObject <MADOperationResultStringProtocol> *) dependency).success) {
+				result = [MADOperationConditionHasResultStringResult newOperationConditionResult: YES
+																						   value: ((NSObject <MADOperationResultStringProtocol> *)dependency).value
+																							name: NSStringFromClass(self.class)];
+				break;
+			}
+		}
+	}
+	
+	if (result != nil) {
+		return result;
+	} else {
+		result = [MADOperationConditionHasResultStringResult newOperationConditionResultFailedNotSatisfied:NSStringFromClass(self.class)];
+		return result;
+	}
+	
 }
 
 @end

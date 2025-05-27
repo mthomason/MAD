@@ -189,8 +189,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[application registerForRemoteNotifications];
 			});
-		} else {
-			os_log_info(GetDesignerLog(), "%s: Notification permission denied: %@", __PRETTY_FUNCTION__, error);
 		}
 	}];
 	return YES;

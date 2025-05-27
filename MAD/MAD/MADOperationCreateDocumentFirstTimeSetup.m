@@ -6,8 +6,9 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import <os/log.h>
-#import <CoreData/NSManagedObjectContext.h>
+
+#import "MADOperationCreateDocumentFirstTimeSetup.h"
+#import "MADOperationCreateDocumentCreateDocument.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
 
@@ -16,8 +17,9 @@
 #import <MAD/RptqDatabase+extras.h>
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
-#import "MADOperationCreateDocumentFirstTimeSetup.h"
-#import "MADOperationCreateDocumentCreateDocument.h"
+
+#import <os/log.h>
+#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()
 
@@ -65,12 +67,12 @@
 		if (success) {
 			NSError * __autoreleasing error = NULL;
 			if (!(success = [private save:&error])) {
-				os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 			}
 		} else {
 			NSError * __autoreleasing error = NULL;
 			if (!(success = [private save:&error])) {
-				os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
 			}
 		}
 	}];

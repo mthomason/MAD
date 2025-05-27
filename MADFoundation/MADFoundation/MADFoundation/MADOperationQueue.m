@@ -17,9 +17,7 @@
 
 @implementation MADOperationQueue
 
-- (void)dealloc {
-	os_log_info(GetFoundationLog(), "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 #pragma mark - Adding Operations
 
@@ -44,14 +42,14 @@
 
 	// Set up a block delegate to handle operation lifecycle events
 	MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler:^(MADOperation *oper) {
-		os_log_info(GetFoundationLog(), "Starting operation %@", oper.name);
+		//os_log_info(GetFoundationLog(), "Starting operation %@", oper.name);
 	} produceHandler:^(MADOperation *oper, NSOperation *newOp) {
 		[weakSelf addOperation:newOp];
 	} finishHandler:^(MADOperation *oper, NSArray<NSError *> *errors) {
 		MADOperationQueue *sself = weakSelf;
 		if (sself) {
 			[sself.delegate operationQueue:sself operationDidFinish:oper withErrors:errors];
-			os_log_info(GetFoundationLog(), "Finished operation %@", oper.name);
+			//os_log_info(GetFoundationLog(), "Finished operation %@", oper.name);
 		}
 	}];
 
@@ -68,7 +66,6 @@
 }
 
 - (void)addStandardOperation:(nonnull NSOperation *)operation {
-	os_log_info(GetFoundationLog(), "%s Adding standard operation %@", __PRETTY_FUNCTION__, operation.name);
 	typeof(self) __weak weakSelf = self;
 	NSOperation * __weak weakOperation = operation;
 

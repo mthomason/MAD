@@ -52,7 +52,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 - (void)dealloc {
 	_databaseConnection = nil;
 	_viewController = nil;
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
 }
 
 - (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
@@ -218,9 +217,6 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 			self.passwordSet = YES;
 		}
 	}
-	//os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Finish but not calling finish?:", __PRETTY_FUNCTION__);
-	//NSLog(@"Count   %d", self.internalQueue.operationCount);
-	//NSLog(@"Last    %@", self.internalQueue.operations.lastObject);
 	//if (self.internalQueue.operationCount == 0) {
 	//    [self finish];
 	//}

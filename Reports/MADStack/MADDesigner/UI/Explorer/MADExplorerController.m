@@ -1667,7 +1667,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (void)operationDidFinish:(MADOperation *)operation
 					errors:(NSArray<NSError *> *)errors {
-	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
+	
 }
 
 #pragma mark -

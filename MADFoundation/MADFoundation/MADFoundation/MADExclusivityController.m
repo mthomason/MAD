@@ -59,7 +59,6 @@ static MADExclusivityController *_sharedInstance;
 
 - (void)removeOperation:(MADOperation *)operation
 			 categories:(nonnull NSArray<NSString *> *)categories {
-	os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 	dispatch_async(_serialQueue, ^{
 		for (NSString *category in categories) {
 			[self noqueue_removeOperation:operation category:category];
@@ -79,8 +78,6 @@ static MADExclusivityController *_sharedInstance;
 
 	[operationsWithThisCategory addObject:operation];
 	_operations[category] = operationsWithThisCategory;
-
-	os_log_info(OS_LOG_DEFAULT, "Added operation %@ to category %@", operation.name, category);
 }
 
 - (void)noqueue_removeOperation:(nonnull MADOperation *)operation category:(nonnull NSString *)category {
@@ -88,19 +85,14 @@ static MADExclusivityController *_sharedInstance;
 	if (matchingOperations) {
 		[matchingOperations removeObject:operation];
 		_operations[category] = matchingOperations;
-
-		os_log_info(OS_LOG_DEFAULT, "Removed operation %@ from category %@", operation.name, category);
 	}
 }
 
 #pragma mark - Debugging
 
 - (nonnull id)debugQuicklookObject {
-	NSString *title = [[NSString alloc] initWithFormat:@"%@ (%lu)\n", NSStringFromClass(self.class),
-					   (unsigned long)_operations.count];
-	NSString *debug = [title stringByAppendingString:@"\n\tSerial queue: "];
-	debug = [debug stringByAppendingString:_serialQueue.description];
-	return debug;
+	NSString *title = [[NSString alloc] initWithFormat:@"%@ (%lu)\n", NSStringFromClass(self.class), (unsigned long)_operations.count];
+	return [[title stringByAppendingString:@"\n\tSerial queue: "] stringByAppendingString:_serialQueue.description];
 }
 
 @end

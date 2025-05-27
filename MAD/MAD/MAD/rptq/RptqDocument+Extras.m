@@ -11,27 +11,6 @@
 #endif
 
 #import "RptqDocument+Extras.h"
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-
-#import <Foundation/NSException.h>
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSPathUtilities.h>
-#import <Foundation/NSBundle.h>
-#import <Foundation/NSError.h>
-
-#import <UIKit/UIImage.h>
-
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
-#import <MADAPI/MADDatabase.h>
-#import <MADAPI/MADDatabaseTable.h>
-#import <MADAPI/MADConnectionsPropertiesProtocol.h>
-#import <MADAPI/MADErrorContainer.h>
-
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"
 #import "RptqQuery+Extras.h"
@@ -41,23 +20,39 @@
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
-
 #import "RptqDocumentElement+Extras.h"
-
 #import "RptqDocumentElementChart.h"
 #import "RptqDocumentElementGroupKey.h"
 #import "RptqDocumentElementImage.h"
 #import "RptqDocumentElementLabel.h"
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementLabelLink.h"
-
 #import "RptqDocumentElementAggregate+Extras.h"
 #import "RptqDocumentElementBarcode+Extras.h"
 #import "RptqDocumentElementFormula+Extras.h"
-
+#import "RptqDataHelper.h"
 #import "MADReportSectionsEnumerator.h"
 
-#import "RptqDataHelper.h"
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
+#import <MADAPI/MADErrorContainer.h>
+
+#import <Foundation/NSException.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
+
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+
+#import <UIKit/UIImage.h>
+
 #import <os/log.h>
 
 static os_log_t rptq_log;
@@ -79,7 +74,7 @@ static os_log_t rptq_log;
 	
 	NSError *error = nil;
 	NSArray *documents = [context executeFetchRequest:request error:&error];
-	if (error) {
+	if (error != nil) {
 		os_log_error(rptq_log, "Failed to fetch existing documents: %{public}@", error);
 	} else if (documents.count > 0) {
 		for (RptqDocument *document in documents) {
@@ -185,17 +180,23 @@ static os_log_t rptq_log;
 
 	NSError *error1 = nil;
 	if (![document.hasReportHeaderSection validateForUpdate: &error1]) {
-		os_log_error(rptq_log, "Error: %s", error1.localizedDescription.UTF8String);
+		if (error1 != nil) {
+			os_log_error(rptq_log, "%s: %@", __PRETTY_FUNCTION__, error1);
+		}
 	}
 	
 	NSError *error2 = nil;
 	if (![document.hasDetailSection validateForUpdate: &error2]) {
-		os_log_error(rptq_log, "Error: %s", error2.localizedDescription.UTF8String);
+		if (error2 != nil) {
+			os_log_error(rptq_log, "%s: %@", __PRETTY_FUNCTION__, error2);
+		}
 	}
 	
 	NSError *error3 = nil;
 	if (![document validateForUpdate: &error3]) {
-		os_log_error(rptq_log, "Error: %s", error3.localizedDescription.UTF8String);
+		if (error3 != nil) {
+			os_log_error(rptq_log, "%s: %@", __PRETTY_FUNCTION__, error3);
+		}
 	}
 	
 	return document;
@@ -209,7 +210,7 @@ static os_log_t rptq_log;
 
 	NSError *error = nil;
 	NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-	if (error) {
+	if (error != nil) {
 		os_log_error(rptq_log, "Failed to fetch document: %{public}@", error);
 		NSAssert(NO, @"Failed to fetch document: %@", error);
 	}
@@ -240,8 +241,7 @@ static os_log_t rptq_log;
 	self.identifier = 1;
 	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
 		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
+		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class] managedObjectContext:self.managedObjectContext];
 		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
 	}
 }
@@ -520,9 +520,9 @@ static os_log_t rptq_log;
 			rptqTable.hasFields = hasFields;
 			
 			BOOL success = NO;
-			NSError * __autoreleasing saveError = nil;
+			NSError *saveError = nil;
 			if (!(success = [rptqTable.managedObjectContext save:&saveError])) {
-				os_log_info(OS_LOG_DEFAULT, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
+				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", saveError);
 			}
 
 		} else {

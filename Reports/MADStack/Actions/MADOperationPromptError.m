@@ -27,9 +27,7 @@ static NSString * const TextYes = @"Dismiss";
 
 @implementation MADOperationPromptError
 
-- (void)dealloc {
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (instancetype)initWithViewController:(UIViewController * __weak)viewController {
 	return [self initWithError:nil tagDependency:0 viewController:viewController];
@@ -48,7 +46,6 @@ static NSString * const TextYes = @"Dismiss";
 - (instancetype)initWithError:(NSError *)error tagDependency:(NSUInteger)tagDependency
 			   viewController:(UIViewController * __weak)viewController {
 	if (self = [super init]) {
-		os_log_info(OS_LOG_DEFAULT, "%s", __PRETTY_FUNCTION__);
 		_tagDependency = tagDependency;
 		_viewController = viewController;
 		_error = error.copy;
@@ -139,7 +136,6 @@ static NSString * const TextYes = @"Dismiss";
 	
 	UIViewController * __weak viewController = self.viewController;
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-		os_log_info(OS_LOG_DEFAULT, "%s\t%s", "Show error alert:", __PRETTY_FUNCTION__);
 		UIViewController *sViewController = viewController;
 		sViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
 		[sViewController presentViewController: alertController animated: YES completion: nil];

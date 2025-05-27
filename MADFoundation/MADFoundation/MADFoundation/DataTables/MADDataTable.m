@@ -140,10 +140,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 								   code:-21
 							   userInfo:userInfo];
 	}
-	
-	os_log_t logger = GetFoundationLog();
-	os_log_info(logger, "[MADDataTable %p] Attempting to loadFromCacheWithUrl: '%{public}@'", self, url);
-	
+		
 	NSString *path = url.path.copy;
 	BOOL isFileDirectory = NO;
 	BOOL fileExistAtPath = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isFileDirectory];
@@ -162,7 +159,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [inputStream.streamError copy];
 		}
-		os_log_error(logger, "Stream error while opening file at path: %@", path);
+		os_log_error(GetFoundationLog(), "Stream error while opening file at path: %@", path);
 		return NO;
 	}
 	
@@ -178,7 +175,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 																 code:-2
 															 userInfo:@{NSLocalizedDescriptionKey: @"Failed to deserialize property list."}];
 		}
-		os_log_error(logger, "Failed to deserialize plist from cache at path: %@, error: %@", path, plistError);
+		os_log_error(GetFoundationLog(), "Failed to deserialize plist from cache at path: %@, error: %@", path, plistError);
 		return NO;
 	}
 	
@@ -188,7 +185,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 	BOOL loadPlist = [self loadWithPlist:plist error:&loadPlistError];
 	if (loadPlistError != nil) {
 		*outError = [loadPlistError copy];
-		os_log_error(logger, "Plist: %@ Error: %@", plist, loadPlistError);
+		os_log_error(GetFoundationLog(), "Plist: %@ Error: %@", plist, loadPlistError);
 	}
 	return loadPlist;
 }
@@ -242,8 +239,6 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 }
 
 - (BOOL)loadWithPlist:(nonnull NSDictionary *)plist error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
-	os_log_info(GetFoundationLog(), "[MADDataTable %p] Loading from plist: %@", self, plist);
-
 	if (![plist isKindOfClass:[NSDictionary class]]) {
 		if (outError) {
 			*outError = [NSError errorWithDomain:MADDataTableErrorDomain

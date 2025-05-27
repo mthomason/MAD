@@ -98,7 +98,7 @@ static os_log_t mlog;
 	if (self == [MADDataTableFast class]) {
 		NSString *name = NSStringFromClass([MADDataTableFast class]);
 		mlog = os_log_create("com.mad", name.UTF8String);
-		os_log_info(mlog, "%@ logging initialized.", name);
+		os_log_debug(mlog, "%@ logging initialized.", name);
 	}
 }
 

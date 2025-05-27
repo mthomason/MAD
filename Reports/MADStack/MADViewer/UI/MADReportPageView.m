@@ -11,8 +11,6 @@
 #endif
 
 #import "MADReportPageView.h"
-
-#import <setjmp.h>
 #import <MAD/miniz.h>
 
 #import <UIKit/UILabel.h>
@@ -24,6 +22,7 @@
 #import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
+//#import <setjmp.h>
 #import <os/log.h>
 
 static const CGFloat PageCounterWidth = 99.0;

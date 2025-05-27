@@ -20,7 +20,7 @@ os_log_t GetFoundationLog(void) {
 			NSLog(@"Warning: MADOperations log facility could not be created as specified, using default.");
 			if (gMADFoundationLog == nil) gMADFoundationLog = OS_LOG_DEFAULT; // Ensure it's not nil
 		}
-		os_log_info(gMADFoundationLog, "MADOperations log facility initialized.");
+		os_log_debug(gMADFoundationLog, "MADFoundation log facility initialized.");
 	});
 	return gMADFoundationLog;
 }

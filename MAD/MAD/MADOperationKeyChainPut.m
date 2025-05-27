@@ -60,36 +60,20 @@ static NSString * const ErrorDomain = @"MADKCP";
 	
 	if (self.cancelled) return [self finish];
 
-	// Write the value to the keychain.
 	if (valueToWrite != nil) {
-	
 		OSStatus status = [MADKeyChain saveToken: valueToWrite
 										 forKey: self.key
 								withDescription: self.keyDescription];
 		if (status == errSecSuccess) {
-		
-			os_log_info(GetMadLog(), "%s\t%s", "Finish success:", __PRETTY_FUNCTION__);
 			[self finish];
-
 		} else {
-
-
-			os_log_info(GetMadLog(), "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
-			NSError *error = [NSError errorWithDomain: ErrorDomain
-												 code: status
-											 userInfo: nil];
+			NSError *error = [NSError errorWithDomain: ErrorDomain code: status userInfo: nil];
 			[self finishWithError:error];
-			
 		}
 		
 	} else {
-
-		os_log_info(GetMadLog(), "%s\t%s", "Finish error:", __PRETTY_FUNCTION__);
-		NSError *error = [NSError errorWithDomain: ErrorDomain
-											 code: StatusNotFound
-										 userInfo: nil];
+		NSError *error = [NSError errorWithDomain: ErrorDomain code: StatusNotFound userInfo: nil];
 		[self finishWithError:error];
-		
 	}
 }
 

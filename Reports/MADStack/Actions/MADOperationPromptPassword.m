@@ -48,9 +48,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 
 @implementation MADOperationPromptPassword
 
-- (void)dealloc {
-	//os_log_info(OS_LOG_DEFAULT, "Dealloc %s", NSStringFromClass(self.class).UTF8String);
-}
+- (void)dealloc { }
 
 - (NSString *)key {
 	return self.passwordKey;
@@ -69,8 +67,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 - (instancetype)initWithPasswordKey:(NSString *)passwordKey
 				  andViewController:(UIViewController *)viewController {
 	if (self = [super init]) {
-		os_log_info(GetDesignerLog(), "%s", __PRETTY_FUNCTION__);
-		//MADMutualExclusiveCondition *condition;
 		_passwordKey = passwordKey.copy;
 		_source = MADCredentialSourceNone;
 		_alertDisplayed = NO;
@@ -79,7 +75,8 @@ static NSString * const MADButtonContinue              = @"Continue";
 
 		_viewController = viewController;
 		self.identifier = self.hash;
-		//condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
+
+		//MADMutualExclusiveCondition *condition = [MADMutualExclusiveCondition newMutualExclusiveConditionAlertMutex];
 		//[self addCondition:condition];
 
 	}

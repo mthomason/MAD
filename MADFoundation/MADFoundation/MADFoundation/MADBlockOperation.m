@@ -17,9 +17,7 @@
 
 @implementation MADBlockOperation
 
-- (void)dealloc {
-	os_log_info(GetFoundationLog(), "-[%s %s]", NSStringFromClass(self.class).UTF8String, __FUNCTION__);
-}
+- (void)dealloc { }
 
 /**
 	The designated initializer.

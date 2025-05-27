@@ -45,15 +45,11 @@
 - (NSOperation *)dependencyForOperation:(MADOperation *)operation { return nil; }
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
-	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-	MADOperationConditionResult *result;
-	result = [self evaluateForOperation:operation];
+	MADOperationConditionResult *result = [self evaluateForOperation:operation];
 	completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
-	os_log_info(GetDesignerLog(), "%s\t%s", __PRETTY_FUNCTION__, operation.description.UTF8String);
-
 	MADOperationConditionResult *result = nil;
 	NSArray<__kindof NSOperation *> *dependencies = operation.dependencies;
 	if (dependencies.count == 0) {
