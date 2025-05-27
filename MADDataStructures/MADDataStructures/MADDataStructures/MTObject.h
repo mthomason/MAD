@@ -23,7 +23,7 @@
 
 @interface MTObject : NSObject <NSCopying, MTProtocolCompare, MTProtocolLog>
 
-	@property (readonly, nonatomic, strong) NSObject <NSCopying> *object;
+	@property (readonly, nonatomic, strong) __kindof NSObject <NSCopying> *object;
 
 	+ (instancetype)newObject:(NSObject <NSCopying> *)object;
 	- (instancetype)init;
