@@ -1283,9 +1283,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		self.barButtonItemLicensing.enabled = NO;
 		self.collectionView.allowsSelection = YES;
 		self.collectionView.allowsMultipleSelection = YES;
-		
+		int i=0;
 		for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
 			cell.wobbling = YES;
+			os_log_debug(GetDesignerLog(), "Wobbling cell at index: %d", i);
+			i++;
 		}
 		[self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
 		

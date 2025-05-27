@@ -15,9 +15,7 @@ extern NSString * const MADTextNotDownloaded;
 
 @protocol UIGestureRecognizerDelegate;
 
-@class MADMetaData, MADThumbnailView, MADLabelFileExplorerDocumentCellTitle,
-	   MADLabelFileExplorerDocumentCellSubtitle, UIActivityIndicatorView,
-	   UIProgressView;
+@class MADMetaData, MADThumbnailView, MADLabelFileExplorerDocumentCellTitle, MADLabelFileExplorerDocumentCellSubtitle, UIActivityIndicatorView, UIProgressView;
 
 @interface MADCollectionViewCellDocument : UICollectionViewCell
 
@@ -30,7 +28,7 @@ extern NSString * const MADTextNotDownloaded;
 @property (nonatomic, weak) IBOutlet UIImageView *imageCloudIndicator;
 @property (nonatomic, weak) IBOutlet UIProgressView *progressViewDownload;
 @property (nonatomic, weak) IBOutlet UIProgressView *progressViewUpload;
-@property (nonatomic, weak, readonly) UIActivityIndicatorView *activityIndicator;
+@property (readonly, nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 - (void)handleContentSizeCategoryDidChangeNotification;
 

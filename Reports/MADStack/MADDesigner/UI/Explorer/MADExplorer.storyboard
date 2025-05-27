@@ -32,7 +32,7 @@
                     <connections>
                         <outlet property="fileExplorerNavigationBar" destination="z47-c9-bXd" id="dHG-Kv-s1O"/>
                         <outlet property="fileExplorerToolBar" destination="9kD-yo-QJu" id="HhW-Xq-WcE"/>
-                        <segue destination="iZG-hE-DvP" kind="relationship" relationship="rootViewController" id="mdr-HZ-Vja"/>
+                        <segue destination="RNf-Mn-Gwm" kind="relationship" relationship="rootViewController" id="2Ab-wg-OAU"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LTZ-xS-8VN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -192,27 +192,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jk9-mR-YZK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3004" y="349"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="LaY-uz-dXF">
-            <objects>
-                <viewController id="iZG-hE-DvP" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="6u5-HO-nSp"/>
-                        <viewControllerLayoutGuide type="bottom" id="tgW-Si-4Ij"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ivW-XD-pli">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="0yf-7T-Ddb"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Lna-N1-YDO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3681" y="349"/>
+            <point key="canvasLocation" x="-3696" y="350"/>
         </scene>
     </scenes>
     <resources>

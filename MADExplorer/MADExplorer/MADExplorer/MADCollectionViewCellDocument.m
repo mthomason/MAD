@@ -31,6 +31,7 @@
 #import <UIKit/UIImageView.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIAccessibility.h>
+#import <UIKit/NSLayoutAnchor.h>
 
 #import <QuartzCore/CALayer.h>
 #import <os/log.h>
@@ -44,7 +45,7 @@ static inline double wobbleRandomFactor(void) {
 }
 
 @interface MADCollectionViewCellDocument ()
-	@property (nonatomic, readwrite, weak) UIActivityIndicatorView *activityIndicator;
+	@property (readwrite, nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation MADCollectionViewCellDocument {
@@ -235,24 +236,24 @@ static inline double wobbleRandomFactor(void) {
 	self.progressViewDownload.hidden = YES;
 	[self.progressViewUpload setProgress:0.0f];
 	self.progressViewUpload.hidden = YES;
-	UIActivityIndicatorView *activityIndicator = self.activityIndicator;
-	if (activityIndicator) {
-		[activityIndicator stopAnimating];
-	}
+	[self.activityIndicator stopAnimating];
 }
 
 #pragma mark -
 #pragma mark Lazy Load
 
 - (UIActivityIndicatorView *)activityIndicator {
-	UIActivityIndicatorView *result = _activityIndicator;
-	if (result == nil) {
-		result = [MADExplorerActivityIndicator newExplorerActivityIndicator];
-		result.center = self.contentView.center;
-		[self.contentView addSubview:result];
-		_activityIndicator = result;
+	if (!_activityIndicator) {
+		UIActivityIndicatorView *indicator = [MADExplorerActivityIndicator newExplorerActivityIndicator];
+		indicator.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.contentView addSubview:indicator];
+		[NSLayoutConstraint activateConstraints:@[
+			[indicator.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+			[indicator.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
+		]];
+		_activityIndicator = indicator;
 	}
-	return result;
+	return _activityIndicator;
 }
 
 #pragma mark -
@@ -306,60 +307,44 @@ static inline double wobbleRandomFactor(void) {
 #pragma mark Wobble
 
 - (void)startWobble {
-	_wobbling = YES;
-	_wobbling = YES;
+	if (_wobbling || !self.superview) return;
 	
-	// Make sure we are in the view hierarchy
-	if (!self.superview) {
-		return;
-	}
-	
-	[self.layer removeAllAnimations]; // Clear any previous animations
-	self.transform = CGAffineTransformIdentity; // Reset transform before starting a new one
+	_wobbling = YES;
+	[self.layer removeAllAnimations];
+	self.transform = CGAffineTransformIdentity;
 	self.layer.anchorPoint = CGPointMake(0.5, 0.5);
 	
-	// Randomize aspects of the wobble for a more natural look
-	CGFloat randomAngleOffset = (CGFloat)((wobbleRandomFactor() - 0.5) * MTAnimationRotateDeg * 0.5); // Small random offset to base angle
-	CGFloat angle = degreesToRadians(MTAnimationRotateDeg + randomAngleOffset);
-	NSTimeInterval duration = 0.15 + (wobbleRandomFactor() * 0.1); // Duration between 0.15s and 0.25s
+	CGFloat baseAngle = degreesToRadians(MTAnimationRotateDeg);
+	CGFloat randomOffset = (wobbleRandomFactor() - 0.5) * 0.2 * baseAngle; // small variation
+	CGFloat angle = baseAngle + randomOffset;
 	
-	// Start slightly offset so the autoreverse creates a back-and-forth motion around the center
-	self.transform = CGAffineTransformMakeRotation(-angle * 0.5f);
+	NSTimeInterval duration = 0.1 + (wobbleRandomFactor() * 0.1); // 0.1–0.2 sec
 	
-	typeof(self) __weak weakSelf = self;
+	self.transform = CGAffineTransformMakeRotation(-angle);
+	
 	[UIView animateWithDuration:duration
-						  delay:0.0
+						  delay:0
 						options:UIViewAnimationOptionAllowUserInteraction |
 	 UIViewAnimationOptionRepeat |
-	 UIViewAnimationOptionAutoreverse |
-	 UIViewAnimationOptionBeginFromCurrentState
+	 UIViewAnimationOptionAutoreverse
 					 animations:^{
-		typeof(weakSelf) __strong strongSelf = weakSelf;
-		if (!strongSelf) return;
-		strongSelf.transform = CGAffineTransformMakeRotation(angle);
+		self.transform = CGAffineTransformMakeRotation(angle);
 	} completion:nil];
 }
 
 - (void)stopWobble {
+	if (!_wobbling) return;
+	
 	_wobbling = NO;
-	if (self.layer.animationKeys.count > 0) {
-		[self.layer removeAllAnimations];
-	}
+	[self.layer removeAllAnimations];
 	self.transform = CGAffineTransformIdentity;
 }
 
 - (void)setWobbling:(BOOL)wobbling {
-	if (_wobbling != wobbling) {
-		if (wobbling && self.layer.animationKeys.count == 0 && self.superview) {
-			[self startWobble];
-		}
-		return;
-	}
-	_wobbling = wobbling;
-	if (_wobbling) {
-		if (self.superview) {
-			[self startWobble];
-		}
+	if (wobbling == _wobbling) return;
+	
+	if (wobbling) {
+		[self startWobble];
 	} else {
 		[self stopWobble];
 	}
@@ -443,3 +428,4 @@ static inline double wobbleRandomFactor(void) {
 }
 
 @end
+

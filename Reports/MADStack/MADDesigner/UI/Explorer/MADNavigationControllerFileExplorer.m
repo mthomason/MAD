@@ -59,10 +59,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear: animated];
-	if (self.viewControllers.count == 1) {
-		MADExplorerController *fileExplorer = [MADExplorerController newExplorerController];
-		[self pushViewController:fileExplorer animated:YES];
-	}
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
