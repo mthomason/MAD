@@ -125,12 +125,11 @@
 		UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 		
 		MADocument *document = _document;
-		NSNumber *identifier;
 		NSSet <NSNumber *> *userSelectedObjectIDs;
 		RptqDocumentElement *element;
 		
 		userSelectedObjectIDs = self.userSelectedObjectIDs;
-		for (identifier in userSelectedObjectIDs) {
+		for (NSNumber *identifier in userSelectedObjectIDs) {
 			
 			element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
 														  fromObjectContext: document.managedObjectContext];
@@ -142,8 +141,7 @@
 		(self.tableViewCellCurrency).accessoryType = accessoryType;
 		
 		if ((self.userSelectedObjectIDs).count == 1) {
-			identifier = userSelectedObjectIDs.anyObject;
-			element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+			element = [RptqDocumentElement newDocumentElementWithIdentifier: [userSelectedObjectIDs.anyObject longLongValue]
 														  fromObjectContext: document.managedObjectContext];
 			(self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:element.numericFormat.decimalCount];
 			(self.stepperNumberOfDecimals).value = element.numericFormat.decimalCount;
@@ -153,7 +151,7 @@
 			BOOL allTheSame = NO;
 			NSInteger lastInteger = 0;
 			NSUInteger counter = 0;
-			for (identifier in self.userSelectedObjectIDs) {
+			for (NSNumber *identifier in self.userSelectedObjectIDs) {
 				element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
 															  fromObjectContext: document.managedObjectContext];
 				if (counter > 0) {
@@ -193,36 +191,29 @@
 		(self.labelNumberOfDecimals).attributedText =
 		[self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
 		
-		RptqDocumentElement *documentObject;
-		NSNumber *identifier;
 		NSManagedObjectContext *context = self.document.managedObjectContext;
-		for (identifier in self.userSelectedObjectIDs) {
-			documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-																 fromObjectContext: context];
+		for (NSNumber *identifier in self.userSelectedObjectIDs) {
+			RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+																					  fromObjectContext: context];
 			documentObject.numericFormat.decimalCount = [valueThatChanged integerValue];
 			NSError *error = NULL;
-			if ([documentObject.managedObjectContext save:&error]) NSLog(@"Error saving managed object context: %@", error);
+			BOOL saved = [documentObject.managedObjectContext save:&error];
+			if (!saved && error != nil) {
+				os_log_error(GetDesignerLog(), "%s Error saving managed object context.", __PRETTY_FUNCTION__);
+			}
 		}
 	}
 }
 
 - (NSAttributedString *)decimalsStringForNumberOfDecimals:(NSInteger)numberOfDecimals {
-	UIFont *boldFont = [UIFont boldSystemFontOfSize:self.labelNumberOfDecimals.font.pointSize];
-	UIFont *systemFont = [UIFont systemFontOfSize:self.labelNumberOfDecimals.font.pointSize];
-	NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont};
-	NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
-	
-	NSString *decimals = NSLocalizedString(@"Decimals", "Decimals");
-	NSMutableAttributedString *localizedAttributedMessage;
-	localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: decimals
-																		attributes: boldAttributes];
-	NSString *pointsString;
-	if (numberOfDecimals == -1) {
-		pointsString = @"-";
-	} else {
-		pointsString = [@" " stringByAppendingFormat:@"%ld", (long)numberOfDecimals];
-	}
-	NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
+	NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: NSLocalizedString(@"Decimals", "Decimals")
+																								   attributes: @{
+		NSFontAttributeName : [UIFont boldSystemFontOfSize:self.labelNumberOfDecimals.font.pointSize]
+	}];
+	NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:(numberOfDecimals == -1) ? @"-" :  [@" " stringByAppendingFormat:@"%ld", (long)numberOfDecimals]
+																		attributes:@{
+		NSFontAttributeName : [UIFont systemFontOfSize:self.labelNumberOfDecimals.font.pointSize]
+	}];
 	[localizedAttributedMessage appendAttributedString:messageSuffix];
 	(self.labelNumberOfDecimals).attributedText = localizedAttributedMessage;
 	return localizedAttributedMessage;

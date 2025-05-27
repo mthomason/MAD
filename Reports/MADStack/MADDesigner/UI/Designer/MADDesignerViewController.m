@@ -98,6 +98,7 @@
 #import <math.h>
 #import <asl.h>
 
+#import <UIKit/NSLayoutAnchor.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UICollectionViewFlowLayout.h>
@@ -261,8 +262,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 + (instancetype)newDesignerViewController:(MADocument *)document {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADDesigner"  bundle:[NSBundle mainBundle]];
-	MADDesignerViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
+	MADDesignerViewController *controller = [[UIStoryboard storyboardWithName:@"MADDesigner"  bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
 	[controller setDocument: document];
 	return controller;
 }
@@ -552,13 +552,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	MADocument *maDocument = self.document;
-	NSLog(@"%@", maDocument.undoManager.undoMenuItemTitle);
-	//NSString *keyPath = [MADDesignerViewController keyPathDocumentUndoTitle];
-	//[self addObserver:self
-	//       forKeyPath:keyPath
-	//          options:NSKeyValueObservingOptionNew context:nil];
-	
-	// Display the prompt message if needed
 	
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
 		[UIView setAnimationsEnabled:NO];
@@ -566,24 +559,16 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		[UIView setAnimationsEnabled:YES];
 	}
 	
-	// Add observers
-
 	[self addObservers];
-	
-	// Reset the display
 	
 	_lastMenuItemSelectRequiresElementView = NO;
 	_zoomScaleRestore = self.view.scroller.zoomScale;
 	[self.view.scroller setZoomScale: 1.0000f animated: NO];
 	
-	// Add the zoom scale label.
-	
 	[self.view addSubview:self.statusLabelZoomScale];
 	[self updateDisplayDetailZoomValue];
 	
-	// Setup the datasource
-	MADReportSectionsDataSource *datasource;
-	datasource = [[MADReportSectionsDataSource alloc] initWithManagedObjectContext:maDocument.managedObjectContext];
+	MADReportSectionsDataSource *datasource = [[MADReportSectionsDataSource alloc] initWithManagedObjectContext:maDocument.managedObjectContext];
 	datasource.eventDelegate = self;
 	[datasource refreshData];
 	self.reportSectionDatasource = datasource;
@@ -672,7 +657,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		self.toolboxTransitioningDelegate.presentationController != nil &&
 		!(self.presentingViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact)) {
 		
-		insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+		insets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
 								  self.toolboxTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
 								  CGSizeZero.width);
 		
@@ -682,13 +667,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 			   !(self.presentingViewController.traitCollection.verticalSizeClass ==
 																UIUserInterfaceSizeClassCompact)) {
 		
-		insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width,
+		insets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width,
 								  self.settingsTransitioningDelegate.presentationController.presentedViewController.view.frame.size.height,
 								  CGSizeZero.width);
 		
 	} else {
 		
-		insets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+		insets = UIEdgeInsetsMake(self.view.safeAreaInsets.top, CGSizeZero.width, self.view.safeAreaInsets.bottom, CGSizeZero.width);
 		
 	}
 	
@@ -2109,10 +2094,11 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 												 visibility:section.visibility
 										   producesFormFeed:section.producesFormFeed
 											   numberOfRows:section.numberOfRows];
-		
-		UIEdgeInsets ei = _viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
-		_viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
-		_viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height, ei.right);
+		UIEdgeInsets hs = _viewControllerSectionLayoutSettings.tableView.horizontalScrollIndicatorInsets;
+		UIEdgeInsets vs = _viewControllerSectionLayoutSettings.tableView.verticalScrollIndicatorInsets;
+		_viewControllerSectionLayoutSettings.tableView.contentInset = UIEdgeInsetsMake(vs.top, hs.left, vs.bottom, hs.right);
+		_viewControllerSectionLayoutSettings.tableView.verticalScrollIndicatorInsets = vs;
+		_viewControllerSectionLayoutSettings.tableView.horizontalScrollIndicatorInsets = hs;
 		[self actionShowSectionSettingsFromLabel:label];
 		[self setDisplayInactive];
 	}
@@ -2555,16 +2541,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)adjustContentOffsetForSelectedElements {
-	if (_toolboxTransitioningDelegate.presentationController.presentedViewController != nil &&
-		[_toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
-		
-		CGRect frame, bounds;
-		frame = ((MADToolboxTransitioningDelegate *)_toolboxTransitioningDelegate).
-										presentationController.presentedViewController.view.frame;
-		bounds = [self.view.scroller positionForRectOfInterest: [self rectForSelectedElements]
-											 withPresentedRect: frame
-												 containerSize: self.view.frame.size
-													adjustment: self.topLayoutGuide.length];
+	if (_toolboxTransitioningDelegate.presentationController.presentedViewController != nil && [_toolboxTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
+		CGRect frame = ((MADToolboxTransitioningDelegate *)_toolboxTransitioningDelegate).presentationController.presentedViewController.view.frame;
+		CGRect bounds = [self.view.scroller positionForRectOfInterest: [self rectForSelectedElements]
+													withPresentedRect: frame
+														containerSize: self.view.frame.size
+														   adjustment: self.view.safeAreaInsets.top];
 		[self.view.scroller.container repositionSectionViews:bounds];
 	}
 }
@@ -2580,13 +2562,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
 	if (self.settingsTransitioningDelegate.presentationController.presentedViewController != nil &&
 		[self.settingsTransitioningDelegate.presentationController isKindOfClass:[MADToolboxPresentationController class]]) {
-		CGRect presentedRect, position;
-		presentedRect = ((MADToolboxTransitioningDelegate *)self.settingsTransitioningDelegate).
-										presentationController.presentedViewController.view.frame;
-		position = [self.view.scroller positionForRectOfInterest: selectedSectionView.frame
-										  withPresentedRect: presentedRect
-											  containerSize: self.view.frame.size
-												 adjustment: self.topLayoutGuide.length];
+		CGRect presentedRect = ((MADToolboxTransitioningDelegate *)self.settingsTransitioningDelegate).
+		presentationController.presentedViewController.view.frame;
+		CGRect position = [self.view.scroller positionForRectOfInterest: selectedSectionView.frame
+													  withPresentedRect: presentedRect
+														  containerSize: self.view.frame.size
+															 adjustment: self.view.safeAreaInsets.top];
 		[self.view.scroller.container repositionSectionViews:position];
 	}
 }
@@ -2608,20 +2589,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (void)deselectElementView:(MADDesignerElementView *)elementView
 				   animated:(BOOL)animated {
-	
 	[self.view.scroller.container removeBorderFromView: elementView];
-	
-	NSArray <UIView *> *passThroughViewsArray;
-	NSMutableSet <UIView *>  * _Nullable passThroughViewsSet;
-	passThroughViewsArray = self.popoverToolbox.passthroughViews;
-	if (!passThroughViewsArray) goto END_deselectElementView;
-	
-	passThroughViewsSet = [[NSMutableSet alloc] initWithArray: passThroughViewsArray];
-	[passThroughViewsSet removeObject: elementView];
-	self.popoverToolbox.passthroughViews = passThroughViewsSet.allObjects;
-	
-END_deselectElementView:;
-
+	NSArray <UIView *> *passThroughViewsArray = self.popoverToolbox.passthroughViews;
+	if (passThroughViewsArray != nil) {
+		NSMutableSet <UIView *>  * _Nullable passThroughViewsSet = [[NSMutableSet alloc] initWithArray: passThroughViewsArray];
+		[passThroughViewsSet removeObject: elementView];
+		self.popoverToolbox.passthroughViews = passThroughViewsSet.allObjects;
+	}
 }
 
 - (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag {
@@ -2635,16 +2609,12 @@ END_deselectElementView:;
 }
 
 - (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView {
-
 	NSArray<NSIndexPath *> *indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems;
-	NSIndexPath *indexPath;
-	MADDesignerElementView *elementView;
-	for (indexPath in indexPathsForVisibleItems) {
-		elementView = [self elementViewAtIndexPath: indexPath
-								  inCollectionView: collectionView];
+	for (NSIndexPath *indexPath in indexPathsForVisibleItems) {
+		MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath
+														  inCollectionView: collectionView];
 		[elementView setNeedsDisplay];
 	}
-
 }
 
 - (MADDesignerElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
@@ -3330,7 +3300,7 @@ END_deselectElementView:;
 
 - (CGRect)detailDisplayFrame {
 	return CGRectMake(DetailDisplayFrameOriginX(self.view.frame.size.width),
-					  DetailDisplayFrameOriginY(self.topLayoutGuide.length),
+					  DetailDisplayFrameOriginY(self.view.safeAreaInsets.top),
 					  MADSizeWidthViewDetailDisplay, MADSizeHeightViewDetailDisplay);
 }
 

@@ -19,7 +19,6 @@
 #import "MADExplorerToolbar.h"
 #import "MADExplorerController.h"
 
-#import "MADExplorerAnimated.h"
 #import "MADThemeManager.h"
 
 #import <UIKit/UINavigationController.h>
@@ -91,7 +90,8 @@
 - (void)navigationController:(UINavigationController *)navigationController
 	  willShowViewController:(UIViewController *)viewController
 					animated:(BOOL)animated {
-	[self setToolbarHidden: NO animated: animated];
+	BOOL shouldShowToolbar = ![viewController isKindOfClass:[UITabBarController class]];
+	[self setToolbarHidden:!shouldShowToolbar animated:animated];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController
@@ -101,36 +101,6 @@
 - (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
 								   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
 	return nil;
-}
-
-- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-											animationControllerForOperation:(UINavigationControllerOperation)operation
-														 fromViewController:(UIViewController *)fromVC
-														   toViewController:(UIViewController *)toVC  {
-
-	id <UIViewControllerAnimatedTransitioning> animationController;
-	BOOL toTabViewController = [toVC isKindOfClass:[UITabBarController class]];
-	BOOL toFileExplorferViewController = [toVC isKindOfClass:[MADExplorerController class]];
-
-	if (toTabViewController || toFileExplorferViewController) {
-		toVC.modalPresentationStyle = UIModalPresentationCustom;
-		switch (operation) {
-			case UINavigationControllerOperationPush:
-				animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
-																					  pushing:YES];
-				break;
-
-			case UINavigationControllerOperationPop:
-				animationController = [MADExplorerAnimated newFileExplorerAnimatedShowToolbar:toFileExplorferViewController
-																					  pushing:NO];
-				break;
-
-			case UINavigationControllerOperationNone:
-			default:
-				break;
-		}
-	}
-	return animationController;
 }
 
 @end

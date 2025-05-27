@@ -99,7 +99,7 @@
 	[self initialize];
 	self.collectionView.alwaysBounceHorizontal = YES;
 	self.collectionView.alwaysBounceVertical = YES;
-	[self setAutomaticallyAdjustsScrollViewInsets:YES];
+	self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

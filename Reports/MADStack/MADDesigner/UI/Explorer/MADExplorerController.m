@@ -31,7 +31,6 @@
 #import "MTVerificationController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADSearchBar.h"
-#import "MADExplorerAnimatedTransitioning.h"
 #import "MADColorTransformer.h"
 #import "MADLocaleTransformer.h"
 #import "MADThemeManager.h"
@@ -1171,10 +1170,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	UINavigationController *licensing = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeLicensing];
 	[MADThemeManager applyAppearanceToNavigationController:licensing traitCollection:self.traitCollection];
-	//licensing.modalPresentationStyle = UIModalPresentationFormSheet;
-	//licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-	//MADExplorerAnimatedTransitioningDelegate *transitioningDelegate;
-	//transitioningDelegate = [[MADExplorerAnimatedTransitioningDelegate alloc] init];
 	
 	licensing.providesPresentationContextTransitionStyle = YES;
 	licensing.definesPresentationContext = YES;
@@ -1182,11 +1177,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	licensing.presentationController.delegate = self;
 	((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
-	//licensing.transitioningDelegate = transitioningDelegate;
 	self.fileExplorerViewDelegate.showingPopover = YES;
 	
-	//self.navigationController.transitioningDelegate = transitioningDelegate;
-  //  self.modalPresentationStyle = UIModalPresentationCurrentContext;
 	self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
 	[self showViewController:licensing animated: YES];
 }
