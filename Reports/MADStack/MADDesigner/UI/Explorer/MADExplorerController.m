@@ -311,10 +311,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[self.collectionView addGestureRecognizer:tapGestureRecognizer];
 	self.fileExplorerDataSource.delegate = self;
 	self.collectionView.dataSource = self.fileExplorerDataSource;
-
-	NSLog(@"A: Collection view layout:   %@", self.collectionView.collectionViewLayout);
-	NSLog(@"B: Collection view layout:   %@", self.collectionViewLayout);
-	NSLog(@"D: Collection view delegate: %@", self.collectionView.delegate);
 	
 	[self setNeedsStatusBarAppearanceUpdate];
 	
