@@ -30,7 +30,7 @@ extern NSString * const MADSqlTextFromPart;
 @end
 
 @interface MADDatabase : NSObject
-	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseDBProtocol, MADDatabaseSQLProtocol, NSCoding, NSCopying>
+	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseSQLProtocol, NSCoding, NSCopying>
 
 	+ (NSString *)imageIconName;
 	+ (NSString *)driverName;
