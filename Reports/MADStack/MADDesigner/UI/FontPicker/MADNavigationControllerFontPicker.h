@@ -11,7 +11,7 @@
 
 #import "MADNavigationController.h"
 
-@interface MADNavigationControllerFontPicker : MADNavigationController <MADNavigationControllerIdentify>
+@interface MADNavigationControllerFontPicker : UINavigationController <MADNavigationControllerIdentify>
 
 @end
 

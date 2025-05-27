@@ -404,7 +404,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (UINavigationController *)navigationControllerToolbox {
 	if (_navigationControllerToolbox == nil) {
-		UINavigationController *navigation = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeToolbox];
+		UINavigationController *navigation = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeToolbox];
 		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
 		navigation.transitioningDelegate = self.toolboxTransitioningDelegate;
 		navigation.modalPresentationStyle = UIModalPresentationCustom;
@@ -1582,7 +1582,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		if (!strongself) return;
 		
 		UIView *viewToEdit = [strongself.elementViewsDictionary objectForKey:identifier];
-		UINavigationController *navigation = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeAggregateAdd];
+		UINavigationController *navigation = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeAggregateAdd];
 		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
 
 		MADocument *document = strongself.document;
@@ -3444,7 +3444,7 @@ END_deselectElementView:;
 }
 
 - (IBAction)actionAdd:(id)sender {
-	UINavigationController *navigation = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeElementPicker];
+	UINavigationController *navigation = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeElementPicker];
 	[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
 
 	MADDesignerElementPickerViewController *pickerController = (MADDesignerElementPickerViewController *)navigation.topViewController;

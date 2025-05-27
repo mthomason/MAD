@@ -1209,7 +1209,6 @@ BOOL storeEnabled(void) {
 - (IBAction)displaySQL:(id)sender {
 	UINavigationController *navigationController = [[UIStoryboard storyboardWithName:@"MADQuery" bundle:nil] instantiateViewControllerWithIdentifier:@"MADQuerySQLNavigationController"];
 	navigationController.modalPresentationStyle = UIModalPresentationPopover;
-	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 	MADViewControllerSQL *viewController = (MADViewControllerSQL *)navigationController.topViewController;
 	viewController.document = self.document;
 	viewController.delegate = self;
@@ -1219,6 +1218,7 @@ BOOL storeEnabled(void) {
 	ppc.barButtonItem = sender;
 	
 	self.showSQLPresentationController = ppc;
+	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 	[self presentViewController:navigationController animated:YES completion:^{
 		[self.tabBarController disableTabBarItems];
 	}];
@@ -1233,7 +1233,7 @@ BOOL storeEnabled(void) {
 	MADQueryBuilderAddTableViewController *tvc = (MADQueryBuilderAddTableViewController *)navigationController.topViewController;
 	tvc.delegate = self;
 	tvc.managedObjectContext = self.document.managedObjectContext;
-
+	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 	[self presentViewController:navigationController animated:YES completion:^{
 		[self.tabBarController disableTabBarItems];
 	}];
@@ -1247,6 +1247,7 @@ BOOL storeEnabled(void) {
 	MADQueryLinkBuilderController *tvc = (MADQueryLinkBuilderController *)navigationController.topViewController;
 	tvc.queryLinkDelegate = self;
 	tvc.document = self.document;
+	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 	[self presentViewController:navigationController animated:YES completion:^{
 		[self.tabBarController disableTabBarItems];
 	}];
@@ -1260,6 +1261,7 @@ BOOL storeEnabled(void) {
 	MADQueryPredicateFormatController *tvc = (MADQueryPredicateFormatController *)navigationController.topViewController;
 	tvc.delegate = self;
 	tvc.document = self.document;
+	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 	[self presentViewController:navigationController animated:YES completion:^{
 		[self.tabBarController disableTabBarItems];
 	}];
@@ -1273,6 +1275,7 @@ BOOL storeEnabled(void) {
 	MADQueryBuilderAddGroupViewController *tvc = (MADQueryBuilderAddGroupViewController *)navigationController.topViewController;
 	tvc.delegate = self;
 	tvc.document = self.document;
+	[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 	[self presentViewController:navigationController animated:YES completion:^{
 		[self.tabBarController disableTabBarItems];
 	}];

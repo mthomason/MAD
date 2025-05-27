@@ -18,19 +18,17 @@
 @class NSManagedObjectContext;
 
 @protocol MADQueryBuilderAddTableDelegate
-	- (void)viewController:(MADQueryBuilderAddTableViewController *)viewController
-	 addedQueryTableWithID:(NSManagedObjectID *)objectID;
+	- (void)viewController:(MADQueryBuilderAddTableViewController *)viewController addedQueryTableWithID:(NSManagedObjectID *)objectID;
 @end
 
-@interface MADQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults
-	<UITableViewDataSource, UITableViewDelegate>
+@interface MADQueryBuilderAddTableViewController : MADTableViewControllerCoreDataResults <UITableViewDataSource, UITableViewDelegate>
 
-	@property (nonatomic, weak) IBOutlet id <MADQueryBuilderAddTableDelegate,
-											 MADViewControllerStandardProtocol> delegate;
-	@property (nonatomic, copy) NSArray *excludeResults;
-	@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, weak) IBOutlet id <MADQueryBuilderAddTableDelegate,
+MADViewControllerStandardProtocol> delegate;
+@property (nonatomic, copy) NSArray *excludeResults;
+@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
-	- (IBAction)done:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 

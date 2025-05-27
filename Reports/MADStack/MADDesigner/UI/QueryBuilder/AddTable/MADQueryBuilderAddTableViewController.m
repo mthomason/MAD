@@ -29,12 +29,11 @@
 		((managedObjectContext = _managedObjectContext)) != nil) {
 		
 		NSFetchRequest *request = [RptqDatabaseSchemaTable fetchRequestSortTables];
-		NSFetchedResultsController *controller;
-		controller = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-														 managedObjectContext: managedObjectContext
-														   sectionNameKeyPath: nil
-																	cacheName: nil];
-		
+		NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+																					 managedObjectContext: managedObjectContext
+																					   sectionNameKeyPath: nil
+																								cacheName: nil];
+
 		NSError *error = nil;
 		[controller performFetch:&error];
 		if (error != nil) {

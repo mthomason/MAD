@@ -16,6 +16,9 @@
 	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
 		self.textLabel.numberOfLines = 0;
 		self.textLabel.textColor = [UIColor labelColor];
+		self.labelMain.textColor = [UIColor labelColor];
+		self.labelDetail.textColor = [UIColor secondaryLabelColor];
+		self.labelOpperator.textColor = [UIColor secondaryLabelColor];
 	}
 	return self;
 }
@@ -24,6 +27,9 @@
 	if (self = [super initWithCoder:aDecoder]) {
 		self.textLabel.numberOfLines = 0;
 		self.textLabel.textColor = [UIColor labelColor];
+		self.labelMain.textColor = [UIColor labelColor];
+		self.labelDetail.textColor = [UIColor secondaryLabelColor];
+		self.labelOpperator.textColor = [UIColor secondaryLabelColor];
 	}
 	return self;
 }

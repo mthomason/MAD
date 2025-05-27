@@ -87,10 +87,10 @@
 	MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
 	[tabBarViewControllers addObject: splitViewController];
 	
-	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [MADNavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
+	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
 	[tabBarViewControllers addObject: navControllerDesigner];
 	
-	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [MADNavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
+	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
 	[tabBarViewControllers addObject: navControllerViewer];
 
 	id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;

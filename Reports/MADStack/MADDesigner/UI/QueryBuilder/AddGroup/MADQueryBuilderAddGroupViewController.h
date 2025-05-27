@@ -18,9 +18,7 @@
 @class MADQueryBuilderAddGroupViewController, MADocument;
 
 @interface MADQueryBuilderAddGroupViewController : UITableViewController
-	<UITableViewDelegate,
-		MADQueryBuilderSortTypeDelegate,
-		MADQueryChooseFieldProtocol>
+	<UITableViewDelegate, MADQueryBuilderSortTypeDelegate, MADQueryChooseFieldProtocol>
 
 	@property (nonatomic, weak) id <MADQueryBuilderAddGroupDelegate> delegate;
 	@property (nonatomic, weak) MADocument *document;

@@ -121,7 +121,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 		self.layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
 		self.format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
 
-		UINavigationController *navigationController = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeFontPicker];
+		UINavigationController *navigationController = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeFontPicker];
 		[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];
 
 		self.styleNavigationController = navigationController;

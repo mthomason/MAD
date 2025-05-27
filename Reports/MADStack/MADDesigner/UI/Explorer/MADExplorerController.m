@@ -1064,7 +1064,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (IBAction)actionAddDocument:(id)sender {
 	
-	UINavigationController *navControl = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeNewDocument];
+	UINavigationController *navControl = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeNewDocument];
 	[MADThemeManager applyAppearanceToNavigationController:navControl traitCollection:self.traitCollection];
 
 	navControl.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -1092,7 +1092,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		_infoControllerOnScreen = NO;
 		[self dismissViewControllerAnimated:YES completion:^{ }];
 	} else {
-		UINavigationController *infoViewController = [MADNavigationController navigationControllerWithType:MADNavigationControllerTypeInformation];
+		UINavigationController *infoViewController = [UINavigationController navigationControllerWithType:MADNavigationControllerTypeInformation];
 		[MADThemeManager applyAppearanceToNavigationController:infoViewController traitCollection:self.traitCollection];
 
 		infoViewController.modalPresentationStyle = UIModalPresentationPopover;
@@ -1169,7 +1169,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (IBAction)actionStore:(id)sender {
 	
-	UINavigationController *licensing = [MADNavigationController navigationControllerWithType: MADNavigationControllerTypeLicensing];
+	UINavigationController *licensing = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeLicensing];
 	[MADThemeManager applyAppearanceToNavigationController:licensing traitCollection:self.traitCollection];
 	//licensing.modalPresentationStyle = UIModalPresentationFormSheet;
 	//licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;

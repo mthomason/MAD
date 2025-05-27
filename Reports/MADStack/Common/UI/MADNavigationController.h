@@ -19,11 +19,15 @@
 @property (readonly, nonatomic, assign) MADNavigationControllerType controllerType;
 @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-+ (UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *)documentNavigationControllerWithType:(MADNavigationControllerType)type
-																															   document:(MADocument *)document;
-+ (UINavigationController *)navigationControllerWithType:(MADNavigationControllerType)type;
-
 - (IBAction)done:(id)sender;
+
+@end
+
+@interface UINavigationController (Constructors)
+
++ (UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *)documentNavigationControllerWithType:(MADNavigationControllerType)type
+																												   document:(MADocument *)document;
++ (UINavigationController *)navigationControllerWithType:(MADNavigationControllerType)type;
 
 @end
 

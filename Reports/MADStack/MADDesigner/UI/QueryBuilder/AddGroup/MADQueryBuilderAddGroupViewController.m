@@ -36,9 +36,7 @@ static NSString * const TextDecending = @"Decending";
 static NSString * const TextDefault = @"Default";
 
 @interface MADQueryBuilderAddGroupViewController ()
-
-	@property (nonatomic, copy) NSManagedObjectID *fieldId;
-
+@property (nonatomic, copy) NSManagedObjectID *fieldId;
 @end
 
 @implementation MADQueryBuilderAddGroupViewController
@@ -56,8 +54,7 @@ static NSString * const TextDefault = @"Default";
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.sortOrder = MADSortOrderAccending;
-	NSString *accending = NSLocalizedString(TextAccending, TextAccending);
-	self.tableViewCellSort.detailTextLabel.text = accending.lowercaseString;
+	self.tableViewCellSort.detailTextLabel.text = [NSLocalizedString(TextAccending, TextAccending) lowercaseString];
 	[self updateSaveButtonState];
 }
 

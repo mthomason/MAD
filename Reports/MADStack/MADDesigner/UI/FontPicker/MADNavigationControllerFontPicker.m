@@ -34,4 +34,18 @@
 	return MADNavigationControllerTypeFontPicker;
 }
 
+- (IBAction)done:(id)sender {
+	for (UIViewController *viewController in self.childViewControllers) {
+		if ([viewController respondsToSelector:@selector(done:)]) {
+			[viewController performSelectorOnMainThread: @selector(done:)
+											 withObject: self
+										  waitUntilDone: NO];
+		}
+	}
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+	return UIStatusBarStyleLightContent;
+}
+
 @end
