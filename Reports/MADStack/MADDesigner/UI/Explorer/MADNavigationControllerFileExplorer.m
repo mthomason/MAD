@@ -69,7 +69,7 @@
 }
 
 - (void)done:(id)sender {
-	[self.viewControllers[1] done:sender];
+	[self.viewControllers[0] done:sender];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
