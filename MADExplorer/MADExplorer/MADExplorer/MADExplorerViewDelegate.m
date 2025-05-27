@@ -395,9 +395,7 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
 						layout:(UICollectionViewLayout*)collectionViewLayout
 		insetForSectionAtIndex:(NSInteger)section {
-	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ?
-									UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0) :
-									UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
+	return collectionView.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0) : UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
 }
 
 

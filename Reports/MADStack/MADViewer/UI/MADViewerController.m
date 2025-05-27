@@ -267,7 +267,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	[self.view addSubview: pageSlider];
 	[self.view bringSubviewToFront: pageSlider];
 
-	[self updateNavigationPrompt:animated];
 	[self.navigationController.toolbar setNeedsLayout];
 }
 
@@ -280,19 +279,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
-	MADocument *document = self.document;
-	MADRefreshOperationReload *reload;
-	MADDocumentPageController *page;
-	MADPageViewAttributes *pageAttributes;
-	UIBarButtonItem *buttonRefresh, *buttonDone, *buttonStatus;
-	
-	reload = [[MADRefreshOperationReload alloc] initWithDocument: document
-												  viewController: self];
+	[self updateNavigationPrompt:animated];
 
-	pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
-																size: document.paper.paperSize];
-	page = [MADDocumentPageController newDocumentPageController: document
-												 pageAttributes: pageAttributes];
+	MADocument *document = self.document;
+	
+	MADRefreshOperationReload *reload = [[MADRefreshOperationReload alloc] initWithDocument: document
+																			 viewController: self];
+	
+	MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
+																					   size: document.paper.paperSize];
+	MADDocumentPageController *page = [MADDocumentPageController newDocumentPageController: document
+																			pageAttributes: pageAttributes];
 	
 	page.view.frame = self.view.bounds;
 	page.delegate = self;
@@ -315,21 +312,20 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 		labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y,
 																		30.0000f, 44.0000f)];
 		
-		buttonStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+		UIBarButtonItem *buttonStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
 		[toolbarItems insertObject: buttonStatus atIndex: 0];
 		[self setToolbarItems: toolbarItems animated:animated];
 		self.labelStatus = labelStatus;
 	}
 
 
-	buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
-																  target: self
-																  action: @selector(refresh:)];
-	
-	buttonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
-															   target: nil
-															   action: @selector(done:)];
+	UIBarButtonItem *buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
+																				   target: self
+																				   action: @selector(refresh:)];
 
+	UIBarButtonItem *buttonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+																				target: nil
+																				action: @selector(done:)];
 
 	[self.navigationController setToolbarHidden:NO animated:animated];
 	
@@ -351,8 +347,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	self.pageSlider.sliderDelegate = nil;
 	self.dataSource = nil;
 	self.delegate = nil;
-	//self.presentationController.delegate = nil;
-
 	[self.tabBarController.navigationItem setRightBarButtonItem:nil];
 	// FIXME: This has to be cleared, or the cache grows, and grows.
 	[self timerDealloc];
@@ -365,8 +359,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 	
 	NSArray<UIBarButtonItem *> *items = self.navigationController.toolbar.items;
 	for (UIBarButtonItem *barButtonItem in items) {
-		NSString *viewSelector = NSStringFromSelector(@selector(view));
-		UIView *view = [barButtonItem valueForKey:viewSelector];
+		UIView *view = [barButtonItem valueForKey:NSStringFromSelector(@selector(view))];
 		if (view != nil) {
 			nonSliderButtonsWidth += (view ? view.frame.size.width : CGSizeZero.width) + MADBarButtonItemsMargin;
 		} else {

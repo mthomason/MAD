@@ -184,18 +184,20 @@ static os_log_t mad_log;
 
 /* The end and beginning of the the text document. */
 //@property (nonatomic, readonly) UITextPosition *beginningOfDocument;
+//@property (nonatomic, readonly) UITextPosition *endOfDocument;
 
+/*
 - (UITextPosition *)beginningOfDocument {
 	MADTextPosition *beginning = [[MADTextPosition alloc] init];
 	return beginning;
 }
-//@property (nonatomic, readonly) UITextPosition *endOfDocument;
 
 - (UITextPosition *)endOfDocument {
 	
 }
-
+*/
 /* Methods for creating ranges and positions. */
+/*
 - (nullable UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition {
 
 	
@@ -203,10 +205,13 @@ static os_log_t mad_log;
 }
 - (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset {}
 - (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset {}
+*/
 
 /* Simple evaluation of positions */
+/*
 - (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other {}
 - (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition {}
+*/
 
 /* A system-provied input delegate is assigned when the system is interested in input changes. */
 //@property (nullable, nonatomic, weak) id <UITextInputDelegate> inputDelegate;
@@ -215,34 +220,45 @@ static os_log_t mad_log;
 //@property (nonatomic, readonly) id <UITextInputTokenizer> tokenizer;
 
 /* Layout questions. */
+/*
 - (nullable UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction {}
 - (nullable UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction {}
+*/
 
 /* Writing direction */
+/*
 - (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {}
 - (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range {}
+*/
 
 /* Geometry used to provide, for example, a correction rect. */
+/*
 - (CGRect)firstRectForRange:(UITextRange *)range {}
 - (CGRect)caretRectForPosition:(UITextPosition *)position {}
 - (NSArray *)selectionRectsForRange:(UITextRange *)range {}       // Returns an array of UITextSelectionRects
+*/
 
 /* Hit testing. */
+/*
 - (nullable UITextPosition *)closestPositionToPoint:(CGPoint)point {}
 - (nullable UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range {}
 - (nullable UITextRange *)characterRangeAtPoint:(CGPoint)point {}
+*/
 
 #pragma mark Optional
-
-- (BOOL)shouldChangeTextInRange:(UITextRange *)range replacementText:(NSString *)text {   /* return NO to not change text */ }
+/* return NO to not change text */
+/*- (BOOL)shouldChangeTextInRange:(UITextRange *)range replacementText:(NSString *)text {  }*/
 
 /* Text styling information can affect, for example, the appearance of a correction rect.
  * Returns a dictionary containing NSAttributedString keys. */
+/*
 - (nullable NSDictionary<NSString *,id> *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {
 	
 }
+*/
 
 /* To be implemented if there is not a one-to-one correspondence between text positions within range and character offsets into the associated string. */
+/*
 - (nullable UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset {
 	
 }
@@ -250,6 +266,7 @@ static os_log_t mad_log;
 - (NSInteger)characterOffsetOfPosition:(UITextPosition *)position withinRange:(UITextRange *)range {
 	
 }
+*/
 
 /* An affiliated view that provides a coordinate system for all geometric values in this protocol.
  * If unimplmeented, the first view in the responder chain will be selected. */
@@ -280,6 +297,7 @@ static os_log_t mad_log;
  * pending dictation results. -insertDictationPlaceholder must return a reference to the
  * placeholder. This reference will be used to identify the placeholder by the other methods
  * (there may be more than one placeholder). */
+/*
 - (id)insertDictationResultPlaceholder {
 	
 }
@@ -287,6 +305,7 @@ static os_log_t mad_log;
 - (CGRect)frameForDictationResultPlaceholder:(id)placeholder {
 	
 }
+*/
 
 /* InsertResult will be NO if the recognition failed. */
 - (void)removeDictationResultPlaceholder:(id)placeholder willInsertResult:(BOOL)willInsertResult {}
