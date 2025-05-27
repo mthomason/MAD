@@ -59,7 +59,7 @@ static inline double wobbleRandomFactor(void) {
 	
 	if (!active) {
 		progressView.hidden = YES;
-		[progressView setProgress:0.0 animated:YES];
+		[progressView setProgress:0.0 animated:NO];
 		return;
 	}
 	
