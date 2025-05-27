@@ -15,9 +15,9 @@
 
 @class MADCellElement, MADDesignerElementView;
 
-@interface MADCellElement : MADManagedObjectCollectionViewCell
-    @property (nonatomic, weak) id <MADCellElementDelegate> delegate;
-    - (void)addElementView:(MADDesignerElementView *)elementView;
+@interface MADCellElement : MADManagedObjectCollectionViewCell  <UIContextMenuInteractionDelegate>
+@property (nonatomic, weak) NSObject <MADCellElementDelegate> *delegate;
+- (void)addElementView:(MADDesignerElementView *)elementView;
 @end
 
 #endif

@@ -125,14 +125,11 @@
 		UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
 		
 		MADocument *document = _document;
-		NSSet <NSNumber *> *userSelectedObjectIDs;
-		RptqDocumentElement *element;
-		
-		userSelectedObjectIDs = self.userSelectedObjectIDs;
+		NSSet <NSNumber *> *userSelectedObjectIDs = self.userSelectedObjectIDs;
 		for (NSNumber *identifier in userSelectedObjectIDs) {
 			
-			element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-														  fromObjectContext: document.managedObjectContext];
+			RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+																			   fromObjectContext: document.managedObjectContext];
 			if (element.numericFormat.enabled) {
 				accessoryType = UITableViewCellAccessoryCheckmark;
 			}
@@ -141,19 +138,19 @@
 		(self.tableViewCellCurrency).accessoryType = accessoryType;
 		
 		if ((self.userSelectedObjectIDs).count == 1) {
-			element = [RptqDocumentElement newDocumentElementWithIdentifier: [userSelectedObjectIDs.anyObject longLongValue]
-														  fromObjectContext: document.managedObjectContext];
+			RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: [userSelectedObjectIDs.anyObject longLongValue]
+																			   fromObjectContext: document.managedObjectContext];
 			(self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:element.numericFormat.decimalCount];
 			(self.stepperNumberOfDecimals).value = element.numericFormat.decimalCount;
 			
 		} else {
-			
+
 			BOOL allTheSame = NO;
 			NSInteger lastInteger = 0;
 			NSUInteger counter = 0;
 			for (NSNumber *identifier in self.userSelectedObjectIDs) {
-				element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-															  fromObjectContext: document.managedObjectContext];
+				RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
+																				   fromObjectContext: document.managedObjectContext];
 				if (counter > 0) {
 #warning Don't think BOOL allTheSame ever becomes "YES"
 					if (lastInteger == element.numericFormat.decimalCount && allTheSame) {  /// WTF: How does this work?  Don't think it ever gets in here!
@@ -174,7 +171,7 @@
 			}
 			self.stepperNumberOfDecimals.value = lastInteger;
 		}
-		
+
 	}
 }
 
@@ -206,12 +203,10 @@
 }
 
 - (NSAttributedString *)decimalsStringForNumberOfDecimals:(NSInteger)numberOfDecimals {
-	NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: NSLocalizedString(@"Decimals", "Decimals")
-																								   attributes: @{
+	NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString: NSLocalizedString(@"Decimals", "Decimals") attributes: @{
 		NSFontAttributeName : [UIFont boldSystemFontOfSize:self.labelNumberOfDecimals.font.pointSize]
 	}];
-	NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:(numberOfDecimals == -1) ? @"-" :  [@" " stringByAppendingFormat:@"%ld", (long)numberOfDecimals]
-																		attributes:@{
+	NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:(numberOfDecimals == -1) ? @"-" :  [@" " stringByAppendingFormat:@"%ld", (long)numberOfDecimals] attributes:@{
 		NSFontAttributeName : [UIFont systemFontOfSize:self.labelNumberOfDecimals.font.pointSize]
 	}];
 	[localizedAttributedMessage appendAttributedString:messageSuffix];

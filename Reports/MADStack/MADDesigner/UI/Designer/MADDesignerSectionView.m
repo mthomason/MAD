@@ -249,12 +249,13 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 	}
 }
 
+/*
+
 #pragma mark -
 #pragma mark Accessibility
 
 - (NSArray <__kindof UIAccessibilityCustomAction *> *)accessibilityCustomActions {
-	NSString *toggleAccessibilityName = NSLocalizedString(@"Access section elements.", @"Access section elements.");
-	UIAccessibilityCustomAction *toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: toggleAccessibilityName
+	UIAccessibilityCustomAction *toggleAccessibility = [[UIAccessibilityCustomAction alloc] initWithName: NSLocalizedString(@"Access section elements.", @"Access section elements.")
 																								  target: self
 																								selector: @selector(toggleAccessibility:)];
 	return @[toggleAccessibility];
@@ -285,5 +286,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 - (UIAccessibilityTraits)accessibilityTraits {
 	return UIAccessibilityTraitButton;
 }
+
+*/
 
 @end

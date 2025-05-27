@@ -10,6 +10,7 @@
 #import "MADDesignerElementView.h"
 #import "MADCellElementDelegate.h"
 #import <UIKit/UIMenuController.h>
+#import <UIKit/UIImage.h>
 
 @interface MADCellElement ()
 @property (nonatomic, weak) MADDesignerElementView *elementView;
@@ -21,16 +22,55 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		[self commonInit];
+		UIContextMenuInteraction *interaction = [[UIContextMenuInteraction alloc] initWithDelegate:self];
+		[self.contentView addInteraction:interaction];
+		//[self commonInit];
 	}
 	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		[self commonInit];
+		UIContextMenuInteraction *interaction = [[UIContextMenuInteraction alloc] initWithDelegate:self];
+		[self.contentView addInteraction:interaction];
+		//[self commonInit];
 	}
 	return self;
+}
+
+- (UIContextMenuConfiguration *)contextMenuInteraction:(UIContextMenuInteraction *)interaction configurationForMenuAtLocation:(CGPoint)location {
+	return [UIContextMenuConfiguration configurationWithIdentifier:nil
+												   previewProvider:nil
+													actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+		UIAction *edit = [UIAction actionWithTitle:@"Edit"
+											 image:[UIImage systemImageNamed:@"pencil"]
+										identifier:nil
+										   handler:^(__kindof UIAction * _Nonnull action) {
+			NSObject <MADCellElementDelegate> *delegate = self.delegate;
+			if ([delegate respondsToSelector:@selector(editDocumentObjectRepresentedByCell:)]) {
+					[delegate editDocumentObjectRepresentedByCell:self];
+			}
+		}];
+		UIAction *delete = [UIAction actionWithTitle:@"Delete"
+											   image:[UIImage systemImageNamed:@"trash"]
+										  identifier:nil
+											 handler:^(__kindof UIAction * _Nonnull action) {
+			NSObject <MADCellElementDelegate> *delegate = self.delegate;
+			if ([delegate respondsToSelector:@selector(deleteDocumentObjectRepresentedByCell:)]) {
+					[delegate deleteDocumentObjectRepresentedByCell:self];
+			}
+		}];
+		UIAction *format = [UIAction actionWithTitle:@"Format"
+											   image:[UIImage systemImageNamed:@"paintbrush"]
+										  identifier:nil
+											 handler:^(__kindof UIAction * _Nonnull action) {
+			NSObject <MADCellElementDelegate> *delegate = self.delegate;
+			if ([delegate respondsToSelector:@selector(formatDocumentObjectRepresentedByCell:)]) {
+					[delegate formatDocumentObjectRepresentedByCell:self];
+			}
+		}];
+		return [UIMenu menuWithTitle:@"" children:@[edit, format, delete]];
+	}];
 }
 
 - (void)commonInit {
@@ -41,20 +81,19 @@
 	NSUInteger indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 		return obj.action == @selector(edit:);
 	}];
+
 	if (indexOfActions == NSNotFound) {
-		UIMenuItem *menuItemEdit;
-		NSString *edit = NSLocalizedString(@"Edit", @"Edit");
-		menuItemEdit = [[UIMenuItem alloc] initWithTitle: edit action: @selector(edit:)];
+		
+		UIMenuItem *menuItemEdit = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Edit", @"Edit") action: @selector(edit:)];
 		[menuItems addObject:menuItemEdit];
 	}
 	
 	indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 		return obj.action == @selector(format:);
 	}];
+
 	if (indexOfActions == NSNotFound) {
-		UIMenuItem *menuItemFormat;
-		NSString *format = NSLocalizedString(@"Format", @"Format");
-		menuItemFormat = [[UIMenuItem alloc] initWithTitle: format action: @selector(format:)];
+		UIMenuItem *menuItemFormat = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Format", @"Format") action: @selector(format:)];
 		[menuItems addObject:menuItemFormat];
 	}
 	menu.menuItems = menuItems;

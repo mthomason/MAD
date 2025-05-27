@@ -492,32 +492,20 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	self.strayTouchGesture = tap;
 		
 	
-	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view
-																			   containerLeft: self.view.scroller.container];
-	
-	NSLayoutConstraint *constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view
-																			   containerRight: self.view.scroller.container];
-	
-	NSLayoutConstraint *constraintContentTop = [MADLayoutConstraint newLayoutConstraintView: self.view.scroller
-																			   containerTop: self.view.scroller.container];
-	
-	NSLayoutConstraint *constraintScrollerBottom = [MADLayoutConstraint newLayoutConstraintScroller: self.view.scroller
-																							 bottom: self.view.scroller.container];
-	
-	NSLayoutConstraint *constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container
-																					width: [self widthForCurrentZoom]];
+	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view containerLeft: self.view.scroller.container];
 	constraintContentLeft.priority = 999;
+	NSLayoutConstraint *constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view containerRight: self.view.scroller.container];
 	constraintContentRight.priority = 999;
+	NSLayoutConstraint *constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container width: [self widthForCurrentZoom]];
 	
-	NSLayoutConstraint *viewScrollerTop = [MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller
-																							 view: self.view.scroller.container];
-
-	[self.view addConstraints:@[constraintContentLeft,
-								constraintContentRight,
-								constraintContentTop,
-								constraintScrollerBottom,
-								constraintWidth,
-								viewScrollerTop]];
+	[self.view addConstraints:@[
+		constraintContentLeft,
+		constraintContentRight,
+		[MADLayoutConstraint newLayoutConstraintView: self.view.scroller containerTop: self.view.scroller.container],
+		[MADLayoutConstraint newLayoutConstraintScroller: self.view.scroller bottom: self.view.scroller.container],
+		constraintWidth,
+		[MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller view: self.view.scroller.container]
+	]];
 
 	self.layoutConstraintContainerLeft = constraintContentLeft;
 	self.layoutConstraintContainerWidth = constraintWidth;
@@ -526,8 +514,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (void)viewSafeAreaInsetsDidChange {
 	[self.view layoutIfNeeded];
-	self.layoutConstraintContainerWidth.constant = self.view.safeAreaLayoutGuide.layoutFrame.size.width -
-										(self.view.safeAreaInsets.left + self.view.safeAreaInsets.right);
+	self.layoutConstraintContainerWidth.constant = self.view.safeAreaLayoutGuide.layoutFrame.size.width - (self.view.safeAreaInsets.left + self.view.safeAreaInsets.right);
 	self.layoutConstraintContainerLeft.constant = self.view.safeAreaInsets.left;
 	[UIView animateWithDuration:0.33333333f animations:^{
 		[self.view layoutIfNeeded];
@@ -580,8 +567,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	[self.view.scroller setNeedsLayout];
 	[self.view.scroller.container setNeedsLayout];
 	
-	NSString *undo = NSLocalizedString(@"Undo", @"Undo Button Title");
-	UIBarButtonItem *toolbarItem = [[UIBarButtonItem alloc] initWithTitle: undo
+	UIBarButtonItem *toolbarItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Undo", @"Undo Button Title")
 																	style: UIBarButtonItemStylePlain
 																   target: self
 																   action: @selector(undo)];
@@ -594,7 +580,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (void)undo {
 	[self.document.undoManager undo];
-	NSLog(@"Undo");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -1335,18 +1320,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	// FIXME: Add ability to edit image fields.  84848422
 	
-	BOOL editedImageExist = info[UIImagePickerControllerEditedImage] != nil;
-	UIImage *selectedImage = nil;
-	if (editedImageExist) {
-		selectedImage = info[UIImagePickerControllerEditedImage];
-	} else {
+	UIImage *selectedImage = info[UIImagePickerControllerEditedImage];
+	if (selectedImage == nil) {
 		selectedImage = info[UIImagePickerControllerOriginalImage];
 	}
 	
 	if (selectedImage != nil) {
-		
-		//MADDesignerViewController * __weak wself = self;
-		
 		[self dismissViewControllerAnimated:YES completion:^{
 			self.hidesStatusBar = NO;
 		}];
@@ -1357,7 +1336,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 					  type,           MTDocumentObjectDefinationType,
 					  selectedImage,  MTDocumentObjectDefinationObject, nil];
 		[self insertDocumentObjectWithDefination: defination];
-
 	}
 	
 	[self setDisplayActive];
@@ -1390,11 +1368,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 																	   animated: NO];
 		controller.presentedViewController.view.backgroundColor = [UIColor clearColor];
 		
-		UINavigationController *navigation;
-		navigation = [[UINavigationController alloc] initWithRootViewController: presented];
-		navigation.navigationBar.translucent = YES;
-		navigation.navigationBar.backgroundColor = [UIColor clearColor];
-		navigation.view.backgroundColor = [UIColor clearColor];
+		UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController: presented];
+		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
 		result = navigation;
 		
 	} else if ([controller.presentedViewController isKindOfClass:[UINavigationController class]]) {
@@ -1511,30 +1486,42 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 				switch (objectToEdit.type) {
 						
 					case MADPrintPageElementTypeAggregate: {
-						NSNumber *objectID  = @(objectToEdit.identifier);
-						[self editDocumentObjectAggregateWithID: objectID
-													   objectID: objectToEdit.objectID];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSNumber *objectID  = @(objectToEdit.identifier);
+							[self editDocumentObjectAggregateWithID: objectID
+														   objectID: objectToEdit.objectID];
+						});
 						break;
 					}
 					
 					case MADPrintPageElementTypeBarcode: {
-						NSNumber *objectID  = @(objectToEdit.identifier);
-						[self editDocumentObjectBarcodeWithID: objectID];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSNumber *objectID  = @(objectToEdit.identifier);
+							[self editDocumentObjectBarcodeWithID: objectID];
+						});
 						break;
 					}
 					
 					case MADPrintPageElementTypeImage: {
-						[self editDocumentObjectImage: objectToEdit];
+						dispatch_async(dispatch_get_main_queue(), ^{
+							[self editDocumentObjectImage: objectToEdit];
+						});
 						break;
 					}
 						
-					case MADPrintPageElementTypeLabelDynamic:
-						[self editDocumentObjectLabelDynamic:objectToEdit];
+					case MADPrintPageElementTypeLabelDynamic: {
+						dispatch_async(dispatch_get_main_queue(), ^{
+							[self editDocumentObjectLabelDynamic:objectToEdit];
+						});
 						break;
+					}
 						
-					case MADPrintPageElementTypeLabelStatic:
-						[self editDocumentObjectLabelStatic:objectToEdit];
+					case MADPrintPageElementTypeLabelStatic: {
+						dispatch_async(dispatch_get_main_queue(), ^{
+							[self editDocumentObjectLabelStatic:objectToEdit];
+						});
 						break;
+					}
 						
 					case MADPrintPageElementTypeWhtiespace:
 						break;
@@ -1989,59 +1976,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 }
 
-- (BOOL)collectionView: (UICollectionView *)collectionView canPerformAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath withSender: (id)sender {
-	
-	BOOL result = NO;
-	if (action == @selector(delete:) || action == @selector(edit:)) {
-		result = YES;
-	}
-	return result;
-}
-
-- (void)collectionView: (MADDesignerSectionView *)collectionView
-		 performAction: (SEL)action forItemAtIndexPath: (NSIndexPath *)indexPath
-			withSender: (id)sender {
-	
-	NSInteger row = indexPath.row;
-	
-	RptqDocumentSection *section = [RptqDocumentSection newDocumentSectionWithIdentifier: collectionView.identifier
-																	   fromObjectContext: _document.managedObjectContext];
-	NSOrderedSet *objects = [section.hasRows[(NSUInteger)indexPath.section] hasObjects];
-	
-	if ((NSInteger)objects.count > row) {
-		RptqDocumentElement *documentObject = objects[(NSUInteger)row];
-		if (action == @selector(delete:)) {
-			[self delete:documentObject];
-		} else if (action == @selector(edit:)) {
-			[self edit:documentObject];
-		}
-		
-	}
-}
-
-/*
- 
- - (UIContextMenuConfiguration *) collectionView:(UICollectionView *) collectionView
- contextMenuConfigurationForItemsAtIndexPaths:(NSArray<NSIndexPath *> *) indexPaths
- point:(CGPoint) point {
- return nil;
- }
- 
- */
-
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	
-	[self dismissAllPopovers];
-	[self dismissSectionPresentationIfOpen];
-	[self dismissToolboxPresentationIfOpen];
-	[self deselectAllElementsAnimated:NO];
-	
-	MADDesignerElementView *elementView = [self elementViewAtIndexPath: indexPath inCollectionView: collectionView];
-	[self.view.scroller.container applyBorderToView:elementView];
-	self.lastElementViewToShowMenu = elementView;
-	return YES;
-}
-
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath { }
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath { }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath { }
@@ -2050,24 +1984,18 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark -
 #pragma mark MADReportSectionDelegate Protocol
 
-- (void)designView:(MADDesignerLayoutDesignView *)designView
-	handleTapStray:(UITapGestureRecognizer *)sender {
-	
+- (void)designView:(MADDesignerLayoutDesignView *)designView handleTapStray:(UITapGestureRecognizer *)sender {
 	if (sender.state != UIGestureRecognizerStateEnded) return;
-
-	[[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
 	if (self.presentedViewController != nil) {
 		[self actionHideToolbox];
 	}
 }
 
-- (void)designView:(MADDesignerLayoutDesignView *)designView
-	handleTapLabel:(UITapGestureRecognizer *)sender {
+- (void)designView:(MADDesignerLayoutDesignView *)designView handleTapLabel:(UITapGestureRecognizer *)sender {
 	
 	if (sender.state != UIGestureRecognizerStateEnded) return;
 	
 	MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
-	[[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
 	[self dismissToolboxPresentationIfOpen];
 	
 	NSSet *selectedElementViews = [self selectedElementViews];
@@ -2801,9 +2729,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)dismissSectionPresentationIfOpen {
-	
 	if (_sectionSettingsVisible && self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
-		
 		_sectionSettingsVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: NULL];
 		[self.view.scroller.container removeBorderFromAllSectionViews];
@@ -2820,10 +2746,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)dismissToolboxPresentationIfOpen {
-	
 	if (_toolboxVisible &&
 		self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
-		
 		_toolboxVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: NULL];
 		[self deselectAllElementsAnimated:YES];
@@ -2851,8 +2775,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 - (void)beginPanPiece: (MADDesignerElementView *)piece
 		   transition: (void (^)(void))transition
 		   completion: (void (^)(void))completion {
-	
-	[[UIMenuController sharedMenuController] setMenuVisible: NO animated: YES];
 	
 	if (self.presentedViewController != nil) {
 		[self actionHideToolbox];
@@ -3144,6 +3066,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	[self setDisplayActive];
 	return result;
 }
+
 /*
 - (NSSet *)elementViews {
 	
@@ -3211,7 +3134,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 - (NSSet <UIView *> *)selectedElementViews {
 	
 	NSMutableSet <UIView *> *results = [[NSMutableSet alloc] init];
-	
 	if (self.selectedElementIDs.count > 0) {
 		
 		//Try quick hash method...
@@ -3258,11 +3180,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
-	
-	//Remove border from element views
 	for (MADDesignerElementView *elementView in [self selectedElementViews]) {
-		[self deselectElementView: elementView
-						 animated: animated];
+		[self deselectElementView: elementView animated: animated];
 	}
 	
 	[self.selectedElementIDs removeAllObjects];

@@ -328,7 +328,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Query" id="6F6-TI-jLR" customClass="MADQueryNavigationItem">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="fJC-AW-SSJ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="fJC-AW-SSJ">
                             <connections>
                                 <action selector="edit:" destination="Hcs-Qh-Ddc" id="cqA-Nk-sKG"/>
                             </connections>
