@@ -31,9 +31,7 @@
 @synthesize document = _document;
 
 + (instancetype)newTabBarController:(MADocument *)document prompt:(NSString *)prompt {
-	UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: [NSBundle mainBundle]];
-	id controller = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
-	return controller;
+	return [[UIStoryboard storyboardWithName: @"MADDesigner" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADIdentifierTabBarController"];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
