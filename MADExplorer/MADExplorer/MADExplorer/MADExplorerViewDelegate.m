@@ -43,15 +43,13 @@
 	i = integral / one_for_div;
 }*/
 
-typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMutableMapGesturesLongPress;
-
 @interface MADExplorerViewDelegate ()
 
 	@property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *selected;
 	@property (nonatomic, readwrite, strong) NSMutableArray <NSMutableIndexSet *> *highlighted;
 	@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
 
-	@property (nonatomic, strong) MADMutableMapGesturesLongPress *longPressGestures;
+	@property (nonatomic, strong) NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *>  *longPressGestures;
 
 	@property (nonatomic, copy) NSPredicate *predicateKindOfLongPressGestureRecognizer;
 
@@ -93,9 +91,7 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 		self.highlighted = arrayHighlighted;
 		
 		_editing = NO;
-		
-		MADMutableMapGesturesLongPress *gestures = [[MADMutableMapGesturesLongPress alloc] init];
-		self.longPressGestures = gestures;
+		_longPressGestures = [[NSMutableDictionary alloc] init];
 		
 	}
 	return self;
@@ -209,41 +205,42 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 	
 	SEL actionEdit = @selector(actionActivateEditMode:);
 	
-	UILongPressGestureRecognizer *longPressGesture;
-	longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-																	 action: actionEdit];
+	UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+																								   action: actionEdit];
 	longPressGesture.delegate = fileExplorerDelegate;
 	[cell addGestureRecognizer: longPressGesture];
+
 	typeof(self) __weak weakself = self;
 	cell.labelTitle.handleTap = ^(UILabel *titleLabel) {
+
 		UIView *superview = titleLabel.superview;
 		do {
 			superview = superview.superview;
 		} while (superview != nil && ![superview isKindOfClass:[UICollectionViewCell class]]);
 		if (superview == nil) return;
+		
 		NSAssert([superview isKindOfClass:[UICollectionViewCell class]], @"We expect a collection view");
 		UICollectionViewCell *c = (UICollectionViewCell *)superview;
 		typeof(self) strongself = weakself;
-		id <MADExplorerProtocol, UIGestureRecognizerDelegate> fileDelegate;
-		fileDelegate = strongself.delegate;
+
+		id <MADExplorerProtocol, UIGestureRecognizerDelegate> fileDelegate = strongself.delegate;
 		if (!strongself.isEditing) {
 			[strongself actionRename:c];
 		} else {
-			UICollectionView *fileExplorerView = fileDelegate.fileExplorerView;
-			NSIndexPath *tappedCellPath = [fileExplorerView indexPathForCell:c];
+			UICollectionView *fileExplorerCollectionView = fileDelegate.fileExplorerView;
+			NSIndexPath *tappedCellPath = [fileExplorerCollectionView indexPathForCell:c];
 			if (tappedCellPath != nil) {
 				if (c.isSelected) {
-					if ([strongself collectionView:fileExplorerView shouldDeselectItemAtIndexPath:tappedCellPath]) {
-						[fileExplorerView deselectItemAtIndexPath: tappedCellPath animated: YES];
-						[strongself collectionView:fileExplorerView
-						didDeselectItemAtIndexPath:tappedCellPath];
+					if ([strongself collectionView:fileExplorerCollectionView shouldDeselectItemAtIndexPath:tappedCellPath]) {
+						[fileExplorerCollectionView deselectItemAtIndexPath: tappedCellPath animated: YES];
+						[strongself collectionView:fileExplorerCollectionView didDeselectItemAtIndexPath:tappedCellPath];
 					}
 				} else {
-					if ([strongself collectionView:fileExplorerView shouldSelectItemAtIndexPath:tappedCellPath]) {
-						[fileExplorerView selectItemAtIndexPath: tappedCellPath
+					if ([strongself collectionView:fileExplorerCollectionView shouldSelectItemAtIndexPath:tappedCellPath]) {
+						[fileExplorerCollectionView selectItemAtIndexPath: tappedCellPath
 													   animated: YES
 												 scrollPosition: UICollectionViewScrollPositionNone];
-						[strongself collectionView:fileExplorerView didSelectItemAtIndexPath:tappedCellPath];
+						[strongself collectionView:fileExplorerCollectionView didSelectItemAtIndexPath:tappedCellPath];
 					}
 				}
 			}
@@ -258,12 +255,12 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 
 }
 
-- (void)collectionView:(UICollectionView *)collectionView
-  didEndDisplayingCell:(MADCollectionViewCellDocument *)cell
-	forItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(MADCollectionViewCellDocument *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
 	NSNumber *hash = [[NSNumber alloc] initWithUnsignedInteger:cell.hash];
-	id gestureToRemove = _longPressGestures[hash];
-	[cell removeGestureRecognizer: gestureToRemove];
+	UILongPressGestureRecognizer *gestureToRemove = _longPressGestures[hash];
+	if (gestureToRemove != nil) {
+		[cell removeGestureRecognizer: gestureToRemove];
+	}
 	[cell prepareForReuse];
 	if (self.isShowingPopover) {
 		cell.labelTitle.textColor = cell.labelTitle.disabledTextColor.copy;
@@ -403,6 +400,7 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 									UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
 }
 
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView
 				   layout:(UICollectionViewLayout*)collectionViewLayout
 									minimumLineSpacingForSectionAtIndex:(NSInteger)section {
@@ -467,9 +465,8 @@ typedef NSMutableDictionary <NSNumber *, UILongPressGestureRecognizer *> MADMuta
 }
 
 - (NSString *)subtitleForItemAtIndexPath:(NSIndexPath *)indexPath {
-	id metadata = [_delegate metadataForItemAtIndexPath:indexPath];
-	id subtitle = [MADExplorerCellTitle explorerCellTitle:metadata];
-	return subtitle;
+	MADMetaData *metadata = [_delegate metadataForItemAtIndexPath:indexPath];
+	return [MADExplorerCellTitle explorerCellTitle:metadata];
 }
 
 - (NSNumberFormatter *)subtitleNumberFormatter {

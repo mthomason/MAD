@@ -198,9 +198,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 	NSURL *documentURL = [self documentURLForName:name extention:extention fileGroup:fileGroup];
 	
 	typeof(_delegate) wdelegate = _delegate;
-	
-	void (^handleUrlCreated)(NSError *);
-	handleUrlCreated = ^(NSError *error) {
+	void (^handleUrlCreated)(NSError *) = ^(NSError *error) {
 		
 		id <MADFileCoordinatorDelegate> delegate = wdelegate;
 		if (error) {
@@ -227,8 +225,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)removeFileAtURL:(NSURL *)URL {
 
 	typeof(_delegate) wdelegate = _delegate;
-	void (^handleUrlRemoved)(NSError *error);
-	handleUrlRemoved = ^(NSError *error) {
+	void (^handleUrlRemoved)(NSError *error) = ^(NSError *error) {
 		
 		id <MADFileCoordinatorDelegate> delegate = wdelegate;
 		if (error) {
@@ -249,8 +246,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)duplicateFileAtURL:(NSURL *)URL {
 
 	id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
-	void (^handleFileDuplicated)(NSURL *result, NSError *error);
-	handleFileDuplicated = ^(NSURL *newURL, NSError *error) {
+	void (^handleFileDuplicated)(NSURL *result, NSError *error) = ^(NSURL *newURL, NSError *error) {
 
 		id <MADFileCoordinatorDelegate> delegate = wdelegate;
 		if (error) {
@@ -271,8 +267,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)renameFileAtURL:(NSURL *)URL toName:(NSString *)name {
 
 	id <MADFileCoordinatorDelegate> __weak wdelegate = _delegate;
-	void (^handleRenameCompletion)(NSURL *sourceURL, NSURL *newURL, NSError *error);
-	handleRenameCompletion = ^(NSURL *sourceURL, NSURL *newURL, NSError *error) {
+	void (^handleRenameCompletion)(NSURL *sourceURL, NSURL *newURL, NSError *error) = ^(NSURL *sourceURL, NSURL *newURL, NSError *error) {
 		
 		id <MADFileCoordinatorDelegate> delegate = wdelegate;
 		if (error) {
@@ -308,8 +303,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 	
 	void (^ __weak weakQueryUpdateHandler)(void) = _firstQueryUpdateHandler;
 	
-	void (^handleDidUpdateCompletion)(BOOL, NSError *);
-	handleDidUpdateCompletion = ^(BOOL success, NSError *error) {
+	void (^handleDidUpdateCompletion)(BOOL, NSError *) = ^(BOOL success, NSError *error) {
 		[wmetadataQuery enableUpdates];
 		void (^firstQueryUpdateHandler)(void) = weakQueryUpdateHandler;
 		if (firstQueryUpdateHandler) {
@@ -327,22 +321,20 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (void)metadataQueryDidUpdate:(NSNotification *)notification {
 	[self.metadataQuery disableUpdates];
 	
-	NSArray *insertedMetadataItemsOrNil, *removedMetadataItemsOrNil, *updatedMetadataItemsOrNil;
-	insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey];
-	removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey];
-	updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
+	NSArray *insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey];
+	NSArray *removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey];
+	NSArray *updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
 	
-	NSArray *insertedMetadata = insertedMetadataItemsOrNil ?: [[NSArray alloc] init],
-			*removedMetadata  = removedMetadataItemsOrNil  ?: [[NSArray alloc] init],
-			*updatedMetadata  = updatedMetadataItemsOrNil  ?: [[NSArray alloc] init];
+	NSArray *insertedMetadata = insertedMetadataItemsOrNil ?: [[NSArray alloc] init];
+	NSArray *removedMetadata  = removedMetadataItemsOrNil  ?: [[NSArray alloc] init];
+	NSArray *updatedMetadata  = updatedMetadataItemsOrNil  ?: [[NSArray alloc] init];
 	
-	NSArray *inserted = [MADMetaData newMetaDatumForMetadataItems:insertedMetadata],
-			*removed  = [MADMetaData newMetaDatumForMetadataItems:removedMetadata],
-			*updated  = [MADMetaData newMetaDatumForMetadataItems:updatedMetadata];
+	NSArray *inserted = [MADMetaData newMetaDatumForMetadataItems:insertedMetadata];
+	NSArray *removed  = [MADMetaData newMetaDatumForMetadataItems:removedMetadata];
+	NSArray *updated  = [MADMetaData newMetaDatumForMetadataItems:updatedMetadata];
 
 	NSMetadataQuery * __weak metadataQuery = self.metadataQuery;
-	void (^handleContentUpdated)(BOOL success, NSError *error);
-	handleContentUpdated = ^(BOOL success, NSError *error) {
+	void (^handleContentUpdated)(BOOL success, NSError *error) = ^(BOOL success, NSError *error) {
 		[metadataQuery enableUpdates];
 	};
 	[self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted
@@ -374,7 +366,6 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 - (NSURL *)documentURLForName:(NSString *)name extention:(NSString *)extention
 					fileGroup:(NSString *)fileGroup {
 	NSURL *documentURLWithoutExtension = [self.documentsDirectory URLByAppendingPathComponent:name];
-	
 	return [documentURLWithoutExtension URLByAppendingPathExtension:extention];
 }
 
@@ -389,11 +380,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 }
 
 - (id)debugQuickLookObject {
-	NSMutableString *debug = [[NSMutableString alloc] init];
-	NSString *classname = NSStringFromClass([self class]);
-	id uppercaseClassname = [classname uppercaseString];
-	[debug appendFormat:@"--%@--\n", uppercaseClassname];
-	return debug;
+	return [NSString stringWithFormat:@"--%@--\n", [NSStringFromClass([self class]) uppercaseString]];
 }
 
 @end

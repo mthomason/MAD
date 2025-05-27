@@ -24,8 +24,7 @@
 
 typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, NSIndexPath *);
 
-@interface MADExplorerDataSource ()
-	<MADFilesControllerDelegate>
+@interface MADExplorerDataSource () <MADFilesControllerDelegate>
 
 	@property (nonatomic, readwrite, strong) MADFileLocationManager *fileLocationManager;
 	@property (nonatomic, readwrite, strong) NSMutableIndexSet *batchInserts;
@@ -209,11 +208,11 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 										   removes: removes
 										   updates: updates
 										completion: ^(BOOL success, NSError *error) {
-											[inserts removeAllObjects];
-											[removes removeAllObjects];
-											[updates removeAllObjects];
-											completion(YES, nil);
-										}];
+		[inserts removeAllObjects];
+		[removes removeAllObjects];
+		[updates removeAllObjects];
+		completion(YES, nil);
+	}];
 
 }
 
@@ -248,30 +247,24 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
 				  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-	
 	static NSString *MADIDCellDocumentIdentifier  = @"MADCollectionViewCellDocumentIdentifier";
+	id cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
+														forIndexPath: indexPath];
 	
-	id cell;
-	cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADIDCellDocumentIdentifier
-													 forIndexPath: indexPath];
-
-	if (_handleCellConfiguration)
+	if (_handleCellConfiguration) {
 		_handleCellConfiguration(cell, indexPath);
-	
+	}
 	return cell;
 }
 
 - (NSString *)title:(NSIndexPath *)index {
 	MADMetaData *metadata = [self metadata:index];
-	NSURL *url = [metadata.URL copy];
-	NSString *title = url.lastPathComponent.stringByDeletingPathExtension;
-	return [title copy];
+	return [metadata.URL.lastPathComponent.stringByDeletingPathExtension copy];
 }
 
 - (NSString *)subtitle:(NSIndexPath *)index {
 	id metadata = [self metadata:index];
-	id subtitle = [MADExplorerCellTitle explorerCellTitle:metadata];
-	return subtitle;
+	return [MADExplorerCellTitle explorerCellTitle:metadata];
 }
 
 @end

@@ -17,11 +17,11 @@
 
 @interface MADFileLocationManager : NSObject
 
-	@property (nonatomic, weak) id <MADFileLocationManagerDelegate> delegate;
-	@property (nonatomic, strong, readonly) MADFilesController *filesController;
+@property (nonatomic, weak) id <MADFileLocationManagerDelegate> delegate;
+@property (nonatomic, strong, readonly) MADFilesController *filesController;
 
-	- (instancetype)initWithUbiquityID:(NSString *)ubiquityID andGroupID:(NSString *)groupID;
-	- (void)getUserCloudPrefs;
+- (instancetype)initWithUbiquityID:(NSString *)ubiquityID andGroupID:(NSString *)groupID;
+- (void)getUserCloudPrefs;
 
 @end
 

@@ -21,7 +21,8 @@ NSString * const MADTextLocal = @"Local";
 
 NSString * const MADIdentifierOpenFileSectionHeader = @"MADIdentifierOpenFileSectionHeader";
 
-static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView);
+static inline CGRect MADFrameActivityView(CGSize, CGSize);
+
 static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 	return CGRectMake(view.width - activityView.width - 10.0,
 					  ((view.height - activityView.height) / 2.0),
@@ -47,6 +48,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 @implementation MADExplorerSectionHeaderView
 
+/*
 + (void)initialize {
 	[super initialize];
 	if (self == [MADExplorerSectionHeaderView self]) {
@@ -60,6 +62,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 		}
 	}
 }
+*/
 
 - (void)awakeFromNib {
 	[super awakeFromNib];

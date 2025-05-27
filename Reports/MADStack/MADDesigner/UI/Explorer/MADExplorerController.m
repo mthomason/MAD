@@ -311,6 +311,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[self.collectionView addGestureRecognizer:tapGestureRecognizer];
 	self.fileExplorerDataSource.delegate = self;
 	self.collectionView.dataSource = self.fileExplorerDataSource;
+
+	NSLog(@"A: Collection view layout:   %@", self.collectionView.collectionViewLayout);
+	NSLog(@"B: Collection view layout:   %@", self.collectionViewLayout);
+	NSLog(@"D: Collection view delegate: %@", self.collectionView.delegate);
 	
 	[self setNeedsStatusBarAppearanceUpdate];
 	
@@ -348,7 +352,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		[toolbarButtons insertObject: self.barButtonItemAction atIndex: 1];
 		[self setToolbarItems:toolbarButtons animated:NO];
 	}
-	
 	self.collectionView.delegate = self.fileExplorerViewDelegate;
 }
 
@@ -543,7 +546,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		[self.collectionView setNeedsDisplay];
 		[self.navigationItem.titleView sizeToFit];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-
+		[self.collectionView.collectionViewLayout invalidateLayout];
 	}];
 }
 
@@ -561,7 +564,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 		[self.collectionView.backgroundView setNeedsDisplay];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-	
+		[self.collectionView.collectionViewLayout invalidateLayout];
 	}];
 
 }
@@ -1271,23 +1274,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 - (IBAction)actionEdit:(id)sender {
-	
 	BOOL startEdit = !self.isEditing;
 	[self setEditing:startEdit animated:YES];
-	
 	if (startEdit) {
-		
 		self.barButtonItemAddNewDocument.enabled = NO;
 		self.barButtonItemAbout.enabled = NO;
 		self.barButtonItemInformation.enabled = NO;
 		self.barButtonItemLicensing.enabled = NO;
 		self.collectionView.allowsSelection = YES;
 		self.collectionView.allowsMultipleSelection = YES;
-		int i=0;
 		for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
 			cell.wobbling = YES;
-			os_log_debug(GetDesignerLog(), "Wobbling cell at index: %d", i);
-			i++;
 		}
 		[self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
 		

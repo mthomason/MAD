@@ -33,11 +33,8 @@
 	self.numberOfLines = 0;
 	self.backgroundColor = [UIColor clearColor];
 	self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-	
-	SEL handleTap = @selector(handleTapGestureRecognizer:);
-	UITapGestureRecognizer *tapGesture;
-	tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
-														 action: handleTap];
+	UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self
+																				 action: @selector(handleTapGestureRecognizer:)];
 	tapGesture.numberOfTapsRequired = 1;
 	tapGesture.numberOfTouchesRequired = 1;
 	[self addGestureRecognizer:tapGesture];

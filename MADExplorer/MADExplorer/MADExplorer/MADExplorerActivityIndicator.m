@@ -8,9 +8,9 @@
 
 #import "MADExplorerActivityIndicator.h"
 
-@implementation MADExplorerActivityIndicator
+@implementation UIActivityIndicatorView(Explorer)
 
-+ (instancetype)newExplorerActivityIndicator {
++ (UIActivityIndicatorView *)explorerActivityIndicator {
 	id activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	[activityIndicatorView stopAnimating];
 	[activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin |

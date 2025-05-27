@@ -13,7 +13,7 @@
 
 @interface MADLabelFileExplorerDocumentCellSubtitle : UILabel
 
-	@property (nonatomic, assign, getter=isSelected) BOOL selected;
+@property (nonatomic, assign, getter=isSelected) BOOL selected;
 
 @end
 

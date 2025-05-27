@@ -14,9 +14,12 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
 		self.estimatedItemSize = CGSizeMake(140.0, 240.0);
+		self.sectionInsetReference = UICollectionViewFlowLayoutSectionInsetFromSafeArea;
 	}
 	return self;
 }
+
+- (void)prepareLayout { }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect; {
 	NSArray <UICollectionViewLayoutAttributes *> *attributes = [super layoutAttributesForElementsInRect:rect];

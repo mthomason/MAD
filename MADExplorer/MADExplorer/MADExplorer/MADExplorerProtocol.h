@@ -12,7 +12,7 @@
 @class  MADMetaData;
 
 @protocol MADExplorerProtocol <NSObject>
-  @required
+@required
 - (MADMetaData *)metadataForItemAtIndexPath:(NSIndexPath *)indexPath;
 - (UICollectionView *)fileExplorerView;
 - (BOOL)isFileViewEditing;

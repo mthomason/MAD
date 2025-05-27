@@ -13,11 +13,11 @@
 
 @interface MADLabelFileExplorerDocumentCellTitle : UILabel
 
-	@property (nonatomic, assign, getter=isSelected) BOOL selected;
-	@property (nonatomic, copy) void (^handleTap)(id sender);
+@property (nonatomic, assign, getter=isSelected) BOOL selected;
+@property (nonatomic, copy) void (^handleTap)(id sender);
 
-	- (UIColor *)disabledTextColor;
-	- (UIColor *)enabledTextColor;
+- (UIColor *)disabledTextColor;
+- (UIColor *)enabledTextColor;
 
 @end
 

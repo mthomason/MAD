@@ -21,11 +21,15 @@
 	}
 }
 
+/*
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
 		self.scrollIndicatorInsets = self.contentInset;
 	}
 	return self;
 }
+
+*/
 
 @end

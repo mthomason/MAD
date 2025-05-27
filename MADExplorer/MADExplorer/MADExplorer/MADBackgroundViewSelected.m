@@ -14,9 +14,9 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.70000f];
+		self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.7];
 		self.clipsToBounds = YES;
-		self.layer.cornerRadius = 5.0000f;
+		self.layer.cornerRadius = 5.0;
 	}
 	return self;
 }

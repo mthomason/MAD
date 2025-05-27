@@ -17,33 +17,32 @@
 
 @class MADMetaData, MADCollectionViewCellDocument;
 
-@interface MADExplorerDataSource : NSObject
-	<UICollectionViewDataSource,
-		MADFileLocationManagerDelegate>
-	- (instancetype)initWithFileExtension:(NSString *)fileExtension
-								  groupID:(NSString *)groupID
-							   ubiquityID:(NSString *)ubiquityID
-						cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell, NSIndexPath *path))config
-						NS_DESIGNATED_INITIALIZER;
+@interface MADExplorerDataSource : NSObject <UICollectionViewDataSource, MADFileLocationManagerDelegate>
 
-	@property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
+@property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
 
-	- (MADMetaData *)metadataAtIndex:(NSUInteger)index;
+- (instancetype)initWithFileExtension:(NSString *)fileExtension
+							  groupID:(NSString *)groupID
+						   ubiquityID:(NSString *)ubiquityID
+					cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell, NSIndexPath *path))config
+NS_DESIGNATED_INITIALIZER;
 
-	- (NSString *)title:(NSIndexPath *)index;
-	- (NSString *)subtitle:(NSIndexPath *)index;
+- (MADMetaData *)metadataAtIndex:(NSUInteger)index;
 
-	- (NSUInteger)count;
+- (NSString *)title:(NSIndexPath *)index;
+- (NSString *)subtitle:(NSIndexPath *)index;
 
-	- (void)updateCloudPreferences;
+- (NSUInteger)count;
 
-	+ (NSString *)groupIdentifier;
+- (void)updateCloudPreferences;
 
-	- (void)rename:(NSString *)newName itemAtIndex:(NSUInteger)index;
-	- (void)removeItemAtIndex:(NSUInteger)index;
-	- (void)duplicateItemAtIndex:(NSUInteger)index;
++ (NSString *)groupIdentifier;
 
-	- (NSURL *)documentsDirectory;
+- (void)rename:(NSString *)newName itemAtIndex:(NSUInteger)index;
+- (void)removeItemAtIndex:(NSUInteger)index;
+- (void)duplicateItemAtIndex:(NSUInteger)index;
+
+- (NSURL *)documentsDirectory;
 
 @end
 

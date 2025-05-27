@@ -224,37 +224,23 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (void)setupFileStorageLocationsForLocal {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
+	id <MADFileLocationManagerDelegate> safedelegate = _delegate;
+	NSString *groupIdentifier = [[safedelegate groupIdentifier] copy];
+	NSString *ubiquityIdentifier = [[safedelegate ubiquityIdentifier] copy];
+	NSString *fileExtention = [[safedelegate fileExtention] copy];
 
-	id <MADFileLocationManagerDelegate> safedelegate;
-	safedelegate = _delegate;
-	
-	NSString *groupIdentifier = [safedelegate groupIdentifier].copy;
-	NSString *ubiquityIdentifier = [safedelegate ubiquityIdentifier].copy;
-	NSString *fileExtention = [safedelegate fileExtention].copy;
-
-	id <MADFileLocationManagerDelegate> __weak wdelegate;
-	wdelegate = safedelegate;
+	id <MADFileLocationManagerDelegate> __weak wdelegate = safedelegate;
 	
 	typeof(self) __weak weakself = self;
 
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-		//NSLog(@"%s", __PRETTY_FUNCTION__);
-		
-		id <MADFileLocationManagerDelegate> delegate;
-		delegate = wdelegate;
-		
-		MADFileLocationManager *strongself;
-		strongself = weakself;
-		
+		id <MADFileLocationManagerDelegate> delegate = wdelegate;
+		MADFileLocationManager *strongself = weakself;
 		if (delegate == nil || strongself == nil) return;
 		
 		MADFileLocationManager __weak *wself = strongself;
-		
-		void (^handlerLocal)(void);
-		void (^handlerCloud)(void);
-		
-		handlerLocal = ^ {
+				
+		void (^handlerLocal)(void) = ^ {
 			MADFileLocationManager *sself = wself;
 			if (sself) {
 				[MADFileLocationManager setStorageOption:MADAppStorageLocal];
@@ -262,7 +248,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			}
 		};
 
-		handlerCloud = ^{
+		void (^handlerCloud)(void) = ^{
 			
 			MADFileLocationManager *sself = wself;
 			if (!sself) return;
@@ -281,15 +267,12 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 		};
 		
 		UIAlertController *prompt = MADCreateAlertControllerPromptStorage(handlerLocal, handlerCloud);
-		UIViewController *presentingController = delegate.presentingController;
-		[presentingController presentViewController:prompt animated:YES completion:nil];
+		[delegate.presentingController presentViewController:prompt animated:YES completion:nil];
 		
 	}];
 }
 
 - (void)getUserCloudPrefs {
-	//NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
 
 		self.getUserCloudPrefsFirstCall = NO;
@@ -305,8 +288,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 				
 				[self setupFileStorageLocationsForCloud];
 				
-			} else if (storageState.storageOption == MADAppStorageLocal ||
-					   storageState.storageOption == MADAppStorageNotSet) {
+			} else if (storageState.storageOption == MADAppStorageLocal || storageState.storageOption == MADAppStorageNotSet) {
 
 				[self setupFileStorageLocationsForLocal];
 

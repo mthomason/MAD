@@ -11,8 +11,8 @@
 
 #import <UIKit/UIActivityIndicatorView.h>
 
-@interface MADExplorerActivityIndicator : UIActivityIndicatorView
-	+ (instancetype)newExplorerActivityIndicator;
+@interface UIActivityIndicatorView (Explorer)
++ (UIActivityIndicatorView *)explorerActivityIndicator;
 @end
 
 #endif

@@ -18,8 +18,8 @@ extern NSString * const Downloading;
 @class MADMetaData;
 
 @interface MADExplorerCellTitle : NSObject
-	+ (NSString *)explorerCellTitle:(MADMetaData *)data;
-	+ (NSString *)explorerCellTitleSubtitle:(MADMetaData *)data;
++ (NSString *)explorerCellTitle:(MADMetaData *)data;
++ (NSString *)explorerCellTitleSubtitle:(MADMetaData *)data;
 @end
 
 #endif

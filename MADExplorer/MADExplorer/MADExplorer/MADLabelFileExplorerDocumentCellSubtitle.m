@@ -13,24 +13,24 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		[MADLabelFileExplorerDocumentCellSubtitle commonInitalization:self];
+		self.textColor = [UIColor lightGrayColor];
+		self.clipsToBounds = NO;
+		self.numberOfLines = 0;
+		self.backgroundColor = [UIColor clearColor];
+		self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
 	}
 	return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		[MADLabelFileExplorerDocumentCellSubtitle commonInitalization:self];
+		self.textColor = [UIColor lightGrayColor];
+		self.clipsToBounds = NO;
+		self.numberOfLines = 0;
+		self.backgroundColor = [UIColor clearColor];
+		self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
 	}
 	return self;
-}
-
-+ (void)commonInitalization:(MADLabelFileExplorerDocumentCellSubtitle *)this {
-	this.textColor = [UIColor lightGrayColor];
-	this.clipsToBounds = NO;
-	this.numberOfLines = 0;
-	this.backgroundColor = [UIColor clearColor];
-	this.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
 }
 
 - (UIColor *)highlightedTextColor {

@@ -84,8 +84,6 @@ static inline double wobbleRandomFactor(void) {
 		UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc] initWithFrame:self.contentView.frame];
 		self.selectedBackgroundView = selectedBackgroundView;
 	}
-	
-	self.translatesAutoresizingMaskIntoConstraints = NO;
 	self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
@@ -126,10 +124,7 @@ static inline double wobbleRandomFactor(void) {
 #pragma mark Accessibility
 
 - (NSString *)accessibilityHintDocumentName {
-	NSString *documentName = NSLocalizedString(@"Document %@.",
-											   @"Document %@.");
-	NSString *label = [[NSString alloc] initWithFormat: documentName, _labelTitle.text];
-	return label;
+	return [[NSString alloc] initWithFormat: NSLocalizedString(@"Document %@.", @"Document %@."), _labelTitle.text];
 }
 
 - (NSString *)accessibilityHintActionSelect {
@@ -137,8 +132,7 @@ static inline double wobbleRandomFactor(void) {
 													 @"Selects document named %@.") :
 								   NSLocalizedString(@"Opens document named %@.",
 													 @"Opens document named %@.");
-	NSString *result = [[NSString alloc] initWithFormat: format, self.labelTitle.text];
-	return result;
+	return [[NSString alloc] initWithFormat: format, self.labelTitle.text];
 }
 
 #pragma mark -
@@ -244,7 +238,7 @@ static inline double wobbleRandomFactor(void) {
 
 - (UIActivityIndicatorView *)activityIndicator {
 	if (!_activityIndicator) {
-		UIActivityIndicatorView *indicator = [MADExplorerActivityIndicator newExplorerActivityIndicator];
+		UIActivityIndicatorView *indicator = [UIActivityIndicatorView explorerActivityIndicator];
 		indicator.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.contentView addSubview:indicator];
 		[NSLayoutConstraint activateConstraints:@[
@@ -278,10 +272,8 @@ static inline double wobbleRandomFactor(void) {
 	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
 	paragraphStyle.alignment = NSTextAlignmentCenter;
 	
-	UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-	
 	NSDictionary<NSAttributedStringKey, id> *attributes = @{
-		NSFontAttributeName: font,
+		NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1],
 		NSParagraphStyleAttributeName: paragraphStyle,
 		NSKernAttributeName: [NSNull null]
 	};
@@ -426,6 +418,17 @@ static inline double wobbleRandomFactor(void) {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
 
 }
+
++ (NSString *)explorerCellTitleSubtitle:(MADMetaData *)data {
+	if (data.ubiquitousItemIsDownloading) {
+		return NSLocalizedString(@"Downloading", @"Downloading");
+	} else if (data.ubiquitousItemIsUploading) {
+		return NSLocalizedString(@"Syncing", @"Syncing");
+	} else {
+		return [MADExplorerCellTitle explorerCellTitle: data];
+	}
+}
+
 
 @end
 

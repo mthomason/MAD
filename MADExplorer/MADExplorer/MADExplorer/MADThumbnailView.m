@@ -13,9 +13,8 @@
 static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 
 @interface MADThumbnailView ()
-	@property (nonatomic, copy) NSString *thumbnailAbsolutePath;
-	@property (nonatomic, copy) NSDate *lastChangeDate;
-
+@property (nonatomic, copy) NSString *thumbnailAbsolutePath;
+@property (nonatomic, copy) NSDate *lastChangeDate;
 @end
 
 @implementation MADThumbnailView {
