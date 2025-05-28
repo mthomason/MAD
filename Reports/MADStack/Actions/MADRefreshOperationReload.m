@@ -112,9 +112,7 @@
 
 - (void)endBackgroundTask {
 	if (_backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
-		
-		NSNumber *bgtask;
-		bgtask = [[NSNumber alloc] initWithUnsignedInteger: self.backgroundTaskIdRefresh];
+		NSNumber *bgtask = [[NSNumber alloc] initWithUnsignedInteger: self.backgroundTaskIdRefresh];
 		_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
 		[[UIApplication sharedApplication] endBackgroundTask:bgtask.unsignedIntegerValue];
 	}
