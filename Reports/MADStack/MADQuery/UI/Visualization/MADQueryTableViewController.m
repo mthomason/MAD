@@ -82,10 +82,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 									   root:(BOOL)root
 								   delegate:(id <MADQueryVisualizationSchemaDelegate>)delegate
 								   document:(MADocument *)document {
-	UIStoryboard *storyboard;
-	id controller;
-	storyboard = [UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL];
-	controller = [storyboard instantiateViewControllerWithIdentifier: MADIdentifierQueryTableViewController];
+	id controller = [[UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL] instantiateViewControllerWithIdentifier: MADIdentifierQueryTableViewController];
 	((MADQueryTableViewController *)controller).document = document;
 	((MADQueryTableViewController *)controller).delegate = delegate;
 	((MADQueryTableViewController *)controller).identifier = identifier;
@@ -97,14 +94,10 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 	[super initialize];
 	if (self == [MADQueryTableViewController self]) {
 		@autoreleasepool {
-			UILabel <UIAppearance> *appearanceProxy;
-			NSArray <Class <UIAppearanceContainer>> *classes;
-			classes = [[NSArray alloc] initWithObjects: [MTTitleView class], nil];
-			appearanceProxy = [UILabel appearanceWhenContainedInInstancesOfClasses:classes];
+			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: [MTTitleView class], nil];
+			UILabel <UIAppearance> *appearanceProxy = [UILabel appearanceWhenContainedInInstancesOfClasses:classes];
 			appearanceProxy.textColor = [UIColor whiteColor];
-			UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-			appearanceProxy.font = [font fontWithSize:12.0];
-			font = nil;
+			appearanceProxy.font = [[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline] fontWithSize:12.0];
 		}
 	}
 }
@@ -201,8 +194,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 	if (row == NSNotFound) {
 		rectForRow = CGRectZero;
 	} else {
-		NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem: (NSInteger)row
-														 inSection: 0];
+		NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem: (NSInteger)row inSection: 0];
 		rectForRow = [self.tableView rectForRowAtIndexPath: cellIndexPath];
 	}
 	return [self.tableView convertRect: rectForRow toView: containerView];
@@ -219,10 +211,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
 			  withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
 	
-	[super willTransitionToTraitCollection: newCollection
-				 withTransitionCoordinator: coordinator];
-	
-	//short circuit
+	[super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
 	if (!self.isViewLoaded) return;
 	
 	UINavigationItem *navigationItem;

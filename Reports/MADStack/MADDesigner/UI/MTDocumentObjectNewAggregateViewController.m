@@ -48,10 +48,7 @@ NSString * const MADSegueAggregateFunctionField     = @"MADSegueAggregateFunctio
 NSString * const MTIdentifierSegueDocumentObjectEditAggregate = @"MTIdentifierSegueDocumentObjectEditAggregate";
 NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
 
-@interface MTDocumentObjectNewAggregateViewController ()
-	<MADAggregateFunctionsViewControllerDelegate,
-		MADGroupByViewControllerDelegate,
-		MADQueryChooseFieldProtocol>
+@interface MTDocumentObjectNewAggregateViewController () <MADAggregateFunctionsViewControllerDelegate, MADGroupByViewControllerDelegate, MADQueryChooseFieldProtocol>
 
 @end
 
@@ -63,14 +60,9 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
 									withFieldID: (NSManagedObjectID *)fieldID {
-	
-	NSManagedObjectContext *context = self.document.managedObjectContext;
 	self.fieldObjectID = fieldID.copy;
-	
-	NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
-	RptqQueryField *field = [context objectWithID: fieldID];
-	NSString *detail = [NSString stringWithFormat:formatString, [field display]];
-	self.tableViewCellAggregateInput.detailTextLabel.text = detail;
+	RptqQueryField *field = [self.document.managedObjectContext objectWithID: fieldID];
+	self.tableViewCellAggregateInput.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Field: %@", @"Field: %@"), [field display]];
 	[self updateDisplay];
 	[self.navigationController popViewControllerAnimated:YES];
 }
@@ -113,9 +105,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 - (void)didSelectFunction:(MTAggregateFunctionType)aggregateFunctionType {
 	if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
 		self.aggregateFunctionType = aggregateFunctionType;
-		NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:aggregateFunctionType];
-		functionName = [functionName stringByAppendingString:@"()"];
-		self.tableViewCellAggrageFunction.detailTextLabel.text = functionName;
+		self.tableViewCellAggrageFunction.detailTextLabel.text = [[RptqDocumentElementAggregate newStringDisplayForType:aggregateFunctionType] stringByAppendingString:@"()"];
 	}
 	
 	[self updateDisplay];
@@ -254,42 +244,31 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)updateField {
 	if (self.fieldObjectID != nil) {
-		NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
 		RptqQueryField *fieldObject = [self.document.managedObjectContext objectWithID:self.fieldObjectID];
-		NSString *display = [fieldObject display];
-		NSString *detailtext = [[NSString alloc] initWithFormat:formatString, display];
-		self.tableViewCellAggregateInput.detailTextLabel.text = detailtext;
+		self.tableViewCellAggregateInput.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Field: %@", @"Field: %@"), [fieldObject display]];
 	}
 }
 
 - (void)updateFunctionType {
 	NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:self.aggregateFunctionType];
-	functionName = [functionName stringByAppendingString:@"(x)"];
-	self.tableViewCellAggrageFunction.detailTextLabel.text = functionName;
+	self.tableViewCellAggrageFunction.detailTextLabel.text = [functionName stringByAppendingString:@"(x)"];
 }
 
 - (void)updateGroupType {
 	switch (self.aggregateGroupByType) {
 		case MTAggregateGroupByTypeSection: {
-			
-			NSInteger group = self.groupTypeSectionNumber;
 			NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
-			NSString *detail = [[NSString alloc] initWithFormat:format, group];
-			self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
+			self.tableViewCellAggregateGroupBy.detailTextLabel.text = [NSString stringWithFormat:format, self.groupTypeSectionNumber];
 			break;
 			
 		}
 		case MTAggregateGroupByTypeReport: {
-			
-			NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
-			self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
+			self.tableViewCellAggregateGroupBy.detailTextLabel.text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
 			break;
 			
 		}
 		case MTAggregateGroupByTypePage: {
-			
-			NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
-			self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
+			self.tableViewCellAggregateGroupBy.detailTextLabel.text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
 			break;
 			
 		}
@@ -306,24 +285,20 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 	} else if ([segue.identifier isEqualToString:@"MTSegueAggregateFunctionChooser"]) {
 	
-		MTAggregateFunctionsViewController *destinationViewController;
-		destinationViewController = segue.destinationViewController;
+		MTAggregateFunctionsViewController *destinationViewController = segue.destinationViewController;
 		destinationViewController.functionDelegate = self;
 		destinationViewController.selectedFunctionType = self.aggregateFunctionType;
 
 	} else if ([segue.identifier isEqualToString:@"MTSegueGroupByPush"]) {
 	
-		MADGroupByViewController *destinationViewController;
-		destinationViewController = segue.destinationViewController;
+		MADGroupByViewController *destinationViewController = segue.destinationViewController;
 		destinationViewController.delegate = self;
 		destinationViewController.document = document;
-		[destinationViewController selectGroupType: _aggregateGroupByType
-								 withSectionNumber: _groupTypeSectionNumber];
+		[destinationViewController selectGroupType: _aggregateGroupByType withSectionNumber: _groupTypeSectionNumber];
 		
 	} else if ([segue.identifier isEqualToString:@"MADSegueAggregateFunctionField"]) {
 	
-		MADQueryChooseFieldController *destinationViewController;
-		destinationViewController = segue.destinationViewController;
+		MADQueryChooseFieldController *destinationViewController = segue.destinationViewController;
 		destinationViewController.document = document;
 		destinationViewController.delegate = self;
 	}

@@ -96,37 +96,37 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 @interface MADExplorerController()
 	<NSFileManagerDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate, UIDocumentInteractionControllerDelegate, UIDocumentPickerDelegate, UITextFieldDelegate, UISearchBarDelegate, UIPopoverControllerDelegate, UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate, MADExplorerProtocol, MADDocumentManagerProtocol, MADocumentDelegate, MADViewControllerStandardProtocol, MADOperationObserver, MADSaveFileProtocol>
 
-	@property (readwrite, nonatomic, strong) MADExplorerDataSource *fileExplorerDataSource;
-	@property (readwrite, nonatomic, strong) MADExplorerViewDelegate *fileExplorerViewDelegate;
-	@property (readwrite, nonatomic, strong) MADOpenDocumentManager *activeDocumentManager;
+@property (readwrite, nonatomic, strong) MADExplorerDataSource *fileExplorerDataSource;
+@property (readwrite, nonatomic, strong) MADExplorerViewDelegate *fileExplorerViewDelegate;
+@property (readwrite, nonatomic, strong) MADOpenDocumentManager *activeDocumentManager;
 
-	@property (nonatomic, weak) IBOutlet MADExplorerView *fileExplorerView;
-	@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
-	@property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
+@property (nonatomic, weak) IBOutlet MADExplorerView *fileExplorerView;
+@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
+@property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
 
-	@property (nonatomic, strong)   IBOutlet UIBarButtonItem *barButtonItemAction;
-	@property (nonatomic, strong)            UIBarButtonItem *barButtonItemEdit;
-	@property (nonatomic, strong)            UIBarButtonItem *barButtonItemEditDone;
-	@property (nonatomic, strong)            UIBarButtonItem *barButtonItemDuplicate;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemInformationDocument;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemTrash;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemInformation;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemAbout;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemCloudDown;
-	@property (nonatomic, weak)     IBOutlet UIBarButtonItem *barButtonItemLicensing;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemEditDone;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
+@property (nonatomic, strong) MADTabBarController *tabController;
 
-	@property (nonatomic, strong)   MADTabBarController *tabController;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformationDocument;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTrash;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformation;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAbout;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemCloudDown;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemLicensing;
 
-	@property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
-	@property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
-	@property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
+@property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
+@property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
+@property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
 
-	@property (nonatomic, strong) MADSearchBar *searchBar;
-	@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
-	@property (nonatomic, strong) MADExplorerSectionHeaderView *headerCloud;
-	@property (nonatomic, strong) MADProgressView *progressViewFileManager;
-	@property (nonatomic, strong) NSArray *defaultPassthroughViews;
+@property (nonatomic, strong) MADSearchBar *searchBar;
+@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
+@property (nonatomic, strong) MADExplorerSectionHeaderView *headerCloud;
+@property (nonatomic, strong) MADProgressView *progressViewFileManager;
+@property (nonatomic, strong) NSArray *defaultPassthroughViews;
 
 @end
 

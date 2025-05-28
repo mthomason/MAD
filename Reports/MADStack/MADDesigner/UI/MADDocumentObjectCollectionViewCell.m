@@ -20,6 +20,7 @@
 	[super awakeFromNib];
 	self.title.isAccessibilityElement = NO;
 	self.detail.isAccessibilityElement = NO;
+	self.detail.textColor = [UIColor labelColor];
 }
 
 - (void)setType:(MADPrintPageElementType)type {

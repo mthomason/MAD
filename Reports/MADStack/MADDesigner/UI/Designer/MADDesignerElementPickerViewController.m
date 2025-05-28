@@ -96,19 +96,13 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	titleView.accessibilityLabel = NSLocalizedString(@"Object Selector", @"Object Selector");
 	
 	self.navigationItem.titleView = titleView;
-	self.navigationController.view.backgroundColor = [UIColor clearColor];
-	self.navigationController.view.opaque = NO;
-	self.collectionView.backgroundColor = [UIColor clearColor];
-	self.collectionView.opaque = NO;
-	self.view.backgroundColor = [UIColor clearColor];
-	self.view.opaque = NO;
+	self.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.preferredContentSize = CGSizeMake(320.0, 320.0);
 	self.navigationController.preferredContentSize = CGSizeMake(320.0, 320.0);
-	
 	NSMutableArray *dataSource = [[NSMutableArray alloc] initWithCapacity:6];
 	NSNumber *labelDynamic = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelDynamic];
 	NSNumber *labelStatic = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelStatic];
@@ -180,14 +174,13 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	
 	static NSString *MADIdentiferDocumentObjectCell = @"MADIdentiferDocumentObjectCell";
 	
-	MADDocumentObjectCollectionViewCell *result;
-	result = [collectionView dequeueReusableCellWithReuseIdentifier: MADIdentiferDocumentObjectCell
-													   forIndexPath: indexPath];
+	MADDocumentObjectCollectionViewCell *result = [collectionView dequeueReusableCellWithReuseIdentifier: MADIdentiferDocumentObjectCell
+																							forIndexPath: indexPath];
 	NSNumber *madob = [self.dataSource[(NSUInteger)indexPath.row] copy];
 	short madobValue = madob.shortValue;
 	result.type = madobValue;
 	result.contentView.tag = madobValue;
-	
+	result.detail.textColor = [UIColor labelColor];
 	if (result.selectedBackgroundView == nil) {
 		UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
 		UIColor *bgColor = [[UIColor alloc] initWithWhite:0.30000f alpha:0.30000f];
@@ -220,9 +213,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
 				  layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-	
 	return CGSizeMake(150.0, 100.0);
-
 }
 
 #pragma mark -
@@ -315,35 +306,25 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 	if (_aggregateViewController) {
 		
-		UITableViewCell *cell;
-		cell = _aggregateViewController.tableViewCellAggregateGroupBy;
-		
+		UITableViewCell *cell = _aggregateViewController.tableViewCellAggregateGroupBy;
 		switch (_aggregateGroupByType) {
 		
 			case MTAggregateGroupByTypeSection: {
-
-				int32_t group = self.aggregateGroupBySectionNumber;
 				NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
-				NSString *detail = [[NSString alloc] initWithFormat:format, group];
-				cell.detailTextLabel.text = detail;
+				cell.detailTextLabel.text = [NSString stringWithFormat:format, self.aggregateGroupBySectionNumber];
 				break;
-				
 			}
 			
 			case MTAggregateGroupByTypeReport: {
-
-				NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
-				cell.detailTextLabel.text = detailText;
+				cell.detailTextLabel.text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
 				break;
-				
 			}
+
 			case MTAggregateGroupByTypePage: {
-
-				NSString *detailText = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
-				cell.detailTextLabel.text = detailText;
+				cell.detailTextLabel.text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
 				break;
-				
 			}
+
 			default:
 				cell.detailTextLabel.text = @"";
 				break;

@@ -1815,7 +1815,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 			}
 			int64_t identifier = documentObject.identifier;
 			
-			cell.backgroundColor = [UIColor clearColor];
+			//cell.backgroundColor = [UIColor clearColor];
 			cell.contentView.autoresizingMask = MADViewAutoresizingFlexable();
 			
 			MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];

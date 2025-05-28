@@ -111,39 +111,14 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 + (NSString *)newStringDisplayForType:(MTAggregateFunctionType)aggregateFunctionType {
 
 	switch (aggregateFunctionType) {
-
-		case MTAggregateFunctionTypeCount:
-			return NSLocalizedString(@"Count", @"Count");
-			break;
-		
-		case MTAggregateFunctionTypeFirst:
-			return NSLocalizedString(@"First", @"First");
-			break;
-		
-		case MTAggregateFunctionTypeLast:
-			return NSLocalizedString(@"Last", @"Last");
-			break;
-		
-		case MTAggregateFunctionTypeMax:
-			return NSLocalizedString(@"Maximum", @"Maximum");
-			break;
-		
-		case MTAggregateFunctionTypeMean:
-			return NSLocalizedString(@"Mean", @"Mean");
-			break;
-		
-		case MTAggregateFunctionTypeMin:
-			return NSLocalizedString(@"Minimum", @"Minimum");
-			break;
-		
-		case MTAggregateFunctionTypeSum:
-			return NSLocalizedString(@"Sum", @"Sum");
-			break;
-		
-		default:
-			return @"";
-			break;
-
+		case MTAggregateFunctionTypeCount: return NSLocalizedString(@"Count", @"Count");
+		case MTAggregateFunctionTypeFirst: return NSLocalizedString(@"First", @"First");
+		case MTAggregateFunctionTypeLast: return NSLocalizedString(@"Last", @"Last");
+		case MTAggregateFunctionTypeMax: return NSLocalizedString(@"Maximum", @"Maximum");
+		case MTAggregateFunctionTypeMean: return NSLocalizedString(@"Mean", @"Mean");
+		case MTAggregateFunctionTypeMin: return NSLocalizedString(@"Minimum", @"Minimum");
+		case MTAggregateFunctionTypeSum: return NSLocalizedString(@"Sum", @"Sum");
+		default: return @"";
 	}
 	
 }
@@ -151,18 +126,10 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 + (NSString *)newStringDisplayForGroupByType:(MTAggregateGroupByType)groupByType {
 
 	switch (groupByType) {
-		case MTAggregateGroupByTypeSection:
-			return NSLocalizedString(@"Section: %d", @"Section: %d");
-			break;
-		case MTAggregateGroupByTypePage:
-			return NSLocalizedString(@"Page", @"Page");
-			break;
-		case MTAggregateGroupByTypeReport:
-			return NSLocalizedString(@"Report", @"Report");
-			break;
-		default:
-			return @"";
-			break;
+		case MTAggregateGroupByTypeSection: return NSLocalizedString(@"Section: %d", @"Section: %d");
+		case MTAggregateGroupByTypePage: return NSLocalizedString(@"Page", @"Page");
+		case MTAggregateGroupByTypeReport: return NSLocalizedString(@"Report", @"Report");
+		default: return @"";
 	}
 }
 

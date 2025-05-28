@@ -24,11 +24,9 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	id <MADQueryViewDelegateProtocol> delegate = _delegate;
 	MADQueryViewSectionDelegate *layout = [delegate sectionLayoutForDisplayIndex:(short)section];
-	
-	id header = [MADTableViewHeader newTableViewHeaderWithType: layout
-													  andFrame: headerSectionFrame([delegate headerHeight])
-														target: self.delegate];
-	return header;
+	return [MADTableViewHeader newTableViewHeaderWithType: layout
+												 andFrame: headerSectionFrame([delegate headerHeight])
+												   target: self.delegate];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -56,8 +54,7 @@ CGRect headerSectionFrame(CGFloat headerSectionHeight) {
 
 - (NSString *)tableView:(UITableView *)tableView
 					titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSString *title = NSLocalizedString(@"Remove", @"Remove button title.");
-	return title;
+	return NSLocalizedString(@"Remove", @"Remove button title.");
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell
