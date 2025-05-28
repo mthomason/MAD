@@ -52,7 +52,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 @interface MADPageSlider ()
 
-	@property (nonatomic, weak, getter=pageSlider) MADSliderPageVertical *slider;
+	@property (nonatomic, strong, getter=pageSlider) MADSliderPageVertical *slider;
 	@property (nonatomic, strong) NSMutableArray <UILabel *> *labels;
 
 @end
@@ -125,16 +125,10 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	self.pageSlider.frame = self.bounds;
 
 	// Update the frame of the page slider
-	self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth,
-							CGPointZero.y,
-							MADSliderPaginationWidth,
-							self.superview.frame.size.height);
+	self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
 
 	// Update the slider's frame
-	self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
-									   MADSliderPaginationWidth, self.superview.frame.size.height);
-
-	// If labels are not initialized, return
+	self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
 	if (self.labels == nil) {
 		return;
 	}
@@ -170,8 +164,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	double tickValue = numberOfTicks > 0 ? self.maximumValue / (numberOfTicks - 1) : 1;
 	for (NSUInteger i = 0; i < numberOfTicks; i++) {
 		if (i % 2 == 0) {
-			MADLabelPageSlider *label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y,
-																							 rect.size.width, _stringHeight)];
+			MADLabelPageSlider *label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, _stringHeight)];
 			label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
 			label.enabled = _enabledColor;
 			[label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
@@ -198,20 +191,16 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 #pragma mark -
 #pragma mark Lazy load
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
 - (MADSliderPageVertical *)pageSlider {
 	if (_slider == nil) {
 		MADSliderPageVertical *slider = [[MADSliderPageVertical alloc] init];
-		[slider addTarget: self action: @selector(handleSliderChangedPage:)
-		 forControlEvents: UIControlEventValueChanged];
+		[slider addTarget: self action: @selector(handleSliderChangedPage:) forControlEvents: UIControlEventValueChanged];
+		[slider addTarget: self action: @selector(handleSliderDidFinishDrag:) forControlEvents: UIControlEventTouchUpInside];
 		
-		[slider addTarget: self action: @selector(handleSliderDidFinishDrag:)
-		 forControlEvents: UIControlEventTouchUpInside];
-		
-		UITapGestureRecognizer *tap;
-		tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-													  action: @selector(handleGestureTapSlider:)];
+		UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+																			  action: @selector(handleGestureTapSlider:)];
 		[slider addGestureRecognizer:tap];
 		
 		slider.transform = CGAffineTransformRotate(slider.transform, 1.0 / 2.0 * (CGFloat)M_PI);
@@ -221,7 +210,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	}
 	return _slider;
 }
-#pragma GCC diagnostic pop
+//#pragma GCC diagnostic pop
 
 #pragma mark -
 #pragma mark Page slider wrappers
@@ -276,18 +265,37 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)setEnabled:(BOOL)enabled {
-	self.pageSlider.enabled = enabled;
-	if (self.pageSlider.enabled) {
-		self.tintColor = [MADColorEverydayApps newColorRed];
-		[self setDisplayEnabled];
-		
+	NSLog(@"%s %@", __PRETTY_FUNCTION__, enabled ? @"YES" : @"NO");
+	if ([NSThread isMainThread]) {
+		[self configureEnabledState:enabled];
 	} else {
-		self.tintColor = [UIColor lightGrayColor];
-		[self setDisplayDisabled];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self configureEnabledState:enabled];
+		});
 	}
 }
 
+- (void)configureEnabledState:(BOOL)enabled {
+	//if (self.pageSlider.isEnabled == enabled && _enabledColor == enabled) {
+	//	return;
+	//}
+	
+	self.pageSlider.enabled = enabled;
+	
+	if (enabled) {
+		self.tintColor = [MADColorEverydayApps newColorRed];
+		_enabledColor = YES;
+	} else {
+		self.tintColor = [UIColor lightGrayColor];
+		_enabledColor = NO;
+	}
+	[self setNeedsDisplay];
+}
+
 - (BOOL)isEnabled {
+	if (![NSThread isMainThread]) {
+		NSLog(@"Warning: isEnabled called from a background thread.");
+	}
 	return self.pageSlider.isEnabled;
 }
 
@@ -321,14 +329,6 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 #pragma mark -
 #pragma mark Custom
 
-- (void)setDisplayEnabled {
-	_enabledColor = YES;
-}
-
-- (void)setDisplayDisabled {
-	_enabledColor = NO;
-}
-
 - (void)rotateBoundingSize:(CGSize)size inContext:(CGContextRef)context {
 	CGContextConcatCTM(context, translateForward(size));
 	CGContextConcatCTM(context, rotate());
@@ -339,7 +339,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point
 		   inContext:(CGContextRef)context {
-	
+	NSLog(@"Draw String: %@ %@", string, NSStringFromCGPoint(point));
 	CGContextSaveGState(context);
 	CGSize boundingSize = [MADPageSlider BoundsForAttributedString:string];
 	[self rotateBoundingSize:boundingSize inContext:context];

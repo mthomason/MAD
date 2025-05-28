@@ -134,8 +134,6 @@
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C2F3B3B1CA26495002CF271 /* MADMutualExclusive.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F3B3A1CA26495002CF271 /* MADMutualExclusive.m */; };
-		4C30A5401E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C30A53F1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m */; };
-		4C30A5431E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C30A5421E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m */; };
 		4C3186312DE2018E0007DDA2 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3186302DE2018E0007DDA2 /* UserNotifications.framework */; };
 		4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */; };
 		4C32A4C31BB07FF300DD59A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE27C1BAFB04D00AD1111 /* main.m */; };
@@ -677,10 +675,6 @@
 		4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeMySQL@2x.png"; path = "Reports/UIImageExportTypeMySQL@2x.png"; sourceTree = "<group>"; };
 		4C2F3B391CA26495002CF271 /* MADMutualExclusive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMutualExclusive.h; sourceTree = "<group>"; };
 		4C2F3B3A1CA26495002CF271 /* MADMutualExclusive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMutualExclusive.m; sourceTree = "<group>"; };
-		4C30A53E1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAnimatedTransitioningNavigationCrossFadePop.h; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePop.h; sourceTree = "<group>"; };
-		4C30A53F1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitioningNavigationCrossFadePop.m; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePop.m; sourceTree = "<group>"; };
-		4C30A5411E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAnimatedTransitioningNavigationCrossFadePush.h; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePush.h; sourceTree = "<group>"; };
-		4C30A5421E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAnimatedTransitioningNavigationCrossFadePush.m; path = MADStack/MADQuery/UI/MADAnimatedTransitioningNavigationCrossFadePush.m; sourceTree = "<group>"; };
 		4C3186302DE2018E0007DDA2 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		4C32A4A41BB0763300DD59A3 /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		4C32A4A51BB0765900DD59A3 /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
@@ -2764,10 +2758,6 @@
 		4CC8EEF61E44F86600139089 /* Transition */ = {
 			isa = PBXGroup;
 			children = (
-				4C30A53E1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.h */,
-				4C30A53F1E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m */,
-				4C30A5411E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.h */,
-				4C30A5421E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m */,
 				4CEBD02E1E319535009FE2DC /* MADAnimatedTransitionControllerPush.h */,
 				4CEBD02F1E319535009FE2DC /* MADAnimatedTransitionControllerPush.m */,
 				4CEBD0311E319546009FE2DC /* MADAnimatedTransitionControllerPop.h */,
@@ -3477,7 +3467,6 @@
 				4C401FBE1BAE8AD500BAE5FC /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4CA4D6201D1714BD00A1240C /* MADNavigationControllerFileExplorer.m in Sources */,
 				4C401EE61BAE5E9000BAE5FC /* MADStoreViewController.m in Sources */,
-				4C30A5401E22BF5F002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePop.m in Sources */,
 				4C8DE26B1BAFA98B00AD1111 /* MADClipboardView.m in Sources */,
 				4C4020EA1BAE988900BAE5FC /* MADQueryBuilderAddGroupViewController.m in Sources */,
 				4C26B9541BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m in Sources */,
@@ -3489,7 +3478,6 @@
 				4C40204C1BAE92F200BAE5FC /* MADButtonTwitter.m in Sources */,
 				4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */,
 				4C401F331BAE754200BAE5FC /* MADTableViewCellBase.m in Sources */,
-				4C30A5431E22BF6A002E18C9 /* MADAnimatedTransitioningNavigationCrossFadePush.m in Sources */,
 				4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4C401FBF1BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C4020511BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m in Sources */,

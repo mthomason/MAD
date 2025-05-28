@@ -15,36 +15,41 @@
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)context {
+	UIViewController *toViewController = [context viewControllerForKey:UITransitionContextToViewControllerKey];
+	UIViewController *fromViewController = [context viewControllerForKey:UITransitionContextFromViewControllerKey];
 	
-	UIViewController *toViewController, *fromViewController;
-	toViewController = [context viewControllerForKey: UITransitionContextToViewControllerKey];
-	fromViewController = [context viewControllerForKey: UITransitionContextFromViewControllerKey];
-	CGRect toFrameFinal = [context finalFrameForViewController:toViewController];
-	CGRect fromFrameFinal;
-	CGRect toFrameInital;
-	CGRect fromFrameInital = [context initialFrameForViewController:fromViewController];
+	UIView *containerView = [context containerView];
 	
-	toFrameInital = CGRectMake(toFrameFinal.origin.x + toFrameFinal.size.width,
-							   toFrameFinal.origin.y,
-							   toFrameFinal.size.width, toFrameFinal.size.height);
-	fromFrameFinal = CGRectMake(fromFrameInital.origin.x - fromFrameInital.size.width,
-								fromFrameInital.origin.y,
-								fromFrameInital.size.width, fromFrameInital.size.height);
-
-	[[context containerView] addSubview:toViewController.view];
-	toViewController.view.frame = toFrameInital;
-
-	[UIView animateWithDuration:[self transitionDuration:context] animations:^{
-		fromViewController.view.frame = fromFrameFinal;
-		toViewController.view.frame = [context containerView].frame;
+	CGRect finalFrameForToVC = [context finalFrameForViewController:toViewController];
+	CGRect initialFrameForFromVC = [context initialFrameForViewController:fromViewController];
+	
+	CGRect initialFrameForToVC = CGRectMake(finalFrameForToVC.origin.x + finalFrameForToVC.size.width,
+											finalFrameForToVC.origin.y,
+											finalFrameForToVC.size.width,
+											finalFrameForToVC.size.height);
+	
+	CGRect finalFrameForFromVC = CGRectMake(initialFrameForFromVC.origin.x - initialFrameForFromVC.size.width,
+											initialFrameForFromVC.origin.y,
+											initialFrameForFromVC.size.width,
+											initialFrameForFromVC.size.height);
+	
+	[containerView addSubview:toViewController.view];
+	toViewController.view.frame = initialFrameForToVC;
+	
+	[UIView animateWithDuration:[self transitionDuration:context]
+						  delay:0.0
+						options:UIViewAnimationOptionCurveEaseInOut // Or your preferred curve
+					 animations:^{
+		fromViewController.view.frame = finalFrameForFromVC;
+		toViewController.view.frame = finalFrameForToVC;
 	} completion:^(BOOL finished) {
-		
 		BOOL wasCancelled = [context transitionWasCancelled];
 		if (!wasCancelled) {
+			// Only remove fromViewController's view if the transition was not cancelled.
+			// If cancelled, fromViewController's view should remain.
 			[fromViewController.view removeFromSuperview];
 		}
-		[toViewController viewDidAppear:!wasCancelled];
-
+		// UIKit handles viewDidAppear/Disappear calls after completeTransition is called.
 		[context completeTransition:!wasCancelled];
 	}];
 }

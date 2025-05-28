@@ -77,7 +77,6 @@
 	[super viewWillAppear:animated];
 
 	MADocument *document = self.document;
-		
 	NSMutableArray <__kindof UIViewController *> *tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
 	
 	MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
@@ -90,7 +89,6 @@
 	[tabBarViewControllers addObject: navControllerViewer];
 
 	id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
-
 	navControllerViewer.viewControllerDelegate = delegate;
 	splitViewController.viewControllerDelegate = delegate;
 	[self setViewControllers: tabBarViewControllers animated: animated];

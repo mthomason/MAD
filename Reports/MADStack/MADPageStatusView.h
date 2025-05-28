@@ -13,7 +13,7 @@
 
 @interface MADPageStatusView : UIView
 
-	- (void)setPage:(NSUInteger)page ofTotal:(NSUInteger)total;
+- (void)setPage:(NSUInteger)page ofTotal:(NSUInteger)total;
 
 @end
 

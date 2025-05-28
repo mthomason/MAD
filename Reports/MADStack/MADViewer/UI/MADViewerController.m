@@ -907,6 +907,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 			os_log_error(GetDesignerLog(), "Error: %@", error);
 		}
 	}
+	self.pageSlider.enabled = YES;
 	// Check if the operation is of a specific type
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]] ||
 		[operation isKindOfClass:[MADRefreshOperationReload class]]) {
@@ -969,8 +970,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			
-			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-				dispatch_sync(dispatch_get_main_queue(), ^{
+			//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+			//	dispatch_sync(dispatch_get_main_queue(), ^{
 					
 					UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
 					
@@ -985,22 +986,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 						sharedController.delegate = document;
 						
 						MADViewerController * __weak weakself2 = sself;
-						
-						;
-						
 						[sharedController presentFromBarButtonItem: sself.barButtonItemActivity
 														  animated: YES
 												 completionHandler: ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-							
 							MADViewerController *sself2 = weakself2;
-							
 							sself2.pageSlider.enabled = YES;
 							[sself2.tabBarController enableTabBarItems];
 						}];
 					}
 				});
-			});
-		});
+		//	});
+		//});
 	});
 }
 

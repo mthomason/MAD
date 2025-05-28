@@ -15,8 +15,7 @@
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)context {
-	UIViewController *toViewController;
-	toViewController = [context viewControllerForKey:UITransitionContextToViewControllerKey];
+	UIViewController *toViewController = [context viewControllerForKey:UITransitionContextToViewControllerKey];
 	UIView *toView = [context viewForKey:UITransitionContextToViewKey];
 	
 	[toViewController beginAppearanceTransition:YES animated:YES];

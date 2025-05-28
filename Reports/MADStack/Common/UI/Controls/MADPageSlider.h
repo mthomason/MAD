@@ -19,9 +19,8 @@
 
 @property (nonatomic) NSUInteger numberOfPages;
 @property (nonatomic, getter=isEnabled) BOOL enabled;
-
 @property (nonatomic, weak) id <MADPageSliderProtocol> sliderDelegate;
-@property (readonly, weak, getter=pageSlider) MADSliderPageVertical *slider;
+@property (readonly, strong, getter=pageSlider) MADSliderPageVertical *slider;
 
 @end
 

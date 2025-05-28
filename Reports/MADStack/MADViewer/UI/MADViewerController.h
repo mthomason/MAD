@@ -20,18 +20,16 @@
 
 @protocol MADViewControllerStandardProtocol;
 
-@interface MADViewerController : UIPageViewController
-	<MADViewControllerDocumentProtocol, MADActivityProtocol,
-		MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
+@interface MADViewerController : UIPageViewController <MADViewControllerDocumentProtocol, MADActivityProtocol, MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
 
-	@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+@property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
-	+ (instancetype)newViewerController:(MADocument *)document;
++ (instancetype)newViewerController:(MADocument *)document;
 
-	- (IBAction)refresh:(id)sender;
-	- (IBAction)zoomToActualSize:(id)sender;
-	- (IBAction)zoomToFit:(id)sender;
-	- (IBAction)zoomToFullScreen:(id)sender;
+- (IBAction)refresh:(id)sender;
+- (IBAction)zoomToActualSize:(id)sender;
+- (IBAction)zoomToFit:(id)sender;
+- (IBAction)zoomToFullScreen:(id)sender;
 
 @end
 

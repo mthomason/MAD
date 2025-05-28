@@ -8,9 +8,6 @@
 
 #import "MADNavigationControllerFileExplorer.h"
 
-#import "MADAnimatedTransitioningNavigationCrossFadePop.h"
-#import "MADAnimatedTransitioningNavigationCrossFadePush.h"
-
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import "MADTransparentPresentationController.h"
