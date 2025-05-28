@@ -56,9 +56,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 #pragma mark - MADApplicationProtocol
 
 + (NSString *)groupIdentifier {
-	NSURL *url = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
-	NSAssert(url != nil, @"We need a URL.");
-	return [NSDictionary dictionaryWithContentsOfURL:url][@"com.apple.security.application-groups"][0];
+	return @"group.everydayapps.mad";
 }
 
 + (NSString *)ubiquityIdentifier {

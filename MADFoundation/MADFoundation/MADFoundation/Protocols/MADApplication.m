@@ -43,10 +43,7 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 }
 
 + (NSString *)groupIdentifier {
-	NSURL *madDesignerEntitlementsUrl = [[NSBundle mainBundle] URLForResource:@"MAD Designer" withExtension:@"entitlements"];
-	NSDictionary *madDesignerEntitlementsDictionary = [NSDictionary dictionaryWithContentsOfURL:madDesignerEntitlementsUrl];
-	NSArray *madApplicationGroups = madDesignerEntitlementsDictionary[@"com.apple.security.application-groups"];
-	return [madApplicationGroups firstObject];
+	return @"group.everydayapps.mad";
 }
 
 + (NSString *)ubiquityIdentifier {
