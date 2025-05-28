@@ -28,26 +28,12 @@
 @dynamic identifier;
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-
-	id dbConnection;
-	//dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
-	
-	NSString *databaseFilename = credentals.database.copy;
-	
 	// FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
 	//          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
 	//          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
-	
-	NSString *groupID = [MADApplication groupIdentifier];
-	NSURL *appSupportDirectory = [MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID: groupID];
-	
-	NSURL *dbUrl = [appSupportDirectory URLByAppendingPathComponent: databaseFilename
-														isDirectory: NO];
-	NSString *path = dbUrl.path.copy;
-	NSURL *databaseUrl = path != nil ? [[NSURL alloc] initFileURLWithPath: path] : nil;
-	dbConnection = [[self alloc] initWithUrl:databaseUrl];
-	return dbConnection;
-	
+	NSURL *dbUrl = [[MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID: [MADApplication groupIdentifier]] URLByAppendingPathComponent: credentals.database
+																																	   isDirectory: NO];
+	return [[self alloc] initWithUrl:dbUrl];
 }
 
 - (instancetype)initWithUrl:(NSURL *)url {
