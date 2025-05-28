@@ -1,72 +1,209 @@
 #!/bin/bash
 
-#  buildcounter.sh
-#  MAD
+# buildcounter.sh
+# MAD
 #
-#  Created by Michael Thomason on 3/4/14.
-#  Copyright © 2017 Michael Thomason. All rights reserved.
+# Original script by Michael Thomason on 3/4/14.
+# Copyright © 2017 Michael Thomason. All rights reserved.
+# Modified by AI (Gemini) for enhanced functionality and separation of concerns.
 
-# Build Counter Script for Xcode
-# This script updates version/build metadata using git information and PlistBuddy.
+# Exit immediately if a command exits with a non-zero status.
+# Treat unset variables as an error.
+# Pipelines fail if any command fails, not just the last one.
+set -euo pipefail
 
-# Define project directory and plist paths
-echo "Initializing script..."
-PROJECT_DIR="${PROJECT_DIR:-/Users/michael/Desktop/Reports/Reports}"
-cd "$PROJECT_DIR" || { echo "Error: Could not change to project directory $PROJECT_DIR"; exit 1; }
+echo "🚀 Starting Build Counter Script..."
 
-PLIST_PATHS=(
-	"${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist"
-	"${PROJECT_DIR}/MADStack/MADDesigner/Info.plist"
+# --- Configuration ---
+# !!! IMPORTANT: VERIFY AND UPDATE THESE PATHS !!!
+
+PROJECT_DIR="${PROJECT_DIR:-/Users/michael/Desktop/Reports/Reports}" # Original fallback
+MAD_META_PLIST_PATH="${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist"
+INFO_PLIST_TARGET_PATHS=(
+    "${PROJECT_DIR}/MADStack/MADDesigner/Info.plist"
+    # Add other Info.plist paths here
 )
+# --- End Configuration ---
 
-# Validate plist files exist
-for plist in "${PLIST_PATHS[@]}"; do
-	if [ ! -f "$plist" ]; then
-		echo "Error: Plist file not found at $plist"
-		exit 1
-	fi
-done
+echo "Project directory: ${PROJECT_DIR}"
+cd "$PROJECT_DIR" || { echo "❌ Error: Could not change to project directory '${PROJECT_DIR}'."; exit 1; }
+echo "Working directory: $(pwd)"
 
-# Get version and build numbers from git
-echo "Fetching version and build numbers from git..."
-git_tag=$(git describe --abbrev=1 --tags 2>/dev/null)
-if [ -z "$git_tag" ]; then
-	echo "Error: No git tags found. Ensure your repository is tagged."
-	exit 1
+# Helper function to print a value from a plist file
+# Returns empty string if key not found (stderr is suppressed)
+print_plist_value() {
+    local command_str="$1"
+    local plist_file="$2"
+    /usr/libexec/PlistBuddy -c "${command_str}" "${plist_file}" 2>/dev/null
+}
+
+# Robust helper function to add a new key or set an existing one with a specific type
+# Usage: add_or_set_plist_key ":KeyName" "KeyValue" "KeyType" "path/to/plist.plist"
+add_or_set_plist_key() {
+    local key_path="$1"
+    local value="$2"
+    local type="$3" # e.g., string, integer, bool
+    local plist_file="$4"
+
+    # Check if key exists by attempting to print it
+    /usr/libexec/PlistBuddy -c "Print ${key_path}" "${plist_file}" >/dev/null 2>&1
+    if [ $? -ne 0 ]; then # Key does not exist
+        /usr/libexec/PlistBuddy -c "Add ${key_path} ${type} ${value}" "${plist_file}"
+        if [ $? -ne 0 ]; then
+            echo "⚠️ Warning: PlistBuddy ADD failed: '${key_path} ${type} ${value}' on '${plist_file}'." >&2
+        fi
+    else # Key exists
+        /usr/libexec/PlistBuddy -c "Set ${key_path} ${value}" "${plist_file}"
+        if [ $? -ne 0 ]; then
+            echo "⚠️ Warning: PlistBuddy SET failed: '${key_path} ${value}' on '${plist_file}'." >&2
+        fi
+    fi
+}
+
+# Helper function for basic "Set" operations, typically for Info.plist CFBundle keys
+# where PlistBuddy's default type inference for Set is usually sufficient.
+set_bundle_plist_value() {
+    local command_str="$1" # Expected "Set :Key Value"
+    local plist_file="$2"
+    /usr/libexec/PlistBuddy -c "${command_str}" "${plist_file}"
+    if [ $? -ne 0 ]; then
+        echo "⚠️ Warning: PlistBuddy command failed: '${command_str}' on '${plist_file}'. The key might not have been set correctly." >&2
+    fi
+}
+
+
+# Validate MADMeta.plist path and attempt to create if it doesn't exist
+if [ ! -f "$MAD_META_PLIST_PATH" ]; then
+    echo "ℹ️ Info: MADMeta.plist not found at '$MAD_META_PLIST_PATH'. Attempting to create it."
+    mkdir -p "$(dirname "$MAD_META_PLIST_PATH")"
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict/></plist>" > "$MAD_META_PLIST_PATH"
+    if [ ! -f "$MAD_META_PLIST_PATH" ]; then
+        echo "❌ Error: Could not create MADMeta.plist at '$MAD_META_PLIST_PATH'. Please create it manually or check permissions."
+        exit 1
+    fi
+    echo "✅ MADMeta.plist created at $MAD_META_PLIST_PATH"
+else
+    echo "✅ MADMeta.plist found at: $MAD_META_PLIST_PATH"
 fi
 
-# Extract major/minor version
-version=$(echo "$git_tag" | awk -F- '{print $1}' | sed 's/^v//')
-minor=$(echo "$git_tag" | awk -F- '{print $2}')
-minor=${minor:-0} # Default to 0 if no minor version
-current_version="${version}.${minor}"
+# Validate Info.plist files from INFO_PLIST_TARGET_PATHS
+valid_info_plists=()
+for plist_path in "${INFO_PLIST_TARGET_PATHS[@]}"; do
+    if [ -z "$plist_path" ]; then
+        echo "⚠️ Warning: An empty Info.plist path was provided in INFO_PLIST_TARGET_PATHS. Skipping."
+        continue
+    fi
+    if [ ! -f "$plist_path" ]; then
+        echo "⚠️ Warning: Target Info.plist file not found at '$plist_path'. It will be skipped for CFBundle updates."
+    else
+        echo "✅ Found target Info.plist for CFBundle updates: $plist_path"
+        valid_info_plists+=("$plist_path")
+    fi
+done
+INFO_PLIST_TARGET_PATHS=("${valid_info_plists[@]}")
 
-# Build number
-build_number=$(git rev-list HEAD --count 2>/dev/null)
-if [ -z "$build_number" ]; then
-	echo "Error: Unable to fetch build number from git."
-	exit 1
+
+# --- Git Information Fetching ---
+echo "⚙️ Fetching version and build information from git..."
+calculated_short_version_string="0.1.0" # Default fallback
+git_commit_count="0" # Default fallback
+git_exact_tag_no_v="0.0.0 (no tag)"
+git_describe_output_for_mad="N/A"
+git_commit_hash="unknown"
+git_branch_name="unknown"
+is_dirty_output=""
+
+git_describe_output=$(git describe --tags --dirty --always 2>/dev/null || echo "")
+
+if [[ -z "$git_describe_output" ]] || ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "⚠️ Warning: Not a git repository or 'git describe' failed. Using fallback versioning."
+else
+    git_describe_output_for_mad="$git_describe_output"
+    base_tag_part=$(echo "$git_describe_output" | awk -F- '{print $1}' | sed 's/^v//')
+    commits_since_tag_part=$(echo "$git_describe_output" | awk -F- '{print $2}')
+
+    if [[ "$base_tag_part" == *"g"* ]]; then
+        calculated_short_version_string="0.1.0"
+    elif [[ "$commits_since_tag_part" =~ ^[0-9]+$ ]]; then
+        calculated_short_version_string="${base_tag_part}.${commits_since_tag_part}"
+    else
+        calculated_short_version_string="${base_tag_part}.0"
+    fi
+
+    current_git_commit_count=$(git rev-list HEAD --count 2>/dev/null)
+    if [[ -n "$current_git_commit_count" && "$current_git_commit_count" =~ ^[0-9]+$ ]]; then
+        git_commit_count="$current_git_commit_count"
+    else
+        echo "⚠️ Warning: Unable to fetch git commit count. Using fallback '0'."
+        git_commit_count="0"
+    fi
+    
+    git_exact_tag_with_v=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+    git_exact_tag_no_v=$(echo "$git_exact_tag_with_v" | sed 's/^v//')
+    git_commit_hash=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+    git_branch_name=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+    is_dirty_output=$(git status --porcelain 2>/dev/null)
 fi
 
-# Increment local build counter (stored in plist)
-echo "Updating build counter..."
-build_counter=$(/usr/libexec/PlistBuddy -c "Print :MADBuildNumber" "${PLIST_PATHS[0]}" 2>/dev/null || echo "0")
-build_counter=$((build_counter + 1))
+git_is_dirty="false"
+if [[ -n "$is_dirty_output" ]]; then
+    git_is_dirty="true"
+    calculated_short_version_string+="-DEV" 
+fi
 
-# Set build metadata in plist files
-echo "Updating plist files..."
-build_date=$(date +%FT%T%Z)
+# --- Build Counter ---
+echo "⚙️ Updating local build counter from $MAD_META_PLIST_PATH..."
+build_counter_val=$(print_plist_value "Print :MADBuildNumber" "$MAD_META_PLIST_PATH")
+if ! [[ "$build_counter_val" =~ ^[0-9]+$ ]]; then
+    build_counter_val=0
+fi
+build_counter=$((build_counter_val + 1))
 
-for plist in "${PLIST_PATHS[@]}"; do
-	/usr/libexec/PlistBuddy -c "Set :MADBuildDate $build_date" "$plist"
-	/usr/libexec/PlistBuddy -c "Set :MADBuildNumber $build_counter" "$plist"
-	/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $current_version" "$plist"
-	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $current_version" "$plist"
-	/usr/libexec/PlistBuddy -c "Set :MADRevision $build_number" "$plist"
-done
+# --- Build Date ---
+build_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-echo "Build metadata updated successfully:"
-echo "  Version: $current_version"
-echo "  Build Number: $build_number"
-echo "  Build Counter: $build_counter"
-echo "  Build Date: $build_date"
+# --- Update MADMeta.plist using the robust add_or_set_plist_key function ---
+echo "📝 Updating metadata in $MAD_META_PLIST_PATH..."
+add_or_set_plist_key ":MADBuildDate" "$build_date" "string" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADBuildNumber" "$build_counter" "integer" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADGitCommitCount" "$git_commit_count" "integer" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADVersionFromTag" "$git_exact_tag_no_v" "string" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADGitDescribe" "$git_describe_output_for_mad" "string" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADGitCommitHash" "$git_commit_hash" "string" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADGitBranch" "$git_branch_name" "string" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":MADGitDirty" "$git_is_dirty" "string" "$MAD_META_PLIST_PATH" # "true" or "false"
+
+# Store the applied CFBundle versions in MADMeta.plist for reference
+add_or_set_plist_key ":CFBundleShortVersionString" "$calculated_short_version_string" "string" "$MAD_META_PLIST_PATH"
+add_or_set_plist_key ":CFBundleVersion" "$git_commit_count" "string" "$MAD_META_PLIST_PATH" # CFBundleVersion often a string
+
+# --- Update Target Info.plist files ---
+# For these, PlistBuddy's 'Set' usually works fine for creating/updating CFBundle keys,
+# as they are standard and their types are commonly strings.
+if [ ${#INFO_PLIST_TARGET_PATHS[@]} -gt 0 ]; then
+    echo "📝 Updating CFBundle versions in target Info.plist files..."
+    for plist_file in "${INFO_PLIST_TARGET_PATHS[@]}"; do
+        echo "   -> $plist_file"
+        set_bundle_plist_value "Set :CFBundleShortVersionString $calculated_short_version_string" "$plist_file"
+        set_bundle_plist_value "Set :CFBundleVersion $git_commit_count" "$plist_file"
+    done
+else
+    echo "ℹ️ No valid target Info.plist files found or configured to update with CFBundle versions."
+fi
+
+echo ""
+echo "----------------------------------------------------"
+echo "✅ Build Metadata Update Complete!"
+echo "----------------------------------------------------"
+echo "  Project Version (CFBundleShortVersionString): $calculated_short_version_string"
+echo "  Build Number (CFBundleVersion / Git Commits): $git_commit_count"
+echo "  Local Build Counter (MADBuildNumber): $build_counter"
+echo "  Build Date (MADBuildDate): $build_date"
+echo ""
+echo "  --- Git Details (from MADMeta.plist) ---"
+echo "  MADVersionFromTag: $git_exact_tag_no_v"
+echo "  MADGitDescribe: $git_describe_output_for_mad"
+echo "  MADGitCommitHash: $git_commit_hash"
+echo "  MADGitBranch: $git_branch_name"
+echo "  MADGitDirty: $git_is_dirty"
+echo "----------------------------------------------------"
