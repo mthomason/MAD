@@ -9,17 +9,12 @@
 #import "MADRefreshOperationReload.h"
 #import "UIApplication+Extras.h"
 
-#import <MADAPI/MADNotificationDidReadRows.h>
-
-#import <MAD/MADocument.h>
-#import <MAD/MADPrintPageRenderer.h>
-#import <MAD/MADNotificationDidFormatPage.h>
-#import "MADDocumentPageController.h"
-#import "MADPageViewAttributes.h"
-
 #import "MADOperationRefreshReloadProtocol.h"
 #import "MADOperationRefresh.h"
 #import "madlog.h"
+
+#import <MAD/MADocument.h>
+#import <MAD/MADNotificationDidFormatPage.h>
 
 @interface MADRefreshOperationReload ()
 
@@ -54,29 +49,17 @@
 
 	[self updateNumberOfPages:document.numberOfPages];
 	
-	// Update records read.
 	NSBlockOperation *updateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
 		typeof(self) __strong sself = weakself;
 		[sself.viewController operation:sself updateRecordsRead:document.numberOfResults];
 	}];
 	NSArray <__kindof NSOperation *> *operations = @[updateRecordsRead];
-	[[NSOperationQueue mainQueue] addOperations: operations
-							  waitUntilFinished: NO];
+	[[NSOperationQueue mainQueue] addOperations: operations waitUntilFinished: NO];
 	
 	
 	if (self.cancelled) return [self finish];
 	
 	[self beginBackgroundTask];
-	
-	NSBlockOperation *setDisplayInactive = [NSBlockOperation blockOperationWithBlock:^{
-		typeof(self) __strong sself = weakself;
-		[sself.viewController operation:sself setDisplayActive:NO];
-	}];
-	operations = @[setDisplayInactive];
-	[[NSOperationQueue mainQueue] addOperations: operations
-							  waitUntilFinished: NO];
-	
-	
 	[document prepareForQuery];
 	
 	if (self.cancelled) {
@@ -106,16 +89,14 @@
 		typeof(self) __strong sself = weakself;
 		[sself.viewController operation:nil finishReload:document];
 	}];
-	updateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
+	NSBlockOperation *opUpdateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
 		typeof(self) __strong sself = weakself;
 		[sself.viewController operation:sself updatePages:document.numberOfPages];
 	}];
-	[finishReload addDependency:updateRecordsRead];
+	[finishReload addDependency:opUpdateRecordsRead];
 	
-	operations = @[updateRecordsRead, finishReload];
-	[[NSOperationQueue mainQueue] addOperations: operations
-							  waitUntilFinished: YES];
-	
+	NSArray <__kindof NSOperation *> *opsFinished = @[opUpdateRecordsRead, finishReload];
+	[[NSOperationQueue mainQueue] addOperations: opsFinished waitUntilFinished: YES];
 	
 	document.refreshed = NO;
 	
