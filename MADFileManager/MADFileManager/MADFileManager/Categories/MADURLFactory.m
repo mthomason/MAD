@@ -18,6 +18,7 @@
 #import <MADFoundation/MADStringUtilities.h>
 
 #import <UIKit/UIScreen.h>
+#import <os/log.h>
 
 static NSString * const MADPathComponentData       = @"Data";
 static NSString * const MADPathComponentDocuments  = @"Documents";
@@ -44,8 +45,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLCacheFilesDirectoryForFilename:(NSString *)filename {
-	NSString *filenameId = [MADURLFactory filenameID:filename.hash];
-	return [MADURLFactory newURLForLocalCacheDirectoryNamed:filenameId];
+	return [MADURLFactory newURLForLocalCacheDirectoryNamed:[MADURLFactory filenameID:filename.hash]];
 }
 
 + (NSURL *)newURLDocumentArchiveForFileURL:(NSURL *)madUrl extension:(NSString *)extension {
@@ -65,31 +65,35 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (NSURL *)newURLThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
 	NSString *name = retinaDisplay ? [handle stringByAppendingString:@"@2x"] : handle;
 	NSString *filename = [name stringByAppendingPathExtension:@"png"];
-	NSString *fileNameId = [MADURLFactory filenameID:handle.hash];
-	NSURL *cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryNamed:fileNameId];
+	NSURL *cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryNamed:[MADURLFactory filenameID:handle.hash]];
 	return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
-+ (NSURL *)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL {
-	NSInteger ctr = 0;
-	NSURL *unqiueURL;
-	NSString *pathExtension, *name, *path, *maybe;
++ (NSURL *)newURLWithUniqueFilenameForURL:(NSURL *)originalURL {
+	NSString *directoryPath = originalURL.URLByDeletingLastPathComponent.path;
+	NSString *baseName = originalURL.lastPathComponent.stringByDeletingPathExtension;
+	NSString *extension = originalURL.pathExtension;
 	
-	pathExtension = origionalURL.pathExtension.copy;
-	name = origionalURL.lastPathComponent.stringByDeletingPathExtension.copy;
+	NSInteger counter = 0;
+	NSURL *candidateURL = nil;
 	
-	do {
-		maybe = [name stringByAppendingFormat:@" %ld", (long)ctr];
-		[maybe stringByAppendingPathExtension: pathExtension];
+	while (true) {
+		NSString *filename = (counter == 0) ? baseName : [NSString stringWithFormat:@"%@ %ld", baseName, (long)counter];
+		if (extension.length > 0) {
+			filename = [filename stringByAppendingPathExtension:extension];
+		}
 		
-		unqiueURL = [origionalURL.baseURL URLByAppendingPathComponent:maybe isDirectory:NO];
-		path = ((NSURL *)unqiueURL).path.copy;
-		ctr++;
-	} while ([[NSFileManager defaultManager] fileExistsAtPath:path]);
+		candidateURL = [NSURL fileURLWithPathComponents:@[directoryPath, filename]];
+		NSString *path = candidateURL.path;
+		if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+			break;
+		}
+		
+		counter++;
+	}
 	
-	return unqiueURL;
+	return candidateURL;
 }
-
 
 + (NSURL *)newURLSharedApplicationGroupContainer:(NSString *)groupIdentifier {
 	NSURL *url = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
@@ -135,13 +139,11 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLForLocalCacheDirectoryNamed:(NSString *)handle {
-	NSURL *url = [MADURLFactory newURLForLocalCacheDirectory];
-	NSURL *cachedArrayDirectories = [url URLByAppendingPathComponent: handle
-														 isDirectory: YES];
-	BOOL exist, isDirectory;
+	NSURL *cachedArrayDirectories = [[MADURLFactory newURLForLocalCacheDirectory] URLByAppendingPathComponent: handle
+																								  isDirectory: YES];
+	BOOL isDirectory = NO;
 	NSString *path = ((NSURL *)cachedArrayDirectories).path;
-	exist = [[NSFileManager defaultManager] fileExistsAtPath: path
-												 isDirectory: &isDirectory];
+	BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath: path isDirectory: &isDirectory];
 	if (exist == NO || isDirectory == NO) {
 		NSError *error = nil;
 		[[NSFileManager defaultManager] createDirectoryAtURL: cachedArrayDirectories
@@ -163,35 +165,31 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupID
-											pathComponent:(NSString *)pathComponent
-									  alternativeSelector:(SEL)alternativeSelector {
-	
-	BOOL success = NO, isDirectory = NO;
-	NSString *cachePath;
-	NSURL *groupUrl, *cacheURL;
+									   pathComponent:(NSString *)pathComponent
+								 alternativeSelector:(SEL)alternativeSelector {
 
-	
-	groupUrl = [[NSFileManager defaultManager]
-					   containerURLForSecurityApplicationGroupIdentifier: groupID];
-	
+	NSURL *groupUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier: groupID];
 	NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil "
-							  @"for %@.  Maybe the fucking entitlment file is missing?!?!",
-							  groupID);
+							  @"for %@.  Maybe the fucking entitlment file is missing?!?!", groupID);
 	
-	cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent
-										 isDirectory: YES];
-	cachePath = cacheURL.path.copy;
-	success = [[NSFileManager defaultManager] fileExistsAtPath: cachePath
-												   isDirectory: &isDirectory];
-	
-	if (!success) {
-		NSError *error;
-		success = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL
+	NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent isDirectory: YES];
+	BOOL isDirectory = NO;
+	BOOL success = NO;
+	NSString *path = cacheURL.path;
+	if (path != nil && path.length > 0) {
+		success = [[NSFileManager defaultManager] fileExistsAtPath:path  isDirectory: &isDirectory];
+		
+		if (!success) {
+			NSError *error = nil;
+			success = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL
 											   withIntermediateDirectories: YES
 																attributes: nil
 																	 error: &error];
+			if (!success && error != nil) {
+				os_log_error(OS_LOG_DEFAULT, "%s %@", __PRETTY_FUNCTION__, error);
+			}
+		}
 	}
-	
 	return success ? cacheURL : [self newURLForURLSelector:alternativeSelector];
 }
 
@@ -203,28 +201,22 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 
 + (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
 													   fileURL:(NSURL *)fileURL {
-	NSString *fileNameId;
-	fileNameId = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)fileURL.lastPathComponent.stringByDeletingPathExtension.hash];
-	return [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier handle:fileNameId];
+	return [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier
+																  handle:[NSString stringWithFormat:@"%lu", (unsigned long)fileURL.lastPathComponent.stringByDeletingPathExtension.hash]];
 }
 
 + (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-														handle:(NSString *)handle {
-	
+												   handle:(NSString *)handle {
 	NSURL *cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
-	
 	NSURL *cacheURL = [cacheDirectory URLByAppendingPathComponent:handle isDirectory:YES];
-	
 	BOOL isDirectory;
 	NSString *path = cacheURL.path;
 	if (path != nil &&
 		![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
-		
 		NSError * __autoreleasing error = NULL;
 		isDirectory = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL
 											   withIntermediateDirectories: YES attributes: nil
 																	 error: &error];
-		
 	}
 	return cacheURL;
 }
@@ -238,29 +230,28 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLLocalTemporaryDirectory {
-	NSURL *fileUrlWithPath = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
-	return [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
+	return [[NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES] URLByAppendingPathComponent:@"tmp" isDirectory:YES];
 }
 
+static NSURL *urlForCacheDirectory;
 + (NSURL *)newURLForLocalCacheDirectory {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-	NSString *firstObject = paths.firstObject;
-	NSURL *url = [[NSURL alloc] initFileURLWithPath:firstObject
-										isDirectory:YES];
-	return url;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+		NSAssert(paths.count > 0, @"Expect a path.");
+		NSString *firstObject = paths.firstObject;
+		urlForCacheDirectory = [[NSURL alloc] initFileURLWithPath:firstObject isDirectory:YES];
+	});
+	return urlForCacheDirectory;
 }
 
 + (NSURL *)newURLForLocalDataDirectory {
-	NSString *homeDirectory = NSHomeDirectory();
-	NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
-	id result = [fileUrlWithPath URLByAppendingPathComponent:MADPathComponentData isDirectory:YES];
-	return result;
+	return [[NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES] URLByAppendingPathComponent:MADPathComponentData isDirectory:YES];
 }
 
 + (NSURL *)newURLForLocalApplicationSupportDirectory {
-	NSArray <NSURL *> *possibleUrls;
-	possibleUrls = [[NSFileManager defaultManager] URLsForDirectory: NSApplicationSupportDirectory
-														  inDomains: NSUserDomainMask];
+	NSArray <NSURL *> *possibleUrls = [[NSFileManager defaultManager] URLsForDirectory: NSApplicationSupportDirectory
+																			 inDomains: NSUserDomainMask];
 	NSURL *appSupportDirectory = nil;
 	NSURL *appSupportDirectoryForApp = nil;
 	
@@ -268,8 +259,8 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 		appSupportDirectory = possibleUrls[0];
 		
 		BOOL isDirectory;
-		NSString *path = appSupportDirectory.path;
-		BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath: path
+		NSString *appSupportPath = appSupportDirectory.path;
+		BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath: appSupportPath
 															  isDirectory: &isDirectory];
 		if (fileExist == NO) {
 			NSError *error = nil;
@@ -281,7 +272,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 		
 		NSString *bundleIdentifier = [NSBundle mainBundle].bundleIdentifier.copy;
 		appSupportDirectoryForApp = [appSupportDirectory URLByAppendingPathComponent:bundleIdentifier];
-		path = ((NSURL *)appSupportDirectoryForApp).path;
+		NSString *path = ((NSURL *)appSupportDirectoryForApp).path;
 		fileExist = [[NSFileManager defaultManager] fileExistsAtPath: path isDirectory: &isDirectory];
 		
 		if (fileExist == NO) {
