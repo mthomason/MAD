@@ -7,6 +7,8 @@
 //
 
 #import "MADTabBarController.h"
+#import "MADNavigationController.h"
+#import "MADQueryBuilderSplitViewController.h"
 
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UINavigationBar.h>
@@ -14,10 +16,6 @@
 #import <UIKit/UIResponder.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UITabBarItem.h>
-
-#import "MADNavigationController.h"
-
-#import "MADQueryBuilderSplitViewController.h"
 
 @interface MADTabBarController () <UITabBarControllerDelegate>
 
@@ -123,20 +121,12 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	
 	UINavigationItem *navigationItem = self.navigationItem;
 	if (navigationItem.leftBarButtonItem) {
 		[navigationItem setLeftBarButtonItem: nil animated: animated];
 	}
 	if (navigationItem.rightBarButtonItem) {
 		[navigationItem setRightBarButtonItem: nil animated: animated];
-	}
-	for (id viewController in self.viewControllers) {
-		if ([viewController isKindOfClass:[UINavigationController class]]) {
-			[((UINavigationController *)viewController) dismissViewControllerAnimated:animated completion:^{
-				
-			}];
-		}
 	}
 }
 
@@ -208,14 +198,6 @@
 - (nullable id <UIViewControllerAnimatedTransitioning>)tabBarController:(UITabBarController *)tabBarController
 					 animationControllerForTransitionFromViewController:(UIViewController *)fromVC
 													   toViewController:(UIViewController *)toVC  {
-	/*NSArray *viewControllers = tabBarController.viewControllers;
-	if ([viewControllers indexOfObject:toVC] > [viewControllers indexOfObject:fromVC]) {
-		// The incoming view controller succeeds the outgoing view controller,
-		// slide towards the left.
-		return [[MADDesignerAnimatedTransitioning alloc] init];
-	} else {
-		return nil;
-	}*/
 	return nil;
 }
 
