@@ -250,8 +250,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 }
 
 - (void)updateFunctionType {
-	NSString *functionName = [RptqDocumentElementAggregate newStringDisplayForType:self.aggregateFunctionType];
-	self.tableViewCellAggrageFunction.detailTextLabel.text = [functionName stringByAppendingString:@"(x)"];
+	self.tableViewCellAggrageFunction.detailTextLabel.text = [[RptqDocumentElementAggregate newStringDisplayForType:self.aggregateFunctionType] stringByAppendingString:@"(x)"];
 }
 
 - (void)updateGroupType {
