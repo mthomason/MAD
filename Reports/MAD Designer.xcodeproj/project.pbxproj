@@ -340,7 +340,6 @@
 		4CC3D8191BCB6DE700BDA5D3 /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CC3D8171BCB6DE700BDA5D3 /* MADFeatures.plist */; };
 		4CC8861B1C7ABFE4003E18D2 /* MADPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */; };
 		4CC982721F4AC32000E0496A /* MADLabelPageSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */; };
-		4CC982881F50E6E800E0496A /* MADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982871F50E6E800E0496A /* MADViewController.m */; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
@@ -1109,8 +1108,6 @@
 		4CC982701F4AC32000E0496A /* MADLabelPageSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelPageSlider.h; sourceTree = "<group>"; };
 		4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelPageSlider.m; sourceTree = "<group>"; };
 		4CC982731F4ACDB300E0496A /* MADOperationRefreshReloadProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshReloadProtocol.h; sourceTree = "<group>"; };
-		4CC982861F50E6E800E0496A /* MADViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADViewController.h; path = MADStack/MADViewController.h; sourceTree = "<group>"; };
-		4CC982871F50E6E800E0496A /* MADViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADViewController.m; path = MADStack/MADViewController.m; sourceTree = "<group>"; };
 		4CD0C1942C50AD3700CB4233 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppleIncRootCertificate.cer; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
@@ -1747,8 +1744,6 @@
 				4CC8EEF41E44F6F200139089 /* Query */,
 				4C6D2F051E6E86F5008EFE5D /* Nibs */,
 				4C1E55071E58295F00E3FAF0 /* Storyboard */,
-				4CC982861F50E6E800E0496A /* MADViewController.h */,
-				4CC982871F50E6E800E0496A /* MADViewController.m */,
 				4C26BA261BAF999800456DC8 /* Protocols */,
 				4CB8EDFF1E19F4AB00193295 /* Navigation */,
 				4C26BA041BAF14F200456DC8 /* About */,
@@ -3411,7 +3406,6 @@
 				4CF3040D1D1E175700466560 /* MADQueryViewSectionDelegate.m in Sources */,
 				4C401F7A1BAE7EB500BAE5FC /* MADWatermarkView.m in Sources */,
 				4C26BA581BAF99F000456DC8 /* MADResizeHandles.m in Sources */,
-				4CC982881F50E6E800E0496A /* MADViewController.m in Sources */,
 				4C26BA5C1BAF99F000456DC8 /* MTAggregateFunctionsViewController.m in Sources */,
 				4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */,
 				4C6D2EEF1E6DDF3E008EFE5D /* MADQueryAddTableNavigationItem.m in Sources */,

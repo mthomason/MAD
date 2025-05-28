@@ -1051,13 +1051,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 #pragma mark Helpers
 
 - (void)updateNavigationPrompt:(BOOL)animated {
-	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-		[UIView setAnimationsEnabled:animated];
-		self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
-		[UIView setAnimationsEnabled:YES];
-	} else {
-		self.navigationItem.prompt = nil;
-	}
+	os_log_debug(GetDesignerLog(), "This feature is omitted.");
 }
 
 #pragma mark -

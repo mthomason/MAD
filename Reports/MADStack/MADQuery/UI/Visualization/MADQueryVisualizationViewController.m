@@ -11,6 +11,39 @@
 #endif
 
 #import "MADQueryVisualizationViewController.h"
+#import "AppDelegate.h"
+#import "MADConnectorView.h"
+#import "MADQueryTableViewController.h"
+#import "MADAffineTransformSwing.h"
+#import "NSLayoutConstraint+QueryVisualization.h"
+#import "MADHierarchicalChildViewDefination.h"
+#import "MADGestureRecognizerAnchorPoint.h"
+#import "MADQueryVisualizationSchemaPresentationController.h"
+#import "MADQueryVisualizationContentView.h"
+#import "MADQueryVisualizationScrollView.h"
+#import "MADQueryVisualizationSchemaView.h"
+#import "MADQueryVisualizationSchemaDelegate.h"
+#import "MADQueryVisualizationCacheManager.h"
+#import "MADQueryVisualizationModel.h"
+#import "MADHierarchicalDisplayModel.h"
+#import "NSLayoutConstraint+Designer.h"
+
+#import <MADDataStructures/MTPair.h>
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTLinkedList.h>
+#import <MADFoundation/MADURLFactory.h>
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MAD/MADocument.h>
+#import <MAD/MADModelDocument.h>
+#import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelQuery.h>
+#import <MAD/MADModelQueryTable.h>
+#import <MAD/MADModelQueryLink.h>
+#import <MAD/MADModelTable.h>
+#import <MAD/MADModelField.h>
+#import <MAD/MADModelQueryField.h>
+#import <MAD/MADTableFieldIdentifier.h>
 
 #import <Foundation/NSSet.h>
 
@@ -28,75 +61,10 @@
 
 #import <QuartzCore/CALayer.h>
 
-#import <MADDataStructures/MTPair.h>
-#import <MADDataStructures/MTVertex.h>
-#import <MADDataStructures/MTLinkedList.h>
-
-#import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURLFactory.h>
-
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-
-#import <MAD/MADocument.h>
-
-#import <MAD/RptqDocument.h>
-#import <MAD/RptqDatabase.h>
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryLinks.h>
-#import <MAD/RptqQueryLinks+Extras.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryTable.h>
-
-#import <MAD/MADModel.h>
-#import <MAD/MADModelDocument.h>
-#import <MAD/MADModelDatabase.h>
-#import <MAD/MADModelQuery.h>
-#import <MAD/MADModelQueryTable.h>
-#import <MAD/MADModelQueryLink.h>
-#import <MAD/MADModelTable.h>
-#import <MAD/MADModelField.h>
-#import <MAD/MADModelQueryField.h>
-
-#import <MAD/MADTableFieldIdentifier.h>
-
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-
-#import "MADConnectorView.h"
-
-#import "MADQueryTableViewController.h"
-
-#import "MADAffineTransformSwing.h"
-
-#import "NSLayoutConstraint+QueryVisualization.h"
-#import "MADHierarchicalChildViewDefination.h"
-
-#import "MADGestureRecognizerAnchorPoint.h"
-
-#import "MADQueryVisualizationSchemaPresentationController.h"
-
-#import "MADQueryVisualizationContentView.h"
-#import "MADQueryVisualizationScrollView.h"
-
-#import "MADQueryVisualizationSchemaView.h"
-#import "MADQueryVisualizationSchemaDelegate.h"
-
-#import "MADQueryVisualizationCacheManager.h"
-
-#import "MADQueryVisualizationModel.h"
-#import "MADHierarchicalDisplayModel.h"
-
-#import "MADViewController.h"
-
-#import "NSLayoutConstraint+Designer.h"
-#import "AppDelegate.h"
-
 typedef void(^MTBlockResultVoid)(void);
 
 typedef UIViewController <MADManagedObjectViewProtocol, MADHierarchicalGroupingNodeProtocol> MADHierarchicalChildController;
-typedef NSMutableDictionary <NSNumber *,
-							 MADHierarchicalChildController *> MADMutableMapHierarchicalChildControllers;
+typedef NSMutableDictionary <NSNumber *, MADHierarchicalChildController *> MADMutableMapHierarchicalChildControllers;
 
 @interface MADQueryVisualizationViewController () <UIGestureRecognizerDelegate, UIPopoverControllerDelegate, MADQueryVisualizationSchemaPresentationDelegate, MADQueryVisualizationSchemaDelegate, MADViewControllerStandardProtocol>
 
@@ -132,7 +100,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark Static functions and keys
 
 + (instancetype)newQueryVisualizationViewController:(MADocument *)document {
-	id controller = [MADViewController newViewControllerQueryVisulization];
+	id controller = [[UIStoryboard storyboardWithName: @"MADQuery" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier: @"MADStoryboardIDQueryVisulization"];
 	[controller setDocument: document];
 	return controller;
 }
@@ -164,12 +132,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
 		
-		MADMutableMapHierarchicalChildControllers *controllersByObjectID;
-		controllersByObjectID = [[NSMutableDictionary alloc] init];
+		MADMutableMapHierarchicalChildControllers *controllersByObjectID = [[NSMutableDictionary alloc] init];
 		self.controllersByObjectID = controllersByObjectID;
 		
-		NSMutableDictionary <NSNumber *, MADConnectorView *> *connectionViewsByObjectID;
-		connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
+		NSMutableDictionary <NSNumber *, MADConnectorView *> *connectionViewsByObjectID = [[NSMutableDictionary alloc] init];
 		self.connectionViewsByObjectID = connectionViewsByObjectID;
 		
 		NSMutableSet <NSNumber *> *rootTables = [[NSMutableSet alloc] init];
@@ -240,11 +206,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (CGRect)frameOfItemWithObjectID:(int64_t)objectID {
 	MADHierarchicalChildViewDefination *tableDefination;
 	tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:objectID];
-	CGRect result = CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2,
-							   tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
-							   MADSchemaViewDefaultWidth,
-							   MADSchemaViewDefaultHeight);
-	return result;
+	return CGRectMake(tableDefination.center.x - MADSchemaViewDefaultWidth / 2, tableDefination.center.y - MADSchemaViewDefaultHeight / 2,
+					  MADSchemaViewDefaultWidth, MADSchemaViewDefaultHeight);
 }
 
 - (void)setDocument:(MADocument *)document {
@@ -595,14 +558,12 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
 										toView: self.contentView];
 	NSNumber *tableIdentifier = @(tableID);
-	NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-	constraints = [self.constraints objectForKey: tableIdentifier];
+	NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self.constraints objectForKey: tableIdentifier];
 	constraints[keyCenterX].constant = pointInView.x;
 	constraints[keyCenterY].constant = pointInView.y;
 
 	MADHierarchicalChildController *movingController = self.controllersByObjectID[tableIdentifier];
-	[self didMoveFieldRect: movingController
-				  animated: NO];
+	[self didMoveFieldRect: movingController animated: NO];
 	
 	if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		
@@ -618,12 +579,9 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		UIView *gestureView = gestureRecognizer.view;
 		if (gestureView != nil) {
 			[self.contentView bringSubviewToFront:gestureView];
-			NSEnumerator <MADConnectorView *> *views;
-			MADConnectorView *view;
-			NSSet <NSNumber /*MADModelQueryLink*/ *> *queryLinks;
-			queryLinks = [self.document.documentModel.firstQuery linksForQueryTable:tableID];
-			views = self.connectionViewsByObjectID.objectEnumerator;
-			for (view in views) {
+			NSSet <NSNumber /*MADModelQueryLink*/ *> *queryLinks = [self.document.documentModel.firstQuery linksForQueryTable:tableID];
+			NSEnumerator <MADConnectorView *> *views = self.connectionViewsByObjectID.objectEnumerator;
+			for (MADConnectorView *view in views) {
 				if ([queryLinks containsObject:view.key]) {
 					[self.contentView bringSubviewToFront:view];
 				}

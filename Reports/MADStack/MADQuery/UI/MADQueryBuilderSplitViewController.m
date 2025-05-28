@@ -17,73 +17,48 @@
 #import "MADQueryVisualizationViewController.h"
 #import "MADNavigationControllerQueryBuilder.h"
 #import "MADNavigationControllerQueryVisualization.h"
-#import <MADFoundation/madmacros.h>
+
 #import <MAD/MADocument.h>
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADLabelTitle.h>
-
 #import <UIKit/UIStoryboard.h>
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UIPopoverController.h>
-#import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIStoryboardPopoverSegue.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/UIViewControllerTransitionCoordinator.h>
-
-#import <CoreData/NSManagedObjectContext.h>
-
-static NSString * const TextTitleFormat = @"MAD %@";
-static NSString * const TextTitleQuery = @"Query";
-
-static NSString * const SplitViewController = @"MADIdentifierQueryBuilderSplitViewController";
-
-static NSString * const MADStoryboardQuery = @"MADQuery";
-static NSString * const TextRedraw = @"Redraw";
 
 @interface MADQueryBuilderSplitViewController () <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
-	@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
-	@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
-	@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemDisplayToggle;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemDisplayToggle;
 
-	@property (nonatomic, assign) BOOL localEditing;
-	@property (nonatomic, assign) BOOL setupDetail;
-	@property (nonatomic, assign) BOOL setupInitalLayout;
+@property (nonatomic, assign) BOOL localEditing;
+@property (nonatomic, assign) BOOL setupDetail;
+@property (nonatomic, assign) BOOL setupInitalLayout;
 
-	@property (readonly, nonatomic, strong) MADNavigationControllerQueryVisualization *secondaryNavigationController;
-	@property (readonly, nonatomic, strong) MADNavigationControllerQueryBuilder *primaryNavigationController;
-	@property (readonly, nonatomic, strong) MADQueryVisualizationViewController *secondaryViewController;
-	@property (readonly, nonatomic, strong) MADQueryViewController *primaryViewController;
+@property (readonly, nonatomic, strong) MADNavigationControllerQueryVisualization *secondaryNavigationController;
+@property (readonly, nonatomic, strong) MADNavigationControllerQueryBuilder *primaryNavigationController;
+@property (readonly, nonatomic, strong) MADQueryVisualizationViewController *secondaryViewController;
+@property (readonly, nonatomic, strong) MADQueryViewController *primaryViewController;
 
 @end
 
 @implementation MADQueryBuilderSplitViewController
 
 @synthesize document = _document, title = _title;
-@dynamic primaryViewController, secondaryViewController,
-		 primaryNavigationController, secondaryNavigationController;
+@dynamic primaryViewController, secondaryViewController, primaryNavigationController, secondaryNavigationController;
 
 + (void)initialize {
 	[super initialize];
-	
 	if (self != [MADQueryBuilderSplitViewController self]) {
 		@autoreleasepool {
-			UIBarButtonItem <UIAppearance> *appearanceProxy;
-			NSArray <Class <UIAppearanceContainer>> *classes;
-			classes = [[NSArray alloc] initWithObjects: self, nil];
-			appearanceProxy = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:classes];
+			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: self, nil];
+			UIBarButtonItem <UIAppearance> *appearanceProxy = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:classes];
 			appearanceProxy.tintColor = [UIColor whiteColor];
 		}
 	}
 }
 
 + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document {
-	id bundle = [NSBundle mainBundle];
-	id storybard = [UIStoryboard storyboardWithName: MADStoryboardQuery bundle: bundle];
-	id controller = [storybard instantiateViewControllerWithIdentifier:SplitViewController];
+	id controller = [[UIStoryboard storyboardWithName: @"MADQuery" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
 	[((typeof(self))controller) setDocument: document];
 	return controller;
 }
@@ -102,7 +77,7 @@ static NSString * const TextRedraw = @"Redraw";
 		_setupInitalLayout = NO;
 		_localEditing = NO;
 		self.delegate = self;
-
+		
 	}
 	return self;
 }
@@ -123,15 +98,15 @@ static NSString * const TextRedraw = @"Redraw";
 	[super viewWillLayoutSubviews];
 	
 	if (!_setupInitalLayout) {
-
+		
 		UINavigationController *navigationController;
 		UIBarButtonItem *buttonSQL;
-
+		
 		navigationController = self.navigationController;
 		buttonSQL = _barButtonItemSQL;
-
+		
 		buttonSQL.tintColor = [UIColor whiteColor];
-
+		
 		_setupInitalLayout = YES;
 	}
 }
@@ -144,9 +119,7 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 + (NSString *)Title {
-	NSString *localizedSuffix = NSLocalizedString(TextTitleQuery, TextTitleQuery);
-	id title = [[NSString alloc] initWithFormat: TextTitleFormat, localizedSuffix];
-	return title;
+	return [[NSString alloc] initWithFormat: @"MAD %@", NSLocalizedString(@"Query", @"Query")];
 }
 
 - (NSString *)title {
@@ -177,24 +150,16 @@ static NSString * const TextRedraw = @"Redraw";
 }
 
 - (void)layoutForUnlicensedUser:(NSNumber *)animated {
-
-	BOOL animate;
-	NSMutableArray<__kindof UIBarButtonItem *> *toolbarItemsLimited;
-	NSArray<__kindof UIBarButtonItem *> *toolbarItemsFull, *toolbarItemsPremium;
-	UIBarButtonItem *barButtonItemRevealQuery;
 	
-	animate = animated.boolValue;
-	
-	toolbarItemsFull = self.toolbarItems;
-	toolbarItemsLimited = toolbarItemsFull.mutableCopy;
+	UIBarButtonItem *barButtonItemRevealQuery = nil;
+	BOOL animate = animated.boolValue;
+	NSArray<__kindof UIBarButtonItem *> *toolbarItemsFull = self.toolbarItems;
+	NSMutableArray<__kindof UIBarButtonItem *> *toolbarItemsLimited = toolbarItemsFull.mutableCopy;
 	toolbarItemsFull = nil;
 	
-	
-	toolbarItemsPremium = [[NSArray alloc] initWithObjects: barButtonItemRevealQuery, nil];
+	NSArray<__kindof UIBarButtonItem *> *toolbarItemsPremium = [[NSArray alloc] initWithObjects: barButtonItemRevealQuery, nil];
 	[toolbarItemsLimited removeObjectsInArray:toolbarItemsPremium];
 	toolbarItemsPremium = nil;
-	
-	barButtonItemRevealQuery = nil;
 	
 	[self setToolbarItems: toolbarItemsLimited animated: animate];
 	
@@ -281,9 +246,9 @@ static NSString * const TextRedraw = @"Redraw";
 		}
 #pragma clang diagnostic pop
 	}
-
-
-
+	
+	
+	
 }
 
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
@@ -295,8 +260,8 @@ static NSString * const TextRedraw = @"Redraw";
 		return UISplitViewControllerDisplayModeAllVisible;
 #pragma clang diagnostic pop
 	}
-
-
+	
+	
 }
 
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {
@@ -318,32 +283,24 @@ static NSString * const TextRedraw = @"Redraw";
 	[self.navigationController presentViewController:vc animated:YES completion:^{
 		
 	}];
-
+	
 	return YES;
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController
-   showsecondaryViewController:(UIViewController *)vc
+showsecondaryViewController:(UIViewController *)vc
 					 sender:(id)sender {
-
-
+	
+	
 	return NO;
 }
 
 - (void)presentationTransitionWillBegin {
-	// Add a custom dimming view behind the presented view controller's view
-	//[[self containerView] addSubview:_dimmingView];
-	//[_dimmingView addSubview:[[self presentedViewController] view]];
-	
-	// Use the transition coordinator to set up the animations.
-	id <UIViewControllerTransitionCoordinator> transitionCoordinator =
-	[[self presentingViewController] transitionCoordinator];
-	
-	// Fade in the dimming view during the transition.
+	id <UIViewControllerTransitionCoordinator> transitionCoordinator = [[self presentingViewController] transitionCoordinator];
 	[self.view setAlpha:0.0];
 	[transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-		 [self.view setAlpha:1.0];
-	 } completion:nil];
+		[self.view setAlpha:1.0];
+	} completion:nil];
 }
 
 
@@ -355,19 +312,12 @@ static NSString * const TextRedraw = @"Redraw";
 	return splitViewController.primaryNavigationController;
 }
 
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController
-	collapseSecondaryViewController:(UIViewController *)secondaryViewController
-		  ontoPrimaryViewController:(UIViewController *)primaryViewController {
-
-	return YES; // Query visualization is not needed.
-	
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
+	return YES;
 }
 
-- (UIViewController *)splitViewController:(UISplitViewController *)splitViewController
-		separateSecondaryViewControllerFromPrimaryViewController:(UIViewController *)primaryViewController {
-
+- (UIViewController *)splitViewController:(UISplitViewController *)splitViewController separateSecondaryViewControllerFromPrimaryViewController:(UIViewController *)primaryViewController {
 	return nil;
-
 }
 
 #pragma mark -
@@ -376,9 +326,8 @@ static NSString * const TextRedraw = @"Redraw";
 - (void)setDocument:(MADocument *)document {
 	if (document != _document) {
 		_document = document;
-		UIViewController *childViewController;
 		NSArray<__kindof UIViewController *> *childViewControllers = self.childViewControllers;
-		for (childViewController in childViewControllers) {
+		for (UIViewController *childViewController in childViewControllers) {
 			if ([childViewController conformsToProtocol:@protocol(MADViewControllerDocumentProtocol)]) {
 				[((id <MADViewControllerDocumentProtocol>)childViewController) setDocument: self.document];
 			}
@@ -386,6 +335,6 @@ static NSString * const TextRedraw = @"Redraw";
 	}
 }
 
-- (IBAction)barButtonItemDisplayToggle:(id)sender {
-}
+- (IBAction)barButtonItemDisplayToggle:(id)sender { }
+
 @end

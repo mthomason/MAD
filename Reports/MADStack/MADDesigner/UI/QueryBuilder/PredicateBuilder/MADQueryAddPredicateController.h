@@ -30,31 +30,26 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @class MADocument;
 
-@interface MADQueryAddPredicateController : UITableViewController
-	<UITableViewDelegate,
-		MADTableViewControllerOpperatorsDelegate,
-		MADQueryChooseFieldProtocol,
-		MADQueryValueFromFieldControllerDelegate>
+@interface MADQueryAddPredicateController : UITableViewController <UITableViewDelegate, MADTableViewControllerOpperatorsDelegate, MADQueryChooseFieldProtocol, MADQueryValueFromFieldControllerDelegate>
 
 
-	@property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateProtocol,
-													MADViewControllerStandardProtocol> queryPredicateDelegate;
-	@property (nonatomic, weak)     MADocument *document;
+@property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateProtocol, MADViewControllerStandardProtocol> queryPredicateDelegate;
+@property (nonatomic, weak)     MADocument *document;
 
-	@property (nonatomic, assign)   MNSPredicatePart currentlyEditingPart;
-	@property (nonatomic, assign)   MADPredicateOperator predicateOperator;
+@property (nonatomic, assign)   MNSPredicatePart currentlyEditingPart;
+@property (nonatomic, assign)   MADPredicateOperator predicateOperator;
 
-	@property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellLeftSide;
-	@property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellRightSide;
-	@property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellOperator;
+@property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellLeftSide;
+@property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellRightSide;
+@property (nonatomic, weak)     IBOutlet UITableViewCell *tableViewCellOperator;
 
-	@property (nonatomic, copy)     NSString *leftValue;
-	@property (nonatomic, copy)     NSString *rightValue;
-	@property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldLeftID;
-	@property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldRightID;
+@property (nonatomic, copy)     NSString *leftValue;
+@property (nonatomic, copy)     NSString *rightValue;
+@property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldLeftID;
+@property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldRightID;
 
-	- (IBAction)save:(id)sender;
-	- (IBAction)cancel:(id)sender;
+- (IBAction)save:(id)sender;
+- (IBAction)cancel:(id)sender;
 
 @end
 

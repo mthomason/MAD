@@ -24,7 +24,6 @@
 	if (self = [super initWithFrame:frame]) {
 		
 		[self setMinimumTrackImage:[UIImage new] forState: UIControlStateNormal];
-		
 		[self setMaximumTrackImage:[UIImage new] forState: UIControlStateNormal];
 		
 		self.maximumValue = 0.0;
@@ -33,7 +32,7 @@
 		self.continuous = YES;
 		self.tintColor = [MADColorEverydayApps newColorRed];
 		self.backgroundColor = [UIColor clearColor];
-		[self setThumbImage: [self imageEnabled] forState: UIControlStateNormal];
+		[self setThumbImage: [UIImage imageNamed:@"MTSliderThumbRotate"] forState: UIControlStateNormal];
 		
 	}
 	return self;

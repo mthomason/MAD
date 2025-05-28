@@ -55,13 +55,10 @@
 
 - (void)start {
 	[self.credentialQueue cancelAllOperations];
-	
-	
-	MADOperationCreateDocument *createDocument;
-	createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.filename
-													   documentsDirectory: self.directory
-													   databaseConnection: self.connection
-														   viewController: self.viewController];
+	MADOperationCreateDocument *createDocument = [[MADOperationCreateDocument alloc] initWithFilename: self.filename
+																				   documentsDirectory: self.directory
+																				   databaseConnection: self.connection
+																					   viewController: self.viewController];
 	[createDocument addObserver:self];
 	[self.credentialQueue addOperation:createDocument];
 }
