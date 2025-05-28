@@ -15,8 +15,7 @@
 
 - (UIWindow *)safeKeyWindow {
 	for (UIScene *scene in self.connectedScenes) {
-		if (scene.activationState == UISceneActivationStateForegroundActive &&
-			[scene isKindOfClass:[UIWindowScene class]]) {
+		if (scene.activationState == UISceneActivationStateForegroundActive && [scene isKindOfClass:[UIWindowScene class]]) {
 			for (UIWindow *window in ((UIWindowScene *)scene).windows) {
 				if (window.isKeyWindow) {
 					return window;

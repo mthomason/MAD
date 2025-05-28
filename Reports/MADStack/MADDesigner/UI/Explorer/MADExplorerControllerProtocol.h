@@ -13,7 +13,7 @@
 
 	- (void)openDocumentAtURL:(NSURL *)url;
 	- (NSString *)mimeTypeForDocumentUTI:(NSString *)documentType;
-	- (NSArray *)supportedUTIs;
+	- (NSArray <NSString *> *)supportedUTIs;
 
 @end
 

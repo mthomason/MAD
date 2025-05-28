@@ -17,6 +17,7 @@
 #import "MADQueryVisualizationViewController.h"
 #import "MADNavigationControllerQueryBuilder.h"
 #import "MADNavigationControllerQueryVisualization.h"
+#import <MADFoundation/madmacros.h>
 #import <MAD/MADocument.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -108,7 +109,14 @@ static NSString * const TextRedraw = @"Redraw";
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+	if (@available(iOS 14.0, *)) {
+		self.preferredDisplayMode = UISplitViewControllerDisplayModeOneBesideSecondary;
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+#pragma clang diagnostic pop
+	}
 }
 
 - (void)viewWillLayoutSubviews {
@@ -248,28 +256,46 @@ static NSString * const TextRedraw = @"Redraw";
 
 // This method allows a client to update any bar button items etc.
 - (void)splitViewController:(UISplitViewController *)svc willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
-
-	switch (displayMode) {
-
-		case UISplitViewControllerDisplayModeAutomatic:
-			break;
-
-		case UISplitViewControllerDisplayModePrimaryHidden:
-			break;
-
-		case UISplitViewControllerDisplayModeAllVisible:
-			break;
-
-		case UISplitViewControllerDisplayModePrimaryOverlay:
-			break;
-
-		default:
-			break;
+	if (@available(iOS 14.0, *)) {
+		switch (displayMode) {
+			case UISplitViewControllerDisplayModeAutomatic:
+			case UISplitViewControllerDisplayModeSecondaryOnly:
+			case UISplitViewControllerDisplayModeOneBesideSecondary:
+			case UISplitViewControllerDisplayModeOneOverSecondary:
+			case UISplitViewControllerDisplayModeTwoBesideSecondary:
+			case UISplitViewControllerDisplayModeTwoOverSecondary:
+			case UISplitViewControllerDisplayModeTwoDisplaceSecondary:
+			default:
+				break;
+		}
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		switch (displayMode) {
+			case UISplitViewControllerDisplayModeAutomatic:
+			case UISplitViewControllerDisplayModePrimaryHidden:
+			case UISplitViewControllerDisplayModeAllVisible:
+			case UISplitViewControllerDisplayModePrimaryOverlay:
+			default:
+				break;
+		}
+#pragma clang diagnostic pop
 	}
+
+
+
 }
 
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
-	return UISplitViewControllerDisplayModeAllVisible;
+	if (@available(iOS 14.0, *)) {
+		return UISplitViewControllerDisplayModeOneBesideSecondary;
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		return UISplitViewControllerDisplayModeAllVisible;
+#pragma clang diagnostic pop
+	}
+
 
 }
 

@@ -14,7 +14,7 @@
 @interface UIApplication (Helpers)
 
 + (__kindof UIViewController *)topViewController NS_RETURNS_NOT_RETAINED;
-- (UIWindow *)safeKeyWindow;
+@property(nonatomic,readonly) UIWindow *safeKeyWindow;
 
 @end
 

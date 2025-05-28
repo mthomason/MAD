@@ -51,6 +51,7 @@
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/MADProgressView.h>
+#import <MADCocoaExtensions/UIApplication+Helpers.h>
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
@@ -216,7 +217,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	
 	if (self = [super initWithCoder:aDecoder]) {
-		
 		_shouldShowAddDocumentPopover = YES;
 		_getUserCloudPrefsFirstCall = YES;
 		_infoControllerOnScreen = NO;
@@ -777,7 +777,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-		UINavigationController *navController = (UINavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+		
+		UINavigationController *navController = (UINavigationController *)[UIApplication sharedApplication].safeKeyWindow.rootViewController;
 		[navController popToRootViewControllerAnimated:YES];
 		
 		UIAlertController *signedOutController = [MADAlertController newAlertControllerNotifyCloudSignOut:^(UIAlertAction *action) {
@@ -846,7 +847,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	}
 }
 
-- (NSArray *)supportedUTIs {
+- (NSArray <NSString *> *)supportedUTIs {
 	return [[NSArray alloc] initWithObjects: MADUtiType, nil];
 }
 
@@ -885,6 +886,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	MADTabBarController *tabBarController = [MADTabBarController newTabBarController:document prompt:title];
 	tabBarController.document = document;
 	tabBarController.viewControllerDelegate = self;
+	//tabBarController.navigationItem.prompt = title;
 	
 	[self.navigationController pushViewController:tabBarController animated:YES];
 }

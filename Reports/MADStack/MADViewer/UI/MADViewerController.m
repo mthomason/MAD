@@ -1110,10 +1110,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0000f;
 - (void)updateNavigationPrompt:(BOOL)animated {
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
 		[UIView setAnimationsEnabled:animated];
-		self.tabBarController.navigationItem.prompt = self.document.fileURL.lastPathComponent;
+		self.navigationItem.prompt = self.document.fileURL.lastPathComponent;
 		[UIView setAnimationsEnabled:YES];
 	} else {
-		self.tabBarController.navigationItem.prompt = nil;
+		self.navigationItem.prompt = nil;
 	}
 }
 
