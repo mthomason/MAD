@@ -614,7 +614,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	MADQueryVisualizationModel *queryVisualizationModel = [[MADQueryVisualizationModel alloc] initWithQuery:query];
 	MTLinkedList *topologicallySortedTables = queryVisualizationModel.topologicallySortedTables;
 	
-	
 	typeof(self) __weak wself = self;
 	
 	NSMutableArray <MADQueryTableViewController *> *viewControllers = [[NSMutableArray alloc] init];

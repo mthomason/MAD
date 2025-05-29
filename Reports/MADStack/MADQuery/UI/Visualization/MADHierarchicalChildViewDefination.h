@@ -14,10 +14,10 @@
 
 @interface MADHierarchicalChildViewDefination : NSObject <NSCopying, NSSecureCoding>
 
-+ (instancetype)newTableDefination;
-
 @property (nonatomic, assign) CGPoint center;
 @property (nonatomic, assign, getter=isRoot) BOOL root;
+
++ (instancetype)newTableDefination;
 
 @end
 

@@ -54,9 +54,7 @@ static NSString * const keyRoot = @"r";
 }
 
 - (NSString *)debugDescription {
-	return [[NSString alloc] initWithFormat:@"%@ <%@::%@>",
-			NSStringFromClass([self class]),
-			NSStringFromCGPoint(_center), _root ? @"Root" : @"Leaf"];
+	return [NSString stringWithFormat:@"%@ <%@::%@>", NSStringFromClass([self class]), NSStringFromCGPoint(_center), _root ? @"Root" : @"Leaf"];
 }
 
 @end

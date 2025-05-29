@@ -14,22 +14,16 @@
 
 @class MADHierarchicalChildViewDefination, MADOperation, NSManagedObjectID;
 
-@interface MADHierarchicalDisplayModel : NSObject
-    <NSCoding>
+@interface MADHierarchicalDisplayModel : NSObject <NSSecureCoding>
 
-    @property (nonatomic, assign) CGPoint scrollViewContentOffset;
-    @property (nonatomic, assign) CGFloat scrollViewZoomScale;
+@property (nonatomic, assign) CGPoint scrollViewContentOffset;
+@property (nonatomic, assign) CGFloat scrollViewZoomScale;
 
-    - (instancetype)initWithNumberOfTables:(NSUInteger)countTables;
-
-    - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination
-                   forObjectID:(int64_t)objectID;
-
-    - (void)removeTableDefinationForObjectID:(int64_t)objectID;
-
-    - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID;
-
-    + (NSString *)cacheFileNameForFileName:(NSString *)filename;
+- (instancetype)initWithNumberOfTables:(NSUInteger)countTables;
+- (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination forObjectID:(int64_t)objectID;
+- (void)removeTableDefinationForObjectID:(int64_t)objectID;
+- (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID;
++ (NSString *)cacheFileNameForFileName:(NSString *)filename;
 
 @end
 

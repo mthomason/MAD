@@ -48,26 +48,21 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 	titleView.text = NSLocalizedString(@"Group By",
 									   @"Title of form that allows you to choose an item to group other items by...");
 	self.navigationItem.titleView = titleView;
-
-	NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-	NSSortDescriptor *sort;
-	sort = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight))
-										 ascending:YES];
-	NSArray <NSSortDescriptor *> *sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
-	request.sortDescriptors = sortDescriptors;
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
+	NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
+														   ascending:YES];
+	request.sortDescriptors = [NSArray arrayWithObjects:sort, nil];
 	
-	NSFetchedResultsController *frc;
-	frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-											  managedObjectContext: self.document.managedObjectContext
-												sectionNameKeyPath: nil
-														 cacheName: nil];
+	NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+																		  managedObjectContext: self.document.managedObjectContext
+																			sectionNameKeyPath: nil
+																					 cacheName: nil];
 	frc.delegate = self;
 	self.fetchedResultsControllerGroups = frc;
 	
 	NSError *error = nil;
-	[self.fetchedResultsControllerGroups performFetch:&error];
-	if (error != nil) {
+	BOOL fetchResult = [self.fetchedResultsControllerGroups performFetch:&error];
+	if (!fetchResult && error != nil) {
 		[NSError presentError: error onViewController: self completion: NULL];
 	}
 	frc = nil;
@@ -237,10 +232,9 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 			RptqQueryGroup *queryGroup = [self.fetchedResultsControllerGroups objectAtIndexPath:[self updatedIndexPath:indexPath]];
 			NSString *fieldNameNice = [queryGroup fieldNameNice];
 			NSInteger groupLevel = [queryGroup location];
-			NSString *textLabel = fieldNameNice == nil ?
+			(cell.textLabel).text = fieldNameNice == nil ?
 					[NSString stringWithFormat:@"Group %ld", (long)groupLevel] :
 					[NSString stringWithFormat:@"Group %ld (%@)", (long)groupLevel, fieldNameNice];
-			(cell.textLabel).text = textLabel;
 			if (_aggregateGroupType == MTAggregateGroupByTypeSection &&
 										indexPath.row - 2 == (NSInteger)_aggregateGroupNumber) {
 				cell.accessoryType = UITableViewCellAccessoryCheckmark;

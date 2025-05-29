@@ -314,8 +314,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	if (self = [super initWithCoder:aDecoder]) {
 		
-		NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
-		borderAppliedToView = [[NSMutableDictionary alloc] init];
+		NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView = [[NSMutableDictionary alloc] init];
 		self.borderAppliedToView = borderAppliedToView;
 		_identifierJustDisplayed = -1;
 		_boundsOnDisappear = CGRectZero;
