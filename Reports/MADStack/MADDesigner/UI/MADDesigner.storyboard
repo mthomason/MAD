@@ -242,7 +242,7 @@
                                     </toolbar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8TZ-dQ-78r">
                                         <rect key="frame" x="0.0" y="24" width="390" height="820"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MTSchemaFieldCellIdentifier" rowHeight="22" id="dBI-d3-jvF" customClass="MTSchemaFieldCell">
                                                 <rect key="frame" x="0.0" y="50" width="390" height="22"/>
@@ -262,6 +262,7 @@
                                                         </label>
                                                     </subviews>
                                                 </tableViewCellContentView>
+                                                <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstItem="c2W-9c-j0G" firstAttribute="leading" secondItem="dBI-d3-jvF" secondAttribute="leading" constant="20" id="Gvy-XQ-7j2"/>
                                                     <constraint firstItem="c2W-9c-j0G" firstAttribute="top" secondItem="dBI-d3-jvF" secondAttribute="top" id="lqw-VV-0Gp"/>
@@ -274,7 +275,7 @@
                                         </prototypes>
                                     </tableView>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="8TZ-dQ-78r" firstAttribute="top" secondItem="mOi-BF-VzE" secondAttribute="bottom" id="9Sh-aN-RRF"/>
                                     <constraint firstItem="8TZ-dQ-78r" firstAttribute="trailing" secondItem="KMv-5c-f7e" secondAttribute="trailing" id="C8T-6f-vSh"/>
@@ -289,6 +290,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="KMv-5c-f7e" firstAttribute="top" secondItem="X8d-qj-glr" secondAttribute="top" id="6wu-kl-DSG"/>
                             <constraint firstAttribute="trailing" secondItem="KMv-5c-f7e" secondAttribute="trailing" id="LBv-bW-ZxA"/>
@@ -318,7 +320,13 @@
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="tertiarySystemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
