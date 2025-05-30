@@ -17,11 +17,11 @@
 
 @interface MADQueryVisualizationSchemaPresentationController : UIPresentationController
 
-	- (instancetype)initWithObjectID:(int64_t)objectID
-			 presentedViewController:(UIViewController *)presentedViewController
-			presentingViewController:(UIViewController *)presentingViewController;
+@property (nonatomic, weak) id <MADQueryVisualizationSchemaPresentationDelegate> delegatePresentation;
 
-	@property (nonatomic, weak) id <MADQueryVisualizationSchemaPresentationDelegate> delegatePresentation;
+- (instancetype)initWithObjectID:(int64_t)objectID
+		 presentedViewController:(UIViewController *)presentedViewController
+		presentingViewController:(UIViewController *)presentingViewController;
 
 @end
 

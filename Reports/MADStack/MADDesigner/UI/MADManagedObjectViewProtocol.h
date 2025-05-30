@@ -9,6 +9,8 @@
 #ifndef MAD_MADManagedObjectViewProtocol_h
 #define MAD_MADManagedObjectViewProtocol_h
 
+#import <Foundation/NSObject.h>
+
 @class NSManagedObjectID;
 
 @protocol MADManagedObjectViewProtocol <NSObject>

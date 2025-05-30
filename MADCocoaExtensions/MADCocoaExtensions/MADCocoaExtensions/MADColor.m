@@ -12,6 +12,12 @@
 
 const CGFloat MADF255 = 255.00000000f;
 
+static inline Byte byteFromColor(CGFloat);
+
+static inline Byte byteFromColor(CGFloat color) {
+	return (Byte)(color * 0xFF) & 0xFF;
+};
+
 UIColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b) {
 	return [[UIColor alloc] initWithRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:1.00000000f];
 }
@@ -44,13 +50,11 @@ UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
 	
 	switch (self.colorSpaceModel) {
 		case kCGColorSpaceModelRGB:
-			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
-												self.redByte, self.greenByte, self.blueByte];
+			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X", self.redByte, self.greenByte, self.blueByte];
 			break;
 			
 		case kCGColorSpaceModelMonochrome:
-			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
-												self.whiteByte, self.whiteByte, self.whiteByte];
+			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X", self.whiteByte, self.whiteByte, self.whiteByte];
 			break;
 			
 		default:
@@ -85,11 +89,6 @@ UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
 	return CGColorSpaceGetModel(CGColorGetColorSpace(self.color.CGColor));
 }
 
-static inline Byte byteFromColor(CGFloat color);
-static inline Byte byteFromColor(CGFloat color) {
-	return (Byte)(color * 0xFF) & 0xFF;
-};
-
 - (Byte) redByte { return byteFromColor(self.red); }
 - (Byte) greenByte { return byteFromColor(self.green); }
 - (Byte) blueByte { return byteFromColor(self.blue); }
@@ -121,8 +120,7 @@ static inline Byte byteFromColor(CGFloat color) {
 	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -green");
 	CGFloat g = 0.0f;
 	
-	switch (self.colorSpaceModel)
-	{
+	switch (self.colorSpaceModel) {
 		case kCGColorSpaceModelRGB:
 			[self.color getRed:NULL green:&g blue:NULL alpha:NULL];
 			break;
@@ -139,8 +137,7 @@ static inline Byte byteFromColor(CGFloat color) {
 	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -blue");
 	CGFloat b = 0.0f;
 	
-	switch (self.colorSpaceModel)
-	{
+	switch (self.colorSpaceModel) {
 		case kCGColorSpaceModelRGB:
 			[self.color getRed:NULL green:NULL blue:&b alpha:NULL];
 			break;
@@ -218,7 +215,6 @@ static inline Byte byteFromColor(CGFloat color) {
 - (CGFloat)brightness {
 	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -brightness");
 	CGFloat v = 0.0f;
-	
 	switch (self.colorSpaceModel) {
 		case kCGColorSpaceModelRGB:
 			[self.color getHue:NULL saturation:NULL brightness: &v alpha:NULL];
@@ -236,7 +232,6 @@ static inline Byte byteFromColor(CGFloat color) {
 
 - (CGFloat)luminance {
 	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use -luminance");
-	
 	CGFloat r, g, b;
 	if (![self.color getRed: &r green: &g blue: &b alpha:NULL])
 		return 0.0f;

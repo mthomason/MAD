@@ -7,7 +7,6 @@
 //
 /*
 #import "MADFileExplorerFlowLayoutDelegate.h"
-#import <Foundation/Foundation.h>
 #import <UIKit/UILabel.h>
 #import <MADFileManager/MADMetaData.h>
 #import "MADExplorerCellTitle.h"

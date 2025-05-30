@@ -52,7 +52,7 @@ static const CGFloat contentViewHeight = 1024.0;
 	self.translatesAutoresizingMaskIntoConstraints = NO;
 	self.autoresizesSubviews = NO;
 	self.delegate = self;
-	self.backgroundColor = [[UIColor systemGroupedBackgroundColor] colorWithAlphaComponent: 0.02];
+	self.backgroundColor = [UIColor systemGroupedBackgroundColor];
 	self.opaque = NO;
 	
 	self.contentSize = CGSizeMake(contentViewWidth, contentViewHeight);
@@ -66,22 +66,17 @@ static const CGFloat contentViewHeight = 1024.0;
 	NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint newLayoutConstraintWidthForView:contentView
 																							   andWidth:contentViewWidth];
 	
-	NSDictionary *viewDictionary;
-	viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:contentView, @"cv", nil];
-	NSArray <NSLayoutConstraint *> *layoutConstraintCenterX;
-	layoutConstraintCenterX = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[cv]|"
-																	  options: NSLayoutFormatAlignAllCenterX
-																	  metrics: 0
-																		views: viewDictionary];
-	NSArray <NSLayoutConstraint *> *layoutConstraintCenterY;
-	layoutConstraintCenterY = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[cv]|"
-																	  options: NSLayoutFormatAlignAllCenterY
-																	  metrics: 0
-																		views: viewDictionary];
-	
-	NSArray <NSLayoutConstraint *> *containerViewConstraints;
-	containerViewConstraints = [[NSArray alloc] initWithObjects: layoutConstraintSizeHeight,
-																 layoutConstraintSizeWidth, nil];
+	NSDictionary <NSString *, MADQueryVisualizationContentView *> *viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:contentView, @"cv", nil];
+	NSArray <NSLayoutConstraint *> *layoutConstraintCenterX = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[cv]|"
+																									  options: NSLayoutFormatAlignAllCenterX
+																									  metrics: 0
+																										views: viewDictionary];
+	NSArray <NSLayoutConstraint *> *layoutConstraintCenterY = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[cv]|"
+																									  options: NSLayoutFormatAlignAllCenterY
+																									  metrics: 0
+																										views: viewDictionary];
+
+	NSArray <NSLayoutConstraint *> *containerViewConstraints = [[NSArray alloc] initWithObjects: layoutConstraintSizeHeight, layoutConstraintSizeWidth, nil];
 	containerViewConstraints = [containerViewConstraints arrayByAddingObjectsFromArray:layoutConstraintCenterX];
 	containerViewConstraints = [containerViewConstraints arrayByAddingObjectsFromArray:layoutConstraintCenterY];
 	
@@ -96,9 +91,7 @@ static const CGFloat contentViewHeight = 1024.0;
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	//[self updateCache];
-}
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate { }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
 

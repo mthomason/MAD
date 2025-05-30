@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment version="4864" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -110,9 +111,9 @@
             <objects>
                 <tableViewController storyboardIdentifier="MADSectionLayoutSettingsID" id="7dU-9p-e74" customClass="MADDesignerSectionLayoutController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="d9l-91-N2c">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="697"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
                             <tableViewSection id="Wdl-j1-yl2">
                                 <cells>
@@ -135,12 +136,11 @@
                                                         <constraint firstAttribute="width" constant="137" id="J73-ae-xa8"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <nil key="textColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="hFc-t7-zDW" secondAttribute="trailing" constant="32" id="I7X-5j-Y89"/>
                                             <constraint firstItem="yZq-8w-W5I" firstAttribute="centerY" secondItem="hFc-t7-zDW" secondAttribute="centerY" id="ZOo-oX-7KW"/>
@@ -167,12 +167,11 @@
                                                         <constraint firstAttribute="width" constant="137" id="iFY-UG-SmP"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <nil key="textColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="abz-yC-AFZ" firstAttribute="centerY" secondItem="ijh-KG-gaR" secondAttribute="centerY" id="2sd-fG-rx4"/>
                                             <constraint firstItem="ijh-KG-gaR" firstAttribute="centerY" secondItem="HkK-u2-4h9" secondAttribute="centerY" id="mCb-OZ-YJC"/>
@@ -243,7 +242,7 @@
                                     </toolbar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="8TZ-dQ-78r">
                                         <rect key="frame" x="0.0" y="24" width="390" height="820"/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MTSchemaFieldCellIdentifier" rowHeight="22" id="dBI-d3-jvF" customClass="MTSchemaFieldCell">
                                                 <rect key="frame" x="0.0" y="50" width="390" height="22"/>
@@ -258,7 +257,7 @@
                                                                 <constraint firstAttribute="width" constant="125" id="pwa-z3-2xp"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                            <color key="textColor" systemColor="darkTextColor"/>
+                                                            <nil key="textColor"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </label>
                                                     </subviews>
@@ -316,11 +315,11 @@
     </scenes>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
     <resources>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

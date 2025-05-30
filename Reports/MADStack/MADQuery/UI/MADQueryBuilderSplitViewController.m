@@ -287,8 +287,7 @@
 	return YES;
 }
 
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController
-showsecondaryViewController:(UIViewController *)vc
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController showsecondaryViewController:(UIViewController *)vc
 					 sender:(id)sender {
 	
 	

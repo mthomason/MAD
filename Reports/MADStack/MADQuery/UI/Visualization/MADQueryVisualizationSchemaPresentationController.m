@@ -18,12 +18,10 @@
 	int64_t _objectID;
 }
 
-
 - (instancetype)initWithObjectID:(int64_t)objectID
 		 presentedViewController:(UIViewController *)presentedViewController
 		presentingViewController:(UIViewController *)presentingViewController {
-	if (self = [super initWithPresentedViewController: presentedViewController
-							 presentingViewController: presentingViewController]) {
+	if (self = [super initWithPresentedViewController: presentedViewController presentingViewController: presentingViewController]) {
 		_objectID = objectID;
 	}
 	return self;

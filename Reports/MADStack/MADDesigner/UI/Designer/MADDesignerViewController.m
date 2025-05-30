@@ -489,7 +489,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	[self.view.scroller addGestureRecognizer:tap];
 	self.view.scroller.delegate = self;
 	self.strayTouchGesture = tap;
-		
 	
 	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view containerLeft: self.view.scroller.container];
 	constraintContentLeft.priority = 999;

@@ -7,6 +7,18 @@
 //
 
 #import "MADQueryVisualizationCacheManager.h"
+#import "MADHierarchicalDisplayModel.h"
+#import "MADQueryVisualizationModel.h"
+#import "MADManagedObjectViewProtocol.h"
+#import "MADHierarchicalGroupingNodeProtocol.h"
+#import "MADHierarchicalChildViewDefination.h"
+#import "MADOperationArchiveData.h"
+#import "MADCacheManager.h"
+#import "madlog.h"
+
+#import <MADDataStructures/MTVertex.h>
+#import <MADDataStructures/MTLinkedList.h>
+#import <MADDataStructures/MTPair.h>
 
 #import <Foundation/NSValue.h>
 #import <Foundation/NSException.h>
@@ -15,23 +27,10 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSKeyedArchiver.h>
 
-#import <MADDataStructures/MTVertex.h>
-#import <MADDataStructures/MTLinkedList.h>
-#import <MADDataStructures/MTPair.h>
-
-#import "MADHierarchicalDisplayModel.h"
-#import "MADQueryVisualizationModel.h"
-#import "MADManagedObjectViewProtocol.h"
-#import "MADHierarchicalGroupingNodeProtocol.h"
-#import "MADHierarchicalChildViewDefination.h"
-#import "MADOperationArchiveData.h"
-#import "MADCacheManager.h"
-
-
 @interface MADQueryVisualizationCacheManager ()
 
-	@property (readwrite, nonatomic, strong) NSURL *url;
-	@property (readwrite, nonatomic, strong) MADHierarchicalDisplayModel *cacheData;
+@property (readwrite, nonatomic, strong) NSURL *url;
+@property (readwrite, nonatomic, strong) MADHierarchicalDisplayModel *cacheData;
 
 @end
 
@@ -50,8 +49,6 @@
 - (void)updateCacheWithQuery:(MADModelQuery *)query contentOffset:(CGPoint)contentOffset
 				   zoomScale:(CGFloat)zoomScale center:(CGPoint (^)(NSNumber *))center {
 	
-	NSArray <NSNumber *> *startingPoints;
-	
 	MADQueryVisualizationModel *queryDef = [[MADQueryVisualizationModel alloc] initWithQuery:query];
 	MTLinkedList *topologicallySortedTables = queryDef.topologicallySortedTables;
 	
@@ -68,9 +65,7 @@
 			
 			MADHierarchicalChildViewDefination *tableModel = [[MADHierarchicalChildViewDefination alloc] init];
 			tableModel.center = center(tableID);
-			
-			startingPoints = queryDef.startingPoints;
-			tableModel.root = [startingPoints containsObject: tableID];
+			tableModel.root = [queryDef.startingPoints containsObject: tableID];
 			[cacheData addTableDefination:tableModel forObjectID: tableID.longLongValue];
 		}
 	}
@@ -84,14 +79,18 @@
 }
 
 - (MADHierarchicalDisplayModel *)loadCache {
+
 	MADHierarchicalDisplayModel *result;
-	NSError * _Nullable __autoreleasing error = nil;
-	NSData *data = [[NSData alloc] initWithContentsOfURL: self.url
-												 options: NSDataReadingUncached
-												   error: &error];
+	NSError *error = nil;
+	NSData *data = [[NSData alloc] initWithContentsOfURL: self.url options: NSDataReadingUncached error: &error];
 	if (error != nil) {
-		[[NSFileManager defaultManager] removeItemAtURL: self.url
-												  error: &error];
+		os_log_info(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, error);
+		NSError *removeItemError = nil;
+		BOOL removeItemStatus = [[NSFileManager defaultManager] removeItemAtURL: self.url
+																		  error: &removeItemError];
+		if (!removeItemStatus && removeItemError != nil) {
+			os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, removeItemError);
+		}
 		result = nil;
 	} else {
 		@try {
@@ -100,11 +99,17 @@
 														  error: nil];
 		} @catch (NSException *exception) {
 			NSError *cleanup = nil;
-			[[NSFileManager defaultManager] removeItemAtURL: self.url
-													  error: &cleanup];
+			BOOL cleanupStatus = [[NSFileManager defaultManager] removeItemAtURL: self.url error: &cleanup];
+			if (!cleanupStatus && cleanup != nil) {
+				os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, cleanup);
+			}
 		} @finally {
 			if (![result isKindOfClass:[MADHierarchicalDisplayModel class]] || result == nil) {
-				[[NSFileManager defaultManager] removeItemAtURL:self.url error:&error];
+				NSError *errorRemove = nil;
+				BOOL removeStatus = [[NSFileManager defaultManager] removeItemAtURL:self.url error:&errorRemove];
+				if (!removeStatus && errorRemove != nil) {
+					os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, errorRemove);
+				}
 				result = nil;
 			}
 		}

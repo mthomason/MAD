@@ -60,16 +60,16 @@ static NSString *CacheExt                    = @"qvvc";
 }
 
 - (void)addTableDefination:(MADHierarchicalChildViewDefination *)tableDefination forObjectID:(int64_t)objectID {
-    MADHierarchicalChildViewDefination *copyTableDefination = [tableDefination copyWithZone:nil];
-    self.tableDefinations[@(objectID)] = copyTableDefination;
+	MADHierarchicalChildViewDefination *copyTableDefination = [tableDefination copyWithZone:nil];
+	self.tableDefinations[@(objectID)] = copyTableDefination;
 }
 
 - (MADHierarchicalChildViewDefination *)tableDefinationForObjectID:(int64_t)objectID {
-    return self.tableDefinations[@(objectID)];
+	return self.tableDefinations[@(objectID)];
 }
 
 - (void)removeTableDefinationForObjectID:(int64_t)objectID {
-    [self.tableDefinations removeObjectForKey: @(objectID)];
+	[self.tableDefinations removeObjectForKey: @(objectID)];
 }
 
 + (NSString *)cacheFileNameForFileName:(NSString *)filename {

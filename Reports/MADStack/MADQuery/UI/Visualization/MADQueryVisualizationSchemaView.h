@@ -9,11 +9,10 @@
 #ifndef Reports_MADQueryVisualizationSchemaView_h
 #define Reports_MADQueryVisualizationSchemaView_h
 
-#import <UIKit/UIView.h>
 #import "MADManagedObjectViewProtocol.h"
+#import <UIKit/UIView.h>
 
-@interface MADQueryVisualizationSchemaView : UIView
-	<MADManagedObjectViewProtocol>
+@interface MADQueryVisualizationSchemaView : UIView <MADManagedObjectViewProtocol>
 
 @end
 

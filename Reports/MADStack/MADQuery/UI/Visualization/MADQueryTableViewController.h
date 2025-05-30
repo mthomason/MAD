@@ -21,19 +21,17 @@
 extern const CGFloat MADSchemaViewDefaultWidth;
 extern const CGFloat MADSchemaViewDefaultHeight;
 
-@interface MADQueryTableViewController : UIViewController
-	<MADViewControllerDocumentProtocol,
-		MADManagedObjectViewProtocol,
-		MADHierarchicalGroupingNodeProtocol>
+@interface MADQueryTableViewController : UIViewController <MADViewControllerDocumentProtocol, MADManagedObjectViewProtocol, MADHierarchicalGroupingNodeProtocol>
 
-	+ (instancetype)newQueryTableViewController:(int64_t)identifier
-										   root:(BOOL)root
-									   delegate:(id <MADQueryVisualizationSchemaDelegate>)delegate
-									   document:(MADocument *)document;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
+@property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-	@property (nonatomic, weak) IBOutlet UITableView *tableView;
-	@property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
-	@property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
++ (instancetype)newQueryTableViewController:(int64_t)identifier
+									   root:(BOOL)root
+								   delegate:(id <MADQueryVisualizationSchemaDelegate>)delegate
+								   document:(MADocument *)document;
+
 
 @end
 

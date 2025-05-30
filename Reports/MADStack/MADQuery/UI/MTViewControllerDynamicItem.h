@@ -12,15 +12,14 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIDynamicBehavior.h>
 
-@interface MTViewControllerDynamicItem : UIViewController
-	<UIDynamicItem>
+@interface MTViewControllerDynamicItem : UIViewController <UIDynamicItem>
 
-	- (void)setCenter:(CGPoint)center;
-	- (void)setBounds:(CGRect)bounds;
-	- (void)setTransform:(CGAffineTransform)transform;
-	- (CGPoint)center;
-	- (CGRect)bounds;
-	- (CGAffineTransform)transform;
+- (void)setCenter:(CGPoint)center;
+- (void)setBounds:(CGRect)bounds;
+- (void)setTransform:(CGAffineTransform)transform;
+- (CGPoint)center;
+- (CGRect)bounds;
+- (CGAffineTransform)transform;
 
 @end
 

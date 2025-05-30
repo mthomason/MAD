@@ -50,8 +50,7 @@
 
 #pragma mark - MTElementView
 
-@interface MADDesignerElementView ()
-	<MADElementCanvasDelegate, UIGestureRecognizerDelegate>
+@interface MADDesignerElementView () <MADElementCanvasDelegate, UIGestureRecognizerDelegate>
 
 	@property (nonatomic, readwrite, strong) MADResizeHandles *resizeHandles;
 	@property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
@@ -115,10 +114,10 @@
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
 	
-	static const CGFloat kDashedBorderWidth     = (0.5000f);
-	static const CGFloat kDashedPhase           = (0.0000f);
-	static const CGFloat kDashedLinesLength[]   = {4.0000f, 2.0000f};
-	static size_t const kDashedCount            = (2.0000f);
+	static const CGFloat kDashedBorderWidth     = (0.5);
+	static const CGFloat kDashedPhase           = (0.0);
+	static const CGFloat kDashedLinesLength[]   = {4.0, 2.0};
+	static size_t const kDashedCount            = (2.0);
 	
 	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
 	
@@ -138,10 +137,8 @@
 		CGContextSetLineDash(context, kDashedPhase, nil, 0);
 		CGContextSetLineWidth(context, element.border.width.top);
 		CGContextAddLines(context, ((CGPoint[]){
-			CGPointMake([element borderLineTopAX],
-						[element borderLineTopAY] + (element.border.width.top / 2.0000f)),
-			CGPointMake([element borderLineTopBX],
-						[element borderLineTopBY] + (element.border.width.top / 2.0000f)),
+			CGPointMake([element borderLineTopAX], [element borderLineTopAY] + (element.border.width.top / 2.0)),
+			CGPointMake([element borderLineTopBX], [element borderLineTopBY] + (element.border.width.top / 2.0)),
 		}), 2);
 		CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
 		CGContextStrokePath(context);
@@ -152,10 +149,8 @@
 		CGContextSetLineDash(context, kDashedPhase, nil, 0);
 		CGContextSetLineWidth(context, element.border.width.bottom);
 		CGContextAddLines(context, ((CGPoint[]){
-			CGPointMake([element borderLineBottomAX],
-						[element borderLineBottomAY] - (element.border.width.bottom / 2.0000f)),
-			CGPointMake([element borderLineBottomBX],
-						[element borderLineBottomBY] - (element.border.width.bottom / 2.0000f)),
+			CGPointMake([element borderLineBottomAX], [element borderLineBottomAY] - (element.border.width.bottom / 2.0)),
+			CGPointMake([element borderLineBottomBX], [element borderLineBottomBY] - (element.border.width.bottom / 2.0)),
 		}), 2);
 		CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
 		CGContextStrokePath(context);
@@ -166,10 +161,8 @@
 		CGContextSetLineDash(context, kDashedPhase, nil, 0);
 		CGContextSetLineWidth(context, element.border.width.left);
 		CGContextAddLines(context, ((CGPoint[]){
-			CGPointMake([element borderLineLeftAX] + (element.border.width.left / 2.0000f),
-						[element borderLineLeftAY]),
-			CGPointMake([element borderLineLeftBX] + (element.border.width.left / 2.0000f),
-						[element borderLineLeftBY]),
+			CGPointMake([element borderLineLeftAX] + (element.border.width.left / 2.0), [element borderLineLeftAY]),
+			CGPointMake([element borderLineLeftBX] + (element.border.width.left / 2.0), [element borderLineLeftBY]),
 		}), 2);
 		CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
 		CGContextStrokePath(context);
@@ -180,10 +173,8 @@
 		CGContextSetLineDash(context, kDashedPhase, nil, 0);
 		CGContextSetLineWidth(context, element.border.width.right);
 		CGContextAddLines(context, ((CGPoint[]){
-			CGPointMake([element borderLineRightAX] - (element.border.width.right / 2.0000f),
-						[element borderLineRightAY]),
-			CGPointMake([element borderLineRightBX] - (element.border.width.right / 2.0000f),
-						[element borderLineRightBY]),
+			CGPointMake([element borderLineRightAX] - (element.border.width.right / 2.0), [element borderLineRightAY]),
+			CGPointMake([element borderLineRightBX] - (element.border.width.right / 2.0), [element borderLineRightBY]),
 		}), 2);
 		CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
 		CGContextStrokePath(context);
@@ -215,12 +206,7 @@
 
 - (void)setAlpha:(CGFloat)alpha {
 	super.alpha = alpha;
-	
-	UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed: 1.0000f
-														   green: 1.0000f
-															blue: 1.0000f
-														   alpha: alpha];
-	self.backgroundColor = labelBackgroundColor;
+	self.backgroundColor = [UIColor colorWithRed: 1.0 green: 1.0 blue: 1.0 alpha: alpha];
 }
 
 #pragma mark -
@@ -240,13 +226,12 @@
 	animates = ^{
 		self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];
 	};
-	void (^handleAnimatesCompletion)(BOOL);
-	handleAnimatesCompletion = ^(BOOL finished) {
+	void (^handleAnimatesCompletion)(BOOL) = ^(BOOL finished) {
 		if (finished) self.backgroundColor = [UIColor clearColor];
 		completion(finished);
 	};
-	[UIView animateWithDuration: 0.6666f
-						  delay: 0.3333f
+	[UIView animateWithDuration: 0.66666666f
+						  delay: 0.33333333f
 						options: UIViewAnimationOptionAutoreverse
 					 animations: animates
 					 completion: handleAnimatesCompletion];
@@ -255,13 +240,12 @@
 - (void)setWobbleRunning:(BOOL)running {
 	self.displayWobbling = running;
 	if (running) {
-		NSInteger randomInt = arc4random() % 500;
-		float r = (randomInt / 500.0000f) + 0.5000f;
+		float r = ((arc4random() % 500) / 500.00000000f) + 0.50000000f;
 		
 		self.transform = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( (kAnimationRotateDeg * -1.0) - r ));
 		CGAffineTransform rightWobble = CGAffineTransformMakeRotation((CGFloat)degreesToRadians( kAnimationRotateDeg + r ));
 		
-		self.layer.anchorPoint = CGPointMake(0.5000f, 0.5000f);
+		self.layer.anchorPoint = CGPointMake(0.5, 0.5);
 
 		[UIView animateWithDuration:0.3500
 							  delay:0
@@ -327,18 +311,10 @@
 	}
 }
 
-- (void)updateSetMarginTop:(float)value {
-	
-}
-- (void)updateSetMarginBottom:(float)value {
-	
-}
-- (void)updateSetMarginLeft:(float)value {
-	
-}
-- (void)updateSetMarginRight:(float)value {
-	
-}
+- (void)updateSetMarginTop:(float)value { }
+- (void)updateSetMarginBottom:(float)value { }
+- (void)updateSetMarginLeft:(float)value { }
+- (void)updateSetMarginRight:(float)value { }
 
 #pragma mark -
 #pragma mark Event Handlers
@@ -384,11 +360,8 @@
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
 	if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
 		CGPoint locationInView = [gestureRecognizer locationInView:gestureRecognizer.view];
-		gestureRecognizer.view.layer.anchorPoint =
-				CGPointMake(locationInView.x / gestureRecognizer.view.bounds.size.width,
-							locationInView.y / gestureRecognizer.view.bounds.size.height);
-		gestureRecognizer.view.center =
-				[gestureRecognizer locationInView:gestureRecognizer.view.superview];
+		gestureRecognizer.view.layer.anchorPoint = CGPointMake(locationInView.x / gestureRecognizer.view.bounds.size.width, locationInView.y / gestureRecognizer.view.bounds.size.height);
+		gestureRecognizer.view.center = [gestureRecognizer locationInView:gestureRecognizer.view.superview];
 	}
 }
 

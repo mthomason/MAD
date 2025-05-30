@@ -45,16 +45,10 @@
 #import <MAD/MADModelQueryField.h>
 #import <MAD/MADTableFieldIdentifier.h>
 
-#import <Foundation/NSSet.h>
-
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UIWindow.h>
-#import <UIKit/UIView.h>
-#import <UIKit/UITableView.h>
-#import <UIKit/UIToolbar.h>
 
-#import <UIKit/UIManagedDocument.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIPopoverController.h>
 #import <UIKit/UIPanGestureRecognizer.h>
@@ -83,12 +77,18 @@ typedef NSMutableDictionary <NSNumber *, MADHierarchicalChildController *> MADMu
 
 @end
 
-static NSString *keyCenterX = @"x";
-static NSString *keyCenterY = @"y";
-static NSString *keyWidth   = @"w";
-static NSString *keyHeight  = @"h";
-
+static inline MADDirection directionHorizontal(CGPoint, CGPoint);
 static inline CGPoint MADPointInsertTable(CGFloat, NSUInteger);
+
+static NSString * const keyCenterX = @"x";
+static NSString * const keyCenterY = @"y";
+static NSString * const keyWidth   = @"w";
+static NSString * const keyHeight  = @"h";
+
+static inline MADDirection directionHorizontal(CGPoint l, CGPoint r) {
+	return l.x < r.x ? MADDirectionLeft : MADDirectionRight;
+}
+
 static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCount) {
 	return CGPointMake(CGPointZero.x + 300, viewHeight / (tableCount + 2) * (tableCount + 1));
 }
@@ -254,9 +254,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	[super viewWillAppear:animated];
 	
 	MADocument *document = self.document;
-	NSManagedObjectContext *managedObjectContext;
-	managedObjectContext = document.documentModel.managedObjectContext;
-	id firstQuery = document.documentModel.firstQuery;
+	NSManagedObjectContext *managedObjectContext = document.documentModel.managedObjectContext;
+	MADModelQuery *firstQuery = document.documentModel.firstQuery;
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(deleteQueryLink:)
 												 name: MADNotificationQueryLinkDelete
@@ -330,18 +329,15 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (void)layoutQueryTables {
-	UIViewController *childContoller;
 	NSArray *childControllers = self.childViewControllers;
-	for (childContoller in childControllers) {
+	for (UIViewController *childContoller in childControllers) {
+
 		if ([childContoller isKindOfClass:[MADQueryTableViewController class]]) {
 
-			MADHierarchicalChildViewDefination *tableDefination;
-			tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:((MADHierarchicalChildController *)childContoller).identifier];
+			MADHierarchicalChildViewDefination *tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:((MADHierarchicalChildController *)childContoller).identifier];
 			if (tableDefination == nil) {
 				tableDefination = [MADHierarchicalChildViewDefination newTableDefination];
-				
 				tableDefination.center = CGCenterRect(self.scrollView.bounds);
-
 				[self.cacheManager.cacheData addTableDefination: tableDefination
 									   forObjectID: ((MADHierarchicalChildController *)childContoller).identifier];
 			}
@@ -508,10 +504,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)updateCache {
 	MADocument *doc = self.document;
-	[self.cacheManager updateCacheWithQuery:doc.documentModel.firstQuery
-							  contentOffset:self.scrollView.contentOffset
-								  zoomScale:self.scrollView.zoomScale
-									 center:^CGPoint(NSNumber *tableID) {
+	[self.cacheManager updateCacheWithQuery: doc.documentModel.firstQuery
+							  contentOffset: self.scrollView.contentOffset
+								  zoomScale: self.scrollView.zoomScale
+									 center: ^CGPoint(NSNumber *tableID) {
 		MADHierarchicalChildController *schemaController = self.controllersByObjectID[tableID];
 		return schemaController.view.center;
 	}];
@@ -528,11 +524,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (NSURL *)localCacheFileURL {
 	if (_localCacheFileURL == nil) {
-		NSString *cacheFileName = [self cacheFileName];
-		NSString *groupID = [AppDelegate groupIdentifier];
-		NSURL *url = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupID];
-		url = [url URLByAppendingPathComponent: cacheFileName
-								   isDirectory: NO];
+		NSURL *url = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
+		url = [url URLByAppendingPathComponent: [self cacheFileName] isDirectory: NO];
 		_localCacheFileURL = url.copy;
 	}
 	return _localCacheFileURL;
@@ -553,23 +546,20 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	if (!tableID) return;
 	
 	[MADGestureRecognizerAnchorPoint adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-	
 	UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
 	CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
 										toView: self.contentView];
-	NSNumber *tableIdentifier = @(tableID);
-	NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self.constraints objectForKey: tableIdentifier];
+	NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self.constraints objectForKey: @(tableID)];
 	constraints[keyCenterX].constant = pointInView.x;
 	constraints[keyCenterY].constant = pointInView.y;
 
-	MADHierarchicalChildController *movingController = self.controllersByObjectID[tableIdentifier];
+	MADHierarchicalChildController *movingController = self.controllersByObjectID[@(tableID)];
 	[self didMoveFieldRect: movingController animated: NO];
 	
 	if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		
 		if (self.cacheManager.cacheData) {
-			MADHierarchicalChildViewDefination *tableDefination;
-			tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:tableID];
+			MADHierarchicalChildViewDefination *tableDefination = [self.cacheManager.cacheData tableDefinationForObjectID:tableID];
 			tableDefination.center = pointInView;
 		}
 		[self archiveCache];
@@ -696,8 +686,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		
 		self.controllersByObjectID[identifier] = viewController;;
 		
-		UIPanGestureRecognizer *panGesture;
-		panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
+		UIPanGestureRecognizer *panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
 		
 		[self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
 		
@@ -745,25 +734,17 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 				 animated:(BOOL)animated
 			   completion:(void(^)(void))completion {
 	
-	NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-	constraints = [self constraints:viewController center:center];
-	
-	NSNumber *identifier = @(viewController.identifier);
-	[self.constraints setObject:constraints forKey:identifier];
+	NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self constraints:viewController center:center];
+	[self.constraints setObject:constraints forKey:@(viewController.identifier)];
 	viewController.root = root;
+	self.controllersByObjectID[@(viewController.identifier)] = viewController;;
 	
-	self.controllersByObjectID[identifier] = viewController;;
-	
-	UIPanGestureRecognizer *panGesture;
-	panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
-	
+	UIPanGestureRecognizer *panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
 	[self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
 	
 	[viewController.view addGestureRecognizer:panGesture];
 	[viewController willMoveToParentViewController:self];
-	
 	[self addChildViewController:viewController];
-	
 	[viewController beginAppearanceTransition:YES animated:YES];
 	
 	viewController.view.center = center;
@@ -791,22 +772,20 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 - (void)insertQueryTable:(NSNotification *)note {
 	if (![note.name isEqualToString:MADNotificationQueryTableInsert]) return;
 
-	MADModelQueryTable *insertedTable;
 	NSEnumerator *insertedTables = note.userInfo.objectEnumerator;
 
 	CGFloat contentViewHeight = self.contentView.bounds.size.height;
-	for (insertedTable in insertedTables) {
+	for (MADModelQueryTable *insertedTable in insertedTables) {
 		[self.rootTables addObject: insertedTable.objectID];
 		
-		MADQueryTableViewController *viewController;
-		viewController = [MADQueryTableViewController newQueryTableViewController:insertedTable.identifier
-																			 root:YES
-																		 delegate:self
-																		 document:self.document];
+		MADQueryTableViewController *viewController = [MADQueryTableViewController newQueryTableViewController:insertedTable.identifier
+																										  root:YES
+																									  delegate:self
+																									  document:self.document];
 		viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
 		
 		[self addViewController: viewController
-						 center: MADPointInsertTable(contentViewHeight / 2, self.rootTables.count)
+						 center: MADPointInsertTable(contentViewHeight / 2.0, self.rootTables.count)
 						   root: YES
 					   animated: YES
 					 completion: ^{ }];
@@ -866,21 +845,17 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	if (![note.name isEqualToString:MADNotificationQueryLinkDelete]) return;
 	
 	MADModelQuery *query = note.object;
-	MADModelQueryLink *deletedLink;
 	
-	NSExpression *expressionMinusSet;
-	NSExpression *evaluatedObject = [NSExpression expressionForEvaluatedObject];
-	NSExpression *evaluatedJoinedTables;
-	NSSet <NSNumber *> *orphaned;
+	//NSExpression *evaluatedObject = [NSExpression expressionForEvaluatedObject];
 	
 	NSEnumerator *deletedLinks = note.userInfo.objectEnumerator;
 	
-	for (deletedLink in deletedLinks) {
-		orphaned = [query orphanedQueryTables];
+	for (MADModelQueryLink *deletedLink in deletedLinks) {
+		NSSet <NSNumber *> *orphaned = [query orphanedQueryTables];
 		
-		evaluatedJoinedTables = [NSExpression expressionForConstantValue:orphaned];
-		expressionMinusSet = [NSExpression expressionForMinusSet: evaluatedObject
-															with: evaluatedJoinedTables];
+		//NSExpression *evaluatedJoinedTables = [NSExpression expressionForConstantValue:orphaned];
+		//NSExpression *expressionMinusSet = [NSExpression expressionForMinusSet: evaluatedObject
+		//																  with: evaluatedJoinedTables];
 		for (NSNumber *orphanedTableIDs in orphaned) {
 			
 			@autoreleasepool {
@@ -893,17 +868,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 			}
 		}
 		
-		MADConnectorView *connectorView;
-		connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
+		MADConnectorView *connectorView = self.connectionViewsByObjectID[deletedLink.objectID];
 		[self.connectionViewsByObjectID removeObjectForKey:deletedLink.objectID];
 		[connectorView removeFromSuperview];
-		//[self.view setNeedsLayout];
-		//[self.view layoutIfNeeded];
-//UILayoutConstraintAxisVertical
-		//[self.view setNeedsLayout];
 	}
-	
-	//[self.view layoutIfNeeded];
 }
 
 #pragma mark - Layout
@@ -939,29 +907,20 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	
 	void(^repositionRect)(CGRect *, CGRect *, CGFloat) = ^void(CGRect *rectParent, CGRect *rectChild, CGFloat rectParentBottomY) {
 		if ((*rectParent).origin.y + (*rectParent).size.height > rectParentBottomY) {
-			(*rectParent) = CGRectMake((*rectParent).origin.x,
-									   rectParentBottomY - (*rectParent).size.height,
-									   (*rectParent).size.width,
-									   (*rectParent).size.height);
+			(*rectParent) = CGRectMake((*rectParent).origin.x, rectParentBottomY - (*rectParent).size.height, (*rectParent).size.width, (*rectParent).size.height);
 		} else if ((*rectParent).origin.y < (*rectChild).origin.y) {
-			(*rectParent) = CGRectMake((*rectParent).origin.x,
-									   (*rectChild).origin.y,
-									   (*rectParent).size.width,
-									   (*rectParent).size.height);
+			(*rectParent) = CGRectMake((*rectParent).origin.x, (*rectChild).origin.y, (*rectParent).size.width, (*rectParent).size.height);
 		}
 	};
 	
-	CGRect(^mainFrame)(CGPoint, CGPoint, CGFloat, CGFloat, CGFloat) =
-	^ CGRect(CGPoint acl, CGPoint acr, CGFloat insete, CGFloat insets, CGFloat insetsY) {
-		return CGRectMake(acl.x - insets - insete,
-						  acl.y - insets - insetsY,
+	CGRect(^mainFrame)(CGPoint, CGPoint, CGFloat, CGFloat, CGFloat) = ^ CGRect(CGPoint acl, CGPoint acr, CGFloat insete, CGFloat insets, CGFloat insetsY) {
+		return CGRectMake(acl.x - insets - insete, acl.y - insets - insetsY,
 						  acr.x - acl.x + (insets * 2.0) + (insete * 2.0),
 						  acr.y - acl.y + (insets * 2.0) + insetsY * 2.0);
 	};
 	
 	BOOL(^updateAnchorPoints)(CGPoint *, CGFloat, CGPoint *, CGFloat, CGFloat *extraInset) =
-	^ BOOL(CGPoint *leftPoint, CGFloat leftHeight, CGPoint *rightPoint,
-		   CGFloat rightHeight, CGFloat *extraInset) {
+	^ BOOL(CGPoint *leftPoint, CGFloat leftHeight, CGPoint *rightPoint, CGFloat rightHeight, CGFloat *extraInset) {
 		
 		BOOL topLeftToBottomRight;
 		if ((*leftPoint).x < (*rightPoint).x) {
@@ -986,52 +945,41 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		return topLeftToBottomRight;
 	};
 	
-	CGRect leftCellFrameInTable, rightCellFrameInTable;
-	CGFloat leftTableBottomY, rightTableBottomY;
-	CGPoint leftCellAnchorPoint, rightCellAnchorPoint;
-	
-	MADHierarchicalChildController *leftTableViewController, *rightTableViewController;
-	
 	MADocument *document = self.document;
 	MADModelDatabase *firstDatabase = document.documentModel.firstDatabase;
 	MADModelQuery *firstQuery = firstDatabase.firstQuery;
-	MADModelTable *rightTable, *leftTable;
-	MADModelField *rightField, *leftField;
-	MADModelQueryTable *rightQueryTable, *leftQueryTable;
-	MADModelQueryField *rightQueryField, *leftQueryField;
 	
-	rightQueryTable = firstQuery.tables[link.rightTableObjectID];
-	rightTable = firstDatabase.tableDictionary[rightQueryTable.schemaTableID];
-	rightQueryField = rightQueryTable.queryFields[link.rightFieldObjectID];
-	rightField = rightTable.fields[rightQueryField.schemaFieldID];
-	rightTableViewController = self.controllersByObjectID[link.rightTableObjectID];
-	rightCellFrameInTable = [rightTableViewController rectForFieldID: rightField.identifier
-															  inView: rightTableViewController.view];
+	MADModelQueryTable *rightQueryTable = firstQuery.tables[link.rightTableObjectID];
+	MADModelTable *rightTable = firstDatabase.tableDictionary[rightQueryTable.schemaTableID];
+	MADModelQueryField *rightQueryField = rightQueryTable.queryFields[link.rightFieldObjectID];
+	MADModelField *rightField = rightTable.fields[rightQueryField.schemaFieldID];
+	MADHierarchicalChildController *rightTableViewController = self.controllersByObjectID[link.rightTableObjectID];
+	CGRect rightCellFrameInTable = [rightTableViewController rectForFieldID: rightField.identifier
+																	 inView: rightTableViewController.view];
+	
+	MADModelQueryTable *leftQueryTable = firstQuery.tables[link.leftTableObjectID];
+	MADModelTable *leftTable = firstDatabase.tableDictionary[leftQueryTable.schemaTableID];
+	MADModelQueryField *leftQueryField = leftQueryTable.queryFields[link.leftFieldObjectID];
+	MADModelField *leftField = leftTable.fields[leftQueryField.schemaFieldID];
+	MADHierarchicalChildController *leftTableViewController = self.controllersByObjectID[link.leftTableObjectID];
+	CGRect leftCellFrameInTable = [leftTableViewController rectForFieldID: leftField.identifier
+																   inView: leftTableViewController.view];
 
-	leftQueryTable = firstQuery.tables[link.leftTableObjectID];
-	leftTable = firstDatabase.tableDictionary[leftQueryTable.schemaTableID];
-	leftQueryField = leftQueryTable.queryFields[link.leftFieldObjectID];
-	leftField = leftTable.fields[leftQueryField.schemaFieldID];
-	leftTableViewController = self.controllersByObjectID[link.leftTableObjectID];
-	leftCellFrameInTable = [leftTableViewController rectForFieldID: leftField.identifier
-															inView: leftTableViewController.view];
-	
-	leftTableBottomY = bottomLeftY(leftTableViewController.frame);
+	CGFloat leftTableBottomY = bottomLeftY(leftTableViewController.frame);
 	
 	CGRect leftTableViewControllerFrame = leftTableViewController.frame;
 	repositionRect(&leftCellFrameInTable, &(leftTableViewControllerFrame), leftTableBottomY);
-	CGRect convertedRect = [self.contentView convertRect: leftCellFrameInTable
-												fromView: leftTableViewController.view];
-	leftCellAnchorPoint = CGCenterOfRect(convertedRect);
+	CGRect convertedRect = [self.contentView convertRect: leftCellFrameInTable fromView: leftTableViewController.view];
+	CGPoint leftCellAnchorPoint = CGCenterOfRect(convertedRect);
 	translatePoint(&leftCellAnchorPoint, padding, 0.0);
-	rightTableBottomY = bottomLeftY(rightTableViewController.frame);
+	CGFloat rightTableBottomY = bottomLeftY(rightTableViewController.frame);
 
 	CGRect rightTableViewControllerFrame = rightTableViewController.frame;
 	repositionRect(&rightCellFrameInTable, &(rightTableViewControllerFrame), rightTableBottomY);
 	
 	convertedRect = [self.contentView convertRect: rightCellFrameInTable
 										 fromView: rightTableViewController.view];
-	rightCellAnchorPoint = CGCenterOfRect(convertedRect);
+	CGPoint rightCellAnchorPoint = CGCenterOfRect(convertedRect);
 	translatePoint(&rightCellAnchorPoint, -padding, 0.0);
 	
 	connectorView.leftViewIsInital = directionHorizontal(leftCellAnchorPoint, rightCellAnchorPoint) == MADDirectionLeft;
@@ -1042,15 +990,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 															&rightCellAnchorPoint,
 															rightCellFrameInTable.size.height,
 															&extraInset);
-	connectorView.frame = mainFrame(leftCellAnchorPoint,
-									rightCellAnchorPoint,
-									extraInset, 0.0, 10.0);
+	connectorView.frame = mainFrame(leftCellAnchorPoint, rightCellAnchorPoint, extraInset, 0.0, 10.0);
 	[connectorView setNeedsDisplay];
-}
-
-MADDirection directionHorizontal(CGPoint, CGPoint);
-MADDirection directionHorizontal(CGPoint l, CGPoint r) {
-	return l.x < r.x ? MADDirectionLeft : MADDirectionRight;
 }
 
 #pragma mark -
@@ -1065,32 +1006,22 @@ MADDirection directionHorizontal(CGPoint l, CGPoint r) {
 	[self.view layoutIfNeeded];
 }
 
-- (NSDictionary <NSString *, NSLayoutConstraint *> *)constraints:(MADHierarchicalChildController *)viewController
-														  center:(CGPoint)center {
-	NSLayoutConstraint *width, *height, *centerX, *centerY;
-	width = [MADLayoutConstraint newLayoutConstraint: viewController.view
-											   width: viewController.preferredContentSize.width];
-	height = [MADLayoutConstraint newLayoutConstraint: viewController.view
-											   height: viewController.preferredContentSize.height];
-	centerX = [MADLayoutConstraint newLayoutConstraint: viewController.view
-												toView: self.contentView
-											   centerX: center.x];
-	
-	centerY = [MADLayoutConstraint newLayoutConstraint: viewController.view
-												toView: self.contentView
-											   centerY: center.y];
-	
-	NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-	constraints = [[NSDictionary alloc] initWithObjectsAndKeys:
-				   centerX, keyCenterX, centerY, keyCenterY,
-				   width, keyWidth, height, keyHeight, nil];
-	return constraints;
+- (NSDictionary <NSString *, NSLayoutConstraint *> *)constraints:(MADHierarchicalChildController *)vc center:(CGPoint)c {
+	NSLayoutConstraint *width = [MADLayoutConstraint newLayoutConstraint: vc.view width: vc.preferredContentSize.width];
+	NSLayoutConstraint *height = [MADLayoutConstraint newLayoutConstraint: vc.view height: vc.preferredContentSize.height];
+	NSLayoutConstraint *centerX = [MADLayoutConstraint newLayoutConstraint: vc.view toView: self.contentView centerX: c.x];
+	NSLayoutConstraint *centerY = [MADLayoutConstraint newLayoutConstraint: vc.view toView: self.contentView centerY: c.y];
+	return @{
+		keyCenterX: centerX,
+		keyCenterY: centerY,
+		keyWidth: width,
+		keyHeight: height,
+	};
 }
 
 + (UIPanGestureRecognizer *)newGestureRecognizerPanPiece:(id <UIGestureRecognizerDelegate>)delegate {
-	UIPanGestureRecognizer *panGesture;
-	panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: delegate
-														 action: @selector(handlePanPiece:)];
+	UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: delegate
+																				 action: @selector(handlePanPiece:)];
 	panGesture.delegate = delegate;
 	return panGesture;
 }

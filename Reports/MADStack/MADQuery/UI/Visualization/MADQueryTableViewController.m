@@ -177,7 +177,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 
 - (void)setRoot:(BOOL)root {
 	self.titleView.style = root ? MADTitleViewQueryTableRoot : MADTitleViewQueryTableChild;
-	self.toolbar.barTintColor = root ? [MADColorEverydayApps newColorBlue] : [UIColor whiteColor];
+	self.toolbar.barTintColor = root ? [MADColorEverydayApps newColorBlue] : [UIColor labelColor];
 }
 
 - (CGRect)frame {
@@ -186,16 +186,13 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 
 - (CGRect)rectForFieldID:(int64_t)fieldID
 				  inView:(UIView *)containerView {
-	NSNumber *schemaTableID = @(_identifierSchemaTable);
-	NSNumber *schemaTableFieldID = @(fieldID);
-	MADModelTable *table = [_document.documentModel.firstDatabase.tableDictionary objectForKey: schemaTableID];
-	NSUInteger row = [table.fieldIDs indexOfObject: schemaTableFieldID];
+	MADModelTable *table = [_document.documentModel.firstDatabase.tableDictionary objectForKey: @(_identifierSchemaTable)];
+	NSUInteger row = [table.fieldIDs indexOfObject: @(fieldID)];
 	CGRect rectForRow;
 	if (row == NSNotFound) {
 		rectForRow = CGRectZero;
 	} else {
-		NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem: (NSInteger)row inSection: 0];
-		rectForRow = [self.tableView rectForRowAtIndexPath: cellIndexPath];
+		rectForRow = [self.tableView rectForRowAtIndexPath: [NSIndexPath indexPathForItem: (NSInteger)row inSection: 0]];
 	}
 	return [self.tableView convertRect: rectForRow toView: containerView];
 }
@@ -213,13 +210,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 	
 	[super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
 	if (!self.isViewLoaded) return;
-	
-	UINavigationItem *navigationItem;
-	UIView __weak *titleView;
-
-	navigationItem = self.navigationItem;
-	titleView = navigationItem.titleView;
-	
+	UIView __weak *titleView = self.navigationItem.titleView;;
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 		[titleView sizeToFit];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
