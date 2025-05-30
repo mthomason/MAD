@@ -313,6 +313,7 @@
 		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4CA8B2EA2DD5DCE0001E27B3 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */; };
 		4CA8B2EB2DD5DCE0001E27B3 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E92DD5DCE0001E27B3 /* libssl.a */; };
+		4CA97B522DEA09EA00542EE2 /* MADDynamicTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA97B512DEA09EA00542EE2 /* MADDynamicTableView.m */; };
 		4CAB0FD41D9025F800676BCE /* MADStringEncryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401FFF1BAE92F200BAE5FC /* MADStringEncryption.m */; };
 		4CAEE7241E55CBB4009A6096 /* MADExplorerNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */; };
 		4CAEE7281E55D26E009A6096 /* MADFieldSelectorNavigationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAEE7271E55D26E009A6096 /* MADFieldSelectorNavigationItem.m */; };
@@ -1039,6 +1040,8 @@
 		4CA8B2E32DD5DA5A001E27B3 /* build_openssl_thridparty.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_openssl_thridparty.sh; path = ../Compressor/build_openssl_thridparty.sh; sourceTree = SOURCE_ROOT; };
 		4CA8B2E82DD5DCE0001E27B3 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = Compressor/library/openssl/iOS/lib/libcrypto.a; sourceTree = "<group>"; };
 		4CA8B2E92DD5DCE0001E27B3 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = Compressor/library/openssl/iOS/lib/libssl.a; sourceTree = "<group>"; };
+		4CA97B502DEA09EA00542EE2 /* MADDynamicTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDynamicTableView.h; sourceTree = "<group>"; };
+		4CA97B512DEA09EA00542EE2 /* MADDynamicTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDynamicTableView.m; sourceTree = "<group>"; };
 		4CAEE7221E55CBB4009A6096 /* MADExplorerNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerNavigationItem.h; sourceTree = "<group>"; };
 		4CAEE7231E55CBB4009A6096 /* MADExplorerNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExplorerNavigationItem.m; sourceTree = "<group>"; };
 		4CAEE7261E55D26E009A6096 /* MADFieldSelectorNavigationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFieldSelectorNavigationItem.h; sourceTree = "<group>"; };
@@ -2493,6 +2496,8 @@
 				4C3DCBCC1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m */,
 				4CA1AAAC1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.h */,
 				4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */,
+				4CA97B502DEA09EA00542EE2 /* MADDynamicTableView.h */,
+				4CA97B512DEA09EA00542EE2 /* MADDynamicTableView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -3462,6 +3467,7 @@
 				4C4020EA1BAE988900BAE5FC /* MADQueryBuilderAddGroupViewController.m in Sources */,
 				4C26B9541BAF0D4300456DC8 /* MADDatabaseTableSectionHeaderView.m in Sources */,
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,
+				4CA97B522DEA09EA00542EE2 /* MADDynamicTableView.m in Sources */,
 				4CFEE8121BB7A22800AFAA0A /* MADQueryAddLinkJoinTypeController.m in Sources */,
 				4C92A4A32DD7F820008171A9 /* madlog.m in Sources */,
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,

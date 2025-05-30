@@ -14,11 +14,11 @@
 @class NSManagedObjectID;
 
 @protocol MADManagedObjectViewProtocol <NSObject>
-  @required
-	@property (nonatomic, assign) int64_t identifier;
-	@property (readonly, nonatomic, copy) NSNumber *key;
-  @optional
-	@property (nonatomic, readonly, copy) NSManagedObjectID *objectID;
+@required
+@property (nonatomic, assign) int64_t identifier;
+@property (readonly, nonatomic, copy) NSNumber *key;
+@optional
+@property (nonatomic, readonly, copy) NSManagedObjectID *objectID;
 @end
 
-#endif /* MADManagedObjectViewProtocol_h */
+#endif

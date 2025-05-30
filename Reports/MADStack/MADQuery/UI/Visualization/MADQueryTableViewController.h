@@ -27,8 +27,7 @@ extern const CGFloat MADSchemaViewDefaultHeight;
 @property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-+ (instancetype)newQueryTableViewController:(int64_t)identifier
-									   root:(BOOL)root
++ (instancetype)newQueryTableViewController:(int64_t)identifier root:(BOOL)root
 								   delegate:(id <MADQueryVisualizationSchemaDelegate>)delegate
 								   document:(MADocument *)document;
 

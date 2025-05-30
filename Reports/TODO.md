@@ -1,4 +1,19 @@
 
+# TODO
+
+* Update designer UI so state doesn't get out of sync when user clicks away
+* Update designer UI for dark mode
+* Test all UI elements can be inserted correctly and work correctly (whitespace elements seem to have an issue)
+* Research which is the lowest version of iOS I should build against.  Right now I'm targeting iOS 13 as a min and building against iOS17.
+* See if something can be done about constraint warnings when the UI is off screen (it's not an issue yet, lol), or perhaps these are real issues, or something to do with animations
+* Test multiple rows
+* Fix sync issue with page slider being enabled
+* Setup test databases for MySQL and MS SQL Server.
+* Add store / monetization pathway
+* Fix problems with query visualization view
+
+---
+
 Icon generation, copy, and removal
 Query visualization caching
 Query visualization layout

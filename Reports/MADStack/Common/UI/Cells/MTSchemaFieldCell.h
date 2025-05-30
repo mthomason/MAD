@@ -17,9 +17,9 @@
 
 @interface MTSchemaFieldCell : UITableViewCell
 
-    @property (nonatomic, weak) IBOutlet id <MADSchemaFieldCellProtocol> delegate;
-    @property (nonatomic, strong) IBOutlet UILabel *detailLabel;
-    @property (nonatomic, strong) UIView *parentContainerView;
+@property (nonatomic, weak) IBOutlet id <MADSchemaFieldCellProtocol> delegate;
+@property (nonatomic, strong) IBOutlet UILabel *detailLabel;
+@property (nonatomic, strong) UIView *parentContainerView;
 
 @end
 

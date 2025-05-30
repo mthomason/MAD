@@ -45,14 +45,12 @@
 #import <MAD/MADModelQueryField.h>
 #import <MAD/MADTableFieldIdentifier.h>
 
-#import <CoreData/NSManagedObjectContext.h>
-
 #import <UIKit/UIWindow.h>
-
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIPopoverController.h>
 #import <UIKit/UIPanGestureRecognizer.h>
 
+#import <CoreData/NSManagedObjectContext.h>
 #import <QuartzCore/CALayer.h>
 
 typedef void(^MTBlockResultVoid)(void);
@@ -673,12 +671,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		
 		int64_t tableID = viewController.identifier;
 		
-		MADHierarchicalChildViewDefination *tableDef;
-		tableDef = cacheData != nil ? [cacheData tableDefinationForObjectID:tableID] : nil;
+		MADHierarchicalChildViewDefination *tableDef = cacheData != nil ? [cacheData tableDefinationForObjectID:tableID] : nil;
 		
 		CGPoint center = cacheData != nil ? tableDef.center : self.contentView.center;
-		NSDictionary <NSString *, NSLayoutConstraint *> *constraints;
-		constraints = [self constraints:viewController center:center];
+		NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self constraints:viewController center:center];
 		
 		NSNumber *identifier = @(viewController.identifier);
 		[self.constraints setObject:constraints forKey:identifier];
@@ -687,7 +683,6 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		self.controllersByObjectID[identifier] = viewController;;
 		
 		UIPanGestureRecognizer *panGesture = [MADQueryVisualizationViewController newGestureRecognizerPanPiece:self];
-		
 		[self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
 		
 		[viewController.view addGestureRecognizer:panGesture];
@@ -696,10 +691,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		[self addChildViewController:viewController];
 		
 		[viewController beginAppearanceTransition:YES animated:YES];
-		
-		viewController.view.bounds = CGRectMake(CGPointZero.x, CGPointZero.y,
-												viewController.preferredContentSize.width,
-												viewController.preferredContentSize.height);
+		viewController.view.bounds = CGRectMake(0.0, 0.0, viewController.preferredContentSize.width, viewController.preferredContentSize.height);
 		viewController.view.center = center;
 		viewController.view.alpha = animated ? 0.0 : 1.0;
 		[self.contentView addSubview: viewController.view];
@@ -795,20 +787,14 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)handleInsertQueryLink:(NSNotification *)note {
 	if (![note.name isEqualToString:MADNotificationQueryLinkInsert]) return;
-
-	MADHierarchicalChildController *leftTVC, *rightTVC;
-
-	MADModelQueryLink *insertedLink;
-	NSEnumerator <MADModelQueryLink *> *insertedLinks;
-	insertedLinks = note.userInfo.objectEnumerator;
-	NSNumber *leftFieldID, *rightFieldID;
-	for (insertedLink in insertedLinks) {
+	NSEnumerator <MADModelQueryLink *> *insertedLinks = note.userInfo.objectEnumerator;
+	for (MADModelQueryLink *insertedLink in insertedLinks) {
 		
-		leftFieldID = @(insertedLink.leftFieldIdentifier.tableID);
-		leftTVC = self.controllersByObjectID[leftFieldID];
+		NSNumber *leftFieldID = @(insertedLink.leftFieldIdentifier.tableID);
+		MADHierarchicalChildController *leftTVC = self.controllersByObjectID[leftFieldID];
 		
-		rightFieldID = @(insertedLink.rightFieldIdentifier.tableID);
-		rightTVC = self.controllersByObjectID[rightFieldID];
+		NSNumber *rightFieldID = @(insertedLink.rightFieldIdentifier.tableID);
+		MADHierarchicalChildController *rightTVC = self.controllersByObjectID[rightFieldID];
 		
 		[self.rootTables removeObject: leftFieldID];
 		

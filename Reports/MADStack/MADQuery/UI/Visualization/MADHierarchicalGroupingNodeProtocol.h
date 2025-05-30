@@ -12,10 +12,9 @@
 @class UIView;
 
 @protocol MADHierarchicalGroupingNodeProtocol <NSObject>
-    @property (nonatomic, assign) BOOL root;
-    - (CGRect)rectForFieldID:(int64_t)managedObjectID
-                      inView:(UIView *)containerView;
-    - (CGRect)frame;
+@property (nonatomic, assign) BOOL root;
+- (CGRect)rectForFieldID:(int64_t)managedObjectID inView:(UIView *)containerView;
+- (CGRect)frame;
 @end
 
-#endif /* MADHierarchicalGroupingNodeProtocol_h */
+#endif
