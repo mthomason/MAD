@@ -21,19 +21,17 @@
 
 @protocol MADReportDesignerFontSettingsDelegate
 
-    - (void)fontSettingsTableViewControllerDidSelectFontList:(MADToolboxStyleViewController *)controller;
+- (void)fontSettingsTableViewControllerDidSelectFontList:(MADToolboxStyleViewController *)controller;
 
 @end
 
-@interface MADToolboxStyleViewController : UITableViewController
-    <MADToolboxDisplayProtocol, MADToolboxControllerProtocol,
-        MADReportDesignerFontSelectorDelegate, MADViewControllerDocumentProtocol>
+@interface MADToolboxStyleViewController : UITableViewController <MADToolboxDisplayProtocol, MADToolboxControllerProtocol, MADReportDesignerFontSelectorDelegate, MADViewControllerDocumentProtocol>
 
-    @property (nonatomic, weak) id <MADReportDesignerFontSettingsDelegate> delegate;
-    @property (nonatomic, weak) MADocument *document;
+@property (nonatomic, weak) id <MADReportDesignerFontSettingsDelegate> delegate;
+@property (nonatomic, weak) MADocument *document;
 
-    @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
-    @property (nonatomic, assign) BOOL clearsBackground;
+@property (nonatomic, weak) IBOutlet UILabel *labelFontName;
+@property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 
