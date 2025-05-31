@@ -26,6 +26,7 @@
 #import "MTStoreKitController+Features.h"
 #import "UIViewController+tabBarItem.h"
 #import "NSDate+Extras.h"
+#import "MADThemeManager.h"
 #import "madlog.h"
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
@@ -95,21 +96,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	@property (readonly, nonatomic, weak) MADPrintPageRenderer *printPageRenderer;
 @end
 
-@interface MADViewerController ()
-	<UIPopoverPresentationControllerDelegate, UIStateRestoring, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIDocumentInteractionControllerDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, MADOperationObserver, MADPageSliderProtocol, MADPrintingProtocol, MADActivityReportPrintPreviewDelegate, MADActivityItemProviderDelegate>
+@interface MADViewerController () <UIPopoverPresentationControllerDelegate, UIStateRestoring, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIDocumentInteractionControllerDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, MADOperationObserver, MADPageSliderProtocol, MADPrintingProtocol, MADActivityReportPrintPreviewDelegate, MADActivityItemProviderDelegate>
 
-	@property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
-	@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
-	@property (nonatomic, strong)   MADPageSlider *pageSlider;
-	@property (nonatomic, weak)     MADLabelStatus *labelStatus;
-	@property (nonatomic, readonly) MADTabBarController *tabBarController;
+@property (nonatomic, strong) MADDateFromTimeFormatter *dateTimeFormatter;
+@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
+@property (nonatomic, strong)   MADPageSlider *pageSlider;
+@property (nonatomic, weak)     MADLabelStatus *labelStatus;
+@property (nonatomic, readonly) MADTabBarController *tabBarController;
 
-	@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 
-	@property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
-	@property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
+@property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
+@property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;
 
-	@property (nonatomic, strong) MADOperationQueue *refreshQueue;
+@property (nonatomic, strong) MADOperationQueue *refreshQueue;
 
 @end
 
@@ -225,10 +226,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	self.accessibilityTraits = self.accessibilityTraits | UIAccessibilityTraitCausesPageTurn;
 	
 	self.view.backgroundColor = [UIColor lightGrayColor];
-
-//	self.navigationController.toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-//	self.navigationController.toolbar.tintColor    = [MADColorEverydayApps newColorWhite];
-
+	[MADThemeManager applyAppearanceToBarButtonItem:_barButtonItemRefresh traitCollection:self.traitCollection];
 	_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
 	self.edgesForExtendedLayout = UIRectEdgeNone;
 	
@@ -236,7 +234,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	
 	_refreshing = NO;
 	_startedRefresh = NO;
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -304,10 +301,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	UIBarButtonItem *buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
 																				   target: self
 																				   action: @selector(refresh:)];
-
+	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
 	UIBarButtonItem *buttonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
 																				target: nil
 																				action: @selector(done:)];
+	[MADThemeManager applyAppearanceToBarButtonItem:buttonDone traitCollection:self.traitCollection];
 
 	[self.navigationController setToolbarHidden:NO animated:animated];
 	
@@ -399,6 +397,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	[super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) { }];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	[self updateNavigationPrompt:previousTraitCollection != nil];
+	if (previousTraitCollection.userInterfaceStyle != self.traitCollection.userInterfaceStyle) {
+		[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemRefresh traitCollection:self.traitCollection];
+	}
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -538,11 +544,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	_refreshing = NO;
 	_updatingOfTimerIsPaused = NO;
 	
-	UIBarButtonItem *barButtonItemRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
+	UIBarButtonItem *buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
 																						  target: self
 																						  action: @selector(refresh:)];
-	barButtonItemRefresh.enabled = YES;
-	[self.navigationItem setRightBarButtonItem: barButtonItemRefresh
+	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
+	buttonRefresh.enabled = YES;
+	[self.navigationItem setRightBarButtonItem: buttonRefresh
 									  animated: YES];
 }
 
@@ -557,6 +564,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = NO;
+	activityIndicator.color = [MADColorEverydayApps newColorRed];
 
 	UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 	[activityIndicator startAnimating];
@@ -1034,13 +1042,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 - (BOOL)isAccessibilityElement {
 	return NO;
-}
-
-#pragma mark -
-#pragma mark Traits
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	[self updateNavigationPrompt:previousTraitCollection != nil];
 }
 
 #pragma mark -
