@@ -16,13 +16,12 @@
 
 @class MADocument;
 
-@interface MADFontSelectorViewController : UITableViewController
-    <UITableViewDelegate, UITableViewDataSource, MADToolboxDisplayProtocol>
+@interface MADFontSelectorViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, MADToolboxDisplayProtocol>
 
-    @property (nonatomic, weak) id <MADReportDesignerFontSelectorDelegate> delegate;
-    @property (nonatomic, assign) BOOL clearsBackground;
+@property (nonatomic, weak) id <MADReportDesignerFontSelectorDelegate> delegate;
+@property (nonatomic, assign) BOOL clearsBackground;
 
-    - (void)setFamilyName:(NSString *)familyName;
+- (void)setFamilyName:(NSString *)familyName;
 
 @end
 

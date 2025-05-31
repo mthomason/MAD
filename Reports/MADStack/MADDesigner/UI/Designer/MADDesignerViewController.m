@@ -122,20 +122,20 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 	MTToolboxTypeNone = 4,
 };
 
-static const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
-static const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
+static const CGFloat MADDefaultsPopooverWidth = 320.0;
+static const CGFloat MADDefaultsPopooverHeight = 480.0;
 
-static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer    = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
-static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer   = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
-static NSString * const MTSegueChooseWhitespaceSaveIdentifer                = @"MTSegueChooseWhitespaceSaveIdentifer";
-static NSString * const MTSegueChooseImageSaveIdentifer                     = @"MTSegueChooseImageSaveIdentifer";
+static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
+static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
+static NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
+static NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
 
-static NSString * const MTIdentifierSegueEditFieldExit                      = @"MTIdentifierSegueEditFieldExit";
+static NSString * const MTIdentifierSegueEditFieldExit = @"MTIdentifierSegueEditFieldExit";
 static NSString * const MTSegueNewDocumentObjectAggregateLabelSaveIdentifer = @"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer";
-static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer        = @"MTSegueNewDocumentObjectBarcodeSaveIdentifer";
+static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer = @"MTSegueNewDocumentObjectBarcodeSaveIdentifer";
 
-static const CGFloat MADSizeWidthViewDetailDisplay              = 32.0000f;
-static const CGFloat MADSizeHeightViewDetailDisplay             = 20.0000f;
+static const CGFloat MADSizeWidthViewDetailDisplay = 32.0;
+static const CGFloat MADSizeHeightViewDetailDisplay = 20.0;
 
 static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView);
 static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView);
@@ -145,11 +145,11 @@ static const inline CGSize sizePopoverDefault(void);
 static const inline CGSize sizePopoverFonts(void);
 
 static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
-	return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0000f);
+	return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0);
 }
 
 static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
-	return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0000f);
+	return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0);
 }
 static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) { return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail; }
 static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) { return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail; }
@@ -317,7 +317,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		self.borderAppliedToView = borderAppliedToView;
 		_identifierJustDisplayed = -1;
 		_boundsOnDisappear = CGRectZero;
-		_zoomScaleRestore = -1.0000f;
+		_zoomScaleRestore = -1.0;
 		_shownAndHidden = NO;
 		_editAggregate = NO;
 		_insetsSetup = NO;
@@ -417,7 +417,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
 		navigationController.transitioningDelegate = self.settingsTransitioningDelegate;
 		navigationController.modalPresentationStyle = UIModalPresentationCustom;
-		navigationController.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
+		navigationController.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0);
 		_navigationControllerSectionLayoutSettings = navigationController;
 	}
 	return _navigationControllerSectionLayoutSettings;
@@ -547,7 +547,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	_lastMenuItemSelectRequiresElementView = NO;
 	_zoomScaleRestore = self.view.scroller.zoomScale;
-	[self.view.scroller setZoomScale: 1.0000f animated: NO];
+	[self.view.scroller setZoomScale: 1.0 animated: NO];
 	
 	[self.view addSubview:self.statusLabelZoomScale];
 	[self updateDisplayDetailZoomValue];
@@ -1894,14 +1894,14 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
 													withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
 														   forIndexPath: indexPath];
-		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
+		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 200.0, 22.0)];
 		label.text = NSLocalizedString(@"Header", @"Header");
 		[result addSubview:label];
 	} else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
 		result = [collectionView dequeueReusableSupplementaryViewOfKind: kind
 													withReuseIdentifier: [MTCollectionReuseableViewDefault reuseIdentifier]
 														   forIndexPath: indexPath];
-		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 200.0000f, 22.0000f)];
+		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 200.0, 22.0)];
 		label.text = NSLocalizedString(@"Footer", @"Footer");
 		[result addSubview:label];
 	} else {
@@ -2234,7 +2234,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		}
 
 	}
-	gestureRecognizer.scale = 1.0000f;
+	gestureRecognizer.scale = 1.0;
 	if ([element.managedObjectContext hasChanges]) {
 		NSError *error = NULL;
 		[element.managedObjectContext save:&error];
@@ -2853,7 +2853,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 			CGPoint location = [self.view convertPoint:gesture.view.frame.origin toView:subview];
 			if ([subview pointInside:location withEvent:nil]) {
 				piece.transform = CGAffineTransformIdentity;
-				piece.alpha = 1.0000f;
+				piece.alpha = 1.0;
 				sectionView = (MADDesignerSectionView *)subview;
 				break;
 			}
@@ -2894,9 +2894,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		private.parentContext = self.document.managedObjectContext;
 		[private performBlockAndWait:^{
 
-			RptqDocumentSection *documentSection;
-			documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
-																  fromObjectContext:private];
+			RptqDocumentSection *documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+																					   fromObjectContext:private];
 			NSNumber *documentSectionKey = @(documentSection.identifier);
 			CGFloat documentSectionHeight = documentSection.height;
 			
@@ -2905,74 +2904,55 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 				[self.view.scroller.container updateSection:documentSectionKey height:documentSectionHeight];
 				[self.view setNeedsUpdateConstraints];
 				
-				MADSectionLayoutManager *layoutManager;
-				layoutManager = self.document.sectionLayoutManagers[sectionViewObjectIdTag];
-				NSIndexPath *path;
-				path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
-										   inSection: 0];
+				MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[sectionViewObjectIdTag];
+				NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
+														inSection: 0];
 				[sectionView insertItemAtIndex:path update:^(){
 					
 					MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
 					la.objectID = pieceIdentifier;
 					
-					NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-
-					RptqDocumentSection *documentSectionBlock;
-					RptqDocumentElement *documentObject;
-
-					documentSectionBlock = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
-																			   fromObjectContext:managedObjectContext];
-					documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceIdentifier
-																		 fromObjectContext: managedObjectContext];
-
-					
-					CGSize documentObjectSize = [documentObject sizeCalculated];
-					
+					NSManagedObjectContext *context = self.document.managedObjectContext;
+					RptqDocumentSection *docSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+																						  fromObjectContext:context];
+					RptqDocumentElement *docObj = [RptqDocumentElement newDocumentElementWithIdentifier: pieceIdentifier
+																					  fromObjectContext: context];
+					CGSize documentObjectSize = [docObj sizeCalculated];
 					la.frame = CGRectMake(locationInSection.x, locationInSection.y, documentObjectSize.width, documentObjectSize.height);
 					[layoutManager addItem:la];
 					[layoutManager layout];
 					[piece removeFromSuperview];
 					
-					[documentSectionBlock addDocumentObject: documentObject
-											  withDropPoint: locationInSection
-									   managedObjectContext: managedObjectContext];
+					[docSection addDocumentObject: docObj
+									withDropPoint: locationInSection
+							 managedObjectContext: context];
 
-					if ([managedObjectContext hasChanges]) {
+					if ([context hasChanges]) {
 						NSError *saveError = NULL;
-						BOOL saved = [managedObjectContext save:&saveError];
+						BOOL saved = [context save:&saveError];
 						if (!saved && saveError != nil) {
 							os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 						}
 					}
 				} animationComplete:^(BOOL complete) {
-					
 					if (complete) {
 						[self.view.scroller.container invalidateIntrinsicContentSize];
 						[self.view setNeedsUpdateConstraints];
 					}
-					
 				} completion:^() {
-					
-					NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
-					
-
-					RptqDocumentSection *sectionBlock;
-					sectionBlock = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
-																	   fromObjectContext:managedObjectContext];
-
-					CGFloat sectionViewIntrinsicContentSizeHeight = [sectionView intrinsicContentSize].height;
-					sectionBlock.height = sectionViewIntrinsicContentSizeHeight;
-					if ([managedObjectContext hasChanges]) {
+					NSManagedObjectContext *context = self.document.managedObjectContext;
+					RptqDocumentSection *docSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+																							fromObjectContext:context];
+					docSection.height = [sectionView intrinsicContentSize].height;
+					if ([context hasChanges]) {
 						NSError *saveError = NULL;
-						BOOL saved = [managedObjectContext save:&saveError];
+						BOOL saved = [context save:&saveError];
 						if (!saved && saveError != nil) {
 							os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 						}
 					}
 					[self redrawAllElementViewsInCollectionView:sectionView];
 					[self.view setNeedsLayout];
-					
-					
 				}];
 			}];
 		}];
@@ -2983,12 +2963,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
 	if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-		UIView *piece = gestureRecognizer.view;
-		CGPoint locationInView = [gestureRecognizer locationInView:piece];
+		UIView *v = gestureRecognizer.view;
+		CGPoint locationInView = [gestureRecognizer locationInView:v];
 		CGPoint locationInSuperview = [gestureRecognizer locationInView:self.view.scroller.container];
 		locationInSuperview = [self.view.scroller.container convertPoint:locationInSuperview toView:self.view];
-		piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
-		piece.center = locationInSuperview;
+		v.layer.anchorPoint = CGPointMake(locationInView.x / v.bounds.size.width, locationInView.y / v.bounds.size.height);
+		v.center = locationInSuperview;
 	}
 }
 
@@ -3033,13 +3013,11 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)setScrollersEnabled:(BOOL)enabled {
-
 	MADDesignerScrollView *scroller = self.view.scroller;
 	@synchronized(scroller) {
 		if ([scroller respondsToSelector:@selector(setScrollEnabled:)]) {
 			scroller.scrollEnabled = enabled;
 			[scroller flashScrollIndicators];
-			
 			for (UICollectionView *collectionView in (scroller.container).subviews) {
 				if ([collectionView isKindOfClass: [UICollectionView class]]) {
 					collectionView.scrollEnabled = enabled;

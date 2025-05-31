@@ -15,14 +15,12 @@
 
 @class MADocument;
 
-@interface MADToolboxViewController : UIViewController
-    <MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol>
+@interface MADToolboxViewController : UIViewController <MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol>
 
-    + (instancetype)newToolboxViewController;
+@property (readwrite, nonatomic, weak) NSSet <NSNumber *> *selectedElementIDs;
+@property (nonatomic, assign) BOOL clearsBackground;
 
-    @property (readwrite, nonatomic, weak) NSSet <NSNumber *> *selectedElementIDs;
-
-    @property (nonatomic, assign) BOOL clearsBackground;
++ (instancetype)newToolboxViewController;
 
 @end
 

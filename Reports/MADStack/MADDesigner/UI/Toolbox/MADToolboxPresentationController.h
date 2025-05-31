@@ -17,13 +17,13 @@
 
 @interface MADToolboxPresentationController : UIPresentationController
 
-    @property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
-    @property (nonatomic, weak) UIView *container;
-    @property (nonatomic, strong) UIView *passthroughContainer;
-    @property (nonatomic, strong) NSSet *passthroughContainers;
-    @property (nonatomic, strong) NSSet *passthroughViews;
+@property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
+@property (nonatomic, weak) UIView *container;
+@property (nonatomic, strong) UIView *passthroughContainer;
+@property (nonatomic, strong) NSSet *passthroughContainers;
+@property (nonatomic, strong) NSSet *passthroughViews;
 
-    - (BOOL)showOnSide;
+- (BOOL)showOnSide;
 
 @end
 

@@ -22,28 +22,27 @@
 
 @interface MADToolboxAnimatedTransitioning : NSObject <UIViewControllerAnimatedTransitioning>
 
-    @property (nonatomic, weak) id <MADToolboxAnimatedTransitioningProtocol> delegate;
-    @property (nonatomic, weak) UIView *passthroughContainer;
-    @property (nonatomic, assign, getter=isToolboxVisible) BOOL toolboxVisible;
+@property (nonatomic, weak) id <MADToolboxAnimatedTransitioningProtocol> delegate;
+@property (nonatomic, weak) UIView *passthroughContainer;
+@property (nonatomic, assign, getter=isToolboxVisible) BOOL toolboxVisible;
 
 @end
 
 @interface MADToolboxTransitioningDelegate : NSObject <UIViewControllerTransitioningDelegate>
 
-    @property (nonatomic, strong, readonly) UIPresentationController *presentationController;
-    @property (nonatomic, assign, readonly) BOOL popoverStyle;
+@property (nonatomic, strong, readonly) UIPresentationController *presentationController;
+@property (nonatomic, assign, readonly) BOOL popoverStyle;
 
-    //For popover view
-    @property (nonatomic, assign) CGRect sourceRect;
-    @property (nonatomic, weak) UIView *sourceView;
-    @property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
+@property (nonatomic, assign) CGRect sourceRect;
+@property (nonatomic, weak) UIView *sourceView;
+@property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
 
-    @property (nonatomic, weak) UIView *container;
-    @property (nonatomic, weak) UIView *passthroughContainer;
-    @property (nonatomic, strong) NSSet *passthroughContainers;
-    @property (nonatomic, strong) NSSet *passthroughViews;
+@property (nonatomic, weak) UIView *container;
+@property (nonatomic, weak) UIView *passthroughContainer;
+@property (nonatomic, strong) NSSet *passthroughContainers;
+@property (nonatomic, strong) NSSet *passthroughViews;
 
-    @property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
+@property (nonatomic, weak) id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate;
 
 @end
 

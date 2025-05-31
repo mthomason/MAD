@@ -164,12 +164,27 @@
 }
 
 - (CGRect)frameOfPresentedViewInContainerView {
-	CGRect presentedViewFrame = CGRectZero;
 	CGRect containerBounds = self.containerView.bounds;
-	presentedViewFrame.size = [self sizeForChildContentContainer: (UIViewController<UIContentContainer> *)self.presentedViewController
-										 withParentContainerSize: containerBounds.size];
-	presentedViewFrame.origin.x = [self showOnSide] ? containerBounds.size.width - presentedViewFrame.size.width : CGPointZero.x;
-	presentedViewFrame.origin.y = [self showOnSide] ? CGPointZero.y : containerBounds.size.height - presentedViewFrame.size.height;
+	UIEdgeInsets safeAreaInsets = self.containerView.safeAreaInsets;
+	CGSize contentSize = [self sizeForChildContentContainer:(UIViewController<UIContentContainer> *)self.presentedViewController
+									withParentContainerSize:containerBounds.size];
+	CGRect presentedViewFrame = CGRectZero;
+	BOOL showOnSide = [self showOnSide];
+	
+	if (showOnSide) {
+		// Side presentation (landscape)
+		presentedViewFrame.size.width = contentSize.width;
+		presentedViewFrame.size.height = containerBounds.size.height - safeAreaInsets.top - safeAreaInsets.bottom;
+		presentedViewFrame.origin.x = containerBounds.size.width - contentSize.width - safeAreaInsets.right;
+		presentedViewFrame.origin.y = safeAreaInsets.top;
+	} else {
+		// Bottom presentation (portrait)
+		presentedViewFrame.size.width = containerBounds.size.width - safeAreaInsets.left - safeAreaInsets.right;
+		presentedViewFrame.size.height = contentSize.height;
+		presentedViewFrame.origin.x = safeAreaInsets.left;
+		presentedViewFrame.origin.y = containerBounds.size.height - contentSize.height - safeAreaInsets.bottom;
+	}
+	
 	return presentedViewFrame;
 }
 

@@ -14,11 +14,10 @@
 
 @class MADocument;
 
-@interface MADToolboxFormatViewController : UITableViewController
-    <MADViewControllerDocumentProtocol>
+@interface MADToolboxFormatViewController : UITableViewController <MADViewControllerDocumentProtocol>
 
-    @property (nonatomic, weak) MADocument *document;
-    @property (nonatomic, assign) BOOL clearsBackground;
+@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 

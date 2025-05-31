@@ -29,8 +29,8 @@ NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardL
 NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
 NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardStyle";
 
-const CGFloat MADNavigationBarSizeHeightNormal = 44.0000f;
-const CGFloat MADNavigationBarSizeHeightConstrained = 32.0000f;
+const CGFloat MADNavigationBarSizeHeightNormal = 44.0;
+const CGFloat MADNavigationBarSizeHeightConstrained = 32.0;
 
 typedef UIViewController <MADToolboxControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanel;
 typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayProtocol, MADViewControllerDocumentProtocol> MADToolboxPanelTable;
@@ -58,60 +58,34 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 #pragma mark Static
 
 + (void)initialize {
-    [super initialize];
-    if (self == [MADToolboxViewController class]) {
-        @autoreleasepool {
-            UISegmentedControl *controlAppearance;
-            id classes;
-            classes = [[NSArray alloc] initWithObjects:[UINavigationBar class], nil];
-            controlAppearance = [UISegmentedControl appearanceWhenContainedInInstancesOfClasses: classes];
-            controlAppearance.tintColor = [UIColor whiteColor];
-        }
-    }
+	[super initialize];
+	if (self == [MADToolboxViewController class]) {
+		@autoreleasepool {
+			UISegmentedControl *controlAppearance = [UISegmentedControl appearanceWhenContainedInInstancesOfClasses: @[[UINavigationBar class]]];
+			controlAppearance.tintColor = [UIColor whiteColor];
+		}
+	}
 }
 
 + (instancetype)newToolboxViewController {
-    UIStoryboard *storyboard;
-    id toolbox;
-    
-    storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox"
-                                           bundle: [NSBundle mainBundle]];
-    toolbox = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
-    return toolbox;
-}
-
-+ (NSString *)keyPathSelectedObjectIds {
-    NSString *selectedElementIDs = NSStringFromSelector(@selector(selectedElementIDs));
-    return selectedElementIDs;
+	return [[UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
 }
 
 - (CGSize)preferredContentSize {
-    switch (self.sceneSelector.selectedSegmentIndex) {
-        case 0:
-            return CGSizeMake(320.0000, 240.0000f);
-            break;
-        case 1:
-            return CGSizeMake(320.0000, 480.0000f);
-            break;
-        case 2:
-            return CGSizeMake(320.0000, 280.0000f);
-            break;
-        default:
-            return CGSizeMake(320.0000f, 480.0000f);
-    }
+	switch (self.sceneSelector.selectedSegmentIndex) {
+		case 0: return CGSizeMake(320.0, 240.0);
+		case 1: return CGSizeMake(320.0, 480.0);
+		case 2: return CGSizeMake(320.0, 280.0);
+		default: return CGSizeMake(320.0, 480.0);
+	}
 }
 
 #pragma mark -
 #pragma mark View Controller
 
 - (void)dealloc {
-
-    [self removeObserver: self
-              forKeyPath: NSStringFromSelector(@selector(document))];
-
-    [self removeObserver: self
-              forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]];
-    
+	[self removeObserver: self forKeyPath: NSStringFromSelector(@selector(document))];
+	[self removeObserver: self forKeyPath: NSStringFromSelector(@selector(selectedElementIDs))];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -130,7 +104,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 		
 		
 		[self addObserver: self
-			   forKeyPath: [MADToolboxViewController keyPathSelectedObjectIds]
+			   forKeyPath: NSStringFromSelector(@selector(selectedElementIDs))
 				  options: (NSKeyValueObservingOptions)0
 				  context: NULL];
 		
@@ -228,8 +202,6 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 		[viewControllerToHide removeFromParentViewController];
 		[viewControllerToShow didMoveToParentViewController:self];
 		[((UINavigationController *)viewControllerToShow).topViewController didMoveToParentViewController:self];
-		
-		
 	}];
 	
 }
@@ -273,7 +245,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 		id <MADViewControllerDocumentProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
 		[delegate setDocument:self.document];
 		
-	} else if ([keyPath isEqualToString:[MADToolboxViewController keyPathSelectedObjectIds]]) {
+	} else if ([keyPath isEqualToString:NSStringFromSelector(@selector(selectedElementIDs))]) {
 		
 		id <MADToolboxControllerProtocol> delegate;
 		delegate = [self delegateForController:self.childViewControllers.firstObject];
@@ -294,24 +266,24 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 			
 		case 0:
 			[self showStyleViewController];   //Handles this case alone...
-			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			self.preferredContentSize = CGSizeMake(320.0, 480.0);
 			return;
 			break;
 			
 		case 1:
-			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			self.preferredContentSize = CGSizeMake(320.0, 480.0);
 			viewControllerToShow = self.layout;
 			viewControllerToUpdate = self.layout;
 			break;
 			
 		case 2:
-			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			self.preferredContentSize = CGSizeMake(320.0, 480.0);
 			viewControllerToShow = self.format;
 			viewControllerToUpdate = self.format;
 			break;
 			
 		default:
-			self.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
+			self.preferredContentSize = CGSizeMake(320.0, 480.0);
 			viewControllerToShow = self.layout;
 			viewControllerToUpdate = self.layout;
 			break;
