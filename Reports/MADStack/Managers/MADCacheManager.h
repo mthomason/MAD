@@ -15,9 +15,9 @@
 
 @interface MADCacheManager : NSObject
 
-    - (instancetype)init NS_UNAVAILABLE;
-    + (instancetype)sharedManager;
-    - (void)addOperation:(NSOperation *)operation;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)sharedManager;
+- (void)addOperation:(NSOperation *)operation;
 
 @end
 

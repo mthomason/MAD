@@ -13,8 +13,11 @@
 
 @interface UIApplication (Helpers)
 
-+ (__kindof UIViewController *)topViewController NS_RETURNS_NOT_RETAINED;
 @property(nonatomic,readonly) UIWindow *safeKeyWindow;
+
++ (__kindof UIViewController *)topViewController NS_RETURNS_NOT_RETAINED;
++ (NSString *)version;
+- (UIBackgroundTaskIdentifier)requestBackgroundTask;
 
 @end
 

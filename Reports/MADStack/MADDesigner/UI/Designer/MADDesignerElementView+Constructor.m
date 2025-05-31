@@ -7,12 +7,12 @@
 //
 
 #import "MADDesignerElementView+Constructor.h"
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MAD/RptqDocumentElement+Extras.h>
 #import "MADDesignerElementTextView.h"
 #import "MADDesignerElementBarcodeView.h"
 #import "MADDesignerElementImageView.h"
 #import "UITapGestureRecognizer+Designer.h"
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MAD/RptqDocumentElement+Extras.h>
 
 @interface MADDesignerElementView ()
 
@@ -47,10 +47,9 @@
 		[elementView updateWithElement:documentObject];
 		
 		elementView.managedObjectContext = documentObject.managedObjectContext;
-		UIGestureRecognizer *tap;
-		tap = [MADTapGestureRecognizer newTapGestureRecognizerTapWithTarget: tapGestureDelegate
-																	 action: selector
-																   delegate: tapGestureDelegate];
+		UIGestureRecognizer *tap = [MADTapGestureRecognizer newTapGestureRecognizerTapWithTarget: tapGestureDelegate
+																						  action: selector
+																						delegate: tapGestureDelegate];
 		[elementView addGestureRecognizer:tap];
 	}
 	return elementView;

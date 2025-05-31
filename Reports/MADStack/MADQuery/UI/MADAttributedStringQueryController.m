@@ -19,8 +19,7 @@
 										   symbol:(NSString *)symbol
 										rightText:(NSString *)rightText {
 	UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-	NSString *formatString = @"%1$@ %2$@ %3$@";
-	NSString *messageText = [[NSString alloc] initWithFormat:formatString, leftText, symbol, rightText];
+	NSString *messageText = [[NSString alloc] initWithFormat:@"%1$@ %2$@ %3$@", leftText, symbol, rightText];
 	
 	NSDictionary *attributes = @{ NSFontAttributeName: font };
 	UIColor *color = [MADColorEverydayApps newColorBlue];

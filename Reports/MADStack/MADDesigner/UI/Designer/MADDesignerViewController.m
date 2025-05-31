@@ -29,7 +29,6 @@
 #import "MADManagedObjectCollectionView.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
-#import "MADPopoverBackgroundView.h"
 #import "MADToolboxPresentationController.h"
 #import "MADDesignerStatusLabel.h"
 #import "MADDesignerScrollView.h"

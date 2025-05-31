@@ -14,6 +14,11 @@
 
 @interface MADQueryVisualizationSchemaView : UIView <MADManagedObjectViewProtocol>
 
+@property (nonatomic, readwrite) CGPoint center;
+@property (nonatomic, readwrite) CGAffineTransform transform;
+@property (nonatomic, readonly) CGRect bounds;
+@property (nonatomic, assign) int64_t identifier;
+
 @end
 
 #endif

@@ -9,32 +9,47 @@
 #ifndef Reports_MTElementView_h
 #define Reports_MTElementView_h
 
-#import <UIKit/UIView.h>
 #import "MADManagedObjectViewProtocol.h"
-#import "MADViewAnimationProtocol.h"
-#import "MADDesignerElementViewProtocol.h"
-#import "MADDesignerElementViewDataSource.h"
+#import <MAD/MADDocumentObjectType.h>
+#import <UIKit/UIView.h>
+
 
 @protocol UIGestureRecognizerDelegate;
+@class UIPanGestureRecognizer, NSManagedObjectContext, MADDesignerElementView, RptqDocumentElement;
 
-@class UIPanGestureRecognizer, NSManagedObjectID, NSManagedObjectContext, MADDesignerElementView, MTBarcode, RptqDocumentElement;
+@protocol MADDesignerElementViewDataSource <NSObject>
+@required
+- (MADPrintPageElementType)documentObjectTypeForElementView:(MADDesignerElementView *)elementView;
+- (id)documentObjectForElementView:(MADDesignerElementView *)elementView;
+- (CGSize)documentObjectSizeForElementView:(MADDesignerElementView *)elementView;
+@optional
+@end
+
+@protocol MADViewAnimationProtocol <NSObject>
+- (void)flash:(void (^)(BOOL finished))completion;
+@end
+
+@protocol MADDesignerElementViewProtocol <NSObject>
+@required
+@property (nonatomic, readwrite, assign) BOOL displayWobbling;
+@property (nonatomic, readwrite, assign) BOOL enableResizing;
+@property (nonatomic, readwrite, assign) BOOL displayHighlighted;
+@end
 
 @interface MADDesignerElementView : UIView <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
+@property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) id displayObject;
+@property (nonatomic, readonly, copy) NSString *textRepresentation;
 
-	@property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
+- (void)setWobbleRunning:(BOOL)running;
+- (void)flash:(void (^)(BOOL finished))completion;
 
-	@property (nonatomic, strong) id displayObject;
-	@property (nonatomic, readonly, copy) NSString *textRepresentation;
+- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+- (void)updateWithElement:(RptqDocumentElement *)element;
+- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 
-	- (void)setWobbleRunning:(BOOL)running;
-	- (void)flash:(void (^)(BOOL finished))completion;
-
-	- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
-	- (void)updateWithElement:(RptqDocumentElement *)element;
-	- (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
-
-	- (void)applyBorder;
-	- (void)removeBorder;
+- (void)applyBorder;
+- (void)removeBorder;
 
 @end
 

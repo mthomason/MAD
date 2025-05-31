@@ -152,15 +152,12 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 		animationComplete: (void (^)(BOOL))animationComplete completion: (void (^)(void))completion {
 
 	void (^updates)(void) = ^{
-		
 		if (update != nil) update();
 		NSArray *indexPaths = [[NSArray alloc] initWithObjects:deletePath, nil];
 		[self deleteItemsAtIndexPaths: indexPaths];
-		
 	};
 
 	void (^complets)(BOOL) = ^(BOOL finished) {
-		
 		if (finished) {
 
 			void (^animate)(void) = ^{

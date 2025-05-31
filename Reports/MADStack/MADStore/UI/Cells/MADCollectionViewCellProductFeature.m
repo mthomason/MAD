@@ -7,7 +7,6 @@
 //
 
 #import "MADCollectionViewCellProductFeature.h"
-#import "MADBackgroundView.h"
 #import <MADExplorer/MADBackgroundViewSelected.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UINibLoading.h>
@@ -30,16 +29,16 @@ static inline CGRect ImageSize(CGSize size) {
 @implementation MADCollectionViewCellProductFeature
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        
-        UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc] initWithFrame:self.bounds];
-        UIView *backgroundView = [[MADBackgroundView alloc] initWithFrame:self.bounds];
-        
-        self.selectedBackgroundView = selectedBackgroundView;
-        self.backgroundView = backgroundView;
-        
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		UIView *selectedBackgroundView = [[MADBackgroundViewSelected alloc] initWithFrame:self.bounds];
+		UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+		backgroundView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent: 1.0/3.0];
+		backgroundView.clipsToBounds = YES;
+		backgroundView.layer.cornerRadius = 5.0;
+		self.selectedBackgroundView = selectedBackgroundView;
+		self.backgroundView = backgroundView;
+	}
+	return self;
 }
 
 - (void)awakeFromNib {

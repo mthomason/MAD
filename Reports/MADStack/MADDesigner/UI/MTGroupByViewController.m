@@ -31,9 +31,7 @@
 NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewControllerIdentifier";
 
 @interface MADGroupByViewController ()
-
-	@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
-
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
 @end
 
 @implementation MADGroupByViewController
@@ -45,9 +43,9 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 	self.navigationItem.hidesBackButton = NO;
 	
 	MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-	titleView.text = NSLocalizedString(@"Group By",
-									   @"Title of form that allows you to choose an item to group other items by...");
+	titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
 	self.navigationItem.titleView = titleView;
+	
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
 	NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
 														   ascending:YES];
@@ -248,8 +246,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	id <NSFetchedResultsSectionInfo> sectionInfo =
-								_fetchedResultsControllerGroups.sections[(NSUInteger)section];
+	id <NSFetchedResultsSectionInfo> sectionInfo = _fetchedResultsControllerGroups.sections[(NSUInteger)section];
 	NSString *title = sectionInfo.name.copy;
 	return title;
 }

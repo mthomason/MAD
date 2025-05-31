@@ -9,10 +9,10 @@
 #ifndef Reports_MTQueryBuilderContainerController_h
 #define Reports_MTQueryBuilderContainerController_h
 
-#import <UIKit/UISplitViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
-#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import "MADTabBarItemProtocol.h"
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+#import <UIKit/UISplitViewController.h>
 
 @class MADQueryVisualizationViewController, MADNavigationControllerQueryBuilder, MADQueryViewController, MADocument, MADNavigationControllerQueryVisualization;
 

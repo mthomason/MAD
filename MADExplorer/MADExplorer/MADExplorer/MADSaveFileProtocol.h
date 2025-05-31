@@ -9,6 +9,10 @@
 #ifndef MADExplorer_MADSaveFileProtocol_h
 #define MADExplorer_MADSaveFileProtocol_h
 
+#import <Foundation/NSObject.h>
+
+@class NSURL;
+
 @protocol MADSaveFileProtocol <NSObject>
 - (NSURL *)documentDirectory;
 @end

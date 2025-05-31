@@ -11,6 +11,9 @@
 @implementation MADQueryVisualizationSchemaView
 
 @synthesize identifier = _identifier;
+@dynamic center;
+@dynamic bounds;
+@dynamic transform;
 
 - (instancetype)init {
 	if (self = [super init]) {

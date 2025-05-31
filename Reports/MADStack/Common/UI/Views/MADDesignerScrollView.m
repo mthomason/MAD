@@ -15,39 +15,39 @@
 
 #import "MADDesignerLayoutDesignView.h"
 
-static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect);
+static inline CGRect displayBoundsRect(CGPoint, CGSize, CGRect);
+static inline CGRect displayBoundsToScale(CGFloat, CGRect);
+static inline CGRect displayBoundsScaled(CGFloat, CGRect);
+
 static inline CGRect displayBoundsRect(CGPoint offset, CGSize size, CGRect presentedRect) {
 	CGRect r = CGRectMake(offset.x, offset.y,
 									size.width, size.height - presentedRect.size.height);
 	return r;
 }
 
-static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest);
 static inline CGRect displayBoundsToScale(CGFloat zoomScale, CGRect rectOfInterest) {
 	CGRect r = zoomScale >= 1 ? rectOfInterest :
 												CGRectAdjustForScale(rectOfInterest, zoomScale);
 	return r;
 }
 
-static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect);
 static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
 	CGRect r = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f), rect.origin.y + adjustment,
 									CGFLOAT_MAX, rect.size.height - adjustment);
 	return r;
 }
 
-@interface MADDesignerScrollView ()
-	<UIGestureRecognizerDelegate>
+@interface MADDesignerScrollView () <UIGestureRecognizerDelegate>
 
-	@property (nonatomic, strong) NSArray *availableZoomScales;
+@property (nonatomic, strong) NSArray *availableZoomScales;
 
-	- (instancetype)initWithCoder:(NSCoder *)aDecoder;
-	- (void)handleTapDoubleGesture:(UITapGestureRecognizer *)sender;
-	- (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect
-						  containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment;
-	- (void)setNeedsDisplay;
-	- (void)setNeedsUpdateConstraints;
-	- (void)setNeedsLayout;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+- (void)handleTapDoubleGesture:(UITapGestureRecognizer *)sender;
+- (CGRect)positionForRectOfInterest:(CGRect)rectOfInterest withPresentedRect:(CGRect)presentedRect
+					  containerSize:(CGSize)containerSize adjustment:(CGFloat)adjustment;
+- (void)setNeedsDisplay;
+- (void)setNeedsUpdateConstraints;
+- (void)setNeedsLayout;
 
 @end
 
@@ -88,27 +88,25 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
 		NSDictionary *metrics = [[NSDictionary alloc] init];
 		NSDictionary *views = NSDictionaryOfVariableBindings(container);
 		
-		NSArray *horizontalConstrains, *verticalConstrains, *constraints;
-		horizontalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[container]|"
+		NSArray<NSLayoutConstraint *> *horizontalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: @"H:|[container]|"
 																	   options: NSLayoutFormatAlignAllCenterX
 																	   metrics: metrics
 																		 views: views];
 		
-		verticalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[container]|"
+		NSArray<NSLayoutConstraint *> *verticalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: @"V:|[container]|"
 																	 options: NSLayoutFormatAlignAllCenterY
 																	 metrics: metrics
 																	   views: views];
 
-		constraints = [horizontalConstrains arrayByAddingObjectsFromArray:verticalConstrains];
-		
-		
+		NSArray<NSLayoutConstraint *> *constraints = [horizontalConstrains arrayByAddingObjectsFromArray:verticalConstrains];
+		[self addConstraints:constraints];
+
 		UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
 																			  action: @selector(handleTapDoubleGesture:)];
 		tap.numberOfTapsRequired = 2;
 		tap.numberOfTouchesRequired = 1;
-		
-		[self addConstraints:constraints];
 		[self addGestureRecognizer:tap];
+
 		self.container = container;
 		self.doubleTapToZoom = tap;
 		
@@ -146,9 +144,7 @@ static inline CGRect displayBoundsScaled(CGFloat adjustment, CGRect rect) {
 		}
 		
 		CGRect visibleRect = CGRectAdjustForScale(displayBoundsRect(self.contentOffset, containerSize, presentedRect), self.zoomScale);
-		
 		CGRect rectOfInterestAdjusted = displayBoundsToScale(self.zoomScale, rectOfInterest);
-		
 		CGRect visibleRectAdjusted = displayBoundsScaled(adjustment, visibleRect);
 
 		if (CGRectContainsRect(visibleRectAdjusted, rectOfInterestAdjusted) == NO) {

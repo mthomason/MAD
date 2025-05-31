@@ -1035,9 +1035,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark Private events handlers
 
 - (void)handleReloadAfterClose {
-	NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
+	//NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
 	self.collectionView.allowsSelection = YES;
-	[self.collectionView reloadItemsAtIndexPaths:visibleItems];
+	//[self.collectionView reloadItemsAtIndexPaths:visibleItems];
 }
 
 #pragma mark - MADDocumentDelegate

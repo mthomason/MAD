@@ -25,7 +25,6 @@
 #import "MADRefreshOperationReload.h"
 #import "MTStoreKitController+Features.h"
 #import "UIViewController+tabBarItem.h"
-#import "UIApplication+Extras.h"
 #import "NSDate+Extras.h"
 #import "madlog.h"
 
@@ -39,6 +38,7 @@
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
+#import <MADCocoaExtensions/UIApplication+Helpers.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADDataStructures/MTPair.h>
 #import <MAD/MADActivityItemProviderDelegate.h>

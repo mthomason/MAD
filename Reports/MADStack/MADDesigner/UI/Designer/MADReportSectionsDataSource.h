@@ -9,16 +9,13 @@
 #ifndef MAD_MADReportSectionsDataSource_h
 #define MAD_MADReportSectionsDataSource_h
 
-#import <objc/NSObject.h>
 #import "MADReportSectionDataSourceProtocol.h"
 
 @class NSManagedObjectContext;
 
-@protocol UICollectionViewDelegate, UICollectionViewDataSource,
-			MADDesignerSectionLayoutLiquidDelegate;
+@protocol UICollectionViewDelegate, UICollectionViewDataSource, MADDesignerSectionLayoutLiquidDelegate;
 
-@interface MADReportSectionsDataSource : NSObject
-	<MADDesignerDesignViewDataSource>
+@interface MADReportSectionsDataSource : NSObject <MADDesignerDesignViewDataSource>
 
 	@property (nonatomic, readwrite, weak) id <MADDesignerSectionLayoutLiquidDelegate,
 												UICollectionViewDelegate,

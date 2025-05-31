@@ -9,8 +9,11 @@
 #ifndef MADDocumentCreationManagerInterface_h
 #define MADDocumentCreationManagerInterface_h
 
+#import <Foundation/NSObject.h>
+
 @protocol MADDocumentCreationManagerProtocol;
-@class MADDatabaseConnection, UIViewController;
+
+@class MADDatabaseConnection, UIViewController, NSString, NSURL;
 
 @protocol MADDocumentCreationManagerInterface <NSObject>
 	- (instancetype)initWithFilename: (NSString *)filename

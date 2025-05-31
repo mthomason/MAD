@@ -9,7 +9,9 @@
 #ifndef Reports_MADAttributedStringQueryController_h
 #define Reports_MADAttributedStringQueryController_h
 
-#import <Foundation/NSAttributedString.h>
+#import <Foundation/NSObject.h>
+
+@class NSString, NSAttributedString;
 
 @interface MADAttributedStringQueryController : NSObject
 

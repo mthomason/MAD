@@ -12,10 +12,6 @@
 
 #import "MTViewControllerDynamicItem.h"
 
-@interface MTViewControllerDynamicItem ()
-
-@end
-
 @implementation MTViewControllerDynamicItem
 
 - (void)setCenter:(CGPoint)center {

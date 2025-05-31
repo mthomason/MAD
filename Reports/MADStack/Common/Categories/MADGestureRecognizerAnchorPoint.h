@@ -13,9 +13,9 @@
 
 @interface MADGestureRecognizerAnchorPoint : NSObject
 
-	+ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
-	+ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-											  inView:(UIView *)containerView;
++ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
++ (CGPoint)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+										  inView:(UIView *)containerView;
 
 @end
 

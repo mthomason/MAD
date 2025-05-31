@@ -11,7 +11,7 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIWindowScene.h>
 
-@implementation UIApplication (KeyWindowSafe)
+@implementation UIApplication (Helpers)
 
 - (UIWindow *)safeKeyWindow {
 	for (UIScene *scene in self.connectedScenes) {
@@ -35,6 +35,19 @@
 		}
 	}
 	return viewController;
+}
+
++ (NSString *)version {
+	return CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
+}
+
+- (UIBackgroundTaskIdentifier)requestBackgroundTask {
+	__block UIBackgroundTaskIdentifier bgTask = UIBackgroundTaskInvalid;
+	bgTask = [self beginBackgroundTaskWithExpirationHandler:^{
+		[self endBackgroundTask:bgTask];
+		bgTask = UIBackgroundTaskInvalid;
+	}];
+	return bgTask;
 }
 
 @end

@@ -9,6 +9,8 @@
 #ifndef MADIdentifierQueryViewSections_h
 #define MADIdentifierQueryViewSections_h
 
+#import <Foundation/NSObjCRuntime.h>
+
 typedef NS_ENUM(short, MADIdentifierQueryViewSections) {
 	MADIdentifierQueryViewSectionsDocumentGroups = 0,
 	MADIdentifierQueryViewSectionsDatasource = 1,

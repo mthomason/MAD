@@ -9,6 +9,8 @@
 #ifndef MADReportSectionDataSourceProtocol_h
 #define MADReportSectionDataSourceProtocol_h
 
+#import <objc/NSObject.h>
+
 @class MADDesignerSectionView, MADDesignerSectionLabel, MADDesignerLayoutDesignView,
 		UITapGestureRecognizer, NSNumber;
 

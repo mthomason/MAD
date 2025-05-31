@@ -9,26 +9,26 @@
 #ifndef Reports_MADPageViewAttributes_h
 #define Reports_MADPageViewAttributes_h
 
-#import <Foundation/NSObject.h>
-#import <CoreGraphics/CGGeometry.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
-@interface MADPageViewAttributes : NSObject
-	<NSCoding, NSCopying>
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
 
-	- (instancetype)initWithPosition:(MADReportPosition)position
-								size:(CGSize)size;
-	- (instancetype)initWithCurrentPage:(NSUInteger)currentPageNumber
-								  total:(NSUInteger)numberOfPages
-								   size:(CGSize)size;
+@interface MADPageViewAttributes : NSObject <NSCoding, NSCopying>
 
-	@property (nonatomic, assign, readwrite) NSUInteger pageNumber;
-	@property (nonatomic, assign, readwrite) NSUInteger numberOfPages;
-	@property (nonatomic, assign, readwrite) CGPoint contentOffsetInital;
-	@property (nonatomic, assign, readwrite) CGSize contentSizeInital;
-	@property (nonatomic, assign, readwrite) double zoomScaleInital;
-	@property (nonatomic, assign, readwrite) double contentScaleFactor;
-	@property (nonatomic, copy) NSDate *reportLastCacheDate;
+@property (nonatomic, assign, readwrite) NSUInteger pageNumber;
+@property (nonatomic, assign, readwrite) NSUInteger numberOfPages;
+@property (nonatomic, assign, readwrite) CGPoint contentOffsetInital;
+@property (nonatomic, assign, readwrite) CGSize contentSizeInital;
+@property (nonatomic, assign, readwrite) double zoomScaleInital;
+@property (nonatomic, assign, readwrite) double contentScaleFactor;
+@property (nonatomic, copy) NSDate *reportLastCacheDate;
+
+- (instancetype)initWithPosition:(MADReportPosition)position
+							size:(CGSize)size;
+- (instancetype)initWithCurrentPage:(NSUInteger)currentPageNumber
+							  total:(NSUInteger)numberOfPages
+							   size:(CGSize)size;
 
 @end
 

@@ -24,10 +24,7 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 + (dispatch_queue_t)queue_file_monitor {
 	static dispatch_queue_t _queue_file_monitor = nil;
 	if (!_queue_file_monitor) {
-		const char queue_label[] = "com.everydayapps.mad.queue.monitor.thumbnail";
-		dispatch_queue_attr_t queue_attr;
-		queue_attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -1);
-		_queue_file_monitor = dispatch_queue_create(queue_label, queue_attr);
+		_queue_file_monitor = dispatch_queue_create("com.everydayapps.mad.queue.monitor.thumbnail", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, -1));
 	}
 	return _queue_file_monitor;
 }
@@ -59,8 +56,7 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
 }
 
-- (void)setImageSyncFromPath:(NSString *)path {
-}
+- (void)setImageSyncFromPath:(NSString *)path { }
 
 - (void)setThumbnailPath:(NSString *)path {
 	

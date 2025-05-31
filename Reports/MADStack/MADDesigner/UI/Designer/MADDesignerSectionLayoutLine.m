@@ -12,27 +12,21 @@
 
 @interface MADDesignerSectionLayoutLine ()
 
-    @property (nonatomic, assign) CGSize contentSize;
-    @property (nonatomic, assign) NSUInteger numberOfSections;
-
-    @property (nonatomic, strong) NSMutableArray *itemAttributesBySection;
-    @property (nonatomic, strong) NSMutableArray *decorationAttributesBySection;
-    @property (nonatomic, strong) NSMutableArray *invalidatedLayoutArray;
+@property (nonatomic, assign) CGSize contentSize;
+@property (nonatomic, assign) NSUInteger numberOfSections;
+@property (nonatomic, strong) NSMutableArray *itemAttributesBySection;
+@property (nonatomic, strong) NSMutableArray *decorationAttributesBySection;
+@property (nonatomic, strong) NSMutableArray *invalidatedLayoutArray;
 
 @end
 
 @implementation MADDesignerSectionLayoutLine
 
-
 - (instancetype)init {
     if (self = [super init]) {
-        
         NSMutableArray *rectArray = [[NSMutableArray alloc] init];
         self.itemAttributesBySection = rectArray;
-
-        [self registerClass: [MADDesignerSectionControl class]
-    forDecorationViewOfKind: NSStringFromClass([MADDesignerSectionControl class])];
-
+        [self registerClass: [MADDesignerSectionControl class] forDecorationViewOfKind: NSStringFromClass([MADDesignerSectionControl class])];
     }
     return self;
 }
@@ -204,8 +198,7 @@
 
         for (UICollectionViewLayoutAttributes *layoutAttributes in sectionAttributes) {
 
-            layoutAttributes.indexPath = [NSIndexPath indexPathForItem:(NSInteger)itemCounter
-                                                             inSection:(NSInteger)sectionCounter];
+            layoutAttributes.indexPath = [NSIndexPath indexPathForItem:(NSInteger)itemCounter inSection:(NSInteger)sectionCounter];
 
             if (CGSizeEqualToSize(layoutAttributes.size, CGSizeZero)) {
                 layoutAttributes.size = [self.delegate collectionView: self.collectionView

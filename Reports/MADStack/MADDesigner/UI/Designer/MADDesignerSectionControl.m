@@ -12,31 +12,29 @@
 @implementation MADDesignerSectionControl
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = [UIColor clearColor];
-    }
-    return self;
+	if (self = [super initWithFrame:frame]) {
+		self.backgroundColor = [UIColor clearColor];
+	}
+	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        self.backgroundColor = [UIColor clearColor];
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		self.backgroundColor = [UIColor clearColor];
+	}
+	return self;
 }
 
 - (void)drawRect:(CGRect)rect {
-    [super drawRect: rect];
-    
-    [[UIColor blackColor] setStroke];
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextBeginPath(context);
-    CGContextMoveToPoint(context, rect.origin.x, rect.origin.y);
-    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y);
-    CGContextClosePath(context);
-    CGContextDrawPath(context, kCGPathStroke);
+	[super drawRect: rect];
+	
+	[[UIColor blackColor] setStroke];
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	CGContextBeginPath(context);
+	CGContextMoveToPoint(context, rect.origin.x, rect.origin.y);
+	CGContextAddLineToPoint(context, rect.origin.x + rect.size.width, rect.origin.y);
+	CGContextClosePath(context);
+	CGContextDrawPath(context, kCGPathStroke);
 }
 
 @end

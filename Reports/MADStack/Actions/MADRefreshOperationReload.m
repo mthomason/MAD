@@ -7,12 +7,12 @@
 //
 
 #import "MADRefreshOperationReload.h"
-#import "UIApplication+Extras.h"
 
 #import "MADOperationRefreshReloadProtocol.h"
 #import "MADOperationRefresh.h"
 #import "madlog.h"
 
+#import <MADCocoaExtensions/UIApplication+Helpers.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 

@@ -11,8 +11,7 @@
 
 #import <UIKit/UIPopoverBackgroundView.h>
 
-@interface MADPopoverBackgroundView : UIPopoverBackgroundView
-	<UIPopoverBackgroundViewMethods>
+@interface MADPopoverBackgroundView : UIPopoverBackgroundView <UIPopoverBackgroundViewMethods>
 
 @end
 

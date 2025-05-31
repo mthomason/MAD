@@ -17,17 +17,13 @@
 
 @interface MADDocumentPageController : UIViewController
 
-	+ (instancetype)newDocumentPageController:(MADocument *)document
-							   pageAttributes:(MADPageViewAttributes *)pageAttributes;
+@property (nonatomic, weak) id <MADPrintingProtocol> delegate;
+@property (readonly, nonatomic, weak) MADDocumentScroller *documentScroller;
+@property (readonly, nonatomic, weak) UIView *documentView;
+@property (readonly, nonatomic, copy) MADPageViewAttributes *pageViewAttributes;
 
-	- (instancetype)initWithDocument:(MADocument *)document
-				  andPageAttributtes:(MADPageViewAttributes *)pageAttributes;
-
-	@property (nonatomic, weak) id <MADPrintingProtocol> delegate;
-
-	@property (readonly, nonatomic, weak) MADDocumentScroller *documentScroller;
-	@property (readonly, nonatomic, weak) UIView *documentView;
-	@property (readonly, nonatomic, copy) MADPageViewAttributes *pageViewAttributes;
++ (instancetype)newDocumentPageController:(MADocument *)doc pageAttributes:(MADPageViewAttributes *)abbribs;
+- (instancetype)initWithDocument:(MADocument *)doc andPageAttributtes:(MADPageViewAttributes *)abbribs;
 
 @end
 

@@ -23,6 +23,7 @@
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UIPopoverController.h>
 #import <UIKit/UIStoryboardPopoverSegue.h>
+#import <UIKit/UIImage.h>
 
 @interface MADQueryBuilderSplitViewController () <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
@@ -96,17 +97,8 @@
 
 - (void)viewWillLayoutSubviews {
 	[super viewWillLayoutSubviews];
-	
 	if (!_setupInitalLayout) {
-		
-		UINavigationController *navigationController;
-		UIBarButtonItem *buttonSQL;
-		
-		navigationController = self.navigationController;
-		buttonSQL = _barButtonItemSQL;
-		
-		buttonSQL.tintColor = [UIColor whiteColor];
-		
+		_barButtonItemSQL.tintColor = [UIColor whiteColor];
 		_setupInitalLayout = YES;
 	}
 }
@@ -150,7 +142,6 @@
 }
 
 - (void)layoutForUnlicensedUser:(NSNumber *)animated {
-	
 	UIBarButtonItem *barButtonItemRevealQuery = nil;
 	BOOL animate = animated.boolValue;
 	NSArray<__kindof UIBarButtonItem *> *toolbarItemsFull = self.toolbarItems;

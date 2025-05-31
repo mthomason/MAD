@@ -9,8 +9,8 @@
 #ifndef MADDesigner_MADDocumentCreationManager_h
 #define MADDesigner_MADDocumentCreationManager_h
 
-#import <Foundation/NSObject.h>
 #import "MADDocumentCreationManagerInterface.h"
+#import <Foundation/NSObject.h>
 
 @interface MADDocumentCreationManager : NSObject <MADDocumentCreationManagerInterface>
 

@@ -31,8 +31,7 @@ const CGFloat MTReportDesignerBufferPaddingVertical      =  2.0000f;
 const CGFloat MTReportDesignerSectionLabelPaddingRight   =  8.0000f;
 const CGFloat MTReportDesignerSectionLabelHeight         = 20.0000f;
 
-@interface MADDesignerLayoutDesignView ()
-	<UIGestureRecognizerDelegate>
+@interface MADDesignerLayoutDesignView () <UIGestureRecognizerDelegate>
 
 	@property (readwrite, nonatomic, strong) NSMutableSet <NSNumber *> *selectedElements;
 	@property (readwrite, nonatomic, strong) NSMutableSet <NSNumber *> *selectedSections;

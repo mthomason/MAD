@@ -10,7 +10,8 @@
 #define MAD_MADTabBarItemProtocol_h
 
 #import <Foundation/NSObject.h>
-#import <UIKit/UIImage.h>
+
+@class UIImage, NSString;
 
 @protocol MADTabBarImageProtocol <NSObject>
 

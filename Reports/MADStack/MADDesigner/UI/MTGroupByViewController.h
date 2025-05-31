@@ -22,17 +22,15 @@ extern NSString * const MADGroupByViewControllerIdentifier;
 
 @class MADocument;
 
-@interface MADGroupByViewController : UITableViewController
-	<UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+@interface MADGroupByViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-	@property (nonatomic, weak) id <MADGroupByViewControllerDelegate> delegate;
-	@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, weak) id <MADGroupByViewControllerDelegate> delegate;
+@property (nonatomic, weak) MADocument *document;
 
-	@property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
-	@property (nonatomic, assign, readonly) int32_t aggregateGroupNumber;
+@property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
+@property (nonatomic, assign, readonly) int32_t aggregateGroupNumber;
 
-	- (void)selectGroupType:(MTAggregateGroupByType)groupByType
-		  withSectionNumber:(int32_t)sectionNumber;
+- (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(int32_t)sectionNumber;
 
 @end
 

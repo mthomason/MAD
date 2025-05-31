@@ -9,6 +9,8 @@
 #ifndef MADOperationRefreshReloadProtocol_h
 #define MADOperationRefreshReloadProtocol_h
 
+@class NSNotification;
+
 @protocol MADOperationRefreshReloadProtocol <NSObject>
 
 @required

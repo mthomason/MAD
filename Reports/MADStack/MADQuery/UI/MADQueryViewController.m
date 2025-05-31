@@ -83,6 +83,7 @@
 #import <UIKit/UISwitch.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UILabel.h>
+#import <UIKit/UIImage.h>
 
 NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
