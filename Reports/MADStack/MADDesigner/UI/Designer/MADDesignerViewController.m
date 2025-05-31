@@ -200,6 +200,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
 @property (nonatomic, weak) UILabel *lastSelectedLabel;
 @property (nonatomic, weak) UIBarButtonItem *undoButton;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAdd;
 
 @property (nonatomic, strong) MADReportSectionsDataSource *reportSectionDatasource;
 
@@ -344,6 +345,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark -
 #pragma mark UITraitCollection
 
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 	BOOL animate = previousTraitCollection != nil;
@@ -354,6 +356,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		[UIView setAnimationsEnabled:animate];
 		[self displayPrompt];
 		[UIView setAnimationsEnabled:YES];
+	}
+	if (previousTraitCollection.userInterfaceStyle != self.traitCollection.userInterfaceStyle) {
+		[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemAdd traitCollection:self.traitCollection];
 	}
 }
 
@@ -507,6 +512,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	self.layoutConstraintContainerLeft = constraintContentLeft;
 	self.layoutConstraintContainerWidth = constraintWidth;
 
+	[MADThemeManager applyAppearanceToBarButtonItem:_barButtonItemAdd traitCollection:self.traitCollection];
 }
 
 - (void)viewSafeAreaInsetsDidChange {

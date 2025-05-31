@@ -19,7 +19,7 @@
 		titleView.accessibilityHint = NSLocalizedString(@"Choose the type of connection to use.", @"Hint");
 		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
 		
-		self.prompt = NSLocalizedString(@"Select database type.", @"Select database type.");
+		//self.prompt = NSLocalizedString(@"Select database type.", @"Select database type.");
 		self.titleView = titleView;
 		self.title = NSLocalizedString(@"New Report", @"Title of form that allows you to choose the name of a database field.");
 		self.leftItemsSupplementBackButton = YES;
