@@ -140,11 +140,23 @@
 - (UIModalPresentationStyle)adaptivePresentationStyle {
 	return UIModalPresentationCustom;
 }
-
 - (CGSize)sizeForChildContentContainer:(id <UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
-	return [self showOnSide] ?
-		CGSizeMake(MAX(floor(parentSize.width / 3.0), self.presentedViewController.preferredContentSize.width) , parentSize.height) :
-		CGSizeMake(MAX(parentSize.width, self.presentedViewController.preferredContentSize.width), MIN(self.presentedViewController.preferredContentSize.height, floor(parentSize.height / 2.0)));
+	UIEdgeInsets safeAreaInsets = UIEdgeInsetsZero;
+	if (@available(iOS 11.0, *)) {
+		safeAreaInsets = self.containerView.safeAreaInsets;
+	}
+	
+	if ([self showOnSide]) {
+		CGFloat availableHeight = parentSize.height - safeAreaInsets.top - safeAreaInsets.bottom;
+		CGFloat width = MAX(floor((parentSize.width - safeAreaInsets.left - safeAreaInsets.right) / 3.0),
+							self.presentedViewController.preferredContentSize.width);
+		return CGSizeMake(width, availableHeight);
+	} else {
+		CGFloat availableWidth = parentSize.width - safeAreaInsets.left - safeAreaInsets.right;
+		CGFloat height = MIN(self.presentedViewController.preferredContentSize.height,
+							 floor((parentSize.height - safeAreaInsets.top - safeAreaInsets.bottom) / 2.0));
+		return CGSizeMake(availableWidth, height);
+	}
 }
 
 - (void)containerViewWillLayoutSubviews {
@@ -165,7 +177,11 @@
 
 - (CGRect)frameOfPresentedViewInContainerView {
 	CGRect containerBounds = self.containerView.bounds;
-	UIEdgeInsets safeAreaInsets = self.containerView.safeAreaInsets;
+	UIEdgeInsets safeAreaInsets = UIEdgeInsetsZero;
+	if (@available(iOS 11.0, *)) {
+		safeAreaInsets = self.containerView.safeAreaInsets;
+	}
+
 	CGSize contentSize = [self sizeForChildContentContainer:(UIViewController<UIContentContainer> *)self.presentedViewController
 									withParentContainerSize:containerBounds.size];
 	CGRect presentedViewFrame = CGRectZero;
@@ -207,8 +223,7 @@
 
 - (BOOL)accessibilityPerformEscape {
 	[self dismiss];
-	NSString *announcement = NSLocalizedString(@"Dismissing toolbox.", @"Dismissing toolbox.");
-	UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, announcement);
+	UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString(@"Dismissing toolbox.", @"Dismissing toolbox."));
 	return YES;
 }
 
