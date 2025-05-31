@@ -25,6 +25,15 @@
 
 + (CGFloat)borderWidthThin { return 1.0; }
 
++ (void)applyAppearanceToBarButtonItem:(UIBarButtonItem *)barButtonItem
+					   traitCollection:(UITraitCollection *)traitCollection {
+	if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+		barButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+	} else {
+		barButtonItem.tintColor = [MADColorEverydayApps newColorWhite];
+	}
+}
+
 + (void)applyAppearanceToNavigationController:(UINavigationController *)navigationController
 							  traitCollection:(UITraitCollection *)traitCollection {
 	UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
@@ -76,14 +85,19 @@
 			NSForegroundColorAttributeName: [MADColorEverydayApps newColorWhite],
 			NSFontAttributeName: buttonFont
 		}];
+		[navBarButtonAppearance.disabled setTitleTextAttributes:@{
+			NSForegroundColorAttributeName: [UIColor systemPinkColor],
+			NSFontAttributeName: buttonFont
+		}];
+
 		navBarAppearance.buttonAppearance = navBarButtonAppearance;
 		navBarAppearance.doneButtonAppearance = navBarButtonAppearance;
 		
 		[toolbarAppearance configureWithOpaqueBackground];
-		toolbarAppearance.backgroundColor = [UIColor whiteColor];
+		toolbarAppearance.backgroundColor = [MADColorEverydayApps newColorBlue]; // Match navigation bar color
 		
 		[toolbarButtonAppearance.normal setTitleTextAttributes:@{
-			NSForegroundColorAttributeName: [MADColorEverydayApps newColorBlue],
+			NSForegroundColorAttributeName: [MADColorEverydayApps newColorWhite], // Make buttons white
 			NSFontAttributeName: buttonFont
 		}];
 		
@@ -105,49 +119,31 @@
 + (void)applyAppearanceToTabBarController:(UITabBarController *)tabBarController
 						  traitCollection:(UITraitCollection *)traitCollection {
 	UITabBarAppearance *tabBarAppearance = [[UITabBarAppearance alloc] init];
-	
-	// Create a single UITabBarItemAppearance instance
 	UITabBarItemAppearance *itemAppearance = [[UITabBarItemAppearance alloc] init];
 	
 	if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
 		[tabBarAppearance configureWithTransparentBackground];
 		tabBarAppearance.backgroundColor = [UIColor clearColor];
 		tabBarAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemMaterialDark];
-		
-		// Configure UNSELECTED state directly on itemAppearance.normal
-		[itemAppearance.normal setTitleTextAttributes:@{
-			NSForegroundColorAttributeName: [UIColor lightGrayColor]
-		}];
-		itemAppearance.normal.iconColor = [UIColor lightGrayColor];
-		
-		// Configure SELECTED state directly on itemAppearance.selected
-		[itemAppearance.selected setTitleTextAttributes:@{
-			NSForegroundColorAttributeName: [UIColor systemBlueColor]
-		}];
-		itemAppearance.selected.iconColor = [UIColor systemBlueColor];
-		
-	} else { // Light mode
+	} else {
 		[tabBarAppearance configureWithOpaqueBackground];
 		tabBarAppearance.backgroundColor = [MADColorEverydayApps newColorBlue];
-		
-		// Configure UNSELECTED state directly on itemAppearance.normal
-		[itemAppearance.normal setTitleTextAttributes:@{
-			NSForegroundColorAttributeName: [[MADColorEverydayApps newColorWhite] colorWithAlphaComponent:0.7]
-		}];
-		itemAppearance.normal.iconColor = [[MADColorEverydayApps newColorWhite] colorWithAlphaComponent:0.7];
-		
-		// Configure SELECTED state directly on itemAppearance.selected
-		[itemAppearance.selected setTitleTextAttributes:@{
-			NSForegroundColorAttributeName: [MADColorEverydayApps newColorWhite]
-		}];
-		itemAppearance.selected.iconColor = [MADColorEverydayApps newColorWhite];
 	}
 	
-	// Assign the configured itemAppearance (which now includes both normal and selected states)
-	// to the relevant layout appearances on the main tabBarAppearance.
+	NSDictionary *whiteTextAttributes = @{
+		NSForegroundColorAttributeName: [MADColorEverydayApps newColorWhite],
+		NSFontAttributeName: [UIFont systemFontOfSize:10 weight:UIFontWeightMedium]
+	};
+	
+	[itemAppearance.normal setTitleTextAttributes:whiteTextAttributes];
+	itemAppearance.normal.iconColor = [MADColorEverydayApps newColorWhite];
+	
+	[itemAppearance.selected setTitleTextAttributes:whiteTextAttributes];
+	itemAppearance.selected.iconColor = [MADColorEverydayApps newColorRed];
+
 	tabBarAppearance.stackedLayoutAppearance = itemAppearance;
-	tabBarAppearance.inlineLayoutAppearance = itemAppearance; // If you might use other layouts
-	tabBarAppearance.compactInlineLayoutAppearance = itemAppearance; // If you might use other layouts
+	tabBarAppearance.inlineLayoutAppearance = itemAppearance;
+	tabBarAppearance.compactInlineLayoutAppearance = itemAppearance;
 	
 	tabBarController.tabBar.standardAppearance = tabBarAppearance;
 	if (@available(iOS 15.0, *)) {

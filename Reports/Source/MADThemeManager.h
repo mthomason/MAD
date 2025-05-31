@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <CoreFoundation/CFCGTypes.h>
 
-@class UINavigationController, UITabBarController, UITraitCollection;
+@class UINavigationController, UITabBarController, UITraitCollection, UIBarButtonItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)applyAppearanceToTabBarController:(UITabBarController *)tabBarController
 						  traitCollection:(UITraitCollection *)traitCollection;
+
++ (void)applyAppearanceToBarButtonItem:(UIBarButtonItem *)barButtonItem
+					   traitCollection:(UITraitCollection *)traitCollection;
 
 @end
 

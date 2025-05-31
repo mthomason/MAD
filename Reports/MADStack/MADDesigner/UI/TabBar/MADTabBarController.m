@@ -9,6 +9,7 @@
 #import "MADTabBarController.h"
 #import "MADNavigationController.h"
 #import "MADQueryBuilderSplitViewController.h"
+#import "MADThemeManager.h"
 
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UINavigationBar.h>
@@ -67,10 +68,18 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	[MADThemeManager applyAppearanceToTabBarController:self traitCollection:self.traitCollection];
 	self.delegate = self;
 	self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	self.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	if (previousTraitCollection.userInterfaceStyle != self.traitCollection.userInterfaceStyle) {
+		[MADThemeManager applyAppearanceToTabBarController:self traitCollection:self.traitCollection];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {

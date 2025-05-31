@@ -288,10 +288,15 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");;
 	self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
 	self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
+	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemTrash traitCollection:self.traitCollection];
 	self.barButtonItemAction.accessibilityHint = NSLocalizedString(@"Preforms an action on the selected document.", @"Preforms an action on the selected document.");
+	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemAction traitCollection:self.traitCollection];
 	self.barButtonItemDuplicate.accessibilityHint = NSLocalizedString(@"Duplicates the selected documents.", @"Duplicates the selected documents.");
+	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemDuplicate traitCollection:self.traitCollection];
 	self.barButtonItemInformationDocument.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
+	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemInformationDocument traitCollection:self.traitCollection];
 	self.barButtonItemInformation.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
+	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemInformation traitCollection:self.traitCollection];
 	self.barButtonItemAbout.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
 	
 	[self.collectionView registerClass: [MADExplorerSectionHeaderView class]

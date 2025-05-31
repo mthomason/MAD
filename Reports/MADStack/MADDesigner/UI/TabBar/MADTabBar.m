@@ -7,24 +7,7 @@
 //
 
 #import "MADTabBar.h"
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 @implementation MADTabBar
-
-- (void)dealloc { }
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		self.tintColor = [MADColorEverydayApps newColorRed];
-	}
-	return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
-		self.tintColor = [MADColorEverydayApps newColorRed];
-	}
-	return self;
-}
 
 @end

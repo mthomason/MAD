@@ -11,8 +11,12 @@
 
 #import <UIKit/UITabBar.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MADTabBar : UITabBar
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif
