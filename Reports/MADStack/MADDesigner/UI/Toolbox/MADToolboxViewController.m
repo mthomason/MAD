@@ -223,13 +223,11 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 }
 
 - (MADToolboxPanel *)delegateForController:(UIViewController *)controller {
-	MADToolboxPanel *delegate;
 	if ([controller isKindOfClass:[UINavigationController class]]) {
-		delegate = (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
+		return (MADToolboxPanel *)((UINavigationController *)controller).viewControllers.firstObject;
 	} else {
-		delegate = (MADToolboxPanel *)controller;
+		return (MADToolboxPanel *)controller;
 	}
-	return delegate;
 }
 
 #pragma mark -

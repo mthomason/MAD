@@ -11,18 +11,10 @@
 #endif
 
 #import "MADToolboxStyleViewController.h"
-#import <asl.h>
-#import <QuartzCore/CALayer.h>
-
-#import <CoreData/NSManagedObjectContext.h>
-
-#import <UIKit/NSAttributedString.h>
-#import <UIKit/UIStepper.h>
-#import <UIKit/UISegmentedControl.h>
-#import <UIKit/UILabel.h>
-#import <UIKit/UIButton.h>
-#import <UIKit/UIImageView.h>
-#import <UIKit/UIStoryboardSegue.h>
+#import "MADControlState.h"
+#import "MADReportDesignerFontSelectorDelegateProtocol.h"
+#import "MADDesignerDisplayProtocol.h"
+#import "MADFontSelectorViewController.h"
 
 #import <MADCocoaExtensions/MADBorderStyle.h>
 #import <MADCocoaExtensions/MADMargin.h>
@@ -44,10 +36,17 @@
 #import <MAD/RptqTextStyle.h>
 #import <MAD/MADDesignerLayout.h>
 
-#import "MADControlState.h"
+#import <UIKit/NSAttributedString.h>
+#import <UIKit/UIStepper.h>
+#import <UIKit/UISegmentedControl.h>
+#import <UIKit/UILabel.h>
+#import <UIKit/UIButton.h>
+#import <UIKit/UIImageView.h>
+#import <UIKit/UIStoryboardSegue.h>
 
-#import "MADReportDesignerFontSelectorDelegateProtocol.h"
-#import "MADDesignerDisplayProtocol.h"
+#import <QuartzCore/CALayer.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <asl.h>
 
 static const CGFloat CornerRadius = 6.6666f;
 static const CGFloat BorderWidth = 1.0000f;
@@ -148,8 +147,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	UISegmentedControl *segmentedControlHorizontalAlignment;
-	segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
+	UISegmentedControl *segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
 	
 	UIFont *font = [UIFont fontWithName:@"FontAwesome" size:12.0000f];;
 	NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
@@ -160,10 +158,9 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 	[segmentedControlHorizontalAlignment setTitle:@"\uf037" forSegmentAtIndex:1];
 	[segmentedControlHorizontalAlignment setTitle:@"\uf038" forSegmentAtIndex:2];
 	[segmentedControlHorizontalAlignment setTitle:@"\uf039" forSegmentAtIndex:3];
-	UIColor *w = [UIColor whiteColor];
 	NSDictionary *attributesSelected = @{
 		NSFontAttributeName : font,
-		NSStrokeColorAttributeName : w
+		NSStrokeColorAttributeName : [UIColor whiteColor]
 	};
 	NSAttributedString *boldButton, *boldButtonSelected;
 	boldButton = [[NSAttributedString alloc] initWithString: @"\uf26c"
@@ -884,8 +881,6 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 		MADFontSelectorViewController *destination = segue.destinationViewController;
 		destination.delegate = self;
 		destination.clearsBackground = self.clearsBackground;
-		
-		NSString *fontname = nil;
 		NSNumber *identifier = [self.userSelectedObjectIDs anyObject];
 		RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
 																		   fromObjectContext:_document.managedObjectContext];
