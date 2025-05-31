@@ -158,50 +158,50 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 @interface MADDesignerViewController() <MADViewControllerBarcodeDelegate, MTViewControllerAggregateDelegate, MADCellElementDelegate, MADDesignerSectionLayoutLiquidDelegate, MADElementPickerProtocol, MADViewControllerStandardProtocol, MADDesignerSectionLayoutDelegate, MADQueryChooseFieldProtocol, MADDesignerDesignViewDelegate, UIPopoverPresentationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate>
 
-	@property (null_resettable, nonatomic, strong) MADDesignerView *view;
+@property (null_resettable, nonatomic, strong) MADDesignerView *view;
 
-	@property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
+@property (nonatomic, strong) MADDesignerStatusLabel *statusLabelZoomScale;
 
-	@property (nonatomic, strong) NSMutableSet <MADDesignerElementView *> *visibleElementViews;
-	@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElementIDs;
+@property (nonatomic, strong) NSMutableSet <MADDesignerElementView *> *visibleElementViews;
+@property (nonatomic, strong) NSMutableSet <NSNumber *> *selectedElementIDs;
 
-	@property (nonatomic, strong) NSMutableDictionary <NSNumber *, __kindof MADDesignerElementView *> *elementViewsDictionary;
-	@property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
+@property (nonatomic, strong) NSMutableDictionary <NSNumber *, __kindof MADDesignerElementView *> *elementViewsDictionary;
+@property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSNumber *> *borderAppliedToView;
 
-	@property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
+@property (nonatomic, weak) MADDesignerElementView *lastElementViewToShowMenu;
 
-	@property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
-	@property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
+@property (nonatomic, strong) MADToolboxTransitioningDelegate *toolboxTransitioningDelegate;
+@property (nonatomic, strong) MADToolboxTransitioningDelegate *settingsTransitioningDelegate;
 
-	@property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
+@property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-	@property (nonatomic, strong) MADPromptManager *promptManager;
+@property (nonatomic, strong) MADPromptManager *promptManager;
 
-	@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
-	@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerLeft;
+@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
+@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerLeft;
 
-	@property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
-	@property (nonatomic, strong) MADDesignerSectionLayoutController *viewControllerSectionLayoutSettings;
+@property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
+@property (nonatomic, strong) MADDesignerSectionLayoutController *viewControllerSectionLayoutSettings;
 
-	@property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
-	@property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
+@property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
+@property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
 
-	@property (nonatomic, assign) NSInteger lastSelectedSectionControlPanel;
+@property (nonatomic, assign) NSInteger lastSelectedSectionControlPanel;
 
-	@property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
-	@property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
+@property (nonatomic, strong) UIPopoverPresentationController *popoverToolbox;
+@property (nonatomic, strong) UIPopoverPresentationController *popoverObjectSelector;
 
-	@property (nonatomic, copy) NSNumber *objectIdEditDynamicLabel;
-	@property (nonatomic, copy) NSNumber *objectIdEditBarcode;     //Never set a value... never used????
-	@property (nonatomic, copy) NSNumber *objectIdEditImage;
-	@property (nonatomic, copy) NSNumber *barcodeToEditObjectID;
-	@property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
+@property (nonatomic, copy) NSNumber *objectIdEditDynamicLabel;
+@property (nonatomic, copy) NSNumber *objectIdEditBarcode;     //Never set a value... never used????
+@property (nonatomic, copy) NSNumber *objectIdEditImage;
+@property (nonatomic, copy) NSNumber *barcodeToEditObjectID;
+@property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
 
-	@property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
-	@property (nonatomic, weak) UILabel *lastSelectedLabel;
-	@property (nonatomic, weak) UIBarButtonItem *undoButton;
+@property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
+@property (nonatomic, weak) UILabel *lastSelectedLabel;
+@property (nonatomic, weak) UIBarButtonItem *undoButton;
 
-	@property (nonatomic, strong) MADReportSectionsDataSource *reportSectionDatasource;
+@property (nonatomic, strong) MADReportSectionsDataSource *reportSectionDatasource;
 
 @end
 
@@ -414,11 +414,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (UINavigationController *)navigationControllerSectionLayoutSettings {
 	if (_navigationControllerSectionLayoutSettings == nil) {
-		UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
-		navigationController.transitioningDelegate = self.settingsTransitioningDelegate;
-		navigationController.modalPresentationStyle = UIModalPresentationCustom;
-		navigationController.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0);
-		_navigationControllerSectionLayoutSettings = navigationController;
+		UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController: self.viewControllerSectionLayoutSettings];
+		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
+		navigation.transitioningDelegate = self.settingsTransitioningDelegate;
+		navigation.modalPresentationStyle = UIModalPresentationCustom;
+		navigation.preferredContentSize = CGSizeMake(MADDefaultsPopooverWidth, 100.0);
+		_navigationControllerSectionLayoutSettings = navigation;
 	}
 	return _navigationControllerSectionLayoutSettings;
 }
@@ -440,8 +441,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (MADDesignerSectionLayoutController *)viewControllerSectionLayoutSettings {
 	if (_viewControllerSectionLayoutSettings == nil) {
-		MADDesignerSectionLayoutController *controller;
-		controller = [MADDesignerSectionLayoutController newDesignerSectionLayoutController];
+		MADDesignerSectionLayoutController *controller = [MADDesignerSectionLayoutController newDesignerSectionLayoutController];
 		controller.delegate = self;
 		self.viewControllerSectionLayoutSettings = controller;
 	}

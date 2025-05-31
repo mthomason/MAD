@@ -9,6 +9,8 @@
 #ifndef MAD_MADToolboxDisplayProtocol_h
 #define MAD_MADToolboxDisplayProtocol_h
 
+#import <Foundation/NSObject.h>
+
 @protocol MADToolboxDisplayProtocol <NSObject>
   @required
     - (void)setClearsBackground:(BOOL)clearsBackground;

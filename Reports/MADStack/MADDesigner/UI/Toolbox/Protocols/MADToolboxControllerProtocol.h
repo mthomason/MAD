@@ -9,9 +9,13 @@
 #ifndef Reports_MADToolboxControllerProtocol_h
 #define Reports_MADToolboxControllerProtocol_h
 
+#import <Foundation/NSObject.h>
+
+@class NSSet<__covariant ObjectType>;
+
 @protocol MADToolboxControllerProtocol <NSObject>
-  @required
-    - (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIds;
+@required
+- (void)setSelectedDocumentObjects:(NSSet <NSNumber *> *)objectIds;
 @end
 
 #endif

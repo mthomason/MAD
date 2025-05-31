@@ -45,6 +45,10 @@ static NSString * const MADTextFormFeedHint    = @"Toggles form feed.";
 	return [[UIStoryboard storyboardWithName: @"MADDesigner" bundle: NULL] instantiateViewControllerWithIdentifier:@"MADSectionLayoutSettingsID"];
 }
 
+- (CGSize)preferredContentSize {
+	return CGSizeMake(390.0, 88.0);
+}
+
 #pragma mark - View lifecycle
 
 - (void)dealloc {

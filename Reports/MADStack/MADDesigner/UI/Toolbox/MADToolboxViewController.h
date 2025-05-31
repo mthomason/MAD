@@ -9,9 +9,9 @@
 #ifndef MAD_MADToolboxViewController_h
 #define MAD_MADToolboxViewController_h
 
-#import <UIKit/UIViewController.h>
 #import "MADToolboxDisplayProtocol.h"
 #import "MADViewControllerDocumentProtocol.h"
+#import <UIKit/UIViewController.h>
 
 @class MADocument;
 

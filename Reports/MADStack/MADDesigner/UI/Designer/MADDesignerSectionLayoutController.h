@@ -17,8 +17,7 @@ extern NSString * const MADSectionLayoutSettingsID;
 
 @protocol MADDesignerSectionLayoutDelegate <NSObject>
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
-- (void)layoutSettings:(MADDesignerSectionLayoutController *)layoutSettings
-		  newPageAfter:(BOOL)newPageAfter;
+- (void)layoutSettings:(MADDesignerSectionLayoutController *)layoutSettings newPageAfter:(BOOL)newPageAfter;
 @optional
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
 - (void)sectionLayoutDidUpdateNumberOfRows:(int32_t)numberOfRows;

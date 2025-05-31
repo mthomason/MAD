@@ -9,6 +9,8 @@
 #ifndef MADReportDesignerFontSelectorDelegateProtocol_h
 #define MADReportDesignerFontSelectorDelegateProtocol_h
 
+@class NSString;
+
 @protocol MADReportDesignerFontSelectorDelegate
   - (void)tableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
 @end
