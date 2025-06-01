@@ -18,7 +18,7 @@
 #import "MADActivityIndicatorLabel.h"
 
 @interface MADActivityIndicator ()
-	@property(readwrite, nonatomic, weak) UIActivityIndicatorView *activityIndicator;;
+@property(readwrite, nonatomic, weak) UIActivityIndicatorView *activityIndicator;;
 @end
 
 @implementation MADActivityIndicator
@@ -35,30 +35,14 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		
 		self.layer.cornerRadius = 5.0000f;
-		
-		UIActivityIndicatorView *activityIndicator;
-		activityIndicator= [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-														UIActivityIndicatorViewStyleLarge];
-		
-		self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-								UIViewAutoresizingFlexibleRightMargin |
-								UIViewAutoresizingFlexibleTopMargin |
-								UIViewAutoresizingFlexibleBottomMargin;
-		
-		activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-											 UIViewAutoresizingFlexibleRightMargin |
-											 UIViewAutoresizingFlexibleTopMargin;
-		
-		
-		activityIndicator.center = CGPointMake(self.bounds.size.width / 2.0000f,
-											   self.bounds.size.height / 2.0000f);
+		UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+													  UIActivityIndicatorViewStyleLarge];
+		self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+		activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+		activityIndicator.center = CGPointMake(self.bounds.size.width / 2.0000f, self.bounds.size.height / 2.0000f);
 
-		CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f,
-									   frame.size.width, 44.0000f);
-		
-		id status = [[MADActivityIndicatorLabel alloc] initWithFrame:labelFrame];
+		id status = [[MADActivityIndicatorLabel alloc] initWithFrame:CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f)];
 
 		[self addSubview:activityIndicator];
 		[self addSubview:status];

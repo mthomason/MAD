@@ -261,7 +261,7 @@ void madwarn(char *err,  const char *err2) { }
 	datatable.cacheDelegate = self;
 	NSError *error = nil;
 	[datatable loadFromCacheWithUrl:self.urlDataTableCache error:&error];
-	if (error != nil) {
+	if (error != nil && error.code != -215) {
 		os_log_error(GetMadLog(), "Error: %@", error);
 	}
 	self.dataTable = datatable;
@@ -523,13 +523,9 @@ void madwarn(char *err,  const char *err2) { }
 		  safelyToURL:(NSURL *)url
 	 forSaveOperation:(UIDocumentSaveOperation)saveOperation
 				error:(NSError * __autoreleasing *)outError {
-	
 	NSError *error = nil;
-	if (![super writeContents:contents
-				andAttributes:additionalFileAttributes
-				  safelyToURL:self.urlGuts
-			 forSaveOperation:saveOperation
-						error:&error]) {
+	if (![super writeContents:contents andAttributes:additionalFileAttributes
+				  safelyToURL:self.urlGuts forSaveOperation:saveOperation error:&error]) {
 		if (outError != nil) {
 			*outError = error.copy;
 		}

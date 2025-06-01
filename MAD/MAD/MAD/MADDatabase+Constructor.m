@@ -32,7 +32,7 @@
             result = [[MADDatabaseSQLServer alloc] init];
             
             break;
-#ifdef INCLUDE_MYSLQ
+#ifdef INCLUDE_MYSQL
         case MADDatabaseTypeMySQL:
             result = [[MADDatabaseMySQL alloc] init];
             

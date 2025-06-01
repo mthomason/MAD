@@ -11,16 +11,17 @@
 
 #import <MADFoundation/MADOperationCondition.h>
 
-@interface MADOperationConditionHasResultString : NSObject
-    <MADOperationCondition>
+@interface MADOperationConditionHasResultString : NSObject <MADOperationCondition>
 
-    - (instancetype)initWithKey:(NSString *)key;
-    @property (nonatomic, readonly, copy) NSString *key;
+@property (nonatomic, readonly, copy) NSString *key;
 
-    - (NSString *)name;
-    - (BOOL)isMutuallyExclusive;
-    - (NSOperation *)dependencyForOperation:(MADOperation *)operation;
-    - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation;
+- (instancetype)initWithKey:(NSString *)key NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)new NS_UNAVAILABLE;
+- (NSString *)name;
+- (BOOL)isMutuallyExclusive;
+- (NSOperation *)dependencyForOperation:(MADOperation *)operation;
+- (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation;
 
 @end
 
