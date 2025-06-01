@@ -45,22 +45,16 @@
 
 - (void)execute {
 	if (self.cancelled) return [self finish];
-
 	MADocument *document = nil;
 	NSArray <NSOperation *> *dependencies = self.dependencies;
 	for (NSOperation *dependency in dependencies) {
-	
 		if ([dependency conformsToProtocol:@protocol(MADOperationCreateDocumentProtocol)]) {
 			document = ((id <MADOperationCreateDocumentProtocol>)dependency).document;
 			break;
 		}
-		
 	}
-
 	[document activeDocumentModel];
-
 	self.success = YES;
-	
 	[self finish];
 }
 

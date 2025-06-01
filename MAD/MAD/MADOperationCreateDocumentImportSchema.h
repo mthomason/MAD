@@ -19,11 +19,12 @@
 	- (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress;
 @end
 
-@interface MADOperationCreateDocumentImportSchema : MADOperation
-	<MADOperationPromptErrorProtocol, MADOperationTestResults>
-	- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
-	@property (nonatomic, weak) id <MADOperationCreateDocumentImportSchemaProtocol> parentOperation;
-	@property (nonatomic, assign, readonly, getter=isSuccess) BOOL success;
+@interface MADOperationCreateDocumentImportSchema : MADOperation <MADOperationPromptErrorProtocol, MADOperationTestResults>
+
+@property (nonatomic, weak) id <MADOperationCreateDocumentImportSchemaProtocol> parentOperation;
+@property (nonatomic, assign, readonly, getter=isSuccess) BOOL success;
+
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection NS_DESIGNATED_INITIALIZER;
 
 @end
 

@@ -16,11 +16,12 @@
 
 @class UIViewController, MADDatabaseConnection, MADCredential;
 
-@interface MADOperationGetCredentials : MADGroupOperation
-	<MADOperationHoldsCredentialsProtocol, MADKeyChainKeyValueProtocol>
+@interface MADOperationGetCredentials : MADGroupOperation <MADOperationHoldsCredentialsProtocol, MADKeyChainKeyValueProtocol>
 
-	- (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
-								viewController: (UIViewController *)viewController;
+- (instancetype)initWithDatabaseConnection: (MADDatabaseConnection *)databaseConnection
+							viewController: (UIViewController *)viewController NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)new NS_UNAVAILABLE;
 
 @end
 

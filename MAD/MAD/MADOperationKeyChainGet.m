@@ -47,7 +47,7 @@
 
 	CFDataRef queryData = NULL;
 	NSDictionary *queryDefination = [MADKeyChain queryDefination: self.key
-												withDescription: self.keyDescription];
+												 withDescription: self.keyDescription];
 	CFDictionaryRef queryDefinationC = (__bridge_retained CFDictionaryRef)queryDefination;
 	OSStatus queryStatus = SecItemCopyMatching(queryDefinationC, (CFTypeRef *)&queryData);
 	CFRelease(queryDefinationC);
@@ -89,6 +89,7 @@
 	NSError *error = [NSError errorWithDomain: NSStringFromClass([self class])
 										 code: status
 									 userInfo: nil];
+	os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error);
 	[self finishWithError:error];
 }
 

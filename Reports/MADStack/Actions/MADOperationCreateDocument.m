@@ -66,51 +66,43 @@
 		NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
 		NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
 
-		MADOperationConditionHasResultString *conditionReadUsername;
-		conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
+		MADOperationConditionHasResultString *conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
 		
-		MADOperationConditionTestConnectionFailuare *connectionConnectionFail;
-		connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
+		MADOperationConditionTestConnectionFailuare *connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
 
 		// Condition: Confirm user manually entered password
-		MADOperationConditionDisplayedAlertConfirm *conditionEnteredPassword;
-		conditionEnteredPassword = [[MADOperationConditionDisplayedAlertConfirm alloc] init];
+		MADOperationConditionDisplayedAlertConfirm *conditionEnteredPassword = [[MADOperationConditionDisplayedAlertConfirm alloc] init];
 		
 		// Condition: Test connection success
-		MADOperationConditionTestConnectionSuccess *conditionConnectionConnectionSuccess;
-		conditionConnectionConnectionSuccess = [[MADOperationConditionTestConnectionSuccess alloc] init];
+		MADOperationConditionTestConnectionSuccess *conditionConnectionConnectionSuccess = [[MADOperationConditionTestConnectionSuccess alloc] init];
 
 		// ---------------------------------------------------
 		// Operation 1: Create unique filename/url for document.
 		// -------------------------
 		
-		MADOperationUniqueUrlForFilename *uniqueUrlForFilename;
-		uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
-																				   pathExtension: MADFileExtentionMobleApplicationDocument
-																		   andDocumentsDirectory: documentsDirectory];
+		MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
+																													 pathExtension: MADFileExtentionMobleApplicationDocument
+																											 andDocumentsDirectory: documentsDirectory];
 		uniqueUrlForFilename.name = @"com.everydayapps.mad.operation.uniqueurl";
-		
+
 		// ---------------------------------------------------
 		// Operation 1: Get database credentials from keychain or user.
 		// -------------------------
 		
-		MADOperationGetCredentials *getCredentials;
-		getCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection: databaseConnection
-																		 viewController: viewController];
+		MADOperationGetCredentials *getCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection: databaseConnection
+																									 viewController: viewController];
 		getCredentials.name = @"com.everydayapps.mad.operation.credentials.get";
-		
+
 		
 		// ---------------------------------------------------
 		// Operation 1: Test the database connection.
 		// -------------------------
 		
-		MADOperationDatabaseTestConnection *testConnectionOperationCredentials;
-		testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
+		MADOperationDatabaseTestConnection *testConnectionOperationCredentials = [[MADOperationDatabaseTestConnection alloc] initWithDatabaseConnection: databaseConnection];
 		testConnectionOperationCredentials.name = @"com.everydayapps.mad.operation.connection.test";
 		[testConnectionOperationCredentials addDependency:getCredentials];
 		
-		MADOperationPromptError *displayErrorCredentials;
-		displayErrorCredentials = [[MADOperationPromptError alloc] initWithViewController:viewController];
+		MADOperationPromptError *displayErrorCredentials = [[MADOperationPromptError alloc] initWithViewController:viewController];
 		displayErrorCredentials.name = @"com.everydayapps.mad.operation.display.error.credentials";
 		[displayErrorCredentials addDependency:testConnectionOperationCredentials];
 		
@@ -126,22 +118,16 @@
 		// Operation:   Prompt save credentials
 		// Conditions:  User entered a credentials.
 		// ---------------------------------------------------
-		NSString *TextSaveToKeyChain = @"Save to KeyChain";
-		NSString *TextSaveToKeyChainMessage = @"Would you like to save your password?";
-		NSString *title = NSLocalizedString(TextSaveToKeyChain, TextSaveToKeyChain);
-		NSString *messagePasswordPrompt = NSLocalizedString(TextSaveToKeyChainMessage, TextSaveToKeyChainMessage);
-		MADOperationPromptPolarQuestion *promptSavePassword;
-		promptSavePassword = [[MADOperationPromptPolarQuestion alloc] initWithTitle: title
-																			message: messagePasswordPrompt
-																	 viewController: viewController];
+		MADOperationPromptPolarQuestion *promptSavePassword = [[MADOperationPromptPolarQuestion alloc] initWithTitle: NSLocalizedString(@"Save to KeyChain", @"Save to KeyChain")
+																											 message: NSLocalizedString(@"Would you like to save your password?", @"Would you like to save your password?")
+																									  viewController: viewController];
 		promptSavePassword.name = @"com.everydayapps.mad.operation.credentials.prompt.save";
 		[promptSavePassword addDependency: testConnectionOperationCredentials];
 		[promptSavePassword addDependency: getCredentials];
 		[promptSavePassword addCondition: conditionEnteredPassword];
 		[promptSavePassword addCondition: conditionConnectionConnectionSuccess];
 		
-		MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative;
-		promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
+		MADOperationConditionPolarQuestionAffirmative *promptToSaveCredntialsAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier:promptSavePassword.identifier];
 		
 		// ---------------------------------------------------
 		// Operation:   Save username
@@ -149,8 +135,7 @@
 		// Conditions:  User said yes to save credentials.
 		// ---------------------------------------------------
 
-		MADOperationKeyChainPut *putUsername;
-		putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MADKeyChainUsernameAccountDesc];
+		MADOperationKeyChainPut *putUsername = [[MADOperationKeyChainPut alloc] initWithKey:keyUsername description:MADKeyChainUsernameAccountDesc];
 		putUsername.name = @"com.everydayapps.mad.operation.credentials.save.username";
 		[putUsername addDependency: promptSavePassword];
 		[putUsername addDependency: getCredentials];
@@ -161,16 +146,14 @@
 		// Dependency:  Prompt save credentials.
 		// Conditions:  User said yes to save credentials..
 		// ---------------------------------------------------
-		MADOperationKeyChainPut *putPassword;
-		putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MADKeyChainPasswordAccountDesc];
+		MADOperationKeyChainPut *putPassword = [[MADOperationKeyChainPut alloc] initWithKey:keyPassword description:MADKeyChainPasswordAccountDesc];
 		putPassword.name = @"com.everydayapps.mad.operation.credentials.save.password";
 		[putPassword addDependency: promptSavePassword];
 		[putPassword addDependency: getCredentials];
 		[putPassword addCondition: promptToSaveCredntialsAffirmative];
 		
 		// Create the document file on disk.
-		MADOperationCreateDocumentCreateDocument *createDocument;
-		createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
+		MADOperationCreateDocumentCreateDocument *createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:databaseConnection];
 		createDocument.name = @"com.everydayapps.mad.operation.document.create.file";
 		[createDocument addDependency: getCredentials];  // This is because the document uses this task as delegate to get credentials.
 		[createDocument addDependency: uniqueUrlForFilename];
@@ -180,8 +163,7 @@
 		[createDocument addCondition: conditionConnectionConnectionSuccess];
 		
 		// Do first time document setup.
-		MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup;
-		firstTimeSetup = [[MADOperationCreateDocumentFirstTimeSetup alloc] init];
+		MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup = [[MADOperationCreateDocumentFirstTimeSetup alloc] init];
 		firstTimeSetup.name = @"com.everydayapps.mad.operation.document.create.setup";
 		[firstTimeSetup addDependency: createDocument];
 		[firstTimeSetup addDependency: displayErrorCredentials];
@@ -189,8 +171,7 @@
 		[firstTimeSetup addCondition: conditionConnectionConnectionSuccess];
 		
 		// Add databaes connection to document.
-		MADOperationCreateDocumentAddConnection *addConnection;
-		addConnection = [[MADOperationCreateDocumentAddConnection alloc] initWithDatabaseConnection:databaseConnection];
+		MADOperationCreateDocumentAddConnection *addConnection = [[MADOperationCreateDocumentAddConnection alloc] initWithDatabaseConnection:databaseConnection];
 		addConnection.name = @"com.everydayapps.mad.operation.document.create.connection";
 		[addConnection addDependency: createDocument];
 		[addConnection addDependency: firstTimeSetup];
@@ -199,8 +180,7 @@
 		[addConnection addCondition: conditionConnectionConnectionSuccess];
 		
 		// Import schema into document.
-		MADOperationCreateDocumentImportSchema *importSchema;
-		importSchema = [[MADOperationCreateDocumentImportSchema alloc] initWithDatabaseConnection:databaseConnection];
+		MADOperationCreateDocumentImportSchema *importSchema = [[MADOperationCreateDocumentImportSchema alloc] initWithDatabaseConnection:databaseConnection];
 		importSchema.name = @"com.everydayapps.mad.operation.document.import.schema";
 		[importSchema addDependency: createDocument];
 		[importSchema addDependency: addConnection];
@@ -210,11 +190,9 @@
 		[importSchema addCondition: conditionConnectionConnectionSuccess];
 		importSchema.parentOperation = self;
 		
-		MADOperationConditionSuccess *conditionSuccessImport;
-		conditionSuccessImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
+		//MADOperationConditionSuccess *conditionSuccessImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
 
-		MADOperationConditionSuccess *conditionFailedImport;
-		conditionFailedImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
+		MADOperationConditionSuccess *conditionFailedImport = [[MADOperationConditionSuccess alloc] initWithKey: importSchema.name];
 		conditionFailedImport.reverseCondition = YES;
 
 		MADOperationPromptError *displayErrorImport = [[MADOperationPromptError alloc] initWithViewController:viewController];
@@ -251,10 +229,9 @@
 		[operationGetUsername addDependency: testConnectionOperationCredentials];
 
 		//If connection failed and credentals are saved, prompt to delete credentals.
-		MADOperationPromptPolarQuestion *promptDeleteCredntials;
-		promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
-																				message: @"Would you like to remove the saved credentials"
-																		 viewController: viewController];
+		MADOperationPromptPolarQuestion *promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
+																												 message: @"Would you like to remove the saved credentials"
+																										  viewController: viewController];
 		promptDeleteCredntials.name = @"com.everydayapps.mad.operation.credentials.prompt.delete";
 		[promptDeleteCredntials addDependency: operationGetUsername];
 		[promptDeleteCredntials addDependency: displayErrorCredentials];
@@ -270,8 +247,7 @@
 		[operationDeletePassword addDependency: promptDeleteCredntials];
 		[operationDeletePassword addCondition: promptDeletePasswordAffirmative];
 		
-		MADOperationDeleteFile *operationDeleteFile;
-		operationDeleteFile = [[MADOperationDeleteFile alloc] init];
+		MADOperationDeleteFile *operationDeleteFile = [[MADOperationDeleteFile alloc] init];
 		[operationDeleteFile addDependency: uniqueUrlForFilename];
 		//[operationDeleteFile addDependency: createDocument];
 		[operationDeleteFile addDependency: importSchema];
@@ -279,8 +255,7 @@
 		[operationDeleteFile addDependency: closeDocument];
 		[operationDeleteFile addCondition: conditionFailedImport];
 
-		MADOperationBackgroundTaskEnd *taskEnd;
-		taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
+		MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
 		[taskEnd addDependency: putUsername];
 		[taskEnd addDependency: putPassword];
 		[taskEnd addDependency: promptSavePassword];

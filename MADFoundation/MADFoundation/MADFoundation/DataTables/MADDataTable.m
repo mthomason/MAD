@@ -137,7 +137,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"URL is nil.",
 								   NSURLErrorKey: url ?: [NSNull null]};
 		@throw [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
-								   code:-21
+								   code:-213
 							   userInfo:userInfo];
 	}
 		
@@ -148,7 +148,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"File does not exist.",
 								   NSURLErrorKey: url ?: [NSNull null]};
 		*outError = [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
-										code:-21
+										code:-215
 									userInfo:userInfo];
 		return NO;
 	}

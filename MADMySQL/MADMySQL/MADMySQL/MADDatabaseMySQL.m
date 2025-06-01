@@ -105,9 +105,7 @@
 	return success ? conn : nil;
 }
 
-- (BOOL)executeQuery:(MADQuery *)query
-	   withDataTable:(MADDataTable *)dataTable
-			andError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
 	BOOL result = NO;
 	id connectionSettings = self.databaseConnection;
 	NSError * __autoreleasing dberror = nil;
@@ -171,8 +169,10 @@
 	
 	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
 	myFetch.delegate = self;
+	
 	NSError *fetchError = nil;
 	[myFetch fetchWithCommand: sql dataTable: &dataTable onConnection:dbconn extendedNames:YES error: &fetchError];
+	
 	return fetchError == nil;
 }
 

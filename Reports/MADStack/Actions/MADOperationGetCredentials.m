@@ -98,42 +98,36 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 	// ---------------------------------------------------
 	// Operation 1: Read username.
 	// -------------------------
-	MADOperationKeyChainGet *getUsername;
-
-	getUsername = [[MADOperationKeyChainGet alloc] initWithKey: _keyUsername
-											   withDescription: MADKeyChainUsernameAccountDesc];
+	MADOperationKeyChainGet *getUsername = [[MADOperationKeyChainGet alloc] initWithKey: _keyUsername
+																		withDescription: MADKeyChainUsernameAccountDesc];
 	getUsername.readOperationType = MADKeyChainReadOperationTypeUsername;
 	
 	// ---------------------------------------------------
 	// Operation 2: Prompt for credentials if condition is met.
 	// Conditions:  Username is missing.
 	// ---------------------------------------------------
-	MADOperationPromptCredentials *promptCredntials;
-	promptCredntials = [[MADOperationPromptCredentials alloc] initWithUsernameKey: _keyUsername
-																	  passwordKey: _keyPassword
-																andViewController: viewController];
+	MADOperationPromptCredentials *promptCredntials = [[MADOperationPromptCredentials alloc] initWithUsernameKey: _keyUsername
+																									 passwordKey: _keyPassword
+																							   andViewController: viewController];
 	[promptCredntials addDependency:getUsername];
 	[promptCredntials addCondition:conditionReadUsernameFailed];
 
 	// Condition: Suppressed prompt credentials
-	MADOperationConditionDisplayedAlert *suppressedAlertCredntials;
-	suppressedAlertCredntials = [[MADOperationConditionDisplayedAlert alloc] initWithOperationIdentifier:promptCredntials.identifier];
+	MADOperationConditionDisplayedAlert *suppressedAlertCredntials = [[MADOperationConditionDisplayedAlert alloc] initWithOperationIdentifier:promptCredntials.identifier];
 	suppressedAlertCredntials.reverseCondition = YES;
-	
+
 	// ---------------------------------------------------
 	// Operation 3: Read password
 	// Conditions:  Username is found.
 	// ---------------------------------------------------
-	MADOperationKeyChainGet *getPassword;
-	getPassword = [[MADOperationKeyChainGet alloc] initWithKey: _keyPassword
-											   withDescription: MADKeyChainPasswordAccountDesc];
+	MADOperationKeyChainGet *getPassword = [[MADOperationKeyChainGet alloc] initWithKey: _keyPassword
+																		withDescription: MADKeyChainPasswordAccountDesc];
 	getPassword.readOperationType = MADKeyChainReadOperationTypePassword;
 	[getPassword addDependency:getUsername];
 	[getPassword addCondition:conditionReadUsername];
-	
+
 	// Condition: Get password failed
-	MADOperationConditionMissingResultString *conditionReadPasswordFailed;
-	conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:_keyPassword];
+	MADOperationConditionMissingResultString *conditionReadPasswordFailed = [[MADOperationConditionMissingResultString alloc] initWithKey:_keyPassword];
 
 	// Condition: Prompt for password only
 	NSArray <NSObject <MADOperationCondition> *> *conditionsForPromptPassword;
@@ -150,18 +144,15 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 	//              Username is found AND
 	//              Credentials alert was suppressed (redundant).
 	// ---------------------------------------------------
-	MADOperationPromptPassword *promptPassword;
-	promptPassword = [[MADOperationPromptPassword alloc] initWithPasswordKey: _keyPassword
-														   andViewController: viewController];
+	MADOperationPromptPassword *promptPassword = [[MADOperationPromptPassword alloc] initWithPasswordKey: _keyPassword
+																					   andViewController: viewController];
 	[promptPassword addDependency:getUsername];
 	[promptPassword addDependency:getPassword];
 	[promptPassword addDependency:promptCredntials];
 	[promptPassword addCondition:conditionPromptPasswordBoolAnd];
 	
 
-	NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials,
-													 getPassword, promptPassword
-													 ];
+	NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials, getPassword, promptPassword];
 	
 	typeof(self) __weak wself = self;
 	NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{

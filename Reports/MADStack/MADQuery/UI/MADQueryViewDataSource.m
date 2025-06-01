@@ -373,6 +373,10 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 			
 			MADocument *madDocument = self.datasoruce.document;
 			MADModelDatabase *db = madDocument.documentModel.firstDatabase;
+			if (!db) {
+				os_log_error(GetDesignerLog(), "%s: Missing database.", __PRETTY_FUNCTION__);
+				break;
+			}
 			NSString *databaseType = db.driverID.copy;
 			NSString *schemaName = db.schemaName.copy;
 			

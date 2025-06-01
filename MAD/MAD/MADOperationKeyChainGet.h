@@ -14,7 +14,9 @@
 
 @interface MADOperationKeyChainGet : MADOperation <MADOperationResultStringProtocol>
 
-- (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description;
+- (instancetype)initWithKey:(NSString *)key withDescription:(NSString *)description NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)new NS_UNAVAILABLE;
 
 @property (nonatomic, readonly, copy) NSString *key;
 @property (atomic, readonly, copy) NSString *value;

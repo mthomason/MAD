@@ -12,17 +12,13 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADOperationCondition.h>
 
-@interface MADOperationConditionTestConnection : NSObject
-    <MADOperationCondition>
-
+@interface MADOperationConditionTestConnection : NSObject <MADOperationCondition>
 @end
 
 @interface MADOperationConditionTestConnectionSuccess : MADOperationConditionTestConnection
-
 @end
 
 @interface MADOperationConditionTestConnectionFailuare : MADOperationConditionTestConnection
-
 @end
 
 #endif

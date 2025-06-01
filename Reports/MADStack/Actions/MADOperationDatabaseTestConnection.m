@@ -163,17 +163,9 @@
 }
 
 - (BOOL)isSuccess { return _success; }
-
 - (BOOL)displayError { return !self.success && self.error != nil; }
-
 - (NSUInteger)tag { return self.hash; }
-
-- (MADCredential *)getCredentialsForKey:(NSString *)key {
-	return self.credentials;
-}
-
-- (MADDataTable *)dataTableForQuery:(MADQuery *)query {
-	return self.datatable;
-}
+- (MADCredential *)getCredentialsForKey:(NSString *)key { return self.credentials; }
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query { return self.datatable; }
 
 @end

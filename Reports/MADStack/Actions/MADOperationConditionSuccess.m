@@ -50,8 +50,7 @@
 
 - (void)evaluateForOperation:(MADOperation *)operation
 				  completion:(void (^)(MADOperationConditionResult *))completion {
-	MADOperationConditionResult *result;
-	result = [self evaluateForOperation:operation];
+	MADOperationConditionResult *result = [self evaluateForOperation:operation];
 	completion(result);
 }
 

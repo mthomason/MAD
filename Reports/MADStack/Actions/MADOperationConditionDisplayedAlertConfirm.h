@@ -12,8 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <MADFoundation/MADOperationCondition.h>
 
-@interface MADOperationConditionDisplayedAlertConfirm : NSObject
-	<MADOperationCondition>
+@interface MADOperationConditionDisplayedAlertConfirm : NSObject <MADOperationCondition>
 
 @end
 

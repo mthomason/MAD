@@ -7,16 +7,19 @@
 //
 
 #import <MADFoundation/MADOperation.h>
-#import <os/log.h>
-#import <pthread.h>
-#import <Foundation/NSKeyValueObserving.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSError.h>
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <MADFoundation/MADOperationObserver.h>
+
 #import "MADBlockObserver.h"
 #import "madlog.h"
+
+#import <Foundation/NSKeyValueObserving.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSError.h>
+
+#import <os/log.h>
+#import <pthread.h>
 
 static NSString * const MADOperatorSelectorIsReady      = @"isReady";
 static NSString * const MADOperatorSelectorIsExecuting  = @"isExecuting";
