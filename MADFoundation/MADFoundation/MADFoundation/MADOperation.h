@@ -11,7 +11,6 @@
 
 #import <Foundation/NSOperation.h>
 
-
 @class NSMutableArray<ObjectType>;
 
 NS_ASSUME_NONNULL_BEGIN

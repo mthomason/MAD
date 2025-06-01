@@ -7,6 +7,7 @@
 //
 
 #import "MADBlockObserver.h"
+#import "madlog.h"
 
 @interface MADBlockObserver ()
 
@@ -36,12 +37,14 @@
 #pragma mark - OperationObserver protocol
 
 - (void)operationDidStart:(nonnull MADOperation *)operation {
+	MADLogDebug("MADBlockObserver <%p> operationDidStart: %@. (Handler %s)", self, operation, self.startHandler ? "exists" : "nil");
 	if (self.startHandler) {
 		self.startHandler(operation);
 	}
 }
 
 -(void)operation:(nonnull MADOperation *)operation didProduceOperation:(nonnull NSOperation *)newOperation {
+	MADLogDebug("MADBlockObserver <%p> operation: %@ didProduceOperation: %@. (Handler %s)", self, operation, newOperation, self.produceHandler ? "exists" : "nil");
 	if (self.produceHandler) {
 		self.produceHandler(operation, newOperation);
 	}
@@ -49,6 +52,8 @@
 
 -(void)operationDidFinish:(nonnull MADOperation *)operation
 				   errors:(nullable NSArray <NSError *> *)errors {
+	MADLogDebug("MADBlockObserver <%p> operationDidFinish: %@, Errors: %@ (Count: %lu). (Handler %s)",
+				self, operation, errors, (unsigned long)(errors ? errors.count : 0), self.finishHandler ? "exists" : "nil");
 	if (self.finishHandler) {
 		self.finishHandler(operation, errors);
 	}

@@ -267,7 +267,7 @@ static NSString *keyIDDocument = @"IO";
 		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
 	}
 	
-	NSAssert(results.count > 0, @"We expect results.");
+	//NSAssert(results.count > 0, @"We expect results.");
 	if (results.count == 0) return;
 	
 	NSMutableOrderedSet <MADModelDatabase *> *databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:results.count];

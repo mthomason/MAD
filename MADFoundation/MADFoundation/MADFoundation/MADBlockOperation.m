@@ -36,11 +36,13 @@
 	return self;
 }
 
-- (instancetype)initWithMainQueueBlock:(nullable dispatch_block_t)block {
+- (instancetype)initWithMainQueueBlock:(nullable dispatch_block_t)mainThreadBlock {
+	MADLogDebug("MADBlockOperation <%p:%@> initWithMainQueueBlock: block is %s",
+				self, self.name, mainThreadBlock ? "provided" : "nil");
 	return [self initWithBlock:^(OperationCompletionBlock operationCompletionBlock) {
-		if (block) {
+		if (mainThreadBlock) {
 			dispatch_async(dispatch_get_main_queue(), ^{
-				block();
+				mainThreadBlock();
 				if (operationCompletionBlock) {
 					operationCompletionBlock();
 				}
@@ -52,13 +54,21 @@
 }
 
 - (void)execute {
+	MADLogDebug("MADBlockOperation <%p:%@> execute. Operation block is %s",
+				self, self.name, self.block ? "present" : "nil");
+	
 	OperationCompletionBlock completion = ^{
+		// [self finish] will be logged by MADOperation's finish method.
+		MADLogDebug("MADBlockOperation <%p:%@> internal completion block called, finishing operation.",
+					self, self.name);
 		[self finish];
 	};
-
+	
 	if (self.block) {
+		MADLogDebug("MADBlockOperation <%p:%@> invoking operation block.", self, self.name);
 		self.block(completion);
 	} else {
+		MADLogDebug("MADBlockOperation <%p:%@> no operation block, finishing immediately.", self, self.name);
 		completion();
 	}
 }
