@@ -338,7 +338,7 @@ void madwarn(char *err,  const char *err2) { }
 		if (databaseConnection != nil) {
 			_database = [MADDatabase newDatabaseWithConnection: databaseConnection];
 		}
-		
+		_database.delegate = self;
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextDidChange:)
 													 name: NSManagedObjectContextObjectsDidChangeNotification
@@ -1374,8 +1374,7 @@ void madwarn(char *err,  const char *err2) { }
 
 - (void)initializeMainDatabase:(RptqDocument *)document {
 	RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-	MADDatabaseConnection *connection;
-	connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser];
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser];
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
 	db.delegate = self;
 	self.database = db;

@@ -1160,8 +1160,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				MADElementViewManager.m,
-				MADKeyChainGetCredentials.m,
-				MADKeyChainSaveCredentials.m,
 				MADPopoverBackgroundView.m,
 				MADPreference.m,
 				MADPreferencesManager.m,

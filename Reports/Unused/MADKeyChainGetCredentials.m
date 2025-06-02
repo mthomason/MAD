@@ -50,7 +50,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 	if (self = [super init]) {
 		self.viewController = viewController;
 		self.key = key.copy;
-		self.source = none;
+		self.source = MADCredentialSourceNone;
 		
 		NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
 		NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
@@ -105,7 +105,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 			NSString *password = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryPasswordData encoding: NSUTF8StringEncoding];
 			MADCredential *c = [[MADCredential alloc] initWithUsername:username andPassword:password];
 			self.credential = c;
-			self.source = keychain;
+			self.source = MADCredentialSourceKeychain;
 			[self finish];
 			break;
 		}
@@ -146,7 +146,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 	};
 	
 	void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
-		self.source = none;
+		self.source = MADCredentialSourceNone;
 		[self finish];
 	};
 	
@@ -203,7 +203,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 	
 	void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
 		self.credential = nil;
-		self.source = none;
+		self.source = MADCredentialSourceNone;
 		[self finish];
 	};
 	

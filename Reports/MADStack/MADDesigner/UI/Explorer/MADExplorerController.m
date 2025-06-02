@@ -31,6 +31,8 @@
 #import "MTVerificationController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADSearchBar.h"
+#import "MADKeyChainSaveCredentials.h"
+#import "MADKeyChainGetCredentials.h"
 #import "MADColorTransformer.h"
 #import "MADLocaleTransformer.h"
 #import "MADThemeManager.h"
@@ -53,6 +55,7 @@
 #import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 
+#import <MADFoundation/MADBlockObserver.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADURLFactory.h>
@@ -872,6 +875,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[document openWithCompletionHandler:^(BOOL success) {
 
 		if (success) {
+			document.documentDelegate = self;
 			SEL selector = @selector(openViewer);
 			id operation = [[NSInvocationOperation alloc] initWithTarget: self
 																selector: selector
@@ -1048,7 +1052,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark - MADDocumentDelegate
 
 - (MADCredential *)getCredentialsForKey:(NSString *)key {
-	/*
 	NSOperationQueue *credentialQueue = [[NSOperationQueue alloc] init];
 	credentialQueue.maxConcurrentOperationCount = 1;
 	
@@ -1060,8 +1063,81 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[credentialQueue addOperation:cs];
 	[credentialQueue waitUntilAllOperationsAreFinished];
 	MADCredential *credentials = cg.credential.copy;
-	*/
-	return nil;
+	return credentials;
+	//return nil;
+}
+
+- (void)getCredentialsForKey:(NSString *)key
+				  completion:(void (^)(MADCredential * _Nullable credential, NSError * _Nullable error))completion {
+	MADLogDebug("%@ <%p> getCredentialsForKey:\"%@\" (ASYNC with completion)",
+				NSStringFromClass([self class]), self, key);
+	
+	if (!key || key.length == 0) {
+		MADLogError("%@ <%p> getCredentialsForKey: Received nil or empty key.",
+					NSStringFromClass([self class]), self);
+		if (completion) {
+			NSError *keyError = [NSError errorWithDomain:@"FileExplorerDomain"
+													code:1001
+												userInfo:@{NSLocalizedDescriptionKey:@"Keychain key was missing or empty."}];
+			completion(nil, keyError);
+		}
+		return;
+	}
+	
+	// MADKeyChainGetCredentials is an NSOperation that handles its own asynchronicity (for UI).
+	MADKeyChainGetCredentials *getCredsOp = [[MADKeyChainGetCredentials alloc] initWithKey:key
+																			viewController:self]; // 'self' is the File Explorer VC
+	getCredsOp.name = [NSString stringWithFormat:@"Delegate.AsyncGetKeyChainCredsOp_for_%@", key];
+	
+	// Use a MADBlockObserver to get the result and call the completion handler
+	MADBlockObserver *observer = [[MADBlockObserver alloc] initWithFinishHandler:^(MADOperation * _Nonnull finishedOperation, NSArray<NSError *> * _Nullable opErrors) {
+		MADCredential *finalCredential = nil;
+		NSError *finalError = opErrors.firstObject; // Use the first error from the operation, if any
+		
+		if ([finishedOperation isKindOfClass:[MADKeyChainGetCredentials class]]) {
+			MADKeyChainGetCredentials *op = (MADKeyChainGetCredentials *)finishedOperation;
+			if (op.credential && !finalError) { // Success if credential present and no primary error
+				finalCredential = [op.credential copy]; // Copy as per original intent
+				MADLogInfo("%@ <%p> getCredentialsForKey: Op <%@> finished. Credential retrieved. Source: %d",
+						   NSStringFromClass([self class]), self, finishedOperation.name, (int)op.source);
+			} else {
+				if (!finalError) { // If op.credential is nil but no error reported by op, create one
+					finalError = [NSError errorWithDomain:@"FileExplorerDomain"
+													 code:1002
+												 userInfo:@{NSLocalizedDescriptionKey:@"Credential operation completed without a credential and no specific error."}];
+				}
+				MADLogError("%@ <%p> getCredentialsForKey: Op <%@> finished. Credential retrieval failed or op had errors. Error: %@",
+							NSStringFromClass([self class]), self, finishedOperation.name, finalError);
+			}
+		} else {
+			MADLogInfo("%@ <%p> getCredentialsForKey: Finished operation was not MADKeyChainGetCredentials? Op: %@. Aggregated errors: %@",
+					   NSStringFromClass([self class]), self, finishedOperation, opErrors);
+			if (!finalError) {
+				finalError = [NSError errorWithDomain:@"FileExplorerDomain" code:1003 userInfo:@{NSLocalizedDescriptionKey:@"Unexpected operation type finished."}];
+			}
+		}
+		
+		// Call the original completion handler.
+		// This will be on the thread the observer's finishHandler is called on (likely a background thread).
+		// If the caller of `getCredentialsForKey:completion:` (i.e., MADDatabase) needs this callback
+		// on a specific thread (e.g., its own operation's thread or main), it should handle that dispatch.
+		if (completion) {
+			completion(finalCredential, finalError);
+		}
+	}];
+	[getCredsOp addObserver:observer];
+	
+	// Add the operation to a shared background operation queue to execute.
+	// Replace with your actual shared queue. For example:
+	// [[AppSharedOperationQueues backgroundUtilityQueue] addOperation:getCredsOp];
+	// Creating a new one each time is also possible but less efficient if called frequently.
+	NSOperationQueue *backgroundQueue = [[NSOperationQueue alloc] init];
+	backgroundQueue.name = @"FileExplorer_CredentialFetchingQueue";
+	MADLogDebug("%@ <%p> getCredentialsForKey: Adding op <%@> to background queue <%@>.",
+				NSStringFromClass([self class]), self, getCredsOp.name, backgroundQueue.name);
+	[backgroundQueue addOperation:getCredsOp];
+	
+	// The method returns immediately; the result is delivered via the completion block.
 }
 
 #pragma mark -

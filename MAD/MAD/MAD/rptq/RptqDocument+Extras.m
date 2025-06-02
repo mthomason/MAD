@@ -435,8 +435,7 @@ static os_log_t rptq_log;
 																			  driverType: database.identifier
 																			connectionId: cid];
 	
-	RptqDatabaseCredentals *credentals;
-	credentals = [RptqDatabaseCredentals newDatabaseCredental: managedObjectContext];
+	RptqDatabaseCredentals *credentals = [RptqDatabaseCredentals newDatabaseCredental: managedObjectContext];
 	
 	NSString *databaseIdentifier = [database.identifier copy];;
 	credentals.driverID = databaseIdentifier;
@@ -445,8 +444,7 @@ static os_log_t rptq_log;
 		
 		switch (database.databaseConnection.databaseType) {
 			case MADDatabaseTypeMySQL: {
-				MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
-				databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
+				MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
 				credentals.port = databaseConnection.port;
 				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
 				credentals.host = databaseConnection.server.copy;

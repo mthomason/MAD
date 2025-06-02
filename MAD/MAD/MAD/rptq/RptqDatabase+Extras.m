@@ -118,8 +118,7 @@ static os_log_t rptq_log;
 	expressionDescription.expression = expressionForDatabaseDriverType;
 	expressionDescription.expressionResultType = NSStringAttributeType;
 	
-	NSArray *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
+	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
 	fetchRequest.propertiesToFetch = propertiesToFetch;
 	fetchRequest.resultType = NSDictionaryResultType;
 	fetchRequest.predicate = predicate;
@@ -143,8 +142,7 @@ static os_log_t rptq_log;
 	expressionDescription.expression = expressionForDatabaseDriverType;
 	expressionDescription.expressionResultType = NSStringAttributeType;
 	
-	NSArray *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
+	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
 	fetchRequest.propertiesToFetch = propertiesToFetch;
 	fetchRequest.resultType = NSDictionaryResultType;
 	fetchRequest.predicate = predicate;

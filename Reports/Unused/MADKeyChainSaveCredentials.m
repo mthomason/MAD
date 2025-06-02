@@ -14,9 +14,9 @@
 #import <MAD/MADCredentialSourceType.h>
 #import "MADKeyChainGetCredentials.h"
 
-static NSString * const MADTitleSaveCredentials        = @"Save Credentials";
-static NSString * const MADMessageSaveCredentials      = @"Would you like to save the credentials to your key chain?";
-static NSString * const MADButtonContinue              = @"Continue";
+static NSString * const MADTitleSaveCredentials = @"Save Credentials";
+static NSString * const MADMessageSaveCredentials = @"Would you like to save the credentials to your key chain?";
+static NSString * const MADButtonContinue = @"Continue";
 
 const short errUserCancel = 1;
 
@@ -44,7 +44,7 @@ const short errUserCancel = 1;
 - (void)execute {
 	if (self.cancelled) return [self finish];
 
-	MADCredentialSource source = none;
+	MADCredentialSource source = MADCredentialSourceNone;
 	NSArray *dependencies = self.dependencies;
 	for (MADKeyChainGetCredentials *dependency in dependencies) {
 		if ([dependency isKindOfClass:[MADKeyChainGetCredentials class]]) {
@@ -88,7 +88,7 @@ const short errUserCancel = 1;
 			
 			break;
 		}
-		case keychain:
+		case MADCredentialSourceKeychain:
 			[self finish];
 			
 		default:

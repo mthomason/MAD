@@ -179,16 +179,12 @@
 	MADQueryValueFromFieldController * __weak weakself2 = self;
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 		__strong MADQueryValueFromFieldController *strongself2 = weakself2;
-		RptqDatabaseSchemaField *field;
-		field = [strongself2.document.managedObjectContext objectWithID: strongself2.schemaFieldObjectId];
-		RptqDatabaseCredentals *userCredentals;
-		userCredentals = field.inTable.inDatabase.ownedByUser;
+		RptqDatabaseSchemaField *field = [strongself2.document.managedObjectContext objectWithID: strongself2.schemaFieldObjectId];
+		RptqDatabaseCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
 		
-		MADDatabaseConnection *databaseConnection;
-		databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
+		MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
 		
-		MADDatabase *database;
-		database = [MADDatabase newDatabaseWithConnection:databaseConnection];
+		MADDatabase *database = [MADDatabase newDatabaseWithConnection:databaseConnection];
 		if ([strongself2.querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
 			database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);
 		}

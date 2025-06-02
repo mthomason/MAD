@@ -13,11 +13,17 @@
 
 @class MADCredential, MADDataTable, NSString, MADQuery;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol MADDatabaseResultsProtocol <NSObject>
-  @required
-  @optional
-	- (MADCredential *)getCredentialsForKey:(NSString *)key;
-	- (MADDataTable *)dataTableForQuery:(MADQuery *)query;
+@required
+@optional
+- (MADCredential *)getCredentialsForKey:(NSString *)key;
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query;
+- (void)getCredentialsForKey:(NSString *)key
+				  completion:(void (^)(MADCredential * _Nullable credential, NSError * _Nullable error))completion;
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif /* MADDatabaseResultsProtocol_h */

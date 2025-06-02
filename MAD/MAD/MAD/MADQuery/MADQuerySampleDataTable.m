@@ -72,6 +72,10 @@
 	return self;
 }
 
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+	return self.credential;
+}
+
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
 	NSError *localError = nil;
 	[super getSql:&localError];
