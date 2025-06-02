@@ -29,17 +29,17 @@
 
 @interface MADOperationDatabaseTestConnection () <MADDatabaseResultsProtocol>
 
-	//Parameters
-	@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
-	@property (nonatomic, copy) MADCredential *credentials;
+//Parameters
+@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
+@property (nonatomic, copy) MADCredential *credentials;
 
-	//Store
-	@property (nonatomic, strong) MADDatabase *database;
-	@property (nonatomic, strong) MADDataTable *datatable;
+//Store
+@property (nonatomic, strong) MADDatabase *database;
+@property (nonatomic, strong) MADDataTable *datatable;
 
-	//Results
-	@property (nonatomic, readwrite, strong) NSError *error;
-	@property (nonatomic, readwrite, assign) BOOL success;
+//Results
+@property (nonatomic, readwrite, strong) NSError *error;
+@property (nonatomic, readwrite, assign) BOOL success;
 
 @end
 

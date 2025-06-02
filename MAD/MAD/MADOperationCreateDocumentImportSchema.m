@@ -1,5 +1,5 @@
 //
-//  MADOperationCreateDocumentAddConnection.m
+//  MADOperationCreateDocumentImportSchema.m
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
@@ -10,8 +10,6 @@
 #import "MADOperationCreateDocumentCreateDocument.h"
 #import "madlog.h"
 
-#import <CoreData/NSManagedObjectContext.h>
-
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
@@ -19,16 +17,22 @@
 #import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADErrorContainer.h>
 
+#import <MADFoundation/MADOperationResultStringProtocol.h>
+#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADNotificationProgress.h>
 
+#import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
+
+#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADOperationCreateDocumentImportSchema ()
 
 @property (nonatomic, assign, readwrite, getter=isSuccess) BOOL success;
 @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
+@property (nonatomic, copy) MADCredential *credentials;
 
 @end
 
@@ -80,6 +84,52 @@
 											   userInfo:@{NSLocalizedDescriptionKey: @"Database connection not provided for schema import."}];
 		[self finishWithError:configError];
 		return;
+	}
+	
+	if (self.credentials == nil) {
+		MADLogDebug("MADOperationDatabaseTestConnection <%p:%@> Credentials not set directly, attempting to find from dependencies.",
+					self, self.name);
+		NSString *username = nil;
+		NSString *password = nil;
+		
+		NSArray <NSOperation *> *dependencies = self.dependencies;
+		for (NSOperation *operation in dependencies) {
+			
+			if ([operation conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)]) {
+				
+				if (((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).gotCredentials) {
+					MADCredential *credentials;
+					credentials = ((NSOperation <MADOperationHoldsCredentialsProtocol> *)operation).credentials.copy;
+					self.credentials = credentials;
+					break;
+				}
+				
+			} else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
+				if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
+					NSString *value;
+					value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
+					switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
+						case MADKeyChainReadOperationTypeUsername:
+							username = value;
+							break;
+						case MADKeyChainReadOperationTypePassword:
+							password = value;
+							break;
+							
+						default:
+							break;
+					}
+				}
+			}
+		}
+		
+		if (self.credentials == nil) {
+			if (username != nil || password != nil) {
+				MADCredential *credentials = [[MADCredential alloc] initWithUsername: username
+																		 andPassword: password];
+				self.credentials = credentials;
+			}
+		}
 	}
 	
 	MADocument * document = nil;
@@ -141,7 +191,7 @@
 		MADErrorContainer *errorContainer = [MADErrorContainer new];
 		NSError *dbConnectionError = nil;
 		id actualDBConnection = [document.database connectWithConnection: document.database.databaseConnection
-															  credentals: nil
+															  credentals: self.credentials
 														 connectionError: &dbConnectionError];
 		
 		if (dbConnectionError != nil) {

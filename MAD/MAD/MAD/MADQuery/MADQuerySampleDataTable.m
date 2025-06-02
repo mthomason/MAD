@@ -110,7 +110,7 @@
 	BOOL success = [queryMaxFieldLenght.database executeQuery: queryMaxFieldLenght
 												withDataTable: self.dataTableMaxFieldLength
 													 andError: &blockError];
-	NSAssert(blockError == NULL, @"Error: %@", blockError.localizedDescription);
+	NSAssert(blockError == NULL, @"%s: Error: %@", __PRETTY_FUNCTION__, blockError);
 	if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
 		
 		for (RptqDatabaseSchemaField *field in fields) {

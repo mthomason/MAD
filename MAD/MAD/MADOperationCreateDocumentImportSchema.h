@@ -1,5 +1,5 @@
 //
-//  MADOperationCreateDocumentAddConnection.h
+//  MADOperationCreateDocumentImportSchema.h
 //  MAD Designer
 //
 //  Created by Michael Thomason on 3/25/16.
