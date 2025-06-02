@@ -12,13 +12,11 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-@interface MADDatabaseConnectionMySql : MADDatabaseConnection
-	<MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties,
-		MADConnectionsPropertiesProtocol, NSCopying>
+@interface MADDatabaseConnectionMySql : MADDatabaseConnection <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, MADConnectionsPropertiesProtocol, NSCopying>
 
-	- (instancetype)initWithHost:(NSString *)host
-						database:(NSString *)database
-						 andPort:(NSInteger)port;
+- (instancetype)initWithHost:(NSString *)host
+					database:(NSString *)database
+					 andPort:(NSInteger)port;
 
 @end
 

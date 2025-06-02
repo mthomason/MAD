@@ -62,14 +62,7 @@
 }
 
 - (NSString *)connectionString {
-	if (!_connectionString) {
-		_connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@",
-								self.identifier,
-								self.server,
-								(long)_port,
-								_database];
-	}
-	return _connectionString;
+	return [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@", self.identifier, self.server, (long)_port, _database];
 }
 
 - (BOOL)requiresCredentials {

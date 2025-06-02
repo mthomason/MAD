@@ -18,31 +18,31 @@
 	MysqlServer *server;
 }
 
-	- (unsigned int)errorNumber;
-	- (const char *)errorText NS_RETURNS_INNER_POINTER;
+@property(nonatomic, readonly) BOOL transactionsEnabled;
+@property(nonatomic, readonly) MysqlServer *server;
 
-	- (void *)connection NS_RETURNS_INNER_POINTER;
+- (unsigned int)errorNumber;
+- (const char *)errorText NS_RETURNS_INNER_POINTER;
 
-	@property(nonatomic, readonly) BOOL transactionsEnabled;
-	@property(nonatomic, readonly) MysqlServer *server;
+- (void *)connection NS_RETURNS_INNER_POINTER;
 
-	+ (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
-	+ (MysqlConnection *)connectToServer:(MysqlServer *)server;
-	+ (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError * __autoreleasing *)error;
++ (MysqlConnection *)connectToServers:(NSArray *)arrayOfServers;
++ (MysqlConnection *)connectToServer:(MysqlServer *)server;
++ (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError * __autoreleasing *)error;
 
-	- (void)enableTransactions;
-	- (void)disableTransactions;
-	- (void)commitTransaction;
-	- (void)rollbackTransaction;
+- (void)enableTransactions;
+- (void)disableTransactions;
+- (void)commitTransaction;
+- (void)rollbackTransaction;
 
-	- (void)enableStrictSql;
+- (void)enableStrictSql;
 
-	- (void)enableTriggers;
-	- (void)disableTriggers;
+- (void)enableTriggers;
+- (void)disableTriggers;
 
-	- (void)startIdle;
+- (void)startIdle;
 
-	- (NSString *)mysqlEscapeString:(NSString *)string;
+- (NSString *)mysqlEscapeString:(NSString *)string;
 
 @end
 

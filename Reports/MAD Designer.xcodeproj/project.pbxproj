@@ -934,7 +934,6 @@
 		4C734FD02DE671CA00506554 /* MAD-Designer-15-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MAD-Designer-15-Info.plist"; path = "/Users/michael/Desktop/Reports/Reports/MAD-Designer-15-Info.plist"; sourceTree = "<absolute>"; };
 		4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaPresentationController.h; sourceTree = "<group>"; };
 		4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaPresentationController.m; sourceTree = "<group>"; };
-		4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C8780B12DD6D266003FD36D /* MADDocumentCreationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADDocumentCreationManager.h; path = Source/MADDocumentCreationManager.h; sourceTree = "<group>"; };
 		4C8780B22DD6D266003FD36D /* MADDocumentCreationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADDocumentCreationManager.m; path = Source/MADDocumentCreationManager.m; sourceTree = "<group>"; };
 		4C8780B42DD6D296003FD36D /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Source/Constants.h; sourceTree = "<group>"; };
@@ -2767,7 +2766,6 @@
 			isa = PBXGroup;
 			children = (
 				4C2831841B1AFC5500511D2D /* libsystem_stats.dylib */,
-				4C8394911AC89F8C0055EDE9 /* libsqlite3.dylib */,
 				4CA54D3D18938801006B301A /* libSystem.dylib */,
 				4CA54D371893830E006B301A /* libsystem_pthread.dylib */,
 				4CA54D35189382FF006B301A /* libpthread.dylib */,

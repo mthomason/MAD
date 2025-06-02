@@ -16,7 +16,9 @@
 @class MADDatabaseConnection;
 
 @protocol MADOperationCreateDocumentImportSchemaProtocol <NSObject>
-	- (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress;
+
+- (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress;
+
 @end
 
 @interface MADOperationCreateDocumentImportSchema : MADOperation <MADOperationPromptErrorProtocol, MADOperationTestResults>

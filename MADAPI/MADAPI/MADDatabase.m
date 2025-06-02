@@ -11,6 +11,7 @@
 #endif
 
 #import "MADDatabase.h"
+#import "madlog.h"
 
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>
@@ -79,34 +80,38 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	NSString *key = [connection connectionString];
+	MADLogDebug("%s Key: %@", __PRETTY_FUNCTION__, key);
 	id <MADDatabaseResultsProtocol> delegate = _delegate;
 	BOOL responds = [delegate respondsToSelector:@selector(getCredentialsForKey:)];
+	MADLogDebug("%s Responds to `getCredentialsForKey:`: %@", __PRETTY_FUNCTION__, responds ? @"YES" : @"NO");
 	MADCredential *results = nil;
 	if (responds) {
 		MADCredential *c = [delegate getCredentialsForKey:key];
 		if (c) {
-			results = c.copy;
+			results = [c copy];
 		}
 		
+	}
+	if (!results) {
+		MADLogError("%s: Failed to get credentals.", __PRETTY_FUNCTION__);
 	}
 	return results;
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable
 			andError:(NSError * __autoreleasing *)error {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -130,38 +135,26 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
 }
 
-- (NSString *)tableAliasForTable:(NSString *)table {
-	NSString *tableAlias = [self newSafeIdentifier: table];
-	return tableAlias;
-}
-
-- (NSString *)tableAliasConnector {
-	return @" AS ";
-}
-
+- (NSString *)tableAliasForTable:(NSString *)table { return [self newSafeIdentifier: table]; }
+- (NSString *)tableAliasConnector { return @" AS "; }
 - (NSString *)identifier { return @"NONE"; }
-
 + (NSString *)identifier { return @"NONE"; }
 
-- (void)readRow:(NSUInteger)row {
-	[[MADNotificationDidReadRows sharedObject] database:self readRow:row];
-}
+- (void)readRow:(NSUInteger)row { [[MADNotificationDidReadRows sharedObject] database:self readRow:row]; }
 
 - (void)closeConnection:(id)process {}
 
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -169,9 +162,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn
 												   error:(NSError *__autoreleasing *)error {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -179,9 +171,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (void)getTablesFromConnection:(id)process
 					 completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -190,9 +181,8 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (void)enumerateTablesFromConnection:(id)dbconn
 						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
 						   completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
-	NSString *reason;
 	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -202,31 +192,24 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 #pragma mark MADDatabaseSQLProtocol
 
 + (MADSafeQueryField *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-	NSString *result = [MADStringUtilities stringByAppendingPeriod:tableName];
-	return [result stringByAppendingString:fieldName];
+	return [[MADStringUtilities stringByAppendingPeriod:tableName] stringByAppendingString:fieldName];
 }
 
 - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
-	id safeField = [MADDatabase newSafeQueryField:fieldName andTable:tableName];
-	return safeField;
+	return [MADDatabase newSafeQueryField:fieldName andTable:tableName];
 }
 
 + (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
-	id result = [[MADSafeQueryField alloc] initWithString: s];
-	return result;
+	return [[MADSafeQueryField alloc] initWithString: s];
 }
 
 - (MADSafeQueryField *)newSafeIdentifier:(NSString *)s {
-	id result = s.copy;
+	id result = [s copy];
 	return result;
 }
 
-- (NSString *)selectPart {
-	return @"SELECT\n";
-}
-
+- (NSString *)selectPart { return @"SELECT\n"; }
 - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit { return @"SELECT\n"; }
-
 - (NSString *)sqlLimitClause { return [self sqlLimitClause:  NSUIntegerMax]; }
 
 - (NSString *)sqlLimitClause:(NSUInteger)limit {

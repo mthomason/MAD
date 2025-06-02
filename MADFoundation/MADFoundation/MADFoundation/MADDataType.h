@@ -38,6 +38,36 @@ typedef NS_ENUM(int16_t, MADDataType) {
 	MADDataTypeNull          = 24
 };
 
+static inline NSString *NSStringFromMADDataType(MADDataType);
+static inline NSString *NSStringFromMADDataType(MADDataType type) {
+	switch (type) {
+		case MADDataTypeBit: return @"MADDataTypeBit";
+		case MADDataTypeBlob: return @"MADDataTypeBlob";
+		case MADDataTypeDate: return @"MADDataTypeDate";
+		case MADDataTypeDateTime: return @"MADDataTypeDateTime";
+		case MADDataTypeFloat: return @"MADDataTypeFloat";
+		case MADDataTypeGeometry: return @"MADDataTypeGeometry";
+		case MADDataTypeImage: return @"MADDataTypeImage";
+		case MADDataTypeInteger: return @"MADDataTypeInteger";
+		case MADDataTypeNumber: return @"MADDataTypeNumber";
+		case MADDataTypeSet: return @"MADDataTypeSet";
+		case MADDataTypeString: return @"MADDataTypeString";
+		case MADDataTypeTime: return @"MADDataTypeTime";
+		case MADDataTypeTimeStamp: return @"MADDataTypeTimeStamp";
+		case MADDataTypeYear: return @"MADDataTypeYear";
+		case MADDataTypeUnknown: return @"MADDataTypeUnknown";
+		case MADDataTypeDecimal: return @"MADDataTypeDecimal";
+		case MADDataTypeDouble: return @"MADDataTypeDouble";
+		case MADDataTypeEnum: return @"MADDataTypeEnum";
+		case MADDataTypeInt24: return @"MADDataTypeInt24";
+		case MADDataTypeLong: return @"MADDataTypeLong";
+		case MADDataTypeLongLong: return @"MADDataTypeLongLong";
+		case MADDataTypeVarChar: return @"MADDataTypeVarChar";
+		case MADDataTypeShort: return @"MADDataTypeShort";
+		case MADDataTypeNull: return @"MADDataTypeNull";
+		default: return @"Unknown";
+	}
+}
 
 SEL MADDataTypeSelectorForSorting(MADDataType dataType);
 

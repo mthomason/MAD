@@ -7,8 +7,13 @@
 //
 
 #import "MADOperationCreateDocument.h"
-
-#import <os/log.h>
+#import "MADOperationGetCredentials.h"
+#import "MADOperationDatabaseTestConnection.h"
+#import "MADOperationPromptPolarQuestion.h"
+#import "MADOperationConditionPolarQuestionAffirmative.h"
+#import "MADOperationConditionDisplayedAlertConfirm.h"
+#import "MADOperationConditionSuccess.h"
+#import "madlog.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MAD/MADConstants.h>
@@ -17,6 +22,8 @@
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADOperationConditionTestConnectionSuccess.h>
+#import <MADFoundation/MADOperationConditionHasResultString.h>
 
 #import <MAD/MADOperationKeyChainGet.h>
 #import <MAD/MADOperationKeyChainPut.h>
@@ -31,17 +38,8 @@
 //#import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
 #import <MAD/MADOperationDeleteFile.h>
-#import <MADFoundation/MADOperationConditionTestConnectionSuccess.h>
-#import <MADFoundation/MADOperationConditionHasResultString.h>
-#import "MADOperationGetCredentials.h"
-#import "MADOperationDatabaseTestConnection.h"
-#import "MADOperationPromptPolarQuestion.h"
-#import "MADOperationConditionPolarQuestionAffirmative.h"
-#import "MADOperationConditionDisplayedAlertConfirm.h"
-#import "MADOperationConditionSuccess.h"
 
-@interface MADOperationCreateDocument ()
-	<MADOperationCreateDocumentImportSchemaProtocol>
+@interface MADOperationCreateDocument () <MADOperationCreateDocumentImportSchemaProtocol>
 
 	@property (nonatomic, assign, readwrite, getter=isSuccessConnection) BOOL successConnection;
 	@property (nonatomic, assign, readwrite, getter=isSuccessCreate) BOOL successCreate;
@@ -57,29 +55,28 @@
 			  databaseConnection: (MADDatabaseConnection *)databaseConnection
 				  viewController: (UIViewController *)viewController {
 	
+	MADLogDebug("MADOperationCreateDocument <%p> initializing with Filename:\"%@\", DB Connection ID:\"%@\" (Type:%d)",
+				self, filename, databaseConnection.identifier, (int)databaseConnection.databaseType);
+	
 	if (self = [super init]) {
 		
 		_connectionSuccess = NO;
 		_successCreate = NO;
-		
+		self.name = [NSString stringWithFormat:@"CreateDocumentGroupOp_for_%@", filename];
 		NSString *key = databaseConnection.connectionString;
 		NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
 		NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
-
+		MADLogDebug("MADOperationCreateDocument <%p> Keychain keys generated. MainKey (connStr):\"%@\", UserKey:\"%@\", PassKey:\"%@\"",
+					self, key, keyUsername, keyPassword);
+		
+		// --- Conditions Setup ---
+		MADLogDebug("MADOperationCreateDocument <%p> Setting up conditions...", self);
 		MADOperationConditionHasResultString *conditionReadUsername = [[MADOperationConditionHasResultString alloc] initWithKey:keyUsername];
-		
 		MADOperationConditionTestConnectionFailuare *connectionConnectionFail = [[MADOperationConditionTestConnectionFailuare alloc] init];
-
-		// Condition: Confirm user manually entered password
 		MADOperationConditionDisplayedAlertConfirm *conditionEnteredPassword = [[MADOperationConditionDisplayedAlertConfirm alloc] init];
-		
-		// Condition: Test connection success
 		MADOperationConditionTestConnectionSuccess *conditionConnectionConnectionSuccess = [[MADOperationConditionTestConnectionSuccess alloc] init];
 
-		// ---------------------------------------------------
-		// Operation 1: Create unique filename/url for document.
-		// -------------------------
-		
+		MADLogDebug("MADOperationCreateDocument <%p> Instantiating sub-operations...", self);
 		MADOperationUniqueUrlForFilename *uniqueUrlForFilename = [[MADOperationUniqueUrlForFilename alloc] initWithDesiredFilename: filename
 																													 pathExtension: MADFileExtentionMobleApplicationDocument
 																											 andDocumentsDirectory: documentsDirectory];
@@ -239,15 +236,14 @@
 		[promptDeleteCredntials addCondition: connectionConnectionFail];
 		[promptDeleteCredntials addCondition: conditionReadUsername];
 		
-		MADOperationConditionPolarQuestionAffirmative *promptDeletePasswordAffirmative;
-		promptDeletePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier: promptDeleteCredntials.identifier];
-		
-		MADOperationKeyChainDeletePassword *operationDeletePassword;
-		operationDeletePassword = [[MADOperationKeyChainDeletePassword alloc] initWithKey: databaseConnection.connectionString];
+		MADOperationConditionPolarQuestionAffirmative *promptDeletePasswordAffirmative = [[MADOperationConditionPolarQuestionAffirmative alloc] initWithOperationIdentifier: promptDeleteCredntials.identifier];
+		MADOperationKeyChainDeletePassword *operationDeletePassword = [[MADOperationKeyChainDeletePassword alloc] initWithKey: databaseConnection.connectionString];
+		operationDeletePassword.name = @"com.everydayapps.mad.operation.delete.password";
 		[operationDeletePassword addDependency: promptDeleteCredntials];
 		[operationDeletePassword addCondition: promptDeletePasswordAffirmative];
 		
 		MADOperationDeleteFile *operationDeleteFile = [[MADOperationDeleteFile alloc] init];
+		operationDeleteFile.name = @"com.everydayapps.mad.operation.delete.file";
 		[operationDeleteFile addDependency: uniqueUrlForFilename];
 		//[operationDeleteFile addDependency: createDocument];
 		[operationDeleteFile addDependency: importSchema];
@@ -256,6 +252,7 @@
 		[operationDeleteFile addCondition: conditionFailedImport];
 
 		MADOperationBackgroundTaskEnd *taskEnd = [[MADOperationBackgroundTaskEnd alloc] init];
+		taskEnd.name = @"com.everydayapps.mad.operation.create.document.end";
 		[taskEnd addDependency: putUsername];
 		[taskEnd addDependency: putPassword];
 		[taskEnd addDependency: promptSavePassword];
@@ -288,8 +285,10 @@
 														 promptDeleteCredntials,
 														 operationDeletePassword];
 		
-		NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{ }];
-		[self addOperations:operations finishingOperation:finishingOperation];
+		NSBlockOperation *groupFinishingSignal = [NSBlockOperation blockOperationWithBlock:^{
+			MADLogDebug("MADOperationCreateDocument <%p> All internal operations for group have completed (groupFinishingSignal executed).", self);
+		}];
+		[self addOperations:operations finishingOperation:groupFinishingSignal];
 		
 	}
 	
@@ -297,10 +296,17 @@
 }
 
 - (void)execute {
+	MADLogDebug("MADOperationCreateDocument <%p:%@> execute called. Delegating to [super execute].", self, self.name);
 	[super execute];
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors {
+	MADLogDebug("MADOperationCreateDocument <%p:%@> (as delegate) received operationDidFinish: <%p:%@>, Error count: %lu",
+				self, self.name, operation, operation.name, (unsigned long)errors.count);
+	if (errors.count > 0) {
+		MADLogError("MADOperationCreateDocument <%p:%@> Sub-operation <%p:%@> finished with %lu error(s). First error: %@",
+					self, self.name, operation, operation.name, (unsigned long)errors.count, errors.firstObject);
+	}
 	if ([operation isKindOfClass:[MADOperationBackgroundTaskEnd class]]) {
 		//[((MADOperation *)operation) cleanup];
 		
@@ -322,6 +328,8 @@
 }
 
 - (void)updateImportProgressWithMessage:(NSString *)message progress:(float)progress {
+	MADLogDebug("MADOperationCreateDocument <%p:%@> updateImportProgressWithMessage: \"%@\", progress: %.2f",
+				self, self.name, message, progress);
 	[[MADNotificationProgress sharedObject] updateProgressOfObject: self
 													   withMessage: message
 														  progress: progress];

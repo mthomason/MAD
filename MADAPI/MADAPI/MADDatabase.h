@@ -29,8 +29,7 @@ extern NSString * const MADSqlTextFromPart;
 - (void)displayError:(NSError *)error;
 @end
 
-@interface MADDatabase : NSObject
-	<MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseSQLProtocol, NSCoding, NSCopying>
+@interface MADDatabase : NSObject <MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseSQLProtocol, NSCoding, NSCopying>
 
 	+ (NSString *)imageIconName;
 	+ (NSString *)driverName;

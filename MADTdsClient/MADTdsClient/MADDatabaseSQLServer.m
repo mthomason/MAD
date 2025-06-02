@@ -7,14 +7,7 @@
 //
 
 #import "MADDatabaseSQLServer.h"
-
-#import <string.h>
-#import <stdlib.h>
-#import <unistd.h>
-
-#import <dispatch/time.h>
-#import <dispatch/queue.h>
-#import <dispatch/semaphore.h>
+#import "MADDatabaseProcessSQLServer.h"
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
@@ -42,11 +35,17 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-//#import "sybdb.h"
 #import <MADTds/tds_sysdep_public.h>
 #import <MADTds/sybdb.h>
 
-#import "MADDatabaseProcessSQLServer.h"
+#import <dispatch/time.h>
+#import <dispatch/queue.h>
+#import <dispatch/semaphore.h>
+
+//#import <sybdb.h>
+#import <string.h>
+#import <stdlib.h>
+#import <unistd.h>
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

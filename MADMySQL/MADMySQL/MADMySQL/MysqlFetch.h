@@ -15,21 +15,21 @@
 @class MysqlConnection, MADQuery, MADDataTable;
 
 @protocol MADMySQLFetchProtocol
-  @optional
-    - (MADDataTable *)dataTableForQuery:(MADQuery *)query;
-    - (void)didFetchRow:(NSUInteger)row;
+@optional
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query;
+- (void)didFetchRow:(NSUInteger)row;
 @end
 
 @interface MysqlFetch : NSObject
 
-    @property(nonatomic, weak) id <MADMySQLFetchProtocol> delegate;
+@property(nonatomic, weak) id <MADMySQLFetchProtocol> delegate;
 
-    @property(nonatomic, strong, readwrite) NSArray *fieldNames;
-    @property(nonatomic, strong, readwrite) NSArray *fields;
+@property(nonatomic, strong, readwrite) NSArray *fieldNames;
+@property(nonatomic, strong, readwrite) NSArray *fields;
 
-    + (int)fetchStatement:(MYSQL_STMT *)statement;
++ (int)fetchStatement:(MYSQL_STMT *)statement;
 
-    char *mySQLTypeForType(enum enum_field_types type);
+char *mySQLTypeForType(enum enum_field_types type);
 
 @end
 

@@ -27,8 +27,7 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 
-@interface MADOperationDatabaseTestConnection ()
-	<MADDatabaseResultsProtocol>
+@interface MADOperationDatabaseTestConnection () <MADDatabaseResultsProtocol>
 
 	//Parameters
 	@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
@@ -47,20 +46,30 @@
 @implementation MADOperationDatabaseTestConnection
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection {
+	MADLogDebug("MADOperationDatabaseTestConnection <%p:%@> initWithDatabaseConnection: %@",
+				self, self.name, connection.identifier);
 	if (self = [super init]) {
-		_databaseConnection = connection.copy;
+		_databaseConnection = [connection copy];
 		_credentials = nil;
 		_success = NO;
+		if (!connection) {
+			MADLogInfo("MADOperationDatabaseTestConnection <%p:%@> initialized with a NIL databaseConnection.", self, self.name);
+		}
 	}
 	return self;
 }
 
 - (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)connection
 							   credentials:(MADCredential *)credentials {
+	MADLogDebug("MADOperationDatabaseTestConnection <%p:%@> initWithDatabaseConnection: %@, credentials: %s",
+				self, self.name, connection.identifier, credentials ? "provided" : "nil");
 	if (self = [super init]) {
-		_databaseConnection = connection.copy;
-		_credentials = credentials.copy;
+		_databaseConnection = [connection copy];
+		_credentials = [credentials copy];
 		_success = NO;
+		if (!connection) {
+			MADLogInfo("MADOperationDatabaseTestConnection <%p:%@> initialized with a NIL databaseConnection.", self, self.name);
+		}
 	}
 	return self;
 }
@@ -68,8 +77,26 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+	MADLogDebug("MADOperationDatabaseTestConnection <%p:%@> execute started. Cancelled: %s. DB Connection ID: %@",
+				self, self.name, self.isCancelled ? "YES" : "NO", self.databaseConnection.identifier);
+
+	if (self.isCancelled) {
+		MADLogDebug("MADOperationDatabaseTestConnection <%p:%@> cancelled before execution. Finishing.", self, self.name);
+		return [self finish];
+	}
+	if (!self.databaseConnection) {
+		MADLogError("MADOperationDatabaseTestConnection <%p:%@> databaseConnection is nil. Cannot proceed. Finishing with error.", self, self.name);
+		self.error = [NSError errorWithDomain:NSStringFromClass([self class])
+										 code:-2001
+									 userInfo:@{NSLocalizedDescriptionKey: @"Database connection not provided for connection test."}];
+		self.success = NO;
+		[self finishWithError:self.error];
+		return;
+	}
+	
 	if (self.credentials == nil) {
-		
+		MADLogDebug("MADOperationDatabaseTestConnection <%p:%@> Credentials not set directly, attempting to find from dependencies.",
+					self, self.name);
 		NSString *username = nil;
 		NSString *password = nil;
 		
@@ -106,9 +133,8 @@
 		
 		if (self.credentials == nil) {
 			if (username != nil && password != nil) {
-				MADCredential *credentials;
-				credentials = [[MADCredential alloc] initWithUsername: username
-														  andPassword: password];
+				MADCredential *credentials = [[MADCredential alloc] initWithUsername: username
+																		 andPassword: password];
 				self.credentials = credentials;
 			}
 		}
@@ -135,8 +161,12 @@
 	queryTest.database = db;
 	self.database = db;
 	
-	NSError * __autoreleasing error = NULL;
-	self.success = [queryTest.database executeQuery:queryTest withError:&error];
+	NSError *error = nil;
+	BOOL success = [queryTest.database executeQuery:queryTest withError:&error];
+	if (!success && error != nil) {
+		MADLogError("MADOperationDatabaseTestConnection <%p:%@> Test query failed.", self, self.name);
+	}
+	self.success = success;
 	
 	_databaseConnection = nil;
 	

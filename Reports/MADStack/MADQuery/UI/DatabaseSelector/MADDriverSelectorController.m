@@ -123,8 +123,6 @@
 																									viewController: ((MADConnectionViewController *)sender)];
 		[documentCreationManager start];
 		self.documentCreationManager = documentCreationManager;
-
-
 	}
 }
 
