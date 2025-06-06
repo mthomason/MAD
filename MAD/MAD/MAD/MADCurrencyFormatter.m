@@ -19,11 +19,11 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-
+		
 		self.enabled = [aDecoder decodeBoolForKey:@"e"];;
 		self.decimalCount = [aDecoder decodeIntegerForKey:@"d"];
 		self.locale = [aDecoder decodeObjectOfClass:[NSLocale class] forKey:@"l"];
-	
+		
 	}
 	return self;
 }
@@ -32,6 +32,14 @@
 	[aCoder encodeBool:self.enabled forKey:@"e"];
 	[aCoder encodeInteger:self.decimalCount forKey:@"d"];
 	[aCoder encodeObject:self.locale forKey:@"l"];
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+	MADCurrencyFormatter *result = [[[self class] allocWithZone:zone] init];
+	result.locale = [_locale copyWithZone:zone];
+	result.enabled = _enabled;
+	result.decimalCount = _decimalCount;
+	return result;
 }
 
 @end
