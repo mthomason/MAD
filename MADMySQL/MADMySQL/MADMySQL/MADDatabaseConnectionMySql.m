@@ -35,11 +35,9 @@
 					database:(NSString *)database
 					 andPort:(NSInteger)port {
 	if (self = [super init]) {
-		NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-		NSString *server = [host stringByTrimmingCharactersInSet: whitespace];
-		_server = server.copy;
-		_host = host.copy;
-		_database = database.copy;
+		_server = [host stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		_host = [host copy];
+		_database = [database copy];
 		_port = port;
 		_databaseType = MADDatabaseTypeMySQL;
 	}

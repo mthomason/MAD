@@ -49,10 +49,10 @@
 			CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_dataType);
 			
 			NSString *tableAlias = object[keyPathInGroupHasFieldInQueryTableAlias];
-			_tableAlias = tableAlias.copy;
+			_tableAlias = [tableAlias copy];
 
 			NSString *fieldName = object[keyPathInGroupHasFieldDatabaseSchemaFieldName];
-			_fieldName = fieldName.copy;
+			_fieldName = [fieldName copy];
 
 			number = object[keyPathInGroupHasFieldInQueryTableDropIndex];
 			CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_dropIndex);

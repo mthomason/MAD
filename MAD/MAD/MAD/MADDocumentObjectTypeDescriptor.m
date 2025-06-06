@@ -30,7 +30,7 @@ NSString * const MADDocumentObjectTypeAddDetailAggregate   = @"Add a grouping of
 NSString * const MADDocumentObjectTypeAddDetailImage       = @"Add a static image.";
 NSString * const MADDocumentObjectTypeAddDetailBarcode     = @"Add a barcode element.";
 
-@implementation NSString (MADocumentObjectType)
+@implementation MADDocumentObjectTypeDescriptor
 
 + (NSString *)humanReadableStringForType:(MADPrintPageElementType)type {
 	switch (type) {

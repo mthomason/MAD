@@ -487,7 +487,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 																			  andPageAttributtes: pageAttributes];
 
 		pageOne.view.frame = self.view.bounds;
-		pageOne.view.backgroundColor = self.view.backgroundColor.copy;
+		pageOne.view.backgroundColor = [self.view.backgroundColor copy];
 		pageOne.delegate = self;
 
 		[self.view bringSubviewToFront: self.pageSlider];
@@ -854,7 +854,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		if (error != nil) {
 			os_log_error(GetDesignerLog(), "Error: %@", error);
 		} else {
-			_lastCacheDate = attributes.fileModificationDate.copy;
+			_lastCacheDate = [attributes.fileModificationDate copy];
 		}
 
 		if (_lastCacheDate == nil) {    // Find last cache date
@@ -864,8 +864,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		
 	}
 
-	MTPair *dateStringAndInterval;
-	dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:_lastCacheDate];
+	MTPair *dateStringAndInterval = [self.dateTimeFormatter stringWithTimeIntervalSinceDate:_lastCacheDate];
 	[labelStatus updateStatusWithTime:dateStringAndInterval.former];
 	resolution = ((NSNumber *)dateStringAndInterval.latter).shortValue;
 

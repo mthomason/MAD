@@ -10,28 +10,21 @@
 
 @implementation RptqDirectionalProperty (Extras)
 
-+ (NSString *)keyTop {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(top));
-	return key;
+static NSString *keyTop = nil;
+static NSString *keyBottom = nil;
+static NSString *keyLeft = nil;
+static NSString *keyRight = nil;
+
++ (void)load {
+	keyTop = NSStringFromSelector(@selector(top));
+	keyBottom = NSStringFromSelector(@selector(bottom));
+	keyLeft = NSStringFromSelector(@selector(left));
+	keyRight = NSStringFromSelector(@selector(right));
 }
 
-+ (NSString *)keyBottom {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(bottom));
-	return key;
-}
-
-+ (NSString *)keyLeft {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(left));
-	return key;
-}
-
-+ (NSString *)keyRight {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(right));
-	return key;
-}
++ (NSString *)keyTop { return keyTop; }
++ (NSString *)keyBottom { return keyBottom; }
++ (NSString *)keyLeft { return keyLeft; }
++ (NSString *)keyRight { return keyRight; }
 
 @end

@@ -65,14 +65,16 @@
 	[private performBlockAndWait:^{
 		BOOL success = [RptqDocument newDocumentForManagedObjectContext: private] != nil;
 		if (success) {
-			NSError * __autoreleasing error = NULL;
-			if (!(success = [private save:&error])) {
-				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+			NSError *error = nil;
+			success = [private save:&error];
+			if (!success && error != nil) {
+				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", error.localizedDescription);
 			}
 		} else {
-			NSError * __autoreleasing error = NULL;
-			if (!(success = [private save:&error])) {
-				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %s", error.localizedDescription.UTF8String);
+			NSError *error = nil;
+			success = [private save:&error];
+			if (!success && error != nil) {
+				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", error.localizedDescription);
 			}
 		}
 	}];

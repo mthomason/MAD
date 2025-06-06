@@ -7,16 +7,12 @@
 //
 
 #import "MADKeyChainSaveCredentials.h"
-#import <UIKit/UIViewController.h>
-#import <UIKit/UIAlertController.h>
+#import "MADKeyChainGetCredentials.h"
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADCredentialSourceType.h>
-#import "MADKeyChainGetCredentials.h"
-
-static NSString * const MADTitleSaveCredentials = @"Save Credentials";
-static NSString * const MADMessageSaveCredentials = @"Would you like to save the credentials to your key chain?";
-static NSString * const MADButtonContinue = @"Continue";
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIAlertController.h>
 
 const short errUserCancel = 1;
 
@@ -33,7 +29,7 @@ const short errUserCancel = 1;
 - (instancetype)initWithKey:(NSString *)key viewController:(UIViewController *)viewController {
 	if (self = [super init]) {
 		self.viewController = viewController;
-		self.key = key.copy;
+		self.key = [key copy];
 	}
 	return self;
 }
@@ -48,7 +44,7 @@ const short errUserCancel = 1;
 	NSArray *dependencies = self.dependencies;
 	for (MADKeyChainGetCredentials *dependency in dependencies) {
 		if ([dependency isKindOfClass:[MADKeyChainGetCredentials class]]) {
-			self.credential = ((MADKeyChainGetCredentials *)dependency).credential.copy;
+			self.credential = [((MADKeyChainGetCredentials *)dependency).credential copy];
 			source = ((MADKeyChainGetCredentials *)dependency).source;
 			break;
 		}
@@ -59,9 +55,7 @@ const short errUserCancel = 1;
 	switch (source) {
 		case MADCredentialSourceCredentialPrompt: {
 			[self promptToSave:^(UIAlertAction *action) {
-				OSStatus status = [MADKeyChain saveUsername: self.credential.username
-											   andPassword: self.credential.password
-													forKey: self.key];
+				OSStatus status = [MADKeyChain saveUsername: self.credential.username andPassword: self.credential.password forKey: self.key];
 				if (status == errSecSuccess) {
 					[self finish];
 				} else {
@@ -75,8 +69,7 @@ const short errUserCancel = 1;
 			
 			
 			[self promptToSave:^(UIAlertAction *action) {
-				OSStatus status = [MADKeyChain savePassword: self.credential.password
-													forKey: self.key];
+				OSStatus status = [MADKeyChain savePassword: self.credential.password forKey: self.key];
 				if (status == errSecSuccess) {
 					[self finish];
 				} else {
@@ -99,35 +92,27 @@ const short errUserCancel = 1;
 }
 
 - (void)promptToSave:(void (^ __nullable)(UIAlertAction *action))actionContinue {
-	
-	NSString *title = NSLocalizedString(MADTitleSaveCredentials, MADTitleSaveCredentials);
-	NSString *message = NSLocalizedString(MADMessageSaveCredentials, MADMessageSaveCredentials);
-	NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-	NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
-	
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-																			 message: message
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Save Credentials", @"Save Credentials")
+																			 message: NSLocalizedString(@"Would you like to save the credentials to your key chain?", @"Would you like to save the credentials to your key chain?")
 																	  preferredStyle: UIAlertControllerStyleAlert];
 	
-	UIAlertAction *alertActionContinue = [UIAlertAction actionWithTitle: ok
+	UIAlertAction *alertActionContinue = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
 																  style: UIAlertActionStyleDefault
 																handler: actionContinue];
-	
-	void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
 
-	};
-	
-	UIAlertAction *alertActionCancel = [UIAlertAction actionWithTitle: cancel
-																style: UIAlertActionStyleCancel
-															  handler: actionCancel];
-	
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
+														   style: UIAlertActionStyleCancel
+														 handler: ^(UIAlertAction *action) { }];
+
 	[alertController addAction:alertActionContinue];
-	[alertController addAction:alertActionCancel];
+	[alertController addAction:actionCancel];
 	
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		UIViewController *topViewController = self.viewController;
-		topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-		[topViewController  presentViewController: alertController animated: YES completion: nil];
+		if (topViewController != nil) {
+			topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+			[topViewController  presentViewController: alertController animated: YES completion: nil];
+		}
 	}];
 }
 

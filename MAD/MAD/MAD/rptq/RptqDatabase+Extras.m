@@ -11,28 +11,22 @@
 #endif
 
 #import "RptqDatabase+Extras.h"
-
-#import <CoreFoundation/CFNumber.h>
-
-#import <Foundation/NSSortDescriptor.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSExpression.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSExpressionDescription.h>
-
-#import <MADFoundation/MADStringUtilities.h>
-
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseCredentals.h"
-
 #import "RptqDataHelper.h"
-
 #import "NSPredicate+Creators.h"
+#import <MADFoundation/MADStringUtilities.h>
+
+#import <CoreFoundation/CFNumber.h>
+#import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSExpression.h>
+#import <CoreData/NSFetchRequest.h>
+#import <CoreData/NSManagedObjectContext.h>
+#import <CoreData/NSEntityDescription.h>
+#import <CoreData/NSExpressionDescription.h>
 #import <os/log.h>
 
 static os_log_t rptq_log;
@@ -49,49 +43,27 @@ static os_log_t rptq_log;
 	}
 }
 
-+ (NSString *)keyDriverID {
-	NSString *keyDriverID = NSStringFromSelector(@selector(driverID));
-	return keyDriverID;
-}
-
-+ (NSString *)keyOwnedByUser {
-	NSString *keyOwnedByUser = NSStringFromSelector(@selector(ownedByUser));
-	return keyOwnedByUser;
-}
++ (NSString *)keyDriverID { return NSStringFromSelector(@selector(driverID)); }
++ (NSString *)keyOwnedByUser { return NSStringFromSelector(@selector(ownedByUser)); }
++ (NSString *)keyDatabaseDriverType { return NSStringFromSelector(@selector(databaseDriverTypeEnum)); }
 
 + (NSString *)keyOwnedByUserDriverID {
-	NSString *keyOwnedByUser = [self keyOwnedByUser];
-	NSString *keyDriverID = [self keyDriverID];
-	NSString *keyOwndByUserDriverID = [MADStringUtilities stringByAppendingPeriod:keyOwnedByUser];
-	keyOwndByUserDriverID = [keyOwndByUserDriverID stringByAppendingString:keyDriverID];
-	return keyOwndByUserDriverID;
+	return [[MADStringUtilities stringByAppendingPeriod:[self keyOwnedByUser]] stringByAppendingString:[self keyDriverID]];
 }
 
 + (NSString *)keyOwnedByUserDatabaseName {
-	NSString *keyOwnedByUser = [self keyOwnedByUser];
-	NSString *keyDatabaseName = NSStringFromSelector(@selector(dbname));
-	NSString *keyOwndByUserDBName = [MADStringUtilities stringByAppendingPeriod:keyOwnedByUser];
-	keyOwndByUserDBName = [keyOwndByUserDBName stringByAppendingString:keyDatabaseName];
-	return keyOwndByUserDBName;
-}
-
-+ (NSString *)keyDatabaseDriverType {
-	NSString *keyDatabaseDriverType = NSStringFromSelector(@selector(databaseDriverTypeEnum));
-	return keyDatabaseDriverType;
+	return [[MADStringUtilities stringByAppendingPeriod:[self keyOwnedByUser]] stringByAppendingString:NSStringFromSelector(@selector(dbname))];
 }
 
 + (NSFetchRequest *)fetchRequestDatabaseDriverID:(int64_t)identifier {
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
 	NSString *keyOwndByUserDriverID = [self keyOwnedByUserDriverID];
-	NSFetchRequest *fetchRequest;
-	NSString *entityName = NSStringFromClass([RptqDatabase class]);
-	fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabase class])];
 	
 	NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:keyOwndByUserDriverID];
 	
-	NSExpressionDescription *expressionDescription;
-	expressionDescription = [[NSExpressionDescription alloc] init];
-	expressionDescription.name = keyOwndByUserDriverID;
+	NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+	expressionDescription.name = [keyOwndByUserDriverID copy];
 	expressionDescription.expression = expressionForDatabaseDriverType;
 	expressionDescription.expressionResultType = NSStringAttributeType;
 	
@@ -106,20 +78,16 @@ static os_log_t rptq_log;
 + (NSFetchRequest *)fetchRequestDatabaseName:(int64_t)identifier {
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
 	NSString *keyOwndByUserDBName = [self keyOwnedByUserDatabaseName];
-	
-	NSFetchRequest *fetchRequest;
-	NSString *entityName = NSStringFromClass([RptqDatabase class]);
-	fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabase class])];
 	
 	NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:keyOwndByUserDBName];
 	
 	NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
-	expressionDescription.name = keyOwndByUserDBName;
+	expressionDescription.name = [keyOwndByUserDBName copy];
 	expressionDescription.expression = expressionForDatabaseDriverType;
 	expressionDescription.expressionResultType = NSStringAttributeType;
 	
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
-	fetchRequest.propertiesToFetch = propertiesToFetch;
+	fetchRequest.propertiesToFetch = @[expressionDescription];
 	fetchRequest.resultType = NSDictionaryResultType;
 	fetchRequest.predicate = predicate;
 	
@@ -130,20 +98,15 @@ static os_log_t rptq_log;
 	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
 
 	NSString *key = [self keyOwnedByUserDatabaseName];
-	
-	NSFetchRequest *fetchRequest;
-	NSString *entityName = NSStringFromClass([RptqDatabase class]);
-	fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-	
+	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabase class])];
 	NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:key];
 	
 	NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
-	expressionDescription.name = key;
+	expressionDescription.name = [key copy];
 	expressionDescription.expression = expressionForDatabaseDriverType;
 	expressionDescription.expressionResultType = NSStringAttributeType;
 	
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
-	fetchRequest.propertiesToFetch = propertiesToFetch;
+	fetchRequest.propertiesToFetch = @[expressionDescription];
 	fetchRequest.resultType = NSDictionaryResultType;
 	fetchRequest.predicate = predicate;
 
@@ -155,21 +118,15 @@ static os_log_t rptq_log;
 
 	NSString *keyDatabaseDriverTypeEnum = [self keyDatabaseDriverType];
 	
-	NSFetchRequest *fetchRequest;
-	NSString *entityName = NSStringFromClass([RptqDatabase class]);
-	fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-	
+	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabase class])];
 	NSExpression *expressionForDatabaseDriverType = [NSExpression expressionForKeyPath:keyDatabaseDriverTypeEnum];
 
-	NSExpressionDescription *expressionDescription;
-	expressionDescription = [[NSExpressionDescription alloc] init];
-	expressionDescription.name = keyDatabaseDriverTypeEnum;
+	NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+	expressionDescription.name = [keyDatabaseDriverTypeEnum copy];
 	expressionDescription.expression = expressionForDatabaseDriverType;
 	expressionDescription.expressionResultType = NSInteger16AttributeType;
 	
-	NSArray *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects:expressionDescription, nil];
-	fetchRequest.propertiesToFetch = propertiesToFetch;
+	fetchRequest.propertiesToFetch = @[expressionDescription];
 	fetchRequest.resultType = NSDictionaryResultType;
 	fetchRequest.predicate = predicate;
 	return fetchRequest;
@@ -192,19 +149,12 @@ static os_log_t rptq_log;
 + (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
 											   driverType:(NSString *)driverIdentifier
 											 connectionId:(int64_t)identifier NS_RETURNS_RETAINED {
-
-	NSString *entityName = NSStringFromClass([self class]);
-	NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: entityName
+	NSEntityDescription *databaseEntity = [NSEntityDescription entityForName: NSStringFromClass([self class])
 													  inManagedObjectContext: objectContext];
-	
 	RptqDatabase *database = [[self alloc] initWithEntity: databaseEntity
 						   insertIntoManagedObjectContext: objectContext];
-
-	NSString *databaseDriverType = [[NSString alloc] initWithString: driverIdentifier];
-	database.databaseDriverType = databaseDriverType;
-	
+	database.databaseDriverType = [driverIdentifier copy];
 	database.identifier = identifier;
-	
 	return database;
 }
 

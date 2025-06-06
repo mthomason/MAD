@@ -7,120 +7,70 @@
 //
 
 #import "MADDatabaseConnection+Constructor.h"
-
-#import <Foundation/NSURL.h>
-#import <Foundation/NSException.h>
-
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
 
 @implementation MADDatabaseConnection (Constructor)
 
 + (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
-                                         host:(NSString *)host
-                                     database:(NSString *)database
-                                         port:(NSInteger)port {
+										 host:(NSString *)host
+									 database:(NSString *)database
+										 port:(NSInteger)port {
 
-    id dbConnection;
-    
-    switch (databaseType) {
-        case MADDatabaseTypeSqlite3:
-            dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
-
-            break;
-            
-        case MADDatabaseTypeTDS:
-            dbConnection = [[MADDatabaseConnectionSQLServer alloc] initWithHost: host
-                                                                        server: host
-                                                                      database: database
-                                                                       andPort: port];
-            
-            break;
-            
-        case MADDatabaseTypeMySQL:
-            dbConnection = [[MADDatabaseConnectionMySql alloc] initWithHost: host
-                                                                  database: database
-                                                                   andPort: port];
-            break;
-            
-        default:
-            NSAssert(NO, @"Unknown database type");
-            break;
-    }
-
-    
-    return dbConnection;
+	switch (databaseType) {
+		case MADDatabaseTypeSqlite3:
+			return [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+		case MADDatabaseTypeTDS:
+			return [[MADDatabaseConnectionSQLServer alloc] initWithHost: host
+																 server: host
+															   database: database
+																andPort: port];
+		case MADDatabaseTypeMySQL:
+			return [[MADDatabaseConnectionMySql alloc] initWithHost: host
+														   database: database
+															andPort: port];
+		default:
+			NSAssert(NO, @"Unknown database type");
+	}
+	return nil;
 }
 
 + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url {
-    id dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-    return dbConnection;
+	return [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
 }
 
 + (instancetype)newDatabaseConnectionForObject:(id)connectionObject {
-    
-    id resultCredentals = nil;
-    
-    if ([connectionObject conformsToProtocol:@protocol(MADConnectionsPropertiesProtocol)]) {
-        resultCredentals = [self newDatabaseConnection:connectionObject];
-        
-    } else if ([connectionObject isKindOfClass:[NSURL class]]) {
-        resultCredentals = [self newDatabaseConnectionForUrl:connectionObject];
-    }
-    return resultCredentals;
+	if ([connectionObject conformsToProtocol:@protocol(MADConnectionsPropertiesProtocol)]) {
+		return [self newDatabaseConnection:connectionObject];
+	} else if ([connectionObject isKindOfClass:[NSURL class]]) {
+		return [self newDatabaseConnectionForUrl:connectionObject];
+	}
+	return nil;
 }
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-    
-    id dbConnection = nil;
-    switch (credentals.databaseType) {
-        case MADDatabaseTypeSqlite3:
-            dbConnection = [MADDatabaseConnectionSqlite3 newDatabaseConnection:credentals];
-            
-            break;
-            
-        case MADDatabaseTypeTDS:
-            dbConnection = [MADDatabaseConnectionSQLServer newDatabaseConnection:credentals];
-            
-            break;
-            
-        case MADDatabaseTypeMySQL:
-            dbConnection = [MADDatabaseConnectionMySql newDatabaseConnection:credentals];
-            break;
-            
-        default:
-            NSAssert(NO, @"Unknown database type");
-            break;
-    }
-    
-    return dbConnection;
-    
+	switch (credentals.databaseType) {
+		case MADDatabaseTypeSqlite3: return [MADDatabaseConnectionSqlite3 newDatabaseConnection:credentals];
+		case MADDatabaseTypeTDS: return [MADDatabaseConnectionSQLServer newDatabaseConnection:credentals];
+		case MADDatabaseTypeMySQL: return [MADDatabaseConnectionMySql newDatabaseConnection:credentals];
+		default:
+			NSAssert(NO, @"Unknown database type");
+	}
+	return nil;
 }
 
 + (NSString *)Identifier:(MADDatabaseType)databaseType {
-    id identifier = nil;
-    
-    switch (databaseType) {
-        case MADDatabaseTypeSqlite3:
-            identifier = [MADDatabaseConnectionSqlite3 Identifier];
-            
-            break;
-            
-        case MADDatabaseTypeTDS:
-            identifier = [MADDatabaseConnectionSQLServer Identifier];
-            
-            break;
-            
-        case MADDatabaseTypeMySQL:
-            identifier = [MADDatabaseConnectionMySql Identifier];
-            break;
-            
-        default:
-            NSAssert(NO, @"Unknown database type");
-            break;
-    }
-    return identifier;
+	switch (databaseType) {
+		case MADDatabaseTypeSqlite3: return [MADDatabaseConnectionSqlite3 Identifier];
+		case MADDatabaseTypeTDS: return [MADDatabaseConnectionSQLServer Identifier];
+		case MADDatabaseTypeMySQL: return [MADDatabaseConnectionMySql Identifier];
+		default:
+			NSAssert(NO, @"Unknown database type");
+	}
+	return nil;
 }
 
 @end

@@ -40,11 +40,10 @@
 					 andPort:(NSInteger)port {
 	
 	if (self = [super init]) {
-		_host = host.copy;
+		_host = [host copy];
 		NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-		NSString *internalServer = [server stringByTrimmingCharactersInSet: whitespace];
-		_server = internalServer.copy;
-		_database = database.copy;
+		_server = [server stringByTrimmingCharactersInSet: whitespace];
+		_database = [database copy];
 		_port = port;
 		_databaseType = MADDatabaseTypeTDS;
 	}

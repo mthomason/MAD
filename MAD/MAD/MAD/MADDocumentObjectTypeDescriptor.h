@@ -26,14 +26,12 @@ extern NSString * const MADDocumentObjectTypeAddDetailAggregate;
 extern NSString * const MADDocumentObjectTypeAddDetailImage;
 extern NSString * const MADDocumentObjectTypeAddDetailBarcode;
 
-typedef NSString MADDocumentObjectTypeDescriptor;
+@interface MADDocumentObjectTypeDescriptor : NSObject
 
-@interface NSString (MADocumentObjectType)
++ (NSString *)localizedStringForType:(MADPrintPageElementType)type;
 
-	+ (NSString *)humanReadableStringForType:(MADPrintPageElementType)type;
-	+ (NSString *)localizedStringForType:(MADPrintPageElementType)type;
-	+ (NSString *)localizedDetailStringForType:(MADPrintPageElementType)type;
-	+ (NSString *)localizedAddDetailStringForType:(MADPrintPageElementType)type;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)new NS_UNAVAILABLE;
 
 @end
 

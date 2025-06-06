@@ -281,7 +281,7 @@
 			[NSThread sleepForTimeInterval:20.0];
 			@synchronized (self) {
 				mysql_query(_connection, "select 'MysqlConnect:idleTmer'");
-				MYSQL_RES     *theResults = mysql_use_result(_connection);
+				MYSQL_RES *theResults = mysql_use_result(_connection);
 				mysql_free_result(theResults);
 			}
 		}

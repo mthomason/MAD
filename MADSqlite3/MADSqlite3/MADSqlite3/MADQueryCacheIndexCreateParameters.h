@@ -13,10 +13,10 @@
 
 @interface MADQueryCacheIndexCreateParameters : NSObject
 
-	@property (nonatomic, weak) NSDictionary *columns;
-	@property (nonatomic, weak) NSArray *sortDescriptors;
-	@property (nonatomic, copy) NSString *tableName;
-	@property (nonatomic, copy) NSString *groupName;
+@property (nonatomic, weak) NSDictionary *columns;
+@property (nonatomic, weak) NSArray *sortDescriptors;
+@property (nonatomic, copy) NSString *tableName;
+@property (nonatomic, copy) NSString *groupName;
 
 @end
 

@@ -37,6 +37,35 @@ static inline CGFloat MaximumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGFloat MinimumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 
+static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
+	return 1.0 +  ( l2 - l1 - (m * 2.0) )  / l1;
+}
+
+static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
+												  CGFloat layoutGuideLength, CGFloat margin) {
+	return parentViewLength > subViewLength ?
+	((parentViewLength - subViewLength) / 2.0) + margin : layoutGuideLength + margin;
+}
+
+static inline CGFloat MaximumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
+	return MAX(zoomScale(paper.width, container.width, margin),
+			   zoomScale(paper.height, container.height, margin));
+}
+
+static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
+	return MIN(zoomScale(paper.width, container.width, margin),
+			   zoomScale(paper.height, container.height, margin));
+}
+
+static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
+	return CGPointMake(contentSize.width * 0.5 + MAX(((scrollerBoundsSize.width - (margin * 2.0)) - contentSize.width) * 0.5, 0.0),
+					   contentSize.height * 0.5 + MAX(((scrollerBoundsSize.height - (margin * 2.0)) - contentSize.height) * 0.5, 0.0));
+}
+
+static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLayoutGuide) {
+	return UIEdgeInsetsMake(topLayoutGuide, CGSizeZero.width, bottomLayoutGuide, CGSizeZero.width);
+}
+
 @interface MADDocumentPageController () <UIAccessibilityReadingContent, UIScrollViewDelegate, MADReportPageViewProtocol>
 
 	@property (readwrite, nonatomic, weak) MADocument *document;
@@ -110,7 +139,7 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 	if (self = [super init]) {
 		_document = document;
 		_initalLayout = YES;
-		_pageViewAttributes = pageAttributes.copy;
+		_pageViewAttributes = [pageAttributes copyWithZone:nil];
 	}
 	return self;
 }
@@ -294,8 +323,7 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
 																					error: &error];
 		if (error == nil) {
-			NSDate *lastD = [attributes fileModificationDate];
-			self.pageViewAttributes.reportLastCacheDate = lastD.copy;
+			self.pageViewAttributes.reportLastCacheDate = [attributes fileModificationDate];
 		} else {
 			os_log_error(GetDesignerLog(), "Error: %@", error);
 		}
@@ -311,33 +339,3 @@ static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
 }
 
 @end
-
-static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
-	return 1.0 +  ( l2 - l1 - (m * 2.0) )  / l1;
-}
-
-static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
-												  CGFloat layoutGuideLength, CGFloat margin) {
-	return parentViewLength > subViewLength ?
-	((parentViewLength - subViewLength) / 2.0) + margin : layoutGuideLength + margin;
-}
-
-static inline CGFloat MaximumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
-	return MAX(zoomScale(paper.width, container.width, margin),
-			   zoomScale(paper.height, container.height, margin));
-}
-
-static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
-	return MIN(zoomScale(paper.width, container.width, margin),
-			   zoomScale(paper.height, container.height, margin));
-}
-
-static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
-	return CGPointMake(contentSize.width * 0.5 + MAX(((scrollerBoundsSize.width - (margin * 2.0)) - contentSize.width) * 0.5, 0.0),
-					   contentSize.height * 0.5 + MAX(((scrollerBoundsSize.height - (margin * 2.0)) - contentSize.height) * 0.5, 0.0));
-}
-
-static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLayoutGuide) {
-	return UIEdgeInsetsMake(topLayoutGuide, CGSizeZero.width, bottomLayoutGuide, CGSizeZero.width);
-}
-

@@ -20,24 +20,16 @@
 												 objCType: @encode(CGPoint)];
 	NSValue *topRight = [[NSValue alloc] initWithBytes: &corners.topRight
 											  objCType: @encode(CGPoint)];
-	NSArray *cornersArray = [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
-	return cornersArray;
+	return [[NSArray alloc] initWithObjects:bottomRight, topRight, nil];
 }
 
 + (NSArray <NSValue *> *)newArrayOfdropPointsOnAttribute:(MADSectionLayoutAttributes *)item {
 	MADCorners corners = MTCornersMake(item.frame);
-	
-	NSValue *topLeft = [[NSValue alloc] initWithBytes: &corners.topLeft
-											 objCType: @encode(CGPoint)],
-			*topRight = [[NSValue alloc] initWithBytes: &corners.topRight
-											  objCType: @encode(CGPoint)],
-			*bottomLeft = [[NSValue alloc] initWithBytes: &corners.bottomLeft
-												objCType: @encode(CGPoint)],
-			*bottomRight = [[NSValue alloc] initWithBytes: &corners.bottomRight
-												 objCType: @encode(CGPoint)];
-	NSArray *result = [[NSArray alloc] initWithObjects:topLeft, topRight,
-													   bottomLeft, bottomRight, nil];
-	return result;
+	NSValue *topLeft = [[NSValue alloc] initWithBytes: &corners.topLeft objCType: @encode(CGPoint)];
+	NSValue *topRight = [[NSValue alloc] initWithBytes: &corners.topRight objCType: @encode(CGPoint)];
+	NSValue *bottomLeft = [[NSValue alloc] initWithBytes: &corners.bottomLeft objCType: @encode(CGPoint)];
+	NSValue *bottomRight = [[NSValue alloc] initWithBytes: &corners.bottomRight objCType: @encode(CGPoint)];
+	return [[NSArray alloc] initWithObjects:topLeft, topRight, bottomLeft, bottomRight, nil];
 }
 
 + (BOOL)item:(MADSectionLayoutAttributes *)item

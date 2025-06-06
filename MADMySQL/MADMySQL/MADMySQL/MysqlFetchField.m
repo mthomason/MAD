@@ -18,7 +18,7 @@
 
 - (instancetype)initWithField:(MYSQL_FIELD)field fieldName:(NSString *)fieldName {
 	if (self = [super init]) {
-		_name = fieldName.copy;
+		_name = [fieldName copy];
 		_width = field.length;
 		_decimals = field.decimals;
 		_fieldType = field.type;

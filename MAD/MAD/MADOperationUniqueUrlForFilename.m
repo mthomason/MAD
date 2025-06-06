@@ -49,9 +49,8 @@
 	}
 
 	NSURL *uniqueUrl = [MADURLFactory newURLUniqueUrlInDirectory: self.documentsDirectory
-										withDesiredHandle: self.desiredFilename
-											 andExtension: self.pathExtension];
-
+											   withDesiredHandle: self.desiredFilename
+													andExtension: self.pathExtension];
 
 	if (uniqueUrl != nil) {
 		self.uniqueUrl = uniqueUrl;

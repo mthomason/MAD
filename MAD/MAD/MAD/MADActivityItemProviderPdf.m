@@ -37,21 +37,10 @@ static inline CGRect CellDefaultBounds(void);
 static inline UIEdgeInsets PdfBorder(void);
 static inline CGRect PdfTrimBox(CGRect);
 
-static inline CGFloat halfinch(void) {
-	return 72.0000 / 72.0000;
-}
-
-static inline CGRect CellDefaultBounds(void) {
-	return MADRectOfSize(CGSizeMake(230.0000f, 200.0000f));
-}
-
-static inline UIEdgeInsets PdfBorder(void) {
-	return UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch());
-}
-
-static inline CGRect PdfTrimBox(CGRect rect) {
-	return UIEdgeInsetsInsetRect(rect, PdfBorder());
-}
+static inline CGFloat halfinch(void) { return 72.0000 / 72.0000; }
+static inline CGRect CellDefaultBounds(void) { return MADRectOfSize(CGSizeMake(230.0000f, 200.0000f)); }
+static inline UIEdgeInsets PdfBorder(void) { return UIEdgeInsetsMake(halfinch(), halfinch(), halfinch(), halfinch()); }
+static inline CGRect PdfTrimBox(CGRect rect) { return UIEdgeInsetsInsetRect(rect, PdfBorder()); }
 
 @interface  MADActivityItemProviderPdf ()
 	<MADDocumentStatusProtocol>
@@ -188,9 +177,7 @@ static inline CGRect PdfTrimBox(CGRect rect) {
 			UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
 			[printPageRenderer drawPageAtIndex:(NSInteger)i inRect:PdfTrimBox(letterRect)];
 			
-			NSNumber *pageNumber = [[NSNumber alloc] initWithUnsignedInteger: i];
-			
-			NSString *page  = [NSNumberFormatter localizedStringFromNumber: pageNumber
+			NSString *page  = [NSNumberFormatter localizedStringFromNumber: @(i+1)
 															   numberStyle: NSNumberFormatterDecimalStyle];
 
 			NSString *text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", page, totalPages];

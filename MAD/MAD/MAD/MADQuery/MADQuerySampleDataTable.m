@@ -80,8 +80,8 @@
 	NSError *localError = nil;
 	[super getSql:&localError];
 		
-	if (localError) {
-		if (error) *error = localError;
+	if (localError != nil) {
+		if (error) *error = [localError copy];
 		return nil;
 	}
 	
@@ -105,9 +105,8 @@
 	}
 	
 	NSOrderedSet *fields = table.hasFields;
-	MADQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght;
-	queryMaxFieldLenght = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
-																							  object: fields];
+	MADQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
+																																   object: fields];
 	queryMaxFieldLenght.database.delegate = self;
 
 	NSError * __autoreleasing blockError = NULL;
@@ -143,7 +142,6 @@
 + (NSString *)sqlAllFieldsInTable: (RptqDatabaseSchemaTable *)schemaTable
 					usingDatabase: (MADDatabase *)database {
 	NSMutableArray<NSString *> *fieldAliases = [[NSMutableArray alloc] init];
-	//NSUInteger *fieldCounter = 0;
 	NSString *safeTableName = [database tableAliasForTable:schemaTable.toString];
 	for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
 		NSString *fieldAlias = [database fieldAliasForField:field.name withSafeTableName:safeTableName];

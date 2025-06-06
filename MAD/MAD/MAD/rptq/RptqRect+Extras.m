@@ -15,23 +15,22 @@
 
 @implementation RptqRect (Extras)
 
-+ (NSString *)keyOrigin {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(origin));
-	return key;
+static NSString *keyOrigin = nil;
+static NSString *keySize = nil;
+
++ (void)load {
+	keyOrigin = NSStringFromSelector(@selector(origin));
+	keySize = NSStringFromSelector(@selector(size));
 }
 
-+ (NSString *)keySize {
-	static NSString *key = nil;
-	if (key == nil) key = NSStringFromSelector(@selector(size));
-	return key;
-}
++ (NSString *)keyOrigin { return keyOrigin; }
++ (NSString *)keySize { return keySize; }
 
 - (void)awakeFromInsert {
 	[super awakeFromInsert];
 	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
 	if (managedObjectContext == nil) {
-		os_log_error(OS_LOG_DEFAULT, "Managed object context is nil");
+		os_log_error(OS_LOG_DEFAULT, "%s: Managed object context is nil", __PRETTY_FUNCTION__);
 		return;
 	}
 	if (self.origin == nil) {
@@ -44,6 +43,8 @@
 	}
 }
 
-- (CGRect)frame { return CGRectMake(self.origin.x, self.origin.y, self.size.width, self.size.height); }
+- (CGRect)frame {
+	return CGRectMake(self.origin.x, self.origin.y, self.size.width, self.size.height);
+}
 
 @end

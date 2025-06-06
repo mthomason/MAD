@@ -7,15 +7,12 @@
 //
 
 #import "MADActivityIndicator.h"
-
-#import <QuartzCore/CALayer.h>
-
+#import "MADActivityIndicatorLabel.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UIAppearance.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import "MADActivityIndicatorLabel.h"
+#import <QuartzCore/CALayer.h>
 
 @interface MADActivityIndicator ()
 @property(readwrite, nonatomic, weak) UIActivityIndicatorView *activityIndicator;;
@@ -35,14 +32,13 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		self.layer.cornerRadius = 5.0000f;
-		UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-													  UIActivityIndicatorViewStyleLarge];
+		self.layer.cornerRadius = 5.0;
+		UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleLarge];
 		self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-		activityIndicator.center = CGPointMake(self.bounds.size.width / 2.0000f, self.bounds.size.height / 2.0000f);
+		activityIndicator.center = CGPointMake(self.bounds.size.width / 2.0, self.bounds.size.height / 2.0);
 
-		id status = [[MADActivityIndicatorLabel alloc] initWithFrame:CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f)];
+		id status = [[MADActivityIndicatorLabel alloc] initWithFrame:CGRectMake(CGPointZero.x, frame.size.height - 44.0, frame.size.width, 44.0)];
 
 		[self addSubview:activityIndicator];
 		[self addSubview:status];

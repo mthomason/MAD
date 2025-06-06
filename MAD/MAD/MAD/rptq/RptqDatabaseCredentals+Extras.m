@@ -56,25 +56,25 @@
 		
 		case MADDatabaseTypeMySQL:
 		case MADDatabaseTypeSqlite3:
-			result = self.dbname.copy;
+			result = [self.dbname copy];
 			break;
 		
 		case MADDatabaseTypeTDS:
-			result = self.dbname.copy;
+			result = [self.dbname copy];
 			break;
 
 		case MADDatabaseTypeUnknown: {
 			
 			if ([self.driverID isEqualToString: [RptqDatabaseCredentals driverIDMySQL]]) {
-				result = self.dbname.copy;
+				result = [self.dbname copy];
 				self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
 				
 			} else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDTDS]]) {
-				result = self.dbname.copy;
+				result = [self.dbname copy];
 				self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
 				
 			} else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDSqlite3]]) {
-				result = self.dbname.copy;
+				result = [self.dbname copy];
 				self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
 				
 			}

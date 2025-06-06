@@ -27,7 +27,7 @@
 - (instancetype)initWithKey:(NSString *)key allowCloud:(BOOL)allowCloud encrypt:(BOOL)encrypt {
 	if (self = [super init]) {
 		
-		_key = key.copy;
+		_key = [key copy];
 		_allowCloud = allowCloud;
 		_encrypt = encrypt;
 		

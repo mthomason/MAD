@@ -47,7 +47,7 @@
 		
 		NSNumber *keyTableName = [[NSNumber alloc] initWithShort: MADQuerySelectTableName];
 		NSString *tableName = obj[keyTableName];
-		self.tableName = tableName.copy;
+		self.tableName = [tableName copy];
 		
 		NSNumber *keySortDescriptors = [[NSNumber alloc] initWithShort: MADQuerySelectSortDescriptors];
 		NSArray *sortDescriptors = [[obj objectForKey:keySortDescriptors] copy];

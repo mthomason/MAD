@@ -24,9 +24,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 @interface MADSectionLayoutManager ()
 
-	@property (nonatomic, strong, readwrite) NSMutableDictionary <NSNumber *,
-																	MADSectionLayoutAttributes *> *items;
-	@property (nonatomic, weak)              MADSectionLayoutAttributes *lastItem;
+	@property (nonatomic, strong, readwrite) NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items;
+	@property (nonatomic, weak) MADSectionLayoutAttributes *lastItem;
 
 @end
 
@@ -38,8 +37,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 #pragma mark -
 #pragma mark Static Helpers
 
-+ (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints
-   dropTolerance:(CGFloat)tolerance {
++ (BOOL)moveItem:(MADSectionLayoutAttributes *)item toNearestPointInGroup:(NSArray *)dropPoints dropTolerance:(CGFloat)tolerance {
 	CGPoint nearestPoint = CGPointZero;
 	double distanceToLastDropPoint = tolerance;
 	BOOL foundNearDropPoint = NO;
@@ -326,9 +324,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 	}
 	[placedItems addObject:placedItem];
 	
-	NSString *formatString = @"objectID != %@.objectID";
-	NSPredicate *unplaced = [NSPredicate predicateWithFormat:formatString, placedItem];
-	NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:unplaced];
+	NSArray *unplacedItems = [allValues filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"objectID != %@.objectID", placedItem]];
 	
 	BOOL positionItems = YES;
 	while (positionItems) {
@@ -373,8 +369,8 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 			[unplacedOverlapping sortUsingComparator:^NSComparisonResult(MADSectionLayoutAttributes *attr1,
 																		 MADSectionLayoutAttributes *attr2) {
-				double d1 = [MADSectionLayoutManager distanceToBestDropPoint:attr1 placedItems:placedItems],
-					   d2 = [MADSectionLayoutManager distanceToBestDropPoint:attr2 placedItems:placedItems];
+				double d1 = [MADSectionLayoutManager distanceToBestDropPoint:attr1 placedItems:placedItems];
+				double d2 = [MADSectionLayoutManager distanceToBestDropPoint:attr2 placedItems:placedItems];
 				if (d1 == d2) {
 					return NSOrderedSame;
 				} else if (d1 > d2) {
@@ -401,31 +397,27 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 
 - (NSArray <__kindof NSValue *> *)allValidLocations {
 	NSMutableDictionary <NSNumber *, MADSectionLayoutAttributes *> *items = self.items;
-	NSValue *placement0Value;
 	NSArray <MADSectionLayoutAttributes *> *allItems = items.allValues;
-	NSMutableArray <__kindof NSValue *> *allValidLocations;
-	allValidLocations = [[NSMutableArray alloc] initWithCapacity:allItems.count * 4];
+	NSMutableArray <__kindof NSValue *> *allValidLocations = [[NSMutableArray alloc] initWithCapacity:allItems.count * 4];
 	
 	for (MADSectionLayoutAttributes *layout in allItems) {
 		@autoreleasepool {
 			MADCorners corners = MTCornersMake(layout.frame);
+			NSValue *placement0 = [[NSValue alloc] initWithBytes: &corners.topLeft
+														objCType: @encode(CGPoint)];
+			[allValidLocations addObject:placement0];
 			
-			placement0Value = [[NSValue alloc] initWithBytes: &corners.topLeft
-													objCType: @encode(CGPoint)];
-			[allValidLocations addObject:placement0Value];
+			NSValue *placement1 = [[NSValue alloc] initWithBytes: &corners.topRight
+														objCType: @encode(CGPoint)];
+			[allValidLocations addObject:placement1];
 			
-			placement0Value = [[NSValue alloc] initWithBytes: &corners.topRight
-													objCType: @encode(CGPoint)];
-			[allValidLocations addObject:placement0Value];
+			NSValue *placement2 = [[NSValue alloc] initWithBytes: &corners.bottomLeft
+														objCType: @encode(CGPoint)];
+			[allValidLocations addObject:placement2];
 			
-			placement0Value = [[NSValue alloc] initWithBytes: &corners.bottomLeft
-													objCType: @encode(CGPoint)];
-			[allValidLocations addObject:placement0Value];
-			
-			placement0Value = [[NSValue alloc] initWithBytes: &corners.bottomRight
-													objCType: @encode(CGPoint)];
-			
-			[allValidLocations addObject:placement0Value];
+			NSValue *placement3 = [[NSValue alloc] initWithBytes: &corners.bottomRight
+														objCType: @encode(CGPoint)];
+			[allValidLocations addObject:placement3];
 		}
 	}
 	return allValidLocations;

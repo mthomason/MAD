@@ -37,83 +37,46 @@
 @dynamic type;
 
 - (instancetype)initWithQueryType:(MADQueryType)type object:(id)parameters {
-	__kindof MADQuery *query;
-
 	switch (type) {
-			
 		case MADQueryTypeCacheAggregateFunction:
-			query = [[MADQueryCacheAggregateFunction alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheAggregateFunction alloc] initWithObject:parameters];
 		case MADQueryTypeCacheSelectGroupKeys:
-			query = [[MADQueryCacheSelectGroupKeys alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheSelectGroupKeys alloc] initWithObject:parameters];
 		case MADQueryTypeCacheSelectRowId:
-			query = [[MADQueryCacheSelectRowId alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheSelectRowId alloc] initWithObject:parameters];
 		case MADQueryTypeCacheSelectRowIds:
-			query = [[MADQueryCacheSelectRowIds alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheSelectRowIds alloc] initWithObject:parameters];
 		case MADQueryTypeMaxFieldLength:
-			query = [[MADQueryMaxFieldLength alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryMaxFieldLength alloc] initWithObject:parameters];
 		case MADQueryTypeCustomSql:
-			query = [[MADQueryCustomNoResults alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCustomNoResults alloc] initWithObject:parameters];
 		case MADQueryTypeFull:
-			query = [[MADQueryFull alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryFull alloc] initWithObject:parameters];
 		case MADQueryTypeConnectionTest:
-			query = [[MADQueryTest alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryTest alloc] initWithObject:parameters];
 		case MADQueryTypeSampleDataField:
-			query = [[MADQuerySampleDataField alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQuerySampleDataField alloc] initWithObject:parameters];
 		case MADQueryTypeSampleDataTable:
-			query = [[MADQuerySampleDataTable alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQuerySampleDataTable alloc] initWithObject:parameters];
 		case MADQueryTypeCacheDeleteAllFromTable:
-			query = [[MADQueryCacheDeleteAllFromTable alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheDeleteAllFromTable alloc] initWithObject:parameters];
 		case MADQueryTypeCacheBeginTransaction:
-			query = [[MADQueryCacheBeginTransaction alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheBeginTransaction alloc] initWithObject:parameters];
 		case MADQueryTypeCacheEndTransaction:
-			query = [[MADQueryCacheEndTransaction alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheEndTransaction alloc] initWithObject:parameters];
 		case MADQueryTypeCacheSyncModeOff:
-			query = [[MADQueryCacheSyncOff alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheSyncOff alloc] initWithObject:parameters];
 		case MADQueryTypeCacheSyncModeDefault:
-			query = [[MADQueryCacheSyncDefault alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheSyncDefault alloc] initWithObject:parameters];
 		case MADQueryTypeCacheJournalModeOverride:
-			query = [[MADQueryCacheJournalModeOverride alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheJournalModeOverride alloc] initWithObject:parameters];
 		case MADQueryTypeCacheJournalModeDefault:
-			query = [[MADQueryCacheJournalModeDefault alloc] initWithObject:parameters];
-			break;
-			
+			return [[MADQueryCacheJournalModeDefault alloc] initWithObject:parameters];
 		default:
 			NSAssert(NO, @"Did you forget a constructor?");
-			break;
 	}
-	return query;
+	NSAssert (NO, @"Should not reach here.");
+	return nil;
 }
 
 @end

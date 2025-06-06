@@ -26,7 +26,7 @@
 
 - (instancetype)initWithTableName:(NSString *)tableName {
 	if (self = [super init]) {
-		_tableName = tableName.copy;
+		_tableName = [tableName copy];
 	}
 	return self;
 }
@@ -35,21 +35,17 @@
 	if (self = [super init]) {
 		NSNumber *keyMTQueryCacheDeleteAllFromTableTableName = @(MADQueryCacheDeleteAllFromTableTableName);
 		NSString *tableName = object[keyMTQueryCacheDeleteAllFromTableTableName];
-		_tableName = tableName.copy;
+		_tableName = [tableName copy];
 		
 	}
 	return self;
 }
 
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
-	NSString *sql = [[NSString alloc] initWithFormat:@"DELETE FROM %@", self.tableName];
-	return sql;
+	return [[NSString alloc] initWithFormat:@"DELETE FROM %@", self.tableName];
 }
 
 - (BOOL)returnsResults { return NO; }
-
-- (MADQueryType)type {
-	return MADQueryTypeCacheDeleteAllFromTable;
-}
+- (MADQueryType)type { return MADQueryTypeCacheDeleteAllFromTable; }
 
 @end

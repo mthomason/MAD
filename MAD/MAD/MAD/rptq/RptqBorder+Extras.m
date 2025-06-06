@@ -15,8 +15,16 @@
 
 @implementation RptqBorder (Extras)
 
-+ (NSString *)keyWidth { return NSStringFromSelector(@selector(width)); }
-+ (NSString *)keyStyle { return NSStringFromSelector(@selector(style)); }
+static NSString *keyWidth = nil;
+static NSString *keyStyle = nil;
+
++ (void)load {
+	keyWidth = NSStringFromSelector(@selector(width));
+	keyStyle = NSStringFromSelector(@selector(style));
+}
+
++ (NSString *)keyWidth { return keyWidth; }
++ (NSString *)keyStyle { return keyStyle; }
 
 - (void)awakeFromInsert {
 	[super awakeFromInsert];

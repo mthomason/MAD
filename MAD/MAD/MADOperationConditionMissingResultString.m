@@ -31,7 +31,7 @@
 
 - (instancetype)initWithKey:(NSString *)key {
 	if (self = [super init]) {
-		self.key = key.copy;
+		self.key = [key copy];
 	}
 	return self;
 }

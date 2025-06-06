@@ -29,7 +29,8 @@
 			   sortDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors
 					   columns:(NSDictionary *)columns {
 	if (self = [super init]) {
-		self.columns = columns.copy;
+		NSDictionary *cols = [[NSDictionary alloc] initWithDictionary:columns];
+		self.columns = cols;
 		NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"SELECT *, ROWID FROM %@ ", tableName];
 		[sql appendString:[self whereClauseWithRowIds:rowIDs]];
 		[sql appendString:[self orderByClauseWithSortDescriptors:sortDescriptors]];

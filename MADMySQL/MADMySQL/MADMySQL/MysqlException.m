@@ -17,7 +17,9 @@
 + (void)raiseConnection:(MysqlConnection *)aConnection withFormat:(NSString *)format,...; {
 	NSDictionary *userInfo = nil;
 	if (aConnection) {
-		userInfo=@{@"MysqlConnection": aConnection};
+		userInfo=@{
+			@"MysqlConnection": aConnection
+		};
 	}
 	
 	va_list arguments;
@@ -25,9 +27,9 @@
 	NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
 	va_end(arguments);
 	
-	MysqlException *exception = [[self alloc] initWithName:NSStringFromClass([self class])
-													reason:formattedString
-												  userInfo:userInfo];
+	MysqlException *exception = [[self alloc] initWithName: NSStringFromClass([self class])
+													reason: formattedString
+												  userInfo: userInfo];
 	[exception raise];
 	exit(0);
 }
@@ -36,8 +38,7 @@
 						  domain:(NSString *)domain
 						 andCode:(NSInteger)code {
 	return [NSError errorWithDomain:domain code:code userInfo:@{
-		NSLocalizedDescriptionKey : [NSString stringWithFormat:@"MySQL says %d! %s.",
-									 mysql_errno(connection.connection), mysql_error(connection.connection)],
+		NSLocalizedDescriptionKey : [NSString stringWithFormat:@"MySQL says %d! %s.", mysql_errno(connection.connection), mysql_error(connection.connection)],
 		NSLocalizedFailureReasonErrorKey : @"Executing Error"
 	}];
 }

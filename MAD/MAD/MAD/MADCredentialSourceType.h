@@ -17,4 +17,15 @@ typedef NS_ENUM(short, MADCredentialSource) {
 	MADCredentialSourcePasswordPrompt,
 };
 
+static inline NSString *NSStringFromMADCredentialSource(MADCredentialSource);
+static inline NSString *NSStringFromMADCredentialSource(MADCredentialSource source) {
+	switch (source) {
+		case MADCredentialSourceNone: return @"MADCredentialSourceNone";
+		case MADCredentialSourceKeychain: return @"MADCredentialSourceKeychain";
+		case MADCredentialSourceCredentialPrompt: return @"MADCredentialSourceCredentialPrompt";
+		case MADCredentialSourcePasswordPrompt: return @"MADCredentialSourcePasswordPrompt";
+		case MADCredentialSourceUnknown: default: return @"MADCredentialSourceUnknown";
+	}
+}
+
 #endif /* MADCredentialSourceType_h */

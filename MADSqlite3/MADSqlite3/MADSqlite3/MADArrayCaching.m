@@ -127,7 +127,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 		_statementInsert = NULL;
 		_statementSelect = NULL;
 		
-		_identifier = identifier.copy;
+		_identifier = [identifier copy];
 		_cachedDelegate = cachedDelegate;
 	}
 	return self;

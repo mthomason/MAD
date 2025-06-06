@@ -106,8 +106,7 @@
 				
 			} else if ([operation conformsToProtocol:@protocol(MADOperationResultStringProtocol)]) {
 				if (((NSObject <MADOperationResultStringProtocol> *)operation).success) {
-					NSString *value;
-					value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
+					NSString *value = ((NSObject <MADOperationResultStringProtocol> *)operation).value.copy;
 					switch (((NSObject <MADOperationResultStringProtocol> *)operation).readOperationType) {
 						case MADKeyChainReadOperationTypeUsername:
 							username = value;

@@ -12,20 +12,9 @@
 
 @implementation RptqDirectionalAsymmetry (Extras)
 
-+ (NSString *)keyTop {
-	return [RptqDirectionalProperty keyTop];
-}
-
-+ (NSString *)keyBottom {
-	return [RptqDirectionalProperty keyBottom];
-}
-
-+ (NSString *)keyLeft {
-	return [RptqDirectionalProperty keyLeft];
-}
-
-+ (NSString *)keyRight {
-	return [RptqDirectionalProperty keyLeft];
-}
++ (NSString *)keyTop { return [RptqDirectionalProperty keyTop]; }
++ (NSString *)keyBottom { return [RptqDirectionalProperty keyBottom]; }
++ (NSString *)keyLeft { return [RptqDirectionalProperty keyLeft]; }
++ (NSString *)keyRight { return [RptqDirectionalProperty keyLeft]; }
 
 @end

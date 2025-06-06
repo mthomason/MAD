@@ -21,7 +21,6 @@
 
 #import <MADDataStructures/MADIndex.h>
 
-#import <MADAPI/MADAliases.h>
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 
@@ -611,7 +610,7 @@ static os_log_t mlog;
 	NSArray *sortDescriptors = self.sortDescriptors;
 	NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count];
 	for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-		NSString *key = sortDescriptor.key.copy;
+		NSString *key = [sortDescriptor.key copy];
 		[columnKeys addObject:key];
 	}
 	return columnKeys;
@@ -649,14 +648,14 @@ static os_log_t mlog;
 	
 	MADQueryCacheIndexCreateParameters *parameters = [[MADQueryCacheIndexCreateParameters alloc] init];
 	parameters.columns = self.columns;
-	parameters.tableName = self.tableName.copy;
+	parameters.tableName = [self.tableName copy];
 	
 	for (NSArray *sortDescriptorGroup in sortDescriptorGroups) {
 		
 		if (sortDescriptorGroup.count > 0) {
 			parameters.sortDescriptors = sortDescriptorGroup;
 			parameters.groupName = [self indexNameForGroupLevel: sortDescCtr
-													   andIndex: groupCounter].copy;
+													   andIndex: groupCounter];
 			
 			MADQuery <MADQueryDataDelegateProtocol> *queryCreateIndex = [[MADQueryCacheIndexCreate alloc] initWithObject:parameters];
 			queryCreateIndex.dataDelegate = dataDelegate;
@@ -667,7 +666,7 @@ static os_log_t mlog;
 				os_log_error(mlog, "%s SQL Error: %@", __PRETTY_FUNCTION__, sqlError);
 			}
 			if (sqlResult.length > 0) {
-				queries[groupCounter] = sqlResult.copy;
+				queries[groupCounter] = [sqlResult copy];
 			}
 			groupCounter++;
 		}
@@ -837,7 +836,7 @@ static os_log_t mlog;
 	}
 	
 	NSDictionary * result = nil;
-	NSString *tableName = [self tableName].copy;
+	NSString *tableName = [[self tableName] copy];
 	
 	NSNumber *keyRowId = [[NSNumber alloc] initWithShort: MADQuerySelectRowId];
 	NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort: MADQuerySelectFieldKeys];
@@ -896,7 +895,7 @@ static os_log_t mlog;
 	NSMutableArray <NSDictionary <NSString *, MADResult *> *> *whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
 	for (NSUInteger i = 0; i < groupKeys.count; i++) {
 		NSString *groupKeyName = [self.sortDescriptors[i].key copy];
-		NSString *gk = ((NSString *)groupKeys[i]).copy;
+		NSString *gk = [((NSString *)groupKeys[i]) copy];
 		NSDictionary <NSString *, MADResult *> *whereStatement = [[NSDictionary alloc] initWithObjectsAndKeys:
 																  groupKeyName, MADQueryKeyPredicateColumn,
 																  gk, MADQueryKeyPredicateValue, nil];

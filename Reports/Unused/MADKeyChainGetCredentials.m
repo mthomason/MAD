@@ -12,22 +12,18 @@
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UILabel.h>
 
-static NSString * const MADTitleCredentials            = @"Credentials";
-static NSString * const MADMessageCredentials          = @"Please enter your credentials.";
+static NSString * const MADTitlePassword = @"Password";
+static NSString * const MADMessagePassword = @"Please enter your password.";
 
-static NSString * const MADTitlePassword               = @"Password";
-static NSString * const MADMessagePassword             = @"Please enter your password.";
+static NSString * const MADButtonContinue = @"Continue";
 
-static NSString * const MADButtonContinue              = @"Continue";
+@interface MADKeyChainGetCredentials() <UITextFieldDelegate>
 
-@interface MADKeyChainGetCredentials()
-	<UITextFieldDelegate>
+@property (nonatomic, weak) UIViewController *viewController;
+@property (nonatomic, strong) UIAlertController *alertController;
 
-	@property (nonatomic, weak) UIViewController *viewController;
-	@property (nonatomic, strong) UIAlertController *alertController;
-
-	@property (nonatomic, copy) NSString *key;
-	@property (nonatomic, copy, readwrite) MADCredential *credential;
+@property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy, readwrite) MADCredential *credential;
 
 @end
 
@@ -49,17 +45,11 @@ static NSString * const MADButtonContinue              = @"Continue";
 
 	if (self = [super init]) {
 		self.viewController = viewController;
-		self.key = key.copy;
+		self.key = [key copy];
 		self.source = MADCredentialSourceNone;
-		
-		NSString *title = NSLocalizedString(MADTitleCredentials, MADTitleCredentials);
-		NSString *message = NSLocalizedString(MADMessageCredentials, MADMessageCredentials);
-		
-		UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-																				 message: message
-																		  preferredStyle: UIAlertControllerStyleAlert];
-		self.alertController = alertController;
-		
+		self.alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Credentials", @"Credentials")
+																   message: NSLocalizedString(@"Please enter your credentials.", @"Please enter your credentials.")
+															preferredStyle: UIAlertControllerStyleAlert];
 	}
 	return self;
 
@@ -100,7 +90,6 @@ static NSString * const MADButtonContinue              = @"Continue";
 	switch (status) {
 			
 		case PromptForNothing: {
-
 			NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData encoding: NSUTF8StringEncoding];
 			NSString *password = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryPasswordData encoding: NSUTF8StringEncoding];
 			MADCredential *c = [[MADCredential alloc] initWithUsername:username andPassword:password];
@@ -111,20 +100,18 @@ static NSString * const MADButtonContinue              = @"Continue";
 		}
 			
 		case PromptForPassword: {
-			
-			NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData
-													   encoding:NSUTF8StringEncoding];
+			NSString *username = [[NSString alloc] initWithData: (__bridge_transfer NSData *) queryUsernameData encoding:NSUTF8StringEncoding];
 			[self promptForPasswordGivenUsername: username];
 			break;
 		}
+
 		case PromptForUsernameAndPassword: {
-			
 			[self promptForUsernameAndPassword];
 			break;
 		}
+
 		default: {
-			NSError *error = [NSError errorWithDomain:@"MADKCGC" code:status userInfo:nil];
-			[self finishWithError:error];
+			[self finishWithError:[NSError errorWithDomain:@"MADKCGC" code:status userInfo:nil]];
 			break;
 		}
 	}
@@ -183,14 +170,8 @@ static NSString * const MADButtonContinue              = @"Continue";
 }
 
 - (void)promptForPasswordGivenUsername:(NSString *)username {
-	
-	NSString *title = NSLocalizedString(MADTitlePassword, MADTitlePassword);
-	NSString *message = NSLocalizedString(MADMessagePassword, MADMessagePassword);
-	NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
-	NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-																			 message: message
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(MADTitlePassword, MADTitlePassword)
+																			 message: NSLocalizedString(MADMessagePassword, MADMessagePassword)
 																	  preferredStyle: UIAlertControllerStyleAlert];
 	
 	void (^ __nullable actionContinue)(UIAlertAction *action) = ^(UIAlertAction *action) {
@@ -211,11 +192,11 @@ static NSString * const MADButtonContinue              = @"Continue";
 		textField.delegate = self;
 	};
 
-	UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
+	UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: NSLocalizedString(MADButtonContinue, MADButtonContinue)
 															style: UIAlertActionStyleDefault
 														  handler: actionContinue];
 	
-	UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
+	UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 																style: UIAlertActionStyleCancel
 															  handler: actionCancel];
 	[alertController addAction:actionAlertOK];
@@ -231,12 +212,12 @@ static NSString * const MADButtonContinue              = @"Continue";
 }
 
 + (void)configureTextFieldForPassword:(UITextField * __autoreleasing *)textField {
-	UILabel *password = [[UILabel alloc] init];
-	password.textColor = [UIColor lightGrayColor];
-	password.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-	password.text = NSLocalizedString(@"Password: ", @"Password: ");
-	[password sizeToFit];
-	(*textField).leftView = password;
+	UILabel *labelPassword = [[UILabel alloc] init];
+	labelPassword.textColor = [UIColor lightGrayColor];
+	labelPassword.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+	labelPassword.text = NSLocalizedString(@"Password: ", @"Password: ");
+	[labelPassword sizeToFit];
+	(*textField).leftView = labelPassword;
 	(*textField).secureTextEntry = YES;
 	(*textField).leftViewMode = UITextFieldViewModeAlways;
 	(*textField).text = @"";
@@ -245,12 +226,12 @@ static NSString * const MADButtonContinue              = @"Continue";
 }
 
 + (void)configureTextFieldForUsername:(UITextField * __autoreleasing *)textField {
-	UILabel *username = [[UILabel alloc] init];
-	username.textColor = [UIColor lightGrayColor];
-	username.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-	username.text = NSLocalizedString(@"Username: ", @"Username: ");
-	[username sizeToFit];
-	(*textField).leftView = username;
+	UILabel *labelUsername = [[UILabel alloc] init];
+	labelUsername.textColor = [UIColor lightGrayColor];
+	labelUsername.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+	labelUsername.text = NSLocalizedString(@"Username: ", @"Username: ");
+	[labelUsername sizeToFit];
+	(*textField).leftView = labelUsername;
 	(*textField).secureTextEntry = NO;
 	(*textField).leftViewMode = UITextFieldViewModeAlways;
 	(*textField).text = @"";
