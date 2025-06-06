@@ -931,7 +931,6 @@
 		4C6D2F031E6E7AAC008EFE5D /* MADSelectValueNavigationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSelectValueNavigationItem.m; sourceTree = "<group>"; };
 		4C6F34FB1E408D9D00F4744F /* MADElementMigrationPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADElementMigrationPolicy.h; sourceTree = "<group>"; };
 		4C6F34FC1E408D9D00F4744F /* MADElementMigrationPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADElementMigrationPolicy.m; sourceTree = "<group>"; };
-		4C734FD02DE671CA00506554 /* MAD-Designer-15-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MAD-Designer-15-Info.plist"; path = "/Users/michael/Desktop/Reports/Reports/MAD-Designer-15-Info.plist"; sourceTree = "<absolute>"; };
 		4C780CE71BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaPresentationController.h; sourceTree = "<group>"; };
 		4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaPresentationController.m; sourceTree = "<group>"; };
 		4C8780B12DD6D266003FD36D /* MADDocumentCreationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADDocumentCreationManager.h; path = Source/MADDocumentCreationManager.h; sourceTree = "<group>"; };
@@ -1634,7 +1633,6 @@
 				4CFC60B61E55B0AB00EC577E /* Projects */,
 				4C8BE8521BAD457700F6E3F7 /* Resources */,
 				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
-				4C734FD02DE671CA00506554 /* MAD-Designer-15-Info.plist */,
 				4C384E2514B29789007B4F48 /* Products */,
 			);
 			sourceTree = "<group>";

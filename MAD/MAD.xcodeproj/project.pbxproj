@@ -541,7 +541,7 @@
 		4CF304061D1D219600466560 /* MADArchiveManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF304041D1D219600466560 /* MADArchiveManager.h */; };
 		4CF304071D1D219600466560 /* MADArchiveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF304051D1D219600466560 /* MADArchiveManager.m */; };
 		4CF46DD31CF2FC9800D93406 /* MADQueryLinkType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CF46DD71CF32D1C00D93406 /* MADSQLJointType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */; };
+		4CF46DD71CF32D1C00D93406 /* MADSQLJoinType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46DD61CF32D1C00D93406 /* MADSQLJoinType.m */; };
 		4CF46DD91CF32D5700D93406 /* MADSQLJoinType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA2D1F544D380061B0C6 /* MADDatabase+Constructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA2B1F544D380061B0C6 /* MADDatabase+Constructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA2E1F544D380061B0C6 /* MADDatabase+Constructor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA2C1F544D380061B0C6 /* MADDatabase+Constructor.m */; };
@@ -1121,7 +1121,7 @@
 		4CF304041D1D219600466560 /* MADArchiveManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADArchiveManager.h; path = MAD/MADArchiveManager.h; sourceTree = "<group>"; };
 		4CF304051D1D219600466560 /* MADArchiveManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADArchiveManager.m; path = MAD/MADArchiveManager.m; sourceTree = "<group>"; };
 		4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQueryLinkType.h; sourceTree = "<group>"; };
-		4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSQLJointType.m; path = MAD/MADSQLJointType.m; sourceTree = "<group>"; };
+		4CF46DD61CF32D1C00D93406 /* MADSQLJoinType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSQLJoinType.m; path = MAD/MADSQLJoinType.m; sourceTree = "<group>"; };
 		4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSQLJoinType.h; sourceTree = "<group>"; };
 		4CF6AA2B1F544D380061B0C6 /* MADDatabase+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADDatabase+Constructor.h"; path = "MAD/MADDatabase+Constructor.h"; sourceTree = "<group>"; };
 		4CF6AA2C1F544D380061B0C6 /* MADDatabase+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADDatabase+Constructor.m"; path = "MAD/MADDatabase+Constructor.m"; sourceTree = "<group>"; };
@@ -2088,7 +2088,7 @@
 				4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */,
 				4CF46DD01CF2F88200D93406 /* MADQueryLinkType.h */,
 				4CF46DD81CF32D5700D93406 /* MADSQLJoinType.h */,
-				4CF46DD61CF32D1C00D93406 /* MADSQLJointType.m */,
+				4CF46DD61CF32D1C00D93406 /* MADSQLJoinType.m */,
 				4CC282031BADE81A00775B72 /* MADSectionLayoutAttributes.h */,
 				4CC282041BADE81A00775B72 /* MADSectionLayoutAttributes.m */,
 				4CC282051BADE81A00775B72 /* MADSectionLayoutManager.h */,
@@ -2635,7 +2635,7 @@
 				4CA354A61D228E370072BD38 /* MADReportSectionGroupFooter.m in Sources */,
 				4CC284941BADE9DF00775B72 /* RptqQueryField+Extras.m in Sources */,
 				4CB98DD61F455A750043B583 /* MADOperationKeyChainGet.m in Sources */,
-				4CF46DD71CF32D1C00D93406 /* MADSQLJointType.m in Sources */,
+				4CF46DD71CF32D1C00D93406 /* MADSQLJoinType.m in Sources */,
 				4CC2848C1BADE9CF00775B72 /* RptqDocumentSectionRows+Extras.m in Sources */,
 				4CC284881BADE9C800775B72 /* RptqDocumentElementLabelLink+Extras.m in Sources */,
 				4C401E021BAE3CAD00BAE5FC /* MADReportFormatter.m in Sources */,
