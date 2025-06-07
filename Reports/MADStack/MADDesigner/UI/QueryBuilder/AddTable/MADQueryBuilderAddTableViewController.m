@@ -61,8 +61,7 @@
 	if (keyName == nil) keyName = NSStringFromSelector(@selector(name));
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
 	RptqDatabaseSchemaTable *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
-	NSString *name = result.name;
-	cell.textLabel.text = name.copy;
+	cell.textLabel.text = [result.name copy];
 	return cell;
 }
 

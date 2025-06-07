@@ -134,7 +134,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 		UITableViewCell *cell = sender;
 		NSIndexPath *indexPath = [self.tableView indexPathForCell: cell];
 		NSManagedObjectID *fieldID = [self queryFieldObjectIDForIndexPath:indexPath];
-		self.queryFieldID = fieldID.copy;
+		self.queryFieldID = [fieldID copy];
 	
 	}
 }
@@ -228,9 +228,9 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 		
 		NSString *name = object[keyFieldName];
 		NSString *dataTypeDisplay = [RptqDatabaseSchemaField dataTypeDisplay:dataType];
-		cell.textLabel.text = name.copy;
+		cell.textLabel.text = [name copy];
 		cell.detailTextLabel.text = dataTypeDisplay.lowercaseString;
-		cell.accessibilityLabel = name.copy;
+		cell.accessibilityLabel = [name copy];
 		cell.accessibilityHint = NSLocalizedString(@"Selects field.", @"Selects field.");
 	}
 

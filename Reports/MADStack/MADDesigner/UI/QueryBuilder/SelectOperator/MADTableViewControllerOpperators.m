@@ -31,7 +31,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	UITableViewCell __weak *cell = [tableView cellForRowAtIndexPath:indexPath];
 	
-	NSString *reuseIdentifier = cell.reuseIdentifier.copy;
+	NSString *reuseIdentifier = [cell.reuseIdentifier copy];
 	
 	if ([reuseIdentifier isEqualToString: MADIDOperatorEqual]) {
 		[self.delegate uITableViewControllerOpperatorsDidSelectOperator: MADPredicateOperatorEqual];

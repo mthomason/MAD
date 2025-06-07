@@ -136,11 +136,11 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 		switch (self.sectionType) {
 				
 			case MACloudManagerSectionCloud:
-				_label.attributedText = _localizedAttrbiutedTextCloud.copy;
+				_label.attributedText = [_localizedAttrbiutedTextCloud copy];
 				break;
 				
 			case MACloudManagerSectionLocal:
-				_label.attributedText = _localizedAttrbiutedTextLocal.copy;
+				_label.attributedText = [_localizedAttrbiutedTextLocal copy];
 				break;
 								
 			default:

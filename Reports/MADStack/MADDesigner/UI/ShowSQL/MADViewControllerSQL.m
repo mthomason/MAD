@@ -43,7 +43,7 @@
 
 	if (sqlStatement.length > 0) {
 
-		self.textView.text = sqlStatement.copy;
+		self.textView.text = [sqlStatement copy];
 
 	} else {
 

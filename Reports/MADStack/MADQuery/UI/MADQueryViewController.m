@@ -459,11 +459,9 @@ BOOL storeEnabled(void) {
 		NSManagedObject *object = nil;
 		
 		if (cell) {
-			object = [context existingObjectWithID: cell.predicateID
-											 error: &error];
+			object = [context existingObjectWithID: cell.predicateID error: &error];
 		} else {
-			NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row
-																	 inSection: 0];
+			NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
 			object = [self.queryViewDataSource.queryPredicatesController objectAtIndexPath: testPredicateIndexPath];
 		}
 		
@@ -473,20 +471,16 @@ BOOL storeEnabled(void) {
 
 			BOOL deleted = NO;
 			if ([predicateToRemove.hasLeftField.inQueryTable.objectID isEqual:relatedTableObjectID]) {
-
 				[context deleteObject:predicateToRemove];
-				
-				NSIndexPath *deleteCellAtIndex = predicateIndexPath.copy;
+				NSIndexPath *deleteCellAtIndex = [predicateIndexPath copy];
 				[cellsToDelete addObject:deleteCellAtIndex];
 				deleted = YES;
 			}
 			
 			if (!deleted) {
 				if ([predicateToRemove.hasRightField.inQueryTable.objectID isEqual:relatedTableObjectID]) {
-				
 					[context deleteObject:predicateToRemove];
-
-					NSIndexPath *deleteCellAtIndex = predicateIndexPath.copy;
+					NSIndexPath *deleteCellAtIndex = [predicateIndexPath copy];
 					[cellsToDelete addObject:deleteCellAtIndex];
 				}
 			}
@@ -539,7 +533,7 @@ BOOL storeEnabled(void) {
 		NSIndexPath *displayIndex = [NSIndexPath indexPathForRow: indexPath.row inSection: 1];
 		RptqQueryTable *table = [strongself.queryViewDataSource.queryTablesController objectAtIndexPath: tableIndex];
 		
-		NSManagedObjectID *deleatedTableObjectId = table.objectID.copy;
+		NSManagedObjectID *deleatedTableObjectId = [table.objectID copy];
 		
 		NSMutableSet *hasQueryTables = rptqQuery.hasQueryTables.mutableCopy;
 		
@@ -604,7 +598,7 @@ BOOL storeEnabled(void) {
 		}
 	
 		[hasQueryTables removeObject:objectToDelete];
-		rptqQuery.hasQueryTables = hasQueryTables.copy;
+		rptqQuery.hasQueryTables = [hasQueryTables copy];
 		[private deleteObject:objectToDelete];
 		numberOfTables--;
 		
@@ -945,7 +939,7 @@ BOOL storeEnabled(void) {
 	if (_queryViewDataSource == nil) {
 		MADocument *document = _document;
 		NSManagedObjectContext *managedObjectContext = document.documentModel.managedObjectContext;
-		NSNumber *objectID = document.documentModel.databases.firstObject.queries.firstObject.objectID.copy;
+		NSNumber *objectID = [document.documentModel.databases.firstObject.queries.firstObject.objectID copy];
 		MADQueryViewDataSource *dataSource = [[MADQueryViewDataSource alloc] initWithQueryID: objectID
 																		managedObjectContext: managedObjectContext
 																			reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
@@ -1435,7 +1429,7 @@ BOOL storeEnabled(void) {
 	MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery;
 	rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
 																											 object: table.databaseSchemaTable];
-	rquery.credential = credentials.copy;
+	rquery.credential = [credentials copy];
 	if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
 		db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);
 	}

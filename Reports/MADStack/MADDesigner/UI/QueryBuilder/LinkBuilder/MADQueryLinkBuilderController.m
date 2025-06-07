@@ -207,7 +207,7 @@
 	if (excludeTableID != nil) {
 		NSManagedObjectContext *moc = document.managedObjectContext;
 		RptqQueryTable *excludeTable = [moc objectWithID:excludeTableID];
-		NSString *alias = excludeTable.alias.copy;
+		NSString *alias = [excludeTable.alias copy];
 		NSArray <NSString *> *excludeTables = alias != nil ?
 										[[NSArray alloc] initWithObjects:alias, nil] :
 										[[NSArray alloc] init];

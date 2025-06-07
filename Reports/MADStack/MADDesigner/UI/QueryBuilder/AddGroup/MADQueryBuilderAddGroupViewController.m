@@ -97,8 +97,8 @@ static NSString * const TextDefault = @"Default";
 	[self.navigationController popToViewController:self animated:YES];
 
 	NSString *fieldName = [queryField tableFieldKey];
-	self.fieldId = queryField.objectID.copy;
-	self.fieldName = fieldName.copy;
+	self.fieldId = [queryField.objectID copy];
+	self.fieldName = [fieldName copy];
 	self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
 
 	[self updateSaveButtonState];

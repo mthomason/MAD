@@ -127,7 +127,7 @@ static os_log_t mad_log;
 			destinationViewController = segue.destinationViewController;
 			destinationViewController.enterStringDelegate = self;
 			destinationViewController.document = document;
-			destinationViewController.schemaFieldObjectId = leftField.databaseSchemaField.objectID.copy;
+			destinationViewController.schemaFieldObjectId = [leftField.databaseSchemaField.objectID copy];
 		}
 	}
 }
@@ -196,7 +196,7 @@ static os_log_t mad_log;
 
 - (void)enterStringDidFinishWithString:(NSString *)userString {
 
-	NSString *userInput = userString.copy;
+	NSString *userInput = [userString copy];
 	if (_currentlyEditingPart == MNSPredicateLeft) {
 		self.leftValue = userInput;
 		self.fieldLeftID = nil;
@@ -221,12 +221,12 @@ static os_log_t mad_log;
 	[self.navigationController popToViewController:self animated:YES];
 	if (_currentlyEditingPart == MNSPredicateLeft) {
 		self.leftValue = nil;
-		self.fieldLeftID = fieldID.copy;
+		self.fieldLeftID = [fieldID copy];
 		_tableViewCellLeftSide.detailTextLabel.text = queryField.display;
 		
 	} else if (_currentlyEditingPart == MNSPredicateRight) {
 		self.rightValue = nil;
-		self.fieldRightID = fieldID.copy;
+		self.fieldRightID = [fieldID copy];
 		tableViewCellRightSide.detailTextLabel.text = queryField.display;
 	}
 	tableViewCellRightSide.userInteractionEnabled = (self.fieldLeftID == nil);

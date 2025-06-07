@@ -87,7 +87,7 @@ static NSString * const keyContentScaleFactor   = @"f";
 - (instancetype)copyWithZone:(NSZone *)zone {
 
 	MADPageViewAttributes *result = [[[self class] allocWithZone:zone] init];
-	result.reportLastCacheDate = _reportLastCacheDate.copy;
+	result.reportLastCacheDate = [_reportLastCacheDate copyWithZone:zone];
 	result.contentScaleFactor = _contentScaleFactor;
 	result.pageNumber = _pageNumber;
 	result.numberOfPages = _numberOfPages;

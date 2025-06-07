@@ -768,7 +768,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (NSURL *)copyMetaDataUrlForIndexPath:(NSIndexPath *)indexPath {
 	MADMetaData *metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
-	return metadata.URL.copy;
+	return [metadata.URL copy];
 }
 
 - (void)configureViewControllerWithLaunchContext:(MADAppLaunchContext *)launchContext {
@@ -1062,9 +1062,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[credentialQueue addOperation:cg];
 	[credentialQueue addOperation:cs];
 	[credentialQueue waitUntilAllOperationsAreFinished];
-	MADCredential *credentials = cg.credential.copy;
+	MADCredential *credentials = [cg.credential copy];
 	return credentials;
-	//return nil;
 }
 
 - (void)getCredentialsForKey:(NSString *)key
@@ -1450,7 +1449,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	NSIndexPath *indexPath;
 	for (indexPath in indexPaths) {
 		metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
-		fileURL = metadata.URL.copy;
+		fileURL = [metadata.URL copy];
 		[wrappedUrls addObject:fileURL];
 	}
 	
@@ -1535,10 +1534,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
 	MADMetaData *metaData = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
 	
-	NSString *textFieldText = cellDocument.labelTitle.text.copy;
+	NSString *textFieldText = [cellDocument.labelTitle.text copy];
 	
 	void (^handleRename)(UITextField *) = ^(UITextField *textField) {
-		textField.text = textFieldText.copy;
+		textField.text = [textFieldText copy];
 		textField.clearButtonMode = UITextFieldViewModeAlways;
 		textField.delegate = self;
 	};
@@ -1555,7 +1554,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		}
 		
 		//Check if file exist
-		NSURL *url = metaData.URL.copy;
+		NSURL *url = [metaData.URL copy];
 		if (!shortcircut && [self.class isUniqueFilename:name inDirectory:url]) {
 			UIAlertController *alertError = [MADAlertController newAlertControllerErrorFileExist];
 			[self showViewController:alertError animated: YES];
