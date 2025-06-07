@@ -49,7 +49,7 @@
 
 		self.textView.text = @"";
 		
-		UIAlertController *alertController  = [MADAlertController newAlertControllerErrorEmptyQuery];
+		UIAlertController *alertController  = [MADViewControllerSQL alertErrorEmptyQuery];
 		[self presentViewController: alertController
 						   animated: YES
 						 completion: nil];
@@ -61,6 +61,17 @@
 
 - (IBAction)done:(id)sender {
 	[self.delegate viewControllerDidFinish:self];
+}
+
++ (UIAlertController *)alertErrorEmptyQuery {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Empty Query", @"Empty Query")
+																   message: NSLocalizedString(@"Add tables to the query and data fields to the designer to generate a query.", @"Add tables to the query and data fields to the designer to generate a query.")
+															preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+												 style: UIAlertActionStyleDefault
+											   handler: nil];
+	[alert addAction: ok];
+	return alert;
 }
 
 @end

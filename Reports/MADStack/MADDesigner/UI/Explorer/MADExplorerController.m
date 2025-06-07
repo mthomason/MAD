@@ -453,7 +453,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		if (!sself) return;
 		
 		UIAlertController *alert;
-		alert = [MADAlertController newAlertControllerNotifyCloudSignOut:actionConfirm];
+		alert = [MADExplorerController alertNotifyCloudSignOut:actionConfirm];
 		[sself presentViewController:alert animated:YES completion:nil];
 		
 	}];
@@ -789,7 +789,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		UINavigationController *navController = (UINavigationController *)[UIApplication sharedApplication].safeKeyWindow.rootViewController;
 		[navController popToRootViewControllerAnimated:YES];
 		
-		UIAlertController *signedOutController = [MADAlertController newAlertControllerNotifyCloudSignOut:^(UIAlertAction *action) {
+		UIAlertController *signedOutController = [MADExplorerController alertNotifyCloudSignOut:^(UIAlertAction *action) {
 			[self.fileExplorerDataSource updateCloudPreferences];
 		}];
 		
@@ -1548,7 +1548,14 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		
 		//Test for input
 		if (name.length <= 0) {
-			UIAlertController *alertError = [MADAlertController newAlertControllerErrorValidationFilename];
+			UIAlertController *alertError = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Validation Error", @"Validation Error")
+																				message: NSLocalizedString(@"Filename not valid.", @"Filename not valid.")
+																		 preferredStyle: UIAlertControllerStyleAlert];
+			UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
+														 style: UIAlertActionStyleDefault
+													   handler: nil];
+			[alertError addAction:ok];
+			
 			[self showViewController:alertError animated: YES];
 			shortcircut = YES;
 		}
@@ -1556,7 +1563,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		//Check if file exist
 		NSURL *url = [metaData.URL copy];
 		if (!shortcircut && [self.class isUniqueFilename:name inDirectory:url]) {
-			UIAlertController *alertError = [MADAlertController newAlertControllerErrorFileExist];
+			UIAlertController *alertError = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"File Exist", @"File Exist")
+																		   message: NSLocalizedString(@"File already exist. Please choose a new name.", @"File already exist. Please choose a new name.")
+																	preferredStyle: UIAlertControllerStyleAlert];
+			UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
+														 style: UIAlertActionStyleDefault
+													   handler: nil];
+			[alertError addAction:ok];
 			[self showViewController:alertError animated: YES];
 			shortcircut = YES;
 		}
@@ -1584,17 +1597,16 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		}
 	};
 	
-	UIAlertController *alert = [MADAlertController newAlertControllerRenameDocument: handleRename
-																			confirm: handleConfermation
-																			 cancel: nil];
+	UIAlertController *alert = [MADExplorerController alertRenameDocument: handleRename
+																  confirm: handleConfermation
+																   cancel: nil];
 	[self showViewController:alert animated: YES];
 	
 }
 
 - (IBAction)actionEmail:(MADCollectionViewCellDocument *)cell {
 	if ([MFMailComposeViewController canSendMail] == NO) {
-		id alert;
-		alert = [MADAlertController newAlertControllerNotConfiguredForEmail];
+		id alert = [MADExplorerController alertNotConfiguredForEmail];
 		[self showViewController:alert animated: YES];
 		return;
 	}
@@ -1651,6 +1663,30 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			}
 		}
 	}
+}
+
++ (UIAlertController *)alertRenameDocument:(void (^)(UITextField *textField))textFieldConfig
+								   confirm:(void (^)(UIAlertAction *action, NSString *text))handlerConfirm
+									cancel:(void (^)(UIAlertAction *action))handlerCancel {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Rename Document", @"Rename Document")
+																   message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
+															preferredStyle: UIAlertControllerStyleAlert];
+	[alert addTextFieldWithConfigurationHandler:textFieldConfig];
+
+	UITextField *textField = ((UIAlertController *)alert).textFields.firstObject;
+	NSString *text = [textField.text copy];
+	UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: NSLocalizedString(@"Rename", @"Rename")
+															style: UIAlertActionStyleDefault
+														  handler: ^(UIAlertAction *action) {
+		handlerConfirm(action, text);
+	}];
+	[alert addAction:actionDefault];
+
+	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
+											style: UIAlertActionStyleCancel
+										  handler: handlerCancel];
+	[alert addAction:actionCancel];
+	return alert;
 }
 
 #pragma mark -
@@ -1746,6 +1782,33 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)operationDidFinish:(MADOperation *)operation
 					errors:(NSArray<NSError *> *)errors {
 	
+}
+
+#pragma mark -
+#pragma mark Alert Controllers
+
++ (UIAlertController *)alertNotConfiguredForEmail {
+	id alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Alert", @"Alert")
+												   message: NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.")
+											preferredStyle: UIAlertControllerStyleAlert];
+	
+	UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+												 style: UIAlertActionStyleDefault
+											   handler: nil];
+	[alert addAction:ok];
+	return alert;
+}
+
++ (UIAlertController *)alertNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler {
+	NSString *MADMessageCloudSignout = @"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents.";
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"iCloud Sign Out", @"iCloud Sign Out")
+																			 message: NSLocalizedString(MADMessageCloudSignout, MADMessageCloudSignout)
+																	  preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
+															style: UIAlertActionStyleDefault
+														  handler: handler];
+	[alertController addAction:actionConfirm];
+	return alertController;
 }
 
 #pragma mark -

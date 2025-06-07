@@ -242,7 +242,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     //[self.appConfiguration cleanupBeforeTerminate];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 /*
     NSURL *documentsDirectory = self.appConfiguration.filesController.documentDirectory;
     NSURL *destination = [documentsDirectory URLByAppendingPathComponent:url.lastPathComponent];
@@ -252,6 +252,15 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     
     if (success) {
         
+ UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"New Document", @"New Document")
+ message: NSLocalizedString(@"Added document.", @"Added document.")
+ preferredStyle: UIAlertControllerStyleAlert];
+ 
+ UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+ style: UIAlertActionStyleDefault
+ handler: nil];
+ [alert addAction:ok];
+ return alert;
         UIAlertController *alert = success ? [UIAlertController newAlertControllerAddedDocument] : [MADAlertController newAlertControllerError:error];
         [self.openFileViewController presentViewController:alert animated:YES completion:^{
             [self.openFileViewController.collectionView reloadData];
@@ -267,8 +276,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     }
     return success;*/
     // FIXME: Open a fucking file, YO!!!
-    return NO;
-}
+//    return NO;
+//}
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
