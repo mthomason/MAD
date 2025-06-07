@@ -11,12 +11,23 @@
 #endif
 
 #import "MADQueryChooseFieldController.h"
+#import "MADQueryChooseFieldProtocol.h"
+#import "MADDatabaseTableSectionHeaderView.h"
+#import "madlog.h"
+
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#import <MADCocoaExtensions/MADLabelTitle.h>
+#import <MAD/MADSchemaFieldSelectorModel.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseSchemaTable+Extras.h>
+#import <MAD/RptqDatabaseSchemaField+Extras.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/MADocument.h>
 
 #import <Foundation/NSSortDescriptor.h>
-
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSExpressionDescription.h>
-
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
@@ -24,29 +35,8 @@
 #import <UIKit/UITableView.h>
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UILabel.h>
-
-#import <MADCocoaExtensions/CGGeometry+Extras.h>
-#import <MADCocoaExtensions/MADLabelTitle.h>
-
-#import <MAD/MADSchemaFieldSelectorModel.h>
-
-#import <MAD/RptqQueryTable.h>
-
-#import <MAD/RptqDocument.h>
-
-#import <MAD/RptqDatabase.h>
-
-#import <MAD/RptqDatabaseSchemaTable+Extras.h>
-#import <MAD/RptqDatabaseSchemaField+Extras.h>
-
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryField+Extras.h>
-
-#import <MAD/MADocument.h>
-
-#import "MADQueryChooseFieldProtocol.h"
-
-#import "MADDatabaseTableSectionHeaderView.h"
+#import <CoreData/NSFetchedResultsController.h>
+#import <CoreData/NSExpressionDescription.h>
 
 typedef NSArray <MADSchemaFieldSelectorModel *> MADSectionInfoArray;
 
@@ -178,7 +168,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 
 		NSError *error = nil;
 		if (![controller performFetch: &error]) {
-			NSLog(@"requestError: %@\n%@", error.localizedDescription, error.localizedFailureReason);
+			os_log_error(GetDesignerLog(), "%s: requestError: %@", __PRETTY_FUNCTION__, error);
 		}
 		
 		_resultsController = controller;

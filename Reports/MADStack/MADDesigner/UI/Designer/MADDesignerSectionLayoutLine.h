@@ -15,19 +15,17 @@
 @class MADDesignerSectionLayoutLine;
 
 @protocol MADDesignerSectionLayoutLineDelegate
-    - (CGSize)collectionView:(UICollectionView *)collectionView
-                      layout:(UICollectionViewLayout *)collectionViewLayout
-      sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
-    - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
-    - (NSUInteger)numberOfItemsInSection:(NSUInteger)section
-                        ofCollectionView:(UICollectionView *)collectionView;
+- (CGSize)collectionView:(UICollectionView *)collectionView
+				  layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView;
+- (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView;
 @end
 
 @interface MADDesignerSectionLayoutLine : UICollectionViewLayout
 
-    @property (nonatomic, weak) id <MADDesignerSectionLayoutLineDelegate, UICollectionViewDataSource> delegate;
+@property (nonatomic, weak) id <MADDesignerSectionLayoutLineDelegate, UICollectionViewDataSource> delegate;
 
-    - (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter;
+- (NSIndexPath *)indexOfAlienViewWithCenterPoint:(CGPoint)alienCenter;
 
 @end
 

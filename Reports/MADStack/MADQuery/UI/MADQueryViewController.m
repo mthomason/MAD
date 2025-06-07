@@ -45,17 +45,13 @@
 
 
 #import <MADAPI/MADQuery.h>
-
-#import <MADAPI/MADQuery.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/NSParagraphStyle+CommonStyles.h>
-
 #import <MAD/MADocument.h>
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDatabase+Constructor.h>
-
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
@@ -69,7 +65,6 @@
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
-
 #import <MAD/MADModel.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
@@ -1534,8 +1529,6 @@ BOOL storeEnabled(void) {
 #pragma mark UIContentSizeCategoryDidChangeNotification
 
 - (void)handleContentSizeCategoryDidChange:(NSNotification *)notification {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
-
 	NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
 	[self updateInupdateInterfaceForPerferedContentSizeCategory:contentSize];
 	[self.view setNeedsLayout];

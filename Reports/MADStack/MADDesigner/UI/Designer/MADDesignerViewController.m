@@ -879,7 +879,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		[self adjustScroller];
 	}
 	self.statusLabelZoomScale.frame = [self detailDisplayFrame];
-	NSString *message = [NSString stringWithFormat: NSLocalizedString(@"Scrolled to %@.", @"Scrolled to %@."), NSStringFromCGPoint(scrollView.contentOffset)];
+	NSString *message = [[NSString alloc] initWithFormat: NSLocalizedString(@"Scrolled to %@.", @"Scrolled to %@."), NSStringFromCGPoint(scrollView.contentOffset)];
 	UIAccessibilityPostNotification(UIAccessibilityPageScrolledNotification, message);
 	[self.view setNeedsUpdateConstraints];
 }
