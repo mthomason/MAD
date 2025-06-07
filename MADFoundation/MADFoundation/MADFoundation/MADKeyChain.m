@@ -50,8 +50,7 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 + (NSDictionary *)queryUsernameDefination:(NSString *)key {
 	NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
 	NSNumber *yes = @YES;
-	NSDictionary *query;
-	query = [[NSDictionary alloc] initWithObjectsAndKeys:
+	NSDictionary *query = [[NSDictionary alloc] initWithObjectsAndKeys:
 				(__bridge NSString *)kSecClassGenericPassword, (__bridge NSString *)(kSecClass),
 				keyUsername, (__bridge NSString *)(kSecAttrService),
 				MADKeyChainUsernameAccountDesc, (__bridge NSString *)(kSecAttrAccount),
@@ -62,8 +61,7 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 + (NSDictionary *)queryPasswordDefination:(NSString *)key {
 	NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
 	NSNumber *yes = @YES;
-	NSDictionary *query;
-	query = [[NSDictionary alloc] initWithObjectsAndKeys:
+	NSDictionary *query = [[NSDictionary alloc] initWithObjectsAndKeys:
 				(__bridge NSString *)kSecClassGenericPassword, (__bridge NSString *)(kSecClass),
 				keyPassword, (__bridge NSString *)(kSecAttrService),
 				MADKeyChainPasswordAccountDesc, (__bridge NSString *)(kSecAttrAccount),
@@ -72,38 +70,37 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 }
 
 + (NSDictionary *)queryDefination:(NSString *)key withDescription:(NSString *)description {
-	NSNumber *yes = @YES;
-	NSString *keyCopy = key.copy;
-	NSString *descriptionCopy = description.copy;
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)(kSecClassGenericPassword),
-			  (__bridge NSString *)(kSecAttrService) : keyCopy,
-			  (__bridge NSString *)(kSecAttrAccount) : descriptionCopy,
-			  (__bridge NSString *)(kSecReturnData) : yes};
-	return query;
+	NSString *keyCopy = [key copy];
+	NSString *descriptionCopy = [description copy];
+	return @{
+		(__bridge NSString *)(kSecClass) : (__bridge NSString *)(kSecClassGenericPassword),
+		(__bridge NSString *)(kSecAttrService) : keyCopy,
+		(__bridge NSString *)(kSecAttrAccount) : descriptionCopy,
+		(__bridge NSString *)(kSecReturnData) : @YES
+	};
 }
 
 + (NSDictionary *)queryUsernameAdd:(NSString *)username key:(NSString *)key {
 	NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
 	NSData *data = [username dataUsingEncoding:NSUTF8StringEncoding];
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
-			  (__bridge NSString *)(kSecAttrService) : keyUsername,
-			  (__bridge NSString *)(kSecAttrAccount) : MADKeyChainUsernameAccountDesc,
-			  (__bridge NSString *)(kSecValueData) : data};
-	return query;
+	return @{
+		(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
+		(__bridge NSString *)(kSecAttrService) : keyUsername,
+		(__bridge NSString *)(kSecAttrAccount) : MADKeyChainUsernameAccountDesc,
+		(__bridge NSString *)(kSecValueData) : data
+	};
 }
 
 + (NSDictionary *)queryAdd:(NSString *)token
 					forKey:(NSString *)key
 		   withDescription:(NSString *)description {
 	NSData *data = [token dataUsingEncoding:NSUTF8StringEncoding];
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
-			  (__bridge NSString *)(kSecAttrService) : key,
-			  (__bridge NSString *)(kSecAttrAccount) : description,
-			  (__bridge NSString *)(kSecValueData) : data};
-	return query;
+	return @{
+		(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
+		(__bridge NSString *)(kSecAttrService) : key,
+		(__bridge NSString *)(kSecAttrAccount) : description,
+		(__bridge NSString *)(kSecValueData) : data
+	};
 }
 
 + (NSDictionary *)queryUpdate:(NSString *)key withDescription:(NSString *)description {
@@ -116,11 +113,11 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 
 + (NSDictionary *)queryUsernameUpdate:(NSString *)key {
 	NSString *keyUsername = [MADKeyChain newKeyForUsernameWithMainKey: key];
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
-			  (__bridge NSString *)(kSecAttrService): keyUsername,
-			  (__bridge NSString *)(kSecAttrAccount): MADKeyChainUsernameAccountDesc};
-	return query;
+	return @{
+		(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
+		(__bridge NSString *)(kSecAttrService): keyUsername,
+		(__bridge NSString *)(kSecAttrAccount): MADKeyChainUsernameAccountDesc
+	};
 }
 
 + (NSDictionary *)queryUpdateData:(NSString *)token {
@@ -137,21 +134,21 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 + (NSDictionary *)queryPasswordAdd:(NSString *)password key:(NSString *)key {
 	NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
 	NSData *data = [password dataUsingEncoding:NSUTF8StringEncoding];
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
-			  (__bridge NSString *)(kSecAttrService) : keyPassword,
-			  (__bridge NSString *)(kSecAttrAccount) : MADKeyChainPasswordAccountDesc,
-			  (__bridge NSString *)(kSecValueData) : data};
-	return query;
+	return @{
+		(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
+		(__bridge NSString *)(kSecAttrService) : keyPassword,
+		(__bridge NSString *)(kSecAttrAccount) : MADKeyChainPasswordAccountDesc,
+		(__bridge NSString *)(kSecValueData) : data
+	};
 }
 
 + (NSDictionary *)queryPasswordUpdate:(NSString *)key {
 	NSString *keyPassword = [MADKeyChain newKeyForPasswordWithMainKey: key];
-	NSDictionary *query;
-	query = @{(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
-			  (__bridge NSString *)(kSecAttrService): keyPassword,
-			  (__bridge NSString *)(kSecAttrAccount): MADKeyChainPasswordAccountDesc};
-	return query;
+	return @{
+		(__bridge NSString *)(kSecClass): (__bridge NSString *)(kSecClassGenericPassword),
+		(__bridge NSString *)(kSecAttrService): keyPassword,
+		(__bridge NSString *)(kSecAttrAccount): MADKeyChainPasswordAccountDesc
+	};
 }
 
 + (BOOL)credentialsExist:(NSString *)key {
