@@ -107,8 +107,8 @@
 															  handler: ^(UIAlertAction *action) {
 			MADOperationPromptCredentials *strongself = weakself;
 			UIAlertController *strongAlertController = weakAlertController;
-			username = ((UITextField *)strongAlertController.textFields.firstObject).text.copy;
-			password = ((UITextField *)(strongAlertController.textFields)[1]).text.copy;
+			username = [((UITextField *)strongAlertController.textFields.firstObject).text copy];
+			password = [((UITextField *)(strongAlertController.textFields)[1]).text copy];
 			
 			MADCredential *credentials = nil;
 			if (username != nil && password != nil) {
@@ -145,8 +145,7 @@
 			for (UITextField *field in weakAlertController.textFields) {
 				field.delegate = nil;
 			}
-			NSError *error = [NSError errorWithDomain:NSStringFromClass([strongself class])
-												 code:173 userInfo:nil];
+			NSError *error = [NSError errorWithDomain:NSStringFromClass([strongself class]) code:173 userInfo:nil];
 			[strongself performSelector:@selector(finishWithError:) withObject:error];
 		}];
 		[alertController addAction:actionAlertCancel];
