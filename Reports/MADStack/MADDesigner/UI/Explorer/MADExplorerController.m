@@ -1625,8 +1625,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	} else {
 		
 		NSString *mimeType = [self mimeTypeForDocumentUTI:documentReport.fileType];
-		NSString *messageStringStart = NSLocalizedString(@"The attached document can be opened with MAD Viewer.", @"The attached document can be opened with MAD Viewer.");
-		NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
+		NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
+																								 @"The attached document can be opened with MAD Viewer.")];
 		[messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
 		
 		MFMailComposeViewController	*mailComposer = [MADMailComposeViewController newMailComposeViewControllerWithBody: messageBody
