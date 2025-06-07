@@ -214,7 +214,6 @@
 		4C40204D1BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020031BAE92F200BAE5FC /* UICollectionReusableView+Reuse.m */; };
 		4C4020501BAE92F200BAE5FC /* UIColor+PaperPatterns.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */; };
 		4C4020511BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */; };
-		4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */; };
 		4C4020571BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020171BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.m */; };
 		4C40205F1BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */; };
 		4C4020641BAE92F200BAE5FC /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */; };
@@ -821,8 +820,6 @@
 		4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PaperPatterns.m"; sourceTree = "<group>"; };
 		4C40200A1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADGestureRecognizerAnchorPoint.h; path = Categories/MADGestureRecognizerAnchorPoint.h; sourceTree = "<group>"; };
 		4C40200B1BAE92F200BAE5FC /* MADGestureRecognizerAnchorPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADGestureRecognizerAnchorPoint.m; path = Categories/MADGestureRecognizerAnchorPoint.m; sourceTree = "<group>"; };
-		4C40200E1BAE92F200BAE5FC /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
-		4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		4C4020101BAE92F200BAE5FC /* UIImage+Resizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resizable.h"; sourceTree = "<group>"; };
 		4C4020111BAE92F200BAE5FC /* UIImage+Resizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resizable.m"; sourceTree = "<group>"; };
 		4C4020161BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIMotionEffectGroup+HoverEffects.h"; sourceTree = "<group>"; };
@@ -1869,8 +1866,6 @@
 				4C4020091BAE92F200BAE5FC /* UIColor+PaperPatterns.m */,
 				4C401F001BAE64AF00BAE5FC /* UIFont+Helpers.h */,
 				4C401F011BAE64AF00BAE5FC /* UIFont+Helpers.m */,
-				4C40200E1BAE92F200BAE5FC /* UIImage+ImageEffects.h */,
-				4C40200F1BAE92F200BAE5FC /* UIImage+ImageEffects.m */,
 				4C4020101BAE92F200BAE5FC /* UIImage+Resizable.h */,
 				4C4020111BAE92F200BAE5FC /* UIImage+Resizable.m */,
 				4C4020161BAE92F200BAE5FC /* UIMotionEffectGroup+HoverEffects.h */,
@@ -3214,7 +3209,6 @@
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
 				4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */,
 				4C5C0DBC1C9CED3C00826BC2 /* MADOperationGetCredentials.m in Sources */,
-				4C4020531BAE92F200BAE5FC /* UIImage+ImageEffects.m in Sources */,
 				4CFEE8201BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m in Sources */,
 				4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */,
 				4C401F741BAE7EB500BAE5FC /* MADDesignerStatusLabel.m in Sources */,
