@@ -16,27 +16,27 @@ extern NSString * const MADKeyChainPasswordAccountDesc;
 
 @interface MADKeyChain : NSObject
 
-	+ (OSStatus)saveUsername:(NSString *)username
-				 andPassword:(NSString *)password
-					  forKey:(NSString *)key;
++ (OSStatus)saveUsername:(NSString *)username
+			 andPassword:(NSString *)password
+				  forKey:(NSString *)key;
 
-	+ (OSStatus)savePassword:(NSString *)password forKey:(NSString *)key;
-	+ (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key;
++ (OSStatus)savePassword:(NSString *)password forKey:(NSString *)key;
++ (OSStatus)saveUsername:(NSString *)username forKey:(NSString *)key;
 
-	+ (OSStatus)saveToken:(NSString *)token
-				   forKey:(NSString *)key
-		  withDescription:(NSString *)description;
++ (OSStatus)saveToken:(NSString *)token
+			   forKey:(NSString *)key
+	  withDescription:(NSString *)description;
 
-	+ (NSDictionary *)queryDefination:(NSString *)key
-					  withDescription:(NSString *)description;
++ (NSDictionary *)queryDefination:(NSString *)key
+				  withDescription:(NSString *)description;
 
-	+ (NSString *)newKeyForUsernameWithMainKey:(NSString *)key;
-	+ (NSString *)newKeyForPasswordWithMainKey:(NSString *)key;
-	+ (NSDictionary *)queryUsernameDefination:(NSString *)key;
-	+ (NSDictionary *)queryPasswordDefination:(NSString *)key;
++ (NSString *)newKeyForUsernameWithMainKey:(NSString *)key;
++ (NSString *)newKeyForPasswordWithMainKey:(NSString *)key;
++ (NSDictionary *)queryUsernameDefination:(NSString *)key;
++ (NSDictionary *)queryPasswordDefination:(NSString *)key;
 
-	+ (OSStatus)deleteKey:(NSString *)key;
-	+ (bool)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error;
++ (OSStatus)deleteKey:(NSString *)key;
++ (bool)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error;
 
 @end
 
