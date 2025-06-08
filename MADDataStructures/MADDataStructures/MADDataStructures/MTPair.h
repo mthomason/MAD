@@ -12,8 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
-@interface MTPair : NSObject
-	<NSCopying, MTProtocolLog>
+@interface MTPair : NSObject <NSCopying, MTProtocolLog>
 
 	@property (nonatomic, strong) id former;
 	@property (nonatomic, strong) id latter;

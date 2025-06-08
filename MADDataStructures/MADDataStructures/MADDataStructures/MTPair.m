@@ -26,29 +26,17 @@
 }
 
 - (instancetype)initWithFormer:(id)former andLatter:(id)latter {
-	
 	if (self = [super init]) {
-		
-		id f = former;
-		self.former = f;
-		
-		id l = latter;
-		self.latter = l;
-		
+		self.former = former;
+		self.latter = latter;
 	}
-	
 	return self;
 }
 
 - (instancetype)initWithLeft:(id)left andRight:(id)right {
-	
 	if (self = [super init]) {
-		
-		id f = left;
-		self.former = f;
-		
-		id l = right;
-		self.latter = l;
+		self.former = left;
+		self.latter = right;
 	}
 	return self;
 }
@@ -67,14 +55,11 @@
 	Protocol *protocolLog = @protocol(MTProtocolLog);
 	BOOL formerConfirmsToLoggingProtocol = [self.former conformsToProtocol: protocolLog];
 	BOOL latterConfirmsToLoggingProtocol = [self.latter conformsToProtocol: protocolLog];
-	NSString *formerToString = formerConfirmsToLoggingProtocol ?
-							[((id <MTProtocolLog>)self.former) toStringHumanReadable] :
-							[NSString stringWithFormat:@"%@", self.former];
-	NSString *latterToString = latterConfirmsToLoggingProtocol ?
-							[((id <MTProtocolLog>)self.latter) toStringHumanReadable] :
-							[NSString stringWithFormat:@"%@", self.latter];
-	NSString *result = [[NSString alloc] initWithFormat:@"(%@, %@)", formerToString, latterToString];
-	return result;
+	NSString *formerToString = formerConfirmsToLoggingProtocol ? [((id <MTProtocolLog>)self.former) toStringHumanReadable] :
+																 [NSString stringWithFormat:@"%@", self.former];
+	NSString *latterToString = latterConfirmsToLoggingProtocol ? [((id <MTProtocolLog>)self.latter) toStringHumanReadable] :
+																 [NSString stringWithFormat:@"%@", self.latter];
+	return [[NSString alloc] initWithFormat:@"(%@, %@)", formerToString, latterToString];
 }
 
 - (NSObject <NSCopying> *)left {
