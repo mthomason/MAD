@@ -451,48 +451,53 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	
 	for (id resultRow in enumeratorForReportData) {
 		
-		//@autoreleasepool {
-		
-		//Get row id
-		if (!calculatedRowId) {
-			if ([resultRow isKindOfClass:[NSDictionary class]]) {
-				rowIdOnly = NO;
+		// This `autoreleasepool` is important to prevent memory spike durning large page renders.
+		//    without it, an 8k page report is spiking 100 MB after render.  With this, it runs
+		//    smooth.  The core issue might be with `arrayByAddingObject:`.  It's intended as speed hack
+		//    to do this with the array instead of using a mutable array, but it may be creating the issue,
+		//    because the array may not be autoreleased until the loop finishes all report data.
+		//    The `autoreleasepool` gives it a chance to get rid of that array, and other stuff, early.
+		@autoreleasepool {
+			
+			//Get row id
+			if (!calculatedRowId) {
+				if ([resultRow isKindOfClass:[NSDictionary class]]) {
+					rowIdOnly = NO;
+				}
+				calculatedRowId = YES;
 			}
-			calculatedRowId = YES;
-		}
-		
-		self.machineState.detailRowIdLast = self.machineState.detailRowId;
-		self.machineState.detailRowId = rowIdOnly ? ((NSNumber *)resultRow).unsignedIntegerValue :
-		((NSNumber *)resultRow[MADIdentifierROWID]).unsignedIntegerValue;
-		
-		//Get row key values
-		keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:resultRow];
-		
-		//Display new footers if needed.
-		if (firstRow) {
-			firstRow = NO;
-		} else {
-			[self formatDocumentGroupFooters: keyValuesForComparson
+			
+			self.machineState.detailRowIdLast = self.machineState.detailRowId;
+			self.machineState.detailRowId = rowIdOnly ? ((NSNumber *)resultRow).unsignedIntegerValue :
+			((NSNumber *)resultRow[MADIdentifierROWID]).unsignedIntegerValue;
+			
+			//Get row key values
+			keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:resultRow];
+			
+			//Display new footers if needed.
+			if (firstRow) {
+				firstRow = NO;
+			} else {
+				[self formatDocumentGroupFooters: keyValuesForComparson
+								   andLastValues: self.lastComparsonValues];
+			}
+			
+			//Display new group headers if needed.
+			[self formatDocumentGroupHeaders: keyValuesForComparson
 							   andLastValues: self.lastComparsonValues];
+			
+			[self formatDocumentAddHeightFromSection: self.sections.detail];
+			
+			MADSectionRepresentation *detail = [MADSectionRepresentation newSectionRepresentation: MADDocumentSectionTypeBody
+																							  row: self.machineState.detailRowId];
+			[self.pageLayoutTemporary addObject: detail];
+			NSNumber *rowIDObject = @(self.machineState.detailRowId);
+			self.pageIndexesTemporary = [self.pageIndexesTemporary arrayByAddingObject:rowIDObject];
+			
+			self.lastComparsonValues = keyValuesForComparson;
+			
+			self.machineState.rowCounter++;
 		}
-		
-		//Display new group headers if needed.
-		[self formatDocumentGroupHeaders: keyValuesForComparson
-						   andLastValues: self.lastComparsonValues];
-		
-		[self formatDocumentAddHeightFromSection: self.sections.detail];
-		
-		MADSectionRepresentation *detail = [MADSectionRepresentation newSectionRepresentation: MADDocumentSectionTypeBody
-																						  row: self.machineState.detailRowId];
-		[self.pageLayoutTemporary addObject: detail];
-		NSNumber *rowIDObject = @(self.machineState.detailRowId);
-		self.pageIndexesTemporary = [self.pageIndexesTemporary arrayByAddingObject:rowIDObject];
-		
-		self.lastComparsonValues = keyValuesForComparson;
-		
-		self.machineState.rowCounter++;
-		
-		//}
 		lastResultRow = resultRow;
 	}
 	//Need to account for the last set of group footers.
@@ -501,12 +506,9 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:lastResultRow];
 	NSUInteger groupLevel = keyValuesForComparson.count;
 	while (groupLevel >= 1) {
-		//@autoreleasepool {
-			NSLog(@"Group: %@", self.sections.groupFooters[groupLevel - 1]);
-			MADSectionGroupLayout *section = self.sections.groupFooters[groupLevel - 1];
-			[self formatDocumentAddHeightFromSection: section];
-			[self layoutAddGroupFooterAtLevel:groupLevel-1];
-		//}
+		MADSectionGroupLayout *section = self.sections.groupFooters[groupLevel - 1];
+		[self formatDocumentAddHeightFromSection: section];
+		[self layoutAddGroupFooterAtLevel:groupLevel-1];
 		groupLevel--;
 	}
 }
