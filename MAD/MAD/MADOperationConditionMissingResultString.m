@@ -8,17 +8,13 @@
 
 #import "MADOperationConditionMissingResultString.h"
 #import "MADOperationConditionHasResultStringResult.h"
-
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationResultStringProtocol.h>
-
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
-
 #import <os/log.h>
 
 @interface MADOperationConditionMissingResultString ()

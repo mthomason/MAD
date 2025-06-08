@@ -12,10 +12,9 @@
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
-
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSKeyValueCoding.h>
+#import <Foundation/NSError.h>
 
 NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 
@@ -52,7 +51,7 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 
 + (nonnull instancetype)newOperationConditionResultFailedNotSatisfied:(nonnull NSString *)name {
 	MADLogDebug("MADOperationConditionResult: created 'failed' (not satisfied) for condition name: \"%@\"", name);
-	NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:MADConditionFailed userInfo:@{
+	NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-82795 userInfo:@{
 		NSLocalizedFailureReasonErrorKey: @"Not Satisfied",
 		NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Condition '%@' not Satisfied", name],
 		MADOperationConditionKey: name
@@ -151,8 +150,7 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 		if (operation.isCancelled) {
 			MADLogDebug("MADOperationConditionResult: Op <%p:%@> was cancelled during condition evaluation, adding cancellation error.",
 						operation, operation.name);
-			NSError *cancellationError = [NSError errorWithCode:MADConditionFailed];
-			failures = [failures arrayByAddingObject:cancellationError];
+			failures = [failures arrayByAddingObject:[NSError errorWithDomain:@"OperationErrors" code:-82796 userInfo:nil]];
 		}
 		
 		if (completion) {

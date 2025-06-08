@@ -51,8 +51,6 @@
 		4CB98D951F43D5310043B583 /* NSOperation+Advanced.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D931F43D5310043B583 /* NSOperation+Advanced.m */; };
 		4CB98D981F43D5490043B583 /* MADExclusivityController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D961F43D5490043B583 /* MADExclusivityController.h */; };
 		4CB98D991F43D5490043B583 /* MADExclusivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D971F43D5490043B583 /* MADExclusivityController.m */; };
-		4CB98D9C1F43D5790043B583 /* NSError+MADOperationErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CB98D9D1F43D5790043B583 /* NSError+MADOperationErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */; };
 		4CB98DA41F43EBA90043B583 /* MADCredential.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DA21F43EBA90043B583 /* MADCredential.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DA51F43EBA90043B583 /* MADCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DA31F43EBA90043B583 /* MADCredential.m */; };
 		4CB98E0E1F47BA720043B583 /* MADOperationResultStringProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98E011F47BA720043B583 /* MADOperationResultStringProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -139,8 +137,6 @@
 		4CB98D931F43D5310043B583 /* NSOperation+Advanced.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOperation+Advanced.m"; sourceTree = "<group>"; };
 		4CB98D961F43D5490043B583 /* MADExclusivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExclusivityController.h; sourceTree = "<group>"; };
 		4CB98D971F43D5490043B583 /* MADExclusivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADExclusivityController.m; sourceTree = "<group>"; };
-		4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MADOperationErrors.h"; sourceTree = "<group>"; };
-		4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MADOperationErrors.m"; sourceTree = "<group>"; };
 		4CB98DA21F43EBA90043B583 /* MADCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCredential.h; sourceTree = "<group>"; };
 		4CB98DA31F43EBA90043B583 /* MADCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCredential.m; sourceTree = "<group>"; };
 		4CB98E011F47BA720043B583 /* MADOperationResultStringProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationResultStringProtocol.h; sourceTree = "<group>"; };
@@ -336,8 +332,6 @@
 		4CB98E1A1F47BAE00043B583 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				4CB98D9A1F43D5790043B583 /* NSError+MADOperationErrors.h */,
-				4CB98D9B1F43D5790043B583 /* NSError+MADOperationErrors.m */,
 				4CB98D921F43D5310043B583 /* NSOperation+Advanced.h */,
 				4CB98D931F43D5310043B583 /* NSOperation+Advanced.m */,
 			);
@@ -387,7 +381,6 @@
 				4CB98D981F43D5490043B583 /* MADExclusivityController.h in Headers */,
 				4CB98D901F43D4F70043B583 /* MADOperationQueue.h in Headers */,
 				4C4F06271F57BD5200E09E54 /* MADDataTableVirtual.h in Headers */,
-				4CB98D9C1F43D5790043B583 /* NSError+MADOperationErrors.h in Headers */,
 				4CB98D871F43D4BA0043B583 /* MADBlockObserver.h in Headers */,
 				4CF6AA3B1F5503440061B0C6 /* MADDataTable.h in Headers */,
 				4C734FD22DE67C6500506554 /* madmacros.h in Headers */,
@@ -528,7 +521,6 @@
 				4C855B862D8A16D800AC69FE /* NSData+Comparison.m in Sources */,
 				4C6C09FB1F5D2B8F00EDA039 /* MADProgress.m in Sources */,
 				4CB98E171F47BA720043B583 /* MADOperationBooleanAnd.m in Sources */,
-				4CB98D9D1F43D5790043B583 /* NSError+MADOperationErrors.m in Sources */,
 				4CF09A4A1BB2791D007BCF7A /* MADApplication.m in Sources */,
 				4CB98D811F43D48E0043B583 /* MADGroupOperation.m in Sources */,
 				4C6C09F91F5D2B8F00EDA039 /* MADNotificationProgress.m in Sources */,

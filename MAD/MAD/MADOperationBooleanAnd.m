@@ -10,8 +10,6 @@
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
-
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>

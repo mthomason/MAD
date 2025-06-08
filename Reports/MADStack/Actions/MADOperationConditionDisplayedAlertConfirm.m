@@ -11,7 +11,6 @@
 #import "madlog.h"
 
 #import <MADFoundation/MADOperation.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>

@@ -12,7 +12,6 @@
 #import "madlog.h"
 
 #import <MADFoundation/MADOperationConditionResult.h>
-#import <MADFoundation/NSError+MADOperationErrors.h>
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArray.h>

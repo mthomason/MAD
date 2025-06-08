@@ -9,9 +9,6 @@
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADMutualExclusive.h"
 #import "madlog.h"
-
-#import <MADFoundation/NSError+MADOperationErrors.h>
-
 #import <UIKit/UIAlertController.h>
 
 static NSString * const TextYes = @"Yes";
@@ -81,7 +78,7 @@ static NSString * const TextNo = @"No";
 		MADOperationPromptPolarQuestion * __strong sself = weakSelf;
 		sself.result = NO;
 		sself.alertDisplayed = YES;
-		NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: MADConditionFailed userInfo: nil];
+		NSError *error = [NSError errorWithDomain: NSStringFromClass([self class]) code: -82794 userInfo: nil];
 		[sself performSelector:@selector(finishWithError:) withObject:error];
 	}];
 	
