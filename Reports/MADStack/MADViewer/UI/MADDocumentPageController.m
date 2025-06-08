@@ -118,12 +118,9 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 
 + (instancetype)newDocumentPageController:(MADocument *)document
 						   pageAttributes:(MADPageViewAttributes *)pageAttributes {
-	
-	id pageViewController;
-	pageViewController = [[self alloc] initWithDocument: document
-									 andPageAttributtes: pageAttributes];
+	id pageViewController = [[self alloc] initWithDocument: document
+										andPageAttributtes: pageAttributes];
 	return pageViewController;
-
 }
 
 #pragma mark -
@@ -164,8 +161,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 	
 	MADReportPageView *documentView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
 	documentView.backgroundColor = [UIColor whiteColor];
-	documentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-										  UIViewAutoresizingFlexibleRightMargin;
+	documentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	documentView.translatesAutoresizingMaskIntoConstraints = YES;
 	documentView.delegatePage = self;
 	[documentScroller addSubview:documentView];
@@ -320,8 +316,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 	if (self.pageViewAttributes.reportLastCacheDate == nil) {
 		NSError *error = nil;
 		NSString *path = self.document.urlDataTableCache.path;
-		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path
-																					error: &error];
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path error: &error];
 		if (error == nil) {
 			self.pageViewAttributes.reportLastCacheDate = [attributes fileModificationDate];
 		} else {

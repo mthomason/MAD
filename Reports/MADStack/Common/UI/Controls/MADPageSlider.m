@@ -7,19 +7,16 @@
 //
 
 #import "MADPageSlider.h"
-
+#import "MADSliderPageVertical.h"
+#import "MADLabelPageSlider.h"
+#import "madlog.h"
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/NSShadow.h>
 #import <UIKit/UITapGestureRecognizer.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSStringDrawing.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADViewHelpers.h>
-
-#import "MADSliderPageVertical.h"
-#import "MADPageSliderProtocol.h"
-#import "MADLabelPageSlider.h"
 
 static const CGFloat MADSliderPaginationWidth = 40.0;
 
@@ -65,20 +62,19 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	BOOL _enabledColor;
 }
 
+#pragma mark -
+#pragma mark Static Functions
+
 + (CGSize)BoundsForAttributedString:(NSAttributedString *)string {
 	CGRect bounds = [string boundingRectWithSize: CGSizeMake(300.0, CGFLOAT_MAX)
-										 options: (NSStringDrawingOptions)
-					 (NSStringDrawingUsesLineFragmentOrigin |
-					  NSStringDrawingUsesFontLeading)
+										 options: (NSStringDrawingOptions) (NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
 										 context: nil];
-	return CGSizeMake(bounds.size.width, bounds.size.height);
+	return bounds.size;
 }
 
 + (CGFloat)distanceBetweenTicks:(NSUInteger)numberOfTicks height:(CGFloat)height
 						padding:(CGFloat)padding rect:(CGRect)rect {
-	return numberOfTicks > 1 ?
-				((rect.size.height - padding * 2) / numberOfTicks) - height :
-				CGSizeZero.height;
+	return numberOfTicks > 1 ? ((rect.size.height - padding * 2) / numberOfTicks) - height : CGSizeZero.height;
 }
 
 #pragma mark -
@@ -102,14 +98,10 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)setupLabelAttributes {
-	UIFont *font = [UIFont boldSystemFontOfSize:9.0];
-	NSNumber *strokeWidth = @-1.0;
-	NSDictionary *attributes = @{
-		NSFontAttributeName: font,
-		NSStrokeWidthAttributeName: strokeWidth
-	};
-
-	NSAttributedString *testString = [[NSAttributedString alloc] initWithString:@"0" attributes:attributes];
+	NSAttributedString *testString = [[NSAttributedString alloc] initWithString:@"0" attributes:@{
+		NSFontAttributeName: [UIFont boldSystemFontOfSize:9.0],
+		NSStrokeWidthAttributeName: @-1.0
+	}];
 	CGSize bounds = [MADPageSlider BoundsForAttributedString:testString];
 	_stringHeight = bounds.height;
 	self.labels = nil;
@@ -135,9 +127,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 	// Calculate the number of ticks based on the available height
 	CGRect rect = self.bounds;
-	unsigned long numberOfTicks = availableLabelSlots(rect.size.height,
-													 _stringHeight,
-													 self.maximumValue);
+	unsigned long numberOfTicks = availableLabelSlots(rect.size.height, _stringHeight, self.maximumValue);
 
 	// If the rect and number of ticks haven't changed, return
 	if (CGRectEqualToRect(rect, _lastRect) && numberOfTicks == _lastNumberOfTicks) {
@@ -265,7 +255,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)setEnabled:(BOOL)enabled {
-	NSLog(@"%s %@", __PRETTY_FUNCTION__, enabled ? @"YES" : @"NO");
+	os_log_debug(GetDesignerLog(), "%s: isEnabled: %@", __PRETTY_FUNCTION__, enabled ? @"YES" : @"NO");
 	if ([NSThread isMainThread]) {
 		[self configureEnabledState:enabled];
 	} else {
@@ -294,7 +284,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (BOOL)isEnabled {
 	if (![NSThread isMainThread]) {
-		NSLog(@"Warning: isEnabled called from a background thread.");
+		os_log_info(GetDesignerLog(), "Warning: isEnabled called from a background thread.");
 	}
 	return self.pageSlider.isEnabled;
 }
@@ -337,9 +327,8 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 #pragma mark Drawing
 
-- (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point
-		   inContext:(CGContextRef)context {
-	NSLog(@"Draw String: %@ %@", string, NSStringFromCGPoint(point));
+- (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point inContext:(CGContextRef)context {
+	os_log_debug(GetDesignerLog(), "Draw String: %@ %@", string, NSStringFromCGPoint(point));
 	CGContextSaveGState(context);
 	CGSize boundingSize = [MADPageSlider BoundsForAttributedString:string];
 	[self rotateBoundingSize:boundingSize inContext:context];

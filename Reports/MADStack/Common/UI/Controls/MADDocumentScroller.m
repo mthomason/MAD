@@ -9,23 +9,19 @@
 #import "MADDocumentScroller.h"
 #import <MADCocoaExtensions/MADViewHelpers.h>
 
-@interface MADDocumentScroller ()
-
-@end
-
 @implementation MADDocumentScroller
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        self.autoresizingMask = MADViewAutoresizingFlexable();
-        self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.showsHorizontalScrollIndicator = YES;
-        self.showsVerticalScrollIndicator = YES;
-        self.indicatorStyle = UIScrollViewIndicatorStyleBlack;
-        self.bounces = YES;
-        self.alwaysBounceVertical = YES;
-    }
-    return self;
+	if (self = [super initWithFrame:frame]) {
+		self.autoresizingMask = MADViewAutoresizingFlexable();
+		self.translatesAutoresizingMaskIntoConstraints = YES;
+		self.showsHorizontalScrollIndicator = YES;
+		self.showsVerticalScrollIndicator = YES;
+		self.indicatorStyle = UIScrollViewIndicatorStyleBlack;
+		self.bounces = YES;
+		self.alwaysBounceVertical = YES;
+	}
+	return self;
 }
 
 @end

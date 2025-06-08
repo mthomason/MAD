@@ -13,7 +13,6 @@
 #import "MADViewerController.h"
 #import "MADOperationRefreshReload.h"
 #import "MADPrintingProtocol.h"
-#import "MADPageSliderProtocol.h"
 #import "MADTabBarController.h"
 #import "MADActivityReportPrintPreview.h"
 #import "MADDocumentPageController.h"
@@ -239,11 +238,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	self.pageSlider.sliderDelegate = self;
 	self.dataSource = self;
 	self.delegate = self;
 	
 	MADPageSlider *pageSlider = self.pageSlider;
+	pageSlider.sliderDelegate = self;
 	[self.view addSubview: pageSlider];
 	[self.view bringSubviewToFront: pageSlider];
 
@@ -545,8 +544,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	_updatingOfTimerIsPaused = NO;
 	
 	UIBarButtonItem *buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
-																						  target: self
-																						  action: @selector(refresh:)];
+																				   target: self
+																				   action: @selector(refresh:)];
 	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
 	buttonRefresh.enabled = YES;
 	[self.navigationItem setRightBarButtonItem: buttonRefresh

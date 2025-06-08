@@ -464,7 +464,6 @@
 		4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentScroller.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C15F32E1E4C9B940072BE5F /* MADPageSliderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPageSliderProtocol.h; sourceTree = "<group>"; };
 		4C15F32F1E4CA0FB0072BE5F /* MADQueryViewDatasourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewDatasourceProtocol.h; sourceTree = "<group>"; };
 		4C15F3301E4CA22A0072BE5F /* MADHierarchicalGroupingNodeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADHierarchicalGroupingNodeProtocol.h; sourceTree = "<group>"; };
 		4C15F3311E4CA2AB0072BE5F /* MADQueryVisualizationSchemaDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaDelegate.h; sourceTree = "<group>"; };
@@ -1971,7 +1970,6 @@
 				4CC8861A1C7ABFE4003E18D2 /* MADPageSlider.m */,
 				4C0590D11C7CD82600A1EC4A /* MADDocumentScroller.h */,
 				4C0590D21C7CD82600A1EC4A /* MADDocumentScroller.m */,
-				4C15F32E1E4C9B940072BE5F /* MADPageSliderProtocol.h */,
 				4CC982701F4AC32000E0496A /* MADLabelPageSlider.h */,
 				4CC982711F4AC32000E0496A /* MADLabelPageSlider.m */,
 			);

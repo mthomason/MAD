@@ -11,7 +11,9 @@
 
 #import <UIKit/UIView.h>
 
-@protocol MADPageSliderProtocol;
+@protocol MADPageSliderProtocol <NSObject>
+- (void)sliderDidChangeToPage:(NSUInteger)page;
+@end
 
 @class MADSliderPageVertical;
 
