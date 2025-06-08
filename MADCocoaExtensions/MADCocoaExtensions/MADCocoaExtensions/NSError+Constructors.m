@@ -29,9 +29,8 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 	UIViewController *displayController = viewController ?:  [UIApplication topViewController];
 	displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
 	
-	NSString *localizedDescription = error.localizedDescription.copy;
-	NSString *localizedFailureReason = error.localizedFailureReason.copy;
-	
+	NSString *localizedDescription = [error.localizedDescription copy];
+	NSString *localizedFailureReason = [error.localizedFailureReason copy];
 	NSError *underlyingError = [error.userInfo[NSUnderlyingErrorKey] copy];
 	
 	if ([underlyingError localizedDescription] != nil) {
