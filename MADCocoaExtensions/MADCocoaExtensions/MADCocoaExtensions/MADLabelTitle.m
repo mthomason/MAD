@@ -37,7 +37,7 @@
 
 - (void)setText:(NSString *)text {
 
-	NSString *safetext = text.copy;
+	NSString *safetext = [text copy];
 	UILabel *title = self.title;
 	title.attributedText = [MADBrandingStringHelper logoAttributedStringForTitle:safetext];
 	[title sizeToFit];
