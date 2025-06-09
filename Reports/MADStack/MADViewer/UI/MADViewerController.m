@@ -123,7 +123,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 @implementation MADViewerController {
 	NSDate *_lastCacheDate;
 	MADReportPosition _currentLocation;
-	UIBackgroundTaskIdentifier _backgroundTaskIdRefresh;
 	BOOL _isFirstAppearance;
 	BOOL _firstTimeViewWillLayoutSubviews;
 	BOOL _refreshing;
@@ -226,7 +225,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	
 	self.view.backgroundColor = [UIColor lightGrayColor];
 	[MADThemeManager applyAppearanceToBarButtonItem:_barButtonItemRefresh traitCollection:self.traitCollection];
-	_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
 	self.edgesForExtendedLayout = UIRectEdgeNone;
 	
 	_currentLocation = MADReportPositionMake(0, 0);
@@ -660,7 +658,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 - (IBAction)refresh:(id)sender {
 	_didRefreshBeforeReaload = YES;
-	_backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
 	
 	if (_refreshing == NO) {
 		_startedRefresh = YES;
@@ -678,8 +675,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		refresh.completionBlock = ^{
 			typeof(self) strongSelf = weakSelf;
 			if (strongSelf) {
-				[[UIApplication sharedApplication] endBackgroundTask:strongSelf->_backgroundTaskIdRefresh];
-				strongSelf->_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
 				strongSelf->_refreshing = NO;
 			}
 		};
@@ -1188,7 +1183,6 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	[debug appendFormat:@"Bar Button Item Activity:         %@\n", self.barButtonItemActivity];
 	[debug appendFormat:@"Print Page Renderer Report:       %@\n", self.printPageRendererReport];
 	[debug appendFormat:@"Activity Item ProviderPdf:        %@\n", self.activityItemProviderPdf];
-	[debug appendFormat:@"Background Task Id Refresh:       %lu\n", (unsigned long)_backgroundTaskIdRefresh];
 	[debug appendFormat:@"Refreshing:                       %@\n", _refreshing ? @"Yes" : @"No"];
 	[debug appendFormat:@"Did Refresh Before Reaload:       %@\n", _didRefreshBeforeReaload ? @"Yes" : @"No"];
 	[debug appendFormat:@"Activity Exporting:               %@\n", _activityExporting ? @"Yes" : @"No"];

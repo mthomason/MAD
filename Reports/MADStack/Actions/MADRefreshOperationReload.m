@@ -12,7 +12,6 @@
 #import "MADOperationRefresh.h"
 #import "madlog.h"
 
-#import <MADCocoaExtensions/UIApplication+Helpers.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADNotificationDidFormatPage.h>
 
@@ -59,11 +58,9 @@
 	
 	if (self.cancelled) return [self finish];
 	
-	[self beginBackgroundTask];
 	[document prepareForQuery];
 	
 	if (self.cancelled) {
-		[self endBackgroundTask];
 		return [self finish];
 	}
 	
@@ -81,7 +78,6 @@
 	[self ignoreFormatter: document.reportFormatter];
 	
 	if (self.cancelled) {
-		[self endBackgroundTask];
 		return [self finish];
 	}
 	
@@ -100,22 +96,7 @@
 	
 	document.refreshed = NO;
 	
-	[self endBackgroundTask];
 	[self finish];
-}
-
-- (void)beginBackgroundTask {
-	if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
-		self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
-	}
-}
-
-- (void)endBackgroundTask {
-	if (_backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
-		NSNumber *bgtask = [[NSNumber alloc] initWithUnsignedInteger: self.backgroundTaskIdRefresh];
-		_backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
-		[[UIApplication sharedApplication] endBackgroundTask:bgtask.unsignedIntegerValue];
-	}
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {
