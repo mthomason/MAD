@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/11/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADNavigationControllerToolbox.h"
@@ -16,19 +16,6 @@
 @end
 
 @implementation MADNavigationControllerToolbox
-
-/*
-+ (void)initialize {
-	[super initialize];
-	if (self == [MADNavigationControllerToolbox self]) {
-		@autoreleasepool {
-			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray <Class <UIAppearanceContainer>> alloc] initWithObjects: self, nil];
-			UINavigationBar <UIAppearance> *appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-			appearanceProxy.barTintColor = [UIColor clearColor];
-		}
-	}
-}
-*/
 
 - (BOOL)prefersStatusBarHidden {
 	return YES;

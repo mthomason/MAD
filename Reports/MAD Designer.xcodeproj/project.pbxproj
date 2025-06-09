@@ -277,7 +277,6 @@
 		4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2481BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m */; };
 		4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */; };
 		4C8DE24F1BAFA88400AD1111 /* MADCellElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */; };
-		4C8DE2521BAFA92C00AD1111 /* MADToolboxNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2511BAFA92C00AD1111 /* MADToolboxNavigationBar.m */; };
 		4C8DE2621BAFA96300AD1111 /* MADSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE25D1BAFA96300AD1111 /* MADSearchBar.m */; };
 		4C8DE26B1BAFA98B00AD1111 /* MADClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2661BAFA98B00AD1111 /* MADClipboardView.m */; };
 		4C8DE26C1BAFA98B00AD1111 /* MADConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2681BAFA98B00AD1111 /* MADConnectorView.m */; };
@@ -946,8 +945,6 @@
 		4C8DE24B1BAFA88400AD1111 /* MADCellElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCellElement.h; sourceTree = "<group>"; };
 		4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCellElement.m; sourceTree = "<group>"; };
 		4C8DE24D1BAFA88400AD1111 /* MADCellElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MADCellElement.xib; path = MADStack/MADDesigner/UI/ElementView/MADCellElement.xib; sourceTree = "<group>"; };
-		4C8DE2501BAFA92C00AD1111 /* MADToolboxNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADToolboxNavigationBar.h; path = UI/MADToolboxNavigationBar.h; sourceTree = "<group>"; };
-		4C8DE2511BAFA92C00AD1111 /* MADToolboxNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADToolboxNavigationBar.m; path = UI/MADToolboxNavigationBar.m; sourceTree = "<group>"; };
 		4C8DE25C1BAFA96300AD1111 /* MADSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSearchBar.h; sourceTree = "<group>"; };
 		4C8DE25D1BAFA96300AD1111 /* MADSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSearchBar.m; sourceTree = "<group>"; };
 		4C8DE2651BAFA98B00AD1111 /* MADClipboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADClipboardView.h; sourceTree = "<group>"; };
@@ -2365,8 +2362,6 @@
 			children = (
 				4CB074D51E22010900643F32 /* MADExplorerNavigationBar.h */,
 				4CB074D61E22010900643F32 /* MADExplorerNavigationBar.m */,
-				4C8DE2501BAFA92C00AD1111 /* MADToolboxNavigationBar.h */,
-				4C8DE2511BAFA92C00AD1111 /* MADToolboxNavigationBar.m */,
 				4C5478E11E5D783A0043682E /* MADQueryNavigationBar.h */,
 				4C5478E21E5D783A0043682E /* MADQueryNavigationBar.m */,
 				4C5478E41E5D7CF70043682E /* MADDesignerNavigationBar.h */,
@@ -3271,7 +3266,6 @@
 				4CF6AFC01CAFB55C00D3AD11 /* MADOperationRefreshReload.m in Sources */,
 				4CFEE8181BB7A2E600AFAA0A /* MADQueryPredicateFormatController.m in Sources */,
 				4C26BA5E1BAF99F000456DC8 /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
-				4C8DE2521BAFA92C00AD1111 /* MADToolboxNavigationBar.m in Sources */,
 				4C40206B1BAE938500BAE5FC /* NSData+Base64.m in Sources */,
 				4C40203F1BAE92F200BAE5FC /* MADAttributedStringCommon.m in Sources */,
 				4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */,

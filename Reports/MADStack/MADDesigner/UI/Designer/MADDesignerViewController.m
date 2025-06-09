@@ -37,7 +37,6 @@
 #import "MADQueryChooseFieldController.h"
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
-#import "MADNavigationControllerToolbox.h"
 #import "MADDesignerSectionLayoutLiquid.h"
 #import "NSLayoutConstraint+Designer.h"
 #import "UITapGestureRecognizer+Designer.h"

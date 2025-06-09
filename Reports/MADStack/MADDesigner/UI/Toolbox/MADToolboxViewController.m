@@ -11,6 +11,7 @@
 #import "MADNavigationController.h"
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADThemeManager.h"
+#import "madlog.h"
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -56,16 +57,6 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 #pragma mark -
 #pragma mark Static
-
-+ (void)initialize {
-	[super initialize];
-	if (self == [MADToolboxViewController class]) {
-		@autoreleasepool {
-			UISegmentedControl *controlAppearance = [UISegmentedControl appearanceWhenContainedInInstancesOfClasses: @[[UINavigationBar class]]];
-			controlAppearance.tintColor = [UIColor whiteColor];
-		}
-	}
-}
 
 + (instancetype)newToolboxViewController {
 	return [[UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardToolbox"];
@@ -147,7 +138,6 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
-	//self.segmentedControlScene.center = CGPointMake(self.view.center.x, self.navigationItem.titleView.center.y);
 }
 
 #pragma mark -
@@ -299,12 +289,12 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 	
 	viewControllerToShow.view.frame = self.view.bounds;
 	
-	MADToolboxViewController * __weak weakself = self;
 	[self addChildViewController:viewControllerToShow];
 	[viewControllerToHide willMoveToParentViewController:nil];
 	[viewControllerToShow beginAppearanceTransition:YES animated:YES];
 	
 	
+	MADToolboxViewController * __weak weakself = self;
 	[self transitionFromViewController: viewControllerToHide
 					  toViewController: viewControllerToShow
 							  duration: 0.23232323f
