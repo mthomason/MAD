@@ -197,18 +197,12 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	return result;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView
-	 numberOfItemsInSection:(NSInteger)section {
-
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 	switch (section) {
-
 		case 0:
 			return (NSInteger)self.dataSource.count;
-			break;
-
 		default:
 			return 0;
-			break;
 	}
 }
 
