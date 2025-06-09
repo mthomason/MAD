@@ -113,11 +113,25 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
+	// Calculate the frame this view should have based on its superview.
+	CGRect desiredFrame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth,
+									 CGPointZero.y,
+									 MADSliderPaginationWidth,
+									 self.superview.frame.size.height);
+	
+	// By checking if the frame is already correct, we break the layout-recursion loop.
+	if (!CGRectEqualToRect(self.frame, desiredFrame)) {
+		self.frame = desiredFrame;
+		// After changing our own frame, we must return. The layout system will call
+		// this method again with the correct geometry.
+		//return;
+	}
+	
 	// Ensure the slider's frame matches the bounds of the view
-	self.pageSlider.frame = self.bounds;
+	//self.pageSlider.frame = self.bounds;
 
 	// Update the frame of the page slider
-	self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
+	//self.frame = CGRectMake(self.superview.frame.size.width - MADSliderPaginationWidth, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
 
 	// Update the slider's frame
 	self.pageSlider.frame = CGRectMake(CGPointZero.x, CGPointZero.y, MADSliderPaginationWidth, self.superview.frame.size.height);
@@ -130,9 +144,9 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	unsigned long numberOfTicks = availableLabelSlots(rect.size.height, _stringHeight, self.maximumValue);
 
 	// If the rect and number of ticks haven't changed, return
-	if (CGRectEqualToRect(rect, _lastRect) && numberOfTicks == _lastNumberOfTicks) {
-		return;
-	}
+	//if (CGRectEqualToRect(rect, _lastRect) && numberOfTicks == _lastNumberOfTicks) {
+	//	return;
+	//}
 
 	// Update the last rect and number of ticks
 	_lastRect = rect;
@@ -234,7 +248,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	s.maximumValue = (float)(numberOfPages > 0 ? numberOfPages - 1 : 0);
 	s.minimumValue = (float)0;
 	_numberOfPages = numberOfPages;
-	[self setNeedsLayout];
+	//[self setNeedsLayout];
 }
 
 - (NSMutableArray <UILabel *> *)labels {
@@ -255,7 +269,6 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)setEnabled:(BOOL)enabled {
-	os_log_debug(GetDesignerLog(), "%s: isEnabled: %@", __PRETTY_FUNCTION__, enabled ? @"YES" : @"NO");
 	if ([NSThread isMainThread]) {
 		[self configureEnabledState:enabled];
 	} else {
@@ -325,10 +338,10 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 	CGContextConcatCTM(context, translateBack(size));
 }
 
+#pragma mark -
 #pragma mark Drawing
 
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point inContext:(CGContextRef)context {
-	os_log_debug(GetDesignerLog(), "Draw String: %@ %@", string, NSStringFromCGPoint(point));
 	CGContextSaveGState(context);
 	CGSize boundingSize = [MADPageSlider BoundsForAttributedString:string];
 	[self rotateBoundingSize:boundingSize inContext:context];
@@ -340,6 +353,26 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 - (NSUInteger)maximumNumberOfLabels {
 	return (NSUInteger)(availableLabelSlots(MaxDimension(self.frame.size), _stringHeight, self.maximumValue) / 2) + 1;
+}
+
+#pragma mark -
+#pragma mark Debugging
+
+- (NSString *)debugDescription {
+	// It's crucial to check if we are on the main thread before accessing UI properties
+	// to ensure thread safety in our logging.
+	if (![NSThread isMainThread]) {
+		__block NSString *descriptionOnMain;
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			descriptionOnMain = [self debugDescription];
+		});
+		return descriptionOnMain;
+	}
+	
+	NSString *sliderState = [NSString stringWithFormat:@"enabled: %@, value: %.2f, pages: %lu",
+							 self.isEnabled ? @"YES" : @"NO", self.value, (unsigned long)self.numberOfPages];
+	return [NSString stringWithFormat:@"<%@: %p> frame: %@; state: {%@}",
+			NSStringFromClass([self class]), self, NSStringFromCGRect(self.frame), sliderState];
 }
 
 @end

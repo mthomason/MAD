@@ -902,6 +902,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 - (void)operationDidStart:(MADOperation *)operation {
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
 		
+		__weak typeof(self) weakSelf = self;
+		void (^updateUIBlock)(void) = ^{
+			typeof(self) strongSelf = weakSelf;
+			if (strongSelf) {
+				[strongSelf.pageSlider setEnabled:NO];
+				[strongSelf.pageSlider setNeedsLayout];
+				[strongSelf.pageSlider setNeedsDisplay];
+			}
+		};
+		
+		if ([NSThread isMainThread]) {
+			updateUIBlock();
+		} else {
+			dispatch_async(dispatch_get_main_queue(), updateUIBlock);
+		}
 	}
 }
 
@@ -922,9 +937,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		_lastCacheDate = nil;
 
 		// Define a block to update the UI
+		__weak typeof(self) weakSelf = self;
 		void (^updateUIBlock)(void) = ^{
-			self.pageSlider.numberOfPages = self->_currentLocation.totalPages;
-			[self updateTimeSinceLastRefresh:nil];
+			typeof(self) strongSelf = weakSelf;
+			if (strongSelf) {
+				strongSelf.pageSlider.numberOfPages = strongSelf->_currentLocation.totalPages;
+				[strongSelf updateTimeSinceLastRefresh:nil];
+				[strongSelf setDisplayActive];
+			}
 		};
 
 		// Ensure UI updates are performed on the main thread
@@ -975,34 +995,27 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		dispatch_sync(dispatch_get_main_queue(), ^{
-			
-			//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-			//	dispatch_sync(dispatch_get_main_queue(), ^{
-					
-					UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
-					
-					if (sharedController) {
-						MADViewerController *sself = weakself;
-						
-						MADocument *document = sself.document;
-						document.activityDelegate = sself;
-						[document updatePrintingReportFormatter];
-						UIPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource: document];
-						sharedController.printPageRenderer = printPageRenderer;
-						sharedController.delegate = document;
-						
-						MADViewerController * __weak weakself2 = sself;
-						[sharedController presentFromBarButtonItem: sself.barButtonItemActivity
-														  animated: YES
-												 completionHandler: ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-							MADViewerController *sself2 = weakself2;
-							sself2.pageSlider.enabled = YES;
-							[sself2.tabBarController enableTabBarItems];
-						}];
-					}
-				});
-		//	});
-		//});
+			UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+			if (sharedController) {
+				MADViewerController *sself = weakself;
+				
+				MADocument *document = sself.document;
+				document.activityDelegate = sself;
+				[document updatePrintingReportFormatter];
+				UIPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource: document];
+				sharedController.printPageRenderer = printPageRenderer;
+				sharedController.delegate = document;
+				
+				MADViewerController * __weak weakself2 = sself;
+				[sharedController presentFromBarButtonItem: sself.barButtonItemActivity
+												  animated: YES
+										 completionHandler: ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+					MADViewerController *sself2 = weakself2;
+					sself2.pageSlider.enabled = YES;
+					[sself2.tabBarController enableTabBarItems];
+				}];
+			}
+		});
 	});
 }
 
@@ -1062,10 +1075,27 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 #pragma mark Operations
 
 - (void)operation:(MADOperation *)operation setDisplayActive:(BOOL)active {
-	if (active) {
-		[self setDisplayActive];
+	// This method is called from a background thread. Dispatch UI work to the main thread.
+	if ([NSThread isMainThread]) {
+		if (active) {
+			[self setDisplayActive];
+		} else {
+			[self setDisplayInactive];
+		}
 	} else {
-		[self setDisplayInactive];
+
+		__weak MADViewerController *weakSelf = self;
+		dispatch_async(dispatch_get_main_queue(), ^{
+
+			__strong MADViewerController *strongSelf = weakSelf;
+			if (!strongSelf) return;;
+
+			if (active) {
+				[strongSelf setDisplayActive];
+			} else {
+				[strongSelf setDisplayInactive];
+			}
+		});
 	}
 }
 
@@ -1074,25 +1104,53 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 }
 
 - (void)finishReload:(MADocument *)document {
-	MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
-	self.printPageRendererReport = printPageRenderer;
-	
-	MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
-																					   size: document.paperSize];
-	
-	MADDocumentPageController *page = [MADDocumentPageController newDocumentPageController: document
-																			pageAttributes: pageAttributes];
-	page.view.frame = self.view.bounds;
-	page.delegate = self;
-	
-	NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
-	
-	[self setViewControllers: viewControllers
-				   direction: UIPageViewControllerNavigationDirectionForward
-					animated: NO
-				  completion: nil];
-	
-	[self setDisplayActive];
+	if ([NSThread isMainThread]) {
+		MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+		self.printPageRendererReport = printPageRenderer;
+		
+		MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
+																						   size: document.paperSize];
+		
+		MADDocumentPageController *page = [MADDocumentPageController newDocumentPageController: document
+																				pageAttributes: pageAttributes];
+		page.view.frame = self.view.bounds;
+		page.delegate = self;
+		
+		NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
+		
+		[self setViewControllers: viewControllers
+					   direction: UIPageViewControllerNavigationDirectionForward
+						animated: NO
+					  completion: nil];
+		
+		[self setDisplayActive];
+	} else {
+		__weak MADViewerController *weakSelf = self;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			__strong MADViewerController *strongSelf = weakSelf;
+			if (!strongSelf) return;;
+
+			MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+			strongSelf.printPageRendererReport = printPageRenderer;
+			
+			MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: strongSelf->_currentLocation
+																							   size: document.paperSize];
+			
+			MADDocumentPageController *page = [MADDocumentPageController newDocumentPageController: document
+																					pageAttributes: pageAttributes];
+			page.view.frame = strongSelf.view.bounds;
+			page.delegate = strongSelf;
+			
+			NSArray *viewControllers = [[NSArray alloc] initWithObjects:page, nil];
+			
+			[strongSelf setViewControllers: viewControllers
+								 direction: UIPageViewControllerNavigationDirectionForward
+								  animated: NO
+								completion: nil];
+
+			[strongSelf setDisplayActive];
+		});
+	}
 }
 
 #pragma mark -
