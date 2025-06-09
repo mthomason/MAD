@@ -19,7 +19,6 @@
 	onViewController:(UIViewController *)viewController
 		  completion:(void (^)(BOOL success))completion;
 
-
 @end
 
 #endif
