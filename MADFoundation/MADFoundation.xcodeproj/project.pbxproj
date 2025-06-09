@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -75,6 +75,7 @@
 		4CF09A421BB23FA8007BCF7A /* MADCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A3F1BB23FA8007BCF7A /* MADCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A491BB2791D007BCF7A /* MADApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF09A471BB2791D007BCF7A /* MADApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF09A4A1BB2791D007BCF7A /* MADApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF09A481BB2791D007BCF7A /* MADApplication.m */; };
+		4CF42DDA2DF740150071A58E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF42DD92DF740150071A58E /* UIKit.framework */; platformFilters = (ios, maccatalyst, ); };
 		4CF6AA3B1F5503440061B0C6 /* MADDataTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AA371F5503440061B0C6 /* MADDataTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AA3C1F5503440061B0C6 /* MADDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AA381F5503440061B0C6 /* MADDataTable.m */; };
 /* End PBXBuildFile section */
@@ -161,6 +162,7 @@
 		4CF09A3F1BB23FA8007BCF7A /* MADCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCacheProtocol.h; sourceTree = "<group>"; };
 		4CF09A471BB2791D007BCF7A /* MADApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADApplication.h; sourceTree = "<group>"; };
 		4CF09A481BB2791D007BCF7A /* MADApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADApplication.m; sourceTree = "<group>"; };
+		4CF42DD92DF740150071A58E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		4CF6AA371F5503440061B0C6 /* MADDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDataTable.h; path = DataTables/MADDataTable.h; sourceTree = "<group>"; };
 		4CF6AA381F5503440061B0C6 /* MADDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDataTable.m; path = DataTables/MADDataTable.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF42DDA2DF740150071A58E /* UIKit.framework in Frameworks */,
 				4C9372B51BACFCA200D6BD62 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,6 +194,7 @@
 				4C9372E31BAD0EBC00D6BD62 /* Resouces */,
 				4C93729C1BACFC9200D6BD62 /* MADFoundation */,
 				4C9372A81BACFC9200D6BD62 /* MADFoundationTests */,
+				4CF42DD82DF740150071A58E /* Frameworks */,
 				4C93729B1BACFC9200D6BD62 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -277,7 +281,6 @@
 		4C9372E31BAD0EBC00D6BD62 /* Resouces */ = {
 			isa = PBXGroup;
 			children = (
-				4C9372B41BACFCA200D6BD62 /* Foundation.framework */,
 			);
 			name = Resouces;
 			sourceTree = "<group>";
@@ -359,6 +362,15 @@
 				4CF09A481BB2791D007BCF7A /* MADApplication.m */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		4CF42DD82DF740150071A58E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C9372B41BACFCA200D6BD62 /* Foundation.framework */,
+				4CF42DD92DF740150071A58E /* UIKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

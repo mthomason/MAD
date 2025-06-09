@@ -9,12 +9,10 @@
 #import "MADOperationBackgroundTaskBegin.h"
 #import "madlog.h"
 
-#import <UIKit/UIApplication.h>
+//#import <UIKit/UIApplication.h>
 
 @interface MADOperationBackgroundTaskBegin ()
-
-	@property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
-
+//@property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 @end
 
 @implementation MADOperationBackgroundTaskBegin
@@ -24,6 +22,10 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+	// This operation does nothing.  Code is left here to show old behavior.
+	[self finish];
+	return;
+/*
 	MADOperationBackgroundTaskBegin * __weak weakself = self;
 	NSString *taskName = @"com.everdayapps.operation.document.create.begin";
 	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName: taskName
@@ -40,7 +42,7 @@
 		NSError *error = [NSError errorWithDomain:domain code:22 userInfo:nil];
 		[self finishWithError:error];
 	}
-	
+*/
 }
 
 @end

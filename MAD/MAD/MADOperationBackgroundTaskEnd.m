@@ -17,6 +17,10 @@
 - (BOOL)isAsynchronous { return YES; }
 
 - (void)execute {
+	// This operation does nothing.  Code is left here to show old behavior.
+	[self finish];
+	return;
+/*
 	UIBackgroundTaskIdentifier backgroundTaskIdentifier = UIBackgroundTaskInvalid;
 	NSArray<NSOperation *> *dependencies = self.dependencies;
 	for (NSOperation *dependency in dependencies) {
@@ -31,6 +35,7 @@
 		NSError *error = [NSError errorWithDomain:NSStringFromClass(self.class) code:23 userInfo:nil];
 		[self finishWithError:error];
 	}
+*/
 }
 
 @end

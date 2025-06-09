@@ -18,6 +18,8 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
 
+#import <UIKit/UIApplication.h>	// Wish I didn't have to import UIApplication here, but it's really the cleanest way.
+
 #import <os/log.h>
 #import <pthread.h>
 
@@ -29,6 +31,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 @interface MADOperation()
 @property (nonatomic, strong) NSMutableArray *internalErrors;
 @property (atomic, assign) BOOL hasFinishedAlready;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 // _state is defined in @implementation block
 @end
 
@@ -140,8 +143,8 @@ static NSString * const MADOperatorSelectorState        = @"state";
 // use the KVO mechanism to indicate that changes to "state" affect other properties as well
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
 	NSArray *keys = [[NSArray alloc] initWithObjects: MADOperatorSelectorIsReady,
-													  MADOperatorSelectorIsExecuting,
-													  MADOperatorSelectorIsFinished, nil];
+					 MADOperatorSelectorIsExecuting,
+					 MADOperatorSelectorIsFinished, nil];
 	if ([keys containsObject:key]) {
 		NSSet *result = [[NSSet alloc] initWithObjects:MADOperatorSelectorState, nil];
 		return result;
@@ -234,14 +237,14 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (BOOL)canTransitionToState:(MADOperationState)target {
 	return (target == MADOperationStatePending               && self.state == MADOperationStateInitialized)
-		|| (target == MADOperationStateEvaluatingConditions  && self.state == MADOperationStatePending)
-		|| (target == MADOperationStateReady                 && self.state == MADOperationStatePending              && self.isCancelled)
-		|| (target == MADOperationStateFinished              && self.state == MADOperationStatePending              && self.isCancelled)
-		|| (target == MADOperationStateReady                 && self.state == MADOperationStateEvaluatingConditions)
-		|| (target == MADOperationStateExecuting             && self.state == MADOperationStateReady)
-		|| (target == MADOperationStateFinishing             && self.state == MADOperationStateReady)
-		|| (target == MADOperationStateFinishing             && self.state == MADOperationStateExecuting)
-		|| (target == MADOperationStateFinished              && self.state == MADOperationStateFinishing);
+	|| (target == MADOperationStateEvaluatingConditions  && self.state == MADOperationStatePending)
+	|| (target == MADOperationStateReady                 && self.state == MADOperationStatePending              && self.isCancelled)
+	|| (target == MADOperationStateFinished              && self.state == MADOperationStatePending              && self.isCancelled)
+	|| (target == MADOperationStateReady                 && self.state == MADOperationStateEvaluatingConditions)
+	|| (target == MADOperationStateExecuting             && self.state == MADOperationStateReady)
+	|| (target == MADOperationStateFinishing             && self.state == MADOperationStateReady)
+	|| (target == MADOperationStateFinishing             && self.state == MADOperationStateExecuting)
+	|| (target == MADOperationStateFinished              && self.state == MADOperationStateFinishing);
 }
 
 - (void)evaluateConditions {
@@ -365,7 +368,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 	NSAssert(self.state == MADOperationStateReady, @"This operation must be performed on an operation queue or after reaching Ready state.");
 	MADLogDebug("MADOperation <%p:%@> main called. Cancelled: %s, InternalErrors: %lu",
 				self, self.name, self.isCancelled ? "YES" : "NO", (unsigned long)self.internalErrors.count);
-	
+	[self beginBackgroundTask];
 	if (!self.isCancelled && self.internalErrors.count == 0) {
 		self.state = MADOperationStateExecuting;
 		
@@ -417,14 +420,14 @@ static NSString * const MADOperatorSelectorState        = @"state";
 #pragma mark -
 #pragma mark Finishing
 
-	/**
-	Most operations may finish with a single error, if they have one at all.
-		This is a convenience method to simplify calling the actual `finish()`
-		method. This is also useful if you wish to finish with an error provided
-		by the system frameworks. As an example, see `DownloadEarthquakesOperation`
-		for how an error from an `NSURLSession` is passed along via the
-		`finishWithError()` method.
-	*/
+/**
+ Most operations may finish with a single error, if they have one at all.
+ This is a convenience method to simplify calling the actual `finish()`
+ method. This is also useful if you wish to finish with an error provided
+ by the system frameworks. As an example, see `DownloadEarthquakesOperation`
+ for how an error from an `NSURLSession` is passed along via the
+ `finishWithError()` method.
+ */
 - (void)finish {
 	[self finish:nil];
 }
@@ -493,15 +496,16 @@ static NSString * const MADOperatorSelectorState        = @"state";
 	}
 }
 
-	/**
-	 Subclasses may override `finished(_:)` if they wish to react to the operation
-		finishing with errors. For example, the `LoadModelOperation` implements
-		this method to potentially inform the user about an error when trying to
-		bring up the Core Data stack.
-	 */
+/**
+ Subclasses may override `finished(_:)` if they wish to react to the operation
+ finishing with errors. For example, the `LoadModelOperation` implements
+ this method to potentially inform the user about an error when trying to
+ bring up the Core Data stack.
+ */
 - (void)finished:(NSArray *)errors {
 	MADLogDebug("MADOperation <%p:%@> 'finished:' (base override point) called with %lu errors.",
 				self, self.name, (unsigned long)errors.count);
+	[self endBackgroundTask];
 	// This is a no-op by default. Subclasses may override this method to
 	// perform any cleanup or finalization tasks.
 	// For example, you might want to remove any temporary files or
@@ -511,15 +515,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
 - (void)waitUntilFinished {
 	[super waitUntilFinished];
 	/*
-	Waiting on operations is almost NEVER the right thing to do. It is
-		usually superior to use proper locking constructs, such as `dispatch_semaphore_t`
-		or `dispatch_group_notify`, or even `NSLocking` objects. Many developers
-		use waiting when they should instead be chaining discrete operations
-		together using dependencies.
+	 Waiting on operations is almost NEVER the right thing to do. It is
+	 usually superior to use proper locking constructs, such as `dispatch_semaphore_t`
+	 or `dispatch_group_notify`, or even `NSLocking` objects. Many developers
+	 use waiting when they should instead be chaining discrete operations
+	 together using dependencies.
 	 
 	 To reinforce this idea, invoking `waitUntilFinished()` will crash your
-		app, as incentive for you to find a more appropriate way to express
-		the behavior you're wishing to create.
+	 app, as incentive for you to find a more appropriate way to express
+	 the behavior you're wishing to create.
 	 */
 	NSAssert(NO, @"Waiting on operations is an anti-pattern. Remove this ONLY if you're absolutely sure there is No Other Way™.");
 }
@@ -541,7 +545,30 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (NSString *)name {
-	return NSStringFromClass(self.class);
+	// Override NSOperation's name property to provide a more descriptive,
+	// unique identifier for debugging.
+	return [NSString stringWithFormat:@"%@_%p", NSStringFromClass(self.class), self];
+}
+
+#pragma mark -
+#pragma mark Background Task Management
+
+- (void)beginBackgroundTask {
+	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:[self name] expirationHandler:^{
+		// The OS is about to kill the app. We must end our task.
+		MADLogError("Background time expired for operation: %@", [self name]);
+		[self endBackgroundTask];
+	}];
+	MADLogInfo("Background task started for operation: %@", [self name]);
+}
+
+- (void)endBackgroundTask {
+	// This check prevents us from trying to end an invalid task.
+	if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+		MADLogInfo("Ending background task for operation: %@", [self name]);
+		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+		self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+	}
 }
 
 @end
