@@ -5,6 +5,7 @@
 
 * Update designer UI so state doesn't get out of sync when user clicks away
 * Setup test databases for ~~MySQL~~ and MS SQL Server.
+* About Screen Background / Edit Document Object Background
 
 ## Secondary
 
