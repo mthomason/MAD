@@ -12,7 +12,7 @@
 @implementation MADAboutTableView
 
 - (void)awakeFromNib {
-    self.backgroundColor = [UIColor whiteColor];
+	self.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.estimatedRowHeight = 44.0;
     self.rowHeight = UITableViewAutomaticDimension;

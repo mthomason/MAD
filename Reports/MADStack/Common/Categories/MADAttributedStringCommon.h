@@ -13,10 +13,8 @@
 
 @interface MADAttributedStringCommon : NSObject
 
-	+ (instancetype)newAttributedStringEDATwitter;
-	+ (instancetype)newAttributedStringTwitter;
-	+ (instancetype)newAttributedStringFollowOnTwitter;
-	+ (instancetype)newAttributedStringTrademarkStatement;
++ (NSAttributedString *)AttributedStringFollowOnTwitter;
++ (NSAttributedString *)AttributedStringTrademarkStatement;
 
 @end
 

@@ -46,7 +46,7 @@
 		b.isAccessibilityElement = YES;
 		b.accessibilityTraits = UIAccessibilityTraitButton;
 		[b addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-		followOnTwitter = [MADAttributedStringCommon newAttributedStringFollowOnTwitter];
+		followOnTwitter = [MADAttributedStringCommon AttributedStringFollowOnTwitter];
 		[b setAttributedTitle:followOnTwitter forState:UIControlStateNormal];
 	};
 

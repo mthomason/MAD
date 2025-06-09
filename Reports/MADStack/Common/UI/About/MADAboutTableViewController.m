@@ -16,8 +16,8 @@
 #import "MADButtonTwitter.h"
 #import "MADOperationPromptError.h"
 #import "MADAttributedStringCommon.h"
+#import "MADThemeManager.h"
 #import "madlog.h"
-
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplication.h>
@@ -32,13 +32,12 @@
 
 static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutViewController";
 
-@interface MADAboutTableViewController ()
-    <MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MADAboutTableViewController () <MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @end
 
 @implementation MADAboutTableViewController
-
+/*
 + (void)initialize {
     [super initialize];
     
@@ -57,31 +56,28 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
         }
     }
 }
-
+*/
 + (instancetype)newAboutTableViewController {
-    UIStoryboard *storyboard;
-    id bundle, controller;
-    bundle = [NSBundle mainBundle];
-    storyboard = [UIStoryboard storyboardWithName:@"MADAbout" bundle:bundle];
-    controller = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierAboutViewController];
-    return controller;
+	return [[UIStoryboard storyboardWithName:@"MADAbout"
+									  bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:MADIdentifierAboutViewController];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.allowsSelection = YES;
+	NSLog(@"Nav:%@", self.navigationController);
     self.preferredContentSize = CGSizeMake(320.0, 260.0);
+	self.tableView.backgroundColor = [UIColor systemBackgroundColor];
     if (!UIAccessibilityIsReduceTransparencyEnabled()) {
-        self.tableView.backgroundColor = [UIColor clearColor];
-        id blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        id blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-        self.tableView.backgroundView = blurEffectView;
+        //id blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        //id blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        //self.tableView.backgroundView = blurEffectView;
         
-        UIPopoverPresentationController *popover;
-        if ((popover = [self.navigationController popoverPresentationController])) {
-            popover.backgroundColor = [UIColor clearColor];
-        }
-        self.tableView.separatorEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+        //UIPopoverPresentationController *popover;
+        //if ((popover = [self.navigationController popoverPresentationController])) {
+        //    popover.backgroundColor = [UIColor clearColor];
+        //}
+        ///self.tableView.separatorEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
     }
 }
 
@@ -94,175 +90,163 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 - (IBAction)unwindToAbout:(UIStoryboardSegue *)action { }
 
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
-                 fromViewController:(UIViewController *)fromViewController
+				 fromViewController:(UIViewController *)fromViewController
 							 sender:(nullable id)sender {
-    return action == @selector(unwindToAbout:);
+	return action == @selector(unwindToAbout:);
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MTSegueAboutGettingStarted"] ||
-        [segue.identifier isEqualToString:@"MTSegueAboutSwipeNext"]) {
-        ((MADAboutTableViewController *)segue.destinationViewController).delegate = self.delegate;
-    }
+	if ([segue.identifier isEqualToString:@"MTSegueAboutGettingStarted"] ||
+		[segue.identifier isEqualToString:@"MTSegueAboutSwipeNext"]) {
+		((MADAboutTableViewController *)segue.destinationViewController).delegate = self.delegate;
+	}
 }
 
 - (NSString *)versionText {
-    NSString *versionTextKey = NSLocalizedString(@"v%@", @"v%@");
-    NSString *globalBundleVersion = [AppDelegate bundleVersion];
-    NSString *versionText = [[NSString alloc] initWithFormat:versionTextKey, globalBundleVersion];
-    return versionText;
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"v%@", @"v%@"), [AppDelegate bundleVersion]];
 }
 
 - (NSString *)buildText {
-    NSString *buildTextKey = NSLocalizedString(@"r%@", @"r%@");
-    NSString *revision = [[MADApplication AppDelegate] revisionNumber];
-    
-    NSString *buildText = [[NSString alloc] initWithFormat:buildTextKey, revision];
-    return buildText;
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"r%@", @"r%@"), [[MADApplication AppDelegate] revisionNumber]];
 }
 
 - (IBAction)cancel:(id)sender {
-    [self.delegate viewControllerDidCancel: self];
+	[self.delegate viewControllerDidCancel: self];
 }
 
 - (IBAction)done:(id)sender {
-    [self.delegate viewControllerDidCancel: self];
+	[self.delegate viewControllerDidCancel: self];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller
-          didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError*)error {
-
-    MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
-    MADOperationPromptError *operationErrorDisplay = [[MADOperationPromptError alloc] initWithError:error viewController:self];
-    MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [operationErrorDisplay addDependency:finish];
-    [operationQueue addOperation:operationErrorDisplay];
- 
+		  didFinishWithResult:(MFMailComposeResult)result
+						error:(NSError*)error {
+	
+	MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
+	MADOperationPromptError *operationErrorDisplay = [[MADOperationPromptError alloc] initWithError:error viewController:self];
+	MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
+		[self dismissViewControllerAnimated:YES completion:nil];
+	}];
+	[operationErrorDisplay addDependency:finish];
+	[operationQueue addOperation:operationErrorDisplay];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+	return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MADTableViewCellBase *cell;
-    id attributedText;
-    
-    cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
-    cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
-
-    switch (indexPath.row) {
-
-        case 0:
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.label.textColor = [MADColorEverydayApps newColorBlueDark];
-            cell.label.text = NSLocalizedString([AppDelegate bundleDisplayName],
-                                                [AppDelegate bundleDisplayName]);
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.userInteractionEnabled = NO;
-            cell.marginStyle = MADTableViewCellMarginStyleTop;
-            break;
-
-        case 1: {
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = [self versionText];
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkGrayColor];
-            UILabel *l = [[UILabel alloc] initWithFrame:CGRectZero];
-            l.text = [self buildText];
-            l.font = cell.label.font;
-            l.textColor = [UIColor lightGrayColor];
-            cell.accessoryView = l;
-            [cell.accessoryView sizeToFit];
-            cell.userInteractionEnabled = NO;
-            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
-            break;
-        }
-
-        case 2: {
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = NSLocalizedString(@"By EVERYDAY APPS LLC in Cincinnati, OH.",
-                                                @"By EVERYDAY APPS LLC in Cincinnati, OH.");
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkGrayColor];
-            cell.userInteractionEnabled = NO;
-            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget: self
-                                                                              action: @selector(followEverydayApps)
-                                                                                size: small];
-            cell.accessoryView = b;
-            cell.marginStyle = MADTableViewCellMarginStyleBottom;
-            [cell.label sizeToFit];
-            break;
-        }
-            
-        case 3:
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = NSLocalizedString([AppDelegate humanReadableCopyright],
-                                                [AppDelegate humanReadableCopyright]);
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkGrayColor];
-            cell.userInteractionEnabled = NO;
-            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
-            break;
-            
-        case 4:
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            attributedText = [MADAttributedStringCommon newAttributedStringTrademarkStatement];
-            cell.label.attributedText = attributedText;
-            cell.label.textColor = [UIColor darkGrayColor];
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.userInteractionEnabled = NO;
-            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
-            break;
-
-        case 5: {
-            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.label.text = NSLocalizedString(@"Created by Michael Thomason for Everyday Apps.",
-                                                @"Created by Michael Thomason for Everyday Apps.");
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.label.textColor = [UIColor darkGrayColor];
-            cell.userInteractionEnabled = NO;
-            UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget: self
-                                                                              action: @selector(followMichael)
-                                                                                size: small];
-            cell.accessoryView = b;
-            cell.marginStyle = MADTableViewCellMarginStyleBottom;
-            [cell.label sizeToFit];
-            break;
-        }
-        default:
-            break;
-    }
-    [cell setNeedsLayout];
-    [cell setNeedsUpdateConstraints];
-    return cell;
+	MADTableViewCellBase *cell;
+	id attributedText;
+	
+	cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
+	cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
+	
+	switch (indexPath.row) {
+			
+		case 0:
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+			cell.label.textColor = [MADColorEverydayApps newColorRed];
+			cell.label.text = NSLocalizedString([AppDelegate bundleDisplayName],
+												[AppDelegate bundleDisplayName]);
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.userInteractionEnabled = NO;
+			cell.marginStyle = MADTableViewCellMarginStyleTop;
+			break;
+			
+		case 1: {
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+			cell.label.text = [self versionText];
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.label.textColor = [UIColor labelColor];
+			UILabel *l = [[UILabel alloc] initWithFrame:CGRectZero];
+			l.text = [self buildText];
+			l.font = cell.label.font;
+			l.textColor = [UIColor labelColor];
+			cell.accessoryView = l;
+			[cell.accessoryView sizeToFit];
+			cell.userInteractionEnabled = NO;
+			cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+			break;
+		}
+			
+		case 2: {
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+			cell.label.text = NSLocalizedString(@"By EVERYDAY APPS LLC in Cincinnati, OH.",
+												@"By EVERYDAY APPS LLC in Cincinnati, OH.");
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.label.textColor = [UIColor secondaryLabelColor];
+			cell.userInteractionEnabled = NO;
+			//UIButton *b = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget: self
+			//																  action: @selector(followEverydayApps)
+			//																	size: small];
+			//cell.accessoryView = b;
+			cell.marginStyle = MADTableViewCellMarginStyleBottom;
+			[cell.label sizeToFit];
+			break;
+		}
+			
+		case 3:
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+			cell.label.text = NSLocalizedString([AppDelegate humanReadableCopyright],
+												[AppDelegate humanReadableCopyright]);
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.label.textColor = [UIColor secondaryLabelColor];
+			cell.userInteractionEnabled = NO;
+			cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+			break;
+			
+		case 4:
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+			attributedText = [MADAttributedStringCommon AttributedStringTrademarkStatement];
+			cell.label.attributedText = attributedText;
+			cell.label.textColor = [UIColor secondaryLabelColor];
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.userInteractionEnabled = NO;
+			cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+			break;
+			
+		case 5: {
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+			cell.label.text = NSLocalizedString(@"Created by Michael Thomason for Everyday Apps.",
+												@"Created by Michael Thomason for Everyday Apps.");
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.label.textColor = [UIColor secondaryLabelColor];
+			cell.userInteractionEnabled = NO;
+			//cell.accessoryView = [MADButtonTwitter newButtonTwitterFolllowTwitterWithTarget: self
+			//																		 action: @selector(followMichael)
+			//																		   size: small];
+			cell.marginStyle = MADTableViewCellMarginStyleBottom;
+			[cell.label sizeToFit];
+			break;
+		}
+		default:
+			break;
+	}
+	[cell setNeedsLayout];
+	[cell setNeedsUpdateConstraints];
+	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)followUser:(NSString *)user {
 	os_log_error(GetDesignerLog(), "%s: Not implemented.", __PRETTY_FUNCTION__);
-	@throw [NSException exceptionWithName:@"NotImplemented"
-							   reason:@"Not implemented"
-							 userInfo:nil];
+	@throw [NSException exceptionWithName:@"NotImplemented" reason:@"Not implemented" userInfo:nil];
 }
 
 - (void)followEverydayApps {
-    [self followUser:@"EverydayApps"];
+	[self followUser:@"EverydayApps"];
 }
 
 - (void)followMichael {
-    [self followUser:@"MichaelThomason"];
+	[self followUser:@"MichaelThomason"];
 }
-
 
 @end
