@@ -1,22 +1,26 @@
 
 # TODO
 
+## Primary
+
 * Update designer UI so state doesn't get out of sync when user clicks away
-* Test all UI elements can be inserted correctly and work correctly (whitespace elements seem to have an issue)
-* See if something can be done about constraint warnings when the UI is off screen (it's not an issue yet, lol), or perhaps these are real issues, or something to do with animations
-* Test multiple rows
-* Fix sync issue with page slider being enabled
-* Setup test databases for MySQL and MS SQL Server.
+* Setup test databases for ~~MySQL~~ and MS SQL Server.
+
+## Secondary
+
 * Add store / monetization pathway
 * Fix problems with query visualization view
-* Make sure that error messages and password login/re-login is on the proper thread.
+
+## Tertiary
+
+* See if something can be done about constraint warnings when the UI is off screen (it's not an issue yet, lol), or perhaps these are real issues, or something to do with animations
+* Test multiple rows
 
 ---
 
 Icon generation, copy, and removal
 Query visualization caching
 Query visualization layout
-
 
 --
 
