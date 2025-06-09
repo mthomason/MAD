@@ -7,16 +7,6 @@
 //
 
 #import "MADOperationRefreshReload.h"
-#import <Foundation/NSArray.h>
-
-#import <MADFoundation/MADCredential.h>
-#import <MADFoundation/MADOperationQueue.h>
-
-#import <MADAPI/MADNotificationDidReadRows.h>
-#import <MADAPI/MADDatabaseConnection.h>
-
-#import <MAD/MADocument.h>
-
 #import "MADOperationGetCredentials.h"
 #import "MADOperationRefreshInitalizeMainDataTable.h"
 #import "MADOperationRefreshInitialize.h"
@@ -24,6 +14,13 @@
 #import "MADRefreshOperationReload.h"
 #import "MADOperationRefreshReloadProtocol.h"
 #import "madlog.h"
+
+#import <MADFoundation/MADCredential.h>
+#import <MADAPI/MADNotificationDidReadRows.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MAD/MADocument.h>
+
+#import <Foundation/NSArray.h>
 
 @interface MADOperationRefreshReload ()
 
