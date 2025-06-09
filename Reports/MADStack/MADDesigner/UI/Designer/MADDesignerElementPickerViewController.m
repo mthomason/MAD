@@ -107,10 +107,12 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	NSNumber *labelDynamic = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelDynamic];
 	NSNumber *labelStatic = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeLabelStatic];
 	NSNumber *aggregate = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeAggregate];
-	NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
-	NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
+	
+	// Add additional items following the pattern below.
+	// NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
+	// NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
 
-	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace]];
+	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate /*, image, whitespace */]];
 	
 	if ([MTStoreKitController sharedObject].barcodeDesignerEnabled) {
 		NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
@@ -137,6 +139,10 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
  
 	switch (madob.shortValue) {
 
+		case MADPrintPageElementTypeWhtiespace:
+			[self performSegueWithIdentifier:@"" sender:self];
+			break;
+			
 		case MADPrintPageElementTypeAggregate:
 			[self performSegueWithIdentifier:@"MTIdentifierSeguePushAggregateLabelNew" sender:self];
 			break;
