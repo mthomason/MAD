@@ -1633,8 +1633,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		navigation.modalPresentationStyle = UIModalPresentationPopover;
 		navigation.preferredContentSize = sizePopoverFonts();
 		
-		UIPopoverPresentationController *popoverController;
-		popoverController = navigation.popoverPresentationController;
+		UIPopoverPresentationController *popoverController = navigation.popoverPresentationController;
 		popoverController.delegate = strongself;
 		popoverController.sourceRect = [viewToEdit convertRect: viewToEdit.bounds
 														toView: strongself.view.scroller.container];

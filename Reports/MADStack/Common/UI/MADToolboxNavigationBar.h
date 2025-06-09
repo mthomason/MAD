@@ -9,9 +9,9 @@
 #ifndef Reports_MADNavigationBarFixedSize_h
 #define Reports_MADNavigationBarFixedSize_h
 
-#import "MADNavigationBar.h"
+#import <UIKit/UINavigationBar.h>
 
-@interface MADToolboxNavigationBar : MADNavigationBar
+@interface MADToolboxNavigationBar : UINavigationBar
 
 @end
 

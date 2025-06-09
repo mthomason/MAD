@@ -42,7 +42,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 @property (nonatomic, strong) MADToolboxPanel *layout;
 @property (nonatomic, strong) MADToolboxPanel *format;
 
-@property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlScene;
 @property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemSceneSelector;
 
 @property (nonatomic, weak) UIViewController *currentViewController;
@@ -72,7 +72,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 }
 
 - (CGSize)preferredContentSize {
-	switch (self.sceneSelector.selectedSegmentIndex) {
+	switch (self.segmentedControlScene.selectedSegmentIndex) {
 		case 0: return CGSizeMake(320.0, 240.0);
 		case 1: return CGSizeMake(320.0, 480.0);
 		case 2: return CGSizeMake(320.0, 280.0);
@@ -124,7 +124,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 	
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.translucent = YES;
-	self.sceneSelector.tintColor = [UIColor whiteColor];
+	self.segmentedControlScene.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
 }
 
@@ -147,7 +147,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
-	self.sceneSelector.center = CGPointMake(self.view.center.x, self.navigationItem.titleView.center.y);
+	//self.segmentedControlScene.center = CGPointMake(self.view.center.x, self.navigationItem.titleView.center.y);
 }
 
 #pragma mark -
