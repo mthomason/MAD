@@ -2350,31 +2350,18 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)saveWhiteSpace {
-	NSNumber *type;
-	NSDictionary *options;
-
-	type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeWhtiespace];
-	options = [[NSDictionary alloc] initWithObjectsAndKeys:
-											type, MTDocumentObjectDefinationType, nil];
-											
+	NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeWhtiespace];
+	NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys: type, MTDocumentObjectDefinationType, nil];
 	[self insertDocumentObjectWithDefination: options];
 	[self scrollToDetailSectionView];
 }
 
 - (void)saveDynamicLabel:(MADQueryChooseFieldController *)viewController {
-	
-	MADQueryChooseFieldController *dynamicFieldController;
-	dynamicFieldController = (MADQueryChooseFieldController *)viewController;
- 
-	NSManagedObjectID *objectID = dynamicFieldController.queryFieldID.copy;
-
+	NSManagedObjectID *objectID = [viewController.queryFieldID copy];
 	NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelDynamic];
-	NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys:
-									keyDynamic, MTDocumentObjectDefinationType,
-									objectID, MTDocumentObjectDefinationObject, nil];
+	NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys: keyDynamic, MTDocumentObjectDefinationType, objectID, MTDocumentObjectDefinationObject, nil];
 	
 	[self insertDocumentObjectWithDefination: definations];
-	
 	[self scrollToDetailSectionView];
 }
 
@@ -2384,8 +2371,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		
 		if (viewController.fieldObjectID != nil) {
 			UIManagedDocument *document = self.document;
-			RptqDocumentElementAggregate *aggregateToEdit;
-			aggregateToEdit = [document.managedObjectContext objectWithID: _aggregateToEditObjectID];
+			RptqDocumentElementAggregate *aggregateToEdit = [document.managedObjectContext objectWithID: _aggregateToEditObjectID];
 			[aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
 																inputType: MTAggregateFunctionInputTypeField
 																groupType: viewController.aggregateGroupByType
@@ -2397,9 +2383,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	} else {
 		if (viewController.fieldObjectID != nil) {
 		
-			NSNumber *groupNumber;
-			groupNumber = [[NSNumber alloc] initWithInteger:viewController.groupTypeSectionNumber];
-			
+			NSNumber *groupNumber = [[NSNumber alloc] initWithInteger:viewController.groupTypeSectionNumber];
 			[self insertDocumentObjectNewAggregateFunctionWithType: viewController.aggregateFunctionType
 														 inputType: MTAggregateFunctionInputTypeField
 													   inputObject: viewController.fieldObjectID
@@ -2421,7 +2405,6 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		RptqDocumentElementBarcode *object;
 		object = [RptqDocumentElementBarcode newDocumentElementWithIdentifier: _objectIdEditBarcode.longLongValue
 															fromObjectContext: managedObjectContext];
-
 		[object updateWithBarcode: barcode
 						 field1ID: viewController.queryField1ID
 						 field2ID: viewController.queryField2ID];
@@ -2437,12 +2420,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		
 		NSManagedObjectID *queryField1ID = viewController.queryField1ID;
 		if (queryField1ID != nil) {
-			defination[MTDocumentObjectDefinationField1] = queryField1ID.copy;
+			defination[MTDocumentObjectDefinationField1] = [queryField1ID copy];
 		}
 		
 		NSManagedObjectID *queryField2ID = viewController.queryField2ID;
 		if (queryField2ID != nil) {
-			defination[MTDocumentObjectDefinationField2] = queryField2ID.copy;
+			defination[MTDocumentObjectDefinationField2] = [queryField2ID copy];
 		}
 		[self insertDocumentObjectWithDefination: defination];
 		
@@ -2454,8 +2437,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark Helpers
 
 - (BOOL)elementViewIsSelected:(MADDesignerElementView *)elementView {
-	NSNumber *elementViewIdentifier = @(elementView.identifier);
-	return [self.selectedElementIDs containsObject:elementViewIdentifier];
+	return [self.selectedElementIDs containsObject:@(elementView.identifier)];
 }
 
 - (void)adjustContextOffsetForToolboxWithToolboxType:(MTToolboxType)toolboxType {
@@ -2574,44 +2556,42 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	MADocument *document = self.document;
 	RptqDocument *rptqDocument = document.activeDocumentModel;
 	
-	MADDesignerSectionView *collectionView;
-	MADSectionLayoutManager *layoutManager;
-
-	collectionView = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
+	MADDesignerSectionView *collectionView = [self getSectionViewForDocumentSection: rptqDocument.hasDetailSection];
 	NSNumber *identifier = [[NSNumber alloc] initWithLongLong:collectionView.identifier];
-	layoutManager = document.sectionLayoutManagers[identifier];
+	MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[identifier];
 	
 	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
-	MADDesignerViewController * __weak weakself = self;
+
+	__weak typeof(self) weakSelf = self;
 	[collectionView performBatchUpdates:^{
 
+		__strong typeof(self) strongSelf = weakSelf;
+		if (!strongSelf) return;
+
+		
 		RptqDocument *bgRptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: managedObjectContext];
 		RptqDocumentSection *bgSection = rptqDocument.hasDetailSection;
-		
-		MADDesignerViewController * sself = weakself;
-		
-		NSIndexPath *path;
-		NSArray *indexPathsInserted;
-		MADSectionLayoutAttributes *layoutAttribute;
+
 		RptqDocumentElement *element = [bgRptqDocument addDocumentObject: documentObjectDefination
 													managedObjectContext: managedObjectContext];
 
 		NSArray *objects = [[NSArray alloc] initWithObjects:element, nil];
 
-		NSError * __autoreleasing error = NULL;
+		NSError *error = NULL;
 		if (![managedObjectContext obtainPermanentIDsForObjects: objects
 														  error: &error]) {
-			os_log_error(OS_LOG_DEFAULT, "Error getting permanent IDs: %s" , error.localizedDescription.UTF8String);
+			os_log_error(GetDesignerLog(), "Error getting permanent IDs: %@" , error.localizedDescription);
 		}
 		
-		path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
-								   inSection: 0];
+		NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
+												inSection: 0];
 		
-		sself->_identifierJustDisplayed = element.identifier;
+		strongSelf->_identifierJustDisplayed = element.identifier;
 		
+		MADSectionLayoutAttributes *layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
 		layoutAttribute.frame = [element elementViewFrameDesignerFrameCalculated];
 		
-		indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
+		NSArray *indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
 		[bgSection addDocumentObject: element
 					   withDropPoint: layoutAttribute.frame.origin
 				managedObjectContext: managedObjectContext];
@@ -2619,25 +2599,28 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		[collectionView insertItemsAtIndexPaths: indexPathsInserted];
 
 		if ([managedObjectContext hasChanges]) {
-			NSError *saveError = NULL;
+			NSError *saveError = nil;
 			[managedObjectContext save:&saveError];
 			if (saveError != nil) {
 				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 			}
 		}
 
-		layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
 		layoutAttribute.objectID = element.identifier;
-		
 		[layoutManager addItem:layoutAttribute];
 		[layoutManager layout];
 
 	} completion:^(BOOL finished) {
-		typeof(self) strongself = weakself;
+		typeof(self) strongself = weakSelf;
+		if (!strongself) return;
 		MADocument *doc = strongself.document;
 		[strongself.view.scroller.container setNeedsUpdateConstraints];
 		[doc updateChangeCount: UIDocumentChangeDone];
-		[doc autosaveWithCompletionHandler:^(BOOL success) { }];
+		[doc autosaveWithCompletionHandler:^(BOOL success) {
+			if (!success) {
+				os_log_info(GetDesignerLog(), "Autosave did not succeed.");
+			}
+		}];
 	}];
 }
 
