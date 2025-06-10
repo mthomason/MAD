@@ -1553,8 +1553,6 @@ BOOL storeEnabled(void) {
 
 - (void)presentationTransitionWillBegin {
 	// Add a custom dimming view behind the presented view controller's view
-	//[[self containerView] addSubview:_dimmingView];
-	//[_dimmingView addSubview:[[self presentedViewController] view]];
 	
 	// Use the transition coordinator to set up the animations.
 	id <UIViewControllerTransitionCoordinator> transitionCoordinator =

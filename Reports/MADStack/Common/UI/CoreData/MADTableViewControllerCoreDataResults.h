@@ -12,13 +12,12 @@
 #import <CoreData/NSFetchedResultsController.h>
 #import <UIKit/UITableViewController.h>
 
-@interface MADTableViewControllerCoreDataResults : UITableViewController
-    <NSFetchedResultsControllerDelegate>
+@interface MADTableViewControllerCoreDataResults : UITableViewController <NSFetchedResultsControllerDelegate>
 
-    @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-    @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
-    - (void)performFetch;
+- (void)performFetch;
 
 @end
 

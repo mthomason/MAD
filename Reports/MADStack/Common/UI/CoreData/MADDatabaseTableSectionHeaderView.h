@@ -15,11 +15,11 @@
 
 @interface MADDatabaseTableSectionHeaderView : UITableViewHeaderFooterView
 
-    @property (nonatomic, assign) NSInteger section;
-    @property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
+@property (nonatomic, assign) NSInteger section;
+@property (nonatomic, weak) id <MADSectionHeaderViewDelegate> delegate;
 
-    - (void)setTitle:(NSString *)title;
-    - (void)toggleOpenWithUserAction:(BOOL)userAction;
+- (void)setTitle:(NSString *)title;
+- (void)toggleOpenWithUserAction:(BOOL)userAction;
 
 @end
 

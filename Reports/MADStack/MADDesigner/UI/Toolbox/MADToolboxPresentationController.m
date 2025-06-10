@@ -97,13 +97,11 @@
 	
 	UINavigationController *navController = (UINavigationController *)self.presentingViewController;
 	UITabBarController *tabBarController = navController.viewControllers.firstObject;
-	UIViewController <MADViewControllerProtocol> *designer;
-	if ([tabBarController isKindOfClass:[UITabBarController class]]) {
-		designer = tabBarController.selectedViewController;
-	} else {
-		designer = (UIViewController <MADViewControllerProtocol> *)self.popoverPresentationControllerDelegate;
-	}
-	//    UIViewController <MADViewControllerProtocol> *designer = tabBarController.selectedViewController;
+
+	UIViewController <MADViewControllerProtocol> *designer = [tabBarController isKindOfClass:[UITabBarController class]] ?
+		tabBarController.selectedViewController :
+		(UIViewController <MADViewControllerProtocol> *)self.popoverPresentationControllerDelegate;
+
 	self.designerViewController = designer;
 	
 	UIView *containerView = self.containerView;
