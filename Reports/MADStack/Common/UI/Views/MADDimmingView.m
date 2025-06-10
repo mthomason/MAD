@@ -13,10 +13,8 @@
 @implementation MADDimmingView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-	if (self) {
-		UIColor *backgroundColor = [[UIColor alloc] initWithWhite: 0.0 alpha: 1.0/3.0];
-		self.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:1.0/3.0];// backgroundColor;
+	if (self = [super initWithFrame:frame]) {
+		self.backgroundColor = [UIColor clearColor];
 		self.alpha = 0.0;
 	}
 	return self;
