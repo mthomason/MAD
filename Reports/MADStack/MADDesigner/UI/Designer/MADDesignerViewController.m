@@ -927,18 +927,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		UIFont *captionFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
 		CGFloat pointsize = captionFont.pointSize;
 		
-		NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray;
-		sectionControlViewsArray = self.view.scroller.container.sectionLabels.allValues;
-		[sectionControlViewsArray enumerateObjectsWithOptions: NSEnumerationConcurrent
-												   usingBlock: ^(__kindof MADDesignerSectionLabel * _Nonnull controlView, NSUInteger idx, BOOL * _Nonnull stop) {
-													   
-			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-				controlView.font = [captionFont fontWithSize:pointsize / scale];
-				controlView.contentScaleFactor = scaleWithScreen;
-				[controlView setNeedsDisplay];
-			}];
-			
-		}];
+		// REPLACED: Concurrent enumeration with simple for-loop
+		NSArray <__kindof MADDesignerSectionLabel *> *sectionControlViewsArray = self.view.scroller.container.sectionLabels.allValues;
+		for (__kindof MADDesignerSectionLabel *controlView in sectionControlViewsArray) {
+			controlView.font = [captionFont fontWithSize:pointsize / scale];
+			controlView.contentScaleFactor = scaleWithScreen;
+			[controlView setNeedsDisplay];
+		}
 		
 		NSEnumerator *objectEnumerator = self.view.scroller.container.sectionViews.objectEnumerator;
 		for (UICollectionView *section in objectEnumerator) {
