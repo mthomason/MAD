@@ -22,7 +22,7 @@
 @interface MADToolboxPresentationController() <UIGestureRecognizerDelegate>
 
 @property (nonatomic, readwrite, strong) UIGestureRecognizer *dismissGestureReconizer;
-@property (nonatomic, readwrite, weak)   UIViewController <MADViewControllerProtocol> *designerViewController;
+@property (nonatomic, readwrite, weak) UIViewController <MADViewControllerProtocol> *designerViewController;
 @property (nonatomic, readwrite, strong) MADDimmingView *dimmingView;
 
 @end
