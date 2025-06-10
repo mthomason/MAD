@@ -38,7 +38,7 @@
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
 #import "MADDesignerSectionLayoutLiquid.h"
-#import "NSLayoutConstraint+Designer.h"
+#import "MADLayoutConstraint.h"
 #import "UITapGestureRecognizer+Designer.h"
 #import "MADNavigationController.h"
 #import "UIViewController+tabBarItem.h"
@@ -494,19 +494,19 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	self.view.scroller.delegate = self;
 	self.strayTouchGesture = tap;
 	
-	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint newLayoutConstraintView: self.view containerLeft: self.view.scroller.container];
+	NSLayoutConstraint *constraintContentLeft = [MADLayoutConstraint LayoutConstraintView: self.view containerLeft: self.view.scroller.container];
 	constraintContentLeft.priority = 999;
-	NSLayoutConstraint *constraintContentRight = [MADLayoutConstraint newLayoutConstraintView: self.view containerRight: self.view.scroller.container];
+	NSLayoutConstraint *constraintContentRight = [MADLayoutConstraint LayoutConstraintView: self.view containerRight: self.view.scroller.container];
 	constraintContentRight.priority = 999;
 	NSLayoutConstraint *constraintWidth = [MADLayoutConstraint newLayoutConstraintContent: self.view.scroller.container width: [self widthForCurrentZoom]];
 	
 	[self.view addConstraints:@[
 		constraintContentLeft,
 		constraintContentRight,
-		[MADLayoutConstraint newLayoutConstraintView: self.view.scroller containerTop: self.view.scroller.container],
-		[MADLayoutConstraint newLayoutConstraintScroller: self.view.scroller bottom: self.view.scroller.container],
+		[MADLayoutConstraint LayoutConstraintView: self.view.scroller containerTop: self.view.scroller.container],
+		[MADLayoutConstraint LayoutConstraintScroller: self.view.scroller bottom: self.view.scroller.container],
 		constraintWidth,
-		[MADLayoutConstraint newLayoutConstraintViewScrollerTop: self.view.scroller view: self.view.scroller.container]
+		[MADLayoutConstraint LayoutConstraintViewScrollerTop: self.view.scroller view: self.view.scroller.container]
 	]];
 
 	self.layoutConstraintContainerLeft = constraintContentLeft;

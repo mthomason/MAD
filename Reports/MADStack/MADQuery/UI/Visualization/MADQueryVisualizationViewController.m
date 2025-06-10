@@ -26,7 +26,7 @@
 #import "MADQueryVisualizationCacheManager.h"
 #import "MADQueryVisualizationModel.h"
 #import "MADHierarchicalDisplayModel.h"
-#import "NSLayoutConstraint+Designer.h"
+#import "MADLayoutConstraint.h"
 
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>
@@ -1040,10 +1040,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 }
 
 - (NSDictionary <NSString *, NSLayoutConstraint *> *)constraints:(MADHierarchicalChildController *)vc center:(CGPoint)c {
-	NSLayoutConstraint *width = [MADLayoutConstraint newLayoutConstraint: vc.view width: vc.preferredContentSize.width];
-	NSLayoutConstraint *height = [MADLayoutConstraint newLayoutConstraint: vc.view height: vc.preferredContentSize.height];
-	NSLayoutConstraint *centerX = [MADLayoutConstraint newLayoutConstraint: vc.view toView: self.contentView centerX: c.x];
-	NSLayoutConstraint *centerY = [MADLayoutConstraint newLayoutConstraint: vc.view toView: self.contentView centerY: c.y];
+	NSLayoutConstraint *width = [MADLayoutConstraint LayoutConstraint: vc.view width: vc.preferredContentSize.width];
+	NSLayoutConstraint *height = [MADLayoutConstraint LayoutConstraint: vc.view height: vc.preferredContentSize.height];
+	NSLayoutConstraint *centerX = [MADLayoutConstraint LayoutConstraint: vc.view toView: self.contentView centerX: c.x];
+	NSLayoutConstraint *centerY = [MADLayoutConstraint LayoutConstraint: vc.view toView: self.contentView centerY: c.y];
 	return @{
 		keyCenterX: centerX,
 		keyCenterY: centerY,

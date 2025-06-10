@@ -13,7 +13,7 @@
 #import <Foundation/NSSet.h>
 
 #import "MADRulerView.h"
-#import "NSLayoutConstraint+Designer.h"
+#import "MADLayoutConstraint.h"
 
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
@@ -146,14 +146,14 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 	allConstraints = nil;
 }
 
-+ (NSArray *)constraintsForSectionView:(UIView *)sectionView contentView:(UIView *)contentView {
-	id left = [MADLayoutConstraint newLayoutConstraintViewLeft:sectionView
-													   content:contentView
-													   padding:MTReportDesignerBorderPaddingSides];
++ (NSArray <NSLayoutConstraint *> *)constraintsForSectionView:(UIView *)sectionView contentView:(UIView *)contentView {
+	id left = [MADLayoutConstraint LayoutConstraintViewLeft:sectionView
+													content:contentView
+													padding:MTReportDesignerBorderPaddingSides];
 	
-	id right = [MADLayoutConstraint newLayoutConstraintViewRight:sectionView
-														 content:contentView
-														 padding:MTReportDesignerBorderPaddingSides];
+	id right = [MADLayoutConstraint LayoutConstraintViewRight:sectionView
+													  content:contentView
+													  padding:MTReportDesignerBorderPaddingSides];
 	
 	id results = [[NSArray alloc] initWithObjects: left, right, nil];
 	return results;
@@ -368,20 +368,20 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 		
 		sectionViewLabel.tag = (NSInteger)sectionIndex;
 		
-		constraintViewTop = [MADLayoutConstraint newLayoutConstraintViewTop: sectionIndex == 0 ? self.ruler : self.sectionViews[lastReportSectionKey]
+		constraintViewTop = [MADLayoutConstraint LayoutConstraintViewTop: sectionIndex == 0 ? self.ruler : self.sectionViews[lastReportSectionKey]
 																 viewBottom: sectionView
 																	padding: MTReportDesignerBufferPaddingVertical];
 		
-		constraintViewHeight = [MADLayoutConstraint newLayoutConstraintView: sectionView
+		constraintViewHeight = [MADLayoutConstraint LayoutConstraintView: sectionView
 																	 height: measurementSectionHeight];
 		
-		constraintLabelRight = [MADLayoutConstraint newLayoutConstraintLabelRight: sectionViewLabel container: sectionView
+		constraintLabelRight = [MADLayoutConstraint LayoutConstraintLabelRight: sectionViewLabel container: sectionView
 																		  padding: MTReportDesignerSectionLabelPaddingRight];
 		
-		lcLabelBottom = [MADLayoutConstraint newLayoutConstraintLabelBottom: sectionViewLabel container: sectionView
+		lcLabelBottom = [MADLayoutConstraint LayoutConstraintLabelBottom: sectionViewLabel container: sectionView
 																			padding: MTReportDesignerBufferPaddingVertical];
 		
-		lcLabelHeight = [MADLayoutConstraint newLayoutConstraintLabel: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
+		lcLabelHeight = [MADLayoutConstraint LayoutConstraintLabel: sectionViewLabel toHeight: MTReportDesignerSectionLabelHeight];
 		
 		collectionViewConstraints = [MADDesignerLayoutDesignView constraintsForSectionView:sectionView contentView:self];
 		
@@ -418,7 +418,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 	measurementControlHeight += MTReportDesignerBorderPaddingVertical;
 
 	NSLayoutConstraint *constraintContentViewHeight;
-	constraintContentViewHeight = [MADLayoutConstraint newLayoutConstraintView: self
+	constraintContentViewHeight = [MADLayoutConstraint LayoutConstraintView: self
 																		height: measurementControlHeight];
 
 	[self.viewDidAppearDesignerScrollViewConstraints addObject:constraintContentViewHeight];
@@ -426,7 +426,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 	
 	NSLayoutConstraint *constraintToScollerBottom;
-	constraintToScollerBottom = [MADLayoutConstraint newLayoutConstraintView: self
+	constraintToScollerBottom = [MADLayoutConstraint LayoutConstraintView: self
 															 containerBottom: self.superview];
 	
 	[self.viewDidAppearDesignerScrollViewConstraints addObject:constraintToScollerBottom];
