@@ -7,64 +7,55 @@
 //
 
 #import "MADDimmingView.h"
-#import "MADDesignerScrollView.h"
+#import "madlog.h"
+#import "MADDesignerSectionView.h"
 
 @implementation MADDimmingView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        UIColor *backgroundColor = [[UIColor alloc] initWithWhite: 0.0
-                                                            alpha: 1.0/3.0];
-        self.backgroundColor = backgroundColor;
-        self.alpha = 0.0;
-        
-    }
-    return self;
+	self = [super initWithFrame:frame];
+	if (self) {
+		UIColor *backgroundColor = [[UIColor alloc] initWithWhite: 0.0 alpha: 1.0/3.0];
+		self.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:1.0/3.0];// backgroundColor;
+		self.alpha = 0.0;
+	}
+	return self;
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    id hitview = nil;
-    UIView *container = _container,
-           *foundView;
-    CGPoint pointNormalized = [container convertPoint: point fromView: self];
-    CGRect rectNormalized;
-    
-    NSSet *passthroughViews = self.passthroughViews;
-    for (foundView in passthroughViews) {
-        
-        rectNormalized = [foundView convertRect: foundView.bounds
-                                         toView: container];
+- (nullable UIView *)hitTest:(CGPoint)point withEvent:(nullable UIEvent *)event {
+	UIView *hitview = nil;
+	UIView *container = _container;
+	CGPoint pointNormalized = [container convertPoint: point fromView: self];
+	NSSet *passthroughViews = self.passthroughViews;
 
-        if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
-            
-            hitview = foundView;
-            goto shortThisB;
-            break;
-        }
-    }
-    
-    if (hitview == nil) {
-        UIView *passthroughContainer;
-        NSSet *passthroughContainers = self.passthroughContainers;
-        for (passthroughContainer in passthroughContainers) {
-            rectNormalized = [passthroughContainer convertRect: passthroughContainer.bounds
-                                                        toView: container];
-            if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
-                hitview = passthroughContainer;
-                goto shortThisB;
-                break;
-            }
-        }
-        
-        if (hitview == nil && self.passthroughContainer != nil) {
-            hitview = self.passthroughContainer;
-        } else if (hitview == nil) {
-            hitview = [super hitTest:point withEvent:event];
-        }
-    }
-shortThisB:
-    return hitview;
+	for (UIView *foundView in passthroughViews) {
+		CGRect rectNormalized = [foundView convertRect: foundView.bounds
+												toView: container];
+		if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
+			if (![foundView isKindOfClass:[MADDesignerSectionView class]]) {
+				hitview = foundView;
+				break;
+			}
+		}
+	}
+	
+	if (hitview == nil) {
+		NSSet *passthroughContainers = self.passthroughContainers;
+		for (UIView *passthroughContainer in passthroughContainers) {
+			CGRect rectNormalized = [passthroughContainer convertRect: passthroughContainer.bounds
+															   toView: container];
+			if (CGRectContainsPoint(rectNormalized, pointNormalized)) {
+				hitview = passthroughContainer;
+				break;
+			}
+		}
+		if (hitview == nil && self.passthroughContainer != nil) {
+			hitview = self.passthroughContainer;
+		} else if (hitview == nil) {
+			hitview = [super hitTest:point withEvent:event];
+		}
+	}
+	return hitview;
 }
 
 @end
