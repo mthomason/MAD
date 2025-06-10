@@ -283,10 +283,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	}];
 	
 	if (statusLabelIndex == NSNotFound) {
-		MADLabelStatus *labelStatus;
-		NSMutableArray <__kindof UIBarButtonItem *> *toolbarItems;
-		toolbarItems = self.toolbarItems.mutableCopy;
-		labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y, 30.0, 44.0)];
+		NSMutableArray <__kindof UIBarButtonItem *> *toolbarItems = self.toolbarItems.mutableCopy;
+		MADLabelStatus *labelStatus = [[MADLabelStatus alloc] initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y, 30.0, 44.0)];
 		
 		UIBarButtonItem *buttonStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
 		[toolbarItems insertObject: buttonStatus atIndex: 0];
@@ -294,11 +292,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		self.labelStatus = labelStatus;
 	}
 
-
 	UIBarButtonItem *buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
 																				   target: self
 																				   action: @selector(refresh:)];
 	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
+
 	UIBarButtonItem *buttonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
 																				target: nil
 																				action: @selector(done:)];
@@ -695,8 +693,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	NSString *temporaryDirectoryPath = NSTemporaryDirectory();
 	NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
 	NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-	MADActivityItemProviderPdf *activityItemProviderPdf;
-	activityItemProviderPdf= [[MADActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
+	MADActivityItemProviderPdf *activityItemProviderPdf = [[MADActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
 	activityItemProviderPdf.document = self.document;
 	return activityItemProviderPdf;
 }

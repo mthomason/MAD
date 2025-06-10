@@ -51,19 +51,16 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate;
-    vibrantTableViewCellDelegate = _vibrantTableViewCellDelegate;
-    
+    id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate = _vibrantTableViewCellDelegate;
     if (vibrantTableViewCellDelegate == nil) return;
+
     if (_initalSetupComplete) return;
-    
     _initalSetupComplete = YES;
-    CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, 320.0, 320.0);
     
     UIBlurEffect *effect = [vibrantTableViewCellDelegate blurEffectForCell:self];
     UIVibrancyEffect *veffect = [UIVibrancyEffect effectForBlurEffect:effect];
     UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:veffect];
-    UILabel *label = [[UILabel alloc] initWithFrame:rect];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 320.0, 320.0)];
     
     label.textColor = [UIColor greenColor];
     label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
@@ -125,7 +122,7 @@
 }
 
 + (UIBlurEffectStyle)blurEffectStyle {
-    return UIBlurEffectStyleExtraLight;
+	return UIBlurEffectStyleRegular; //UIBlurEffectStyleExtraLight;
 }
 
 - (void)updateConstraints {

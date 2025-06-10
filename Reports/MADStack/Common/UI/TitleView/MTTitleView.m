@@ -36,15 +36,12 @@ static inline CGRect LabelRect(CGRect bounds) {
 }
 
 - (void)initialize {
-	
 	UILabel *label = [[UILabel alloc] initWithFrame:LabelRect(self.bounds)];
 	label.textAlignment = NSTextAlignmentCenter;
 	label.text = @"";
 	[self addSubview:label];
 	_label = label;
-	
-	UIColor *color = [UIColor clearColor];
-	self.backgroundColor = color;
+	self.backgroundColor = [UIColor clearColor];
 }
 
 @end
@@ -57,15 +54,12 @@ static inline CGRect LabelRect(CGRect bounds) {
 	switch (style) {
 		case MADTitleViewQueryTableRoot:
 			self.label.textColor = [UIColor whiteColor];
-			self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0
-															   weight: UIFontWeightSemibold];
+			self.label.font = [UIFont monospacedDigitSystemFontOfSize: 12.0 weight: UIFontWeightSemibold];
 			break;
 		case MADTitleViewQueryTableChild:
 			self.label.textColor = [MADColorEverydayApps newColorBlue];
-			self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0
-															   weight: UIFontWeightMedium];
+			self.label.font = [UIFont monospacedDigitSystemFontOfSize: 11.0 weight: UIFontWeightMedium];
 			break;
-			
 		default:
 			break;
 	}
@@ -75,7 +69,6 @@ static inline CGRect LabelRect(CGRect bounds) {
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
 	[[MADColorEverydayApps newColorBlue] setStroke];
-	
 	CGMutablePathRef border = CGPathCreateMutable();
 	CGContextRef currentContext = UIGraphicsGetCurrentContext();
 	CGContextSetLineWidth(currentContext, 1.0 / self.traitCollection.displayScale);
@@ -84,8 +77,6 @@ static inline CGRect LabelRect(CGRect bounds) {
 	CGContextAddPath(currentContext, border);
 	CGContextDrawPath(currentContext, kCGPathStroke);
 	CGPathRelease(border);
-	
 }
-
 
 @end
