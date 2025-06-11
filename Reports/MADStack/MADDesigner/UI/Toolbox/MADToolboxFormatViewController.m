@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/16/13.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADToolboxFormatViewController.h"
@@ -37,15 +37,17 @@
 
 @property (nonatomic, strong) NSSet <NSNumber *> *userSelectedObjectIDs;
 
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellDecimals;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCurrency;
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDecimals;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellCurrency;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
 
-@property (strong, nonatomic) IBOutlet UIStepper *stepperNumberOfDecimals;
-@property (strong, nonatomic) IBOutlet UILabel *labelNumberOfDecimals;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperNumberOfDecimals;
+@property (nonatomic, weak) IBOutlet UILabel *labelNumberOfDecimals;
+@property (nonatomic, weak) IBOutlet UILabel *labelCurrency;
+@property (nonatomic, weak) IBOutlet UILabel *labelCurrencyLocal;
 
-@property (nonatomic, strong) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
-@property (nonatomic, strong) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
+@property (nonatomic, weak) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
+@property (nonatomic, weak) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
 
 @property (nonatomic, assign) BOOL completedInitalLayout;
 
@@ -62,6 +64,9 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.completedInitalLayout = NO;
+	self.labelNumberOfDecimals.textColor = [UIColor labelColor];
+	self.labelCurrency.textColor = [UIColor labelColor];
+	self.labelCurrencyLocal.textColor = [UIColor labelColor];
 }
 
 - (void)viewWillLayoutSubviews {

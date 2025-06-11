@@ -384,6 +384,8 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="labelCurrency" destination="Knw-Oy-RqO" id="yWx-CS-aAq"/>
+                        <outlet property="labelCurrencyLocal" destination="DDR-qy-KoC" id="PoX-Pc-bWv"/>
                         <outlet property="labelNumberOfDecimals" destination="tA5-5B-Mmf" id="a5S-XP-jZh"/>
                         <outlet property="stepperNumberOfDecimals" destination="zMI-SA-aIT" id="ZSX-07-je7"/>
                         <outlet property="tableViewCellCurrency" destination="WJY-xx-L9x" id="K0m-7Q-trr"/>
@@ -681,7 +683,7 @@
                                                         <constraint firstAttribute="width" constant="42" id="nc6-6P-6xG"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <nil key="textColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
                                             </subviews>
@@ -719,7 +721,7 @@
                                                         <constraint firstAttribute="width" constant="73" id="2qW-h1-gtc"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <nil key="textColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
                                                 <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="n0w-UZ-1rG">
@@ -818,7 +820,7 @@
                                                         <constraint firstAttribute="width" constant="73" id="CtW-Vx-8St"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <nil key="textColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
                                                 <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="9YP-Bs-tvr">
@@ -911,7 +913,7 @@
                                                         <constraint firstAttribute="width" constant="73" id="cUz-JQ-svk"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <nil key="textColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
                                                 <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="f9q-uD-uVV">
@@ -994,6 +996,10 @@
                         <outlet property="labelBorderLeft" destination="KyK-Pp-3lM" id="h0s-LM-EhO"/>
                         <outlet property="labelBorderRight" destination="AHY-f3-C29" id="vnH-A6-rI0"/>
                         <outlet property="labelBorderTop" destination="9rW-0M-JUU" id="VMI-TE-gIo"/>
+                        <outlet property="labelHeaderBorder" destination="aoj-Ql-fjp" id="ZT7-sF-c4D"/>
+                        <outlet property="labelHeaderMargin" destination="UVi-Q6-MQZ" id="03Y-ec-fVY"/>
+                        <outlet property="labelHeaderPadding" destination="ac2-MK-MkW" id="o9H-3y-DYW"/>
+                        <outlet property="labelHeaderSize" destination="C3C-gS-Vco" id="98Y-0T-0ZP"/>
                         <outlet property="labelMarginBottom" destination="shV-Fk-flU" id="IBG-Za-jSc"/>
                         <outlet property="labelMarginLeft" destination="LV4-td-6U2" id="Hma-B4-zTF"/>
                         <outlet property="labelMarginRight" destination="y6k-SA-Fsm" id="h7d-En-O48"/>

@@ -86,6 +86,12 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 @property (nonatomic, weak) IBOutlet UITableViewCell *fontLabelTableViewCell;
 @property (nonatomic, weak) IBOutlet UILabel *labelFontSize;
 
+// These next for labels represent section headers.
+@property (weak, nonatomic) IBOutlet UILabel *labelHeaderPadding;
+@property (weak, nonatomic) IBOutlet UILabel *labelHeaderBorder;
+@property (weak, nonatomic) IBOutlet UILabel *labelHeaderMargin;
+@property (weak, nonatomic) IBOutlet UILabel *labelHeaderSize;
+
 @property (nonatomic, weak) IBOutlet UILabel *labelPaddingTop;
 @property (nonatomic, weak) IBOutlet UILabel *labelPaddingBottom;
 @property (nonatomic, weak) IBOutlet UILabel *labelPaddingLeft;
@@ -162,12 +168,12 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 		NSFontAttributeName : font,
 		NSStrokeColorAttributeName : [UIColor whiteColor]
 	};
-	NSAttributedString *boldButton, *boldButtonSelected;
-	boldButton = [[NSAttributedString alloc] initWithString: @"\uf26c"
-												 attributes: attributes];
-	boldButtonSelected = [[NSAttributedString alloc] initWithString: @"\uf26c"
-														 attributes: attributesSelected];
+	NSAttributedString *boldButton = [[NSAttributedString alloc] initWithString: @"\uf26c"
+																	 attributes: attributes];
+	NSAttributedString *boldButtonSelected = [[NSAttributedString alloc] initWithString: @"\uf26c"
+																			 attributes: attributesSelected];
 	self.tableView.delegate = self;
+		
 	self.buttonBold.layer.borderColor = self.view.tintColor.CGColor;
 	self.buttonBold.layer.cornerRadius = CornerRadius;
 	self.buttonBold.layer.borderWidth = BorderWidth;
@@ -216,6 +222,31 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 	self.buttonUnderline.titleLabel.font = font;
 	self.buttonUnderline.imageView.image = nil;
 	
+	self.labelFontName.textColor = [UIColor secondaryLabelColor];
+	self.labelFontSize.textColor = [UIColor secondaryLabelColor];
+	self.labelBorderTop.textColor = [UIColor secondaryLabelColor];
+	self.labelMarginTop.textColor = [UIColor secondaryLabelColor];
+	self.labelSizeWidth.textColor = [UIColor secondaryLabelColor];
+	self.labelBorderLeft.textColor = [UIColor secondaryLabelColor];
+	self.labelMarginLeft.textColor = [UIColor secondaryLabelColor];
+	self.labelPaddingTop.textColor = [UIColor secondaryLabelColor];
+	self.labelSizeHeight.textColor = [UIColor secondaryLabelColor];
+	self.labelBorderRight.textColor = [UIColor secondaryLabelColor];
+	self.labelMarginRight.textColor = [UIColor secondaryLabelColor];
+	self.labelPaddingLeft.textColor = [UIColor secondaryLabelColor];
+	self.labelBorderBottom.textColor = [UIColor secondaryLabelColor];
+	self.labelMarginBottom.textColor = [UIColor secondaryLabelColor];
+	self.labelPaddingRight.textColor = [UIColor secondaryLabelColor];
+	self.labelPaddingBottom.textColor = [UIColor secondaryLabelColor];
+
+
+	self.labelHeaderSize.textColor = [UIColor labelColor];
+	self.labelHeaderBorder.textColor = [UIColor labelColor];
+	self.labelHeaderMargin.textColor = [UIColor labelColor];
+	self.labelHeaderPadding.textColor = [UIColor labelColor];
+
+	self.fontLabelTableViewCell.textLabel.textColor = [UIColor labelColor];
+
 	_completedInitalLayout = NO;
 }
 
