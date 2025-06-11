@@ -59,7 +59,7 @@
                                             <constraint firstItem="LGd-yZ-pnR" firstAttribute="centerY" secondItem="9hz-QS-stY" secondAttribute="centerY" id="j1N-nq-tec"/>
                                         </constraints>
                                         <connections>
-                                            <segue destination="vpu-SA-ssI" kind="show" identifier="MADIdentifierStoryboardSeguePushFontPicker" id="jsY-cc-2nO"/>
+                                            <segue destination="vpu-SA-ssI" kind="show" identifier="MADIdentifierStoryboardSeguePushFontPicker" destinationCreationSelector="segueFontController:" id="jsY-cc-2nO"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MADReuseIDTVCFontSize" id="2bG-1b-zef">
@@ -263,7 +263,7 @@
                     <navigationItem key="navigationItem" id="Nlj-8r-lwL">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="eJs-Au-RN1">
-                            <rect key="frame" x="67.5" y="6" width="240" height="32"/>
+                            <rect key="frame" x="68" y="6" width="240" height="32"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Style"/>
@@ -631,7 +631,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r3l-3v-Rad" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1812" y="6994"/>
+            <point key="canvasLocation" x="1983" y="6994"/>
         </scene>
         <!--Toolbox Style Layout View Controller-->
         <scene sceneID="4HE-7c-v45">

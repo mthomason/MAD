@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 2/29/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef MAD_MADFonts_h

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 2/29/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #import "MADFonts.h"
@@ -19,13 +19,7 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
-		
-		NSArray *unsortedNames = [UIFont familyNames], *sortedNames, *familyNames;
-		sortedNames = [unsortedNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-		
-		familyNames = [[NSArray alloc] initWithArray:sortedNames];
-		self.familyNames = familyNames;
-
+		self.familyNames = [[UIFont familyNames] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 	}
 	return self;
 }

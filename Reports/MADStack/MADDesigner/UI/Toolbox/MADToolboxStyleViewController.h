@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/5/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MTReportDesignerFontSettingsViewController_h
@@ -13,7 +13,6 @@
 #import "MADToolboxControllerProtocol.h"
 #import "MADToolboxDisplayProtocol.h"
 #import "MADViewControllerDocumentProtocol.h"
-//#import "MADFontSelectorViewController.h"
 #import <UIKit/UITableViewController.h>
 
 @class MADocument, MADToolboxStyleViewController, MTFont;

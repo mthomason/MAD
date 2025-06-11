@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/6/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MTReportDesignerFontSelectorViewController_h
@@ -18,7 +18,7 @@
 
 @interface MADFontSelectorViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, MADToolboxDisplayProtocol>
 
-@property (nonatomic, weak) id <MADReportDesignerFontSelectorDelegate> delegate;
+@property (nonatomic, weak) id <MADReportDesignerFontSelectorDelegate> fontSelectorDelegate;
 @property (nonatomic, assign) BOOL clearsBackground;
 
 - (void)setFamilyName:(NSString *)familyName;

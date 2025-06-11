@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/6/12.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -66,11 +66,6 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 	return self;
 }
 
-- (void)initialize {
-	MADFonts *fonts = [[MADFonts alloc] init];
-	self.madFonts = fonts;
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
@@ -79,17 +74,15 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 	self.tableView.dataSource = self;
 	self.tableView.backgroundColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorRed];
-	self.navigationController.navigationBar.alpha = 1.0000f;
+	self.navigationController.navigationBar.alpha = 1.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
 	[self.navigationController setNavigationBarHidden: NO animated: animated];
 	if (self.clearsBackground) {
 		self.tableView.backgroundView = nil;
 	}
-	
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -98,8 +91,7 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 
 - (void)viewWillLayoutSubviews {
 	[super viewWillLayoutSubviews];
-	
-	self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0000f, 680.0000f);
+	self.navigationController.parentViewController.preferredContentSize = CGSizeMake(320.0, 680.0);
 	
 	UIEdgeInsets safeAreaInsets;
 	MADViewSafeAreaInserts(self.view, &safeAreaInsets);
@@ -112,7 +104,6 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 		self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - safeAreaInsets.top);
 		self.firstTimeViewWillLayoutSubviews = NO;
 	}
-	
 }
 
 - (void)viewDidLayoutSubviews {
@@ -129,13 +120,14 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *reusableCellWithIdentifier = @"MADFontSelectorDefaultCell";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCellWithIdentifier forIndexPath:indexPath];
-	
+
 	NSString *familyName = self.madFonts.familyNames[(NSUInteger)indexPath.row];
+	cell.textLabel.textColor = [UIColor labelColor];
 	cell.textLabel.text = familyName;
 	cell.textLabel.font = [UIFont fontWithName: familyName
 										  size: cell.textLabel.font.pointSize];
-	cell.accessoryType = [self.familyName isEqualToString:familyName] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-	
+	cell.accessoryType = [self.familyName isEqualToString:familyName] ?
+							UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 	return cell;
 }
 
@@ -148,7 +140,6 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
 	for (UITableViewCell *visibleCell in tableView.visibleCells) {
 		visibleCell.accessoryType = UITableViewCellAccessoryNone;
 	}
@@ -157,9 +148,8 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 	cell.accessoryType = UITableViewCellAccessoryCheckmark;
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	
 	NSString *familyName = self.madFonts.familyNames[(NSUInteger)indexPath.row];
-	[self.delegate tableViewControllerDidUpdateFontToFontWithName:familyName];
+	[self.fontSelectorDelegate tableViewControllerDidUpdateFontToFontWithName:familyName];
 }
 
 - (void)setFamilyName:(NSString *)familyName {

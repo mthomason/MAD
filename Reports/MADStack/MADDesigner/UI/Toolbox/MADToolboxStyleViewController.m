@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/5/12.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #if ! __has_feature(objc_arc)
@@ -43,7 +43,7 @@
 #import <UIKit/UIButton.h>
 #import <UIKit/UIImageView.h>
 #import <UIKit/UIStoryboardSegue.h>
-
+#import <UIKit/UINibDeclarations.h>
 #import <QuartzCore/CALayer.h>
 #import <CoreData/NSManagedObjectContext.h>
 #import <asl.h>
@@ -876,10 +876,17 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 #pragma mark -
 #pragma mark UIViewController
 
+- (IBSegueAction MADFontSelectorViewController *)segueFontController:(NSCoder *)coder {
+	MADFontSelectorViewController *result = [[MADFontSelectorViewController alloc] initWithCoder:coder];
+	result.fontSelectorDelegate = self;
+	return result;
+}
+
+
 - (void)prepareForSegues:(UIStoryboardSegue *)segue sender:(id)sender {
 	if ([segue.identifier isEqualToString:MADIdentifierStoryboardSeguePushFontPicker]) {
 		MADFontSelectorViewController *destination = segue.destinationViewController;
-		destination.delegate = self;
+		destination.fontSelectorDelegate = self;
 		destination.clearsBackground = self.clearsBackground;
 		NSNumber *identifier = [self.userSelectedObjectIDs anyObject];
 		RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
