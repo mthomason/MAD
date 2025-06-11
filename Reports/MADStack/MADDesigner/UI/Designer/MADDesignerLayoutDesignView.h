@@ -18,8 +18,7 @@ extern const CGFloat MTReportDesignerBufferPaddingVertical;
 extern const CGFloat MTReportDesignerSectionLabelPaddingRight;
 extern const CGFloat MTReportDesignerSectionLabelHeight;
 
-@class UITapGestureRecognizer, MADRulerView, MADDesignerSectionView, MADDesignerSectionLabel,
-		MADDesignerElementView;
+@class UITapGestureRecognizer, MADRulerView, MADDesignerSectionView, MADDesignerSectionLabel, MADDesignerElementView;
 
 @protocol MADDesignerDesignViewDataSource, MADDesignerDesignViewDelegate;
 

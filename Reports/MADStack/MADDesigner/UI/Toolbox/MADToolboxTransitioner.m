@@ -7,13 +7,13 @@
 //
 
 #import "MADToolboxTransitioner.h"
+#import "MADToolboxPresentationController.h"
+#import "MADViewControllerProtocol.h"
+#import "madlog.h"
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UIPopoverPresentationController.h>
-
-#import "MADToolboxPresentationController.h"
-#import "MADViewControllerProtocol.h"
 
 @interface MADToolboxTransitioningDelegate ()
 
@@ -33,7 +33,7 @@
 - (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
 																   presentingController:(UIViewController *)presenting
 																	   sourceController:(UIViewController *)source {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	MADToolboxAnimatedTransitioning *animationController = [self animationController];
 	animationController.toolboxVisible = YES;
 	return animationController;
@@ -92,7 +92,8 @@
 - (UIPresentationController *)presentationControllerForPresentedViewController: (UIViewController *)presented
 													  presentingViewController: (UIViewController *)presenting
 														  sourceViewController: (UIViewController *)source {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	UIView *passthroughContainer = _passthroughContainer;
 	id <UIPopoverPresentationControllerDelegate> popoverPresentationControllerDelegate = _popoverPresentationControllerDelegate;
 	
@@ -144,12 +145,13 @@
 }
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)context {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	UITabBarController *tabBarController = nil;
 	UINavigationController *toolboxNavigationController = nil;
 	UINavigationController *navController = nil;
 	
-	BOOL isToolboxVisible = _toolboxVisible, showOnSide;
+	BOOL isToolboxVisible = _toolboxVisible;
 	if (isToolboxVisible == NO) {
 		navController = [context viewControllerForKey:UITransitionContextToViewControllerKey];
 		tabBarController = navController.viewControllers.lastObject;
@@ -160,7 +162,7 @@
 		toolboxNavigationController = (UINavigationController *)[context viewControllerForKey:UITransitionContextToViewControllerKey];
 	}
 	
-	showOnSide = [((MADToolboxPresentationController *)toolboxNavigationController.presentationController) showOnSide];
+	BOOL showOnSide = [((MADToolboxPresentationController *)toolboxNavigationController.presentationController) showOnSide];
 	
 	if (isToolboxVisible) {
 		[context.containerView addSubview:toolboxNavigationController.view];

@@ -81,7 +81,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 
-    if (self = [super initWithCoder:aDecoder]) {
+	if (self = [super initWithCoder:aDecoder]) {
 		UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]];
 		self.layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
 		self.format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];

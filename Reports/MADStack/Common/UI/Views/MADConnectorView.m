@@ -14,7 +14,6 @@
 #import <QuartzCore/CALayer.h>
 
 static inline CGRect CGRectSafeInset(CGRect, CGFloat, CGFloat);
-
 static inline CGRect CGRectSafeInset(CGRect rect, CGFloat insetX, CGFloat insetY) {
 	CGFloat actualInsetX = MIN(insetX, rect.size.width / 2.0);
 	CGFloat actualInsetY = MIN(insetY, rect.size.height / 2.0);
