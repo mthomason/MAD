@@ -3,7 +3,8 @@
 
 ## Primary
 
-* Update designer UI so state doesn't get out of sync when user clicks away
+* ~~Update designer UI so state doesn't get out of sync when user clicks away~~
+* Update toolbox UI for dark mode
 * Setup test databases for ~~MySQL~~ and MS SQL Server.
 
 ## Secondary
