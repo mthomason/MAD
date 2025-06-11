@@ -115,11 +115,11 @@
 	if (presentedViewController.transitionCoordinator) {
 		
 		[presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-			self.dimmingView.alpha = 1.0000f;
+			self.dimmingView.alpha = 1.0;
 		} completion:nil];
 		
 	} else {
-		self.dimmingView.alpha = 1.0000f;
+		self.dimmingView.alpha = 1.0;
 	}
 }
 
@@ -213,9 +213,14 @@
 
 - (void)dismiss {
 	[((UIViewController <MADViewControllerProtocol> *)self.designerViewController) setHidesStatusBar: NO];
-	[self.presentingViewController dismissViewControllerAnimated: YES
-													  completion: ^{
-		[self.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)self];
+	UIViewController *presentingViewController = self.presentingViewController;
+	__weak typeof(self) weakSelf = self;
+	[presentingViewController dismissViewControllerAnimated: YES
+												 completion: ^{
+		__strong typeof(self) strongSelf = weakSelf;
+		if (strongSelf) {
+			[strongSelf.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)strongSelf];
+		}
 	}];
 }
 

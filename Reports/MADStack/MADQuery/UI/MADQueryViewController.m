@@ -34,7 +34,6 @@
 #import "MADQueryViewControllerTableLayout.h"
 #import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
 #import "MADAttributedStringQueryController.h"
-#import "MADViewTableHeader+QueryViewSectionTypes.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
@@ -42,7 +41,6 @@
 #import "MADOperationGetCredentials.h"
 #import "MADThemeManager.h"
 #import "madlog.h"
-
 
 #import <MADAPI/MADQuery.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -488,16 +486,15 @@ BOOL storeEnabled(void) {
 - (void)deleteQueryTableFromTableView: (UITableView *)tableView
 						  atIndexPath: (NSIndexPath *)indexPath {
 	MADocument *document = self.document;
-	MADocument * __weak weakDocument = document;
 	[self ingnoreManagedObjectContextChanges:document.managedObjectContext];
 
 	_suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
 	
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
-	typeof(self) __weak weakself = self;
+	__weak typeof(self) weakself = self;
+	__weak MADocument *weakDocument = document;
 	[private performBlockAndWait:^{
 		typeof(self) strongself = weakself;
 		MADocument *strongDocument = weakDocument;
@@ -508,15 +505,14 @@ BOOL storeEnabled(void) {
 		NSUInteger numberOfTables = rptqQuery.hasQueryTables.count;
 		
 		BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
-		MADQueryViewDataSource *oldQueryLayout, *newQueryLayout;
-		oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
-															   reportingEnabled: reportingEnabled
-															handleConfigureCell: nil];
+		MADQueryViewDataSource *oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
+																					   reportingEnabled: reportingEnabled
+																					handleConfigureCell: nil];
 		
-		newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables - 1
-															   reportingEnabled: reportingEnabled
-															handleConfigureCell: nil];
-		
+		MADQueryViewDataSource *newQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables - 1
+																					   reportingEnabled: reportingEnabled
+																					handleConfigureCell: nil];
+
 		NSIndexSet *indexSetSectionsOld = oldQueryLayout.sectionTypesIndexs;
 		NSMutableIndexSet *indexSetSectionsOldM = indexSetSectionsOld.mutableCopy;
 		[indexSetSectionsOldM removeIndexes:newQueryLayout.sectionTypesIndexs];
@@ -555,7 +551,6 @@ BOOL storeEnabled(void) {
 		NSMutableArray <NSIndexPath *> *cellsToDelete = [[NSMutableArray alloc] init];
 		
 		short numberOfSections = strongself.queryViewDataSource.count;
-		
 		for (short section = 0; section < numberOfSections; section++) {
 			
 			NSArray <NSIndexPath *> *cells = nil;
@@ -655,7 +650,6 @@ BOOL storeEnabled(void) {
 		
 		NSError *error = nil;
 		BOOL successSave = [private save:&error];
-		
 		if (!successSave && error != nil) {
 			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
@@ -671,7 +665,7 @@ BOOL storeEnabled(void) {
 	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
-	typeof(self) __weak weakself = self;
+	__weak typeof(self) weakself = self;
 	[private performBlockAndWait:^{
 		typeof(self) strongself = weakself;
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -699,8 +693,8 @@ BOOL storeEnabled(void) {
 	[document.managedObjectContext deleteObject:predicate];
 
 	NSError *error = nil;
-	[document.managedObjectContext save:&error];
-	if (error != nil) {
+	BOOL successSave = [document.managedObjectContext save:&error];
+	if (!successSave && error != nil) {
 		os_log_error(GetDesignerLog(), "Error saving managed object context: %@", error);
 	}
 	[document updateChangeCount: UIDocumentChangeDone];
@@ -793,7 +787,7 @@ BOOL storeEnabled(void) {
 - (void)viewController:(MADQueryBuilderAddTableViewController *)vc addedQueryTableWithID:(NSManagedObjectID *)objectID {
 	
 	MADocument *document = self.document;
-	typeof(self) __weak weakself = self;
+	__weak typeof(self) weakself = self;
 	
 	[self dismissViewController];
 	
@@ -885,9 +879,9 @@ BOOL storeEnabled(void) {
 		
 	}];
 	
-	NSError * __autoreleasing error = NULL;
-	[document.managedObjectContext save:&error];
-	if (error != nil) {
+	NSError *error = nil;
+	BOOL savedContext = [document.managedObjectContext save:&error];
+	if (!savedContext && error != nil) {
 		os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 	}
 	[document updateChangeCount: UIDocumentChangeDone];
@@ -925,7 +919,7 @@ BOOL storeEnabled(void) {
 
 - (NSString *)title {
 	if (_title == nil) {
-		_title = NSLocalizedString(@"MAD Query", @"View controller title.");
+		_title = NSLocalizedString(@"MAD Query", @"Query view controller title.");
 	}
 	return _title;
 }
@@ -949,17 +943,14 @@ BOOL storeEnabled(void) {
 #pragma mark MADDesignerSectionLayoutDelegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
-	
 	MADocument *document = self.document;
-	[document.activeDocumentModel setHeight: height
-							forSectionAtRow: _lastSelectedRowNumber];
+	[document.activeDocumentModel setHeight: height forSectionAtRow: _lastSelectedRowNumber];
 	[document saveContext];
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 	MADocument *document = self.document;
-	[document.activeDocumentModel setVisibility: isVisible
-								forSectionAtRow: _lastSelectedRowNumber];
+	[document.activeDocumentModel setVisibility: isVisible forSectionAtRow: _lastSelectedRowNumber];
 	[document saveContext];
 }
 
@@ -1382,11 +1373,9 @@ BOOL storeEnabled(void) {
 
 - (void)queryViewDelegate:(MADQueryViewDelegate *)delegate handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
 
-	NSString *ownedByUser = NSStringFromSelector(@selector(ownedByUser));
-	NSString *entityName = NSStringFromClass([RptqDatabase class]);
-	NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabase class])];
 	fr.fetchLimit = 1;
-	fr.relationshipKeyPathsForPrefetching = @[ownedByUser];
+	fr.relationshipKeyPathsForPrefetching = @[NSStringFromSelector(@selector(ownedByUser))];
 	fr.resultType = NSManagedObjectResultType;
 
 	NSError *error = nil;
@@ -1396,14 +1385,11 @@ BOOL storeEnabled(void) {
 	}
 
 	RptqDatabaseCredentals *databaseCredentals = ((RptqDatabase *) results.firstObject).ownedByUser;
-
 	MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:databaseCredentals];
-	
 	MADOperationGetCredentials *operationGetCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection:databaseConnection
 																										  viewController:self];
 	self.credentailsQueue.maxConcurrentOperationCount = 1;
 	[self.credentailsQueue addOperation:operationGetCredentials];
-	
 	_showingTableIndex = index;
 }
 
@@ -1416,14 +1402,12 @@ BOOL storeEnabled(void) {
 	
 	RptqQueryTable *table = [queryTablesResultsController objectAtIndexPath: indexPathUpdate];
 	
-	MADDatabaseConnection *databaseConnection;
-	databaseConnection = [MADDatabaseConnection newDatabaseConnection:table.databaseSchemaTable.inDatabase.ownedByUser];
+	MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:table.databaseSchemaTable.inDatabase.ownedByUser];
 	
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
 	
-	MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery;
-	rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
-																											 object: table.databaseSchemaTable];
+	MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
+																																											  object: table.databaseSchemaTable];
 	rquery.credential = [credentials copy];
 	if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
 		db.delegate = ((NSObject <MADDatabaseResultsProtocol> *)rquery);

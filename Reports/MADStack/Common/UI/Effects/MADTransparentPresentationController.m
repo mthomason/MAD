@@ -13,31 +13,29 @@
 @implementation MADTransparentPresentationController
 
 + (void)initialize {
-    [super initialize];
-    if (self == [MADTransparentPresentationController self]) {
-        @autoreleasepool {
-            NSArray <Class <UIAppearanceContainer>> *classes;
-            classes = [[NSArray alloc] initWithObjects: self, nil];
-            UINavigationBar *appearanceProxy;
-            appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-            appearanceProxy.barTintColor = [UIColor clearColor];
-        }
-    }
+	[super initialize];
+	if (self == [MADTransparentPresentationController self]) {
+		@autoreleasepool {
+			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: self, nil];
+			UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
+			appearanceProxy.barTintColor = [UIColor clearColor];
+		}
+	}
 }
 
 - (instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController {
-    if (self = [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
-        
-    }
-    return self;
+	if (self = [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController]) {
+		
+	}
+	return self;
 }
 
 - (BOOL) shouldRemovePresentersView {
-    return NO;
+	return NO;
 }
 
 - (void)presentationTransitionWillBegin {
-    [super presentationTransitionWillBegin];
+	[super presentationTransitionWillBegin];
 }
 
 @end

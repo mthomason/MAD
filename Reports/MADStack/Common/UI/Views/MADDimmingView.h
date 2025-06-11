@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/4/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2025 Michael Thomason. All rights reserved.
 //
 
 #ifndef Reports_MADDimmingView_h
