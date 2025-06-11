@@ -7,7 +7,10 @@
 //
 
 #import "MADToolboxPresentationController.h"
-
+#import "MADDesignerViewController.h"
+#import "MADDimmingView.h"
+#import "MADViewControllerProtocol.h"
+#import "madlog.h"
 #import <UIKit/UIGestureRecognizer.h>
 #import <UIKit/UITapGestureRecognizer.h>
 #import <UIKit/UISwipeGestureRecognizer.h>
@@ -15,9 +18,6 @@
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UITabBarController.h>
 #import <UIKit/UIPopoverPresentationController.h>
-
-#import "MADDimmingView.h"
-#import "MADViewControllerProtocol.h"
 
 @interface MADToolboxPresentationController() <UIGestureRecognizerDelegate>
 
@@ -33,11 +33,13 @@
 
 - (void)presentationTransitionDidEnd:(BOOL)completed {
 	[super presentationTransitionDidEnd:completed];
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 }
 
 - (void)dismissalTransitionDidEnd:(BOOL)completed {
 	[super presentationTransitionDidEnd:completed];
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	[self removeObserver: self
 			  forKeyPath: NSStringFromSelector(@selector(passthroughContainer))];
 	[self removeObserver: self
@@ -48,7 +50,8 @@
 					  ofObject:(id)object
 						change:(NSDictionary <NSKeyValueChangeKey, id> *)change
 					   context:(void *)context {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	if ([keyPath isEqualToString:NSStringFromSelector(@selector(passthroughViews))]) {
 		
 		self.dimmingView.passthroughViews = self.passthroughViews;
@@ -89,12 +92,9 @@
 	return self;
 }
 
-- (void)handleSwipeAway:(UIGestureRecognizer *)gestureReconizer {
-	[self dismiss];
-}
-
 - (void)presentationTransitionWillBegin {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	UINavigationController *navController = (UINavigationController *)self.presentingViewController;
 	UITabBarController *tabBarController = navController.viewControllers.firstObject;
 
@@ -124,6 +124,8 @@
 }
 
 - (void)dismissalTransitionWillBegin {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	if (self.presentedViewController.transitionCoordinator) {
 		typeof(self) __weak weakself = self;
 		[self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -159,12 +161,14 @@
 
 - (void)containerViewWillLayoutSubviews {
 	[super containerViewWillLayoutSubviews];
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	self.dimmingView.frame = self.containerView.bounds;
 	self.presentedView.frame = [self frameOfPresentedViewInContainerView];
 }
 
 - (void)containerViewDidLayoutSubviews {
 	[super containerViewDidLayoutSubviews];
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 }
 
 - (BOOL)shouldPresentInFullscreen { return YES; }
@@ -203,6 +207,7 @@
 }
 
 - (void)dimmingViewTapped:(UIGestureRecognizer *)gesture {
+	MADLogDebug("%s: gestureReconizer: %@", __PRETTY_FUNCTION__, gesture);
 	if (gesture.state == UIGestureRecognizerStateEnded) {
 		if ([self.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)self]) {
 			[self dismiss];
@@ -210,18 +215,34 @@
 	}
 }
 
+- (void)handleSwipeAway:(UIGestureRecognizer *)gesture {
+	MADLogDebug("%s: gestureReconizer: %@", __PRETTY_FUNCTION__, gesture);
+	if (gesture.state == UIGestureRecognizerStateEnded) {
+		if ([self.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)self]) {
+			[self dismiss];
+		}
+	}
+}
 
 - (void)dismiss {
-	[((UIViewController <MADViewControllerProtocol> *)self.designerViewController) setHidesStatusBar: NO];
-	UIViewController *presentingViewController = self.presentingViewController;
-	__weak typeof(self) weakSelf = self;
-	[presentingViewController dismissViewControllerAnimated: YES
-												 completion: ^{
-		__strong typeof(self) strongSelf = weakSelf;
-		if (strongSelf) {
-			[strongSelf.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)strongSelf];
+	id <UIAdaptivePresentationControllerDelegate> delegate = self.delegate;
+	MADLogDebug("%s: presentingViewController: %@ presentedViewController: %@ delegate: %@", __PRETTY_FUNCTION__, self.presentingViewController, self.presentedViewController, delegate);
+	if ([delegate isKindOfClass:[MADDesignerViewController class]]) {	// This is a fucking hack.  This presentation controller shouldn't know about `MADDesignerViewController`, but here we are.
+		if ([delegate respondsToSelector:@selector(actionHideToolbox)]) {
+			[(MADDesignerViewController *)delegate actionHideToolbox];
 		}
-	}];
+	} else {
+		[((UIViewController <MADViewControllerProtocol> *)self.designerViewController) setHidesStatusBar: NO];
+		UIViewController *presentingViewController = self.presentingViewController;
+		__weak typeof(self) weakSelf = self;
+		[presentingViewController dismissViewControllerAnimated: YES
+													 completion: ^{
+			__strong typeof(self) strongSelf = weakSelf;
+			if (strongSelf) {
+				[strongSelf.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)strongSelf];
+			}
+		}];
+	}
 }
 
 - (BOOL)accessibilityPerformEscape {

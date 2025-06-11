@@ -968,6 +968,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark MADDesignerSectionLayoutDelegate
 
 - (void)sectionLayoutSettingsDidFinish:(MADDesignerSectionLayoutController *)controller {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	[self actionHideToolbox];
 }
 
@@ -1375,8 +1376,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		}];
 
 		NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeImage];
-		NSDictionary *defination;
-		defination = [[NSDictionary alloc] initWithObjectsAndKeys:
+		NSDictionary *defination = [[NSDictionary alloc] initWithObjectsAndKeys:
 					  type,           MTDocumentObjectDefinationType,
 					  selectedImage,  MTDocumentObjectDefinationObject, nil];
 		[self insertDocumentObjectWithDefination: defination];
@@ -1401,7 +1401,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (UIViewController *)presentationController:(UIPresentationController *)controller
 						viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	UIViewController *result = nil;
 	id presented = controller.presentedViewController;
 	if (style != UIModalPresentationPopover && [presented isKindOfClass:[UINavigationController class]] == NO) {
@@ -1453,6 +1454,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark UIPopoverPresentationControllerDelegate
 
 - (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	popoverPresentationController.backgroundColor = nil;
 }
 
@@ -1461,6 +1463,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	[self actionDismiss];
 	[self setDisplayActive];
 }
@@ -2036,6 +2039,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 #pragma mark MADReportSectionDelegate Protocol
 
 - (void)designView:(MADDesignerLayoutDesignView *)designView handleTapStray:(UITapGestureRecognizer *)sender {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	if (sender.state != UIGestureRecognizerStateEnded) return;
 	if (self.presentedViewController != nil) {
 		[self actionHideToolbox];
@@ -2043,7 +2047,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (void)designView:(MADDesignerLayoutDesignView *)designView handleTapLabel:(UITapGestureRecognizer *)sender {
-	
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
+
 	if (sender.state != UIGestureRecognizerStateEnded) return;
 	
 	MADDesignerSectionLabel *label = (MADDesignerSectionLabel *)sender.view;
@@ -3350,6 +3355,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (IBAction)actionDismiss {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	[self deselectAllElementsAnimated:YES];
 	__strong MADocument *document = self.document;
 	if ([document.managedObjectContext hasChanges]) {
@@ -3362,6 +3368,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 - (IBAction)actionHideToolbox {
+	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	self.hidesStatusBar = NO;
 
 	typeof(self) __weak weakself = self;
@@ -3395,7 +3402,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	__weak typeof(self) weakSelf = self;
 	[self presentViewController:self.navigationControllerToolbox animated:YES completion:^{
-		[weakSelf adjustContextOffsetForToolboxWithToolboxType:MTToolboxTypeElement];
+		__strong typeof(self) strongSelf = weakSelf;
+		strongSelf.navigationControllerToolbox.presentationController.delegate = strongSelf;
+		[strongSelf adjustContextOffsetForToolboxWithToolboxType:MTToolboxTypeElement];
 		MADLogDebug("%s: Toolbox presentation completed", __PRETTY_FUNCTION__);
 	}];
 }

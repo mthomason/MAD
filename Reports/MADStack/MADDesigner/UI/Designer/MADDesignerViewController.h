@@ -23,6 +23,7 @@
 
 + (instancetype)newDesignerViewController:(MADocument *)document;
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
+- (IBAction)actionHideToolbox;
 
 @end
 
