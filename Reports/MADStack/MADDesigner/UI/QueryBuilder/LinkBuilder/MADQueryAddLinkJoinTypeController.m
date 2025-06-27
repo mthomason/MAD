@@ -11,30 +11,24 @@
 #endif
 
 #import "MADQueryAddLinkJoinTypeController.h"
-
-#import <UIKit/UILabel.h>
-
 #import "MADQueryBuilderAddLinkJoinTypeDelegate.h"
-
 #import <MADAPI/MADDatabaseConnection.h>
-
 #import <MAD/MADocument.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
-
 #import <MAD/MADSQLJoinType.h>
-
 #import <MAD/MADDatabaseConnection+Constructor.h>
+#import <UIKit/UILabel.h>
 
 @interface MADQueryAddLinkJoinTypeController ()
 
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellEquiJoin;
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellEquiJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
 
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellCrossJoin;
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellInnerJoin;
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellLeftOuterJoin;
-	@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellRightOuterJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellCrossJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellInnerJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellLeftOuterJoin;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellRightOuterJoin;
 
 @end
 

@@ -17,9 +17,9 @@
 
 @interface MADQueryValueFromFieldController : UIViewController
 
-	@property (nonatomic, weak) id <MADQueryValueFromFieldControllerDelegate> enterStringDelegate;
-	@property (nonatomic, weak) MADocument *document;
-	@property (nonatomic, copy) NSManagedObjectID *schemaFieldObjectId;
+@property (nonatomic, weak) id <MADQueryValueFromFieldControllerDelegate> enterStringDelegate;
+@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, copy) NSManagedObjectID *schemaFieldObjectId;
 
 @end
 

@@ -237,7 +237,6 @@
 }
 
 - (void)updateRightLabelState {
-
 	BOOL enabled = [self firstFieldSet];
 	self.tableViewCellTableFieldTwo.userInteractionEnabled = enabled;
 	self.tableViewCellTableFieldTwo.textLabel.enabled = enabled;

@@ -132,8 +132,7 @@ BOOL storeEnabled(void) {
 			
 			UISwitch *switchQueryMode = [[UISwitch alloc] initWithFrame:CGRectZero];
 			switchQueryMode.on = [[NSUserDefaults standardUserDefaults] boolForKey: MADIdentifierDefaultsViewerDesired];
-			[switchQueryMode addTarget: nil action: @selector(handleToggleReportingMode:)
-					  forControlEvents: UIControlEventValueChanged];
+			[switchQueryMode addTarget: nil action: @selector(handleToggleReportingMode:) forControlEvents: UIControlEventValueChanged];
 			cell.accessoryView = switchQueryMode;
 			cell.textLabel.text = switchQueryMode.on ? NSLocalizedString(@"Reporting Mode", @"Reporting Mode") : NSLocalizedString(@"Designer Mode (limited)", @"Designer Mode (limited)");
 			cell.textLabel.textColor = [UIColor labelColor];

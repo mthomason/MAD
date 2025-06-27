@@ -9,8 +9,8 @@
 #ifndef MAD_Designer_MADQueryViewControllerLayoutSection_h
 #define MAD_Designer_MADQueryViewControllerLayoutSection_h
 
-#import <UIKit/UITableView.h>
 #import "MADIdentifierQueryViewSections.h"
+#import <UIKit/UITableView.h>
 
 @class NSArray <__covariant ObjectType>, NSSet <__covariant ObjectType>,
 	   NSNumber, NSFetchedResultsController, NSIndexPath, NSIndexSet, NSManagedObjectID,
@@ -22,43 +22,42 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 
 @protocol MADQueryViewControllerDatasourceProtocol;
 
-@interface MADQueryViewDataSource : NSObject
-	<UITableViewDataSource>
+@interface MADQueryViewDataSource : NSObject <UITableViewDataSource>
 
-	- (instancetype)initWithQueryID: (NSNumber *)queryID
-			   managedObjectContext: (NSManagedObjectContext *)managedObjectContext
-				   reportingEnabled: (BOOL)reportingEnabled
-				handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCel;
+@property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 
-	- (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
-						  reportingEnabled:(BOOL)reportingEnabled
-					   handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
+@property (readonly, nonatomic, weak) NSManagedObjectContext *managedObjectContext;
+@property (readonly, nonatomic, strong) NSFetchedResultsController *queryTablesController;
+@property (readonly, nonatomic, strong) NSFetchedResultsController *queryLinksController;
+@property (readonly, nonatomic, strong) NSFetchedResultsController *queryGroupsController;
+@property (readonly, nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
 
-	@property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
+@property (nonatomic, readonly, assign) short count;
+@property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
-	@property (readonly, nonatomic, weak) NSManagedObjectContext *managedObjectContext;
-	@property (readonly, nonatomic, strong) NSFetchedResultsController *queryTablesController;
-	@property (readonly, nonatomic, strong) NSFetchedResultsController *queryLinksController;
-	@property (readonly, nonatomic, strong) NSFetchedResultsController *queryGroupsController;
-	@property (readonly, nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
+- (instancetype)initWithQueryID: (NSNumber *)queryID
+		   managedObjectContext: (NSManagedObjectContext *)managedObjectContext
+			   reportingEnabled: (BOOL)reportingEnabled
+			handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCel;
 
-	@property (nonatomic, readonly, assign) short count;
-	@property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
+- (instancetype)initWithNumberOfTables:(NSUInteger)numberOfTables
+					  reportingEnabled:(BOOL)reportingEnabled
+				   handleConfigureCell:(MADQueryViewCellConfigureHandler)handleConfigureCell;
 
-	- (void)numberOfTablesChanged:(NSUInteger)numberOfTables;
+- (void)numberOfTablesChanged:(NSUInteger)numberOfTables;
 
-	- (NSSet <NSNumber *> *)sectionTypes;
-	- (NSIndexSet *)sectionTypesIndexs;
-	- (MADIdentifierQueryViewSections)sectionAtIndex:(short)index;
-	- (MADQueryViewSectionDelegate *)layoutAtIndex:(short)index;
+- (NSSet <NSNumber *> *)sectionTypes;
+- (NSIndexSet *)sectionTypesIndexs;
+- (MADIdentifierQueryViewSections)sectionAtIndex:(short)index;
+- (MADQueryViewSectionDelegate *)layoutAtIndex:(short)index;
 
-	- (BOOL)canEditSectionAtIndex:(short)index;
+- (BOOL)canEditSectionAtIndex:(short)index;
 
-	- (void)performFetchAll;
-	- (void)performFetchTables;
-	- (void)performFetchLinks;
-	- (void)performFetchGroups;
-	- (void)performFetchPredicate;
+- (void)performFetchAll;
+- (void)performFetchTables;
+- (void)performFetchLinks;
+- (void)performFetchGroups;
+- (void)performFetchPredicate;
 
 @end
 

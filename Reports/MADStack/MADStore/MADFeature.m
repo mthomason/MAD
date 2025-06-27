@@ -27,7 +27,7 @@ static NSString * const Available       = @"available";
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     if (self = [super init]) {
-        NSDictionary *feature = [NSDictionary dictionaryWithDictionary:dictionary];
+        NSDictionary *feature = [[NSDictionary alloc] initWithDictionary:dictionary];
         self.feature = feature;
     }
     return self;

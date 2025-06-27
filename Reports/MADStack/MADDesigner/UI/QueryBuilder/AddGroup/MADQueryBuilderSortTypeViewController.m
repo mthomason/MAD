@@ -18,8 +18,8 @@
 
 @interface MADQueryBuilderSortTypeViewController ()
 
-	@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
-	@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
+@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
+@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
 
 @end
 

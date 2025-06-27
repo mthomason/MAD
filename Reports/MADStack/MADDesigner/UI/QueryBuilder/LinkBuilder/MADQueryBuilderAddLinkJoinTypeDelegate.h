@@ -15,8 +15,8 @@
 
 @protocol MADQueryBuilderAddLinkJoinTypeDelegate
 
-	- (MADLinkType)initalLinktype;
-	- (void)viewController:(UIViewController *)viewController addLinkJoinType:(MADLinkType)result;
+- (MADLinkType)initalLinktype;
+- (void)viewController:(UIViewController *)viewController addLinkJoinType:(MADLinkType)result;
 
 @end
 

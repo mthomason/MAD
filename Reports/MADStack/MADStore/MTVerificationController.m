@@ -525,21 +525,16 @@ outLabel:
 - (id)debugQuickLookObject {
 	NSMutableString *result = [[NSMutableString alloc] initWithString:self.description];
 	[result appendString:@"\n"];
-	NSString *a = [NSString stringWithFormat:@"Valid\t%@\n", self.modernReceiptIsValid ? @"YES" : @"NO"];
-	NSString *b = [NSString stringWithFormat:@"Process\t%@\n", self.modernReceiptProcess ? @"YES" : @"NO"];
-	NSString *d = [NSString stringWithFormat:@"Expires\t%@\n", self.modernReceiptProcessExperationDate];
-	[result appendString:a];
-	[result appendString:b];
-	[result appendString:d];
+	[result appendFormat:@"Valid\t%@\n", self.modernReceiptIsValid ? @"YES" : @"NO"];
+	[result appendFormat:@"Process\t%@\n", self.modernReceiptProcess ? @"YES" : @"NO"];
+	[result appendFormat:@"Expires\t%@\n", self.modernReceiptProcessExperationDate];
 	[self.receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 		
-		NSString *debuggingString = [NSString stringWithFormat:@"%@\t\t\t%@", key, obj];
-		[result appendString:debuggingString];
+		[result appendFormat:@"%@\t\t\t%@", key, obj];
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			
 			[obj enumerateKeysAndObjectsUsingBlock:^(id key1, id obj1, BOOL *stop1) {
-				NSString *debuggingString1 = [[NSString alloc] initWithFormat:@"\t%@\t\t%@", key1, obj1];
-				[result appendString:debuggingString1];
+				[result appendFormat:@"\t%@\t\t%@", key1, obj1];
 			}];
 			
 		}

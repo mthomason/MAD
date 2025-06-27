@@ -32,7 +32,6 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @interface MADQueryAddPredicateController : UITableViewController <UITableViewDelegate, MADTableViewControllerOpperatorsDelegate, MADQueryChooseFieldProtocol, MADQueryValueFromFieldControllerDelegate>
 
-
 @property (nonatomic, weak)     IBOutlet id <MADQueryAddPredicateProtocol, MADViewControllerStandardProtocol> queryPredicateDelegate;
 @property (nonatomic, weak)     MADocument *document;
 

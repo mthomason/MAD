@@ -14,11 +14,10 @@
 
 @protocol MADQueryBuilderSortTypeDelegate;
 
-@interface MADQueryBuilderSortTypeViewController : UITableViewController
-	<UITableViewDelegate>
+@interface MADQueryBuilderSortTypeViewController : UITableViewController <UITableViewDelegate>
 
-	@property (nonatomic, weak) IBOutlet id <MADQueryBuilderSortTypeDelegate> delegate;
-	@property (nonatomic, assign) MADSortOrder initalSortOrder;
+@property (nonatomic, weak) IBOutlet id <MADQueryBuilderSortTypeDelegate> delegate;
+@property (nonatomic, assign) MADSortOrder initalSortOrder;
 
 @end
 

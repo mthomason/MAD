@@ -233,8 +233,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 		
 		UIEdgeInsets safeBoundsInsets = boundsInsets(safeAreaInsets.top, safeAreaInsets.bottom);
 		
-		documentScroller.scrollIndicatorInsets =
-		[MADDocumentPageController ScrollIndicatorInset: self.documentScroller bounds: safeBoundsInsets];
+		documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: self.documentScroller bounds: safeBoundsInsets];
 		documentScroller.contentOffset = nextContentOffset;
 		documentScroller.bounds = MADRectOfSize(size);
 		

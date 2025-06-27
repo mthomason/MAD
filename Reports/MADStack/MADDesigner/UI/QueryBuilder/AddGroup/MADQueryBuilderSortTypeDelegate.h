@@ -11,11 +11,10 @@
 
 #import <MAD/MADSortOrder.h>
 
-@class MADQueryBuilderSortTypeViewController;
+@class MADQueryBuilderSortTypeViewController, UIViewController;
 
 @protocol MADQueryBuilderSortTypeDelegate
-	- (void)viewController:(UIViewController *)viewController
-		 didSelectSortType:(MADSortOrder)sortOrderType;
+- (void)viewController:(UIViewController *)viewController didSelectSortType:(MADSortOrder)sortOrderType;
 @end
 
 #endif /* MADQueryBuilderSortTypeDelegate_h */

@@ -85,8 +85,7 @@ static os_log_t mad_log;
 		self.currentlyEditingPart = MNSPredicateCenter;
 		
 		if ([segue.destinationViewController isKindOfClass: [MADTableViewControllerOpperators class]]) {
-			MADTableViewControllerOpperators *destinationViewController;
-			destinationViewController = segue.destinationViewController;
+			MADTableViewControllerOpperators *destinationViewController = segue.destinationViewController;
 			destinationViewController.delegate = self;
 		}
 		
@@ -114,8 +113,7 @@ static os_log_t mad_log;
 		if ([segue.destinationViewController isKindOfClass: [MADQueryChooseFieldController class]]) {
 			
 			NSArray *excludedTables = [[NSArray alloc] init];
-			MADQueryChooseFieldController *destinationViewController;
-			destinationViewController = segue.destinationViewController;
+			MADQueryChooseFieldController *destinationViewController = segue.destinationViewController;
 			destinationViewController.excludeTables = excludedTables;
 			destinationViewController.delegate = self;
 			destinationViewController.document = document;
@@ -123,8 +121,7 @@ static os_log_t mad_log;
 		} else if ([segue.destinationViewController isKindOfClass: [MADQueryValueFromFieldController class]]) {
 
 			RptqQueryField *leftField = [self.document.managedObjectContext objectWithID:self.fieldLeftID];
-			MADQueryValueFromFieldController *destinationViewController;
-			destinationViewController = segue.destinationViewController;
+			MADQueryValueFromFieldController *destinationViewController = segue.destinationViewController;
 			destinationViewController.enterStringDelegate = self;
 			destinationViewController.document = document;
 			destinationViewController.schemaFieldObjectId = [leftField.databaseSchemaField.objectID copy];

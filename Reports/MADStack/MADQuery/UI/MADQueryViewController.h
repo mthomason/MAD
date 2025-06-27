@@ -12,7 +12,6 @@
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADTabBarItemProtocol.h"
 #import "MADQueryNavigationProtocol.h"
-
 #import <UIKit/UITableViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 

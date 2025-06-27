@@ -16,7 +16,7 @@
 	[super initialize];
 	if (self == [MADTransparentPresentationController self]) {
 		@autoreleasepool {
-			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: self, nil];
+			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: [MADTransparentPresentationController class], nil];
 			UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
 			appearanceProxy.barTintColor = [UIColor clearColor];
 		}

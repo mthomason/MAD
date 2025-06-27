@@ -12,56 +12,43 @@
 
 #import "MADQueryValueFromFieldController.h"
 #import "MADQueryValueFromFieldControllerDelegate.h"
-
-#import <CoreData/NSManagedObjectContext.h>
-
-#import <UIKit/UIWindow.h>
-#import <UIKit/UITableView.h>
-#import <UIKit/UIPickerView.h>
-
+#import "MADCellTextInput.h"
 #import <MADFoundation/MADDataTable.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
-
+#import <MADAPI/MADQuery.h>
+#import <MADAPI/MADDatabase.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADAlertController.h>
-
-#import <MADAPI/MADQuery.h>
-#import <MAD/MADQuery+Extras.h>
 #import <MADFoundation/MADKeyChain.h>
+#import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
-
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabase.h>
-
 #import <MAD/MADocument.h>
 
-#import <MADAPI/MADDatabase.h>
+#import <UIKit/UIWindow.h>
+#import <UIKit/UITableView.h>
+#import <UIKit/UIPickerView.h>
+#import <CoreData/NSManagedObjectContext.h>
 
-#import "MADCellTextInput.h"
+@interface MADQueryValueFromFieldController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
-@interface MADQueryValueFromFieldController ()
-	<UITextFieldDelegate,
-		UITableViewDataSource,
-		UITableViewDelegate,
-		UIPickerViewDataSource,
-		UIPickerViewDelegate>
+@property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
+@property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
+@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
-	@property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
-	@property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
-	@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, strong) MADCellTextInput *tableViewCellEnterText;
+@property (nonatomic, strong) NSArray *pickerData;
+@property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
-	@property (nonatomic, weak) IBOutlet UITextField *textField;
-	@property (nonatomic, strong) MADCellTextInput *tableViewCellEnterText;
-	@property (nonatomic, strong) NSArray *pickerData;
-	@property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
-
-	@property (nonatomic, strong) MADQuery *querySampleDataField;
-	@property (nonatomic, strong) MADDataTable *dataTable;
+@property (nonatomic, strong) MADQuery *querySampleDataField;
+@property (nonatomic, strong) MADDataTable *dataTable;
 
 @end
 
@@ -82,12 +69,10 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -99,9 +84,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(keyboardDidShow:)
 												 name: UIKeyboardDidShowNotification object:nil];
-	
 	[self loadPickerView];
-	
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

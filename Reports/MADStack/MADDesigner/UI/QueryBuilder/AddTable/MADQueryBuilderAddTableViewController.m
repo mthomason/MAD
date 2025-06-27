@@ -54,8 +54,7 @@
 #pragma mark -
 #pragma mark Table View Data Source Protocol
 
-- (UITableViewCell *)tableView:(UITableView *)tableView
-		 cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"MADIdentifierTableViewCellAddTable";
 	static NSString *keyName;
 	if (keyName == nil) keyName = NSStringFromSelector(@selector(name));
