@@ -376,6 +376,19 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
+	for (UIViewController *subviewController in self.childViewControllers) {
+		[self didMoveFieldRect:subviewController animated:NO];
+	}
+	
+	// Update all connectors
+	for (NSNumber *linkID in self.connectionViewsByObjectID.allKeys) {
+		MADModelQueryLink *link = [self.document.documentModel.firstQuery.links objectForKey:linkID];
+		if (link) {
+			[self layoutQueryLinkViewControllerWithModelObject:link];
+		}
+	}
+	
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -555,8 +568,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (MADQueryVisualizationCacheManager *)cacheManager {
 	if (_cacheManager == nil) {
-		MADQueryVisualizationCacheManager *cacheManager;
-		cacheManager = [[MADQueryVisualizationCacheManager alloc] initWithURL:self.localCacheFileURL];
+		MADQueryVisualizationCacheManager *cacheManager = [[MADQueryVisualizationCacheManager alloc] initWithURL:self.localCacheFileURL];
 		_cacheManager = cacheManager;
 	}
 	return _cacheManager;
