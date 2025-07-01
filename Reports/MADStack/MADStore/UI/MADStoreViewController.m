@@ -95,32 +95,38 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if ([MTStoreKitController sharedObject].products.count <= 0) {
-        MADFeatures *features = [[MADFeatures alloc] init];
-        NSArray *products = [features availableFeaturesProductIDs];
-        
+	[super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	if ([MTStoreKitController sharedObject].products.count <= 0) {
+		MADFeatures *features = [[MADFeatures alloc] init];
+		NSArray *products = [features availableFeaturesProductIDs];
+		
 		UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 		[activityIndicator startAnimating];
 		activityIndicator.hidden = NO;
 		activityIndicator.hidesWhenStopped = NO;
 		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-        [self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
-        MTBlockCompletion handleStoreCompletion = ^(BOOL success, NSError *error) {
-            if (!success && error) {
-                id alert = [MADAlertController newAlertControllerError:error];
-                [self presentViewController:alert animated:YES completion:NULL];
-            }
-            [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-            [self.collectionView reloadData];
-        };
-        
-        [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers: products
-                                                                    completion: handleStoreCompletion];
-    } else {
-        [self.collectionView reloadData];
-    }
+		[self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
+		
+		__weak typeof(self) weakSelf = self;
+		[[MTStoreKitController sharedObject] initializeProductsWithIdentifiers: products
+																	completion: ^(BOOL success, NSError *error) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				__strong typeof(self) strongSelf = weakSelf;
+				if (!success && error) {
+					id alert = [MADAlertController newAlertControllerError:error];
+					[strongSelf presentViewController:alert animated:YES completion:NULL];
+				}
+				[strongSelf.navigationItem setLeftBarButtonItem:nil animated:YES];
+				[strongSelf.collectionView reloadData];
+			});
+		}];
+	} else {
+		[self.collectionView reloadData];
+	}
 }
 
 #pragma mark - Navigation
