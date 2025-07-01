@@ -741,12 +741,23 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 				  animated:(BOOL)animated
 				completion:(void(^)(void))completion {
 	
+	bool hasCachedData = cacheData != nil;
+	CGPoint startPoint = CGPointMake(100.0, 100.0);
 	for (MADQueryTableViewController *viewController in viewControllers) {
 		int64_t tableID = viewController.identifier;
 		
 		MADHierarchicalChildViewDefination *tableDef = cacheData != nil ? [cacheData tableDefinationForObjectID:tableID] : nil;
 		
-		CGPoint center = cacheData != nil ? tableDef.center : self.contentView.center;
+		
+		
+		CGPoint center;
+		if (hasCachedData) {
+			center = tableDef.center;
+		} else {
+			center = startPoint;
+			startPoint.x = startPoint.x + 150.0;
+			startPoint.y = startPoint.y + 100.0;
+		}
 		NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self constraints:viewController center:center];
 		
 		NSNumber *identifier = @(viewController.identifier);
