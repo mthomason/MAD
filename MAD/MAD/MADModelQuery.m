@@ -147,18 +147,13 @@
 
 - (NSMutableDictionary <NSNumber *, MADModelQueryLink *> *)links {
 	if (_links == nil) {
-		@autoreleasepool {
-			
-			NSMutableDictionary <NSNumber *, MADModelQueryLink *> *links;
-			links = [[NSMutableDictionary alloc] init];
-			_links = links;
-
-			NSMutableOrderedSet <NSNumber *> *queryLinkIDs;
-			queryLinkIDs = [[NSMutableOrderedSet alloc] init];
-			_queryLinkIDs = queryLinkIDs;
-			
-			[self updateLinks];
-		}
+		NSMutableDictionary <NSNumber *, MADModelQueryLink *> *links = [[NSMutableDictionary alloc] init];
+		_links = links;
+		
+		NSMutableOrderedSet <NSNumber *> *queryLinkIDs = [[NSMutableOrderedSet alloc] init];
+		_queryLinkIDs = queryLinkIDs;
+		
+		[self updateLinks];
 	}
 	return _links;
 }
