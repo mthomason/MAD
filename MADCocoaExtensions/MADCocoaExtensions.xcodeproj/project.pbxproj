@@ -63,6 +63,8 @@
 		4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35161E40D8D200F4744F /* MADTextStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7AEBAB21CC0DD700849874 /* MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B91C8BFA340058E6B4 /* MADColor.m */; };
 		4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */; };
+		4CD807C72E145CCD00BE420E /* madlog.h in Sources */ = {isa = PBXBuildFile; fileRef = 4CD807C62E145CCD00BE420E /* madlog.h */; };
+		4CD807C92E145D0800BE420E /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD807C82E145D0800BE420E /* madlog.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +137,8 @@
 		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMargin.h; path = MADCocoaExtensions/MADMargin.h; sourceTree = "<group>"; };
 		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPadding.h; path = MADCocoaExtensions/MADPadding.h; sourceTree = "<group>"; };
 		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextStyle.h; path = MADCocoaExtensions/MADTextStyle.h; sourceTree = "<group>"; };
+		4CD807C62E145CCD00BE420E /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
+		4CD807C82E145D0800BE420E /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +203,8 @@
 		4C5205771BA7E247000E6A59 /* MADCocoaExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				4CD807C62E145CCD00BE420E /* madlog.h */,
+				4CD807C82E145D0800BE420E /* madlog.m */,
 				4C6C09EC1F5D0F1400EDA039 /* MADProgressView.h */,
 				4C6C09ED1F5D0F1400EDA039 /* MADProgressView.m */,
 				4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */,
@@ -226,10 +232,10 @@
 				4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */,
 				4C5205891BA7E2A2000E6A59 /* MADAlertController.h */,
 				4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */,
+				4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */,
 				4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */,
 				4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */,
 				4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */,
-				4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */,
 				4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */,
 				4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */,
 				4C5205A11BA7E2A2000E6A59 /* MTMath.h */,
@@ -425,6 +431,7 @@
 				4C17AE261E427EBB0056A0EA /* MADBorderStyle.m in Sources */,
 				4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */,
 				4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */,
+				4CD807C72E145CCD00BE420E /* madlog.h in Sources */,
 				4C6C09EF1F5D0F1400EDA039 /* MADProgressView.m in Sources */,
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
 				4C6C09E31F5D0DFF00EDA039 /* MADLabelTitle.m in Sources */,
@@ -434,6 +441,7 @@
 				4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */,
 				4C6C09E71F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */,
+				4CD807C92E145D0800BE420E /* madlog.m in Sources */,
 				4C5205AF1BA7E2A2000E6A59 /* MADBarButtonItem.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,
 				4C1CC25C24C624EE0027A454 /* MADViewHelpers.m in Sources */,

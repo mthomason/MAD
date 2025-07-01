@@ -919,16 +919,40 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		for (NSError *error in errors) {
 			os_log_error(GetDesignerLog(), "Error: %@", error);
 		}
+		
+		// Define block to present error alerts
+		void (^presentErrorsBlock)(void) = ^{
+			for (NSError *error in errors) {
+				NSString *message = error.localizedDescription ?: @"An unknown error occurred.";
+				UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+																			   message:message
+																		preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+																   style:UIAlertActionStyleDefault
+																 handler:nil];
+				[alert addAction:okAction];
+				
+				// Assuming `self` is a UIViewController or has access to one
+				UIViewController *presentingVC = self.presentedViewController ?: self;
+				[presentingVC presentViewController:alert animated:YES completion:nil];
+			}
+		};
+		
+		// Ensure alerts are presented on the main thread
+		if ([NSThread isMainThread]) {
+			presentErrorsBlock();
+		} else {
+			dispatch_async(dispatch_get_main_queue(), presentErrorsBlock);
+		}
 	}
+	
 	self.pageSlider.enabled = YES;
-	// Check if the operation is of a specific type
+	
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]] ||
 		[operation isKindOfClass:[MADRefreshOperationReload class]]) {
 		
-		// Reset the last cache date
 		_lastCacheDate = nil;
-
-		// Define a block to update the UI
+		
 		__weak typeof(self) weakSelf = self;
 		void (^updateUIBlock)(void) = ^{
 			typeof(self) strongSelf = weakSelf;
@@ -938,8 +962,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 				[strongSelf setDisplayActive];
 			}
 		};
-
-		// Ensure UI updates are performed on the main thread
+		
 		if ([NSThread isMainThread]) {
 			updateUIBlock();
 		} else {

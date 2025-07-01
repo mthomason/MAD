@@ -72,18 +72,15 @@
 		return [self finish];
 	}
 
-	MADOperationGetCredentials *getCredentials;
-	getCredentials= [[MADOperationGetCredentials alloc] initWithDatabaseConnection: _databaseConnection
-																	viewController: (UIViewController *)_viewController];
+	MADOperationGetCredentials *getCredentials = [[MADOperationGetCredentials alloc] initWithDatabaseConnection: _databaseConnection
+																								 viewController: (UIViewController *)_viewController];
 	MADocument *document = _document;
 	
 	
-	MADOperationRefreshInitializeMainDataTable *initializeMainDataTable;
-	initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
+	MADOperationRefreshInitializeMainDataTable *initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
 	[initializeMainDataTable addDependency: getCredentials];
 	
-	MADOperationRefreshInitialize *initialize;
-	initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];
+	MADOperationRefreshInitialize *initialize = [[MADOperationRefreshInitialize alloc] initWithDocument:document];
 	[initialize addDependency: initializeMainDataTable];
 	[initialize addDependency: getCredentials];
 	
@@ -96,12 +93,7 @@
 																			 viewController: (NSObject <MADOperationRefreshReloadProtocol> *)_viewController];
 	[reload addDependency:refresh];
 	
-	NSArray <__kindof NSOperation *> *operations;
-	operations = [[NSArray alloc] initWithObjects: getCredentials,
-												   initializeMainDataTable,
-												   initialize,
-												   reload,
-												   refresh, nil];
+	NSArray <__kindof NSOperation *> *operations = [[NSArray alloc] initWithObjects: getCredentials, initializeMainDataTable, initialize, reload, refresh, nil];
 		
 	MADOperationRefreshReload * __weak wself = self;
 	NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -112,6 +104,20 @@
 		sself.viewController = nil;
 		sself.databaseConnection = nil;
 		sself.completedSuccessfully = YES;
+		
+		if ([refresh.errors count] > 0) {
+			for (NSError *error in refresh.errors) {
+				os_log_info(GetDesignerLog(), "%s: Finish error: %@", __PRETTY_FUNCTION__, error);
+			}
+			[sself finishWithError:[[refresh.errors firstObject] copy]];
+			return;
+		}
+		if ([reload.errors count] > 0) {
+			for (NSError *error in reload.errors) {
+				os_log_info(GetDesignerLog(), "%s: Finish error: %@", __PRETTY_FUNCTION__, error);
+			}
+		}
+
 		[sself finish];
 	}];
 	

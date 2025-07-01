@@ -73,6 +73,12 @@ static const short errCache = 2;
 											  credentals: credientals
 										 connectionError: &eerror];
 	
+	if (eerror != nil) {
+		NSError *error = [eerror copy];
+		[self finishWithError:error];
+		return;
+	}
+
 	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	

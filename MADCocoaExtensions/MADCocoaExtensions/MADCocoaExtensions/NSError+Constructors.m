@@ -11,6 +11,7 @@
 #endif
 
 #import "NSError+Constructors.h"
+#import "madlog.h"
 #import "UIApplication+Helpers.h"
 
 #import <UIKit/UIAlertController.h>
@@ -23,8 +24,11 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 		  completion:(void (^)(BOOL success))completion {
 	
 	if (error == nil) {
+		os_log_error(GetMadExtLog(), "Error was nil.  This is unexpected.");
 		completion(YES);
 		return;
+	} else {
+		os_log_error(GetMadExtLog(), "Error: %@", error);
 	}
 	UIViewController *displayController = viewController ?:  [UIApplication topViewController];
 	displayController.modalPresentationStyle = UIModalPresentationOverCurrentContext;

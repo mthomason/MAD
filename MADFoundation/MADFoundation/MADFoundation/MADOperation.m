@@ -29,7 +29,8 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 static NSString * const MADOperatorSelectorState        = @"state";
 
 @interface MADOperation()
-@property (nonatomic, strong) NSMutableArray *internalErrors;
+@property (nonatomic, strong) NSMutableArray <NSError *> *internalErrors;
+@property (nonatomic, strong) NSMutableArray <NSError *> *errors;
 @property (atomic, assign) BOOL hasFinishedAlready;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 // _state is defined in @implementation block
@@ -72,6 +73,13 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 #pragma mark -
 #pragma mark Lazy Load
+
+- (NSMutableArray<NSError *> *)errors {
+	if (!_errors) {
+		_errors = [NSMutableArray array];
+	}
+	return _errors;
+}
 
 - (NSMutableArray<NSError *> *)internalErrors {
 	if (!_internalErrors) {
@@ -466,9 +474,10 @@ static NSString * const MADOperatorSelectorState        = @"state";
 		self.state = MADOperationStateFinishing; // This will lock/unlock itself
 		
 		NSMutableArray<NSError *> *combinedErrors = [NSMutableArray arrayWithArray:self.internalErrors];
-		if (errors) {
+		if ([errors count] > 0) {
 			NSArray *errorsStrong = errors;
 			[combinedErrors addObjectsFromArray:errorsStrong];
+			[self.errors addObjectsFromArray:errorsStrong];
 		}
 		
 		if (combinedErrors.count > 0) {

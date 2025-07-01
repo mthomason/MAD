@@ -20,12 +20,7 @@
 #import <MAD/MADOperationKeyChainPut.h>
 
 
-@interface MADOperationPromptPassword : MADOperation
-	<MADOperationResultStringProtocol,
-		MADKeyChainKeyValueProtocol,
-		MADOperationHoldsPasswordProtocol,
-		MADOperationConditionPolarQuestionResultProtocol,
-		MADOperationConditionDisplayedAlertProtocol>
+@interface MADOperationPromptPassword : MADOperation <MADOperationResultStringProtocol, MADKeyChainKeyValueProtocol, MADOperationHoldsPasswordProtocol, MADOperationConditionPolarQuestionResultProtocol, MADOperationConditionDisplayedAlertProtocol>
 
 	- (instancetype)initWithPasswordKey:(NSString *)passwordKey andViewController:(UIViewController *)viewController;
 	- (NSString *)valueForKey:(NSString *)key;

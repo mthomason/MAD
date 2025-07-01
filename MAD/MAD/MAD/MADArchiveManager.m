@@ -67,7 +67,7 @@ int backup_file(char *path_origin, char *path_destination) {
 	} else {
 		// 1. Does a previous backup exist exist?
 		if (access(path_destination, F_OK) < 0)
-			os_log_error(OS_LOG_DEFAULT, "No backup file to delete (%d): %s\n\t%s)", errno, strerror(errno), path_destination);
+			os_log_info(OS_LOG_DEFAULT, "No backup file to delete (%d): %s\n\t%s)", errno, strerror(errno), path_destination);
 		else
 			// 2. If a previous backup exist, delete it.
 			if (remove(path_destination) < 0)
@@ -286,20 +286,18 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	int success = 0;
 	//Test to see if it's it's not a compressed  archive
 	NSError * __autoreleasing errorReading = NULL;
-	NSData *data;
-	data = [[NSData alloc] initWithContentsOfURL: _archive
-										 options: NSDataReadingUncached
-										   error: &errorReading];
+	NSData *data = [[NSData alloc] initWithContentsOfURL: _archive
+												 options: NSDataReadingUncached
+												   error: &errorReading];
 	if (errorReading != nil) {
 		os_log_error(OS_LOG_DEFAULT, "Error: %s.", errorReading.localizedDescription.UTF8String);
 		success = -2;
 	}
 	
 	if (success == 0) {
-		NSFileWrapper *fileWrapper;
-		fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+		NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
 		
-		NSError * __autoreleasing errorWriting = NULL;
+		NSError *errorWriting = NULL;
 		success = [fileWrapper writeToURL: _filewrapper
 								  options: NSFileWrapperWritingAtomic
 					  originalContentsURL: _archive
@@ -308,7 +306,6 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		if (success < 0 && errorWriting != nil) {
 			os_log_error(OS_LOG_DEFAULT, "Error: %s.", errorWriting.localizedDescription.UTF8String);
 		}
-		
 		NSAssert(success >= 0, @"Failed to write at %s.", __PRETTY_FUNCTION__);
 	}
 	return success;

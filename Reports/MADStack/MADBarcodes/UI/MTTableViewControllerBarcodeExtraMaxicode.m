@@ -110,18 +110,18 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    if (indexPath.section == 1) {
-        NSInteger numberOfRows = [tableView numberOfRowsInSection:1];
-        for (NSInteger i = 0; i < numberOfRows; i++) {
-            UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
-            c.accessoryType = UITableViewCellAccessoryNone;
-        }
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.delegate barcodeMaxicodeDidSetEncodingMode:cell.tag];
-    }
+	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
+	if (indexPath.section == 1) {
+		NSInteger numberOfRows = [tableView numberOfRowsInSection:1];
+		for (NSInteger i = 0; i < numberOfRows; i++) {
+			UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+			c.accessoryType = UITableViewCellAccessoryNone;
+		}
+		cell.accessoryType = UITableViewCellAccessoryCheckmark;
+		[self.delegate barcodeMaxicodeDidSetEncodingMode:cell.tag];
+	}
 }
 
 @end

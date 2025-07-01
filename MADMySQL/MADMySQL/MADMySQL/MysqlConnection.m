@@ -138,7 +138,11 @@
 + (MysqlConnection *)connectToServer:(MysqlServer *)server error:(NSError * __autoreleasing *)error {
 	MADLogDebug("MysqlConnection: +connectToServer (with error ptr) called for server: %@", server.host);
 	
-	MYSQL *mysqlHandle = [self internal_connectToServer:server outError:error]; // Pass the error pointer
+	NSError *connectionError = nil;
+	MYSQL *mysqlHandle = [self internal_connectToServer:server outError:&connectionError]; // Pass the error pointer
+	if (connectionError != nil) {
+		*error = [connectionError copy];
+	}
 	
 	if (!mysqlHandle) {
 		// Error is logged by internal_connectToServer and *error is populated.

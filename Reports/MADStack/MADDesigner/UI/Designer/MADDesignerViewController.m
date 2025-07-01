@@ -1279,7 +1279,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
 	NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
 	if (updatedObjects == nil) {
-		os_log_error(GetDesignerLog(), "No updated objects in context save notification.");
+		os_log_info(GetDesignerLog(), "No updated objects in context save notification.");
 		return;
 	}
 	for (NSManagedObject *object in updatedObjects) {
