@@ -92,12 +92,10 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	MADBlockAlertDidFinish handleAlertDidFinish;
 	UIAlertController *alert;
 	NSRange range;
-	NSError *error;
+	NSError *error = errors.lastObject;
 	NSString *localizedDescription, *localizedFailureReason;
 	NSArray <__kindof NSError *> *remaningErrors;
-	
-	error = errors.lastObject;
-	
+		
 	range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
 	remaningErrors = [errors subarrayWithRange:range];
 
