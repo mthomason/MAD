@@ -3,6 +3,13 @@
 
 ## Primary
 
+* Add images back
+* Test iCloud stuff and make sure intro screen activity is synced correctly
+* Test TDS
+* See if something can be done about slow load of SQL screen
+* Infoscreen in dark mode is unreadable... can't be dismissed
+* That's it...
+
 * ~~Update designer UI so state doesn't get out of sync when user clicks away~~
 * Update toolbox UI for dark mode
 * Setup test databases for ~~MySQL~~ and MS SQL Server.

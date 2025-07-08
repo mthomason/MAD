@@ -31,6 +31,10 @@
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UILabel.h>
 
+
+#import <MADMySQL/MADMySQL.h>
+#import <MADTdsClient/MADTdsClient.h>
+
 @interface MADDriverSelectorController () <MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
 	@property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
 	@property (nonatomic, weak) __kindof MADConnectionViewController *connectionViewController;
@@ -102,8 +106,17 @@
 }
 
 - (void)showViewControllerConnection:(NSInteger)type {
-	MADConnectionViewController *connectionViewController = [[UIStoryboard storyboardWithName: @"MADCreateDocument"
-																					   bundle: [NSBundle bundleWithIdentifier:type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient"]] instantiateViewControllerWithIdentifier:@"MADConnectionViewControllerSQLGeneric"];
+	// This function use to load the bundle using `[NSBundle bundleWithIdentifier:type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient"]` but this was very slow.
+	// This code is left below, to show how it worked.
+	// I'm not sure if this is slow because symbol loading is delayed.  If that's the case, we may want to go back to the old version, because it means those symbols are being loaded on launch.
+	// If this is slow because of search, then using `bundleForClass:` is the correct solution, and we should continue doing that.
+	//MADConnectionViewController *connectionViewController = [[UIStoryboard storyboardWithName: @"MADCreateDocument"
+	//																				   bundle: [NSBundle bundleWithIdentifier:type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient"]] instantiateViewControllerWithIdentifier:@"MADConnectionViewControllerSQLGeneric"];
+	
+	
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADCreateDocument"
+														 bundle: [NSBundle bundleForClass:type == 0 ? [MADDatabaseMySQL class] : [MADDatabaseConnectionSQLServer class]]];
+	MADConnectionViewController *connectionViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADConnectionViewControllerSQLGeneric"];
 	connectionViewController.delegate = self;
 	connectionViewController.saveFileDelegate = self;
 	connectionViewController.databaseType = type == 0 ? MADDatabaseTypeMySQL :
