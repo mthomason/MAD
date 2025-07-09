@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="3.0">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="3.0">
     <entity name="RptqAlignment" representedClassName="RptqAlignment" syncable="YES">
         <attribute name="horizontal" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="vertical" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -162,7 +162,7 @@
         <attribute name="groupNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="RptqDocumentElementImage" representedClassName="RptqDocumentElementImage" parentEntity="RptqDocumentElement" syncable="YES">
-        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName=""/>
+        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="MADPngImageTransformer"/>
     </entity>
     <entity name="RptqDocumentElementLabel" representedClassName="RptqDocumentElementLabel" parentEntity="RptqDocumentElement" syncable="YES">
         <attribute name="text" optional="YES" attributeType="String"/>

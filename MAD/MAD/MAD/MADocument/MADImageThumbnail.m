@@ -33,17 +33,14 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 @implementation MADImageThumbnail
 
 + (instancetype)newImageThumbnailWithRenderer:(MADPrintPageRenderer *)printPageRenderer {
-	id thumbnail;
-	
-	
-	thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
-										   size: MADFloat_1024
-									 edgeEffect: NO
-									 zoomEffect: NO
-								   squareEffect: YES
-									 cornerSize: 0.0000f
-										  scale: 1.0000f
-						   andPrintPageRenderer: printPageRenderer];
+	id thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
+											  size: MADFloat_1024
+										edgeEffect: NO
+										zoomEffect: NO
+									  squareEffect: YES
+										cornerSize: 0.0000f
+											 scale: 1.0000f
+							  andPrintPageRenderer: printPageRenderer];
 	return thumbnail;
 }
 

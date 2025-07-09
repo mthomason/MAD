@@ -12,11 +12,11 @@
 
 
 #import "AppDelegate.h"
-
-#import <MAD/MADConstants.h>
+#import "MADPngImageTransformer.h"
 #import "Constants.h"
 #import "madlog.h"
 
+#import <MAD/MADConstants.h>
 #import <MADDataStructures/MADVectorBool.h>
 
 #import <Foundation/NSString.h>
@@ -179,8 +179,11 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	
+	
 	[[NSBundle mainBundle] load];
 
+	[NSValueTransformer setValueTransformer:[[MADPngImageTransformer alloc] init] forName:NSStringFromClass([MADPngImageTransformer class])];
+	
 	[[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
 						  completionHandler:^(BOOL granted, NSError * _Nullable error) {
 		if (granted) {

@@ -272,6 +272,7 @@
 		4C8C97B314C5C4FC007FB629 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
 		4C8C97B514C5C50B007FB629 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
 		4C8C97B714C5C524007FB629 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
+		4C8CDC352E1EEE3B00FE1E77 /* MADPngImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CDC342E1EEE3B00FE1E77 /* MADPngImageTransformer.m */; };
 		4C8DE2491BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2461BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m */; };
 		4C8DE24A1BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE2481BAFA66100AD1111 /* MTCollectionReuseableViewDefault.m */; };
 		4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DE24C1BAFA88400AD1111 /* MADCellElement.m */; };
@@ -935,6 +936,8 @@
 		4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4C8C97B414C5C50B007FB629 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4C8C97B614C5C524007FB629 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		4C8CDC332E1EEE3B00FE1E77 /* MADPngImageTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADPngImageTransformer.h; sourceTree = "<group>"; };
+		4C8CDC342E1EEE3B00FE1E77 /* MADPngImageTransformer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPngImageTransformer.m; sourceTree = "<group>"; };
 		4C8DE2451BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReusableViewFloatingLabel.h; sourceTree = "<group>"; };
 		4C8DE2461BAFA66100AD1111 /* MTCollectionReusableViewFloatingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionReusableViewFloatingLabel.m; sourceTree = "<group>"; };
 		4C8DE2471BAFA66100AD1111 /* MTCollectionReuseableViewDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReuseableViewDefault.h; sourceTree = "<group>"; };
@@ -2191,6 +2194,8 @@
 			children = (
 				4CFC60B31E559C0700EC577E /* MADImageTransformer.h */,
 				4CFC60B41E559C0700EC577E /* MADImageTransformer.m */,
+				4C8CDC332E1EEE3B00FE1E77 /* MADPngImageTransformer.h */,
+				4C8CDC342E1EEE3B00FE1E77 /* MADPngImageTransformer.m */,
 			);
 			name = Transformers;
 			sourceTree = "<group>";
@@ -3320,6 +3325,7 @@
 				4C0153DC1C9F729700FCD3C1 /* MADOperationConditionDisplayedAlert.m in Sources */,
 				4C401FC31BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C6D2EF21E6DE469008EFE5D /* MADQueryAddGroupNavigationItem.m in Sources */,
+				4C8CDC352E1EEE3B00FE1E77 /* MADPngImageTransformer.m in Sources */,
 				4C4020861BAE966000BAE5FC /* MADQueryViewController.m in Sources */,
 				4C401FC51BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
 				4CFEE81F1BB7A3A300AFAA0A /* MADQueryAddPredicateController.m in Sources */,

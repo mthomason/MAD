@@ -95,9 +95,10 @@ static os_log_t mad_log;
 		
 		if (delegatePage.pageNumber != 1) return;
 		
+		MADPrintPageRenderer *renderer = printPageRenderer;
 		NSURL *thumbnailURL = [[delegatePage thumbnailURL] copy];
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:printPageRenderer];
+			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
 			NSData *pngImage = UIImagePNGRepresentation(thumbnail);
 			NSError *error = nil;
 			[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
@@ -107,7 +108,6 @@ static os_log_t mad_log;
 			pngImage = nil;
 		});
 	}
-
 }
 
 #pragma mark

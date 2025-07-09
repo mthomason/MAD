@@ -1853,11 +1853,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	
 	RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
 																			  fromObjectContext: document.managedObjectContext];
+
 	CGFloat contextScale = self.view.scroller.zoomScale * self.view.scroller.traitCollection.displayScale;
 	NSString *resuseId = [MADCellElement reuseIdentifier];
 	
 	MADCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId forIndexPath:indexPath];
 	cell.delegate = self;
+
+	if (documentObject == nil) return cell;
 	
 	CGSize documentObjectSize = [documentObject sizeCalculated];
 	CGRect cellBounds = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);

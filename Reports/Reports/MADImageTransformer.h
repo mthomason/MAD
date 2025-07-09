@@ -6,8 +6,8 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#ifndef Reports_MADAffineTransformSwing_h
-#define Reports_MADAffineTransformSwing_h
+#ifndef Reports_MADImageTransform_h
+#define Reports_MADImageTransform_h
 
 #import <Foundation/NSValueTransformer.h>
 
