@@ -109,10 +109,10 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	NSNumber *aggregate = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeAggregate];
 	
 	// Add additional items following the pattern below.
-	// NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
-	// NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
-
-	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate /*, image, whitespace */]];
+	NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
+	NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
+	
+	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace ]];
 	
 	if ([MTStoreKitController sharedObject].barcodeDesignerEnabled) {
 		NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
@@ -136,9 +136,9 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	
 	[collectionView deselectItemAtIndexPath:indexPath animated:YES];
 	NSNumber *madob = self.dataSource[(NSUInteger)indexPath.row];
- 
+	
 	switch (madob.shortValue) {
-
+			
 		case MADPrintPageElementTypeWhtiespace:
 			[self performSegueWithIdentifier:@"" sender:self];
 			break;
@@ -146,15 +146,15 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 		case MADPrintPageElementTypeAggregate:
 			[self performSegueWithIdentifier:@"MTIdentifierSeguePushAggregateLabelNew" sender:self];
 			break;
-
+			
 		case MADPrintPageElementTypeBarcode:
 			[self performSegueWithIdentifier:@"MTIdentifierSeguePushBarcodeLabelNew" sender:self];
 			break;
-
+			
 		case  MADPrintPageElementTypeLabelDynamic:
 			[self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:self];
 			break;
-
+			
 		case MADPrintPageElementTypeLabelStatic:
 			[self performSegueWithIdentifier:@"MTIdentifierSeguePushStaticLabelNew" sender:self];
 			break;
@@ -162,7 +162,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 		case MADPrintPageElementTypeImage:
 			[self presentImagePicker];
 			break;
-
+			
 		default:
 			break;
 	}
@@ -193,7 +193,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 		selectedBackgroundView.backgroundColor = bgColor;
 		result.selectedBackgroundView = selectedBackgroundView;
 	}
-
+	
 	return result;
 }
 
@@ -241,7 +241,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 - (void)navigationController:(UINavigationController *)navigationController
 	   didShowViewController:(UIViewController *)viewController
 					animated:(BOOL)animated {
-
+	
 }
 
 
@@ -303,28 +303,28 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 }
 
 - (void)displaySelectedGroupByType {
-
+	
 	if (_aggregateViewController) {
 		
 		UITableViewCell *cell = _aggregateViewController.tableViewCellAggregateGroupBy;
 		switch (_aggregateGroupByType) {
-		
+				
 			case MTAggregateGroupByTypeSection: {
 				NSString *format = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeSection];
 				cell.detailTextLabel.text = [NSString stringWithFormat:format, self.aggregateGroupBySectionNumber];
 				break;
 			}
-			
+				
 			case MTAggregateGroupByTypeReport: {
 				cell.detailTextLabel.text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypeReport];
 				break;
 			}
-
+				
 			case MTAggregateGroupByTypePage: {
 				cell.detailTextLabel.text = [RptqDocumentElementAggregate newStringDisplayForGroupByType: MTAggregateGroupByTypePage];
 				break;
 			}
-
+				
 			default:
 				cell.detailTextLabel.text = @"";
 				break;
@@ -341,25 +341,25 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+	
 	switch (tableView.tag) {
 		case MADViewTagFieldOrFormulaSelector:
-
+			
 			switch (indexPath.row) {
-				
+					
 				case 0: {   // Group by a Field
 					
 					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Field Selector", @"Field Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
-
+					
 				}
 				case 1: {   // Group by a Formula
-
+					
 					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Formula Selector", @"Formula Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
-
+					
 				}
 				default:
 					break;
@@ -373,31 +373,31 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 		case MADViewTagDocumentObjectNewAggregate: {
 			
 			switch (indexPath.row) {
-
+					
 				case 0: {   // Aggrage Function *f(x)*
-
+					
 					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Function Selector", @"Function Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
-
+					
 				}
 				case 1: {   // Input *x*
-
+					
 					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Data Object Selector", @"Data Object Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
 				}
 				case 2: {   //Group By *For Each*
-
+					
 					UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Group By Selector", @"Group By Selector")];
 					[self.navigationBar pushNavigationItem:itemToPush animated:YES];
 					break;
-
+					
 				}
 				default:
 					break;
 			}
-
+			
 			break;
 		}
 			
