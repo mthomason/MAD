@@ -1906,9 +1906,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 			
 			elementView.userInteractionEnabled = YES;
 			cell.userInteractionEnabled = YES;
-			cell.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.80];
-			cell.contentView.backgroundColor = [[UIColor magentaColor] colorWithAlphaComponent:.50];
-			elementView.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:.30];
+			//cell.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
+			//cell.contentView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
+			elementView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
 			
 			NSNumber *identifierNumber = @(identifier);
 			if ([self.selectedElementIDs containsObject: identifierNumber]) {
@@ -2815,7 +2815,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	[UIView animateWithDuration:0.2 animations:^{
 		piece.alpha = 0.8;
+		piece.backgroundColor = [UIColor darkGrayColor]; // This is your requested cosmetic change
 	}];
+	
+	// This line brings the piece to the front within its current superview,
+	// which is the collection view (or its container) before re-parenting.
 	[self.view.scroller.container bringSubviewToFront: piece];
 	
 	int64_t pieceID = piece.identifier;
@@ -2836,17 +2840,23 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			
 			MADDesignerViewController *strongself1 = weakself1;
+			if (!strongself1) return;
 			
 			MADDesignerSectionView *sectionView = strongself1.view.scroller.container.sectionViews[sectionIdentifier];
+			
+			// Reverted lines to original working state for re-parenting.
+			// This logic was present before my last attempted fix.
 			CGRect b = [strongself1.view convertRect:piece.frame fromView:sectionView];
 			piece.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, b.size.width, b.size.height);
 			[strongself1.view addSubview: piece];
 			
+			// The alpha animation already started in the outer block.
 			[UIView animateWithDuration:0.2 animations:^{
 				piece.alpha = 0.8;
+				piece.backgroundColor = [UIColor darkGrayColor];
 			}];
 			
-			transition();
+			transition(); // This calls translatePanGesture
 			
 			MADocument *document = strongself1.document;
 			NSNumber *sectionViewID = @(sectionView.identifier);
@@ -2858,6 +2868,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 			MADocument * __weak wdocument = document;
 			MADDesignerViewController __weak *weakself2 = strongself1;
 			
+			// Remove item from collection view *after* it's re-parented and visually stable
 			[sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
 				[wdocument removeDocumentObjectWithObjectID: pieceID];
 			} animationComplete:^(BOOL complete) {
@@ -2867,11 +2878,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 					[strongself2.view setNeedsUpdateConstraints];
 				}
 			} completion:^() {
+				// This redraw might or might not be necessary, keeping it as part of original state.
 				[weakself2 redrawAllElementViewsInCollectionView:sectionView];
 				completion();
 			}];
 		}];
-		
 	}];
 }
 

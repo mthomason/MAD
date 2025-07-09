@@ -3,7 +3,7 @@
 
 ## Primary
 
-* Add images back
+* ~~Add images back~~
 * Test iCloud stuff and make sure intro screen activity is synced correctly
 * Test TDS
 * ~~See if something can be done about slow load of SQL screen~~
