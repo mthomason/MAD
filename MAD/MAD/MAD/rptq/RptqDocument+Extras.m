@@ -549,15 +549,16 @@ static os_log_t rptq_log;
 	
 }
 
-- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination
-					  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 	
 	NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
 	MADPrintPageElementType objectType = (MADPrintPageElementType)objectTypeObj.unsignedIntegerValue;
-
-	RptqDocumentElement *reportObject;
 	
+	RptqDocumentElement *reportObject;
 	NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
+	
+	// Initialize elementSize with the default for non-image elements
+	CGSize elementSize = CGSizeMake(75.0f, 22.0f);
 	
 	switch (objectType) {
 		case MADPrintPageElementTypeLabelDynamic: {
@@ -573,10 +574,10 @@ static os_log_t rptq_log;
 			
 			
 			reportObject = [[RptqDocumentElementLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-													 insertIntoManagedObjectContext: managedObjectContext];
+													  insertIntoManagedObjectContext: managedObjectContext];
 			
 			((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
-
+			
 			((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
 			
 			reportObject.type = MADPrintPageElementTypeLabelDynamic;
@@ -594,7 +595,7 @@ static os_log_t rptq_log;
 											 insertIntoManagedObjectContext: managedObjectContext];
 			
 			((RptqDocumentElementLabel *)reportObject).text = labelText;
-
+			
 			reportObject.type = MADPrintPageElementTypeLabelStatic;
 			
 			break;
@@ -607,7 +608,7 @@ static os_log_t rptq_log;
 			NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
 			// Gives "CoreData: warning: Sort descriptor key "identifier" may refer to a modelled property or an expression; the modelled property will be used."
 			reportObject = [[RptqDocumentElementAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-												 insertIntoManagedObjectContext: self.managedObjectContext];
+												 insertIntoManagedObjectContext: managedObjectContext]; // Changed self.managedObjectContext to managedObjectContext for consistency
 			
 			NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
 			((RptqDocumentElementAggregate *)reportObject).groupNumber = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber] intValue];
@@ -625,7 +626,7 @@ static os_log_t rptq_log;
 					break;
 				}
 				case MTAggregateFunctionInputTypeFormula: {
-					RptqDocumentElementFormula *formula =  [managedObjectContext objectWithID: objectId];
+					RptqDocumentElementFormula *formula = [managedObjectContext objectWithID: objectId];
 					[((RptqDocumentElementAggregate *)reportObject) setAggregateField:nil];
 					((RptqDocumentElementAggregate *)reportObject).aggregateFunction = formula;
 					break;
@@ -646,10 +647,22 @@ static os_log_t rptq_log;
 			UIImage *image = defination[MTDocumentObjectDefinationObject];
 			
 			reportObject = [[RptqDocumentElementImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-											insertIntoManagedObjectContext: managedObjectContext];
-			((RptqDocumentElementImage *)reportObject).image = image;
-
-			[((RptqDocumentElementImage *)reportObject) setSizeValue: image.size];
+											 insertIntoManagedObjectContext: managedObjectContext];
+			((RptqDocumentElementImage *)reportObject).image = image; // This sets the original image data and sizeValue to image.size
+			
+			// Calculate initial size to maintain aspect ratio, with a max width of 75pt
+			CGSize originalImageSize = image.size;
+			CGFloat maxWidth = 75.0f;
+			
+			if (originalImageSize.width > maxWidth) {
+				// Scale down to maxWidth while maintaining aspect ratio
+				CGFloat aspectRatio = originalImageSize.width / originalImageSize.height;
+				elementSize = CGSizeMake(maxWidth, maxWidth / aspectRatio);
+			} else {
+				// Use original width if it's already within the limit, scale height proportionally
+				elementSize = originalImageSize;
+			}
+			
 			((RptqDocumentElementImage *)reportObject).type = MADPrintPageElementTypeImage;
 			
 			image = nil;
@@ -666,13 +679,11 @@ static os_log_t rptq_log;
 			MTBarcode *barcode = defination[MTDocumentObjectDefinationObject];
 			NSManagedObjectID *field1ObjectId = defination[MTDocumentObjectDefinationField1];
 			NSManagedObjectID *field2ObjectId = defination[MTDocumentObjectDefinationField2];
-			RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID: field1ObjectId
-													  managedObjectContext: managedObjectContext];
-			RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID: field2ObjectId
-													  managedObjectContext: managedObjectContext];
+			RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID: field1ObjectId managedObjectContext: managedObjectContext];
+			RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID: field2ObjectId managedObjectContext: managedObjectContext];
 			reportObject = [RptqDocumentElementBarcode barcodeWithMtBarcode: barcode
-															 queryFieldOne: field1
-															 queryFieldTwo: field2];
+															  queryFieldOne: field1
+															  queryFieldTwo: field2];
 			reportObject.type = MADPrintPageElementTypeBarcode;
 			
 			break;
@@ -681,7 +692,8 @@ static os_log_t rptq_log;
 			break;
 	}
 	[reportObject setOriginPoint:CGPointZero];
-	[reportObject setSizeWidth:75.0000f height:22.0000f];
+	// Apply the calculated 'elementSize' for images, or the default size for other elements
+	[reportObject setSizeWidth:(float)elementSize.width height:(float)elementSize.height];
 	
 	NSMutableOrderedSet *hasObjects = [self.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
 	[hasObjects insertObject:reportObject atIndex:0];
