@@ -2259,33 +2259,46 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: piece.identifier
 																	   fromObjectContext: _document.managedObjectContext];
 	
-	if (gestureRecognizer.numberOfTouches > 1) {
-		CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
-		CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
-		MADCompassDirection direction = MADSpecificDirectionOfDegrees(CGAngleBetweenTwoPoints(p1, p2));
-		struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
+	CGSize currentSize = element.sizeContentView; // Get the current size from the model
+	
+	// Apply scaling based on element type
+	if (element.documentObjectType == MADPrintPageElementTypeImage) {
+		// For images, always maintain aspect ratio
+		CGFloat scale = gestureRecognizer.scale;
+		CGSize newSize = CGSizeMake(currentSize.width * scale, currentSize.height * scale);
 		
-		switch (resizeAspect.direction) {
-				
-			case horizontal:
-				[element setSizeWidth:(float)(element.sizeContentView.width * gestureRecognizer.scale)];
-				break;
-				
-			case vertical:
-				[element setSizeHeight:(float)(element.sizeContentView.height * gestureRecognizer.scale)];
-				break;
-				
-			default: {
-				CGSize s = element.sizeContentView;
-				[element setSizeWidth:(float)(s.width * gestureRecognizer.scale)
-							   height:(float)(s.height * gestureRecognizer.scale)];
-				break;
-			}
-				
+		// Ensure it's not scaled to zero or negative, and potentially add a min/max size constraint
+		if (newSize.width > 0 && newSize.height > 0) {
+			[element setSizeWidth:(float)newSize.width height:(float)newSize.height];
 		}
-		
+	} else {
+		// For other element types, use the existing logic (which might allow non-proportional scaling)
+		if (gestureRecognizer.numberOfTouches > 1) {
+			CGPoint p1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
+			CGPoint p2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
+			MADCompassDirection direction = MADSpecificDirectionOfDegrees(CGAngleBetweenTwoPoints(p1, p2));
+			struct MADResizeAspect resizeAspect = MADResizeTypeForDirection(direction);
+			
+			switch (resizeAspect.direction) {
+					
+				case horizontal:
+					[element setSizeWidth:(float)(currentSize.width * gestureRecognizer.scale)];
+					break;
+					
+				case vertical:
+					[element setSizeHeight:(float)(currentSize.height * gestureRecognizer.scale)];
+					break;
+					
+				default: {
+					[element setSizeWidth:(float)(currentSize.width * gestureRecognizer.scale)
+								   height:(float)(currentSize.height * gestureRecognizer.scale)];
+					break;
+				}
+			}
+		}
 	}
-	gestureRecognizer.scale = 1.0;
+	
+	gestureRecognizer.scale = 1.0; // Reset scale for continuous gestures
 	if ([element.managedObjectContext hasChanges]) {
 		NSError *error = nil;
 		BOOL saved = [element.managedObjectContext save:&error];
