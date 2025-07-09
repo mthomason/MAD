@@ -11,7 +11,7 @@
 
 #import <UIKit/UIView.h>
 
-@protocol MADReportPageViewProtocol;
+#import "MADReportPageViewProtocol.h"
 
 @interface MADReportPageView : UIView
 

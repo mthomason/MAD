@@ -311,6 +311,10 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 	return _document.thumbnailURL;
 }
 
+- (NSURL *)documentURL {
+	return _document.fileURL;
+}
+
 - (NSDate * _Nullable)lastCacheDate {
 	if (self.pageViewAttributes.reportLastCacheDate == nil) {
 		NSError *error = nil;

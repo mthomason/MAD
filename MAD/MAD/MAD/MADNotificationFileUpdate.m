@@ -12,10 +12,9 @@
 #import <Foundation/NSURL.h>
 #import <MADFoundation/MADProgress.h>
 
-NSString * const MADNotificationIdentifierFileUpdate = @"MADProgressNotification";
+NSString * const MADNotificationIdentifierFileUpdate = @"MADFileUpdateNotificationIdentifier";
 
 @interface MADNotificationFileUpdate ()
-  - (instancetype)init  NS_UNAVAILABLE;
 	@property (nonatomic, copy) NSURL *url;
 @end
 
@@ -31,7 +30,7 @@ NSString * const MADNotificationIdentifierFileUpdate = @"MADProgressNotification
 
 - (instancetype)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
-		self.url = url.copy;
+		self.url = [url copy];
 	}
 	return self;
 }

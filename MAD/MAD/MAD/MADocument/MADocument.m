@@ -1386,7 +1386,7 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (void)notifyThumbnailUpdated {
-	MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] init];
+	MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] initWithURL:self.thumbnailURL];
 	[fileUpdate notify];
 }
 

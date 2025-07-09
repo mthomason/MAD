@@ -46,20 +46,15 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 
 + (instancetype)newImageThumbnailWithDocument:(MADocument *)document {
 
-	MADPrintPageRenderer *printPageRenderer =
-	[[MADPrintPageRenderer alloc] initWithDataSource:document];
-	
-	id thumbnail;
-	
-	
-	thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
-										   size: MADFloat_1024
-									 edgeEffect: NO
-									 zoomEffect: NO
-								   squareEffect: YES
-									 cornerSize: 0.0000f
-										  scale: 1.0000f
-						   andPrintPageRenderer: printPageRenderer];
+	MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+	id thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
+											  size: MADFloat_1024
+										edgeEffect: NO
+										zoomEffect: NO
+									  squareEffect: YES
+										cornerSize: 0.0000f
+											 scale: 1.0000f
+							  andPrintPageRenderer: printPageRenderer];
 	return thumbnail;
 }
 
@@ -139,7 +134,6 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 		CGContextClip(context);
 		CGPathRelease(zigPath);
 		
-		
 		CGMutablePathRef zagPath = CGPathCreateMutable();
 		CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
 		CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
@@ -176,7 +170,6 @@ static inline CGFloat cornerRadiusForHorizontalSizeClass(UIUserInterfaceSizeClas
 		CGContextRestoreGState(context);
 		
 		UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-		
 		CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
 		croppedImage = [UIImage imageWithCGImage:imageRef];
 		CGImageRelease(imageRef);

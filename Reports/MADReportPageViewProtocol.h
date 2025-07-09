@@ -9,12 +9,15 @@
 #ifndef MADReportPageViewProtocol_h
 #define MADReportPageViewProtocol_h
 
+#import <MAD/MADPrintPageRenderer.h>
+
 @protocol MADReportPageViewProtocol <NSObject>
   @required
 	- (NSUInteger)pageNumber;
 	- (NSDate * _Nullable)lastCacheDate;
 	- (MADPrintPageRenderer * _Nullable)printPageRenderer;
 	- (NSURL * _Nonnull)thumbnailURL;
+	- (NSURL * _Nonnull)documentURL;
   @optional
 	- (NSUInteger)numberOfPages;
 @end

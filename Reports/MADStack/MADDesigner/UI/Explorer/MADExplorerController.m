@@ -38,6 +38,8 @@
 #import "MADThemeManager.h"
 #import "madlog.h"
 
+#import <MAD/MADNotificationFileUpdate.h>
+
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADFileManager/MADFileUtilities.h>
 #import <MADFileManager/MADFileInfo.h>
@@ -214,6 +216,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: MADNotificationCloudActivityCompleted
 												  object: nil];
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: MADNotificationIdentifierFileUpdate
+												  object: nil];
 
 }
 
@@ -342,6 +347,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 												 name: MADNotificationCloudActivityCompleted
 											   object: nil];
 	
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleFileUpdateNotification:)
+												 name: MADNotificationIdentifierFileUpdate
+											   object: nil];
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -437,6 +447,39 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 #pragma mark -
+#pragma mark handleFileUpdateNotification
+
+- (void)handleFileUpdateNotification:(NSNotification *)notification {
+	if (![notification.object isKindOfClass:[NSURL class]]) {
+		return;
+	}
+	NSURL *updatedFileURL = (NSURL *)notification.object;
+	
+	typeof(self) __weak weakSelf = self;
+	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+		__strong MADExplorerController *strongSelf = weakSelf;
+		if (!strongSelf) return;
+		
+		// Find the index path for the updated file URL
+		NSIndexPath *indexPathToReload = nil;
+		NSUInteger count = [strongSelf.fileExplorerDataSource count];
+		for (NSUInteger i = 0; i < count; i++) {
+			MADMetaData *metadata = [strongSelf.fileExplorerDataSource metadataAtIndex:i];
+			if ([metadata.URL isEqual:updatedFileURL]) {
+				indexPathToReload = [NSIndexPath indexPathForItem:(NSInteger)i inSection:0];
+				break;
+			}
+		}
+		
+		if (indexPathToReload) {
+			// Reload the specific item in the collection view
+			// [[strongSelf collectionView] reloadItemsAtIndexPaths:@[indexPathToReload]];
+			[[strongSelf collectionView] reloadData];  // For some reason `reloadItemsAtIndexPaths` is not working
+		}
+	}];
+}
+
+#pragma mark -
 #pragma mark MADDocumentManagerProtocol
 
 - (void)handleDidDisconnectFromClound:(id)sender {
@@ -470,9 +513,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark MADDocumentManagerProtocol
 
-- (void)documentManagerDidChangeContent:(NSArray *)inserts
-								removes:(NSArray *)removes
-								updates:(NSArray *)updates
+- (void)documentManagerDidChangeContent:(NSArray <NSIndexPath *> *)inserts
+								removes:(NSArray <NSIndexPath *> *)removes
+								updates:(NSArray <NSIndexPath *> *)updates
 							 completion:(void (^)(BOOL, NSError *))completion {
 
 	UICollectionView *__weak weakCollectionView = self.collectionView;
@@ -1440,8 +1483,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (IBAction)actionActivity:(id)sender {
 	
-	NSMutableArray *wrappedUrls =
-		[[NSMutableArray alloc] initWithCapacity: self.fileExplorerDataSource.count];
+	NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.fileExplorerDataSource.count];
 
 	NSArray<NSIndexPath *> *indexPaths = self.collectionView.indexPathsForSelectedItems;
 	MADMetaData *metadata;
@@ -1461,13 +1503,12 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	//    documentCell.selected = NO;
 	//}
 	
-	NSArray *applicationActivities, *excludedActivityTypes;
-	applicationActivities = [[NSArray alloc] init];
-	excludedActivityTypes = [[NSArray alloc] initWithObjects: UIActivityTypeAssignToContact,
-															  UIActivityTypePostToFacebook,
-															  UIActivityTypePostToFlickr,
-															  UIActivityTypePostToTwitter,
-															  UIActivityTypePostToVimeo, nil];
+	NSArray *applicationActivities = [[NSArray alloc] init];
+	NSArray *excludedActivityTypes = [[NSArray alloc] initWithObjects: UIActivityTypeAssignToContact,
+									  UIActivityTypePostToFacebook,
+									  UIActivityTypePostToFlickr,
+									  UIActivityTypePostToTwitter,
+									  UIActivityTypePostToVimeo, nil];
 	UIActivityViewController *activityViewController;
 	activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
 															   applicationActivities: applicationActivities];

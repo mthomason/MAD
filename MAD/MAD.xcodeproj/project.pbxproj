@@ -322,7 +322,7 @@
 		4C7C00D11EE289BA00E7A5B1 /* NSPredicate+Creators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C00CF1EE289BA00E7A5B1 /* NSPredicate+Creators.m */; };
 		4C7C00D31EE28AFD00E7A5B1 /* MADModelIDProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7C00D21EE28AFD00E7A5B1 /* MADModelIDProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7C00D51EE28B0D00E7A5B1 /* MADModelDataProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7C00D41EE28B0D00E7A5B1 /* MADModelDataProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C8278BC1DB76BFD005313F5 /* MADNotificationFileUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278BA1DB76BFD005313F5 /* MADNotificationFileUpdate.h */; };
+		4C8278BC1DB76BFD005313F5 /* MADNotificationFileUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278BA1DB76BFD005313F5 /* MADNotificationFileUpdate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C8278BD1DB76BFD005313F5 /* MADNotificationFileUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8278BB1DB76BFD005313F5 /* MADNotificationFileUpdate.m */; };
 		4C8278C01DB76E19005313F5 /* MADNotificationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8278BE1DB76E19005313F5 /* MADNotificationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C82C9801CF0B08A00F244F6 /* MADPathUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C82C97E1CF0B08A00F244F6 /* MADPathUtilities.h */; };

@@ -11,17 +11,17 @@
 #endif
 
 #import "MADReportPageView.h"
-#import <MAD/miniz.h>
-
-#import <UIKit/UILabel.h>
-
-#import <MAD/MADImageThumbnail.h>
-
-#import <MAD/MADPrintPageRenderer.h>
-
 #import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
+#import <MAD/miniz.h>
+#import <MAD/MADNotificationFileUpdate.h>
+#import <MAD/MADImageThumbnail.h>
+#import <MAD/MADPrintPageRenderer.h>
+
+#import <UIKit/UILabel.h>
+
+
 //#import <setjmp.h>
 #import <os/log.h>
 
@@ -97,13 +97,20 @@ static os_log_t mad_log;
 		
 		MADPrintPageRenderer *renderer = printPageRenderer;
 		NSURL *thumbnailURL = [[delegatePage thumbnailURL] copy];
+		
+		UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
+		
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
 			NSData *pngImage = UIImagePNGRepresentation(thumbnail);
 			NSError *error = nil;
 			[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
 			if (error != nil) {
 				os_log_error(mad_log, "Error: %@", error);
+			} else {
+				dispatch_async(dispatch_get_main_queue(), ^{
+					MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] initWithURL:[delegatePage documentURL]];
+					[fileUpdate notify];
+				});
 			}
 			pngImage = nil;
 		});

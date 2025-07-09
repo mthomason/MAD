@@ -48,6 +48,7 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 					MADThumbnailView *sself1 = wself;
 					if (sself1) {
 						sself1.image = result;
+						[sself1 setNeedsDisplay];
 					}
 				});
 			}
@@ -71,6 +72,7 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 				if (thumbnail == nil) thumbnail = [UIImage imageNamed:MADImageBlank];
 				dispatch_block_t setThumbnail = ^{
 					self.image = thumbnail;
+					[self setNeedsDisplay];
 				};
 				dispatch_sync(dispatch_get_main_queue(), setThumbnail);
 			}

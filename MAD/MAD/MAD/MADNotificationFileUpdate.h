@@ -9,16 +9,14 @@
 #ifndef Reports_MADNotificationFileUpdate_h
 #define Reports_MADNotificationFileUpdate_h
 
+#import <MAD/MADNotificationProtocol.h>
 #import <Foundation/NSObject.h>
-#import <MADNotificationProtocol.h>
 
 extern NSString * const MADNotificationIdentifierFileUpdate;
 
-@interface MADNotificationFileUpdate : NSObject
-	<MADNotificationProtocol>
-
-	- (instancetype)initWithURL:(NSURL *)url NS_DESIGNATED_INITIALIZER;
-
+@interface MADNotificationFileUpdate : NSObject <MADNotificationProtocol>
+- (instancetype)init  NS_UNAVAILABLE;
+- (instancetype)initWithURL:(NSURL *)url NS_DESIGNATED_INITIALIZER;
 @end
 
 #endif

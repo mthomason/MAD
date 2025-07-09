@@ -4,6 +4,7 @@
 ## Primary
 
 * ~~Add images back~~
+* ~~Got rid of warning images~~
 * Test iCloud stuff and make sure intro screen activity is synced correctly
 * Test TDS
 * ~~See if something can be done about slow load of SQL screen~~
