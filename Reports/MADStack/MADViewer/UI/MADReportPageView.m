@@ -96,23 +96,25 @@ static os_log_t mad_log;
 		if (delegatePage.pageNumber != 1) return;
 		
 		MADPrintPageRenderer *renderer = printPageRenderer;
-		NSURL *thumbnailURL = [[delegatePage thumbnailURL] copy];
 		
-		UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
-		
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-			NSError *error = nil;
-			[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
-			if (error != nil) {
-				os_log_error(mad_log, "Error: %@", error);
-			} else {
-				dispatch_async(dispatch_get_main_queue(), ^{
-					MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] initWithURL:[delegatePage documentURL]];
-					[fileUpdate notify];
-				});
-			}
-			pngImage = nil;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			NSURL *thumbnailURL = [[delegatePage thumbnailURL] copy];
+			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
+			
+			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+				NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+				NSError *error = nil;
+				[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
+				if (error != nil) {
+					os_log_error(mad_log, "Error: %@", error);
+				} else {
+					dispatch_async(dispatch_get_main_queue(), ^{
+						MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] initWithURL:[delegatePage documentURL]];
+						[fileUpdate notify];
+					});
+				}
+				pngImage = nil;
+			});
 		});
 	}
 }
