@@ -143,7 +143,7 @@
 	ltoa(dropIndex, buf);
 	ptr = buf;
 	NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
-	return [schemaTableName stringByAppendingString:indexString];
+	return [[schemaTableName stringByAppendingString:indexString] stringByReplacingOccurrencesOfString:@"." withString:@""];
 }
 
 - (BOOL)isEqualTo:(RptqQueryTable *)sender {
