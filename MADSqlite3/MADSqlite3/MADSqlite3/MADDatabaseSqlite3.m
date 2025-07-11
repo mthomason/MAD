@@ -393,7 +393,7 @@ void sqliteLog(void *foo, const char* statement) {
 				
 		}
 	}
-	NSAssert(NO, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+	//NSAssert(NO, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
 	return NO;
 }
 

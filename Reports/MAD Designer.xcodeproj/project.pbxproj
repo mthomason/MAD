@@ -3705,11 +3705,9 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3C58YS54A;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D3C58YS54A;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -3743,8 +3741,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
 				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "MAD Designer Development";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MAD Designer Development";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_BITCODE_FROM_COPIED_FILES = NO;
 			};
 			name = Debug;

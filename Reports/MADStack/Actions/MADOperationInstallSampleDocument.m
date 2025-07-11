@@ -37,10 +37,10 @@
 
 	if (self = [super init]) {
 		
-		_filename = filename.copy;
-		_fileExtension = fileExtension.copy;
-		_groupIdentifier = groupIdentifier.copy;
-		_installFlag = installFlag.copy;
+		_filename = [filename copy];
+		_fileExtension = [fileExtension copy];
+		_groupIdentifier = [groupIdentifier copy];
+		_installFlag = [installFlag copy];
 		
 	}
 	return self;

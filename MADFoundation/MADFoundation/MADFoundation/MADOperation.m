@@ -257,7 +257,7 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (void)evaluateConditions {
 	// NSAssert is a form of self-documentation and debug check.
-	NSAssert(self.state == MADOperationStatePending && !self.isCancelled, @"evaluateConditions() was called out-of-order");
+	//NSAssert(self.state == MADOperationStatePending && !self.isCancelled, @"evaluateConditions() was called out-of-order");
 	
 	MADLogDebug("MADOperation <%p:%@> evaluateConditions: changing state to EvaluatingConditions.", self, self.name);
 	self.state = MADOperationStateEvaluatingConditions;

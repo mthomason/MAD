@@ -116,36 +116,56 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	return hasChanged;
 }
 
+// Keys for NSUserDefaults (add these to your constants)
+//static NSString *const MADAppConfigurationUserDefaultsUbiquityToken = @"UbiquityToken";
+static NSString *const MADAppConfigurationUserDefaultsUbiquityTokenClass = @"UbiquityTokenClass";
+
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
-	id<NSObject, NSCopying, NSCoding> storedToken = nil;
-	
 	NSData *ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults] objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+	if (!ubiquityIdentityTokenArchive) {
+		return nil;
+	}
 	
-	if (ubiquityIdentityTokenArchive) {
-		NSError *error = nil;
-		storedToken = [NSKeyedUnarchiver unarchivedObjectOfClasses:[NSSet setWithObjects:[NSObject class], nil] fromData:ubiquityIdentityTokenArchive error:&error];
-		if (error) {
-			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
-		}
+	// Retrieve the class name
+	NSString *className = [[NSUserDefaults standardUserDefaults] stringForKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
+	Class tokenClass = className ? NSClassFromString(className) : nil;
+	
+	if (!tokenClass) {
+		os_log_error(OS_LOG_DEFAULT, "%s: Unknown class for ubiquity token. Possible OS upgrade or corruption.", __PRETTY_FUNCTION__);
+		return nil;
+	}
+	
+	NSError *error = nil;
+	id storedToken = [NSKeyedUnarchiver unarchivedObjectOfClass:tokenClass fromData:ubiquityIdentityTokenArchive error:&error];
+	
+	if (error) {
+		os_log_error(OS_LOG_DEFAULT, "%s: Error unarchiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
+		return nil;
 	}
 	
 	return storedToken;
 }
 
-
 - (void)persistAccount {
-	
-	id <NSObject, NSCopying, NSCoding> token; token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
+	id<NSObject, NSCopying, NSCoding> token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
 	if (token) {
+		// Store the token's class name
+		NSString *className = NSStringFromClass([token class]);
+		
 		NSError *error = nil;
 		NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token requiringSecureCoding:YES error:&error];
+		
 		if (ubiquityIdentityTokenArchive && !error) {
-			[[NSUserDefaults standardUserDefaults] setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
+			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+			[defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
+			[defaults setObject:className forKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
 		} else {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
 		}
 	} else {
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+		[defaults removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
 	}
 }
 
@@ -337,6 +357,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 		if (storageState.storageOption == MADAppStorageNotSet) {
 			[self getUserCloudPrefs];
 		} else {
+			// Generally MADAppStorageStateUnknown
 			[self configureFilesController: NO storageOptionChangeHandler: nil];
 		}
 	}
