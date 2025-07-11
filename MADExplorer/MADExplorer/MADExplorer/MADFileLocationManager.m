@@ -23,9 +23,10 @@
 
 #import <os/log.h>
 
-static NSString * const MADAppConfigurationUserDefaultsUbiquityToken    = @"MADAppConfigurationUserDefaultsUbiquityToken";
-static NSString * const MADAppConfigurationUserDefaultsStorageOption    = @"MADAppConfigurationUserDefaultsStorageOption";
-static NSString * const MADFirstLaunch                                  = @"MADFirstLaunch";
+static NSString * const MADAppConfigurationUserDefaultsUbiquityToken      = @"MADAppConfigurationUserDefaultsUbiquityToken";
+static NSString * const MADAppConfigurationUserDefaultsStorageOption      = @"MADAppConfigurationUserDefaultsStorageOption";
+static NSString * const MADFirstLaunch                                    = @"MADFirstLaunch";
+static NSString * const MADAppConfigurationUserDefaultsUbiquityTokenClass = @"UbiquityTokenClass";
 
 static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void));
 static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLocal)(void), void (^handlerCloud)(void)) {
@@ -104,21 +105,17 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	id <NSObject, NSCopying, NSCoding> currentToken = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
 	id <NSObject, NSCopying, NSCoding> storedToken = [self copyStoredUbiquityIdentityToken];
 	
-	if ((!currentToken && storedToken) ||
-		(!storedToken && currentToken) ||
+	// Compare tokens (handles all nil/non-nil combinations)
+	if ((currentToken && !storedToken) ||
+		(!currentToken && storedToken) ||
 		(currentToken && storedToken && ![currentToken isEqual:storedToken])) {
 		
-		[self persistAccount];
-		
+		[self persistAccount];  // Update stored token
 		hasChanged = YES;
 	}
 	
 	return hasChanged;
 }
-
-// Keys for NSUserDefaults (add these to your constants)
-//static NSString *const MADAppConfigurationUserDefaultsUbiquityToken = @"UbiquityToken";
-static NSString *const MADAppConfigurationUserDefaultsUbiquityTokenClass = @"UbiquityTokenClass";
 
 - (id<NSObject, NSCopying, NSCoding>)copyStoredUbiquityIdentityToken {
 	NSData *ubiquityIdentityTokenArchive = [[NSUserDefaults standardUserDefaults] objectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
@@ -131,7 +128,7 @@ static NSString *const MADAppConfigurationUserDefaultsUbiquityTokenClass = @"Ubi
 	Class tokenClass = className ? NSClassFromString(className) : nil;
 	
 	if (!tokenClass) {
-		os_log_error(OS_LOG_DEFAULT, "%s: Unknown class for ubiquity token. Possible OS upgrade or corruption.", __PRETTY_FUNCTION__);
+		os_log_error(OS_LOG_DEFAULT, "%s: Unknown class for ubiquity token. Treating as changed account.", __PRETTY_FUNCTION__);
 		return nil;
 	}
 	
@@ -149,18 +146,18 @@ static NSString *const MADAppConfigurationUserDefaultsUbiquityTokenClass = @"Ubi
 - (void)persistAccount {
 	id<NSObject, NSCopying, NSCoding> token = [[NSFileManager defaultManager].ubiquityIdentityToken copyWithZone:nil];
 	if (token) {
-		// Store the token's class name
-		NSString *className = NSStringFromClass([token class]);
 		
 		NSError *error = nil;
 		NSData *ubiquityIdentityTokenArchive = [NSKeyedArchiver archivedDataWithRootObject:token requiringSecureCoding:YES error:&error];
-		
+
 		if (ubiquityIdentityTokenArchive && !error) {
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
-			[defaults setObject:className forKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
+			[[NSUserDefaults standardUserDefaults] setObject:ubiquityIdentityTokenArchive forKey:MADAppConfigurationUserDefaultsUbiquityToken];
+			[[NSUserDefaults standardUserDefaults] setObject:NSStringFromClass([token class]) forKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
 		} else {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
+			// Clear invalid token on failure
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityToken];
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
 		}
 	} else {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
