@@ -1327,8 +1327,17 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (id)connectionSettings { return self.databaseConnection; }
 
+- (NSString *)fieldAliasForField:(NSString *)field withSafeTableName:(NSString *)safeTableName {
+	//NSString *safeTableName = [self shortAliasFromQualifiedTable:safeTableName];	//Calling this function removes the schema part.
+	return [[safeTableName stringByAppendingString:@"."] stringByAppendingString:[self newSafeIdentifier:field]];
+}
+
+- (NSString *)shortAliasFromQualifiedTable:(NSString *)qualifiedName {
+	return [[qualifiedName componentsSeparatedByString:@"."] lastObject] ?: qualifiedName;
+}
+
 + (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-	MADSafeQueryField *safeQueryField = [[MADSafeQueryField alloc] initWithFormat:@"[%@].[%@]", tableName, fieldName];
+	NSString *safeQueryField = [[NSString alloc] initWithFormat:@"[%@].[%@]", [tableName stringByReplacingOccurrencesOfString:@"." withString:@"."], fieldName];
 	return safeQueryField;
 }
 - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
@@ -1336,14 +1345,31 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 + (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName {
-	id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
-	return result;
+	if ([fieldOrTableName rangeOfString:@"."].location == NSNotFound) {
+		return [NSString stringWithFormat:@"[%@]", fieldOrTableName];
+	}
+	
+	return [self bracketedIdentifierFromName:fieldOrTableName];
 }
 
 - (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName {
-	id result = [[NSString alloc] initWithFormat:@"[%@]", fieldOrTableName];
-	return result;
+	return [MADDatabaseSQLServer newSafeIdentifier:fieldOrTableName];
 }
+
++ (NSString *)bracketedIdentifierFromName:(NSString *)name {
+	NSArray<NSString *> *components = [name componentsSeparatedByString:@"."];
+	NSMutableArray<NSString *> *wrappedComponents = [NSMutableArray arrayWithCapacity:components.count];
+	
+	for (NSString *part in components) {
+		if (part.length > 0) {
+			NSString *wrapped = [NSString stringWithFormat:@"[%@]", part];
+			[wrappedComponents addObject:wrapped];
+		}
+	}
+	
+	return [wrappedComponents componentsJoinedByString:@"."];
+}
+
 
 - (NSString *)sqlAggregateFunctionLength { return @"DATALENGTH"; }
 
@@ -1383,7 +1409,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	DBPROCESS *dbconn = [process process];
 	if (dbconn) {
 		
-		dbcmd(dbconn, "SELECT name FROM sys.tables");
+		dbcmd(dbconn,
+			  "SELECT s.name + '.' + t.name AS full_name "
+			  "FROM sys.tables t "
+			  "JOIN sys.schemas s ON t.schema_id = s.schema_id "
+			  "ORDER BY full_name");
 		
 		RETCODE success = dbsqlexec(dbconn);
 		
@@ -1439,7 +1469,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	DBPROCESS *dbconn = [process process];
 	if (dbconn) {
 		
-		dbcmd(dbconn, "SELECT name FROM sys.tables");
+		dbcmd(dbconn,
+			  "SELECT s.name + '.' + t.name AS full_name "
+			  "FROM sys.tables t "
+			  "JOIN sys.schemas s ON t.schema_id = s.schema_id "
+			  "ORDER BY full_name");
 		
 		RETCODE success = dbsqlexec(dbconn);
 		
@@ -1497,7 +1531,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	DBPROCESS *dbconn = [process process];
 	if (dbconn) {
 		
-		dbcmd(dbconn, "SELECT name FROM sys.tables");
+		dbcmd(dbconn,
+			  "SELECT s.name + '.' + t.name AS full_name "
+			  "FROM sys.tables t "
+			  "JOIN sys.schemas s ON t.schema_id = s.schema_id "
+			  "ORDER BY full_name");
+
 		
 		RETCODE success = dbsqlexec(dbconn);
 		
@@ -1545,7 +1584,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 #pragma mark - Reading Fields
-
+//Reads fields
 - (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName connection:(id)process error:(NSError * __autoreleasing *)error {
 	NSMutableArray *results = nil;
 	RETCODE sqlReturnCode = FAIL;

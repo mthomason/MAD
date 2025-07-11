@@ -129,9 +129,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 - (MADSafeQueryField *)fieldAliasForField:(NSString *)fieldName
 							 andTableName:(NSString *)tableName {
-	NSString *fieldAlias;
-	fieldAlias = [fieldName stringByAppendingString:tableName];
-	return fieldAlias;
+	return [fieldName stringByAppendingString:tableName];
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
