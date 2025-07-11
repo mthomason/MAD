@@ -17,8 +17,7 @@
 
 typedef UIDocumentInteractionController MADocumentActivityController;
 
-@interface MADActivityReportPrintPreview()
-    <UIDocumentInteractionControllerDelegate>
+@interface MADActivityReportPrintPreview() <UIDocumentInteractionControllerDelegate>
 
     @property (nonatomic, strong) MADocumentActivityController *activityController;
     @property (nonatomic, copy) NSURL *pdfurl;
@@ -56,8 +55,7 @@ typedef UIDocumentInteractionController MADocumentActivityController;
 }
 
 - (void)performActivity {
-    NSURL *pdfurl = self.pdfurl;
-    MADocumentActivityController *controller = [MADocumentActivityController  interactionControllerWithURL:pdfurl];
+    MADocumentActivityController *controller = [MADocumentActivityController  interactionControllerWithURL:self.pdfurl];
     controller.delegate = self;
     self.activityController = controller;
     

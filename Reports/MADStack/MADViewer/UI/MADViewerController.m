@@ -648,8 +648,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	
 	MADViewerController * __weak weakSelf = self;
 	[self presentViewController:activityViewController animated:YES completion:^{
-		weakSelf.presentedViewController.navigationController.navigationBar.barTintColor =
-			[MADColorEverydayApps newColorAnalogous4];
+		weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
 	}];
 	[self.tabBarController disableTabBarItems];
 }

@@ -222,8 +222,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 		_showWaterMark = NO;
 		_accessibilityCacheNeedsUpdate = NO;
 		
-		NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
-		fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *>alloc] init];
+		NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *>alloc] init];
 		self.fontDescriptors = fontDescriptors;
 
 	}

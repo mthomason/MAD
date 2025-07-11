@@ -157,10 +157,9 @@ static inline CGRect PdfTrimBox(CGRect rect) { return UIEdgeInsetsInsetRect(rect
 														name: MADNotificationDidFormatPagesName
 													  object: reportFormatter];
 		
-		MADPrintPageRenderer *printPageRenderer;
-		printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
+		MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
 		
-		NSString *filePath = fileURL.path.copy;
+		NSString *filePath = [fileURL.path copy];
 		UIGraphicsBeginPDFContextToFile(filePath, letterRect, options);
 		
 		NSValue *trimBox = [NSValue valueWithCGRect:PdfTrimBox(letterRect)];
