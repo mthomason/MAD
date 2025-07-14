@@ -23,6 +23,7 @@
 
 #import "MADQuerySampleDataField.h"
 #import "MADQuerySampleDataTable.h"
+#import "MADQuerySampleDataTableRange.h"
 #import "MADQueryFull.h"
 #import "MADQueryMaxFieldLength.h"
 #import "MADQueryTest.h"
@@ -58,6 +59,8 @@
 			return [[MADQuerySampleDataField alloc] initWithObject:parameters];
 		case MADQueryTypeSampleDataTable:
 			return [[MADQuerySampleDataTable alloc] initWithObject:parameters];
+		case MADQueryTypeSampleDataTableRange:
+			return [[MADQuerySampleDataTableRange alloc] initWithObject:parameters];
 		case MADQueryTypeCacheDeleteAllFromTable:
 			return [[MADQueryCacheDeleteAllFromTable alloc] initWithObject:parameters];
 		case MADQueryTypeCacheBeginTransaction:

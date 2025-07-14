@@ -11,20 +11,6 @@
 #endif
 
 #import "MADQuerySampleDataTable.h"
-
-#import <CoreData/NSManagedObjectID.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSNull.h>
-#import <Foundation/NSError.h>
-
-#import <MADFoundation/MADDataTable.h>
-
-#import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADDatabase.h>
-#import <MADAPI/MADDatabaseField.h>
-
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase.h"
@@ -36,6 +22,20 @@
 #import "MADDatabaseField+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
+
+#import <MADFoundation/MADDataTable.h>
+
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseField.h>
+
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSError.h>
+
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MADQuerySampleDataTable () <MADDatabaseResultsProtocol>
 
@@ -64,7 +64,8 @@
 		NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]],
 				 @"MADQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
-		MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: ((RptqDatabaseSchemaTable *)object).objectID.URIRepresentation.absoluteString];
+		RptqDatabaseSchemaTable *obj = object;
+		MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: obj.objectID.URIRepresentation.absoluteString];
 		self.dataTableMaxFieldLength = dataTable;
 		self.queryObject = object;
 
@@ -118,14 +119,14 @@
 		
 		for (RptqDatabaseSchemaField *field in fields) {
 			NSString *tableName = [queryMaxFieldLenght.database tableAliasForTable:field.inTable.toString];
-			NSString *okey = [queryMaxFieldLenght.database fieldAliasForField: field.name
-															withSafeTableName: tableName];
-			NSString *ckey = [queryMaxFieldLenght.database fieldAliasForField: field.name
-																 andTableName: field.inTable.name];
+			NSString *fieldAliasKey = [queryMaxFieldLenght.database fieldAliasForField: field.name
+																	 withSafeTableName: tableName];
+			NSString *fieldAliasKey2 = [queryMaxFieldLenght.database fieldAliasForField: field.name
+																		   andTableName: field.inTable.name];
 			NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
-			NSNumber *widthByField = widthsByField[ckey];
+			NSNumber *widthByField = widthsByField[fieldAliasKey2];
 			NSUInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.unsignedIntegerValue;
-			MADDatabaseField *databaseField = self.fields[okey];
+			MADDatabaseField *databaseField = self.fields[fieldAliasKey];
 			databaseField.calculatedWidth = maxSize;
 		}
 	}
@@ -133,6 +134,7 @@
 	[sql appendString:MADSqlTextFromPart];
 	[sql appendString:safeTableName];
 	
+
 	NSString *sqlLimit = [self.database sqlLimitClause:255];
 	[sql appendString:sqlLimit];
 	

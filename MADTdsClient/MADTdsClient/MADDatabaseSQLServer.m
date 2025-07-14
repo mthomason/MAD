@@ -1383,6 +1383,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 				[selectPart stringByAppendingFormat:@"TOP %ld\n", (long)limit] : selectPart;
 }
 
+- (NSString *)sqlRangeClauseWithLimit:(NSUInteger)limit offset:(NSUInteger)offset {
+	return [NSString stringWithFormat:@"OFFSET %ld ROWS FETCH NEXT %ld ROWS ONLY", offset, limit];
+}
+- (NSString *)sqlDefaultRequiredOrderByClause { return @"ORDER BY (SELECT NULL)"; }
+
 - (NSString *)sqlLimitClause { return @""; }
 
 - (NSString *)sqlLimitClause:(NSUInteger)limit { return @""; }

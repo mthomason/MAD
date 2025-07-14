@@ -1405,7 +1405,7 @@ BOOL storeEnabled(void) {
 	
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:databaseConnection];
 	
-	MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTable
+	MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol, MADQueryDatabaseRangeProtocol> *rquery = (MADQuery <MADQueryDatabaseProtocol, MADQueryCredentialProtocol, MADQueryDatabaseRangeProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataTableRange
 																																											  object: table.databaseSchemaTable];
 	rquery.credential = [credentials copy];
 	if ([rquery conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {

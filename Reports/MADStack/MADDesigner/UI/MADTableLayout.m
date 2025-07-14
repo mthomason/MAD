@@ -11,6 +11,7 @@
 #endif
 
 #import "MADTableLayout.h"
+#import "MTTableCellHeader.h"
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UITableView.h>
 #import <Foundation/NSIndexPath.h>
@@ -60,7 +61,7 @@ typedef struct _ColumnWidth {
 	self.columnCount = columnCount;
 	self.heightRow = 22.0000f;
 	self.heightHeader = 24.0000f;
-	self.collectionView.delegate = self;
+	//self.collectionView.delegate = self;
 }
 
 - (void)prepareLayout {
@@ -98,8 +99,8 @@ typedef struct _ColumnWidth {
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
 																	 atIndexPath:(NSIndexPath *)indexPath {
-
-	UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: @"MADTableCellHeader"
+	
+	UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: NSStringFromClass([MADTableCellHeader class])
 																															  withIndexPath: indexPath];
 	NSUInteger column = (NSUInteger)indexPath.row;
 	CGRect frame = [self locationOfHeaderAtColumn:column];

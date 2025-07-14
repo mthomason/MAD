@@ -56,7 +56,6 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
 #import "MADQueryPredicate.h"
-#import "MADQueryLimitClause.h"
 
 #import "RptqQuerySort.h"
 
@@ -160,19 +159,11 @@ static inline BOOL isKindOfRptqQuery(id obj) {
     NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
 
 
-    MADQueryPredicate *predicate;
-    MADQueryLimitClause *limitClause;
+	MADQueryPredicate *predicate = [[MADQueryPredicate alloc] initWithQueryPredicates: queryObject.hasQueryPredicate
+																		  andDatabase: database];
 
-    predicate = [[MADQueryPredicate alloc] initWithQueryPredicates: queryObject.hasQueryPredicate
-                                                       andDatabase: database];
-    
-    limitClause = [[MADQueryLimitClause alloc] initWithLimit: _limitResults
-                                                 andDatabase: database];
-
-    NSString *predicatePart = predicate.sql.copy;
-    NSString *limitPart = limitClause.sql.copy;
-    
-    
+    NSString *predicatePart = [predicate.sql copy];
+    NSString *limitPart = [[database sqlLimitClause: _limitResults] copy];
     
     [result appendString:selectPart];
     
@@ -266,8 +257,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
                                                   @"Empty query while using \"only active "
                                                   @"fields.\" You may need to reference some "
                                                   @"query fields.");
-            NSDictionary *errorInfo;
-            errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+            NSDictionary *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                             message, NSLocalizedDescriptionKey, nil];
             *error = [NSError errorWithDomain: @"MADQuery"
                                          code: 5774

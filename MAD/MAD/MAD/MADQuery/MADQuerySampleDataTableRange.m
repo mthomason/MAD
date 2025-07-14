@@ -1,0 +1,163 @@
+//
+//  MADQuerySampleDataTable.m
+//  MAD
+//
+//  Created by Michael Thomason on 3/22/14.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
+//
+
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
+#import "MADQuerySampleDataTableRange.h"
+
+#import <CoreData/NSManagedObjectID.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSError.h>
+
+#import <MADFoundation/MADDataTable.h>
+
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseField.h>
+
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqDatabase.h"
+
+#import "MADQuery+Extras.h"
+
+#import "MADDatabase+Constructor.h"
+#import "MADDataTable+Constructor.h"
+#import "MADDatabaseField+Constructor.h"
+
+#import "RptqDatabaseCredentals+Extras.h"
+
+@interface MADQuerySampleDataTableRange () <MADDatabaseResultsProtocol>
+
+	@property (nonatomic, strong) id queryObject;
+	@property (nonatomic, strong) MADDataTable *dataTableMaxFieldLength;
+
+@end
+
+@implementation MADQuerySampleDataTableRange
+
+@synthesize credential = _credential;
+@synthesize fields = _fields;
+@synthesize fieldKeys = _fieldKeys;
+@synthesize dataTable = _dataTable;
+@synthesize database = _database;
+
+- (instancetype)initWithObject:(id)object {
+	if (self = [super initWithObject:object]) {
+		_limit = 0;
+		_offset = 0;
+		
+		NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
+		self.fields = fieldInfo;
+
+		NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+		self.fieldKeys = fieldKeys;
+
+		NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]],
+				 @"MADQuerySampleDataTable expects RptqDatabaseSchemaTable.");
+
+		RptqDatabaseSchemaTable *obj = object;
+		MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: obj.objectID.URIRepresentation.absoluteString];
+		self.dataTableMaxFieldLength = dataTable;
+		self.queryObject = object;
+
+	}
+	return self;
+}
+
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+	return self.credential;
+}
+
+- (bool)useRange {
+	return _limit > 0;
+}
+
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
+	NSError *localError = nil;
+	[super getSql:&localError];
+		
+	if (localError != nil) {
+		if (error) *error = [localError copy];
+		return nil;
+	}
+	
+	NSString *selectPart = [self useRange] ? [self.database selectPart] : [self.database selectPartWithLimitedResults:255];
+	NSMutableString *sql = [[NSMutableString alloc] initWithString:selectPart];
+	RptqDatabaseSchemaTable *table = self.queryObject;
+	
+	[sql appendString:[MADQuerySampleDataTableRange sqlAllFieldsInTable: table
+														  usingDatabase: self.database]];
+
+	NSString *safeTableName = [self.database tableAliasForTable:table.toString];
+
+	if (self.fieldKeys.count <= 0) {
+		for (RptqDatabaseSchemaField *field in table.hasFields) {
+			NSString *fieldAlias = [self.database fieldAliasForField:field.name
+												   withSafeTableName:safeTableName];
+			MADDatabaseField *databaseField = [MADDatabaseField newDatabaseFieldWithSchemaField:field];
+			self.fields[fieldAlias] = databaseField;
+			[self.fieldKeys addObject:fieldAlias];
+		}
+	}
+	
+	NSOrderedSet *fields = table.hasFields;
+	MADQuery <MADQueryDatabaseProtocol> *queryMaxFieldLenght = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeMaxFieldLength
+																																   object: fields];
+	queryMaxFieldLenght.database.delegate = self;
+
+	NSError * __autoreleasing blockError = NULL;
+	BOOL success = [queryMaxFieldLenght.database executeQuery: queryMaxFieldLenght
+												withDataTable: self.dataTableMaxFieldLength
+													 andError: &blockError];
+	NSAssert(blockError == NULL, @"%s: Error: %@", __PRETTY_FUNCTION__, blockError);
+	if (success && self.dataTableMaxFieldLength.numberOfRows > 0) {
+		
+		for (RptqDatabaseSchemaField *field in fields) {
+			NSString *tableName = [queryMaxFieldLenght.database tableAliasForTable:field.inTable.toString];
+			NSString *fieldAliasKey = [queryMaxFieldLenght.database fieldAliasForField: field.name
+																	 withSafeTableName: tableName];
+			NSString *fieldAliasKey2 = [queryMaxFieldLenght.database fieldAliasForField: field.name
+																		   andTableName: field.inTable.name];
+			NSDictionary *widthsByField = [self.dataTableMaxFieldLength objectAtRow:0];
+			NSNumber *widthByField = widthsByField[fieldAliasKey2];
+			NSUInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : widthByField.unsignedIntegerValue;
+			MADDatabaseField *databaseField = self.fields[fieldAliasKey];
+			databaseField.calculatedWidth = maxSize;
+		}
+	}
+	
+	[sql appendString:MADSqlTextFromPart];
+	[sql appendString:safeTableName];
+	[sql appendString:[self.database sqlDefaultRequiredOrderByClause]];
+	NSString *sqlLimit = [self useRange] ? [self.database sqlRangeClauseWithLimit:_limit offset:_offset] : [self.database sqlLimitClause:255];
+	[sql appendString:sqlLimit];
+	
+	return [sql copy];
+}
+
++ (NSString *)sqlAllFieldsInTable: (RptqDatabaseSchemaTable *)schemaTable
+					usingDatabase: (MADDatabase *)database {
+	NSMutableArray<NSString *> *fieldAliases = [[NSMutableArray alloc] init];
+	NSString *safeTableName = [database tableAliasForTable:schemaTable.toString];
+	for (RptqDatabaseSchemaField *field in schemaTable.hasFields) {
+		NSString *fieldAlias = [database fieldAliasForField:field.name withSafeTableName:safeTableName];
+		[fieldAliases addObject:fieldAlias];
+		
+	}
+	return [fieldAliases componentsJoinedByString:@",\n\t"];
+}
+
+- (MADDataTable *)dataTableForQuery:(MADQuery *)query { return self.dataTableMaxFieldLength; }
+
+@end

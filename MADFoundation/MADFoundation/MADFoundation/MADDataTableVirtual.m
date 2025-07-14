@@ -143,9 +143,16 @@
 
 - (id)objectAtIndexedSubscript:(NSUInteger)index { return [self objectAtRow:index]; }
 - (id)objectAtIndex:(NSUInteger)index { return [self objectAtRow:index]; }
-- (id)objectAtRow:(NSUInteger)row { return [self.sortIndex objectAtIndex:row]; }
 - (NSEnumerator *)objectEnumerator { return [self.sortIndex objectEnumerator]; }
 - (NSEnumerator *)columnsEnumerator { return [self.columns objectEnumerator]; }
+
+- (id)objectAtRow:(NSUInteger)row {
+	@try {
+		return (row < self.sortIndex.count) ? [self.sortIndex objectAtIndex:row] : nil;
+	} @catch (NSException *exception) {
+		return nil;
+	}
+}
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
 	NSString *fieldKey = self.columnKeys[column];

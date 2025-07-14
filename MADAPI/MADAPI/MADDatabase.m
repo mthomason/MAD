@@ -209,7 +209,10 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (NSString *)selectPart { return @"SELECT\n"; }
 - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit { return @"SELECT\n"; }
 - (NSString *)sqlLimitClause { return [self sqlLimitClause:  NSUIntegerMax]; }
-
+- (NSString *)sqlRangeClauseWithLimit:(NSUInteger)limit offset:(NSUInteger)offset {
+	return [NSString stringWithFormat:@"LIMIT %ld OFFSET %ld", limit, offset];
+}
+- (NSString *)sqlDefaultRequiredOrderByClause { return @""; }
 - (NSString *)sqlLimitClause:(NSUInteger)limit {
 	NSString *sqlLimitClause = (limit > 0 && limit != NSUIntegerMax) ?
 		[[NSString alloc] initWithFormat: @"\nLIMIT %ld", (unsigned long)limit] :

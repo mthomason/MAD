@@ -22,6 +22,8 @@
 	- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit;
 	- (NSString *)sqlLimitClause;
 	- (NSString *)sqlLimitClause:(NSUInteger)limit;
+	- (NSString *)sqlRangeClauseWithLimit:(NSUInteger)limit offset:(NSUInteger)offset;
+	- (NSString *)sqlDefaultRequiredOrderByClause;
 	- (NSString *)fieldAliasForField:(NSString *)field withSafeTableName:(NSString *)safeTableName;
 	- (NSString *)fieldAliasForField:(NSString *)fieldName andTableName:(NSString *)tableName;
 	- (NSString *)tableAliasConnector;

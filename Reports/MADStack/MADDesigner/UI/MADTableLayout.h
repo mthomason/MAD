@@ -21,6 +21,8 @@ typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *s
 
 @interface MADTableLayout : UICollectionViewLayout
 
+@property (readonly, nonatomic, assign) CGFloat heightRow;
+
 - (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
 - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath;

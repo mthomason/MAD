@@ -18,12 +18,12 @@
 
 @implementation MADDataFormatter
 
-+ (instancetype)newDataFormatter:(MADQuery <MADQueryDatabaseProtocol> *)query {
++ (instancetype)newDataFormatter:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query {
 	id result = [[self alloc] initWithQuery:query];
 	return result;
 }
 
-- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query {
+- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query {
 	if (self = [super init]) {
 		self.query = query;
 		self.didRefresh = NO;

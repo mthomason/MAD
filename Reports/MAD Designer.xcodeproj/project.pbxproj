@@ -843,6 +843,7 @@
 		4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADReportPageView.m; path = MADStack/MADViewer/UI/MADReportPageView.m; sourceTree = "<group>"; };
 		4C4020FD1BAE98C300BAE5FC /* MADDocumentPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDocumentPageController.h; path = MADStack/MADViewer/UI/MADDocumentPageController.h; sourceTree = "<group>"; };
 		4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDocumentPageController.m; path = MADStack/MADViewer/UI/MADDocumentPageController.m; sourceTree = "<group>"; };
+		4C453FC42E247D8000641E6E /* Scratch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Scratch.m; path = Source/Scratch.m; sourceTree = "<group>"; };
 		4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerControllerProtocol.h; path = ../../MADDesigner/UI/Explorer/MADExplorerControllerProtocol.h; sourceTree = "<group>"; };
 		4C479D451F3E9CAE00FCE020 /* MADOperationPromptError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationPromptError.h; sourceTree = "<group>"; };
 		4C479D4A1F3EBBDC00FCE020 /* MADOperationDatabaseTestConnectionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationDatabaseTestConnectionProtocol.h; sourceTree = "<group>"; };
@@ -2591,6 +2592,7 @@
 				4C26BA4F1BAF99F000456DC8 /* MTTableController.m */,
 				4C26BA501BAF99F000456DC8 /* MADTableLayout.h */,
 				4C26BA511BAF99F000456DC8 /* MADTableLayout.m */,
+				4C453FC42E247D8000641E6E /* Scratch.m */,
 			);
 			name = Designer;
 			sourceTree = "<group>";

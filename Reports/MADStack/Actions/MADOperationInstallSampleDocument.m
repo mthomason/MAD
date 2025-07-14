@@ -36,7 +36,6 @@
 				 groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
 
 	if (self = [super init]) {
-		
 		_filename = [filename copy];
 		_fileExtension = [fileExtension copy];
 		_groupIdentifier = [groupIdentifier copy];

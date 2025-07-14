@@ -37,7 +37,10 @@ extern NSString * const MADIdentifierROWID;
 @protocol MADQueryDataTableProtocol <NSObject>
 	@property (nonatomic, strong) MADDataTable *dataTable;
 @end
-
+@protocol MADQueryDatabaseRangeProtocol <NSObject>
+	@property (nonatomic, assign) NSUInteger limit;
+	@property (nonatomic, assign) NSUInteger offset;
+@end
 @protocol MADQueryDatabaseProtocol <NSObject>
 	@property (nonatomic, strong) MADDatabase *database;
 @end

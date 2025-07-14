@@ -12,17 +12,17 @@
 #import <objc/NSObject.h>
 
 @class MADQuery;
-@protocol MADQueryDatabaseProtocol;
+@protocol MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol;
 
 @interface MADDataFormatter : NSObject
 
-	+ (instancetype)newDataFormatter:(MADQuery <MADQueryDatabaseProtocol> *)query;
 
 	@property (nonatomic, strong) MADQuery <MADQueryDatabaseProtocol> *query;
 	@property (nonatomic, assign) BOOL didRefresh;
 	@property (nonatomic, assign, readonly) BOOL needsFormat;
 
-	- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query;
++ (instancetype)newDataFormatter:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query;
+- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query;
 
 @end
 
