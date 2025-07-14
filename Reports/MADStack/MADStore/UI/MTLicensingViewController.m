@@ -159,7 +159,7 @@
         [self.activityIndicatorDesignerLicenseOneYear startAnimating];
         [self.activityIndicator2 startAnimating];
         
-        NSArray *productIds;
+        NSArray <NSString *> *productIds = nil;
         if ([MADApplication isMADDesigner]) {
             productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionMonth1,
                            MTStoreKitProductIdentifierDesignerSubscriptionYear1];
