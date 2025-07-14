@@ -25,8 +25,8 @@
 
 @interface MADReceiptViewController ()
 
-    @property (nonatomic, strong) MADFeatures *features;
-    @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) MADFeatures *features;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -41,6 +41,7 @@
 	[super viewDidLoad];
 	
 	MADFeatures *features = [[MADFeatures alloc] init];
+	[features loadFeaturesFromPlist];
 	self.features = features;
 	self.dateFormatter = [NSDateFormatter RFC_3339];
 }
@@ -52,7 +53,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	NSUInteger extraRows = ([MTVerificationController sharedInstance].receipt.charterMembership ? 1 : 0);
+	//NSUInteger extraRows = ([MTVerificationController sharedInstance].receipt.charterMembership ? 1 : 0);
 	return (NSInteger)([MTVerificationController sharedInstance].receipt == nil ? 0 :
 					   [MTVerificationController sharedInstance].receipt.inAppPurchases.count +
 					   ([MTVerificationController sharedInstance].receipt.charterMembership ? 1 : 0));
@@ -73,7 +74,6 @@
 		} else if (indexPath.item == 1) {
 			static NSString *reuseID = @"MADIdentifierReceiptCharterMember";
 			cell = [tableView dequeueReusableCellWithIdentifier:reuseID forIndexPath:indexPath];
-			NSString *formatString = NSLocalizedString(@"Charter Member (since version %@)", @"Charter Member (since version %@)");
 			NSString *formattted = [[NSString alloc] initWithFormat:NSLocalizedString(@"Charter Member (since version %@)", @"Charter Member (since version %@)"), [MTVerificationController sharedInstance].receipt.originalVersion];
 			NSMutableAttributedString *cellText = [((MADTableViewCellReceiptCharterMember *)cell).charterMember.attributedText mutableCopy];
 			[cellText replaceCharactersInRange:NSMakeRange(0, cellText.length) withString:formattted];

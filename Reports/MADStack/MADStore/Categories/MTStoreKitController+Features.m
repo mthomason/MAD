@@ -28,7 +28,7 @@
 }
 
 - (BOOL)isBarcodeDesignerEnabled {
-    return [[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.element.barcode"];
+	return [[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.element.barcode"];
 }
 
 @end
