@@ -10,7 +10,6 @@
 #define Reports_MTStoreKitController_h
 
 #import <Foundation/NSObject.h>
-//#import <Foundation/NSArray.h>
 
 extern NSString * const MTStoreKitTransactionReceipt;
 extern NSString * const MTStoreKitTransactionDate;
@@ -49,12 +48,12 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 
 @class SKProduct, NSArray<ObjectType>;
 
-@interface MTStoreKitController : NSObject
+@interface MADStoreKitController : NSObject
 
 @property (nonatomic, readonly, retain) NSArray <SKProduct *> *products;
 @property (nonatomic, retain) NSDate *verifiedExperationDate;
 
-+ (MTStoreKitController *)sharedObject;
++ (MADStoreKitController *)sharedObject;
 - (void)initializeProductsWithIdentifiers:(NSArray <NSString *> *)productIdentifiers
 							   completion:(MTBlockCompletion)completion;
 - (void)purchaseProduct:(SKProduct *)product completion:(MTBlockCompletion) completion;

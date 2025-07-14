@@ -6,7 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import "MTVerificationController.h"
+#import "MADVerificationController.h"
 #import "ReceiptAttribute.h"
 #import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
@@ -26,7 +26,7 @@
 #import <openssl/x509_vfy.h>
 #import <openssl/evp.h>
 
-@interface MTVerificationController() <SKRequestDelegate>
+@interface MADVerificationController() <SKRequestDelegate>
 
 @property (nonatomic, copy) MTVerificationControllerVerifyPurchaseCompletion verifyPurchaseCompletion;
 @property (nonatomic, copy) NSDictionary *receiptData;
@@ -37,15 +37,15 @@
 
 @end
 
-@implementation MTVerificationController
+@implementation MADVerificationController
 
-static MTVerificationController *sharedSingleton;
+static MADVerificationController *sharedSingleton;
 
 - (void)dealloc {
 	NSAssert(NO, @"Don't dealloc the singleton.");
 }
 
-+ (MTVerificationController *)sharedInstance {
++ (MADVerificationController *)sharedInstance {
 	
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -60,7 +60,7 @@ static MTVerificationController *sharedSingleton;
 }
 
 - (BOOL)freeForCharterMemembers:(NSString *)productID {
-	return [MTVerificationController charterMemberGiftLookup:productID] &&
+	return [MADVerificationController charterMemberGiftLookup:productID] &&
 	self.receipt.charterMembership;
 }
 
@@ -123,17 +123,17 @@ static MTVerificationController *sharedSingleton;
 			NSError *error = nil;
 			[[NSFileManager defaultManager] removeItemAtURL:receiptUrl error:&error];
 			
-			MTVerificationController * __weak weakself = self;
+			MADVerificationController * __weak weakself = self;
 			[self refreshReceipt:^(BOOL refreshReceiptSuccess, NSError *refreshReceiptError) {
-				MTVerificationController *strongself = weakself;
+				MADVerificationController *strongself = weakself;
 				if (strongself && refreshReceiptSuccess) [strongself reloadReceipt];
 			}];
 		}
 	} else {
 		// No receipt!!! Download it from APPL!
-		MTVerificationController * __weak weakself = self;
+		MADVerificationController * __weak weakself = self;
 		[self refreshReceipt:^(BOOL success, NSError *error) {
-			MTVerificationController *strongself = weakself;
+			MADVerificationController *strongself = weakself;
 			if (success && strongself) [strongself reloadReceipt];
 		}];
 	}

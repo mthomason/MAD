@@ -7,8 +7,8 @@
 //
 
 #import "MADStoreViewController.h"
-#import "MTStoreKitController.h"
-#import "MTVerificationController.h"
+#import "MADStoreKitController.h"
+#import "MADVerificationController.h"
 #import "MADCollectionViewCellProductFeature.h"
 #import "MADWatermarkView.h"
 #import "MADReceiptViewController.h"
@@ -56,7 +56,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 		NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
 		priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
 		self.priceFormatter = priceFormatter;
-		self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
+		self.charterMember = [MADVerificationController sharedInstance].receipt.charterMembership;
 		
 	}
 	return self;
@@ -92,7 +92,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	if ([MTStoreKitController sharedObject].products.count <= 0) {
+	if ([MADStoreKitController sharedObject].products.count <= 0) {
 		MADFeatures *features = [[MADFeatures alloc] init];
 		[features loadFeaturesFromPlist];
 
@@ -106,7 +106,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 		[self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 		
 		__weak typeof(self) weakSelf = self;
-		[[MTStoreKitController sharedObject] initializeProductsWithIdentifiers: products
+		[[MADStoreKitController sharedObject] initializeProductsWithIdentifiers: products
 																	completion: ^(BOOL success, NSError *error) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				__strong typeof(self) strongSelf = weakSelf;
@@ -134,7 +134,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-	return (NSInteger)[MTStoreKitController sharedObject].products.count;
+	return (NSInteger)[MADStoreKitController sharedObject].products.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
@@ -142,17 +142,17 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 	static NSString *MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault";
 	MADCollectionViewCellProductFeature *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADStoreCellReuseIdentifier
 																						  forIndexPath: indexPath];
-	SKProduct *product =[MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
+	SKProduct *product =[MADStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
 	cell.labelTitle.text = product.localizedTitle;
 	cell.labelDescription.text = product.localizedDescription;
 	self.priceFormatter.locale = product.priceLocale;
 
-	if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
+	if (self.charterMember && [MADVerificationController charterMemberGiftLookup:product.productIdentifier]) {
 		cell.labelPrice.text = @"";
 		cell.labelPrice.font = [UIFont fontWithName: @"FontAwesome"
 											   size: cell.labelPrice.font.pointSize];
 	} else {
-		BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+		BOOL ownIt = [[MADVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
 		if (!ownIt) {
 			cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
 		} else {
@@ -190,22 +190,22 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[collectionView deselectItemAtIndexPath:indexPath animated:YES];
-	SKProduct *product = [MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
-	if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
+	SKProduct *product = [MADStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
+	if (self.charterMember && [MADVerificationController charterMemberGiftLookup:product.productIdentifier]) {
 		UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt)
 																							message: NSLocalizedString(MADTextFreeGift, MADTextFreeGift)
 																					  andCompletion: nil];
 		[self presentViewController:alert animated:YES completion:NULL];
 	} else {
-		BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+		BOOL ownIt = [[MADVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
 		if (ownIt) {
 			UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouItsYours, MADTextYouItsYours)
 																								message: NSLocalizedString(MADTextAlready, MADTextAlready)
 																						  andCompletion: nil];
 			[self presentViewController:alert animated:YES completion:NULL];
 		} else {
-			[[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
-			[[MTStoreKitController sharedObject] purchaseProduct: product
+			[[MADVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
+			[[MADStoreKitController sharedObject] purchaseProduct: product
 													  completion: ^(BOOL success, NSError *error) {
 				UIAlertController *alert = success ? [MADAlertController newAlertControllerNofityTransactionComplete] :
 				[MADAlertController newAlertControllerError:error];

@@ -9,9 +9,9 @@
 #ifndef MAD_Designer_MTStoreKitController_Features_h
 #define MAD_Designer_MTStoreKitController_Features_h
 
-#import "MTStoreKitController.h"
+#import "MADStoreKitController.h"
 
-@interface MTStoreKitController (Features)
+@interface MADStoreKitController (Features)
 
 @property (readonly, getter=isReportingLimited)             BOOL reportingLimited;
 @property (readonly, getter=isReportingEnabled)             BOOL reportingEnabled;

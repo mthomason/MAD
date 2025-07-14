@@ -7,7 +7,7 @@
 //
 
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "MTVerificationController.h"
+#import "MADVerificationController.h"
 #import "MADSalesReceipt.h"
 
 //On future versions of the software, we will enable subscription based purchase.  For now, it's free once
@@ -25,13 +25,13 @@ NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1      = @"
 NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1        = @"com.everydayapps.mad.viewer.subscription.month";
 NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"com.everydayapps.mad.viewer.subscription.year";
 
-@implementation MTStoreKitController (NonRenewableLicensing)
+@implementation MADStoreKitController (NonRenewableLicensing)
 
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
 //#if SUBSCRIPTION == TRUE
 //    if (YES) {    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
 
-        MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+        MADVerificationController *verificationController = [MADVerificationController sharedInstance];
         NSDate *experationDate = verificationController.modernReceiptProcessExperationDate;
         BOOL licensedUser = experationDate != nil &&
                             verificationController.modernReceiptIsValid &&
@@ -56,7 +56,7 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 //#if SUBSCRIPTION == TRUE
 //    if (YES) {
         
-        MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+        MADVerificationController *verificationController = [MADVerificationController sharedInstance];
         NSDate *experationDate = verificationController.modernReceiptProcessExperationDate;
         BOOL licensedUser = experationDate != nil &&
             verificationController.modernReceiptIsValid &&
@@ -77,7 +77,7 @@ NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1         = @"
 
 //    if (YES) {  //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
         
-        MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+        MADVerificationController *verificationController = [MADVerificationController sharedInstance];
         NSDate *experationDate = verificationController.modernReceiptProcessExperationDate;
         BOOL licensedUser = experationDate != nil &&
                             verificationController.modernReceiptIsValid &&

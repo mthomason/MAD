@@ -6,8 +6,8 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import "MTStoreKitController.h"
-#import "MTVerificationController.h"
+#import "MADStoreKitController.h"
+#import "MADVerificationController.h"
 
 NSString * const MTStoreKitTransactionReceipt                           = @"MTStoreKitTransactionReceipt";
 NSString * const MTStoreKitTransactionDate                              = @"MTStoreKitTransactionDate";
@@ -39,7 +39,7 @@ NSString * const MTStoreKitIdentifierReceiptHash                        = @"hash
 NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inapppurchases";
 
 
-@interface MTStoreKitController () <SKPaymentTransactionObserver, SKProductsRequestDelegate>
+@interface MADStoreKitController () <SKPaymentTransactionObserver, SKProductsRequestDelegate>
 
 @property(nonatomic, assign) BOOL purchasingProduct;
 @property(nonatomic, assign) BOOL restoringPurchases;
@@ -56,7 +56,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 
 @end
 
-@implementation MTStoreKitController
+@implementation MADStoreKitController
 
 - (void)dealloc {
 	NSAssert(NO, @"Don't dealloc the singleton.");
@@ -77,7 +77,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 	return string;
 }
 
-+ (MTStoreKitController *)sharedObject {
++ (MADStoreKitController *)sharedObject {
 	static id sharedSingleton = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -197,7 +197,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 				
 			case SKPaymentTransactionStatePurchased: {
 				
-				MTVerificationController *verificationController = [MTVerificationController sharedInstance];
+				MADVerificationController *verificationController = [MADVerificationController sharedInstance];
 				[verificationController iOS7VerifyReceipt];
 				
 				[[SKPaymentQueue defaultQueue] finishTransaction:transaction];

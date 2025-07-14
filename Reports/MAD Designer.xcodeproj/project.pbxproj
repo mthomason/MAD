@@ -145,7 +145,7 @@
 		4C3DCBD11BC9FF2F00ABE231 /* MADViewerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBCF1BC9FF2200ABE231 /* MADViewerAppDelegate.m */; };
 		4C3DCBD41BCA000500ABE231 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBD21BCA000100ABE231 /* main.m */; };
 		4C3DCC061BCA039B00ABE231 /* MADNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26BA8C1BAF9B9B00456DC8 /* MADNavigationController.m */; };
-		4C3DCC071BCA03CD00ABE231 /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */; };
+		4C3DCC071BCA03CD00ABE231 /* MADVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MADVerificationController.m */; };
 		4C3DCC191BCAEFA900ABE231 /* MADFeatures.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C3DCC131BCAEFA900ABE231 /* MADFeatures.plist */; };
 		4C3DCC1A1BCAEFA900ABE231 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C3DCC141BCAEFA900ABE231 /* Images.xcassets */; };
 		4C3DCC1B1BCAEFA900ABE231 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C3DCC151BCAEFA900ABE231 /* Settings.bundle */; };
@@ -154,8 +154,8 @@
 		4C401EDA1BAE5E9000BAE5FC /* MADFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EBD1BAE5E9000BAE5FC /* MADFeature.m */; };
 		4C401EDB1BAE5E9000BAE5FC /* MADFeatures.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EBF1BAE5E9000BAE5FC /* MADFeatures.m */; };
 		4C401EDC1BAE5E9000BAE5FC /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC11BAE5E9000BAE5FC /* MADSalesReceipt.m */; };
-		4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC31BAE5E9000BAE5FC /* MTStoreKitController.m */; };
-		4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */; };
+		4C401EDD1BAE5E9000BAE5FC /* MADStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC31BAE5E9000BAE5FC /* MADStoreKitController.m */; };
+		4C401EDE1BAE5E9000BAE5FC /* MADVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC51BAE5E9000BAE5FC /* MADVerificationController.m */; };
 		4C401EDF1BAE5E9000BAE5FC /* ReceiptModule.ans1 in Resources */ = {isa = PBXBuildFile; fileRef = 4C401EC61BAE5E9000BAE5FC /* ReceiptModule.ans1 */; };
 		4C401EE01BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECA1BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m */; };
 		4C401EE11BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401ECC1BAE5E9000BAE5FC /* MADTableViewCellReceiptApplication.m */; };
@@ -693,10 +693,10 @@
 		4C401EBF1BAE5E9000BAE5FC /* MADFeatures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFeatures.m; sourceTree = "<group>"; };
 		4C401EC01BAE5E9000BAE5FC /* MADSalesReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSalesReceipt.h; sourceTree = "<group>"; };
 		4C401EC11BAE5E9000BAE5FC /* MADSalesReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSalesReceipt.m; sourceTree = "<group>"; };
-		4C401EC21BAE5E9000BAE5FC /* MTStoreKitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStoreKitController.h; sourceTree = "<group>"; };
-		4C401EC31BAE5E9000BAE5FC /* MTStoreKitController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStoreKitController.m; sourceTree = "<group>"; };
-		4C401EC41BAE5E9000BAE5FC /* MTVerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVerificationController.h; sourceTree = "<group>"; };
-		4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVerificationController.m; sourceTree = "<group>"; };
+		4C401EC21BAE5E9000BAE5FC /* MADStoreKitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreKitController.h; sourceTree = "<group>"; };
+		4C401EC31BAE5E9000BAE5FC /* MADStoreKitController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreKitController.m; sourceTree = "<group>"; };
+		4C401EC41BAE5E9000BAE5FC /* MADVerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVerificationController.h; sourceTree = "<group>"; };
+		4C401EC51BAE5E9000BAE5FC /* MADVerificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVerificationController.m; sourceTree = "<group>"; };
 		4C401EC61BAE5E9000BAE5FC /* ReceiptModule.ans1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReceiptModule.ans1; sourceTree = "<group>"; };
 		4C401EC91BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCollectionViewCellProductFeature.h; sourceTree = "<group>"; };
 		4C401ECA1BAE5E9000BAE5FC /* MADCollectionViewCellProductFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCollectionViewCellProductFeature.m; sourceTree = "<group>"; };
@@ -1736,10 +1736,10 @@
 				4C401EBF1BAE5E9000BAE5FC /* MADFeatures.m */,
 				4C401EC01BAE5E9000BAE5FC /* MADSalesReceipt.h */,
 				4C401EC11BAE5E9000BAE5FC /* MADSalesReceipt.m */,
-				4C401EC21BAE5E9000BAE5FC /* MTStoreKitController.h */,
-				4C401EC31BAE5E9000BAE5FC /* MTStoreKitController.m */,
-				4C401EC41BAE5E9000BAE5FC /* MTVerificationController.h */,
-				4C401EC51BAE5E9000BAE5FC /* MTVerificationController.m */,
+				4C401EC21BAE5E9000BAE5FC /* MADStoreKitController.h */,
+				4C401EC31BAE5E9000BAE5FC /* MADStoreKitController.m */,
+				4C401EC41BAE5E9000BAE5FC /* MADVerificationController.h */,
+				4C401EC51BAE5E9000BAE5FC /* MADVerificationController.m */,
 				4C401EC61BAE5E9000BAE5FC /* ReceiptModule.ans1 */,
 			);
 			name = Store;
@@ -3159,7 +3159,7 @@
 				4C3DCBD41BCA000500ABE231 /* main.m in Sources */,
 				4C3DCC061BCA039B00ABE231 /* MADNavigationController.m in Sources */,
 				4C3DCBD11BC9FF2F00ABE231 /* MADViewerAppDelegate.m in Sources */,
-				4C3DCC071BCA03CD00ABE231 /* MTVerificationController.m in Sources */,
+				4C3DCC071BCA03CD00ABE231 /* MADVerificationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3274,7 +3274,7 @@
 				4C8DE2781BAFAA0B00AD1111 /* MTSchemaFieldCell.m in Sources */,
 				4C26BA1F1BAF150F00456DC8 /* MADQueryBuilderSplitViewController.m in Sources */,
 				4C4020371BAE92F200BAE5FC /* MADAffineTransformSwing.m in Sources */,
-				4C401EDE1BAE5E9000BAE5FC /* MTVerificationController.m in Sources */,
+				4C401EDE1BAE5E9000BAE5FC /* MADVerificationController.m in Sources */,
 				4C3500121E7051E8009423B0 /* MADTableViewCellQueryCountID.m in Sources */,
 				4CFEE8211BB7A3A300AFAA0A /* MADCellTextInput.m in Sources */,
 				4C26B96A1BAF11C800456DC8 /* MADOperationInstallSampleDocument.m in Sources */,
@@ -3297,7 +3297,7 @@
 				4C4020851BAE966000BAE5FC /* MADNavigationControllerQueryVisualization.m in Sources */,
 				4C26BAA51BAF9E8000456DC8 /* MADActivityReportPrintPreview.m in Sources */,
 				4C401FC21BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
-				4C401EDD1BAE5E9000BAE5FC /* MTStoreKitController.m in Sources */,
+				4C401EDD1BAE5E9000BAE5FC /* MADStoreKitController.m in Sources */,
 				4C5478E91E5D7EC80043682E /* MADViewerNavigationBar.m in Sources */,
 				4C26BA801BAF9AA700456DC8 /* MADDriverSelectorController.m in Sources */,
 				4C4020501BAE92F200BAE5FC /* UIColor+PaperPatterns.m in Sources */,

@@ -11,8 +11,8 @@
 #endif
 
 #import "MTLicensingViewController.h"
-#import "MTVerificationController.h"
-#import "MTStoreKitController.h"
+#import "MADVerificationController.h"
+#import "MADStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADFoundation/MADApplication.h>
@@ -80,7 +80,7 @@
         [self.buttonBuyNowViewerOneMonth setHidden:NO];
     }
     
-    NSArray *products = [MTStoreKitController sharedObject].products;
+    NSArray *products = [MADStoreKitController sharedObject].products;
     
     NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
     priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
@@ -175,7 +175,7 @@
         MTBlockCompletion initalizationComplete = ^(BOOL success, NSError *error) {
             [weakself initalizationComplete:success error:error];
         };
-        [[MTStoreKitController sharedObject] initializeProductsWithIdentifiers: productIds
+        [[MADStoreKitController sharedObject] initializeProductsWithIdentifiers: productIds
                                                                    completion: initalizationComplete];
     }
 }
@@ -183,7 +183,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
+    [[MADVerificationController sharedInstance] iOS7VerifyReceipt];
     
     MTLicensingViewController * __block __weak weakViewController = self;
 
@@ -195,7 +195,7 @@
     
     MTBlockCompletion completion = ^(BOOL success, NSError *error){
         [self enableUserInterface];
-        [[MTStoreKitController sharedObject] licensedUser:self.licenseUserCompletion];
+        [[MADStoreKitController sharedObject] licensedUser:self.licenseUserCompletion];
         if (success == NO) {
             [NSError presentError: error onViewController: self completion: NULL];
         }
@@ -224,7 +224,7 @@
         self.buttonBuyNowViewerOneMonth.enabled = NO;
     }
 
-    [[MTStoreKitController sharedObject] licensedUser:self.licenseUserCompletion];
+    [[MADStoreKitController sharedObject] licensedUser:self.licenseUserCompletion];
     
 }
 
@@ -314,13 +314,13 @@
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
     [self indicateStartUpdating];
     
-    NSArray *products = [MTStoreKitController sharedObject].products;
+    NSArray *products = [MADStoreKitController sharedObject].products;
     NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(SKProduct * evaluatedObject, NSDictionary *bindings) {
         return [evaluatedObject.productIdentifier isEqualToString:identifier];
     }];
     NSArray *productArray = [products filteredArrayUsingPredicate:predicate];
     if (productArray.count > 0) {
-        [[MTStoreKitController sharedObject] purchaseProduct: productArray[0]
+        [[MADStoreKitController sharedObject] purchaseProduct: productArray[0]
                                                   completion: self.standardCompletion];
     } else {
         [self enableUserInterface];

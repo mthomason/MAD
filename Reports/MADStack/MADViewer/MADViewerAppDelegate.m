@@ -201,8 +201,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     // underlying queue
     // at dealloc
     
-    MTVerificationController *verificationController;
-    verificationController = [MTVerificationController sharedInstance];
+    MADVerificationController *verificationController;
+    verificationController = [MADVerificationController sharedInstance];
     resetReceipt = [[NSInvocationOperation alloc] initWithTarget: verificationController
                                                         selector: @selector(resetReceipt)
                                                           object: NULL];
@@ -220,7 +220,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [MTVerificationController sharedInstance];
+        [MADVerificationController sharedInstance];
     });
     
     dispatch_async(self.appDelegateQueueSerial, ^{

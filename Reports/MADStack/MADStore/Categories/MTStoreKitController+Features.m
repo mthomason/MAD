@@ -7,9 +7,9 @@
 //
 
 #import "MTStoreKitController+Features.h"
-#import "MTVerificationController.h"
+#import "MADVerificationController.h"
 
-@implementation MTStoreKitController (Features)
+@implementation MADStoreKitController (Features)
 
 - (BOOL)isReportingLimited {
     return !self.isReportingEnabledAndDesired;
@@ -28,7 +28,7 @@
 }
 
 - (BOOL)isBarcodeDesignerEnabled {
-	return [[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.element.barcode"];
+	return [[MADVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.element.barcode"];
 }
 
 @end

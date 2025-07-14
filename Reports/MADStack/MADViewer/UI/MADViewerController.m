@@ -1402,7 +1402,7 @@ static NSString * const MADOperatorSelectorIsFinished   = @"isFinished";
 	MADocument *document = self.document;
 	
 	if (![self isCancelled]) {
-		document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+		document.limitResultsDesignMode = [MADStoreKitController sharedObject].isReportingLimited;
 	}
 	
 	if (![self isCancelled]) {

@@ -9,7 +9,7 @@
 #ifndef Reports_MTStoreKitController_NonRenewableLicensing_h
 #define Reports_MTStoreKitController_NonRenewableLicensing_h
 
-#import "MTStoreKitController.h"
+#import "MADStoreKitController.h"
 #import <Foundation/NSObject.h>
 #import <Foundation/NSDate.h>
 
@@ -25,7 +25,7 @@ extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
 
 typedef void (^MTStoreKitNonRenewableLicensedUser)(BOOL isLicensedUser, NSDate *experationDate);
 
-@interface MTStoreKitController (NonRenewableLicensing)
+@interface MADStoreKitController (NonRenewableLicensing)
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion;

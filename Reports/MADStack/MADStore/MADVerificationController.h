@@ -18,9 +18,9 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 
 @class MADSalesReceipt;
 
-@interface MTVerificationController : NSObject
+@interface MADVerificationController : NSObject
 
-+ (MTVerificationController *) sharedInstance;
++ (MADVerificationController *) sharedInstance;
 
 @property (nonatomic, strong) NSMutableDictionary *transactionsReceiptStorageDictionary;
 

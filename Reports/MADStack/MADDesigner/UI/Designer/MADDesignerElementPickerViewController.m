@@ -41,7 +41,7 @@
 
 #import "MADDesignerViewController.h"
 
-#import "MTStoreKitController.h"
+#import "MADStoreKitController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADDocumentObjectCollectionViewCell.h"
 
@@ -114,7 +114,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	
 	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace ]];
 	
-	if ([MTStoreKitController sharedObject].barcodeDesignerEnabled) {
+	if ([MADStoreKitController sharedObject].barcodeDesignerEnabled) {
 		NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
 		[dataSource addObject:barcode];
 	}

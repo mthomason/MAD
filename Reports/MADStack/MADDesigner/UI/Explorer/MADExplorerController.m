@@ -28,7 +28,7 @@
 #import "MADTabBarController.h"
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"
-#import "MTVerificationController.h"
+#import "MADVerificationController.h"
 #import "MTStoreKitController+Features.h"
 #import "MADSearchBar.h"
 #import "MADKeyChainSaveCredentials.h"
@@ -282,7 +282,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[opInstallDocB addObserver:self];
 	[operationQueueBackground addOperation:opInstallDocB];
 	
-	NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MTVerificationController sharedInstance]
+	NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MADVerificationController sharedInstance]
 																	 selector: @selector(resetReceipt)
 																	   object: NULL];
 	[operationQueueBackground addOperation:resetReceipt];
@@ -905,7 +905,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)openDocumentAtURL:(NSURL *)url {
 
 	MADocument *document = [[MADocument alloc] initWithFileURL:url];
-	document.limitResultsDesignMode = [MTStoreKitController sharedObject].isReportingLimited;
+	document.limitResultsDesignMode = [MADStoreKitController sharedObject].isReportingLimited;
 	document.documentDelegate = self;
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self

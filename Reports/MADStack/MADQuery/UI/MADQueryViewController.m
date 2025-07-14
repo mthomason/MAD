@@ -91,7 +91,7 @@ static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everyday
 
 BOOL storeEnabled(void);
 BOOL storeEnabled(void) {
-	return [MTStoreKitController sharedObject].reportingEnabled;
+	return [MADStoreKitController sharedObject].reportingEnabled;
 }
 
 #pragma mark - Private Category
@@ -503,7 +503,7 @@ BOOL storeEnabled(void) {
 		
 		NSUInteger numberOfTables = rptqQuery.hasQueryTables.count;
 		
-		BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
+		BOOL reportingEnabled = [MADStoreKitController sharedObject].reportingEnabled;
 		MADQueryViewDataSource *oldQueryLayout = [[MADQueryViewDataSource alloc] initWithNumberOfTables: numberOfTables
 																					   reportingEnabled: reportingEnabled
 																					handleConfigureCell: nil];
@@ -804,7 +804,7 @@ BOOL storeEnabled(void) {
 
 		NSUInteger numberOfTablesOld = query.hasQueryTables.count;
 		NSUInteger numberOfTables = numberOfTablesOld + 1;
-		BOOL reportingEnabled = [MTStoreKitController sharedObject].reportingEnabled;
+		BOOL reportingEnabled = [MADStoreKitController sharedObject].reportingEnabled;
 
 		RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable: schemaTable
 																		   database: rptqDatabase
@@ -930,7 +930,7 @@ BOOL storeEnabled(void) {
 		NSNumber *objectID = [document.documentModel.databases.firstObject.queries.firstObject.objectID copy];
 		MADQueryViewDataSource *dataSource = [[MADQueryViewDataSource alloc] initWithQueryID: objectID
 																		managedObjectContext: managedObjectContext
-																			reportingEnabled: [MTStoreKitController sharedObject].reportingEnabled
+																			reportingEnabled: [MADStoreKitController sharedObject].reportingEnabled
 																		 handleConfigureCell: _handleConfigureCell];
 		dataSource.datasoruce = self;
 		_queryViewDataSource = dataSource;
@@ -993,7 +993,7 @@ BOOL storeEnabled(void) {
 
 - (void)handleToggleReportingMode:(UISwitch *)switchControl {
 	if (switchControl.on) {
-		if ([MTStoreKitController sharedObject].isReportingEnabled) {
+		if ([MADStoreKitController sharedObject].isReportingEnabled) {
 			[[NSUserDefaults standardUserDefaults] setBool: YES
 													forKey: MADIdentifierDefaultsViewerDesired];
 		} else {
