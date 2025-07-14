@@ -51,15 +51,14 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 
 @interface MTStoreKitController : NSObject
 
-    + (MTStoreKitController *)sharedObject;
+@property (nonatomic, readonly, retain) NSArray <SKProduct *> *products;
+@property (nonatomic, retain) NSDate *verifiedExperationDate;
 
-    @property (nonatomic, readonly, retain) NSArray <SKProduct *> *products;
-    @property (nonatomic, retain) NSDate *verifiedExperationDate;
-
-    - (void)initializeProductsWithIdentifiers:(NSArray *)productIdentifiers
-                                   completion:(MTBlockCompletion)completion;
-    - (void)purchaseProduct:(SKProduct *)product completion:(MTBlockCompletion) completion;
-    - (void)restorePurchases:(MTBlockCompletion)completion;
++ (MTStoreKitController *)sharedObject;
+- (void)initializeProductsWithIdentifiers:(NSArray <NSString *> *)productIdentifiers
+							   completion:(MTBlockCompletion)completion;
+- (void)purchaseProduct:(SKProduct *)product completion:(MTBlockCompletion) completion;
+- (void)restorePurchases:(MTBlockCompletion)completion;
 
 @end
 
