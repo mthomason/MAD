@@ -7,22 +7,21 @@
 //
 
 #import "MADStoreViewController.h"
+#import "MTStoreKitController.h"
+#import "MTVerificationController.h"
+#import "MADCollectionViewCellProductFeature.h"
+#import "MADWatermarkView.h"
+#import "MADReceiptViewController.h"
+#import "MADFeatures.h"
+#import "MADSalesReceipt.h"
 
-#import <UIKit/UIView.h>
-
+#import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 
-#import "MTStoreKitController.h"
-#import "MTVerificationController.h"
-#import "MADCollectionViewCellProductFeature.h"
-#import "MADWatermarkView.h"
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-#import "MADReceiptViewController.h"
-#import "MADFeatures.h"
-#import "MADSalesReceipt.h"
+#import <UIKit/UIView.h>
 
 static NSString * const MADTextYouGotIt     = @"You Got It";
 static NSString * const MADTextYouItsYours  = @"It's Yours";
@@ -30,68 +29,61 @@ static NSString * const MADTextFreeGift     = @"Access to this feature is a free
                                               @"members. That's you! How rare is that?";
 static NSString * const MADTextAlready      = @"You already got this feature. Make sure to collect them all.";
 
-@interface MADStoreViewController ()
-    <MADViewControllerStandardProtocol>
+@interface MADStoreViewController () <MADViewControllerStandardProtocol>
 
-    @property (nonatomic, strong) NSNumberFormatter *priceFormatter;
-    @property (nonatomic, assign) BOOL charterMember;
+@property (nonatomic, strong) NSNumberFormatter *priceFormatter;
+@property (nonatomic, assign) BOOL charterMember;
 
 @end
 
 @implementation MADStoreViewController
 
 - (void)viewControllerDidCancel:(id)sender {
-    [self viewControllerDidFinish:sender];
+	[self viewControllerDidFinish:sender];
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    void (^reload)(void);
-    reload = ^{ [self.collectionView reloadData]; };
-    [self dismissViewControllerAnimated:YES completion:reload];
+	[self dismissViewControllerAnimated:YES completion:^{
+		[self.collectionView reloadData];
+	}];
 }
 
 - (IBAction)unwindToStore:(UIStoryboardSegue*)sender { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-
-        NSNumberFormatter *priceFormatter;
-        priceFormatter = [[NSNumberFormatter alloc] init];
-        priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
-        self.priceFormatter = priceFormatter;
-        self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
-
-    }
-    return self;
+	if (self = [super initWithCoder:aDecoder]) {
+		
+		NSNumberFormatter *priceFormatter = [[NSNumberFormatter alloc] init];
+		priceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+		self.priceFormatter = priceFormatter;
+		self.charterMember = [MTVerificationController sharedInstance].receipt.charterMembership;
+		
+	}
+	return self;
 }
 
-
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    MADWatermarkView *watermarkView;
+	[super viewDidLoad];
 
-    watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    self.collectionView.backgroundView = watermarkView;
-    self.collectionView.scrollEnabled = YES;
-    self.collectionView.scrollsToTop = YES;
-    self.collectionView.allowsSelection = YES;
-
-    self.collectionView.backgroundColor = [UIColor clearColor];             //[[UIColor redColor] colorWithAlphaComponent:.90];
-    self.navigationController.view.backgroundColor = [UIColor clearColor];  //[[UIColor greenColor] colorWithAlphaComponent:.70];
-    self.view.backgroundColor = [UIColor clearColor];                       //[[UIColor purpleColor] colorWithAlphaComponent:.30];
-    self.collectionView.backgroundView = nil;
-    ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset =
-                                        UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
-    
-    self.collectionView.backgroundColor = [UIColor clearColor];
-    
-    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
-    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    visualEffectsView.tintColor = [UIColor redColor];
-    visualEffectsView.frame = self.collectionView.frame;
-    visualEffectsView.autoresizingMask = MADViewAutoresizingFlexable();
-    self.collectionView.backgroundView = visualEffectsView;
+	MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+	self.collectionView.backgroundView = watermarkView;
+	self.collectionView.scrollEnabled = YES;
+	self.collectionView.scrollsToTop = YES;
+	self.collectionView.allowsSelection = YES;
+	
+	self.collectionView.backgroundColor = [UIColor clearColor];             //[[UIColor redColor] colorWithAlphaComponent:.90];
+	self.navigationController.view.backgroundColor = [UIColor clearColor];  //[[UIColor greenColor] colorWithAlphaComponent:.70];
+	self.view.backgroundColor = [UIColor clearColor];                       //[[UIColor purpleColor] colorWithAlphaComponent:.30];
+	self.collectionView.backgroundView = nil;
+	((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
+	
+	self.collectionView.backgroundColor = [UIColor clearColor];
+	
+	UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent]];
+	visualEffectsView.tintColor = [UIColor redColor];
+	visualEffectsView.frame = self.collectionView.frame;
+	visualEffectsView.autoresizingMask = MADViewAutoresizingFlexable();
+	self.collectionView.backgroundView = visualEffectsView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -102,7 +94,9 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 	[super viewDidAppear:animated];
 	if ([MTStoreKitController sharedObject].products.count <= 0) {
 		MADFeatures *features = [[MADFeatures alloc] init];
-		NSArray *products = [features availableFeaturesProductIDs];
+		[features loadFeaturesFromPlist];
+
+		NSArray <NSString *> *products = [features availableFeaturesProductIDs];
 		
 		UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 		[activityIndicator startAnimating];
@@ -139,44 +133,42 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView
-     numberOfItemsInSection:(NSInteger)section {
-    return (NSInteger)[MTStoreKitController sharedObject].products.count;
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+	return (NSInteger)[MTStoreKitController sharedObject].products.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault";
-    MADCollectionViewCellProductFeature *cell;
-    cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADStoreCellReuseIdentifier
-                                                     forIndexPath: indexPath];
-    SKProduct *product =[MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
-    cell.labelTitle.text = product.localizedTitle;
-    cell.labelDescription.text = product.localizedDescription;
-    self.priceFormatter.locale = product.priceLocale;
-    
-    if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
-        cell.labelPrice.text = @"";
-        cell.labelPrice.font = [UIFont fontWithName: @"FontAwesome"
-                                               size: cell.labelPrice.font.pointSize];
-    } else {
-        BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
-        if (!ownIt) {
-            cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
-        } else {
-            cell.labelPrice.text = @"✓";
-        }
-    }
-    if ([product.productIdentifier containsString:@"barcode"]) {
-        UIImage *barcode = [UIImage imageNamed:@"MADBarcode64"];
-        cell.image.image = barcode;
-        cell.image.highlightedImage = [barcode imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    } else {
-        UIImage *infinity = [UIImage imageNamed:@"MADInfinity64"];
-        cell.image.image = infinity;
-        cell.image.highlightedImage = [infinity imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    }
-    return cell;
+				  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+	static NSString *MADStoreCellReuseIdentifier = @"MADProdcutFeatureDefault";
+	MADCollectionViewCellProductFeature *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MADStoreCellReuseIdentifier
+																						  forIndexPath: indexPath];
+	SKProduct *product =[MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
+	cell.labelTitle.text = product.localizedTitle;
+	cell.labelDescription.text = product.localizedDescription;
+	self.priceFormatter.locale = product.priceLocale;
+
+	if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
+		cell.labelPrice.text = @"";
+		cell.labelPrice.font = [UIFont fontWithName: @"FontAwesome"
+											   size: cell.labelPrice.font.pointSize];
+	} else {
+		BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+		if (!ownIt) {
+			cell.labelPrice.text = [self.priceFormatter stringFromNumber:product.price];
+		} else {
+			cell.labelPrice.text = @"✓";
+		}
+	}
+	if ([product.productIdentifier containsString:@"barcode"]) {
+		UIImage *barcode = [UIImage imageNamed:@"MADBarcode64"];
+		cell.image.image = barcode;
+		cell.image.highlightedImage = [barcode imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	} else {
+		UIImage *infinity = [UIImage imageNamed:@"MADInfinity64"];
+		cell.image.image = infinity;
+		cell.image.highlightedImage = [infinity imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	}
+	return cell;
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -197,57 +189,49 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
  */
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    SKProduct *product = [MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
-    if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
-        NSString *title = NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt);
-        NSString *message = NSLocalizedString(MADTextFreeGift, MADTextFreeGift);
-        UIAlertController *alert;
-        alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                         message: message
-                                                                   andCompletion: nil];
-        [self presentViewController:alert animated:YES completion:NULL];
-    } else {
-        BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
-        if (ownIt) {
-            NSString *title = NSLocalizedString(MADTextYouItsYours, MADTextYouItsYours);
-            NSString *message = NSLocalizedString(MADTextAlready, MADTextAlready);
-            UIAlertController *alert;
-            alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: title
-                                                                             message: message
-                                                                       andCompletion: nil];
-            [self presentViewController:alert animated:YES completion:NULL];
-        } else {
-            MTBlockCompletion handleStoreCompletion;
-            handleStoreCompletion = ^(BOOL success, NSError *error) {
-                UIAlertController *alert = success ? [MADAlertController newAlertControllerNofityTransactionComplete] :
-                                                     [MADAlertController newAlertControllerError:error];
-                [self presentViewController: alert animated: YES completion: nil];
-                [self.collectionView reloadData];
-            };
-            [[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
-            [[MTStoreKitController sharedObject] purchaseProduct: product
-                                                      completion: handleStoreCompletion];
-        }
-    }
+	[collectionView deselectItemAtIndexPath:indexPath animated:YES];
+	SKProduct *product = [MTStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
+	if (self.charterMember && [MTVerificationController charterMemberGiftLookup:product.productIdentifier]) {
+		UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt)
+																							message: NSLocalizedString(MADTextFreeGift, MADTextFreeGift)
+																					  andCompletion: nil];
+		[self presentViewController:alert animated:YES completion:NULL];
+	} else {
+		BOOL ownIt = [[MTVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
+		if (ownIt) {
+			UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouItsYours, MADTextYouItsYours)
+																								message: NSLocalizedString(MADTextAlready, MADTextAlready)
+																						  andCompletion: nil];
+			[self presentViewController:alert animated:YES completion:NULL];
+		} else {
+			[[MTVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
+			[[MTStoreKitController sharedObject] purchaseProduct: product
+													  completion: ^(BOOL success, NSError *error) {
+				UIAlertController *alert = success ? [MADAlertController newAlertControllerNofityTransactionComplete] :
+				[MADAlertController newAlertControllerError:error];
+				[self presentViewController: alert animated: YES completion: nil];
+				[self.collectionView reloadData];
+			}];
+		}
+	}
 }
 
 #pragma mark - Actions
 
 - (IBAction)actionDone:(id)sender {
-    [self.delegate viewControllerDidCancel:self];
+	[self.delegate viewControllerDidCancel:self];
 }
 
 #pragma mark - UICollectionViewFlowLayout Delegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
+				  layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-  
-    return CGSizeMake(collectionView.bounds.size.width >= 480.0 ?
-                      (collectionView.bounds.size.width / 2.0) - (8.0 * 3.0) :
-                      collectionView.bounds.size.width - 8.0 * 2.0, 220.0);
-
+	
+	return CGSizeMake(collectionView.bounds.size.width >= 480.0 ?
+					  (collectionView.bounds.size.width / 2.0) - (8.0 * 3.0) :
+					  collectionView.bounds.size.width - 8.0 * 2.0, 220.0);
+	
 }
 
 @end

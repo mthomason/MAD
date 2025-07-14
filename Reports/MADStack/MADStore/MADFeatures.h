@@ -10,16 +10,18 @@
 #define MAD_Designer_MADFeatures_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
 
 @class  MADFeature;
 
 @interface MADFeatures : NSObject
 
-@property (nonatomic, strong, readonly) NSArray *features;
+@property (readonly, nonatomic, strong) NSArray <MADFeature *> *features;
 
-    - (NSArray *)availableFeatures;
-    - (NSArray *)availableFeaturesProductIDs;
-    - (MADFeature *)featureForProductID:(NSString *)productID;
+- (NSArray <MADFeature *> *)availableFeatures;
+- (NSArray <NSString *> *)availableFeaturesProductIDs;
+- (MADFeature *)featureForProductID:(NSString *)productID;
+- (BOOL)loadFeaturesFromPlist;
 
 @end
 

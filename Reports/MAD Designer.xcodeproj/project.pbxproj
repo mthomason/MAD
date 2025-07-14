@@ -3769,7 +3769,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MADStack/MADDesigner/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = D3C58YS54A;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";

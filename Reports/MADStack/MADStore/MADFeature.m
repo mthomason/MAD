@@ -9,52 +9,91 @@
 #import "MADFeature.h"
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSValue.h>
-
-static NSString * const ProductID       = @"product-id";
-static NSString * const AppleID         = @"apple-id";
-static NSString * const Title           = @"title";
-static NSString * const Description     = @"description";
-static NSString * const Type            = @"type";
-static NSString * const Available       = @"available";
+#import <Foundation/NSString.h>
+#import <Foundation/NSCoder.h>
+#import <Foundation/NSSet.h>
 
 @interface MADFeature ()
 
-@property (nonatomic, strong) NSDictionary *feature;
+@property (nonatomic, copy, readwrite) NSString *productID;
+@property (nonatomic, copy, readwrite) NSString *appleID;
+@property (nonatomic, copy, readwrite) NSString *defaultTitle;
+@property (nonatomic, copy, readwrite) NSString *defaultDescription;
+@property (nonatomic, readwrite) MADFeatureType type;
+@property (nonatomic, readwrite) BOOL available;
 
 @end
 
 @implementation MADFeature
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
-    if (self = [super init]) {
-        NSDictionary *feature = [[NSDictionary alloc] initWithDictionary:dictionary];
-        self.feature = feature;
-    }
-    return self;
+- (instancetype)initWithProductID:(NSString *)productID
+						  appleID:(NSString *)appleID
+							title:(NSString *)title
+					  description:(NSString *)description
+							 type:(MADFeatureType)type
+						available:(BOOL)available {
+	self = [super init];
+	if (self) {
+		_productID = [productID copy];
+		_appleID = [appleID copy];
+		_defaultTitle = [title copy];
+		_defaultDescription = [description copy];
+		_type = type;
+		_available = available;
+	}
+	return self;
 }
 
-- (NSString *)productID {
-    return self.feature[ProductID];
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary __deprecated_msg("Use initWithProductID:appleID:title:description:type:available: instead.") {
+	NSString *productID = dictionary[@"product-id"];
+	NSString *appleID = dictionary[@"apple-id"];
+	NSString *title = dictionary[@"title"];
+	NSString *description = dictionary[@"description"];
+	MADFeatureType type = ((NSNumber *)dictionary[@"type"]).shortValue;
+	BOOL available = ((NSNumber *)dictionary[@"available"]).boolValue;
+	
+	return [self initWithProductID:productID appleID:appleID title:title description:description type:type available:available];
 }
 
-- (NSString *)appleID {
-    return self.feature[AppleID];
+#pragma mark - NSSecureCoding
+
++ (BOOL)supportsSecureCoding {
+	return YES;
 }
 
-- (NSString *)defaultTitle {
-    return self.feature[Title];
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeObject:self.productID forKey:NSStringFromSelector(@selector(productID))];
+	[coder encodeObject:self.appleID forKey:NSStringFromSelector(@selector(appleID))];
+	[coder encodeObject:self.defaultTitle forKey:NSStringFromSelector(@selector(defaultTitle))];
+	[coder encodeObject:self.defaultDescription forKey:NSStringFromSelector(@selector(defaultDescription))];
+	[coder encodeInteger:self.type forKey:NSStringFromSelector(@selector(type))];
+	[coder encodeBool:self.available forKey:NSStringFromSelector(@selector(available))];
 }
 
-- (NSString *)defaultDescription {
-    return self.feature[Description];
+- (instancetype)initWithCoder:(NSCoder *)coder {
+	NSSet *stringClasses = [NSSet setWithObject:[NSString class]];
+	
+	NSString *productID = [coder decodeObjectOfClasses:stringClasses forKey:NSStringFromSelector(@selector(productID))];
+	NSString *appleID = [coder decodeObjectOfClasses:stringClasses forKey:NSStringFromSelector(@selector(appleID))];
+	NSString *title = [coder decodeObjectOfClasses:stringClasses forKey:NSStringFromSelector(@selector(defaultTitle))];
+	NSString *description = [coder decodeObjectOfClasses:stringClasses forKey:NSStringFromSelector(@selector(defaultDescription))];
+
+	MADFeatureType type = (MADFeatureType)[coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
+	BOOL available = [coder decodeBoolForKey:NSStringFromSelector(@selector(available))];
+	
+	return [self initWithProductID:productID appleID:appleID title:title description:description type:type available:available];
 }
 
-- (MADFeatureType)type {
-    return ((NSNumber *)self.feature[Type]).shortValue;
-}
+#pragma mark - NSCopying
 
-- (BOOL)available {
-    return ((NSNumber *)self.feature[Available]).boolValue;
+- (id)copyWithZone:(NSZone *)zone {
+	MADFeature *copy = [[[self class] allocWithZone:zone] initWithProductID:self.productID
+																	appleID:self.appleID
+																	  title:self.defaultTitle
+																description:self.defaultDescription
+																	   type:self.type
+																  available:self.available];
+	return copy;
 }
 
 @end

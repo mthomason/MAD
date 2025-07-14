@@ -12,20 +12,21 @@
 #import <Foundation/NSObject.h>
 
 typedef NS_ENUM(short, MADFeatureType) {
-    MADFeatureTypeNonConsumable                     = 1,
-    MADFeatureTypeSubscription                      = 2
+	MADFeatureTypeNonConsumable = 1,
+	MADFeatureTypeSubscription = 2
 };
 
-@interface MADFeature : NSObject
+@interface MADFeature : NSObject <NSSecureCoding, NSCopying>
 
-@property (readonly) NSString *productID;
-@property (readonly) NSString *appleID;
-@property (readonly) NSString *defaultTitle;
-@property (readonly) NSString *defaultDescription;
-@property (readonly) MADFeatureType type;
-@property (readonly) BOOL available;
+@property (readonly, nonatomic, copy) NSString *productID;
+@property (readonly, nonatomic, copy) NSString *appleID;
+@property (readonly, nonatomic, copy) NSString *defaultTitle;
+@property (readonly, nonatomic, copy) NSString *defaultDescription;
+@property (readonly, nonatomic) MADFeatureType type;
+@property (readonly, nonatomic) BOOL available;
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary __deprecated_msg("Use initWithProductID:appleID:title:description:type:available: instead.");
+- (instancetype)initWithProductID:(NSString *)productID appleID:(NSString *)appleID title:(NSString *)title description:(NSString *)description type:(MADFeatureType)type available:(BOOL)available;
 
 @end
 
