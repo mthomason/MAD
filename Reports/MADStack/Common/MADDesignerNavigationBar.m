@@ -11,9 +11,9 @@
 
 @implementation MADDesignerNavigationBar
 
-- (void)layoutSubviews {
-	[super layoutSubviews];
-	[self.topItem.titleView sizeToFit];
-}
+//- (void)layoutSubviews {
+//	[super layoutSubviews];
+//	[self.topItem.titleView sizeToFit];
+//}
 
 @end

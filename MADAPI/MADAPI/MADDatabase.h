@@ -31,26 +31,23 @@ extern NSString * const MADSqlTextFromPart;
 
 @interface MADDatabase : NSObject <MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseSQLProtocol, NSCoding, NSCopying>
 
-	+ (NSString *)imageIconName;
-	+ (NSString *)driverName;
+@property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
+@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
+@property (nonatomic, strong) NSMutableArray *errors;
+@property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
-	@property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
-	@property (nonatomic, copy) MADDatabaseConnection *databaseConnection;
++ (NSString *)imageIconName;
++ (NSString *)driverName;
+- (NSString *)identifier;
++ (NSString *)identifier;
 
-	@property (nonatomic, strong) NSMutableArray *errors;
+- (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection;
 
-	- (NSString *)identifier;
-	+ (NSString *)identifier;
+- (void)readRow:(NSUInteger)row;
 
-	- (MADCredential *)credentalsWithConnection:(MADDatabaseConnection *)connection;
-
-	- (void)readRow:(NSUInteger)row;
-
-	- (void)enumerateTablesFromConnection:(id)dbconn
-							   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
-							   completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
-
-	@property (nonatomic, assign, readonly) BOOL isLicensedUser;
+- (void)enumerateTablesFromConnection:(id)dbconn
+						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
+						   completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion;
 
 @end
 

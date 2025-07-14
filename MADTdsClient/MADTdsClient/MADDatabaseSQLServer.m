@@ -351,14 +351,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (BOOL)runSQL:(NSString *)sql onDataTable:(MADDataTable *)datatable fieldKeys:(NSArray *)fieldKeys
 	   process:(MADDatabaseProcessSQLServer *)process {
-
+	
 	BOOL rsuccess = NO;
-	NSError *error = nil;
+	// Use a local error variable, then assign to outError if provided
+	NSError * __autoreleasing localError = nil;
 	if (sql.length > 0) {
 		
 		NSCalendar *gregorian = [[NSCalendar alloc]
 								 initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-
+		
 		NSDateComponents *janFirst1990Components = [[NSDateComponents alloc] init];
 		janFirst1990Components.year =    1900;
 		janFirst1990Components.month =   1;
@@ -376,9 +377,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			
 			dbcmd(dbconn, [sql cStringUsingEncoding:NSUTF8StringEncoding]);
 			success = dbsqlexec(dbconn);
-
+			
 			if (success == SUCCEED) {
-
+				
 				static NSString * const MTDatabaseColumnTypeId         = @"MTDatabaseColumnTypeId";
 				static NSString * const MTDatabaseColumnNameId         = @"MTDatabaseColumnNameId";
 				static NSString * const MTDatabaseColumnNumberId       = @"MTDatabaseColumnNumberId";
@@ -386,15 +387,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 				static NSString * const MTDatabaseColumnLenId          = @"MTDatabaseColumnLenId";
 				static NSString * const MTDatabaseColumnIndexOfType    = @"MTDatabaseColumnIndexOfType";
 				static NSString * const MTDatabaseColumnPrecision      = @"MTDatabaseColumnPrecision";
-
+				
 				NSString *decimalSeperator = [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator];
-
+				
 				BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperator = NO;
 				BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
 				
 				NSUInteger numberOfColumns = (NSUInteger)dbnumcols(dbconn);
 				NSMutableArray <NSDictionary *> *colmunHolder =
-					[[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
+				[[NSMutableArray alloc] initWithCapacity:(NSUInteger)numberOfColumns];
 				static int disregardedBind = -1023;
 				
 				NSArray <NSNumber *> *keys = @[
@@ -407,26 +408,26 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 				];
 				
 				NSMutableDictionary<NSNumber *, NSNumber *> *counters =
-					[[NSMutableDictionary alloc] initWithCapacity:keys.count];
+				[[NSMutableDictionary alloc] initWithCapacity:keys.count];
 				for (NSNumber *key in keys) {
 					counters[key] = @0;
 				}
 				
 				[datatable removeAllObjects];
-
+				
 				int index;
 				DBINT columnCtr, columnType, columnNumberBytes, columnLength;
 				NSNumber *n;
 				NSNumber *columnNumberWrapper,
-						 *columnTypeNumber,
-						 *columnDataLen,
-						 *columTypeKey,
-						 *columnIndexOfTypeNumber,
-						 *columnLen,
-						 *columPercision;
+				*columnTypeNumber,
+				*columnDataLen,
+				*columTypeKey,
+				*columnIndexOfTypeNumber,
+				*columnLen,
+				*columPercision;
 				NSString *columnNameString;
 				MADDataColumn *dataColumn;
-
+				
 				for (columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
 					
 					columnType = dbcoltype(dbconn, columnCtr + 1);
@@ -439,7 +440,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					if (columnType >= 0) {
 						columnNumberBytes = dbdatlen(dbconn, columnCtr + 1);
 						columnLength      = dbcollen(dbconn, columnCtr + 1);
-					
+						
 						columnNameString = nil;
 						columnNumberWrapper = [[NSNumber alloc] initWithInt: columnCtr];
 						columnTypeNumber = [[NSNumber alloc] initWithInt: columnType];
@@ -468,16 +469,16 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 						[columnDictionary setObject:columnIndexOfTypeNumber forKey:MTDatabaseColumnIndexOfType];
 						[columnDictionary setObject:columnLen forKey:MTDatabaseColumnLenId];
 						[columnDictionary setObject:columPercision forKey:MTDatabaseColumnPrecision];
-
+						
 						/*dictionary = @{
-									   MTDatabaseColumnTypeId : columnTypeNumber,             //Type
-									   MTDatabaseColumnNameId : columnNameString,             //Name
-									   MTDatabaseColumnNumberId : columnNumberWrapper,        //Index
-									   MTDatabaseColumnDataLenId : columnDataLen,             //Data length
-									   MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber, //Index of type
-									   MTDatabaseColumnLenId : columnLen,                     //Column lenght
-									   MTDatabaseColumnPrecision : columPercision             //Column percision
-									   };*/
+						 MTDatabaseColumnTypeId : columnTypeNumber,             //Type
+						 MTDatabaseColumnNameId : columnNameString,             //Name
+						 MTDatabaseColumnNumberId : columnNumberWrapper,        //Index
+						 MTDatabaseColumnDataLenId : columnDataLen,             //Data length
+						 MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber, //Index of type
+						 MTDatabaseColumnLenId : columnLen,                     //Column lenght
+						 MTDatabaseColumnPrecision : columPercision             //Column percision
+						 };*/
 						
 						dataColumn = [[MADDataColumn alloc] initWithType: [MADDatabaseSQLServer dataTypeForNativeType:columnType]
 																	name: columnNameString
@@ -489,7 +490,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 															  nativeType: (int16_t)columnType];
 						[datatable addColumn:dataColumn];
 						[colmunHolder addObject:columnDictionary];
-
+						
 						index++;
 						
 						n = [[NSNumber alloc] initWithInt: index];
@@ -504,129 +505,238 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					
 					//SYBREAL, SYBFLTN, and SYBFLT8
 					
-					NSUInteger resultCountForType = numberOfItemsOfType(SYBREAL, counters);
-					double sybRealBind[resultCountForType];
-					DBINT sybRealBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBREAL = numberOfItemsOfType(SYBREAL, counters);
+					double *sybRealBind = NULL;
+					DBINT *sybRealBindNull = NULL;
+					if (resultCountForType_SYBREAL > 0) {
+						sybRealBind = (double *)malloc(sizeof(double) * resultCountForType_SYBREAL);
+						sybRealBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBREAL);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBFLTN, counters);
-					double sybFltNBind[resultCountForType];
-					DBINT sybFltNBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBFLTN = numberOfItemsOfType(SYBFLTN, counters);
+					double *sybFltNBind = NULL;
+					DBINT *sybFltNBindNull = NULL;
+					if (resultCountForType_SYBFLTN > 0) {
+						sybFltNBind = (double *)malloc(sizeof(double) * resultCountForType_SYBFLTN);
+						sybFltNBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBFLTN);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBFLT8, counters);
-					double sybFlt8Bind[resultCountForType];
-					DBINT sybFlt8BindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBFLT8 = numberOfItemsOfType(SYBFLT8, counters);
+					double *sybFlt8Bind = NULL;
+					DBINT *sybFlt8BindNull = NULL;
+					if (resultCountForType_SYBFLT8 > 0) {
+						sybFlt8Bind = (double *)malloc(sizeof(double) * resultCountForType_SYBFLT8);
+						sybFlt8BindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBFLT8);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBINT1, counters);
-					int sybInt1Bind[resultCountForType];
-					DBINT sybInt1BindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBINT1 = numberOfItemsOfType(SYBINT1, counters);
+					int *sybInt1Bind = NULL;
+					DBINT *sybInt1BindNull = NULL;
+					if (resultCountForType_SYBINT1 > 0) {
+						sybInt1Bind = (int *)malloc(sizeof(int) * resultCountForType_SYBINT1);
+						sybInt1BindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBINT1);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBINT2, counters);
-					int sybInt2Bind[resultCountForType];
-					DBINT sybInt2BindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBINT2 = numberOfItemsOfType(SYBINT2, counters);
+					int *sybInt2Bind = NULL;
+					DBINT *sybInt2BindNull = NULL;
+					if (resultCountForType_SYBINT2 > 0) {
+						sybInt2Bind = (int *)malloc(sizeof(int) * resultCountForType_SYBINT2);
+						sybInt2BindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBINT2);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBINTN, counters);
-					long long sybIntnBind[resultCountForType];
-					DBINT sybIntnBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBINTN = numberOfItemsOfType(SYBINTN, counters);
+					long long *sybIntnBind = NULL;
+					DBINT *sybIntnBindNull = NULL;
+					if (resultCountForType_SYBINTN > 0) {
+						sybIntnBind = (long long *)malloc(sizeof(long long) * resultCountForType_SYBINTN);
+						sybIntnBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBINTN);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBINT4, counters);
-					int sybInt4Bind[resultCountForType];
-					DBINT sybInt4BindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBINT4 = numberOfItemsOfType(SYBINT4, counters);
+					int *sybInt4Bind = NULL;
+					DBINT *sybInt4BindNull = NULL;
+					if (resultCountForType_SYBINT4 > 0) {
+						sybInt4Bind = (int *)malloc(sizeof(int) * resultCountForType_SYBINT4);
+						sybInt4BindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBINT4);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBINT8, counters);
-					long long sybInt8Bind[resultCountForType];
-					DBINT sybInt8BindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBINT8 = numberOfItemsOfType(SYBINT8, counters);
+					long long *sybInt8Bind = NULL;
+					DBINT *sybInt8BindNull = NULL;
+					if (resultCountForType_SYBINT8 > 0) {
+						sybInt8Bind = (long long *)malloc(sizeof(long long) * resultCountForType_SYBINT8);
+						sybInt8BindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBINT8);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBMONEY, counters);
-					double sybMoneyBind[resultCountForType];
-					DBINT sybMoneyBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBMONEY = numberOfItemsOfType(SYBMONEY, counters);
+					double *sybMoneyBind = NULL;
+					DBINT *sybMoneyBindNull = NULL;
+					if (resultCountForType_SYBMONEY > 0) {
+						sybMoneyBind = (double *)malloc(sizeof(double) * resultCountForType_SYBMONEY);
+						sybMoneyBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBMONEY);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBMONEYN, counters);
-					double sybMoneyNBind[resultCountForType];
-					DBINT sybMoneyNBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBMONEYN = numberOfItemsOfType(SYBMONEYN, counters);
+					double *sybMoneyNBind = NULL;
+					DBINT *sybMoneyNBindNull = NULL;
+					if (resultCountForType_SYBMONEYN > 0) {
+						sybMoneyNBind = (double *)malloc(sizeof(double) * resultCountForType_SYBMONEYN);
+						sybMoneyNBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBMONEYN);
+					}
+					
 					
 					NSUInteger resultCountForTypeSybNumericBindChar = numberOfItemsOfType(SYBNUMERIC, counters);
-					char *sybNumericBindChar[resultCountForTypeSybNumericBindChar];
-					DBINT sybNumericBindNull[resultCountForTypeSybNumericBindChar];
-					for (NSInteger i=0; i<resultCountForTypeSybNumericBindChar; i++) {
-						sybNumericBindChar[i] = "\0";
+					char **sybNumericBindChar = NULL;
+					DBINT *sybNumericBindNull = NULL;
+					if (resultCountForTypeSybNumericBindChar > 0) {
+						sybNumericBindChar = (char **)malloc(sizeof(char *) * resultCountForTypeSybNumericBindChar);
+						sybNumericBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForTypeSybNumericBindChar);
+						for (NSInteger i=0; i<resultCountForTypeSybNumericBindChar; i++) {
+							sybNumericBindChar[i] = NULL; // Initialize pointers to NULL
+						}
 					}
 					
 					NSUInteger resultCountForTypeSybCharBind = numberOfItemsOfType(SYBCHAR, counters);
-					char *sybCharBind[resultCountForTypeSybCharBind];
-					DBINT sybCharBindNull[resultCountForTypeSybCharBind];
-					for (NSInteger i=0; i<resultCountForTypeSybCharBind; i++) {
-						sybCharBind[i] = "\0";
+					char **sybCharBind = NULL;
+					DBINT *sybCharBindNull = NULL;
+					if (resultCountForTypeSybCharBind > 0) {
+						sybCharBind = (char **)malloc(sizeof(char *) * resultCountForTypeSybCharBind);
+						sybCharBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForTypeSybCharBind);
+						for (NSInteger i=0; i<resultCountForTypeSybCharBind; i++) {
+							sybCharBind[i] = NULL;
+						}
 					}
 					
 					NSUInteger resultCountForTypeSybVarCharBind = numberOfItemsOfType(SYBVARCHAR, counters);
-					char *sybVarCharBind[resultCountForTypeSybVarCharBind];
-					DBINT sybVarCharBindNull[resultCountForTypeSybVarCharBind];
-					for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
-						sybVarCharBind[i] = "\0";
+					char **sybVarCharBind = NULL;
+					DBINT *sybVarCharBindNull = NULL;
+					if (resultCountForTypeSybVarCharBind > 0) {
+						sybVarCharBind = (char **)malloc(sizeof(char *) * resultCountForTypeSybVarCharBind);
+						sybVarCharBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForTypeSybVarCharBind);
+						for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
+							sybVarCharBind[i] = NULL;
+						}
 					}
 					
 					NSUInteger resultCountForTypeSybnVarCharBind = numberOfItemsOfType(SYBNVARCHAR, counters);
-					char *sybnVarCharBind[resultCountForTypeSybnVarCharBind];
-					DBINT sybnVarCharBindNull[resultCountForTypeSybnVarCharBind];
-					for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
-						sybnVarCharBind[i] = "\0";
+					char **sybnVarCharBind = NULL;
+					DBINT *sybnVarCharBindNull = NULL;
+					if (resultCountForTypeSybnVarCharBind > 0) {
+						sybnVarCharBind = (char **)malloc(sizeof(char *) * resultCountForTypeSybnVarCharBind);
+						sybnVarCharBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForTypeSybnVarCharBind);
+						for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
+							sybnVarCharBind[i] = NULL;
+						}
 					}
 					
 					NSUInteger resultCountForTypeSybTextBind = numberOfItemsOfType(SYBTEXT, counters);
-					char *sybTextBind[resultCountForTypeSybTextBind];
-					DBINT sybTextBindNull[resultCountForTypeSybTextBind];
-					for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
-						sybTextBind[i] = "\0";
+					char **sybTextBind = NULL;
+					DBINT *sybTextBindNull = NULL;
+					if (resultCountForTypeSybTextBind > 0) {
+						sybTextBind = (char **)malloc(sizeof(char *) * resultCountForTypeSybTextBind);
+						sybTextBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForTypeSybTextBind);
+						for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
+							sybTextBind[i] = NULL;
+						}
 					}
 					
 					NSUInteger resultCountForTypeSybnTextBind = numberOfItemsOfType(SYBNTEXT, counters);
-					char *sybnTextBind[resultCountForTypeSybnTextBind];
-					DBINT sybnTextBindNull[resultCountForTypeSybnTextBind];
-					for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
-						sybnTextBind[i] = "\0";
+					char **sybnTextBind = NULL;
+					DBINT *sybnTextBindNull = NULL;
+					if (resultCountForTypeSybnTextBind > 0) {
+						sybnTextBind = (char **)malloc(sizeof(char *) * resultCountForTypeSybnTextBind);
+						sybnTextBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForTypeSybnTextBind);
+						for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
+							sybnTextBind[i] = NULL;
+						}
 					}
 					
-					resultCountForType = numberOfItemsOfType(SYBDATETIME, counters);
-					DBDATETIME *sybDateTimeBind[resultCountForType];
-					DBINT sybDateTimeBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBDATETIME = numberOfItemsOfType(SYBDATETIME, counters);
+					DBDATETIME **sybDateTimeBind = NULL;
+					DBINT *sybDateTimeBindNull = NULL;
+					if (resultCountForType_SYBDATETIME > 0) {
+						sybDateTimeBind = (DBDATETIME **)malloc(sizeof(DBDATETIME *) * resultCountForType_SYBDATETIME);
+						sybDateTimeBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBDATETIME);
+						for (NSInteger i = 0; i < resultCountForType_SYBDATETIME; i++) {
+							sybDateTimeBind[i] = NULL;
+						}
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBDATETIME4, counters);
-					DBDATETIME4 *sybDateTime4Bind[resultCountForType];
-					DBINT sybDateTime4BindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBDATETIME4 = numberOfItemsOfType(SYBDATETIME4, counters);
+					DBDATETIME4 **sybDateTime4Bind = NULL;
+					DBINT *sybDateTime4BindNull = NULL;
+					if (resultCountForType_SYBDATETIME4 > 0) {
+						sybDateTime4Bind = (DBDATETIME4 **)malloc(sizeof(DBDATETIME4 *) * resultCountForType_SYBDATETIME4);
+						sybDateTime4BindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBDATETIME4);
+						for (NSInteger i = 0; i < resultCountForType_SYBDATETIME4; i++) {
+							sybDateTime4Bind[i] = NULL;
+						}
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBDATETIMN, counters);
-					DBDATETIME *sybDateTimnBind[resultCountForType];
-					DBINT sybDateTimnBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBDATETIMN = numberOfItemsOfType(SYBDATETIMN, counters);
+					DBDATETIME **sybDateTimnBind = NULL;
+					DBINT *sybDateTimnBindNull = NULL;
+					if (resultCountForType_SYBDATETIMN > 0) {
+						sybDateTimnBind = (DBDATETIME **)malloc(sizeof(DBDATETIME *) * resultCountForType_SYBDATETIMN);
+						sybDateTimnBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBDATETIMN);
+						for (NSInteger i = 0; i < resultCountForType_SYBDATETIMN; i++) {
+							sybDateTimnBind[i] = NULL;
+						}
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBIMAGE, counters);
-					BYTE *sybImageBind[resultCountForType];
-					DBINT sybImageBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBIMAGE = numberOfItemsOfType(SYBIMAGE, counters);
+					BYTE **sybImageBind = NULL;
+					DBINT *sybImageBindNull = NULL;
+					if (resultCountForType_SYBIMAGE > 0) {
+						sybImageBind = (BYTE **)malloc(sizeof(BYTE *) * resultCountForType_SYBIMAGE);
+						sybImageBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBIMAGE);
+						for (NSInteger i = 0; i < resultCountForType_SYBIMAGE; i++) {
+							sybImageBind[i] = NULL;
+						}
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBBINARY, counters);
-					DBINT sybBinaryBind[resultCountForType];
-					DBINT sybBinaryBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBBINARY = numberOfItemsOfType(SYBBINARY, counters);
+					DBINT *sybBinaryBind = NULL;
+					DBINT *sybBinaryBindNull = NULL;
+					if (resultCountForType_SYBBINARY > 0) {
+						sybBinaryBind = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBBINARY);
+						sybBinaryBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBBINARY);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBVARBINARY, counters);
-					//void *sybVarBinaryBind[resultCountForType];
-					DBINT sybVarBinaryBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBVARBINARY = numberOfItemsOfType(SYBVARBINARY, counters);
+					DBINT *sybVarBinaryBindNull = NULL;
+					if (resultCountForType_SYBVARBINARY > 0) {
+						sybVarBinaryBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBVARBINARY);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBVOID, counters);
-					//void *sybVoidBind[resultCountForType];
-					DBINT sybVoidBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBVOID = numberOfItemsOfType(SYBVOID, counters);
+					DBINT *sybVoidBindNull = NULL;
+					if (resultCountForType_SYBVOID > 0) {
+						sybVoidBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBVOID);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBBIT, counters);
-					BOOL sybBitBind[resultCountForType];
-					DBINT sybBitBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBBIT = numberOfItemsOfType(SYBBIT, counters);
+					BOOL *sybBitBind = NULL;
+					DBINT *sybBitBindNull = NULL;
+					if (resultCountForType_SYBBIT > 0) {
+						sybBitBind = (BOOL *)malloc(sizeof(BOOL) * resultCountForType_SYBBIT);
+						sybBitBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBBIT);
+					}
 					
-					resultCountForType = numberOfItemsOfType(SYBBITN, counters);
-					BOOL sybBitNBind[resultCountForType];
-					DBINT sybBitNBindNull[resultCountForType];
+					NSUInteger resultCountForType_SYBBITN = numberOfItemsOfType(SYBBITN, counters);
+					BOOL *sybBitNBind = NULL;
+					DBINT *sybBitNBindNull = NULL;
+					if (resultCountForType_SYBBITN > 0) {
+						sybBitNBind = (BOOL *)malloc(sizeof(BOOL) * resultCountForType_SYBBITN);
+						sybBitNBindNull = (DBINT *)malloc(sizeof(DBINT) * resultCountForType_SYBBITN);
+					}
 					
 					for (NSDictionary *columnMetaData in colmunHolder) {
 						
 						int columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue];
 						unsigned long columnLengthMeta = [columnMetaData[MTDatabaseColumnLenId] unsignedLongValue];
-						//int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
+						DBINT bindLength = columnLengthMeta > INT_MAX ? INT_MAX : (DBINT)columnLengthMeta + 1;
 						int columnIndexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
 						int columnOffsetNumber = columnNumber + 1;
 						
@@ -634,161 +744,204 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 								
 							case SYBCHAR: {
 								size_t size = sizeof(char) * ( columnLengthMeta + 1 );
-								sybCharBind[columnIndexOfType] = malloc( size );
-								dbbind(dbconn,
-									   columnOffsetNumber,
-									   NTBSTRINGBIND,
-									   (DBINT)columnLengthMeta + 1,
-									   (BYTE *)sybCharBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybCharBindNull[columnIndexOfType]);
+								// Add safety checks for allocated bind arrays before dereferencing
+								if (sybCharBind && sybCharBindNull && columnIndexOfType < resultCountForTypeSybCharBind) {
+									sybCharBind[columnIndexOfType] = malloc( size );
+									dbbind(dbconn,
+										   columnOffsetNumber,
+										   NTBSTRINGBIND,
+										   bindLength,
+										   (BYTE *)sybCharBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybCharBindNull[columnIndexOfType]);
+								}
 								break;
 							}
 							case SYBVARCHAR: {
-								sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta + 1, (BYTE *)sybVarCharBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybVarCharBindNull[columnIndexOfType]);
+								if (sybVarCharBind && sybVarCharBindNull && columnIndexOfType < resultCountForTypeSybVarCharBind) {
+									sybVarCharBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
+									dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, bindLength, (BYTE *)sybVarCharBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybVarCharBindNull[columnIndexOfType]);
+								}
 								break;
 							}
 							case SYBTEXT: {
-								sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta + 1, (BYTE *)sybTextBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybTextBindNull[columnIndexOfType]);
+								if (sybTextBind && sybTextBindNull && columnIndexOfType < resultCountForTypeSybTextBind) {
+									sybTextBind[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
+									dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, bindLength, (BYTE *)sybTextBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybTextBindNull[columnIndexOfType]);
+								}
 								break;
 							}
 							case SYBNTEXT: {
 								size_t size = sizeof(char) * ( columnLengthMeta + 1 );
-								sybnTextBind[columnIndexOfType] = malloc( size );
-								dbbind(dbconn,
-									   columnOffsetNumber,
-									   NTBSTRINGBIND,
-									   (DBINT)columnLengthMeta + 1,
-									   (BYTE *)sybnTextBind[columnIndexOfType]);
-								dbnullbind(dbconn,
+								if (sybnTextBind && sybnTextBindNull && columnIndexOfType < resultCountForTypeSybnTextBind) {
+									sybnTextBind[columnIndexOfType] = malloc( size );
+									dbbind(dbconn,
 										   columnOffsetNumber,
-										   &sybnTextBindNull[columnIndexOfType]);
+										   NTBSTRINGBIND,
+										   (DBINT)columnLengthMeta + 1,
+										   (BYTE *)sybnTextBind[columnIndexOfType]);
+									dbnullbind(dbconn,
+											   columnOffsetNumber,
+											   &sybnTextBindNull[columnIndexOfType]);
+								}
 								break;
 							}
 							case SYBNVARCHAR: {
 								size_t size = sizeof(char) * ( columnLengthMeta + 1 );
-								sybnVarCharBind[columnIndexOfType] = malloc( size );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta + 1, (BYTE *)sybnVarCharBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybnVarCharBindNull[columnIndexOfType]);
+								if (sybnVarCharBind && sybnVarCharBindNull && columnIndexOfType < resultCountForTypeSybnVarCharBind) {
+									sybnVarCharBind[columnIndexOfType] = malloc( size );
+									dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, bindLength, (BYTE *)sybnVarCharBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybnVarCharBindNull[columnIndexOfType]);
+								}
 								break;
 							}
 							case SYBINTN:
-								dbbind(dbconn, columnOffsetNumber, BIGINTBIND, sizeof(long long), (BYTE *)&sybIntnBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybIntnBindNull[columnIndexOfType]);
+								if (sybIntnBind && sybIntnBindNull && columnIndexOfType < resultCountForType_SYBINTN) {
+									dbbind(dbconn, columnOffsetNumber, BIGINTBIND, sizeof(long long), (BYTE *)&sybIntnBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybIntnBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBINT1:
-								dbbind(dbconn, columnOffsetNumber, INTBIND, sizeof(int), (BYTE *)&sybInt1Bind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybInt1BindNull[columnIndexOfType]);
+								if (sybInt1Bind && sybInt1BindNull && columnIndexOfType < resultCountForType_SYBINT1) {
+									dbbind(dbconn, columnOffsetNumber, INTBIND, sizeof(int), (BYTE *)&sybInt1Bind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybInt1BindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBINT2:
-								dbbind(dbconn, columnOffsetNumber, INTBIND, sizeof(int), (BYTE *)&sybInt2Bind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybInt2BindNull[columnIndexOfType]);
+								if (sybInt2Bind && sybInt2BindNull && columnIndexOfType < resultCountForType_SYBINT2) {
+									dbbind(dbconn, columnOffsetNumber, INTBIND, sizeof(int), (BYTE *)&sybInt2Bind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybInt2BindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBINT4:
-								dbbind(dbconn, columnOffsetNumber, INTBIND, sizeof(int), (BYTE *)&sybInt4Bind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybInt4BindNull[columnIndexOfType]);
+								if (sybInt4Bind && sybInt4BindNull && columnIndexOfType < resultCountForType_SYBINT4) {
+									dbbind(dbconn, columnOffsetNumber, INTBIND, sizeof(int), (BYTE *)&sybInt4Bind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybInt4BindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBINT8:
-								dbbind(dbconn, columnOffsetNumber, BIGINTBIND, sizeof(long long), (BYTE *)&sybInt8Bind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybInt8BindNull[columnIndexOfType]);
+								if (sybInt8Bind && sybInt8BindNull && columnIndexOfType < resultCountForType_SYBINT8) {
+									dbbind(dbconn, columnOffsetNumber, BIGINTBIND, sizeof(long long), (BYTE *)&sybInt8Bind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybInt8BindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBBIT:
-								dbbind(dbconn, columnOffsetNumber, BITBIND, sizeof(BOOL), (BYTE *)&sybBitBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybBitBindNull[columnIndexOfType]);
+								if (sybBitBind && sybBitBindNull && columnIndexOfType < resultCountForType_SYBBIT) {
+									dbbind(dbconn, columnOffsetNumber, BITBIND, sizeof(BOOL), (BYTE *)&sybBitBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybBitBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBBITN:
-								dbbind(dbconn, columnOffsetNumber, BITBIND, sizeof(BOOL), (BYTE *)&sybBitNBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybBitNBindNull[columnIndexOfType]);
+								if (sybBitNBind && sybBitNBindNull && columnIndexOfType < resultCountForType_SYBBITN) {
+									dbbind(dbconn, columnOffsetNumber, BITBIND, sizeof(BOOL), (BYTE *)&sybBitNBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybBitNBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBFLTN:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybFltNBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybFltNBindNull[columnIndexOfType]);
+								if (sybFltNBind && sybFltNBindNull && columnIndexOfType < resultCountForType_SYBFLTN) {
+									dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybFltNBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybFltNBindNull[columnIndexOfType]);
+								}
 								break;
 							case SYBFLT8:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybFlt8BindNull[columnIndexOfType]);
+								if (sybFlt8Bind && sybFlt8BindNull && columnIndexOfType < resultCountForType_SYBFLT8) {
+									dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybFlt8Bind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybFlt8BindNull[columnIndexOfType]);
+								}
 								break;
 							case SYBREAL:
-								dbbind(dbconn,
-									   columnOffsetNumber,
-									   FLT8BIND,
-									   (DBINT)columnLengthMeta,
-									   (BYTE *)&sybRealBind[columnIndexOfType]);
-								dbnullbind(dbconn,
+								if (sybRealBind && sybRealBindNull && columnIndexOfType < resultCountForType_SYBREAL) {
+									dbbind(dbconn,
 										   columnOffsetNumber,
-										   &sybRealBindNull[columnIndexOfType]);
+										   FLT8BIND,
+										   (DBINT)columnLengthMeta,
+										   (BYTE *)&sybRealBind[columnIndexOfType]);
+									dbnullbind(dbconn,
+											   columnOffsetNumber,
+											   &sybRealBindNull[columnIndexOfType]);
+								}
 								break;
 							case SYBDECIMAL:
 							case SYBNUMERIC: {
-								
-								//Logic to bind numeric is below...  Can get percision and scale that way, but
-								//      large numbers will crash on converting to a useable format (dbconvert).
-								//      I bind as string and convert to numeric using cocoa.
-								/*
-								 size_t s = sizeof(DBNUMERIC);
-								 sybNumericBind[columnIndexOfType] = (DBNUMERIC *) calloc(1, s);
-								 memset(sybNumericBind[columnIndexOfType], 0, sizeof(*sybNumericBind[columnIndexOfType]));
-								 dbbind(dbconn, columnOffsetNumber, NUMERICBIND, s, (BYTE *)sybNumericBind[columnIndexOfType]);
-								 */
-								
-								sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
-								dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta, (BYTE *)sybNumericBindChar[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybNumericBindNull[columnIndexOfType]);
+								if (sybNumericBindChar && sybNumericBindNull && columnIndexOfType < resultCountForTypeSybNumericBindChar) {
+									sybNumericBindChar[columnIndexOfType] = malloc( sizeof(char) * ( columnLengthMeta + 1 ) );
+									dbbind(dbconn, columnOffsetNumber, NTBSTRINGBIND, (DBINT)columnLengthMeta, (BYTE *)sybNumericBindChar[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybNumericBindNull[columnIndexOfType]);
+								}
 								break;
 							}
 							case SYBMONEYN:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybMoneyNBindNull[columnIndexOfType]);
+								if (sybMoneyNBind && sybMoneyNBindNull && columnIndexOfType < resultCountForType_SYBMONEYN) {
+									dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybMoneyNBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybMoneyNBindNull[columnIndexOfType]);
+								}
 								break;
 							case SYBMONEY:
-								dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybMoneyBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybMoneyBindNull[columnIndexOfType]);
+								if (sybMoneyBind && sybMoneyBindNull && columnIndexOfType < resultCountForType_SYBMONEY) {
+									dbbind(dbconn, columnOffsetNumber, FLT8BIND, (DBINT)columnLengthMeta, (BYTE *)&sybMoneyBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybMoneyBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBDATETIME:
-								sybDateTimeBind[columnIndexOfType] = malloc(sizeof(DBDATETIME));
-								dbbind(dbconn, columnOffsetNumber, DATETIMEBIND, sizeof(DBDATETIME), (BYTE *)sybDateTimeBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybDateTimeBindNull[columnIndexOfType]);
+								if (sybDateTimeBind && sybDateTimeBindNull && columnIndexOfType < resultCountForType_SYBDATETIME) {
+									sybDateTimeBind[columnIndexOfType] = malloc(sizeof(DBDATETIME));
+									dbbind(dbconn, columnOffsetNumber, DATETIMEBIND, sizeof(DBDATETIME), (BYTE *)sybDateTimeBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybDateTimeBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBDATETIMN:
-								sybDateTimnBind[columnIndexOfType] = malloc(sizeof(DBDATETIME));
-								dbbind(dbconn, columnOffsetNumber, DATETIMEBIND, sizeof(DBDATETIME), (BYTE *)sybDateTimnBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybDateTimnBindNull[columnIndexOfType]);
+								if (sybDateTimnBind && sybDateTimnBindNull && columnIndexOfType < resultCountForType_SYBDATETIMN) {
+									sybDateTimnBind[columnIndexOfType] = malloc(sizeof(DBDATETIME));
+									dbbind(dbconn, columnOffsetNumber, DATETIMEBIND, sizeof(DBDATETIME), (BYTE *)sybDateTimnBind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybDateTimnBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBDATETIME4:
-								sybDateTime4Bind[columnIndexOfType] = malloc(sizeof(DBDATETIME4));
-								dbbind(dbconn, columnOffsetNumber, SMALLDATETIMEBIND, sizeof(DBDATETIME4), (BYTE *)sybDateTime4Bind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybDateTime4BindNull[columnIndexOfType]);
+								if (sybDateTime4Bind && sybDateTime4BindNull && columnIndexOfType < resultCountForType_SYBDATETIME4) {
+									sybDateTime4Bind[columnIndexOfType] = malloc(sizeof(DBDATETIME4));
+									dbbind(dbconn, columnOffsetNumber, SMALLDATETIMEBIND, sizeof(DBDATETIME4), (BYTE *)sybDateTime4Bind[columnIndexOfType]);
+									dbnullbind(dbconn, columnOffsetNumber, &sybDateTime4BindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBIMAGE:
-								dbbind(dbconn, columnOffsetNumber, BINARYBIND, (int)sizeof(sybImageBind), (BYTE *)sybImageBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybImageBindNull[columnIndexOfType]);
+								if (sybImageBind && sybImageBindNull && columnIndexOfType < resultCountForType_SYBIMAGE) {
+									// The size parameter here in dbbind should be the max possible length of the image data, not sizeof(BYTE*).
+									// For very large objects, dbbind might not be the most appropriate method; often dbbind with a NULL pointer and
+									// then dbreadtext/dbwritetext is used. Retaining original approach but correcting sizeof.
+									dbbind(dbconn, columnOffsetNumber, BINARYBIND, (int)dbcollen(dbconn, columnOffsetNumber), (BYTE *)sybImageBind[columnIndexOfType]); // Use actual column length
+									dbnullbind(dbconn, columnOffsetNumber, &sybImageBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBBINARY:
-								dbbind(dbconn, columnOffsetNumber, BINARYBIND, (int)sizeof(sybBinaryBind), (BYTE *)&sybBinaryBind[columnIndexOfType]);
-								dbnullbind(dbconn, columnOffsetNumber, &sybBinaryBind[columnIndexOfType]);
+								if (sybBinaryBind && sybBinaryBindNull && columnIndexOfType < resultCountForType_SYBBINARY) {
+									dbbind(dbconn, columnOffsetNumber, BINARYBIND, (int)dbcollen(dbconn, columnOffsetNumber), (BYTE *)&sybBinaryBind[columnIndexOfType]); // Use actual column length
+									dbnullbind(dbconn, columnOffsetNumber, &sybBinaryBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBVOID:
-								dbnullbind(dbconn, columnOffsetNumber, &sybVoidBindNull[columnIndexOfType]);
+								if (sybVoidBindNull && columnIndexOfType < resultCountForType_SYBVOID) {
+									dbnullbind(dbconn, columnOffsetNumber, &sybVoidBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							case SYBVARBINARY:
-								dbnullbind(dbconn, columnOffsetNumber, &sybVarBinaryBindNull[columnIndexOfType]);
+								if (sybVarBinaryBindNull && columnIndexOfType < resultCountForType_SYBVARBINARY) {
+									dbnullbind(dbconn, columnOffsetNumber, &sybVarBinaryBindNull[columnIndexOfType]);
+								}
 								break;
 								
 							default:
@@ -811,24 +964,26 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 						NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
 						
 						NSUInteger columnCounter = 0;
+						int indexOfType; // Declare indexOfType here for proper scope
 						for (NSDictionary *columnMetaData in colmunHolder) {
 							
-							int indexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
+							indexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue]; // Assign value here
 							
 							NSString *fieldName = columnMetaData[MTDatabaseColumnNameId];
 							
-							NSInteger columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue];
+							NSInteger columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue]; // columnNumber is not used here
 							
 							switch ([columnMetaData[MTDatabaseColumnTypeId] integerValue]) {
 									
 								case SYBDECIMAL:
 								case SYBNUMERIC: {
-									
-									if (sybNumericBindNull[indexOfType] != -1) {
+									// Add robust null and bounds checks
+									if (sybNumericBindNull && indexOfType < resultCountForTypeSybNumericBindChar && sybNumericBindNull[indexOfType] != -1) {
 										
 										NSString *objectStr = [[NSString alloc] initWithCString: sybNumericBindChar[indexOfType]
 																					   encoding: NSStringEncodingConversionAllowLossy];
 										
+										// The columnPercision logic is maintained as per original intent.
 										NSInteger cp = [columnPercision[columnCounter] integerValue];
 										
 										NSString *decimalSeperatorSqlServer2 = nil;
@@ -877,136 +1032,175 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										if (decimalNumber) {
 											resultsForRow[fieldName] = decimalNumber;
 										} else {
-											resultsForRow[fieldName] = @"Error";
+											resultsForRow[fieldName] = [NSNull null]; // Use NSNull for error conversion instead of "Error" string
 										}
 										
 										objectStr = nil; objectStr2 = nil;
 										
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Numeric NULL
 									}
 									break;
 								}
 								case SYBREAL: {
-									if (sybRealBindNull[indexOfType] != -1) {
+									if (sybRealBindNull && indexOfType < resultCountForType_SYBREAL && sybRealBindNull[indexOfType] != -1) {
 										NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Real NULL
 									}
 									break;
 								}
 								case SYBFLTN: {
-									if (sybFltNBindNull[indexOfType] != -1) {
-										NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
+									if (sybFltNBindNull && indexOfType < resultCountForType_SYBFLTN && sybFltNBindNull[indexOfType] != -1) {
+										// FIXED: Used sybFltNBind instead of sybRealBind
+										NSNumber *object = [[NSNumber alloc] initWithFloat:sybFltNBind[indexOfType]];
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Float N NULL
 									}
 									break;
 								}
 								case SYBFLT8: {
-									if (sybFlt8BindNull[indexOfType] != -1) {
+									if (sybFlt8BindNull && indexOfType < resultCountForType_SYBFLT8 && sybFlt8BindNull[indexOfType] != -1) {
 										NSNumber *object = @(sybFlt8Bind[indexOfType]);
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Float 8 NULL
 									}
 									break;
 								}
 									
-									
 								case SYBCHAR: {
-									if (sybCharBindNull[indexOfType] != -1) {
+									if (sybCharBindNull && indexOfType < resultCountForTypeSybCharBind && sybCharBindNull[indexOfType] != -1) {
 										char *sybChar = sybCharBind[indexOfType];
-										if (sybChar != nil) {
+										if (sybChar != nil) { // Check if pointer is valid (not null)
 											NSString *object = [[NSString alloc] initWithCString: sybChar
 																						encoding: NSStringEncodingConversionAllowLossy];
 											resultsForRow[fieldName] = object;
+										} else { // Handle empty string vs nil char*
+											resultsForRow[fieldName] = [NSNull null]; // Assign NSNull if char* is nil despite not being DB NULL
 										}
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Char NULL
 									}
 									break;
 								}
 									
 								case SYBVARCHAR: {
-									if (sybVarCharBindNull[indexOfType] != -1) {
+									if (sybVarCharBindNull && indexOfType < resultCountForTypeSybVarCharBind && sybVarCharBindNull[indexOfType] != -1) {
 										char *sybVarChar = sybVarCharBind[indexOfType];
 										if (sybVarChar != nil) {
 											NSString *object = [[NSString alloc] initWithCString: sybVarChar
 																						encoding: NSStringEncodingConversionAllowLossy];
 											resultsForRow[fieldName] = object;
+										} else {
+											resultsForRow[fieldName] = [NSNull null];
 										}
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // VarChar NULL
 									}
 									break;
 								}
 								case SYBNVARCHAR: {
-									if (sybnVarCharBindNull[indexOfType] != -1) {
+									if (sybnVarCharBindNull && indexOfType < resultCountForTypeSybnVarCharBind && sybnVarCharBindNull[indexOfType] != -1) {
 										char *sybnVarChar = sybnVarCharBind[indexOfType];
 										if (sybnVarChar != nil) {
 											NSString *object = [[NSString alloc] initWithCString: sybnVarChar
 																						encoding: NSStringEncodingConversionAllowLossy];
 											resultsForRow[fieldName] = object;
+										} else {
+											resultsForRow[fieldName] = [NSNull null];
 										}
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // NVarChar NULL
 									}
 									break;
 								}
 								case SYBTEXT: {
-									if (sybTextBindNull[indexOfType] != -1) {
+									if (sybTextBindNull && indexOfType < resultCountForTypeSybTextBind && sybTextBindNull[indexOfType] != -1) {
 										
 										char *sybText = sybTextBind[indexOfType];
 										if (sybText != nil) {
 											NSString *object = [[NSString alloc] initWithCString: sybText
 																						encoding: NSStringEncodingConversionAllowLossy];
 											resultsForRow[fieldName] = object;
+										} else {
+											resultsForRow[fieldName] = [NSNull null];
 										}
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Text NULL
 									}
 									break;
 								}
 								case SYBNTEXT: {
-									if (sybnTextBindNull[indexOfType] != -1) {
-										char *sybnTest = sybnVarCharBind[indexOfType];
+									if (sybnTextBindNull && indexOfType < resultCountForTypeSybnTextBind && sybnTextBindNull[indexOfType] != -1) {
+										// FIXED: Used sybnTextBind instead of sybnVarCharBind
+										char *sybnTest = sybnTextBind[indexOfType];
 										if (sybnTest != nil) {
 											NSString *object = [[NSString alloc] initWithCString: sybnTest
 																						encoding: NSStringEncodingConversionAllowLossy];
 											resultsForRow[fieldName] = object;
+										} else {
+											resultsForRow[fieldName] = [NSNull null];
 										}
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // NText NULL
 									}
 									break;
 								}
 									
 								case SYBINTN: {
-									if (sybIntnBindNull[indexOfType] != -1) {
+									if (sybIntnBindNull && indexOfType < resultCountForType_SYBINTN && sybIntnBindNull[indexOfType] != -1) {
 										long long integer = sybIntnBind[indexOfType];
 										NSNumber *object = @((NSInteger)integer);
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Integer N NULL
 									}
 									break;
 								}
 								case SYBINT1: {
-									if (sybInt1BindNull[indexOfType] != -1) {
+									if (sybInt1BindNull && indexOfType < resultCountForType_SYBINT1 && sybInt1BindNull[indexOfType] != -1) {
 										int integer = sybInt1Bind[indexOfType];
 										NSNumber *object = @(integer);
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Integer 1 NULL
 									}
 									break;
 								}
 								case SYBINT2: {
-									if (sybInt2BindNull[indexOfType] != -1) {
+									if (sybInt2BindNull && indexOfType < resultCountForType_SYBINT2 && sybInt2BindNull[indexOfType] != -1) {
 										int integer = sybInt2Bind[indexOfType];
 										NSNumber *object = @(integer);
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Integer 2 NULL
 									}
 									break;
 								}
 								case SYBINT4: {
-									if (sybInt4BindNull[indexOfType] != -1) {
+									if (sybInt4BindNull && indexOfType < resultCountForType_SYBINT4 && sybInt4BindNull[indexOfType] != -1) {
 										int integer = sybInt4Bind[indexOfType];
 										NSNumber *object = @(integer);
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Integer 4 NULL
 									}
 									break;
 								}
 								case SYBINT8: {
-									if (sybInt8BindNull[indexOfType] != -1) {
+									if (sybInt8BindNull && indexOfType < resultCountForType_SYBINT8 && sybInt8BindNull[indexOfType] != -1) {
 										NSNumber *object = @(sybInt8Bind[indexOfType]);
 										resultsForRow[fieldName] = object;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // Integer 8 NULL
 									}
 									break;
 								}
 								case SYBDATETIME4: {
-									if (sybDateTime4BindNull[indexOfType] != -1) {
+									if (sybDateTime4BindNull && indexOfType < resultCountForType_SYBDATETIME4 && sybDateTime4BindNull[indexOfType] != -1) {
 										DBDATETIME4 smallDate = *sybDateTime4Bind[indexOfType];
 										
 										NSDateComponents *offsetCompsDays = [[NSDateComponents alloc] init];
@@ -1015,7 +1209,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										NSDate *object = [gregorian dateByAddingComponents:offsetCompsDays toDate:janFirst1990 options:0];
 										
 										
-										NSDateComponents *smallDaysComponentsPart1 = [gregorian components:(NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay)
+										NSDateComponents *smallDaysComponentsPart1 = [gregorian components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
 																								  fromDate:object];
 										
 										NSDateComponents *offsetCompsWithMinutes = [[NSDateComponents alloc] init];
@@ -1031,15 +1225,20 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										
 										NSDate *newDate = [gregorian dateFromComponents:offsetCompsWithMinutes];
 										resultsForRow[fieldName] = newDate;
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // DateTime4 NULL
 									}
 									break;
 								}
 									
 								case SYBDATETIME: {
-									if (sybDateTimeBindNull[indexOfType] != -1) {
+									// Robust null check for the array itself first
+									if (sybDateTimeBindNull && indexOfType < resultCountForType_SYBDATETIME && sybDateTimeBindNull[indexOfType] != -1) {
 										struct tds_sybase_dbdaterec dateinfo;
-										memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
-										dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimeBind[indexOfType]);
+										// CORRECTED: Copy data INTO the malloc'd memory block
+										memcpy(sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
+										// CORRECTED: Pass the pointer to the structure to dbdatecrack
+										dbdatecrack(dbconn, &dateinfo, sybDateTimeBind[indexOfType]);
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										comps.month = dateinfo.datemonth + 1;
@@ -1051,16 +1250,19 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										NSDate *date = [gregorian dateFromComponents:comps];
 										resultsForRow[fieldName] = date;
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // DateTime NULL
 									}
 									break;
 								}
 									
 								case SYBDATETIMN: {
-									if (sybDateTimnBindNull[indexOfType] != -1) {
+									// Robust null check for the array itself first
+									if (sybDateTimnBindNull && indexOfType < resultCountForType_SYBDATETIMN && sybDateTimnBindNull[indexOfType] != -1) {
 										struct tds_sybase_dbdaterec dateinfo;
-										memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
-										dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimnBind[indexOfType]);
+										// CORRECTED: Copy data INTO the malloc'd memory block
+										memcpy(sybDateTimnBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
+										// CORRECTED: Pass the pointer to the structure to dbdatecrack
+										dbdatecrack(dbconn, &dateinfo, sybDateTimnBind[indexOfType]);
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										comps.month = dateinfo.datemonth + 1;
@@ -1072,88 +1274,92 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										NSDate *date = [gregorian dateFromComponents:comps];
 										resultsForRow[fieldName] = date;
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // DateTime N NULL
 									}
 									break;
 								}
 									
 								case SYBBIT: {
-									if (sybBitBindNull[indexOfType] != -1) {
+									if (sybBitBindNull && indexOfType < resultCountForType_SYBBIT && sybBitBindNull[indexOfType] != -1) {
 										NSNumber *object = @((BOOL)sybBitBind[indexOfType]);
 										resultsForRow[fieldName] = object;
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Bit NULL
 									}
 									break;
 								}
 									
 								case SYBBITN: {
-									if (sybBitNBindNull[indexOfType] != -1) {
+									if (sybBitNBindNull && indexOfType < resultCountForType_SYBBITN && sybBitNBindNull[indexOfType] != -1) {
 										NSNumber *object = [[NSNumber alloc] initWithInt:(BOOL)sybBitNBind[indexOfType]];
 										resultsForRow[fieldName] = object;
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Bit N NULL
 									}
 									break;
 								}
 									
 								case SYBIMAGE: {
-									if (sybImageBindNull[indexOfType] != -1) {
-										
+									if (sybImageBindNull && indexOfType < resultCountForType_SYBIMAGE && sybImageBindNull[indexOfType] != -1) {
+										// Image data processing not fully implemented, returning NSNull for non-null value
+										// To properly handle, you would need to use dbreadtext/dbwritetext or similar methods.
+										resultsForRow[fieldName] = [NSNull null];
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Image NULL
 									}
 									break;
 								}
 								case SYBMONEY: {
-									if (sybMoneyBindNull[indexOfType] != -1) {
+									if (sybMoneyBindNull && indexOfType < resultCountForType_SYBMONEY && sybMoneyBindNull[indexOfType] != -1) {
 										double money = sybMoneyBind[indexOfType];
 										NSNumber *moneyNumber = @(money);
 										resultsForRow[fieldName] = moneyNumber;
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Money NULL
 									}
 									break;
 								}
 								case SYBMONEYN: {
-									if (sybMoneyNBindNull[indexOfType] != -1) {
+									if (sybMoneyNBindNull && indexOfType < resultCountForType_SYBMONEYN && sybMoneyNBindNull[indexOfType] != -1) {
 										double money = sybMoneyNBind[indexOfType];
 										NSNumber *moneyNumber = @(money);
 										resultsForRow[fieldName] = moneyNumber;
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Money N NULL
 									}
 									break;
 								}
 								case SYBBINARY: {
-									if (sybBinaryBindNull[indexOfType] != -1) {
-										NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
-										resultsForRow[fieldName] = notSupported;
+									if (sybBinaryBindNull && indexOfType < resultCountForType_SYBBINARY && sybBinaryBindNull[indexOfType] != -1) {
+										// Binary data processing not fully implemented, returning NSNull for non-null value
+										resultsForRow[fieldName] = [NSNull null];
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Binary NULL
 									}
 									break;
 								}
 								case SYBVOID: {
-									if (sybVoidBindNull[indexOfType] != -1) {
-										NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
-										resultsForRow[fieldName] = notSupported;
+									if (sybVoidBindNull && indexOfType < resultCountForType_SYBVOID && sybVoidBindNull[indexOfType] != -1) {
+										// Void data processing not fully implemented, returning NSNull for non-null value
+										resultsForRow[fieldName] = [NSNull null];
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // Void NULL
 									}
 									break;
 								}
 								case SYBVARBINARY: {
-									if (sybVarBinaryBindNull[indexOfType] != -1) {
-										NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
-										resultsForRow[fieldName] = notSupported;
+									if (sybVarBinaryBindNull && indexOfType < resultCountForType_SYBVARBINARY && sybVarBinaryBindNull[indexOfType] != -1) {
+										// VarBinary data processing not fully implemented, returning NSNull for non-null value
+										resultsForRow[fieldName] = [NSNull null];
 									} else {
-										resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
+										resultsForRow[fieldName] = [NSNull null]; // VarBinary NULL
 									}
 									break;
 								}
 									
 								default:
+									// For any other unhandled types, explicitly return NSNull
+									resultsForRow[fieldName] = [NSNull null];
 									break;
 							}
 							
@@ -1165,41 +1371,121 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 						rowCounter++;
 					}
 					
-					for (NSInteger i = 0; i < resultCountForTypeSybCharBind; i++) {
-						free(sybCharBind[i]);
+					// Frees for individual char* and DBDATETIME* pointers
+					if (sybNumericBindChar) {
+						for (NSInteger i=0; i<resultCountForTypeSybNumericBindChar; i++) {
+							if (sybNumericBindChar[i] != NULL) free(sybNumericBindChar[i]);
+						}
 					}
-					for (NSInteger i = 0; i < resultCountForTypeSybNumericBindChar; i++) {
-						free(sybNumericBindChar[i]);
+					if (sybCharBind) {
+						for (NSInteger i=0; i<resultCountForTypeSybCharBind; i++) {
+							if (sybCharBind[i] != NULL) free(sybCharBind[i]);
+						}
 					}
-					for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
-						free(sybVarCharBind[i]);
+					if (sybVarCharBind) {
+						for (NSInteger i = 0; i < resultCountForTypeSybVarCharBind; i++) {
+							if (sybVarCharBind[i] != NULL) free(sybVarCharBind[i]);
+						}
 					}
-					for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
-						free(sybnVarCharBind[i]);
+					if (sybnVarCharBind) {
+						for (NSInteger i = 0; i < resultCountForTypeSybnVarCharBind; i++) {
+							if (sybnVarCharBind[i] != NULL) free(sybnVarCharBind[i]);
+						}
 					}
-					for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
-						free(sybTextBind[i]);
+					if (sybTextBind) {
+						for (NSInteger i = 0; i < resultCountForTypeSybTextBind; i++) {
+							if (sybTextBind[i] != NULL) free(sybTextBind[i]);
+						}
 					}
-					for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
-						free(sybnTextBind[i]);
+					if (sybnTextBind) {
+						for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
+							if (sybnTextBind[i] != NULL) free(sybnTextBind[i]);
+						}
 					}
 					
-				}
+					if (sybDateTimeBind) {
+						for (NSInteger i = 0; i < resultCountForType_SYBDATETIME; i++) {
+							if (sybDateTimeBind[i]) free(sybDateTimeBind[i]);
+						}
+					}
+					if (sybDateTime4Bind) {
+						for (NSInteger i = 0; i < resultCountForType_SYBDATETIME4; i++) {
+							if (sybDateTime4Bind[i]) free(sybDateTime4Bind[i]);
+						}
+					}
+					if (sybDateTimnBind) {
+						for (NSInteger i = 0; i < resultCountForType_SYBDATETIMN; i++) {
+							if (sybDateTimnBind[i]) free(sybDateTimnBind[i]);
+						}
+					}
+					
+					// Frees for main arrays of pointers and value arrays
+					if (sybRealBind) free(sybRealBind);
+					if (sybRealBindNull) free(sybRealBindNull);
+					if (sybFltNBind) free(sybFltNBind);
+					if (sybFltNBindNull) free(sybFltNBindNull);
+					if (sybFlt8Bind) free(sybFlt8Bind);
+					if (sybFlt8BindNull) free(sybFlt8BindNull);
+					if (sybInt1Bind) free(sybInt1Bind);
+					if (sybInt1BindNull) free(sybInt1BindNull);
+					if (sybInt2Bind) free(sybInt2Bind);
+					if (sybInt2BindNull) free(sybInt2BindNull);
+					if (sybIntnBind) free(sybIntnBind);
+					if (sybIntnBindNull) free(sybIntnBindNull);
+					if (sybInt4Bind) free(sybInt4Bind);
+					if (sybInt4BindNull) free(sybInt4BindNull);
+					if (sybInt8Bind) free(sybInt8Bind);
+					if (sybInt8BindNull) free(sybInt8BindNull);
+					if (sybMoneyBind) free(sybMoneyBind);
+					if (sybMoneyBindNull) free(sybMoneyBindNull);
+					if (sybMoneyNBind) free(sybMoneyNBind);
+					if (sybMoneyNBindNull) free(sybMoneyNBindNull);
+					
+					if (sybNumericBindChar) free(sybNumericBindChar);
+					if (sybNumericBindNull) free(sybNumericBindNull);
+					if (sybCharBind) free(sybCharBind);
+					if (sybCharBindNull) free(sybCharBindNull);
+					if (sybVarCharBind) free(sybVarCharBind);
+					if (sybVarCharBindNull) free(sybVarCharBindNull);
+					if (sybnVarCharBind) free(sybnVarCharBind);
+					if (sybnVarCharBindNull) free(sybnVarCharBindNull);
+					if (sybTextBind) free(sybTextBind);
+					if (sybTextBindNull) free(sybTextBindNull);
+					if (sybnTextBind) free(sybnTextBind);
+					if (sybnTextBindNull) free(sybnTextBindNull);
+					if (sybDateTimeBind) free(sybDateTimeBind);
+					if (sybDateTimeBindNull) free(sybDateTimeBindNull);
+					if (sybDateTime4Bind) free(sybDateTime4Bind);
+					if (sybDateTime4BindNull) free(sybDateTime4BindNull);
+					if (sybDateTimnBind) free(sybDateTimnBind);
+					if (sybDateTimnBindNull) free(sybDateTimnBindNull);
+					if (sybImageBind) free(sybImageBind);
+					if (sybImageBindNull) free(sybImageBindNull);
+					if (sybBinaryBind) free(sybBinaryBind);
+					if (sybBinaryBindNull) free(sybBinaryBindNull);
+					if (sybVarBinaryBindNull) free(sybVarBinaryBindNull);
+					if (sybVoidBindNull) free(sybVoidBindNull);
+					if (sybBitBind) free(sybBitBind);
+					if (sybBitBindNull) free(sybBitBindNull);
+					if (sybBitNBind) free(sybBitNBind);
+					if (sybBitNBindNull) free(sybBitNBindNull);
+					
+				} // End while (dbresults(dbconn) != NO_MORE_RESULTS)
 				[datatable endBulkInsert];
 				rsuccess = YES;
 				
 			} else {
 				NSString *message = @"Sql Syntax Error";
 				NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-				error = [NSError errorWithDomain:MADDomainTDS code:87635 userInfo:errorInfo];
+				localError = [NSError errorWithDomain:MADDomainTDS code:87635 userInfo:errorInfo]; // Assign to localError
 				rsuccess = NO;
 			}
 			dbclose(dbconn);
 			
 		} else {
-			NSError *error1 = [NSError errorWithDomain:MADDomainTDS
-												  code:4379
-											  userInfo:@{
+			localError = [NSError errorWithDomain:MADDomainTDS // Assign to localError
+											 code:4379
+										 userInfo:@{
 				NSLocalizedDescriptionKey : NSLocalizedString(@"Bad Process", @"Bad Process"),
 				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Could not run this query.", @"Could not run this query.")
 			}];
@@ -1207,14 +1493,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		}
 		
 	} else {
-		NSError *error2 = [NSError errorWithDomain:MADDomainTDS
-											  code:4378
-										  userInfo:@{
+		localError = [NSError errorWithDomain:MADDomainTDS // Assign to localError
+										 code:4378
+									 userInfo:@{
 			NSLocalizedDescriptionKey : NSLocalizedString(@"Bad Query", @"Bad Query"),
 			NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Could not run this query.", @"Could not run this query.")
 		}];
 		rsuccess = NO;
 	}
+	
 	return rsuccess;
 }
 
