@@ -98,14 +98,12 @@ static MADVerificationController *sharedSingleton;
 
 - (void)resetReceipt {
 	
-	NSURL *receiptUrl = [NSBundle mainBundle].appStoreReceiptURL;
+	NSURL *receiptUrl = [[NSBundle mainBundle].appStoreReceiptURL copy];
 	NSString *receiptPath = receiptUrl.path;
-	
-	
 	
 	if ([[NSFileManager defaultManager] fileExistsAtPath: receiptPath]) {
 		
-		MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptUrl.path];
+		MADSalesReceipt *receipt = [[MADSalesReceipt alloc] initWithPath:receiptPath];
 		
 		NSString *bundleID = [[MADApplication AppDelegate] applicationBundleIdentifier];
 		
@@ -151,7 +149,6 @@ static MADVerificationController *sharedSingleton;
 }
 
 - (void)iOS7VerifyReceipt {
-	
 	[self resetReceipt];
 	if (self.modernReceiptIsValid == NO) {
 		[self refreshReceipt];
@@ -224,8 +221,7 @@ static MADVerificationController *sharedSingleton;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-	if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
+	if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
 		SecTrustRef trust = challenge.protectionSpace.serverTrust;
 		NSError *error = nil;
 		BOOL didUseCredential = NO;

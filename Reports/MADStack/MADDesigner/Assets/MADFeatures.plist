@@ -4,6 +4,20 @@
 <array>
 	<dict>
 		<key>product-id</key>
+		<string>com.everydayapps.mad.designer.subscription.full.month</string>
+		<key>title</key>
+		<string>Subscription: Monthly</string>
+		<key>description</key>
+		<string>Enable all features.</string>
+		<key>type</key>
+		<integer>2</integer>
+		<key>apple-id</key>
+		<string>6748623299</string>
+		<key>available</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>product-id</key>
 		<string>com.everydayapps.mad.designer.product.viewer</string>
 		<key>title</key>
 		<string>Reporting Mode</string>

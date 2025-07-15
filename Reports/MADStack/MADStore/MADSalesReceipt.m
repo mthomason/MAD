@@ -209,7 +209,7 @@ static NSString * const MTStoreKitIdentifierReceiptInApp                       =
 
 - (instancetype)initWithPath:(NSString *)path {
 	if (self = [super init]) {
-		self.path = path;
+		_path = [path copy];
 	}
 	return self;
 }

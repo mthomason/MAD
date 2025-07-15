@@ -181,8 +181,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 #pragma mark - SKProductsRequestDelegate Protocol
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-	NSArray *products = [NSArray arrayWithArray:response.products];
-	self.products = products;
+	self.products = [NSArray arrayWithArray:response.products];
 }
 
 #pragma mark - SKPaymentTransactionObserver Protocol

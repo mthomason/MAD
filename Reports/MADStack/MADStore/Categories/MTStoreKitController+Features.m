@@ -16,15 +16,12 @@
 }
 
 - (BOOL)isReportingEnabledAndDesired {
-    return YES;
-    
-    //[[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"] &&
-    //        [[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
+	return [[MADVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"] &&
+		[[NSUserDefaults standardUserDefaults] boolForKey:@"defaults.everydayapps.features.viewer.desired"];
 }
 
 - (BOOL)isReportingEnabled {
-    return YES;
-    //[[MTVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"];
+    return [[MADVerificationController sharedInstance] entitledToProduct:@"com.everydayapps.mad.designer.product.viewer"];
 }
 
 - (BOOL)isBarcodeDesignerEnabled {

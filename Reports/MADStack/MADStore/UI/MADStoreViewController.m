@@ -71,9 +71,9 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 	self.collectionView.scrollsToTop = YES;
 	self.collectionView.allowsSelection = YES;
 	
-	self.collectionView.backgroundColor = [UIColor clearColor];             //[[UIColor redColor] colorWithAlphaComponent:.90];
-	self.navigationController.view.backgroundColor = [UIColor clearColor];  //[[UIColor greenColor] colorWithAlphaComponent:.70];
-	self.view.backgroundColor = [UIColor clearColor];                       //[[UIColor purpleColor] colorWithAlphaComponent:.30];
+	self.collectionView.backgroundColor = /*[UIColor clearColor];*/             [[UIColor redColor] colorWithAlphaComponent:.90];
+	self.navigationController.view.backgroundColor = /*[UIColor clearColor];*/  [[UIColor greenColor] colorWithAlphaComponent:.70];
+	self.view.backgroundColor = /*[UIColor clearColor];*/                       [[UIColor purpleColor] colorWithAlphaComponent:.30];
 	self.collectionView.backgroundView = nil;
 	((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
 	
@@ -126,7 +126,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    ((MADReceiptViewController *)((UINavigationController *)segue.destinationViewController).topViewController).delegate = self;
+	((MADReceiptViewController *)((UINavigationController *)segue.destinationViewController).topViewController).delegate = self;
 }
 
 #pragma mark <UICollectionViewDataSource>
