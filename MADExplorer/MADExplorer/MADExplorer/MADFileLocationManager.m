@@ -126,14 +126,18 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	// Retrieve the class name
 	NSString *className = [[NSUserDefaults standardUserDefaults] stringForKey:MADAppConfigurationUserDefaultsUbiquityTokenClass];
 	Class tokenClass = className ? NSClassFromString(className) : nil;
-	
+		
 	if (!tokenClass) {
 		os_log_error(OS_LOG_DEFAULT, "%s: Unknown class for ubiquity token. Treating as changed account.", __PRETTY_FUNCTION__);
 		return nil;
 	}
 	
+	NSSet *allowedClasses = [NSSet setWithObjects:tokenClass, [NSData class], nil];
+	
 	NSError *error = nil;
-	id storedToken = [NSKeyedUnarchiver unarchivedObjectOfClass:tokenClass fromData:ubiquityIdentityTokenArchive error:&error];
+	id storedToken = [NSKeyedUnarchiver unarchivedObjectOfClasses:allowedClasses
+														 fromData:ubiquityIdentityTokenArchive
+															error:&error];
 	
 	if (error) {
 		os_log_error(OS_LOG_DEFAULT, "%s: Error unarchiving ubiquity token: %@", __PRETTY_FUNCTION__, error);
