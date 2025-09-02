@@ -573,10 +573,11 @@ void sqliteLog(void *foo, const char* statement) {
 	
 	if (!success) {
 		errorMessage = (char *)sqlite3_errmsg(_database);
-		NSLog(@"%s.", errorMessage);
+		os_log_error(GetMadLog(), "%s: %s", __PRETTY_FUNCTION__, errorMessage);
 	}
 	
-	if (!success && resultError != NULL) *resultError = [NSError errorWithDomain:NSStringFromClass([self class]) code:4784 userInfo:@{
+	if (!success && resultError != NULL) *resultError = [NSError errorWithDomain:NSStringFromClass([self class])
+																			code:4784 userInfo:@{
 		NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
 		NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
 	}];
@@ -816,8 +817,7 @@ void sqliteLog(void *foo, const char* statement) {
 	NSMutableArray *result = [[NSMutableArray alloc] init];
 	BOOL success = NO;
 	sqlite3_stmt *statement;
-	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	char *sql = sqlite3_mprintf(queryStart.UTF8String);
+	char *sql = sqlite3_mprintf("SELECT tbl_name FROM main.sqlite_master WHERE type='table';");
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
 		success = YES;
 		BOOL stop = NO;
@@ -857,8 +857,7 @@ void sqliteLog(void *foo, const char* statement) {
 												   error:(NSError *__autoreleasing *)error {
 	NSMutableArray *result = [[NSMutableArray alloc] init];
 	sqlite3_stmt *statement;
-	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
+	char *sql = sqlite3_mprintf("SELECT tbl_name FROM main.sqlite_master WHERE type='table';");
 	
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
 		while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -1217,7 +1216,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 		case SQLITE3_TEXT: {
 			const char *resultString = (char *)sqlite3_column_text(statement, columnNumber);
 			return [[NSString alloc] initWithCString: resultString
-											 encoding: NSUTF8StringEncoding];
+											encoding: NSUTF8StringEncoding];
 		}
 		default:
 			NSAssert(NO, @"Unhandled case");
