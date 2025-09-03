@@ -483,8 +483,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark MADDocumentManagerProtocol
 
 - (void)handleDidDisconnectFromClound:(id)sender {
+
 	typeof(self) __weak weakself = self;
-	
 	void (^actionConfirm)(UIAlertAction *action) = ^(UIAlertAction *action) {
 		MADExplorerController *sself = weakself;
 		[sself.fileExplorerDataSource updateCloudPreferences];
