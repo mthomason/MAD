@@ -1825,7 +1825,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)operationDidFinish:(MADOperation *)operation
 					errors:(NSArray<NSError *> *)errors {
 	if ([operation isKindOfClass:[MADOperationInstallSampleDocument class]] && ((MADOperationInstallSampleDocument *)operation).sampleDocumentInstalled) {
-#warning Need to reload the collection view...
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[self.fileExplorerDataSource refresh];
 		}];
