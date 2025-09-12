@@ -44,6 +44,7 @@
 #import <MADFileManager/MADFileUtilities.h>
 #import <MADFileManager/MADFileInfo.h>
 #import <MADFileManager/MADMetaData.h>
+#import <MADFileManager/MADFilesController.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
@@ -69,6 +70,7 @@
 #import <MADExplorer/MADExplorerProtocol.h>
 #import <MADExplorer/MADDocumentManagerProtocol.h>
 #import <MADExplorer/MADExplorerView.h>
+#import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADCollectionViewCellDocument.h>
 #import <MADExplorer/MADExplorerViewDelegate.h>
@@ -1822,7 +1824,12 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (void)operationDidFinish:(MADOperation *)operation
 					errors:(NSArray<NSError *> *)errors {
-	
+	if ([operation isKindOfClass:[MADOperationInstallSampleDocument class]] && ((MADOperationInstallSampleDocument *)operation).sampleDocumentInstalled) {
+#warning Need to reload the collection view...
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+			[self.fileExplorerDataSource refresh];
+		}];
+	}
 }
 
 #pragma mark -
@@ -1857,8 +1864,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (id)debugQuickLookObject {
 	NSMutableString *debug = [[NSMutableString alloc] init];
-	NSString *classname = NSStringFromClass([self class]);
-	id uppercaseClassname = [classname uppercaseString];
+	NSString *uppercaseClassname = [NSStringFromClass([self class]) uppercaseString];
 	[debug appendFormat:@"--%@--\n", uppercaseClassname];
 	[debug appendFormat:@"Collection view delegate:          %@\n", self.fileExplorerViewDelegate];
 	[debug appendFormat:@"Active document manager:           %@\n", self.activeDocumentManager];

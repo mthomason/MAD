@@ -11,7 +11,6 @@
 #endif
 
 #import "MADCollectionViewCellDocument.h"
-#import "MADExplorerActivityIndicator.h"
 #import "MADLabelFileExplorerDocumentCellTitle.h"
 #import "MADLabelFileExplorerDocumentCellSubtitle.h"
 #import "MADBackgroundViewSelected.h"
@@ -32,6 +31,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/NSLayoutAnchor.h>
+#import <UIKit/UIActivityIndicatorView.h>
 
 #import <QuartzCore/CALayer.h>
 #import <os/log.h>
@@ -238,14 +238,17 @@ static inline double wobbleRandomFactor(void) {
 
 - (UIActivityIndicatorView *)activityIndicator {
 	if (!_activityIndicator) {
-		UIActivityIndicatorView *indicator = [UIActivityIndicatorView explorerActivityIndicator];
-		indicator.translatesAutoresizingMaskIntoConstraints = NO;
-		[self.contentView addSubview:indicator];
+		UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
+		[activityIndicatorView stopAnimating];
+		[activityIndicatorView setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+		[activityIndicatorView setTranslatesAutoresizingMaskIntoConstraints: YES];;
+		activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+		[self.contentView addSubview:activityIndicatorView];
 		[NSLayoutConstraint activateConstraints:@[
-			[indicator.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
-			[indicator.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
+			[activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+			[activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
 		]];
-		_activityIndicator = indicator;
+		_activityIndicator = activityIndicatorView;
 	}
 	return _activityIndicator;
 }

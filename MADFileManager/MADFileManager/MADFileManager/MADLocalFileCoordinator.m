@@ -88,6 +88,10 @@
 
 #pragma mark - MADFileCoordinator
 
+- (void)refresh {
+	[self processChangeToLocalDocumentsDirectory];
+}
+
 - (void)startQuery {
 	[self processChangeToLocalDocumentsDirectory];
 	

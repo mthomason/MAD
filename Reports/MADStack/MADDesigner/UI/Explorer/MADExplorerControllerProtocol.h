@@ -9,6 +9,8 @@
 #ifndef MAD_MADExplorerControllerProtocol_h
 #define MAD_MADExplorerControllerProtocol_h
 
+#import <Foundation/NSArray.h>
+
 @protocol MADExplorerControllerProtocol <NSObject>
 
 	- (void)openDocumentAtURL:(NSURL *)url;

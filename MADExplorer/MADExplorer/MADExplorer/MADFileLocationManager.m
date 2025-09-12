@@ -194,8 +194,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 #pragma mark - Convenience
 
 - (BOOL)isFirstLaunch {
-	BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch] ?
-																					YES : NO;
+	BOOL isFirstLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:MADFirstLaunch];
 	if (isFirstLaunch) {
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:MADFirstLaunch];
 		[[NSUserDefaults standardUserDefaults] synchronize];
@@ -246,8 +245,8 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 
 - (void)setupFileStorageLocationsForLocal {
 	id <MADFileLocationManagerDelegate> safedelegate = _delegate;
-	NSString *groupIdentifier = [[safedelegate groupIdentifier] copy];
-	NSString *ubiquityIdentifier = [[safedelegate ubiquityIdentifier] copy];
+	NSString *groupIdentifier = [[[safedelegate class] groupIdentifier] copy];
+	NSString *ubiquityIdentifier = [[[safedelegate class] ubiquityIdentifier] copy];
 	NSString *fileExtention = [[safedelegate fileExtention] copy];
 
 	id <MADFileLocationManagerDelegate> __weak wdelegate = safedelegate;
@@ -294,40 +293,45 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (void)getUserCloudPrefs {
-	if (self.isFirstLaunch || self.getUserCloudPrefsFirstCall == NO) {
-
-		self.getUserCloudPrefsFirstCall = NO;
-		BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
-		BOOL isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
-		
-		MADStorageState *storageState = [MADStorageState newStorageStateWithStorageOption: [self.class StorageOption]
-															   hasUbiquityIdentityChanged: hasUbiquityIdentityChanged
-																  isCloudReadilyAvailable: isCloudReadilyAvailable];
-		if (storageState.cloudAvailable) {
+	// Use a serial queue to prevent race conditions
+	dispatch_async(self.synchronizationQueue, ^{
+		if (self.isFirstLaunch || !self.getUserCloudPrefsFirstCall) {
+			self.getUserCloudPrefsFirstCall = NO;
 			
-			if (storageState.storageOption == MADAppStorageCloud) {
-				
-				[self setupFileStorageLocationsForCloud];
-				
-			} else if (storageState.storageOption == MADAppStorageLocal || storageState.storageOption == MADAppStorageNotSet) {
-
-				[self setupFileStorageLocationsForLocal];
-
+			__block BOOL isCloudReadilyAvailable;
+			if ([NSThread isMainThread]) {
+				isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
+			} else {
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
+				});
 			}
+			BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
 			
+			MADStorageState *storageState = [MADStorageState newStorageStateWithStorageOption:[self.class StorageOption]
+																   hasUbiquityIdentityChanged:hasUbiquityIdentityChanged
+																	  isCloudReadilyAvailable:isCloudReadilyAvailable];
+			NSLog(@"storageState: %@ cloudAvailable: %@: storageOption: %ld", storageState, storageState.cloudAvailable ? @"YES" : @"NO", (long)storageState.storageOption);
+			if (storageState.cloudAvailable) {
+				if (storageState.storageOption == MADAppStorageCloud) {
+					NSLog(@"Calling setupFileStorageLocationsForCloud");
+					[self setupFileStorageLocationsForCloud];
+				} else if (storageState.storageOption == MADAppStorageLocal || storageState.storageOption == MADAppStorageNotSet || storageState.storageOption == MADAppStorageStateUnknown) {
+					NSLog(@"Calling setupFileStorageLocationsForLocal");
+					[self setupFileStorageLocationsForLocal];
+				}
+			} else {
+				NSLog(@"Cloud not available.");
+				if (storageState.storageOption == MADAppStorageCloud) {
+					[self.class setStorageOption:MADAppStorageNotSet];
+				}
+				[self configureFilesController:NO storageOptionChangeHandler:nil];
+			}
 		} else {
-		
-			if (storageState.storageOption == MADAppStorageCloud) {
-				[self.class setStorageOption: MADAppStorageNotSet];
-			}
-			
-			[self configureFilesController: NO storageOptionChangeHandler: nil];
-			
+			self.getUserCloudPrefsFirstCall = NO;
+			[self getUserCloudPrefsSubsquient];
 		}
-	} else {
-		self.getUserCloudPrefsFirstCall = NO;
-		[self getUserCloudPrefsSubsquient];
-	}
+	});
 }
 
 - (void)getUserCloudPrefsSubsquient {

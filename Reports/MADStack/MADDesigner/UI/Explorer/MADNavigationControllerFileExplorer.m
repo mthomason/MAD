@@ -12,8 +12,6 @@
 
 #import "MADTransparentPresentationController.h"
 
-#import "MADExplorerNavigationBar.h"
-#import "MADExplorerToolbar.h"
 #import "MADExplorerController.h"
 
 #import "MADThemeManager.h"
@@ -29,8 +27,8 @@
 
 @interface MADNavigationControllerFileExplorer ()
 
-@property (weak, nonatomic) IBOutlet MADExplorerNavigationBar *fileExplorerNavigationBar;
-@property (weak, nonatomic) IBOutlet MADExplorerToolbar *fileExplorerToolBar;
+@property (weak, nonatomic) IBOutlet UINavigationBar *fileExplorerNavigationBar;
+@property (weak, nonatomic) IBOutlet UIToolbar *fileExplorerToolBar;
 
 @end
 

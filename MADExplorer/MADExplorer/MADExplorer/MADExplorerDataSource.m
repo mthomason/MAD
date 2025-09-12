@@ -26,7 +26,6 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 
 @interface MADExplorerDataSource () <MADFilesControllerDelegate>
 
-	@property (nonatomic, readwrite, strong) MADFileLocationManager *fileLocationManager;
 	@property (nonatomic, readwrite, strong) NSMutableIndexSet *batchInserts;
 	@property (nonatomic, readwrite, strong) NSMutableIndexSet *batchRemoves;
 	@property (nonatomic, readwrite, strong) NSMutableIndexSet *batchUpdates;
@@ -99,6 +98,14 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 
 - (void)updateCloudPreferences {
 	[self.fileLocationManager getUserCloudPrefs];
+}
+
+- (void)refresh {
+	if (self.fileLocationManager.filesController) {
+		[self.fileLocationManager.filesController refresh];
+	} else {
+		[self.fileLocationManager getUserCloudPrefs];
+	}
 }
 
 - (void)rename:(NSString *)newName itemAtIndex:(NSUInteger)index {

@@ -9,14 +9,14 @@
 #ifndef Reports_MADFileExplorerViewController_h
 #define Reports_MADFileExplorerViewController_h
 
-#import <UIKit/UICollectionViewController.h>
-#import <MADExplorer/MADDocumentCellProtocol.h>
 #import "MADExplorerControllerProtocol.h"
+#import <MADExplorer/MADDocumentCellProtocol.h>
+#import <UIKit/UICollectionViewController.h>
 
 @interface MADExplorerController : UICollectionViewController <MADDocumentCellProtocol, MADExplorerControllerProtocol>
 
-	+ (instancetype)newExplorerController;
-	- (void)done:(id)sender;
++ (instancetype)newExplorerController;
+- (void)done:(id)sender;
 
 @end
 

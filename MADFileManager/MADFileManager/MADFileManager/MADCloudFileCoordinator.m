@@ -179,6 +179,11 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - MADFileCoordinator
 
+- (void)refresh {
+	[self.metadataQuery stopQuery];
+	[self.metadataQuery startQuery];
+}
+
 - (void)startQuery {
 	NSMetadataQuery *__weak metadataQuery = self.metadataQuery;
 	dispatch_async(dispatch_get_main_queue(), ^{

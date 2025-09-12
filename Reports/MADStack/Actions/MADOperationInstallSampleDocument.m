@@ -36,6 +36,7 @@
 				 groupIdentifier:(NSString *)groupIdentifier installFlag:(NSString *)installFlag {
 
 	if (self = [super init]) {
+		_sampleDocumentInstalled = false;
 		_filename = [filename copy];
 		_fileExtension = [fileExtension copy];
 		_groupIdentifier = [groupIdentifier copy];
@@ -63,22 +64,29 @@
 		// !!!: Do an extra check to hanle the case of upgrades.
 		BOOL isDirectory;
 		NSString *path = destination.path;
-		installed = [[NSFileManager defaultManager] fileExistsAtPath: path
-														 isDirectory: &isDirectory];
-		
-		if (self.cancelled) {
-			return [self finish];
-		}
-		
-		if (!installed) {
-			destination = [destination URLByAppendingPathExtension: _fileExtension];
+		if (path != nil && path.length > 0) {
+			installed = [[NSFileManager defaultManager] fileExistsAtPath: path
+															 isDirectory: &isDirectory];
 			
-			NSError *error;
-			NSDataAsset *sampleDoc = [[NSDataAsset alloc] initWithName:_filename];
-			installed = [sampleDoc.data writeToURL:destination options:NSDataWritingAtomic error:&error];
+			if (self.cancelled) {
+				return [self finish];
+			}
 			
+			if (!installed) {
+				destination = [destination URLByAppendingPathExtension: _fileExtension];
+				
+				NSError *error;
+				NSDataAsset *sampleDoc = [[NSDataAsset alloc] initWithName:_filename];
+				installed = [sampleDoc.data writeToURL:destination options:NSDataWritingAtomic error:&error];
+				if (!installed && error != nil) {
+					os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, error);
+				}
+				_sampleDocumentInstalled = installed ? true : false;
+			} else {
+				_sampleDocumentInstalled = true;
+			}
+			[[NSUserDefaults standardUserDefaults] setBool:installed forKey:_installFlag];
 		}
-		[[NSUserDefaults standardUserDefaults] setBool:installed forKey:_installFlag];
 	}
 	[self finish];
 }

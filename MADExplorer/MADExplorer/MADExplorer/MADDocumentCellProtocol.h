@@ -10,6 +10,7 @@
 #define Reports_MADDocumentCellProtocol_h
 
 #import <Foundation/NSObject.h>
+#import <UIKit/UICollectionViewCell.h>
 
 @protocol MADDocumentCellProtocol <NSObject>
 

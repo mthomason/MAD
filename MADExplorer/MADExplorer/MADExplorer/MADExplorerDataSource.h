@@ -15,11 +15,12 @@
 
 @protocol MADDocumentManagerProtocol;
 
-@class MADMetaData, MADCollectionViewCellDocument;
+@class MADMetaData, MADCollectionViewCellDocument, MADFileLocationManager;
 
 @interface MADExplorerDataSource : NSObject <UICollectionViewDataSource, MADFileLocationManagerDelegate>
 
 @property (nonatomic, weak) UIViewController <MADDocumentManagerProtocol> * delegate;
+@property (nonatomic, readwrite, strong) MADFileLocationManager *fileLocationManager;
 
 - (instancetype)initWithFileExtension:(NSString *)fileExtension
 							  groupID:(NSString *)groupID
@@ -35,6 +36,7 @@ NS_DESIGNATED_INITIALIZER;
 - (NSUInteger)count;
 
 - (void)updateCloudPreferences;
+- (void)refresh;
 
 + (NSString *)groupIdentifier;
 

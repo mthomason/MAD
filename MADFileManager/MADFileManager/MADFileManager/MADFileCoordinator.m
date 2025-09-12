@@ -116,6 +116,13 @@
 								 userInfo: nil];
 }
 
+- (void)refresh {
+	NSString *reason = [NSString stringWithFormat:@"Must subclass: %@", NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
+}
+
 - (id)debugQuickLookObject {
 	return [NSString stringWithFormat:@"--%@--\n", [NSStringFromClass([self class]) uppercaseString]];
 }

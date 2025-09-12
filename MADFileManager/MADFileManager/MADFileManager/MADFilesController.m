@@ -178,6 +178,10 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 	[self.fileCoordinator stopQuery];
 }
 
+- (void)refresh {
+	[self.fileCoordinator refresh];
+}
+
 #pragma mark - Property Overrides
 
 - (NSUInteger)count {

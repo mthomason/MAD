@@ -13,7 +13,7 @@
                 <navigationController storyboardIdentifier="MADIdentifierStoryboardRootNavigationController" definesPresentationContext="YES" toolbarHidden="NO" id="noS-r8-mf8" customClass="MADNavigationControllerFileExplorer" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" id="z47-c9-bXd" customClass="MADExplorerNavigationBar">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" id="z47-c9-bXd">
                         <rect key="frame" x="0.0" y="96" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -23,7 +23,7 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                         </textAttributes>
                     </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="9kD-yo-QJu" customClass="MADExplorerToolbar">
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="9kD-yo-QJu">
                         <rect key="frame" x="0.0" y="779" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
