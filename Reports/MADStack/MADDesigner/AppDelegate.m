@@ -159,18 +159,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	return _appDelegateQueueSerial;
 }
 
-#pragma mark - Initialization
-
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-												  object: nil];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSUbiquityIdentityDidChangeNotification
-												  object: nil];
-}
-
 #pragma mark - Application Lifecycle
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
