@@ -59,9 +59,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 		self.documentsDirectoryQueue = documentsDirectoryQueue;
 		
 		NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
-		metadataQuery.searchScopes = @[//NSMetadataQueryUbiquitousDataScope,
-									   //NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
-									   NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
+		metadataQuery.searchScopes = @[NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
 									   NSMetadataQueryUbiquitousDocumentsScope];
 		metadataQuery.notificationBatchingInterval = 0.5000;
 		metadataQuery.predicate = predicate.copy;

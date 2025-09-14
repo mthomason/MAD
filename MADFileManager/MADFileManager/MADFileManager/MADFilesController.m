@@ -105,20 +105,15 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 							  userInfo: longRunningCallBlock
 							   repeats: NO];
 		
-		dispatch_queue_t global_queue;
-		global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-		dispatch_async(global_queue, ^(void) {
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
 			
-			NSURL *ubiquityContainer;
-
 			NSFileManager *fileManager = [[NSFileManager alloc] init];
-			ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
+			NSURL *ubiquityContainer = [fileManager URLForUbiquityContainerIdentifier: ubiquityIdentifier];
 
 			dispatch_queue_t main_queue = dispatch_get_main_queue();
 			dispatch_sync(main_queue, ^{
 				
-				NSURL *documentDirectory;
-				documentDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Documents"];
+				NSURL *documentDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Documents"];
 				[MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:documentDirectory];
 				
 				NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];

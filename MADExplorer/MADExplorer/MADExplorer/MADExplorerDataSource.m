@@ -57,9 +57,8 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 
 		_extension = fileExtension.copy;
 		
-		MADFileLocationManager *fileLocationManager;
-		fileLocationManager = [[MADFileLocationManager alloc] initWithUbiquityID:ubiquityID
-																	  andGroupID:groupID];
+		MADFileLocationManager *fileLocationManager = [[MADFileLocationManager alloc] initWithUbiquityID:ubiquityID
+																							  andGroupID:groupID];
 		fileLocationManager.delegate = self;
 		fileLocationManager.filesController.delegate = self;
 		self.fileLocationManager = fileLocationManager;

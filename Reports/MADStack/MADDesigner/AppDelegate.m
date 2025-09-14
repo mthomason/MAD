@@ -24,13 +24,13 @@
 #import <QuickLook/QLPreviewController.h>
 #import <CoreFoundation/CFBundle.h>
 
-static NSString * const MADAppConfigurationApplicationGroupsPrimary        = @"group.everydayapps.mad.primary";
-static NSString * const MADIDUser                                          = @"MADIDUser";
+static NSString * const MADAppConfigurationApplicationGroupsPrimary		= @"group.everydayapps.mad.primary";
+static NSString * const MADIDUser										= @"MADIDUser";
 
 const CFStringRef MADKeyRevision = CFSTR("MADRevision");
 
 #if MAD_DESIGNER
-    NSString *s = @"";
+	NSString *s = @"";
 #endif
 
 const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";

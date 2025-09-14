@@ -66,8 +66,7 @@
 	switch (queryStatus) {
 		case errSecSuccess:
 			
-			result = [[NSString alloc] initWithData: resultData
-										   encoding: NSUTF8StringEncoding];
+			result = [[NSString alloc] initWithData: resultData encoding: NSUTF8StringEncoding];
 			self.value = result;
 			self.success = YES;
 			[self finish];

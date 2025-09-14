@@ -208,6 +208,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 												  object: nil];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+												  object: nil];
+
+	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: UIContentSizeCategoryDidChangeNotification
 												  object: nil];
 	
@@ -328,12 +332,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	self.collectionView.dataSource = self.fileExplorerDataSource;
 	
 	[self setNeedsStatusBarAppearanceUpdate];
-	
+
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleNotificationUbiquityIdentityDidChange:)
 												 name: NSUbiquityIdentityDidChangeNotification
 											   object: nil];
 	
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+												 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+											   object: nil];
+
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleContentSizeCategoryDidChangeNotification:)
 												 name: UIContentSizeCategoryDidChangeNotification
@@ -497,8 +506,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		MADExplorerController *sself = weakself;
 		if (!sself) return;
 		
-		UIAlertController *alert;
-		alert = [MADExplorerController alertNotifyCloudSignOut:actionConfirm];
+		UIAlertController *alert = [MADExplorerController alertNotifyCloudSignOut:actionConfirm];
 		[sself presentViewController:alert animated:YES completion:nil];
 		
 	}];

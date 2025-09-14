@@ -20,7 +20,7 @@
 #import "MADNavigationController.h"
 #import "Constants.h"
 
-#import "MTVerificationController.h"
+//#import "MTVerificationController.h"
 #import "MADQueryViewController.h"
 
 #import "MADExplorerController.h"
@@ -108,23 +108,23 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     return version;
 }
 
-+ (NSString *)bundleDisplayName { 
-	<#code#>
++ (NSString *)bundleDisplayName {
+	return @"";
 }
 
 
 + (NSString *)bundleVersion { 
-	<#code#>
+	return @"";
 }
 
 
 - (NSString *)groupIdentifier { 
-	<#code#>
+	return @"";
 }
 
 
 + (NSString *)humanReadableCopyright { 
-	<#code#>
+	return @"";
 }
 
 
@@ -165,7 +165,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (BOOL)application:(UIApplication *)application
                                     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+/*
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:MADAppConfigurationApplicationGroupsPrimary];
     self.applicationUserDefaults = defaults;
     
@@ -209,7 +209,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     
     [operationQueueBackground addOperation:resetReceipt];
 
-    return YES;
+*/
+	return YES;
 }
 
 - (void)runOperations {
@@ -217,16 +218,16 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [MADVerificationController sharedInstance];
-    });
-    
-    dispatch_async(self.appDelegateQueueSerial, ^{
-        [MADQueryViewController deleteCoreDataCache];
-    });
-    
+/*
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		[MADVerificationController sharedInstance];
+	});
+	
+	dispatch_async(self.appDelegateQueueSerial, ^{
+		[MADQueryViewController deleteCoreDataCache];
+	});
+*/
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }

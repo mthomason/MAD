@@ -590,8 +590,6 @@
 		4C26BA291BAF999800456DC8 /* MADPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPrintingProtocol.h; sourceTree = "<group>"; };
 		4C26BA2A1BAF999800456DC8 /* MADUnwindProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUnwindProtocol.h; sourceTree = "<group>"; };
 		4C26BA2D1BAF999800456DC8 /* MADControlState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADControlState.h; sourceTree = "<group>"; };
-		4C26BA2F1BAF999800456DC8 /* MADUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUser.h; sourceTree = "<group>"; };
-		4C26BA301BAF999800456DC8 /* MADUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUser.m; sourceTree = "<group>"; };
 		4C26BA351BAF99BE00456DC8 /* MADPromptManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPromptManager.h; path = MADStack/MADDesigner/Managers/MADPromptManager.h; sourceTree = "<group>"; };
 		4C26BA361BAF99BE00456DC8 /* MADPromptManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPromptManager.m; path = MADStack/MADDesigner/Managers/MADPromptManager.m; sourceTree = "<group>"; };
 		4C26BA3A1BAF99F000456DC8 /* MADResizeHandles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeHandles.h; sourceTree = "<group>"; };
@@ -1148,8 +1146,6 @@
 			membershipExceptions = (
 				MADElementViewManager.m,
 				MADPopoverBackgroundView.m,
-				MADPreference.m,
-				MADPreferencesManager.m,
 				MADUserDefault.m,
 			);
 			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
@@ -1510,8 +1506,6 @@
 		4C26BA2E1BAF999800456DC8 /* User */ = {
 			isa = PBXGroup;
 			children = (
-				4C26BA2F1BAF999800456DC8 /* MADUser.h */,
-				4C26BA301BAF999800456DC8 /* MADUser.m */,
 			);
 			path = User;
 			sourceTree = "<group>";

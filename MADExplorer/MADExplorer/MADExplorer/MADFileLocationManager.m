@@ -11,12 +11,12 @@
 #import <MADFoundation/MADApplication.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
-#import <MADFileManager/MADStorageState.h>
 #import <MADFileManager/MADFilesController.h>
 #import <MADFileManager/MADFileUtilities.h>
 #import <MADFileManager/MADFileCoordinator.h>
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADAppStorageOption.h>
+#import <MADFileManager/MADStorageState.h>
 
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
@@ -85,8 +85,8 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	}
 	if (self = [super init]) {
 		_synchronizationQueue = dispatch_queue_create("com.madfilelocationmanager.sync", DISPATCH_QUEUE_SERIAL);
-		self.groupID = groupID.copy;
-		self.ubiquityID = ubiquityID.copy;
+		self.groupID = [groupID copy];
+		self.ubiquityID = [ubiquityID copy];
 		NSDictionary *defaultValues = @{
 			MADFirstLaunch: @YES,
 			MADAppConfigurationUserDefaultsStorageOption: @(MADAppStorageNotSet)
@@ -99,6 +99,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 
 #pragma mark - Ubiquity Identity Token Handling (Account Change)
 
+// This function causes a login prompt
 - (BOOL)hasUbiquityIdentityChanged {
 	BOOL hasChanged = NO;
 	
@@ -295,8 +296,11 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 - (void)getUserCloudPrefs {
 	// Use a serial queue to prevent race conditions
 	dispatch_async(self.synchronizationQueue, ^{
+		
+		// Make sure this only runs once
 		if (self.isFirstLaunch || !self.getUserCloudPrefsFirstCall) {
 			self.getUserCloudPrefsFirstCall = NO;
+			
 			
 			__block BOOL isCloudReadilyAvailable;
 			if ([NSThread isMainThread]) {
@@ -306,11 +310,13 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 					isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
 				});
 			}
+
 			BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
-			
-			MADStorageState *storageState = [MADStorageState newStorageStateWithStorageOption:[self.class StorageOption]
-																   hasUbiquityIdentityChanged:hasUbiquityIdentityChanged
-																	  isCloudReadilyAvailable:isCloudReadilyAvailable];
+			MADStorageState *storageState = [[MADStorageState alloc] init];
+			storageState.storageOption = [self.class StorageOption];
+			storageState.accountDidChange = hasUbiquityIdentityChanged;
+			storageState.cloudAvailable = isCloudReadilyAvailable;
+
 			NSLog(@"storageState: %@ cloudAvailable: %@: storageOption: %ld", storageState, storageState.cloudAvailable ? @"YES" : @"NO", (long)storageState.storageOption);
 			if (storageState.cloudAvailable) {
 				if (storageState.storageOption == MADAppStorageCloud) {
@@ -335,9 +341,11 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 }
 
 - (void)getUserCloudPrefsSubsquient {
-	MADStorageState *storageState = [MADStorageState newStorageStateWithStorageOption: [self.class StorageOption]
-														   hasUbiquityIdentityChanged: [self hasUbiquityIdentityChanged]
-															  isCloudReadilyAvailable: [MADFilesController isCloudReadilyAvailable]];
+	MADStorageState *storageState = [[MADStorageState alloc] init];
+	storageState.storageOption = [self.class StorageOption];
+	storageState.accountDidChange = [self hasUbiquityIdentityChanged];
+	storageState.cloudAvailable = [MADFilesController isCloudReadilyAvailable];
+
 	if (storageState.accountDidChange) {
 		
 		switch (storageState.storageOption) {

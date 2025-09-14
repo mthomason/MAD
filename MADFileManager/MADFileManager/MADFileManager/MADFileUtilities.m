@@ -100,19 +100,17 @@ static NSString * const MADPathComponentData       = @"Data";
 
 + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID
 				extension:(NSString *)extension {
-	dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
 	
-	dispatch_async(defaultQueue, ^{
-		NSFileManager *fileManager = [NSFileManager defaultManager];
-		
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^{
+
 		// Note the call to -URLForUbiquityContainerIdentifier: should be on a background queue.
 		NSURL *documentsDirectoryURL = [MADURLFactory newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID];
 		NSURL *documentsDirectoryLocal = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
 		
-		NSArray <NSURL *> *urls = [fileManager contentsOfDirectoryAtURL: documentsDirectoryLocal
-											 includingPropertiesForKeys: nil
-																options: (NSDirectoryEnumerationOptions)0
-																  error: nil];
+		NSArray <NSURL *> *urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: documentsDirectoryLocal
+																includingPropertiesForKeys: nil
+																				   options: (NSDirectoryEnumerationOptions)0
+																					 error: nil];
 
 		for (NSURL *URL in urls) {
 			if ([URL.pathExtension isEqualToString:extension]) {
@@ -301,9 +299,9 @@ static NSString * const MADPathComponentData       = @"Data";
 
 	NSString *status;
 	NSError *errorGettingAttributes = nil;
-	if ([source getResourceValue:&status forKey:NSURLUbiquitousItemDownloadingStatusKey
-						   error:&errorGettingAttributes] &&
-		[status isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
+	BOOL gotResourceValue = [source getResourceValue:&status forKey:NSURLUbiquitousItemDownloadingStatusKey
+											   error:&errorGettingAttributes];
+	if (gotResourceValue && [status isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
 		[self moveFileAtURL:source toUrl:destination
 				   completion:^(NSURL *result, NSError *error) {
 			completion(source, result, error);

@@ -49,8 +49,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLDocumentArchiveForFileURL:(NSURL *)madUrl extension:(NSString *)extension {
-	NSString *name = madUrl.lastPathComponent.stringByDeletingPathExtension;
-	NSString *destinationName = [name stringByAppendingPathExtension: extension];
+	NSString *destinationName = [madUrl.lastPathComponent.stringByDeletingPathExtension stringByAppendingPathExtension: extension];
 	NSURL *destinationDirectoryUrl = [MADURLFactory newURLLocalTemporaryDirectory];
 	return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
 													isDirectory: YES];
@@ -111,9 +110,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 						 andExtension:(NSString *)extension {
 	NSAssert(directory != nil, @"Requires a url.");
 	NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
-	NSURL *fileUrl = extension.length > 0 ?
-	[baseUrl URLByAppendingPathExtension: extension] :
-	baseUrl;
+	NSURL *fileUrl = extension.length > 0 ? [baseUrl URLByAppendingPathExtension: extension] : baseUrl;
 	NSInteger ctr = 0;
 	BOOL isDir1;
 	NSString *path = fileUrl.path;
@@ -159,8 +156,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl {
-	NSUInteger hash = fileUrl.lastPathComponent.stringByDeletingPathExtension.hash;
-	NSString *fileNameId = [[NSString alloc] initWithFormat: @"%lu", (unsigned long)hash];
+	NSString *fileNameId = [[NSString alloc] initWithFormat: @"%lu", (unsigned long)fileUrl.lastPathComponent.stringByDeletingPathExtension.hash];
 	return [self newURLForLocalCacheDirectoryNamed:fileNameId];
 }
 
@@ -222,8 +218,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLForLocalDocumentsDirectory {
-	NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-																		NSUserDomainMask, YES);
+	NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *firstObject = documentsDirectories.firstObject;
 	NSURL *url = [[NSURL alloc] initWithString:firstObject];
 	return url;

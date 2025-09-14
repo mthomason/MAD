@@ -19,7 +19,7 @@ NSString * const Downloading          = @"Downloading";
 
 + (NSString *)explorerCellTitle:(MADMetaData *)data {
 	if (data.isUbiquitousItemDownloadingStatusNotDownloaded) {
-		return [[NSString alloc] initWithString:NSLocalizedString(@"Not Downloaded", @"Not Downloaded")];
+		return NSLocalizedString(@"Not Downloaded", @"Not Downloaded");
 	} else {
 		return [MADStandard standardStringForFileSize:data.fileSystemFileSize];
 	}
