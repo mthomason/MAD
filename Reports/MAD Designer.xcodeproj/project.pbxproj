@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -360,6 +360,8 @@
 		4CF6AFC91CB1088B00D3AD11 /* MADRefreshOperationReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFC81CB1088B00D3AD11 /* MADRefreshOperationReload.m */; };
 		4CF6AFCC1CB108C700D3AD11 /* MADRefreshOperationConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCB1CB108C700D3AD11 /* MADRefreshOperationConnect.m */; };
 		4CF6AFCF1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */; };
+		4CF824F52E77846B00BB70FD /* MADKeyChainGetCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF824F22E77846B00BB70FD /* MADKeyChainGetCredentials.m */; };
+		4CF824F62E77846B00BB70FD /* MADKeyChainSaveCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF824F42E77846B00BB70FD /* MADKeyChainSaveCredentials.m */; };
 		4CFC60B51E559C0700EC577E /* MADImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC60B41E559C0700EC577E /* MADImageTransformer.m */; };
 		4CFEE7F61BB773D800AFAA0A /* MADQueryAddGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE7F51BB773D800AFAA0A /* MADQueryAddGroup.storyboard */; };
 		4CFEE7FB1BB77BD600AFAA0A /* MADQueryChooseFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE7FA1BB77BD600AFAA0A /* MADQueryChooseFieldController.m */; };
@@ -1110,6 +1112,10 @@
 		4CF6AFCB1CB108C700D3AD11 /* MADRefreshOperationConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationConnect.m; sourceTree = "<group>"; };
 		4CF6AFCD1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADRefreshOperationGetSQL.h; sourceTree = "<group>"; };
 		4CF6AFCE1CB108DE00D3AD11 /* MADRefreshOperationGetSQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADRefreshOperationGetSQL.m; sourceTree = "<group>"; };
+		4CF824F12E77846B00BB70FD /* MADKeyChainGetCredentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADKeyChainGetCredentials.h; path = Source/MADKeyChainGetCredentials.h; sourceTree = "<group>"; };
+		4CF824F22E77846B00BB70FD /* MADKeyChainGetCredentials.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADKeyChainGetCredentials.m; path = Source/MADKeyChainGetCredentials.m; sourceTree = "<group>"; };
+		4CF824F32E77846B00BB70FD /* MADKeyChainSaveCredentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADKeyChainSaveCredentials.h; path = Source/MADKeyChainSaveCredentials.h; sourceTree = "<group>"; };
+		4CF824F42E77846B00BB70FD /* MADKeyChainSaveCredentials.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADKeyChainSaveCredentials.m; path = Source/MADKeyChainSaveCredentials.m; sourceTree = "<group>"; };
 		4CFC60B31E559C0700EC577E /* MADImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADImageTransformer.h; sourceTree = "<group>"; };
 		4CFC60B41E559C0700EC577E /* MADImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADImageTransformer.m; sourceTree = "<group>"; };
 		4CFEE7F51BB773D800AFAA0A /* MADQueryAddGroup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADQueryAddGroup.storyboard; path = MADStack/MADDesigner/UI/QueryBuilder/AddGroup/MADQueryAddGroup.storyboard; sourceTree = "<group>"; };
@@ -1139,22 +1145,6 @@
 		4CFEE81E1BB7A3A300AFAA0A /* MADQueryAddPredicateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryAddPredicateController.h; sourceTree = "<group>"; };
 		4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADQuery.storyboard; path = MADStack/MADDesigner/UI/QueryBuilder/MADQuery.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4CF3D5E02DEA64350024FFE0 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MADElementViewManager.m,
-				MADPopoverBackgroundView.m,
-				MADUserDefault.m,
-			);
-			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		4CF3D5D02DEA63700024FFE0 /* Unused */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4CF3D5E02DEA64350024FFE0 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Unused; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4C0E779E163B5AEC003B951E /* Frameworks */ = {
@@ -1674,7 +1664,6 @@
 		4C401EB51BAE5E7100BAE5FC /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4CF3D5D02DEA63700024FFE0 /* Unused */,
 				4C92A4A12DD7F820008171A9 /* madlog.h */,
 				4C92A4A22DD7F820008171A9 /* madlog.m */,
 				4C8780B42DD6D296003FD36D /* Constants.h */,
@@ -1709,6 +1698,10 @@
 				4C1E74A82DDE1D2200F2334F /* MADColorTransformer.m */,
 				4C1E74AA2DDE20B900F2334F /* MADLocaleTransformer.h */,
 				4C1E74AB2DDE20B900F2334F /* MADLocaleTransformer.m */,
+				4CF824F12E77846B00BB70FD /* MADKeyChainGetCredentials.h */,
+				4CF824F22E77846B00BB70FD /* MADKeyChainGetCredentials.m */,
+				4CF824F32E77846B00BB70FD /* MADKeyChainSaveCredentials.h */,
+				4CF824F42E77846B00BB70FD /* MADKeyChainSaveCredentials.m */,
 				4C4B4B8E2DE34A170035A316 /* MADThemeManager.h */,
 				4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */,
 			);
@@ -2875,9 +2868,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				4CF3D5D02DEA63700024FFE0 /* Unused */,
-			);
 			name = "MAD Designer";
 			productName = TheReportViewer;
 			productReference = 4C384E2414B29789007B4F48 /* MAD Designer.app */;
@@ -3187,6 +3177,8 @@
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
 				4C6D2EF51E6DE4F6008EFE5D /* MADSortOrderNavigationItem.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
+				4CF824F52E77846B00BB70FD /* MADKeyChainGetCredentials.m in Sources */,
+				4CF824F62E77846B00BB70FD /* MADKeyChainSaveCredentials.m in Sources */,
 				4C539C311CB5607D002E4CD5 /* MADQueryViewDataSource.m in Sources */,
 				4C5C0DBC1C9CED3C00826BC2 /* MADOperationGetCredentials.m in Sources */,
 				4CFEE8201BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m in Sources */,
