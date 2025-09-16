@@ -288,10 +288,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[opInstallDocB addObserver:self];
 	[operationQueueBackground addOperation:opInstallDocB];
 	
-	NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MADVerificationController sharedInstance]
-																	 selector: @selector(resetReceipt)
-																	   object: NULL];
-	[operationQueueBackground addOperation:resetReceipt];
+	// Only call this when a user request to restore purchases.  Do not call this on launch or load.
+	//NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MADVerificationController sharedInstance]
+	//																 selector: @selector(resetReceipt)
+	//																   object: NULL];
+	//[operationQueueBackground addOperation:resetReceipt];
 	
 	NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.fileExplorerDataSource
 																				selector: @selector(updateCloudPreferences)
