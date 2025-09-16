@@ -25,8 +25,7 @@
 - (instancetype)initWithFileExtension:(NSString *)fileExtension
 							  groupID:(NSString *)groupID
 						   ubiquityID:(NSString *)ubiquityID
-					cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell, NSIndexPath *path))config
-NS_DESIGNATED_INITIALIZER;
+					cellConfiguration:(void (^)(MADCollectionViewCellDocument *cell, NSIndexPath *path))config NS_DESIGNATED_INITIALIZER;
 
 - (MADMetaData *)metadataAtIndex:(NSUInteger)index;
 
