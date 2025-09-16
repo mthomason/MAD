@@ -913,7 +913,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	return [[NSArray alloc] initWithObjects: MADUtiType, nil];
 }
 
-- (void)openDocumentAtURL:(NSURL *)url {
+- (void)openDocumentAtURL:(NSURL *)url completion:(void (^)(void))completion {
 
 	MADocument *document = [[MADocument alloc] initWithFileURL:url];
 	document.limitResultsDesignMode = [MADStoreKitController sharedObject].isReportingLimited;
@@ -930,11 +930,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 		if (success) {
 			document.documentDelegate = self;
-			SEL selector = @selector(openViewer);
 			id operation = [[NSInvocationOperation alloc] initWithTarget: self
-																selector: selector
+																selector: @selector(openViewer)
 																  object: nil];
 			[[NSOperationQueue mainQueue] addOperation:operation];
+		}
+		if (completion) {
+			completion();
 		}
 	}];
 }

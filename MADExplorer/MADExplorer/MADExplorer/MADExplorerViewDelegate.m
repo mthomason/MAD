@@ -324,8 +324,10 @@
 	} else {
 		collectionView.allowsSelection = NO;
 		MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-		cell.working = YES;
-		[self.delegate openDocumentAtURL:url];
+		[cell setWorking:YES];
+		[self.delegate openDocumentAtURL:url completion:^{
+			[cell setWorking:NO];
+		}];
 	}
 
 	[self invokeOperationDidChangeNumberOfItemsSelected:collectionView];
