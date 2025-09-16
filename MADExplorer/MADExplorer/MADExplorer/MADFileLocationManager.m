@@ -302,14 +302,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			self.getUserCloudPrefsFirstCall = NO;
 			
 			
-			__block BOOL isCloudReadilyAvailable;
-			if ([NSThread isMainThread]) {
-				isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
-			} else {
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
-				});
-			}
+			__block BOOL isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
 
 			BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
 			MADStorageState *storageState = [[MADStorageState alloc] init];
