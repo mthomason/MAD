@@ -320,10 +320,10 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 		NSError *error = nil;
 		NSString *path = self.document.urlDataTableCache.path;
 		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath: path error: &error];
-		if (error == nil) {
-			self.pageViewAttributes.reportLastCacheDate = [attributes fileModificationDate];
-		} else {
+		if (error != nil) {
 			os_log_error(GetDesignerLog(), "Error: %@", error);
+		} else {
+			self.pageViewAttributes.reportLastCacheDate = [attributes fileModificationDate];
 		}
 	}
 	return self.pageViewAttributes.reportLastCacheDate;
