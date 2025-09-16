@@ -230,7 +230,7 @@ static inline double wobbleRandomFactor(void) {
 	self.progressViewDownload.hidden = YES;
 	[self.progressViewUpload setProgress:0.0f];
 	self.progressViewUpload.hidden = YES;
-	[self.activityIndicator stopAnimating];
+	[self setWorking:NO];
 }
 
 #pragma mark -
