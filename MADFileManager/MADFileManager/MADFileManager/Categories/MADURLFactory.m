@@ -58,7 +58,6 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (NSURL *)newURLThumbnailForURL:(NSURL *)madUrl {
 	return [self newURLThumbnailForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
 						 andRetinaDisplay: [self isRetinaDisplay]];
-	
 }
 
 + (NSURL *)newURLThumbnailForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {

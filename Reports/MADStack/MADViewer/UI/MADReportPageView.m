@@ -14,6 +14,8 @@
 #import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
+#import "madlog.h"
+
 #import <MAD/miniz.h>
 #import <MAD/MADNotificationFileUpdate.h>
 #import <MAD/MADImageThumbnail.h>
@@ -21,14 +23,11 @@
 
 #import <UIKit/UILabel.h>
 
-
-//#import <setjmp.h>
 #import <os/log.h>
 
 static const CGFloat PageCounterWidth = 99.0;
 static const CGFloat PageCounterHeight = 33.0;
 static const CGFloat PageCounterBuffer = 10.0;
-static os_log_t mad_log;
 
 @interface MADReportPageView ()
 
@@ -37,13 +36,6 @@ static os_log_t mad_log;
 @implementation MADReportPageView {
 	BOOL _firstTime;
 	BOOL _displaysPageCounter;
-}
-
-+ (void)initialize {
-	if (self == [MADReportPageView class]) {
-		NSString *c = NSStringFromClass([MADReportPageView class]);
-		mad_log = os_log_create("com.mad", c.UTF8String);
-	}
 }
 
 - (void)dealloc {
@@ -95,25 +87,31 @@ static os_log_t mad_log;
 		
 		if (delegatePage.pageNumber != 1) return;
 		
+		os_log_debug(GetDesignerLog(), "%s: Drawing thumbnail", __PRETTY_FUNCTION__);
 		MADPrintPageRenderer *renderer = printPageRenderer;
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
 			NSURL *thumbnailURL = [[delegatePage thumbnailURL] copy];
 			UIImage *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
-			
+
+			os_log_debug(GetDesignerLog(), "%s: Created thumbnail", __PRETTY_FUNCTION__);
+
 			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 				NSData *pngImage = UIImagePNGRepresentation(thumbnail);
 				NSError *error = nil;
-				[pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
+				BOOL wroteToUrl = [pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
 				if (error != nil) {
-					os_log_error(mad_log, "Error: %@", error);
+					os_log_error(GetDesignerLog(), "Error: %@", error);
 				} else {
-					dispatch_async(dispatch_get_main_queue(), ^{
-						MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] initWithURL:[delegatePage documentURL]];
-						[fileUpdate notify];
-					});
+					if (wroteToUrl) {
+						os_log_debug(GetDesignerLog(), "%s: Wrote thumbnail to URL: %@", __PRETTY_FUNCTION__, thumbnailURL);
+						dispatch_async(dispatch_get_main_queue(), ^{
+							MADNotificationFileUpdate *fileUpdate = [[MADNotificationFileUpdate alloc] initWithURL:[delegatePage documentURL]];
+							[fileUpdate notify];
+							os_log_debug(GetDesignerLog(), "%s: Notifited of file update (thumbnail)", __PRETTY_FUNCTION__);
+						});
+					}
 				}
-				pngImage = nil;
 			});
 		});
 	}

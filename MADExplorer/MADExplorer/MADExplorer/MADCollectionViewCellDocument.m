@@ -128,10 +128,8 @@ static inline double wobbleRandomFactor(void) {
 }
 
 - (NSString *)accessibilityHintActionSelect {
-	NSString *format = _wobbling ? NSLocalizedString(@"Selects document named %@.",
-													 @"Selects document named %@.") :
-								   NSLocalizedString(@"Opens document named %@.",
-													 @"Opens document named %@.");
+	NSString *format = _wobbling ? NSLocalizedString(@"Selects document named %@.", @"Selects document named %@.") :
+								   NSLocalizedString(@"Opens document named %@.", @"Opens document named %@.");
 	return [[NSString alloc] initWithFormat: format, self.labelTitle.text];
 }
 
@@ -319,9 +317,7 @@ static inline double wobbleRandomFactor(void) {
 	
 	[UIView animateWithDuration:duration
 						  delay:0
-						options:UIViewAnimationOptionAllowUserInteraction |
-	 UIViewAnimationOptionRepeat |
-	 UIViewAnimationOptionAutoreverse
+						options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
 					 animations:^{
 		self.transform = CGAffineTransformMakeRotation(angle);
 	} completion:nil];
@@ -388,19 +384,20 @@ static inline double wobbleRandomFactor(void) {
 	
 	labelTitleSub.text = [MADExplorerCellTitle explorerCellTitleSubtitle:metadata];
 	
-	[self setUploadingActive: isUploading percent: metadata.ubiquitousItemPercentUploaded];
-	[self setDownloadingActive:isDownloading percent: metadata.ubiquitousItemPercentDownloaded];
+	[self setUploadingActive: isUploading
+					 percent: metadata.ubiquitousItemPercentUploaded];
+	[self setDownloadingActive: isDownloading
+					   percent: metadata.ubiquitousItemPercentDownloaded];
 	
-	UIImage *cloudIndicatorImage = notDownloaded && isUbiquitous ?
-								[UIImage imageNamed:@"MADImageToolbarCloudDownload"] : nil;
+	UIImage *cloudIndicatorImage = notDownloaded && isUbiquitous ? [UIImage imageNamed:@"MADImageToolbarCloudDownload"] : nil;
 	[cloudIndicatorImageView setImage: cloudIndicatorImage];
 	
 	[labelTitle setNeedsLayout];
 	[labelTitleSub setNeedsLayout];
 	[labelTitle setNeedsDisplay];
 	[labelTitleSub setNeedsDisplay];
-	
-	dispatch_block_t read_iamge = ^{
+		
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 		@autoreleasepool {
 			NSURL *metadataURL = [metadata.URL copy];
 			NSURL *thumbnailUrl = [MADURLFactory newURLThumbnailForURL:metadataURL];
@@ -416,9 +413,7 @@ static inline double wobbleRandomFactor(void) {
 				}
 			}];
 		}
-	};
-	
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
+	});
 
 }
 

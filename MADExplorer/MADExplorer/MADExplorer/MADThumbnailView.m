@@ -38,23 +38,20 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 
 - (void)setThumbnailToDefault {
 	MADThumbnailView * __weak weakself = self;
-	dispatch_block_t read_iamge = ^{
-		@autoreleasepool {
-			MADThumbnailView *sself = weakself;
-			if (sself) {
-				UIImage *result = [UIImage imageNamed:MADImageBlank];
-				MADThumbnailView * __weak wself = sself;
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					MADThumbnailView *sself1 = wself;
-					if (sself1) {
-						sself1.image = result;
-						[sself1 setNeedsDisplay];
-					}
-				});
-			}
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+		MADThumbnailView *sself = weakself;
+		if (sself) {
+			UIImage *result = [UIImage imageNamed:MADImageBlank];
+			MADThumbnailView * __weak wself = sself;
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				MADThumbnailView *sself1 = wself;
+				if (sself1) {
+					sself1.image = result;
+					[sself1 setNeedsDisplay];
+				}
+			});
 		}
-	};
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
+	});
 }
 
 - (void)setImageSyncFromPath:(NSString *)path { }
@@ -63,21 +60,19 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 	
 	if (_thumbnailAbsolutePath == nil || ![_thumbnailAbsolutePath isEqualToString: path]) {
 
-		_thumbnailAbsolutePath = path.copy;
+		_thumbnailAbsolutePath = [path copy];
+		NSString *thumbnailPath = [path copy];
 		
-		NSString *thumbnailPath = path.copy;
-		dispatch_block_t read_iamge = ^{
-			@autoreleasepool {
-				id thumbnail = [[UIImage alloc] initWithContentsOfFile:thumbnailPath];
-				if (thumbnail == nil) thumbnail = [UIImage imageNamed:MADImageBlank];
-				dispatch_block_t setThumbnail = ^{
-					self.image = thumbnail;
-					[self setNeedsDisplay];
-				};
-				dispatch_sync(dispatch_get_main_queue(), setThumbnail);
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+			UIImage *thumbnail = [[UIImage alloc] initWithContentsOfFile:thumbnailPath];
+			if (thumbnail == nil) {
+				thumbnail = [UIImage imageNamed:MADImageBlank];
 			}
-		};
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), read_iamge);
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				self.image = thumbnail;
+				[self setNeedsDisplay];
+			});
+		});
 	}
 }
 

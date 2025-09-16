@@ -133,29 +133,29 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
  }
  */
 
-NSString * const MADMimeType                                    = @"application/vnd.everydayapps.mad";
-NSString * const MADDocumentInfoKeyThumbnail                    = @"thumbnail";
+NSString * const MADMimeType									= @"application/vnd.everydayapps.mad";
+NSString * const MADDocumentInfoKeyThumbnail					= @"thumbnail";
 
-static NSString * const MTDocumentAdditionalContentKey          = @"additionalContent";
-static NSString * const MTDocumentFileTypeKey                   = @"fileType";
-static NSString * const MTDocumentParentContextKey              = @"parentContext";
+static NSString * const MTDocumentAdditionalContentKey			= @"additionalContent";
+static NSString * const MTDocumentFileTypeKey					= @"fileType";
+static NSString * const MTDocumentParentContextKey				= @"parentContext";
 
-static NSString * const MADDocumentInfoKeyThumbnailStandard     = @"thumbnail.png";
-static NSString * const MADDocumentInfoKeyThumbnailRetna        = @"thumbnail@2x.png";
-static NSString * const MADDocumentInfoKeyMeta                  = @"meta.plist";
-static NSString * const MADDocumentInfoKeyVersion               = @"version";
-static NSString * const MADDocumentInfoKeyGenerator             = @"generator";
+static NSString * const MADDocumentInfoKeyThumbnailStandard		= @"thumbnail.png";
+static NSString * const MADDocumentInfoKeyThumbnailRetna		= @"thumbnail@2x.png";
+static NSString * const MADDocumentInfoKeyMeta					= @"meta.plist";
+static NSString * const MADDocumentInfoKeyVersion				= @"version";
+static NSString * const MADDocumentInfoKeyGenerator				= @"generator";
 
-static NSString * const MADFileNameMetaPlist                   = @"meta.plist";
+static NSString * const MADFileNameMetaPlist					= @"meta.plist";
 
-static NSString * const MADPersistentStoreAliasMad             = @"analyitics";
-static NSString * const MADDocumentTypeUtiMad                  = @"com.everydayapps.productivity.mad";
+static NSString * const MADPersistentStoreAliasMad				= @"analyitics";
+static NSString * const MADDocumentTypeUtiMad					= @"com.everydayapps.productivity.mad";
 
-static NSString * const MNSInterfaceMessageErrorFailedToCreateReport    = @"Failed to create report document.";
-static NSString * const MNSInterfaceTitleProblem                        = @"Problem";
+static NSString * const MNSInterfaceMessageErrorFailedToCreateReport	= @"Failed to create report document.";
+static NSString * const MNSInterfaceTitleProblem						= @"Problem";
 
-static NSString * const MADManagedObjectModelName                       = @"MAD";
-static NSString * const MADManagedObjectModelExtention                  = @"momd";
+static NSString * const MADManagedObjectModelName						= @"MAD";
+static NSString * const MADManagedObjectModelExtention					= @"momd";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
   NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
@@ -532,9 +532,8 @@ void madwarn(char *err,  const char *err2) { }
 		return NO;
 	}
 
-	MADArchiveManager *archiveManager;
-	archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
-															archiveURL:self.fileURL];
+	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
+																			   archiveURL:self.fileURL];
 	return [archiveManager archive:YES];
 }
 
@@ -723,10 +722,9 @@ void madwarn(char *err,  const char *err2) { }
 		queryGroup.hasField = queryField;   //Retain cycle
 		
 		//Create group header (contains a retain cycle)
-		RptqDocumentSection *headerSection;
-		headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
-											  forManagedObjectContext: private];
-																   
+		RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
+																   forManagedObjectContext: private];
+
 		RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
 		headerSectionRow.inSection = headerSection;
 		

@@ -13,50 +13,50 @@
 
 @interface MADURLFactory : NSObject
 
-	+ (NSURL *)newURLLocalDocumentWithName:(NSString *)name
-									  extention:(NSString *)extention
-									  fileGroup:(NSString *)fileGroup;
-	+ (NSURL *)newURLCacheFilesDirectoryForFilename:(NSString *)filename;
-	+ (NSURL *)newURLDocumentArchiveForFileURL:(NSURL *)madUrl
-										  extension:(NSString *)extension;
++ (NSURL *)newURLLocalDocumentWithName:(NSString *)name
+							 extention:(NSString *)extention
+							 fileGroup:(NSString *)fileGroup;
++ (NSURL *)newURLCacheFilesDirectoryForFilename:(NSString *)filename;
++ (NSURL *)newURLDocumentArchiveForFileURL:(NSURL *)madUrl
+								 extension:(NSString *)extension;
 
-	+ (NSURL *)newURLThumbnailForURL:(NSURL *)madUrl;
++ (NSURL *)newURLThumbnailForURL:(NSURL *)madUrl;
 
-	+ (NSURL *)newURLThumbnailForHandle:(NSString *)handle
-							andRetinaDisplay:(BOOL)retinaDisplay;
++ (NSURL *)newURLThumbnailForHandle:(NSString *)handle
+				   andRetinaDisplay:(BOOL)retinaDisplay;
 
-	+ (NSURL *)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL;
++ (NSURL *)newURLWithUniqueFilenameForURL:(NSURL *)origionalURL;
 
-	+ (NSURL *)newURLUniqueUrlInDirectory:(NSURL *)directory
-							 withDesiredHandle:(NSString *)desiredFileHandle
-								  andExtension:(NSString *)extension;
++ (NSURL *)newURLUniqueUrlInDirectory:(NSURL *)directory
+					withDesiredHandle:(NSString *)desiredFileHandle
+						 andExtension:(NSString *)extension;
 
-	+ (NSURL *)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-												pathComponent:(NSString *)pathComponent
-										  alternativeSelector:(SEL)alternativeSelector;
-									  
-	+ (NSURL *)newURLForURLSelector:(SEL)selector;
-	+ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-														   fileURL:(NSURL *)fileURL;
-	+ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
-															handle:(NSString *)handle;
-	+ (NSURL *)newURLForLocalDocumentsDirectory;
-	+ (NSURL *)newURLLocalTemporaryDirectory;
-	+ (NSURL *)newURLForLocalCacheDirectory;
-	+ (NSURL *)newURLForLocalDataDirectory;
-	+ (NSURL *)newURLForLocalApplicationSupportDirectory;
++ (NSURL *)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+									   pathComponent:(NSString *)pathComponent
+								 alternativeSelector:(SEL)alternativeSelector;
 
-	+ (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
-	+ (NSURL *)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
++ (NSURL *)newURLForURLSelector:(SEL)selector;
++ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+												  fileURL:(NSURL *)fileURL;
++ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier
+												   handle:(NSString *)handle;
++ (NSURL *)newURLForLocalDocumentsDirectory;
++ (NSURL *)newURLLocalTemporaryDirectory;
++ (NSURL *)newURLForLocalCacheDirectory;
++ (NSURL *)newURLForLocalDataDirectory;
++ (NSURL *)newURLForLocalApplicationSupportDirectory;
 
-	+ (NSURL *)newURLForLocalDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-	+ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
-	+ (NSURL *)newURLLocalApplicationSupportDirectoryForGroupID:(NSString *)groupIdentifier;
-	+ (NSURL *)newURLForLocalCacheDirectoryNamed:(NSString *)handle;
-	+ (NSURL *)newURLUniqueURLForURL:(NSURL *)url;
-	+ (NSURL *)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl;
-	+ (NSURL *)newURLApplicationSupportFile:(NSString *)filename
-									   extension:(NSString *)extension;
++ (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
++ (NSURL *)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
+
++ (NSURL *)newURLForLocalDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
++ (NSURL *)newURLForLocalCacheDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
++ (NSURL *)newURLLocalApplicationSupportDirectoryForGroupID:(NSString *)groupIdentifier;
++ (NSURL *)newURLForLocalCacheDirectoryNamed:(NSString *)handle;
++ (NSURL *)newURLUniqueURLForURL:(NSURL *)url;
++ (NSURL *)newURLForLocalCachedDirectoryForFileUrl:(NSURL *)fileUrl;
++ (NSURL *)newURLApplicationSupportFile:(NSString *)filename
+							  extension:(NSString *)extension;
 
 @end
 
