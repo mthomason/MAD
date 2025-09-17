@@ -8,16 +8,19 @@
 
 #import "MADDocumentInformationTableViewController.h"
 
-#import <UIKit/UILabel.h>
-#import <UIKit/UIVisualEffectView.h>
-#import <UIKit/UIStoryboard.h>
+#import "MADVibrantTableView.h"
+#import "MADVibrantTableViewCell.h"
 
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADFileManager/MADMetaData.h>
 
-#import "MADVibrantTableView.h"
-#import "MADVibrantTableViewCell.h"
+#import <UIKit/UILabel.h>
+#import <UIKit/UIVisualEffectView.h>
+#import <UIKit/UIStoryboard.h>
+#import <UIKit/UIBarButtonItem.h>
+#import <UIKit/UINavigationItem.h>
+#import <UIKit/UINavigationController.h>
 
 @interface MADDocumentInformationTableViewController ()
 	<MADVibrantTableViewCellDelegate>
@@ -50,6 +53,10 @@
 	self.tableView.allowsSelection = NO;
 	self.preferredContentSize = CGSizeMake(280, 200);
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+																				target:self
+																				action:@selector(doneButtonTapped:)];
+	self.navigationItem.rightBarButtonItem = doneButton;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,6 +130,10 @@
 
 - (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
 	return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
+}
+
+- (void)doneButtonTapped:(id)sender {
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -310,6 +310,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 				   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
 
 	NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
+	[toolbarButtons removeObject:_barButtonItemLicensing];	// Removing the store button.
 	[toolbarButtons removeObject:_barButtonItemAction];
 	[toolbarButtons removeObject:_barButtonItemCloudDown];
 	[toolbarButtons insertObject:_barButtonItemDuplicate atIndex:1];
@@ -1291,18 +1292,27 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController newDocumentInformationTableViewController];
 	documentInformation.modalPresentationStyle = UIModalPresentationPopover;
 	
-	NSArray *passthoughViews = [self defaultPassthroughViews];
-	UIPopoverPresentationController *ppc = documentInformation.popoverPresentationController;
-	ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:passthoughViews];
-	ppc.backgroundColor = [UIColor clearColor];
-	ppc.delegate = self;
-	ppc.barButtonItem = sender;
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:documentInformation];
+	navController.modalPresentationStyle = UIModalPresentationPopover;
+	navController.presentationController.delegate = self;
+	
+	UIPopoverPresentationController *ppc = navController.popoverPresentationController;
+	if (ppc) {
+		ppc.barButtonItem = sender;
+		ppc.delegate = self;
+		NSArray *passthoughViews = [self defaultPassthroughViews];
+		ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:passthoughViews];
+		ppc.backgroundColor = [UIColor clearColor];
+	}
 	
 	self.documentInformationPopoverPresentationController = ppc;
 	
 	documentInformation.metadataItems = metadataItems;
 	
-	[self showViewController:documentInformation animated: YES];
+	[self presentViewController: navController animated: YES completion:^{
+		[self actionEdit:self];
+	}];
+
 }
 
 - (IBAction)actionStore:(id)sender {
@@ -1447,12 +1457,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
 		[self.collectionView deselectItemAtIndexPath:path animated:YES];
 	}
-	
 	MADCollectionViewCellDocument *cell;
 	for (cell in self.collectionView.visibleCells) {
 		cell.wobbling = NO;
 	}
-
 }
 
 - (IBAction)actionDownload:(id)sender {
@@ -1789,9 +1797,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	return YES;
 }
 
+
 - (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
 	self.fileExplorerViewDelegate.showingPopover = NO;
-	if ([UIPresentationController isKindOfClass:[UIPopoverPresentationController class]]) {
+	if ([presentationController isKindOfClass:[UIPopoverPresentationController class]]) {
 		UIPopoverPresentationController *popoverPresentationController = (UIPopoverPresentationController *)presentationController;
 		popoverPresentationController.passthroughViews = nil;
 		popoverPresentationController.barButtonItem = nil;
