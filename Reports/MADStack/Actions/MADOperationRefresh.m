@@ -46,6 +46,14 @@ static const short errCache = 2;
 	}
 	
 	MADocument *document = self.document;
+	if (!document) {
+		NSError *docNullError = [[NSError alloc] initWithDomain: @"com.everydayapps.operation.refresh"
+														   code: 3842
+													   userInfo: nil];
+		[self finishWithError:docNullError];
+		return;
+	}
+	
 	MADCredential *credientals = nil;
 	if (document.database.delegate == nil) {
 		document.database.delegate = (id <MADDatabaseResultsProtocol>)document;
