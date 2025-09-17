@@ -1413,10 +1413,11 @@
 		4C401E431BAE4D7800BAE5FC /* MADocument */ = {
 			isa = PBXGroup;
 			children = (
-				4CE319531E4DAEE700EB5B85 /* Unused */,
 				4CC982841F4BBF2800E0496A /* MADocumentDesignerProtocol.h */,
 				4C401E441BAE4D8C00BAE5FC /* MADocument.h */,
 				4C401E451BAE4D8C00BAE5FC /* MADocument.m */,
+				4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */,
+				4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */,
 				4CC982801F4BB99600E0496A /* MADDesignerLayout.h */,
 				4CC982811F4BB99600E0496A /* MADDesignerLayout.m */,
 				4CC982781F4BB96600E0496A /* MADDesignerQuery.h */,
@@ -1928,15 +1929,6 @@
 				4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */,
 			);
 			name = Protocols;
-			sourceTree = "<group>";
-		};
-		4CE319531E4DAEE700EB5B85 /* Unused */ = {
-			isa = PBXGroup;
-			children = (
-				4C4F12541D091D4D0002294E /* UIManagedDocument+Extras.h */,
-				4C4F12551D091D4D0002294E /* UIManagedDocument+Extras.m */,
-			);
-			name = Unused;
 			sourceTree = "<group>";
 		};
 		4CEFDD0F1CF5AEA80092C148 /* Subclasses */ = {
