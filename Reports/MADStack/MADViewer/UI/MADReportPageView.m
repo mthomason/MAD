@@ -23,8 +23,6 @@
 
 #import <UIKit/UILabel.h>
 
-#import <os/log.h>
-
 static const CGFloat PageCounterWidth = 99.0;
 static const CGFloat PageCounterHeight = 33.0;
 static const CGFloat PageCounterBuffer = 10.0;
