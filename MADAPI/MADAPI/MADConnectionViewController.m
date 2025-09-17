@@ -24,14 +24,15 @@
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+#import <UIKit/UIProgressView.h>
+
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
 
 @interface MADConnectionViewController () <UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
 
-@property (nonatomic, strong) MADProgressView *progressView;
-
+@property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, assign) SEL actionSave;
 @property (nonatomic, weak) id actionSaveTarget;
 
@@ -78,8 +79,10 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		MADProgressView *progressView;
-		progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
+		UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+		progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
+		progressView.trackTintColor = [UIColor grayColor];
 		self.progressView = progressView;
 	}
 	return self;

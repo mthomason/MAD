@@ -10,7 +10,6 @@
 #define MADAPI_MADConnectionViewController_h
 
 #import <MADAPI/MADDatabaseType.h>
-#import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>

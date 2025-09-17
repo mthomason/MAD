@@ -12,7 +12,18 @@
 
 #import "MADConnectionSQLGenericViewController.h"
 
-#import <os/log.h>
+#import <MADFoundation/MADProgress.h>
+#import <MADFoundation/MADNotificationProgress.h>
+#import <MADFoundation/MADKeyChain.h>
+
+#import <MADCocoaExtensions/MADLabelTitle.h>
+
+#import <MADCocoaExtensions/MADAlertController.h>
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+
+#import <MADAPI/MADViewControllerStandardProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADErrorContainer.h>
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UINavigationController.h>
@@ -22,20 +33,9 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 #import <UIKit/UITableViewHeaderFooterView.h>
 #import <UIKit/UILabel.h>
+#import <UIKit/UIProgressView.h>
 
-#import <MADFoundation/MADProgress.h>
-#import <MADFoundation/MADNotificationProgress.h>
-#import <MADFoundation/MADKeyChain.h>
-
-#import <MADCocoaExtensions/MADLabelTitle.h>
-#import <MADCocoaExtensions/MADProgressView.h>
-
-#import <MADCocoaExtensions/MADAlertController.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADErrorContainer.h>
+#import <os/log.h>
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
@@ -51,7 +51,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	@property (nonatomic, strong) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 	@property (nonatomic, strong) IBOutletCollection(UITextField) NSArray *textFields;
 
-	@property (nonatomic, strong) MADProgressView *progressView;
+	@property (nonatomic, strong) UIProgressView *progressView;
 
 	@property (nonatomic, assign) SEL actionSave;
 	@property (nonatomic, weak) id actionSaveTarget;
@@ -127,8 +127,10 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		MADProgressView *progressView;
-		progressView = [MADProgressView newProgressView:MADProgressViewTypeConnection];
+		UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+		progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		progressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
+		progressView.trackTintColor = [UIColor grayColor];
 		self.progressView = progressView;
 	}
 	return self;

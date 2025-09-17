@@ -49,7 +49,6 @@
 #import <MADCocoaExtensions/MADMailComposeViewController.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
-#import <MADCocoaExtensions/MADProgressView.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 
 #import <MADFoundation/MADBlockObserver.h>
@@ -123,7 +122,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 @property (nonatomic, strong) MADSearchBar *searchBar;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 @property (nonatomic, strong) MADExplorerSectionHeaderView *headerCloud;
-@property (nonatomic, strong) MADProgressView *progressViewFileManager;
+@property (nonatomic, strong) UIProgressView *progressViewFileManager;
 @property (nonatomic, strong) NSArray *defaultPassthroughViews;
 
 @end
@@ -444,9 +443,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	return _searchBar;
 }
 
-- (MADProgressView *)progressViewFileManager {
+- (UIProgressView *)progressViewFileManager {
 	if (!_progressViewFileManager) {
-		_progressViewFileManager = [MADProgressView newProgressView:MADProgressViewTypeFileExplorer];
+		UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+		progressView.trackTintColor = [MADColorEverydayApps newColorRed];
+		progressView.tintColor = [MADColorEverydayApps newColorBlue];
+		progressView.progress = 0.0;
+		_progressViewFileManager = progressView;
 	}
 	return _progressViewFileManager;
 }
