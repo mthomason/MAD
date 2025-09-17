@@ -5,18 +5,16 @@
 #
 # Original script by Michael Thomason on 3/4/14.
 # Copyright © 2017 Michael Thomason. All rights reserved.
-# Modified by AI (Gemini) for enhanced functionality and separation of concerns.
 
 # Exit immediately if a command exits with a non-zero status.
 # Treat unset variables as an error.
 # Pipelines fail if any command fails, not just the last one.
+# Updated to disable writing to `Info.plist`.
 set -euo pipefail
 
 echo "🚀 Starting Build Counter Script..."
 
 # --- Configuration ---
-# !!! IMPORTANT: VERIFY AND UPDATE THESE PATHS !!!
-
 PROJECT_DIR="${PROJECT_DIR:-/Users/michael/Desktop/Reports/Reports}" # Original fallback
 MAD_META_PLIST_PATH="${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist"
 INFO_PLIST_TARGET_PATHS=(
@@ -71,7 +69,6 @@ set_bundle_plist_value() {
     fi
 }
 
-
 # Validate MADMeta.plist path and attempt to create if it doesn't exist
 if [ ! -f "$MAD_META_PLIST_PATH" ]; then
     echo "ℹ️ Info: MADMeta.plist not found at '$MAD_META_PLIST_PATH'. Attempting to create it."
@@ -87,21 +84,20 @@ else
 fi
 
 # Validate Info.plist files from INFO_PLIST_TARGET_PATHS
-valid_info_plists=()
-for plist_path in "${INFO_PLIST_TARGET_PATHS[@]}"; do
-    if [ -z "$plist_path" ]; then
-        echo "⚠️ Warning: An empty Info.plist path was provided in INFO_PLIST_TARGET_PATHS. Skipping."
-        continue
-    fi
-    if [ ! -f "$plist_path" ]; then
-        echo "⚠️ Warning: Target Info.plist file not found at '$plist_path'. It will be skipped for CFBundle updates."
-    else
-        echo "✅ Found target Info.plist for CFBundle updates: $plist_path"
-        valid_info_plists+=("$plist_path")
-    fi
-done
-INFO_PLIST_TARGET_PATHS=("${valid_info_plists[@]}")
-
+# valid_info_plists=()
+# for plist_path in "${INFO_PLIST_TARGET_PATHS[@]}"; do
+#     if [ -z "$plist_path" ]; then
+#         echo "⚠️ Warning: An empty Info.plist path was provided in INFO_PLIST_TARGET_PATHS. Skipping."
+#         continue
+#     fi
+#     if [ ! -f "$plist_path" ]; then
+#         echo "⚠️ Warning: Target Info.plist file not found at '$plist_path'. It will be skipped for CFBundle updates."
+#     else
+#         echo "✅ Found target Info.plist for CFBundle updates: $plist_path"
+#         valid_info_plists+=("$plist_path")
+#     fi
+# done
+# INFO_PLIST_TARGET_PATHS=("${valid_info_plists[@]}")
 
 # --- Git Information Fetching ---
 echo "⚙️ Fetching version and build information from git..."
@@ -180,16 +176,16 @@ add_or_set_plist_key ":CFBundleVersion" "$git_commit_count" "string" "$MAD_META_
 # --- Update Target Info.plist files ---
 # For these, PlistBuddy's 'Set' usually works fine for creating/updating CFBundle keys,
 # as they are standard and their types are commonly strings.
-if [ ${#INFO_PLIST_TARGET_PATHS[@]} -gt 0 ]; then
-    echo "📝 Updating CFBundle versions in target Info.plist files..."
-    for plist_file in "${INFO_PLIST_TARGET_PATHS[@]}"; do
-        echo "   -> $plist_file"
-        set_bundle_plist_value "Set :CFBundleShortVersionString $calculated_short_version_string" "$plist_file"
-        set_bundle_plist_value "Set :CFBundleVersion $git_commit_count" "$plist_file"
-    done
-else
-    echo "ℹ️ No valid target Info.plist files found or configured to update with CFBundle versions."
-fi
+# if [ ${#INFO_PLIST_TARGET_PATHS[@]} -gt 0 ]; then
+#     echo "📝 Updating CFBundle versions in target Info.plist files..."
+#     for plist_file in "${INFO_PLIST_TARGET_PATHS[@]}"; do
+#         echo "   -> $plist_file"
+#         set_bundle_plist_value "Set :CFBundleShortVersionString $calculated_short_version_string" "$plist_file"
+#         set_bundle_plist_value "Set :CFBundleVersion $git_commit_count" "$plist_file"
+#     done
+# else
+#     echo "ℹ️ No valid target Info.plist files found or configured to update with CFBundle versions."
+# fi
 
 echo ""
 echo "----------------------------------------------------"
