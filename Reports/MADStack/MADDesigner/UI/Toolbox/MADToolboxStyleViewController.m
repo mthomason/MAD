@@ -19,7 +19,6 @@
 #import <MADCocoaExtensions/MADBorderStyle.h>
 #import <MADCocoaExtensions/MADMargin.h>
 #import <MADCocoaExtensions/MADPadding.h>
-#import <MADCocoaExtensions/MADTextStyle.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 

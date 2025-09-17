@@ -13,13 +13,13 @@
 
 @interface MADMargin : NSObject <NSCoding, NSCopying>
 
-	- (instancetype)initWithLeft:(Float64)left right:(Float64)right
-							 top:(Float64)top bottom:(Float64)bottom;
+- (instancetype)initWithLeft:(Float64)left right:(Float64)right
+						 top:(Float64)top bottom:(Float64)bottom;
 
-	@property (nonatomic, assign, readwrite) Float64 left;
-	@property (nonatomic, assign, readwrite) Float64 right;
-	@property (nonatomic, assign, readwrite) Float64 top;
-	@property (nonatomic, assign, readwrite) Float64 bottom;
+@property (nonatomic, assign, readwrite) Float64 left;
+@property (nonatomic, assign, readwrite) Float64 right;
+@property (nonatomic, assign, readwrite) Float64 top;
+@property (nonatomic, assign, readwrite) Float64 bottom;
 
 @end
 

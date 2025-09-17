@@ -13,7 +13,7 @@
 
 @interface NSParagraphStyle (CommonStyles)
 
-	+ (instancetype)newParagraphStyleTitleBar;
++ (instancetype)newParagraphStyleTitleBar;
 
 @end
 

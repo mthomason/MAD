@@ -7,18 +7,19 @@
 //
 
 #import "MADElementStylizedText.h"
-#import <UIKit/UIFontDescriptor.h>
-#import <UIKit/UIFont.h>
-#import <UIKit/NSParagraphStyle.h>
-#import <UIKit/NSAttributedString.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSValue.h>
-#import <MADCocoaExtensions/MADTextStyle.h>
 #import "UIFontDescriptor+MADAdditions.h"
 #import "RptqDocumentElement.h"
 #import "RptqTextStyle.h"
 #import "MADAlignment.h"
+
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSValue.h>
+
+#import <UIKit/UIFontDescriptor.h>
+#import <UIKit/UIFont.h>
+#import <UIKit/NSParagraphStyle.h>
+#import <UIKit/NSAttributedString.h>
 
 @interface MADElementStylizedText ()
 

@@ -18,7 +18,6 @@
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADTextStyle.h>
 
 #import <MAD/RptqRect+Extras.h>
 #import <MAD/RptqAlignment.h>

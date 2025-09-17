@@ -20,7 +20,7 @@
 																  relatedBy: NSLayoutRelationEqual
 																	 toItem: nil
 																  attribute: NSLayoutAttributeNotAnAttribute
-																 multiplier: 1.0000f
+																 multiplier: 1.0
 																   constant: width];
 	[label addConstraint:constraint];
 	return label;

@@ -7,12 +7,12 @@
 //
 
 #import "MADBrandingStringHelper.h"
+#import "NSParagraphStyle+CommonStyles.h"
 
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIFont.h>
 #import <UIKit/UIColor.h>
 #import <UIKit/UIInterface.h>
-#import "NSParagraphStyle+CommonStyles.h"
 
 @interface NSParagraphStyle (MADPrivateExtensions)
 + (NSParagraphStyle *)newParagraphStyleTitleBar;
@@ -84,7 +84,6 @@
 	
 	[attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:fullRange];
 	[attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:fullRange];
-	
 	
 	return attributedString;
 }

@@ -73,34 +73,28 @@
 #import "MTBarcodeUniversalProductCodeUpce.h"
 #import "MTBarcodeUspsIntelligentMail.h"
 
-//#import <MADCocoaExtensions/MADColor.h>
-
 #import <UIKit/UIGraphics.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIColor.h>
 
-//#import "MADBarcodeDataInputType.h"
-
 typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
-    MTBarcodeDataTypeUnicode = UNICODE_MODE,
-    MTBarcodeDataTypeData = DATA_MODE,
-    MTBarcodeDataTypeGs1 = GS1_MODE
+	MTBarcodeDataTypeUnicode = UNICODE_MODE,
+	MTBarcodeDataTypeData = DATA_MODE,
+	MTBarcodeDataTypeGs1 = GS1_MODE
 };
 
 
 @interface MTBarcode ()
 
-    @property (nonatomic, assign) CGFloat rotate;
+@property (nonatomic, assign) CGFloat rotate;
 
-    //@property (nonatomic, copy, readwrite) MADColor *backgroundColor;
+@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, assign, readwrite) int16_t barcodeType;
+@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
-    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
-
-    + (instancetype)newBarcodeWithType:(MTBarcodeType)type;
++ (instancetype)newBarcodeWithType:(MTBarcodeType)type;
 
 @end
 
@@ -122,23 +116,23 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
 - (void)dealloc { }
 
 - (instancetype)init {
-    if (self = [super init]) {
-        //MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
-        //MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
-        //_forgroundColor = blackColor;
-        //_backgroundColor = whiteColor;
-        _showErrorMessage = YES;
-        _humanReadable = YES;
-        _barcodeHeight = 50;
-        _barcodeBorderWidth = 5;
-        _rotate = (90.0000f * M_PI / 180.0000f);
-        _option1 = NO;
-        _option2 = NO;
-        _option3 = NO;
-        _center = NO;
-        _scale = 1.0000f;
-    }
-    return self;
+	if (self = [super init]) {
+		//MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
+		//MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
+		//_forgroundColor = blackColor;
+		//_backgroundColor = whiteColor;
+		_showErrorMessage = YES;
+		_humanReadable = YES;
+		_barcodeHeight = 50;
+		_barcodeBorderWidth = 5;
+		_rotate = (90.0000f * M_PI / 180.0000f);
+		_option1 = NO;
+		_option2 = NO;
+		_option3 = NO;
+		_center = NO;
+		_scale = 1.0000f;
+	}
+	return self;
 }
 
 + (instancetype)newBarcode:(id <MTBarcodeProtocol>)documentObject {
