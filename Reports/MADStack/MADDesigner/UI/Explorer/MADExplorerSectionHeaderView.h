@@ -20,10 +20,10 @@ extern NSString * const MADIdentifierOpenFileSectionHeader;
 
 @interface MADExplorerSectionHeaderView : UICollectionReusableView
 
-	@property (nonatomic, assign) MACloudManagerSection sectionType;
+@property (nonatomic, assign) MACloudManagerSection sectionType;
 
-	- (void)startAnimating;
-	- (void)stopAnimating;
+- (void)startAnimating;
+- (void)stopAnimating;
 
 @end
 

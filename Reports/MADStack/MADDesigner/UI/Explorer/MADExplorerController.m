@@ -13,24 +13,19 @@
 #import "MADExplorerController.h"
 #import "AppDelegate.h"
 #import "MADExplorerViewLayout.h"
-#import "MADExplorerControllerProtocol.h"
 #import "MADAboutTableViewController.h"
 #import "MADDocumentInformationTableViewController.h"
 #import "MADExplorerSectionHeaderView.h"
 #import "MADSearchBar.h"
-#import "MADViewerController.h"
 #import "MADDesignerViewController.h"
-#import "MADQueryViewController.h"
 #import "MADDriverSelectorController.h"
 #import "MADStoreViewController.h"
 #import "MADNavigationController.h"
-#import "MADQueryVisualizationViewController.h"
 #import "MADTabBarController.h"
 #import "MADOperationInstallSampleDatabase.h"
 #import "MADOperationInstallSampleDocument.h"
-#import "MADVerificationController.h"
-#import "MTStoreKitController+Features.h"
-#import "MADSearchBar.h"
+//#import "MADVerificationController.h"		// Removed "Store" button for now.
+//#import "MTStoreKitController+Features.h"	// Removed "Store" button for now.
 #import "MADKeyChainSaveCredentials.h"
 #import "MADKeyChainGetCredentials.h"
 #import "MADColorTransformer.h"
@@ -48,7 +43,6 @@
 
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
@@ -84,9 +78,6 @@
 
 #import <QuickLook/QLPreviewController.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
-static NSString * const MADIdentifierFileLondon                 = @"London";
-static NSString * const MADIdentifierFileMusic                  = @"Music";
 
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUpgradeInstalledSamplesLondon               = @"MADUpgradeInstalledSamplesLondon";
@@ -271,7 +262,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	MADOperationInstallSampleDatabase *opInstallDb = [[MADOperationInstallSampleDatabase alloc] init];
 	[operationQueueBackground addOperation:opInstallDb];
 	
-	MADOperationInstallSampleDocument *opInstallDocA = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileLondon
+	MADOperationInstallSampleDocument *opInstallDocA = [[MADOperationInstallSampleDocument alloc] initWithFilename: @"London"
 																									 fileExtension: MADFileExtentionMobleApplicationDocument
 																								   groupIdentifier: [AppDelegate groupIdentifier]
 																									   installFlag: MADUpgradeInstalledSamplesLondon];
@@ -280,7 +271,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[operationQueueBackground addOperation:opInstallDocA];
 
 	
-	MADOperationInstallSampleDocument *opInstallDocB = [[MADOperationInstallSampleDocument alloc] initWithFilename: MADIdentifierFileMusic
+	MADOperationInstallSampleDocument *opInstallDocB = [[MADOperationInstallSampleDocument alloc] initWithFilename: @"Music"
 																									 fileExtension: MADFileExtentionMobleApplicationDocument
 																								   groupIdentifier: [AppDelegate groupIdentifier]
 																									   installFlag: MADUpgradeInstalledSamplesMusic];
@@ -371,7 +362,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	[self.navigationItem setRightBarButtonItem: _barButtonItemEdit
 									  animated: animated];
-	_barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
+	// Removed "Store" button for now.
+	//_barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 
 	if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
 		NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
@@ -916,7 +908,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)openDocumentAtURL:(NSURL *)url completion:(void (^)(void))completion {
 
 	MADocument *document = [[MADocument alloc] initWithFileURL:url];
-	document.limitResultsDesignMode = [MADStoreKitController sharedObject].isReportingLimited;
+	document.limitResultsDesignMode = NO; // [MADStoreKitController sharedObject].isReportingLimited;  // Removed store feature for now.
 	document.documentDelegate = self;
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self

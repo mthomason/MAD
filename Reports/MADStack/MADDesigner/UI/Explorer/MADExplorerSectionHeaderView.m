@@ -8,13 +8,13 @@
 
 #import "MADExplorerSectionHeaderView.h"
 
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
+#import <MADCocoaExtensions/MADViewHelpers.h>
+
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/UINibLoading.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/NSAttributedString.h>
-
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/MADViewHelpers.h>
 
 NSString * const MADTextCloud = @"Cloud";
 NSString * const MADTextLocal = @"Local";
@@ -47,22 +47,6 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 @end
 
 @implementation MADExplorerSectionHeaderView
-
-/*
-+ (void)initialize {
-	[super initialize];
-	if (self == [MADExplorerSectionHeaderView self]) {
-		@autoreleasepool {
-			UIActivityIndicatorView <UIAppearance> *appearanceProxy;
-			NSArray <Class <UIAppearanceContainer>> *classes;
-			classes = [[NSArray alloc] initWithObjects: self, nil];
-			appearanceProxy = [UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:classes];
-			appearanceProxy.tintColor = [UIColor whiteColor];
-			appearanceProxy.color     = [UIColor whiteColor];
-		}
-	}
-}
-*/
 
 - (void)awakeFromNib {
 	[super awakeFromNib];

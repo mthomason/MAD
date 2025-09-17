@@ -16,7 +16,6 @@
 #import "MADSalesReceipt.h"
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
-#import <MADCocoaExtensions/MADBarButtonItem.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>

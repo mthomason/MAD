@@ -8,13 +8,11 @@
 
 #import "MADNavigationControllerFileExplorer.h"
 
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-
 #import "MADTransparentPresentationController.h"
-
 #import "MADExplorerController.h"
-
 #import "MADThemeManager.h"
+
+#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UITabBarController.h>

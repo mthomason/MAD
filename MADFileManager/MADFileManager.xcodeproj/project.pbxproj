@@ -146,7 +146,6 @@
 		4C6701111BA20683001C9D5A /* MADFileManager */ = {
 			isa = PBXGroup;
 			children = (
-				4CC909071D0FD326007A1C75 /* Unused */,
 				4C6701121BA20683001C9D5A /* MADFileManager.h */,
 				4C4F12911D0FAEE90002294E /* MADFileLocationManagerDelegate.h */,
 				4CC909061D0FD2CD007A1C75 /* FileController */,
@@ -227,13 +226,6 @@
 				4C41DA701BA22C5700FF63EC /* MADFilesController.m */,
 			);
 			name = FileController;
-			sourceTree = "<group>";
-		};
-		4CC909071D0FD326007A1C75 /* Unused */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Unused;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
