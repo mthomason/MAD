@@ -19,7 +19,9 @@
 	return self;
 }
 
-- (void)prepareLayout { }
+- (void)prepareLayout {
+	[super prepareLayout];
+}
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect; {
 	NSArray <UICollectionViewLayoutAttributes *> *attributes = [super layoutAttributesForElementsInRect:rect];
