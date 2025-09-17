@@ -31,7 +31,7 @@
 #import "RptqDocumentElementBarcode+Extras.h"
 #import "RptqDocumentElementFormula+Extras.h"
 #import "RptqDataHelper.h"
-#import "MADReportSectionsEnumerator.h"
+#import "madlog.h"
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
@@ -53,18 +53,23 @@
 
 #import <UIKit/UIImage.h>
 
-#import <os/log.h>
+static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger, NSUInteger);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger);
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger, NSUInteger);
 
-static os_log_t rptq_log;
+static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+	return selectedIndex < (numberOfGroups * 2) + 5;
+}
+
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
+	return selectedIndex - 2;
+}
+
+static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+	return ((2 + numberOfGroups) - (selectedIndex - (2 + numberOfGroups))) - 2;
+}
 
 @implementation RptqDocument (Extras)
-
-+ (void)load {
-	if (self == [RptqDocument class]) {
-		NSString *c = NSStringFromClass([RptqDocument class]);
-		rptq_log = os_log_create("com.mad", c.UTF8String);
-	}
-}
 
 #pragma mark - Static
 
@@ -75,13 +80,13 @@ static os_log_t rptq_log;
 	NSError *error = nil;
 	NSArray *documents = [context executeFetchRequest:request error:&error];
 	if (error != nil) {
-		os_log_error(rptq_log, "Failed to fetch existing documents: %{public}@", error);
+		os_log_error(GetMadLog(), "Failed to fetch existing documents: %{public}@", error);
 	} else if (documents.count > 0) {
 		for (RptqDocument *document in documents) {
 			[context deleteObject:document];
 		}
 		if (![context save:&error]) {
-			os_log_error(rptq_log, "Failed to save after document deletion: %{public}@", error);
+			os_log_error(GetMadLog(), "Failed to save after document deletion: %{public}@", error);
 		}
 	}
 	
@@ -181,21 +186,21 @@ static os_log_t rptq_log;
 	NSError *error1 = nil;
 	if (![document.hasReportHeaderSection validateForUpdate: &error1]) {
 		if (error1 != nil) {
-			os_log_error(rptq_log, "%s: %@", __PRETTY_FUNCTION__, error1);
+			os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error1);
 		}
 	}
 	
 	NSError *error2 = nil;
 	if (![document.hasDetailSection validateForUpdate: &error2]) {
 		if (error2 != nil) {
-			os_log_error(rptq_log, "%s: %@", __PRETTY_FUNCTION__, error2);
+			os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error2);
 		}
 	}
 	
 	NSError *error3 = nil;
 	if (![document validateForUpdate: &error3]) {
 		if (error3 != nil) {
-			os_log_error(rptq_log, "%s: %@", __PRETTY_FUNCTION__, error3);
+			os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error3);
 		}
 	}
 	
@@ -211,7 +216,7 @@ static os_log_t rptq_log;
 	NSError *error = nil;
 	NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
 	if (error != nil) {
-		os_log_error(rptq_log, "Failed to fetch document: %{public}@", error);
+		os_log_error(GetMadLog(), "Failed to fetch document: %{public}@", error);
 		NSAssert(NO, @"Failed to fetch document: %@", error);
 	}
 	NSAssert(documents.count > 0, @"No documents found");

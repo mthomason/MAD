@@ -11,30 +11,45 @@
 #import "RptqDocument.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
-
-#import "MADReportSectionReportHeader.h"
-#import "MADReportSectionPageHeader.h"
-#import "MADReportSectionGroupHeader.h"
-#import "MADReportSectionDetail.h"
-#import "MADReportSectionGroupFooter.h"
-#import "MADReportSectionPageFooter.h"
-#import "MADReportSectionReportFooter.h"
+#import "RptqQueryGroup+Extras.h"
 
 #import "MADSectionLayoutManager.h"
 
+#import <Foundation/NSBundle.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
 
 @interface MADReportSection ()
 
-@property (nonatomic, readwrite, strong)                            MADSectionLayoutManager *layoutManager;
+@property (nonatomic, readwrite, strong) MADSectionLayoutManager *layoutManager;
 
-@property (nonatomic, readwrite, strong)                            NSNumber *objectID;
-@property (nonatomic, readwrite, assign)                            NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readwrite, strong) NSNumber *objectID;
+@property (nonatomic, readwrite, assign) NSManagedObjectContext *managedObjectContext;
 
-@property (nonatomic, readwrite, strong, getter=hasReportRows)      MADReportRows *reportRows;
-@property (nonatomic, readwrite, strong)                            RptqDocumentSection *documentSection;
+@property (nonatomic, readwrite, strong, getter=hasReportRows) MADReportRows *reportRows;
+@property (nonatomic, readwrite, strong) RptqDocumentSection *documentSection;
 
+@end
+
+@interface MADReportSectionReportHeader : MADReportSection
+@end
+
+@interface MADReportSectionPageHeader : MADReportSection
+@end
+
+@interface MADReportSectionGroupHeader : MADReportSection
+@end
+
+@interface MADReportSectionDetail : MADReportSection
+@end
+
+@interface MADReportSectionGroupFooter : MADReportSection
+@end
+
+@interface MADReportSectionPageFooter : MADReportSection
+@end
+
+@interface MADReportSectionReportFooter : MADReportSection
 @end
 
 @implementation MADReportSection
@@ -106,4 +121,38 @@
 - (BOOL)isVisible { return self.documentSection.visibility; }
 - (NSInteger)identifier { return self.documentSection.identifier; }
 
+@end
+
+@implementation MADReportSectionReportHeader
+- (NSString *)localizedDisplayName { return NSLocalizedString(@"Report Header", @"Report Header"); }
+@end
+
+@implementation MADReportSectionPageHeader
+- (NSString *)localizedDisplayName { return NSLocalizedString(@"Page Header", @"Page Header"); }
+@end
+
+@implementation MADReportSectionGroupHeader
+- (NSString *)localizedDisplayName {
+	id fieldName =  [self.documentSection.inGroup fieldNameQuery];
+	return [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"Group Header (%@)"), fieldName];
+}
+@end
+
+@implementation MADReportSectionDetail
+- (NSString *)localizedDisplayName { return NSLocalizedString(@"Report Detail", @"Report Detail"); }
+@end
+
+@implementation MADReportSectionGroupFooter
+- (NSString *)localizedDisplayName {
+	id fieldName =  [self.documentSection.inGroup fieldNameQuery];
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"Group Footer - (%@)"), fieldName];
+}
+@end
+
+@implementation MADReportSectionPageFooter
+- (NSString *)localizedDisplayName { return NSLocalizedString(@"Page Footer", @"Page Footer"); }
+@end
+
+@implementation MADReportSectionReportFooter
+- (NSString *)localizedDisplayName { return NSLocalizedString(@"Report Footer", @"Report Footer"); }
 @end

@@ -31,6 +31,14 @@ typedef NS_ENUM(int16_t, MADDocumentSectionType) {
 static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionType);
 static inline NSUInteger documentSectionDynamicIndexDetail(NSUInteger);
 static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger);
+static inline NSUInteger documentSectionDynamicIndexDocumentFooter(NSUInteger numberOfGroups);
+static inline BOOL isSectionDetail(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isPageFooter(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isDocumentFooter(NSUInteger index, NSUInteger numberOfGroups);
+static inline BOOL isPageHeader(NSUInteger index);
+static inline BOOL isDocumentHeader(NSUInteger index);
+static inline BOOL isGroupHeader(NSUInteger index, NSUInteger numberOfGroups);
+static inline MADDocumentSectionType documentSectionType(NSUInteger index, NSUInteger numberOfGroups);
 
 static inline NSString *NSStringFromMADDocumentSectionType(MADDocumentSectionType value) {
 	switch (value) {
@@ -53,55 +61,41 @@ static inline NSUInteger documentSectionDynamicIndexPageFooter(NSUInteger number
 	return MADDocumentSectionIndexPageFooter + (2 * numberOfGroups);
 }
 
-static inline NSUInteger documentSectionDynamicIndexDocumentFooter(NSUInteger numberOfGroups);
 static inline NSUInteger documentSectionDynamicIndexDocumentFooter(NSUInteger numberOfGroups) {
 	return MADDocumentSectionIndexDocumentFooter + (2 * numberOfGroups);
 }
 
-static inline BOOL isSectionDetail(NSUInteger index, NSUInteger numberOfGroups);
 static inline BOOL isSectionDetail(NSUInteger index, NSUInteger numberOfGroups) {
 	return index == documentSectionDynamicIndexDetail(numberOfGroups);
 }
 
-static inline BOOL isPageFooter(NSUInteger index, NSUInteger numberOfGroups);
 static inline BOOL isPageFooter(NSUInteger index, NSUInteger numberOfGroups) {
 	return index == documentSectionDynamicIndexPageFooter(numberOfGroups);
 }
 
-static inline BOOL isDocumentFooter(NSUInteger index, NSUInteger numberOfGroups);
 static inline BOOL isDocumentFooter(NSUInteger index, NSUInteger numberOfGroups) {
 	return index == documentSectionDynamicIndexDocumentFooter(numberOfGroups);
 }
 
-static inline BOOL isPageHeader(NSUInteger index);
 static inline BOOL isPageHeader(NSUInteger index) {
 	return index == MADDocumentSectionIndexPageHeader;
 }
 
-static inline BOOL isDocumentHeader(NSUInteger index);
 static inline BOOL isDocumentHeader(NSUInteger index) {
 	return index == MADDocumentSectionIndexDocumentHeader;
 }
 
-static inline BOOL isGroupHeader(NSUInteger index, NSUInteger numberOfGroups);
 static inline BOOL isGroupHeader(NSUInteger index, NSUInteger numberOfGroups) {
 	return ((index - MADDocumentSectionIndexPageHeader) <= numberOfGroups);
 }
 
-static inline MADDocumentSectionType documentSectionType(NSUInteger index, NSUInteger numberOfGroups);
 static inline MADDocumentSectionType documentSectionType(NSUInteger index, NSUInteger numberOfGroups) {
 	return isSectionDetail(index, numberOfGroups) ? MADDocumentSectionTypeBody :
-	(isPageHeader(index) ? MADDocumentSectionTypePageHeader :
-	 (isPageFooter(index, numberOfGroups) ? MADDocumentSectionTypePageFooter :
-	  (isDocumentHeader(index) ? MADDocumentSectionTypeReportHeader :
-	   (isDocumentFooter(index, numberOfGroups) ? MADDocumentSectionTypeReportFooter :
-		(isGroupHeader(index, numberOfGroups) ?
-		 MADDocumentSectionTypeGroupHeader :
-		 MADDocumentSectionTypeGroupFooter)
-		)
-	   )
-	  )
-	 );
+		(isPageHeader(index) ? MADDocumentSectionTypePageHeader :
+		 (isPageFooter(index, numberOfGroups) ? MADDocumentSectionTypePageFooter :
+		  (isDocumentHeader(index) ? MADDocumentSectionTypeReportHeader :
+		   (isDocumentFooter(index, numberOfGroups) ? MADDocumentSectionTypeReportFooter :
+			(isGroupHeader(index, numberOfGroups) ? MADDocumentSectionTypeGroupHeader : MADDocumentSectionTypeGroupFooter)))));
 }
 
 #endif /* MADocumentSectionType_h */
