@@ -16,8 +16,6 @@
 
 #import <MADAPI/MADQueryType.h>
 
-static NSString * const JoinPredicateWhere = @" WHERE ";
-
 @interface MADQueryCacheSelectGroupKeys ()
 
 @property (nonatomic, copy) NSString *tableName;
@@ -44,7 +42,7 @@ static NSString * const JoinPredicateWhere = @" WHERE ";
 		self.tableName = tableName;
 		
 		NSNumber *keySelectPredicates = @(MADQuerySelectPredicates);
-		NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:JoinPredicateWhere];
+		NSMutableString *sqlPredicate = [[NSMutableString alloc] initWithString:@" WHERE "];
 		NSArray *selectPredicates = [obj objectForKey:keySelectPredicates];
 		int i = 0;
 		for (NSDictionary *predicate in selectPredicates) {

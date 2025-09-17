@@ -9,12 +9,10 @@
 #import "MADReportSectionReportFooter.h"
 #import <Foundation/NSBundle.h>
 
-static NSString * const Name = @"Report Footer";
-
 @implementation MADReportSectionReportFooter
 
 - (NSString *)localizedDisplayName {
-    return NSLocalizedString(Name, Name);
+	return NSLocalizedString(@"Report Footer", @"Report Footer");
 }
 
 @end

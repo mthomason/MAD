@@ -9,31 +9,29 @@
 #ifndef MAD_MADReportSection_h
 #define MAD_MADReportSection_h
 
+#import <MAD/MADocumentSectionType.h>
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
-#import <MAD/MADocumentSectionType.h>
 
-@class MADReportRows, MADSectionLayoutManager, NSManagedObjectID, NSManagedObjectContext,
-       RptqDocumentSection;
+@class MADReportRows, MADSectionLayoutManager, NSManagedObjectID, NSManagedObjectContext, RptqDocumentSection;
 
 @interface MADReportSection : NSObject
 
-    - (instancetype)initWithReportSection:(RptqDocumentSection *)reportSection;
+- (instancetype)initWithReportSection:(RptqDocumentSection *)reportSection;
 
-    @property (nonatomic, readonly, strong)                         RptqDocumentSection *documentSection;
-    @property (nonatomic, readonly, strong)                         NSNumber *objectID;
+@property (nonatomic, readonly, strong)                         RptqDocumentSection *documentSection;
+@property (nonatomic, readonly, strong)                         NSNumber *objectID;
 
-    @property (nonatomic, readonly)                                 NSInteger identifier;
+@property (nonatomic, readonly)                                 NSInteger identifier;
 
-    @property (nonatomic, readonly, strong, getter=hasReportRows)   MADReportRows *reportRows;
-    @property (nonatomic, readonly, strong)                         MADSectionLayoutManager *layoutManager;
+@property (nonatomic, readonly, strong, getter=hasReportRows)   MADReportRows *reportRows;
+@property (nonatomic, readonly, strong)                         MADSectionLayoutManager *layoutManager;
 
-    @property (nonatomic, readonly, getter=isVisible)               BOOL visible;
-    @property (nonatomic, readonly)                                 CGFloat height;
-    @property (nonatomic, readonly)                                 MADDocumentSectionType type;
+@property (nonatomic, readonly, getter=isVisible)               BOOL visible;
+@property (nonatomic, readonly)                                 CGFloat height;
+@property (nonatomic, readonly)                                 MADDocumentSectionType type;
 
-    @property (nonatomic, readonly)                                 NSString *localizedDisplayName;
-
+@property (nonatomic, readonly)                                 NSString *localizedDisplayName;
 
 @end
 

@@ -25,11 +25,6 @@
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
-static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
-																@"%@ %@ %@ "
-																@"%@ %@ "
-																@"LIMIT 511;";
-
 @implementation MADDatabase
 
 + (NSString *)imageIconName { return @""; }
@@ -231,9 +226,7 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 - (NSArray <MADDatabaseField *> *)fieldsForTable:(NSString *)tableName
 									  connection:(id)dbconn
 										   error:(NSError *__autoreleasing *)error {
-	NSString *reason;
-	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:@"Not implemented: %@.  Subclass MADDatabase; don't use it directly.", NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -247,8 +240,10 @@ static NSString * const MADTextSqlSelectSampleDataForField = @"%@ DISTINCT "
 
 	NSString *selectPart = [self selectPart];
 	NSString *tableAliasConnector = [self tableAliasConnector];
-	return [NSString stringWithFormat:MADTextSqlSelectSampleDataForField, selectPart, safeField,
-			tableAliasConnector, safeFieldAlias, @"\nFROM\n", safeTable];
+	return [NSString stringWithFormat:@"%@ DISTINCT "
+			@"%@ %@ %@ "
+			@"%@ %@ "
+			@"LIMIT 511;", selectPart, safeField, tableAliasConnector, safeFieldAlias, MADSqlTextFromPart, safeTable];
 }
 
 - (NSString *)sqlAggregateFunctionLength { return @"LENGTH"; }

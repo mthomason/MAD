@@ -9,12 +9,10 @@
 #import "MADReportSectionPageHeader.h"
 #import <Foundation/NSBundle.h>
 
-static NSString * const Name = @"Page Header";
-
 @implementation MADReportSectionPageHeader
 
 - (NSString *)localizedDisplayName {
-	return NSLocalizedString(Name, Name);
+	return NSLocalizedString(@"Page Header", @"Page Header");
 }
 
 @end

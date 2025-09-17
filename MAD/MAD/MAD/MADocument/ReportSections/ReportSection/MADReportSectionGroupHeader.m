@@ -7,17 +7,15 @@
 //
 
 #import "MADReportSectionGroupHeader.h"
-#import <Foundation/NSBundle.h>
 #import "RptqDocumentSection.h"
 #import "RptqQueryGroup+Extras.h"
-
-static NSString * const Format = @"Group Header (%@)";
+#import <Foundation/NSBundle.h>
 
 @implementation MADReportSectionGroupHeader
 
 - (NSString *)localizedDisplayName {
-    id fieldName =  [self.documentSection.inGroup fieldNameQuery];
-	return [NSString stringWithFormat:NSLocalizedString(Format, Format), fieldName];
+	id fieldName =  [self.documentSection.inGroup fieldNameQuery];
+	return [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"Group Header (%@)"), fieldName];
 }
 
 @end

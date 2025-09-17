@@ -7,18 +7,15 @@
 //
 
 #import "MADReportSectionGroupFooter.h"
-#import <Foundation/NSBundle.h>
 #import "RptqDocumentSection.h"
 #import "RptqQueryGroup+Extras.h"
-
-static NSString * const Format = @"Group Footer - (%@)";
+#import <Foundation/NSBundle.h>
 
 @implementation MADReportSectionGroupFooter
 
 - (NSString *)localizedDisplayName {
-    id format = NSLocalizedString(Format, Format);
-    id fieldName =  [self.documentSection.inGroup fieldNameQuery];
-    return [[NSString alloc] initWithFormat:format, fieldName];
+	id fieldName =  [self.documentSection.inGroup fieldNameQuery];
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"Group Footer - (%@)"), fieldName];
 }
 
 @end
