@@ -11,39 +11,31 @@
 #endif
 
 #import "MADConnectionViewController.h"
+#import "MADViewControllerStandardProtocol.h"
+#import "MADDatabaseConnection.h"
+#import "MADErrorContainer.h"
 
-#import <os/log.h>
+#import <MADFoundation/MADProgress.h>
+#import <MADFoundation/MADNotificationProgress.h>
+#import <MADFoundation/MADKeyChain.h>
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIActivityIndicatorView.h>
-#import <UIKit/UILocalNotification.h>
 #import <UIKit/UIViewControllerTransitioning.h>
-
-#import <MADFoundation/MADDataType.h>
-#import <MADFoundation/MADProgress.h>
-#import <MADFoundation/MADNotificationProgress.h>
-#import <MADFoundation/MADKeyChain.h>
-
-#import "MADViewControllerStandardProtocol.h"
-#import "MADDatabaseConnection.h"
-#import "MADErrorContainer.h"
-
-//#import <MAD/MADDatabaseConnection+Constructor.h>
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);
 
-@interface MADConnectionViewController ()
-	<UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
+@interface MADConnectionViewController () <UITableViewDelegate, UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning, UITextFieldDelegate>
 
-	@property (nonatomic, strong) MADProgressView *progressView;
+@property (nonatomic, strong) MADProgressView *progressView;
 
-	@property (nonatomic, assign) SEL actionSave;
-	@property (nonatomic, weak) id actionSaveTarget;
+@property (nonatomic, assign) SEL actionSave;
+@property (nonatomic, weak) id actionSaveTarget;
 
-	- (IBAction)save:(id)sender;
+- (IBAction)save:(id)sender;
 
 @end
 
@@ -51,42 +43,16 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 #pragma mark -
 #pragma mark NSObject
-/*
-+ (void)initialize {
-	[super initialize];
-	
-	if (self != [MADConnectionViewController self]) {
-		@autoreleasepool {
-			UIProgressView <UIAppearance> *appearanceProxyProgressView;
-			NSArray <Class <UIAppearanceContainer>> *classes;
-			classes = [[NSArray alloc] initWithObjects: self, nil];
-			appearanceProxyProgressView = [UIProgressView appearanceWhenContainedInInstancesOfClasses:classes];
-			appearanceProxyProgressView.tintColor = [UIColor whiteColor];
-			appearanceProxyProgressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			appearanceProxyProgressView.progressTintColor = [MADColorEverydayApps newColorAnalogous4];
-			appearanceProxyProgressView.trackTintColor = [UIColor grayColor];
-		}
-	}
-}
-*/
 
 + (void)viewController:(id)viewController
 		 displayErrors:(NSArray <__kindof NSError *> *)errors
 			completion:(void (^)(BOOL))completion {
 
-	MADBlockAlertDidFinish handleAlertDidFinish;
-	UIAlertController *alert;
-	NSRange range;
-	NSError *error;
-	NSString *localizedDescription, *localizedFailureReason;
-	NSArray <__kindof NSError *> *remaningErrors;
-	
-	error = errors.lastObject;
-	
-	range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
-	remaningErrors = [errors subarrayWithRange:range];
+	NSError *error = [errors lastObject];
+	NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
+	NSArray <__kindof NSError *> *remaningErrors = [errors subarrayWithRange:range];
 
-	handleAlertDidFinish = ^(UIAlertAction *action) {
+	MADBlockAlertDidFinish handleAlertDidFinish = ^(UIAlertAction *action) {
 
 		if (remaningErrors.count > 0) {
 			
@@ -100,17 +66,15 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 		
 	};
 	
-	localizedDescription = error.localizedDescription.copy;
-	localizedFailureReason = error.localizedFailureReason.copy;
+	NSString *localizedDescription = [error.localizedDescription copy];
+	NSString *localizedFailureReason = [error.localizedFailureReason copy];
 
-	alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: localizedDescription
-																	 message: localizedFailureReason
-															   andCompletion: handleAlertDidFinish];
+	UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: localizedDescription
+																						message: localizedFailureReason
+																				  andCompletion: handleAlertDidFinish];
 
 	[viewController presentViewController:alert animated:YES completion:nil];
 }
-
-- (void)dealloc { }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
@@ -273,9 +237,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 		[alert addAction:[UIAlertAction actionWithTitle: alertButton
 												  style: UIAlertActionStyleDefault
 												handler: nil]];
-		[self presentViewController:alert
-						   animated:YES
-						 completion:nil];
+		[self presentViewController:alert animated:YES completion:nil];
 	}
 
 }
@@ -360,7 +322,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 																				action: self.actionSave];
 	[self.navigationItem setRightBarButtonItem:buttonSave animated:YES];
 	self.navigationItem.rightBarButtonItem.enabled = YES;
-	self.progressView.progress = 0.0000f;
+	self.progressView.progress = 0.0;
 }
 
 @end

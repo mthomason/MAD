@@ -14,13 +14,11 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
 
-const short errUserCancel = 1;
-
 @interface MADKeyChainSaveCredentials()
 
-	@property (nonatomic, weak) UIViewController *viewController;
-	@property (nonatomic, copy) NSString *key;
-	@property (nonatomic, strong, readwrite) MADCredential *credential;
+@property (nonatomic, weak) UIViewController *viewController;
+@property (nonatomic, copy) NSString *key;
+@property (nonatomic, strong, readwrite) MADCredential *credential;
 
 @end
 

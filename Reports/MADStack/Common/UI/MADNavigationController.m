@@ -34,22 +34,6 @@
 
 @dynamic document;
 
-/*
-+ (void)initialize {
-	[super initialize];
-	if (self == [MADNavigationController self]) {
-		@autoreleasepool {
-			NSArray<Class <UIAppearanceContainer>> * classes = [[NSArray alloc] initWithObjects: self, nil];
-			UIToolbar *toolbar = [UIToolbar appearanceWhenContainedInInstancesOfClasses:classes];
-			toolbar.tintColor = [MADColorEverydayApps newColorWhite];
-			toolbar.barTintColor = [MADColorEverydayApps newColorBlue];
-			toolbar.barStyle = UIBarStyleBlack;
-			toolbar.translucent = YES;
-		}
-	}
-}
-*/
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];

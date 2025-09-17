@@ -16,9 +16,6 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/NSAttributedString.h>
 
-NSString * const MADTextCloud = @"Cloud";
-NSString * const MADTextLocal = @"Local";
-
 NSString * const MADIdentifierOpenFileSectionHeader = @"MADIdentifierOpenFileSectionHeader";
 
 static inline CGRect MADFrameActivityView(CGSize, CGSize);
@@ -59,8 +56,8 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
 		
-		self.localizedTextCloud = NSLocalizedString(MADTextCloud, MADTextCloud);
-		self.localizedTextLocal = NSLocalizedString(MADTextLocal, MADTextLocal);
+		self.localizedTextCloud = NSLocalizedString(@"Cloud", @"Cloud");
+		self.localizedTextLocal = NSLocalizedString(@"Local", @"Local");
 		self.fontType = UIFontTextStyleHeadline;
 		self.sectionType = MACloudManagerSectionLocal;
 
@@ -68,7 +65,7 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 		label.textAlignment = NSTextAlignmentLeft;
 		label.font = [UIFont preferredFontForTextStyle:self.fontType];
 		label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-		label.text = NSLocalizedString(MADTextLocal, MADTextLocal);
+		label.text = NSLocalizedString(@"Local", @"Local");
 		[self addSubview: label];
 
 		UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
@@ -81,11 +78,11 @@ static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {
 
 		self.activityIndicatorView = activityView;
 		
-		NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: NSLocalizedString(MADTextLocal, MADTextLocal)
+		NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: NSLocalizedString(@"Local", @"Local")
 																					attributes: @{ NSForegroundColorAttributeName: [MADColorEverydayApps newColorRed] }];
 		self.localizedAttrbiutedTextLocal = attributedStringLocal;
 		
-		NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: NSLocalizedString(MADTextCloud, MADTextCloud)
+		NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: NSLocalizedString(@"Cloud", @"Cloud")
 																					attributes: @{ NSForegroundColorAttributeName: [MADColorEverydayApps newColorRed] }];
 		self.localizedAttrbiutedTextCloud = attributedStringCloud;
 		

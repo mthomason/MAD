@@ -12,11 +12,6 @@
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UILabel.h>
 
-static NSString * const MADTitlePassword = @"Password";
-static NSString * const MADMessagePassword = @"Please enter your password.";
-
-static NSString * const MADButtonContinue = @"Continue";
-
 @interface MADKeyChainGetCredentials() <UITextFieldDelegate>
 
 @property (nonatomic, weak) UIViewController *viewController;
@@ -119,7 +114,7 @@ static NSString * const MADButtonContinue = @"Continue";
 
 - (void)promptForUsernameAndPassword {
 
-	NSString *ok = NSLocalizedString(MADButtonContinue, MADButtonContinue);
+	NSString *ok = NSLocalizedString(@"Continue", @"Continue");
 	NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
 	
 	UIAlertController *alertController = self.alertController;
@@ -170,38 +165,32 @@ static NSString * const MADButtonContinue = @"Continue";
 }
 
 - (void)promptForPasswordGivenUsername:(NSString *)username {
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(MADTitlePassword, MADTitlePassword)
-																			 message: NSLocalizedString(MADMessagePassword, MADMessagePassword)
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Password", @"Password")
+																			 message: NSLocalizedString(@"Please enter your password.", @"Please enter your password.")
 																	  preferredStyle: UIAlertControllerStyleAlert];
-	
-	void (^ __nullable actionContinue)(UIAlertAction *action) = ^(UIAlertAction *action) {
+
+	UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+															style: UIAlertActionStyleDefault
+														  handler: ^(UIAlertAction *action) {
 		MADCredential *c = [[MADCredential alloc] initWithUsername: username
 													   andPassword: ((UITextField *)alertController.textFields.firstObject).text];
 		self.credential = c;
 		self.source = MADCredentialSourcePasswordPrompt;
 		[self finish];
-	};
-	
-	void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
-		self.credential = nil;
-		self.source = MADCredentialSourceNone;
-		[self finish];
-	};
-	
-	void (^ __nullable actionTextFieldWithConfiguration)(UITextField *textField) = ^(UITextField *textField) {
-		textField.delegate = self;
-	};
-
-	UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: NSLocalizedString(MADButtonContinue, MADButtonContinue)
-															style: UIAlertActionStyleDefault
-														  handler: actionContinue];
+	}];
 	
 	UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 																style: UIAlertActionStyleCancel
-															  handler: actionCancel];
+															  handler: ^(UIAlertAction *action) {
+		self.credential = nil;
+		self.source = MADCredentialSourceNone;
+		[self finish];
+	}];
 	[alertController addAction:actionAlertOK];
 	[alertController addAction:actionAlertCancel];
-	[alertController addTextFieldWithConfigurationHandler:actionTextFieldWithConfiguration];
+	[alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+		textField.delegate = self;
+	}];
 	
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		UIViewController *topViewController = self.viewController;

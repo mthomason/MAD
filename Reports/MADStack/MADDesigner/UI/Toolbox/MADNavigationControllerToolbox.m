@@ -7,10 +7,10 @@
 //
 
 #import "MADNavigationControllerToolbox.h"
+#import "MADToolboxViewController.h"
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UIBarCommon.h>
 #import <UIKit/UIViewControllerTransitionCoordinator.h>
-#import "MADToolboxViewController.h"
 
 @interface MADNavigationControllerToolbox () <UINavigationBarDelegate, UIBarPositioningDelegate>
 @end

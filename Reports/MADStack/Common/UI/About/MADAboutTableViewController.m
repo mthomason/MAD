@@ -37,26 +37,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 @end
 
 @implementation MADAboutTableViewController
-/*
-+ (void)initialize {
-    [super initialize];
-    
-    if (self == [MADAboutTableViewController self]) {
-        @autoreleasepool {
-            
-            id classes;
-            UINavigationBar *navigationBarMailAppearance;
-            
-            classes = [[NSArray alloc] initWithObjects:[MFMailComposeViewController class], nil];
-            
-            navigationBarMailAppearance = [UINavigationBar appearanceWhenContainedInInstancesOfClasses: classes];
-            
-            navigationBarMailAppearance.barTintColor = [MADColorEverydayApps newColorAnalogous4];
-            navigationBarMailAppearance.tintColor = [MADColorEverydayApps newColorRed];
-        }
-    }
-}
-*/
+
 + (instancetype)newAboutTableViewController {
 	return [[UIStoryboard storyboardWithName:@"MADAbout"
 									  bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:MADIdentifierAboutViewController];

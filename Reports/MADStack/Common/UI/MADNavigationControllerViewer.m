@@ -10,9 +10,6 @@
 #import "MADViewerController.h"
 #import "MADThemeManager.h"
 
-@interface MADNavigationControllerViewer ()
-@end
-
 @implementation MADNavigationControllerViewer
 
 @synthesize document = _document;
