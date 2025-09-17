@@ -300,7 +300,7 @@ static inline double wobbleRandomFactor(void) {
 #pragma mark Wobble
 
 - (void)startWobble {
-	if (_wobbling || !self.superview) return;
+	if (!self.superview) return;
 	
 	_wobbling = YES;
 	[self.layer removeAllAnimations];
@@ -332,7 +332,7 @@ static inline double wobbleRandomFactor(void) {
 }
 
 - (void)setWobbling:(BOOL)wobbling {
-	if (wobbling == _wobbling) return;
+	//if (wobbling == _wobbling) return;	// Removed short circuit
 	
 	if (wobbling) {
 		[self startWobble];

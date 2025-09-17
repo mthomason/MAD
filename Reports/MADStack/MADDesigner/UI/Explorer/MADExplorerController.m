@@ -538,6 +538,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	};
 	
 	void (^batchCompletion)(BOOL finished) = ^(BOOL finished) {
+		if (self.isEditing) {
+			for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+				cell.wobbling = YES;
+			}
+		}
 		completion(YES, nil);
 	};
 	
@@ -597,6 +602,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		[self.navigationItem.titleView sizeToFit];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
 		[self.collectionView.collectionViewLayout invalidateLayout];
+		if (self.isEditing) {
+			for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+				cell.wobbling = YES;
+			}
+		}
 	}];
 }
 
@@ -1513,15 +1523,18 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 									  UIActivityTypePostToFacebook,
 									  UIActivityTypePostToFlickr,
 									  UIActivityTypePostToTwitter,
-									  UIActivityTypePostToVimeo, nil];
-	UIActivityViewController *activityViewController;
-	activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
-															   applicationActivities: applicationActivities];
+									  UIActivityTypePostToVimeo,
+									  UIActivityTypeAddToReadingList,
+									  UIActivityTypePostToTencentWeibo,
+									  UIActivityTypePostToWeibo,
+									  UIActivityTypeSaveToCameraRoll, nil];
+	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
+																						 applicationActivities: applicationActivities];
 	activityViewController.excludedActivityTypes = excludedActivityTypes;
 	activityViewController.modalPresentationStyle = UIModalPresentationPopover;
 	activityViewController.popoverPresentationController.barButtonItem = sender;
 	activityViewController.popoverPresentationController.delegate = self;
-	
+
 	MADExplorerController * __weak weakself = self;
 	activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
 														  NSArray *returnedItems, NSError *activityError) {
@@ -1794,7 +1807,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	_barButtonItemInformationDocument.enabled = YES;
 	_barButtonItemTrash.enabled = YES;
 	_barButtonItemDuplicate.enabled = YES;
-	_barButtonItemAction.enabled = NO;
+	_barButtonItemAction.enabled = YES;
 }
 
 - (void)enableBarButtonItems {
