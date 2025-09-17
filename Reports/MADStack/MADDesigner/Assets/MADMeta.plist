@@ -3,25 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.2428-DEV</string>
+	<string>8.0.2429-DEV</string>
 	<key>CFBundleVersion</key>
-	<string>4370</string>
+	<string>4371</string>
 	<key>MADApplicationNamePrefix</key>
 	<string>MAD</string>
 	<key>MADApplicationNameSuffix</key>
 	<string>Designer</string>
 	<key>MADBuildDate</key>
-	<string>2025-09-17T05:48:18Z</string>
+	<string>2025-09-17T09:42:46Z</string>
 	<key>MADBuildNumber</key>
-	<string>37212</string>
+	<string>37217</string>
 	<key>MADGitBranch</key>
 	<string>master</string>
 	<key>MADGitCommitCount</key>
-	<string>4370</string>
+	<string>4371</string>
 	<key>MADGitCommitHash</key>
-	<string>ed5d92dcc</string>
+	<string>d64eea4c6</string>
 	<key>MADGitDescribe</key>
-	<string>v8.0-2428-ged5d92dcc-dirty</string>
+	<string>v8.0-2429-gd64eea4c6-dirty</string>
 	<key>MADGitDirty</key>
 	<string>true</string>
 	<key>MADGroupIdentifier</key>

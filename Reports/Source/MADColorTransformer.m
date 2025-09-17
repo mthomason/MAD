@@ -11,6 +11,11 @@
 
 @implementation MADColorTransformer
 
++ (void)load {
+	MADColorTransformer *t = [MADColorTransformer new];
+	[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADColorTransformer class])];
+}
+
 + (Class)transformedValueClass {
 	return [UIColor class];
 }

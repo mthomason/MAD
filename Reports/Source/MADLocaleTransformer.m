@@ -12,6 +12,11 @@
 
 @implementation MADLocaleTransformer
 
++ (void)load {
+	MADLocaleTransformer *t = [MADLocaleTransformer new];
+	[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADLocaleTransformer class])];
+}
+
 + (Class)transformedValueClass {
 	return [NSLocale class];
 }

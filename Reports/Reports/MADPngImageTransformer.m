@@ -11,6 +11,11 @@
 
 @implementation MADPngImageTransformer
 
++ (void)load {
+	MADPngImageTransformer *t = [MADPngImageTransformer new];
+	[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADPngImageTransformer class])];
+}
+
 + (Class)transformedValueClass {
 	return [NSData class];
 }
