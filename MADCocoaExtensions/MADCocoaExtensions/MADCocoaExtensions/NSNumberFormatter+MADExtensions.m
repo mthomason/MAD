@@ -6,7 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import "MADNumberFormatter.h"
+#import "NSNumberFormatter+MADExtensions.h"
 
 @implementation NSNumberFormatter (MADExtensions)
 

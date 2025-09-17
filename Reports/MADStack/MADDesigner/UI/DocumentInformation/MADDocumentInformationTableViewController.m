@@ -12,7 +12,7 @@
 #import "MADVibrantTableViewCell.h"
 
 #import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/NSNumberFormatter+MADExtensions.h>
 #import <MADFileManager/MADMetaData.h>
 
 #import <UIKit/UILabel.h>

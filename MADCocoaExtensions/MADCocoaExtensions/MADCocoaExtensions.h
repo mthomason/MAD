@@ -12,7 +12,7 @@ FOUNDATION_EXPORT double MADCocoaExtensionsVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
-#import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/NSNumberFormatter+MADExtensions.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>

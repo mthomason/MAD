@@ -26,8 +26,8 @@
 		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; };
 		4C5205AA1BA7E2A2000E6A59 /* MADColorSocial.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205AB1BA7E2A2000E6A59 /* MADColorSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */; };
-		4C5205AC1BA7E2A2000E6A59 /* MADNumberFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205811BA7E2A2000E6A59 /* MADNumberFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205821BA7E2A2000E6A59 /* MADNumberFormatter.m */; };
+		4C5205AC1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */; };
 		4C5205B21BA7E2A2000E6A59 /* MADMailComposeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205871BA7E2A2000E6A59 /* MADMailComposeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205B31BA7E2A2000E6A59 /* MADMailComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */; };
 		4C5205B41BA7E2A2000E6A59 /* MADAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205891BA7E2A2000E6A59 /* MADAlertController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,8 +91,8 @@
 		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MacroVendColor.h; path = MADCocoaExtensions/MacroVendColor.h; sourceTree = "<group>"; };
 		4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColorSocial.h; path = MADCocoaExtensions/MADColorSocial.h; sourceTree = "<group>"; };
 		4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColorSocial.m; path = MADCocoaExtensions/MADColorSocial.m; sourceTree = "<group>"; };
-		4C5205811BA7E2A2000E6A59 /* MADNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADNumberFormatter.h; path = MADCocoaExtensions/MADNumberFormatter.h; sourceTree = "<group>"; };
-		4C5205821BA7E2A2000E6A59 /* MADNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADNumberFormatter.m; path = MADCocoaExtensions/MADNumberFormatter.m; sourceTree = "<group>"; };
+		4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+MADExtensions.h"; path = "MADCocoaExtensions/NSNumberFormatter+MADExtensions.h"; sourceTree = "<group>"; };
+		4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumberFormatter+MADExtensions.m"; path = "MADCocoaExtensions/NSNumberFormatter+MADExtensions.m"; sourceTree = "<group>"; };
 		4C5205871BA7E2A2000E6A59 /* MADMailComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMailComposeViewController.h; path = MADCocoaExtensions/MADMailComposeViewController.h; sourceTree = "<group>"; };
 		4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMailComposeViewController.m; path = MADCocoaExtensions/MADMailComposeViewController.m; sourceTree = "<group>"; };
 		4C5205891BA7E2A2000E6A59 /* MADAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlertController.h; path = MADCocoaExtensions/MADAlertController.h; sourceTree = "<group>"; };
@@ -201,8 +201,8 @@
 				4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */,
 				4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */,
 				4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */,
-				4C5205811BA7E2A2000E6A59 /* MADNumberFormatter.h */,
-				4C5205821BA7E2A2000E6A59 /* MADNumberFormatter.m */,
+				4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */,
+				4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */,
 				4C5205871BA7E2A2000E6A59 /* MADMailComposeViewController.h */,
 				4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */,
 				4C5205891BA7E2A2000E6A59 /* MADAlertController.h */,
@@ -263,7 +263,7 @@
 			files = (
 				4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */,
 				4C5205CC1BA7E2A2000E6A59 /* MTMath.h in Headers */,
-				4C5205AC1BA7E2A2000E6A59 /* MADNumberFormatter.h in Headers */,
+				4C5205AC1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h in Headers */,
 				4C5205C71BA7E2A2000E6A59 /* CGGeometry+Extras.h in Headers */,
 				4C3622C11CF350E9002B8649 /* MADMathAlgebra.h in Headers */,
 				4C5205C91BA7E2A2000E6A59 /* UIColor+EverydayApps.h in Headers */,
@@ -401,7 +401,7 @@
 				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
 				4C5767471E1CB68500611F37 /* MADTextField.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
-				4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */,
+				4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m in Sources */,
 				4CD807C92E145D0800BE420E /* madlog.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,
 				4C1CC25C24C624EE0027A454 /* MADViewHelpers.m in Sources */,

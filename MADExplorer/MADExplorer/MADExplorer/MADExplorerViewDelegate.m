@@ -19,7 +19,7 @@
 #import "madlog.h"
 
 #import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/NSNumberFormatter+MADExtensions.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <MADFileManager/MADMetaData.h>

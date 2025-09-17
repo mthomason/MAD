@@ -45,7 +45,7 @@
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
-#import <MADCocoaExtensions/MADNumberFormatter.h>
+#import <MADCocoaExtensions/NSNumberFormatter+MADExtensions.h>
 #import <MADCocoaExtensions/MADMailComposeViewController.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
