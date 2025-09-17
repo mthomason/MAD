@@ -13,8 +13,6 @@
 		4C17AE281E427ECB0056A0EA /* MADTextStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE271E427ECB0056A0EA /* MADTextStyle.m */; };
 		4C1CC25B24C624EE0027A454 /* MADViewHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1CC25924C624EE0027A454 /* MADViewHelpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1CC25C24C624EE0027A454 /* MADViewHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CC25A24C624EE0027A454 /* MADViewHelpers.m */; };
-		4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */; };
 		4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2480B81C8BFA340058E6B4 /* MADColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3622B51CF343D9002B8649 /* MADCompassDirection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3622B41CF343D9002B8649 /* MADCompassDirection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3622B71CF34A8B002B8649 /* MADResizeAspect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3622B61CF34A8B002B8649 /* MADResizeAspect.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -76,8 +74,6 @@
 		4C17AE271E427ECB0056A0EA /* MADTextStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTextStyle.m; path = MADCocoaExtensions/MADTextStyle.m; sourceTree = "<group>"; };
 		4C1CC25924C624EE0027A454 /* MADViewHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADViewHelpers.h; path = MADCocoaExtensions/MADViewHelpers.h; sourceTree = "<group>"; };
 		4C1CC25A24C624EE0027A454 /* MADViewHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADViewHelpers.m; path = MADCocoaExtensions/MADViewHelpers.m; sourceTree = "<group>"; };
-		4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabel.h; path = MADCocoaExtensions/MADLabel.h; sourceTree = "<group>"; };
-		4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabel.m; path = MADCocoaExtensions/MADLabel.m; sourceTree = "<group>"; };
 		4C2480B81C8BFA340058E6B4 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColor.h; path = MADCocoaExtensions/MADColor.h; sourceTree = "<group>"; };
 		4C2480B91C8BFA340058E6B4 /* MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColor.m; path = MADCocoaExtensions/MADColor.m; sourceTree = "<group>"; };
 		4C3622B41CF343D9002B8649 /* MADCompassDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCompassDirection.h; path = MADCocoaExtensions/MADCompassDirection.h; sourceTree = "<group>"; };
@@ -189,15 +185,18 @@
 			children = (
 				4CD807C62E145CCD00BE420E /* madlog.h */,
 				4CD807C82E145D0800BE420E /* madlog.m */,
-				4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */,
-				4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */,
 				4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */,
-				4C5767461E1CB68500611F37 /* MADTextField.h */,
-				4C5767451E1CB68500611F37 /* MADTextField.m */,
 				4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */,
 				4C3622B41CF343D9002B8649 /* MADCompassDirection.h */,
-				4C2480A21C8B2D7F0058E6B4 /* MADLabel.h */,
-				4C2480A31C8B2D7F0058E6B4 /* MADLabel.m */,
+				4C3622B61CF34A8B002B8649 /* MADResizeAspect.h */,
+				4C3622B81CF34AB8002B8649 /* MADAspectRatio.h */,
+				4C3622BA1CF34B9C002B8649 /* MAD2dDirection.h */,
+				4C3622C01CF350E9002B8649 /* MADMathAlgebra.h */,
+				4C3622C21CF351AB002B8649 /* MADLineSegment.h */,
+				4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */,
+				4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */,
+				4C5767461E1CB68500611F37 /* MADTextField.h */,
+				4C5767451E1CB68500611F37 /* MADTextField.m */,
 				4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */,
 				4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */,
 				4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */,
@@ -218,11 +217,6 @@
 				4C5205A21BA7E2A2000E6A59 /* MTMath.m */,
 				4C2480B81C8BFA340058E6B4 /* MADColor.h */,
 				4C2480B91C8BFA340058E6B4 /* MADColor.m */,
-				4C3622B61CF34A8B002B8649 /* MADResizeAspect.h */,
-				4C3622B81CF34AB8002B8649 /* MADAspectRatio.h */,
-				4C3622BA1CF34B9C002B8649 /* MAD2dDirection.h */,
-				4C3622C01CF350E9002B8649 /* MADMathAlgebra.h */,
-				4C3622C21CF351AB002B8649 /* MADLineSegment.h */,
 				4C6F35101E40C1C100F4744F /* MADBorderStyle.h */,
 				4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */,
 				4C6F35121E40D3AA00F4744F /* MADMargin.h */,
@@ -277,7 +271,6 @@
 				4C6F35111E40C1C100F4744F /* MADBorderStyle.h in Headers */,
 				4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */,
 				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
-				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
 				4C3622B91CF34AB8002B8649 /* MADAspectRatio.h in Headers */,
 				4C3622B51CF343D9002B8649 /* MADCompassDirection.h in Headers */,
 				4C6F35151E40D6D400F4744F /* MADPadding.h in Headers */,
@@ -408,7 +401,6 @@
 				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
 				4C5767471E1CB68500611F37 /* MADTextField.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
-				4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */,
 				4CD807C92E145D0800BE420E /* madlog.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,

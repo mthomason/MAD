@@ -13,7 +13,7 @@
 
 @interface MADNumberFormatter : NSNumberFormatter
 
-	+ (instancetype)newNumberFormatterTwoDecimalPlaces;
++ (instancetype)newNumberFormatterTwoDecimalPlaces;
 
 @end
 

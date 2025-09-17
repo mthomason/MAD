@@ -17,8 +17,8 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 
 @interface MADTextField : NSObject
 
-	@property (readonly, nonatomic, copy) MADTextFieldConfigurationHandler handleConfigurePassword;
-	@property (readonly, nonatomic, copy) MADTextFieldConfigurationHandler handleConfigureUsername;
+@property (readonly, nonatomic, copy) MADTextFieldConfigurationHandler handleConfigurePassword;
+@property (readonly, nonatomic, copy) MADTextFieldConfigurationHandler handleConfigureUsername;
 
 @end
 

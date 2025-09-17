@@ -18,7 +18,6 @@
 #import "MADExplorerCellTitle.h"
 #import "madlog.h"
 
-#import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>

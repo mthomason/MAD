@@ -14,7 +14,6 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/MADNumberFormatter.h>
 #import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/MADLabel.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>

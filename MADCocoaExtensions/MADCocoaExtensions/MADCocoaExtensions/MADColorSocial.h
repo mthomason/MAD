@@ -13,9 +13,7 @@
 
 @interface MADColorSocial : MADColor
 
-	+ (instancetype)newBlueTwitter;
-	+ (instancetype)newBlueLinkedIn;
-	+ (instancetype)newBlueFacebook;
++ (instancetype)newBlueTwitter;
 
 @end
 
