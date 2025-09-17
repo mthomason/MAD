@@ -470,7 +470,7 @@
 
 - (NSNumberFormatter *)subtitleNumberFormatter {
 	if (!_subtitleNumberFormatter) {
-		_subtitleNumberFormatter = [MADNumberFormatter newNumberFormatterTwoDecimalPlaces];
+		_subtitleNumberFormatter = [NSNumberFormatter ma_twoDecimalPlacesFormatter];
 	}
 	return _subtitleNumberFormatter;
 }

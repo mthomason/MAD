@@ -11,9 +11,9 @@
 
 #import <Foundation/NSNumberFormatter.h>
 
-@interface MADNumberFormatter : NSNumberFormatter
+@interface NSNumberFormatter (MADExtensions)
 
-+ (instancetype)newNumberFormatterTwoDecimalPlaces;
++ (instancetype)ma_twoDecimalPlacesFormatter;
 
 @end
 

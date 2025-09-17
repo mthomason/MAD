@@ -42,8 +42,7 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		NSNumberFormatter *numberFormatter = [MADNumberFormatter newNumberFormatterTwoDecimalPlaces];
-		self.numberFormatter = numberFormatter;
+		self.numberFormatter = [NSNumberFormatter ma_twoDecimalPlacesFormatter];
 	}
 	return self;
 }

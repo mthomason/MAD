@@ -8,17 +8,15 @@
 
 #import "MADNumberFormatter.h"
 
-@implementation MADNumberFormatter
+@implementation NSNumberFormatter (MADExtensions)
 
-+ (instancetype)newNumberFormatterTwoDecimalPlaces {
-	id numberFormatter = [[self alloc] init];
-
-	[numberFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
-	[numberFormatter setMaximumFractionDigits: 2];
-	[numberFormatter setDecimalSeparator: @"."];
-	[numberFormatter setGroupingSeparator: @","];
-	
-	return numberFormatter;
++ (instancetype)ma_twoDecimalPlacesFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.maximumFractionDigits = 2;
+	formatter.decimalSeparator = @".";
+	formatter.groupingSeparator = @",";
+	return formatter;
 }
 
 @end
