@@ -49,8 +49,6 @@
 		4C5767481E1CB68500611F37 /* MADTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5767461E1CB68500611F37 /* MADTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09E21F5D0DFF00EDA039 /* MADLabelTitle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09E31F5D0DFF00EDA039 /* MADLabelTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */; };
-		4C6C09E61F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09DE1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C6C09E71F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C09DF1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m */; };
 		4C6F35111E40C1C100F4744F /* MADBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35101E40C1C100F4744F /* MADBorderStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F35131E40D3E800F4744F /* MADMargin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35121E40D3AA00F4744F /* MADMargin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6F35151E40D6D400F4744F /* MADPadding.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35141E40D6D400F4744F /* MADPadding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -119,8 +117,6 @@
 		4C5767461E1CB68500611F37 /* MADTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextField.h; path = MADCocoaExtensions/MADTextField.h; sourceTree = "<group>"; };
 		4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabelTitle.h; path = MADCocoaExtensions/MADLabelTitle.h; sourceTree = "<group>"; };
 		4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabelTitle.m; path = MADCocoaExtensions/MADLabelTitle.m; sourceTree = "<group>"; };
-		4C6C09DE1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSParagraphStyle+CommonStyles.h"; path = "MADCocoaExtensions/NSParagraphStyle+CommonStyles.h"; sourceTree = "<group>"; };
-		4C6C09DF1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSParagraphStyle+CommonStyles.m"; path = "MADCocoaExtensions/NSParagraphStyle+CommonStyles.m"; sourceTree = "<group>"; };
 		4C6F35101E40C1C100F4744F /* MADBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBorderStyle.h; path = MADCocoaExtensions/MADBorderStyle.h; sourceTree = "<group>"; };
 		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMargin.h; path = MADCocoaExtensions/MADMargin.h; sourceTree = "<group>"; };
 		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPadding.h; path = MADCocoaExtensions/MADPadding.h; sourceTree = "<group>"; };
@@ -195,8 +191,6 @@
 				4CD807C82E145D0800BE420E /* madlog.m */,
 				4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */,
 				4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */,
-				4C6C09DE1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h */,
-				4C6C09DF1F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m */,
 				4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */,
 				4C5767461E1CB68500611F37 /* MADTextField.h */,
 				4C5767451E1CB68500611F37 /* MADTextField.m */,
@@ -283,7 +277,6 @@
 				4C6F35111E40C1C100F4744F /* MADBorderStyle.h in Headers */,
 				4C2480BA1C8BFA340058E6B4 /* MADColor.h in Headers */,
 				4C5205C11BA7E2A2000E6A59 /* UIApplication+Helpers.h in Headers */,
-				4C6C09E61F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.h in Headers */,
 				4C2480A81C8B2D7F0058E6B4 /* MADLabel.h in Headers */,
 				4C3622B91CF34AB8002B8649 /* MADAspectRatio.h in Headers */,
 				4C3622B51CF343D9002B8649 /* MADCompassDirection.h in Headers */,
@@ -416,7 +409,6 @@
 				4C5767471E1CB68500611F37 /* MADTextField.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
 				4C2480A91C8B2D7F0058E6B4 /* MADLabel.m in Sources */,
-				4C6C09E71F5D0DFF00EDA039 /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* MADNumberFormatter.m in Sources */,
 				4CD807C92E145D0800BE420E /* madlog.m in Sources */,
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,

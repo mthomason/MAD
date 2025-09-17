@@ -45,7 +45,6 @@
 #import <MADAPI/MADQuery.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
-#import <MADCocoaExtensions/NSParagraphStyle+CommonStyles.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
