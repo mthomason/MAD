@@ -18,9 +18,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSFileManager.h>
 
-static NSString * const Features = @"MADFeatures";
-static NSString * const Plist = @"plist";
-
 @interface MADFeatures ()
 
 @property (nonatomic, strong, readwrite) NSArray <MADFeature *> *features;
@@ -38,7 +35,7 @@ static NSString * const Plist = @"plist";
 
 - (BOOL)loadFeaturesFromPlist {
 	// Get the path to the plist file in the main bundle
-	NSString *path = [[NSBundle mainBundle] pathForResource:Features ofType:Plist];
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"MADFeatures" ofType:@"plist"];
 	// Validate if the plist file exists
 	if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
 		MADLogError("Error: Plist file not found at path: %@", path);

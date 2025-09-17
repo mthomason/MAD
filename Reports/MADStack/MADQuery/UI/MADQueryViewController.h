@@ -15,7 +15,6 @@
 #import <UIKit/UITableViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
 
-extern NSString * const MADImageBarButtonItemDatabase;
 extern NSString * const MADImageBarButtonItemDatabase8;
 
 @interface MADQueryViewController : UITableViewController <MADViewControllerDocumentProtocol, MADTabBarImageProtocol, MADQueryNavigationProtocol, UIViewControllerAnimatedTransitioning>

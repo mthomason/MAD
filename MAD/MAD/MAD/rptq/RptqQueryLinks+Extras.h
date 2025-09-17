@@ -10,24 +10,8 @@
 #define Reports_RptqQueryLinks_Extras_h
 
 #import <MAD/RptqQueryLinks.h>
-#import <MADDataStructures/MTProtocolLog.h>
 #import <MAD/MADQueryLinkType.h>
-
-extern NSString * const MTLinkTypeNameInnerJoin;
-extern NSString * const MTLinkTypeNameEquiJoin;
-extern NSString * const MTLinkTypeNameNaturalJoin;
-extern NSString * const MTLinkTypeNameCrossJoin;
-extern NSString * const MTLinkTypeNameLeftOuterJoin;
-extern NSString * const MTLinkTypeNameRightOuterJoin;
-extern NSString * const MTLinkTypeNameFullOuterJoin;
-
-extern NSString * const MTLinkSqlInnerJoin;
-extern NSString * const MTLinkSqlEquiJoin;
-extern NSString * const MTLinkSqlNaturalJoin;
-extern NSString * const MTLinkSqlCrossJoin;
-extern NSString * const MTLinkSqlLeftOuterJoin;
-extern NSString * const MTLinkSqlRightOuterJoin;
-extern NSString * const MTLinkSqlFullOuterJoin;
+#import <MADDataStructures/MTProtocolLog.h>
 
 @class RptqDocument, RptqQueryTable;
 

@@ -26,10 +26,6 @@
 #import <UIKit/UIImage.h>
 #import <UIKit/UIGraphics.h>
 
-NSString * const MADIdentifierStoryboardLayout      = @"MADIdentifierStoryboardLayout";
-NSString * const MADIdentifierStoryboardFormat      = @"MADIdentifierStoryboardFormat";
-NSString * const MADIdentifierStoryboardStyle       = @"MADIdentifierStoryboardStyle";
-
 const CGFloat MADNavigationBarSizeHeightNormal = 44.0;
 const CGFloat MADNavigationBarSizeHeightConstrained = 32.0;
 
@@ -83,8 +79,8 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 
 	if (self = [super initWithCoder:aDecoder]) {
 		UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADDesignerToolbox" bundle: [NSBundle mainBundle]];
-		self.layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
-		self.format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
+		self.layout = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardLayout"];
+		self.format = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardFormat"];
 
 		UINavigationController *navigationController = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeFontPicker];
 		[MADThemeManager applyAppearanceToNavigationController:navigationController traitCollection:self.traitCollection];

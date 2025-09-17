@@ -11,42 +11,23 @@
 #endif
 
 #import "MTDocumentObjectNewAggregateViewController.h"
-#import <CoreData/NSManagedObjectID.h>
-#import <UIKit/UIStoryboardSegue.h>
-
-#import <UIKit/UINavigationController.h>
-#import <UIKit/UINavigationBar.h>
-
-#import <UIKit/UILabel.h>
+#import "MADAggregateFunctionsViewControllerDelegate.h"
+#import "MADGroupByViewControllerDelegate.h"
+#import "MADQueryChooseFieldProtocol.h"
+#import "MTGroupByViewController.h"
+#import "MADQueryChooseFieldController.h"
+#import "MTAggregateFunctionsViewController.h"
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
-
 #import <MADCocoaExtensions/MADLabelTitle.h>
 
-#import "MADAggregateFunctionsViewControllerDelegate.h"
-#import "MADGroupByViewControllerDelegate.h"
-
-#import "MADQueryChooseFieldProtocol.h"
-
-#import "MTGroupByViewController.h"
-#import "MADQueryChooseFieldController.h"
-
-#import "MTAggregateFunctionsViewController.h"
-
-NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";
-NSString * const MTSegueAggregateFunctionFirst      = @"MTSegueAggregateFunctionFirst";
-NSString * const MTSegueAggregateFunctionLast       = @"MTSegueAggregateFunctionLast";
-NSString * const MTSegueAggregateFunctionMaximum    = @"MTSegueAggregateFunctionMaximum";
-NSString * const MTSegueAggregateFunctionMean       = @"MTSegueAggregateFunctionMean";
-NSString * const MTSegueAggregateFunctionMinimum    = @"MTSegueAggregateFunctionMinimum";
-NSString * const MTSegueAggregateFunctionSum        = @"MTSegueAggregateFunctionSum";
-NSString * const MTSegueAggregateGroupTypeSave      = @"MTSegueAggregateGroupTypeSave";
-NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSave";
-NSString * const MADSegueAggregateFunctionField     = @"MADSegueAggregateFunctionField";
-NSString * const MTIdentifierSegueDocumentObjectEditAggregate = @"MTIdentifierSegueDocumentObjectEditAggregate";
-NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
+#import <UIKit/UIStoryboardSegue.h>
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UINavigationBar.h>
+#import <UIKit/UILabel.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MTDocumentObjectNewAggregateViewController () <MADAggregateFunctionsViewControllerDelegate, MADGroupByViewControllerDelegate, MADQueryChooseFieldProtocol>
 
@@ -120,35 +101,35 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 	
 	MTAggregateFunctionType aggregateFunctionType = MTAggregateFunctionTypeNotSet;
 	
-	if ([action.identifier isEqualToString:MTSegueAggregateFunctionCount]) {
+	if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionCount"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeCount;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFunctionFirst]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionFirst"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeFirst;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFunctionLast]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionLast"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeLast;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFunctionMaximum]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionMaximum"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeMax;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFunctionMean]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionMean"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeMean;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFunctionMinimum]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionMinimum"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeMin;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFunctionSum]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFunctionSum"]) {
 		
 		aggregateFunctionType = MTAggregateFunctionTypeSum;
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateGroupTypeSave]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateGroupTypeSave"]) {
 		
 		MADGroupByViewController *groupByViewController = action.sourceViewController;
 		self.aggregateGroupByType = groupByViewController.aggregateGroupType;
@@ -184,7 +165,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 		}
 		
 		
-	} else if ([action.identifier isEqualToString:MTSegueAggregateFieldSave]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFieldSave"]) {
 		
 		MADQueryChooseFieldController *dynamicFieldController = action.sourceViewController;
 		self.fieldObjectID = dynamicFieldController.queryFieldID.copy;

@@ -306,7 +306,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	[self.collectionView registerClass: [MADExplorerSectionHeaderView class]
 			forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-				   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
+				   withReuseIdentifier: @"MADIdentifierOpenFileSectionHeader"];
 
 	NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
 	[toolbarButtons removeObject:_barButtonItemLicensing];	// Removing the store button.

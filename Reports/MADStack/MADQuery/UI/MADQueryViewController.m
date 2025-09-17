@@ -77,14 +77,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIImage.h>
 
-NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
-
-static NSString * const NSFetchedResultsCacheName                   = @"NSFetchedResultsCacheName";
-static NSString * const NSFetchedResultsCacheTables                 = @"NSFetchedResultsCacheTables";
-static NSString * const NSFetchedResultsCacheLinks                  = @"NSFetchedResultsCacheLinks";
-static NSString * const NSFetchedResultsCacheGroups                 = @"NSFetchedResultsCacheGroups";
-static NSString * const NSFetchedResultsCachePredicates             = @"NSFetchedResultsCachePredicates";
 
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
@@ -188,11 +181,11 @@ BOOL storeEnabled(void) {
 }
 
 + (void)deleteCoreDataCache {
-	[NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-	[NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-	[NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-	[NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-	[NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+	[NSFetchedResultsController deleteCacheWithName: @"NSFetchedResultsCacheName"];
+	[NSFetchedResultsController deleteCacheWithName: @"NSFetchedResultsCacheTables"];
+	[NSFetchedResultsController deleteCacheWithName: @"NSFetchedResultsCacheLinks"];
+	[NSFetchedResultsController deleteCacheWithName: @"NSFetchedResultsCacheGroups"];
+	[NSFetchedResultsController deleteCacheWithName: @"NSFetchedResultsCachePredicates"];
 }
 
 #pragma mark -

@@ -11,35 +11,19 @@
 #endif
 
 #import "RptqQueryLinks+Extras.h"
-#import <CoreData/CoreData.h>
 
 #import "RptqDocument.h"
-#import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
-#import "RptqQueryTable+Extras.h"
-
-#import "MADSQLJoinType.h"
 #import "RptqDataHelper.h"
+#import "RptqDocument+Extras.h"
+#import "RptqQueryTable+Extras.h"
+#import "MADSQLJoinType.h"
 
-NSString * const MTLinkTypeNameInnerJoin        = @"Inner-Join";
-NSString * const MTLinkTypeNameEquiJoin         = @"Equi-Join";
-NSString * const MTLinkTypeNameNaturalJoin      = @"Natural Join";
-NSString * const MTLinkTypeNameCrossJoin        = @"Cross Join";
-NSString * const MTLinkTypeNameLeftOuterJoin    = @"Left Outer Join";
-NSString * const MTLinkTypeNameRightOuterJoin   = @"Right Outer Join";
-NSString * const MTLinkTypeNameFullOuterJoin    = @"Full Outer Join";
-
-NSString * const MTLinkSqlInnerJoin             = @"INNER JOIN";
-NSString * const MTLinkSqlEquiJoin              = @"JOIN";
-NSString * const MTLinkSqlNaturalJoin           = @"NATURAL JOIN";
-NSString * const MTLinkSqlCrossJoin             = @"CROSS JOIN";
-NSString * const MTLinkSqlLeftOuterJoin         = @"LEFT OUTER JOIN";
-NSString * const MTLinkSqlRightOuterJoin        = @"RIGHT OUTER JOIN";
-NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
+#import <CoreData/CoreData.h>
 
 @implementation RptqQueryLinks (Extras)
 
@@ -71,93 +55,39 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 + (NSString *)ReuseIdForLinkType:(MADLinkType)type {
 	switch (type) {
-		case MADLinkTypeInnerJoin:
-			return MNSJoinTypeInnerJoin;
-			break;
-		case MADLinkTypeEquiJoin:
-			return MNSJoinTypeEquiJoin;
-			break;
-		case MADLinkTypeNaturalJoin:
-			return MNSJoinTypeNaturalJoin;
-			break;
-		case MADLinkTypeCrossJoin:
-			return MNSJoinTypeCrossJoin;
-			break;
-		case MADLinkTypeLeftOuterJoin:
-			return MNSJoinTypeLeftOuterJoin;
-			break;
-		case MADLinkTypeRightOuterJoin:
-			return MNSJoinTypeRightOuterJoin;
-			break;
-		case MADLinkTypeFullOuterJoin:
-			return MNSJoinTypeFullOuterJoin;
-			break;
-		default:
-			return MNSJoinTypeLeftOuterJoin;
-			break;
+		case MADLinkTypeInnerJoin: return MNSJoinTypeInnerJoin;
+		case MADLinkTypeEquiJoin: return MNSJoinTypeEquiJoin;
+		case MADLinkTypeNaturalJoin: return MNSJoinTypeNaturalJoin;
+		case MADLinkTypeCrossJoin: return MNSJoinTypeCrossJoin;
+		case MADLinkTypeLeftOuterJoin: return MNSJoinTypeLeftOuterJoin;
+		case MADLinkTypeRightOuterJoin: return MNSJoinTypeRightOuterJoin;
+		case MADLinkTypeFullOuterJoin: return MNSJoinTypeFullOuterJoin;
+		default: return MNSJoinTypeLeftOuterJoin;
 	}
 }
 
 + (NSString *)NamesForLinkType:(MADLinkType)type {
-	NSString *reuseId;
 	switch (type) {
-		case MADLinkTypeInnerJoin:
-			reuseId = MTLinkTypeNameInnerJoin;
-			break;
-		case MADLinkTypeEquiJoin:
-			reuseId = MTLinkTypeNameEquiJoin;
-			break;
-		case MADLinkTypeNaturalJoin:
-			reuseId = MTLinkTypeNameNaturalJoin;
-			break;
-		case MADLinkTypeCrossJoin:
-			reuseId = MTLinkTypeNameCrossJoin;
-			break;
-		case MADLinkTypeLeftOuterJoin:
-			reuseId = MTLinkTypeNameLeftOuterJoin;
-			break;
-		case MADLinkTypeRightOuterJoin:
-			reuseId = MTLinkTypeNameRightOuterJoin;
-			break;
-		case MADLinkTypeFullOuterJoin:
-			reuseId = MTLinkTypeNameFullOuterJoin;
-			break;
-		default:
-			reuseId = MTLinkTypeNameLeftOuterJoin;
-			break;
+		case MADLinkTypeInnerJoin: return NSLocalizedString(@"Inner-Join", @"Inner-Join");
+		case MADLinkTypeEquiJoin: return NSLocalizedString(@"Equi-Join", @"Equi-Join");
+		case MADLinkTypeNaturalJoin: return NSLocalizedString(@"Natural Join", @"Natural Join");
+		case MADLinkTypeCrossJoin: return NSLocalizedString(@"Cross Join", @"Cross Join");
+		case MADLinkTypeRightOuterJoin: return NSLocalizedString(@"Right Outer Join", @"Right Outer Join");
+		case MADLinkTypeFullOuterJoin: return NSLocalizedString(@"Full Outer Join", @"Full Outer Join");
+		case MADLinkTypeLeftOuterJoin: default: return NSLocalizedString(@"Left Outer Join", @"Left Outer Join");
 	}
-	return NSLocalizedString(reuseId, reuseId);
 }
 
 + (NSString *)SqlForLinkType:(MADLinkType)type {
-	NSString *sql;
 	switch (type) {
-		case MADLinkTypeInnerJoin:
-			sql = MTLinkSqlInnerJoin;
-			break;
-		case MADLinkTypeEquiJoin:
-			sql = MTLinkSqlEquiJoin;
-			break;
-		case MADLinkTypeNaturalJoin:
-			sql = MTLinkSqlNaturalJoin;
-			break;
-		case MADLinkTypeCrossJoin:
-			sql = MTLinkSqlCrossJoin;
-			break;
-		case MADLinkTypeLeftOuterJoin:
-			sql = MTLinkSqlLeftOuterJoin;
-			break;
-		case MADLinkTypeRightOuterJoin:
-			sql = MTLinkSqlRightOuterJoin;
-			break;
-		case MADLinkTypeFullOuterJoin:
-			sql = MTLinkSqlFullOuterJoin;
-			break;
-		default:
-			sql = MTLinkSqlLeftOuterJoin;
-			break;
+		case MADLinkTypeInnerJoin: return @"INNER JOIN";
+		case MADLinkTypeEquiJoin: return @"JOIN";
+		case MADLinkTypeNaturalJoin: return @"NATURAL JOIN";
+		case MADLinkTypeCrossJoin: return @"CROSS JOIN";
+		case MADLinkTypeRightOuterJoin: return @"RIGHT OUTER JOIN";
+		case MADLinkTypeFullOuterJoin: return @"FULL OUTER JOIN";
+		case MADLinkTypeLeftOuterJoin: default: return @"LEFT OUTER JOIN";
 	}
-	return sql;
 }
 
 + (NSString *)newLocalizedNameForLinkType:(MADLinkType)type {
@@ -194,7 +124,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 - (NSString *)toStringHumanReadable {
 	NSString *name = self.hasLeftField.databaseSchemaField.name;
 	NSString *nameRight = self.hasRightField.databaseSchemaField.name;
-	NSMutableString *result = name.mutableCopy;
+	NSMutableString *result = [name mutableCopy];
 	NSString *linkDescription = [self linkDescription];
 	[result appendFormat:@" %@ ", linkDescription];
 	[result appendString:nameRight];

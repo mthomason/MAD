@@ -16,8 +16,6 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/NSAttributedString.h>
 
-NSString * const MADIdentifierOpenFileSectionHeader = @"MADIdentifierOpenFileSectionHeader";
-
 static inline CGRect MADFrameActivityView(CGSize, CGSize);
 
 static inline CGRect MADFrameActivityView(CGSize view, CGSize activityView) {

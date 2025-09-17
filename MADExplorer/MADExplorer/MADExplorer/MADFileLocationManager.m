@@ -33,17 +33,13 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	if (!handlerLocal && !handlerCloud) {
 		return nil;
 	}
-	NSString *title = NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option");
-	NSString *message = NSLocalizedString(@"Do you want to store documents in iCloud or only on this device?", @"Do you want to store documents in iCloud or only on this device?");
-	NSString *localOnlyActionTitle = NSLocalizedString(@"Local Only", @"Local Only");
-	NSString *cloudActionTitle = NSLocalizedString(@"iCloud", @"iCloud");
 
-	UIAlertController *storageController = [UIAlertController alertControllerWithTitle:title
-																			   message:message
+	UIAlertController *storageController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose Storage Option", @"Choose Storage Option")
+																			   message:NSLocalizedString(@"Do you want to store documents in iCloud or only on this device?", @"Do you want to store documents in iCloud or only on this device?")
 																		preferredStyle:UIAlertControllerStyleAlert];
 	if (handlerLocal) {
 		
-		UIAlertAction *localOption = [UIAlertAction actionWithTitle:localOnlyActionTitle
+		UIAlertAction *localOption = [UIAlertAction actionWithTitle:NSLocalizedString(@"Local Only", @"Local Only")
 															  style:UIAlertActionStyleDefault
 															handler:^(UIAlertAction * _Nonnull action) {
 			if (handlerLocal) handlerLocal();
@@ -52,7 +48,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	}
 	
 	if (handlerCloud) {
-		UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:cloudActionTitle
+		UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:NSLocalizedString(@"iCloud", @"iCloud")
 															  style:UIAlertActionStyleDefault
 															handler:^(UIAlertAction * _Nonnull action) {
 			if (handlerCloud) handlerCloud();
