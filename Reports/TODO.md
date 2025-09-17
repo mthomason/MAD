@@ -9,6 +9,9 @@
 * ~~Test TDS~~
 * ~~See if something can be done about slow load of SQL screen~~
 * ~~Infoscreen in dark mode is unreadable... can't be dismissed~~
+* Recreate sample reports (in new format)
+* Fix minor UI issues
+* AI localizations
 * That's it...
 
 Test passwords are (it's a never on test server):
