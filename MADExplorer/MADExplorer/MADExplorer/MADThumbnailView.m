@@ -64,8 +64,9 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 		NSString *thumbnailPath = [path copy];
 		
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+			
 			UIImage *thumbnail = [[UIImage alloc] initWithContentsOfFile:thumbnailPath];
-			if (thumbnail == nil) {
+			if (!thumbnail) {
 				thumbnail = [UIImage imageNamed:MADImageBlank];
 			}
 			dispatch_sync(dispatch_get_main_queue(), ^{
@@ -83,6 +84,8 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 }
 
 - (void)prepareForReuse {
+	self.image = nil;
+	self.thumbnailAbsolutePath = nil;
 	/*
 	_lastChangeDate = nil;
 	MADThumbnailView * __weak weakself = self;
