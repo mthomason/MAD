@@ -11,16 +11,16 @@
 
 #import <MessageUI/MFMailComposeViewController.h>
 
-@interface MADMailComposeViewController : MFMailComposeViewController
+@interface MFMailComposeViewController (MADExtensions)
 
-	+ (instancetype)newMailComposeViewControllerWithTitle: (NSString *)title
-													 body: (NSString *)body
-									   userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom;
++ (instancetype)ma_newMailComposeViewControllerWithTitle:(NSString *)title
+													body:(NSString *)body
+									  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
 
-	+ (instancetype)newMailComposeViewControllerWithBody: (NSString *)body
-											  attachment: (NSURL *)attachmentURL
-												mimeType: (NSString *)mimeType
-									  userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom;
++ (instancetype)ma_newMailComposeViewControllerWithBody:(NSString *)body
+											 attachment:(NSURL *)attachmentURL
+											   mimeType:(NSString *)mimeType
+									 userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
 
 @end
 

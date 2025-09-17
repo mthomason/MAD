@@ -127,18 +127,15 @@
 }
 
 - (void)actionEmailUs {
-	MFMailComposeViewController *controller;
 	UITraitCollection *traitCollection = self.traitCollection;
 	UIUserInterfaceIdiom userInterfaceIdiom = traitCollection.userInterfaceIdiom;
-	controller = [MADMailComposeViewController newMailComposeViewControllerWithTitle: @""
-																				body: @""
-																  userInterfaceIdiom: userInterfaceIdiom];
+	MFMailComposeViewController *controller = [MFMailComposeViewController ma_newMailComposeViewControllerWithTitle: @""
+																											   body: @""
+																								 userInterfaceIdiom: userInterfaceIdiom];
 	controller.toRecipients = @[@"admin@everydayapps.com"];
 	controller.subject = @"MAD Designer";
 	if (self.popoverPresentationController != nil) {
-		[self dismissViewControllerAnimated:YES completion:^{
-			
-		}];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 	controller.mailComposeDelegate = self;
 	[self showViewController:controller sender:self];

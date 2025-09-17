@@ -1700,10 +1700,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 																								 @"The attached document can be opened with MAD Viewer.")];
 		[messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
 		
-		MFMailComposeViewController	*mailComposer = [MADMailComposeViewController newMailComposeViewControllerWithBody: messageBody
-																											attachment: metadata.URL
-																											  mimeType: mimeType
-																									userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
+		MFMailComposeViewController	*mailComposer = [MFMailComposeViewController ma_newMailComposeViewControllerWithBody: messageBody
+																											  attachment: metadata.URL
+																												mimeType: mimeType
+																									  userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
 		mailComposer.mailComposeDelegate = self;
 		[self showViewController:mailComposer animated: YES];
 	}

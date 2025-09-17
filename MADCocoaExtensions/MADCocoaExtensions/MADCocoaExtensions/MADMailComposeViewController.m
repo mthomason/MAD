@@ -9,17 +9,16 @@
 #import "MADMailComposeViewController.h"
 #import "UIColor+EverydayApps.h"
 
-@implementation MADMailComposeViewController
+@implementation MFMailComposeViewController (MADExtensions)
 
-+ (instancetype)newMailComposeViewControllerWithTitle: (NSString *)title
-												 body: (NSString *)body
-								   userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom {
++ (instancetype)ma_newMailComposeViewControllerWithTitle:(NSString *)title
+													body:(NSString *)body
+									  userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
 	
-	MADMailComposeViewController *mailComposer = [[self alloc] init];
+	MFMailComposeViewController *mailComposer = [[self alloc] init];
 	mailComposer.subject = title;
 	[mailComposer setMessageBody:body isHTML:NO];
-	mailComposer.navigationController.navigationBar.barTintColor
-													= [MADColorEverydayApps newColorAnalogous4];
+	mailComposer.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
 	
 	if (userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 		mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -30,25 +29,23 @@
 	return mailComposer;
 }
 
-+ (instancetype)newMailComposeViewControllerWithBody: (NSString *)body
-										  attachment: (NSURL *)attachmentURL
-											mimeType: (NSString *)mimeType
-								  userInterfaceIdiom: (UIUserInterfaceIdiom)userInterfaceIdiom {
++ (instancetype)ma_newMailComposeViewControllerWithBody:(NSString *)body
+											 attachment:(NSURL *)attachmentURL
+											   mimeType:(NSString *)mimeType
+									 userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom {
 	
-	NSData *data = [NSData dataWithContentsOfURL:attachmentURL];
-	NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
-	NSString *documentTitle = [NSString stringWithFormat:formatString,
-														 attachmentURL.lastPathComponent];
+	NSString *documentTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), attachmentURL.lastPathComponent];
 	
-	MADMailComposeViewController *mailComposer;
-	mailComposer = [self newMailComposeViewControllerWithTitle: documentTitle
-														  body: body
-											userInterfaceIdiom: userInterfaceIdiom];
+	MFMailComposeViewController *mailComposer = [self ma_newMailComposeViewControllerWithTitle:documentTitle
+																						  body:body
+																			userInterfaceIdiom:userInterfaceIdiom];
 
-	NSString *lastPathComponent = attachmentURL.lastPathComponent.copy ?: @"";
-	[mailComposer addAttachmentData: data
-						   mimeType: mimeType
-						   fileName: lastPathComponent];
+	NSString *lastPathComponent = [attachmentURL.lastPathComponent copy] ?: @"";
+	NSData *data = [NSData dataWithContentsOfURL:attachmentURL];
+	[mailComposer addAttachmentData:data
+						   mimeType:mimeType
+						   fileName:lastPathComponent];
+	
 	return mailComposer;
 }
 
