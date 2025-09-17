@@ -1295,7 +1295,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:documentInformation];
 	navController.modalPresentationStyle = UIModalPresentationPopover;
 	navController.presentationController.delegate = self;
-	
+	[MADThemeManager applyAppearanceToNavigationController:navController traitCollection:self.traitCollection];
+
 	UIPopoverPresentationController *ppc = navController.popoverPresentationController;
 	if (ppc) {
 		ppc.barButtonItem = sender;
