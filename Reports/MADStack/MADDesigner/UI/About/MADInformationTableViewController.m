@@ -13,7 +13,7 @@
 #import "MADOperationPromptError.h"
 #import "madlog.h"
 
-#import <MADCocoaExtensions/MADMailComposeViewController.h>
+#import <MADCocoaExtensions/MFMailComposeViewController+MADExtensions.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADBlockOperation.h>

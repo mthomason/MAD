@@ -28,8 +28,8 @@
 		4C5205AB1BA7E2A2000E6A59 /* MADColorSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */; };
 		4C5205AC1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */; };
-		4C5205B21BA7E2A2000E6A59 /* MADMailComposeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205871BA7E2A2000E6A59 /* MADMailComposeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C5205B31BA7E2A2000E6A59 /* MADMailComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */; };
+		4C5205B21BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C5205B31BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m */; };
 		4C5205B41BA7E2A2000E6A59 /* MADAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205891BA7E2A2000E6A59 /* MADAlertController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */; };
 		4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */; };
@@ -93,8 +93,8 @@
 		4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColorSocial.m; path = MADCocoaExtensions/MADColorSocial.m; sourceTree = "<group>"; };
 		4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+MADExtensions.h"; path = "MADCocoaExtensions/NSNumberFormatter+MADExtensions.h"; sourceTree = "<group>"; };
 		4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumberFormatter+MADExtensions.m"; path = "MADCocoaExtensions/NSNumberFormatter+MADExtensions.m"; sourceTree = "<group>"; };
-		4C5205871BA7E2A2000E6A59 /* MADMailComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMailComposeViewController.h; path = MADCocoaExtensions/MADMailComposeViewController.h; sourceTree = "<group>"; };
-		4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMailComposeViewController.m; path = MADCocoaExtensions/MADMailComposeViewController.m; sourceTree = "<group>"; };
+		4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MFMailComposeViewController+MADExtensions.h"; path = "MADCocoaExtensions/MFMailComposeViewController+MADExtensions.h"; sourceTree = "<group>"; };
+		4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MFMailComposeViewController+MADExtensions.m"; path = "MADCocoaExtensions/MFMailComposeViewController+MADExtensions.m"; sourceTree = "<group>"; };
 		4C5205891BA7E2A2000E6A59 /* MADAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlertController.h; path = MADCocoaExtensions/MADAlertController.h; sourceTree = "<group>"; };
 		4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAlertController.m; path = MADCocoaExtensions/MADAlertController.m; sourceTree = "<group>"; };
 		4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CGGeometry+Extras.m"; path = "MADCocoaExtensions/CGGeometry+Extras.m"; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 				4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */,
 				4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */,
 				4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */,
-				4C5205871BA7E2A2000E6A59 /* MADMailComposeViewController.h */,
-				4C5205881BA7E2A2000E6A59 /* MADMailComposeViewController.m */,
+				4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h */,
+				4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m */,
 				4C5205891BA7E2A2000E6A59 /* MADAlertController.h */,
 				4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */,
 				4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */,
@@ -276,7 +276,7 @@
 				4C6F35151E40D6D400F4744F /* MADPadding.h in Headers */,
 				4C5205B41BA7E2A2000E6A59 /* MADAlertController.h in Headers */,
 				4C3622BB1CF34B9C002B8649 /* MAD2dDirection.h in Headers */,
-				4C5205B21BA7E2A2000E6A59 /* MADMailComposeViewController.h in Headers */,
+				4C5205B21BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h in Headers */,
 				4C6F35131E40D3E800F4744F /* MADMargin.h in Headers */,
 				4C5767481E1CB68500611F37 /* MADTextField.h in Headers */,
 				4C5205C81BA7E2A2000E6A59 /* NSError+Constructors.h in Headers */,
@@ -406,7 +406,7 @@
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,
 				4C1CC25C24C624EE0027A454 /* MADViewHelpers.m in Sources */,
 				4C17AE221E427CBA0056A0EA /* MADMargin.m in Sources */,
-				4C5205B31BA7E2A2000E6A59 /* MADMailComposeViewController.m in Sources */,
+				4C5205B31BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m in Sources */,
 				4C5205AB1BA7E2A2000E6A59 /* MADColorSocial.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

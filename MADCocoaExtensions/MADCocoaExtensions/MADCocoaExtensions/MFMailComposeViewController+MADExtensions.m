@@ -6,7 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#import "MADMailComposeViewController.h"
+#import "MFMailComposeViewController+MADExtensions.h"
 #import "UIColor+EverydayApps.h"
 
 @implementation MFMailComposeViewController (MADExtensions)
