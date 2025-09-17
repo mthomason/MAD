@@ -1563,10 +1563,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (IBAction)actionDelete:(id)sender {
 
 	NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
-	UIAlertController *alertController;
-	alertController = [MADAlertController newAlertControllerDeleteItems:selectedItems.count
-																confirm:^(UIAlertAction *action) {
-																	
+	UIAlertController *alertController = [MADAlertController newAlertControllerDeleteItems:selectedItems.count
+																				   confirm:^(UIAlertAction *action) {
+		
 		for (NSIndexPath *selectedItem in selectedItems) {
 			[self.fileExplorerDataSource removeItemAtIndex:(NSUInteger)selectedItem.item];
 		}

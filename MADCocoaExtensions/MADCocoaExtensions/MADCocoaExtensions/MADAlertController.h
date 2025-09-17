@@ -28,16 +28,8 @@
 											 confirm:(void (^)(UIAlertAction *action))handlerConfirm
 											  cancel:(void (^)(UIAlertAction *action))handlerCancel;
 
-+ (UIAlertController *)newAlertControllerSaveCredentials:(void (^)(UIAlertAction *action))handlerContinue
-												  cancel:(void (^)(UIAlertAction *action))handlerCancel;
-
 + (UIAlertController *)removeCredentials:(void (^)(UIAlertAction *action))handlerDestructive
 								  cancel:(void (^)(UIAlertAction *action))handlerCancel;
-
-+ (UIAlertController *)newAlertControllerPromptForPasswordGivenUsername:(NSString *)username
-															   password:(void (^)(UITextField *textField))passwordSetup
-																 submit:(void (^)(NSString *password))handlerContinue
-																 cancel:(void (^)(void))handlerCancel;
 
 @end
 

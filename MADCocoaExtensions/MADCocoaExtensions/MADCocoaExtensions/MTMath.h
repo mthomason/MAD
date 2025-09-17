@@ -31,7 +31,7 @@ static inline double madSystemFileSizeToMB(unsigned long long sfs) {
 
 @interface MTMath : NSObject
 
-	+ (NSNumber *)newSystemFileSizeToMB:(unsigned long long)sfs;
++ (NSNumber *)newSystemFileSizeToMB:(unsigned long long)sfs;
 
 @end
 
