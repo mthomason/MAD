@@ -13,8 +13,8 @@
 
 @interface UIManagedDocument (Extras)
 
-	- (void)resetPersistentStore;
-	- (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
+- (void)resetPersistentStore;
+- (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
 @end
 

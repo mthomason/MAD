@@ -17,27 +17,26 @@
 @implementation MADPrintPageElementTextDynamic
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelDynamic *)definition {
-    if (self = [super initWithDefinition:definition]) {
-        
-        NSString *text = @"";
-        NSDictionary *rowData = nil;
-        NSString *fieldKey = definition.fieldKey;
-        NSError * __autoreleasing error = nil;
-        rowData = [definition.datasource dataForRow: definition.detailRowId
-                                             column: fieldKey
-                                              error: &error];
-        if (rowData != nil) {
-            id value = rowData[fieldKey];
-            text = [definition formattedStringForValue: value];
-        }
-        self.text = text.copy;
-        
-    }
-    return self;
+	if (self = [super initWithDefinition:definition]) {
+		
+		NSString *fieldKey = definition.fieldKey;
+		NSError * __autoreleasing error = nil;
+		NSDictionary *rowData = [definition.datasource dataForRow: definition.detailRowId
+														   column: fieldKey
+															error: &error];
+		NSString *text = @"";
+		if (rowData != nil) {
+			id value = rowData[fieldKey];
+			text = [definition formattedStringForValue: value];
+		}
+		self.text = [text copy];
+		
+	}
+	return self;
 }
 
 - (void)drawInRect:(CGRect)rect {
-    [super drawInRect:rect];
+	[super drawInRect:rect];
 }
 
 @end

@@ -11,15 +11,15 @@
 #ifndef Reports_MADocument_h
 #define Reports_MADocument_h
 
-#import <UIKit/UIManagedDocument.h>
-#import <UIKit/UIPrintInteractionController.h>
-
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
 
 #import <MAD/MADPrintPageRendererDataSource.h>
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
+
+#import <UIKit/UIManagedDocument.h>
+#import <UIKit/UIPrintInteractionController.h>
 
 @protocol MADActivityProtocol, MADocumentDelegate;
 
@@ -30,7 +30,7 @@ extern NSString * const MADMimeType;
 extern NSString * const MADDocumentInfoKeyThumbnail;
 
 @protocol MADDocumentStatusProtocol <NSObject>
-   - (void)setStatusText:(NSString *)statusText;
+- (void)setStatusText:(NSString *)statusText;
 @end
 
 @interface MADocument : UIManagedDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol>

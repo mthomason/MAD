@@ -14,26 +14,18 @@
 #import "MADModel.h"
 #import "MADModelDocument.h"
 #import "MADModelDatabase.h"
-#import "MADPrintPageRenderer.h"
-#import "MADPathUtilities.h"
 #import "MADImageThumbnail.h"
 #import "MADArchiveManager.h"
 #import "MADNotificationFileUpdate.h"
 #import "RptqDataHelper.h"
-#import "MADDocumentObjectDataReference.h"
 #import "MADDesignerViewer.h"
 #import "MADDesignerLayout.h"
 #import "MADDesignerQuery.h"
 #import "MADDocumentProtocol.h"
 #import "MADocumentDesignerProtocol.h"
-#import "MADAggregateFunctionGroupByType.h"
-#import "MADAggregateFunctionType.h"
-#import "MADSortOrder.h"
-#import "MADConstants.h"
 #import "MADSectionLayoutManager.h"
 #import "MADQueryFull.h"
 #import "MADConstants.h"
-#import "MADActivityIndicator.h"
 #import "MADocumentState.h"
 #import "MADReportFormatter.h"
 #import "MADNotificationDidFormatPage.h"
@@ -68,10 +60,6 @@
 #import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"
 #import "RptqDocumentSectionRows.h"
-#import "RptqRect.h"
-#import "RptqSize.h"
-#import "RptqDirectionalAsymmetry.h"
-#import "MADDataTable+Constructor.h"
 #import "MADParameters+QueryCacheAggregate.h"
 #import "NSPredicate+Creators.h"
 #import "MADDatabase+Constructor.h"
@@ -108,13 +96,8 @@
 #import <CoreData/CoreDataErrors.h>
 #import <CoreData/NSManagedObjectID.h>
 
-#import <UIKit/UIScreen.h>
-#import <UIKit/UIImage.h>
 #import <UIKit/UIPrintPaper.h>
-#import <UIKit/UILabel.h>
-#import <UIKit/UIPrintInteractionController.h>
 
-#import <os/log.h>
 #import <setjmp.h>
 #import <asl.h>
 #import <mach/machine/vm_param.h>
@@ -136,23 +119,10 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 NSString * const MADMimeType									= @"application/vnd.everydayapps.mad";
 NSString * const MADDocumentInfoKeyThumbnail					= @"thumbnail";
 
-static NSString * const MTDocumentAdditionalContentKey			= @"additionalContent";
-static NSString * const MTDocumentFileTypeKey					= @"fileType";
-static NSString * const MTDocumentParentContextKey				= @"parentContext";
-
-static NSString * const MADDocumentInfoKeyThumbnailStandard		= @"thumbnail.png";
-static NSString * const MADDocumentInfoKeyThumbnailRetna		= @"thumbnail@2x.png";
-static NSString * const MADDocumentInfoKeyMeta					= @"meta.plist";
 static NSString * const MADDocumentInfoKeyVersion				= @"version";
 static NSString * const MADDocumentInfoKeyGenerator				= @"generator";
 
-static NSString * const MADFileNameMetaPlist					= @"meta.plist";
-
-static NSString * const MADPersistentStoreAliasMad				= @"analyitics";
 static NSString * const MADDocumentTypeUtiMad					= @"com.everydayapps.productivity.mad";
-
-static NSString * const MNSInterfaceMessageErrorFailedToCreateReport	= @"Failed to create report document.";
-static NSString * const MNSInterfaceTitleProblem						= @"Problem";
 
 static NSString * const MADManagedObjectModelName						= @"MAD";
 static NSString * const MADManagedObjectModelExtention					= @"momd";
@@ -311,7 +281,7 @@ void madwarn(char *err,  const char *err2) { }
 		_autosaveEnabled = YES;
 		_urlGuts = [MADURLFactory newURLDocumentArchiveForFileURL: url
 														extension: MADFileExtentionMobleApplicationDocumentArchive];
-		_urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: MADFileNameMetaPlist];
+		_urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: @"meta.plist"];
 		
 		NSUInteger dataTableIdHash = self.fileURL.lastPathComponent.stringByDeletingPathExtension.hash;
 		
@@ -603,7 +573,7 @@ void madwarn(char *err,  const char *err2) { }
 	}
 	
 	if (imageData != nil) {
-		self.extraInformation[MADDocumentInfoKeyThumbnailRetna] = [UIImage imageWithData:imageData];
+		self.extraInformation[@"thumbnail@2x.png"] = [UIImage imageWithData:imageData];
 	}
 	
 	NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
@@ -671,7 +641,7 @@ void madwarn(char *err,  const char *err2) { }
 	return writeAdditionalContent;
 }
 
-+ (NSString *)persistentStoreName { return MADPersistentStoreAliasMad; }
++ (NSString *)persistentStoreName { return @"analyitics"; }
 
 #pragma mark -
 #pragma mark UIPrintInteractionControllerDelegate

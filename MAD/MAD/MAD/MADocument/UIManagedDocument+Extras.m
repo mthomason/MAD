@@ -7,9 +7,9 @@
 //
 
 #import "UIManagedDocument+Extras.h"
+#import <MADFileManager/MADFileUtilities.h>
 #import <CoreData/NSPersistentStoreCoordinator.h>
 #import <CoreData/NSManagedObjectContext.h>
-#import <MADFileManager/MADFileUtilities.h>
 
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 

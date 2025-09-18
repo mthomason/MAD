@@ -13,7 +13,7 @@
 
 @interface MADDatabase (Constructor)
 
-    + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
 
 @end
 

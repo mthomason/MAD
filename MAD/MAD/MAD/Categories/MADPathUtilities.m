@@ -28,18 +28,14 @@
 		}
 	}
 
-	const NSUInteger numberOfParentComponents = anchorComponents.count - componentsInCommon;
-	const NSUInteger numberOfPathComponents = pathComponents.count - componentsInCommon;
+	NSUInteger numberOfParentComponents = anchorComponents.count - componentsInCommon;
+	NSUInteger numberOfPathComponents = pathComponents.count - componentsInCommon;
 
-	NSMutableArray *relativeComponents;
-	relativeComponents = [[NSMutableArray alloc] initWithCapacity:
-						  numberOfParentComponents + numberOfPathComponents];
+	NSMutableArray *relativeComponents = [[NSMutableArray alloc] initWithCapacity: numberOfParentComponents + numberOfPathComponents];
 	for (NSUInteger i = 0; i < numberOfParentComponents; i++) {
 		[relativeComponents addObject:@".."];
 	}
-	NSArray <NSString *> *subarrayWithRange;
-	subarrayWithRange = [pathComponents subarrayWithRange:
-						 NSMakeRange(componentsInCommon, numberOfPathComponents)];
+	NSArray <NSString *> *subarrayWithRange = [pathComponents subarrayWithRange: NSMakeRange(componentsInCommon, numberOfPathComponents)];
 	[relativeComponents addObjectsFromArray: subarrayWithRange];
 	return [NSString pathWithComponents:relativeComponents];
 }

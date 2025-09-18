@@ -15,10 +15,10 @@
 
 @interface MADArchiveManager : NSObject
 
-	- (instancetype)initWithFileWrapperURL:(NSURL *)fileWrapper archiveURL:(NSURL *)archive;
-	- (BOOL)archive:(BOOL)overwrite;
-	- (BOOL)unarchive;
-	
+- (instancetype)initWithFileWrapperURL:(NSURL *)fileWrapper archiveURL:(NSURL *)archive;
+- (BOOL)archive:(BOOL)overwrite;
+- (BOOL)unarchive;
+
 @end
 
 #endif

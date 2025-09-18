@@ -1153,20 +1153,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C04EE6B1CA9587700582422 /* Connections */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Connections;
-			sourceTree = "<group>";
-		};
-		4C04EE6C1CA9589200582422 /* Drivers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Drivers;
-			sourceTree = "<group>";
-		};
 		4C14929C1D065D4A00B8E9EA /* AttributedText */ = {
 			isa = PBXGroup;
 			children = (
@@ -1398,8 +1384,6 @@
 		4C401E081BAE3D7800BAE5FC /* MADDatabase */ = {
 			isa = PBXGroup;
 			children = (
-				4C04EE6C1CA9589200582422 /* Drivers */,
-				4C04EE6B1CA9587700582422 /* Connections */,
 				4CF6AA2B1F544D380061B0C6 /* MADDatabase+Constructor.h */,
 				4CF6AA2C1F544D380061B0C6 /* MADDatabase+Constructor.m */,
 				4CF6AA331F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.h */,

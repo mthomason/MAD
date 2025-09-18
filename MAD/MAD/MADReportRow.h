@@ -15,8 +15,7 @@
 
 @interface MADReportRow : NSObject
 
-    @property (nonatomic, readonly, strong, getter=hasDocumentObjects)
-                                                NSArray <MADPrintPageElement *> *hasDocumentObjects;
+@property (nonatomic, readonly, strong, getter=hasDocumentObjects) NSArray <MADPrintPageElement *> *hasDocumentObjects;
 
 @end
 

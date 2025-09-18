@@ -16,7 +16,7 @@
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition {
 	if (self = [super initWithDefinition:definition]) {
-		self.text = definition.text.copy;
+		self.text = [definition.text copy];
 	}
 	return self;
 }

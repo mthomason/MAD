@@ -12,8 +12,8 @@
 @class NSUndoManager, NSManagedObjectContext;
 @protocol MADocumentDesignerProtocol <NSObject>
 
-	@property (strong, null_resettable) NSUndoManager *undoManager;
-	@property (nonatomic, strong, readonly, null_resettable) NSManagedObjectContext *managedObjectContext;
+@property (strong, null_resettable) NSUndoManager *undoManager;
+@property (nonatomic, strong, readonly, null_resettable) NSManagedObjectContext *managedObjectContext;
 
 @end
 

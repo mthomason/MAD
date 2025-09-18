@@ -10,9 +10,7 @@
 #import <UIKit/UIFont.h>
 
 @interface MADFonts ()
-
 @property (nonatomic, strong, readwrite) NSArray <NSString *> *familyNames;
-
 @end
 
 @implementation MADFonts

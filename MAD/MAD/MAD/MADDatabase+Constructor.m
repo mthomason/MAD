@@ -19,40 +19,40 @@
 @implementation MADDatabase (Comparson)
 
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
-    
-    id result = nil;
-    
-    switch (connection.databaseType) {
-        case MADDatabaseTypeSqlite3:
-            result = [[MADDatabaseSqlite3 alloc] init];
-            
-            break;
-            
-        case MADDatabaseTypeTDS:
-            result = [[MADDatabaseSQLServer alloc] init];
-            
-            break;
+	
+	id result = nil;
+	
+	switch (connection.databaseType) {
+		case MADDatabaseTypeSqlite3:
+			result = [[MADDatabaseSqlite3 alloc] init];
+			
+			break;
+			
+		case MADDatabaseTypeTDS:
+			result = [[MADDatabaseSQLServer alloc] init];
+			
+			break;
 #ifdef INCLUDE_MYSQL
-        case MADDatabaseTypeMySQL:
-            result = [[MADDatabaseMySQL alloc] init];
-            
-            break;
+		case MADDatabaseTypeMySQL:
+			result = [[MADDatabaseMySQL alloc] init];
+			
+			break;
 #endif
-        default:
-            break;
-    }
-    
-    [result setDatabaseConnection:connection];
-    
-    if ([result respondsToSelector:@selector(openDatabase)]) {
-        [result openDatabase];
-    }
-    
-    return result;
+		default:
+			break;
+	}
+	
+	[result setDatabaseConnection:connection];
+	
+	if ([result respondsToSelector:@selector(openDatabase)]) {
+		[result openDatabase];
+	}
+	
+	return result;
 }
 
 - (void)openDatabase {
-    
+	
 }
 
 @end

@@ -13,16 +13,16 @@
 
 @interface MADDatabaseConnection (Constructor)
 
-    + (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
-                                             host:(NSString *)host
-                                         database:(NSString *)database
-                                             port:(NSInteger)port;
++ (instancetype)newDatabaseConnectionWithType:(MADDatabaseType)databaseType
+										 host:(NSString *)host
+									 database:(NSString *)database
+										 port:(NSInteger)port;
 
-    + (instancetype)newDatabaseConnectionForUrl:(NSURL *)url;
++ (instancetype)newDatabaseConnectionForUrl:(NSURL *)url;
 
-    + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 
-    + (NSString *)Identifier:(MADDatabaseType)databaseType;
++ (NSString *)Identifier:(MADDatabaseType)databaseType;
 
 @end
 

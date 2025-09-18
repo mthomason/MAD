@@ -11,8 +11,8 @@
 
 @interface MADReportRows ()
 
-    @property (nonatomic, readwrite, copy)      NSManagedObjectID *objectID;
-    @property (nonatomic, readwrite, strong)    NSArray <MADReportRow *> *rows;
+@property (nonatomic, readwrite, copy) NSManagedObjectID *objectID;
+@property (nonatomic, readwrite, strong) NSArray <MADReportRow *> *rows;
 
 @end
 

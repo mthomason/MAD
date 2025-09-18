@@ -15,7 +15,7 @@
 
 @interface MADPrintPageElementTextStatic : MADPrintPageElementText
 
-    - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition;
+- (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceLabelStatic *)definition;
 
 @end
 

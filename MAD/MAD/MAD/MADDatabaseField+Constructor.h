@@ -15,7 +15,7 @@
 
 @interface MADDatabaseField (Constructor)
 
-    + (instancetype)newDatabaseFieldWithSchemaField:(RptqDatabaseSchemaField *)schemaField;
++ (instancetype)newDatabaseFieldWithSchemaField:(RptqDatabaseSchemaField *)schemaField;
 
 @end
 
