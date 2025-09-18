@@ -9,10 +9,10 @@
 #ifndef MAD_MADDesignerViewController_h
 #define MAD_MADDesignerViewController_h
 
-#import <UIKit/UIViewController.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADViewControllerProtocol.h"
 #import "MADTabBarItemProtocol.h"
+#import <UIKit/UIViewController.h>
 
 @protocol MADViewControllerStandardProtocol;
 

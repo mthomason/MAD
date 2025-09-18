@@ -9,9 +9,9 @@
 #ifndef Reports_MADTabBarController_h
 #define Reports_MADTabBarController_h
 
-#import <UIKit/UITabBarController.h>
 #import "MADViewControllerDocumentProtocol.h"
 #import <MADAPI/MADViewControllerStandardProtocol.h>
+#import <UIKit/UITabBarController.h>
 
 @class MADocument, MADQueryBuilderSplitViewController, MADDesignerViewController, MADViewerController;
 

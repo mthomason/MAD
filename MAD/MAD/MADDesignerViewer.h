@@ -16,7 +16,7 @@
 
 @interface MADDesignerViewer : NSObject
 
-	@property (nonatomic, weak) id <MADocumentDesignerProtocol> delegate;
+@property (nonatomic, weak) id <MADocumentDesignerProtocol> delegate;
 
 @end
 

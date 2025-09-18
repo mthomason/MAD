@@ -13,7 +13,7 @@
 
 @interface UICollectionReusableView (Reuse)
 
-	+ (NSString *)reuseIdentifier;
++ (NSString *)reuseIdentifier;
 
 @end
 
