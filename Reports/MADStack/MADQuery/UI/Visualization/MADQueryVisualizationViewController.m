@@ -287,6 +287,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	self.view.opaque = YES;
 	
 	MADQueryVisualizationScrollView *scrollView = [[MADQueryVisualizationScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
+	scrollView.backgroundColor = [UIColor systemGroupedBackgroundColor];
 	[self.backgroundContainer addSubview:scrollView];
 	
 	NSDictionary <NSString *, __kindof UIView *> *viewDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:scrollView, @"sv", _backgroundContainer, @"bg", nil];

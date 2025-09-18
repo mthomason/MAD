@@ -129,10 +129,20 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 	self.containerView.layer.cornerRadius =  3.0;
 	self.containerView.clipsToBounds = YES;
 	self.toolbar.backgroundColor = [UIColor darkGrayColor];
-	self.view.layer.shadowOpacity = 1.0;
-	self.view.layer.shadowRadius = 1.0;
-	self.view.layer.shadowOffset = CGSizeMake(5.0, 5.0);
 
+	// Card styling
+	self.view.layer.cornerRadius = 12.0;
+	self.view.layer.masksToBounds = NO; // Important for shadow to appear
+	
+	// Shadow
+	self.view.layer.shadowColor = [UIColor blackColor].CGColor;
+	self.view.layer.shadowOffset = CGSizeMake(0, 4);
+	self.view.layer.shadowOpacity = 0.77f;
+	self.view.layer.shadowRadius = 10.0;
+	
+	// Subtle Border
+	self.view.layer.borderColor = [UIColor separatorColor].CGColor;
+	self.view.layer.borderWidth = 0.5;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
