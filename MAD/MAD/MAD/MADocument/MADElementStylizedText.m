@@ -78,20 +78,14 @@
 				break;
 		}
 		
-		NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: textStyle.underline ?
-											 NSUnderlineStyleSingle :
-									NSUnderlineStyleNone];
-		
-		NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger: textStyle.strikethrough ?
-												 NSUnderlineStyleSingle :
-										NSUnderlineStyleNone];
-		
+		NSNumber *underlineStyle = [[NSNumber alloc] initWithInteger: textStyle.underline ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
+		NSNumber *strikethroughStyle = [[NSNumber alloc] initWithInteger: textStyle.strikethrough ? NSUnderlineStyleSingle : NSUnderlineStyleNone];
 		NSMutableDictionary *fontAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-											   customFont,         NSFontAttributeName,
-											   @0.0,     NSBaselineOffsetAttributeName,
-											   underlineStyle,     NSUnderlineStyleAttributeName,
-											   strikethroughStyle, NSStrikethroughStyleAttributeName,
-											   paragraphStyle,     NSParagraphStyleAttributeName, nil];
+											   customFont,			NSFontAttributeName,
+											   @0.0,				NSBaselineOffsetAttributeName,
+											   underlineStyle,		NSUnderlineStyleAttributeName,
+											   strikethroughStyle,	NSStrikethroughStyleAttributeName,
+											   paragraphStyle,		NSParagraphStyleAttributeName, nil];
 		
 		self.fontAttributes = fontAttributes;
 		
