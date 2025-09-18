@@ -37,7 +37,6 @@
 #import "MADQueryChooseFieldController.h"
 #import "MADToolboxViewController.h"
 #import "MADToolboxTransitioner.h"
-#import "MADDesignerSectionLayoutLiquid.h"
 #import "MADLayoutConstraint.h"
 #import "UITapGestureRecognizer+Designer.h"
 #import "MADNavigationController.h"
@@ -1731,9 +1730,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	NSManagedObjectContext *context = object.managedObjectContext;
 	NSManagedObjectID *objectID = [object.objectID copy];
 
+	__weak MADDesignerViewController *weakSelf = self;
 	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Change", @"Change")
 											  style: UIAlertActionStyleDefault
 											handler: ^(UIAlertAction *action) {
+		__strong MADDesignerViewController *strongSelf = weakSelf;
+		if (!strongSelf) return;
+
 		NSError *fetchError = nil;
 		RptqDocumentElementLabel *label = [context existingObjectWithID:objectID error:&fetchError];
 		if (fetchError != nil) {
@@ -1744,6 +1747,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 				NSError *saveError = nil;
 				if (![context save:&saveError]) {
 					os_log_error(GetDesignerLog(), "%s: Error saving context %@", __PRETTY_FUNCTION__, saveError);
+				} else {
+					MADDesignerElementView *elementView = [strongSelf elementViewForManagedObject:label];
+					if (elementView) {
+						[elementView updateWithElement:label];
+						[elementView setNeedsDisplay];
+					}
 				}
 			}
 		} else {
