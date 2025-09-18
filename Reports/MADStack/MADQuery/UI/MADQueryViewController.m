@@ -13,8 +13,6 @@
 #import "MADQueryViewController.h"
 #import "MADQueryViewSectionDelegate.h"
 #import "MADTabBarController.h"
-#import "MTStoreKitController+Features.h"
-#import "MADWatermarkView.h"
 #import "MADQueryBuilderAddTableViewController.h"
 #import "MADQueryBuilderAddGroupViewController.h"
 #import "MADQueryPredicateFormatController.h"
@@ -34,6 +32,7 @@
 #import "MADQueryViewControllerTableLayout.h"
 #import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
 #import "MADAttributedStringQueryController.h"
+#import "MTStoreKitController+Features.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MADQueryViewDelegate.h"
 #import "MADTabBarItemProtocol.h"
@@ -77,7 +76,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIImage.h>
 
-NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
+NSString * const MADImageBarButtonItemDatabase8 = @"UIBarButtonItemDatabase8";
 
 static NSString * const MADIdentifierDefaultsViewerDesired = @"defaults.everydayapps.features.viewer.desired";
 
@@ -220,8 +219,8 @@ BOOL storeEnabled(void) {
 
 	_showingTableIndex = -1;
 
-	_firstTimeViewWillLayoutSubviews = NO;
-
+	_firstTimeViewWillLayoutSubviews = YES;
+	
 	MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
 	queryViewDelegate.delegate = self;
 	self.queryViewDelegate = queryViewDelegate;
@@ -270,6 +269,9 @@ BOOL storeEnabled(void) {
 
 	self.navigationItem.prompt = nil;
 	self.tableView.dataSource = self.queryViewDataSource;
+	self.tableView.delegate = self.queryViewDelegate;
+	
+	[self reloadMainDocumentAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -294,11 +296,7 @@ BOOL storeEnabled(void) {
 											   object: nil];
 	
 	[self observeManagedObjectContextChanges: managedObjectContext];
-	
 	[self.tabBarController enableTabBarItems];
-	
-	self.tableView.delegate = _queryViewDelegate;
-	[self reloadMainDocumentAnimated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -335,9 +333,9 @@ BOOL storeEnabled(void) {
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
 	if (_firstTimeViewWillLayoutSubviews) {
+		_firstTimeViewWillLayoutSubviews = NO;
 		CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.frame.size.width, 1.0);
 		[self.tableView scrollRectToVisible: r animated: NO];
-		_firstTimeViewWillLayoutSubviews = NO;
 	}
 }
 
@@ -346,6 +344,7 @@ BOOL storeEnabled(void) {
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 		self.view.frame = self.navigationController.view.bounds;
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+
 	}];
 	
 }
