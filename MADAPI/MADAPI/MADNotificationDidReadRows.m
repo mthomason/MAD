@@ -8,15 +8,15 @@
 
 #import "MADNotificationDidReadRows.h"
 
-#import <dispatch/once.h>
-#import <math.h>
-
 #import <Foundation/NSValue.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSDate.h>
 #import <Foundation/NSException.h>
+
+#import <dispatch/once.h>
+#import <math.h>
 
 NSString * const MADNotificationDidReadRowsName = @"MADNotificationDidReadRows";
 NSString * const MADDatabaseNumberOfRowsReadKey = @"MADDatabaseNumberOfRowsReadKey";

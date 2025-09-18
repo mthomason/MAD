@@ -74,8 +74,7 @@
 	
 	id connectionSettings = self.databaseConnection;
 	NSError * __autoreleasing connectionError = nil;
-	MysqlConnection *conn;
-	conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
+	MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
 	if (conn && connectionError == nil) {
 		
 		NSError *fetchError = nil;

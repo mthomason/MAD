@@ -106,10 +106,7 @@
 + (NSString *)keyQueryTableID {
 	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
 	NSString *keyInQueryTable = [self keyInQueryTable];
-	NSString *key;
-	key = [MADStringUtilities stringByAppendingPeriod: keyInQueryTable];
-	key = [key stringByAppendingString:keyIdentifier];
-	return key;
+	return [[MADStringUtilities stringByAppendingPeriod: keyInQueryTable] stringByAppendingString:keyIdentifier];
 }
 
 + (NSString *)keyQueryFieldID {
@@ -117,10 +114,8 @@
 }
 
 + (NSString *)keySchemaTableID {
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
 	NSString *keySchemaTable = [self keySchemaTable];
-	NSString *key = [MADStringUtilities stringByAppendingPeriod: keySchemaTable];
-	return [key stringByAppendingString:keyIdentifier];
+	return [[MADStringUtilities stringByAppendingPeriod: keySchemaTable] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
 }
 
 + (NSString *)keySchemaFieldID {
@@ -148,10 +143,9 @@
 	NSUInteger expressionInQueryCount = 2;
 
 	NSExpression *pexpressions[expressionInQueryCount];
-	NSString *predicateKey;
 	NSNumber *idn = @(identifier);
 	NSString *keyInQueryTable = [self keyInQueryTable];
-	predicateKey = [MADStringUtilities stringByAppendingPeriod: keyInQueryTable];
+	NSString *predicateKey = [MADStringUtilities stringByAppendingPeriod: keyInQueryTable];
 	predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
 	predicateKey = [MADStringUtilities stringByAppendingPeriod: predicateKey];
 	predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
@@ -159,18 +153,13 @@
 	pexpressions[0] = [NSExpression expressionForKeyPath:predicateKey];
 	pexpressions[1] = [NSExpression expressionForConstantValue: idn];
 	
-	NSPredicate *predicate;
-	predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-												   rightExpression: pexpressions[1]
-														  modifier: NSDirectPredicateModifier
-															  type: NSEqualToPredicateOperatorType
-														   options: 0];
+	NSPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
+																rightExpression: pexpressions[1]
+																	   modifier: NSDirectPredicateModifier
+																		   type: NSEqualToPredicateOperatorType
+																		options: 0];
 
-	
-	NSFetchRequest *fetchQueryTable;
-	NSString *entityName;
-	entityName = NSStringFromClass([RptqQueryField class]);
-	fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryField class])];
 	
 	NSString *keyPathInQueryTable = [self keyInQueryTable];
 	
@@ -272,10 +261,9 @@
 	NSUInteger expressionInQueryCount = 2;
 
 	NSExpression *pexpressions[expressionInQueryCount];
-	NSString *predicateKey;
 	NSNumber *idn = @(identifier);
 	NSString *keyInQueryTable = [self keyInQueryTable];
-	predicateKey = [MADStringUtilities stringByAppendingPeriod: keyInQueryTable];
+	NSString *predicateKey = [MADStringUtilities stringByAppendingPeriod: keyInQueryTable];
 	predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(inQuery))];
 	predicateKey = [MADStringUtilities stringByAppendingPeriod: predicateKey];
 	predicateKey = [predicateKey stringByAppendingString:NSStringFromSelector(@selector(identifier))];
@@ -283,19 +271,13 @@
 	pexpressions[0] = [NSExpression expressionForKeyPath:predicateKey];
 	pexpressions[1] = [NSExpression expressionForConstantValue: idn];
 	
-	NSPredicate *predicate;
-	predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
-												   rightExpression: pexpressions[1]
-														  modifier: NSDirectPredicateModifier
-															  type: NSEqualToPredicateOperatorType
-														   options: 0];
+	NSPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression: pexpressions[0]
+																rightExpression: pexpressions[1]
+																	   modifier: NSDirectPredicateModifier
+																		   type: NSEqualToPredicateOperatorType
+																		options: 0];
 
-	
-	NSString *entityName;
-	NSFetchRequest *fetchQueryTable;
-	
-	entityName = NSStringFromClass([RptqQueryField class]);
-	fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:entityName];
+	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryField class])];
 	
 	NSString *keyPathInQueryTable = [self keyInQueryTable],
 			 *keyPathInQueryTableDropIndex = [self keyInQueryTableDropIndex],
@@ -385,8 +367,7 @@
 }
 
 + (instancetype)newQueryField:(NSManagedObjectContext *)managedObjectContext NS_RETURNS_RETAINED {
-	NSString *entityName = NSStringFromClass([RptqQueryField class]);
-	NSEntityDescription *entity = [NSEntityDescription entityForName: entityName
+	NSEntityDescription *entity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryField class])
 											  inManagedObjectContext: managedObjectContext];
 	RptqQueryField *queryField = [[RptqQueryField alloc] initWithEntity: entity
 										 insertIntoManagedObjectContext: managedObjectContext];

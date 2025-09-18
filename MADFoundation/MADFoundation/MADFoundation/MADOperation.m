@@ -167,30 +167,14 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 + (NSString *)descriptionForState:(MADOperationState)state {
 	switch (state) {
-		case MADOperationStateReady:
-			return @"Ready";
-			break;
-		case MADOperationStatePending:
-			return @"Pending";
-			break;
-		case MADOperationStateFinished:
-			return @"Finished";
-			break;
-		case MADOperationStateFinishing:
-			return @"Finishing";
-			break;
-		case MADOperationStateExecuting:
-			return @"Executing";
-			break;
-		case MADOperationStateInitialized:
-			return @"Initalized";
-			break;
-		case MADOperationStateEvaluatingConditions:
-			return @"Evaluating Conditions";
-			break;
-		default:
-			return @"Unknown";
-			break;
+		case MADOperationStateReady: return @"Ready";
+		case MADOperationStatePending: return @"Pending";
+		case MADOperationStateFinished: return @"Finished";
+		case MADOperationStateFinishing: return @"Finishing";
+		case MADOperationStateExecuting: return @"Executing";
+		case MADOperationStateInitialized: return @"Initalized";
+		case MADOperationStateEvaluatingConditions: return @"Evaluating Conditions";
+		default: return @"Unknown";
 	}
 }
 

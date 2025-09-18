@@ -53,19 +53,14 @@
 #import "MADThemeManager.h"
 #import "madlog.h"
 
-#import <MADCocoaExtensions/MADCompassDirection.h>
 #import <MADCocoaExtensions/MADResizeAspect.h>
-#import <MADCocoaExtensions/MADAlertController.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <MADFoundation/MADStringUtilities.h>
 
-#import <MAD/madmath.h>
 #import <MAD/MADReportSection.h>
 #import <MAD/MADocument.h>
-#import <MAD/MADFont.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADSectionLayoutAttributes.h>
 #import <MAD/RptqDocument.h>
@@ -74,7 +69,6 @@
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
-#import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 #import <MAD/RptqTextStyle.h>
 #import <MAD/RptqDocumentElementLabel.h>
@@ -91,6 +85,7 @@
 #import <MAD/RptqBorder.h>
 #import <MAD/RptqRect.h>
 #import <MAD/RptqSize.h>
+#import <MAD/madmath.h>
 
 #import <UIKit/NSLayoutAnchor.h>
 #import <UIKit/UIStoryboard.h>
@@ -111,7 +106,6 @@
 #import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObjectContext.h>
 
-#import <os/log.h>
 #import <math.h>
 #import <asl.h>
 
@@ -123,16 +117,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 static const CGFloat MADDefaultsPopooverWidth = 320.0;
 static const CGFloat MADDefaultsPopooverHeight = 480.0;
-
-static NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
-static NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
-static NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
-static NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
-
-static NSString * const MTIdentifierSegueEditFieldExit = @"MTIdentifierSegueEditFieldExit";
-static NSString * const MTSegueNewDocumentObjectAggregateLabelSaveIdentifer = @"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer";
-static NSString * const MTSegueNewDocumentObjectBarcodeSaveIdentifer = @"MTSegueNewDocumentObjectBarcodeSaveIdentifer";
-
 static const CGFloat MADSizeWidthViewDetailDisplay = 32.0;
 static const CGFloat MADSizeHeightViewDetailDisplay = 20.0;
 
@@ -144,11 +128,11 @@ static const inline CGSize sizePopoverDefault(void);
 static const inline CGSize sizePopoverFonts(void);
 
 static inline CGFloat ScrollViewCenterX(UIScrollView *scrollView) {
-	return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5000f, 0.0);
+	return scrollView.contentSize.width * 0.5000f + MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
 }
 
 static inline CGFloat ScrollViewCenterY(UIScrollView *scrollView) {
-	return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5000f, 0.0);
+	return scrollView.contentSize.height * 0.5000f + MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
 }
 static inline CGFloat DetailDisplayFrameOriginX(CGFloat width) { return width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail; }
 static inline CGFloat DetailDisplayFrameOriginY(CGFloat marginTop) { return CGPointZero.y + marginTop + MTReportDesignerBorderPaddingDetail; }
@@ -280,23 +264,23 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action {
 	
-	if ([action.identifier isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
+	if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectStaticLabelSaveIdentifer"]) {
 		[self saveStaticLabel:action.sourceViewController];
 		
-	} else if ([action.identifier isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueChooseWhitespaceSaveIdentifer"]) {
 		[self saveWhiteSpace];
 		
-	} else if ([action.identifier isEqualToString:MTIdentifierSegueEditFieldExit]) {
+	} else if ([action.identifier isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
 		[self tableViewControllerChooseFieldDidFinish: action.sourceViewController
 										  withFieldID: [action.sourceViewController queryFieldID]];
 		
-	} else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"]) {
 		[self saveDynamicLabel: action.sourceViewController];
 		
-	} else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectAggregateLabelSaveIdentifer]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
 		[self saveAggregateLabel: action.sourceViewController];
 		
-	} else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectBarcodeSaveIdentifer]) {
+	} else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
 		[self saveBarcodeLabel: action.sourceViewController];
 		
 	}
@@ -1734,30 +1718,43 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 - (void)editDocumentObjectLabelStatic:(RptqDocumentElement *)object {
 	
-	UIAlertController *alert;
-	NSString *newText;
-	
-	newText = ((RptqDocumentElementLabel *)object).text.copy;
-	
-	void (^configureLabel)(UITextField *);
-	configureLabel = ^(UITextField *textField) {
-		textField.text = newText;
+	NSString *oldText = [((RptqDocumentElementLabel *)object).text copy];
+
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Edit Label", @"Edit Label")
+																   message: NSLocalizedString(@"Please enter updated text.", @"Please enter updated text.")
+															preferredStyle: UIAlertControllerStyleAlert];
+	[alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+		textField.text = [oldText copy];
 		textField.clearButtonMode = UITextFieldViewModeAlways;
-	};
+	}];
 	
-	void (^completion)(UIAlertAction *action, NSString *text) = ^(UIAlertAction *action, NSString *text) {
-		((RptqDocumentElementLabel *)object).text = text.copy;
-		if ([object.managedObjectContext hasChanges]) {
-			NSError *error = NULL;
-			BOOL saved = [object.managedObjectContext save:&error];
-			if (!saved && error != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+	NSManagedObjectContext *context = object.managedObjectContext;
+	NSManagedObjectID *objectID = [object.objectID copy];
+
+	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Change", @"Change")
+											  style: UIAlertActionStyleDefault
+											handler: ^(UIAlertAction *action) {
+		NSError *fetchError = nil;
+		RptqDocumentElementLabel *label = [context existingObjectWithID:objectID error:&fetchError];
+		if (fetchError != nil) {
+			os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, fetchError);
+		} else if (label && !fetchError) {
+			label.text = [alert.textFields.firstObject.text copy];
+			if ([context hasChanges]) {
+				NSError *saveError = nil;
+				if (![context save:&saveError]) {
+					os_log_error(GetDesignerLog(), "%s: Error saving context %@", __PRETTY_FUNCTION__, saveError);
+				}
 			}
+		} else {
+			os_log_error(GetDesignerLog(), "%s: Label is null.", __PRETTY_FUNCTION__);
 		}
-	};
+	}]];
 	
-	alert = [MADAlertController newAlertControllerEditLabel: configureLabel
-												 completion: completion];
+	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
+											  style: UIAlertActionStyleCancel
+											handler: nil]];
+
 	[self presentViewController:alert animated:YES completion:nil];
 }
 

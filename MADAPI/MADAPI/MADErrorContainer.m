@@ -19,7 +19,7 @@ static NSString * const MADErrorContainerDate   = @"d";
 
 @interface MADErrorContainer ()
 
-	@property (nonatomic, strong) NSMutableArray <NSDictionary *> *errors;
+@property (nonatomic, strong) NSMutableArray <NSDictionary *> *errors;
 
 @end
 

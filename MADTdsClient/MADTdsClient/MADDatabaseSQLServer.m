@@ -232,11 +232,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	
 	__block MADDatabaseSQLServer *blockSelf = self;
 	
-	dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-	
-	dispatch_async(queuePriorityBackground, ^{
-		dispatch_queue_t queue = dispatch_get_main_queue();
-		dispatch_sync(queue, ^{
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+
+		dispatch_sync(dispatch_get_main_queue(), ^{
 			
 			MADDatabaseConnection *databaseConnection = blockSelf.databaseConnection;
 			NSError * __autoreleasing dberror = nil;

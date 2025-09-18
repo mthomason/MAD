@@ -136,24 +136,12 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 + (MADDataType)dataTypeForAffentyType:(int)affentyType {
-	MADDataType result;
 	switch (affentyType) {
-		case SQLITE_INTEGER:
-			result = MADDataTypeInteger;
-			break;
-		case SQLITE_FLOAT:
-			result = MADDataTypeDouble;
-			break;
-		case SQLITE_BLOB:
-			result = MADDataTypeBlob;
-			break;
-		case SQLITE_NULL:
-		case SQLITE3_TEXT:
-		default:
-			result = MADDataTypeString;
-			break;
+		case SQLITE_INTEGER: return MADDataTypeInteger;
+		case SQLITE_FLOAT: return MADDataTypeDouble;
+		case SQLITE_BLOB: return MADDataTypeBlob;
+		case SQLITE_NULL: case SQLITE3_TEXT: default: return MADDataTypeString;
 	}
-	return result;
 }
 
 + (NSString *)sortDescriptionForColumnType:(MADDataType)columnType

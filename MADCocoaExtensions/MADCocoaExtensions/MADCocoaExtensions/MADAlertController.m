@@ -80,31 +80,6 @@
 	return alert;
 }
 
-+ (UIAlertController *)newAlertControllerEditLabel:(void (^)(UITextField *textField))textFieldConfig
-										completion:(void (^)(UIAlertAction *action, NSString *text))completion {
-	
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Edit Label", @"Edit Label")
-																   message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
-															preferredStyle: UIAlertControllerStyleAlert];
-	[alert addTextFieldWithConfigurationHandler:textFieldConfig];
-	
-	UITextField *textField = ((UIAlertController *)alert).textFields.firstObject;
-	NSString *text = [textField.text copy];
-	
-	UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: NSLocalizedString(@"Change", @"Change")
-															style: UIAlertActionStyleDefault
-														  handler: ^(UIAlertAction *action) {
-		completion(action, text);
-	}];
-	[alert addAction:actionDefault];
-	
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
-														   style: UIAlertActionStyleCancel
-														 handler: nil];
-	[alert addAction:actionCancel];
-	return alert;
-}
-
 + (UIAlertController *)newAlertControllerDeleteItems:(NSUInteger)itemCount
 											 confirm:(void (^)(UIAlertAction *action))handlerConfirm
 											  cancel:(void (^)(UIAlertAction *action))handlerCancel {

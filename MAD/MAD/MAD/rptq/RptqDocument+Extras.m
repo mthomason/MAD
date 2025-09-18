@@ -53,13 +53,13 @@
 
 #import <UIKit/UIImage.h>
 
-static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger, NSUInteger);
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger);
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger, NSUInteger);
 
-static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
-	return selectedIndex < (numberOfGroups * 2) + 5;
-}
+//static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger, NSUInteger);
+//static inline BOOL validateSelectedIndexWithGroupCount(NSUInteger selectedIndex, NSUInteger numberOfGroups) {
+//	return selectedIndex < (numberOfGroups * 2) + 5;
+//}
 
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger selectedIndex) {
 	return selectedIndex - 2;

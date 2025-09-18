@@ -20,10 +20,6 @@
 															message:(NSString *)message
 													  andCompletion:(void (^)(UIAlertAction *action))handlerContinue;
 
-
-+ (UIAlertController *)newAlertControllerEditLabel:(void (^)(UITextField *textField))textFieldConfig
-										completion:(void (^)(UIAlertAction *action, NSString *text))completion;
-
 + (UIAlertController *)newAlertControllerDeleteItems:(NSUInteger)itemCount
 											 confirm:(void (^)(UIAlertAction *action))handlerConfirm
 											  cancel:(void (^)(UIAlertAction *action))handlerCancel;
