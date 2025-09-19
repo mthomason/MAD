@@ -15,12 +15,11 @@
 
 @interface MADAboutTableViewController : UITableViewController
 
-    + (instancetype)newAboutTableViewController;
+@property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol, UITableViewDelegate> delegate;
 
-    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol, UITableViewDelegate> delegate;
-
-    - (IBAction)cancel:(id)sender;
-    - (IBAction)done:(id)sender;
++ (instancetype)newAboutTableViewController;
+- (IBAction)cancel:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 

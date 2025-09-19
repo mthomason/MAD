@@ -44,26 +44,14 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.tableView.allowsSelection = YES;
-	NSLog(@"Nav:%@", self.navigationController);
-    self.preferredContentSize = CGSizeMake(320.0, 260.0);
+	[super viewDidLoad];
+	self.tableView.allowsSelection = YES;
+	self.preferredContentSize = CGSizeMake(320.0, 260.0);
 	self.tableView.backgroundColor = [UIColor systemBackgroundColor];
-    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
-        //id blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        //id blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-        //self.tableView.backgroundView = blurEffectView;
-        
-        //UIPopoverPresentationController *popover;
-        //if ((popover = [self.navigationController popoverPresentationController])) {
-        //    popover.backgroundColor = [UIColor clearColor];
-        //}
-        ///self.tableView.separatorEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 }
 
 #pragma mark - Exit
@@ -132,8 +120,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 		case 0:
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 			cell.label.textColor = [MADColorEverydayApps newColorRed];
-			cell.label.text = NSLocalizedString([AppDelegate bundleDisplayName],
-												[AppDelegate bundleDisplayName]);
+			cell.label.text = NSLocalizedString([AppDelegate bundleDisplayName], [AppDelegate bundleDisplayName]);
 			cell.accessoryType = UITableViewCellAccessoryNone;
 			cell.userInteractionEnabled = NO;
 			cell.marginStyle = MADTableViewCellMarginStyleTop;
@@ -157,8 +144,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 			
 		case 2: {
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-			cell.label.text = NSLocalizedString(@"By EVERYDAY APPS LLC in Cincinnati, OH.",
-												@"By EVERYDAY APPS LLC in Cincinnati, OH.");
+			cell.label.text = NSLocalizedString(@"By EVERYDAY APPS LLC in Cincinnati, OH.", @"By EVERYDAY APPS LLC in Cincinnati, OH.");
 			cell.accessoryType = UITableViewCellAccessoryNone;
 			cell.label.textColor = [UIColor secondaryLabelColor];
 			cell.userInteractionEnabled = NO;
@@ -173,8 +159,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 			
 		case 3:
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-			cell.label.text = NSLocalizedString([AppDelegate humanReadableCopyright],
-												[AppDelegate humanReadableCopyright]);
+			cell.label.text = NSLocalizedString([AppDelegate humanReadableCopyright], [AppDelegate humanReadableCopyright]);
 			cell.accessoryType = UITableViewCellAccessoryNone;
 			cell.label.textColor = [UIColor secondaryLabelColor];
 			cell.userInteractionEnabled = NO;
@@ -193,8 +178,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 			
 		case 5: {
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-			cell.label.text = NSLocalizedString(@"Created by Michael Thomason for Everyday Apps.",
-												@"Created by Michael Thomason for Everyday Apps.");
+			cell.label.text = NSLocalizedString(@"Created by Michael Thomason for Everyday Apps.", @"Created by Michael Thomason for Everyday Apps.");
 			cell.accessoryType = UITableViewCellAccessoryNone;
 			cell.label.textColor = [UIColor secondaryLabelColor];
 			cell.userInteractionEnabled = NO;

@@ -13,10 +13,10 @@
 
 - (void)awakeFromNib {
 	self.backgroundColor = [UIColor systemGroupedBackgroundColor];
-    self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.estimatedRowHeight = 44.0;
-    self.rowHeight = UITableViewAutomaticDimension;
-    [super awakeFromNib];
+	self.separatorStyle = UITableViewCellSeparatorStyleNone;
+	self.estimatedRowHeight = 44.0;
+	self.rowHeight = UITableViewAutomaticDimension;
+	[super awakeFromNib];
 }
 
 @end
