@@ -25,7 +25,7 @@
 													  style: UIAlertActionStyleDefault
 													handler: ^(UIAlertAction *action) {
 		UIAlertController *controller = alert;
-		NSString *text = ((UITextField *)controller.textFields.firstObject).text.copy;
+		NSString *text = [((UITextField *)controller.textFields.firstObject).text copy];
 		handlerContinue(text);
 	}];
 	
@@ -89,25 +89,23 @@
 												NSLocalizedString(@"Are you sure you would like to delete %@ item?  This action is final.",
 																  @"Delete message template (singular)");
 
-	NSString *number = [NSNumberFormatter localizedStringFromNumber: [NSNumber numberWithUnsignedInteger: itemCount]
-														numberStyle: NSNumberFormatterSpellOutStyle];
+	NSString *numberStr = [NSNumberFormatter localizedStringFromNumber: [NSNumber numberWithUnsignedInteger: itemCount]
+														   numberStyle: NSNumberFormatterSpellOutStyle];
 
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Confirm", @"Confirm")
-																   message: [NSString stringWithFormat:messageTemplate, number]
+																   message: [NSString stringWithFormat:messageTemplate, numberStr]
 															preferredStyle: UIAlertControllerStyleActionSheet];
 
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
-														   style: UIAlertActionStyleCancel
-														 handler: handlerCancel];
-	[alert addAction:actionCancel];
+	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
+											  style: UIAlertActionStyleCancel
+											handler: handlerCancel]];
 
 	NSString *titleDestructiveTemplate = itemCount > 1 ? NSLocalizedString(@"Remove %@ items", @"Remove %@ items (plural)") :
 														 NSLocalizedString(@"Remove %@ item", @"Remove %@ item (singular)");
 
-	UIAlertAction *actionDestructive = [UIAlertAction actionWithTitle: [NSString stringWithFormat:titleDestructiveTemplate, number]
-																style: UIAlertActionStyleDestructive
-															  handler: handlerConfirm];
-	[alert addAction:actionDestructive];
+	[alert addAction:[UIAlertAction actionWithTitle: [NSString stringWithFormat:titleDestructiveTemplate, numberStr]
+											  style: UIAlertActionStyleDestructive
+											handler: handlerConfirm]];
 	return alert;
 }
 
@@ -119,38 +117,35 @@
 	if (message.length <= 0) {
 		message = NSLocalizedString(@"Unknown error.", @"Unknown error.");
 	}
-	id alertController = [UIAlertController alertControllerWithTitle: title
-															 message: message
-													  preferredStyle: UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
-													   style: UIAlertActionStyleDefault
-													 handler: nil];
-	[alertController addAction:actionOK];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+																			 message: message
+																	  preferredStyle: UIAlertControllerStyleAlert];
+	[alertController addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+														style: UIAlertActionStyleDefault
+													  handler: nil]];
 	return alertController;
 }
 
 + (UIAlertController *)newAlertControllerErrorDisplayErrorWithTitle:(NSString *)title
 															message:(NSString *)message
 													  andCompletion:(void (^)(UIAlertAction *action))handlerContinue {
-	id alertController = [UIAlertController alertControllerWithTitle: title
-															 message: message
-													  preferredStyle: UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
-													   style: UIAlertActionStyleDefault
-													 handler: handlerContinue];
-	[alertController addAction:actionOK];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+																			 message: message
+																	  preferredStyle: UIAlertControllerStyleAlert];
+	[alertController addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+														style: UIAlertActionStyleDefault
+													  handler: handlerContinue]];
 	return alertController;
 	
 }
 
 + (UIAlertController *)newAlertControllerNofityTransactionComplete {
-	id alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Transaction Complete", @"Transaction Complete")
-												   message: NSLocalizedString(@"Software activated.", @"Software activated.")
-											preferredStyle: UIAlertControllerStyleAlert];
-	UIAlertAction *actionOK = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
-													   style: UIAlertActionStyleDefault
-													 handler: nil];
-	[alert addAction:actionOK];
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Transaction Complete", @"Transaction Complete")
+																   message: NSLocalizedString(@"Software activated.", @"Software activated.")
+															preferredStyle: UIAlertControllerStyleAlert];
+	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
+											  style: UIAlertActionStyleDefault
+											handler: nil]];
 	return alert;
 }
 
