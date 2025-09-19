@@ -68,7 +68,9 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 + (NSString *)bundleRevisionNumber {
-	return [[NSBundle mainBundle] infoDictionary][@"MADRevision"];
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"MADMeta" ofType:@"plist"];
+	NSDictionary *metaDictionary = [NSDictionary dictionaryWithContentsOfFile:path];
+	return metaDictionary[@"MADRevision"];
 }
 
 + (NSString *)humanReadableCopyright {
@@ -143,11 +145,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (NSString *)revisionNumber {
-	if (!_revisionNumber) {
-		CFStringRef version = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), MADKeyRevision);
-		_revisionNumber = (__bridge NSString *)version;
-	}
-	return _revisionNumber;
+	return [AppDelegate bundleRevisionNumber];
 }
 
 - (dispatch_queue_t)appDelegateQueueSerial {
