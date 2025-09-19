@@ -223,6 +223,7 @@
 		typeof(self) strongself = weakself;
 
 		id <MADExplorerProtocol, UIGestureRecognizerDelegate> fileDelegate = strongself.delegate;
+
 		if (!strongself.isEditing) {
 			[strongself actionRename:c];
 		} else {

@@ -278,6 +278,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[opInstallDocB addObserver:self];
 	[operationQueueBackground addOperation:opInstallDocB];
 	
+	/// FIXME: Leaving this here for when I add storekit stuff back.
 	// Only call this when a user request to restore purchases.  Do not call this on launch or load.
 	//NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MADVerificationController sharedInstance]
 	//																 selector: @selector(resetReceipt)
@@ -1743,12 +1744,12 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 															preferredStyle: UIAlertControllerStyleAlert];
 	[alert addTextFieldWithConfigurationHandler:textFieldConfig];
 
-	UITextField *textField = ((UIAlertController *)alert).textFields.firstObject;
-	NSString *text = [textField.text copy];
 	UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: NSLocalizedString(@"Rename", @"Rename")
 															style: UIAlertActionStyleDefault
 														  handler: ^(UIAlertAction *action) {
-		handlerConfirm(action, text);
+		UITextField *textField = alert.textFields.firstObject;
+		NSString *newText = [textField.text copy];
+		handlerConfirm(action, newText);
 	}];
 	[alert addAction:actionDefault];
 
