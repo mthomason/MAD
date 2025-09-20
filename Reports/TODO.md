@@ -11,6 +11,7 @@
 * ~~Infoscreen in dark mode is unreadable... can't be dismissed~~
 * Recreate sample reports (in new format)
 * ~~Allow users to rename documents.~~
+* Fix whitespace element type
 * Fix minor UI issues
 * AI localizations
 * That's it...
