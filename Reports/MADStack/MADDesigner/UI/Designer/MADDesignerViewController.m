@@ -2159,6 +2159,10 @@ didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
 	}];
 }
 
+- (void)insertDocumentObjectWhitespace {
+	[self saveWhiteSpace];
+}
+
 #pragma mark -
 #pragma mark Gesture Recognizer Delegate
 

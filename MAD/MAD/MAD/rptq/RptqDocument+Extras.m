@@ -675,8 +675,11 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			break;
 		}
 		case MADPrintPageElementTypeWhtiespace: {
+			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElement class])
+																 inManagedObjectContext: managedObjectContext];
+			reportObject = [[RptqDocumentElement alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+										insertIntoManagedObjectContext: managedObjectContext];
 			reportObject.type = MADPrintPageElementTypeWhtiespace;
-			
 			break;
 		}
 		case MADPrintPageElementTypeBarcode: {

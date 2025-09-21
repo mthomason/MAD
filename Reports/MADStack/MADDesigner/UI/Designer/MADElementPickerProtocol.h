@@ -17,6 +17,7 @@
 @protocol MADElementPickerProtocol <MADViewControllerStandardProtocol>
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
+- (void)insertDocumentObjectWhitespace;
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
 											   inputType:(MTAggregateFunctionInputType)inputType

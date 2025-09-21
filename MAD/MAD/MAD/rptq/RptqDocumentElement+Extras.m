@@ -964,6 +964,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (NSString *)designerRepresentationText {
+	if (self.documentObjectType == MADPrintPageElementTypeWhtiespace) {
+		return @"";
+	}
 	@throw NSInternalInconsistencyException;
 }
 

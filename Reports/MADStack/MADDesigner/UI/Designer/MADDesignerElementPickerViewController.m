@@ -139,10 +139,12 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	
 	switch (madob.shortValue) {
 			
-		case MADPrintPageElementTypeWhtiespace:
-			[self performSegueWithIdentifier:@"" sender:self];
+		case MADPrintPageElementTypeWhtiespace: {
+			id <MADElementPickerProtocol> delegate = self.objectSelectorDelegate;
+			[delegate insertDocumentObjectWhitespace];
+			[delegate viewControllerDidFinish:self];
 			break;
-			
+		}
 		case MADPrintPageElementTypeAggregate:
 			[self performSegueWithIdentifier:@"MTIdentifierSeguePushAggregateLabelNew" sender:self];
 			break;
