@@ -56,4 +56,7 @@
    <FileRef
       location = "group:LICENSE.md">
    </FileRef>
+   <FileRef
+      location = "group:AGENTS.md">
+   </FileRef>
 </Workspace>
