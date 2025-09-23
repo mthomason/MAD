@@ -112,7 +112,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
 	NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
 	
-	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace ]];
+	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace]];
 	
 	if ([MADStoreKitController sharedObject].barcodeDesignerEnabled) {
 		NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
@@ -173,7 +173,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 - (void)presentImagePicker {
 	UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 	imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-	imagePicker.delegate = (id <UINavigationControllerDelegate ,UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
+	imagePicker.delegate = (id <UINavigationControllerDelegate, UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
 	imagePicker.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
 	[self presentViewController:imagePicker animated:YES completion:NULL];
 }
