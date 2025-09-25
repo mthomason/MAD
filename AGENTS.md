@@ -78,5 +78,6 @@ The codebase also includes static library build scrips in a file called `Compres
 
 * This project uses tabs for spacing.
 * This project uses limited comments where needed
+* This project is very complex, so fixes and changes should be made stratigicly to minimize side effects.
 
 ---
