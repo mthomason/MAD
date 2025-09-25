@@ -36,6 +36,7 @@
 		4C6895162CF1F95000BD38DF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4C7C37FF2DF612CF008BCFA6 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../Compressor/library/openssl/iOS/lib/libssl.a; sourceTree = "<group>"; };
 		4C7C38002DF612D0008BCFA6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../Compressor/library/openssl/iOS/lib/libcrypto.a; sourceTree = "<group>"; };
+		4CBF04412E85194500812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CCABCD92CF0B75A008EC875 /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CCABCDC2CF0B75A008EC875 /* MADTds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTds.h; sourceTree = "<group>"; };
 		4CCABCDD2CF0B75A008EC875 /* MADTds.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MADTds.docc; sourceTree = "<group>"; };
@@ -86,6 +87,7 @@
 		4CCABCCF2CF0B75A008EC875 = {
 			isa = PBXGroup;
 			children = (
+				4CBF04412E85194500812022 /* AGENTS.md */,
 				4C6895162CF1F95000BD38DF /* README.md */,
 				4CCABCDB2CF0B75A008EC875 /* MADTds */,
 				4CCABCDA2CF0B75A008EC875 /* Products */,

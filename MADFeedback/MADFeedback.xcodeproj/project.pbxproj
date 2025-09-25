@@ -46,6 +46,7 @@
 		4C8DCF951B8FCD4D0078563C /* MADFeedback.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFeedback.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8DCF9F1B8FCD4D0078563C /* MADFeedback.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADFeedback.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8DCFB31B90C9F50078563C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4CBF043B2E85184E00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CC035E61B90FF99001A3CC5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -98,6 +99,7 @@
 		4C8DCF8B1B8FCD4D0078563C = {
 			isa = PBXGroup;
 			children = (
+				4CBF043B2E85184E00812022 /* AGENTS.md */,
 				4C401F341BAE780300BAE5FC /* MADFeedback */,
 				4C401F3D1BAE780300BAE5FC /* MADFeedbackTest */,
 				4C8DCFFC1B90DF1E0078563C /* Frameworks */,

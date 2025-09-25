@@ -1151,6 +1151,7 @@
 		4C9373E71BAD2A8300D6BD62 /* MysqlUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MysqlUpdate.m; path = MADMySQL/MysqlUpdate.m; sourceTree = "<group>"; };
 		4CA8B2E42DD5DB53001E27B3 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../Compressor/library/openssl/iOS/lib/libcrypto.a; sourceTree = "<group>"; };
 		4CA8B2E52DD5DB53001E27B3 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../Compressor/library/openssl/iOS/lib/libssl.a; sourceTree = "<group>"; };
+		4CBF043F2E8518E800812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CDCEF251D8D859A00A5A32E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADCreateDocument.storyboard; path = MADMySQL/MADCreateDocument.storyboard; sourceTree = "<group>"; };
 		4CF85F3A2DD0AAA800FCA47D /* aes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -2100,6 +2101,7 @@
 		4C70148A1BACDC6800301713 = {
 			isa = PBXGroup;
 			children = (
+				4CBF043F2E8518E800812022 /* AGENTS.md */,
 				4CAEE7341E563659009A6096 /* Resources */,
 				4C7014961BACDC6800301713 /* Source */,
 				4C7014A21BACDC6800301713 /* MADMySQLTests */,

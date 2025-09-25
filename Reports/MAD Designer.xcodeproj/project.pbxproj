@@ -1021,6 +1021,7 @@
 		4CBBA9561CFED6870033F63B /* MADQueryBuilderAddGroupDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQueryBuilderAddGroupDelegate.h; sourceTree = "<group>"; };
 		4CBC501C1E1B508800B067AD /* MADMeta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = MADMeta.plist; path = Assets/MADMeta.plist; sourceTree = "<group>"; };
 		4CBE1CC718C5A6E6009675CE /* buildcounter.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildcounter.sh; sourceTree = "<group>"; };
+		4CBF04352E85171C00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = AGENTS.md; path = ../Compressor/AGENTS.md; sourceTree = SOURCE_ROOT; };
 		4CC3D6331BCB62BC00BDA5D3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CC3D6391BCB6D9400BDA5D3 /* MADIcon22x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADIcon22x29.png; sourceTree = "<group>"; };
 		4CC3D63A1BCB6D9400BDA5D3 /* MADIcon320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADIcon320.png; sourceTree = "<group>"; };
@@ -1646,6 +1647,7 @@
 		4C3A969A189F7CB6007AF476 /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
+				4CBF04352E85171C00812022 /* AGENTS.md */,
 				4C4B4B852DE2C16F0035A316 /* build_sqlite3.sh */,
 				4CA8B2E32DD5DA5A001E27B3 /* build_openssl_thridparty.sh */,
 				4C4EC6D32DC97D7A001DBEBE /* build_archive.sh */,

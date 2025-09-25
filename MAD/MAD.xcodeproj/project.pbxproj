@@ -941,6 +941,7 @@
 		4CB98DFC1F4637510043B583 /* MADOperationDeleteFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOperationDeleteFile.m; path = MAD/MADOperationDeleteFile.m; sourceTree = "<group>"; };
 		4CBBA9481CFE94FB0033F63B /* MADActivityItemProviderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADActivityItemProviderDelegate.h; path = MAD/MADActivityItemProviderDelegate.h; sourceTree = "<group>"; };
 		4CBBA9511CFEB9DE0033F63B /* MADPredicateOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPredicateOperator.h; path = ../../Reports/MADStack/MADDesigner/UI/QueryBuilder/SelectOperator/MADPredicateOperator.h; sourceTree = "<group>"; };
+		4CBF04342E85164B00812022 /* AGENTS.md */ = {isa = PBXFileReference; explicitFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CC1C6FC1CFDED57006F1546 /* MADAppLaunchContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAppLaunchContext.h; path = ../../MADFileManager/MADFileManager/MADFileManager/MADAppLaunchContext.h; sourceTree = "<group>"; };
 		4CC1C6FD1CFDED57006F1546 /* MADAppLaunchContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAppLaunchContext.m; path = ../../MADFileManager/MADFileManager/MADFileManager/MADAppLaunchContext.m; sourceTree = "<group>"; };
 		4CC281EF1BADE80500775B72 /* MADActivityProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADActivityProtocol.h; path = MAD/MADActivityProtocol.h; sourceTree = "<group>"; };
@@ -1963,6 +1964,7 @@
 		4CF7813A1BADE5EA0050A67D = {
 			isa = PBXGroup;
 			children = (
+				4CBF04342E85164B00812022 /* AGENTS.md */,
 				4C1E54E61E56610D00E3FAF0 /* Resources */,
 				4CF781461BADE5EA0050A67D /* MAD */,
 				4CF781521BADE5EA0050A67D /* MADTests */,

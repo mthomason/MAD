@@ -155,6 +155,7 @@
 		4CB98E1C1F47BBED0043B583 /* MADOperationTestResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOperationTestResults.h; path = MAD/MADOperationTestResults.h; sourceTree = "<group>"; };
 		4CB9AAE91C8C2D3B00420CFF /* MADDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataType.h; sourceTree = "<group>"; };
 		4CB9AAEA1C8C2D3B00420CFF /* MADDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataType.m; sourceTree = "<group>"; };
+		4CBF043E2E8518A800812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CDA62D81D0803ED00E95859 /* MADURLFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADURLFactory.m; path = ../../../MADFileManager/MADFileManager/MADFileManager/Categories/MADURLFactory.m; sourceTree = "<group>"; };
 		4CDA62D91D0803ED00E95859 /* MADURLFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADURLFactory.h; path = ../../../MADFileManager/MADFileManager/MADFileManager/Categories/MADURLFactory.h; sourceTree = "<group>"; };
 		4CF09A3D1BB23FA8007BCF7A /* MADApplicationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADApplicationProtocol.h; sourceTree = "<group>"; };
@@ -191,6 +192,7 @@
 		4C9372901BACFC9200D6BD62 = {
 			isa = PBXGroup;
 			children = (
+				4CBF043E2E8518A800812022 /* AGENTS.md */,
 				4C9372E31BAD0EBC00D6BD62 /* Resouces */,
 				4C93729C1BACFC9200D6BD62 /* MADFoundation */,
 				4C9372A81BACFC9200D6BD62 /* MADFoundationTests */,

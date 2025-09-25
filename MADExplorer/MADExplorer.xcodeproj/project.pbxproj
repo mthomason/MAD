@@ -88,6 +88,7 @@
 		4CA4D62C1D183DD400A1240C /* MADStandard.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MADStandard.mm; sourceTree = "<group>"; };
 		4CA4D62F1D18451200A1240C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CB0DF4D24ACCA01002C7A95 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CBF043A2E85181B00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADFileLocationManager.h; path = MADExplorer/MADFileLocationManager.h; sourceTree = "<group>"; };
 		4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADFileLocationManager.m; path = MADExplorer/MADFileLocationManager.m; sourceTree = "<group>"; };
 		4CC641581BA77ABC00F3ECCE /* MADCollectionViewCellDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCollectionViewCellDocument.h; path = MADExplorer/MADCollectionViewCellDocument.h; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 		4C6700E11BA20633001C9D5A = {
 			isa = PBXGroup;
 			children = (
+				4CBF043A2E85181B00812022 /* AGENTS.md */,
 				4CC641601BA77BB700F3ECCE /* Resources */,
 				4C6700ED1BA20633001C9D5A /* MADExplorer */,
 				4C6700F91BA20633001C9D5A /* MADExplorerTests */,

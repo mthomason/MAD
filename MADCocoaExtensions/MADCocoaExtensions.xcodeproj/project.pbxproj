@@ -117,6 +117,7 @@
 		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMargin.h; path = MADCocoaExtensions/MADMargin.h; sourceTree = "<group>"; };
 		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPadding.h; path = MADCocoaExtensions/MADPadding.h; sourceTree = "<group>"; };
 		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextStyle.h; path = MADCocoaExtensions/MADTextStyle.h; sourceTree = "<group>"; };
+		4CBF04382E8517CE00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CD807C62E145CCD00BE420E /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
 		4CD807C82E145D0800BE420E /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,6 +145,7 @@
 		4C5205531BA7E1DC000E6A59 = {
 			isa = PBXGroup;
 			children = (
+				4CBF04382E8517CE00812022 /* AGENTS.md */,
 				4C5205CE1BA7E2F3000E6A59 /* Resources */,
 				4C52055F1BA7E1DC000E6A59 /* MADCocoaExtensions */,
 				4C52056B1BA7E1DC000E6A59 /* MADCocoaExtensionsTests */,

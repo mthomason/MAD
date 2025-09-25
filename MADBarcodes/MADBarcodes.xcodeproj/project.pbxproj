@@ -418,6 +418,7 @@
 		4CA8B2F22DD5E4CA001E27B3 /* png.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4CA8B2F32DD5E4CA001E27B3 /* pngconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
 		4CA8B2F42DD5E4CA001E27B3 /* pnglibconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
+		4CBF04372E8517A300812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeSizingMode.h; path = MADBarcodes/MADBarcodeSizingMode.h; sourceTree = "<group>"; };
 		4CC909021D0FC53E007A1C75 /* MADBarcodeDataInputType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADBarcodeDataInputType.h; sourceTree = "<group>"; };
 		4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeBorderStyle.h; path = MADBarcodes/MADBarcodeBorderStyle.h; sourceTree = "<group>"; };
@@ -450,6 +451,7 @@
 		4C1309601BA8068B0022665F = {
 			isa = PBXGroup;
 			children = (
+				4CBF04372E8517A300812022 /* AGENTS.md */,
 				4C130B061BA808660022665F /* Resouces */,
 				4C13096C1BA8068B0022665F /* MADBarcodes */,
 				4C1309781BA8068B0022665F /* MADBarcodesTests */,

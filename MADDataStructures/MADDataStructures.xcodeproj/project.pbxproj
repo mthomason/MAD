@@ -119,6 +119,7 @@
 		4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBfsProperties.h; path = MADDataStructures/MADBfsProperties.h; sourceTree = "<group>"; };
 		4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAlgorithmElementProperties.m; path = MADDataStructures/MADAlgorithmElementProperties.m; sourceTree = "<group>"; };
 		4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlgorithmElementProperties.h; path = MADDataStructures/MADAlgorithmElementProperties.h; sourceTree = "<group>"; };
+		4CBF04392E8517F300812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +144,7 @@
 		4C2C7B371BA929EF00C9CC5E = {
 			isa = PBXGroup;
 			children = (
+				4CBF04392E8517F300812022 /* AGENTS.md */,
 				4C2C7B431BA929EF00C9CC5E /* MADDataStructures */,
 				4C2C7B4F1BA929EF00C9CC5E /* MADDataStructuresTests */,
 				4C2C7B421BA929EF00C9CC5E /* Products */,

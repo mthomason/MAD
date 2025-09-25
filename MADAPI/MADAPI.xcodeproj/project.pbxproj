@@ -78,6 +78,7 @@
 		4C7E248724A6093D005098F2 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7E24AE24A63872005098F2 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CAA659D2DDD10760016006E /* MADAliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAliases.h; sourceTree = "<group>"; };
+		4CBF04362E85176C00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADAPI.h; sourceTree = "<group>"; };
 		4CF6AAA31F5518BB0061B0C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 		4CF6AA951F5518BA0061B0C6 = {
 			isa = PBXGroup;
 			children = (
+				4CBF04362E85176C00812022 /* AGENTS.md */,
 				4CF6AAA11F5518BB0061B0C6 /* MADAPI */,
 				4CF6AAAC1F5518BB0061B0C6 /* MADAPITests */,
 				4CF6AADB1F5528710061B0C6 /* Frameworks */,
