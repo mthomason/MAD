@@ -16,8 +16,7 @@ extern NSString * const MADUpgradeInstalledChinook;
 
 @interface MADOperationInstallSampleDatabase : MADOperation
 
-	+ (NSURL *)newApplicationBundleSampleDatabaseChinook;
-	+ (NSURL *)newApplicationSupportSampleDatabaseChinook;
++ (NSURL *)newApplicationSupportSampleDatabaseChinook;
 
 @end
 

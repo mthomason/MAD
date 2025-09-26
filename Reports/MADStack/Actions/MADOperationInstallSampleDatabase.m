@@ -7,23 +7,23 @@
 //
 
 #import "MADOperationInstallSampleDatabase.h"
+#import "madlog.h"
+
+#import <MAD/MADConstants.h>
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADApplicationProtocol.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSBundle.h>
 #import <UIKit/NSDataAsset.h>
 
-#import <MAD/MADConstants.h>
-#import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURLFactory.h>
-#import "madlog.h"
+NSString * const MADUpgradeInstalledSamples			= @"MADUpgradeInstalledSamples";
+NSString * const MADUpgradeInstalledChinook			= @"MADUpgradeInstalledChinook";
 
-NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
-NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
-
-static NSString * const MTSampleDatabaseChinook            = @"chinook";
-static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
+static NSString * const MTSampleDatabaseChinook		= @"chinook";
+static NSString * const MTDocumentExtentionSqlite3	= @"sqlite3";
 
 @implementation MADOperationInstallSampleDatabase
 
@@ -75,7 +75,7 @@ static NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 + (NSURL *)newApplicationSupportSampleDatabaseChinook {
 	return [MADURLFactory newURLApplicationSupportFile: MTSampleDatabaseChinook
-									  extension: MTDocumentExtentionSqlite3];
+											 extension: MTDocumentExtentionSqlite3];
 }
 
 @end
