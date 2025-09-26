@@ -12,21 +12,20 @@
 #import <UIKit/UITableViewController.h>
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 
-@interface MTSettingsViewController : UITableViewController
-    <UITableViewDelegate>
+@interface MTSettingsViewController : UITableViewController <UITableViewDelegate>
 
-    @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol> delegate;
 
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellPrint;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellExport;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellFind;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellReportSetup;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellRuler;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellSettings;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellHelp;
-    @property (nonatomic, weak) IBOutlet UITableViewCell *tableCellStore;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellPrint;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellExport;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellFind;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellReportSetup;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellRuler;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellSettings;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellHelp;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellStore;
 
-    - (IBAction)done:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 

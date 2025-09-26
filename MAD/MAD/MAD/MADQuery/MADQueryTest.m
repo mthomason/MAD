@@ -13,8 +13,9 @@
 #import "MADQueryTest.h"
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADAPI/MADDatabase.h>
-#import <Foundation/NSString.h>
 #import <MADAPI/MADQueryType.h>
+
+#import <Foundation/NSString.h>
 
 @implementation MADQueryTest
 

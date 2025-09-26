@@ -11,10 +11,9 @@
 
 #import <MADAPI/MADQuery.h>
 
-@interface MADQueryMaxFieldLength : MADQuery
-    <MADQueryFieldKeysProtocol, MADQueryDatabaseProtocol>
+@interface MADQueryMaxFieldLength : MADQuery <MADQueryFieldKeysProtocol, MADQueryDatabaseProtocol>
 
-    - (NSString *)getSql:(NSError * __autoreleasing *)error;
+- (NSString *)getSql:(NSError * __autoreleasing *)error;
 
 @end
 

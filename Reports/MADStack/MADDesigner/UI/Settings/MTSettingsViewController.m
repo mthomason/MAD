@@ -17,15 +17,14 @@
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-
-    [self setClearsSelectionOnViewWillAppear: YES];
+	[super viewDidLoad];
+	[self setClearsSelectionOnViewWillAppear: YES];
 }
 
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [self.delegate viewControllerDidFinish:self];
+	[self.delegate viewControllerDidFinish:self];
 }
 
 #pragma mark -

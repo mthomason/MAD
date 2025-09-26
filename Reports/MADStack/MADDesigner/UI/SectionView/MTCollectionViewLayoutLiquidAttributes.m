@@ -14,14 +14,14 @@
 #pragma mark NSCopying
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-    MTCollectionViewLayoutLiquidAttributes *copy = [super copyWithZone:zone];
-    copy.dropPoint = self.dropPoint;
-    copy.dropIndex = self.dropIndex;
-    copy.lastTouchPointValid = self.lastTouchPointValid;
-    copy.lastTouchPoint = self.lastTouchPoint;
-    copy.layoutDescription = self.layoutDescription.copy;
-    copy.frame = self.frame;
-    return copy;
+	MTCollectionViewLayoutLiquidAttributes *copy = [super copyWithZone:zone];
+	copy.dropPoint = self.dropPoint;
+	copy.dropIndex = self.dropIndex;
+	copy.lastTouchPointValid = self.lastTouchPointValid;
+	copy.lastTouchPoint = self.lastTouchPoint;
+	copy.layoutDescription = self.layoutDescription.copy;
+	copy.frame = self.frame;
+	return copy;
 }
 
 /*

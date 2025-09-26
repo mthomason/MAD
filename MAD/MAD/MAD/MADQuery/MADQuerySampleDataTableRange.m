@@ -12,19 +12,6 @@
 
 #import "MADQuerySampleDataTableRange.h"
 
-#import <CoreData/NSManagedObjectID.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSException.h>
-#import <Foundation/NSNull.h>
-#import <Foundation/NSError.h>
-
-#import <MADFoundation/MADDataTable.h>
-
-#import <MADAPI/MADDatabaseResultsProtocol.h>
-#import <MADAPI/MADDatabaseConnection.h>
-#import <MADAPI/MADDatabase.h>
-#import <MADAPI/MADDatabaseField.h>
-
 #import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase.h"
@@ -36,6 +23,18 @@
 #import "MADDatabaseField+Constructor.h"
 
 #import "RptqDatabaseCredentals+Extras.h"
+
+#import <MADFoundation/MADDataTable.h>
+#import <MADAPI/MADDatabaseResultsProtocol.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseField.h>
+
+#import <Foundation/NSURL.h>
+#import <Foundation/NSException.h>
+#import <Foundation/NSNull.h>
+#import <Foundation/NSError.h>
+#import <CoreData/NSManagedObjectID.h>
 
 @interface MADQuerySampleDataTableRange () <MADDatabaseResultsProtocol>
 

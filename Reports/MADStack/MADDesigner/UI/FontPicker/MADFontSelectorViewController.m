@@ -29,7 +29,7 @@ static inline CGRect frameWithTopGuide(CGRect frame, CGFloat topGuideLength) {
 }
 
 static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGuideLength) {
-    return UIEdgeInsetsMake(topGuideLength, CGSizeZero.width, bottomGuideLength, CGSizeZero.width);
+	return UIEdgeInsetsMake(topGuideLength, CGSizeZero.width, bottomGuideLength, CGSizeZero.width);
 }
 
 @interface MADFontSelectorViewController()

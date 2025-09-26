@@ -12,15 +12,15 @@
 #import <UIKit/UITableViewController.h>
 
 @protocol MTTableViewControllerBarcodeExtraDataMatrixDelegate
-    - (NSInteger)barcodeDataMatrixInitalSize;
-    - (void)barcodeDataMatrixDidSelectSize:(NSInteger)size;
-    - (void)barcodeDataMatrixDidSuppressRectangularSymbols:(BOOL)suppress;
-    - (BOOL)barcodeDataMatrixSuppressRectangularSymbols;
+- (NSInteger)barcodeDataMatrixInitalSize;
+- (void)barcodeDataMatrixDidSelectSize:(NSInteger)size;
+- (void)barcodeDataMatrixDidSuppressRectangularSymbols:(BOOL)suppress;
+- (BOOL)barcodeDataMatrixSuppressRectangularSymbols;
 @end
 
 @interface MTTableViewControllerBarcodeExtraDataMatrix : UITableViewController
 
-    @property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
 
 @end
 

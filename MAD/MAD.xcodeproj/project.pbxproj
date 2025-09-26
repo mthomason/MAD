@@ -808,8 +808,6 @@
 		4C4F127B1D0A956A0002294E /* MADQuerySelectExpressionAllFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQuerySelectExpressionAllFields.m; path = MAD/MADQuery/MADQuerySelectExpressionAllFields.m; sourceTree = "<group>"; };
 		4C4F127E1D0A95810002294E /* MADQuerySelectExpressionActiveFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQuerySelectExpressionActiveFields.h; path = MAD/MADQuery/MADQuerySelectExpressionActiveFields.h; sourceTree = "<group>"; };
 		4C4F127F1D0A95810002294E /* MADQuerySelectExpressionActiveFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQuerySelectExpressionActiveFields.m; path = MAD/MADQuery/MADQuerySelectExpressionActiveFields.m; sourceTree = "<group>"; };
-		4C4F12821D0B928B0002294E /* NSError+QueryFull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+QueryFull.h"; path = "MAD/NSError+QueryFull.h"; sourceTree = "<group>"; };
-		4C4F12831D0B928B0002294E /* NSError+QueryFull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+QueryFull.m"; path = "MAD/NSError+QueryFull.m"; sourceTree = "<group>"; };
 		4C4F12861D0B948D0002294E /* MADQueryFullTableEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADQueryFullTableEnumerator.h; path = MAD/MADQueryFullTableEnumerator.h; sourceTree = "<group>"; };
 		4C4F12871D0B948D0002294E /* MADQueryFullTableEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADQueryFullTableEnumerator.m; path = MAD/MADQueryFullTableEnumerator.m; sourceTree = "<group>"; };
 		4C5259321D894AA200FEF1A1 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -1953,8 +1951,6 @@
 				4C02F9D12E21B512009113B6 /* MADQuerySampleDataTableRange.m */,
 				4C401DB31BAE3BD500BAE5FC /* MADQueryTest.h */,
 				4C401DB41BAE3BD500BAE5FC /* MADQueryTest.m */,
-				4C4F12821D0B928B0002294E /* NSError+QueryFull.h */,
-				4C4F12831D0B928B0002294E /* NSError+QueryFull.m */,
 				4C4F12861D0B948D0002294E /* MADQueryFullTableEnumerator.h */,
 				4C4F12871D0B948D0002294E /* MADQueryFullTableEnumerator.m */,
 			);

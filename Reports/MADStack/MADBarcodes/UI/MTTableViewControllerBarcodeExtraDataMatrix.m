@@ -19,44 +19,44 @@
 @implementation MTTableViewControllerBarcodeExtraDataMatrix
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    NSInteger row = [self.delegate barcodeDataMatrixInitalSize];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:1]];
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+	[super viewWillAppear:animated];
+	NSInteger row = [self.delegate barcodeDataMatrixInitalSize];
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:1]];
+	cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
-    delegate = self.delegate;
-    
-    NSInteger section = indexPath.section;
-    switch (indexPath.section) {
-        case 0: {
-            BOOL suppress = [delegate barcodeDataMatrixSuppressRectangularSymbols] == NO;
-            UITableViewCell *c = [tableView cellForRowAtIndexPath:indexPath];
-            UITableViewCellAccessoryType accessory = suppress ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            c.accessoryType = accessory;
-            [delegate barcodeDataMatrixDidSuppressRectangularSymbols:suppress];
-            break;
-        }
-        case 1: {
-            NSInteger numberOfRows = [tableView numberOfRowsInSection:section];
-            for (NSInteger i = 0; i < numberOfRows; i++) {
-                UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
-                c.accessoryType = UITableViewCellAccessoryNone;
-            }
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            [delegate barcodeDataMatrixDidSelectSize:cell.tag];
-
-            break;
-        }
-        default:
-            break;
-    }
+	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	id <MTTableViewControllerBarcodeExtraDataMatrixDelegate> delegate;
+	delegate = self.delegate;
+	
+	NSInteger section = indexPath.section;
+	switch (indexPath.section) {
+		case 0: {
+			BOOL suppress = [delegate barcodeDataMatrixSuppressRectangularSymbols] == NO;
+			UITableViewCell *c = [tableView cellForRowAtIndexPath:indexPath];
+			UITableViewCellAccessoryType accessory = suppress ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+			c.accessoryType = accessory;
+			[delegate barcodeDataMatrixDidSuppressRectangularSymbols:suppress];
+			break;
+		}
+		case 1: {
+			NSInteger numberOfRows = [tableView numberOfRowsInSection:section];
+			for (NSInteger i = 0; i < numberOfRows; i++) {
+				UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
+				c.accessoryType = UITableViewCellAccessoryNone;
+			}
+			cell.accessoryType = UITableViewCellAccessoryCheckmark;
+			[delegate barcodeDataMatrixDidSelectSize:cell.tag];
+			
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 @end

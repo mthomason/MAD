@@ -12,7 +12,9 @@
 #import <MADAPI/MADQuery.h>
 
 @interface MADQuerySampleDataTable : MADQuery <MADQueryFieldKeysProtocol, MADQueryDataTableProtocol, MADQueryDatabaseProtocol, MADQueryDatabaseProtocol, MADQueryCredentialProtocol>
+
 - (NSString *)getSql:(NSError * __autoreleasing *)error;
+
 @end
 
 #endif

@@ -12,13 +12,13 @@
 #import <UIKit/UITableViewController.h>
 
 @protocol MTTableViewControllerBarcodeExtraGridMatrixDelegate
-    - (void)barcodeGridMatrixDidEnableAutomaticResizing;
-    - (void)barcodeGridMatrixDidSetSize:(NSInteger)size;
-    - (void)barcodeGridMatrixDidSetErrorCorrection:(NSInteger)errorCorrection;
+- (void)barcodeGridMatrixDidEnableAutomaticResizing;
+- (void)barcodeGridMatrixDidSetSize:(NSInteger)size;
+- (void)barcodeGridMatrixDidSetErrorCorrection:(NSInteger)errorCorrection;
 
-    - (BOOL)barcodeGridMatrixAutomaticResizing;
-    - (NSInteger)barcodeGridMatrixInitalSize;
-    - (NSInteger)barcodeGridMatrixInitalErrorCorrection;
+- (BOOL)barcodeGridMatrixAutomaticResizing;
+- (NSInteger)barcodeGridMatrixInitalSize;
+- (NSInteger)barcodeGridMatrixInitalErrorCorrection;
 @end
 
 @interface MTTableViewControllerBarcodeExtraGridMatrix : UITableViewController

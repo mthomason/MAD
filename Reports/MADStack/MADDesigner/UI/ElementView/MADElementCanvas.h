@@ -13,14 +13,14 @@
 #import <UIKit/NSStringDrawing.h>
 
 @protocol MADElementCanvasDelegate <NSObject>
-    - (id)displayObject;
+- (id)displayObject;
 @end
 
 @class NSParagraphStyle;
 
 @interface MADElementCanvas : UIView
 
-    @property (nonatomic, weak) id <MADElementCanvasDelegate>canvasDelegate;
+@property (nonatomic, weak) id <MADElementCanvasDelegate>canvasDelegate;
 
 @end
 

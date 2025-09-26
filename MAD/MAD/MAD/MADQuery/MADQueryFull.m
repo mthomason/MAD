@@ -435,8 +435,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	
 	BOOL queryChanged = NO;
 	
-	BOOL (^queryObjectInSet)(NSSet <NSManagedObjectContext *> *);
-	queryObjectInSet = ^(NSSet <NSManagedObjectContext *> *changes){
+	BOOL (^queryObjectInSet)(NSSet <NSManagedObjectContext *> *) = ^(NSSet <NSManagedObjectContext *> *changes){
 		for (id change in changes) {
 			if (isKindOfRptqQuery(change)) {
 				return YES;
@@ -444,7 +443,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 		}
 		return NO;
 	};
-	
+
 	NSSet *changes;
 	changes = notification.userInfo[NSUpdatedObjectsKey];
 	queryChanged = queryObjectInSet(changes);
