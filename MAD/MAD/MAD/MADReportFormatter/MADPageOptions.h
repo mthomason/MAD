@@ -9,9 +9,9 @@
 #ifndef MAD_MADReportFormatterPageDefinition_h
 #define MAD_MADReportFormatterPageDefinition_h
 
-#import <CoreGraphics/CGBase.h>
 #import <Foundation/NSObject.h>
 #import <UIKit/UIGeometry.h>
+#import <CoreGraphics/CGBase.h>
 
 @interface MADPageOptions : NSObject
 

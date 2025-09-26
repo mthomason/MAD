@@ -147,8 +147,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 			 managedObjectContext: (NSManagedObjectContext *)managedObjectContext
 							error: (NSError * __autoreleasing *)error {
 	
-	RptqDocument *document;
-	document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
 	RptqDatabase *databaseSchema = document.hasDatabaseSchemas.anyObject;
 	RptqQuery *queryObject = databaseSchema.hasQueries.anyObject;
 	

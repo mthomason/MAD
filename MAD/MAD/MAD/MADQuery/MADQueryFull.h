@@ -13,18 +13,18 @@
 
 @class NSManagedObjectID, NSManagedObjectContext, RptqQuery;
 
-@interface MADQueryFull : MADQuery
-    <MADQueryFieldKeysProtocol, MADQueryDataDelegateProtocol>
-    - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
+@interface MADQueryFull : MADQuery <MADQueryFieldKeysProtocol, MADQueryDataDelegateProtocol>
 
-    - (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                            error:(NSError * __autoreleasing *)error;
+- (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
 
-    - (NSString *)SQLOnlyActiveFields:(BOOL)onlyActiveFields
-                 managedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                error:(NSError **)error;
+- (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+										error:(NSError * __autoreleasing *)error;
 
-    @property (nonatomic, assign) NSUInteger limitResults;
+- (NSString *)SQLOnlyActiveFields:(BOOL)onlyActiveFields
+			 managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+							error:(NSError **)error;
+
+@property (nonatomic, assign) NSUInteger limitResults;
 
 @end
 
