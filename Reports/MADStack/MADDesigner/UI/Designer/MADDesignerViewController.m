@@ -1929,16 +1929,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 			if (_identifierJustDisplayed != -1) {
 				
 				if (_identifierJustDisplayed == identifier) {
-					__typeof(self) __weak wself = self;
+					__weak MADDesignerViewController *wself = self;
 					if ([elementView conformsToProtocol:@protocol(MADViewAnimationProtocol)]) {
-						//[elementView flash:^(BOOL finished) {
-						//    if (finished) {
-						typeof(self) sself = wself;
-						if (sself) {
-							sself->_identifierJustDisplayed = -1;
-						}
-						//    }
-						//}];
+						[elementView flash:^(BOOL finished) {
+							if (finished) {
+								__strong MADDesignerViewController *sself = wself;
+								if (sself) {
+									sself->_identifierJustDisplayed = -1;
+								}
+							}
+						}];
 					}
 				}
 				
@@ -2626,10 +2626,10 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADDesignerViewController *weakSelf = self;
 	[collectionView performBatchUpdates:^{
 		
-		__strong typeof(self) strongSelf = weakSelf;
+		__strong MADDesignerViewController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 		
 		
@@ -2676,7 +2676,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		[layoutManager layout];
 		
 	} completion:^(BOOL finished) {
-		typeof(self) strongself = weakSelf;
+		__strong MADDesignerViewController *strongself = weakSelf;
 		if (!strongself) return;
 		MADocument *doc = strongself.document;
 		[strongself.view.scroller.container setNeedsUpdateConstraints];

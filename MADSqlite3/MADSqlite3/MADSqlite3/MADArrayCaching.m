@@ -8,6 +8,17 @@
 
 #import "MADArrayCaching.h"
 
+#import "MADDatabaseConnectionSqlite3.h"
+#import "MADQueryCacheAddColumn.h"
+
+#import <MADSqlite3/sqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
+#import <MADSqlite3/MADQueryCacheDeleteAllFromTable.h>
+#import <MADFoundation/MADCacheProtocol.h>
+#import <MADFoundation/MADDataColumn.h>
+#import <MADDataStructures/MADIndex.h>
+#import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
+
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
@@ -16,20 +27,6 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSKeyedArchiver.h>
 #import <os/log.h>
-
-#import <MADSqlite3/sqlite3.h>
-#import <MADSqlite3/MADDatabaseSqlite3.h>
-#import <MADSqlite3/MADQueryCacheDeleteAllFromTable.h>
-
-#import <MADFoundation/MADCacheProtocol.h>
-#import <MADFoundation/MADDataColumn.h>
-
-#import <MADDataStructures/MADIndex.h>
-
-#import <MADSqlite3/MADQueryCacheSelectLimitOffsetParamaters.h>
-
-#import "MADDatabaseConnectionSqlite3.h"
-#import "MADQueryCacheAddColumn.h"
 
 static os_log_t caching_log;
 static NSString * const MTArrayCachedTableName = @"ac";
