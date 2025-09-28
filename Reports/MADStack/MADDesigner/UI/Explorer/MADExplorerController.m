@@ -313,6 +313,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[toolbarButtons removeObject:_barButtonItemLicensing];	// Removing the store button.
 	[toolbarButtons removeObject:_barButtonItemAction];
 	[toolbarButtons removeObject:_barButtonItemCloudDown];
+	[toolbarButtons removeObject:_barButtonItemInformation];
 	[toolbarButtons insertObject:_barButtonItemDuplicate atIndex:1];
 	[self setToolbarItems:toolbarButtons animated:NO];
 	[self setEditing: NO animated: NO];
