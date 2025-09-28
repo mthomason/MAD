@@ -420,7 +420,11 @@ static os_log_t mlog;
 	NSError *errorQuery = nil;
 	BOOL insertSuccess = [_databaseForInserts executeQuery:query withError:&errorQuery];
 	if (!insertSuccess) {
-		os_log_error(OS_LOG_DEFAULT, "%s at %s", sqlite3_errmsg(_databaseForInserts->_database), __PRETTY_FUNCTION__);
+		if (!_databaseForInserts) {
+			os_log_error(OS_LOG_DEFAULT, "Database for inserts is null: %s", __PRETTY_FUNCTION__);
+		} else {
+			os_log_error(OS_LOG_DEFAULT, "%s at %s", sqlite3_errmsg(_databaseForInserts->_database), __PRETTY_FUNCTION__);
+		}
 	}
 	if (errorQuery != nil) {
 		os_log_error(mlog, "Error: %@", errorQuery);
