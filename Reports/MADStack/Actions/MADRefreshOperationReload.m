@@ -43,14 +43,14 @@
 - (void)execute {
 	if (self.cancelled) return [self finish];
 	
-	typeof(self) __weak weakself = self;
+	MADRefreshOperationReload * __weak weakself = self;
 	MADocument *document = _document;
-
-	[self updateNumberOfPages:document.numberOfPages];
 	
 	NSBlockOperation *updateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
-		typeof(self) __strong sself = weakself;
-		[sself.viewController operation:sself updateRecordsRead:document.numberOfResults];
+		MADRefreshOperationReload * __strong sself = weakself;
+		if (sself) {
+			[sself.viewController operation:sself updateRecordsRead:document.numberOfResults];
+		}
 	}];
 	NSArray <__kindof NSOperation *> *operations = @[updateRecordsRead];
 	[[NSOperationQueue mainQueue] addOperations: operations waitUntilFinished: NO];
@@ -81,18 +81,14 @@
 		return [self finish];
 	}
 	
-	NSBlockOperation *finishReload = [NSBlockOperation blockOperationWithBlock:^{
-		typeof(self) __strong sself = weakself;
-		[sself.viewController operation:nil finishReload:document];
-	}];
-	NSBlockOperation *opUpdateRecordsRead = [NSBlockOperation blockOperationWithBlock:^{
-		typeof(self) __strong sself = weakself;
-		[sself.viewController operation:sself updatePages:document.numberOfPages];
-	}];
-	[finishReload addDependency:opUpdateRecordsRead];
-	
-	NSArray <__kindof NSOperation *> *opsFinished = @[opUpdateRecordsRead, finishReload];
-	[[NSOperationQueue mainQueue] addOperations: opsFinished waitUntilFinished: YES];
+	MADRefreshOperationReload * __strong sself = weakself;
+	if (sself) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			NSObject <MADOperationRefreshReloadProtocol> *viewController = sself.viewController;
+			[viewController operation:sself updatePages:document.numberOfPages];
+			[viewController operation:nil finishReload:document];
+		});
+	}
 	
 	document.refreshed = NO;
 	
@@ -100,18 +96,13 @@
 }
 
 - (void)updateNumberOfPages:(NSUInteger)numberOfPages {
-	if ([NSOperationQueue mainQueue].operationCount < 2) {
-		typeof(self) __weak weakself = self;
-		[self.messageQueue addOperationWithBlock:^{
-			NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
-				typeof(self) sself = weakself;
-				[sself.viewController operation:sself updatePages:numberOfPages];
-			}];
-			NSArray *ops = @[op];
-			[[NSOperationQueue mainQueue] addOperations:ops waitUntilFinished:YES];
-			usleep((useconds_t)floor((1/11)*1000)); //delay updates... 1/11th of a second
-		}];
-	}
+	MADRefreshOperationReload * __weak weakself = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		MADRefreshOperationReload * __strong sself = weakself;
+		if (sself) {
+			[sself.viewController operation:sself updatePages:numberOfPages];
+		}
+	});
 }
 
 #pragma mark -

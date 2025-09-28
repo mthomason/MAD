@@ -16,8 +16,10 @@
 @protocol MADOperationRefreshReloadProtocol;
 
 @interface MADRefreshOperationReload : MADOperation
-    - (instancetype)initWithDocument: (MADocument *)document
-                      viewController: (NSObject <MADOperationRefreshReloadProtocol> *)viewController;
+
+- (instancetype)initWithDocument: (MADocument *)document
+				  viewController: (NSObject <MADOperationRefreshReloadProtocol> *)viewController;
+
 @end
 
 #endif
