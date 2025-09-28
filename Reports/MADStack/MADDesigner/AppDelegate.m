@@ -222,6 +222,10 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	return NO;
 }
 
+- (BOOL)application:(UIApplication *)application shouldSaveSecureApplicationState:(nonnull NSCoder *)coder {
+	return NO;
+}
+
 - (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
 	return NO;
 }
