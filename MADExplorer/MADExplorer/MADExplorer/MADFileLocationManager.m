@@ -170,8 +170,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 #pragma mark - Overrides
 
 + (BOOL)StorageOptionsInitialized {
-	NSString *MADAppConfigurationUserDefaultsStorageOptionSet = @"MADAppConfigurationUserDefaultsStorageOptionSet";
-	return [[NSUserDefaults standardUserDefaults] boolForKey:MADAppConfigurationUserDefaultsStorageOptionSet];
+	return [[NSUserDefaults standardUserDefaults] boolForKey:@"MADAppConfigurationUserDefaultsStorageOptionSet"];
 }
 
 + (NSInteger)StorageOptionUserDefaults {
@@ -207,7 +206,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	safeDelegate = (UIViewController <MADFileLocationManagerDelegate> *)_delegate;
 
 	UIViewController <MADFileLocationManagerDelegate> * __weak weakDelegate = safeDelegate;
-	typeof(self) __weak weakself = self;
+	MADFileLocationManager * __weak weakself = self;
 	
 	[MADFilesController getFileStorageLocationsForUbiquityIdentifier: ubiquityIdentifier
 													 groupIdentifier: groupIdentifier
@@ -230,7 +229,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			
-			UIViewController <MADFileLocationManagerDelegate> * sdelegate = weakDelegate;
+			UIViewController <MADFileLocationManagerDelegate> * __strong sdelegate = weakDelegate;
 			if (sdelegate) {
 				[sdelegate completedLongRunningActivity];
 			}
@@ -248,7 +247,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 
 	id <MADFileLocationManagerDelegate> __weak wdelegate = safedelegate;
 	
-	typeof(self) __weak weakself = self;
+	MADFileLocationManager * __weak weakself = self;
 
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		id <MADFileLocationManagerDelegate> delegate = wdelegate;
@@ -272,8 +271,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			
 			[MADFileLocationManager setStorageOption:MADAppStorageCloud];
 			
-			void (^handleStorageOptionChanged)(void);
-			handleStorageOptionChanged = ^{
+			void (^handleStorageOptionChanged)(void) = ^{
 				[MADFileUtilities migrateLocalFiles: groupIdentifier
 											toCloud: ubiquityIdentifier
 										  extension: fileExtention];
