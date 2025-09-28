@@ -72,11 +72,11 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 }
 
 - (NSString *)versionText {
-	return [[NSString alloc] initWithFormat:NSLocalizedString(@"v%@", @"v%@"), [AppDelegate bundleVersion]];
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"v%@", @"v%@"), [AppDelegate bundleVersionShortString]];
 }
 
 - (NSString *)buildText {
-	return [[NSString alloc] initWithFormat:NSLocalizedString(@"r%@", @"r%@"), [[MADApplication AppDelegate] revisionNumber]];
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"r%@", @"r%@"), [AppDelegate bundleGitCommitCount]];
 }
 
 - (IBAction)cancel:(id)sender {
