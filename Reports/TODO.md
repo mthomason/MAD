@@ -5,7 +5,7 @@
 
 * ~~Add images back~~
 * ~~Got rid of warning images~~
-* Test iCloud stuff and make sure intro screen activity is synced correctly
+* ~~Test iCloud stuff and make sure intro screen activity is synced correctly~~  Just disabled iCloud for now.
 * ~~Test TDS~~
 * ~~See if something can be done about slow load of SQL screen~~
 * ~~Infoscreen in dark mode is unreadable... can't be dismissed~~
