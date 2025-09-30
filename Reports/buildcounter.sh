@@ -15,11 +15,21 @@ set -euo pipefail
 echo "🚀 Starting Build Counter Script..."
 
 # --- Configuration ---
-PROJECT_DIR="${PROJECT_DIR:-/Users/michael/Desktop/Reports/Reports}" # Original fallback
+# Set OVERRIDE_VERSION to a specific value (e.g., "9.0") to force that version.
+# After your release, you should set this back to "" to resume automatic git-tag-based versioning.
+#OVERRIDE_VERSION="9.0"
+
+# Dynamically determine the directory containing the script.
+# This makes the script portable and independent of the execution context.
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Use the PROJECT_DIR from the environment if available (e.g., from Xcode),
+# otherwise, assume the project directory is the script's directory.
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
 MAD_META_PLIST_PATH="${PROJECT_DIR}/MADStack/MADDesigner/Assets/MADMeta.plist"
 INFO_PLIST_TARGET_PATHS=(
     "${PROJECT_DIR}/MADStack/MADDesigner/Info.plist"
-    # Add other Info.plist paths here
+    # Add other Info.plist paths here if needed
 )
 # --- End Configuration ---
 
@@ -84,21 +94,20 @@ else
 fi
 
 # Validate Info.plist files from INFO_PLIST_TARGET_PATHS
-# valid_info_plists=()
-# for plist_path in "${INFO_PLIST_TARGET_PATHS[@]}"; do
-#     if [ -z "$plist_path" ]; then
-#         echo "⚠️ Warning: An empty Info.plist path was provided in INFO_PLIST_TARGET_PATHS. Skipping."
-#         continue
-#     fi
-#     if [ ! -f "$plist_path" ]; then
-#         echo "⚠️ Warning: Target Info.plist file not found at '$plist_path'. It will be skipped for CFBundle updates."
-#     else
-#         echo "✅ Found target Info.plist for CFBundle updates: $plist_path"
-#         valid_info_plists+=("$plist_path")
-#     fi
-# done
-# INFO_PLIST_TARGET_PATHS=("${valid_info_plists[@]}")
-
+valid_info_plists=()
+for plist_path in "${INFO_PLIST_TARGET_PATHS[@]}"; do
+    if [ -z "$plist_path" ]; then
+        echo "⚠️ Warning: An empty Info.plist path was provided in INFO_PLIST_TARGET_PATHS. Skipping."
+        continue
+    fi
+    if [ ! -f "$plist_path" ]; then
+        echo "⚠️ Warning: Target Info.plist file not found at '$plist_path'. It will be skipped for CFBundle updates."
+    else
+        echo "✅ Found target Info.plist for CFBundle updates: $plist_path"
+        valid_info_plists+=("$plist_path")
+    fi
+done
+INFO_PLIST_TARGET_PATHS=("${valid_info_plists[@]}")
 # --- Git Information Fetching ---
 echo "⚙️ Fetching version and build information from git..."
 calculated_short_version_string="0.1.0" # Default fallback
@@ -141,10 +150,20 @@ else
     is_dirty_output=$(git status --porcelain 2>/dev/null)
 fi
 
+# --- Version Override ---
+# If OVERRIDE_VERSION is set in the configuration, use it.
+if [[ -n "${OVERRIDE_VERSION:-}" ]]; then
+    echo "✅ Using override version: $OVERRIDE_VERSION"
+    calculated_short_version_string="$OVERRIDE_VERSION"
+fi
+
 git_is_dirty="false"
 if [[ -n "$is_dirty_output" ]]; then
     git_is_dirty="true"
-    calculated_short_version_string+="-DEV" 
+    # Only append -DEV if not using an override version
+    if [[ -z "${OVERRIDE_VERSION:-}" ]]; then
+        calculated_short_version_string+="-DEV"
+    fi
 fi
 
 # --- Build Counter ---
@@ -176,16 +195,18 @@ add_or_set_plist_key ":CFBundleVersion" "$git_commit_count" "string" "$MAD_META_
 # --- Update Target Info.plist files ---
 # For these, PlistBuddy's 'Set' usually works fine for creating/updating CFBundle keys,
 # as they are standard and their types are commonly strings.
-# if [ ${#INFO_PLIST_TARGET_PATHS[@]} -gt 0 ]; then
-#     echo "📝 Updating CFBundle versions in target Info.plist files..."
-#     for plist_file in "${INFO_PLIST_TARGET_PATHS[@]}"; do
-#         echo "   -> $plist_file"
-#         set_bundle_plist_value "Set :CFBundleShortVersionString $calculated_short_version_string" "$plist_file"
-#         set_bundle_plist_value "Set :CFBundleVersion $git_commit_count" "$plist_file"
-#     done
-# else
-#     echo "ℹ️ No valid target Info.plist files found or configured to update with CFBundle versions."
-# fi
+# This section updates the Info.plist with the correct version numbers.
+# It only sets the two standard version keys.
+if [ ${#INFO_PLIST_TARGET_PATHS[@]} -gt 0 ]; then
+    echo "📝 Updating CFBundle versions in target Info.plist files..."
+    for plist_file in "${INFO_PLIST_TARGET_PATHS[@]}"; do
+        echo "   -> $plist_file"
+        set_bundle_plist_value "Set :CFBundleShortVersionString $calculated_short_version_string" "$plist_file"
+        set_bundle_plist_value "Set :CFBundleVersion $git_commit_count" "$plist_file"
+    done
+else
+    echo "ℹ️ No valid target Info.plist files found or configured to update with CFBundle versions."
+fi
 
 echo ""
 echo "----------------------------------------------------"
