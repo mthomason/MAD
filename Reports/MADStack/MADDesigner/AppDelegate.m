@@ -42,12 +42,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 @implementation AppDelegate {
 	NSString *_ubiquityIdentifier;
 	NSString *_groupIdentifier;
-	NSString *_name;
-	NSString *_localizedName;
-	NSString *_applicationNameSufixPart;
-	NSString *_applicationIdentifier;
-	NSString *_applicationBundleIdentifier;
-	NSString *_localizedApplicationNameSufixPart;
 	NSString *_versionNumber;
 	NSString *_revisionNumber;
 	NSString *_bundleDisplayName;
@@ -108,50 +102,31 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (NSString *)name {
-	if (!_name) {
-		_localizedName = [[NSString alloc] initWithFormat:@"%@ %@", [self trademark], self.localizedApplicationNameSufixPart];
-	}
-	return _name;
+	NSString *name = [[NSString alloc] initWithFormat:@"%@ %@", [self trademark], self.localizedApplicationNameSufixPart];
+	return name;
 }
 
 - (NSString *)localizedName {
-	if (!_localizedName) {
-		_localizedName = [[NSString alloc] initWithFormat:@"%@ %@", [self trademark], self.localizedApplicationNameSufixPart];
-	}
-	return _localizedName;
+	NSString *localizedName = [[NSString alloc] initWithFormat:@"%@ %@", [self trademark], self.localizedApplicationNameSufixPart];
+	return localizedName;
 }
 
-- (NSString *)applicationIdentifier {
-	if (!_applicationIdentifier) _applicationIdentifier = @"666001433";
-	return _applicationIdentifier;
-}
+- (NSString *)applicationIdentifier { return @"666001433"; }
 
-- (NSString *)applicationBundleIdentifier {
-	if (!_applicationBundleIdentifier) _applicationBundleIdentifier = @"com.everydayapps.mad.designer";
-	return _applicationBundleIdentifier;
-}
+- (NSString *)applicationBundleIdentifier { return @"com.everydayapps.mad.designer"; }
 
-- (NSString *)trademark {
-	return @"MAD";
-}
+- (NSString *)trademark { return @"MAD"; }
 
-- (NSString *)applicationNameSufixPart {
-	if (!_applicationNameSufixPart)  _applicationNameSufixPart = @"Designer";
-	return _applicationNameSufixPart;
-}
+- (NSString *)applicationNameSufixPart { return @"Designer"; }
 
 - (NSString *)localizedApplicationNameSufixPart {
-	if (!_localizedApplicationNameSufixPart) {
-		_localizedApplicationNameSufixPart = NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
-	}
-	return _localizedApplicationNameSufixPart;
+	return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
 }
 
 - (NSString *)versionNumber {
 	if (!_versionNumber) {
 		CFStringRef cversion = CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey);
 		_versionNumber = (__bridge NSString *)cversion;
-		
 	}
 	return _versionNumber;
 }
@@ -162,8 +137,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (dispatch_queue_t)appDelegateQueueSerial {
 	if (!_appDelegateQueueSerial) {
-		dispatch_queue_t queue;
-		queue = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
+		dispatch_queue_t queue = dispatch_queue_create(MADQueueAppDelegate, DISPATCH_QUEUE_SERIAL);
 		_appDelegateQueueSerial = queue;
 	}
 	return _appDelegateQueueSerial;
@@ -176,11 +150,10 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	
-	
 	[[NSBundle mainBundle] load];
 
-	[NSValueTransformer setValueTransformer:[[MADPngImageTransformer alloc] init] forName:NSStringFromClass([MADPngImageTransformer class])];
+	[NSValueTransformer setValueTransformer:[[MADPngImageTransformer alloc] init]
+									forName:NSStringFromClass([MADPngImageTransformer class])];
 	
 	[[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
 						  completionHandler:^(BOOL granted, NSError * _Nullable error) {
@@ -209,7 +182,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	//[self.appConfiguration cleanupBeforeTerminate];
 }
 
-- (BOOL)application:(UIApplication *)application OpenURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+- (BOOL)application:(UIApplication *)application OpenURL:(NSURL *)url
+			options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 	return NO;
 }
 
