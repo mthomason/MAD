@@ -138,6 +138,7 @@
 		4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
+		4C3AEF262E8D9C5F00C48F77 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3AEF252E8D9C5F00C48F77 /* SceneDelegate.m */; };
 		4C3DCBC71BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */; };
 		4C3DCBCA1BC9E26600ABE231 /* MADQueryVisualizationContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBC91BC9E26600ABE231 /* MADQueryVisualizationContentView.m */; };
 		4C3DCBCD1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DCBCC1BC9E40100ABE231 /* MADQueryVisualizationScrollView.m */; };
@@ -670,6 +671,8 @@
 		4C384E2814B29789007B4F48 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C384E2A14B29789007B4F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C384E2C14B29789007B4F48 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4C3AEF242E8D9C5F00C48F77 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		4C3AEF252E8D9C5F00C48F77 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		4C3DCBC51BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4C3DCBC61BC8DD9400ABE231 /* MADQueryVisualizationSchemaAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4C3DCBC81BC9E26600ABE231 /* MADQueryVisualizationContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationContentView.h; sourceTree = "<group>"; };
@@ -1780,6 +1783,8 @@
 				4CBC501C1E1B508800B067AD /* MADMeta.plist */,
 				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
 				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
+				4C3AEF242E8D9C5F00C48F77 /* SceneDelegate.h */,
+				4C3AEF252E8D9C5F00C48F77 /* SceneDelegate.m */,
 			);
 			name = MADDesigner;
 			path = MADStack/MADDesigner;
@@ -3335,6 +3340,7 @@
 				4CAEE72B1E55EB65009A6096 /* MADDriverSelectorNavigationItem.m in Sources */,
 				4C401F271BAE703200BAE5FC /* MADTableViewCellQueryOverride.m in Sources */,
 				4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */,
+				4C3AEF262E8D9C5F00C48F77 /* SceneDelegate.m in Sources */,
 				4C26BA651BAF99F000456DC8 /* MTSettingsViewController.m in Sources */,
 				4C401F821BAE7EB500BAE5FC /* MADTableViewHeader.m in Sources */,
 				4CFEE80F1BB7A1C000AFAA0A /* MADQueryLinkBuilderController.m in Sources */,
