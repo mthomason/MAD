@@ -10,9 +10,9 @@
 #define MAD_MADReportFormatter_h
 
 #import <MAD/MADTableFormatter.h>
+#import <MAD/MADSectionRepresentation.h>
 
 #import <CoreGraphics/CGGeometry.h>
-#import <MAD/MADSectionRepresentation.h>
 
 typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 	MADReportFormatterOptionsNone    = 0,
@@ -21,50 +21,50 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 
 @protocol MADReportFormatterDataSource, MADDataProtocol, MADCacheProtocol;
 
-@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions,
-	   NSManagedObjectID, MADArrayCaching <ObjectType>;
+@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions, NSManagedObjectID, MADArrayCaching <ObjectType>;
 
 @interface MADReportFormatter : MADTableFormatter
 
-	- (instancetype)initWithDocument: (MADocument *)layout
-							 options: (MADReportFormatterOptions)options;
-							 
-	+ (instancetype)newReportFormatterWithLayout: (MADocument *)layout
-										 options: (MADReportFormatterOptions)options;
+- (instancetype)initWithDocument: (MADocument *)layout
+						 options: (MADReportFormatterOptions)options;
 
-	@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
++ (instancetype)newReportFormatterWithLayout: (MADocument *)layout
+									 options: (MADReportFormatterOptions)options;
 
-	//  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
-	//      which represents a page.  The array contains dictionaries for each object on that page.
-	@property (readonly, nonatomic, strong) MADArrayCaching <NSArray <MADSectionRepresentation *> *> *reportLayout;
+@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
-	@property (readwrite, nonatomic, weak) id <MADReportFormatterDataSource> datasource;
-	@property (readwrite, nonatomic, weak) id <MADCacheProtocol> cachedDelegate;
+//  `reportLayout` contains and object for each page.  Each object in `reportLayout` is an array
+//      which represents a page.  The array contains dictionaries for each object on that page.
+@property (readonly, nonatomic, strong) MADArrayCaching <NSArray <MADSectionRepresentation *> *> *reportLayout;
 
-	@property (readonly, nonatomic, strong) MADPageOptions *page;
-	@property (readonly, nonatomic, weak) MADocument *layout;
+@property (readwrite, nonatomic, weak) id <MADReportFormatterDataSource> datasource;
+@property (readwrite, nonatomic, weak) id <MADCacheProtocol> cachedDelegate;
 
-	@property (readonly, nonatomic) NSUInteger numberOfPages;
-	@property (readonly, nonatomic) NSUInteger numberOfGroups;
+@property (readonly, nonatomic, strong) MADPageOptions *page;
+@property (readonly, nonatomic, weak) MADocument *layout;
 
-	//  Use this to cache in location other than default.
-	@property (nonatomic, copy, readwrite) NSString *overrideIdentifier;
+@property (readonly, nonatomic) NSUInteger numberOfPages;
+@property (readonly, nonatomic) NSUInteger numberOfGroups;
 
-	- (void)format:(CGSize)printableSize;
-	- (void)format:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
+//  Use this to cache in location other than default.
+@property (nonatomic, copy, readwrite) NSString *overrideIdentifier;
 
-	- (void)loadFromCache:(CGSize)printableSize;
+- (void)format:(CGSize)printableSize;
+- (void)format:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
 
-	- (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumerator:(NSUInteger)pageIndex;
+- (void)loadFromCache:(CGSize)printableSize;
 
-	- (CGFloat)heightSection:(NSNumber *)identifier;
+- (NSEnumerator <__kindof MADSectionRepresentation *> *)layoutEnumerator:(NSUInteger)pageIndex;
 
-	- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex;
+- (CGFloat)heightSection:(NSNumber *)identifier;
 
-	- (void)setLayoutSize:(CGSize)layoutSize;
-	- (void)setMarginUsingPrintableRect:(CGRect)printableRect;
+- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex;
 
-	- (NSArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
+- (void)setLayoutSize:(CGSize)layoutSize;
+- (void)setMarginUsingPrintableRect:(CGRect)printableRect;
+
+- (NSArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
+- (void)layoutAddGroupFooterAtLevel:(NSUInteger)groupLevel withRowId:(NSUInteger)rowId;
 
 @end
 
