@@ -299,7 +299,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			
 			__block BOOL isCloudReadilyAvailable = [MADFilesController isCloudReadilyAvailable];
 
-			BOOL hasUbiquityIdentityChanged = [self hasUbiquityIdentityChanged];
+			BOOL hasUbiquityIdentityChanged = isCloudReadilyAvailable ? [self hasUbiquityIdentityChanged] : NO;
 			MADStorageState *storageState = [[MADStorageState alloc] init];
 			storageState.storageOption = [self.class StorageOption];
 			storageState.accountDidChange = hasUbiquityIdentityChanged;
@@ -331,9 +331,9 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 - (void)getUserCloudPrefsSubsquient {
 	MADStorageState *storageState = [[MADStorageState alloc] init];
 	storageState.storageOption = [self.class StorageOption];
-	storageState.accountDidChange = [self hasUbiquityIdentityChanged];
 	storageState.cloudAvailable = [MADFilesController isCloudReadilyAvailable];
-
+	storageState.accountDidChange = storageState.cloudAvailable ? [self hasUbiquityIdentityChanged] : NO;
+	
 	if (storageState.accountDidChange) {
 		
 		switch (storageState.storageOption) {

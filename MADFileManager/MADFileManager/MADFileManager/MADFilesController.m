@@ -87,10 +87,15 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 	return controller;
 }
 
-+ (BOOL)isCloudReadilyAvailable {
++ (BOOL)isCloudDesired {
 	return NO;
-	/// FIXME: Disabling iCloud for now.
-	//return [NSFileManager defaultManager].ubiquityIdentityToken != nil;
+}
+
++ (BOOL)isCloudReadilyAvailable {
+	if (![self isCloudDesired]) {
+		return NO;
+	}
+	return [NSFileManager defaultManager].ubiquityIdentityToken != nil;
 }
 
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier

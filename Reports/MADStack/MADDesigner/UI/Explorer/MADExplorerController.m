@@ -327,15 +327,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	[self setNeedsStatusBarAppearanceUpdate];
 
-	[[NSNotificationCenter defaultCenter] addObserver: self
-											 selector: @selector(handleNotificationUbiquityIdentityDidChange:)
-												 name: NSUbiquityIdentityDidChangeNotification
-											   object: nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver: self
-											 selector: @selector(handleNotificationUbiquityIdentityDidChange:)
-												 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-											   object: nil];
+	if ([MADFilesController isCloudReadilyAvailable]) {
+		[[NSNotificationCenter defaultCenter] addObserver: self
+												 selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+													 name: NSUbiquityIdentityDidChangeNotification
+												   object: nil];
+		
+		[[NSNotificationCenter defaultCenter] addObserver: self
+												 selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+													 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+												   object: nil];
+	}
 
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleContentSizeCategoryDidChangeNotification:)
@@ -493,16 +495,19 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark MADDocumentManagerProtocol
 
 - (void)handleDidDisconnectFromClound:(id)sender {
+	if (![MADFilesController isCloudDesired]) {
+		return;
+	}
 
-	typeof(self) __weak weakself = self;
+	__weak MADExplorerController *weakself = self;
 	void (^actionConfirm)(UIAlertAction *action) = ^(UIAlertAction *action) {
-		MADExplorerController *sself = weakself;
+		__strong MADExplorerController *sself = weakself;
 		[sself.fileExplorerDataSource updateCloudPreferences];
 	};
 		
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 		
-		MADExplorerController *sself = weakself;
+		__strong MADExplorerController *sself = weakself;
 		if (!sself) return;
 		
 		UIAlertController *alert = [MADExplorerController alertNotifyCloudSignOut:actionConfirm];
@@ -846,6 +851,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
+	if (![MADFilesController isCloudDesired]) {
+		return;
+	}
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		
 		UINavigationController *navController = (UINavigationController *)[UIApplication sharedApplication].safeKeyWindow.rootViewController;

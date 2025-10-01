@@ -53,7 +53,8 @@ typedef void (^MADBlockFileStorageLocation)(BOOL cloudAvailble, NSURL *documents
 - (void)renameFileInfo:(MADMetaData *)fileInfo toName:(NSString *)name;
 - (void)setFileInfoHasNewContents:(MADMetaData *)fileInfo;
 
-+ (BOOL)isCloudReadilyAvailable;
++ (BOOL)isCloudDesired;				// Should iCloud be enabled as part of this build.
++ (BOOL)isCloudReadilyAvailable;	// Is `isCloudDesired` and is iCloud available?
 + (void)getFileStorageLocationsForUbiquityIdentifier: (NSString *)ubiquityIdentifier
 									 groupIdentifier: (NSString *)groupIdentifier
 											   delay: (void (^)(void))handleLongRunningCall
