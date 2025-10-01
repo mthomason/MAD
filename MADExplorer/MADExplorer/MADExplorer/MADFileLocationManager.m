@@ -7,6 +7,7 @@
 //
 
 #import "MADFileLocationManager.h"
+#import "madlog.h"
 
 #import <MADFoundation/MADApplication.h>
 #import <MADCocoaExtensions/MADAlertController.h>
@@ -304,17 +305,17 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			storageState.accountDidChange = hasUbiquityIdentityChanged;
 			storageState.cloudAvailable = isCloudReadilyAvailable;
 
-			NSLog(@"storageState: %@ cloudAvailable: %@: storageOption: %ld", storageState, storageState.cloudAvailable ? @"YES" : @"NO", (long)storageState.storageOption);
+			os_log_debug(GetExplorerLog(), "storageState: %@ cloudAvailable: %@: storageOption: %ld", storageState, storageState.cloudAvailable ? @"YES" : @"NO", (long)storageState.storageOption);
 			if (storageState.cloudAvailable) {
 				if (storageState.storageOption == MADAppStorageCloud) {
-					NSLog(@"Calling setupFileStorageLocationsForCloud");
+					os_log_debug(GetExplorerLog(), "Calling setupFileStorageLocationsForCloud");
 					[self setupFileStorageLocationsForCloud];
 				} else if (storageState.storageOption == MADAppStorageLocal || storageState.storageOption == MADAppStorageNotSet || storageState.storageOption == MADAppStorageStateUnknown) {
-					NSLog(@"Calling setupFileStorageLocationsForLocal");
+					os_log_debug(GetExplorerLog(), "Calling setupFileStorageLocationsForLocal");
 					[self setupFileStorageLocationsForLocal];
 				}
 			} else {
-				NSLog(@"Cloud not available.");
+				os_log_debug(GetExplorerLog(), "Cloud not available.");
 				if (storageState.storageOption == MADAppStorageCloud) {
 					[self.class setStorageOption:MADAppStorageNotSet];
 				}

@@ -7,6 +7,14 @@
 //
 
 #import "MysqlFetch+DataTable.h"
+#import "MADDataTypeMySQL.h"
+#import "MysqlConnection.h"
+#import "MysqlFetchField.h"
+#import "MysqlException.h"
+
+#import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADDataTableType.h>
+#import <MADFoundation/MADDataTable.h>
 
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
@@ -20,15 +28,7 @@
 #import <Foundation/NSDateFormatter.h>
 #import <Foundation/NSCalendar.h>
 #import <string.h>
-
-#import <MADFoundation/MADDataColumn.h>
-#import <MADFoundation/MADDataTableType.h>
-#import <MADFoundation/MADDataTable.h>
-
-#import "MADDataTypeMySQL.h"
-#import "MysqlConnection.h"
-#import "MysqlFetchField.h"
-#import "MysqlException.h"
+#import <os/log.h>
 
 #ifndef __OBJC_GC__
 #define BLOB_DEFAULT_SIZE 10000
@@ -149,13 +149,12 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 				NSString *table = [MysqlFetch tableForField: myStatement->fields[x]];
 				[sourceTables addObject:table];
 				
-				NSString *fieldName;
-				fieldName = useExtendedNames || sourceTables.count > 1 ?
-								[MysqlFetch fieldNameForField:myStatement->fields[x] andTable:table] :
-								[MysqlFetch fieldNameForField:myStatement->fields[x]];
+				NSString *fieldName = useExtendedNames || sourceTables.count > 1 ?
+					[MysqlFetch fieldNameForField:myStatement->fields[x] andTable:table] :
+					[MysqlFetch fieldNameForField:myStatement->fields[x]];
 				[fieldNameCollector addObject:fieldName];
 				
-				NSLog(@"Field name: %@", fieldName);
+				os_log_debug(OS_LOG_DEFAULT, "Field name: %@", fieldName);
 				
 				MysqlFetchField *field = [[MysqlFetchField alloc] initWithField: myStatement->fields[x]
 																	  fieldName: fieldName];

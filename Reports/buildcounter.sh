@@ -4,7 +4,7 @@
 # MAD
 #
 # Original script by Michael Thomason on 3/4/14.
-# Copyright © 2017 Michael Thomason. All rights reserved.
+# Copyright © 2025 Michael Thomason. All rights reserved.
 
 # Exit immediately if a command exits with a non-zero status.
 # Treat unset variables as an error.
@@ -17,7 +17,7 @@ echo "🚀 Starting Build Counter Script..."
 # --- Configuration ---
 # Set OVERRIDE_VERSION to a specific value (e.g., "9.0") to force that version.
 # After your release, you should set this back to "" to resume automatic git-tag-based versioning.
-#OVERRIDE_VERSION="9.0"
+OVERRIDE_VERSION="9.0"
 
 # Dynamically determine the directory containing the script.
 # This makes the script portable and independent of the execution context.

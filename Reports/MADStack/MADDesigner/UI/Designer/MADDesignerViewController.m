@@ -1917,7 +1917,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 			cell.userInteractionEnabled = YES;
 			//cell.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
 			//cell.contentView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
-			elementView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
+			//elementView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.30];
+			elementView.backgroundColor = [UIColor tertiarySystemFillColor];
 			
 			NSNumber *identifierNumber = @(identifier);
 			if ([self.selectedElementIDs containsObject: identifierNumber]) {
@@ -1926,6 +1927,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 			
 			[cell addElementView:elementView];
 			
+			/*
+			 // Flash used to be handled here, but it seems like it's being called to early.
 			if (_identifierJustDisplayed != -1) {
 				
 				if (_identifierJustDisplayed == identifier) {
@@ -1943,6 +1946,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 				}
 				
 			}
+			*/
 			
 			if (cell) {
 				cell.contentScaleFactor = contextScale;
@@ -2627,6 +2631,8 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
 	
 	__weak MADDesignerViewController *weakSelf = self;
+	__block CGRect newElementFrame = CGRectZero;
+	__block NSIndexPath *newElementPath = nil;
 	[collectionView performBatchUpdates:^{
 		
 		__strong MADDesignerViewController *strongSelf = weakSelf;
@@ -2650,11 +2656,13 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		
 		NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
 												inSection: 0];
+		newElementPath = path;
 		
 		strongSelf->_identifierJustDisplayed = element.identifier;
 		
 		MADSectionLayoutAttributes *layoutAttribute = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
 		layoutAttribute.frame = [element elementViewFrameDesignerFrameCalculated];
+		newElementFrame = layoutAttribute.frame;
 		
 		NSArray *indexPathsInserted = [[NSArray alloc] initWithObjects: path, nil];
 		[bgSection addDocumentObject: element
@@ -2676,6 +2684,34 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		[layoutManager layout];
 		
 	} completion:^(BOOL finished) {
+		/* // Below is slop trying to get it to flash.  Doesn't work.
+		if (finished) {
+			__strong typeof(self) strongSelf = weakSelf;
+			if (!strongSelf) return;
+			
+			// Now that the collection view updates are finished, we can safely access the cell and animate it.
+			MADCellElement *cell = (MADCellElement *)[collectionView cellForItemAtIndexPath:newElementPath];
+			MADDesignerElementView *elementView = [strongSelf elementViewForCollectionViewCell:cell];
+			
+			if (elementView) {
+				[elementView flash:nil];
+			}
+			
+			if (!CGRectIsEmpty(newElementFrame)) {
+				CGRect frameInContainer = [collectionView convertRect:newElementFrame toView:strongSelf.view.scroller.container];
+				[strongSelf.view.scroller scrollRectToVisible:frameInContainer animated:YES];
+			}
+			
+			MADocument *doc = strongSelf.document;
+			[strongSelf.view.scroller.container setNeedsUpdateConstraints];
+			[doc updateChangeCount: UIDocumentChangeDone];
+			[doc autosaveWithCompletionHandler:^(BOOL success) {
+				if (!success) {
+					os_log_info(GetDesignerLog(), "Autosave did not succeed.");
+				}
+			}];
+		}
+		*/
 		__strong MADDesignerViewController *strongself = weakSelf;
 		if (!strongself) return;
 		MADocument *doc = strongself.document;

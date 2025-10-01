@@ -391,11 +391,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 				if (error != nil) {
 					os_log_error(caching_log, "NSKeyedArchiver Error: %@", error.localizedDescription);
 				}
-				//result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-				//id result2 = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-				//NSLog(@"%@-%@", NSStringFromClass([result class]), result);
-				//NSLog(@"%@-%@", NSStringFromClass([result2 class]), result2);
-				
 			}
 			sqlite3_clear_bindings(statementSelect);
 			sqlite3_reset(statementSelect);

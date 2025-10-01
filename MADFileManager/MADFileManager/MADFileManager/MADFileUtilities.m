@@ -7,7 +7,7 @@
 //
 
 #import "MADFileUtilities.h"
-
+#import "madlog.h"
 #import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSException.h>
@@ -409,17 +409,15 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeFilesAtURL:(NSURL *)url {
-	BOOL (^errorHandler)(NSURL *, NSError *);
-	errorHandler = ^BOOL(NSURL *errorUrl, NSError *error) {
+	BOOL (^errorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *errorUrl, NSError *error) {
 		//NSLog(@"Error %@", error);
 		return YES;
 	};
 	NSArray *propertyKeys = [[NSArray alloc] initWithObjects: NSURLIsDirectoryKey, nil];
-	NSDirectoryEnumerator *enumerator;
-	enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
-									  includingPropertiesForKeys: propertyKeys
-														 options: NSNotFound
-													errorHandler: errorHandler];
+	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: url
+															 includingPropertiesForKeys: propertyKeys
+																				options: NSNotFound
+																		   errorHandler: errorHandler];
 	for (NSURL *fileURL in enumerator) {
 		[MADFileUtilities removeFileAtURL:fileURL];
 	}
@@ -434,8 +432,11 @@ static NSString * const MADPathComponentData       = @"Data";
 		[self removeFileAtURL:url completion:NULL];
 	} else {
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
-		NSError *error;
+		NSError *error = nil;
 		[fileManager removeItemAtURL:url error:&error];
+		if (error != nil) {
+			os_log_debug(GetFileManagerLog(), "Error: %@", error);
+		}
 	}
 }
 
@@ -453,12 +454,16 @@ static NSString * const MADPathComponentData       = @"Data";
 										   queue:[self queue]
 									  byAccessor:^(NSError *accessError) {
 		if (accessError) {
+			os_log_debug(GetFileManagerLog(), "Error: %@", accessError);
 			if (completion) completion(accessError);
 			return;
 		}
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
-		NSError *error;
+		NSError *error = nil;
 		BOOL successfulDelete = [fileManager removeItemAtURL:writing.URL error:&error];
+		if (error != nil) {
+			os_log_debug(GetFileManagerLog(), "Error: %@", error);
+		}
 		if (successfulSecurityScopedResourceAccess) [url stopAccessingSecurityScopedResource];
 		if (completion) completion(successfulDelete ? nil : error);
 	}];
@@ -493,36 +498,31 @@ static NSString * const MADPathComponentData       = @"Data";
 		if (accessError) {
 			// An error occured when trying to coordinate moving URL to toURL.
 			//  In your app, handle this gracefully.
-			//NSLog(@"Couldn't move file: %@ to: %@ error: %@.", url.absoluteString,
-			//        toURL.absoluteString, accessError.localizedDescription);
-			
+			os_log_debug(GetFileManagerLog(), "Error: %@", accessError);
 			return;
 		}
 		
-		BOOL success = NO;
-		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		
-		success = [fileManager copyItemAtURL:moving.URL toURL:replacing.URL error:&error];
+		BOOL success = [fileManager copyItemAtURL:moving.URL toURL:replacing.URL error:&error];
 		
 		if (success) {
 			NSDictionary <NSString *, NSNumber *> *fileAttributes;
 			fileAttributes = @{ NSFileExtensionHidden : @YES };
 			NSString *path = replacing.URL.path;
 			if (path) {
+				NSError *setAttributesError = nil;
 				[fileManager setAttributes:fileAttributes
 							  ofItemAtPath:path
-									 error:nil];
+									 error:&setAttributesError];
+				if (setAttributesError != nil) {
+					os_log_error(OS_LOG_DEFAULT, "%s: Error setting file attributes: %@", __PRETTY_FUNCTION__, setAttributesError);
+				}
 			}
 		}
 		
 		if (successfulSecurityScopedResourceAccess) {
 			[url stopAccessingSecurityScopedResource];
-		}
-		
-		if (!success) {
-			// An error occured when moving URL to toURL. In your app, handle this gracefully.
-			//NSLog(@"Couldn't move file: %@ to: %@.", url.absoluteString, toURL.absoluteString);
 		}
 	}];
 }
@@ -625,54 +625,72 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
-	//NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
-
-   NSError *error = nil;
-	NSFileManager *defaultManager = [NSFileManager defaultManager];
+	NSError *error = nil;
 	NSURL *cachedDirectory = [MADURLFactory newURLForLocalCachedDirectoryForFileUrl: documentUrl];
-	NSArray <NSURL *> *cachedFiles;
-	cachedFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: cachedDirectory
-												includingPropertiesForKeys: nil
-																   options: (NSDirectoryEnumerationOptions)0
-																	 error: &error];
+	NSArray <NSURL *> *cachedFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: cachedDirectory
+																   includingPropertiesForKeys: nil
+																					  options: (NSDirectoryEnumerationOptions)0
+																						error: &error];
+	if (error != nil) {
+		os_log_error(GetFileManagerLog(), "%s: Error getting contents of directory: %@", __PRETTY_FUNCTION__, error);
+	}
 	NSURL *cachedFile;
 	for (cachedFile in cachedFiles) {
-		[defaultManager removeItemAtURL:cachedFile error:&error];
+		NSError *removeItemError = nil;
+		[[NSFileManager defaultManager] removeItemAtURL:cachedFile error:&removeItemError];
+		if (removeItemError != nil) {
+			os_log_error(GetFileManagerLog(), "%s: Error removing item at URL: %@", __PRETTY_FUNCTION__, removeItemError);
+		}
 	}
-	[defaultManager removeItemAtURL:cachedDirectory error:&error];
+	NSError *removeDirError = nil;
+	[[NSFileManager defaultManager] removeItemAtURL:cachedDirectory error:&removeDirError];
+	if (removeDirError != nil) {
+		os_log_error(GetFileManagerLog(), "%s: Error removing directory at URL: %@", __PRETTY_FUNCTION__, removeDirError);
+	}
 }
 
 + (BOOL)removeCachedFileForDocumentUrl:(NSURL *)documentUrl
 					   groupIdentifier:(NSString *)groupIdentifier {
-	//NSLog(@"Remove cached files for document url: %@\n(%s)", documentUrl, __PRETTY_FUNCTION__);
-
 	NSURL *cachedDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier: groupIdentifier
-																			fileURL: documentUrl];
+																				   fileURL: documentUrl];
 	return [MADFileUtilities removeContentsOfDirectory:cachedDirectory];
 }
 
 + (BOOL)removeContentsOfDirectory:(NSURL *)directory {
 	NSError *error = nil;
-	NSArray <NSURL *> *files;
-	files = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: directory
-										  includingPropertiesForKeys: nil
-															 options: (NSDirectoryEnumerationOptions)0
-															   error: &error];
-	for (NSURL *file in files) {
-		[[NSFileManager defaultManager] removeItemAtURL: file error: &error];
+	NSArray <NSURL *> *files = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: directory
+															 includingPropertiesForKeys: nil
+																				options: (NSDirectoryEnumerationOptions)0
+																				  error: &error];
+	if (error != nil) {
+		os_log_error(GetFileManagerLog(), "%s: Error getting contents of directory: %@", __PRETTY_FUNCTION__, error);
+		return NO;
 	}
-	[[NSFileManager defaultManager] removeItemAtURL: directory error: &error];
+	for (NSURL *file in files) {
+		NSError *removeItemError = nil;
+		[[NSFileManager defaultManager] removeItemAtURL: file error: &removeItemError];
+		if (removeItemError != nil) {
+			os_log_error(GetFileManagerLog(), "%s: Error removing item at URL: %@", __PRETTY_FUNCTION__, removeItemError);
+		}
+	}
+	NSError *removeDirError = nil;
+	[[NSFileManager defaultManager] removeItemAtURL: directory error: &removeDirError];
+	if (removeDirError != nil) {
+		os_log_error(GetFileManagerLog(), "%s: Error removing directory at URL: %@", __PRETTY_FUNCTION__, removeDirError);
+	}
 	return YES;
 }
 
 + (BOOL)restoreFileWrapper:(NSURL *)originURL archiveURL:(NSURL *)archiveURL
 				 overwrite:(BOOL)overwrite {
 	BOOL success = NO;
-	NSFileWrapper *fileWrapper;
 	NSError *fileWrapperError = nil;
-	fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
-											 options: NSFileWrapperReadingImmediate
-											   error: &fileWrapperError];
+	NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: originURL
+															options: NSFileWrapperReadingImmediate
+															  error: &fileWrapperError];
+	if (fileWrapperError != nil) {
+		os_log_error(GetFileManagerLog(), "%s: Error creating file wrapper from URL: %@", __PRETTY_FUNCTION__, fileWrapperError);
+	}
 	
 	if (fileWrapperError == nil) {
 		if (overwrite) {
@@ -681,6 +699,9 @@ static NSString * const MADPathComponentData       = @"Data";
 			success = [data writeToURL: archiveURL
 							   options: NSDataWritingAtomic
 								 error: &errorWriting];
+			if (errorWriting != nil) {
+				os_log_error(GetFileManagerLog(), "%s: Error writing data to URL: %@", __PRETTY_FUNCTION__, errorWriting);
+			}
 		} else {
 			NSURL *resultUrl = [MADURLFactory newURLWithUniqueFilenameForURL:archiveURL];
 			NSData *data = fileWrapper.serializedRepresentation;

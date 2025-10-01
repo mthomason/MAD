@@ -221,19 +221,29 @@
 }
 
 - (void)flash:(void (^)(BOOL finished))completion {
-	void (^animates)(void);
-	animates = ^{
-		self.backgroundColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];
-	};
-	void (^handleAnimatesCompletion)(BOOL) = ^(BOOL finished) {
-		if (finished) self.backgroundColor = [UIColor clearColor];
-		completion(finished);
-	};
-	[UIView animateWithDuration: 0.66666666f
-						  delay: 0.33333333f
-						options: UIViewAnimationOptionAutoreverse
-					 animations: animates
-					 completion: handleAnimatesCompletion];
+	UIColor *originalColor = self.backgroundColor;
+	UIColor *highlightColor = [[MADColorEverydayApps newColorBlue] colorWithAlphaComponent:0.33333333f];
+	[UIView animateWithDuration: 2.0/3.0
+						  delay: 1.0/3.0
+						options: UIViewAnimationOptionCurveEaseOut
+					 animations: ^{
+		self.backgroundColor = highlightColor;
+	} completion: ^(BOOL finished) {
+		if (finished) {
+			// Animate back to original color
+			[UIView animateWithDuration: 0.5
+								  delay: 0.2
+								options:UIViewAnimationOptionCurveEaseIn
+							 animations:^{ self.backgroundColor = originalColor; }
+							 completion:completion];
+		} else {
+			// If the first animation was interrupted, restore the original color immediately.
+			self.backgroundColor = originalColor;
+			if (completion) {
+				completion(NO);
+			}
+		}
+	}];
 }
 
 - (void)setWobbleRunning:(BOOL)running {

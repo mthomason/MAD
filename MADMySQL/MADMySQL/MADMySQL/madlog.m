@@ -15,12 +15,12 @@ static os_log_t gMySqlLog;
 os_log_t GetMySqlLog(void) {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		gMySqlLog = os_log_create("com.mt", "mad");
+		gMySqlLog = os_log_create("com.mt", "madmysql");
 		if (gMySqlLog == nil || gMySqlLog == OS_LOG_DISABLED || gMySqlLog == OS_LOG_DEFAULT) {
-			NSLog(@"Warning: MADOperations log facility could not be created as specified, using default.");
-			if (gMySqlLog == nil) gMySqlLog = OS_LOG_DEFAULT; // Ensure it's not nil
+			NSLog(@"Warning: MADMySQL log facility could not be created as specified, using default.");
+			if (gMySqlLog == nil) gMySqlLog = OS_LOG_DEFAULT;
 		}
-		os_log_info(gMySqlLog, "MADOperations log facility initialized.");
+		os_log_info(gMySqlLog, "MADMySQL log facility initialized.");
 	});
 	return gMySqlLog;
 }

@@ -9,28 +9,26 @@
 #import "MADLocalFileCoordinator.h"
 #import "MADFileCoordinatorProtocol.h"
 #import "MADFileCoordinatorDelegate.h"
+#import "MADDirectoryMonitor.h"
+#import "MADFileUtilities.h"
+#import "MADDirectoryMonitorProtocol.h"
+#import "madlog.h"
 
-#import <dispatch/queue.h>
+#import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSCompoundPredicate.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSFileManager.h>
+#import <dispatch/queue.h>
 
-#import <MADFoundation/MADURLFactory.h>
+@interface MADLocalFileCoordinator () <MADDirectoryMonitorProtocol>
 
-#import "MADDirectoryMonitor.h"
-#import "MADFileUtilities.h"
-#import "MADDirectoryMonitorProtocol.h"
-
-@interface MADLocalFileCoordinator ()
-			<MADDirectoryMonitorProtocol>
-
-	@property (nonatomic, copy)     NSArray *currentLocalContents;
-	@property (nonatomic, copy)     NSPredicate *predicate;
-	@property (nonatomic, copy)   void (^firstQueryUpdateHandler)(void);
-	@property (nonatomic, copy)     NSString *fileGroup;
-	@property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
+@property (nonatomic, copy)     NSArray *currentLocalContents;
+@property (nonatomic, copy)     NSPredicate *predicate;
+@property (nonatomic, copy)   void (^firstQueryUpdateHandler)(void);
+@property (nonatomic, copy)     NSString *fileGroup;
+@property (nonatomic, strong)   MADDirectoryMonitor *directoryMonitor;
 
 @end
 
@@ -229,34 +227,33 @@
 
 	dispatch_queue_t defaultQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
 
-	typeof(self) __weak wself = self;
+	__weak MADLocalFileCoordinator *wself = self;
 
-	void (^updateContent)(void);
-	updateContent = ^{
+	void (^updateContent)(void) = ^{
 		
-		MADLocalFileCoordinator *sself = wself;
+		__strong MADLocalFileCoordinator *sself = wself;
 		if (sself == nil) return;
 		
 		NSURL *url = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier: fileGroup];
-		
+		os_log_debug(GetFileManagerLog(), "Sample report directory: %@", [url path]);
+
 		NSError *error = nil;
 		NSArray <NSURL *> *urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: url
 																includingPropertiesForKeys: nil
 																				   options: NSDirectoryEnumerationSkipsPackageDescendants
-																					 error: nil];
-		if (!urls) {
-			NSLog(@"Failed to read directory contents: %@", error.localizedDescription);
+																					 error: &error];
+		if (error != nil) {
+			os_log_debug(GetFileManagerLog(), "Failed to read directory contents: %@", error.localizedDescription);
 			return; // Exit early if the directory cannot be read
 		}
 		
 		NSArray <NSURL *> *localListURLs = [urls filteredArrayUsingPredicate:predicate];
 		if (localListURLs.count > 0) {
 			
-			NSString *MADPredicateFormatSelfInObject = @"self in %@";
-			NSPredicate *containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, sself.currentLocalContents];
+			NSPredicate *containPredicate = [NSPredicate predicateWithFormat:@"self in %@", sself.currentLocalContents];
 			NSPredicate *doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
 			NSArray <NSURL *> *insertedURLs = [localListURLs filteredArrayUsingPredicate:doesntContainPredicate];
-			containPredicate = [NSPredicate predicateWithFormat:MADPredicateFormatSelfInObject, localListURLs];
+			containPredicate = [NSPredicate predicateWithFormat:@"self in %@", localListURLs];
 			doesntContainPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:containPredicate];
 			
 			NSArray <NSURL *> *removedURLs = [sself.currentLocalContents filteredArrayUsingPredicate:doesntContainPredicate];
@@ -272,7 +269,6 @@
 		
 		if (sself.firstQueryUpdateHandler) {
 			sself.firstQueryUpdateHandler();
-			//sself.firstQueryUpdateHandler = nil;
 		}
 	};
 	dispatch_async(defaultQueue, updateContent);
@@ -280,8 +276,7 @@
 
 - (id)debugQuickLookObject {
 	NSMutableString *debug = [[NSMutableString alloc] init];
-	NSString *classname = NSStringFromClass([self class]);
-	id uppercaseClassname = [classname uppercaseString];
+	NSString *uppercaseClassname = [NSStringFromClass([self class]) uppercaseString];
 	[debug appendFormat:@"--%@--\n", uppercaseClassname];
 	[debug appendFormat:@"File group:\t%@\n", self.fileGroup];
 	[debug appendFormat:@"Current contents:\t%@", self.currentLocalContents];

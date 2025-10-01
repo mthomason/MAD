@@ -7,16 +7,6 @@
 //
 
 #import "MADModelDocument.h"
-#import "madlog.h"
-
-#import <CoreFoundation/CFNumber.h>
-
-#import <Foundation/NSExpression.h>
-#import <Foundation/NSOperation.h>
-
-#import <CoreData/CoreData.h>
-#import <MADFoundation/MADStringUtilities.h>
-
 #import "MADModelDatabase.h"
 #import "MADModelQuery.h"
 
@@ -25,6 +15,14 @@
 #import "RptqQuery.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
+#import "madlog.h"
+
+#import <MADFoundation/MADStringUtilities.h>
+
+#import <Foundation/NSExpression.h>
+#import <Foundation/NSOperation.h>
+#import <CoreFoundation/CFNumber.h>
+#import <CoreData/CoreData.h>
 
 static NSString *keyDatabase = @"DA";
 static NSString *keyQuery = @"QU";
@@ -91,7 +89,6 @@ static NSString *keyIDDocument = @"IO";
 		
 		__typeof(self) __weak wself = self;
 		void (^blockChange)(NSNotification *) = ^(NSNotification *note) {
-			//NSLog(@"%@: %@", NSStringFromClass(note.class), note);
 			//id keys = note.userInfo.keyEnumerator;
 			//id objects = note.userInfo.objectEnumerator;
 			
@@ -169,14 +166,14 @@ static NSString *keyIDDocument = @"IO";
 																	   object:managedObjectContext
 																		queue:_objectContextQueue
 																   usingBlock:^(NSNotification * _Nonnull note) {
-																	   NSLog(@"%@: %@", NSStringFromClass(note.class), note);
-																   }];
+			os_log_debug(OS_LOG_DEFAULT, "%@: %@", NSStringFromClass(note.class), note);
+		}];
 		_observeDidSaveNotification = [notificationCenter addObserverForName:NSManagedObjectContextDidSaveNotification
 																	  object:managedObjectContext
 																	   queue:_objectContextQueue
 																  usingBlock:^(NSNotification * _Nonnull note) {
-																	  NSLog(@"%@: %@", NSStringFromClass(note.class), note);
-																  }];
+			os_log_debug(OS_LOG_DEFAULT, "%@: %@", NSStringFromClass(note.class), note);
+		}];
 
 		[self updateDocumentDatabaseQuery];
 

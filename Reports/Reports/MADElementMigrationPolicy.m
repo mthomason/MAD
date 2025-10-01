@@ -44,60 +44,23 @@
 
 @implementation MADElementMigrationPolicy
 
-/*- (BOOL)createDestinationInstancesForSourceInstance:(NSManagedObject *)sInstance
-									  entityMapping:(NSEntityMapping *)mapping
-											manager:(NSMigrationManager *)manager
-											  error:(NSError * _Nullable *)error{
-	BOOL result = [super createDestinationInstancesForSourceInstance: sInstance
-													   entityMapping: mapping
-															 manager: manager
-															   error: error];
- */
-	/*
-	 if ([sInstance.entity.name isEqualToString: @"RptqDocumentObject"]) {
-		NSArray *sInstances = [[NSArray alloc] initWithObjects:sInstance, nil];
-		NSArray<__kindof NSManagedObject *> *dInstances = [manager destinationInstancesForEntityMappingNamed: mapping.name
-																							 sourceInstances: sInstances];
-		NSAssert(dInstances.count == 1, @"We expect one and only one result.");
-		NSManagedObjectContext *destinationContext = manager.destinationContext;
-		RptqDocumentElement *destinationElement = dInstances[0];
-		[self addBorderToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-		[self addPaddingToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-		[self addRectToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-		[self addNumericFormatToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-		[self addAlignmentToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-		[self addTextStyleToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-		[self addPointToElement:destinationElement fromElement:sInstance forContext:destinationContext];
-	   // NSError *saveError = nil;
-		//if (![destinationContext save:&saveError]) {
-		//    NSLog(@"%@", saveError);
-	   // }
-	}*/
-/*
-	return result;
-}*/
-
 - (void)addBorderToElement:(RptqDocumentElement *)destinationElement
 			   fromElement:(NSManagedObject *)sourceElement
 				forContext:(NSManagedObjectContext *)context {
 
-	NSString *key = NSStringFromClass([RptqBorder class]);
-	NSEntityDescription *entityDescription;
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqBorder class])
+														 inManagedObjectContext: context];
 	RptqBorder *border = (RptqBorder *)[[NSManagedObject alloc] initWithEntity: entityDescription
 												insertIntoManagedObjectContext: context];
 	
-	key = NSStringFromClass([RptqDirectionalProperty class]);
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
-	RptqDirectionalProperty *style = (RptqDirectionalProperty *)[[NSManagedObject alloc] initWithEntity: entityDescription
+	NSEntityDescription *entityDescriptionDirection = [NSEntityDescription entityForName: NSStringFromClass([RptqDirectionalProperty class])
+																  inManagedObjectContext: context];
+	RptqDirectionalProperty *style = (RptqDirectionalProperty *)[[NSManagedObject alloc] initWithEntity: entityDescriptionDirection
 																		 insertIntoManagedObjectContext: context];
-	
-	key = NSStringFromClass([RptqDirectionalAsymmetry class]);
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
-	RptqDirectionalAsymmetry *width = (RptqDirectionalAsymmetry *)[[NSManagedObject alloc] initWithEntity: entityDescription
+
+	NSEntityDescription *entityDescriptionAsy = [NSEntityDescription entityForName: NSStringFromClass([RptqDirectionalAsymmetry class])
+															inManagedObjectContext: context];
+	RptqDirectionalAsymmetry *width = (RptqDirectionalAsymmetry *)[[NSManagedObject alloc] initWithEntity: entityDescriptionAsy
 																		   insertIntoManagedObjectContext: context];
 
 	NSNumber *n = [sourceElement valueForKey:@"borderHeightTop"];
@@ -134,10 +97,8 @@
 				fromElement:(NSManagedObject *)sourceElement
 				 forContext:(NSManagedObjectContext *)context {
 	
-	NSString *key = NSStringFromClass([RptqDirectionalAsymmetry class]);
-	NSEntityDescription *entityDescription;
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqDirectionalAsymmetry class])
+														 inManagedObjectContext: context];
 	RptqDirectionalAsymmetry *padding = (RptqDirectionalAsymmetry *)[[NSManagedObject alloc] initWithEntity: entityDescription
 																			 insertIntoManagedObjectContext: context];
 	
@@ -177,23 +138,19 @@
 			 fromElement:(NSManagedObject *)sourceElement
 			  forContext:(NSManagedObjectContext *)context {
 	
-	NSString *key = NSStringFromClass([RptqRect class]);
-	NSEntityDescription *entityDescription;
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
-	
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqRect class])
+														 inManagedObjectContext: context];
+
 	RptqRect *rect = (RptqRect *)[[NSManagedObject alloc] initWithEntity: entityDescription
 										  insertIntoManagedObjectContext: context];
 
-	key = NSStringFromClass([RptqPoint class]);
-	entityDescription = [NSEntityDescription entityForName: key
+	entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqPoint class])
 									inManagedObjectContext: context];
 
 	RptqPoint *origin = (RptqPoint *)[[NSManagedObject alloc] initWithEntity: entityDescription
 											  insertIntoManagedObjectContext: context];
 
-	key = NSStringFromClass([RptqSize class]);
-	entityDescription = [NSEntityDescription entityForName: key
+	entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqSize class])
 									inManagedObjectContext: context];
 
 	RptqSize *size = (RptqSize *)[[NSManagedObject alloc] initWithEntity: entityDescription
@@ -220,15 +177,12 @@
 					  fromElement:(NSManagedObject *)sourceElement
 					   forContext:(NSManagedObjectContext *)context {
 	
-	NSString *key = NSStringFromClass([RptqNumericFormat class]);
-	NSEntityDescription *entityDescription;
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqNumericFormat class])
+														 inManagedObjectContext: context];
 	RptqNumericFormat *numericFormat = (RptqNumericFormat *)[[NSManagedObject alloc] initWithEntity: entityDescription
 																	 insertIntoManagedObjectContext: context];
 	
-	NSNumber *n;
-	n = [sourceElement valueForKey:@"formatNumericDecimals"];
+	NSNumber *n = [sourceElement valueForKey:@"formatNumericDecimals"];
 	if (n != nil) [numericFormat setValue:n forKey:@"decimalCount"];
 	
 	n = [sourceElement valueForKey:@"formatNumericCurrency"];
@@ -247,16 +201,12 @@
 				  fromElement:(NSManagedObject *)sourceElement
 				   forContext:(NSManagedObjectContext *)context {
 	
-	NSEntityDescription *entityDescription;
-	NSString *key;
-	key = NSStringFromClass([RptqAlignment class]);
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqAlignment class])
+														 inManagedObjectContext: context];
 	RptqAlignment *alignment = (RptqAlignment *)[[NSManagedObject alloc] initWithEntity: entityDescription
 														 insertIntoManagedObjectContext: context];;
 	
-	NSNumber *n;
-	n = [sourceElement valueForKey:@"horizontalAlignment"];
+	NSNumber *n = [sourceElement valueForKey:@"horizontalAlignment"];
 	if (n != nil) [alignment setValue:n forKey:@"horizontal"];
 	
 	n = [sourceElement valueForKey:@"verticalAlignment"];
@@ -269,16 +219,12 @@
 				  fromElement:(NSManagedObject *)sourceElement
 				   forContext:(NSManagedObjectContext *)context {
 	
-	NSEntityDescription *entityDescription;
-	NSString *key;
-	key = NSStringFromClass([RptqTextStyle class]);
-	entityDescription = [NSEntityDescription entityForName: key
-									inManagedObjectContext: context];
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqTextStyle class])
+														 inManagedObjectContext: context];
 	RptqTextStyle *textStyle = (RptqTextStyle *)[[NSManagedObject alloc] initWithEntity: entityDescription
 														 insertIntoManagedObjectContext: context];
 	
-	NSNumber *n;
-	n = [sourceElement valueForKey:@"underline"];
+	NSNumber *n = [sourceElement valueForKey:@"underline"];
 	if (n != nil) [textStyle setValue:n forKey:@"underline"];
 	
 	n = [sourceElement valueForKey:@"bold"];
@@ -347,7 +293,6 @@
 		[self addTextStyleToElement:dElement fromElement:element forContext:destinationContext];
 		[self addPointToElement:dElement fromElement:element forContext:destinationContext];
 		
-		//NSLog(@"%@", dInstance);
 		//NSError *errorSave = NULL;
 		//[destinationContext save:&errorSave];
 	}

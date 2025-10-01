@@ -7,13 +7,13 @@
 //
 
 #import "MADDirectoryMonitor.h"
+#import "MADDirectoryMonitorProtocol.h"
+#import "madlog.h"
+
+#import <Foundation/NSURL.h>
 #import <sys/unistd.h>
 #import <sys/fcntl.h>
 #import <dispatch/dispatch.h>
-
-#import <Foundation/NSURL.h>
-
-#import "MADDirectoryMonitorProtocol.h"
 
 const char * MADQueueFileSystemWatcher = "com.everydayapps.mad.filesystem.watcher";
 static const int NotListening = -1;
@@ -72,22 +72,22 @@ static const int NotListening = -1;
 			dispatch_source_proc_flags_t flags = dispatch_source_get_data(sself.directoryMonitorSource);
 			switch (flags) {
 				case DISPATCH_VNODE_DELETE:
-					//NSLog(@"Delete event.");
+					os_log_debug(GetFileManagerLog(), "Delete event.");
 					break;
 				case DISPATCH_VNODE_RENAME:
-					//NSLog(@"Rename event.");
+					os_log_debug(GetFileManagerLog(), "Rename event.");
 					break;
 				case DISPATCH_VNODE_EXTEND:
-					//NSLog(@"Extend event.");
+					os_log_debug(GetFileManagerLog(), "Extend event.");
 					break;
 				case DISPATCH_VNODE_ATTRIB:
-					//NSLog(@"Attribute update event.");
+					os_log_debug(GetFileManagerLog(), "Attribute update event.");
 					break;
 				case DISPATCH_VNODE_WRITE:
-					//NSLog(@"Write event.");
+					os_log_debug(GetFileManagerLog(), "Write event.");
 					break;
 				default:
-					//NSLog(@"Untracked event.");
+					os_log_debug(GetFileManagerLog(), "Untracked event.");
 					break;
 			}
 			[sself.delegate directoryMonitorDidObserveChange:sself];
