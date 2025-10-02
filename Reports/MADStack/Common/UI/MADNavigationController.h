@@ -20,6 +20,7 @@
 @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
 
 - (IBAction)done:(id)sender;
+- (void)done:(id)sender completion:(void (^)(void))completion;
 
 @end
 

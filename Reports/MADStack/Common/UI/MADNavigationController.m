@@ -28,6 +28,7 @@
 
 @interface MADNavigationController ()
 	@property (readwrite, nonatomic, assign) MADNavigationControllerType controllerType;
+	@property (nonatomic, copy) void (^popCompletionBlock)(void);
 @end
 
 @implementation MADNavigationController
@@ -36,6 +37,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	self.delegate = self;
 	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
@@ -44,6 +46,11 @@
 #pragma mark IBActions
 
 - (IBAction)done:(id)sender {
+	[self done:sender completion:nil];
+}
+
+- (void)done:(id)sender completion:(void(^)(void))completion {
+	self.popCompletionBlock = completion;
 	for (UIViewController *viewController in self.childViewControllers) {
 		if ([viewController respondsToSelector:@selector(done:)]) {
 			[viewController performSelectorOnMainThread: @selector(done:)
@@ -55,6 +62,20 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
 	return UIStatusBarStyleLightContent;
+}
+
+#pragma mark -
+#pragma mark UINavigationControllerDelegate
+
+// This delegate method is called after a view controller is popped and the transition is complete.
+- (void)navigationController:(UINavigationController *)navigationController
+	   didShowViewController:(UIViewController *)viewController
+					animated:(BOOL)animated {
+	// If a completion block is pending, execute it now and then clear it.
+	if (self.popCompletionBlock) {
+		self.popCompletionBlock();
+		self.popCompletionBlock = nil;
+	}
 }
 
 @end

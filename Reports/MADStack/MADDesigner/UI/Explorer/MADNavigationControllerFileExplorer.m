@@ -27,6 +27,7 @@
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *fileExplorerNavigationBar;
 @property (weak, nonatomic) IBOutlet UIToolbar *fileExplorerToolBar;
+@property (nonatomic, copy) void (^popCompletionBlock)(void);
 
 @end
 
@@ -62,6 +63,11 @@
 }
 
 - (void)done:(id)sender {
+	[self done:sender completion:nil];
+}
+
+- (void)done:(id)sender completion:(void (^)(void))completion {
+	self.popCompletionBlock = completion;
 	[self.viewControllers[0] done:sender];
 }
 
@@ -81,6 +87,10 @@
 					animated:(BOOL)animated {
 	BOOL shouldShowToolbar = ![viewController isKindOfClass:[UITabBarController class]];
 	[self setToolbarHidden:!shouldShowToolbar animated:animated];
+	if (self.popCompletionBlock) {
+		self.popCompletionBlock();
+		self.popCompletionBlock = nil;
+	}
 }
 
 - (void)navigationController:(UINavigationController *)navigationController

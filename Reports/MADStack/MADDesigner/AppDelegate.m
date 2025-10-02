@@ -13,6 +13,9 @@
 
 #import "AppDelegate.h"
 #import "MADPngImageTransformer.h"
+#import "MADExplorerController.h"
+#import "MADTabBarController.h"
+#import "MADNavigationController.h"
 #import "Constants.h"
 #import "madlog.h"
 
@@ -184,7 +187,20 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (BOOL)application:(UIApplication *)application OpenURL:(NSURL *)url
 			options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-	return NO;
+	if (!url.isFileURL) return NO;
+	
+	UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+	if ([navController.topViewController isKindOfClass:[MADExplorerController class]]) {
+		MADExplorerController *filesController = (MADExplorerController *)navController.topViewController;
+		[filesController openDocumentAtURL:url completion:nil];
+	} else if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
+		MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
+		if ([tabBarController.navigationController respondsToSelector:@selector(done:)]) {
+			[((MADNavigationController *)tabBarController.navigationController) done:self];
+		}
+	}
+	
+	return YES;
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application

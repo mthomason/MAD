@@ -2465,7 +2465,6 @@
 				4CC3D6371BCB6D9400BDA5D3 /* icons */,
 				4CC3D6811BCB6D9400BDA5D3 /* MADImageIconDuplicate.ai */,
 				4CC3D6931BCB6D9400BDA5D3 /* masters */,
-				4CC3D69B1BCB6D9400BDA5D3 /* patterns */,
 				4CC3D7041BCB6D9500BDA5D3 /* ui */,
 			);
 			path = Images;
@@ -2474,7 +2473,6 @@
 		4CC3D6371BCB6D9400BDA5D3 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				4CE0F52F1F5E113300D828E1 /* InAssetsPackage */,
 				4CF6AA271F5405DC0061B0C6 /* Icon-Designer.pdf */,
 				4CC3D6381BCB6D9400BDA5D3 /* document */,
 				4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */,
@@ -2507,13 +2505,6 @@
 				4CC3D6991BCB6D9400BDA5D3 /* MTActivityProvidence~iPad.ai */,
 			);
 			path = masters;
-			sourceTree = "<group>";
-		};
-		4CC3D69B1BCB6D9400BDA5D3 /* patterns */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = patterns;
 			sourceTree = "<group>";
 		};
 		4CC3D7041BCB6D9500BDA5D3 /* ui */ = {
@@ -2691,13 +2682,6 @@
 				4CD90DB91CE6B76600B56B90 /* rwpng.c */,
 			);
 			path = rwpng;
-			sourceTree = "<group>";
-		};
-		4CE0F52F1F5E113300D828E1 /* InAssetsPackage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = InAssetsPackage;
 			sourceTree = "<group>";
 		};
 		4CE4EFAD1CD08C14006CA2B0 /* Managers */ = {

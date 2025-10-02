@@ -14,6 +14,9 @@
 
 @interface MADNavigationControllerFileExplorer : UINavigationController <MADNavigationControllerIdentify, UINavigationControllerDelegate>
 
+- (void)done:(id)sender;
+- (void)done:(id)sender completion:(void (^)(void))completion;
+
 @end
 
 #endif
