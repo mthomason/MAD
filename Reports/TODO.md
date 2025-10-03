@@ -14,12 +14,6 @@
 * ~~Fix whitespace element type~~
 * Fix minor UI issues
 * AI localizations
-* That's it...
-
-Test passwords are (it's a never on test server):
-root, root, employees
-test, test, AdventureWorks2022
-
 * ~~Update designer UI so state doesn't get out of sync when user clicks away~~
 * ~~Update toolbox UI for dark mode~~
 * Setup test databases for ~~MySQL~~ and ~~MS SQL Server~~.

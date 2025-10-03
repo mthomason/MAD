@@ -229,6 +229,7 @@
 		4C453FC72E25D6E200641E6E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C453FC62E25D6E200641E6E /* StoreKit.framework */; };
 		4C453FC92E25DB4000641E6E /* MAD Designer.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4C453FC82E25DB4000641E6E /* MAD Designer.storekit */; };
 		4C453FCA2E25DB4000641E6E /* MAD Designer.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4C453FC82E25DB4000641E6E /* MAD Designer.storekit */; };
+		4C459A342E8F8B3100F078CF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C459A332E8F8B3100F078CF /* Launch Screen.storyboard */; };
 		4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
@@ -848,6 +849,7 @@
 		4C453FC42E247D8000641E6E /* Scratch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Scratch.m; path = Source/Scratch.m; sourceTree = "<group>"; };
 		4C453FC62E25D6E200641E6E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C453FC82E25DB4000641E6E /* MAD Designer.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "MAD Designer.storekit"; sourceTree = "<group>"; };
+		4C459A332E8F8B3100F078CF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Assets/Launch Screen.storyboard"; sourceTree = "<group>"; };
 		4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerControllerProtocol.h; path = ../../MADDesigner/UI/Explorer/MADExplorerControllerProtocol.h; sourceTree = "<group>"; };
 		4C479D451F3E9CAE00FCE020 /* MADOperationPromptError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationPromptError.h; sourceTree = "<group>"; };
 		4C479D4A1F3EBBDC00FCE020 /* MADOperationDatabaseTestConnectionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationDatabaseTestConnectionProtocol.h; sourceTree = "<group>"; };
@@ -1274,6 +1276,7 @@
 				4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */,
 				4C401ED11BAE5E9000BAE5FC /* MADStore.storyboard */,
 				4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */,
+				4C459A332E8F8B3100F078CF /* Launch Screen.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -3070,6 +3073,7 @@
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */,
 				4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */,
+				4C459A342E8F8B3100F078CF /* Launch Screen.storyboard in Resources */,
 				4CFEE7FD1BB77C4000AFAA0A /* MADQuerySelectField.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3664,6 +3668,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
@@ -3729,6 +3734,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;

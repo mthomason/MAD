@@ -54,6 +54,12 @@
       location = "group:/Users/michael/Desktop/Reports/Reports/TODO.md">
    </FileRef>
    <FileRef
+      location = "group:DEVELOPER.md">
+   </FileRef>
+   <FileRef
+      location = "group:APPSTORE.md">
+   </FileRef>
+   <FileRef
       location = "group:LICENSE.md">
    </FileRef>
    <FileRef
