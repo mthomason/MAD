@@ -40,17 +40,18 @@
 
 typedef NSArray <MADSchemaFieldSelectorModel *> MADSectionInfoArray;
 
-static inline double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields);
+static inline double heightForSectionInfo(NSUInteger, NSUInteger);
+static inline double PreferredContentHeightForUpdate(NSUInteger, NSUInteger);
+static inline CGSize PreferredContentSizeForUpdate(NSUInteger, NSUInteger);
+
 static inline  double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
 	return ((numTables * MADHeaderHeight) + (numFields * MAD_44));
 }
 
-static inline double PreferredContentHeightForUpdate(NSUInteger, NSUInteger);
 static inline double PreferredContentHeightForUpdate(NSUInteger count, NSUInteger index) {
 	return heightForSectionInfo(count, index);
 }
 
-static inline CGSize PreferredContentSizeForUpdate(NSUInteger, NSUInteger);
 static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger index) {
 	return CGSizeMake(MADFloat_320,
 					  (CGFloat)PreferredContentHeightForUpdate(count, index));
@@ -373,8 +374,14 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 }
 
 - (void)updateSize {
-	self.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
-	self.navigationController.preferredContentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
+	CGSize contentSize = PreferredContentSizeForUpdate(self.sectionInfoArray.count, _openSectionIndex == NSNotFound ? 0 : self.resultsController.sections[(NSUInteger)_openSectionIndex].objects.count);
+	self.preferredContentSize = contentSize;
+	
+	UINavigationBar *navBar = self.navigationController.navigationBar;
+	if (navBar && !navBar.hidden) {
+		contentSize.height += navBar.frame.size.height;
+	}
+	self.navigationController.preferredContentSize = contentSize;
 }
 
 #pragma mark -
