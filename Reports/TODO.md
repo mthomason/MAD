@@ -9,10 +9,10 @@
 * ~~Test TDS~~
 * ~~See if something can be done about slow load of SQL screen~~
 * ~~Infoscreen in dark mode is unreadable... can't be dismissed~~
-* Recreate sample reports (in new format)
+* ~~Recreate sample reports (in new format)~~
 * ~~Allow users to rename documents.~~
 * ~~Fix whitespace element type~~
-* Fix minor UI issues
+* ~~Fix minor UI issues~~
 * AI localizations
 * ~~Update designer UI so state doesn't get out of sync when user clicks away~~
 * ~~Update toolbox UI for dark mode~~
@@ -31,6 +31,13 @@
 
 * See if something can be done about constraint warnings when the UI is off screen (it's not an issue yet, lol), or perhaps these are real issues, or something to do with animations
 * Test multiple rows
+
+## More
+
+Functions to look at:
+
+* `- (void)setupGroupKeyIndexes`
+* `- (NSArray *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber`
 
 ---
 
