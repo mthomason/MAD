@@ -5,25 +5,25 @@
 	<key>CFBundleShortVersionString</key>
 	<string>9.0</string>
 	<key>CFBundleVersion</key>
-	<string>4432</string>
+	<string>4433</string>
 	<key>MADApplicationNamePrefix</key>
 	<string>MAD</string>
 	<key>MADApplicationNameSuffix</key>
 	<string>Designer</string>
 	<key>MADBuildDate</key>
-	<string>2025-10-03T23:53:46Z</string>
+	<string>2025-10-04T00:50:24Z</string>
 	<key>MADBuildNumber</key>
-	<string>37716</string>
+	<string>37731</string>
 	<key>MADGitBranch</key>
 	<string>master</string>
 	<key>MADGitCommitCount</key>
-	<string>4432</string>
+	<string>4433</string>
 	<key>MADGitCommitHash</key>
-	<string>75e635d4c</string>
+	<string>d6c79f2a0</string>
 	<key>MADGitDescribe</key>
-	<string>v8.0-2490-g75e635d4c</string>
+	<string>v8.0-2491-gd6c79f2a0-dirty</string>
 	<key>MADGitDirty</key>
-	<string>false</string>
+	<string>true</string>
 	<key>MADGroupIdentifier</key>
 	<string>group.everydayapps.mad</string>
 	<key>MADRevision</key>

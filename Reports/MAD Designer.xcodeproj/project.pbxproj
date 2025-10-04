@@ -229,11 +229,10 @@
 		4C453FC72E25D6E200641E6E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C453FC62E25D6E200641E6E /* StoreKit.framework */; };
 		4C453FC92E25DB4000641E6E /* MAD Designer.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4C453FC82E25DB4000641E6E /* MAD Designer.storekit */; };
 		4C453FCA2E25DB4000641E6E /* MAD Designer.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4C453FC82E25DB4000641E6E /* MAD Designer.storekit */; };
-		4C459A342E8F8B3100F078CF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C459A332E8F8B3100F078CF /* Launch Screen.storyboard */; };
+		4C459A342E8F8B3100F078CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C459A332E8F8B3100F078CF /* LaunchScreen.storyboard */; };
 		4C4935A21E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
-		4C4B4B842DE25DAA0035A316 /* MADLaunchIOS13.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */; };
 		4C4B4B902DE34A170035A316 /* MADThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */; };
 		4C4C28832DD6C47100DB8538 /* MADPluginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C28822DD6C47100DB8538 /* MADPluginManager.m */; };
 		4C4F128C1D0C777D0002294E /* MADAttributedStringQueryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F128B1D0C777D0002294E /* MADAttributedStringQueryController.m */; };
@@ -849,14 +848,13 @@
 		4C453FC42E247D8000641E6E /* Scratch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Scratch.m; path = Source/Scratch.m; sourceTree = "<group>"; };
 		4C453FC62E25D6E200641E6E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C453FC82E25DB4000641E6E /* MAD Designer.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "MAD Designer.storekit"; sourceTree = "<group>"; };
-		4C459A332E8F8B3100F078CF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "Assets/Launch Screen.storyboard"; sourceTree = "<group>"; };
+		4C459A332E8F8B3100F078CF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Assets/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerControllerProtocol.h; path = ../../MADDesigner/UI/Explorer/MADExplorerControllerProtocol.h; sourceTree = "<group>"; };
 		4C479D451F3E9CAE00FCE020 /* MADOperationPromptError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOperationPromptError.h; sourceTree = "<group>"; };
 		4C479D4A1F3EBBDC00FCE020 /* MADOperationDatabaseTestConnectionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationDatabaseTestConnectionProtocol.h; sourceTree = "<group>"; };
 		4C4935A01E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDesignerAnimatedTransitioning.h; path = MADStack/MADDesigner/MADDesignerAnimatedTransitioning.h; sourceTree = "<group>"; };
 		4C4935A11E22515A00AE5E5E /* MADDesignerAnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDesignerAnimatedTransitioning.m; path = MADStack/MADDesigner/MADDesignerAnimatedTransitioning.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = MADLaunchIOS13.storyboard; path = MADStack/MADDesigner/UI/Explorer/MADLaunchIOS13.storyboard; sourceTree = "<group>"; };
 		4C4B4B852DE2C16F0035A316 /* build_sqlite3.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build_sqlite3.sh; path = ../Compressor/build_sqlite3.sh; sourceTree = SOURCE_ROOT; };
 		4C4B4B8E2DE34A170035A316 /* MADThemeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADThemeManager.h; path = Source/MADThemeManager.h; sourceTree = "<group>"; };
 		4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADThemeManager.m; path = Source/MADThemeManager.m; sourceTree = "<group>"; };
@@ -1257,7 +1255,6 @@
 		4C1E55071E58295F00E3FAF0 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
-				4C4B4B832DE25DAA0035A316 /* MADLaunchIOS13.storyboard */,
 				4C401F091BAE6DF100BAE5FC /* MADAbout.storyboard */,
 				4C26BA091BAF14F200456DC8 /* MADAboutApp.storyboard */,
 				4C26BA021BAF14B300456DC8 /* MADAboutDocument.storyboard */,
@@ -1276,7 +1273,7 @@
 				4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */,
 				4C401ED11BAE5E9000BAE5FC /* MADStore.storyboard */,
 				4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */,
-				4C459A332E8F8B3100F078CF /* Launch Screen.storyboard */,
+				4C459A332E8F8B3100F078CF /* LaunchScreen.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -3044,7 +3041,6 @@
 				4C3DCC1A1BCAEFA900ABE231 /* Images.xcassets in Resources */,
 				4C60C5B61BB0A1CC004D9758 /* MADExplorer.storyboard in Resources */,
 				4C401FD01BAE8DC400BAE5FC /* MADLaunchImagesOS7.storyboard in Resources */,
-				4C4B4B842DE25DAA0035A316 /* MADLaunchIOS13.storyboard in Resources */,
 				4CC3D7291BCB6D9500BDA5D3 /* MADIcon22x29.png in Resources */,
 				4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */,
 				4CFEE80B1BB7993300AFAA0A /* MADQueryAddTable.storyboard in Resources */,
@@ -3073,7 +3069,7 @@
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4CC3D72D1BCB6D9500BDA5D3 /* MADIcon64.png in Resources */,
 				4C00A36E1F58078C00F6A6C1 /* Samples.xcassets in Resources */,
-				4C459A342E8F8B3100F078CF /* Launch Screen.storyboard in Resources */,
+				4C459A342E8F8B3100F078CF /* LaunchScreen.storyboard in Resources */,
 				4CFEE7FD1BB77C4000AFAA0A /* MADQuerySelectField.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
