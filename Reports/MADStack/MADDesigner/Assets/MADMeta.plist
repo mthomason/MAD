@@ -11,17 +11,17 @@
 	<key>MADApplicationNameSuffix</key>
 	<string>Designer</string>
 	<key>MADBuildDate</key>
-	<string>2025-10-04T00:50:24Z</string>
+	<string>2025-10-05T16:26:07Z</string>
 	<key>MADBuildNumber</key>
-	<string>37731</string>
+	<string>37735</string>
 	<key>MADGitBranch</key>
 	<string>master</string>
 	<key>MADGitCommitCount</key>
 	<string>4433</string>
 	<key>MADGitCommitHash</key>
-	<string>d6c79f2a0</string>
+	<string>8fc14434d</string>
 	<key>MADGitDescribe</key>
-	<string>v8.0-2491-gd6c79f2a0-dirty</string>
+	<string>v9.0-dirty</string>
 	<key>MADGitDirty</key>
 	<string>true</string>
 	<key>MADGroupIdentifier</key>
@@ -33,6 +33,6 @@
 	<key>MADUbiquityIdentifier</key>
 	<string>iCloud.com.everydayapps.mad.designer</string>
 	<key>MADVersionFromTag</key>
-	<string>8.0</string>
+	<string>9.0</string>
 </dict>
 </plist>
