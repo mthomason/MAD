@@ -495,6 +495,7 @@
 		4CA8B2E72DD5DB53001E27B3 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2E52DD5DB53001E27B3 /* libssl.a */; };
 		4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF251D8D859A00A5A32E /* libc++.tbd */; };
 		4CE0F5061F5D52AE00D828E1 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */; };
+		4CE4DE152E92EB430093BEBC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4CE4DE142E92EB430093BEBC /* PrivacyInfo.xcprivacy */; };
 		4CF85FC92DD0AAC400FCA47D /* crmferr.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF85F5C2DD0AAA800FCA47D /* crmferr.h */; };
 		4CF85FCA2DD0AAC400FCA47D /* kdf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF85F822DD0AAA800FCA47D /* kdf.h */; };
 		4CF85FCB2DD0AAC400FCA47D /* rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF85FA02DD0AAA800FCA47D /* rand.h */; };
@@ -1154,6 +1155,7 @@
 		4CBF043F2E8518E800812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CDCEF251D8D859A00A5A32E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MADCreateDocument.storyboard; path = MADMySQL/MADCreateDocument.storyboard; sourceTree = "<group>"; };
+		4CE4DE142E92EB430093BEBC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4CF85F3A2DD0AAA800FCA47D /* aes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		4CF85F3B2DD0AAA800FCA47D /* asn1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
 		4CF85F3C2DD0AAA800FCA47D /* asn1_mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
@@ -2161,6 +2163,7 @@
 		4CAEE7341E563659009A6096 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CE4DE142E92EB430093BEBC /* PrivacyInfo.xcprivacy */,
 				4C7014991BACDC6800301713 /* Info.plist */,
 				4C00A37E1F5951E200F6A6C1 /* Media.xcassets */,
 			);
@@ -3008,6 +3011,7 @@
 				4C64C3CD226D743200CE93FE /* MADDatabaseConnectionMySql.h in Resources */,
 				4C64C3CF226D743200CE93FE /* MADDataTypeMySQL.h in Resources */,
 				4C64C3D1226D743200CE93FE /* MADMySQLFetchProtocol.h in Resources */,
+				4CE4DE152E92EB430093BEBC /* PrivacyInfo.xcprivacy in Resources */,
 				4C64C3D2226D743200CE93FE /* MysqlConnection.h in Resources */,
 				4C64C3D4226D743200CE93FE /* MysqlCommitException.h in Resources */,
 				4C64C3D6226D743200CE93FE /* MysqlFetch.h in Resources */,

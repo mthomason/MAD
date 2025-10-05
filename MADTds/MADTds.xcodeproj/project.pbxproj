@@ -27,6 +27,7 @@
 		4CCF93B02DD5ED4C00E8BA0F /* syberror.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCF93A42DD5ED4C00E8BA0F /* syberror.h */; };
 		4CCF93B12DD5ED4C00E8BA0F /* tds_sysdep_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCF93A62DD5ED4C00E8BA0F /* tds_sysdep_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CCF93B22DD5ED4C00E8BA0F /* sybdb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCF93A32DD5ED4C00E8BA0F /* sybdb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CE4DE132E92EB080093BEBC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4CE4DE122E92EB080093BEBC /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		4CCF93A42DD5ED4C00E8BA0F /* syberror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = syberror.h; sourceTree = "<group>"; };
 		4CCF93A52DD5ED4C00E8BA0F /* sybfront.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
 		4CCF93A62DD5ED4C00E8BA0F /* tds_sysdep_public.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
+		4CE4DE122E92EB080093BEBC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		4CCABCDB2CF0B75A008EC875 /* MADTds */ = {
 			isa = PBXGroup;
 			children = (
+				4CE4DE122E92EB080093BEBC /* PrivacyInfo.xcprivacy */,
 				4CCABCDD2CF0B75A008EC875 /* MADTds.docc */,
 				4CCABCDC2CF0B75A008EC875 /* MADTds.h */,
 				4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */,
@@ -223,6 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CE4DE132E92EB080093BEBC /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
