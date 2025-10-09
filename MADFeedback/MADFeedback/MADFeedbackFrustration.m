@@ -9,7 +9,6 @@
 #import "MADFeedbackFrustration.h"
 #import "MADAlertControllerFeedback.h"
 
-#import <MADCocoaExtensions/UIViewController+Utilities.h>
 #import <MADCocoaExtensions/UIApplication+Helpers.h>
 #import <MADCocoaExtensions/MADAlertController.h>
 
