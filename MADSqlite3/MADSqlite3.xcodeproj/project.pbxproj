@@ -90,10 +90,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C00A3801F5955EF00F6A6C1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = MADSqlite3/Assets/Media.xcassets; sourceTree = "<group>"; };
+		4C00A3801F5955EF00F6A6C1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		4C11F1431BA9008D00EC2C58 /* MADSqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADSqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADSqlite3.h; sourceTree = "<group>"; };
-		4C11F1481BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADSqlite3/Info.plist; sourceTree = "<group>"; };
+		4C11F1481BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C11F14D1BA9008D00EC2C58 /* MADSqlite3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADSqlite3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSqlite3Tests.m; sourceTree = "<group>"; };
 		4C11F1541BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -189,22 +189,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C00A37B1F59500800F6A6C1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				4C11F1481BA9008D00EC2C58 /* Info.plist */,
-				4C00A3801F5955EF00F6A6C1 /* Media.xcassets */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 		4C11F1391BA9008D00EC2C58 = {
 			isa = PBXGroup;
 			children = (
-				4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */,
 				4CA7C3002EA4368E00475743 /* Source */,
+				4CA7C30E2EA43EF100475743 /* Resources */,
+				4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */,
 				4CBF04402E85191A00812022 /* AGENTS.md */,
-				4C00A37B1F59500800F6A6C1 /* Resources */,
 				4C11F1511BA9008D00EC2C58 /* MADSqlite3Tests */,
 				4C2D77ED1F56CF3F005415F7 /* Frameworks */,
 				4C11F1441BA9008D00EC2C58 /* Products */,
@@ -316,6 +307,15 @@
 				4C4B4B8B2DE31A050035A316 /* sqlite3.c */,
 			);
 			path = sqlite3;
+			sourceTree = "<group>";
+		};
+		4CA7C30E2EA43EF100475743 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C11F1481BA9008D00EC2C58 /* Info.plist */,
+				4C00A3801F5955EF00F6A6C1 /* Media.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -650,7 +650,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = MADSqlite3/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -695,7 +695,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = MADSqlite3/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
