@@ -68,39 +68,39 @@
 
 /* Begin PBXFileReference section */
 		4C0BC9672D438787003BE83E /* MTGraphTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTGraphTests.m; sourceTree = "<group>"; };
-		4C0FA9F21C94F462005E8B33 /* MADIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADIndex.m; path = MADDataStructures/MADIndex.m; sourceTree = "<group>"; };
-		4C0FA9F31C94F462005E8B33 /* MADIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADIndex.h; path = MADDataStructures/MADIndex.h; sourceTree = "<group>"; };
+		4C0FA9F21C94F462005E8B33 /* MADIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADIndex.m; sourceTree = "<group>"; };
+		4C0FA9F31C94F462005E8B33 /* MADIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADIndex.h; sourceTree = "<group>"; };
 		4C2C7B411BA929EF00C9CC5E /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDataStructures.h; sourceTree = "<group>"; };
 		4C2C7B461BA929EF00C9CC5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C2C7B4B1BA929EF00C9CC5E /* MADDataStructuresTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDataStructuresTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2C7B501BA929EF00C9CC5E /* MADDataStructuresTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataStructuresTests.m; sourceTree = "<group>"; };
 		4C2C7B521BA929EF00C9CC5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = MADDataStructures/MTEdge.h; sourceTree = "<group>"; };
-		4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTEdge.m; path = MADDataStructures/MTEdge.m; sourceTree = "<group>"; };
-		4C2C7B601BA92A8700C9CC5E /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = MADDataStructures/MTGraph.h; sourceTree = "<group>"; };
-		4C2C7B611BA92A8700C9CC5E /* MTGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTGraph.m; path = MADDataStructures/MTGraph.m; sourceTree = "<group>"; };
-		4C2C7B621BA92A8700C9CC5E /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLinkedList.h; path = MADDataStructures/MTLinkedList.h; sourceTree = "<group>"; };
-		4C2C7B631BA92A8700C9CC5E /* MTLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTLinkedList.m; path = MADDataStructures/MTLinkedList.m; sourceTree = "<group>"; };
-		4C2C7B641BA92A8700C9CC5E /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTObject.h; path = MADDataStructures/MTObject.h; sourceTree = "<group>"; };
-		4C2C7B651BA92A8700C9CC5E /* MTObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTObject.m; path = MADDataStructures/MTObject.m; sourceTree = "<group>"; };
-		4C2C7B661BA92A8700C9CC5E /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPair.h; path = MADDataStructures/MTPair.h; sourceTree = "<group>"; };
-		4C2C7B671BA92A8700C9CC5E /* MTPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTPair.m; path = MADDataStructures/MTPair.m; sourceTree = "<group>"; };
-		4C2C7B681BA92A8700C9CC5E /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolCompare.h; path = MADDataStructures/MTProtocolCompare.h; sourceTree = "<group>"; };
-		4C2C7B691BA92A8700C9CC5E /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolEnumerator.h; path = MADDataStructures/MTProtocolEnumerator.h; sourceTree = "<group>"; };
-		4C2C7B6A1BA92A8700C9CC5E /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTProtocolLog.h; path = MADDataStructures/MTProtocolLog.h; sourceTree = "<group>"; };
-		4C2C7B6B1BA92A8700C9CC5E /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueue.h; path = MADDataStructures/MTQueue.h; sourceTree = "<group>"; };
-		4C2C7B6C1BA92A8700C9CC5E /* MTQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueue.m; path = MADDataStructures/MTQueue.m; sourceTree = "<group>"; };
-		4C2C7B6D1BA92A8700C9CC5E /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTStack.h; path = MADDataStructures/MTStack.h; sourceTree = "<group>"; };
-		4C2C7B6E1BA92A8700C9CC5E /* MTStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTStack.m; path = MADDataStructures/MTStack.m; sourceTree = "<group>"; };
-		4C2C7B711BA92A8700C9CC5E /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTree.h; path = MADDataStructures/MTTree.h; sourceTree = "<group>"; };
-		4C2C7B721BA92A8700C9CC5E /* MTTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTree.m; path = MADDataStructures/MTTree.m; sourceTree = "<group>"; };
-		4C2C7B731BA92A8700C9CC5E /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVertex.h; path = MADDataStructures/MTVertex.h; sourceTree = "<group>"; };
-		4C2C7B741BA92A8700C9CC5E /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVertex.m; path = MADDataStructures/MTVertex.m; sourceTree = "<group>"; };
-		4C3080F71D05C3B700A7D597 /* MADVectorBool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADVectorBool.h; path = MADDataStructures/MADVectorBool.h; sourceTree = "<group>"; };
-		4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADVectorBool.mm; path = MADDataStructures/MADVectorBool.mm; sourceTree = "<group>"; };
-		4C6895172CF223B900BD38DF /* MTLinkedListNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MTLinkedListNode.h; path = MADDataStructures/MTLinkedListNode.h; sourceTree = "<group>"; };
-		4C6895182CF223B900BD38DF /* MTLinkedListNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MTLinkedListNode.m; path = MADDataStructures/MTLinkedListNode.m; sourceTree = "<group>"; };
+		4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEdge.h; sourceTree = "<group>"; };
+		4C2C7B5F1BA92A8700C9CC5E /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEdge.m; sourceTree = "<group>"; };
+		4C2C7B601BA92A8700C9CC5E /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraph.h; sourceTree = "<group>"; };
+		4C2C7B611BA92A8700C9CC5E /* MTGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGraph.m; sourceTree = "<group>"; };
+		4C2C7B621BA92A8700C9CC5E /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLinkedList.h; sourceTree = "<group>"; };
+		4C2C7B631BA92A8700C9CC5E /* MTLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLinkedList.m; sourceTree = "<group>"; };
+		4C2C7B641BA92A8700C9CC5E /* MTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTObject.h; sourceTree = "<group>"; };
+		4C2C7B651BA92A8700C9CC5E /* MTObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTObject.m; sourceTree = "<group>"; };
+		4C2C7B661BA92A8700C9CC5E /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPair.h; sourceTree = "<group>"; };
+		4C2C7B671BA92A8700C9CC5E /* MTPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPair.m; sourceTree = "<group>"; };
+		4C2C7B681BA92A8700C9CC5E /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolCompare.h; sourceTree = "<group>"; };
+		4C2C7B691BA92A8700C9CC5E /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolEnumerator.h; sourceTree = "<group>"; };
+		4C2C7B6A1BA92A8700C9CC5E /* MTProtocolLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolLog.h; sourceTree = "<group>"; };
+		4C2C7B6B1BA92A8700C9CC5E /* MTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueue.h; sourceTree = "<group>"; };
+		4C2C7B6C1BA92A8700C9CC5E /* MTQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueue.m; sourceTree = "<group>"; };
+		4C2C7B6D1BA92A8700C9CC5E /* MTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStack.h; sourceTree = "<group>"; };
+		4C2C7B6E1BA92A8700C9CC5E /* MTStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStack.m; sourceTree = "<group>"; };
+		4C2C7B711BA92A8700C9CC5E /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTree.h; sourceTree = "<group>"; };
+		4C2C7B721BA92A8700C9CC5E /* MTTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTree.m; sourceTree = "<group>"; };
+		4C2C7B731BA92A8700C9CC5E /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVertex.h; sourceTree = "<group>"; };
+		4C2C7B741BA92A8700C9CC5E /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVertex.m; sourceTree = "<group>"; };
+		4C3080F71D05C3B700A7D597 /* MADVectorBool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVectorBool.h; sourceTree = "<group>"; };
+		4C3080F81D05C3B700A7D597 /* MADVectorBool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MADVectorBool.mm; sourceTree = "<group>"; };
+		4C6895172CF223B900BD38DF /* MTLinkedListNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTLinkedListNode.h; sourceTree = "<group>"; };
+		4C6895182CF223B900BD38DF /* MTLinkedListNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTLinkedListNode.m; sourceTree = "<group>"; };
 		4C8984C02CFEA51F002AC52A /* MADMapStringsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMapStringsTests.m; sourceTree = "<group>"; };
 		4C8984C22CFEA5F0002AC52A /* MADVectorBoolTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADVectorBoolTests.m; sourceTree = "<group>"; };
 		4C8984C42CFEA802002AC52A /* MTStackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTStackTests.m; sourceTree = "<group>"; };
@@ -108,17 +108,17 @@
 		4CA14C5D2D00C4FE009AE442 /* MTLinkedListTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTLinkedListTests.m; sourceTree = "<group>"; };
 		4CA1AD6F1E29CDDB005081E1 /* madmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = madmap.cpp; sourceTree = "<group>"; };
 		4CA1AD701E29CDDB005081E1 /* madmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = madmap.hpp; sourceTree = "<group>"; };
-		4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMapStrings.h; path = MADDataStructures/MADMapStrings.h; sourceTree = "<group>"; };
-		4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MADMapStrings.mm; path = MADDataStructures/MADMapStrings.mm; sourceTree = "<group>"; };
-		4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlgorithmColor.h; path = MADDataStructures/MADAlgorithmColor.h; sourceTree = "<group>"; };
-		4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADSortProperties.m; path = MADDataStructures/MADSortProperties.m; sourceTree = "<group>"; };
-		4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADSortProperties.h; path = MADDataStructures/MADSortProperties.h; sourceTree = "<group>"; };
-		4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADDfsProperties.h; path = MADDataStructures/MADDfsProperties.h; sourceTree = "<group>"; };
-		4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADDfsProperties.m; path = MADDataStructures/MADDfsProperties.m; sourceTree = "<group>"; };
-		4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBfsProperties.m; path = MADDataStructures/MADBfsProperties.m; sourceTree = "<group>"; };
-		4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBfsProperties.h; path = MADDataStructures/MADBfsProperties.h; sourceTree = "<group>"; };
-		4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAlgorithmElementProperties.m; path = MADDataStructures/MADAlgorithmElementProperties.m; sourceTree = "<group>"; };
-		4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlgorithmElementProperties.h; path = MADDataStructures/MADAlgorithmElementProperties.h; sourceTree = "<group>"; };
+		4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMapStrings.h; sourceTree = "<group>"; };
+		4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MADMapStrings.mm; sourceTree = "<group>"; };
+		4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlgorithmColor.h; sourceTree = "<group>"; };
+		4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSortProperties.m; sourceTree = "<group>"; };
+		4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSortProperties.h; sourceTree = "<group>"; };
+		4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDfsProperties.h; sourceTree = "<group>"; };
+		4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDfsProperties.m; sourceTree = "<group>"; };
+		4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBfsProperties.m; sourceTree = "<group>"; };
+		4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBfsProperties.h; sourceTree = "<group>"; };
+		4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAlgorithmElementProperties.m; sourceTree = "<group>"; };
+		4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlgorithmElementProperties.h; sourceTree = "<group>"; };
 		4CBF04392E8517F300812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,8 +144,10 @@
 		4C2C7B371BA929EF00C9CC5E = {
 			isa = PBXGroup;
 			children = (
+				4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */,
 				4CBF04392E8517F300812022 /* AGENTS.md */,
-				4C2C7B431BA929EF00C9CC5E /* MADDataStructures */,
+				4CA7C31D2EA4550500475743 /* Source */,
+				4CA7C31C2EA454F700475743 /* Resources */,
 				4C2C7B4F1BA929EF00C9CC5E /* MADDataStructuresTests */,
 				4C2C7B421BA929EF00C9CC5E /* Products */,
 			);
@@ -158,16 +160,6 @@
 				4C2C7B4B1BA929EF00C9CC5E /* MADDataStructuresTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		4C2C7B431BA929EF00C9CC5E /* MADDataStructures */ = {
-			isa = PBXGroup;
-			children = (
-				4C2C7B441BA929EF00C9CC5E /* MADDataStructures.h */,
-				4C2C7B461BA929EF00C9CC5E /* Info.plist */,
-				4C2C7B5B1BA92A0900C9CC5E /* MADDataStructures */,
-			);
-			path = MADDataStructures;
 			sourceTree = "<group>";
 		};
 		4C2C7B4F1BA929EF00C9CC5E /* MADDataStructuresTests */ = {
@@ -185,12 +177,28 @@
 			path = MADDataStructuresTests;
 			sourceTree = "<group>";
 		};
-		4C2C7B5B1BA92A0900C9CC5E /* MADDataStructures */ = {
+		4CA7C31C2EA454F700475743 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C2C7B461BA929EF00C9CC5E /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4CA7C31D2EA4550500475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				4CA1AD701E29CDDB005081E1 /* madmap.hpp */,
 				4CA1AD6F1E29CDDB005081E1 /* madmap.cpp */,
-				4CBC23E81C9559E60006C0A6 /* AlgorithmProperties */,
+				4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */,
+				4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */,
+				4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */,
+				4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */,
+				4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */,
+				4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */,
+				4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */,
+				4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */,
+				4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */,
 				4C0FA9F31C94F462005E8B33 /* MADIndex.h */,
 				4C0FA9F21C94F462005E8B33 /* MADIndex.m */,
 				4C2C7B5E1BA92A8700C9CC5E /* MTEdge.h */,
@@ -221,23 +229,7 @@
 				4CB8EDFB1E1938EC00193295 /* MADMapStrings.h */,
 				4CB8EDFC1E1938EC00193295 /* MADMapStrings.mm */,
 			);
-			name = MADDataStructures;
-			sourceTree = "<group>";
-		};
-		4CBC23E81C9559E60006C0A6 /* AlgorithmProperties */ = {
-			isa = PBXGroup;
-			children = (
-				4CB8EE061E1A93D300193295 /* MADAlgorithmColor.h */,
-				4CBC23D91C9559C40006C0A6 /* MADSortProperties.h */,
-				4CBC23D81C9559C40006C0A6 /* MADSortProperties.m */,
-				4CBC23DA1C9559C40006C0A6 /* MADDfsProperties.h */,
-				4CBC23DB1C9559C40006C0A6 /* MADDfsProperties.m */,
-				4CBC23DD1C9559C40006C0A6 /* MADBfsProperties.h */,
-				4CBC23DC1C9559C40006C0A6 /* MADBfsProperties.m */,
-				4CBC23DF1C9559C40006C0A6 /* MADAlgorithmElementProperties.h */,
-				4CBC23DE1C9559C40006C0A6 /* MADAlgorithmElementProperties.m */,
-			);
-			name = AlgorithmProperties;
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -559,7 +551,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				INFOPLIST_FILE = MADDataStructures/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -616,7 +608,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				INFOPLIST_FILE = MADDataStructures/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

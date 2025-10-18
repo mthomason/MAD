@@ -125,34 +125,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4CF6AA951F5518BA0061B0C6 = {
+		4CA7C3182EA4535700475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4CBF04362E85176C00812022 /* AGENTS.md */,
-				4CF6AAA11F5518BB0061B0C6 /* MADAPI */,
-				4CF6AAAC1F5518BB0061B0C6 /* MADAPITests */,
-				4CF6AADB1F5528710061B0C6 /* Frameworks */,
-				4CF6AAA01F5518BB0061B0C6 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		4CF6AAA01F5518BB0061B0C6 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */,
-				4CF6AAA81F5518BB0061B0C6 /* MADAPITests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		4CF6AAA11F5518BB0061B0C6 /* MADAPI */ = {
-			isa = PBXGroup;
-			children = (
-				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
 				4C63C8462DED1D7C00A366BC /* madlog.h */,
 				4C63C8472DED1D7C00A366BC /* madlog.m */,
 				4CAA659D2DDD10760016006E /* MADAliases.h */,
-				4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */,
 				4C6C0A061F5D329700EDA039 /* MADConnectionViewController.h */,
 				4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */,
 				4C6C0A161F5D374600EDA039 /* MADConnectionSQLGenericViewController.h */,
@@ -183,9 +161,39 @@
 				4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */,
 				4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */,
 				4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */,
-				4CF6AAA31F5518BB0061B0C6 /* Info.plist */,
 			);
-			path = MADAPI;
+			path = Source;
+			sourceTree = "<group>";
+		};
+		4CA7C3192EA4536300475743 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4CF6AAA31F5518BB0061B0C6 /* Info.plist */,
+				4C6C0A141F5D360400EDA039 /* MADCreateDocument.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4CF6AA951F5518BA0061B0C6 = {
+			isa = PBXGroup;
+			children = (
+				4CF6AAA21F5518BB0061B0C6 /* MADAPI.h */,
+				4CA7C3192EA4536300475743 /* Resources */,
+				4CA7C3182EA4535700475743 /* Source */,
+				4CBF04362E85176C00812022 /* AGENTS.md */,
+				4CF6AAAC1F5518BB0061B0C6 /* MADAPITests */,
+				4CF6AADB1F5528710061B0C6 /* Frameworks */,
+				4CF6AAA01F5518BB0061B0C6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CF6AAA01F5518BB0061B0C6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CF6AA9F1F5518BB0061B0C6 /* MADAPI.framework */,
+				4CF6AAA81F5518BB0061B0C6 /* MADAPITests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4CF6AAAC1F5518BB0061B0C6 /* MADAPITests */ = {
@@ -503,7 +511,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = MADAPI/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -538,7 +546,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = MADAPI/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

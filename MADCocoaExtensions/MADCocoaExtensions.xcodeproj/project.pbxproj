@@ -68,55 +68,55 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C17AE211E427CBA0056A0EA /* MADMargin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADMargin.m; path = MADCocoaExtensions/MADMargin.m; sourceTree = "<group>"; };
-		4C17AE231E427D6B0056A0EA /* MADPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADPadding.m; path = MADCocoaExtensions/MADPadding.m; sourceTree = "<group>"; };
-		4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBorderStyle.m; path = MADCocoaExtensions/MADBorderStyle.m; sourceTree = "<group>"; };
-		4C17AE271E427ECB0056A0EA /* MADTextStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTextStyle.m; path = MADCocoaExtensions/MADTextStyle.m; sourceTree = "<group>"; };
-		4C1CC25924C624EE0027A454 /* MADViewHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADViewHelpers.h; path = MADCocoaExtensions/MADViewHelpers.h; sourceTree = "<group>"; };
-		4C1CC25A24C624EE0027A454 /* MADViewHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MADViewHelpers.m; path = MADCocoaExtensions/MADViewHelpers.m; sourceTree = "<group>"; };
-		4C2480B81C8BFA340058E6B4 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColor.h; path = MADCocoaExtensions/MADColor.h; sourceTree = "<group>"; };
-		4C2480B91C8BFA340058E6B4 /* MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColor.m; path = MADCocoaExtensions/MADColor.m; sourceTree = "<group>"; };
-		4C3622B41CF343D9002B8649 /* MADCompassDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCompassDirection.h; path = MADCocoaExtensions/MADCompassDirection.h; sourceTree = "<group>"; };
-		4C3622B61CF34A8B002B8649 /* MADResizeAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADResizeAspect.h; path = MADCocoaExtensions/MADResizeAspect.h; sourceTree = "<group>"; };
-		4C3622B81CF34AB8002B8649 /* MADAspectRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAspectRatio.h; path = MADCocoaExtensions/MADAspectRatio.h; sourceTree = "<group>"; };
-		4C3622BA1CF34B9C002B8649 /* MAD2dDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAD2dDirection.h; path = MADCocoaExtensions/MAD2dDirection.h; sourceTree = "<group>"; };
-		4C3622C01CF350E9002B8649 /* MADMathAlgebra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADMathAlgebra.h; path = MADCocoaExtensions/MADMathAlgebra.h; sourceTree = "<group>"; };
-		4C3622C21CF351AB002B8649 /* MADLineSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLineSegment.h; path = MADCocoaExtensions/MADLineSegment.h; sourceTree = "<group>"; };
+		4C17AE211E427CBA0056A0EA /* MADMargin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMargin.m; sourceTree = "<group>"; };
+		4C17AE231E427D6B0056A0EA /* MADPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPadding.m; sourceTree = "<group>"; };
+		4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBorderStyle.m; sourceTree = "<group>"; };
+		4C17AE271E427ECB0056A0EA /* MADTextStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTextStyle.m; sourceTree = "<group>"; };
+		4C1CC25924C624EE0027A454 /* MADViewHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADViewHelpers.h; sourceTree = "<group>"; };
+		4C1CC25A24C624EE0027A454 /* MADViewHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADViewHelpers.m; sourceTree = "<group>"; };
+		4C2480B81C8BFA340058E6B4 /* MADColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADColor.h; sourceTree = "<group>"; };
+		4C2480B91C8BFA340058E6B4 /* MADColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADColor.m; sourceTree = "<group>"; };
+		4C3622B41CF343D9002B8649 /* MADCompassDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCompassDirection.h; sourceTree = "<group>"; };
+		4C3622B61CF34A8B002B8649 /* MADResizeAspect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADResizeAspect.h; sourceTree = "<group>"; };
+		4C3622B81CF34AB8002B8649 /* MADAspectRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAspectRatio.h; sourceTree = "<group>"; };
+		4C3622BA1CF34B9C002B8649 /* MAD2dDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAD2dDirection.h; sourceTree = "<group>"; };
+		4C3622C01CF350E9002B8649 /* MADMathAlgebra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMathAlgebra.h; sourceTree = "<group>"; };
+		4C3622C21CF351AB002B8649 /* MADLineSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLineSegment.h; sourceTree = "<group>"; };
 		4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADCocoaExtensions.h; sourceTree = "<group>"; };
 		4C5205621BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5205671BA7E1DC000E6A59 /* MADCocoaExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADCocoaExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCocoaExtensionsTests.m; sourceTree = "<group>"; };
 		4C52056E1BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MacroVendColor.h; path = MADCocoaExtensions/MacroVendColor.h; sourceTree = "<group>"; };
-		4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADColorSocial.h; path = MADCocoaExtensions/MADColorSocial.h; sourceTree = "<group>"; };
-		4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADColorSocial.m; path = MADCocoaExtensions/MADColorSocial.m; sourceTree = "<group>"; };
-		4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumberFormatter+MADExtensions.h"; path = "MADCocoaExtensions/NSNumberFormatter+MADExtensions.h"; sourceTree = "<group>"; };
-		4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumberFormatter+MADExtensions.m"; path = "MADCocoaExtensions/NSNumberFormatter+MADExtensions.m"; sourceTree = "<group>"; };
-		4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MFMailComposeViewController+MADExtensions.h"; path = "MADCocoaExtensions/MFMailComposeViewController+MADExtensions.h"; sourceTree = "<group>"; };
-		4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MFMailComposeViewController+MADExtensions.m"; path = "MADCocoaExtensions/MFMailComposeViewController+MADExtensions.m"; sourceTree = "<group>"; };
-		4C5205891BA7E2A2000E6A59 /* MADAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlertController.h; path = MADCocoaExtensions/MADAlertController.h; sourceTree = "<group>"; };
-		4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAlertController.m; path = MADCocoaExtensions/MADAlertController.m; sourceTree = "<group>"; };
-		4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CGGeometry+Extras.m"; path = "MADCocoaExtensions/CGGeometry+Extras.m"; sourceTree = "<group>"; };
-		4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Constructors.m"; path = "MADCocoaExtensions/NSError+Constructors.m"; sourceTree = "<group>"; };
-		4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+EverydayApps.m"; path = "MADCocoaExtensions/UIColor+EverydayApps.m"; sourceTree = "<group>"; };
-		4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+Helpers.h"; path = "MADCocoaExtensions/UIApplication+Helpers.h"; sourceTree = "<group>"; };
-		4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+Helpers.m"; path = "MADCocoaExtensions/UIApplication+Helpers.m"; sourceTree = "<group>"; };
-		4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CGGeometry+Extras.h"; path = "MADCocoaExtensions/CGGeometry+Extras.h"; sourceTree = "<group>"; };
-		4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Constructors.h"; path = "MADCocoaExtensions/NSError+Constructors.h"; sourceTree = "<group>"; };
-		4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+EverydayApps.h"; path = "MADCocoaExtensions/UIColor+EverydayApps.h"; sourceTree = "<group>"; };
-		4C5205A11BA7E2A2000E6A59 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTMath.h; path = MADCocoaExtensions/MTMath.h; sourceTree = "<group>"; };
-		4C5205A21BA7E2A2000E6A59 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTMath.m; path = MADCocoaExtensions/MTMath.m; sourceTree = "<group>"; };
+		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroVendColor.h; sourceTree = "<group>"; };
+		4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADColorSocial.h; sourceTree = "<group>"; };
+		4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADColorSocial.m; sourceTree = "<group>"; };
+		4C5205811BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+MADExtensions.h"; sourceTree = "<group>"; };
+		4C5205821BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+MADExtensions.m"; sourceTree = "<group>"; };
+		4C5205871BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+MADExtensions.h"; sourceTree = "<group>"; };
+		4C5205881BA7E2A2000E6A59 /* MFMailComposeViewController+MADExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+MADExtensions.m"; sourceTree = "<group>"; };
+		4C5205891BA7E2A2000E6A59 /* MADAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlertController.h; sourceTree = "<group>"; };
+		4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAlertController.m; sourceTree = "<group>"; };
+		4C52058D1BA7E2A2000E6A59 /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
+		4C52058F1BA7E2A2000E6A59 /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+Constructors.m"; sourceTree = "<group>"; };
+		4C5205921BA7E2A2000E6A59 /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EverydayApps.m"; sourceTree = "<group>"; };
+		4C5205961BA7E2A2000E6A59 /* UIApplication+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Helpers.h"; sourceTree = "<group>"; };
+		4C5205971BA7E2A2000E6A59 /* UIApplication+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Helpers.m"; sourceTree = "<group>"; };
+		4C52059C1BA7E2A2000E6A59 /* CGGeometry+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGGeometry+Extras.h"; sourceTree = "<group>"; };
+		4C52059D1BA7E2A2000E6A59 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+Constructors.h"; sourceTree = "<group>"; };
+		4C52059E1BA7E2A2000E6A59 /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EverydayApps.h"; sourceTree = "<group>"; };
+		4C5205A11BA7E2A2000E6A59 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMath.h; sourceTree = "<group>"; };
+		4C5205A21BA7E2A2000E6A59 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMath.m; sourceTree = "<group>"; };
 		4C5205D01BA7E308000E6A59 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAlertControllerAlertRemovedProtocol.h; path = MADCocoaExtensions/MADAlertControllerAlertRemovedProtocol.h; sourceTree = "<group>"; };
-		4C5767451E1CB68500611F37 /* MADTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADTextField.m; path = MADCocoaExtensions/MADTextField.m; sourceTree = "<group>"; };
-		4C5767461E1CB68500611F37 /* MADTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextField.h; path = MADCocoaExtensions/MADTextField.h; sourceTree = "<group>"; };
-		4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabelTitle.h; path = MADCocoaExtensions/MADLabelTitle.h; sourceTree = "<group>"; };
-		4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabelTitle.m; path = MADCocoaExtensions/MADLabelTitle.m; sourceTree = "<group>"; };
-		4C6F35101E40C1C100F4744F /* MADBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBorderStyle.h; path = MADCocoaExtensions/MADBorderStyle.h; sourceTree = "<group>"; };
-		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MADMargin.h; path = MADCocoaExtensions/MADMargin.h; sourceTree = "<group>"; };
-		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADPadding.h; path = MADCocoaExtensions/MADPadding.h; sourceTree = "<group>"; };
-		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADTextStyle.h; path = MADCocoaExtensions/MADTextStyle.h; sourceTree = "<group>"; };
+		4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlertControllerAlertRemovedProtocol.h; sourceTree = "<group>"; };
+		4C5767451E1CB68500611F37 /* MADTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTextField.m; sourceTree = "<group>"; };
+		4C5767461E1CB68500611F37 /* MADTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextField.h; sourceTree = "<group>"; };
+		4C6C09DA1F5D0DFF00EDA039 /* MADLabelTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelTitle.h; sourceTree = "<group>"; };
+		4C6C09DB1F5D0DFF00EDA039 /* MADLabelTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADLabelTitle.m; sourceTree = "<group>"; };
+		4C6F35101E40C1C100F4744F /* MADBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBorderStyle.h; sourceTree = "<group>"; };
+		4C6F35121E40D3AA00F4744F /* MADMargin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMargin.h; sourceTree = "<group>"; };
+		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPadding.h; sourceTree = "<group>"; };
+		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextStyle.h; sourceTree = "<group>"; };
 		4CBF04382E8517CE00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CD807C62E145CCD00BE420E /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
 		4CD807C82E145D0800BE420E /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
@@ -145,9 +145,10 @@
 		4C5205531BA7E1DC000E6A59 = {
 			isa = PBXGroup;
 			children = (
+				4CA7C31B2EA4543400475743 /* Source */,
+				4CA7C31A2EA4542A00475743 /* Resources */,
+				4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */,
 				4CBF04382E8517CE00812022 /* AGENTS.md */,
-				4C5205CE1BA7E2F3000E6A59 /* Resources */,
-				4C52055F1BA7E1DC000E6A59 /* MADCocoaExtensions */,
 				4C52056B1BA7E1DC000E6A59 /* MADCocoaExtensionsTests */,
 				4C7AEBA821CC0CDB00849874 /* Frameworks */,
 				4C52055E1BA7E1DC000E6A59 /* Products */,
@@ -163,16 +164,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4C52055F1BA7E1DC000E6A59 /* MADCocoaExtensions */ = {
-			isa = PBXGroup;
-			children = (
-				4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */,
-				4C5205621BA7E1DC000E6A59 /* Info.plist */,
-				4C5205771BA7E247000E6A59 /* MADCocoaExtensions */,
-			);
-			path = MADCocoaExtensions;
-			sourceTree = "<group>";
-		};
 		4C52056B1BA7E1DC000E6A59 /* MADCocoaExtensionsTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,7 +173,23 @@
 			path = MADCocoaExtensionsTests;
 			sourceTree = "<group>";
 		};
-		4C5205771BA7E247000E6A59 /* MADCocoaExtensions */ = {
+		4C7AEBA821CC0CDB00849874 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C5205D01BA7E308000E6A59 /* CFNetwork.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CA7C31A2EA4542A00475743 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C5205621BA7E1DC000E6A59 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4CA7C31B2EA4543400475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				4CD807C62E145CCD00BE420E /* madlog.h */,
@@ -230,30 +237,7 @@
 				4C1CC25924C624EE0027A454 /* MADViewHelpers.h */,
 				4C1CC25A24C624EE0027A454 /* MADViewHelpers.m */,
 			);
-			name = MADCocoaExtensions;
-			sourceTree = "<group>";
-		};
-		4C5205CE1BA7E2F3000E6A59 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				4C5205CF1BA7E2FA000E6A59 /* Frameworks */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		4C5205CF1BA7E2FA000E6A59 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				4C5205D01BA7E308000E6A59 /* CFNetwork.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4C7AEBA821CC0CDB00849874 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -581,7 +565,7 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				INFOPLIST_FILE = MADCocoaExtensions/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -640,7 +624,7 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				INFOPLIST_FILE = MADCocoaExtensions/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
