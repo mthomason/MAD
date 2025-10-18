@@ -130,6 +130,7 @@
 		4C6701051BA20683001C9D5A = {
 			isa = PBXGroup;
 			children = (
+				4C6701121BA20683001C9D5A /* MADFileManager.h */,
 				4CA7C3172EA4500A00475743 /* Resources */,
 				4CA7C3162EA44FB100475743 /* Source */,
 				4CBF043D2E85188300812022 /* AGENTS.md */,
@@ -163,7 +164,6 @@
 			children = (
 				4C3AEF202E8D4A9700C48F77 /* madlog.h */,
 				4C3AEF212E8D4A9700C48F77 /* madlog.m */,
-				4C6701121BA20683001C9D5A /* MADFileManager.h */,
 				4C4F12911D0FAEE90002294E /* MADFileLocationManagerDelegate.h */,
 				4C4754541CF4178E00BC9E02 /* MADFilesControllerDelegate.h */,
 				4C41DA6F1BA22C5700FF63EC /* MADFilesController.h */,
