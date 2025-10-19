@@ -154,7 +154,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 	
 	UISegmentedControl *segmentedControlHorizontalAlignment = _segmentedControlHorizontalAlignment;
 	
-	UIFont *font = [UIFont fontWithName:@"FontAwesome" size:12.0000f];;
+	UIFont *font = [UIFont fontWithName:@"FontAwesome" size:12.0];
 	NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
 														   forKey:NSFontAttributeName];
 	[segmentedControlHorizontalAlignment setTitleTextAttributes:attributes
@@ -163,14 +163,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 	[segmentedControlHorizontalAlignment setTitle:@"\uf037" forSegmentAtIndex:1];
 	[segmentedControlHorizontalAlignment setTitle:@"\uf038" forSegmentAtIndex:2];
 	[segmentedControlHorizontalAlignment setTitle:@"\uf039" forSegmentAtIndex:3];
-	NSDictionary *attributesSelected = @{
-		NSFontAttributeName : font,
-		NSStrokeColorAttributeName : [UIColor whiteColor]
-	};
-	NSAttributedString *boldButton = [[NSAttributedString alloc] initWithString: @"\uf26c"
-																	 attributes: attributes];
-	NSAttributedString *boldButtonSelected = [[NSAttributedString alloc] initWithString: @"\uf26c"
-																			 attributes: attributesSelected];
+
 	self.tableView.delegate = self;
 		
 	self.buttonBold.layer.borderColor = self.view.tintColor.CGColor;
