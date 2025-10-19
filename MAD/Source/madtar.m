@@ -22,6 +22,10 @@
 #import "archive.h"
 #import "archive_entry.h"
 
+#ifndef BUFF_SIZE
+#define BUFF_SIZE 8192
+#endif
+
 bool archive_function_result_handler(int ar, const char *description);
 bool directory_exist(const char *path);
 char *mad_copy_path_fix(const char *path);
@@ -353,10 +357,10 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st)
 
 int mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath) {
 	
-	const size_t buff_size = 8192;
 	int fd = 0, status = 0;
 	ssize_t len;
-	char buff[buff_size];
+
+	char buff[BUFF_SIZE];
 	
 	struct archive_entry *entry = NULL;
 	struct stat st;
@@ -376,7 +380,7 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 			os_log_error(OS_LOG_DEFAULT, "Failed to open file %s.\n", filename);
 		} else {
 			la_ssize_t w_size = 0;
-			while ((len = read(fd, buff, buff_size)) > 0) {
+			while ((len = read(fd, buff, BUFF_SIZE)) > 0) {
 				w_size = archive_write_data(archive, buff, (size_t)len);
 				if (w_size < 0) {
 					os_log_error(OS_LOG_DEFAULT, "Error: archive_write_data() returned %ld.", w_size);
