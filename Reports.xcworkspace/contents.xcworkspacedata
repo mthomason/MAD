@@ -6,7 +6,7 @@
    </FileRef>
    <Group
       location = "container:"
-      name = "Resources">
+      name = "Frameworks">
       <FileRef
          location = "group:MAD/MAD.xcodeproj">
       </FileRef>

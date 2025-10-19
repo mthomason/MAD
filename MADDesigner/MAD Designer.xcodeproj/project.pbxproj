@@ -1210,9 +1210,19 @@
 		4C296A782EA4A160007DB66E /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4C296A812EA4D299007DB66E /* ReceiptModuleAsn1c */,
-				4C296A7A2EA4AB55007DB66E /* barcodes */,
 				4C296A792EA4AB0D007DB66E /* rwpng */,
+				4C296A7A2EA4AB55007DB66E /* barcodes */,
+				4C296A812EA4D299007DB66E /* ReceiptModuleAsn1c */,
+				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
+				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
+				4C3AEF242E8D9C5F00C48F77 /* SceneDelegate.h */,
+				4C3AEF252E8D9C5F00C48F77 /* SceneDelegate.m */,
+				4C92A4A12DD7F820008171A9 /* madlog.h */,
+				4C92A4A22DD7F820008171A9 /* madlog.m */,
+				4C26BA881BAF9B3000456DC8 /* objcmad.h */,
+				4C26BA871BAF9B3000456DC8 /* objcmad.c */,
+				4C8780B42DD6D296003FD36D /* Constants.h */,
+				4C8780B52DD6D296003FD36D /* Constants.m */,
 				4CEBD02E1E319535009FE2DC /* MADAnimatedTransitionControllerPush.h */,
 				4CEBD02F1E319535009FE2DC /* MADAnimatedTransitionControllerPush.m */,
 				4CEBD0311E319546009FE2DC /* MADAnimatedTransitionControllerPop.h */,
@@ -1398,8 +1408,6 @@
 				4C4020271BAE92F200BAE5FC /* UITapGestureRecognizer+Designer.m */,
 				4C4020301BAE92F200BAE5FC /* UIViewController+tabBarItem.h */,
 				4C4020311BAE92F200BAE5FC /* UIViewController+tabBarItem.m */,
-				4C26BA881BAF9B3000456DC8 /* objcmad.h */,
-				4C26BA871BAF9B3000456DC8 /* objcmad.c */,
 				4C401F721BAE7EB500BAE5FC /* MADTableViewHeader.h */,
 				4C401F731BAE7EB500BAE5FC /* MADTableViewHeader.m */,
 				4C8DE2651BAFA98B00AD1111 /* MADClipboardView.h */,
@@ -1705,10 +1713,6 @@
 				4CFEE81D1BB7A3A300AFAA0A /* MADCellTextInput.m */,
 				4CFEE8131BB7A29800AFAA0A /* MADQueryBuilderAddTableViewController.h */,
 				4CFEE8141BB7A29800AFAA0A /* MADQueryBuilderAddTableViewController.m */,
-				4C92A4A12DD7F820008171A9 /* madlog.h */,
-				4C92A4A22DD7F820008171A9 /* madlog.m */,
-				4C8780B42DD6D296003FD36D /* Constants.h */,
-				4C8780B52DD6D296003FD36D /* Constants.m */,
 				4C8780B12DD6D266003FD36D /* MADDocumentCreationManager.h */,
 				4C8780B22DD6D266003FD36D /* MADDocumentCreationManager.m */,
 				4C4C28812DD6C47100DB8538 /* MADPluginManager.h */,
@@ -1775,9 +1779,13 @@
 		4C296A7B2EA4CEF6007DB66E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CC3D6331BCB62BC00BDA5D3 /* Info.plist */,
+				4CBC501C1E1B508800B067AD /* MADMeta.plist */,
 				4C453FC82E25DB4000641E6E /* MAD Designer.storekit */,
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
 				4C401EC61BAE5E9000BAE5FC /* ReceiptModule.ans1 */,
+				4C8DE27A1BAFB04D00AD1111 /* SupportingFiles */,
+				4C401EF31BAE62FD00BAE5FC /* Assets */,
 				4C296A842EA4D3B4007DB66E /* MADFileDefinition */,
 				4C296A832EA4D3A5007DB66E /* Storyboard */,
 				4C296A822EA4D39B007DB66E /* Nibs */,
@@ -1891,9 +1899,9 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4CE5FFA22EA4D8490041E101 /* Projects */,
 				4C296A7B2EA4CEF6007DB66E /* Resources */,
 				4C296A782EA4A160007DB66E /* Source */,
+				4CE5FFA22EA4D8490041E101 /* Targets */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4CAEA4EC1CC681810064E9A9 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
@@ -1928,21 +1936,6 @@
 				4CBE1CC718C5A6E6009675CE /* buildcounter.sh */,
 			);
 			name = Scripts;
-			sourceTree = "<group>";
-		};
-		4C401EE81BAE61F700BAE5FC /* MADDesigner */ = {
-			isa = PBXGroup;
-			children = (
-				4C8DE27A1BAFB04D00AD1111 /* SupportingFiles */,
-				4C401EF31BAE62FD00BAE5FC /* Assets */,
-				4CC3D6331BCB62BC00BDA5D3 /* Info.plist */,
-				4CBC501C1E1B508800B067AD /* MADMeta.plist */,
-				4C401EE91BAE61F700BAE5FC /* AppDelegate.h */,
-				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
-				4C3AEF242E8D9C5F00C48F77 /* SceneDelegate.h */,
-				4C3AEF252E8D9C5F00C48F77 /* SceneDelegate.m */,
-			);
-			path = MADDesigner;
 			sourceTree = "<group>";
 		};
 		4C401EF31BAE62FD00BAE5FC /* Assets */ = {
@@ -2073,15 +2066,14 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
-		4CE5FFA22EA4D8490041E101 /* Projects */ = {
+		4CE5FFA22EA4D8490041E101 /* Targets */ = {
 			isa = PBXGroup;
 			children = (
-				4C401EE81BAE61F700BAE5FC /* MADDesigner */,
 				4C4020F71BAE98C300BAE5FC /* MADViewer */,
 				4C5B55E31C98CCBE005C19D9 /* MADDesignerUITests */,
 				4C5B55F11C98CCD6005C19D9 /* MADDesignerUnitTests */,
 			);
-			path = Projects;
+			path = Targets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2942,7 +2934,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "Projects/MADDesigner/SupportingFiles/MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Resources/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3C58YS54A;
@@ -2951,7 +2943,7 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Projects/MADDesigner/SupportingFiles/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "Resources/SupportingFiles/Reports-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
 					"$(inherited)",
 					"SRC_ROOT=\"$(SRCROOT)\"",
@@ -2964,7 +2956,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				INFOPLIST_FILE = Projects/MADDesigner/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "MAD Designer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_OUTPUT_FORMAT = XML;
@@ -3009,7 +3001,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "Projects/MADDesigner/SupportingFiles/MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Resources/SupportingFiles/MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: Everyday Apps LLC (D3C58YS54A)";
 				CODE_SIGN_STYLE = Manual;
@@ -3019,7 +3011,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Projects/MADDesigner/SupportingFiles/Reports-Prefix.pch";
+				GCC_PREFIX_HEADER = "Resources/SupportingFiles/Reports-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
 					"$(inherited)",
 					"SRC_ROOT=\"$(SRCROOT)\"",
@@ -3031,7 +3023,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
-				INFOPLIST_FILE = Projects/MADDesigner/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "MAD Designer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_OUTPUT_FORMAT = XML;
