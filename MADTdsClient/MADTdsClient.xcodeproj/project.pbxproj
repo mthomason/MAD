@@ -49,7 +49,7 @@
 		4C29163024AC7BDE00EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C1471BA887D500663575 /* MADTdsClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTdsClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C14A1BA887D500663575 /* MADTdsClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTdsClient.h; sourceTree = "<group>"; };
-		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MADTdsClient/Info.plist; sourceTree = "<group>"; };
+		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C66C1511BA887D500663575 /* MADTdsClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTdsClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C1561BA887D500663575 /* MADTdsClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsClientTests.m; sourceTree = "<group>"; };
 		4C66C1581BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,9 +97,10 @@
 		4C66C13D1BA887D500663575 = {
 			isa = PBXGroup;
 			children = (
+				4C66C14A1BA887D500663575 /* MADTdsClient.h */,
 				4CBF04422E85197500812022 /* AGENTS.md */,
-				4C66C1611BA887EB00663575 /* Resources */,
-				4C66C1491BA887D500663575 /* MADTdsClient */,
+				4CE5FFA32EA537840041E101 /* Resources */,
+				4C66C1491BA887D500663575 /* Source */,
 				4C66C1551BA887D500663575 /* MADTdsClientTests */,
 				4C00A34E1F57D0D100F6A6C1 /* Frameworks */,
 				4C66C1481BA887D500663575 /* Products */,
@@ -115,11 +116,9 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4C66C1491BA887D500663575 /* MADTdsClient */ = {
+		4C66C1491BA887D500663575 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4C66C14A1BA887D500663575 /* MADTdsClient.h */,
-				4CE0F5031F5D52A400D828E1 /* MADCreateDocument.storyboard */,
 				4C6C0A0A1F5D32AB00EDA039 /* MADTdsConnectionViewController.h */,
 				4C6C0A0B1F5D32AB00EDA039 /* MADTdsConnectionViewController.m */,
 				4C00A3481F57CFA300F6A6C1 /* MADDatabaseSQLServer.h */,
@@ -129,7 +128,7 @@
 				4C00A3461F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.h */,
 				4C00A3471F57CFA300F6A6C1 /* MADDatabaseProcessSQLServer.m */,
 			);
-			path = MADTdsClient;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		4C66C1551BA887D500663575 /* MADTdsClientTests */ = {
@@ -141,13 +140,14 @@
 			path = MADTdsClientTests;
 			sourceTree = "<group>";
 		};
-		4C66C1611BA887EB00663575 /* Resources */ = {
+		4CE5FFA32EA537840041E101 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CE0F5031F5D52A400D828E1 /* MADCreateDocument.storyboard */,
 				4C66C14C1BA887D500663575 /* Info.plist */,
 				4C00A37C1F59506600F6A6C1 /* Media.xcassets */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,7 +435,7 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				INFOPLIST_FILE = MADTdsClient/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -495,7 +495,7 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				INFOPLIST_FILE = MADTdsClient/Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
