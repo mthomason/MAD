@@ -2210,10 +2210,9 @@
 			};
 			buildConfigurationList = 4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD Designer" */;
 			compatibilityVersion = "Xcode 10.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				ar,
 				arm,
