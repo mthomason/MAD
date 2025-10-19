@@ -1,0 +1,183 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "43A65538",
+  "nonRenewingSubscriptions" : [
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "690198388",
+      "localizations" : [
+        {
+          "description" : "One month of access to all features in MAD Designer.",
+          "displayName" : "month of access to all features",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.everydayapps.mad.designer.subscription.month",
+      "referenceName" : "One Month Subscription",
+      "type" : "NonRenewingSubscription"
+    },
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "668415596",
+      "localizations" : [
+        {
+          "description" : "One year of access to all features in MAD Designer.",
+          "displayName" : "year of access to all features",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.everydayapps.mad.designer.subscription.year",
+      "referenceName" : "One Year Subscription",
+      "type" : "NonRenewingSubscription"
+    }
+  ],
+  "products" : [
+    {
+      "displayPrice" : "19.99",
+      "familyShareable" : false,
+      "internalID" : "1008059344",
+      "localizations" : [
+        {
+          "description" : "Render your live data as barcodes.\n\nThis feature adds the ability to render your data as barcodes. Supports Aztec to UPC.",
+          "displayName" : "Barcode Elements",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.everydayapps.mad.designer.product.element.barcode",
+      "referenceName" : "Barcode Package",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "1008054444",
+      "localizations" : [
+        {
+          "description" : "Enable unlimited query results.\n\nBy default, the software comes in Design Mode. This limits query results. Enable Reporting Mode to generate the full report.",
+          "displayName" : "Reporting Mode",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.everydayapps.mad.designer.product.viewer",
+      "referenceName" : "Reporting Mode",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "1008057881",
+      "localizations" : [
+        {
+          "description" : "Format your report with custom fonts.  Report fields can be formatted with six common fonts.  Field may also be formatted with the following font styles: bold, italic, and underline.",
+          "displayName" : "MAD Designer: Font Styles",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.everydayapps.mad.designer.product.style.basic",
+      "referenceName" : "Style Package",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "666001433",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "D3C58YS54A",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 782554405.15413404,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21732347",
+      "localizations" : [
+
+      ],
+      "name" : "Subscription Plans",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "1.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6748623299",
+          "introductoryOffer" : null,
+          "localizations" : [
+
+          ],
+          "productID" : "com.everydayapps.mad.designer.subscription.full.month",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Full Access",
+          "subscriptionGroupID" : "21732347",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
