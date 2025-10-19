@@ -343,6 +343,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	return;
+	// Below is commented code that I'm keeping.  It's the begining of ∞ scrolling.
+	/*
 	CGFloat offsetY = scrollView.contentOffset.y;
 	CGFloat contentHeight = scrollView.contentSize.height;
 	CGFloat viewHeight = scrollView.bounds.size.height;
@@ -356,6 +358,7 @@
 		NSUInteger candidateRow = (NSUInteger)self.minKnownRow - 255;
 		[self fetchRowAtIndex:candidateRow];
 	}
+	*/
 }
 
 #pragma mark - Data Fetching
