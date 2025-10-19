@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:Reports/MAD Designer.xcodeproj">
+      location = "group:MADDesigner/MAD Designer.xcodeproj">
    </FileRef>
    <Group
       location = "container:"
@@ -51,9 +51,6 @@
       location = "group:Reports/../README.md">
    </FileRef>
    <FileRef
-      location = "group:/Users/michael/Desktop/Reports/Reports/TODO.md">
-   </FileRef>
-   <FileRef
       location = "group:DEVELOPER.md">
    </FileRef>
    <FileRef
@@ -64,5 +61,8 @@
    </FileRef>
    <FileRef
       location = "group:AGENTS.md">
+   </FileRef>
+   <FileRef
+      location = "group:TODO.md">
    </FileRef>
 </Workspace>
