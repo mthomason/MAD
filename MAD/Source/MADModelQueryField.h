@@ -13,19 +13,17 @@
 
 @class MADModelDatabase, MADModelQueryTable, MADModelField;
 
-@interface MADModelQueryField : MADModel
-	<MADModelIDProtocol>
+@interface MADModelQueryField : MADModel <MADModelIDProtocol>
 
-	- (instancetype)initWithIdentifier:(int64_t)identifier
-						   schemaTable:(int64_t)schemaTable
-						   schemaField:(int64_t)schemaField
-							  database:(MADModelDatabase *)database;
+@property (nonatomic, weak) MADModelQueryTable *inQueryTable;
+@property (nonatomic, readonly) int64_t schemaFieldIdentifier;
 
-	@property (nonatomic, weak) MADModelQueryTable *inQueryTable;
-
-	- (MADModelField *)schemaField;
-	- (NSNumber *) schemaFieldID;
-	@property (nonatomic, readonly) int64_t schemaFieldIdentifier;
+- (instancetype)initWithIdentifier:(int64_t)identifier
+					   schemaTable:(int64_t)schemaTable
+					   schemaField:(int64_t)schemaField
+						  database:(MADModelDatabase *)database;
+- (MADModelField *)schemaField;
+- (NSNumber *) schemaFieldID;
 
 @end
 

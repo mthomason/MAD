@@ -14,24 +14,23 @@
 @class MADModelDatabase, MADModelQuery, MADModelQueryField, NSFetchRequest, NSPredicate,
 		NSMutableDictionary<KeyType, ObjectType>, NSMutableOrderedSet<ObjectType>;
 
-@interface MADModelQueryTable : MADModel
-	<MADModelIDProtocol>
+@interface MADModelQueryTable : MADModel <MADModelIDProtocol>
 
-	- (instancetype)initWithIdentifier:(int64_t)identifier
-							 dropIndex:(int64_t)dropIndex
-						   schemaTable:(int64_t)schemaTableIdentifier
-							inDatabase:(MADModelDatabase *)inDatabase;
+@property (nonatomic, weak) MADModelQuery *inQuery;
+@property (nonatomic, readonly) int64_t schemaTable;
+@property (nonatomic, readonly) NSNumber *schemaTableID;
+@property (nonatomic, readonly, strong) NSMutableDictionary <NSNumber *, MADModelQueryField *> *queryFields;
+@property (nonatomic, readonly, strong) NSMutableOrderedSet <NSNumber *> *queryFieldIDs;
 
-	@property (nonatomic, weak) MADModelQuery *inQuery;
-	@property (nonatomic, readonly) int64_t schemaTable;
-	@property (nonatomic, readonly) NSNumber *schemaTableID;
-	@property (nonatomic, readonly, strong) NSMutableDictionary <NSNumber *, MADModelQueryField *> *queryFields;
-	@property (nonatomic, readonly, strong) NSMutableOrderedSet <NSNumber *> *queryFieldIDs;
+- (instancetype)initWithIdentifier:(int64_t)identifier
+						 dropIndex:(int64_t)dropIndex
+					   schemaTable:(int64_t)schemaTableIdentifier
+						inDatabase:(MADModelDatabase *)inDatabase;
 
-	- (void)addField:(int64_t)fieldIdentifier
-		 schemaField:(int64_t)schemaField;
+- (void)addField:(int64_t)fieldIdentifier
+	 schemaField:(int64_t)schemaField;
 
-	- (NSString *)alias;
+- (NSString *)alias;
 
 @end
 
