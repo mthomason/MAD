@@ -31,7 +31,6 @@
 #import "MADQueryBuilderAddGroupDelegate.h"
 #import "MADQueryViewControllerTableLayout.h"
 #import "MADQueryViewControllerLayoutSectionSelectorProtocol.h"
-#import "MADAttributedStringQueryController.h"
 #import "MTStoreKitController+Features.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MADQueryViewDelegate.h"
