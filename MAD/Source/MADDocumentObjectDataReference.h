@@ -15,6 +15,8 @@
 #import <MAD/MADAggregateFunctionGroupByType.h>
 #import <MAD/MADAggregateFunctionType.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol MADPrintPageRendererDataSourceProtocol, MTBarcodeProtocol;
 @class RptqDocumentElement, NSManagedObjectID, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary<KeyType, ObjectType>, UIImage;
 
@@ -25,12 +27,6 @@
 
 @interface MADDocumentObjectDataReference : NSObject <NSCopying>
 
-+ (instancetype)newDocumentObjectDataReference:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource
-									  delegate:(NSObject <MADDocumentObjectDataReferenceProtocol> *)delegate
-										  page:(NSUInteger)page
-										  item:(__kindof RptqDocumentElement *)item
-										itemID:(NSUInteger)itemID;
-
 @property (readonly, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
 @property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
 @property (readwrite, nonatomic, weak) __kindof RptqDocumentElement *item;
@@ -38,9 +34,46 @@
 @property (readwrite, nonatomic, assign) NSUInteger pageIndex;
 @property (readwrite, nonatomic, assign) NSUInteger detailRowId;
 
++ (instancetype)newDocumentObjectDataReference:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource
+									  delegate:(NSObject <MADDocumentObjectDataReferenceProtocol> *)delegate
+										  page:(NSUInteger)page
+										  item:(__kindof RptqDocumentElement *)item
+										itemID:(NSUInteger)itemID;
 - (NSDictionary <NSString *, id> *)fontAttributes;
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
 @end
+
+@interface MADDocumentObjectDataReferenceLabelStatic : MADDocumentObjectDataReference
+
+@property (nonatomic, copy, readonly) NSString *text;
+
+@end
+
+@interface MADDocumentObjectDataReferenceLabelDynamic : MADDocumentObjectDataReference
+
+@property (nonatomic, copy, readonly) NSString *fieldKey;
+- (NSString *)formattedStringForValue:(id)value;
+
+@end
+
+@interface MADDocumentObjectDataReferenceAggregate : MADDocumentObjectDataReference
+
+@property (nonatomic, copy, readonly) NSString *fieldKey;
+@property (nonatomic, assign, readonly) int32_t groupNumber;
+@property (nonatomic, assign, readonly) BOOL calculateInMemory;
+@property (nonatomic, assign, readonly) MTAggregateGroupByType groupType;
+@property (nonatomic, assign, readonly) MTAggregateFunctionType functionType;
+- (NSString *)formattedStringForValue:(id)value;
+
+@end
+
+@interface MADDocumentObjectDataReferenceImage : MADDocumentObjectDataReference
+
+@property (nullable, nonatomic, copy, readonly) UIImage *image;
+
+@end
+
+NS_ASSUME_NONNULL_END
 
 #endif

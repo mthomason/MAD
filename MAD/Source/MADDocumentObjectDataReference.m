@@ -27,11 +27,7 @@
 #import "MADAggregateFunctionType.h"
 #import "MADDocumentObjectType.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "MADDocumentObjectDataReferenceAggregate.h"
-#import "MADDocumentObjectDataReferenceImage.h"
-#import "MADDocumentObjectDataReferenceLabelStatic.h"
 #import "MADDocumentObjectDataReferenceBarcode.h"
-#import "MADDocumentObjectDataReferenceLabelDynamic.h"
 #import "madlog.h"
 
 #import <MADAPI/MADDatabase.h>
@@ -40,10 +36,24 @@
 #import <Foundation/NSDictionary.h>
 
 @interface MADDocumentObjectDataReference ()
-
 @property (readwrite, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
 @property (readwrite, nonatomic, weak) NSObject <MADDocumentObjectDataReferenceProtocol> *delegate;
+@end
 
+@interface MADDocumentObjectDataReferenceLabelStatic ()
+@property (nonatomic, readonly) RptqDocumentElementLabel *item;
+@end
+
+@interface MADDocumentObjectDataReferenceLabelDynamic ()
+@property (nonatomic, readonly) RptqDocumentElementLabelDataField *item;
+@end
+
+@interface MADDocumentObjectDataReferenceAggregate ()
+@property (nonatomic, readonly) RptqDocumentElementAggregate *item;
+@end
+
+@interface MADDocumentObjectDataReferenceImage ()
+@property (nonatomic, readonly) RptqDocumentElementImage *item;
 @end
 
 @implementation MADDocumentObjectDataReference
@@ -139,7 +149,137 @@
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-	return [self.item formattedString:dataType forValue:value];
+	NSString *result = [self.item formattedString:dataType forValue:value];
+	return result != nil ? result : @"";
+}
+
+@end
+
+@implementation MADDocumentObjectDataReferenceLabelStatic
+
+@dynamic item;
+
+- (NSString *)text {
+	return self.item.text ?: @"";
+}
+
+@end
+
+@implementation MADDocumentObjectDataReferenceLabelDynamic
+
+@dynamic item;
+@dynamic fieldKey;
+
+- (NSString *)fieldKey {
+	NSString *qa = [self.item.referencesQueryField.inQueryTable queryAlias];
+	NSString *fieldName = self.item.referencesQueryField.databaseSchemaField.name;
+	NSString *fieldKey = [self.datasource.database queryKey: fieldName
+													  table: qa];
+	return fieldKey;
+}
+
+- (NSString *)formattedStringForValue:(id)value {
+	NSString *result;
+	result = [self.item formattedString: self.item.referencesQueryField.databaseSchemaField.dataType
+							   forValue: value];
+	if ([result isEqualToString:MTNullIdentifier]) result = @"";
+	return result;
+}
+
+@end
+
+@implementation MADDocumentObjectDataReferenceAggregate
+
+@dynamic item;
+@dynamic fieldKey;
+@dynamic groupNumber;
+@dynamic calculateInMemory;
+@dynamic groupType;
+@dynamic functionType;
+
+- (int32_t)groupNumber { return self.item.groupNumber; }
+- (MTAggregateGroupByType)groupType { return self.item.groupType; }
+- (MTAggregateFunctionType)functionType { return self.item.functionType; }
+- (BOOL)calculateInMemory { return self.functionType == MTAggregateFunctionTypeFirst || self.functionType == MTAggregateFunctionTypeLast; }
+
+/*
+ 
+ - (NSString *)fieldKey {
+ NSString *fieldName = self.item.aggregateField.databaseSchemaField.name;
+ NSString *queryAlias = [self.item.aggregateField.inQueryTable queryAlias];
+ return [self.datasource.database queryKey: fieldName
+ table: queryAlias];
+ }
+ 
+ */
+
+- (NSString *)fieldKey {
+	os_log_t logger = GetMadLog(); // Or your specific log handle for this subsystem
+	
+	RptqDocumentElementAggregate *aggItem = self.item;
+	if (!aggItem) {
+		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p): fieldKey - self.item (RptqDocumentElementAggregate) is NIL. PageIndex: %lu, DetailRowId: %lu", self, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId);
+		return nil; // Or an appropriate default to avoid crashing, though nil is fine for string.
+	}
+	
+	RptqQueryField *aggregateField = aggItem.aggregateField;
+	if (!aggregateField) {
+		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType));
+		return nil;
+	}
+	
+	RptqDatabaseSchemaField *dbSchemaField = aggregateField.databaseSchemaField;
+	if (!dbSchemaField) {
+		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField.databaseSchemaField is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType));
+		return nil;
+	}
+	
+	NSString *fieldName = dbSchemaField.name;
+	if (!fieldName || fieldName.length == 0) {
+		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField.databaseSchemaField.name is NIL or empty. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType));
+		// Potentially return nil or an error placeholder if this is invalid
+	}
+	
+	RptqQueryTable *queryTable = aggregateField.inQueryTable;
+	if (!queryTable) {
+		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField.inQueryTable is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
+		return nil;
+	}
+	
+	NSString *queryAlias = [queryTable queryAlias];
+	if (!queryAlias || queryAlias.length == 0) {
+		// Potentially return nil or an error placeholder
+	}
+	NSObject <MADPrintPageRendererDataSourceProtocol> *datasource = self.datasource;
+	if (!datasource) {
+		os_log_debug(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.datasource is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
+		return nil;
+	}
+	
+	if (!datasource.database) {
+		os_log_debug(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.datasource.database is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
+		return nil;
+	}
+	
+	return [datasource.database queryKey:fieldName table:queryAlias];
+}
+
+- (NSString *)formattedStringForValue:(id)value {
+	NSString *result = [self.item formattedString: self.item.aggregateField.databaseSchemaField.dataType
+										 forValue: value];
+	if ([result isEqualToString:MTNullIdentifier]) result = @"";
+	return result;
+}
+
+@end
+
+@implementation MADDocumentObjectDataReferenceImage
+
+@dynamic item;
+@dynamic image;
+
+- (UIImage *)image {
+	return self.item.image;
 }
 
 @end

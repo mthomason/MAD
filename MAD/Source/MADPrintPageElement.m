@@ -8,10 +8,6 @@
 
 #import "MADPrintPageElement.h"
 #import "MADDocumentObjectDataReference.h"
-#import "MADDocumentObjectDataReferenceLabelStatic.h"
-#import "MADDocumentObjectDataReferenceLabelDynamic.h"
-#import "MADDocumentObjectDataReferenceImage.h"
-#import "MADDocumentObjectDataReferenceAggregate.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "madlog.h"
 

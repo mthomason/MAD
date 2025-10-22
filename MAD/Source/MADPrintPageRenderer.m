@@ -37,7 +37,6 @@
 #import "MADElementStylizedText.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADDocumentObjectDataReference.h"
-#import "MADDocumentObjectDataReferenceAggregate.h"
 #import "MADPrintPageElement.h"
 #import "MADPrintPageElement+Constructor.h"
 #import "MADSectionRepresentation.h"
