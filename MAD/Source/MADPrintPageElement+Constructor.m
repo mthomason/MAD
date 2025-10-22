@@ -9,11 +9,7 @@
 #import "MADPrintPageElement+Constructor.h"
 #import "MADDocumentObjectDataReference.h"
 
-#import "MADPrintPageElementAggregate.h"
-#import "MADPrintPageElementTextDynamic.h"
-#import "MADPrintPageElementImage.h"
 #import "MADPrintPageElementBarcode.h"
-#import "MADPrintPageElementTextStatic.h"
 
 #import <Foundation/NSException.h>
 
