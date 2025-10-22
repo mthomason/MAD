@@ -10,8 +10,7 @@
 #define Reports_MADDesignerElementTextView_h
 
 #import "MADDesignerElementView.h"
-#import <MAD/MADHorizontalAlignmentType.h>
-#import <MAD/MADVerticalAlignmentType.h>
+#import <MAD/MADAlignment.h>
 
 @protocol MADTextElementProtocol <NSObject>
 

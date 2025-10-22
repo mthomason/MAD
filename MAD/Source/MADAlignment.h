@@ -11,8 +11,22 @@
 
 #import <Foundation/NSObject.h>
 
-#import <MAD/MADHorizontalAlignmentType.h>
-#import <MAD/MADVerticalAlignmentType.h>
+typedef enum MADHorizontalAlignment : int16_t {
+	MADHorizontalAlignmentUnknown = -1,
+	MADHorizontalAlignmentLeft = 0,
+	MADHorizontalAlignmentCenter = 1,
+	MADHorizontalAlignmentRight = 2,
+	MADHorizontalAlignmentJustified = 3,
+	MADHorizontalAlignmentNatrual = 4,
+	
+} MADHorizontalAlignment;
+
+typedef enum MADVerticalAlignment : int16_t {
+	MADVerticalAlignmentUnknown = -1,
+	MADVerticalAlignmentTop = 0,
+	MADVerticalAlignmentCenter = 1,
+	MADVerticalAlignmentBottom = 2
+} MADVerticalAlignment;
 
 struct MADAlignment_t {
 	MADHorizontalAlignment horizontal;
