@@ -12,8 +12,10 @@
 @implementation MADColorTransformer
 
 + (void)load {
-	MADColorTransformer *t = [MADColorTransformer new];
-	[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADColorTransformer class])];
+	if (self == [MADColorTransformer class]) {
+		MADColorTransformer *t = [MADColorTransformer new];
+		[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADColorTransformer class])];
+	}
 }
 
 + (Class)transformedValueClass {

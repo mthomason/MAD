@@ -13,8 +13,10 @@
 @implementation MADLocaleTransformer
 
 + (void)load {
-	MADLocaleTransformer *t = [MADLocaleTransformer new];
-	[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADLocaleTransformer class])];
+	if (self == [MADLocaleTransformer class]) {
+		MADLocaleTransformer *t = [MADLocaleTransformer new];
+		[NSValueTransformer setValueTransformer:t forName:NSStringFromClass([MADLocaleTransformer class])];
+	}
 }
 
 + (Class)transformedValueClass {
