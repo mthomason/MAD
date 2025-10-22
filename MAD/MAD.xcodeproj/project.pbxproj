@@ -25,7 +25,6 @@
 		4C1E54EE1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54F41E56693100E3FAF0 /* MADHorizontalAlignmentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F31E56693100E3FAF0 /* MADHorizontalAlignmentType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1E54F61E56694E00E3FAF0 /* MADVerticalAlignmentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F51E56694E00E3FAF0 /* MADVerticalAlignmentType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C1E54F81E56698800E3FAF0 /* MADAlignment_t.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54F71E56698800E3FAF0 /* MADAlignment_t.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C235CDC1D1F825C00D3D77C /* MADReportSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C235CDA1D1F825C00D3D77C /* MADReportSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C235CDD1D1F825C00D3D77C /* MADReportSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C235CDB1D1F825C00D3D77C /* MADReportSection.m */; };
 		4C235CE11D1F82AF00D3D77C /* MADReportRows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C235CDF1D1F82AF00D3D77C /* MADReportRows.h */; };
@@ -562,7 +561,6 @@
 		4C1E54ED1E56652200E3FAF0 /* MADOperationHoldsCredentialsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationHoldsCredentialsProtocol.h; sourceTree = "<group>"; };
 		4C1E54F31E56693100E3FAF0 /* MADHorizontalAlignmentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADHorizontalAlignmentType.h; sourceTree = "<group>"; };
 		4C1E54F51E56694E00E3FAF0 /* MADVerticalAlignmentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVerticalAlignmentType.h; sourceTree = "<group>"; };
-		4C1E54F71E56698800E3FAF0 /* MADAlignment_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAlignment_t.h; sourceTree = "<group>"; };
 		4C235CDA1D1F825C00D3D77C /* MADReportSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportSection.h; sourceTree = "<group>"; };
 		4C235CDB1D1F825C00D3D77C /* MADReportSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportSection.m; sourceTree = "<group>"; };
 		4C235CDF1D1F82AF00D3D77C /* MADReportRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportRows.h; sourceTree = "<group>"; };
@@ -1432,7 +1430,6 @@
 				4CC282071BADE81A00775B72 /* MADSortOrder.h */,
 				4C1E54F31E56693100E3FAF0 /* MADHorizontalAlignmentType.h */,
 				4C1E54F51E56694E00E3FAF0 /* MADVerticalAlignmentType.h */,
-				4C1E54F71E56698800E3FAF0 /* MADAlignment_t.h */,
 				4CC2820D1BADE81A00775B72 /* MADAlignment.h */,
 				4C17AE291E4343F80056A0EA /* MADAlignment.m */,
 				4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */,
@@ -2001,7 +1998,6 @@
 				4C401D601BAE3AF800BAE5FC /* MTPaperC7.h in Headers */,
 				4C59399F1E3EF7E400582271 /* RptqDocumentSection.h in Headers */,
 				4C5939B31E3EF7E400582271 /* RptqDocumentSectionRows.h in Headers */,
-				4C1E54F81E56698800E3FAF0 /* MADAlignment_t.h in Headers */,
 				4C994F2A1BDD96E40058627A /* MADReportTextRepresentation.h in Headers */,
 				4C401D3A1BAE3AF800BAE5FC /* MTPaperA10.h in Headers */,
 				4CB98DC71F43F0A00043B583 /* MADOperationDocumentCloseDocument.h in Headers */,

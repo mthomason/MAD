@@ -10,16 +10,23 @@
 #define MAD_MTAlignment_h
 
 #import <Foundation/NSObject.h>
-#import <MAD/MADAlignment_t.h>
 
-@interface MADAlignment : NSObject
-	<NSCoding>
+#import <MAD/MADHorizontalAlignmentType.h>
+#import <MAD/MADVerticalAlignmentType.h>
 
-	- (instancetype)initWithHorizontal:(MADHorizontalAlignment)horizontal
-							  vertical:(MADVerticalAlignment)vertical;
+struct MADAlignment_t {
+	MADHorizontalAlignment horizontal;
+	MADVerticalAlignment vertical;
+};
+typedef struct MADAlignment_t MADAlignment_t;
 
-	@property (nonatomic, assign, readwrite) MADHorizontalAlignment horizontal;
-	@property (nonatomic, assign, readwrite) MADVerticalAlignment vertical;
+@interface MADAlignment : NSObject <NSCoding>
+
+@property (nonatomic, assign, readwrite) MADHorizontalAlignment horizontal;
+@property (nonatomic, assign, readwrite) MADVerticalAlignment vertical;
+
+- (instancetype)initWithHorizontal:(MADHorizontalAlignment)horizontal
+						  vertical:(MADVerticalAlignment)vertical;
 
 @end
 
