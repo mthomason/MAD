@@ -668,9 +668,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 																			  databaseConnection: document.database.databaseConnection];
 		[refresh addObserver:self];
 
-		__weak typeof(self) weakSelf = self;
+		__weak MADViewerController *weakSelf = self;
 		refresh.completionBlock = ^{
-			typeof(self) strongSelf = weakSelf;
+			__strong MADViewerController *strongSelf = weakSelf;
 			if (strongSelf) {
 				strongSelf->_refreshing = NO;
 			}
@@ -893,9 +893,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 - (void)operationDidStart:(MADOperation *)operation {
 	if ([operation isKindOfClass:[MADOperationRefreshReload class]]) {
 		
-		__weak typeof(self) weakSelf = self;
+		__weak MADViewerController *weakSelf = self;
 		void (^updateUIBlock)(void) = ^{
-			typeof(self) strongSelf = weakSelf;
+			__strong MADViewerController *strongSelf = weakSelf;
 			if (strongSelf) {
 				[strongSelf.pageSlider setEnabled:NO];
 				[strongSelf.pageSlider setNeedsLayout];
@@ -952,9 +952,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		
 		_lastCacheDate = nil;
 		
-		__weak typeof(self) weakSelf = self;
+		__weak MADViewerController *weakSelf = self;
 		void (^updateUIBlock)(void) = ^{
-			typeof(self) strongSelf = weakSelf;
+			__strong MADViewerController *strongSelf = weakSelf;
 			if (strongSelf) {
 				strongSelf.pageSlider.numberOfPages = strongSelf->_currentLocation.totalPages;
 				[strongSelf updateTimeSinceLastRefresh:nil];

@@ -676,7 +676,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	MADQueryVisualizationModel *queryVisualizationModel = [[MADQueryVisualizationModel alloc] initWithQuery:query];
 	MTLinkedList *topologicallySortedTables = queryVisualizationModel.topologicallySortedTables;
 	
-	typeof(self) __weak wself = self;
+	__weak MADQueryVisualizationViewController *wself = self;
 	
 	NSMutableArray <MADQueryTableViewController *> *viewControllers = [[NSMutableArray alloc] init];
 	for (MTPair *pair in topologicallySortedTables) {
@@ -714,7 +714,8 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	}
 	
 	void(^completion)(void) = ^() {
-		typeof(self) sself = wself;
+		MADQueryVisualizationViewController *sself = wself;
+		if (!sself) return;
 		MADModelDocument *modelDocument = sself.document.documentModel;
 		MADModelQuery *modelQuery = modelDocument.firstQuery;
 		NSEnumerator <MADModelQueryLink *> *queryLinks = modelQuery.links.objectEnumerator;
@@ -787,19 +788,31 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		}
 	}
 
-	if (!animated) return completion();
-	
-	typeof(self) __weak weakself = self;
+	if (!animated) {
+		if (completion != nil) {
+			completion();
+			return;
+		} else {
+			return;
+		}
+	}
+
+	__weak MADQueryVisualizationViewController *weakself = self;
 	[UIView animateWithDuration:0.5 animations: ^{
 		for (MADQueryTableViewController *viewController in viewControllers) {
 			[viewController.view setAlpha:1.0];
 		}
 	} completion:^(BOOL finished) {
-		for (MADQueryTableViewController *viewController in viewControllers) {
-			[viewController endAppearanceTransition];
-			[viewController didMoveToParentViewController:weakself];
+		__strong MADQueryVisualizationViewController *sself = weakself;
+		if (sself) {
+			for (MADQueryTableViewController *viewController in viewControllers) {
+				[viewController endAppearanceTransition];
+				[viewController didMoveToParentViewController:sself];
+			}
 		}
-		completion();
+		if (completion) {
+			completion();
+		}
 	}];
 
 }

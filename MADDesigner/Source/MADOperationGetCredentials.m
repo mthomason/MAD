@@ -154,9 +154,9 @@ static NSString * const TextSaveToKeyChainMessagePassword = @"Would you like to 
 
 	NSArray <__kindof NSOperation *> *operations = @[getUsername, promptCredntials, getPassword, promptPassword];
 	
-	typeof(self) __weak wself = self;
+	__weak MADOperationGetCredentials *wself = self;
 	NSBlockOperation *finishingOperation = [NSBlockOperation blockOperationWithBlock:^{
-		typeof(wself) __strong sself = wself;
+		__strong MADOperationGetCredentials *sself = wself;
 		os_log_info(OS_LOG_DEFAULT, "%s - block", __PRETTY_FUNCTION__);
 		sself.databaseConnection = nil;
 		sself.viewController = nil;

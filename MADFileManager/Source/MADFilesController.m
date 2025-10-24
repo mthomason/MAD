@@ -263,10 +263,11 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 
 	dispatch_queue_t fileMetaDataQueue = self.fileMetaDataQueue;
 
-	__weak typeof(self) weakSelf = self;
+	__weak MADFilesController *weakSelf = self;
 	dispatch_async(fileMetaDataQueue, ^{
 		
-		typeof(self) sself = weakSelf;
+		__strong MADFilesController *sself = weakSelf;
+		if (!sself) return;
 		NSUInteger indexOfFileInfo = [sself.fileMetaDatum indexOfObject:fileInfo];
 		sself.fileMetaDatum[indexOfFileInfo] = fileInfo;
 		
@@ -361,7 +362,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 }
 
 - (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
-	typeof(self) __weak weakSelf = self;
+	__weak MADFilesController *weakSelf = self;
 	/*void (^handleFailure)(void);
 	handleFailure = ^{
 		MADFilesController *sself = weakSelf;
@@ -374,7 +375,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 		
 	};*/
 	[self.delegateQueue addOperationWithBlock:^{
-		MADFilesController *sself = weakSelf;
+		__strong MADFilesController *sself = weakSelf;
+		if (!sself) return;
 		id <MADFilesControllerDelegate> delegate = sself.delegate;
 		MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
 		SEL didFailCreatingFile = @selector(filesController:didFailCreatingFileInfo:withError:);
@@ -386,9 +388,10 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 
 - (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL *)URL withError:(NSError *)error {
 	//NSLog(@"File Coordinator did fail duplicating URL: %@", URL);
-	typeof(self) __weak weakSelf = self;
+	__weak MADFilesController *weakSelf = self;
 	[self.delegateQueue addOperationWithBlock:^{
-		MADFilesController *sself = weakSelf;
+		__strong MADFilesController *sself = weakSelf;
+		if (!sself) return;
 		id <MADFilesControllerDelegate> delegate = sself.delegate;
 		MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
 		SEL didFailDuplicating = @selector(filesController:didFailDuplicatingFileInfo:withError:);
@@ -400,9 +403,10 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 
 - (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error {
 	//NSLog(@"File Coordinator did fail renaming URL: %@", URL);
-	typeof(self) __weak weakSelf = self;
+	__weak MADFilesController *weakSelf = self;
 	[self.delegateQueue addOperationWithBlock:^{
-		MADFilesController *sself = weakSelf;
+		__strong MADFilesController *sself = weakSelf;
+		if (!sself) return;
 		id <MADFilesControllerDelegate> delegate = sself.delegate;
 		MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];
 		SEL didFailRemovingFile = @selector(filesController:didFailRemovingFileInfo:withError:);
@@ -415,7 +419,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 - (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error {
 	//NSLog(@"File Coordinator did fail removing URL: %@", URL);
 
-	typeof(self) __weak weakSelf = self;
+	__weak MADFilesController *weakSelf = self;
 	//void (^handleFailure)(void);
 	/*handleFailure = ^{
 		MADFilesController *sself = weakSelf;
@@ -428,7 +432,8 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 		}
 	};*/
 	[self.delegateQueue addOperationWithBlock:^{
-		MADFilesController *sself = weakSelf;
+		__strong MADFilesController *sself = weakSelf;
+		if (!sself) return;
 		id <MADFilesControllerDelegate> delegate = sself.delegate;
 		
 		MADMetaData *fileInfo = [[MADMetaData alloc] initWithURL:URL];

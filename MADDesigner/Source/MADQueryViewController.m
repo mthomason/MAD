@@ -476,10 +476,10 @@ BOOL storeEnabled(void) {
 	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
-	__weak typeof(self) weakself = self;
+	__weak MADQueryViewController *weakself = self;
 	__weak MADocument *weakDocument = document;
 	[private performBlockAndWait:^{
-		typeof(self) strongself = weakself;
+		__strong MADQueryViewController *strongself = weakself;
 		MADocument *strongDocument = weakDocument;
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
 		RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
@@ -648,9 +648,9 @@ BOOL storeEnabled(void) {
 	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	
-	__weak typeof(self) weakself = self;
+	__weak MADQueryViewController *weakself = self;
 	[private performBlockAndWait:^{
-		typeof(self) strongself = weakself;
+		__strong MADQueryViewController *strongself = weakself;
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
 		RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
 		RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
@@ -770,7 +770,7 @@ BOOL storeEnabled(void) {
 - (void)viewController:(MADQueryBuilderAddTableViewController *)vc addedQueryTableWithID:(NSManagedObjectID *)objectID {
 	
 	MADocument *document = self.document;
-	__weak typeof(self) weakself = self;
+	__weak MADQueryViewController *weakself = self;
 	
 	[self dismissViewController];
 	
@@ -779,7 +779,7 @@ BOOL storeEnabled(void) {
 	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	private.parentContext = document.managedObjectContext;
 	[private performBlockAndWait: ^{
-		typeof(self) strongself = weakself;
+		__strong MADQueryViewController *strongself = weakself;
 		
 		RptqDatabaseSchemaTable *schemaTable = [private objectWithID:objectID];
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
@@ -823,18 +823,19 @@ BOOL storeEnabled(void) {
 					os_log_error(GetDesignerLog(), "Error saving managed object: %s", errorParent.localizedDescription.UTF8String);
 				}
 			}];
-			[strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
-			[strongself.queryViewDataSource performFetchTables];
-
-			NSUInteger tableIndex = [strongself.queryViewDataSource.queryTablesController.fetchedObjects indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-				return newQueryTable.identifier == obj.identifier;
-			}];
-			
-			NSIndexSet *indexSetSections = [self newSectionsTableCountStart: numberOfTablesOld
-															  tableCountEnd: numberOfTables
-														   reportingEnabled: reportingEnabled];
-			
-			[self tableView: strongself.tableView insertTable:tableIndex andSection:indexSetSections];
+			if (strongself != nil) {
+				[strongself.queryViewDataSource numberOfTablesChanged: numberOfTables];
+				[strongself.queryViewDataSource performFetchTables];
+				NSUInteger tableIndex = [strongself.queryViewDataSource.queryTablesController.fetchedObjects indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+					return newQueryTable.identifier == obj.identifier;
+				}];
+				
+				NSIndexSet *indexSetSections = [self newSectionsTableCountStart: numberOfTablesOld
+																  tableCountEnd: numberOfTables
+															   reportingEnabled: reportingEnabled];
+				
+				[self tableView: strongself.tableView insertTable:tableIndex andSection:indexSetSections];
+			}
 
 		}
 		[private refreshObject:newQueryTable mergeChanges:NO];
@@ -1431,9 +1432,9 @@ BOOL storeEnabled(void) {
 		[operation isKindOfClass:[MADOperationGetCredentials class]]) {
 		
 		MADCredential *credentials = ((MADOperationGetCredentials *)operation).credentials;
-		__weak typeof(self) wself = self;
+		__weak MADQueryViewController *wself = self;
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-			typeof(self) sself = wself;
+			__strong MADQueryViewController *sself = wself;
 			[sself finishUserRequestForSampleData:credentials];
 		}];
 	}

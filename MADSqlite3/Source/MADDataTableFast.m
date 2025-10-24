@@ -1207,7 +1207,7 @@ static os_log_t mlog;
 	sqlite3_finalize(_statementInsert);
 	_statementInsert = NULL;
 	
-	__block typeof(self) myself = self;
+	__block MADDataTableFast *myself = self;
 	__block BOOL internalBulkInsertLoop = _bulkInsertLoop;
 	dispatch_barrier_sync(self.queueBulkAdd, ^{
 		internalBulkInsertLoop = NO;
@@ -1218,7 +1218,6 @@ static os_log_t mlog;
 
 - (NSEnumerator *)enumeratorForRowIds:(NSArray *)cacheIds { //Note, software currently usues
 	//  NSArray for row ids
-	
 	NSDictionary <NSString *, MADDataColumn *> *columns = [NSDictionary dictionaryWithDictionary:self.columns];
 	
 	MADQuery *query = [[MADQueryCacheSelectRowIds alloc] initWithRowIDs:cacheIds

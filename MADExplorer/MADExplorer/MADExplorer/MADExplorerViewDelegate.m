@@ -209,7 +209,7 @@
 	longPressGesture.delegate = fileExplorerDelegate;
 	[cell addGestureRecognizer: longPressGesture];
 
-	typeof(self) __weak weakself = self;
+	__weak MADExplorerViewDelegate *weakself = self;
 	cell.labelTitle.handleTap = ^(UILabel *titleLabel) {
 
 		UIView *superview = titleLabel.superview;
@@ -220,7 +220,7 @@
 		
 		NSAssert([superview isKindOfClass:[UICollectionViewCell class]], @"We expect a collection view");
 		UICollectionViewCell *c = (UICollectionViewCell *)superview;
-		typeof(self) strongself = weakself;
+		__strong MADExplorerViewDelegate *strongself = weakself;
 
 		id <MADExplorerProtocol, UIGestureRecognizerDelegate> fileDelegate = strongself.delegate;
 
@@ -366,9 +366,12 @@
 		} else if ([[delegate fileExplorerView].indexPathsForSelectedItems containsObject:indexPath]) {
 			shouldDeselect = YES;
 			[_selected[section] removeAllIndexes];
-			typeof(self) __weak weakself = self;
+			__weak MADExplorerViewDelegate *weakself = self;
 			[[delegate fileExplorerView].indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-				[weakself.selected[section] addIndex:(NSUInteger)obj.row];
+				__strong MADExplorerViewDelegate *sself = weakself;
+				if (sself) {
+					[sself.selected[section] addIndex:(NSUInteger)obj.row];
+				}
 			}];
 			
 		}

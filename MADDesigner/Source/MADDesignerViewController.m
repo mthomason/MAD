@@ -2753,20 +2753,20 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[sectionIdentifier];
 	MADSectionLayoutAttributes *itemToRemove = (layoutManager.items)[objectId];
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADDesignerViewController *weakSelf = self;
 	[sectionView removeItemAtIndex:itemToRemove.indexPath update:^{
-		typeof(self) strongSelf = weakSelf;
+		__strong MADDesignerViewController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 		[strongSelf.document removeDocumentObjectWithObjectID: cellIdentifier];
 	} animationComplete:^(BOOL complete) {
 		if (complete) {
-			typeof(self) strongSelf = weakSelf;
+			__strong MADDesignerViewController *strongSelf = weakSelf;
 			if (!strongSelf) return;
 			[strongSelf.view.scroller.container invalidateIntrinsicContentSize];
 			[strongSelf.view setNeedsUpdateConstraints];
 		}
 	} completion:^() {
-		typeof(self) strongSelf = weakSelf;
+		__strong MADDesignerViewController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 		[strongSelf redrawAllElementViewsInCollectionView:sectionView];
 		MADocument *doc = strongSelf.document;

@@ -104,11 +104,11 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 		UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 		[self.navigationItem setLeftBarButtonItem: barButtonItem animated: animated];
 		
-		__weak typeof(self) weakSelf = self;
+		__weak MADStoreViewController *weakSelf = self;
 		[[MADStoreKitController sharedObject] initializeProductsWithIdentifiers: products
 																	completion: ^(BOOL success, NSError *error) {
 			dispatch_async(dispatch_get_main_queue(), ^{
-				__strong typeof(self) strongSelf = weakSelf;
+				__strong MADStoreViewController *strongSelf = weakSelf;
 				if (!success && error) {
 					id alert = [MADAlertController newAlertControllerError:error];
 					[strongSelf presentViewController:alert animated:YES completion:nil];

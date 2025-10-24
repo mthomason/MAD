@@ -76,7 +76,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 		localizedPageOfPages = [NSString stringWithFormat:NSLocalizedString(MADTextPageXofY, MADTextPageXofY), start, end];
 	}
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[weakSelf updateStatusWithPageNumber:localizedPageOfPages];
 	});
@@ -86,7 +86,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
 	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage), decimalString];
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[weakSelf updateStatusWithRecordsRead:readRecords];
 	});
@@ -97,14 +97,14 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 																numberStyle:NSNumberFormatterDecimalStyle];
 	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextReadRecords, MADTextReadRecords), decimalString];
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[weakSelf updateStatusWithRecordsRead:readRecords];
 	});
 }
 
 - (void)displayNoCache {
-	__weak typeof(self) weakSelf = self;
+	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[weakSelf updateStatusWithTime:NSLocalizedString(MADTextNoCache, MADTextNoCache)];
 	});
@@ -133,7 +133,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 						 attributes:(NSDictionary *)attributes {
 	// Ensure we're on main thread for all mutations
 	if (![NSThread isMainThread]) {
-		__weak typeof(self) weakSelf = self;
+		__weak MADLabelStatus *weakSelf = self;
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[weakSelf safelyUpdateAttributedString:target
 									 withNewString:newString

@@ -127,9 +127,12 @@
 	MADLogDebug("%s", __PRETTY_FUNCTION__);
 
 	if (self.presentedViewController.transitionCoordinator) {
-		typeof(self) __weak weakself = self;
+		__weak MADToolboxPresentationController *weakself = self;
 		[self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-			weakself.dimmingView.alpha = 0.0;
+			__strong MADToolboxPresentationController *sself = weakself;
+			if (sself) {
+				sself.dimmingView.alpha = 0.0;
+			}
 		} completion:nil];
 		
 	} else {

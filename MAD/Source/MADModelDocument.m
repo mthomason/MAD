@@ -87,7 +87,7 @@ static NSString *keyIDDocument = @"IO";
 		objectContextQueue = [[NSOperationQueue alloc] init];
 		objectContextQueue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
 		
-		__typeof(self) __weak wself = self;
+		__weak MADModelDocument *wself = self;
 		void (^blockChange)(NSNotification *) = ^(NSNotification *note) {
 			//id keys = note.userInfo.keyEnumerator;
 			//id objects = note.userInfo.objectEnumerator;
@@ -103,15 +103,19 @@ static NSString *keyIDDocument = @"IO";
 			[insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-					typeof(self) sself = wself;
-					MADModelQuery *query = sself.firstQuery;
-					[query insertQueryLink:obj];
+					__strong MADModelDocument *sself = wself;
+					if (sself) {
+						MADModelQuery *query = sself.firstQuery;
+						[query insertQueryLink:obj];
+					}
 				}
 				
 				if ([obj isKindOfClass:[RptqQueryTable class]]) {
-					typeof(self) sself = wself;
-					MADModelQuery *query = sself.firstQuery;
-					[query insertQueryTable: obj];
+					__strong MADModelDocument *sself = wself;
+					if (sself) {
+						MADModelQuery *query = sself.firstQuery;
+						[query insertQueryTable: obj];
+					}
 				}
 				
 			}];
@@ -138,17 +142,21 @@ static NSString *keyIDDocument = @"IO";
 			[deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
-					typeof(self) sself = wself;
-					MADModelQuery *query = sself.firstQuery;
-					NSNumber *idn = @(((RptqQueryLinks *)obj).identifier);
-					[query deleteQueryLinkID:idn];
+					__strong MADModelDocument *sself = wself;
+					if (sself) {
+						MADModelQuery *query = sself.firstQuery;
+						NSNumber *idn = @(((RptqQueryLinks *)obj).identifier);
+						[query deleteQueryLinkID:idn];
+					}
 				}
 				
 				if ([obj isKindOfClass:[RptqQueryTable class]]) {
-					typeof(self) sself = wself;
-					MADModelQuery *query = sself.firstQuery;
-					NSNumber *idn = @(((RptqQueryTable *)obj).identifier);
-					[query deleteQueryTableID:idn];
+					__strong MADModelDocument *sself = wself;
+					if (sself) {
+						MADModelQuery *query = sself.firstQuery;
+						NSNumber *idn = @(((RptqQueryTable *)obj).identifier);
+						[query deleteQueryTableID:idn];
+					}
 				}
 				
 			}];

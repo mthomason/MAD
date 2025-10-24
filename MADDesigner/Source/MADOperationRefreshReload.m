@@ -76,7 +76,6 @@
 																								 viewController: (UIViewController *)_viewController];
 	MADocument *document = _document;
 	
-	
 	MADOperationRefreshInitializeMainDataTable *initializeMainDataTable = [[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:document];
 	[initializeMainDataTable addDependency: getCredentials];
 	

@@ -467,7 +467,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	}
 	NSURL *updatedFileURL = (NSURL *)notification.object;
 	
-	typeof(self) __weak weakSelf = self;
+	__weak MADExplorerController *weakSelf = self;
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 		__strong MADExplorerController *strongSelf = weakSelf;
 		if (!strongSelf) return;
@@ -1376,27 +1376,27 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		
 		if (self.navigationItem.titleView != nil) {
 		
-			typeof(self) __weak weakSelf = self;
+			__weak MADExplorerController *weakSelf = self;
 			UIView *titleView = (UIView * _Nonnull)self.navigationItem.titleView;
 			[UIView transitionWithView: titleView
 							  duration: 0.2
 							   options: UIViewAnimationOptionCurveEaseOut
 							animations: ^{
-								typeof(self) strongSelf = weakSelf;
-								if (strongSelf) {
-									strongSelf.searchBar.alpha = 1.0;
-									strongSelf.navigationItem.titleView.alpha = 0.0;
-									strongSelf.navigationItem.titleView = searchViewHolder;
-								}
-							} completion:^(BOOL finished) {
-								typeof(self) strongSelf = weakSelf;
-								if (strongSelf) {
-									if (strongSelf.searchBar.isFirstResponder == NO) {
-										[strongSelf.searchBar becomeFirstResponder];
-										strongSelf.searchBar.hidden = NO;
-									}
-								}
-							}];
+				__strong MADExplorerController *strongSelf = weakSelf;
+				if (strongSelf) {
+					strongSelf.searchBar.alpha = 1.0;
+					strongSelf.navigationItem.titleView.alpha = 0.0;
+					strongSelf.navigationItem.titleView = searchViewHolder;
+				}
+			} completion:^(BOOL finished) {
+				__strong MADExplorerController *strongSelf = weakSelf;
+				if (strongSelf) {
+					if (strongSelf.searchBar.isFirstResponder == NO) {
+						[strongSelf.searchBar becomeFirstResponder];
+						strongSelf.searchBar.hidden = NO;
+					}
+				}
+			}];
 		}
 		
 	} else {
@@ -1410,11 +1410,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		self.navigationItem.titleView.alpha = 0.0;
 		self.navigationItem.leftBarButtonItem.enabled = YES;
 		
-		typeof(self) __weak weakSelf = self;
+		__weak MADExplorerController *weakSelf = self;
 		UIView *titleView = self.navigationItem.titleView;
 		
 		[UIView transitionWithView: titleView duration: 0.2 options: UIViewAnimationOptionCurveEaseOut animations:^{
-			typeof(self) strongSelf = weakSelf;
+			__strong MADExplorerController *strongSelf = weakSelf;
 
 			if (strongSelf) {
 				strongSelf.searchBar.alpha = 0.0;
@@ -1423,7 +1423,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			}
 		} completion:^(BOOL finished) {
 			if (finished) {
-				typeof(self) strongSelf = weakSelf;
+				__strong MADExplorerController *strongSelf = weakSelf;
 				if (strongSelf) {
 					strongSelf.searchBar.hidden = YES;
 				}

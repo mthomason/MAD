@@ -38,15 +38,18 @@
 }
 
 - (void)addMADOperation:(nonnull MADOperation *)operation {
-	typeof(self) __weak weakSelf = self;
+	__weak MADOperationQueue *weakSelf = self;
 
 	// Set up a block delegate to handle operation lifecycle events
 	MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler:^(MADOperation *oper) {
 		//os_log_info(GetFoundationLog(), "Starting operation %@", oper.name);
 	} produceHandler:^(MADOperation *oper, NSOperation *newOp) {
-		[weakSelf addOperation:newOp];
+		__strong MADOperationQueue *sself = weakSelf;
+		if (sself) {
+			[sself addOperation:newOp];
+		}
 	} finishHandler:^(MADOperation *oper, NSArray<NSError *> *errors) {
-		MADOperationQueue *sself = weakSelf;
+		__strong MADOperationQueue *sself = weakSelf;
 		if (sself) {
 			[sself.delegate operationQueue:sself operationDidFinish:oper withErrors:errors];
 			//os_log_info(GetFoundationLog(), "Finished operation %@", oper.name);
@@ -66,11 +69,11 @@
 }
 
 - (void)addStandardOperation:(nonnull NSOperation *)operation {
-	typeof(self) __weak weakSelf = self;
-	NSOperation * __weak weakOperation = operation;
+	__weak MADOperationQueue *weakSelf = self;
+	__weak NSOperation *weakOperation = operation;
 
 	[operation addCompletionBlock:^{
-		MADOperationQueue *queue = weakSelf;
+		__strong MADOperationQueue *queue = weakSelf;
 		NSOperation *op = weakOperation;
 		if (queue && op) {
 			id<MADOperationQueueDelegate> delegate = queue.delegate;

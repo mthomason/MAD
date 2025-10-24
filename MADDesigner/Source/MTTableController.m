@@ -406,9 +406,9 @@
 						 limit:(NSUInteger)limit
 					completion:(void (^)(BOOL hasMore))completion {
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADTableController *weakSelf = self;
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-		__strong typeof(weakSelf) strongSelf = weakSelf;
+		__strong MADTableController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 		
 		MADQuery *queryTableFormatter = strongSelf.tableFormatter.query;
