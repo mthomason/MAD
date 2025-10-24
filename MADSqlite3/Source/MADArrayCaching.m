@@ -75,7 +75,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 @dynamic url;
 
 + (void)initialize {
-	if (self == [MADArrayCaching class]) {
+	if (self == [MADArrayCaching self]) {
 		NSString *name = NSStringFromClass([MADArrayCaching class]);
 		caching_log = os_log_create("com.mad", name.UTF8String);
 	}

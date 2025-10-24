@@ -12,7 +12,7 @@
 
 /*+ (void)initialize {
 	[super initialize];
-	if (self == [MADQueryVisualizationContentView self]) {
+	if (self == [MADQueryVisualizationContentView class]) {
 		@autoreleasepool {
 			//UILabel <UIAppearance> *appearanceProxy;
 			//NSArray <Class <UIAppearanceContainer>> *classes;

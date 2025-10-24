@@ -34,12 +34,14 @@ static MADNotificationDidReadRows *_sharedSingleton = nil;
 }
 
 + (void)initialize {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		_sharedSingleton = [[super allocWithZone:NULL] init];
-		NSDate *lastUpdate = [NSDate date].copy;
-		_sharedSingleton.lastUpdate = lastUpdate;
-	});
+	if (self == [MADNotificationDidReadRows self]) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			_sharedSingleton = [[super allocWithZone:NULL] init];
+			NSDate *lastUpdate = [NSDate date].copy;
+			_sharedSingleton.lastUpdate = lastUpdate;
+		});
+	}
 }
 
 + (MADNotificationDidReadRows *)sharedObject {

@@ -30,10 +30,13 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
 }
 
 + (void)initialize {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		_sharedSingleton = [[super allocWithZone:NULL] init];
-	});
+	[super initialize];
+	if (self == [MADNotificationDidFormatPage self]) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			_sharedSingleton = [[super allocWithZone:NULL] init];
+		});
+	}
 }
 
 - (instancetype)init {

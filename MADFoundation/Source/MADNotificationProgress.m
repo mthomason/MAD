@@ -36,13 +36,16 @@ static MADNotificationProgress *_sharedSingleton = nil;
 }
 
 + (void)initialize {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		_sharedSingleton = [[super allocWithZone:NULL] init];
-		NSDate *lastUpdate = [NSDate date].copy;
-		_sharedSingleton.lastUpdate = lastUpdate;
-		[_sharedSingleton initializeProgressNotification];
-	});
+	[super initialize];
+	if (self == [MADNotificationProgress self]) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			_sharedSingleton = [[super allocWithZone:NULL] init];
+			NSDate *lastUpdate = [NSDate date].copy;
+			_sharedSingleton.lastUpdate = lastUpdate;
+			[_sharedSingleton initializeProgressNotification];
+		});
+	}
 }
 
 + (MADNotificationProgress *)sharedObject {

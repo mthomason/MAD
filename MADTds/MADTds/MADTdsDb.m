@@ -51,7 +51,7 @@ static os_log_t db_log;
 @implementation MADTdsDb
 
 + (void)initialize {
-	if (self == [MADTdsDb class]) {
+	if (self == [MADTdsDb self]) {
 		NSString *className = NSStringFromClass([MADTdsDb class]);
 		db_log = os_log_create("com.eda.madtds", className.UTF8String);
 	}

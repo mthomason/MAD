@@ -43,7 +43,7 @@ static os_log_t mad_log;
 @implementation MADQueryAddPredicateController
 
 + (void)initialize {
-	if (self == [MADQueryAddPredicateController class]) {
+	if (self == [MADQueryAddPredicateController self]) {
 		NSString *c = NSStringFromClass([MADQueryAddPredicateController class]);
 		mad_log = os_log_create("com.mad", c.UTF8String);
 	}
