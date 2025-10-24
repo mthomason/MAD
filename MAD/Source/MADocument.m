@@ -374,16 +374,22 @@ void madwarn(char *err,  const char *err2) { }
 		if (![NSThread isMainThread]) {
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				[strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-					completion(successClose, fileURL, gutsUrl);
+					if (completion != nil) {
+						completion(successClose, fileURL, gutsUrl);
+					}
 				}];
 			}];
 		} else {
 			[strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-				completion(successClose, fileURL, gutsUrl);
+				if (completion != nil) {
+					completion(successClose, fileURL, gutsUrl);
+				}
 			}];
 		}
 	} else {
-		completion(YES, fileURL, gutsUrl);
+		if (completion != nil) {
+			completion(YES, fileURL, gutsUrl);
+		}
 	}
 }
 

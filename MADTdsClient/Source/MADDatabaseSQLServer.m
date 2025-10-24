@@ -1810,7 +1810,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			free(sybVarCharBind);
 		}
 	}
-	completion(error == nil, error, results);
+	if (completion) completion(error == nil, error, results);
 }
 
 - (void)getTablesFromConnection:(id)process
@@ -1870,7 +1870,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		//dbclose(dbconn);
 		
 	}
-	completion(error == nil, error, results);
+	if (completion) completion(error == nil, error, results);
 }
 
 #pragma mark - Reading Fields
@@ -1880,10 +1880,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	RETCODE sqlReturnCode = FAIL;
 	DBPROCESS *dbconn = [process process];
 	if (dbconn) {
-		NSString *query, *queryFormat;
-		queryFormat = @"SELECT name, system_type_id, max_length, precision, scale FROM "
-					  @"sys.columns WHERE object_id = OBJECT_ID('%@')";
-		query = [[NSString alloc] initWithFormat:queryFormat, tableName];
+		NSString *queryFormat = @"SELECT name, system_type_id, max_length, precision, scale FROM "
+								@"sys.columns WHERE object_id = OBJECT_ID('%@')";
+		NSString *query = [[NSString alloc] initWithFormat:queryFormat, tableName];
 		dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
 		
 		sqlReturnCode = dbsqlexec(dbconn);

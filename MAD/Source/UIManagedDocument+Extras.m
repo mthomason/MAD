@@ -34,7 +34,9 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 		}
 		[MADFileUtilities removeFileAtURL:fileURL];
 		NSAssert(deleteError == nil, @"%@", deleteError);
-		completion(YES);
+		if (completion != nil) {
+			completion(YES);
+		}
 	};
 	
 	NSAssert(self.documentState & UIDocumentStateClosed, @"Document must be closed to call this!");

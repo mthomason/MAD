@@ -48,7 +48,7 @@
 
 - (void)evaluateForOperation:(MADOperation *)operation completion:(void (^)(MADOperationConditionResult *))completion {
 	MADOperationConditionResult *result = [self evaluateForOperation:operation];
-	completion(result);
+	if (completion != nil) completion(result);
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {

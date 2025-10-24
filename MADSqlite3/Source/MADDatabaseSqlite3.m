@@ -827,7 +827,7 @@ void sqliteLog(void *foo, const char* statement) {
 	sqlite3_finalize(statement);
 	sqlite3_clear_bindings(statement);
 	sqlite3_free(sql);
-	completion(success, nil, result);
+	if (completion) completion(success, nil, result);
 	
 }
 
@@ -837,7 +837,7 @@ void sqliteLog(void *foo, const char* statement) {
 		if (error != nil) {
 			os_log_error(GetMadLog(), "Error: %@", error.localizedDescription);
 		}
-		completion(success, error, tables);
+		if (completion) completion(success, error, tables);
 	}];
 }
 

@@ -25,7 +25,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 	
 	if (error == nil) {
 		os_log_error(GetMadExtLog(), "Error was nil.  This is unexpected.");
-		completion(YES);
+		if (completion != nil) completion(YES);
 		return;
 	} else {
 		os_log_error(GetMadExtLog(), "Error: %@", error);
@@ -49,11 +49,11 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 	UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
 												 style: UIAlertActionStyleDefault
 											   handler: ^(UIAlertAction *action) {
-		if (completion) completion(YES);
+		if (completion != nil) completion(YES);
 	}];
 	[alert addAction:ok];
 	
-	[displayController presentViewController:alert animated:YES completion:NULL];
+	[displayController presentViewController:alert animated:YES completion:nil];
 	
 }
 

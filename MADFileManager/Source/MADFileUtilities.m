@@ -158,7 +158,7 @@ static NSString * const MADPathComponentData       = @"Data";
 									  byAccessor:^(NSError *error) {
 		if (error) {
 			if (startedAccess) [url stopAccessingSecurityScopedResource];
-			if (completion) completion(nil, error);
+			if (completion != nil) completion(nil, error);
 			return;
 		}
 		
@@ -166,7 +166,7 @@ static NSString * const MADPathComponentData       = @"Data";
 		NSData *data = [NSData dataWithContentsOfURL:intent.URL options:0 error:&readError];
 		if (!data || readError) {
 			if (startedAccess) [url stopAccessingSecurityScopedResource];
-			if (completion) completion(nil, readError);
+			if (completion != nil) completion(nil, readError);
 			return;
 		}
 		
@@ -176,7 +176,7 @@ static NSString * const MADPathComponentData       = @"Data";
 														 error:&decodeError];
 		
 		if (startedAccess) [url stopAccessingSecurityScopedResource];
-		if (completion) completion(object, decodeError);
+		if (completion != nil) completion(object, decodeError);
 	}];
 }
 
@@ -192,7 +192,7 @@ static NSString * const MADPathComponentData       = @"Data";
 										   queue:[self queue]
 									  byAccessor:^(NSError *error) {
 		if (error) {
-			if (completion) completion(error);
+			if (completion != nil) completion(error);
 			return;
 		}
 		
@@ -202,7 +202,7 @@ static NSString * const MADPathComponentData       = @"Data";
 															 error:&archiveError];
 		if (archiveError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
-			if (completion) completion(archiveError);
+			if (completion != nil) completion(archiveError);
 			return;
 		}
 		
@@ -216,7 +216,7 @@ static NSString * const MADPathComponentData       = @"Data";
 											 ofItemAtPath:path
 													error:&setAttributesError];
 			if (setAttributesError != nil) {
-				if (completion) completion(setAttributesError);
+				if (completion != nil) completion(setAttributesError);
 				os_log_error(OS_LOG_DEFAULT, "%s: Error setting file attributes: %@", __PRETTY_FUNCTION__, setAttributesError);
 			}
 			
@@ -226,7 +226,7 @@ static NSString * const MADPathComponentData       = @"Data";
 			}
 		}
 
-		if (completion) completion(writeError);
+		if (completion != nil) completion(writeError);
 	}];
 }
 
@@ -304,12 +304,12 @@ static NSString * const MADPathComponentData       = @"Data";
 	if (gotResourceValue && [status isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
 		[self moveFileAtURL:source toUrl:destination
 				   completion:^(NSURL *result, NSError *error) {
-			completion(source, result, error);
+			if (completion != nil) completion(source, result, error);
 		}];
 	} else {
 		[self moveRemoveFileAtURL:source toUrl:destination
 			completion:^(NSURL *result, NSError *error) {
-			completion(source, result, error);
+			if (completion != nil) completion(source, result, error);
 		}];
 	}
 }
@@ -319,7 +319,7 @@ static NSString * const MADPathComponentData       = @"Data";
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
 		[self moveFileAtURL:source toUrl:destination
 				   completion:^(NSURL *result, NSError *error) {
-			completion(destination, error);
+			if (completion != nil) completion(destination, error);
 		}];
 		
 	});
@@ -350,7 +350,7 @@ static NSString * const MADPathComponentData       = @"Data";
 			[source stopAccessingSecurityScopedResource];
 		}
 									 
-		completion(accessorDestination, moveError);
+		if (completion != nil) completion(accessorDestination, moveError);
 
 	}];
 
@@ -375,27 +375,21 @@ static NSString * const MADPathComponentData       = @"Data";
 									  error: &error
 								 byAccessor: ^(NSURL *source, NSURL *destinaion) {
 		if (error) {
-			if (completion) {
-				completion(nil, error);
-			}
-			
+			if (completion != nil) completion(nil, error);
 			return;
 		}
 		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		NSError *errorCopy = nil;
 
-		BOOL success = [fileManager copyItemAtURL: source
-											toURL: destinaion
-											error: &errorCopy];
-									 
+		BOOL success = [fileManager copyItemAtURL: source toURL: destinaion error: &errorCopy];
 		if (success) {
 			[coordinator itemAtURL:source didMoveToURL:destinaion];
 		}
 		if (successfulSecurityScopedResourceAccess) {
 			[url stopAccessingSecurityScopedResource];
 		}
-		if (completion) {
+		if (completion != nil) {
 			completion(destinaion, errorCopy);
 		}
 
@@ -424,12 +418,12 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeFileAtURL:(NSURL *)url {
-	[self removeFileAtURL:url completion:NULL];
+	[self removeFileAtURL:url completion:nil];
 }
 
 + (void)removeFileAtURL:(NSURL *)url withCoordinator:(BOOL)coordinator {
 	if (coordinator) {
-		[self removeFileAtURL:url completion:NULL];
+		[self removeFileAtURL:url completion:nil];
 	} else {
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		NSError *error = nil;
@@ -446,16 +440,15 @@ static NSString * const MADPathComponentData       = @"Data";
 	// `url` may be a security scoped resource.
 	BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
 	
-	NSFileAccessIntent *writing;
-	writing = [NSFileAccessIntent writingIntentWithURL: url
-											   options: NSFileCoordinatorWritingForDeleting];
+	NSFileAccessIntent *writing = [NSFileAccessIntent writingIntentWithURL: url
+																   options: NSFileCoordinatorWritingForDeleting];
 	NSArray *intents = [[NSArray alloc] initWithObjects:writing, nil];
 	[fileCoordinator coordinateAccessWithIntents:intents
 										   queue:[self queue]
 									  byAccessor:^(NSError *accessError) {
 		if (accessError) {
 			os_log_debug(GetFileManagerLog(), "Error: %@", accessError);
-			if (completion) completion(accessError);
+			if (completion != nil) completion(accessError);
 			return;
 		}
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -465,7 +458,7 @@ static NSString * const MADPathComponentData       = @"Data";
 			os_log_debug(GetFileManagerLog(), "Error: %@", error);
 		}
 		if (successfulSecurityScopedResourceAccess) [url stopAccessingSecurityScopedResource];
-		if (completion) completion(successfulDelete ? nil : error);
+		if (completion != nil) completion(successfulDelete ? nil : error);
 	}];
 }
 

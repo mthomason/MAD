@@ -125,7 +125,7 @@
 			}
 		}
 	}
-	completion(error == nil, error, results);
+	if (completion) completion(error == nil, error, results);
 }
 
 - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
@@ -403,7 +403,7 @@
 			}
 		}
 	}
-	completion(error == nil, error, results);
+	if (completion) completion(error == nil, error, results);
 }
 
 #pragma mark -

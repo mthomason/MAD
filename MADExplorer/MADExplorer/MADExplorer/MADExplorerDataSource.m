@@ -217,7 +217,9 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 		[inserts removeAllObjects];
 		[removes removeAllObjects];
 		[updates removeAllObjects];
-		completion(YES, nil);
+		if (completion != nil) {
+			completion(YES, nil);
+		}
 	}];
 
 }

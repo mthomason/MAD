@@ -110,7 +110,7 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 
 	if (conditions.count == 0) {
 		MADLogDebug("MADOperationConditionResult: Op <%p:%@> no conditions to evaluate.", operation, operation.name);
-		if (completion) {
+		if (completion != nil) {
 			completion(@[]);
 		}
 		return;
@@ -153,7 +153,7 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 			failures = [failures arrayByAddingObject:[NSError errorWithDomain:@"OperationErrors" code:-82796 userInfo:nil]];
 		}
 		
-		if (completion) {
+		if (completion != nil) {
 			MADLogDebug("MADOperationConditionResult: Op <%p:%@> completing evaluation with %lu total error(s).",
 						operation, operation.name, (unsigned long)failures.count);
 			completion([failures copy]);

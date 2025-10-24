@@ -62,7 +62,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 										  displayErrors:remaningErrors
 											 completion:alertCompleted];
 		} else {
-			completion(YES);
+			if (completion != nil) completion(YES);
 		}
 		
 	};
