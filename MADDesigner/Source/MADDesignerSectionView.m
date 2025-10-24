@@ -170,7 +170,7 @@ static inline MADBorderState borderState(BOOL selected, BOOL visible) {
 				}
 			};
 
-			[UIView animateWithDuration: 0.6666f
+			[UIView animateWithDuration: (2.0/3.0)
 							 animations: animate
 							 completion: finish];
 			if (completion != nil) { completion(); }

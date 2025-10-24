@@ -214,7 +214,7 @@ static NSString * const MADIdentifierQueryTableViewController = @"MADIdentifierQ
 	
 	[super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
 	if (!self.isViewLoaded) return;
-	UIView __weak *titleView = self.navigationItem.titleView;;
+	__weak UIView *titleView = self.navigationItem.titleView;;
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 		[titleView sizeToFit];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {

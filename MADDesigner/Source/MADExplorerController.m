@@ -1238,11 +1238,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	if (_aboutViewControllerOnScreen) {
 		_aboutViewControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:^{ }];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 	if (_infoControllerOnScreen) {
 		_infoControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:^{ }];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	} else {
 		UINavigationController *infoViewController = [UINavigationController navigationControllerWithType:MADNavigationControllerTypeInformation];
 		[MADThemeManager applyAppearanceToNavigationController:infoViewController traitCollection:self.traitCollection];
@@ -1268,12 +1268,12 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	if (_infoControllerOnScreen) {
 		_infoControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:^{ }];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 	
 	if (_aboutViewControllerOnScreen) {
 		_aboutViewControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:^{ }];
+		[self dismissViewControllerAnimated:YES completion:nil];
 		
 	} else {
 		
@@ -1567,7 +1567,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		
 	};
 	
-	[self presentViewController:activityViewController animated:YES completion:^{ }];
+	[self presentViewController:activityViewController animated:YES completion:nil];
 }
 
 - (IBAction)actionDelete:(id)sender {
@@ -1585,7 +1585,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	if ([sender isKindOfClass:[UIBarButtonItem class]]) {
 		alertController.popoverPresentationController.barButtonItem = sender;
 	}
-	[self presentViewController:alertController animated:YES completion:NULL];
+	[self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (IBAction)actionDuplicate:(id)sender {

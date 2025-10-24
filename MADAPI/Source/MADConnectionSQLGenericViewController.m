@@ -298,16 +298,11 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Issues Encounterd", @"Alert Title 'Issues Encounterd'.")
 																	   message: [errorContainer errorLogCompact]
 																preferredStyle: UIAlertControllerStyleAlert];
-
-		UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Button 'Continue'")
-													 style: UIAlertActionStyleDefault
-												   handler: nil];
-		[alert addAction:ok];
-		[self presentViewController:alert
-						   animated:YES
-						 completion:nil];
+		[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Button 'Continue'")
+												  style: UIAlertActionStyleDefault
+												handler: nil]];
+		[self presentViewController:alert animated:YES completion:nil];
 	}
-
 }
 
 - (void)disableNavigation {

@@ -178,9 +178,7 @@ static os_log_t mad_log;
 		[document autosaveWithCompletionHandler:^(BOOL success) { }];
 		[self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
 	} else {
-		[NSError presentError:error onViewController:self completion:^(BOOL success) {
-			
-		}];
+		[NSError presentError:error onViewController:self completion:nil];
 	}
 	
 }

@@ -271,9 +271,7 @@
 	if ([vc conformsToProtocol: viewControllerDocumentProtocol]) {
 		[(id <MADViewControllerDocumentProtocol>)vc setDocument:_document];
 	}
-	[self.navigationController presentViewController:vc animated:YES completion:^{
-		
-	}];
+	[self.navigationController presentViewController:vc animated:YES completion:nil];
 	
 	return YES;
 }

@@ -164,8 +164,7 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
 - (void)getTablesFromConnection:(id)process
 					 completion:(void (^)(BOOL, NSError *, NSArray *))completion {
-	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:@"Not implemented: %@.  Subclass MADDatabase; don't use it directly.", NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];
@@ -174,8 +173,7 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 - (void)enumerateTablesFromConnection:(id)dbconn
 						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
 						   completion:(void (^)(BOOL success, NSError *error, NSArray *results))completion {
-	NSString *format = @"Not implemented: %@.  Subclass MADDatabase; don't use it directly.";
-	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	NSString *reason = [[NSString alloc] initWithFormat:@"Not implemented: %@.  Subclass MADDatabase; don't use it directly.", NSStringFromSelector(_cmd)];
 	@throw [NSException exceptionWithName: NSInternalInconsistencyException
 								   reason: reason
 								 userInfo: nil];

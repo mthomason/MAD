@@ -50,11 +50,11 @@
 			NSArray *to = @[emailAddress];
 			mailComposer.toRecipients = to;
 			mailComposer.mailComposeDelegate = self;
-			[[UIApplication topViewController] presentViewController:mailComposer animated:YES completion:^{}];
+			[[UIApplication topViewController] presentViewController:mailComposer animated:YES completion:nil];
 		} cancel:^(UIAlertAction *action) {
 			
 		}];
-		[[UIApplication topViewController] presentViewController:alertController animated:YES completion:^{}];
+		[[UIApplication topViewController] presentViewController:alertController animated:YES completion:nil];
 		
 	}
 }
@@ -64,7 +64,7 @@
 		UIAlertController *alertController = [MADAlertController newAlertControllerError:error];
 		[[UIApplication topViewController] showViewController:alertController sender:self];
 	} else {
-		[[UIApplication topViewController] dismissViewControllerAnimated:YES completion:^{ }];
+		[[UIApplication topViewController] dismissViewControllerAnimated:YES completion:nil];
 	}
 }
 

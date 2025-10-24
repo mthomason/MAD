@@ -111,7 +111,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 				__strong typeof(self) strongSelf = weakSelf;
 				if (!success && error) {
 					id alert = [MADAlertController newAlertControllerError:error];
-					[strongSelf presentViewController:alert animated:YES completion:NULL];
+					[strongSelf presentViewController:alert animated:YES completion:nil];
 				}
 				[strongSelf.navigationItem setLeftBarButtonItem:nil animated:YES];
 				[strongSelf.collectionView reloadData];
@@ -194,14 +194,14 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 		UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt)
 																							message: NSLocalizedString(MADTextFreeGift, MADTextFreeGift)
 																					  andCompletion: nil];
-		[self presentViewController:alert animated:YES completion:NULL];
+		[self presentViewController:alert animated:YES completion:nil];
 	} else {
 		BOOL ownIt = [[MADVerificationController sharedInstance] purchasedProductWithID:product.productIdentifier];
 		if (ownIt) {
 			UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouItsYours, MADTextYouItsYours)
 																								message: NSLocalizedString(MADTextAlready, MADTextAlready)
 																						  andCompletion: nil];
-			[self presentViewController:alert animated:YES completion:NULL];
+			[self presentViewController:alert animated:YES completion:nil];
 		} else {
 			[[MADVerificationController sharedInstance] freeForCharterMemembers:product.productIdentifier];
 			[[MADStoreKitController sharedObject] purchaseProduct: product

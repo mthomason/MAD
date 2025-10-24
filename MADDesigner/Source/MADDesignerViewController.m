@@ -1339,8 +1339,12 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	// You might want to hide toolbox when menu shows
 	if (_toolboxVisible) {
 		MADLogDebug("%s: Hiding toolbox because menu is appearing", __PRETTY_FUNCTION__);
+		__weak MADDesignerViewController *weakself = self;
 		[self dismissViewControllerAnimated:YES completion:^{
-			self->_toolboxVisible = NO;
+			__strong MADDesignerViewController *strongSelf = weakself;
+			if (strongSelf != nil) {
+				strongSelf->_toolboxVisible = NO;
+			}
 			MADLogDebug("%s: Toolbox dismissed", __PRETTY_FUNCTION__);
 		}];
 	}
@@ -1360,8 +1364,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	}
 	
 	if (selectedImage != nil) {
+		__weak MADDesignerViewController *weakself = self;
 		[self dismissViewControllerAnimated:YES completion:^{
-			self.hidesStatusBar = NO;
+			__strong MADDesignerViewController *strongSelf = weakself;
+			if (strongSelf != nil) {
+				strongSelf.hidesStatusBar = NO;
+			}
 		}];
 		
 		NSNumber *type = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeImage];
@@ -1376,7 +1384,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
 	self.hidesStatusBar = NO;
-	[self dismissViewControllerAnimated:YES completion:NULL];
+	[self dismissViewControllerAnimated:YES completion:nil];
 	[self setDisplayActive];
 }
 
@@ -2117,7 +2125,7 @@ didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
 - (void)viewControllerDidFinish:(id)sender {
 	[self setDisplayActive];
 	self.hidesStatusBar = NO;
-	[self dismissViewControllerAnimated:YES completion:NULL];
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -2729,7 +2737,6 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	int64_t cellIdentifier = cell.identifier;
 	NSNumber *objectId = @(cell.identifier);
 	
-	
 	MADocument *document = _document;
 	NSFetchRequest <__kindof RptqDocumentElement *> *fetchElement = [RptqDocumentElement fetchRequestElement:cell.identifier];
 	NSError *error = nil;
@@ -2799,20 +2806,20 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 
 - (void)adjustPassthroughViews {
 	if (_sectionSettingsVisible) {
-		self.settingsTransitioningDelegate.passthroughContainers =  self.view.scroller.container.passthroughContainers;
-		self.settingsTransitioningDelegate.passthroughViews =       [self passthroughViews];
-		self.settingsTransitioningDelegate.passthroughContainer =   self.view.scroller;
+		self.settingsTransitioningDelegate.passthroughContainers = self.view.scroller.container.passthroughContainers;
+		self.settingsTransitioningDelegate.passthroughViews = [self passthroughViews];
+		self.settingsTransitioningDelegate.passthroughContainer = self.view.scroller;
 	} else if (_toolboxVisible) {
-		self.toolboxTransitioningDelegate.passthroughContainers =   self.view.scroller.container.passthroughContainers;
-		self.toolboxTransitioningDelegate.passthroughViews =        [self passthroughViews];
-		self.toolboxTransitioningDelegate.passthroughContainer =    self.view.scroller;
+		self.toolboxTransitioningDelegate.passthroughContainers = self.view.scroller.container.passthroughContainers;
+		self.toolboxTransitioningDelegate.passthroughViews = [self passthroughViews];
+		self.toolboxTransitioningDelegate.passthroughContainer = self.view.scroller;
 	}
 }
 
 - (void)dismissSectionPresentationIfOpen {
 	if (_sectionSettingsVisible && self.settingsTransitioningDelegate.presentationController.presentedViewController != nil) {
 		_sectionSettingsVisible = NO;
-		[self dismissViewControllerAnimated: YES completion: NULL];
+		[self dismissViewControllerAnimated: YES completion: nil];
 		[self.view.scroller.container removeBorderFromAllSectionViews];
 		
 		__strong MADocument *document = self.document;
@@ -2829,7 +2836,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 - (void)dismissToolboxPresentationIfOpen {
 	if (_toolboxVisible && self.toolboxTransitioningDelegate.presentationController.presentedViewController != nil) {
 		_toolboxVisible = NO;
-		[self dismissViewControllerAnimated: YES completion: NULL];
+		[self dismissViewControllerAnimated: YES completion: nil];
 		[self deselectAllElementsAnimated:YES];
 		
 		__strong MADocument *document = self.document;
@@ -3428,8 +3435,9 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 
 - (IBAction)actionCancel:(id)sender {
 	self.hidesStatusBar = NO;
+	__weak MADDesignerViewController *weakSelf = self;
 	[self dismissViewControllerAnimated:YES completion:^{
-		[self setDisplayActive];
+		[weakSelf setDisplayActive];
 	}];
 }
 
@@ -3450,9 +3458,9 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	self.hidesStatusBar = NO;
 	
-	typeof(self) __weak weakself = self;
+	__weak MADDesignerViewController *weakSelf = self;
 	[self dismissViewControllerAnimated:YES completion:^{
-		MADDesignerViewController *sself = weakself;
+		__strong MADDesignerViewController *sself = weakSelf;
 		if (sself) {
 			[sself actionDismiss];
 			[sself setDisplayActive];
@@ -3479,11 +3487,13 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	self.viewControllerToolbox.document = self.document;
 	[self adjustToolboxLocation];
 	
-	__weak typeof(self) weakSelf = self;
+	__weak MADDesignerViewController *weakSelf = self;
 	[self presentViewController:self.navigationControllerToolbox animated:YES completion:^{
-		__strong typeof(self) strongSelf = weakSelf;
-		strongSelf.navigationControllerToolbox.presentationController.delegate = strongSelf;
-		[strongSelf adjustContextOffsetForToolboxWithToolboxType:MTToolboxTypeElement];
+		__strong MADDesignerViewController *strongSelf = weakSelf;
+		if (strongSelf) {
+			strongSelf.navigationControllerToolbox.presentationController.delegate = strongSelf;
+			[strongSelf adjustContextOffsetForToolboxWithToolboxType:MTToolboxTypeElement];
+		}
 		MADLogDebug("%s: Toolbox presentation completed", __PRETTY_FUNCTION__);
 	}];
 }
@@ -3502,8 +3512,10 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	if (_sectionSettingsVisible == NO) {
 		_sectionSettingsVisible = YES;
 		[self adjustPassthroughViews];
+		__weak MADDesignerViewController *weakSelf = self;
 		[self presentViewController: self.navigationControllerSectionLayoutSettings animated: YES completion: ^{
-			[self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
+			__strong MADDesignerViewController *strongSelf = weakSelf;
+			[strongSelf adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];
 		}];
 	} else {
 		[self adjustContextOffsetForToolboxWithToolboxType: MTToolboxTypeSection];

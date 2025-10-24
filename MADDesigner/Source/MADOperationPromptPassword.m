@@ -162,7 +162,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 		UIAlertController *strongAlertController = weakAlertController;
 		UIViewController *topViewController = wViewController;
 		topViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-		[topViewController  presentViewController: strongAlertController animated: YES completion:NULL];
+		[topViewController  presentViewController: strongAlertController animated: YES completion: nil];
 	}];
 
 }

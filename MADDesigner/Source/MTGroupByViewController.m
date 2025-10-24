@@ -61,7 +61,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 	NSError *error = nil;
 	BOOL fetchResult = [self.fetchedResultsControllerGroups performFetch:&error];
 	if (!fetchResult && error != nil) {
-		[NSError presentError: error onViewController: self completion: NULL];
+		[NSError presentError: error onViewController: self completion: nil];
 	}
 	frc = nil;
 

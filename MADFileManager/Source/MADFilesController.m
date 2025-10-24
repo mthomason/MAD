@@ -126,7 +126,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 				NSURL *dataDirectory = [ubiquityContainer URLByAppendingPathComponent:@"Data"];
 				[MADFileUtilities coordinateCreateDirectoryIfDoesNotExist:dataDirectory];
 				
-				if (handleCompletion) handleCompletion(YES, documentDirectory, dataDirectory);
+				if (handleCompletion != nil) handleCompletion(YES, documentDirectory, dataDirectory);
 				
 			});
 		});
@@ -135,7 +135,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 	
 		NSURL *documents = [MADURLFactory newURLForLocalDataDirectoryForGroupIdentifier:groupIdentifier];
 		NSURL *data = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:groupIdentifier];
-		if (handleCompletion) handleCompletion(NO, documents, data);
+		if (handleCompletion != nil) handleCompletion(NO, documents, data);
 	
 	}
 	
@@ -338,8 +338,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
 											 removedMetaDatum:(NSArray *)removedMetaDatum
 											 updatedMetaDatum:(NSArray *)updatedMetaDatum
-												   completion:(void (^)(BOOL success,
-																		NSError *error))completion {
+												   completion:(void (^)(BOOL success, NSError *error))completion {
 	
 	//NSLog(@"(MetaDatam) File Coordinator Did Update Contents With \n"
 	//      @"\t%@\n" @"\t%@\n" @"\t%@", insertedMetaDatum, removedMetaDatum, updatedMetaDatum);
@@ -357,7 +356,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 									removedMetaDatum: removes
 									updatedMetaDatum: updates
 										  completion: ^(BOOL success, NSError *error) {
-											  completion(success, error);
+											  if (completion != nil) completion(success, error);
 										  }];
 }
 
@@ -561,9 +560,9 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 			void (^handleCompletion)(BOOL, NSError *) = ^(BOOL success, NSError *error) { };
 			[delegate filesControllerDidChangeContent: sself
 										   completion: handleCompletion];
-			completion(YES, nil);
+			if (completion != nil) completion(YES, nil);
 		} else {
-			completion(YES, nil);
+			if (completion != nil) completion(YES, nil);
 		}
 	}];
 }

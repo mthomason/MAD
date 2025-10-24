@@ -244,7 +244,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
 		[self.view setNeedsDisplay];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+	} completion:nil];
 	
 }
 
@@ -561,7 +561,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 #pragma mark MADViewControllerStandardProtocol
 
 - (void)viewControllerDidFinish:(id)sender {
-	[self dismissViewControllerAnimated:YES completion:^{ }];
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -1120,7 +1120,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		[UIView animateWithDuration: 0.3 delay: 0.0
 							options: UIViewAnimationOptionCurveEaseInOut
 						 animations: animateFrameTransform
-						 completion: ^(BOOL finished) { }];
+						 completion: nil];
 		[self layoutQueryLinkViewControllerWithModelObject:link];
 	}
 }

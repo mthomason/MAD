@@ -214,29 +214,30 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 															   delay: ^ {
 		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-			UIViewController <MADFileLocationManagerDelegate> *delegate = weakDelegate;
-			if (delegate) {
+			__strong UIViewController <MADFileLocationManagerDelegate> *delegate = weakDelegate;
+			if (delegate != nil) {
 				[delegate startLongRunningActivity];
 			}
 		}];
 		
 	} completion:^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
 		
-		MADFileLocationManager *sself = weakself;
-		MADAppStorage storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
-		[sself.class setStorageOption: storageOption];
-		
-		[sself configureFilesController: NO storageOptionChangeHandler: nil];
-		
-		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+		__strong MADFileLocationManager *sself = weakself;
+		if (sself != nil) {
+			MADAppStorage storageOption = cloudAvailable ? MADAppStorageCloud : MADAppStorageLocal;
+			[sself.class setStorageOption: storageOption];
 			
-			UIViewController <MADFileLocationManagerDelegate> * __strong sdelegate = weakDelegate;
-			if (sdelegate) {
-				[sdelegate completedLongRunningActivity];
-			}
+			[sself configureFilesController: NO storageOptionChangeHandler: nil];
 			
-		}];
-		
+			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+				
+				__strong UIViewController <MADFileLocationManagerDelegate> *sdelegate = weakDelegate;
+				if (sdelegate != nil) {
+					[sdelegate completedLongRunningActivity];
+				}
+				
+			}];
+		}
 	}];
 }
 
@@ -246,16 +247,15 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	NSString *ubiquityIdentifier = [[[safedelegate class] ubiquityIdentifier] copy];
 	NSString *fileExtention = [[safedelegate fileExtention] copy];
 
-	id <MADFileLocationManagerDelegate> __weak wdelegate = safedelegate;
-	
-	MADFileLocationManager * __weak weakself = self;
+	__weak id <MADFileLocationManagerDelegate> wdelegate = safedelegate;
+	__weak MADFileLocationManager * weakself = self;
 
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		id <MADFileLocationManagerDelegate> delegate = wdelegate;
 		MADFileLocationManager *strongself = weakself;
 		if (delegate == nil || strongself == nil) return;
 		
-		MADFileLocationManager __weak *wself = strongself;
+		__weak MADFileLocationManager *wself = strongself;
 				
 		void (^handlerLocal)(void) = ^ {
 			MADFileLocationManager *sself = wself;

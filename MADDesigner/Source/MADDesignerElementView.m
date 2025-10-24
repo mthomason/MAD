@@ -234,8 +234,9 @@
 			[UIView animateWithDuration: 0.5
 								  delay: 0.2
 								options:UIViewAnimationOptionCurveEaseIn
-							 animations:^{ self.backgroundColor = originalColor; }
-							 completion:completion];
+							 animations:^{
+				self.backgroundColor = originalColor;
+			} completion: completion];
 		} else {
 			// If the first animation was interrupted, restore the original color immediately.
 			self.backgroundColor = originalColor;

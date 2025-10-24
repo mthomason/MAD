@@ -11,20 +11,19 @@
 
 @protocol MADFileCoordinatorDelegate <NSObject>
 
-	- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs: (NSArray *)insertedURLs
-												 removedURLs: (NSArray *)removedURLs
-												 updatedURLs: (NSArray *)updatedURLs;
+- (void)fileCoordinatorDidUpdateContentsWithInsertedURLs: (NSArray *)insertedURLs
+											 removedURLs: (NSArray *)removedURLs
+											 updatedURLs: (NSArray *)updatedURLs;
 
-	- (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: (NSArray *)insertedMetaDatum
-												 removedMetaDatum: (NSArray *)removedMetaDatum
-												 updatedMetaDatum: (NSArray *)updatedMetaDatum
-													   completion: (void (^)(BOOL success,
-																			 NSError *error))completion;
+- (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: (NSArray *)insertedMetaDatum
+											 removedMetaDatum: (NSArray *)removedMetaDatum
+											 updatedMetaDatum: (NSArray *)updatedMetaDatum
+												   completion: (void (^)(BOOL success, NSError *error))completion;
 
-	- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-	- (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
-	- (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
-	- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailRemovingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailDuplicatingFileAtURL:(NSURL*)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailRenamingFileAtURL:(NSURL *)URL withError:(NSError *)error;
+- (void)fileCoordinatorDidFailCreatingFileAtURL:(NSURL *)URL withError:(NSError *)error;
 
 @end
 

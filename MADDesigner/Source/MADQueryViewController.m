@@ -210,33 +210,29 @@ BOOL storeEnabled(void) {
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-	
 	[MADQueryViewController deleteCoreDataCache];
-	
-	self = [super initWithCoder:aDecoder];
-	if (!self) return nil;
-
-	_showingTableIndex = -1;
-
-	_firstTimeViewWillLayoutSubviews = YES;
-	
-	MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
-	queryViewDelegate.delegate = self;
-	self.queryViewDelegate = queryViewDelegate;
-	
-	MADQueryViewCellConfigureHandler handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
+	if (self = [super initWithCoder:aDecoder]) {
+		_showingTableIndex = -1;
 		
-		[MADQueryViewController configureCell: cell
-								   forSection: forSection
-									   andRow: row];
+		_firstTimeViewWillLayoutSubviews = YES;
 		
-	};
-	self.handleConfigureCell = handleConfigureCell;
-	
-	MADOperationQueue *credentailsQueue = [[MADOperationQueue alloc] init];
-	credentailsQueue.delegate = self;
-	self.credentailsQueue = credentailsQueue;
-	
+		MADQueryViewDelegate *queryViewDelegate = [[MADQueryViewDelegate alloc] init];
+		queryViewDelegate.delegate = self;
+		self.queryViewDelegate = queryViewDelegate;
+		
+		MADQueryViewCellConfigureHandler handleConfigureCell = ^(UITableViewCell *cell, MADIdentifierQueryViewSections forSection, NSInteger row) {
+			
+			[MADQueryViewController configureCell: cell
+									   forSection: forSection
+										   andRow: row];
+			
+		};
+		self.handleConfigureCell = handleConfigureCell;
+		
+		MADOperationQueue *credentailsQueue = [[MADOperationQueue alloc] init];
+		credentailsQueue.delegate = self;
+		self.credentailsQueue = credentailsQueue;
+	}
 	return self;
 }
 
@@ -342,10 +338,8 @@ BOOL storeEnabled(void) {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
 		self.view.frame = self.navigationController.view.bounds;
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	} completion:nil];
 
-	}];
-	
 }
 
 #pragma mark -

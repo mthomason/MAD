@@ -175,7 +175,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 	imagePicker.delegate = (id <UINavigationControllerDelegate, UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
 	imagePicker.navigationBar.barTintColor = [MADColorEverydayApps newColorAnalogous4];
-	[self presentViewController:imagePicker animated:YES completion:NULL];
+	[self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

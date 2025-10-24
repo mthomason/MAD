@@ -138,11 +138,7 @@
 		}
 		[UIView animateWithDuration:duration delay:0.0 options:options animations:^{
 			weakself.pickerView.frame = pickerViewFrameEnd;
-		} completion:^(BOOL finished) {
-			
-		}];
-
-		
+		} completion:nil];
 	}
 }
 
@@ -224,8 +220,7 @@
 								   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
 									   [MADKeyChain deleteKey:key];
 								   } cancel:nil];
-								   [weak1 presentViewController:alertController animated:YES
-													 completion:nil];
+								   [weak1 presentViewController:alertController animated:YES completion:nil];
 							   }];
 				});
 			}

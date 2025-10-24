@@ -120,9 +120,7 @@
 	UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
 		[toView setNeedsDisplay];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-
-	}];
+	} completion: nil];
 	
 }
 

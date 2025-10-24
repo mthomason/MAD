@@ -275,7 +275,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	[self setViewControllers: pages
 				   direction: UIPageViewControllerNavigationDirectionForward
 					animated: animated
-				  completion: ^(BOOL finished) { }];
+				  completion: nil];
 	
 	NSUInteger statusLabelIndex;
 	statusLabelIndex = [self.toolbarItems indexOfObjectPassingTest:^BOOL(__kindof UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

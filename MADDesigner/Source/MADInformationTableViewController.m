@@ -197,9 +197,7 @@
 - (void)followEverydayApps {
 	os_log_error(GetDesignerLog(), "%s Not implemented", __PRETTY_FUNCTION__);
 	if (self.popoverPresentationController != nil) {
-		[self dismissViewControllerAnimated:YES completion:^{
-			
-		}];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 }
 

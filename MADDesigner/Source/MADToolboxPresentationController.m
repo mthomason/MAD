@@ -234,10 +234,10 @@
 	} else {
 		[((UIViewController <MADViewControllerProtocol> *)self.designerViewController) setHidesStatusBar: NO];
 		UIViewController *presentingViewController = self.presentingViewController;
-		__weak typeof(self) weakSelf = self;
+		__weak MADToolboxPresentationController *weakSelf = self;
 		[presentingViewController dismissViewControllerAnimated: YES
 													 completion: ^{
-			__strong typeof(self) strongSelf = weakSelf;
+			__strong MADToolboxPresentationController *strongSelf = weakSelf;
 			if (strongSelf) {
 				[strongSelf.popoverPresentationControllerDelegate presentationControllerShouldDismiss:(UIPopoverPresentationController *)strongSelf];
 			}

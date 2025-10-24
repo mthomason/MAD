@@ -132,18 +132,16 @@
 		MADReceiptViewController *strongself = weakself;
 		if (error != nil) {
 			UIAlertController *alert = [MADAlertController newAlertControllerError:error];
-			[strongself presentViewController:alert animated:YES completion:^{
-				
-			}];
+			[strongself presentViewController:alert animated:YES completion:nil];
 		} else {
 			UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Purchases Restored", @"Purchases Restored")
 																		   message: NSLocalizedString(@"Restored purchases for your account.", @"Restored purchases for your account.")
 																	preferredStyle: UIAlertControllerStyleAlert];
 			UIAlertAction *dismissAction = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
 																	style: UIAlertActionStyleDefault
-																  handler: NULL];
+																  handler: nil];
 			[alert addAction:dismissAction];
-			[strongself presentViewController:alert animated:YES completion:NULL];
+			[strongself presentViewController:alert animated:YES completion:nil];
 		}
 		[strongself.tableView reloadData];
 	}];
