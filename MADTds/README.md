@@ -73,7 +73,7 @@ MADTds/                        - Core framework source
 ├── MADTds.h                   - Framework entry point
 ├── MADTdsDb.h                 - Database connection interface
 ├── MADTdsDb.m                 - Database connection implementation
-madtds/madtds.docc/            - Documentation for the framework
+madtds/MADTds.docc/            - Documentation for the framework
 freetds/                       - Bundled FreeTDS library
 ├── lib/include/               - Header files for FreeTDS
 ├── lib/libct.a                - FreeTDS Client Library
@@ -100,7 +100,7 @@ README.md                      - Project documentation
 
 ## Documentation
 
-Documentation is available in the `madtds/madtds.docc` folder. To view the documentation:
+Documentation is available in the `madtds/MADTds.docc` folder. To view the documentation:
 1. Open `MADTds.xcodeproj` in Xcode.
 2. Go to the **Product > Build Documentation** menu.
 

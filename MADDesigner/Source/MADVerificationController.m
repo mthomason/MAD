@@ -138,9 +138,12 @@ static MADVerificationController *sharedSingleton;
 }
 
 - (void)refreshReceipt {
+#if DEBUG
+#else
 	SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
 	request.delegate = self;
 	[request start];
+#endif
 }
 
 - (void)refreshReceipt:(MADCompletionSuccessError)completion {

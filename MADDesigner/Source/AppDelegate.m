@@ -53,7 +53,11 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 #pragma mark - MADApplicationProtocol
 
 + (NSString *)groupIdentifier {
+#if DEBUG
+	return @"group.everydayapps.mad.local";
+#else
 	return @"group.everydayapps.mad";
+#endif
 }
 
 + (NSString *)ubiquityIdentifier {

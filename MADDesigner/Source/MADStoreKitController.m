@@ -38,8 +38,11 @@ NSString * const MTStoreKitIdentifierReceiptExpirationDate              = @"expe
 NSString * const MTStoreKitIdentifierReceiptHash                        = @"hash";
 NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inapppurchases";
 
-
+#if DEBUG
+@interface MADStoreKitController ()
+#else
 @interface MADStoreKitController () <SKPaymentTransactionObserver, SKProductsRequestDelegate>
+#endif
 
 @property(nonatomic, assign) BOOL purchasingProduct;
 @property(nonatomic, assign) BOOL restoringPurchases;
@@ -94,7 +97,10 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 
 - (instancetype)init {
 	if (self = [super init]) {
+#if DEBUG
+#else
 		[[SKPaymentQueue defaultQueue] addTransactionObserver: self];
+#endif
 	}
 	return self;
 }
@@ -106,11 +112,14 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 		self.initializeProductsCompletion = [completion copy];
 		self.productIdentifiers = productIdentifiers;
 		
+#if DEBUG
+#else
 		NSSet *productIdSet = [NSSet setWithArray:self.productIdentifiers];
 		SKProductsRequest *request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdSet];
 		request.delegate = self;
 		[request start];
-		
+#endif
+
 	} else if (self.products.count == 0) {
 		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : @"Product Load Failed",
 									NSLocalizedFailureReasonErrorKey : @"Try again later."};
@@ -124,9 +133,11 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 	self.purchasingProduct = YES;
 	self.purchasingProductObject = product;
 	self.purchaseProductWithIdentifierCompletion = [completion copy];
-	
+#if DEBUG
+#else
 	SKPayment *payment = [SKPayment paymentWithProduct:product];
 	[[SKPaymentQueue defaultQueue] addPayment:payment];
+#endif
 }
 
 - (void)restorePurchases:(MTBlockCompletion)completion {
@@ -166,6 +177,9 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 
 #pragma mark - SKRequestDelegate Protocol
 
+#if DEBUG
+#else
+
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
 	if (self.initializeProductsCompletion) {
 		self.initializeProductsCompletion(NO, error);
@@ -178,11 +192,21 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 	}
 }
 
+#endif
+
 #pragma mark - SKProductsRequestDelegate Protocol
+
+#if DEBUG
+#else
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
 	self.products = [NSArray arrayWithArray:response.products];
 }
+
+#endif
+
+#if DEBUG
+#else
 
 #pragma mark - SKPaymentTransactionObserver Protocol
 
@@ -235,5 +259,7 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error { }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue { }
+
+#endif
 
 @end

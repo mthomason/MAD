@@ -43,7 +43,11 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 }
 
 + (NSString *)groupIdentifier {
+#if DEBUG
+	return @"group.everydayapps.mad.local";
+#else
 	return @"group.everydayapps.mad";
+#endif
 }
 
 + (NSString *)ubiquityIdentifier {

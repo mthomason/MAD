@@ -226,7 +226,6 @@
 		4C4020FF1BAE98C300BAE5FC /* MADViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */; };
 		4C4021001BAE98C300BAE5FC /* MADReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */; };
 		4C4021011BAE98C300BAE5FC /* MADDocumentPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */; };
-		4C453FC72E25D6E200641E6E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C453FC62E25D6E200641E6E /* StoreKit.framework */; };
 		4C453FC92E25DB4000641E6E /* MAD Designer.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4C453FC82E25DB4000641E6E /* MAD Designer.storekit */; };
 		4C453FCA2E25DB4000641E6E /* MAD Designer.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4C453FC82E25DB4000641E6E /* MAD Designer.storekit */; };
 		4C459A342E8F8B3100F078CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C459A332E8F8B3100F078CF /* LaunchScreen.storyboard */; };
@@ -834,7 +833,6 @@
 		4C4020FC1BAE98C300BAE5FC /* MADReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportPageView.m; sourceTree = "<group>"; };
 		4C4020FD1BAE98C300BAE5FC /* MADDocumentPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentPageController.h; sourceTree = "<group>"; };
 		4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentPageController.m; sourceTree = "<group>"; };
-		4C453FC62E25D6E200641E6E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C453FC82E25DB4000641E6E /* MAD Designer.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "MAD Designer.storekit"; sourceTree = "<group>"; };
 		4C459A332E8F8B3100F078CF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C4754581CF41FF000BC9E02 /* MADExplorerControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerControllerProtocol.h; sourceTree = "<group>"; };
@@ -887,6 +885,7 @@
 		4C5C0DC41C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionPolarQuestionAffirmativeResult.m; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
 		4C60C5B51BB0A1CC004D9758 /* MADExplorer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADExplorer.storyboard; sourceTree = "<group>"; };
+		4C63B02E306AB71200FE4ECE /* MAD DesignerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MAD DesignerDebug.entitlements"; sourceTree = "<group>"; };
 		4C6895142CF1DCE300BD38DF /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C692B351E1D0A1400DC2CB0 /* MADNavigationControllerViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerViewer.h; sourceTree = "<group>"; };
 		4C692B361E1D0A1400DC2CB0 /* MADNavigationControllerViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerViewer.m; sourceTree = "<group>"; };
@@ -1172,7 +1171,6 @@
 				4C29161524AC75E300EC794B /* MADAPI.framework in Frameworks */,
 				4C29162724AC75E400EC794B /* MADSqlite3.framework in Frameworks */,
 				4C29161324AC75E300EC794B /* MAD.framework in Frameworks */,
-				4C453FC72E25D6E200641E6E /* StoreKit.framework in Frameworks */,
 				4C29162124AC75E400EC794B /* MADFileManager.framework in Frameworks */,
 				4C29161924AC75E300EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C29161724AC75E300EC794B /* MADBarcodes.framework in Frameworks */,
@@ -1894,6 +1892,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C63B02E306AB71200FE4ECE /* MAD DesignerDebug.entitlements */,
 				4C296A7B2EA4CEF6007DB66E /* Resources */,
 				4C296A782EA4A160007DB66E /* Source */,
 				4CE5FFA22EA4D8490041E101 /* Targets */,
@@ -2031,7 +2030,6 @@
 				4C384E2814B29789007B4F48 /* UIKit.framework */,
 				4C384E2A14B29789007B4F48 /* Foundation.framework */,
 				4C384E2C14B29789007B4F48 /* CoreGraphics.framework */,
-				4C453FC62E25D6E200641E6E /* StoreKit.framework */,
 				4C3186302DE2018E0007DDA2 /* UserNotifications.framework */,
 				4C6895142CF1DCE300BD38DF /* MADTds.framework */,
 				4CD0C1942C50AD3700CB4233 /* MADFoundation.framework */,
@@ -2696,7 +2694,6 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADViewer/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2748,7 +2745,6 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = MADStack/MADViewer/info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2837,7 +2833,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/include\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -2897,7 +2893,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/include\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -2927,10 +2923,10 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "Resources/SupportingFiles/MAD Designer.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "MAD DesignerDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = D3C58YS54A;
+				DEVELOPMENT_TEAM = 25858PHWZ7;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -2953,7 +2949,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "MAD Designer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2963,7 +2958,7 @@
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../Compressor/library/openssl/iOS-simulator/lib\"";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.designer.local;
 				PRODUCT_NAME = "MAD Designer";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3020,7 +3015,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "MAD Designer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_OUTPUT_FORMAT = XML;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
