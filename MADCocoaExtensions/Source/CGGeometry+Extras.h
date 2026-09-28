@@ -88,15 +88,15 @@ static inline CGSize CGSizeFingerDefault(void);
 static inline MADLine CGLineMake(CGFloat, CGFloat);
 static inline CGPoint CGPointContentOffsetTopOfRect(CGRect);
 static inline CGPoint CGPointContentOffsetBottomOfRect(CGRect, CGRect);
-static inline BOOL CGRectAboveRect(CGRect, CGRect);
-static inline BOOL CGRectBelowRect(CGRect, CGRect);
+__attribute__((unused)) static inline BOOL CGRectAboveRect(CGRect, CGRect);
+__attribute__((unused)) static inline BOOL CGRectBelowRect(CGRect, CGRect);
 static inline CGPoint CGCenterOfRect(CGRect);
-static inline CGPoint CGRandomPointInRect(CGRect);
-static inline CGRect CGRectForDesiredRect(CGRect, CGRect);
+__attribute__((unused)) static inline CGPoint CGRandomPointInRect(CGRect);
+__attribute__((unused)) static inline CGRect CGRectForDesiredRect(CGRect, CGRect);
 static inline CGPoint CGPointMakeRandomOffscreen(CGFloat);
-static inline CGRect CGRectFrameAtRandomOffscreenLocation(CGSize);
-static inline CGPoint CGPointCenterOfTileInsideRect(CGRect, CGRect, NSInteger, NSInteger, NSInteger, NSInteger, CGFloat, CGFloat);
-static inline CGPoint CGPointRoundPointToGrid(CGPoint);
+__attribute__((unused)) static inline CGRect CGRectFrameAtRandomOffscreenLocation(CGSize);
+__attribute__((unused)) static inline CGPoint CGPointCenterOfTileInsideRect(CGRect, CGRect, NSInteger, NSInteger, NSInteger, NSInteger, CGFloat, CGFloat);
+__attribute__((unused)) static inline CGPoint CGPointRoundPointToGrid(CGPoint);
 static inline CGPoint CGCornerTopLeftPointInRect(CGRect);
 static inline CGPoint CGCornerTopRightPointInRect(CGRect);
 static inline CGPoint CGCornerBottomLeftPointInRect(CGRect);
@@ -106,18 +106,18 @@ static inline CGPoint CGEdgeTopPointInRect(CGRect);
 static inline CGPoint CGEdgeRightPointInRect(CGRect);
 static inline CGPoint CGEdgeBottomPointInRect(CGRect);
 static inline CGPoint CGEdgeLeftPointInRect(CGRect);
-static inline double MGPointsForInches(double);
+__attribute__((unused)) static inline double MGPointsForInches(double);
 static inline CGFloat fCGPointsForInches(CGFloat);
 static inline CGFloat CGFloatPointsForMillimeters(CGFloat);
-static inline CGFloat CGFloatInchesForPoints(CGFloat);
-static inline CGFloat CGFloatInchesForCentmeters(CGFloat);
-static inline CGFloat CGFloatCentemetersForInches(CGFloat);
-static inline double CGRateOfChange(CGPoint, CGPoint, NSTimeInterval, NSTimeInterval);
-static inline CGPoint CGSlide(CGFloat, CGPoint, CGPoint);
-static inline CGPoint CGLineIntercept(CGPoint, CGPoint, CGPoint, CGPoint);
-static inline CGFloat CGFloatMax(CGFloat, CGFloat);
-static inline CGFloat CGFloatMin(CGFloat, CGFloat);
-static inline BOOL CGSegmentIntercept(CGPoint, CGPoint, CGPoint, CGPoint);
+__attribute__((unused)) static inline CGFloat CGFloatInchesForPoints(CGFloat);
+__attribute__((unused)) static inline CGFloat CGFloatInchesForCentmeters(CGFloat);
+__attribute__((unused)) static inline CGFloat CGFloatCentemetersForInches(CGFloat);
+__attribute__((unused)) static inline double CGRateOfChange(CGPoint, CGPoint, NSTimeInterval, NSTimeInterval);
+__attribute__((unused)) static inline CGPoint CGSlide(CGFloat, CGPoint, CGPoint);
+__attribute__((unused)) static inline CGPoint CGLineIntercept(CGPoint, CGPoint, CGPoint, CGPoint);
+__attribute__((unused)) static inline BOOL CGSegmentIntercept(CGPoint, CGPoint, CGPoint, CGPoint);
+static inline CGRect CGRectAdjustForScale(CGRect, CGFloat);
+__attribute__((unused)) static inline double CGDirectionInDegreesFromVelocity(CGPoint);
 
 static inline double square (double x) { return ( (x) * (x) ); }
 static inline MADReportPosition MADReportPositionMake(NSUInteger c, NSUInteger t) { MADReportPosition p; p.currentPage = c; p.totalPages = t; return p; }
@@ -200,9 +200,9 @@ static inline CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect conta
 }
 
 static inline CGFloat CGDelta(CGFloat f1, CGFloat f2) { return f2 - f1; }
-static inline double CGDirectionInDegreesFromVelocity(CGPoint);
-static inline CGRect CGRectAdjustForScale(CGRect, CGFloat);
-static inline double CGDirectionInDegreesFromVelocity(CGPoint velocity) { return atan2(velocity.y, velocity.x); }
+
+__attribute__((unused)) static inline double CGDirectionInDegreesFromVelocity(CGPoint velocity) { return atan2(velocity.y, velocity.x); }
+
 static inline CGRect CGRectAdjustForScale(CGRect r, CGFloat zoomScale) {
 	CGFloat scale = 1.0 / zoomScale;
 	if ( isless(scale, 1.0) ) {
@@ -219,11 +219,11 @@ static inline CGRect CGRectAdjustForScale(CGRect r, CGFloat zoomScale) {
 	return r;
 }
 
-static inline BOOL CGRectAboveRect(CGRect r1, CGRect r2) {
+__attribute__((unused)) static inline BOOL CGRectAboveRect(CGRect r1, CGRect r2) {
 	return r1.origin.y + r1.size.height < r2.origin.y;
 }
 
-static inline BOOL CGRectBelowRect(CGRect r1, CGRect r2) {
+__attribute__((unused)) static inline BOOL CGRectBelowRect(CGRect r1, CGRect r2) {
 	return r1.origin.y > r2.origin.y + r2.size.height;
 }
 
@@ -231,12 +231,12 @@ static inline CGPoint CGCenterOfRect(CGRect r) {
 	return CGPointMake(r.origin.x + (r.size.width / 2.0), r.origin.y + (r.size.height / 2.0));
 }
 
-static inline CGPoint CGRandomPointInRect(CGRect r) {
+__attribute__((unused)) static inline CGPoint CGRandomPointInRect(CGRect r) {
 	return CGPointMake((arc4random() % (uint32_t)fabs(r.origin.x + r.size.width + 1.0)) + (uint32_t)r.origin.x,
 					   (arc4random() % (uint32_t)fabs(r.origin.y + r.size.height + 1.0)) + (uint32_t)r.origin.y);
 }
 
-static inline CGRect CGRectForDesiredRect(CGRect f, CGRect b) {
+__attribute__((unused)) static inline CGRect CGRectForDesiredRect(CGRect f, CGRect b) {
 	if (CGRectContainsRect(b, f) == NO) {
 		
 		//Is it to the left?
@@ -272,20 +272,20 @@ static inline CGPoint CGPointMakeRandomOffscreen(CGFloat offSetSize) {
 			CGPointMake(MADFloat_1024 + offSetSize, arc4random_uniform((uint32_t)MADFloat_1024)));
 }
 
-static inline CGRect CGRectFrameAtRandomOffscreenLocation(CGSize s) {
+__attribute__((unused)) static inline CGRect CGRectFrameAtRandomOffscreenLocation(CGSize s) {
 	CGPoint offScreen = CGPointMakeRandomOffscreen(400.0);
 	return CGRectMake(offScreen.x, offScreen.y, s.width, s.height);
 }
 
-static inline CGPoint CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom) {
+__attribute__((unused)) static inline CGPoint CGPointCenterOfTileInsideRect(CGRect tileRect, CGRect containerRect, NSInteger onRow, NSInteger ofRows, NSInteger andOnCol, NSInteger ofCols, CGFloat withPaddingTop, CGFloat andPaddingBottom) {
 	containerRect = CGRectMake(containerRect.origin.x, containerRect.origin.y, containerRect.size.width, containerRect.size.height - withPaddingTop - andPaddingBottom);
-	CGFloat moveDistanceX = (containerRect.size.width - (tileRect.size.width * ofCols)) / (((ofCols - 1) * 2) + 2);
-	CGFloat moveDistanceY = (containerRect.size.height - (tileRect.size.height * ofRows)) / (((ofRows - 1) * 2) + 2);
-	return CGPointMake((tileRect.size.width * andOnCol) + (moveDistanceX * andOnCol * 2) + moveDistanceX,
-					   (tileRect.size.width * onRow) + (moveDistanceY * onRow * 2) + moveDistanceY + withPaddingTop);
+	CGFloat moveDistanceX = (containerRect.size.width - (tileRect.size.width * (CGFloat)ofCols)) / (CGFloat)(((ofCols - 1) * 2) + 2);
+	CGFloat moveDistanceY = (containerRect.size.height - (tileRect.size.height * (CGFloat)ofRows)) / (CGFloat)(((ofRows - 1) * 2) + 2);
+	return CGPointMake((tileRect.size.width * (CGFloat)andOnCol) + (moveDistanceX * (CGFloat)andOnCol * 2) + moveDistanceX,
+					   (tileRect.size.width * (CGFloat)onRow) + (moveDistanceY * (CGFloat)onRow * 2) + moveDistanceY + withPaddingTop);
 }
 
-static inline CGPoint CGPointRoundPointToGrid(CGPoint p) {
+__attribute__((unused)) static inline CGPoint CGPointRoundPointToGrid(CGPoint p) {
 	return CGPointMake((CGFloat)round(p.x / 10.0) * 10.0, (CGFloat)round(p.y / 10.0) * 10.0);
 }
 
@@ -301,41 +301,38 @@ static inline CGPoint CGEdgeBottomPointInRect(CGRect frame) { return CGPointMake
 
 static inline CGPoint CGEdgeLeftPointInRect(CGRect frame) { return CGPointMake(frame.origin.x, frame.origin.y + (frame.size.height / 2.0)); }
 
-static inline double MGPointsForInches(double inches) { return inches * 72.0; }
+__attribute__((unused)) static inline double MGPointsForInches(double inches) { return inches * 72.0; }
 
 static inline CGFloat fCGPointsForInches(CGFloat inches) { return inches * 72.00000f; }
 
 static inline CGFloat CGFloatPointsForMillimeters(CGFloat millimeters) { return millimeters * 0.0393701f * 72.0; }
 
-static inline CGFloat CGFloatInchesForPoints(CGFloat points) { return points / 72.0; }
+__attribute__((unused)) static inline CGFloat CGFloatInchesForPoints(CGFloat points) { return points / 72.0; }
 
-static inline CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) { return centemeters / 2.54; }
+__attribute__((unused)) static inline CGFloat CGFloatInchesForCentmeters(CGFloat centemeters) { return centemeters / 2.54; }
 
-static inline CGFloat CGFloatCentemetersForInches(CGFloat inches) { return inches * 2.54; }
+__attribute__((unused)) static inline CGFloat CGFloatCentemetersForInches(CGFloat inches) { return inches * 2.54; }
 
-static inline double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
+__attribute__((unused)) static inline double CGRateOfChange(CGPoint p1, CGPoint p2, NSTimeInterval t1, NSTimeInterval t2) {
 	if (t2 - t1 != 0) return (MADDistance(p1, p2) / (CGFloat)((t2 - t1) * 3));
 	else return 0;
 }
 
-static inline CGPoint CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2) {
+__attribute__((unused)) static inline CGPoint CGSlide(CGFloat rateOfChange, CGPoint p1, CGPoint p2) {
 	if (rateOfChange <= 0) { rateOfChange = 1; }
 	CGPoint c = CGYInversePlusDistance(p1, p2, rateOfChange);
 	if (!isnan(c.x) && !isnan(c.y)) { c.y = (-1) * (c.y); }
 	return c;
 }
 
-static inline CGPoint CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
+__attribute__((unused)) static inline CGPoint CGLineIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
 	return CGPointMake(
 						( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.x - p2b.x) - ((  p1a.x  -    p1b.x) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ),
 					   -( (p1a.x * (-p1b.y) - (-p1a.y) * p1b.x) * (p2a.y - p2b.y) - (((-p1a.y) - (-p1b.y)) * (p2a.x *p2b.y -p2a.y * p2b.x) ) ) / ( (p1a.x - p1b.x) * (p2a.y - p2b.y) - ( ( (-p1a.y) - (-p1b.y) ) * (p2a.x - p2b.x) ) ) );
 	
 }
 
-static inline CGFloat CGFloatMax(CGFloat n1, CGFloat n2) { return n1 > n2 ? n1 : n2; }
-static inline CGFloat CGFloatMin(CGFloat n1, CGFloat n2) { return n1 < n2 ? n1 : n2; }
-
-static inline BOOL CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
+__attribute__((unused)) static inline BOOL CGSegmentIntercept(CGPoint p1a, CGPoint p1b, CGPoint p2a, CGPoint p2b) {
 	
 	BOOL result = NO;
 
