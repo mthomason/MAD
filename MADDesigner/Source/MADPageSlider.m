@@ -74,7 +74,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 + (CGFloat)distanceBetweenTicks:(NSUInteger)numberOfTicks height:(CGFloat)height
 						padding:(CGFloat)padding rect:(CGRect)rect {
-	return numberOfTicks > 1 ? ((rect.size.height - padding * 2) / numberOfTicks) - height : CGSizeZero.height;
+	return numberOfTicks > 1 ? ((rect.size.height - padding * 2) / (CGFloat)numberOfTicks) - height : CGSizeZero.height;
 }
 
 #pragma mark -
@@ -165,11 +165,11 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 
 	// Position the labels
 	CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
-	double tickValue = numberOfTicks > 1 ? self.maximumValue / (numberOfTicks - 1) : 1;
+	double tickValue = numberOfTicks > 1 ? self.maximumValue / (float)(numberOfTicks - 1) : 1;
 	for (NSUInteger i = 0; i < numberOfTicks; i++) {
 		if (i % 2 == 0) {
 			MADLabelPageSlider *label = [[MADLabelPageSlider alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, rect.size.width, _stringHeight)];
-			label.pageNumber = (NSUInteger)roundl(i * tickValue + 1);
+			label.pageNumber = (NSUInteger)roundl((long double)i * tickValue + 1);
 			label.enabled = _enabledColor;
 			[label translateToPoint:CGPointMake(drawingPoint.x, drawingPoint.y + offsetTopBottom)];
 			[self addSubview:label];

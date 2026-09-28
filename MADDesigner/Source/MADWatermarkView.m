@@ -34,14 +34,14 @@ static inline CGFloat LogoPointOriginXOffset(CGFloat marginWidth, CGSize string)
 
 static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, BOOL moveLeft);
 static inline CGFloat LogoPointOriginX(NSUInteger columnCounter, CGFloat marginWidth, CGSize string, BOOL moveLeft) {
-    return ((columnCounter * 2) + 1) * marginWidth + columnCounter * string.width +
+    return (CGFloat)((columnCounter * 2) + 1) * marginWidth + (CGFloat)columnCounter * string.width +
     (LogoPointOriginXOffset(marginWidth, string) * (moveLeft ? -1 : 2));
 }
 
 static inline CGFloat LogoPointOriginY(NSUInteger rowCounter, CGFloat marginHeight, const CGSize strings[2]);
 static inline CGFloat LogoPointOriginY(NSUInteger rowCounter, CGFloat marginHeight, const CGSize strings[2]) {
-    return ((rowCounter * 2) + 1) * marginHeight +
-            rowCounter * strings[0].height +
+    return (CGFloat)((rowCounter * 2) + 1) * marginHeight +
+            (CGFloat)rowCounter * strings[0].height +
             strings[1].height +
             (marginHeight / 2.0 - strings[0].height / 2.0 - 150.0);
 }

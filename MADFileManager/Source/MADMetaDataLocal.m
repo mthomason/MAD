@@ -11,6 +11,7 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSMetadataAttributes.h>
 #import <MobileCoreServices/UTType.h>
+#import <UniformTypeIdentifiers/UTType.h>
 
 @interface MADMetaDataLocal ()
 
@@ -79,14 +80,14 @@
 }
 
 - (NSString *)contentType {
-	NSString * __nonnull pathExtension = (_origionalURL.pathExtension) ?
-										 (NSString * __nonnull)_origionalURL.pathExtension :@"";
-	__nullable CFStringRef cfkey;
-	cfkey = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
-												  (__bridge CFStringRef)pathExtension,
-												  NULL);
-	id key = CFBridgingRelease(cfkey);
-	return key;
+	if (!_origionalURL) return nil;
+	NSString *pathExtension = _origionalURL.pathExtension;
+	if (!pathExtension || pathExtension.length == 0) {
+		return nil;
+	}
+	
+	UTType *type = [UTType typeWithFilenameExtension:pathExtension];
+	return type.identifier;
 }
 
 - (NSString *)ubiquitousItemContainerDisplayName {

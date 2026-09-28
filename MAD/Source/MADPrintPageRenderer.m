@@ -153,59 +153,6 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	CGPathRelease(path);
 }
 
-+ (void)drawWatermarkWithContext:(CGContextRef)ctx
-					  inPageRect:(CGRect)pageRect {
-	
-	UIFont *customFont = [UIFont boldSystemFontOfSize:12.0];
-	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-	paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-	paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-	paragraphStyle.alignment = NSTextAlignmentCenter;
-	
-	UIColor *strokeColor = [[UIColor alloc] initWithRed:170.0/256.0 green:170.0/256.0 blue:170.0/256.0 alpha:0.8000f];
-	UIColor *foregroundColor = [[UIColor alloc] initWithRed:85.0/256.0 green:85.0/256.0 blue:85.0/256.0 alpha:0.8];
-	NSNumber *strokeWidth = @3.0;
-	NSDictionary *results = @{
-		NSFontAttributeName : customFont,
-		NSStrokeWidthAttributeName : strokeWidth,
-		NSStrokeColorAttributeName : strokeColor,
-		NSForegroundColorAttributeName : foregroundColor,
-		NSParagraphStyleAttributeName: paragraphStyle
-	};
-	NSString *getMadS = @"Get MAD Viewer!\nOpen and View MAD Documents";
-	NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS
-																 attributes: results];
-	
-	NSInteger rowCounter = 0, columnCounter = 0;
-	CGSize logoSize = CGSizeMake(150.0, 50.0);
-	CGSize logoMargin = CGSizeMake(25.0, 25.0);
-	CGRect logoRect;
-	
-	do {
-		columnCounter = 0;
-		do {
-			
-			CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width;
-			CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height;
-			logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
-			
-			CGContextSaveGState(ctx);
-			{
-				static CGFloat angle315Degrees = 7.0 * (CGFloat)M_PI / 4.0;
-				CGContextTranslateCTM(ctx, x, columnCounter % 2 == 0 ?
-									  y :
-									  y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0));
-				CGContextRotateCTM(ctx, angle315Degrees);
-				[getMad drawInRect:CGRectMake(CGPointZero.x, CGPointZero.y, logoRect.size.width, logoRect.size.height)];
-			}
-			CGContextRestoreGState(ctx);
-			columnCounter++;
-		} while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
-		
-		rowCounter++;
-	} while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
-}
-
 #pragma -
 #pragma NSObject
 
@@ -217,8 +164,6 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
 	if (self = [super init]) {
 		self.datasource = datasource;
-		
-		_showWaterMark = NO;
 		_accessibilityCacheNeedsUpdate = NO;
 		
 		NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *>alloc] init];
@@ -346,13 +291,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
 	[MADPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
-	
 	[self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
-
-	if (_showWaterMark) {
-		[MADPrintPageRenderer drawWatermarkWithContext: ctx inPageRect: pageRect];
-	}
-
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex

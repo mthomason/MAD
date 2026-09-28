@@ -254,7 +254,7 @@
 							strongSelf, strongSelf.name, tableName, (unsigned long)(counter + 1), (unsigned long)numberOfTables);
 				
 				[strongSelf.parentOperation updateImportProgressWithMessage: tableName
-																   progress: (counter + 1) / numberOfTables];
+																   progress: (float)(counter + 1) / (float)numberOfTables];
 				
 				NSError *getFieldsError = nil;
 				NSArray *fieldsForTable = [document.database fieldsForTable: tableName

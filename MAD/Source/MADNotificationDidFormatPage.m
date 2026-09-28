@@ -71,15 +71,13 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
 - (void)reportFormatter:(MADReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
 	if (page % _pageInterval == 0) {
 		if (page == 0) _pageInterval = _pageIntervalInital;
-		NSDictionary <NSString *, NSNumber *> *parameters;
-		parameters = [self parametersWithNumberOfPages:page];
-		NSNotification *notification;
-		notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName
-													 object:reportFormatter userInfo:parameters];
+		NSDictionary <NSString *, NSNumber *> *parameters = [self parametersWithNumberOfPages:page];
+		NSNotification *notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName
+																	 object:reportFormatter userInfo:parameters];
 		[[NSNotificationCenter defaultCenter] postNotification:notification];
 		if (_pageInterval < _pageIntervalInitalMax) {
 			if (page > _pageInterval) {
-				_pageInterval = (unsigned long)ceil(_pageInterval * 1.1);
+				_pageInterval = (unsigned long)ceil((double)_pageInterval * 1.1);
 			}
 		}
 	}

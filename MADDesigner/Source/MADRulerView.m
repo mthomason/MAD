@@ -25,7 +25,7 @@ static inline double eigthInchInPoints(void);
 
 static inline double cmInPoints(void) { return (72.0 / 1.0) / 2.54; }
 static inline double eigthInchInPoints(void) { return 72.0 / 8.0; }
-static inline double xPoint(NSInteger i, double offset) { return i * offset; }
+static inline double xPoint(NSInteger i, double offset) { return (double)i * offset; }
 
 @interface MADRulerView ()
 	@property (readwrite, nonatomic, strong) NSParagraphStyle *paragraphStyle;
@@ -81,13 +81,13 @@ static inline double xPoint(NSInteger i, double offset) { return i * offset; }
 	CGRect locationRect;
 	CGFloat thinLineWidth = 1.0 / self.traitCollection.displayScale;
 	static const CGFloat lineWidth = 1.0;
-	for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / eigthInchInPoints(); i++) {
+	for (NSInteger i = (NSInteger)CGPointZero.x; (double)i < rect.size.width / eigthInchInPoints(); i++) {
 		@autoreleasepool {
 			if ((i % 8) == 0) {
 				locationRect = CGRectMake((CGFloat)xPoint(i, eigthInchInPoints()) - 5.0,
 										  rect.size.height - 8.0,
 										  10.0, 5.0);
-				s = [[NSString alloc] initWithFormat:@"%Lf", (long)i / 8.0L];
+				s = [[NSString alloc] initWithFormat:@"%Lf", (long double)i / 8.0L];
 				[s drawInRect:locationRect withAttributes:attributes];
 				length = 1.0;
 				CGContextSetLineWidth(currentContext, lineWidth * 2.0);

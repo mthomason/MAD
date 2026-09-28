@@ -61,7 +61,7 @@
 		maxWidthForSection = CGSizeZero.width; maxHeightForSection = CGSizeZero.height;
 		layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
 		
-		sectionY = CGPointZero.y + sectionHeight * section;
+		sectionY = CGPointZero.y + sectionHeight * (CGFloat)section;
 		
 		UICollectionViewLayoutAttributes *itemAttributes;
 		for (item = 0; item < numberOfItems; item++) {
@@ -184,7 +184,7 @@
 											   sizeForItemAtIndexPath: layoutAttributes.indexPath];
 			}
 			
-			CGFloat sectionY = CGPointZero.y + sectionHeight * layoutAttributes.indexPath.section;
+			CGFloat sectionY = CGPointZero.y + sectionHeight * (CGFloat)layoutAttributes.indexPath.section;
 			layoutAttributes.frame = CGRectMake(maxWidthForSection, sectionY,
 												layoutAttributes.size.width,
 												layoutAttributes.size.height);
