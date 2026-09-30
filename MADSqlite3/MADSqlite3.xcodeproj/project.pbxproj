@@ -11,6 +11,8 @@
 		4C11F1471BA9008D00EC2C58 /* MADSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C11F14E1BA9008D00EC2C58 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11F1431BA9008D00EC2C58 /* MADSqlite3.framework */; };
 		4C11F1531BA9008D00EC2C58 /* MADSqlite3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */; };
+		4CDA7B0100000000000000B2 /* MADDatabaseSqlite3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */; };
+		4CDA7B0200000000000000B2 /* MADDatabaseSqlite3DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */; };
 		4C29159824AC61D900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159724AC61D900EC794B /* MADFoundation.framework */; };
 		4C29159C24AC61E500EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159B24AC61E500EC794B /* MADDataStructures.framework */; };
 		4C29159F24AC61F600EC794B /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159E24AC61F600EC794B /* MADAPI.framework */; };
@@ -96,6 +98,8 @@
 		4C11F1481BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C11F14D1BA9008D00EC2C58 /* MADSqlite3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADSqlite3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSqlite3Tests.m; sourceTree = "<group>"; };
+		4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3Tests.m; sourceTree = "<group>"; };
+		4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3DatabaseTests.m; sourceTree = "<group>"; };
 		4C11F1541BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C29159724AC61D900EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C29159B24AC61E500EC794B /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,6 +219,8 @@
 			isa = PBXGroup;
 			children = (
 				4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */,
+				4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */,
+				4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */,
 				4C11F1541BA9008D00EC2C58 /* Info.plist */,
 			);
 			path = MADSqlite3Tests;
@@ -499,6 +505,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C11F1531BA9008D00EC2C58 /* MADSqlite3Tests.m in Sources */,
+				4CDA7B0100000000000000B2 /* MADDatabaseSqlite3Tests.m in Sources */,
+				4CDA7B0200000000000000B2 /* MADDatabaseSqlite3DatabaseTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,6 +737,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Source";
 				INFOPLIST_FILE = MADSqlite3Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -749,6 +758,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Source";
 				INFOPLIST_FILE = MADSqlite3Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
