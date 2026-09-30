@@ -285,11 +285,11 @@
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
-	MADDataTable *dataTable;
+	MADDataTable *dataTable = nil;
 	if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
 		((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
 		dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
-	} else {
+	} else if ([self.delegate respondsToSelector:@selector(dataTableForQuery:)]) {
 		dataTable = [self.delegate dataTableForQuery:query];
 	}
 	NSError *executeError = nil;
@@ -410,7 +410,10 @@
 #pragma mark MADMySQLFetchProtocol
 
 - (MADDataTable *)dataTableForQuery:(MADQuery *)query {
-	return [self.delegate dataTableForQuery:query];
+	if ([self.delegate respondsToSelector:@selector(dataTableForQuery:)]) {
+		return [self.delegate dataTableForQuery:query];
+	}
+	return nil;
 }
 
 - (void)didFetchRow:(NSUInteger)row {

@@ -306,11 +306,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
-	MADDataTable *dataTable;
+	MADDataTable *dataTable = nil;
 	if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
 		((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
 		dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
-	} else {
+	} else if ([self.delegate respondsToSelector:@selector(dataTableForQuery:)]) {
 		dataTable = [self.delegate dataTableForQuery:query];
 	}
 	return [self executeQuery:query withDataTable:dataTable andError:error];

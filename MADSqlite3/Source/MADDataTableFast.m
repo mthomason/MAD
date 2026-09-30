@@ -980,11 +980,11 @@ static os_log_t mlog;
 		
 		MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 		
-		int sqlite3_prepare = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1, &statement, NULL) == SQLITE_OK;
-		
-		NSAssert(sqlite3_prepare != SQLITE_OK, @"%s", sqlite3_errmsg(databaseForSelects->_database));
-		if (sqlite3_prepare == SQLITE_OK) {
-			
+		int prepareResult = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1, &statement, NULL);
+
+		NSAssert(prepareResult == SQLITE_OK, @"%s", sqlite3_errmsg(databaseForSelects->_database));
+		if (prepareResult == SQLITE_OK) {
+
 			while (sqlite3_step(statement) == SQLITE_ROW) {
 				NSDictionary *currentObject = [self newCurrentObject:statement];
 				[results addObject:currentObject];

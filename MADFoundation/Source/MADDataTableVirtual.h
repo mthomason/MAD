@@ -13,6 +13,9 @@
 
 @interface MADDataTableVirtual : MADDataTable
 
+/// Indexed access to the rows, equivalent to -objectAtRow:.
+- (id)objectAtIndexedSubscript:(NSUInteger)index;
+
 @end
 
 #endif

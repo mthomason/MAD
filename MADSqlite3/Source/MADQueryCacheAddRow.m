@@ -16,6 +16,7 @@
 #import <string.h>
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSNull.h>
 
 #import <MADFoundation/madlib.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -69,6 +70,22 @@ static NSString * const SqlDelimitorObject = @", %@";
 	
 	[self.binaryBindings removeAllObjects];
 	NSUInteger columnKeysCount = columnKeys.count;
+
+	// The SQL below is built with "?" placeholders, so every column needs a
+	// binding or sqlite3_step() runs with the parameters unbound and stores
+	// NULL for each one.
+	NSDictionary <NSString *, MADDataColumn *> *columns = [delegate queryColumns];
+	for (NSUInteger columnCounter = 0; columnCounter < columnKeysCount; columnCounter++) {
+		MADDataColumn *column = columns[columnKeys[columnCounter]];
+		MADDataType datatype = column != nil ? column.type : MADDataTypeUnknown;
+		id value = columnCounter < rows.count ? rows[columnCounter] : [NSNull null];
+
+		MADDatabaseDataBinding *databinding = [[MADDatabaseDataBinding alloc] initWithDataType: datatype
+																					fieldIndex: columnCounter
+																						 value: value];
+		[self.binaryBindings addObject: databinding];
+	}
+
 	char buf[(count_digits_ul(columnKeysCount) + 3) * columnKeysCount + 1];
 	buf[0] = '?';
 	buf[1] = '\0';

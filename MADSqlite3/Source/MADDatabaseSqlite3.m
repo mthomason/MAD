@@ -605,11 +605,11 @@ void sqliteLog(void *foo, const char* statement) {
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
 
-	MADDataTable *dataTable;
+	MADDataTable *dataTable = nil;
 	if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
 		((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
 		dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
-	} else {
+	} else if ([self.delegate respondsToSelector:@selector(dataTableForQuery:)]) {
 		dataTable = [self.delegate dataTableForQuery:query];
 	}
 
