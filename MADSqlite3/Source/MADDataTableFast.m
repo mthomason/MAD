@@ -733,9 +733,16 @@ static os_log_t mlog;
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
 	NSDictionary *objForRow = [self objectAtRow:row];
-	NSString *key = self.columnKeys[0];
+	if (objForRow == nil || column >= self.columnKeys.count) {
+		return nil;
+	}
+	NSString *key = self.columnKeys[column];
 	MADDataColumn *columnMetaData = self.columns[key];
-	return objForRow[columnMetaData.fieldName];
+	if (columnMetaData == nil) {
+		return nil;
+	}
+	// -newCurrentObject: keys the row by MADDataColumn.identifier.
+	return objForRow[columnMetaData.identifier];
 }
 
 - (NSDictionary *)objectAtRow:(NSUInteger)row {

@@ -18,10 +18,15 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADDataFormatter.h>
 
 #import <MAD/MADSectionLayoutAttributes.h>
+#import <MAD/MADSectionsLayout.h>
 
 #import <MAD/MTPaper.h>
 #import <MAD/MADPrintPageRenderer.h>
 #import <MAD/MADReportFormatter.h>
+
+#import <MAD/MADDatabase+Constructor.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MAD/MADDataTable+Constructor.h>
 
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>

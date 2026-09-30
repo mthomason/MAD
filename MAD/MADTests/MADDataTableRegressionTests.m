@@ -258,7 +258,12 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 
 	BOOL threw = NO;
 	@try {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+		// The nil is the point of the test: the parameter is declared nonnull, so
+		// this deliberately breaks that contract to record what the guard does.
 		[table loadFromCacheWithUrl:(NSURL *)nil error:NULL];
+#pragma clang diagnostic pop
 	} @catch (id exception) {
 		threw = YES;
 		XCTAssertTrue([exception isKindOfClass:[NSError class]],
@@ -915,18 +920,53 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 				   @"A zero limit short-circuits.");
 }
 
-/// KNOWN DEFECT (locked down): -objectAtRow:column: ignores its column argument
-/// and always answers with column 0.  It is still correct for column 0; indexes
-/// past the first column return the first column's value rather than that
-/// column's.
-- (void)testFastTableObjectAtRowColumnIgnoresTheColumnArgument {
+/// CONTRACT: -objectAtRow:column: returns the value stored in the requested
+/// column at the requested row.  It used to answer from column 0 for every
+/// index.
+- (void)testFastTableObjectAtRowColumnReturnsTheRequestedColumn {
 	MADDataTableFast *table = [self newFastTableWithTag:112];
 
-	[self bulkInsertRows:@[@[@"alice", @30]] intoTable:table];
+	MADDataColumn *role = [[MADDataColumn alloc] initWithIdentifier:@"role"];
+	role.type = MADDataTypeString;
+	[table addColumn:role];
 
-	XCTAssertEqualObjects([table objectAtRow:0 column:0], @"alice");
-	XCTAssertEqualObjects([table objectAtRow:0 column:1], @"alice",
-						  @"Should be @30 - the column argument is ignored.");
+	[self bulkInsertRows:@[@[@"Alice", @30, @"Engineer"]] intoTable:table];
+
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], @"Alice");
+	XCTAssertEqualObjects([table objectAtRow:0 column:1], @30);
+	XCTAssertEqualObjects([table objectAtRow:0 column:2], @"Engineer");
+}
+
+/// CONTRACT: the column index is bounds checked.
+- (void)testFastTableObjectAtRowColumnOutOfBoundsReturnsNil {
+	MADDataTableFast *table = [self newFastTableWithTag:113];
+
+	[self bulkInsertRows:@[@[@"Alice", @30], @[@"Bob", @20]] intoTable:table];
+
+	XCTAssertEqual([table numberOfColumns], (NSUInteger)2);
+
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], @"Alice");
+	XCTAssertNil([table objectAtRow:0 column:2], @"One past the last column.");
+	XCTAssertNil([table objectAtRow:0 column:NSNotFound]);
+	XCTAssertNil([table objectAtRow:9 column:0], @"Row out of range.");
+}
+
+/// CONTRACT: -objectAtRow:column: agrees with the dictionaries the row accessors
+/// return, for every column.
+- (void)testFastTableObjectAtRowColumnAgreesWithRowDictionaries {
+	MADDataTableFast *table = [self newFastTableWithTag:114];
+
+	[self bulkInsertRows:@[@[@"Alice", @30], @[@"Bob", @20]] intoTable:table];
+
+	NSArray <NSString *> *fieldNames = @[@"name", @"age"];
+	for (NSUInteger row = 0; row < 2; row++) {
+		NSDictionary *rowDictionary = [table objectAtRow:row];
+		for (NSUInteger column = 0; column < fieldNames.count; column++) {
+			XCTAssertEqualObjects([table objectAtRow:row column:column],
+								  rowDictionary[fieldNames[column]],
+								  @"row %lu column %lu", (unsigned long)row, (unsigned long)column);
+		}
+	}
 }
 
 #pragma mark - MADDataTableFast: mutation
