@@ -143,16 +143,21 @@ author's own words:
 
 ---
 
-## 5. What is *not* in the document
+## 5. What is *not* in the document: the companion files
 
-**Row data.** The report's rows live in a `.maddb` SQLite cache, written by
-`MADDataTableFast` and addressed through `MADDataTable`.
+A `.mad` is a definition, not a dataset. Everything a report *displays* is derived,
+regenerable, and deliberately outside the archive. Three kinds of file are built beside it:
 
-That cache is deliberately *not* a member of the archive. `MADocument.m:286-300`
-builds it from a cache directory supplied by
-`MADURLFactory newURLCacheFilesDirectoryForFilename:` (`MADURLFactory.m:47-49`),
-which resolves to `NSCachesDirectory/<id>/<tag>.maddb` -- a per-user, per-device
-location outside the document:
+| File | Written by | What it holds |
+|---|---|---|
+| `<hash>.maddb` | `MADDataTableFast` | the report's row data |
+| `<hash>.mdcache` | `MADDataTable` (`:354`) | a plist describing the virtual tables over that data |
+| `<hash>{ih,lh}{w, h}.madac` | `MADArrayCaching`, fed by `MADReportFormatter` (`:179`, `:183`) | rendered page content, keyed by layout identifier and page size |
+
+All three live together in one directory per document, named by `dataTableIdHash`.
+`MADocument.m:286-300` builds the table from a directory supplied by
+`MADURLFactory newURLCacheFilesDirectoryForFilename:` (`MADURLFactory.m:47-49`), which
+resolves to a per-user, per-device location outside the document:
 
 ```objc
 MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:dataTableIdHash];
@@ -162,18 +167,51 @@ self.urlDataTableCache = cacheUrl;
 [datatable loadFromCacheWithUrl:cacheUrl error:&error];
 ```
 
-The consequences are worth stating plainly:
+### 5.1 The sizes are not what the name suggests
+
+Measured on a real cache directory under `Library/Caches/`:
+
+| Kind | Files | Total |
+|---|---|---|
+| `<hash>.maddb` | 1 | 816 KB |
+| `<hash>.mdcache` | 1 | 1.7 KB |
+| `<hash>{ih,lh}{...}.madac` | 6 | **~15 MB** |
+
+The `.madac` files are the formatter's page cache. The `ih` and `lh` keys come from
+`MADReportFormatter.m:179` and `:183`, which build `<layoutIdentifier>ih<CGSize>` and
+`<layoutIdentifier>lh<CGSize>`; `{612, 792}` is US Letter in points. So the cache is
+keyed by *layout identity and page geometry* -- which is what makes the two hazards
+in §5.3 real.
+
+Against a document under 80 KB, the render cache is roughly **200× the document**. The
+row data, which one would expect to dominate, is under 6% of the directory.
+
+### 5.2 The consequences
 
 - A `.mad` is **small and self-contained**: it is a definition, not a dataset. Both
   shipping samples are under 80 KB.
-- Data is **disposable**. Deleting a cache costs a refresh, never a document.
-- Data is **not shared** between devices, and is not in iCloud, even if the document
-  is. Every device re-fetches on first open.
-- `.mad` is therefore **not** the "compressed SQLite file with the data in it" it
-  might appear to be. It is a compressed SQLite file with the *definition* in it.
+- Everything in the cache directory is **disposable**. Deleting it costs a refresh,
+  never a document.
+- It is **not shared** between devices, and is not in iCloud, even if the document is.
+  Every device re-fetches on first open.
+- `.mad` is therefore **not** the "compressed SQLite file with the data in it" it might
+  appear to be. It is a compressed SQLite file with the *definition* in it.
 
-The name `<tag>.mdcache` (`MADDataTable.m:354`) is a sibling plist describing the
-virtual tables; it lives in the same cache directory, not in the document.
+### 5.3 What the companion files do not yet define
+
+The directory is named and populated but not specified. Three gaps, each of which a
+second platform would have to guess at:
+
+1. **Nothing says what invalidates the render cache.** Its key is layout identifier
+   plus page size; a document change that alters neither would, on the face of it,
+   reuse a stale page. Whether something else invalidates it is not written down, and
+   `MAD_FORMAT.md` §8.4 records the question rather than answering it.
+2. **Nothing says what may be deleted.** All three kinds are regenerable, so all three
+   should be safe — but a 0-byte `.maddb` in a directory otherwise untouched shows the
+   directory is created before it is filled, and nothing states whether such a
+   directory is meaningful.
+3. **The `.mdcache` plist has no documented schema.** It is the only companion file
+   that is not self-describing.
 
 ---
 
@@ -263,6 +301,10 @@ absence of the magic.
 3. **Should `.mad` carry the row cache optionally?** A "packed" variant would make a
    document openable offline on a second device at the cost of size. Nothing does
    this today; it is raised because the name invites the expectation (§5).
+4. **Is the render cache invalidated when the document changes?** Raised by §5.3. Its
+   key is layout identity and page size, so a change to element *content* that leaves
+   both alone could reuse a stale page, and nothing in the code or this document says
+   either way. This needs answering before the companion files can be called defined.
 
 ---
 
@@ -277,6 +319,14 @@ plutil -p /tmp/mad/meta.plist
 file /tmp/mad/StoreContent/analyitics
 ```
 
+The claims in §5 are reproducible from a device or simulator container:
+
+```sh
+ls -la ~/Library/Developer/CoreSimulator/Devices/<UDID>/data/Library/Caches/<dataTableIdHash>/
+```
+
 Any change to the format must extend the round-trip fixtures described in
 `MAD_CLI.md` §6, so that the definition in this file is pinned by a test rather than
-by this prose.
+by this prose. §5 is the part with no such fixture today — the companion files are
+described here from measurement, and nothing fails if the measurement stops being
+true.

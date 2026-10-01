@@ -7,7 +7,31 @@ is the engineering queue, `TODO.md` is the product wishlist. This one says which
 which of the three design documents written on 2026-10-01, get picked up next and why in that
 order. Work starts here when the user asks for a track by name or number.
 
-Written 2026-10-01, against `master` at `073bb2e24`.
+Written 2026-10-01 against `master` at `073bb2e24`; reordered the same day against `master` at
+`c6e5cab0f`, once the user settled what the core task is.
+
+---
+
+## The core task
+
+**Define the `.mad` document.** What it is today, what it should be, what travels with it,
+and how a reader on another platform opens it. Every other track in this file is either a step
+toward that or an instrument for seeing it.
+
+The user's words:
+
+> *"The core task is to define this `.mad` document; we also need to define the files related
+> to it... all the caches that are built... we need to understand what it is, and then define
+> what it will be, and then make it portable. Rebuilding static libraries at this point doesn't
+> get it closer to it."*
+
+Two consequences reorder the whole plan:
+
+- **The macOS library builds are not on the path.** Deferred 2026-10-01; Track 2 records why
+  the deferral costs nothing.
+- **The `mad` CLI is the instrument, not the product.** It does not ship. It exists so the
+  document can be read, exercised and tested with the app out of the way — which makes Track 3
+  a means and Track 4 the end.
 
 ---
 
@@ -15,31 +39,30 @@ Written 2026-10-01, against `master` at `073bb2e24`.
 
 Recorded so the plan can be read cold.
 
-**The repository is clean and backed up.** `master` and `refactor/mad-database-decouple` are
-both at `073bb2e24` and both pushed. `feature/mad-format-and-cli` was deleted after its work
-landed on `master`.
+**The repository is clean and backed up.** `master` is at `c6e5cab0f`, pushed. Track 1's fixes
+and Track 2.1's reconciliation have both landed on it, and the two merged working branches have
+been deleted.
 
 **The tree builds and the suite is broad.** `MAD Designer` builds. 885 test methods across 11
 suites, with `MADMySQL` and `MADTdsClient` carrying live suites that skip when no server is
 reachable. Both a MySQL and a SQL Server instance are available for live work, and the `mad`
 CLI can drive a report without the UI.
 
+**The format is already measured.** `MAD_FORMAT.md` describes the container, the store and the
+hazards from the two shipping samples, and states the normative target. What it treats thinly
+is the companion files — Track 4.1.
+
 **The registers are in much better shape than their headline counts suggest.** `BUGS.md` holds
 76 entries; 56 are fully fixed. Of the 20 that are not, **12 are documented deliberate
 non-defects** — load-bearing shapes recorded so nobody "fixes" them. That leaves roughly four
-genuinely open defects, listed in Track 1.
-
-**The remaining work is mostly planned and unstarted, not unknown.** Three design documents
-were written on 2026-10-01 — `MAD_FORMAT.md`, `MAD_CLI.md`, `LIBRARIES.md` — and the
-`MADDataTable` architecture report carries a six-phase migration whose phases 0–5 have largely
-landed. What is left is execution.
+genuinely open defects, all listed in Track 1.
 
 ---
 
-## Track 1 — Close the real bug backlog
+## Track 1 — Close the real bug backlog — **done 2026-10-01**
 
-**Start here.** The defects are few, they are understood, and every one of them is testable
-today against the live servers.
+Kept here because the evidence is worth being able to read without going to git. The full
+record, with tests, is in `BUGS.md`.
 
 ### 1.1 SQL Server loses every modern date/time value — **done 2026-10-01**
 
@@ -170,7 +193,7 @@ depend on it. They are recorded correctly and changing them would break working 
 
 ---
 
-## Track 2 — The build wiring
+## Track 2 — The build wiring — **deferred 2026-10-01**
 
 **§2.2 and §2.3 are deferred — the user's decision, 2026-10-01.** The macOS builds are not
 wanted yet ("we will build for MacOS later"), and the declarative build system is agreed to
@@ -178,11 +201,13 @@ be important but not now ("we will also put off the declarative build system, th
 believe it's important. This info should be stored in a plist or something"). Both are
 recorded in `TASKS.md` §6, so the deferral is a tracked intent rather than a dropped thread.
 
-The consequence for the rest of this file: **Track 2 no longer gates Track 3.** The claim
-in the original heading — "gates Tracks 3 and 4" — was written before `CLI/build.sh` had
-been read. Track 3 builds and runs entirely on iOS Simulator artifacts, so it needs none of
-this; §3 says why. If anything the dependency runs the other way: §4.2's decoupling is what
-a native macOS binary is actually waiting on.
+**The user's reason, and it is the right one:** rebuilding static libraries does not move the
+core task forward. Nothing in Tracks 3, 4 or 5 needs a macOS slice.
+
+**This track does not gate anything.** The claim in the original heading — "gates Tracks 3 and
+4" — was written before `CLI/build.sh` had been read. Track 3 builds and runs entirely on iOS
+Simulator artifacts. If anything the dependency runs the other way: Track 5.1's decoupling is
+what a native macOS binary is actually waiting on.
 
 This is `LIBRARIES.md` §7, minus the pruning.
 
@@ -196,6 +221,13 @@ the project files are all `CODE_SIGN_IDENTITY`, `PROVISIONING_PROFILE_SPECIFIER`
 §2.1 then clarified what "wiring" has to mean. The slices are not merely unreachable through a
 missing setting: the file references themselves are not SDK-conditional, so adding the
 `[sdk=macosx*]` arms would not have been enough to link them. See §2.1.
+
+**There is a second `Compressor` on the desktop.** `/Users/michael/Desktop/Compressor` is a
+standalone git repository last touched June 2025; the tree in this workspace is the newer of
+the two (it carries `gettext`, `libffi` and `sqlite3` build outputs the desktop copy lacks, and
+`build_sqlite3.sh` as of 2026-10-01). Which archive actually went into the last shipped build
+is not answerable from here and does not need to be — but it is why the desktop copy should not
+be deleted without asking.
 
 ### 2.1 Reconcile the Xcode references — **done 2026-10-01, but the third bullet cannot be done as written**
 
@@ -237,15 +269,13 @@ Both are in `BUGS.md` under *Build wiring*.
 **This removes references, not libraries.** The standing constraint holds: nothing on disk is
 deleted until the replacement builds every combination.
 
-`MAD Designer` builds; `MAD` 176 tests, 0 failures; `MADMySQL` 58, 0 failures.
-
 ### 2.2 The two real builds — **deferred 2026-10-01**
 
 zlib/macOS and mysqlclient/macOS. Five rows are already built; these two are not.
 
 Deferred by the user's call, and nothing is waiting on them: the CLI runs on the iOS
-Simulator (§3), and a native macOS binary is blocked by §4.2's UIKit decoupling rather than
-by a missing archive.
+Simulator (Track 3), and a native macOS binary is blocked by Track 5.1's UIKit decoupling
+rather than by a missing archive.
 
 ### 2.3 The declarative build system — **deferred 2026-10-01**
 
@@ -260,9 +290,9 @@ Deferred by the user's call. Worth keeping from that exchange: the user's instin
 When this resumes, the per-library manifest should be built **first**: it is what makes every
 other piece of the matrix checkable rather than merely runnable.
 
-The XCFramework is still the answer to §2.1's third bullet. That finding does not expire
-with the deferral — `PBXFileReference.path` names an iOS slice directly, so no search path
-can fix it whenever the macOS work is picked back up.
+The XCFramework is still the answer to §2.1's third bullet. That finding does not expire with
+the deferral — `PBXFileReference.path` names an iOS slice directly, so no search path can fix
+it whenever the macOS work is picked back up.
 
 ### 2.4 Prune last
 
@@ -271,31 +301,75 @@ artifacts. One commit per item, with the matrix diff in the message as evidence.
 
 ---
 
-## Track 3 — Headless and the CLI
+## Track 3 — The headless CLI (the instrument)
 
-`MAD_CLI.md` phases 3–6. Phases 0–2 are done.
+**The CLI does not ship.** The user's decision, 2026-10-01:
 
-**Two things worth saying before the detail, because the plan above says otherwise.**
+> *"the CLI isn't going to be shipped (least not now, it's only for our understanding of how
+> the software works, and testing)."*
 
-*Track 2 does not gate this track.* `CLI/build.sh` builds `mad` for the **iOS Simulator**
-and runs it on the Mac through `xcrun simctl spawn`, so it links the existing frameworks and
-the existing iOS static libraries with nothing rebuilt for a second platform. The macOS
-slices of §2.2 and the XCFramework of §2.3 are only needed for a *native* macOS binary, and
-what blocks that is §4.2, not the build wiring.
+That settles `MAD_CLI.md` §8.1 — it is a developer tool — and with it several questions that
+were only hard because shipping was assumed: no signing, no notarisation, no installer, and
+`--credentials user:pass` may take a plaintext argument.
 
-*The track is smaller than it reads.* `CLI/Source` is 1011 lines and the unimplemented
-surface is two entries, both visible as `"not implemented yet"`:
+**Why it comes first anyway.** It is the only way to see the document with the app out of the
+way. `mad inspect` already reads the container and the store as raw SQLite — no Core Data, no
+UI — which is precisely the reader `MAD_FORMAT.md` §7 asks a second platform to be able to
+write. So the CLI is not a detour from the core task; it is how the core task gets checked.
+
+**Track 2 does not gate this track.** `CLI/build.sh` builds `mad` for the **iOS Simulator** and
+runs it on the Mac through `xcrun simctl spawn`, linking the existing frameworks and the existing
+iOS static libraries unchanged. The macOS slices are only needed for a *native* macOS binary,
+and what blocks that is Track 5.1.
+
+**The track is smaller than it reads.** `CLI/Source` is 1011 lines and the entire unimplemented
+surface is two entries, both greppable as `"not implemented yet"`:
 
 - `schema` — the whole of `MADCLIUnimplemented.m` (15 lines).
-- `refresh --rows N` — rejected in `MADCLIRefresh.m:17`.
+- `refresh --rows N` — rejected at `MADCLIRefresh.m:17`.
 
-`inspect` (115 lines), `query` (36), `refresh` (54) and `export` (66) are real
-implementations that open a document and do the work. So §3.2 and §3.4 below are as much a
-description of what exists as a specification of what to build. The honest remaining scope
-is **§3.1, the `schema` verb, `--rows`, and whatever the first end-to-end run against a real
-`.mad` turns up** — and that last item is the one that cannot be estimated from the source.
+`inspect` (115 lines), `query` (36), `refresh` (54) and `export` (66) are real implementations
+that open a document and do the work. So §3.2 below is as much a description of what exists as
+a specification of what to build.
 
-### 3.1 Move `MADOperationRefresh` into the `MAD` framework
+### 3.1 Phase 1 — prove the path
+
+Four runs against the two shipping samples. Each is an acceptance test; whatever breaks is the
+work. **No new code before these.**
+
+| # | Run | What it proves |
+|---|---|---|
+| 1 | `mad inspect` on London and Music | the container and the store read without Core Data |
+| 2 | `mad query` on both | the query model loads headlessly |
+| 3 | `mad refresh` on **London first**, then Music | the data path, end to end |
+| 4 | `mad export --out` | a PDF produced from a headless run |
+
+London goes first in run 3 because its driver is **Sqlite 3** over a local `chinook.sqlite3`:
+no server sits in the path, so a failure is the code's rather than the network's. Music is the
+control.
+
+Precondition: `xcrun simctl spawn booted` wants a booted simulator. `CLI/build/mad` is already
+built.
+
+**Do not do §3.4 first.** Moving `MADOperationRefresh` into `MAD` is housekeeping with a working
+workaround — `CLI/build.sh`'s `REFRESH_SOURCES` reaches across the target boundary and compiles
+it today. Reorganising before the runs have said what shape the code wants is the wrong order.
+
+### 3.2 Phase 2 — close the surface
+
+`mad schema`, and `refresh --rows N`. Both small, both bounded by what already exists.
+
+### 3.3 Phase 3 — make the CLI the document's spec
+
+`mad inspect` is container-only: it reports nothing about the companion cache files. Extending
+it to report them is what turns the CLI from a test harness into the thing that *defines* the
+document, and it is what makes Track 4.1 checkable rather than prose.
+
+The success criterion for this track: **`mad inspect` can state everything `MAD_FORMAT.md`
+claims, from a file, without the app.** When that is true the format has a specification that
+can fail.
+
+### 3.4 Housekeeping — move `MADOperationRefresh` into the `MAD` framework
 
 `MADDesigner/Source/MADOperationRefresh.m` — 131 lines, zero UIKit symbols, importing only
 `MADAPI`, `MADFoundation` and `MAD`. It is already the CLI's refresh verb; it is merely in the
@@ -303,44 +377,70 @@ wrong target. The two `Reload` operations stay behind in the app.
 
 The workaround is visible in `CLI/build.sh`: its `REFRESH_SOURCES` list reaches across the
 target boundary and compiles `MADOperationRefresh.m` and the two `MADOperationRefreshInitial*`
-files straight out of `MADDesigner/Source`. So the CLI works today, which is why this item
-reads as housekeeping rather than a blocker — but the file is being built into a framework's
-client from outside the framework, and that only stays benign while nothing else wants it.
-
-### 3.2 The `mad` target: `inspect`, `schema`, `query`
-
-All three exist in `CLI/Source` today as separate verb sources. `inspect` is the verb that
-proves the format document has been implemented.
-
-### 3.3 `mad refresh`
-
-Must call the same code the app calls — `MADOperationRefresh` →
-`-executeSQL:fieldKeys:onConnection:intoResultTable:withError:` → `<MADDataTableWriting>` —
-not reimplement it.
-
-### 3.4 `mad export`
-
-PDF first: it works today, it is simply not headless. Put it behind a `<MADReportExporting>`
-protocol so `--format json` is a new class rather than a new branch. JSON and CSV are new work,
-but being pure Foundation they are the formats that work on any platform.
+files straight out of `MADDesigner/Source`. So the CLI works today, which is why this item reads
+as housekeeping rather than a blocker — but the file is being built into a framework's client
+from outside the framework, and that only stays benign while nothing else wants it.
 
 ---
 
-## Track 4 — The format, and decoupling
+## Track 4 — The `.mad` document (the core task)
 
-Both are decisions as much as work, so they come last.
+`MAD_FORMAT.md` is the definition: what the format is today, measured from the two shipping
+samples; its hazards; and the normative target. This track is the work that document implies.
 
-### 4.1 `.mad` v1
+### 4.1 The companion files are only half described
+
+`MAD_FORMAT.md` §5 records two companion kinds — `.maddb` (the rows) and `.mdcache` (the
+virtual-table plist). A real cache directory holds **three**, and the undocumented one
+dominates:
+
+| Kind | Written by | One real directory |
+|---|---|---|
+| `<hash>.maddb` | `MADDataTableFast` | 816 KB |
+| `<hash>.mdcache` | `MADDataTable` | 1.7 KB |
+| `<hash>{ih,lh}{612, 792}.madac` | `MADArrayCaching`, fed by `MADReportFormatter.m:179,:183` | **~15 MB** |
+
+`.madac` is the formatter's rendered-page cache, keyed by layout identifier and page size
+(`{612, 792}` is US Letter in points). Against a document under 80 KB, the render cache is
+around 200× the document.
+
+§5 also never describes the cache **directory** as a unit: its `dataTableIdHash` naming, its
+lifecycle, or why 0-byte `.maddb` files sit in directories that were created and never
+populated. That is the part that matters — nothing currently says what may be deleted, what
+must be invalidated when a document changes, or what a second platform has to reproduce.
+
+### 4.2 The three decisions, which block v1
+
+`MAD_FORMAT.md` §8. These are the user's calls, and the first is a genuine prerequisite for
+portability:
+
+- **Does the store stay Core Data?** It is the last Apple dependency in the format (hazard H3),
+  and the definition it holds is a modest object graph.
+- Should the thumbnail be in the document, or is it regenerable like everything else?
+- Should `.mad` optionally carry the row cache, making a document openable offline elsewhere?
+
+Plus one raised by 4.1: **is the render cache invalidated when the document changes?** Nothing
+in `MAD_FORMAT.md` says so, and a stale page cache would be invisible.
+
+### 4.3 `.mad` v1
 
 A fixed header outside the compression stream (`"MADFILE\0"` + version + flags) and a
-checkpointed store. Backwards-compatible by design: absence of the magic means legacy v0, so
-both shipping samples keep opening. It also pays for itself — the Music sample spends a third of
-its bytes on WAL.
+checkpointed store, per `MAD_FORMAT.md` §7. Backwards-compatible by design: absence of the
+magic means legacy v0, so both shipping samples keep opening. It also pays for itself — the
+Music sample spends a third of its bytes on WAL.
 
-### 4.2 The framework decoupling
+**Not to be started before 4.1 and 4.2.** The header is the easy part; the decisions are what
+make it correct.
 
-This is what makes the project's own synopsis true: *"Developers should be able to create
-frameworks which support new database types."*
+---
+
+## Track 5 — The three seams
+
+The project's synopsis names three things a developer should be able to extend without editing
+the core: **database types**, **document element types**, and **export formats**. Today none of
+the three has a seam, and this file had a plan for none of them.
+
+### 5.1 Database types
 
 Today the core `MAD` framework imports the concrete drivers in exactly three files:
 
@@ -349,14 +449,35 @@ Today the core `MAD` framework imports the concrete drivers in exactly three fil
 - `MAD/Source/MADPrintPageElementBarcode.m` — MADBarcodes
 
 A driver registry turns "add a driver" from *edit the core* into *add a framework*. It is also
-the same seam Track 3.4's export protocol needs.
+what a native macOS build is waiting on: three of those imports lead to UIKit, which is why no
+target compiles for macOS today.
 
-### 4.3 The `MADDataTable` leaks that are left
+### 5.2 Export formats
 
-Three from the architecture report, of which the structural one is that `MADDataTableFast`
-reaches into `MADDatabaseSqlite3`'s private `_database` ivar at fifteen sites — which is exactly
-why the fast table needs a real file on disk to do anything at all. The insert path is also a
-cycle: table → query object → back into table.
+`mad export` has one arm: PDF, behind a string comparison in `MADCLIExport.m`. `MAD_CLI.md` §5.3
+asks for a `<MADReportExporting>` protocol so `--format json` is a *new class* rather than a new
+branch — the same shape as 5.1's driver registry, which is why the two belong in one track.
+
+The user's framing, 2026-10-01:
+
+> *"You can also create a new export format if you want... put that in the task... export to
+> text or email or markdown or any of a hundred things. That's part of the app that is supposed
+> to be expandable."*
+
+**When this is picked up, build a text exporter first.** Not because text is wanted, but because
+it is the cheapest proof the seam is real: pure Foundation, no Core Graphics, and it makes the
+report's *content* visible in the CLI without a PDF viewer — which Track 3.1 wants anyway. If
+the seam is right, text is an afternoon; if it is not, text is where that shows.
+
+**But not before Track 3.1.** An exporter that renders nothing because refresh is broken proves
+nothing about the seam.
+
+### 5.3 Document element types
+
+The third seam, and the one this file says nothing about. `RptqDocumentElement` and its
+subclasses are the extension point — the synopsis names static labels, data labels, aggregates
+and barcode labels as the family — but nothing describes how a third party adds one. Worth a
+design pass before it is worth code.
 
 ---
 
@@ -367,30 +488,41 @@ These block work rather than being work.
 | Decision | Where | Why it blocks |
 |---|---|---|
 | Which system owns the database password — the app's own keychain item, or the platform AutoFill / `kSecClassInternetPassword` path? | `TASKS.md` §1 | The double prompt is the symptom. `TASKS.md` §4 is blocked behind it. |
+| Does the `.mad` store stay Core Data? | `MAD_FORMAT.md` §8.1 | Called a prerequisite for Windows regardless of what the CLI does. Track 4.2. |
+| Is the render cache invalidated when the document changes? | Track 4.1 | A stale page cache would be invisible. |
+| Should the thumbnail and row cache live in the document? | `MAD_FORMAT.md` §8.2–8.3 | Decides whether every member of a `.mad` is authoritative. |
 | Is `.mad` v1 worth doing? | `MAD_FORMAT.md` §7 | It is compatible, but it is a format decision. |
-| Does `mad` ship, or is it a developer tool? | `MAD_CLI.md` §8.1 | Decides signing, notarisation, an installer, and whether `--credentials` may take a plaintext argument. |
-| Does the `.mad` store stay Core Data? | `MAD_FORMAT.md` §8.1 | Called a prerequisite for Windows regardless of what the CLI does. |
 | What is the JSON export shape? | `MAD_CLI.md` §8.3 | Belongs in a schema, not a README. |
+
+Struck: *"Does `mad` ship, or is it a developer tool?"* — settled 2026-10-01; it is a developer
+tool, for now.
 
 ---
 
 ## Order
 
-1. **Track 1** — done 2026-10-01.
-2. **Track 2.1** — done 2026-10-01; its third bullet moved to §2.3 and §4.2.
-3. **Track 3** — next, on the user's call. It does not wait for Track 2.
-4. **Track 4.2** — the decoupling, which is what a native macOS build is actually blocked
-   behind.
-5. **Track 2.2–2.4** — deferred 2026-10-01; resume when a macOS build is wanted, and build
-   the `manifest.json` first.
-6. **Prune** — `LIBRARIES.md` §7.4, only once its gate is met.
+1. **Track 3.1** — the four runs. Next, and nothing should precede it.
+2. **Track 3.2–3.3** — close the surface, then make `inspect` describe the whole document.
+3. **Track 4** — the companion files, the decisions, then v1. This is the core task; it starts
+   in earnest once the CLI can show the document.
+4. **Track 5.2** — the export seam, text first, because it is cheap and it makes the report
+   visible.
+5. **Track 5.1** — the driver registry, which is also the macOS prerequisite.
+6. **Track 5.3** — document element types; needs a design pass first.
+7. **Track 2.2–2.4** — deferred; resume only when a native macOS build is wanted, and build the
+   `manifest.json` first.
+8. **Prune** — `LIBRARIES.md` §7.4, only once its gate is met.
 
 ## Standing constraints
 
 - Nothing in `Compressor/library` is deleted until the replacement builds every combination.
+- The second `Compressor` at `/Users/michael/Desktop/Compressor` is a separate repository; do not
+  delete or reconcile it without asking.
 - `TEST-DB-INFO.md` and `MADDesigner/run.log` stay untracked.
-- `+[NSString stringWithFormat:]` is not used in this codebase, deliberately — tight loops on a
-  mobile device. Match the `initWithFormat:` / `appendFormat:` house style instead.
+- `+[NSString stringWithFormat:]` is avoided in this codebase, deliberately — tight loops on a
+  mobile device. Match the `initWithFormat:` / `appendFormat:` house style instead. (The
+  constraint is about hot paths, and the codebase is not literally free of the call: it appears
+  in one-shot paths, including the CLI. New code in a loop should not add one.)
 - Behaviour-safe refactoring and cleanup are welcome without being asked for; the `MTPaper`
   paper classes are the known example. "Behaviour-safe" means provable by the suite.
 - Deliberately-unused code is marked with the right clang attribute at the declaration

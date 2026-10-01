@@ -237,3 +237,71 @@ matrix would not let a target compile for macOS today.
     resumes.
 *   The standing constraint still holds: nothing in `Compressor/library` is deleted until a
     replacement builds every combination. A deferral is not permission to prune.
+
+---
+
+## 7. The `mad` CLI — the headless path
+
+**Status:** In progress — `ROADMAP.md` Track 3.
+
+**The CLI does not ship.** The user's decision, 2026-10-01: *"the CLI isn't going to be shipped
+(least not now, it's only for our understanding of how the software works, and testing)."* It
+is a developer instrument. That removes signing, notarisation and an installer from scope, and
+it means `--credentials user:pass` may take a plaintext argument.
+
+**Why it is the next thing.** It is the only way to read the document with the app out of the
+way. `mad inspect` reads the container and the store as raw SQLite — no Core Data, no UI — which
+is the reader `MAD_FORMAT.md` §7 asks a second platform to be able to write.
+
+**Current step — Phase 1, the four runs.** No new code before these; each is an acceptance test
+and whatever breaks is the work.
+
+| # | Run | What it proves |
+|---|---|---|
+| 1 | `mad inspect` on London and Music | the container and store read without Core Data |
+| 2 | `mad query` on both | the query model loads headlessly |
+| 3 | `mad refresh` on **London first**, then Music | the data path, end to end |
+| 4 | `mad export --out` | a PDF produced from a headless run |
+
+London goes first in run 3: its driver is **Sqlite 3** over a local `chinook.sqlite3`, so no
+server sits in the path and a failure is the code's rather than the network's.
+
+Run with `CLI/build.sh --run <command> <document.mad>`; it wants a booted simulator, because it
+runs the tool through `xcrun simctl spawn booted`.
+
+**Then:** `schema` (the only stub verb) and `refresh --rows N`; then extending `inspect` to
+report the companion cache files, which is what makes §8's work checkable.
+
+**Not first:** moving `MADOperationRefresh` into `MAD`. It is housekeeping with a working
+workaround — `CLI/build.sh`'s `REFRESH_SOURCES` compiles it across the target boundary today.
+
+---
+
+## 8. Export formats — the third extensibility seam
+
+**Status:** Open. Do not start before task 7's Phase 1.
+
+The project's synopsis promises that a developer can add an **export format** without editing
+the core, alongside new database types and new document element types. That promise has no
+seam yet: `mad export` has one arm, PDF, behind a string comparison in `MADCLIExport.m`.
+
+The user's framing, 2026-10-01:
+
+> *"You can also create a new export format if you want... put that in the task... export to
+> text or email or markdown or any of a hundred things. That's part of the app that is supposed
+> to be expandable. But, only do that now if it's quick and it aids the core task."*
+
+**The work.** `MAD_CLI.md` §5.3 asks for a `<MADReportExporting>` protocol, so a new format is a
+new class rather than a new branch of a switch. That is the same shape as the driver registry
+`ROADMAP.md` §5.1 wants, which is why the two belong together.
+
+**Build text first, when this is picked up.** Not because text is wanted, but because it is the
+cheapest proof the seam is real: pure Foundation, no Core Graphics, and it puts the report's
+content in front of you in a terminal without a PDF viewer. If the seam is right, text is an
+afternoon. If it is not, text is where that shows — before JSON or CSV have been written
+against a shape that cannot hold them.
+
+**Why it waits.** An exporter that renders nothing because refresh is broken proves nothing
+about the seam, and today nobody has run refresh headlessly at all. Task 7 Phase 1 changes
+that. After it, this is quick and it does aid the core task, which is the user's own test for
+whether to do it now — so it is queued directly behind Phase 1 rather than at the back.
