@@ -95,11 +95,40 @@ column can never hold a value, so the mapping only picks a schema label and a fo
 
 `MADMySQL` suite: 58 tests, 0 failures.
 
-### 1.4 Unblock `MADTestReportFormatter`
+### 1.4 Unblock `MADTestReportFormatter` — **done 2026-10-01**
 
-Disabled because the Core Data model is not in a build phase. This unblocks more than the test:
-`MAD_CLI.md` §5.1 requires that the CLI **not** need the Core Data model in a build phase, which
-is the same constraint the test suite already hit. Solve it once.
+The recorded reason was wrong. The test was said to be blocked until the Core Data model went
+into a build phase; `MAD.xcdatamodeld` has been in the `MADTests` Sources phase all along, and
+`MADCoreDataModelTests` has been loading `MAD.momd` from the test bundle for as long as it has
+existed. So the item was not "solve the model" — the model was already solved, and what was
+left was a fixture that had never run.
+
+Reviving it took four independent fixes, recorded in `BUGS.md` under *Test infrastructure*:
+
+- A `MADTestReportFormatterDocument` double, because the test cast a plain `RptqDocument` to
+  `MADocument *` and the formatter reads `-filename` and `-database` off it. A real
+  `MADocument` cannot stand in — opening one unarchives a `.mad` the app's create path makes.
+- The model loaded from the test bundle rather than the framework bundle, which has no
+  `MAD.momd`.
+- A parent context, because every `Rptq` class sets its required `identifier` in
+  `-awakeFromInsert` only when `managedObjectContext.parentContext` is set.
+- Saving before formatting, because `MADSectionsLayout` fetches sections as dictionaries and a
+  dictionary-result fetch is answered from the store.
+
+Two more were about modelling the cache rather than Core Data: the group value has to be keyed
+by `MADSectionGroupLayout -safeSortKey`, and each row needs a `MADIdentifierROWID`.
+
+**This unblocks more than the test.** It is the first proof that a document's section tree can
+be built, saved, fetched and formatted headlessly — which is the shape `MAD_CLI.md` §5.1 needs
+from the CLI, and the same constraint the test suite had already hit from the other side.
+
+**Found while doing it:** `MADSectionGroupLayout` segfaults on a group whose field has no query
+table — it hands nil to `CFNumberGetValue` at `:43`, `:46`, `:49` and `:58`. The test host died
+rather than the test failing, which is how it surfaced. Recorded in `BUGS.md` as **still open**:
+wiring the fixture past it was the right call for this item, but *what the layout should do*
+with a group it cannot place is a behaviour decision that has not been made.
+
+`MAD` suite: 175 tests, 0 failures.
 
 ### 1.5 The `"<null>"` / `"<NULL>"` string hacks
 

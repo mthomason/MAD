@@ -61,6 +61,25 @@ Status key:
 
 ## MAD (framework)
 
+### `MADSectionGroupLayout` segfaults on a group whose field has no query table
+- **Status:** Still open
+- **Where:** `MAD/Source/MADSectionGroupLayout.m:43`, `:46`, `:49`, `:58`
+- **Behavior:** The initialiser lifts the group's `sort`, `weight` and
+  `hasField.databaseSchemaField.dataType`, and the field's
+  `inQueryTable.dropIndex`, straight out of the dictionary-result row and pushes
+  each through `CFNumberGetValue`. A nil value is a NULL `CFNumberRef`, which
+  `CFNumberGetValue` does not test for: the process dies with SIGSEGV instead of
+  raising. Reached whenever a group's field is not backed by a `RptqQueryTable` --
+  a document whose group field is not in a table the query selects.
+- **Why it matters:** It is a hard crash in the formatter on data read back from a
+  `.mad`, not an assertion or a wrong number. Found by `MADTestReportFormatter`:
+  an incompletely-wired fixture took down the test host rather than failing a
+  test, and the crash log was the only diagnosis.
+- **Not yet fixed:** the fixture now wires the table, so the test passes without
+  reaching it. Nobody has decided what the layout *should* do with a group it
+  cannot place -- skip it, or default the four numbers and let it render
+  mis-keyed. That is a behaviour decision, not a one-line guard.
+
 ### `MADReportTextRepresentation` `-characterCount` / `-elementCount` crash on non-empty input
 - **Status:** Fixed
 - **Where:** `MAD/Source/MADReportTextRepresentation.m:64` and `:76`
@@ -1571,10 +1590,43 @@ header search path.
 
 ## Test infrastructure (not product bugs)
 
-### `MADTestReportFormatter` is blocked
+### `MADTestReportFormatter` was blocked, and the reason recorded was wrong
+- **Status:** Fixed
 - **Where:** `MAD/MADTests/MADTestReportFormatter.m`
-- **Behavior:** Disabled; cannot be revived until the Core Data model is added
-  to a build phase. See `memory/madtestreportformatter-blocked.md`.
+- **Behavior:** The whole file was commented out. The register (and a memory note)
+  said it could not be revived until the Core Data model was added to a build
+  phase. That had already happened: `MAD.xcdatamodeld` is in the `MADTests`
+  target's Sources phase, so `MAD.momd` is built into the test bundle and
+  `MADCoreDataModelTests` has been loading it all along. The stated blocker was
+  stale; what actually blocked the test was the fixture.
+- **Now:** the test runs, and `testGroupFooterRowIDAssociation` passes. Four
+  separate things had to be right, none of them the model:
+  - `MADReportFormatter` takes a `MADocument` and reads `-filename`, the class of
+    `-database`, `-managedObjectContext` and `-resetSectionLayoutManagers` from it.
+    The test cast a plain `RptqDocument` to `MADocument *`, which is not one --
+    hence the original `unrecognized selector`. A `MADTestReportFormatterDocument`
+    test double now answers those four from the in-memory stack. A real
+    `MADocument` cannot stand in: opening one routes through `-readFromURL:error:`,
+    which unarchives a `.mad` the app's create path produces.
+  - The model was loaded from `[NSBundle bundleForClass:[RptqDocument class]]`,
+    the **MAD.framework** bundle, which has no `MAD.momd`. It is now loaded from
+    the test bundle, the way `MADCoreDataModelTests` does it.
+  - The context was flat. Every `Rptq` class assigns its required `identifier`
+    in `-awakeFromInsert`, and that override is guarded by
+    `self.managedObjectContext.parentContext`, so a flat context left every new
+    object with a nil `identifier` and the save failed with
+    `NSValidationMultipleErrorsError` (1560). The test now uses the two-context
+    shape `MADocument` has.
+  - Nothing was saved before formatting. `MADSectionsLayout` reads the sections
+    through an `NSDictionaryResultType` fetch, and a dictionary-result fetch is
+    answered from the store, so unsaved inserts are invisible to it and the
+    layout came up with no sections -- nil-ing out the five section layouts and
+    crashing at `MADSectionsLayout.m:115`. Both contexts are saved first.
+- **Also:** the fixture had to model the cache's row shape: the group value keyed
+  by `MADSectionGroupLayout -safeSortKey` (`alias + drop index + "." + field`),
+  and a `MADIdentifierROWID` per row, which the sqlite-backed tables inject in
+  their enumerators. With the bare field name as the key every row compared equal
+  and the report collapsed into one group; with no row id every row reported 0.
 
 ### `MADDesignerUnitTests` was misconfigured and had not built in some time
 - **Where:** `MADDesigner/MAD Designer.xcodeproj/project.pbxproj`,
