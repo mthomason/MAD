@@ -13,6 +13,8 @@
 
 @interface MADStandard : NSObject
 
++ (NSString *)standardStringForDouble:(double)d;
++ (NSString *)standardStringForUnsignedLong:(unsigned long)ul;
 + (NSString *)standardStringForFileSize:(unsigned long long)filesize;
 
 @end

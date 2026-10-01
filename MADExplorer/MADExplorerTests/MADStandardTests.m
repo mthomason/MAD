@@ -6,18 +6,12 @@
 //
 //  Coverage for MADStandard, the file-size formatting helper. Documents the
 //  decimal (10^6) megabyte scale, the fixed three-decimal "X.XXX MB" format,
-//  and the missing sub-megabyte fallback. The two hidden std::to_string
-//  passthroughs are surfaced via a test-only category.
+//  and the missing sub-megabyte fallback.
 //
 
 #import <XCTest/XCTest.h>
 
 #import <MADExplorer/MADStandard.h>
-
-@interface MADStandard (MADExplorerTestsInternal)
-+ (NSString *)standardStringForDouble:(double)d;
-+ (NSString *)standardStringForUnsignedLong:(unsigned long)ul;
-@end
 
 @interface MADStandardTests : XCTestCase
 @end
