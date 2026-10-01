@@ -1,6 +1,10 @@
 # Runtime logs -- written by the running app, never source.
 MADDesigner/run.log
 
+# Local test-database credentials for the live MySQL / SQL Server suites.
+# A working note for this machine, not source, and it carries passwords.
+TEST-DB-INFO.md
+
 # Scripts
 .DS_Store
 .graffle
