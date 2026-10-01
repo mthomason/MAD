@@ -182,6 +182,33 @@ Status key:
 - **Why it matters:** Credential deletion failures are silently dropped, and the
   legal `error:NULL` call site crashes.
 
+### `MADOperationConditionTestConnection` base class returns `nil` from `-evaluateForOperation:`
+- **Status:** Quirk
+- **Where:** `MADFoundation/Source/MADOperationConditionTestConnectionSuccess.m:58`
+- **Behavior:** The class is an abstract middle class — only
+  `MADOperationConditionTestConnectionSuccess` and
+  `MADOperationConditionTestConnectionFailuare` implement
+  `-evaluateForOperation:`; the base returns `nil`. That violates the protocol's
+  nonnull contract, and the inherited `-evaluateForOperation:completion:` would
+  pass that `nil` straight to the completion block.
+- **Why it matters:** Nothing in the app instantiates the base directly, so it is
+  latent rather than live — recorded so the `nil` is not mistaken for an
+  intentional "always satisfied" signal.
+- **Locked down by:** `testTestConnectionBaseClassProducesNoResult`.
+
+### `MADOperationConditionResult` factories put the result class name in the error domain
+- **Status:** Quirk
+- **Where:** `MADFoundation/Source/MADOperationConditionResult.m:54`
+- **Behavior:** `-newOperationConditionResultFailedNotSatisfied:` builds its error
+  with `domain:NSStringFromClass([self class])`, so a failure raised by
+  `MADOperationConditionHasResultStringResult` reports the domain
+  `MADOperationConditionHasResultStringResult`. The *condition* name travels in
+  `userInfo[MADOperationConditionKey]` instead.
+- **Why it matters:** Error domain is not a useful way to tell which condition
+  failed; code that switches on the domain rather than the userInfo key will be
+  misled.
+- **Locked down by:** `testFailedNotSatisfiedResultShape`.
+
 ---
 
 ## MADCocoaExtensions

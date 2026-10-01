@@ -43,6 +43,8 @@
 		4CDB7A0B00000000000000A1 /* MADOperationQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0B00000000000000B1 /* MADOperationQueueTests.m */; };
 		4CDB7A0C00000000000000A1 /* MADExclusivityControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0C00000000000000B1 /* MADExclusivityControllerTests.m */; };
 		4CDB7A0D00000000000000A1 /* MADNotificationProgressTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0D00000000000000B1 /* MADNotificationProgressTests.m */; };
+		4CDB7A0E00000000000000A1 /* MADOperationConditionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0E00000000000000B1 /* MADOperationConditionTests.m */; };
+		4CDB7A0F00000000000000A1 /* MADOperationConditionResultTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0F00000000000000B1 /* MADOperationConditionResultTests.m */; };
 		4C9372B51BACFCA200D6BD62 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C9372B41BACFCA200D6BD62 /* Foundation.framework */; };
 		4C9372CF1BACFF0F00D6BD62 /* MADDataColumn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372CD1BACFF0F00D6BD62 /* MADDataColumn.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372D01BACFF0F00D6BD62 /* MADDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372CE1BACFF0F00D6BD62 /* MADDataColumn.m */; };
@@ -142,6 +144,8 @@
 		4CDB7A0B00000000000000B1 /* MADOperationQueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationQueueTests.m; sourceTree = "<group>"; };
 		4CDB7A0C00000000000000B1 /* MADExclusivityControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADExclusivityControllerTests.m; sourceTree = "<group>"; };
 		4CDB7A0D00000000000000B1 /* MADNotificationProgressTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADNotificationProgressTests.m; sourceTree = "<group>"; };
+		4CDB7A0E00000000000000B1 /* MADOperationConditionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionTests.m; sourceTree = "<group>"; };
+		4CDB7A0F00000000000000B1 /* MADOperationConditionResultTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationConditionResultTests.m; sourceTree = "<group>"; };
 		4C9372AB1BACFC9200D6BD62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9372B41BACFCA200D6BD62 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C9372CD1BACFF0F00D6BD62 /* MADDataColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataColumn.h; sourceTree = "<group>"; };
@@ -254,6 +258,8 @@
 				4CDB7A0B00000000000000B1 /* MADOperationQueueTests.m */,
 				4CDB7A0C00000000000000B1 /* MADExclusivityControllerTests.m */,
 				4CDB7A0D00000000000000B1 /* MADNotificationProgressTests.m */,
+				4CDB7A0E00000000000000B1 /* MADOperationConditionTests.m */,
+				4CDB7A0F00000000000000B1 /* MADOperationConditionResultTests.m */,
 				4C9372AB1BACFC9200D6BD62 /* Info.plist */,
 			);
 			path = MADFoundationTests;
@@ -544,6 +550,8 @@
 				4CDB7A0B00000000000000A1 /* MADOperationQueueTests.m in Sources */,
 				4CDB7A0C00000000000000A1 /* MADExclusivityControllerTests.m in Sources */,
 				4CDB7A0D00000000000000A1 /* MADNotificationProgressTests.m in Sources */,
+				4CDB7A0E00000000000000A1 /* MADOperationConditionTests.m in Sources */,
+				4CDB7A0F00000000000000A1 /* MADOperationConditionResultTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
