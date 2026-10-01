@@ -10,10 +10,12 @@
 #define MAD_CocoaExtensions_MADColorSocial_h
 
 #import <MADCocoaExtensions/MADColor.h>
+#import <UIKit/UIColor.h>
 
 @interface MADColorSocial : MADColor
 
-+ (instancetype)newBlueTwitter;
+// Returns a plain UIColor: newColorWitColors() builds a UIColor, not a MADColor.
++ (UIColor *)newBlueTwitter;
 
 @end
 

@@ -74,12 +74,10 @@
 	XCTAssertEqualWithAccuracy(a2, 0.5, 0.001);
 }
 
-- (void)testSocialColorReturnsUIColorNotSubclass {
-	// Defect: +newBlueTwitter is declared as instancetype (MADColorSocial) but
-	// returns a plain UIColor from the factory.
-	id twitter = [MADColorSocial newBlueTwitter];
+- (void)testSocialColorIsUIColor {
+	// +newBlueTwitter builds a plain UIColor, and now declares that it does.
+	UIColor *twitter = [MADColorSocial newBlueTwitter];
 	XCTAssertTrue([twitter isKindOfClass:[UIColor class]]);
-	XCTAssertFalse([twitter isKindOfClass:[MADColorSocial class]]);
 }
 
 @end

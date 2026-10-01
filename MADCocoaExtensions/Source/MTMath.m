@@ -11,7 +11,7 @@
 @implementation MTMath
 
 + (NSNumber *)newSystemFileSizeToMB:(unsigned long long)sfs {
-	return [[NSNumber alloc] initWithDouble:sfs / 1000000];
+	return [[NSNumber alloc] initWithDouble:(double)sfs / 1000000.0];
 }
 
 @end

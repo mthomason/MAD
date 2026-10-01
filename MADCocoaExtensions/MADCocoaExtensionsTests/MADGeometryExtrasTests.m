@@ -4,9 +4,10 @@
 //
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
-//  Coverage for the inline geometry helpers in CGGeometry+Extras.h.  Documents
-//  the swapped corner coordinates in CGRectTopRight/BottomLeft/BottomRight and
-//  the incorrect center in CGCenterRect.
+//  Coverage for the inline geometry helpers in CGGeometry+Extras.h.  The corner
+//  helpers and CGCenterRect were once wrong; the tests now pin the corrected
+//  values.  CGRectAdjustForScale is deliberately left alone -- see its comment
+//  in the header and BUGS.md.
 //
 
 #import <XCTest/XCTest.h>
@@ -59,18 +60,14 @@ static inline BOOL MADPointEqualToPoint(CGPoint a, CGPoint b) {
 	XCTAssertTrue(MADPointEqualToPoint(CGCornerBottomRightPointInRect(r), CGPointMake(40, 60)));
 }
 
-- (void)testCGRectCornerFunctionsAreSwapped {
-	// Defect: CGRectTopRight/BottomLeft/BottomRight transpose x and y, unlike the
-	// correct CGCorner*PointInRect variants.
+- (void)testCGRectCornerFunctions {
+	// Agrees with the CGCorner*PointInRect variants below.
 	CGRect r = CGRectMake(10, 20, 30, 40);
 
 	XCTAssertTrue(MADPointEqualToPoint(CGRectTopLeft(r), CGPointMake(10, 20)));
-	// Should be (40, 20):
-	XCTAssertTrue(MADPointEqualToPoint(CGRectTopRight(r), CGPointMake(20, 40)));
-	// Should be (10, 60):
-	XCTAssertTrue(MADPointEqualToPoint(CGRectBottomLeft(r), CGPointMake(60, 10)));
-	// Should be (40, 60):
-	XCTAssertTrue(MADPointEqualToPoint(CGRectBottomRight(r), CGPointMake(60, 40)));
+	XCTAssertTrue(MADPointEqualToPoint(CGRectTopRight(r), CGPointMake(40, 20)));
+	XCTAssertTrue(MADPointEqualToPoint(CGRectBottomLeft(r), CGPointMake(10, 60)));
+	XCTAssertTrue(MADPointEqualToPoint(CGRectBottomRight(r), CGPointMake(40, 60)));
 }
 
 #pragma mark - Centers
@@ -81,10 +78,9 @@ static inline BOOL MADPointEqualToPoint(CGPoint a, CGPoint b) {
 }
 
 - (void)testCenterRect {
-	// Defect: CGCenterRect divides (origin + size) by 2 rather than origin + size/2,
-	// so it is only correct when the origin is (0,0).
+	// Now agrees with CGCenterOfRect, including for a non-zero origin.
 	CGRect r = CGRectMake(10, 20, 30, 40);
-	XCTAssertTrue(MADPointEqualToPoint(CGCenterRect(r), CGPointMake(20, 30)));
+	XCTAssertTrue(MADPointEqualToPoint(CGCenterRect(r), CGPointMake(25, 40)));
 
 	CGRect zeroOrigin = CGRectMake(0, 0, 30, 40);
 	XCTAssertTrue(MADPointEqualToPoint(CGCenterRect(zeroOrigin), CGPointMake(15, 20)));
@@ -123,8 +119,13 @@ static inline BOOL MADPointEqualToPoint(CGPoint a, CGPoint b) {
 	XCTAssertEqual(MADGeneralDirectionOfDegrees(225), southWest);
 	XCTAssertEqual(MADGeneralDirectionOfDegrees(15), east);
 	XCTAssertEqual(MADGeneralDirectionOfDegrees(180), west);
-	// Defect/quirk: exact boundaries fall through to north.
-	XCTAssertEqual(MADGeneralDirectionOfDegrees(0), north);
+	// Exact octant boundaries no longer fall through to north: each belongs to
+	// the octant it starts.
+	XCTAssertEqual(MADGeneralDirectionOfDegrees(0), east);
+	XCTAssertEqual(MADGeneralDirectionOfDegrees(360), east);
+	XCTAssertEqual(MADGeneralDirectionOfDegrees(30), northEast);
+	XCTAssertEqual(MADGeneralDirectionOfDegrees(60), north);
+	XCTAssertEqual(MADGeneralDirectionOfDegrees(330), east);
 }
 
 #pragma mark - Finger size / line / content offsets
@@ -172,7 +173,8 @@ static inline BOOL MADPointEqualToPoint(CGPoint a, CGPoint b) {
 #pragma mark - Scale / rounding
 
 - (void)testAdjustForScale {
-	// Defect/quirk: the function shrinks regardless of zoom direction.
+	// Deliberate: both branches shrink. The two MADDesignerScrollView callers
+	// each reach a different branch on purpose; see BUGS.md before changing this.
 	CGRect r = CGRectMake(10, 20, 100, 200);
 	CGRect zoomIn = CGRectAdjustForScale(r, 2.0);
 	XCTAssertEqual(zoomIn.size.width, (CGFloat)50);

@@ -88,10 +88,11 @@
 #pragma mark - Horizontal/vertical direction of a segment
 
 - (void)testHorizontalDirectionOfPoint {
-	// Defect: the Left/Right result is inverted — moving right reports Left.
+	// The direction of travel from p1 to p2: rightward reports Right.
 	CGPoint p1 = CGPointMake(0, 0);
 	CGPoint p2 = CGPointMake(10, 0);
-	XCTAssertEqual(MADDirectionHorizontalDirectionOfPoint(p1, p2), MADDirectionLeft);
+	XCTAssertEqual(MADDirectionHorizontalDirectionOfPoint(p1, p2), MADDirectionRight);
+	XCTAssertEqual(MADDirectionHorizontalDirectionOfPoint(p2, p1), MADDirectionLeft);
 
 	// Same x -> NoDirection.
 	XCTAssertEqual(MADDirectionHorizontalDirectionOfPoint(CGPointMake(5, 0), CGPointMake(5, 10)),
@@ -99,15 +100,15 @@
 }
 
 - (void)testVerticalDirectionOfPoint {
-	// Defect: the alignment guard compares X (not Y), so a purely vertical
-	// segment is reported as NoDirection instead of Down/Up.
-	CGPoint p1 = CGPointMake(0, 0);
-	CGPoint p2 = CGPointMake(0, 10);
-	XCTAssertEqual(MADDirectionVerticalDirectionOfPoint(p1, p2), MADDirectionNoDirection);
-
-	// With a horizontal offset the Y comparison is reached.
-	XCTAssertEqual(MADDirectionVerticalDirectionOfPoint(CGPointMake(0, 0), CGPointMake(10, 10)),
+	// The alignment guard compares Y, so a purely vertical segment classifies.
+	XCTAssertEqual(MADDirectionVerticalDirectionOfPoint(CGPointMake(0, 0), CGPointMake(0, 10)),
 				   MADDirectionDown);
+	XCTAssertEqual(MADDirectionVerticalDirectionOfPoint(CGPointMake(0, 10), CGPointMake(0, 0)),
+				   MADDirectionUp);
+
+	// Same y -> NoDirection.
+	XCTAssertEqual(MADDirectionVerticalDirectionOfPoint(CGPointMake(0, 0), CGPointMake(10, 0)),
+				   MADDirectionNoDirection);
 }
 
 #pragma mark - Resize aspect for compass direction

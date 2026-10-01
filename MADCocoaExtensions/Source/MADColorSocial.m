@@ -10,17 +10,8 @@
 
 @implementation MADColorSocial
 
-+ (instancetype)newBlueTwitter {
-	id color = newColorWitColors(0.0000f, 172.0000f, 237.0000f);
-	return color;
-}
-+ (instancetype)newBlueLinkedIn {
-	id color = newColorWitColors(0.0000f, 123.0000f, 182.0000f);
-	return color;
-}
-+ (instancetype)newBlueFacebook {
-	id color = newColorWitColors(59.0000f, 89.0000f, 152.0000f);
-	return color;
++ (UIColor *)newBlueTwitter {
+	return newColorWitColors(0.0000f, 172.0000f, 237.0000f);
 }
 
 @end

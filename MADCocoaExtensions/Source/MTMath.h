@@ -26,7 +26,7 @@ static inline NSUInteger madRandomNumberInRange(NSRange range) {
 }
 
 static inline double madSystemFileSizeToMB(unsigned long long sfs) {
-	return sfs / 1000000;
+	return (double)sfs / 1000000.0;
 }
 
 @interface MTMath : NSObject

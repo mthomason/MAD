@@ -40,7 +40,7 @@ static inline MADTextStyle_t MADLayoutTextStyleMake(BOOL b, BOOL i, BOOL u, BOOL
 - (instancetype)initWithBold:(BOOL)bold italic:(BOOL)italic
 				   underline:(BOOL)underline strikethrough:(BOOL)strikethrough {
 	if (self = [super init]) {
-		_style = MADLayoutTextStyleMake(bold, strikethrough, italic, underline);
+		_style = MADLayoutTextStyleMake(bold, italic, underline, strikethrough);
 
 	}
 	return self;

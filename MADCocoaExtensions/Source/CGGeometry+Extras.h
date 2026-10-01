@@ -124,9 +124,9 @@ static inline MADReportPosition MADReportPositionMake(NSUInteger c, NSUInteger t
 static inline CGSize MADSizeSquare(CGFloat l) { CGSize s; s.width = l; s.height = l; return s; }
 static inline CGRect MADRectOfSize(CGSize s) { CGRect r; r.origin = CGPointZero; r.size = s; return r; }
 static inline CGPoint CGRectTopLeft(CGRect r) { return r.origin; }
-static inline CGPoint CGRectBottomLeft(CGRect r) { return CGPointMake(r.origin.y + r.size.height, r.origin.x); }
-static inline CGPoint CGRectBottomRight(CGRect r) { return CGPointMake(r.origin.y + r.size.height, r.origin.x + r.size.width); }
-static inline CGPoint CGRectTopRight(CGRect r) { return CGPointMake(r.origin.y, r.origin.x + r.size.width); }
+static inline CGPoint CGRectBottomLeft(CGRect r) { return CGPointMake(r.origin.x, r.origin.y + r.size.height); }
+static inline CGPoint CGRectBottomRight(CGRect r) { return CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height); }
+static inline CGPoint CGRectTopRight(CGRect r) { return CGPointMake(r.origin.x + r.size.width, r.origin.y); }
 static inline BOOL CGRectIsOffScreenWest(CGRect r) { return r.origin.x < CGPointZero.x; }
 static inline BOOL CGRectIsOffScreenNorth(CGRect r) { return r.origin.y < CGPointZero.y; }
 static inline CGRect CGRectFlushLeft(CGRect r) { return CGRectMake(CGPointZero.x, r.origin.y, r.size.width, r.size.height); }
@@ -146,35 +146,35 @@ static inline MADCorners MTCornersMake(CGRect r) {
 static inline BOOL CGFloatCompare(CGFloat x, CGFloat y) { return (fabs(x-y) < .0001 * FLT_EPSILON * fabs(x+y) || fabs(x-y) < FLT_MIN); }
 
 static inline MADDirection MADDirectionHorizontalDirectionOfPoint(CGPoint p1, CGPoint p2) {
-	return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.x > p1.x ? MADDirectionLeft : MADDirectionRight;
+	return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.x > p1.x ? MADDirectionRight : MADDirectionLeft;
 }
 
 static inline MADDirection MADDirectionVerticalDirectionOfPoint(CGPoint p1, CGPoint p2) {
-	return CGFloatCompare(p2.x, p1.x) ? MADDirectionNoDirection : p2.y > p1.y ? MADDirectionDown : MADDirectionUp;
+	return CGFloatCompare(p2.y, p1.y) ? MADDirectionNoDirection : p2.y > p1.y ? MADDirectionDown : MADDirectionUp;
 }
 
 static inline MADCompassDirection MADGeneralDirectionOfDegrees(CGFloat degrees) {
 	while (degrees < 0.0) {
 		degrees += 360.0;
 	}
-	while (degrees > 360.0) {
+	while (degrees >= 360.0) {
 		degrees -= 360.0;
 	}
-	if (degrees > 60.0 && degrees < 120.0) {
+	if (degrees >= 60.0 && degrees < 120.0) {
 		return north;
-	} else if (degrees > 30.0 && degrees < 60.0) {
+	} else if (degrees >= 30.0 && degrees < 60.0) {
 		return northEast;
-	} else if ( degrees > 120.0 && degrees < 150.0 ) {
+	} else if ( degrees >= 120.0 && degrees < 150.0 ) {
 		return northWest;
-	} else if ( degrees > 240.0 && degrees < 300.0 ) {
+	} else if ( degrees >= 240.0 && degrees < 300.0 ) {
 		return south;
-	} else if ( degrees > 300.0 && degrees < 330.0 ) {
+	} else if ( degrees >= 300.0 && degrees < 330.0 ) {
 		return southEast;
-	} else if ( degrees > 210.0 && degrees < 240.0 ) {
+	} else if ( degrees >= 210.0 && degrees < 240.0 ) {
 		return southWest;
-	} else if ((degrees > 330.0 && degrees < 360.0) || (degrees > 0.0 && degrees < 30.0)) {
+	} else if (degrees >= 330.0 || degrees < 30.0) {
 		return east;
-	} else if ( degrees > 150.0 && degrees < 210.0) {
+	} else if ( degrees >= 150.0 && degrees < 210.0) {
 		return west;
 	} else {
 		return north;
@@ -203,6 +203,12 @@ static inline CGFloat CGDelta(CGFloat f1, CGFloat f2) { return f2 - f1; }
 
 __attribute__((unused)) static inline double CGDirectionInDegreesFromVelocity(CGPoint velocity) { return atan2(velocity.y, velocity.x); }
 
+// Both branches shrink the rect, by design. The two callers in
+// MADDesignerScrollView.m partition the zoomScale domain so each reaches the
+// branch that is correct for it: displayBoundsToScale calls this only when
+// zoomScale < 1, and positionForRectOfInterest: forces zoomScale >= 1 before
+// calling. The results are compared with CGRectContainsRect, so changing one
+// branch without reworking both call sites breaks that test. See BUGS.md.
 static inline CGRect CGRectAdjustForScale(CGRect r, CGFloat zoomScale) {
 	CGFloat scale = 1.0 / zoomScale;
 	if ( isless(scale, 1.0) ) {
@@ -292,7 +298,7 @@ __attribute__((unused)) static inline CGPoint CGPointRoundPointToGrid(CGPoint p)
 static inline CGPoint CGCornerTopLeftPointInRect(CGRect frame) { return CGPointMake(frame.origin.x, frame.origin.y); }
 static inline CGPoint CGCornerTopRightPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y); }
 static inline CGPoint CGCornerBottomLeftPointInRect(CGRect frame) { return CGPointMake(frame.origin.x, frame.origin.y + frame.size.height); }
-static inline CGPoint CGCenterRect(CGRect rect) { return CGPointMake((rect.origin.x + rect.size.width) / 2.0, (rect.origin.y + rect.size.height) / 2.0); }
+static inline CGPoint CGCenterRect(CGRect rect) { return CGPointMake(rect.origin.x + (rect.size.width / 2.0), rect.origin.y + (rect.size.height / 2.0)); }
 static inline CGPoint CGCornerBottomRightPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height); }
 static inline CGPoint CGEdgeTopPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + (frame.size.width / 2.0), frame.origin.y); }
 static inline CGPoint CGEdgeRightPointInRect(CGRect frame) { return CGPointMake(frame.origin.x + frame.size.width, frame.origin.y + (frame.size.height / 2.0)); }

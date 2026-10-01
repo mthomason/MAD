@@ -42,15 +42,14 @@
 
 - (void)testSystemFileSizeToMB {
 	XCTAssertEqual(madSystemFileSizeToMB(5000000), 5.0);
-	// Quirk: integer division truncates the fractional megabyte.
-	XCTAssertEqual(madSystemFileSizeToMB(1500000), 1.0);
+	// Floating-point division keeps the fractional megabyte.
+	XCTAssertEqual(madSystemFileSizeToMB(1500000), 1.5);
 	XCTAssertEqual(madSystemFileSizeToMB(0), 0.0);
 }
 
 - (void)testNewSystemFileSizeToMB {
 	XCTAssertEqualObjects([MTMath newSystemFileSizeToMB:5000000], @5.0);
-	// Quirk: same integer-division truncation, wrapped in an NSNumber.
-	XCTAssertEqualObjects([MTMath newSystemFileSizeToMB:1500000], @1.0);
+	XCTAssertEqualObjects([MTMath newSystemFileSizeToMB:1500000], @1.5);
 }
 
 @end

@@ -18,19 +18,16 @@
 
 @implementation MADTextStyleTests
 
-- (void)testInitScramblesFlags {
-	// Defect: initWithBold:italic:underline:strikethrough: passes its arguments
-	// as (bold, strikethrough, italic, underline), so the last three flags land in
-	// the wrong properties.
+- (void)testInitFlagsLandInTheRightProperties {
+	// Each argument sets the property it is named for.
 	MADTextStyle *style = [[MADTextStyle alloc] initWithBold:YES italic:YES underline:NO strikethrough:NO];
 	XCTAssertTrue(style.bold);
-	XCTAssertFalse(style.italic);      // expected YES
-	XCTAssertTrue(style.underline);    // expected NO
+	XCTAssertTrue(style.italic);
+	XCTAssertFalse(style.underline);
 	XCTAssertFalse(style.strikethrough);
 }
 
 - (void)testSettersAreCorrect {
-	// The individual setters map correctly; only the initializer is broken.
 	MADTextStyle *style = [[MADTextStyle alloc] init];
 	style.bold = YES;
 	style.italic = YES;
