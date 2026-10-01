@@ -333,12 +333,54 @@ Status key:
 
 ## MADSqlite3
 
-No test-visible defects. The `MADDataTypeUnknown → String`/`TEXT` coercions in
-`MADDatabaseSqlite3` are intentional fallbacks and are covered by tests.
+The `MADDataTypeUnknown → String`/`TEXT` coercions in `MADDatabaseSqlite3` are
+intentional fallbacks and are covered by tests. One defect in this framework was
+found by inspection rather than by a test and is recorded under "Already fixed
+(for reference)": eight call sites passed a variable to `sqlite3_mprintf` as the
+format string. The two below were found while writing the write-port test that
+proves the driver is decoupled from `MADDataTable`.
 
-One defect in this framework was found by inspection rather than by a test and is
-recorded under "Already fixed (for reference)": eight call sites passed a variable
-to `sqlite3_mprintf` as the format string.
+### `MADDataTableFast` left its row counter stale after an in-memory drop or delete
+- **Status:** Fixed
+- **Commit:** `850c32f51`
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:799`, `:804`, `:818`, `:789`
+- **Behavior:** `rowCounter` is the only thing `-count` and `-numberOfRows`
+  consult (`:1216`, `:1222`), and none of `-dropTable`, `-dropTableName:`,
+  `-deleteAll` or `-vacuumCacheDb` touched it. After any of the four the counter
+  named a row count the file no longer held.
+- **Why it mattered:** No caller could reach it — `-deleteAll` had no callers
+  anywhere in the repository, and the other three are reached only from
+  `-removeAllObjects`, which zeroes the counter itself — so no live path was
+  broken. But `-count` is a *page cursor* to `MTTableController` (see the app
+  section below), so the hazard was one new caller away from being live.
+- **Now:** `-dropTable` and `-dropTableName:` zero the counter, as does
+  `-deleteAll`. `-vacuumCacheDb` deliberately does not — VACUUM rewrites the file
+  but keeps every row, and the source carries a comment saying so. `-dropTableName:`
+  takes an arbitrary table name, so it zeroes the counter only when the table that
+  went away is this one; dropping a foreign table must not touch this count.
+- **Test:** `testFastTableDropTableZeroesRowCount`,
+  `testFastTableDropForeignTableKeepsRowCount`,
+  `testFastTableDeleteAllZeroesRowCount` and `testFastTableVacuumKeepsRowCount` in
+  `MAD/MADTests/MADDataTableRegressionTests.m`, each driving one of the private
+  methods directly. They call `-reopenDbConnection` first: `-endBulkInsert` closes
+  the inserts connection and nulls its handle, so the mutations that send SQL
+  through it cannot run until it is reopened. That is also what `-removeAllObjects`
+  does.
+
+### `MADDataTableFast -deleteAll` built its query with the wrong initializer
+- **Status:** Fixed
+- **Commit:** `850c32f51`
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:818`
+- **Behavior:** `-deleteAll` sent `[[MADQueryCacheDeleteAllFromTable alloc]
+  initWithObject:tableName]`. `-initWithObject:` expects the parameters
+  *dictionary* and subscripts it, so an `NSString` raised
+  `-[NSTaggedPointerString objectForKeyedSubscript:]` on the first row. The sqlite
+  driver's own `-beginBulkInsert` uses `-initWithTableName:` for exactly this.
+- **Why it mattered:** Nothing called the method, which is why nothing had ever
+  hit it — the same reason the counter drift above went unnoticed. It would have
+  raised on the first call from any future caller.
+- **Now:** `-initWithTableName:`.
+- **Test:** `testFastTableDeleteAllZeroesRowCount`.
 
 ---
 
@@ -707,6 +749,36 @@ Covered by the hosted `MADDesignerUnitTests` bundle (69 tests across
 through the running executable; the app's classes are declared locally in the test
 files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
+
+### `MTTableController` read a stale page count after a failed fetch
+- **Status:** Fixed
+- **Commit:** `7b3e976db`
+- **Where:** `MADDesigner/Source/MTTableController.m:449` (and `:380`, `:402`)
+- **Behavior:** `-fetchFromAPIWithOffset:limit:completion:` answered
+  `hasMore = (datatable.count == limit)` from *both* of its branches. On the
+  success branch that is right: the driver clears the table before filling it, so
+  the count is the page just written. On the failure branch the driver has not
+  cleared anything, so the count still described the *previous* page — a failed
+  fetch reported `hasMoreData = YES` and re-issued its own query. Two further
+  sites, in `-fetchMoreRows` and `-fetchRowAtIndex:`, computed `offset + count - 1`
+  without checking for an empty page; with `count == 0` and `offset == 0` that
+  yields `NSUIntegerMax`, cast to `NSInteger` as `-1`, so `maxKnownRow` is left at
+  `-1` instead of at a value meaning "no rows".
+- **Why it mattered:** A query that failed once kept retrying itself instead of
+  stopping — that half was live. The underflow was latent rather than visible:
+  `-invalidateLayout`'s `maxKnownRow >= minKnownRow` guard turns the `-1` into a
+  row count of 0, which is the right answer for an empty page, and
+  `-fetchMoreRows`'s `maxKnownRow == NSIntegerMin` sentinel test then falls
+  through to arithmetic that wraps `-1` back to an offset of 0. It worked by
+  accident on both sides, which is what made it worth removing.
+- **Now:** the failure path reports `completion(NO)`; the page-cursor arithmetic
+  guards `count > 0` before deriving a last row.
+- **Test:** none. `MTTableController` is app source, and the app's unit bundle
+  reaches app classes only through locally-declared copies (the bundle's header
+  search path does not include `MADDesigner/Source`), so there is nothing here to
+  drive it from. The paging invariant it depends on — the driver clears the table
+  before filling it — is pinned on the driver side instead, by
+  `testDriverFillsAWritePortWithNoDataTableBehindIt` in `MADSqlite3Tests`.
 
 ### `+[MADDateFromTimeFormatter timeIntervalForResolution:]` returns 0.1 seconds for a millisecond
 - **Status:** Investigated — left as is
