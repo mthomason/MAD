@@ -22,3 +22,14 @@ The `MADTdsClient` framework provides the specific implementation for connecting
 When you need to work with a Microsoft SQL Server database, you will be using the classes from this framework. The `MADDatabaseSQLServer` class is the main entry point for all SQL Server-related operations. If you need to modify the user interface for creating or editing SQL Server connections, you should look at the `MADTdsConnectionViewController` and its associated storyboard.
 
 This framework serves as a good example of how to add support for a new database system to the _MAD Designer_ application. It demonstrates how to subclass `MADDatabase` and provide the necessary UI and logic for a specific database platform.
+
+## Testing and Reports
+
+*   **Tests**: `MADTdsClient/MADTdsClientTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADTdsClient -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADTdsClient` section.
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).
+*   **Live tests**: `MADTdsClientTests/MADTdsClientLiveTests.m` talks to a real SQL Server
+    and skips when none is reachable. The credentials it expects are in
+    [`DEVELOPER.md`](../DEVELOPER.md); override them with the `MAD_TDS_TEST_*`
+    environment variables.

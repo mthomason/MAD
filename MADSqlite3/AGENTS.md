@@ -35,3 +35,10 @@ The `MADSqlite3` framework provides a modern, object-oriented wrapper for the po
 When you need to work with a Sqlite3 database, you should use the classes provided in this framework. The `MADDatabaseSqlite3` class is the main entry point for all database operations. Use the `MADQueryCache...` classes to improve performance by caching the results of expensive queries.
 
 When performing multiple database operations that need to be treated as a single unit, be sure to wrap them in a transaction using the `MADQueryCacheBeginTransaction` and `MADQueryCacheEndTransaction` classes. This will ensure that your changes are applied atomically and can be rolled back in case of an error.
+
+## Testing and Reports
+
+*   **Tests**: `MADSqlite3/MADSqlite3Tests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADSqlite3 -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADSqlite3` section.
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).

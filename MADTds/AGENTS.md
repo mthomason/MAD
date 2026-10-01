@@ -23,3 +23,7 @@ The `MADTds` framework provides a high-level Objective-C wrapper for the FreeTDS
 When you need to connect to a Sybase or Microsoft SQL Server database, you should use the `MADTdsDb` class. This class provides a simple and convenient way to execute queries and retrieve results. You will need to configure the connection properties (server, database, username, and password) before you can connect to the database.
 
 If you need to make changes to the FreeTDS library itself, you will need to modify the `build_tds.sh` script and then rebuild the framework. However, this should only be done if you have a deep understanding of the FreeTDS library and its build process.
+
+## Testing and Reports
+
+*   **Note**: the framework ships no tests of its own; it is exercised through `MADTdsClient`.

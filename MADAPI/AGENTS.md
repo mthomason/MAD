@@ -37,3 +37,9 @@
 ## Usage Guidelines
 
 When you need to interact with a database, you should use the classes and protocols defined in this framework. To add support for a new database system, you will need to create a new subclass of `MADDatabase` that implements the required functionality. When building queries, use the `MADQuery` class to ensure that your queries are constructed in a consistent and portable manner.
+
+## Testing and Reports
+
+*   **Tests**: `MADAPI/MADAPITests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADAPI -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADAPI` section.

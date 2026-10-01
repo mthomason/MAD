@@ -27,3 +27,9 @@ Given that this framework is **unused and unmaintained**, it is not recommended 
 
 If you do decide to use this framework, you will need to familiarize yourself with the `zint` library and the various `MTBarcode` subclasses. The `MTBarcodeView` class can be used to display barcodes in the UI.#  <#Title#>
 
+
+## Testing and Reports
+
+*   **Tests**: `MADBarcodes/MADBarcodesTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme None -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Note**: the test target is in the Xcode project but no shared scheme runs it.

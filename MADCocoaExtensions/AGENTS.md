@@ -40,3 +40,9 @@
 ## Usage Guidelines
 
 When you need to create or modify UI elements, consult this framework first. It is likely that `MADCocoaExtensions` already provides a helper class or category that can simplify your task. Use the styling classes (`MADMargin`, `MADPadding`, etc.) to ensure that your UI changes are consistent with the rest of the application.
+
+## Testing and Reports
+
+*   **Tests**: `MADCocoaExtensions/MADCocoaExtensionsTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADCocoaExtensions -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADCocoaExtensions` section.

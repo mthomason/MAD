@@ -33,3 +33,9 @@ The `MADExplorer` framework provides the user interface components for the file 
 When you need to make changes to the file explorer's user interface or behavior, you will need to work with the classes in this framework. The `MADCollectionViewCellDocument` class is the place to start if you need to change how documents are displayed. The `MADOpenDocumentManager` class is the key to understanding how documents are opened.
 
 If you need to add a new file storage location to the application, you will need to work with the `MADFileLocationManager` class. This class is designed to be extensible, so you should be able to add new locations without modifying the existing code extensively.
+
+## Testing and Reports
+
+*   **Tests**: `MADExplorer/MADExplorerTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADExplorer -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADExplorer` section.

@@ -40,3 +40,10 @@ The `MAD` framework defines a large number of `MADOperation` subclasses that are
 This framework is the core of the application, and any significant changes to the application's functionality will likely involve modifying code within this framework. When working with documents, queries, or report elements, you will be interacting with the Core Data model classes (prefixed with `Rptq`). Be sure to use the provided factory classes when creating new document elements.
 
 When performing asynchronous tasks related to documents or data, look for an existing `MADOperation` subclass in this framework before creating a new one. The operations here are designed to work with the application's document and data models.
+
+## Testing and Reports
+
+*   **Tests**: `MAD/MADTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MAD -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MAD (framework)` section.
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).

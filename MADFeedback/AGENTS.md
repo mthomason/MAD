@@ -23,3 +23,9 @@ The `MADFeedback` framework is designed to help developers gather feedback from 
 Given that this framework is **unused and unmaintained**, it is not recommended to use it in new code. If you need to add feedback or error reporting functionality to the application, you should first evaluate whether this framework can be updated and made reliable, or if it would be better to use a different solution, such as a third-party library like Crashlytics or Sentry.
 
 If you do decide to use this framework, you will need to initialize the `MADFeedbackUncaughtExceptionHandler` early in the application's lifecycle to ensure that it can catch all uncaught exceptions. The `MADFeedbackFrustration` class can be used to proactively solicit feedback from users who may be experiencing difficulties.
+
+## Testing and Reports
+
+*   **Tests**: `MADFeedback/MADFeedbackTest`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme None -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Note**: the test target is in the Xcode project but no shared scheme runs it.

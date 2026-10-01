@@ -42,3 +42,10 @@
 ## Usage Guidelines
 
 When working with any other framework in this project, it is highly likely that you will need to interact with classes and protocols from `MADFoundation`. Before creating new classes for data handling or asynchronous tasks, check this framework to see if a suitable solution already exists. Pay close attention to the operation classes, as they are central to the application's workflow.
+
+## Testing and Reports
+
+*   **Tests**: `MADFoundation/MADFoundationTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADFoundation` section.
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).

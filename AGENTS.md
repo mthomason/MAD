@@ -80,4 +80,35 @@ The codebase also includes static library build scrips in a file called `Compres
 * This project uses limited comments where needed
 * This project is very complex, so fixes and changes should be made stratigicly to minimize side effects.
 
+## Testing
+
+Each framework has one test target, exposed by a shared scheme of the same name. Run a
+suite against an iOS Simulator:
+
+	xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
+		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+
+`MADMySQL` and `MADTdsClient` each carry a second file -- `MADMySQLLiveTests.m` and
+`MADTdsClientLiveTests.m` -- that talks to a real database server and **skips** when one is
+not reachable, so the suite still passes on a machine without a server. The credentials
+they expect are in `DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*` or
+`MAD_TDS_TEST_*` environment variable.
+
+`MADBarcodes`, `MADFeedback`, `MADTds`, `Scrimpter`, and `Compressor` expose no shared test
+scheme, so the command above does not reach them.
+
+## Related Documents
+
+* `BUGS.md` -- known defects, grouped by framework, with `file:line` references and the
+  tests that pin each one.
+* `MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
+  `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
+* `DEVELOPER.md` -- test database credentials and common build commands.
+* `TODO.md` -- the working backlog.
+* `README.md` -- build notes and the export-compliance statement.
+* `APPSTORE.md` -- the App Store promotional text and description currently in use.
+
+Every directory with an `AGENTS.md` also has a `CLAUDE.md` symlink to it, so the two names
+always name the same file.
+
 ---

@@ -37,3 +37,9 @@ The `MADFileManager` framework is responsible for all file-related operations in
 When you need to perform any file-related operations, such as creating, deleting, or moving files, you should use the `MADFilesController` class. This will ensure that all file operations are properly coordinated and that the UI is updated accordingly. When you need to get or set information about a file, use the `MADFileInfo` and `MADMetaData` classes.
 
 If you need to support a new file storage location (e.g., a different cloud service), you will need to create a new class that conforms to the `MADFileLocationManagerDelegate` protocol.
+
+## Testing and Reports
+
+*   **Tests**: `MADFileManager/MADFileManagerTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADFileManager -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADFileManager` section.

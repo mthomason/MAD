@@ -27,3 +27,9 @@ The `Scrimpter` project is a custom scripting language that was intended to be u
 As this project is **not currently used** in the main application, it is not recommended to use it in new code without first consulting with the project owner.
 
 If you are tasked with maintaining or extending the Scrimpter language, you will need to familiarize yourself with the `parser.ym` and `scanner.lm` files, as well as the various `MTAstNode...` classes. Any changes to the language's syntax will require modifications to the parser and scanner files, followed by a regeneration of the parser and scanner code.
+
+## Testing and Reports
+
+*   **Tests**: `Scrimpter/ScrimpterTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme None -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Note**: the test target is in the Xcode project but no shared scheme runs it.

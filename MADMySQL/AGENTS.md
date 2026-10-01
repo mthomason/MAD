@@ -20,3 +20,15 @@ The `MADMySQL` framework provides the specific implementation for connecting to 
 When you need to work with a MySQL database, you will be using the classes from this framework. The `MADDatabaseMySQL` class is the main entry point for all MySQL-related operations.
 
 This framework, along with `MADTdsClient`, serves as a good example of how to add support for a new database system to the _MAD Designer_ application. It demonstrates how to subclass `MADDatabase` and provide the necessary logic for a specific database platform.
+
+## Testing and Reports
+
+*   **Tests**: `MADMySQL/MADMySQLTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADMySQL -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADMySQL` section.
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).
+*   **Live tests**: `MADMySQLTests/MADMySQLLiveTests.m` talks to a real MySQL server
+    and skips when none is reachable. The credentials it expects are in
+    [`DEVELOPER.md`](../DEVELOPER.md); override them with the `MAD_MYSQL_TEST_*`
+    environment variables. Use `127.0.0.1`, not `localhost` -- libmysqlclient reads
+    `localhost` as a request for a Unix socket, which the Simulator does not have.

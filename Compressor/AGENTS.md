@@ -31,3 +31,7 @@ To build all the third-party libraries, you can run the `compressor.sh` script. 
 If you need to rebuild a specific library, you can run its corresponding build script (e.g., `build_openssl.sh`). However, be aware that some libraries have dependencies on other libraries, so it is generally recommended to run the main `compressor.sh` script to ensure that all dependencies are up-to-date.
 
 If you need to add a new third-party library to the project, you will need to create a new build script for it and add it to the `compressor.sh` script. Your new script should follow the same pattern as the existing scripts, ensuring that it builds the library for the correct architectures and places the output in the appropriate directory.
+
+## Testing and Reports
+
+*   **Note**: the project ships no tests. `compressor.sh` is verified by building the libraries.

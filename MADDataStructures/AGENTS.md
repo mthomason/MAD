@@ -39,3 +39,8 @@ The `MADDataStructures` framework provides a collection of fundamental data stru
 ## Usage Guidelines
 
 When you need to work with complex data relationships or implement algorithms, consult this framework first. The data structures provided here are likely to be more efficient and robust than custom implementations. When using the data structures, ensure that your objects conform to the required protocols (e.g., `MTProtocolCompare`) to ensure proper functionality.
+
+## Testing and Reports
+
+*   **Tests**: `MADDataStructures/MADDataStructuresTests`. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADDataStructures -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
