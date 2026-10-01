@@ -704,8 +704,9 @@ it skips rather than fails when no server is reachable.
 
 ## MAD Designer (app)
 
-Covered by the hosted `MADDesignerUnitTests` bundle (37 tests across
-`MADDesignerUnitTests.m` and `MADAppLogicTests.m`). The bundle is hosted by
+Covered by the hosted `MADDesignerUnitTests` bundle (70 tests across
+`MADDesignerUnitTests.m`, `MADAppLogicTests.m`, and
+`MADAppOperationConditionTests.m`). The bundle is hosted by
 `MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's own source
 through the running executable; the app's classes are declared locally in the test
 files rather than imported, because `MADDesigner/Source` is not on the bundle's
@@ -801,6 +802,50 @@ header search path.
 
 ---
 
+### `MADOperationConditionPolarQuestionAffirmative` discards the answer it was given
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/MADOperationConditionPolarQuestionAffirmative.m:63`
+- **Behavior:** The satisfied branch calls
+  `+[MADOperationConditionPolarQuestionAffirmativeResult newOperationConditionResult:name:]`
+  with the *dependency object* in the `BOOL satisfied` position. On arm64, where
+  `BOOL` is `_Bool`, the pointer converts to `YES` by way of "is not null" rather
+  than by way of the dependency's answer -- so the condition does report satisfied,
+  but the result's own `result` property is left at NO. A caller that reads the
+  answer back off the result is told "no" after asking "yes".
+  The negative condition next door does it correctly, through
+  `+newOperationCondition:name:`, which sets `result`; the two are meant to be
+  mirror images and only one of them is.
+- **Why it matters:** Nothing points at the call site. `-fsyntax-only` on both
+  `arm64` and `x86_64` accepts the line without a warning, so the mistake is only
+  visible by reading the value back off the result. The behaviour pinned by the
+  test is the arm64 one, where `BOOL` is `_Bool`; on `x86_64`, where it is
+  `signed char`, the same expression is the low byte of the pointer instead.
+
+### `MADOperationConditionSuccess` asserts instead of failing when no dependency matches
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/MADOperationConditionSuccess.m:90`
+- **Behavior:** When the loop finds no dependency whose `NSOperation.name` equals
+  the condition's key, `result` is still nil at the end and the method hits
+  `NSAssert(result != nil, @"We expect dependencies.")` before it can return. The
+  `result != nil ? result : [self result: NO]` on the following line is therefore
+  unreachable in Debug builds, which abort the calling operation instead. Release
+  builds define `NS_BLOCK_ASSERTIONS` and do get the quiet failure, so the same
+  input asserts in development and silently fails in production.
+  Note also that `dependency.name` is read *before* the `conformsToProtocol:`
+  check, which is only safe because `NSOperation` declares `name`.
+
+### `MADOperationConditionDisplayedAlertConfirm` returns nil when nothing can answer
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/MADOperationConditionDisplayedAlertConfirm.m:51`
+- **Behavior:** If no dependency conforms to either
+  `MADOperationConditionDisplayedAlertProtocol` or
+  `MADOperationHoldsCredentialsProtocol`, the loop falls through and the method
+  returns nil from a method declared `nonnull`. The empty-dependency case returns
+  a proper failure, so the nil only appears when dependencies are present but
+  none of them can answer -- which is the case a caller is least likely to test.
+
+---
+
 ## Already fixed (for reference)
 
 ### `MADDataTableFast -objectAtRow:column:` ignored its `column` argument
@@ -834,6 +879,15 @@ header search path.
     live RDS instance in `us-east-1` with hardcoded credentials, against APIs that
     no longer exist. It was rewritten around the app's own helper categories and
     framework consumption.
+
+### XCTest assertion macros split on commas inside square brackets
+- **Where:** any test file using `XCTAssert*(...)`
+- **Behavior:** The preprocessor separates macro arguments on commas that are not
+  inside *parentheses*, so `XCTAssertEqualObjects(a, [Foo bar:baz, qux])` is torn
+  into `expression2` and a stray variadic argument and fails to parse, with the
+  error reported at the end of the statement rather than at the comma. Wrapping the
+  send in parentheses, or hoisting it into a local first, fixes it. Worth knowing
+  because the messages the app's conditions take are often two-argument sends.
 
 ### `MADDesignerTestConnection.m` is an empty template that still runs
 - **Where:** `MADDesigner/Targets/MADDesignerUnitTests/MADDesignerTestConnection.m`
