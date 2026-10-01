@@ -61,6 +61,45 @@ Status key:
 
 ## MAD (framework)
 
+### A NULL read from a source database printed as the text `<null>`, or as the epoch
+- **Status:** Fixed
+- **Where:** the producer is
+  `MAD/Source/rptq/RptqDocumentElement+Extras.m:973`
+  (`-formattedString:forValue:`). The four callers that tried to undo it are
+  `MAD/Source/MADDocumentObjectDataReference.m:185`, `:270` and
+  `MAD/Source/MADDocumentObjectDataReferenceBarcode.m:59`, `:66`.
+- **Behavior:** the method opened with `if (!value) return @"";`, which catches `nil`
+  but not `[NSNull null]` — `NSNull` is an object, and truthy. A NULL read from a
+  source database arrives as `NSNull` (see the `MADQueryCacheSelectGroupKeys` entry
+  below for why that representation is deliberate), so it fell through to the branches
+  below. Every text path there ends in `-initWithFormat:@"%@", value`, and
+  `[NSNull description]` is `"<null>"` — angle brackets. The date branches are worse:
+  `NSNull` is not `NSData`, not `NSString` and not `NSNumber`, so the time interval
+  defaulted to 0 and a NULL date printed as the epoch, 1970-01-01.
+- **Why it matters:** a NULL in the data was a visible `<null>` on the printed report,
+  and a NULL date was a plausible-looking wrong date. The intended guard never worked:
+  the four callers compared the result against `MTNullIdentifier`, which was declared
+  `@"(null)"` — *parentheses*, the way a nil pointer formats, not the way `NSNull`
+  does. The two strings differ, so `-isEqualToString:` was always false. The constant
+  was dead from the day it was written, and the only value that could ever have matched
+  it is real text in the data spelling `(null)`, which would then have been blanked.
+- **Now:** the guard covers both cases — `if (!value || [value isKindOfClass:[NSNull
+  class]])` — so a NULL is empty where it enters the formatter. The four comparisons
+  and the constant go with it: `MTNullIdentifier` is deleted from
+  `MAD/Source/rptq/autogen/RptqDocumentElement.h:24` and `:15` of the `.m`. They were
+  removed rather than left in place because they are not merely unreachable after this
+  change — they were already unreachable before it, and leaving a comparison against a
+  string nothing produces invites the next reader to assume the round trip is live.
+- **Note:** `MAD/Source/rptq/autogen/` holds Xcode-generated Core Data subclass code and
+  is hand-edited here; nothing in the build regenerates it, so the deletion stands.
+- **Test:** `MADTests MADDocumentTests testFormattedStringRendersNullAsEmpty`. It
+  asserts `NSNull` formats empty for a string, an integer, a date and a datetime, that
+  `nil` still does, and that a real value still formats. Run against the old guard it
+  fails four ways, and the failure text is the evidence for the paragraph above:
+  `("<null>") is not equal to ("")` for the string and integer cases, and
+  `("12/31/69, 7:00 PM") is not equal to ("")` for the datetime — the epoch in US
+  Eastern, which is 1970-01-01 UTC.
+
 ### `MADSectionGroupLayout` segfaults on a group whose field has no query table
 - **Status:** Still open
 - **Where:** `MAD/Source/MADSectionGroupLayout.m:43`, `:46`, `:49`, `:58`
@@ -1111,6 +1150,31 @@ Covered by the hosted `MADDesignerUnitTests` bundle (69 tests across
 through the running executable; the app's classes are declared locally in the test
 files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
+
+### The value picker offers `NULL` as a value, and it is not SQL NULL
+- **Status:** Still open
+- **Where:** `MADDesigner/Source/MADQueryValueFromFieldController.m:269-270`
+  (`-pickerView:titleForRow:forComponent:`) and `:283-284`
+  (`-pickerView:didSelectRow:inComponent:`)
+- **Behavior:** when the sampled row's value object is nil, the picker labels the row
+  `@"NULL"`. `-didSelectRow:` then copies that label straight into the text field, and
+  the field's contents are what becomes the predicate's right-hand value. From there
+  `MADQueryPredicate` quotes a non-numeric value — so the SQL reads `= 'NULL'`, a text
+  literal matching only those four characters — and emits a numeric one bare, `= NULL`,
+  which is SQL NULL and matches no row at all. Neither is `IS NULL`, which is what the
+  label implies to the user.
+- **Why it is not a one-line fix:** there is no `IS NULL` in the operator set, so the
+  "no value" case has nowhere correct to go. Doing it properly means the comparison
+  symbol enum, `MADQueryPredicate` and the predicate-entry UI together, and it is a
+  product decision — what should a blank value mean — not a defect to patch.
+- **The branch is also aimed at the wrong thing:** it tests `resultObject == nil`, but a
+  dictionary read out of the data table cannot hold nil for a value; it holds `NSNull`.
+  An actual NULL therefore falls past this branch to the final `else` and displays as
+  an empty row, so the label is not reached for the case it is written for.
+- **Not fixed:** audited for ROADMAP Track 1.5 and left alone. The string here stands
+  in for a NULL, which is what that item is about, but it is a picker's display text
+  that the selection handler copies into a value field — changing it changes what the
+  user sees and what gets typed, and nothing covers either today.
 
 ### `MADOperationRefresh` reports the connection error in place of the execution error
 - **Status:** Fixed

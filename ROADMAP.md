@@ -130,15 +130,38 @@ with a group it cannot place is a behaviour decision that has not been made.
 
 `MAD` suite: 175 tests, 0 failures.
 
-### 1.5 The `"<null>"` / `"<NULL>"` string hacks
+### 1.5 The `"<null>"` / `"<NULL>"` string hacks — **done 2026-10-01**
 
 The user's own description: "clearly a hack on my part, and should be addressed", qualified by
 "while it may not be perfect, it's also not an accident."
 
-So these are fair game, but the fix has to account for how the value is consumed downstream —
-the same caller-analysis discipline as everything else in the register. Audit, then decide
-per site. The Sqlite3 cache storing `NSNull` for a NULL read from a source database is
-**deliberate and stays**; what is in scope is a *string* standing in for a NULL.
+So these were fair game, but only with the consumers understood. The audit sorted the hits
+into three kinds, and only the first was a defect.
+
+**The sentinel round-trip was already broken.** `RptqDocumentElement -formattedString:forValue:`
+guarded with `if (!value)`, which misses `NSNull` — an object, and truthy. A NULL read from a
+source database arrives as `NSNull` (that representation is deliberate and stays), so it fell
+through to the branches, whose text paths all end in `-initWithFormat:@"%@"`. `[NSNull
+description]` is `"<null>"`; a NULL therefore printed on the report as the literal text
+`<null>`. The date branches had no guard at all and printed the epoch.
+
+The four callers that were meant to undo this compared against `MTNullIdentifier`, declared
+`@"(null)"` — *parentheses*, the way a nil pointer formats, not the way `NSNull` does. The
+comparison was never true. The constant was dead from the day it was written; the one string
+that could have matched it is real data spelling `(null)`, which it would then have blanked.
+
+Fixed at the source, where the other `NSNull` case in this family
+(`MADQueryCacheSelectGroupKeys`) was already fixed: the guard now covers `NSNull`, the four
+comparisons are gone, and so is the constant.
+
+**Left alone, and recorded.** The SQL `NULL` keyword sites stay — they are the keyword, not
+a string standing in for a value. Scrimpter's `Null` is a language-level rendering of its own
+type and is out of the workspace. And `MADQueryValueFromFieldController`'s picker label
+`"NULL"` is a string that does reach SQL, but it is display text the selection handler copies
+into a value field, and the correct answer — `IS NULL` — needs the operator enum, the SQL
+builder and the UI together. Recorded in `BUGS.md` as **still open**; it is a product decision.
+
+`MAD` suite: 176 tests, 0 failures.
 
 ### Deliberately not in Track 1
 

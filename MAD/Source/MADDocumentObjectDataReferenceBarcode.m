@@ -54,17 +54,13 @@
 }
 
 - (NSString *)formattedStringForValue1:(id)value {
-	NSString *result = [self.item formattedString: self.item.referencesField1.databaseSchemaField.dataType
-										 forValue: value];
-	if ([result isEqualToString:MTNullIdentifier]) result = @"";
-	return result;
+	return [self.item formattedString: self.item.referencesField1.databaseSchemaField.dataType
+							 forValue: value];
 }
 
 - (NSString *)formattedStringForValue2:(id)value {
-	NSString *result = [self.item formattedString: self.item.referencesField2.databaseSchemaField.dataType
-										 forValue: value];
-	if ([result isEqualToString:MTNullIdentifier]) result = @"";
-	return result;
+	return [self.item formattedString: self.item.referencesField2.databaseSchemaField.dataType
+							 forValue: value];
 }
 
 @end

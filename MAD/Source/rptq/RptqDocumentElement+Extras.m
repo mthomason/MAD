@@ -971,7 +971,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
-	if (!value) {
+	// NSNull is how a NULL read from a source database arrives here -- it is not nil,
+	// so it used to fall through to the branches below, whose text paths all end in
+	// -initWithFormat:@"%@", which writes NSNull as "<null>".  That is what appeared
+	// on the report.  The date branches were worse: NSNull is not NSData, NSString or
+	// NSNumber, so the interval defaulted to 0 and a NULL date printed as the epoch.
+	// A NULL has no representation, so it is empty at the source instead.
+	if (!value || [value isKindOfClass:[NSNull class]]) {
 		return @"";
 	}
 

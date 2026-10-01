@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-extern NSString * const MTNullIdentifier;
-
 @interface RptqDocumentElement (CoreDataProperties)
 
 + (NSFetchRequest<RptqDocumentElement *> *)fetchRequest;

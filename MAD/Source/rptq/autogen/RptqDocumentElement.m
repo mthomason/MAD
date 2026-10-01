@@ -12,8 +12,6 @@
 
 @end
 
-NSString * const MTNullIdentifier = @"(null)";
-
 @implementation RptqDocumentElement (CoreDataProperties)
 
 + (NSFetchRequest<RptqDocumentElement *> *)fetchRequest {
