@@ -20,6 +20,10 @@
 		4C66C14B1BA887D500663575 /* MADTdsClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C66C14A1BA887D500663575 /* MADTdsClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C66C1471BA887D500663575 /* MADTdsClient.framework */; };
 		4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66C1561BA887D500663575 /* MADTdsClientTests.m */; };
+		4CAA00102000000000000010 /* MADTdsClientLiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAA00112000000000000011 /* MADTdsClientLiveTests.m */; };
+		4CAA00012000000000000001 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29162F24AC7BDE00EC794B /* MADAPI.framework */; };
+		4CAA00022000000000000002 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29163024AC7BDE00EC794B /* MADFoundation.framework */; };
+		4CAA00032000000000000003 /* MADTds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6895122CF1157C00BD38DF /* MADTds.framework */; };
 		4C6895132CF1157C00BD38DF /* MADTds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6895122CF1157C00BD38DF /* MADTds.framework */; };
 		4C6C0A0C1F5D32AB00EDA039 /* MADTdsConnectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C0A0A1F5D32AB00EDA039 /* MADTdsConnectionViewController.h */; };
 		4C6C0A0D1F5D32AB00EDA039 /* MADTdsConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C0A0B1F5D32AB00EDA039 /* MADTdsConnectionViewController.m */; };
@@ -52,6 +56,7 @@
 		4C66C14C1BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C66C1511BA887D500663575 /* MADTdsClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADTdsClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C66C1561BA887D500663575 /* MADTdsClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsClientTests.m; sourceTree = "<group>"; };
+		4CAA00112000000000000011 /* MADTdsClientLiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsClientLiveTests.m; sourceTree = "<group>"; };
 		4C66C1581BA887D500663575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C6895122CF1157C00BD38DF /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6C0A0A1F5D32AB00EDA039 /* MADTdsConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTdsConnectionViewController.h; sourceTree = "<group>"; };
@@ -77,6 +82,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C66C1521BA887D500663575 /* MADTdsClient.framework in Frameworks */,
+				4CAA00032000000000000003 /* MADTds.framework in Frameworks */,
+				4CAA00012000000000000001 /* MADAPI.framework in Frameworks */,
+				4CAA00022000000000000002 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				4C66C1561BA887D500663575 /* MADTdsClientTests.m */,
+				4CAA00112000000000000011 /* MADTdsClientLiveTests.m */,
 				4C66C1581BA887D500663575 /* Info.plist */,
 			);
 			path = MADTdsClientTests;
@@ -276,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C66C1571BA887D500663575 /* MADTdsClientTests.m in Sources */,
+				4CAA00102000000000000010 /* MADTdsClientLiveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

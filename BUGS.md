@@ -494,6 +494,187 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 
 ---
 
+## MADTdsClient
+
+Covered by an offline suite (`MADTdsClientTests.m`, 43 tests) plus a live suite
+(`MADTdsClientLiveTests.m`, 26 tests) that runs against the local SQL Server 2022
+instance in `DEVELOPER.md` (`127.0.0.1`, `sa`, `AdventureWorksLT2022`). The live
+suite is the only way to reach `-connect:andPassword:error:`,
+`-getTablesFromConnection:error:`, `-fieldsForTable:connection:error:` and
+`-runSQL:onDataTable:fieldKeys:process:`, which are thin wrappers over freetds;
+it skips rather than fails when no server is reachable.
+
+### `-getTables:` passed the process wrapper to freetds as if it were a `DBPROCESS`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:241`
+- **Behavior:** `-connectWithConnection:credentals:connectionError:` returns a
+  `MADDatabaseProcessSQLServer` that wraps the `DBPROCESS`, but the code
+  bridge-cast that object straight to `DBPROCESS *` and handed it to `dbcmd()`.
+  freetds then realloc'd at an offset inside the Objective-C object instead of
+  its command buffer, and every call aborted the process:
+  `tds_realloc → dbcmd → -[MADDatabaseSQLServer getTables:]`. The wrapper is now
+  unwrapped with `-process` before the first freetds call.
+- **Why it matters:** The method could never work, and it takes the whole host
+  process down rather than returning an error — the connection-creation flow is
+  the one place it is called.
+
+### `-runSQL:onDataTable:fieldKeys:process:` closes the connection it was given
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1481`
+- **Behavior:** `dbclose(dbconn)` runs on every exit path, including the success
+  path, on a `DBPROCESS` the caller opened. The read paths
+  (`-getTablesFromConnection:error:`, `-fieldsForTable:connection:error:`) have
+  their `dbclose` calls commented out; this one does not.
+- **Why it matters:** Two consequences, both fatal:
+  - A caller that closes the connection it opened double-frees inside freetds.
+    The live suite reproduced this before it was worked around —
+    `dbstring_free → dbclose → -[MADDatabaseSQLServer closeConnection:]`,
+    `SIGSEGV`. `-executeQuery:withDataTable:andError:` never closes its
+    connection at all, so it leaks rather than crashing; `-getTables:` does
+    close, and would crash.
+  - Only one statement can ever be run per connection, which defeats the
+    `-runSQL:` contract and makes `-getTables:`'s own `dbclose` at line 291
+    (legitimate there, because that method opens its own connection) the odd
+    one out.
+  - Locked down by `testEachStatementNeedsItsOwnConnection`, which pins the
+    one-statement-per-connection pattern the defect forces.
+
+### Every `DECIMAL` / `NUMERIC` value is lost or corrupted
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:975-1035`
+  (`case SYBDECIMAL: case SYBNUMERIC:`)
+- **Behavior:** The separator-detection block derives a "separator" by trimming
+  decimal digits off both ends of the value string, then only ever assigns the
+  working copy when that bogus separator differs from the locale separator:
+
+  ```objc
+  NSString *objectStr2 = nil;
+  if (tdsDecimalSeperatorMatchesCocoaDecimalSeperator == NO) {
+      objectStr2 = [objectStr stringByReplacingOccurrencesOfString:...];
+  }
+  NSDecimalNumber *decimalNumber = [[NSDecimalNumber alloc] initWithString:objectStr2];
+  ```
+
+  When no replacement is wanted `objectStr2` stays `nil`, and
+  `-initWithString:` on `nil` returns `notANumber`. The value is discarded.
+  The negative case is worse: the derived separator for `"-2.5"` is the literal
+  `"-2."`, which occurs inside the string being rewritten, so `"-2.5"` becomes
+  `".5"` and is reported as `0.5` — a plausible number that is silently wrong.
+- **Verified against the server:** `sqlcmd` returns 3.5, 1.00 and 123.456 for
+  the expressions the tests use; the loss is in the framework.
+- **Why it matters:** Any report built on a `DECIMAL` or `NUMERIC` column shows
+  `NaN`, or a wrong value with no indication anything failed.
+- **Locked down by:** `testSelectDecimalReturnsNotANumber`,
+  `testSelectNegativeDecimalReturnsCorruptedValue`.
+
+### `-fieldsForTable:connection:error:` feeds sybdb type codes into a table of SQL Server type ids
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1878`
+- **Behavior:** The query selects `sys.columns.system_type_id` and passes it to
+  `+dataTypeForNativeType:`, which is written against sybdb (`SYB*`) codes. The
+  two numbering schemes overlap only for the legacy types, so the mapping is
+  right by coincidence where it is right at all. `DECIMAL` is 106 in both — and
+  106 has no case, so it falls to `default` and reports `String`. `VARBINARY` is
+  165, which is not a sybdb code at all, so it also reports `String`. Unlike the
+  query path there is no `SYBDECIMAL → SYBNUMERIC` rewrite here to save it.
+- **Locked down by:** `testFieldsForTableMisreportsDecimalAndBinaryAsString`
+  (`SalesLT.Product.Weight` and `.ThumbNailPhoto` both come back `String`).
+
+### `+dataTypeForNativeType:` has no case for several live SQL Server types
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:156`
+- **Behavior:** `SYBDECIMAL` (106), `SYBDATE` (49), `SYBTIME` (51), `SYBMONEY4`
+  (122), `SYBMSDATE` (40), `SYBMSTIME` (41), `SYBMSDATETIME2` (42),
+  `SYBMSDATETIMEOFFSET` (43), `SYBBIGDATETIME` (187) and `SYBBIGTIME` (188) all
+  reach `default` and become `MADDataTypeString`. On the query path
+  `-runSQL:` rescues `SYBDECIMAL` and `SYBMONEY4` by rewriting the code before
+  calling this method, but nothing rewrites the post-2005 date/time types.
+- **Why it matters:** `DATE`, `TIME`, `DATETIME2` and `DATETIMEOFFSET` columns
+  are typed as strings, so date grouping, formatting and comparison in the
+  designer do not apply to them.
+- **Locked down by:** `testSelectModernDateTimeTypes`,
+  `testSelectSmallMoneyIsRewrittenToMoney`.
+
+### `-connectWithConnection:credentals:connectionError:` never reports its error
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1599`
+- **Behavior:** `error = &dberror;` rebinds the parameter to a local, so the
+  caller's out-parameter is never written. It also means the surrounding
+  `if (error && dberror)` is always true when a failure occurred, so the
+  `else` branch that would have produced the wrapper is skipped and the method
+  returns `nil` — the only failure signal the caller gets.
+- **Why it matters:** Callers pass an `NSError **` and get back nothing, so a
+  failed connection is indistinguishable from any other nil return.
+- **Locked down by:** `testConnectWithConnectionDoesNotReportErrorToCaller`.
+
+### `-connect:andPassword:error:` dereferences `*error` without a NULL check
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1512`
+- **Behavior:** The first statement of the failure path is
+  `if (*error != NULL)`, and several later paths assign `*error` directly. A
+  caller that passes `NULL` — which is the documented Cocoa convention for "I
+  don't care" — crashes.
+- **Why it matters:** Passing `NULL` is exactly what a caller who only wants
+  the `DBPROCESS *` back would do.
+
+### `-fieldsForTable:connection:error:` has dead error handling that dereferences a known-NULL pointer
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1878`
+- **Behavior:** A branch reads
+  `if (sqlReturnCode != SUCCEED && error == NULL) { if (error != NULL) {...} NSAssert(error == NULL, @"...", *error); }`
+  — the inner test can never be true inside a block that already established
+  `error == NULL`, and the assertion's message argument dereferences `*error`
+  anyway.
+- **Why it matters:** The failure this code was meant to handle is not reported
+  at all; the code only looks like it is handled.
+
+### `port` is never passed to freetds
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1512`
+- **Behavior:** `MADDatabaseConnectionSQLServer` carries a `port` and includes it
+  in `connectionString`, but `-connect:andPassword:error:` only calls
+  `DBSETLUSER`, `DBSETLPWD`, `DBSETLAPP` and `DBSETLDBNAME`. `DBSETLPORT` is
+  never called, so freetds always dials its default port.
+- **Why it matters:** A SQL Server listening anywhere other than the default
+  port cannot be reached, even though the connection UI lets the user type the
+  port in. The live suite works only because the test instance is on 1433.
+
+### `+newSafeQueryField:andTable:` does not split a schema-qualified table
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1624`
+- **Behavior:** The method brackets the table name as a single identifier —
+  `[[NSString alloc] initWithFormat:@"[%@].[%@]", tableName, fieldName]` — with
+  no handling of a dot. `dbo.employees` therefore becomes
+  `[dbo.employees].[emp_no]`, which is a table named `dbo.employees`, not a
+  column of `dbo.employees`.
+- **Why it matters:** Schema discovery returns schema-qualified names
+  (`SalesLT.Customer`), so the generated SQL for any query built on a discovered
+  table names a table that does not exist.
+- **Locked down by:** `testNewSafeQueryFieldDoesNotSplitSchemaQualifiedTable`
+  (a characterization test: it pins the current, wrong output).
+
+### `-sqlSampleDataForField:andTable:` bypasses the base class's clause builders
+- **Status:** Quirk
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1680`
+- **Behavior:** The override hardcodes `SELECT DISTINCT TOP 511 ...` instead of
+  composing `-selectPart` / `-selectPartWithLimitedResults:` and calling
+  `-sqlAggregateFunctionLength` the way the base class does. It works, and it
+  is the reason SQL Server sample data does not emit the base class's invalid
+  `LIMIT 511;`, but the two paths will drift.
+- **Why it matters:** Nothing is broken today; noted so the duplication is not
+  mistaken for the base implementation.
+
+### `-executeQuery:withDataTable:andError:` discards its error
+- **Status:** Confirmed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:319`
+- **Behavior:** It declares `NSError * __autoreleasing dberror = nil`, passes
+  `&dberror` to the connect call, and then never reads `dberror` or writes
+  `*error`. A connection failure returns `NO` with no explanation.
+- **Why it matters:** Same as `-connectWithConnection:...` above: the caller's
+  `NSError **` contract is not honoured.
+
+---
+
 ## Already fixed (for reference)
 
 ### `MADDataTableFast -objectAtRow:column:` ignored its `column` argument
