@@ -1,3 +1,6 @@
+# Runtime logs -- written by the running app, never source.
+MADDesigner/run.log
+
 # Scripts
 .DS_Store
 .graffle
