@@ -720,6 +720,34 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqualObjects([table tableName], @"t321");
 }
 
+/// A caller with a directory but no cache delegate must still be able to build a
+/// working physical table.  This is what -initWithId:cacheDirectory: is for: without
+/// it the table reaches for [MADApplication AppDelegate], which a logic test has not
+/// got.  No delegate is set here on purpose.
+- (void)testFastTableInitWithCacheDirectoryNeedsNoDelegate {
+	const NSUInteger tag = 555;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:tag cacheDirectory:self.cacheDirectory];
+
+	MADDataColumn *name = [[MADDataColumn alloc] initWithIdentifier:@"name"];
+	name.type = MADDataTypeString;
+	[table addColumn:name];
+
+	[self bulkInsertRows:@[@[@"alice"], @[@"bob"]] intoTable:table];
+
+	XCTAssertEqual([table numberOfRows], (NSUInteger)2);
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], @"alice");
+
+	// The cache file belongs to the directory we handed over, not to any app default.
+	NSArray <NSString *> *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.cacheDirectory.path
+																					   error:NULL];
+	NSString *stem = [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+	BOOL foundCacheFile = NO;
+	for (NSString *name in contents) {
+		if ([name hasPrefix:stem]) { foundCacheFile = YES; break; }
+	}
+	XCTAssertTrue(foundCacheFile, @"no cache file for tag %@ in %@", stem, contents);
+}
+
 - (void)testFastTableColumnNamesAreHashedIdentifiers {
 	MADDataTableFast *table = [self newFastTableWithTag:5];
 
@@ -769,6 +797,26 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual([table numberOfRows], (NSUInteger)3);
 	XCTAssertEqual([table count], (NSUInteger)3);
 	XCTAssertEqual([table rowCounter], (NSUInteger)3);
+}
+
+/// The plist carries the row counter but not the rows -- those are in the cache
+/// file.  A counter that disagrees with the file must not survive a reload.
+- (void)testFastTableReloadRecountsRowsFromCacheFile {
+	MADDataTableFast *source = [self newFastTableWithTag:1001];
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20], @[@"carol", @40]] intoTable:source];
+
+	NSMutableDictionary *plist = [[source copyPlist] mutableCopy];
+	// "rowCounter" mirrors +[MADDataTable keyRowCounter]; the key methods are private.
+	XCTAssertEqualObjects(plist[@"rowCounter"], @3);
+	plist[@"rowCounter"] = @99;
+
+	MADDataTableFast *restored = [[MADDataTableFast alloc] initWithId:1001];
+	NSError *loadError = nil;
+	XCTAssertTrue([restored loadWithPlist:plist error:&loadError], @"loadWithPlist failed: %@", loadError);
+
+	XCTAssertEqual([restored numberOfRows], (NSUInteger)3);
+	XCTAssertEqual([restored count], (NSUInteger)3);
+	XCTAssertEqual([restored rowCounter], (NSUInteger)3);
 }
 
 - (void)testFastTableBulkInsertEnumeratesValues {
@@ -1178,10 +1226,10 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	});
 }
 
-/// CONTRACT: MADDataTableFast does not serialize -addRow: internally, so writers
-/// must be serialized by the caller.  This test performs the writes from a serial
-/// queue (the supported pattern) and verifies that no rows are lost.  Issuing the
-/// same writes from a concurrent queue is NOT supported.
+/// CONTRACT: MADDataTableFast serializes -addRow: on its own bulk-insert queue, so
+/// writers may come from any queue without losing rows.  This test uses the app's
+/// serial-queue pattern; -testFastTableConcurrentWritersLoseNoRows covers the
+/// concurrent case.
 - (void)testFastTableSerializedConcurrentWritesLoseNoRows {
 	MADDataTableFast *table = [self newFastTableWithTag:202];
 
@@ -1209,6 +1257,43 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual([table numberOfRows], writers * rowsPerWriter);
 
 	// Reads after the writers stop must observe every row.
+	NSUInteger counted = 0;
+	for (NSDictionary *row in [table objectEnumerator]) {
+		XCTAssertNotNil(row[@"name"]);
+		counted++;
+	}
+	XCTAssertEqual(counted, writers * rowsPerWriter);
+}
+
+/// -addRow: runs under the same serial queue -endBulkInsert uses as a barrier, so
+/// writers racing each other still land one at a time and none are dropped.
+- (void)testFastTableConcurrentWritersLoseNoRows {
+	MADDataTableFast *table = [self newFastTableWithTag:204];
+
+	const NSUInteger writers = 4;
+	const NSUInteger rowsPerWriter = 25;
+
+	[table beginBulkInsert];
+
+	dispatch_queue_t concurrent = dispatch_queue_create("MADDataTableRegression.concurrentWrites",
+														DISPATCH_QUEUE_CONCURRENT);
+	dispatch_group_t group = dispatch_group_create();
+	for (NSUInteger writer = 0; writer < writers; writer++) {
+		dispatch_group_async(group, concurrent, ^{
+			for (NSUInteger row = 0; row < rowsPerWriter; row++) {
+				NSString *name = [NSString stringWithFormat:@"w%lu-r%lu", (unsigned long)writer, (unsigned long)row];
+				NSError *error = nil;
+				BOOL success = [table addRow:@[name, @(row)] error:&error];
+				XCTAssertTrue(success, @"addRow: failed: %@", error);
+			}
+		});
+	}
+	dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+
+	[table endBulkInsert];
+
+	XCTAssertEqual([table numberOfRows], writers * rowsPerWriter);
+
 	NSUInteger counted = 0;
 	for (NSDictionary *row in [table objectEnumerator]) {
 		XCTAssertNotNil(row[@"name"]);
