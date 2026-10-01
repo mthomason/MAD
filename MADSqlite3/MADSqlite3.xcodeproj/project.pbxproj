@@ -169,6 +169,7 @@
 		4CB5D9151F57A02000CC2E8E /* MADQueryCacheSelectRowId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryCacheSelectRowId.h; sourceTree = "<group>"; };
 		4CB5D9161F57A02000CC2E8E /* MADQueryCacheSelectRowId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryCacheSelectRowId.m; sourceTree = "<group>"; };
 		4CBF04402E85191A00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = sqlite3.xcconfig; path = ../Compressor/sqlite3.xcconfig; sourceTree = SOURCE_ROOT; };
 		4CDD44AE2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDataTableSingleColumnEnumerator.h; sourceTree = "<group>"; };
 		4CDD44AF2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableSingleColumnEnumerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -202,6 +203,7 @@
 				4CA7C30E2EA43EF100475743 /* Resources */,
 				4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */,
 				4CBF04402E85191A00812022 /* AGENTS.md */,
+				4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */,
 				4C11F1511BA9008D00EC2C58 /* MADSqlite3Tests */,
 				4C2D77ED1F56CF3F005415F7 /* Frameworks */,
 				4C11F1441BA9008D00EC2C58 /* Products */,
@@ -527,6 +529,7 @@
 /* Begin XCBuildConfiguration section */
 		4C11F1551BA9008D00EC2C58 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -568,7 +571,6 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "SQLITE_ENABLE_COLUMN_METADATA=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -591,6 +593,7 @@
 		};
 		4C11F1561BA9008D00EC2C58 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -627,7 +630,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "SQLITE_ENABLE_COLUMN_METADATA=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;

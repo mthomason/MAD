@@ -21,40 +21,37 @@ readonly BUILD_SQLITE_DIR="${BUILD_BASE_DIR}/sqlite3"
 readonly LIBRARY_BASE_DIR="${SCRIPT_DIR}/library"
 readonly OUTPUT_SQLITE_DIR="${LIBRARY_BASE_DIR}/sqlite3"
 
-# --- Custom SQLite CFLAGS for amalgamation ---
-SQLITE_CFLAGS=(
-  # Feature enablement
-  -DSQLITE_ENABLE_FTS5
-  -DSQLITE_ENABLE_JSON1
-  -DSQLITE_ENABLE_STAT4
-  -DSQLITE_ENABLE_COLUMN_METADATA
+# --- SQLite compile options ---
+# The option list lives in sqlite3.xcconfig, which is also the base
+# configuration of the MADSqlite3 target that compiles the amalgamation.  It
+# is the one place these are written down.  They used to be written down here
+# and nowhere else, with the target passing a different set, so the engine
+# writing every .maddb cache was configured by accident: it reported a 4096
+# page size where this list asked for 8192, and had no FTS5 or STAT4 at all.
+# See LIBRARIES.md section 4.
+readonly SQLITE_XCCONFIG="${SCRIPT_DIR}/sqlite3.xcconfig"
 
-  # Performance & behavior
-  -DSQLITE_THREADSAFE=1
-  -DSQLITE_DEFAULT_MEMSTATUS=0
-  -DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1
-  -DSQLITE_DEFAULT_CACHE_SIZE=-4096
-  -DSQLITE_DEFAULT_PAGE_SIZE=8192
-  -DSQLITE_TEMP_STORE=2
-  -DSQLITE_LIKE_DOESNT_MATCH_BLOBS
-  -DSQLITE_MAX_MMAP_SIZE=0
+if [[ ! -f "${SQLITE_XCCONFIG}" ]]; then
+	echo "Error: ${SQLITE_XCCONFIG} not found." >&2
+	exit 1
+fi
 
-  # Optional size optimization / cleanup
-  -DSQLITE_OMIT_PROGRESS_CALLBACK
-  -DSQLITE_OMIT_DEPRECATED
-  -DSQLITE_OMIT_AUTHORIZATION
-  -DSQLITE_OMIT_DECLTYPE
-  -DSQLITE_OMIT_LOAD_EXTENSION
+# The file holds bare macro names, because Xcode prepends -D itself.  Add it
+# back here, where CFLAGS wants it.
+readonly SQLITE_DEFINES="$(sed -n 's/^SQLITE_DEFINES[[:space:]]*=[[:space:]]*//p' "${SQLITE_XCCONFIG}")"
 
-  # SQL strictness / safety
-  -DSQLITE_DQS=0
-  -DSQLITE_MAX_EXPR_DEPTH=0
-  
-  -DNOMINMAX
+if [[ -z "${SQLITE_DEFINES}" ]]; then
+	echo "Error: no SQLITE_DEFINES line in ${SQLITE_XCCONFIG}." >&2
+	exit 1
+fi
 
-  # Compiler optimization
-  -Os
-)
+SQLITE_CFLAGS=()
+for sqlite_define in ${SQLITE_DEFINES}; do
+	SQLITE_CFLAGS+=("-D${sqlite_define}")
+done
+
+# Compiler optimization
+SQLITE_CFLAGS+=("-Os")
 
 echo "Starting SQLite3 amalgamation build..."
 echo "Script directory: ${SCRIPT_DIR}"

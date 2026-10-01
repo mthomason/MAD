@@ -1,0 +1,55 @@
+//
+//  sqlite3.xcconfig
+//  MAD Designer
+//
+//  The single place the SQLite compile-time options are written down.
+//
+//  Two consumers read this file, and they must not disagree:
+//
+//    * MADSqlite3 -- compiles Compressor/library/sqlite3/sqlite3.c as a
+//      target source file, and is the only target that does.
+//    * Compressor/build_sqlite3.sh -- regenerates the amalgamation, and
+//      reads SQLITE_DEFINES below rather than keeping its own list.
+//
+//  Why this file exists: the target used to pass one define while the
+//  script declared twenty, so the engine writing every .maddb cache was
+//  configured by accident.  Measured against the built framework, it
+//  reported DEFAULT_PAGE_SIZE=4096 where the script asks 8192, and listed
+//  neither ENABLE_FTS5 nor ENABLE_STAT4.  The page size is recorded in the
+//  database header, so that was a difference in the format, not just an
+//  untidy build.
+//
+//  These are compile-time options only.  The amalgamation already contains
+//  the FTS5 and STAT4 code behind #ifdef, and SQLITE_DEFAULT_PAGE_SIZE is a
+//  plain #ifndef, so changing this list does not require regenerating
+//  sqlite3.c -- but it does change the bytes of every cache written after
+//  it.  Treat this as a format decision.  See LIBRARIES.md section 4.
+//
+
+// Bare macro names, no "-D": GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS
+// prefixes each entry with -D itself, and handing it "-DNAME" produces
+// "-D-DNAME" and a "Macro name must be an identifier" error.
+// build_sqlite3.sh adds the -D when it turns these into CFLAGS.
+//
+SQLITE_DEFINES = SQLITE_ENABLE_FTS5 SQLITE_ENABLE_STAT4 SQLITE_ENABLE_COLUMN_METADATA SQLITE_THREADSAFE=1 SQLITE_DEFAULT_MEMSTATUS=0 SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 SQLITE_DEFAULT_CACHE_SIZE=-4096 SQLITE_DEFAULT_PAGE_SIZE=8192 SQLITE_TEMP_STORE=2 SQLITE_LIKE_DOESNT_MATCH_BLOBS SQLITE_MAX_MMAP_SIZE=0 SQLITE_OMIT_PROGRESS_CALLBACK SQLITE_OMIT_DEPRECATED SQLITE_OMIT_AUTHORIZATION SQLITE_OMIT_LOAD_EXTENSION SQLITE_DQS=0 SQLITE_MAX_EXPR_DEPTH=0
+
+GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = $(inherited) $(SQLITE_DEFINES)
+
+//
+// SQLITE_ENABLE_COLUMN_METADATA is the one option that was in effect
+// before; MADSqlite3 calls sqlite3_column_origin_name, so dropping it
+// breaks the build.
+//
+// Three of the script's original twenty flags are deliberately not here.
+//
+// SQLITE_OMIT_DECLTYPE is removed because it contradicts the line above:
+// the amalgamation refuses to build with both, since column metadata is
+// built on sqlite3_column_decltype.  ("Must not define both
+// SQLITE_OMIT_DECLTYPE and SQLITE_ENABLE_COLUMN_METADATA".)  The script
+// asked for both and never noticed, because the list was never compiled.
+//
+// SQLITE_ENABLE_JSON1 is a no-op on SQLite 3.49 -- JSON has been part of
+// the core since 3.38.
+//
+// -DNOMINMAX is a Visual C++ artifact with no meaning to clang.
+//
