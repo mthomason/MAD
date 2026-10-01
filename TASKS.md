@@ -292,8 +292,11 @@ own `MADURLFactory` rule, so it cannot drift. Music's cache reads 15.0 MB and is
 now visible side by side — the `{0, 0}` vs `{612, 792}` question in `MAD_FORMAT.md` §5.3 is
 reportable instead of hand-measured.
 
-**Not first:** moving `MADOperationRefresh` into `MAD`. It is housekeeping with a working
-workaround — `CLI/build.sh`'s `REFRESH_SOURCES` compiles it across the target boundary today.
+**Not first:** moving `MADOperationRefresh` into `MAD`. The refresh chain reaches
+`MADDatabase+Constructor`, which imports all three drivers, so the move re-asserts the
+`MAD`↔drivers cycle that `ROADMAP.md` §5.1 exists to cut. Do it together with the driver
+registry, not before. Until then `CLI/build.sh`'s `REFRESH_SOURCES` compiles it across the
+target boundary and it works.
 
 ---
 

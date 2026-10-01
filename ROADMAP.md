@@ -431,7 +431,7 @@ claims, from a file, without the app** — is met for the container, the store, 
 WAL/SHM and the companion files. The one claim `inspect` does not yet state is the store's
 *schema*, which is `schema`'s job, not `inspect`'s; the two together cover the document.
 
-### 3.4 Housekeeping — move `MADOperationRefresh` into the `MAD` framework
+### 3.4 Move `MADOperationRefresh` into the `MAD` framework — **coupled to §5.1**
 
 `MADDesigner/Source/MADOperationRefresh.m` — 131 lines, zero UIKit symbols, importing only
 `MADAPI`, `MADFoundation` and `MAD`. It is already the CLI's refresh verb; it is merely in the
@@ -439,9 +439,23 @@ wrong target. The two `Reload` operations stay behind in the app.
 
 The workaround is visible in `CLI/build.sh`: its `REFRESH_SOURCES` list reaches across the
 target boundary and compiles `MADOperationRefresh.m` and the two `MADOperationRefreshInitial*`
-files straight out of `MADDesigner/Source`. So the CLI works today, which is why this item reads
-as housekeeping rather than a blocker — but the file is being built into a framework's client
-from outside the framework, and that only stays benign while nothing else wants it.
+files straight out of `MADDesigner/Source`. So the CLI works today.
+
+**Why it is not plain housekeeping.** The refresh *chain* has to reach the concrete drivers:
+`MADOperationRefreshInitialize` imports `MADDatabase+Constructor`, and that file (and its
+sibling `MADDatabaseConnection+Constructor`) import all three drivers —
+`<MADSqlite3/MADDatabaseSqlite3.h>`, `<MADMySQL/MADDatabaseMySQL.h>`,
+`<MADTdsClient/MADDatabaseSQLServer.h>`. That is why refresh was kept in the app target, which
+links everything. It is also why this is half-resolved already: the `Constructor` files live in
+`MAD`, and `MAD.framework` already links `MADSqlite3`, `MADMySQL` and `MADTdsClient`, so the
+mechanical move would compile. But it would re-assert the cycle the drivers already form with
+`MAD` — they subclass `MADDatabase` (they depend on `MAD`), while `MAD`'s `Constructor` imports
+them. Moving the refresh operations on top of that pile makes the seam §5.1 wants *harder* to
+cut, not easier.
+
+So do **not** move the files until §5.1's driver registry exists; then the move and the registry
+are one change, and refresh constructs a driver through the registry instead of through a
+`Constructor` that hard-imports them.
 
 ---
 

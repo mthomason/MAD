@@ -186,6 +186,22 @@ in §5.3 real.
 Against a document under 80 KB, the render cache is roughly **200× the document**. The
 row data, which one would expect to dominate, is under 6% of the directory.
 
+**Why it is deliberately this big.** The size is a consequence of the design, not an
+accident to be optimised away. Two reasons, both the user's own description (2026-10-01):
+
+1. **Two-pass rendering.** Page count and groupings cannot be known until the full row
+   set is in hand. A count group in the report footer can be summed at the end, but one
+   in the report header must be known before the first page is laid out -- and pages
+   cannot be numbered until the row count is known -- so the whole result set is pulled
+   once and held on device.
+2. **The cache is the platform for future views.** Once the rows are local, different
+   views of the same data can be built from the one cache without re-querying the
+   source, the opposite of a website that hits the database again for every page. There
+   is more planned on top of this one cache, so treating it as scratch space would be
+   wrong.
+
+The cache could be compressed, but it is not the pressing thing to change.
+
 ### 5.2 The consequences
 
 - A `.mad` is **small and self-contained**: it is a definition, not a dataset. Both
